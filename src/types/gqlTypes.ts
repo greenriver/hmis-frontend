@@ -1248,10 +1248,6 @@ export enum Destination {
   ResidentialProjectOrHalfwayHouseWithNoHomelessCriteria = 'RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA',
   /** (18) Safe Haven */
   SafeHaven = 'SAFE_HAVEN',
-  /** (35) Staying or living in a family member's room, apartment or house */
-  StayingOrLivingInAFamilyMemberSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE',
-  /** (36) Staying or living in a friend's room, apartment or house */
-  StayingOrLivingInAFriendSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE',
   /** (22) Staying or living with family, permanent tenure */
   StayingOrLivingWithFamilyPermanentTenure = 'STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE',
   /** (12) Staying or living with family, temporary tenure (e.g. room, apartment or house) */
@@ -1264,8 +1260,6 @@ export enum Destination {
   SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
   /** (2) Transitional housing for homeless persons (including homeless youth) */
   TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
-  /** (37) Worker unable to determine */
-  WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
 }
 
 /** Represents direct upload credentials */
@@ -1307,6 +1301,7 @@ export type DisabilitiesPaginated = {
 
 export type Disability = {
   __typename?: 'Disability';
+  antiRetroviral?: Maybe<NoYesReasonsForMissingData>;
   client: Client;
   dataCollectionStage: DataCollectionStage;
   dateCreated: Scalars['ISO8601DateTime']['output'];
@@ -1318,12 +1313,18 @@ export type Disability = {
   id: Scalars['ID']['output'];
   indefiniteAndImpairs?: Maybe<Scalars['Int']['output']>;
   informationDate: Scalars['ISO8601Date']['output'];
+  tCellCount?: Maybe<Scalars['Int']['output']>;
+  tCellCountAvailable?: Maybe<NoYesReasonsForMissingData>;
+  tCellSource?: Maybe<TCellSourceViralLoadSource>;
   user?: Maybe<User>;
+  viralLoad?: Maybe<Scalars['Int']['output']>;
+  viralLoadAvailable?: Maybe<ViralLoadAvailable>;
 };
 
 /** Group of disability records that were collected at the same time */
 export type DisabilityGroup = {
   __typename?: 'DisabilityGroup';
+  antiRetroviral?: Maybe<NoYesReasonsForMissingData>;
   chronicHealthCondition?: Maybe<NoYesReasonsForMissingData>;
   chronicHealthConditionIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
@@ -1343,7 +1344,12 @@ export type DisabilityGroup = {
   physicalDisabilityIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
   substanceUseDisorder?: Maybe<DisabilityResponse>;
   substanceUseDisorderIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
+  tCellCount?: Maybe<Scalars['Int']['output']>;
+  tCellCountAvailable?: Maybe<NoYesReasonsForMissingData>;
+  tCellSource?: Maybe<TCellSourceViralLoadSource>;
   user?: Maybe<User>;
+  viralLoad?: Maybe<Scalars['Int']['output']>;
+  viralLoadAvailable?: Maybe<ViralLoadAvailable>;
 };
 
 /** 4.10.2 */
@@ -2730,8 +2736,6 @@ export enum LivingSituation {
   HostHomeNonCrisis = 'HOST_HOME_NON_CRISIS',
   /** (14) Hotel or motel paid for without emergency shelter voucher */
   HotelOrMotelPaidForWithoutEmergencyShelterVoucher = 'HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER',
-  /** (27) Interim Housing */
-  InterimHousing = 'INTERIM_HOUSING',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (7) Jail, prison or juvenile detention facility */
@@ -2740,6 +2744,8 @@ export enum LivingSituation {
   LongTermCareFacilityOrNursingHome = 'LONG_TERM_CARE_FACILITY_OR_NURSING_HOME',
   /** (26) Moved from one HOPWA funded project to HOPWA PH */
   MovedFromOneHopwaFundedProjectToHopwaPh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH',
+  /** (27) Moved from one HOPWA funded project to HOPWA TH */
+  MovedFromOneHopwaFundedProjectToHopwaTh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH',
   /** (30) No exit interview completed */
   NoExitInterviewCompleted = 'NO_EXIT_INTERVIEW_COMPLETED',
   /** (17) Other */
@@ -4627,6 +4633,18 @@ export enum SubsidyInformation {
   WithTheSubsidyTheyHadAtProjectEntry_1 = 'WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY_1',
 }
 
+/** W4.B */
+export enum TCellSourceViralLoadSource {
+  /** (2) Client Report */
+  ClientReport = 'CLIENT_REPORT',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (1) Medical Report */
+  MedicalReport = 'MEDICAL_REPORT',
+  /** (3) Other */
+  Other = 'OTHER',
+}
+
 /** 2.02.8 */
 export enum TargetPopulation {
   /** (1) Domestic violence victims */
@@ -4875,6 +4893,24 @@ export type ValueBound = {
   valueDate?: Maybe<Scalars['ISO8601Date']['output']>;
   valueNumber?: Maybe<Scalars['Int']['output']>;
 };
+
+/** W4.3 */
+export enum ViralLoadAvailable {
+  /** (1) Available */
+  Available = 'AVAILABLE',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (0) Not available */
+  NotAvailable = 'NOT_AVAILABLE',
+  /** (2) Undetectable */
+  Undetectable = 'UNDETECTABLE',
+}
 
 /** Autogenerated return type of VoidReferralRequest. */
 export type VoidReferralRequestPayload = {
@@ -5294,6 +5330,12 @@ export type AssessmentWithRecordsFragment = {
     substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    tCellCountAvailable?: NoYesReasonsForMissingData | null;
+    tCellCount?: number | null;
+    tCellSource?: TCellSourceViralLoadSource | null;
+    viralLoadAvailable?: ViralLoadAvailable | null;
+    viralLoad?: number | null;
+    antiRetroviral?: NoYesReasonsForMissingData | null;
   } | null;
   healthAndDv?: {
     __typename: 'HealthAndDv';
@@ -5633,6 +5675,12 @@ export type FullAssessmentFragment = {
     substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    tCellCountAvailable?: NoYesReasonsForMissingData | null;
+    tCellCount?: number | null;
+    tCellSource?: TCellSourceViralLoadSource | null;
+    viralLoadAvailable?: ViralLoadAvailable | null;
+    viralLoad?: number | null;
+    antiRetroviral?: NoYesReasonsForMissingData | null;
   } | null;
   healthAndDv?: {
     __typename: 'HealthAndDv';
@@ -6410,6 +6458,12 @@ export type GetAssessmentQuery = {
       substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      tCellCountAvailable?: NoYesReasonsForMissingData | null;
+      tCellCount?: number | null;
+      tCellSource?: TCellSourceViralLoadSource | null;
+      viralLoadAvailable?: ViralLoadAvailable | null;
+      viralLoad?: number | null;
+      antiRetroviral?: NoYesReasonsForMissingData | null;
     } | null;
     healthAndDv?: {
       __typename: 'HealthAndDv';
@@ -6832,6 +6886,12 @@ export type GetHouseholdAssessmentsQuery = {
       substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      tCellCountAvailable?: NoYesReasonsForMissingData | null;
+      tCellCount?: number | null;
+      tCellSource?: TCellSourceViralLoadSource | null;
+      viralLoadAvailable?: ViralLoadAvailable | null;
+      viralLoad?: number | null;
+      antiRetroviral?: NoYesReasonsForMissingData | null;
     } | null;
     healthAndDv?: {
       __typename: 'HealthAndDv';
@@ -7203,6 +7263,12 @@ export type SubmitAssessmentMutation = {
         substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        tCellCountAvailable?: NoYesReasonsForMissingData | null;
+        tCellCount?: number | null;
+        tCellSource?: TCellSourceViralLoadSource | null;
+        viralLoadAvailable?: ViralLoadAvailable | null;
+        viralLoad?: number | null;
+        antiRetroviral?: NoYesReasonsForMissingData | null;
       } | null;
       healthAndDv?: {
         __typename: 'HealthAndDv';
@@ -7589,6 +7655,12 @@ export type GetAssessmentsForPopulationQuery = {
           substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          tCellCountAvailable?: NoYesReasonsForMissingData | null;
+          tCellCount?: number | null;
+          tCellSource?: TCellSourceViralLoadSource | null;
+          viralLoadAvailable?: ViralLoadAvailable | null;
+          viralLoad?: number | null;
+          antiRetroviral?: NoYesReasonsForMissingData | null;
         } | null;
         healthAndDv?: {
           __typename: 'HealthAndDv';
@@ -8031,6 +8103,12 @@ export type DisabilityGroupValuesFragment = {
   substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+  tCellCountAvailable?: NoYesReasonsForMissingData | null;
+  tCellCount?: number | null;
+  tCellSource?: TCellSourceViralLoadSource | null;
+  viralLoadAvailable?: ViralLoadAvailable | null;
+  viralLoad?: number | null;
+  antiRetroviral?: NoYesReasonsForMissingData | null;
 };
 
 export type DisabilityGroupFieldsFragment = {
@@ -8051,6 +8129,12 @@ export type DisabilityGroupFieldsFragment = {
   substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+  tCellCountAvailable?: NoYesReasonsForMissingData | null;
+  tCellCount?: number | null;
+  tCellSource?: TCellSourceViralLoadSource | null;
+  viralLoadAvailable?: ViralLoadAvailable | null;
+  viralLoad?: number | null;
+  antiRetroviral?: NoYesReasonsForMissingData | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
   enrollment: {
     __typename?: 'Enrollment';
@@ -9713,6 +9797,12 @@ export type GetRecentDisabilitiesQuery = {
       substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      tCellCountAvailable?: NoYesReasonsForMissingData | null;
+      tCellCount?: number | null;
+      tCellSource?: TCellSourceViralLoadSource | null;
+      viralLoadAvailable?: ViralLoadAvailable | null;
+      viralLoad?: number | null;
+      antiRetroviral?: NoYesReasonsForMissingData | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
       enrollment: {
         __typename?: 'Enrollment';
@@ -16818,6 +16908,13 @@ export const DisabilityGroupValuesFragmentDoc = gql`
     substanceUseDisorderIndefiniteAndImpairs
     dateCreated
     dateUpdated
+    hivAids
+    tCellCountAvailable
+    tCellCount
+    tCellSource
+    viralLoadAvailable
+    viralLoad
+    antiRetroviral
   }
 `;
 export const HealthAndDvValuesFragmentDoc = gql`

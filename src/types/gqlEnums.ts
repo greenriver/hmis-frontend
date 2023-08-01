@@ -266,11 +266,6 @@ export const HmisEnums = {
       'Rental by client, with HCV voucher (tenant or project based)',
     RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT:
       'Rental by client in a public housing unit',
-    STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE:
-      "Staying or living in a family member's room, apartment or house",
-    STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE:
-      "Staying or living in a friend's room, apartment or house",
-    WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
@@ -702,7 +697,8 @@ export const HmisEnums = {
       'Long-term care facility or nursing home',
     MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH:
       'Moved from one HOPWA funded project to HOPWA PH',
-    INTERIM_HOUSING: 'Interim Housing',
+    MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH:
+      'Moved from one HOPWA funded project to HOPWA TH',
     RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY:
       'Rental by client, with GPD TIP housing subsidy',
     RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA:
@@ -1304,6 +1300,12 @@ export const HmisEnums = {
     WITH_ON_GOING_SUBSIDY_2: 'With on-going subsidy 2',
     WITHOUT_AN_ON_GOING_SUBSIDY_2: 'Without an on-going subsidy 2',
   },
+  TCellSourceViralLoadSource: {
+    INVALID: 'Invalid Value',
+    MEDICAL_REPORT: 'Medical Report',
+    CLIENT_REPORT: 'Client Report',
+    OTHER: 'Other',
+  },
   TargetPopulation: {
     INVALID: 'Invalid Value',
     DOMESTIC_VIOLENCE_VICTIMS: 'Domestic violence victims',
@@ -1336,6 +1338,15 @@ export const HmisEnums = {
     out_of_range: 'out_of_range',
     required: 'required',
     server_error: 'server_error',
+  },
+  ViralLoadAvailable: {
+    INVALID: 'Invalid Value',
+    NOT_AVAILABLE: 'Not available',
+    AVAILABLE: 'Available',
+    UNDETECTABLE: 'Undetectable',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   WellbeingAgreement: {
     INVALID: 'Invalid Value',
