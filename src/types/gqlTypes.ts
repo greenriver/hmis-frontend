@@ -1307,6 +1307,7 @@ export type DisabilitiesPaginated = {
 
 export type Disability = {
   __typename?: 'Disability';
+  antiRetroviral?: Maybe<NoYesReasonsForMissingData>;
   client: Client;
   dataCollectionStage: DataCollectionStage;
   dateCreated: Scalars['ISO8601DateTime']['output'];
@@ -1315,10 +1316,16 @@ export type Disability = {
   disabilityResponse: DisabilityResponse;
   disabilityType: DisabilityType;
   enrollment: Enrollment;
+  hivAids?: Maybe<NoYesReasonsForMissingData>;
   id: Scalars['ID']['output'];
   indefiniteAndImpairs?: Maybe<Scalars['Int']['output']>;
   informationDate: Scalars['ISO8601Date']['output'];
+  tCellCount?: Maybe<Scalars['Int']['output']>;
+  tCellCountAvailable?: Maybe<NoYesReasonsForMissingData>;
+  tCellSource?: Maybe<TCellSourceViralLoadSource>;
   user?: Maybe<User>;
+  viralLoad?: Maybe<Scalars['Int']['output']>;
+  viralLoadAvailable?: Maybe<ViralLoadAvailable>;
 };
 
 /** Group of disability records that were collected at the same time */
