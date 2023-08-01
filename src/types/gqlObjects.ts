@@ -1203,14 +1203,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'hivAids',
-        type: {
-          kind: 'ENUM',
-          name: 'NoYesReasonsForMissingData',
-          ofType: null,
-        },
-      },
-      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
