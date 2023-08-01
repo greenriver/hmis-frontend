@@ -16,7 +16,7 @@ const ApolloErrorAlert = ({
 }) => {
   if (!error) return null;
 
-  let graphqlErrors = [];
+  let graphqlErrors = [...error.graphQLErrors];
   if (error.graphQLErrors.length < 1 && isServerError(error.networkError)) {
     graphqlErrors = error.networkError?.result?.errors || [];
   }
