@@ -14300,12 +14300,6 @@
             "deprecationReason": null
           },
           {
-            "name": "NEW_CLIENT_ENROLLMENT",
-            "description": "(NEW_CLIENT_ENROLLMENT) New Client Enrollment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "ORGANIZATION",
             "description": "(ORGANIZATION) Organization",
             "isDeprecated": false,
@@ -26060,12 +26054,6 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
-          {
-            "name": "CLIENT",
-            "description": "Client",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "CURRENT_LIVING_SITUATION",
             "description": "CurrentLivingSituation",
