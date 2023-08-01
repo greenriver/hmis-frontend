@@ -1248,10 +1248,6 @@ export enum Destination {
   ResidentialProjectOrHalfwayHouseWithNoHomelessCriteria = 'RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA',
   /** (18) Safe Haven */
   SafeHaven = 'SAFE_HAVEN',
-  /** (35) Staying or living in a family member's room, apartment or house */
-  StayingOrLivingInAFamilyMemberSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE',
-  /** (36) Staying or living in a friend's room, apartment or house */
-  StayingOrLivingInAFriendSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE',
   /** (22) Staying or living with family, permanent tenure */
   StayingOrLivingWithFamilyPermanentTenure = 'STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE',
   /** (12) Staying or living with family, temporary tenure (e.g. room, apartment or house) */
@@ -1264,8 +1260,6 @@ export enum Destination {
   SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
   /** (2) Transitional housing for homeless persons (including homeless youth) */
   TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
-  /** (37) Worker unable to determine */
-  WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
 }
 
 /** Represents direct upload credentials */
@@ -2120,6 +2114,8 @@ export enum FormRole {
   Inventory = 'INVENTORY',
   /** (MOVE_IN_DATE) Move-in Date */
   MoveInDate = 'MOVE_IN_DATE',
+  /** (NEW_CLIENT_ENROLLMENT) New Client Enrollment */
+  NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
   /** (ORGANIZATION) Organization */
   Organization = 'ORGANIZATION',
   /** (PATH_STATUS) PATH Status */
@@ -2730,8 +2726,6 @@ export enum LivingSituation {
   HostHomeNonCrisis = 'HOST_HOME_NON_CRISIS',
   /** (14) Hotel or motel paid for without emergency shelter voucher */
   HotelOrMotelPaidForWithoutEmergencyShelterVoucher = 'HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER',
-  /** (27) Interim Housing */
-  InterimHousing = 'INTERIM_HOUSING',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (7) Jail, prison or juvenile detention facility */
@@ -2740,6 +2734,8 @@ export enum LivingSituation {
   LongTermCareFacilityOrNursingHome = 'LONG_TERM_CARE_FACILITY_OR_NURSING_HOME',
   /** (26) Moved from one HOPWA funded project to HOPWA PH */
   MovedFromOneHopwaFundedProjectToHopwaPh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH',
+  /** (27) Moved from one HOPWA funded project to HOPWA TH */
+  MovedFromOneHopwaFundedProjectToHopwaTh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH',
   /** (30) No exit interview completed */
   NoExitInterviewCompleted = 'NO_EXIT_INTERVIEW_COMPLETED',
   /** (17) Other */
@@ -4015,6 +4011,8 @@ export enum ReferralSource {
 
 /** Related record type for a group of questions in an assessment */
 export enum RelatedRecordType {
+  /** Client */
+  Client = 'CLIENT',
   /** CurrentLivingSituation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** DisabilityGroup */

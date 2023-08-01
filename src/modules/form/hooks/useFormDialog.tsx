@@ -84,7 +84,9 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
     }
     const hasTopLevelGroup =
       formDefinition &&
-      formDefinition.definition.item[0]?.type === ItemType.Group;
+      formDefinition.definition.item.find(
+        ({ type }) => type === ItemType.Group
+      );
 
     return (
       <CommonDialog

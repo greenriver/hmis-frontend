@@ -7982,18 +7982,6 @@
             "deprecationReason": null
           },
           {
-            "name": "STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE",
-            "description": "(35) Staying or living in a family member's room, apartment or house",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE",
-            "description": "(36) Staying or living in a friend's room, apartment or house",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE",
             "description": "(22) Staying or living with family, permanent tenure",
             "isDeprecated": false,
@@ -8026,12 +8014,6 @@
           {
             "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH",
             "description": "(2) Transitional housing for homeless persons (including homeless youth)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "WORKER_UNABLE_TO_DETERMINE",
-            "description": "(37) Worker unable to determine",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -14318,6 +14300,12 @@
             "deprecationReason": null
           },
           {
+            "name": "NEW_CLIENT_ENROLLMENT",
+            "description": "(NEW_CLIENT_ENROLLMENT) New Client Enrollment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ORGANIZATION",
             "description": "(ORGANIZATION) Organization",
             "isDeprecated": false,
@@ -18286,12 +18274,6 @@
             "deprecationReason": null
           },
           {
-            "name": "INTERIM_HOUSING",
-            "description": "(27) Interim Housing",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "INVALID",
             "description": "Invalid Value",
             "isDeprecated": false,
@@ -18312,6 +18294,12 @@
           {
             "name": "MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH",
             "description": "(26) Moved from one HOPWA funded project to HOPWA PH",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH",
+            "description": "(27) Moved from one HOPWA funded project to HOPWA TH",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -26072,6 +26060,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "CLIENT",
+            "description": "Client",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "CURRENT_LIVING_SITUATION",
             "description": "CurrentLivingSituation",
