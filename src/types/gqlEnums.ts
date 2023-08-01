@@ -437,6 +437,7 @@ export const HmisEnums = {
     INTAKE: 'Intake Assessment',
     INVENTORY: 'Inventory',
     MOVE_IN_DATE: 'Move-in Date',
+    NEW_CLIENT_ENROLLMENT: 'New Client Enrollment',
     ORGANIZATION: 'Organization',
     PATH_STATUS: 'PATH Status',
     POST_EXIT: 'Post-Exit Assessment',
@@ -994,6 +995,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   RelatedRecordType: {
+    CLIENT: 'Client',
     CURRENT_LIVING_SITUATION: 'CurrentLivingSituation',
     DISABILITY_GROUP: 'DisabilityGroup',
     EMPLOYMENT_EDUCATION: 'EmploymentEducation',
