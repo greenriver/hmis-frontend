@@ -35,6 +35,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
+import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -110,8 +111,8 @@ const AssessmentForm = ({
   // Local values that may be referenced by the FormDefinition
   const localConstants = useMemo(
     () => ({
-      entryDate: enrollment.entryDate,
-      exitDate: enrollment.exitDate,
+      entryDate: parseHmisDateString(enrollment.entryDate),
+      exitDate: parseHmisDateString(enrollment.exitDate),
       ...AlwaysPresentLocalConstants,
     }),
     [enrollment]
