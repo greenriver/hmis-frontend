@@ -1151,6 +1151,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Disability',
     fields: [
       {
+        name: 'antiRetroviral',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
         name: 'dataCollectionStage',
         type: {
           kind: 'NON_NULL',
@@ -1214,11 +1222,47 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
       },
+      {
+        name: 'tCellCount',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'tCellCountAvailable',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'tCellSource',
+        type: {
+          kind: 'ENUM',
+          name: 'TCellSourceViralLoadSource',
+          ofType: null,
+        },
+      },
+      {
+        name: 'viralLoad',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'viralLoadAvailable',
+        type: { kind: 'ENUM', name: 'ViralLoadAvailable', ofType: null },
+      },
     ],
   },
   {
     name: 'DisabilityGroup',
     fields: [
+      {
+        name: 'antiRetroviral',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
       {
         name: 'chronicHealthCondition',
         type: {
@@ -1338,6 +1382,34 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: 'NoYesReasonsForMissingData',
           ofType: null,
         },
+      },
+      {
+        name: 'tCellCount',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'tCellCountAvailable',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'tCellSource',
+        type: {
+          kind: 'ENUM',
+          name: 'TCellSourceViralLoadSource',
+          ofType: null,
+        },
+      },
+      {
+        name: 'viralLoad',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'viralLoadAvailable',
+        type: { kind: 'ENUM', name: 'ViralLoadAvailable', ofType: null },
       },
     ],
   },

@@ -161,6 +161,13 @@ fragment DisabilityGroupValues on DisabilityGroup {
   substanceUseDisorderIndefiniteAndImpairs
   dateCreated
   dateUpdated
+  hivAids
+  tCellCountAvailable
+  tCellCount
+  tCellSource
+  viralLoadAvailable
+  viralLoad
+  antiRetroviral
 }
 
 fragment DisabilityGroupFields on DisabilityGroup {
