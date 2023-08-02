@@ -51,7 +51,7 @@ export function getOptionLabelFromOptions(
 ): string {
   if (option.label) return option.label;
   if (option.code === INVALID_ENUM) return 'Invalid Value';
-  if (options && options[0].label) {
+  if (options && options.length > 0 && options[0].label) {
     return find(options, { code: option.code })?.label || '';
   }
   return option.code || '';
