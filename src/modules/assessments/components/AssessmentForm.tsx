@@ -26,16 +26,16 @@ import DynamicForm, {
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
-import { AlwaysPresentLocalConstants } from '@/modules/form/hooks/useInitialFormValues';
+
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import {
+  AlwaysPresentLocalConstants,
   getInitialValues,
   getItemMap,
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
-import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -111,8 +111,8 @@ const AssessmentForm = ({
   // Local values that may be referenced by the FormDefinition
   const localConstants = useMemo(
     () => ({
-      entryDate: parseHmisDateString(enrollment.entryDate),
-      exitDate: parseHmisDateString(enrollment.exitDate),
+      entryDate: enrollment.entryDate,
+      exitDate: enrollment.exitDate,
       ...AlwaysPresentLocalConstants,
     }),
     [enrollment]
