@@ -120,7 +120,9 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     ),
   },
   assignedUnit: (householdMembers: HouseholdClientFieldsFragment[]) => ({
-    header: 'Assigned Unit',
+    header: `Assigned Units (${
+      householdMembers.filter((m) => m.enrollment.currentUnit).length
+    })`,
     hide: !householdMembers.some((m) => m.enrollment.currentUnit),
     render: (hc: HouseholdClientFieldsFragment) =>
       hc.enrollment.currentUnit?.name,
