@@ -89,12 +89,12 @@ const UnitManagementTable = ({
   const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
     return [
       {
-        header: 'Unit ID',
-        render: 'id',
-      },
-      {
         header: 'Unit Type',
         render: (unit) => unit.unitType?.description,
+      },
+      {
+        header: 'Unit ID',
+        render: 'id',
       },
       {
         header: 'Active Status',
