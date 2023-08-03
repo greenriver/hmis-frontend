@@ -9658,6 +9658,18 @@
             "deprecationReason": null
           },
           {
+            "name": "localConstant",
+            "description": "The Local Constant that determines whether item is enabled/disabled",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "operator",
             "description": "How to evaluate the question's answer",
             "args": [],
@@ -9678,13 +9690,9 @@
             "description": "The linkId of question that determines whether item is enabled/disabled",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -30730,6 +30738,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "ISO8601Date",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueLocalConstant",
+            "description": "Name of Local Constant to use for comparison",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,

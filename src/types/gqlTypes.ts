@@ -1497,10 +1497,12 @@ export type EnableWhen = {
   answerNumber?: Maybe<Scalars['Int']['output']>;
   /** The linkId of a question to compare with the question using the operator */
   compareQuestion?: Maybe<Scalars['String']['output']>;
+  /** The Local Constant that determines whether item is enabled/disabled */
+  localConstant?: Maybe<Scalars['String']['output']>;
   /** How to evaluate the question's answer */
   operator: EnableOperator;
   /** The linkId of question that determines whether item is enabled/disabled */
-  question: Scalars['String']['output'];
+  question?: Maybe<Scalars['String']['output']>;
 };
 
 /** HUD Enrollment */
@@ -4891,6 +4893,8 @@ export type ValueBound = {
   severity: ValidationSeverity;
   type: BoundType;
   valueDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  /** Name of Local Constant to use for comparison */
+  valueLocalConstant?: Maybe<Scalars['String']['output']>;
   valueNumber?: Maybe<Scalars['Int']['output']>;
 };
 
@@ -5969,6 +5973,7 @@ export type GetAssessmentQuery = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    valueLocalConstant?: string | null;
                     offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
@@ -5990,7 +5995,8 @@ export type GetAssessmentQuery = {
                   }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
-                    question: string;
+                    question?: string | null;
+                    localConstant?: string | null;
                     operator: EnableOperator;
                     answerCode?: string | null;
                     answerCodes?: Array<string> | null;
@@ -6010,7 +6016,8 @@ export type GetAssessmentQuery = {
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
-                      question: string;
+                      question?: string | null;
+                      localConstant?: string | null;
                       operator: EnableOperator;
                       answerCode?: string | null;
                       answerCodes?: Array<string> | null;
@@ -6035,6 +6042,7 @@ export type GetAssessmentQuery = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  valueLocalConstant?: string | null;
                   offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -6056,7 +6064,8 @@ export type GetAssessmentQuery = {
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
-                  question: string;
+                  question?: string | null;
+                  localConstant?: string | null;
                   operator: EnableOperator;
                   answerCode?: string | null;
                   answerCodes?: Array<string> | null;
@@ -6076,7 +6085,8 @@ export type GetAssessmentQuery = {
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
-                    question: string;
+                    question?: string | null;
+                    localConstant?: string | null;
                     operator: EnableOperator;
                     answerCode?: string | null;
                     answerCodes?: Array<string> | null;
@@ -6101,6 +6111,7 @@ export type GetAssessmentQuery = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                valueLocalConstant?: string | null;
                 offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
@@ -6122,7 +6133,8 @@ export type GetAssessmentQuery = {
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
-                question: string;
+                question?: string | null;
+                localConstant?: string | null;
                 operator: EnableOperator;
                 answerCode?: string | null;
                 answerCodes?: Array<string> | null;
@@ -6142,7 +6154,8 @@ export type GetAssessmentQuery = {
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
-                  question: string;
+                  question?: string | null;
+                  localConstant?: string | null;
                   operator: EnableOperator;
                   answerCode?: string | null;
                   answerCodes?: Array<string> | null;
@@ -6167,6 +6180,7 @@ export type GetAssessmentQuery = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              valueLocalConstant?: string | null;
               offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
@@ -6188,7 +6202,8 @@ export type GetAssessmentQuery = {
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -6208,7 +6223,8 @@ export type GetAssessmentQuery = {
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
-                question: string;
+                question?: string | null;
+                localConstant?: string | null;
                 operator: EnableOperator;
                 answerCode?: string | null;
                 answerCodes?: Array<string> | null;
@@ -6233,6 +6249,7 @@ export type GetAssessmentQuery = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            valueLocalConstant?: string | null;
             offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
@@ -6254,7 +6271,8 @@ export type GetAssessmentQuery = {
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
-            question: string;
+            question?: string | null;
+            localConstant?: string | null;
             operator: EnableOperator;
             answerCode?: string | null;
             answerCodes?: Array<string> | null;
@@ -6274,7 +6292,8 @@ export type GetAssessmentQuery = {
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -10891,7 +10910,8 @@ export type PickListOptionFieldsFragment = {
 
 export type EnableWhenFieldsFragment = {
   __typename?: 'EnableWhen';
-  question: string;
+  question?: string | null;
+  localConstant?: string | null;
   operator: EnableOperator;
   answerCode?: string | null;
   answerCodes?: Array<string> | null;
@@ -10938,6 +10958,7 @@ export type ItemFieldsFragment = {
     question?: string | null;
     valueNumber?: number | null;
     valueDate?: string | null;
+    valueLocalConstant?: string | null;
     offset?: number | null;
   }> | null;
   pickListOptions?: Array<{
@@ -10959,7 +10980,8 @@ export type ItemFieldsFragment = {
   }> | null;
   enableWhen?: Array<{
     __typename?: 'EnableWhen';
-    question: string;
+    question?: string | null;
+    localConstant?: string | null;
     operator: EnableOperator;
     answerCode?: string | null;
     answerCodes?: Array<string> | null;
@@ -10979,7 +11001,8 @@ export type ItemFieldsFragment = {
     autofillReadonly?: boolean | null;
     autofillWhen: Array<{
       __typename?: 'EnableWhen';
-      question: string;
+      question?: string | null;
+      localConstant?: string | null;
       operator: EnableOperator;
       answerCode?: string | null;
       answerCodes?: Array<string> | null;
@@ -11122,6 +11145,7 @@ export type FormDefinitionJsonFieldsFragment = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              valueLocalConstant?: string | null;
               offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
@@ -11143,7 +11167,8 @@ export type FormDefinitionJsonFieldsFragment = {
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -11163,7 +11188,8 @@ export type FormDefinitionJsonFieldsFragment = {
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
-                question: string;
+                question?: string | null;
+                localConstant?: string | null;
                 operator: EnableOperator;
                 answerCode?: string | null;
                 answerCodes?: Array<string> | null;
@@ -11188,6 +11214,7 @@ export type FormDefinitionJsonFieldsFragment = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            valueLocalConstant?: string | null;
             offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
@@ -11209,7 +11236,8 @@ export type FormDefinitionJsonFieldsFragment = {
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
-            question: string;
+            question?: string | null;
+            localConstant?: string | null;
             operator: EnableOperator;
             answerCode?: string | null;
             answerCodes?: Array<string> | null;
@@ -11229,7 +11257,8 @@ export type FormDefinitionJsonFieldsFragment = {
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -11254,6 +11283,7 @@ export type FormDefinitionJsonFieldsFragment = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          valueLocalConstant?: string | null;
           offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
@@ -11275,7 +11305,8 @@ export type FormDefinitionJsonFieldsFragment = {
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
-          question: string;
+          question?: string | null;
+          localConstant?: string | null;
           operator: EnableOperator;
           answerCode?: string | null;
           answerCodes?: Array<string> | null;
@@ -11295,7 +11326,8 @@ export type FormDefinitionJsonFieldsFragment = {
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
-            question: string;
+            question?: string | null;
+            localConstant?: string | null;
             operator: EnableOperator;
             answerCode?: string | null;
             answerCodes?: Array<string> | null;
@@ -11320,6 +11352,7 @@ export type FormDefinitionJsonFieldsFragment = {
         question?: string | null;
         valueNumber?: number | null;
         valueDate?: string | null;
+        valueLocalConstant?: string | null;
         offset?: number | null;
       }> | null;
       pickListOptions?: Array<{
@@ -11341,7 +11374,8 @@ export type FormDefinitionJsonFieldsFragment = {
       }> | null;
       enableWhen?: Array<{
         __typename?: 'EnableWhen';
-        question: string;
+        question?: string | null;
+        localConstant?: string | null;
         operator: EnableOperator;
         answerCode?: string | null;
         answerCodes?: Array<string> | null;
@@ -11361,7 +11395,8 @@ export type FormDefinitionJsonFieldsFragment = {
         autofillReadonly?: boolean | null;
         autofillWhen: Array<{
           __typename?: 'EnableWhen';
-          question: string;
+          question?: string | null;
+          localConstant?: string | null;
           operator: EnableOperator;
           answerCode?: string | null;
           answerCodes?: Array<string> | null;
@@ -11386,6 +11421,7 @@ export type FormDefinitionJsonFieldsFragment = {
       question?: string | null;
       valueNumber?: number | null;
       valueDate?: string | null;
+      valueLocalConstant?: string | null;
       offset?: number | null;
     }> | null;
     pickListOptions?: Array<{
@@ -11407,7 +11443,8 @@ export type FormDefinitionJsonFieldsFragment = {
     }> | null;
     enableWhen?: Array<{
       __typename?: 'EnableWhen';
-      question: string;
+      question?: string | null;
+      localConstant?: string | null;
       operator: EnableOperator;
       answerCode?: string | null;
       answerCodes?: Array<string> | null;
@@ -11427,7 +11464,8 @@ export type FormDefinitionJsonFieldsFragment = {
       autofillReadonly?: boolean | null;
       autofillWhen: Array<{
         __typename?: 'EnableWhen';
-        question: string;
+        question?: string | null;
+        localConstant?: string | null;
         operator: EnableOperator;
         answerCode?: string | null;
         answerCodes?: Array<string> | null;
@@ -11575,6 +11613,7 @@ export type FormDefinitionFieldsFragment = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                valueLocalConstant?: string | null;
                 offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
@@ -11596,7 +11635,8 @@ export type FormDefinitionFieldsFragment = {
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
-                question: string;
+                question?: string | null;
+                localConstant?: string | null;
                 operator: EnableOperator;
                 answerCode?: string | null;
                 answerCodes?: Array<string> | null;
@@ -11616,7 +11656,8 @@ export type FormDefinitionFieldsFragment = {
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
-                  question: string;
+                  question?: string | null;
+                  localConstant?: string | null;
                   operator: EnableOperator;
                   answerCode?: string | null;
                   answerCodes?: Array<string> | null;
@@ -11641,6 +11682,7 @@ export type FormDefinitionFieldsFragment = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              valueLocalConstant?: string | null;
               offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
@@ -11662,7 +11704,8 @@ export type FormDefinitionFieldsFragment = {
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -11682,7 +11725,8 @@ export type FormDefinitionFieldsFragment = {
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
-                question: string;
+                question?: string | null;
+                localConstant?: string | null;
                 operator: EnableOperator;
                 answerCode?: string | null;
                 answerCodes?: Array<string> | null;
@@ -11707,6 +11751,7 @@ export type FormDefinitionFieldsFragment = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            valueLocalConstant?: string | null;
             offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
@@ -11728,7 +11773,8 @@ export type FormDefinitionFieldsFragment = {
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
-            question: string;
+            question?: string | null;
+            localConstant?: string | null;
             operator: EnableOperator;
             answerCode?: string | null;
             answerCodes?: Array<string> | null;
@@ -11748,7 +11794,8 @@ export type FormDefinitionFieldsFragment = {
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -11773,6 +11820,7 @@ export type FormDefinitionFieldsFragment = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          valueLocalConstant?: string | null;
           offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
@@ -11794,7 +11842,8 @@ export type FormDefinitionFieldsFragment = {
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
-          question: string;
+          question?: string | null;
+          localConstant?: string | null;
           operator: EnableOperator;
           answerCode?: string | null;
           answerCodes?: Array<string> | null;
@@ -11814,7 +11863,8 @@ export type FormDefinitionFieldsFragment = {
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
-            question: string;
+            question?: string | null;
+            localConstant?: string | null;
             operator: EnableOperator;
             answerCode?: string | null;
             answerCodes?: Array<string> | null;
@@ -11839,6 +11889,7 @@ export type FormDefinitionFieldsFragment = {
         question?: string | null;
         valueNumber?: number | null;
         valueDate?: string | null;
+        valueLocalConstant?: string | null;
         offset?: number | null;
       }> | null;
       pickListOptions?: Array<{
@@ -11860,7 +11911,8 @@ export type FormDefinitionFieldsFragment = {
       }> | null;
       enableWhen?: Array<{
         __typename?: 'EnableWhen';
-        question: string;
+        question?: string | null;
+        localConstant?: string | null;
         operator: EnableOperator;
         answerCode?: string | null;
         answerCodes?: Array<string> | null;
@@ -11880,7 +11932,8 @@ export type FormDefinitionFieldsFragment = {
         autofillReadonly?: boolean | null;
         autofillWhen: Array<{
           __typename?: 'EnableWhen';
-          question: string;
+          question?: string | null;
+          localConstant?: string | null;
           operator: EnableOperator;
           answerCode?: string | null;
           answerCodes?: Array<string> | null;
@@ -12064,6 +12117,7 @@ export type GetFormDefinitionQuery = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  valueLocalConstant?: string | null;
                   offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -12085,7 +12139,8 @@ export type GetFormDefinitionQuery = {
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
-                  question: string;
+                  question?: string | null;
+                  localConstant?: string | null;
                   operator: EnableOperator;
                   answerCode?: string | null;
                   answerCodes?: Array<string> | null;
@@ -12105,7 +12160,8 @@ export type GetFormDefinitionQuery = {
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
-                    question: string;
+                    question?: string | null;
+                    localConstant?: string | null;
                     operator: EnableOperator;
                     answerCode?: string | null;
                     answerCodes?: Array<string> | null;
@@ -12130,6 +12186,7 @@ export type GetFormDefinitionQuery = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                valueLocalConstant?: string | null;
                 offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
@@ -12151,7 +12208,8 @@ export type GetFormDefinitionQuery = {
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
-                question: string;
+                question?: string | null;
+                localConstant?: string | null;
                 operator: EnableOperator;
                 answerCode?: string | null;
                 answerCodes?: Array<string> | null;
@@ -12171,7 +12229,8 @@ export type GetFormDefinitionQuery = {
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
-                  question: string;
+                  question?: string | null;
+                  localConstant?: string | null;
                   operator: EnableOperator;
                   answerCode?: string | null;
                   answerCodes?: Array<string> | null;
@@ -12196,6 +12255,7 @@ export type GetFormDefinitionQuery = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              valueLocalConstant?: string | null;
               offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
@@ -12217,7 +12277,8 @@ export type GetFormDefinitionQuery = {
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -12237,7 +12298,8 @@ export type GetFormDefinitionQuery = {
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
-                question: string;
+                question?: string | null;
+                localConstant?: string | null;
                 operator: EnableOperator;
                 answerCode?: string | null;
                 answerCodes?: Array<string> | null;
@@ -12262,6 +12324,7 @@ export type GetFormDefinitionQuery = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            valueLocalConstant?: string | null;
             offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
@@ -12283,7 +12346,8 @@ export type GetFormDefinitionQuery = {
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
-            question: string;
+            question?: string | null;
+            localConstant?: string | null;
             operator: EnableOperator;
             answerCode?: string | null;
             answerCodes?: Array<string> | null;
@@ -12303,7 +12367,8 @@ export type GetFormDefinitionQuery = {
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -12328,6 +12393,7 @@ export type GetFormDefinitionQuery = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          valueLocalConstant?: string | null;
           offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
@@ -12349,7 +12415,8 @@ export type GetFormDefinitionQuery = {
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
-          question: string;
+          question?: string | null;
+          localConstant?: string | null;
           operator: EnableOperator;
           answerCode?: string | null;
           answerCodes?: Array<string> | null;
@@ -12369,7 +12436,8 @@ export type GetFormDefinitionQuery = {
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
-            question: string;
+            question?: string | null;
+            localConstant?: string | null;
             operator: EnableOperator;
             answerCode?: string | null;
             answerCodes?: Array<string> | null;
@@ -12526,6 +12594,7 @@ export type GetServiceFormDefinitionQuery = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  valueLocalConstant?: string | null;
                   offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -12547,7 +12616,8 @@ export type GetServiceFormDefinitionQuery = {
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
-                  question: string;
+                  question?: string | null;
+                  localConstant?: string | null;
                   operator: EnableOperator;
                   answerCode?: string | null;
                   answerCodes?: Array<string> | null;
@@ -12567,7 +12637,8 @@ export type GetServiceFormDefinitionQuery = {
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
-                    question: string;
+                    question?: string | null;
+                    localConstant?: string | null;
                     operator: EnableOperator;
                     answerCode?: string | null;
                     answerCodes?: Array<string> | null;
@@ -12592,6 +12663,7 @@ export type GetServiceFormDefinitionQuery = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                valueLocalConstant?: string | null;
                 offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
@@ -12613,7 +12685,8 @@ export type GetServiceFormDefinitionQuery = {
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
-                question: string;
+                question?: string | null;
+                localConstant?: string | null;
                 operator: EnableOperator;
                 answerCode?: string | null;
                 answerCodes?: Array<string> | null;
@@ -12633,7 +12706,8 @@ export type GetServiceFormDefinitionQuery = {
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
-                  question: string;
+                  question?: string | null;
+                  localConstant?: string | null;
                   operator: EnableOperator;
                   answerCode?: string | null;
                   answerCodes?: Array<string> | null;
@@ -12658,6 +12732,7 @@ export type GetServiceFormDefinitionQuery = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              valueLocalConstant?: string | null;
               offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
@@ -12679,7 +12754,8 @@ export type GetServiceFormDefinitionQuery = {
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -12699,7 +12775,8 @@ export type GetServiceFormDefinitionQuery = {
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
-                question: string;
+                question?: string | null;
+                localConstant?: string | null;
                 operator: EnableOperator;
                 answerCode?: string | null;
                 answerCodes?: Array<string> | null;
@@ -12724,6 +12801,7 @@ export type GetServiceFormDefinitionQuery = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            valueLocalConstant?: string | null;
             offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
@@ -12745,7 +12823,8 @@ export type GetServiceFormDefinitionQuery = {
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
-            question: string;
+            question?: string | null;
+            localConstant?: string | null;
             operator: EnableOperator;
             answerCode?: string | null;
             answerCodes?: Array<string> | null;
@@ -12765,7 +12844,8 @@ export type GetServiceFormDefinitionQuery = {
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
-              question: string;
+              question?: string | null;
+              localConstant?: string | null;
               operator: EnableOperator;
               answerCode?: string | null;
               answerCodes?: Array<string> | null;
@@ -12790,6 +12870,7 @@ export type GetServiceFormDefinitionQuery = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          valueLocalConstant?: string | null;
           offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
@@ -12811,7 +12892,8 @@ export type GetServiceFormDefinitionQuery = {
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
-          question: string;
+          question?: string | null;
+          localConstant?: string | null;
           operator: EnableOperator;
           answerCode?: string | null;
           answerCodes?: Array<string> | null;
@@ -12831,7 +12913,8 @@ export type GetServiceFormDefinitionQuery = {
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
-            question: string;
+            question?: string | null;
+            localConstant?: string | null;
             operator: EnableOperator;
             answerCode?: string | null;
             answerCodes?: Array<string> | null;
@@ -17574,6 +17657,7 @@ export const PickListOptionFieldsFragmentDoc = gql`
 export const EnableWhenFieldsFragmentDoc = gql`
   fragment EnableWhenFields on EnableWhen {
     question
+    localConstant
     operator
     answerCode
     answerCodes
@@ -17616,6 +17700,7 @@ export const ItemFieldsFragmentDoc = gql`
       question
       valueNumber
       valueDate
+      valueLocalConstant
       offset
     }
     pickListOptions {

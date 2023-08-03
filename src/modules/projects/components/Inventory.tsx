@@ -51,6 +51,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
       inventoryId,
+      projectType: project.projectType,
     };
   }, [project, inventoryId]);
   const pickListArgs = useMemo(() => ({ projectId }), [projectId]);

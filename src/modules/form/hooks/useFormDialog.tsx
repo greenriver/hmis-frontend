@@ -113,6 +113,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                   initialValues={initialValues}
                   loading={submitLoading}
                   errors={errors}
+                  localConstants={args.localConstants}
                   {...props}
                   FormActionProps={{
                     onDiscard: () => setDialogOpen(false),

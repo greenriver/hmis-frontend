@@ -3,6 +3,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ReactNode, useMemo } from 'react';
 import IconButtonContainer from './IconButtonContainer';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 interface Props {
@@ -36,8 +37,9 @@ const EditableOccurrencePointValue = ({
     formRole,
     record: enrollment,
     localConstants: {
-      entryDate: enrollment.entryDate,
-      exitDate: enrollment.exitDate,
+      entryDate: parseHmisDateString(enrollment.entryDate),
+      exitDate: parseHmisDateString(enrollment.exitDate),
+      projectType: enrollment.project.projectType,
     },
   });
   return (
