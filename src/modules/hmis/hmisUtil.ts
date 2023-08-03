@@ -3,6 +3,7 @@ import {
   differenceInYears,
   format,
   formatDistanceToNowStrict,
+  isDate,
   isFuture,
   isToday,
   isValid,
@@ -114,6 +115,12 @@ export const parseHmisDateString = (
   }
   const date = parseISO(dateString);
   return isValid(date) ? date : null;
+};
+
+export const safeParseDateOrString = (maybeDate: any): Date | null => {
+  if (isDate(maybeDate)) return maybeDate;
+  if (typeof maybeDate === 'string') return parseHmisDateString(maybeDate);
+  return null;
 };
 
 export const parseAndFormatDate = (

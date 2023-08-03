@@ -1,4 +1,12 @@
-import { add, getYear, isDate, isValid, max, min } from 'date-fns';
+import {
+  add,
+  getYear,
+  isDate,
+  isValid,
+  max,
+  min,
+  startOfToday,
+} from 'date-fns';
 import {
   compact,
   get,
@@ -35,6 +43,7 @@ import {
   formatDateForGql,
   INVALID_ENUM,
   parseHmisDateString,
+  safeParseDateOrString,
 } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -509,8 +518,9 @@ const compareNumOrDate = ({
   offset?: number;
 }) => {
   // Add offset to value
-  if (isDate(value)) {
-    value = add(value, { days: offset });
+  const date = safeParseDateOrString(value);
+  if (date) {
+    value = add(date, { days: offset });
   } else if (!isNaN(Number(value))) {
     value = Number(value) + offset;
   } else {
@@ -571,6 +581,7 @@ export const buildCommonInputProps = ({
     }
   });
 
+  // console.log(inputProps, localConstants);
   return inputProps;
 };
 
@@ -1276,4 +1287,8 @@ export const chooseSelectComponentType = (
   if (picklistLength === 0) return Component.Dropdown;
   if (picklistLength < 4 && isLocalPickList) return Component.RadioButtons;
   return Component.Dropdown;
+};
+
+export const AlwaysPresentLocalConstants = {
+  today: startOfToday(),
 };
