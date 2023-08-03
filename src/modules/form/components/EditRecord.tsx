@@ -88,11 +88,17 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
 
     // Remove disabled groups
     topLevelItems = topLevelItems.filter((item) =>
-      shouldEnableItem(item, initialValues, itemMap)
+      shouldEnableItem({ item, values: initialValues, itemMap, localConstants })
     );
     if (topLevelItems.length < 3) return false;
     return topLevelItems;
-  }, [itemMap, formDefinition, initialValues, minGroupsForLeftNav]);
+  }, [
+    itemMap,
+    formDefinition,
+    initialValues,
+    minGroupsForLeftNav,
+    localConstants,
+  ]);
 
   if (definitionLoading) return <Loading />;
   if (!formDefinition) return <NotFound text='Form definition not found.' />;
@@ -106,6 +112,7 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
         initialValues={initialValues}
         loading={submitLoading}
         errors={errors}
+        localConstants={localConstants}
         {...props}
         FormActionProps={{
           submitButtonText: 'Save Changes',

@@ -35,6 +35,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
+import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -106,18 +107,21 @@ const AssessmentForm = ({
     () => getItemMap(definition.definition),
     [definition]
   );
+
+  // Local values that may be referenced by the FormDefinition
+  const localConstants = useMemo(
+    () => ({
+      entryDate: parseHmisDateString(enrollment.entryDate),
+      exitDate: parseHmisDateString(enrollment.exitDate),
+      ...AlwaysPresentLocalConstants,
+    }),
+    [enrollment]
+  );
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
     if (mutationLoading || !definition || !enrollment) return;
     if (locked && assessment) return {};
-
-    // Local values that may be referenced by the FormDefinition
-    const localConstants = {
-      entryDate: enrollment.entryDate,
-      exitDate: enrollment.exitDate,
-      ...AlwaysPresentLocalConstants,
-    };
 
     const source = sourceAssessment || assessment;
 
@@ -156,6 +160,7 @@ const AssessmentForm = ({
     reloadInitialValues,
     itemMap,
     locked,
+    localConstants,
   ]);
 
   const navigate = useNavigate();
@@ -265,6 +270,7 @@ const AssessmentForm = ({
                 ? undefined
                 : saveDraftHandler
             }
+            localConstants={localConstants}
             initialValues={initialValues || undefined}
             pickListArgs={pickListArgs}
             loading={mutationLoading}

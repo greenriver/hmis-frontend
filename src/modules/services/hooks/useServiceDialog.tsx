@@ -195,6 +195,7 @@ export function useServiceDialog({
               errors={errors}
               ref={formRef}
               {...props}
+              localConstants={hookArgs?.localConstants}
               hideSubmit
               loadingElement={
                 <Skeleton variant='rectangular' sx={{ height: 60, pt: 2 }} />

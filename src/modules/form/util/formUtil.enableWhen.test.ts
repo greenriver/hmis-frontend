@@ -1,3 +1,4 @@
+import { FormValues } from '../types';
 import { shouldEnableItem } from './formUtil';
 
 import {
@@ -97,185 +98,369 @@ describe('shouldEnableItem', () => {
     const values = {
       '1': true,
     };
-    expect(shouldEnableItem(Items.EnableIfTrue, values, ITEM_MAP)).toBe(true);
-    expect(shouldEnableItem(Items.EnableIfFalse, values, ITEM_MAP)).toBe(false);
-    expect(shouldEnableItem(Items.EnableIfExists, values, ITEM_MAP)).toBe(true);
-    expect(shouldEnableItem(Items.EnableIfNotExists, values, ITEM_MAP)).toBe(
-      false
-    );
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfTrue,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfFalse,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
   });
   it('works on boolean value (false)', () => {
     const values = {
       '1': false,
     };
-    expect(shouldEnableItem(Items.EnableIfTrue, values, ITEM_MAP)).toBe(false);
-    expect(shouldEnableItem(Items.EnableIfFalse, values, ITEM_MAP)).toBe(true);
-    expect(shouldEnableItem(Items.EnableIfExists, values, ITEM_MAP)).toBe(true);
-    expect(shouldEnableItem(Items.EnableIfNotExists, values, ITEM_MAP)).toBe(
-      false
-    );
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfTrue,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfFalse,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
   });
   it('works on boolean value (null)', () => {
     const values = {
       '1': null,
     };
-    expect(shouldEnableItem(Items.EnableIfTrue, values, ITEM_MAP)).toBe(false);
-    expect(shouldEnableItem(Items.EnableIfFalse, values, ITEM_MAP)).toBe(false);
-    expect(shouldEnableItem(Items.EnableIfExists, values, ITEM_MAP)).toBe(
-      false
-    );
-    expect(shouldEnableItem(Items.EnableIfNotExists, values, ITEM_MAP)).toBe(
-      true
-    );
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfTrue,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfFalse,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
   });
   it('works on boolean value (undefined)', () => {
     const values = {
       '1': undefined,
     };
-    expect(shouldEnableItem(Items.EnableIfTrue, values, ITEM_MAP)).toBe(false);
-    expect(shouldEnableItem(Items.EnableIfFalse, values, ITEM_MAP)).toBe(false);
-    expect(shouldEnableItem(Items.EnableIfExists, values, ITEM_MAP)).toBe(
-      false
-    );
-    expect(shouldEnableItem(Items.EnableIfNotExists, values, ITEM_MAP)).toBe(
-      true
-    );
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfTrue,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfFalse,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
   });
 
   it('works on code value (FOO)', () => {
     const values = {
       '2': { code: 'FOO' },
     };
-    expect(shouldEnableItem(Items.EnableIfFoo, values, ITEM_MAP)).toBe(true);
-    expect(shouldEnableItem(Items.EnableIfNotFoo, values, ITEM_MAP)).toBe(
-      false
-    );
-    expect(shouldEnableItem(Items.EnableIfInFooBar, values, ITEM_MAP)).toBe(
-      true
-    );
-    expect(shouldEnableItem(Items.EnableIfExists, values, ITEM_MAP)).toBe(true);
-    expect(shouldEnableItem(Items.EnableIfNotExists, values, ITEM_MAP)).toBe(
-      false
-    );
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfFoo,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotFoo,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfInFooBar,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
   });
 
   it('works on code value (BAZ)', () => {
     const values = {
       '2': { code: 'BAZ' },
     };
-    expect(shouldEnableItem(Items.EnableIfFoo, values, ITEM_MAP)).toBe(false);
-    expect(shouldEnableItem(Items.EnableIfNotFoo, values, ITEM_MAP)).toBe(true);
-    expect(shouldEnableItem(Items.EnableIfInFooBar, values, ITEM_MAP)).toBe(
-      false
-    );
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfFoo,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotFoo,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfInFooBar,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
   });
 
   it('works on code value (undefined)', () => {
     const values = {
       '2': undefined,
     };
-    expect(shouldEnableItem(Items.EnableIfFoo, values, ITEM_MAP)).toBe(false);
-    expect(shouldEnableItem(Items.EnableIfNotFoo, values, ITEM_MAP)).toBe(true);
-    expect(shouldEnableItem(Items.EnableIfInFooBar, values, ITEM_MAP)).toBe(
-      false
-    );
-    expect(shouldEnableItem(Items.EnableIfExists, values, ITEM_MAP)).toBe(
-      false
-    );
-    expect(shouldEnableItem(Items.EnableIfNotExists, values, ITEM_MAP)).toBe(
-      true
-    );
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfFoo,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotFoo,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfInFooBar,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotExists,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
   });
 
   it('works on code value (null)', () => {
     const values = {
       '2': null,
     };
-    expect(shouldEnableItem(Items.EnableIfFoo, values, ITEM_MAP)).toBe(false);
-    expect(shouldEnableItem(Items.EnableIfNotFoo, values, ITEM_MAP)).toBe(true);
-    expect(shouldEnableItem(Items.EnableIfInFooBar, values, ITEM_MAP)).toBe(
-      false
-    );
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfFoo,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfNotFoo,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(true);
+    expect(
+      shouldEnableItem({
+        item: Items.EnableIfInFooBar,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      })
+    ).toBe(false);
   });
 
   it('works on multiple values (any)', () => {
+    const withValues = (values: FormValues) =>
+      shouldEnableItem({
+        item: Items.EnableIfFooOrTrue,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      });
+
     expect(
-      shouldEnableItem(
-        Items.EnableIfFooOrTrue,
-        {
-          '1': true,
-          '2': 'FOO',
-        },
-        ITEM_MAP
-      )
+      withValues({
+        '1': true,
+        '2': 'FOO',
+      })
     ).toBe(true);
 
     expect(
-      shouldEnableItem(
-        Items.EnableIfFooOrTrue,
-        {
-          '1': null,
-          '2': 'FOO',
-        },
-        ITEM_MAP
-      )
+      withValues({
+        '1': null,
+        '2': 'FOO',
+      })
     ).toBe(true);
 
     expect(
-      shouldEnableItem(
-        Items.EnableIfFooOrTrue,
-        {
-          '1': true,
-          '2': 'BAR',
-        },
-        ITEM_MAP
-      )
+      withValues({
+        '1': true,
+        '2': 'BAR',
+      })
     ).toBe(true);
 
     expect(
-      shouldEnableItem(
-        Items.EnableIfFooOrTrue,
-        {
-          '1': false,
-          '2': 'BAR',
-        },
-        ITEM_MAP
-      )
+      withValues({
+        '1': false,
+        '2': 'BAR',
+      })
     ).toBe(false);
   });
 
   it('works on multiple values (all)', () => {
+    const withValues = (values: FormValues) =>
+      shouldEnableItem({
+        item: Items.EnableIfFooAndTrue,
+        values,
+        itemMap: ITEM_MAP,
+        localConstants: {},
+      });
+
     expect(
-      shouldEnableItem(
-        Items.EnableIfFooAndTrue,
-        {
-          '1': true,
-          '2': 'FOO',
-        },
-        ITEM_MAP
-      )
+      withValues({
+        '1': true,
+        '2': 'FOO',
+      })
     ).toBe(true);
 
     expect(
-      shouldEnableItem(
-        Items.EnableIfFooAndTrue,
-        {
-          '1': false,
-          '2': 'FOO',
-        },
-        ITEM_MAP
-      )
+      withValues({
+        '1': false,
+        '2': 'FOO',
+      })
     ).toBe(false);
 
     expect(
-      shouldEnableItem(
-        Items.EnableIfFooAndTrue,
-        {
-          '1': true,
-          '2': undefined,
-        },
-        ITEM_MAP
-      )
+      withValues({
+        '1': true,
+        '2': undefined,
+      })
     ).toBe(false);
   });
 });
