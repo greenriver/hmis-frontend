@@ -119,14 +119,18 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       />
     ),
   },
-  assignedUnit: (householdMembers: HouseholdClientFieldsFragment[]) => ({
-    header: `Assigned Units (${
-      householdMembers.filter((m) => m.enrollment.currentUnit).length
-    })`,
-    hide: !householdMembers.some((m) => m.enrollment.currentUnit),
-    render: (hc: HouseholdClientFieldsFragment) =>
-      hc.enrollment.currentUnit?.name,
-  }),
+  assignedUnit: (householdMembers: HouseholdClientFieldsFragment[]) => {
+    let unitIds = householdMembers
+      .map((m) => m.enrollment.currentUnit?.id)
+      .filter((x) => !!x);
+    unitIds = [...new Set(unitIds)];
+    return {
+      header: `Assigned Units (${unitIds.length})`,
+      hide: !householdMembers.some((m) => m.enrollment.currentUnit),
+      render: (hc: HouseholdClientFieldsFragment) =>
+        hc.enrollment.currentUnit?.name,
+    };
+  },
   dobAge: {
     header: 'DOB / Age',
     key: 'dob',
