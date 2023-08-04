@@ -13,6 +13,7 @@ import {
   transformSubmitValues,
 } from '@/modules/form/util/formUtil';
 import {
+  AssessmentFieldsFragment,
   FormDefinition,
   FormDefinitionJson,
   SaveAssessmentMutation,
@@ -25,6 +26,7 @@ type Args = {
   definition: FormDefinition;
   enrollmentId: string;
   assessmentId?: string;
+  onSuccessfulSubmit?: (assessment: AssessmentFieldsFragment) => void;
 };
 
 export const createValuesForSubmit = (
@@ -47,6 +49,7 @@ export function useAssessmentHandlers({
   definition,
   enrollmentId,
   assessmentId,
+  onSuccessfulSubmit = () => null,
 }: Args) {
   const formDefinitionId = definition.id;
 
@@ -112,6 +115,7 @@ export function useAssessmentHandlers({
           onCompleted(data);
           if (data.submitAssessment?.assessment && onSuccess) {
             onSuccess();
+            onSuccessfulSubmit(data.submitAssessment?.assessment);
           }
         },
       });
@@ -123,6 +127,7 @@ export function useAssessmentHandlers({
       formDefinitionId,
       enrollmentId,
       onCompleted,
+      onSuccessfulSubmit,
     ]
   );
 

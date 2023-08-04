@@ -23,6 +23,7 @@ fragment PickListOptionFields on PickListOption {
 
 fragment EnableWhenFields on EnableWhen {
   question
+  localConstant
   operator
   answerCode
   answerCodes
@@ -63,6 +64,7 @@ fragment ItemFields on FormItem {
     question
     valueNumber
     valueDate
+    valueLocalConstant
     offset
   }
   pickListOptions {

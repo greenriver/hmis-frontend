@@ -8323,6 +8323,18 @@
         "description": null,
         "fields": [
           {
+            "name": "antiRetroviral",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "client",
             "description": null,
             "args": [],
@@ -8491,12 +8503,72 @@
             "deprecationReason": null
           },
           {
+            "name": "tCellCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tCellCountAvailable",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tCellSource",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "TCellSourceViralLoadSource",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "user",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
               "name": "User",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "viralLoad",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "viralLoadAvailable",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ViralLoadAvailable",
               "ofType": null
             },
             "isDeprecated": false,
@@ -8513,6 +8585,18 @@
         "name": "DisabilityGroup",
         "description": "Group of disability records that were collected at the same time",
         "fields": [
+          {
+            "name": "antiRetroviral",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "chronicHealthCondition",
             "description": null,
@@ -8738,12 +8822,72 @@
             "deprecationReason": null
           },
           {
+            "name": "tCellCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tCellCountAvailable",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tCellSource",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "TCellSourceViralLoadSource",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "user",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
               "name": "User",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "viralLoad",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "viralLoadAvailable",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ViralLoadAvailable",
               "ofType": null
             },
             "isDeprecated": false,
@@ -9514,6 +9658,18 @@
             "deprecationReason": null
           },
           {
+            "name": "localConstant",
+            "description": "The Local Constant that determines whether item is enabled/disabled",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "operator",
             "description": "How to evaluate the question's answer",
             "args": [],
@@ -9534,13 +9690,9 @@
             "description": "The linkId of question that determines whether item is enabled/disabled",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -28818,6 +28970,41 @@
       },
       {
         "kind": "ENUM",
+        "name": "TCellSourceViralLoadSource",
+        "description": "W4.B",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CLIENT_REPORT",
+            "description": "(2) Client Report",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MEDICAL_REPORT",
+            "description": "(1) Medical Report",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER",
+            "description": "(3) Other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "TargetPopulation",
         "description": "2.02.8",
         "fields": null,
@@ -30569,6 +30756,18 @@
             "deprecationReason": null
           },
           {
+            "name": "valueLocalConstant",
+            "description": "Name of Local Constant to use for comparison",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "valueNumber",
             "description": null,
             "args": [],
@@ -30584,6 +30783,59 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ViralLoadAvailable",
+        "description": "W4.3",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "AVAILABLE",
+            "description": "(1) Available",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NOT_AVAILABLE",
+            "description": "(0) Not available",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNDETECTABLE",
+            "description": "(2) Undetectable",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {

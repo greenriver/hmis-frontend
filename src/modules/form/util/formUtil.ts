@@ -1,4 +1,12 @@
-import { add, getYear, isDate, isValid, max, min } from 'date-fns';
+import {
+  add,
+  getYear,
+  isDate,
+  isValid,
+  max,
+  min,
+  startOfToday,
+} from 'date-fns';
 import {
   compact,
   get,
@@ -35,6 +43,7 @@ import {
   formatDateForGql,
   INVALID_ENUM,
   parseHmisDateString,
+  safeParseDateOrString,
 } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -88,11 +97,11 @@ export const hasMeaningfulValue = (value: any): boolean => {
 
 export const localResolvePickList = (
   pickListReference: string,
-  includeDataNotCollected = false
+  excludeDataNotCollected = false
 ): PickListOption[] | null => {
   if (isHmisEnum(pickListReference)) {
     let values = Object.entries(HmisEnums[pickListReference]);
-    if (!includeDataNotCollected) {
+    if (excludeDataNotCollected) {
       values = values.filter(([code]) => !isDataNotCollected(code));
     }
     return values
@@ -134,15 +143,14 @@ export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
 
 export const resolveOptionList = (
   item: FormItem,
-  includeDataNotCollected = false
+  excludeDataNotCollected = false
 ): PickListOption[] | null => {
   if (!item.pickListReference && !item.pickListOptions) return null;
   if (item.pickListOptions) return item.pickListOptions;
   if (item.pickListReference) {
     return localResolvePickList(
       item.pickListReference,
-      // always show DNC for relationship to hoh
-      includeDataNotCollected || item.pickListReference === 'RelationshipToHoH'
+      excludeDataNotCollected
     );
   }
   return null;
@@ -169,7 +177,7 @@ export const getOptionValue = (
       `Can't get option value for ${value}, unexpected type ${typeof value}`
     );
   }
-  if (isDataNotCollected(value)) return null;
+
   if (item.pickListReference) {
     // This is a value for a choice item, like 'PSH', so transform it to the option object
     const option = (localResolvePickList(item.pickListReference) || []).find(
@@ -236,28 +244,38 @@ const findItem = (
  * Evaluate a single `enableWhen` condition.
  * Used for enabling/disabling items AND for autofill.
  */
-const evaluateEnableWhen = (
-  en: EnableWhen,
-  values: FormValues,
-  itemMap: ItemMap,
+type EvaluateEnableWhenArgs = {
+  en: EnableWhen;
+  values: FormValues;
+  itemMap: ItemMap;
+  localConstants: LocalConstants;
   // pass function to avoid circular dependency
-  shouldEnableFn: (
-    item: FormItem,
-    values: FormValues,
-    itemMap: ItemMap
-  ) => boolean
-) => {
-  const linkId = en.question;
+  shouldEnableFn: typeof shouldEnableItem;
+};
+const evaluateEnableWhen = ({
+  en,
+  values,
+  itemMap,
+  localConstants,
+  shouldEnableFn,
+}: EvaluateEnableWhenArgs) => {
+  if (!en.question && !en.localConstant) {
+    throw new Error('question or local_constant required');
+  }
 
-  // Current form value to compare
-  let currentValue = values[linkId];
-  if (currentValue && isPickListOption(currentValue)) {
+  // Current value
+  let currentValue = en.question
+    ? values[en.question]
+    : en.localConstant
+    ? localConstants[en.localConstant.replace('$', '')]
+    : null;
+  if (isPickListOption(currentValue)) {
     currentValue = en.answerGroupCode
       ? currentValue.groupCode
       : currentValue.code;
   }
 
-  // Comparison value from the form definition
+  // Comparison value
   let comparisonValue;
   if (en.operator !== EnableOperator.Exists) {
     comparisonValue = [
@@ -310,8 +328,18 @@ const evaluateEnableWhen = (
       }
       break;
     case EnableOperator.Enabled:
-      const dependentItem = itemMap[linkId];
-      result = shouldEnableFn(dependentItem, values, itemMap);
+      if (!en.question) {
+        throw new Error(
+          'Enabled operator must be used in conjunction with question'
+        );
+      }
+      const dependentItem = itemMap[en.question];
+      result = shouldEnableFn({
+        item: dependentItem,
+        values,
+        itemMap,
+        localConstants,
+      });
       // flip the result if this is "not enabled"
       if (en.answerBoolean === false) {
         result = !result;
@@ -343,16 +371,29 @@ const evaluateEnableWhen = (
 /**
  * Decide whether an item should be enabled based on enableWhen logic.
  */
-export const shouldEnableItem = (
-  item: FormItem,
-  values: FormValues,
-  itemMap: ItemMap
-): boolean => {
+type ShouldEnableItemArgs = {
+  item: FormItem;
+  values: FormValues;
+  itemMap: ItemMap;
+  localConstants: LocalConstants;
+};
+export const shouldEnableItem = ({
+  item,
+  values,
+  itemMap,
+  localConstants,
+}: ShouldEnableItemArgs): boolean => {
   if (!item.enableWhen) return true;
 
   // Evaluate all enableWhen conditions
   const booleans = item.enableWhen.map((en) =>
-    evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
+    evaluateEnableWhen({
+      en,
+      values,
+      itemMap,
+      localConstants,
+      shouldEnableFn: shouldEnableItem,
+    })
   );
 
   // console.debug(item.linkId, booleans);
@@ -393,18 +434,31 @@ export const getAutofillComparisonValue = (
  *
  * @return boolen true if values changed
  */
-export const autofillValues = (
-  item: FormItem,
-  values: FormValues,
-  itemMap: ItemMap
-): boolean => {
+type AutofillValuesArgs = {
+  item: FormItem;
+  values: FormValues;
+  itemMap: ItemMap;
+  localConstants: LocalConstants;
+};
+export const autofillValues = ({
+  item,
+  values,
+  itemMap,
+  localConstants,
+}: AutofillValuesArgs): boolean => {
   if (!item.autofillValues) return false;
 
   // use `some` to stop iterating when true is returned
   return item.autofillValues.some((av) => {
     // Evaluate all enableWhen conditions
     const booleans = av.autofillWhen.map((en) =>
-      evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
+      evaluateEnableWhen({
+        en,
+        values,
+        itemMap,
+        shouldEnableFn: shouldEnableItem,
+        localConstants,
+      })
     );
 
     // If there were no conditions specify, it should always be autofilled
@@ -434,12 +488,19 @@ export const autofillValues = (
   });
 };
 
-export const getBoundValue = (bound: ValueBound, values: FormValues) => {
+const getBoundValue = (
+  bound: ValueBound,
+  values: FormValues,
+  localConstants: LocalConstants
+) => {
   if (bound.question) {
     return values[bound.question];
   }
   if (bound.valueDate) {
     return parseHmisDateString(bound.valueDate);
+  }
+  if (bound.valueLocalConstant) {
+    return localConstants[bound.valueLocalConstant.replace('$', '')];
   }
   return bound.valueNumber;
 };
@@ -456,10 +517,15 @@ const compareNumOrDate = ({
   offset?: number;
 }) => {
   // Add offset to value
-  if (isDate(value)) {
-    value = add(value, { days: offset });
+  const date = safeParseDateOrString(value);
+  if (date) {
+    value = add(date, { days: offset });
+  } else if (!isNaN(Number(value))) {
+    value = Number(value) + offset;
   } else {
-    value = (value as number) + offset;
+    throw new Error(
+      `cannot use value ${value} as a bound, must be num or date`
+    );
   }
 
   if (isNil(comparison)) return value;
@@ -476,17 +542,22 @@ const compareNumOrDate = ({
     : Math.min(value as number, comparison as number);
 };
 
-export const buildCommonInputProps = (
-  item: FormItem,
-  values: FormValues
-): DynamicInputCommonProps => {
+export const buildCommonInputProps = ({
+  item,
+  values,
+  localConstants,
+}: {
+  item: FormItem;
+  values: FormValues;
+  localConstants: LocalConstants;
+}): DynamicInputCommonProps => {
   const inputProps: DynamicInputCommonProps = {};
   if (item.readOnly) {
     inputProps.disabled = true;
   }
 
   (item.bounds || []).forEach((bound) => {
-    const value = getBoundValue(bound, values);
+    const value = getBoundValue(bound, values, localConstants);
     if (isNil(value)) return;
 
     const args = {
@@ -509,6 +580,7 @@ export const buildCommonInputProps = (
     }
   });
 
+  // console.log(inputProps, localConstants);
   return inputProps;
 };
 
@@ -542,7 +614,6 @@ export const gqlValueToFormValue = (
     case ItemType.Choice:
     case ItemType.OpenChoice:
       if (Array.isArray(value)) {
-        // DNC gets filtered out here
         return compact(value.map((v) => getOptionValue(v, item)));
       }
       return getOptionValue(value, item);
@@ -743,7 +814,7 @@ export const buildAutofillDependencyMap = (
       // If this autofill is conditional on other items, add those dependencies
       if (av.autofillWhen) {
         av.autofillWhen.forEach((en) => {
-          addDependency(en.question);
+          if (en.question) addDependency(en.question);
           if (en.compareQuestion) addDependency(en.compareQuestion);
         });
       }
@@ -759,8 +830,10 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
   const deps: LinkIdMap = {};
 
   function addEnableWhen(linkId: string, en: EnableWhen) {
-    if (!deps[en.question]) deps[en.question] = [];
-    deps[en.question].push(linkId);
+    if (en.question) {
+      if (!deps[en.question]) deps[en.question] = [];
+      deps[en.question].push(linkId);
+    }
     if (en.compareQuestion) {
       if (!deps[en.compareQuestion]) deps[en.compareQuestion] = [];
       deps[en.compareQuestion].push(linkId);
@@ -768,7 +841,7 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
 
     // If this item is dependent on another item being enabled,
     // recusively add those to its dependency list
-    if (en.operator === EnableOperator.Enabled) {
+    if (en.operator === EnableOperator.Enabled && en.question) {
       if (!itemMap[en.question]) {
         throw new Error(`No such question: ${en.question}`);
       }
@@ -788,12 +861,23 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
 /**
  * List of link IDs that should be disabled, based on provided form values
  */
-export const getDisabledLinkIds = (
-  itemMap: ItemMap,
-  values: FormValues
-): string[] => {
+export const getDisabledLinkIds = ({
+  itemMap,
+  values,
+  localConstants,
+}: {
+  itemMap: ItemMap;
+  values: FormValues;
+  localConstants: LocalConstants;
+}): string[] => {
   return Object.keys(itemMap).filter(
-    (linkId) => !shouldEnableItem(itemMap[linkId], values, itemMap)
+    (linkId) =>
+      !shouldEnableItem({
+        item: itemMap[linkId],
+        values,
+        itemMap,
+        localConstants,
+      })
   );
 };
 
@@ -890,7 +974,7 @@ export const extractClientItemsFromDefinition = (
 };
 
 const findDataNotCollectedCode = (item: FormItem): string | undefined => {
-  const options = resolveOptionList(item, true) || [];
+  const options = resolveOptionList(item) || [];
 
   return options.find(
     (opt) => isDataNotCollected(opt.code) || opt.code === 'NOT_APPLICABLE'
@@ -1138,18 +1222,22 @@ export const debugFormValues = (
   return true;
 };
 
-export const setDisabledLinkIdsBase = (
-  changedLinkIds: string[],
-  localValues: any,
-  callback: React.Dispatch<React.SetStateAction<string[]>>,
-  {
-    enabledDependencyMap,
-    itemMap,
-  }: {
-    enabledDependencyMap: LinkIdMap;
-    itemMap: ItemMap;
-  }
-) => {
+type SetDisabledLinkIdsBaseArgs = {
+  changedLinkIds: string[];
+  localValues: any;
+  callback: React.Dispatch<React.SetStateAction<string[]>>;
+  enabledDependencyMap: LinkIdMap;
+  itemMap: ItemMap;
+  localConstants: LocalConstants;
+};
+export const setDisabledLinkIdsBase = ({
+  changedLinkIds,
+  localValues,
+  callback,
+  enabledDependencyMap,
+  itemMap,
+  localConstants,
+}: SetDisabledLinkIdsBaseArgs) => {
   // If none of these are dependencies, return immediately
   if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
 
@@ -1159,11 +1247,12 @@ export const setDisabledLinkIdsBase = (
       if (!enabledDependencyMap[changedLinkId]) return;
 
       enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-        const enabled = shouldEnableItem(
-          itemMap[dependentLinkId],
-          localValues,
-          itemMap
-        );
+        const enabled = shouldEnableItem({
+          item: itemMap[dependentLinkId],
+          values: localValues,
+          itemMap,
+          localConstants,
+        });
         if (enabled && newList.includes(dependentLinkId)) {
           pull(newList, dependentLinkId);
         } else if (!enabled && !newList.includes(dependentLinkId)) {
@@ -1200,4 +1289,8 @@ export const chooseSelectComponentType = (
   if (picklistLength === 0) return Component.Dropdown;
   if (picklistLength < 4 && isLocalPickList) return Component.RadioButtons;
   return Component.Dropdown;
+};
+
+export const AlwaysPresentLocalConstants = {
+  today: startOfToday(),
 };

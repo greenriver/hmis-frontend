@@ -77,7 +77,7 @@ export const MciSuccessAlert = ({
     <AlertTitle>Client has been cleared.</AlertTitle>
     <Stack direction='column' gap={1} sx={{ pt: 1 }}>
       {mciIds.map((mci) => (
-        <ExternalIdDisplay value={mci} />
+        <ExternalIdDisplay key={mci.identifier} value={mci} />
       ))}
     </Stack>
   </Alert>

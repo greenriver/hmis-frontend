@@ -2,8 +2,8 @@ import { QueryOptions } from '@apollo/client';
 import { Box, Grid, Stack } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, {
-  forwardRef,
   Ref,
+  forwardRef,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -17,6 +17,7 @@ import {
   ChangeType,
   FormActionTypes,
   FormValues,
+  LocalConstants,
   PickListArgs,
 } from '../types';
 
@@ -71,6 +72,7 @@ export interface DynamicFormProps
   hideSubmit?: boolean;
   loadingElement?: JSX.Element;
   picklistQueryOptions?: Omit<QueryOptions, 'query'>;
+  localConstants?: LocalConstants;
 }
 export interface DynamicFormRef {
   SaveIfDirty: (callback: VoidFunction) => void;
@@ -99,12 +101,14 @@ const DynamicForm = forwardRef(
       hideSubmit = false,
       loadingElement,
       picklistQueryOptions,
+      localConstants = {},
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
     const { renderFields, getCleanedValues } = useDynamicFields({
       definition,
       initialValues,
+      localConstants,
     });
 
     const { loading: pickListsLoading } = usePreloadPicklists({

@@ -154,7 +154,7 @@ describe('getInitialValues', () => {
     ];
     expect(getInitialValues({ item })).toMatchObject({
       '1': { code: 'YES', label: 'Yes' },
-      '2': null,
+      '2': { code: 'DATA_NOT_COLLECTED', label: 'Data not collected' },
       '3': { code: 'FOO' },
     });
   });

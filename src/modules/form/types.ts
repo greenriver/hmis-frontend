@@ -64,6 +64,7 @@ export interface DynamicViewFieldProps {
   pickListArgs?: PickListArgs;
   noLabel?: boolean;
   adjustValue?: ItemChangedFn;
+  disabled?: boolean;
 }
 
 // Props accepted by all input components

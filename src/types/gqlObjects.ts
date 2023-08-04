@@ -1151,6 +1151,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Disability',
     fields: [
       {
+        name: 'antiRetroviral',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
         name: 'dataCollectionStage',
         type: {
           kind: 'NON_NULL',
@@ -1214,11 +1222,47 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
       },
+      {
+        name: 'tCellCount',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'tCellCountAvailable',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'tCellSource',
+        type: {
+          kind: 'ENUM',
+          name: 'TCellSourceViralLoadSource',
+          ofType: null,
+        },
+      },
+      {
+        name: 'viralLoad',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'viralLoadAvailable',
+        type: { kind: 'ENUM', name: 'ViralLoadAvailable', ofType: null },
+      },
     ],
   },
   {
     name: 'DisabilityGroup',
     fields: [
+      {
+        name: 'antiRetroviral',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
       {
         name: 'chronicHealthCondition',
         type: {
@@ -1339,6 +1383,34 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: null,
         },
       },
+      {
+        name: 'tCellCount',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'tCellCountAvailable',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'tCellSource',
+        type: {
+          kind: 'ENUM',
+          name: 'TCellSourceViralLoadSource',
+          ofType: null,
+        },
+      },
+      {
+        name: 'viralLoad',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'viralLoadAvailable',
+        type: { kind: 'ENUM', name: 'ViralLoadAvailable', ofType: null },
+      },
     ],
   },
   {
@@ -1450,6 +1522,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'localConstant',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'operator',
         type: {
           kind: 'NON_NULL',
@@ -1459,11 +1535,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'question',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
@@ -4595,6 +4667,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'valueDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'valueLocalConstant',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'valueNumber',

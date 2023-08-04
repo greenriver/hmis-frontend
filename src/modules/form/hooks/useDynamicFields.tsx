@@ -5,7 +5,12 @@ import DynamicFormFields, {
   Props as DynamicFormFieldsProps,
 } from '../components/DynamicFormFields';
 import DynamicViewFields from '../components/viewable/DynamicViewFields';
-import { FormValues, ItemChangedFn, SeveralItemsChangedFn } from '../types';
+import {
+  FormValues,
+  ItemChangedFn,
+  LocalConstants,
+  SeveralItemsChangedFn,
+} from '../types';
 import {
   addDescendants,
   autofillValues,
@@ -23,11 +28,13 @@ const useDynamicFields = ({
   initialValues,
   bulk = false,
   viewOnly = false,
+  localConstants = {},
 }: {
   definition: FormDefinitionJson;
   initialValues?: Record<string, any>;
   bulk?: boolean;
   viewOnly?: boolean;
+  localConstants?: LocalConstants;
 }) => {
   const [values, setValues] = useState<FormValues>(
     Object.assign({}, initialValues)
@@ -38,7 +45,7 @@ const useDynamicFields = ({
     autofillDependencyMap,
     enabledDependencyMap,
     initiallyDisabledLinkIds = [],
-  } = useComputedData({ definition, initialValues, viewOnly });
+  } = useComputedData({ definition, initialValues, viewOnly, localConstants });
 
   const [disabledLinkIds, setDisabledLinkIds] = useState(
     initiallyDisabledLinkIds
@@ -64,11 +71,16 @@ const useDynamicFields = ({
       changedLinkIds.forEach((changedLinkId) => {
         if (!autofillDependencyMap[changedLinkId]) return;
         autofillDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-          autofillValues(itemMap[dependentLinkId], localValues, itemMap);
+          autofillValues({
+            item: itemMap[dependentLinkId],
+            values: localValues,
+            itemMap,
+            localConstants,
+          });
         });
       });
     },
-    [itemMap, autofillDependencyMap]
+    [itemMap, autofillDependencyMap, localConstants]
   );
 
   /**
@@ -78,12 +90,16 @@ const useDynamicFields = ({
    */
   const updateDisabledLinkIds = useCallback(
     (changedLinkIds: string[], localValues: any) => {
-      setDisabledLinkIdsBase(changedLinkIds, localValues, setDisabledLinkIds, {
+      setDisabledLinkIdsBase({
+        changedLinkIds,
+        localValues,
+        callback: setDisabledLinkIds,
         enabledDependencyMap,
         itemMap,
+        localConstants,
       });
     },
-    [itemMap, enabledDependencyMap, setDisabledLinkIds]
+    [itemMap, enabledDependencyMap, setDisabledLinkIds, localConstants]
   );
 
   // Run autofill once for all values on initial load
@@ -145,6 +161,7 @@ const useDynamicFields = ({
         | 'bulk'
         | 'itemChanged'
         | 'severalItemsChanged'
+        | 'localConstants'
       > & {
         itemChanged?: ItemChangedFn;
         severalItemsChanged?: SeveralItemsChangedFn;
@@ -163,6 +180,7 @@ const useDynamicFields = ({
             severalItemsChanged: wrappedSeveralItemsChanged(
               props.severalItemsChanged
             ),
+            localConstants,
           }}
         />
       );
@@ -175,6 +193,7 @@ const useDynamicFields = ({
       bulk,
       wrappedItemChanged,
       wrappedSeveralItemsChanged,
+      localConstants,
     ]
   );
 
@@ -193,6 +212,7 @@ const useDynamicFields = ({
         | 'bulk'
         | 'itemChanged'
         | 'severalItemsChanged'
+        | 'localConstants'
       > & {
         itemChanged?: ItemChangedFn;
       }

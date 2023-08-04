@@ -5,6 +5,7 @@ import {
   FormValues,
   ItemChangedFn,
   ItemMap,
+  LocalConstants,
   OverrideableDynamicFieldProps,
   PickListArgs,
   SeveralItemsChangedFn,
@@ -42,6 +43,7 @@ export interface Props {
   severalItemsChanged: SeveralItemsChangedFn;
   itemMap: ItemMap;
   disabledLinkIds: string[];
+  localConstants: LocalConstants;
 }
 
 const DynamicFormFields: React.FC<Props> = ({
@@ -57,6 +59,7 @@ const DynamicFormFields: React.FC<Props> = ({
   disabledLinkIds,
   itemChanged,
   severalItemsChanged,
+  localConstants,
 }) => {
   // Get errors for a particular field
   const getFieldErrors = useCallback(
@@ -136,7 +139,7 @@ const DynamicFormFields: React.FC<Props> = ({
         {...props}
         inputProps={{
           ...props?.inputProps,
-          ...buildCommonInputProps(item, values),
+          ...buildCommonInputProps({ item, values, localConstants }),
           disabled: isDisabled || locked || undefined,
         }}
       />
