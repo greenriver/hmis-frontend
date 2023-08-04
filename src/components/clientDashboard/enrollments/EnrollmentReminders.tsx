@@ -161,6 +161,7 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
           rows={displayReminders}
           columns={columns}
           rowLinkTo={rowLinkTo}
+          rowSx={() => ({ '&:nth-last-of-type(1) td': { pb: 1 } })}
           noData={
             <Stack
               direction={'row'}

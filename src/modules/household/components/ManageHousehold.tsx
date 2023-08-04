@@ -108,7 +108,11 @@ const ManageHousehold = ({
         </CommonCard>
       )}
       {household && (
-        <TitleCard title='Current Household' headerVariant='border'>
+        <TitleCard
+          title='Current Household'
+          headerVariant='border'
+          data-testid='editHouseholdMemberTable'
+        >
           <EditHouseholdMemberTable
             household={household}
             currentDashboardClientId={currentDashboardClientId}

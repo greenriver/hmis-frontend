@@ -210,6 +210,7 @@ const HouseholdMemberTable = ({
         rowSx={() => ({
           td: condensed ? { py: 1, border: 'unset' } : { py: 2 },
           '&:nth-last-of-type(1) td': { pb: 2 },
+          '&:first-of-type td': { pt: 2 },
           // HoH indicator column
           'td:nth-of-type(1)': { pl: 1, pr: 0 },
         })}

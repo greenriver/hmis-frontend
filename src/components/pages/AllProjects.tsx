@@ -119,7 +119,7 @@ const AllProjects = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Paper>
+          <Paper data-testid='allProjectsTable'>
             <GenericTableWithData<
               GetProjectsQuery,
               GetProjectsQueryVariables,

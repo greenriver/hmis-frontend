@@ -149,7 +149,7 @@ const EditHouseholdMemberTable = ({
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
       HOUSEHOLD_MEMBER_COLUMNS.clientName({
         currentClientId: currentDashboardClientId,
-        linkToProfile: !currentDashboardClientId,
+        linkToProfile: !!currentDashboardClientId,
       }),
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
       HOUSEHOLD_MEMBER_COLUMNS.dobAge,

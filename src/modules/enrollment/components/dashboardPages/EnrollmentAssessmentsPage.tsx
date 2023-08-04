@@ -204,6 +204,7 @@ const AssessmentsTable = () => {
         />
       }
       headerVariant='border'
+      data-testid='enrollmentAssessmentsCard'
     >
       <GenericTableWithData<
         GetEnrollmentAssessmentsQuery,

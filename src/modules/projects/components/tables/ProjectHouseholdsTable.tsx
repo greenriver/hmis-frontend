@@ -1,7 +1,8 @@
-import { Box, Link, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { omit } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
+import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -66,13 +67,9 @@ export const HOUSEHOLD_COLUMNS: {
     render: (hh) => (
       <TableCellConatiner>
         {hh.householdClients.map((c) => (
-          <Stack
+          <RouterLink
             key={c.id}
-            direction='row'
-            gap={0.5}
-            whiteSpace='nowrap'
-            component={Link}
-            href={generateSafePath(
+            to={generateSafePath(
               EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
               {
                 clientId: c.client.id,
@@ -80,9 +77,11 @@ export const HOUSEHOLD_COLUMNS: {
               }
             )}
           >
-            <ClientName client={c.client} key='name' />
-            <ClientDobAge client={c.client} noDob key='age' />
-          </Stack>
+            <Stack direction='row' gap={0.5} whiteSpace='nowrap'>
+              <ClientName client={c.client} key='name' />
+              <ClientDobAge client={c.client} noDob key='age' />
+            </Stack>
+          </RouterLink>
         ))}
       </TableCellConatiner>
     ),

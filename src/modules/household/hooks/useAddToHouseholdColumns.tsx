@@ -6,8 +6,10 @@ import { isHouseholdClient, RecentHouseholdMember } from '../types';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   ClientFieldsFragment,
+  PickListType,
   useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
+import { evictPickList } from '@/utils/cacheUtil';
 
 interface Args {
   householdId?: string;
@@ -22,12 +24,15 @@ export default function useAddToHouseholdColumns({
   const [getHousehold, { data, loading }] = useGetHouseholdLazyQuery({
     fetchPolicy: 'network-only',
   });
-  console.log('householdId', householdId);
 
   const refetchHousehold = useCallback(() => {
     if (!householdId) return;
     getHousehold({ variables: { id: householdId } });
-  }, [getHousehold, householdId]);
+    evictPickList(PickListType.AvailableUnitsForEnrollment, {
+      projectId,
+      householdId,
+    });
+  }, [getHousehold, householdId, projectId]);
 
   // Refetch household when household ID changes
   useEffect(() => refetchHousehold(), [refetchHousehold, householdId]);
@@ -51,13 +56,13 @@ export default function useAddToHouseholdColumns({
   const onSuccess = useCallback(
     (updatedHouseholdId: string) => {
       setHouseholdId(updatedHouseholdId);
-      // evictPickList(PickListType.AvailableUnitsForEnrollment, {
-      //   projectId,
-      //   householdId: data.householdId,
-      // });
+      evictPickList(PickListType.AvailableUnitsForEnrollment, {
+        projectId,
+        householdId: updatedHouseholdId,
+      });
       getHousehold({ variables: { id: updatedHouseholdId } });
     },
-    [getHousehold]
+    [getHousehold, projectId]
   );
 
   const addToEnrollmentColumns = useMemo(() => {

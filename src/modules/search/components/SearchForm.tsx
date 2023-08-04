@@ -137,7 +137,12 @@ const SearchForm: React.FC<SearchFormProps> = ({
   };
 
   return (
-    <Box component='form' onSubmit={submitHandler} sx={{ pb: 2 }}>
+    <Box
+      component='form'
+      onSubmit={submitHandler}
+      sx={{ pb: 2 }}
+      data-testid='clientSearchForm'
+    >
       {!hideInstructions && (
         <Grid container sx={{ mb: 2 }}>
           <Grid item xs={9}>
