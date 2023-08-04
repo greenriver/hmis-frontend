@@ -18,7 +18,6 @@ import EditClient from '@/components/clientDashboard/EditClient';
 import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
 import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
-import NewEnrollment from '@/components/clientDashboard/enrollments/NewEnrollment';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
@@ -347,18 +346,18 @@ export const protectedRoutes: RouteNode[] = [
               </ClientRoute>
             ),
           },
-          {
-            path: ClientDashboardRoutes.NEW_ENROLLMENT,
-            element: (
-              <ClientRoute
-                permissions='canEditEnrollments'
-                redirectRoute={ClientDashboardRoutes.CLIENT_ENROLLMENTS}
-              >
-                <NewEnrollment />
-              </ClientRoute>
-            ),
-          },
-
+          // disabled for now #185750557
+          // {
+          //   path: ClientDashboardRoutes.NEW_ENROLLMENT,
+          //   element: (
+          //     <ClientRoute
+          //       permissions='canEditEnrollments'
+          //       redirectRoute={ClientDashboardRoutes.CLIENT_ENROLLMENTS}
+          //     >
+          //       <NewEnrollment />
+          //     </ClientRoute>
+          //   ),
+          // },
           {
             path: ClientDashboardRoutes.CLIENT_ENROLLMENTS,
             element: (

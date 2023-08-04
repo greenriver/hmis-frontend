@@ -1,7 +1,6 @@
 import { Alert, AlertProps, AlertTitle, Box, Grid } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 
-import ClientActionsCard from '@/modules/client/components/ClientActionsCard';
 import ClientEnrollmentCard from '@/modules/client/components/ClientEnrollmentCard';
 import ClientProfileCard from '@/modules/client/components/ClientProfileCard';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -38,7 +37,9 @@ const ProfileLayout: React.FC<Props> = ({ client, notices = [] }) => {
           <ClientProfileCard client={client} />
         </Grid>
         <Grid item md={12} lg={6}>
-          <ClientActionsCard client={client} />
+          {/* disabled because the only action was Enroll in Project, which
+          we are disabling for now #185750557 */}
+          {/* <ClientActionsCard client={client} /> */}
           <ClientPermissionsFilter
             permissions={['canViewEnrollmentDetails']}
             id={client.id}
