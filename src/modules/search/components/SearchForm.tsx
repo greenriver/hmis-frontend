@@ -9,8 +9,8 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { isEmpty, omit, omitBy, isNil, trim } from 'lodash-es';
-import React, { useCallback, useState } from 'react';
+import { isEmpty, isNil, omit, omitBy, trim } from 'lodash-es';
+import React, { ReactNode, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ProjectSelect, {
@@ -34,6 +34,7 @@ export interface SearchFormProps {
   hideInstructions?: boolean;
   hideProject?: boolean;
   hideAdvanced?: boolean;
+  actions?: ReactNode;
 }
 
 const defaultSearchKeys = ['textSearch', 'projects'];
@@ -45,6 +46,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
   hideInstructions = false,
   hideProject = false,
   hideAdvanced = false,
+  actions,
 }) => {
   const { t } = useTranslation();
   const [values, setValues] = useState<FormValues>(initialValues || {});
@@ -143,6 +145,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           </Grid>
         </Grid>
       )}
+
       <Grid container>
         <Grid
           item
@@ -202,7 +205,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           </Grid>
         </Grid>
       </Grid>
-
+      {actions && <Box sx={{ float: 'right' }}>{actions}</Box>}
       {!hideAdvanced && (
         <Button
           variant='outlined'

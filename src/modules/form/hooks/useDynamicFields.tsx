@@ -104,9 +104,18 @@ const useDynamicFields = ({
 
   // Run autofill once for all values on initial load
   useEffect(() => {
-    updateAutofillValues(Object.keys(values), values);
+    Object.keys(values).forEach((linkId) => {
+      autofillValues({
+        item: itemMap[linkId],
+        values,
+        itemMap,
+        localConstants,
+      });
+    });
+
+    // Note: disable so it doesnt rerun when any value changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [itemMap, localConstants]);
 
   const wrappedItemChanged: (wrappedFn?: ItemChangedFn) => ItemChangedFn =
     useCallback(

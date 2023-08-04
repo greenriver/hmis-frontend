@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
+import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 /**
  * Form for creating AND enrolling a new client
@@ -9,23 +9,31 @@ import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
 export function useNewClientEnrollmentFormDialog({
   onCompleted,
   projectId,
+  householdId,
 }: {
   projectId?: string;
-  onCompleted?: (data: ClientFieldsFragment) => void;
+  householdId?: string;
+  onCompleted?: (data: EnrollmentFieldsFragment) => void;
 }) {
-  const localConstants = useMemo(() => {
-    return { canViewFullSsn: true, canViewDob: true, householdId: null };
-  }, []);
+  const localConstants = useMemo(
+    () => ({
+      canViewFullSsn: true,
+      canViewDob: true,
+      householdId,
+    }),
+    [householdId]
+  );
+  const inputVariables = useMemo(() => ({ projectId }), [projectId]);
 
   const { openFormDialog, renderFormDialog } =
-    useFormDialog<ClientFieldsFragment>({
+    useFormDialog<EnrollmentFieldsFragment>({
       formRole: FormRole.NewClientEnrollment,
       onCompleted,
       localConstants,
-      inputVariables: { projectId },
+      inputVariables,
     });
 
-  const renderClientFormDialog = useCallback(() => {
+  const renderNewClientEnrollmentFormDialog = useCallback(() => {
     return renderFormDialog({
       title: 'Enroll a New Client',
       submitButtonText: 'Create & Enroll Client',
@@ -33,8 +41,9 @@ export function useNewClientEnrollmentFormDialog({
       pickListArgs: { projectId },
     });
   }, [renderFormDialog, projectId]);
+
   return {
-    openClientFormDialog: openFormDialog,
-    renderClientFormDialog,
+    openNewClientEnrollmentFormDialog: openFormDialog,
+    renderNewClientEnrollmentFormDialog,
   } as const;
 }

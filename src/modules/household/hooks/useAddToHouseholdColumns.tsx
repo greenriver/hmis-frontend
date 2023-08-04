@@ -22,6 +22,7 @@ export default function useAddToHouseholdColumns({
   const [getHousehold, { data, loading }] = useGetHouseholdLazyQuery({
     fetchPolicy: 'network-only',
   });
+  console.log('householdId', householdId);
 
   const refetchHousehold = useCallback(() => {
     if (!householdId) return;
@@ -50,6 +51,10 @@ export default function useAddToHouseholdColumns({
   const onSuccess = useCallback(
     (updatedHouseholdId: string) => {
       setHouseholdId(updatedHouseholdId);
+      // evictPickList(PickListType.AvailableUnitsForEnrollment, {
+      //   projectId,
+      //   householdId: data.householdId,
+      // });
       getHousehold({ variables: { id: updatedHouseholdId } });
     },
     [getHousehold]
@@ -82,6 +87,7 @@ export default function useAddToHouseholdColumns({
   return {
     addToEnrollmentColumns,
     householdId,
+    onHouseholdIdChange: onSuccess,
     household: data?.household,
     refetchHousehold,
     loading,

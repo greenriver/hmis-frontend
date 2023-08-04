@@ -447,6 +447,7 @@ export const autofillValues = ({
   localConstants,
 }: AutofillValuesArgs): boolean => {
   if (!item.autofillValues) return false;
+  console.log(item);
 
   // use `some` to stop iterating when true is returned
   return item.autofillValues.some((av) => {
@@ -460,6 +461,7 @@ export const autofillValues = ({
         localConstants,
       })
     );
+    console.log('autofill', av, booleans, localConstants);
 
     // If there were no conditions specify, it should always be autofilled
     if (booleans.length === 0) booleans.push(true);
