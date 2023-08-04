@@ -1,6 +1,7 @@
 import {
   Box,
   Checkbox,
+  LinearProgress,
   SxProps,
   Table,
   TableBody,
@@ -40,6 +41,7 @@ export interface Props<T> {
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
+  loadingVariant?: 'circular' | 'linear';
   tablePaginationProps?: TablePaginationProps;
   tableContainerProps?: TableContainerProps;
   actionRow?: ReactNode;
@@ -106,6 +108,7 @@ const GenericTable = <T extends { id: string }>({
   EnhancedTableToolbarProps,
   filterToolbar,
   noData = 'No data',
+  loadingVariant = 'circular',
 }: Props<T>) => {
   const columns = useMemo(
     () => (columnProp || []).filter((c) => !c.hide),
@@ -143,7 +146,7 @@ const GenericTable = <T extends { id: string }>({
   // Clear selection when data changes
   useEffect(() => setSelected([]), [rows]);
 
-  if (loading) return <Loading />;
+  if (loading && loadingVariant === 'circular') return <Loading />;
 
   const renderCellContents = (row: T, render: ColumnDef<T>['render']) => {
     if (isRenderFunction<T>(render)) return <>{render(row)}</>;
@@ -163,6 +166,7 @@ const GenericTable = <T extends { id: string }>({
   const key = (def: ColumnDef<T>) =>
     def.key || (typeof def.header === 'string' ? def.header : '');
 
+  const fullColSpan = columns.length + (selectable ? 1 : 0);
   const tableHead = noHead ? null : vertical ? (
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
@@ -210,6 +214,13 @@ const GenericTable = <T extends { id: string }>({
           ))}
         </TableRow>
       )}
+      {loading && loadingVariant === 'linear' && (
+        <TableRow>
+          <TableCell colSpan={fullColSpan} sx={{ p: 0, m: 0 }}>
+            <LinearProgress sx={{ height: '2px' }} />
+          </TableCell>
+        </TableRow>
+      )}
     </TableHead>
   );
 
@@ -217,7 +228,7 @@ const GenericTable = <T extends { id: string }>({
     rows.length > 0 ? null : (
       <TableRow>
         <TableCell
-          colSpan={columns.length + (selectable ? 1 : 0)}
+          colSpan={fullColSpan}
           sx={{
             py: 4,
             textAlign: 'center',

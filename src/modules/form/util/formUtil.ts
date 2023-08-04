@@ -732,7 +732,11 @@ export const getInitialValues = (
         const varName = initial.valueLocalConstant.replace(/^\$/, '');
         if (localConstants && varName in localConstants) {
           const value = localConstants[varName];
-          if (!isNil(value)) {
+          if (isNil(value)) {
+            // Even if there's no  value, we still want to set it to null
+            // in case there are other questions that depend on its (lack of) presence.
+            values[item.linkId] = null;
+          } else {
             values[item.linkId] = gqlValueToFormValue(value, item) || value;
           }
         }

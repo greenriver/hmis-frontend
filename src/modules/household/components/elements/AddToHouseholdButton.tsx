@@ -4,12 +4,7 @@ import { useEffect, useState } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import {
-  EnrollmentFieldsFragment,
-  FormRole,
-  PickListType,
-} from '@/types/gqlTypes';
-import { evictPickList } from '@/utils/cacheUtil';
+import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 interface Props {
   clientId: string;
@@ -38,7 +33,7 @@ const AddToHouseholdButton = ({
     }
   }, [prevIsMember, isMember, setAdded]);
 
-  let text = 'Add to Enrollment';
+  let text = householdId ? 'Add to Enrollment' : 'Enroll Client';
   const color: 'secondary' | 'error' = 'secondary';
   if (added) text = 'Added';
 
@@ -48,10 +43,6 @@ const AddToHouseholdButton = ({
       onCompleted: (data: EnrollmentFieldsFragment) => {
         setAdded(true);
         onSuccess(data.householdId);
-        evictPickList(PickListType.AvailableUnitsForEnrollment, {
-          projectId,
-          householdId: data.householdId,
-        });
       },
       inputVariables: { projectId, clientId },
       localConstants: { householdId },

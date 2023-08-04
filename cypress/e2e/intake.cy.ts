@@ -1,4 +1,3 @@
-import { startOfYesterday, format } from 'date-fns';
 import { AlphaIncomeSources } from 'support/assessmentConstants';
 import {
   incomePerSource,
@@ -24,25 +23,28 @@ it(
     viewportWidth: 1024,
   },
   () => {
-    // Set up new client, enroll, and begin intake
-    cy.createClient('Cy First', 'Cy Last');
-    cy.testId('enrollButton').click();
-    // Select project
-    cy.testId('projectSelect').click();
-    cy.get('.MuiAutocomplete-popper .MuiAutocomplete-loading').should(
-      'not.exist'
-    );
-    cy.get(`.MuiAutocomplete-listbox`)
-      .find('li[role="option"]')
+    // Open a project
+    cy.testId('navToProjects').click();
+    cy.tableRows('allProjectsTable').first().click();
+    cy.navItem('enrollments').click();
+
+    // Create and enroll a new client
+    cy.testId('addHouseholdButton').click();
+    cy.testId('clientSearchForm').find('input').type('client name{enter}');
+    cy.testId('addClientButton').click();
+    cy.testId('dialog').should('be.visible');
+    cy.testId('dialog').find('input[id="first-name"]').type('Cy First');
+    cy.testId('dialog').find('input[id="last-name"]').type('Cy Last');
+    cy.testId('dialog').find('button[type="submit"]').click();
+
+    // Open up the enrollment
+    cy.testId('editHouseholdMemberTable')
+      .findTestId('clientName')
       .first()
-      .as('firstProject');
-    cy.get('@firstProject').click();
-    // Set entry date
-    cy.inputId('entry-date').clear();
-    const yesterday = format(startOfYesterday(), 'MMddyyyy');
-    cy.inputId('entry-date').type(yesterday);
-    cy.testId('createEnrollmentButton').first().click();
-    cy.testId('beginIntake').click();
+      .click();
+
+    // Open up the intake assessment
+    cy.contains('Finish Intake Assessment').click();
     // cy.visit('/client/8042/enrollments/10099/assessments/intake/new');
 
     // Client Location - skip because we don't know about this project
@@ -73,7 +75,12 @@ it(
       // Save assessment
       cy.testId('formButton-saveDraft').first().click();
       // Re-open assessment and assert that hudValues match previous
-      cy.testId('panel-assessments').find('table').find('a').first().click();
+      cy.navItem('assessments').click();
+      cy.testId('enrollmentAssessmentsCard')
+        .find('table')
+        .find('a')
+        .first()
+        .click();
       cy.expectHudValuesToDeepEqual(hudValues);
 
       // Ensure total income is calculated on page load
@@ -101,7 +108,12 @@ it(
     cy.confirmDialog();
 
     // Re-open and make sure CLIENT_REFUSED saved
-    cy.testId('panel-assessments').find('table').find('a').first().click();
+    cy.navItem('assessments').click();
+    cy.testId('enrollmentAssessmentsCard')
+      .find('table')
+      .find('a')
+      .first()
+      .click();
     cy.testId('unlockAssessmentButton').click();
     cy.testId('formButton-submit').should('exist');
     cy.testId('formButton-saveDraft').should('not.exist');
@@ -116,7 +128,12 @@ it(
     cy.confirmDialog();
 
     // Re-open and make sure YES saved
-    cy.testId('panel-assessments').find('table').find('a').first().click();
+    cy.navItem('assessments').click();
+    cy.testId('enrollmentAssessmentsCard')
+      .find('table')
+      .find('a')
+      .first()
+      .click();
     cy.testId('unlockAssessmentButton').click();
     cy.expectHudValuesToInclude({
       'IncomeBenefit.incomeFromAnySource': 'YES',
@@ -132,7 +149,12 @@ it(
       cy.testId('formButton-submit').first().click();
       cy.confirmDialog();
       // Re-open assessment and assert that hudValues match previous
-      cy.testId('panel-assessments').find('table').find('a').first().click();
+      cy.navItem('assessments').click();
+      cy.testId('enrollmentAssessmentsCard')
+        .find('table')
+        .find('a')
+        .first()
+        .click();
       cy.testId('unlockAssessmentButton').click();
       cy.expectHudValuesToDeepEqual(hudValues);
 

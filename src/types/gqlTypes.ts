@@ -2128,6 +2128,8 @@ export enum FormRole {
   Inventory = 'INVENTORY',
   /** (MOVE_IN_DATE) Move-in Date */
   MoveInDate = 'MOVE_IN_DATE',
+  /** (NEW_CLIENT_ENROLLMENT) New Client Enrollment */
+  NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
   /** (ORGANIZATION) Organization */
   Organization = 'ORGANIZATION',
   /** (PATH_STATUS) PATH Status */
@@ -4023,6 +4025,8 @@ export enum ReferralSource {
 
 /** Related record type for a group of questions in an assessment */
 export enum RelatedRecordType {
+  /** Client */
+  Client = 'CLIENT',
   /** CurrentLivingSituation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** DisabilityGroup */

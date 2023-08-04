@@ -62,7 +62,7 @@ const ClientName = forwardRef<Props, any>(
       );
 
     return (
-      <Stack direction='row' gap={1} {...stackProps}>
+      <Stack direction='row' gap={1} data-testid='clientName' {...stackProps}>
         {primaryNameComponent}
       </Stack>
     );

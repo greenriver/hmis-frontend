@@ -32,12 +32,14 @@ interface Props {
   household: HouseholdFieldsFragment;
   currentDashboardClientId?: string;
   refetchHousehold: any;
+  loading?: boolean;
 }
 
 const EditHouseholdMemberTable = ({
   household,
   refetchHousehold,
   currentDashboardClientId,
+  loading,
 }: Props) => {
   const [proposedHoH, setProposedHoH] =
     useState<HouseholdClientFieldsFragment | null>(null);
@@ -63,31 +65,32 @@ const EditHouseholdMemberTable = ({
   // client to highlight for relationship input
   const [highlight, setHighlight] = useState<string[]>([]);
 
-  const [setHoHMutate, { loading }] = useUpdateRelationshipToHoHMutation({
-    onCompleted: (data) => {
-      if (!data.updateRelationshipToHoH) return;
+  const [setHoHMutate, { loading: hohChangeLoading }] =
+    useUpdateRelationshipToHoHMutation({
+      onCompleted: (data) => {
+        if (!data.updateRelationshipToHoH) return;
 
-      if (data.updateRelationshipToHoH.enrollment) {
-        // highlight relationship field for non-HOH members
-        const members =
-          data.updateRelationshipToHoH?.enrollment?.household.householdClients
-            .filter(
-              (hc) =>
-                hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
-            )
-            .map((hc) => hc.client.id);
-        setHighlight(members || []);
-        setProposedHoH(null);
-        setErrors(emptyErrorState);
-        // refetch, so that all relationships-to-HoH to reload
-        refetchHousehold();
-      } else if (data.updateRelationshipToHoH.errors.length > 0) {
-        const errors = data.updateRelationshipToHoH.errors;
-        setErrors(partitionValidations(errors));
-      }
-    },
-    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
-  });
+        if (data.updateRelationshipToHoH.enrollment) {
+          // highlight relationship field for non-HOH members
+          const members =
+            data.updateRelationshipToHoH?.enrollment?.household.householdClients
+              .filter(
+                (hc) =>
+                  hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
+              )
+              .map((hc) => hc.client.id);
+          setHighlight(members || []);
+          setProposedHoH(null);
+          setErrors(emptyErrorState);
+          // refetch, so that all relationships-to-HoH to reload
+          refetchHousehold();
+        } else if (data.updateRelationshipToHoH.errors.length > 0) {
+          const errors = data.updateRelationshipToHoH.errors;
+          setErrors(partitionValidations(errors));
+        }
+      },
+      onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
+    });
 
   // If member list has changed, update HoH and clear proposed-HoH status
   useEffect(() => {
@@ -146,7 +149,7 @@ const EditHouseholdMemberTable = ({
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
       HOUSEHOLD_MEMBER_COLUMNS.clientName({
         currentClientId: currentDashboardClientId,
-        linkToProfile: !currentDashboardClientId,
+        linkToProfile: !!currentDashboardClientId,
       }),
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
       HOUSEHOLD_MEMBER_COLUMNS.dobAge,
@@ -163,7 +166,7 @@ const EditHouseholdMemberTable = ({
             <FormControlLabel
               checked={hc.client.id === hoh?.client?.id}
               control={
-                loading && proposedHoH === hc ? (
+                hohChangeLoading && proposedHoH === hc ? (
                   <Box display='flex' alignItems='center' sx={{ pl: 1, pr: 2 }}>
                     <CircularProgress size={20} />
                   </Box>
@@ -174,7 +177,7 @@ const EditHouseholdMemberTable = ({
               componentsProps={{ typography: { variant: 'body2' } }}
               label='HoH'
               labelPlacement='end'
-              disabled={loading}
+              disabled={hohChangeLoading}
               onChange={() => {
                 onChangeHoH(hc, false);
               }}
@@ -223,7 +226,7 @@ const EditHouseholdMemberTable = ({
     refetchHousehold,
     onChangeHoH,
     setHighlight,
-    loading,
+    hohChangeLoading,
     proposedHoH,
     highlight,
     currentMembers,
@@ -238,6 +241,8 @@ const EditHouseholdMemberTable = ({
           // HoH indicator column
           'td:nth-of-type(1)': { px: 0 },
         })}
+        loading={loading}
+        loadingVariant='linear'
       />
       {renderValidationDialog({
         title: 'Change Head of Household',
@@ -246,7 +251,7 @@ const EditHouseholdMemberTable = ({
           setProposedHoH(null);
           setErrors(emptyErrorState);
         },
-        loading,
+        loading: hohChangeLoading,
       })}
     </>
   );
