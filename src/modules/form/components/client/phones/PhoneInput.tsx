@@ -10,8 +10,7 @@ import { isPickListOption } from '@/modules/form/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { ClientContactPointUse } from '@/types/gqlTypes';
 
-const contactUsePicklist =
-  localResolvePickList('ClientContactPointUse', false) || [];
+const contactUsePicklist = localResolvePickList('ClientContactPointUse') || [];
 
 const PhoneInput = ({
   value,

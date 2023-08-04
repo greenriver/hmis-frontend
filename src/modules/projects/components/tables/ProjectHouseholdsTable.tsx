@@ -53,7 +53,9 @@ export const HOUSEHOLD_COLUMNS: {
               relationshipToHoh={c.relationshipToHoH}
             />
           ) : (
-            <Typography variant='body2'>&#160;</Typography>
+            <Typography variant='body2' key={c.id}>
+              &#160;
+            </Typography>
           )
         )}
       </TableCellConatiner>
@@ -78,8 +80,8 @@ export const HOUSEHOLD_COLUMNS: {
               }
             )}
           >
-            <ClientName client={c.client} />
-            <ClientDobAge client={c.client} noDob />
+            <ClientName client={c.client} key='name' />
+            <ClientDobAge client={c.client} noDob key='age' />
           </Stack>
         ))}
       </TableCellConatiner>
@@ -91,7 +93,9 @@ export const HOUSEHOLD_COLUMNS: {
       <TableCellConatiner>
         {hh.householdClients.map((c) =>
           c.relationshipToHoH === RelationshipToHoH.DataNotCollected ? (
-            <Typography variant='body2'>&#160;</Typography>
+            <Typography variant='body2' key={c.id}>
+              &#160;
+            </Typography>
           ) : (
             <HmisEnum
               key={c.id}

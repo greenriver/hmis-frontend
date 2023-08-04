@@ -80,6 +80,7 @@ const DynamicViewFields: React.FC<Props> = ({
         <DynamicViewField
           item={item}
           value={isDisabled ? undefined : values[item.linkId]}
+          disabled={isDisabled}
           nestingLevel={nestingLevel}
           horizontal={horizontal}
           pickListArgs={pickListArgs}

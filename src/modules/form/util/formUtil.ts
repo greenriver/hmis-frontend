@@ -97,11 +97,11 @@ export const hasMeaningfulValue = (value: any): boolean => {
 
 export const localResolvePickList = (
   pickListReference: string,
-  includeDataNotCollected = false
+  excludeDataNotCollected = false
 ): PickListOption[] | null => {
   if (isHmisEnum(pickListReference)) {
     let values = Object.entries(HmisEnums[pickListReference]);
-    if (!includeDataNotCollected) {
+    if (excludeDataNotCollected) {
       values = values.filter(([code]) => !isDataNotCollected(code));
     }
     return values
@@ -143,15 +143,14 @@ export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
 
 export const resolveOptionList = (
   item: FormItem,
-  includeDataNotCollected = false
+  excludeDataNotCollected = false
 ): PickListOption[] | null => {
   if (!item.pickListReference && !item.pickListOptions) return null;
   if (item.pickListOptions) return item.pickListOptions;
   if (item.pickListReference) {
     return localResolvePickList(
       item.pickListReference,
-      // always show DNC for relationship to hoh
-      includeDataNotCollected || item.pickListReference === 'RelationshipToHoH'
+      excludeDataNotCollected
     );
   }
   return null;
@@ -178,7 +177,7 @@ export const getOptionValue = (
       `Can't get option value for ${value}, unexpected type ${typeof value}`
     );
   }
-  if (isDataNotCollected(value)) return null;
+
   if (item.pickListReference) {
     // This is a value for a choice item, like 'PSH', so transform it to the option object
     const option = (localResolvePickList(item.pickListReference) || []).find(
@@ -615,7 +614,6 @@ export const gqlValueToFormValue = (
     case ItemType.Choice:
     case ItemType.OpenChoice:
       if (Array.isArray(value)) {
-        // DNC gets filtered out here
         return compact(value.map((v) => getOptionValue(v, item)));
       }
       return getOptionValue(value, item);
@@ -972,7 +970,7 @@ export const extractClientItemsFromDefinition = (
 };
 
 const findDataNotCollectedCode = (item: FormItem): string | undefined => {
-  const options = resolveOptionList(item, true) || [];
+  const options = resolveOptionList(item) || [];
 
   return options.find(
     (opt) => isDataNotCollected(opt.code) || opt.code === 'NOT_APPLICABLE'

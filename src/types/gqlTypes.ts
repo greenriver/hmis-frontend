@@ -5237,6 +5237,7 @@ export type AssessmentWithRecordsFragment = {
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
+    client: { __typename?: 'Client'; id: string };
   };
   incomeBenefit?: {
     __typename: 'IncomeBenefit';
@@ -5582,6 +5583,7 @@ export type FullAssessmentFragment = {
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
+    client: { __typename?: 'Client'; id: string };
   };
   incomeBenefit?: {
     __typename: 'IncomeBenefit';
@@ -6380,6 +6382,7 @@ export type GetAssessmentQuery = {
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
+      client: { __typename?: 'Client'; id: string };
     };
     incomeBenefit?: {
       __typename: 'IncomeBenefit';
@@ -6808,6 +6811,7 @@ export type GetHouseholdAssessmentsQuery = {
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
+      client: { __typename?: 'Client'; id: string };
     };
     incomeBenefit?: {
       __typename: 'IncomeBenefit';
@@ -7185,6 +7189,7 @@ export type SubmitAssessmentMutation = {
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
+        client: { __typename?: 'Client'; id: string };
       };
       incomeBenefit?: {
         __typename: 'IncomeBenefit';
@@ -7577,6 +7582,7 @@ export type GetAssessmentsForPopulationQuery = {
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
+          client: { __typename?: 'Client'; id: string };
         };
         incomeBenefit?: {
           __typename: 'IncomeBenefit';
@@ -17100,6 +17106,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
       ...EnrollmentValues
       customDataElements {
         ...CustomDataElementFields
+      }
+      client {
+        id
       }
     }
     incomeBenefit {

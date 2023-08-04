@@ -35,7 +35,11 @@ const TextContent = <T extends ReactNode>({
       }
       return renderedValue;
     } else {
-      return <NotCollectedText variant='body2' data-testid={testId} />;
+      return (
+        <NotCollectedText variant='body2' data-testid={testId}>
+          Data not collected
+        </NotCollectedText>
+      );
     }
   }, [renderValue, value, testId]);
 

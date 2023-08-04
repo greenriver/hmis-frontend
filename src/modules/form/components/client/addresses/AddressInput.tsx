@@ -11,8 +11,7 @@ import { isPickListOption } from '@/modules/form/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { ClientAddressType, ItemType } from '@/types/gqlTypes';
 
-const addressTypePicklist =
-  localResolvePickList('ClientAddressType', false) || [];
+const addressTypePicklist = localResolvePickList('ClientAddressType') || [];
 
 const fakeStateItem = {
   linkId: 'fake',
