@@ -23,6 +23,9 @@ fragment AssessmentWithRecords on Assessment {
     customDataElements {
       ...CustomDataElementFields
     }
+    client {
+      id
+    }
   }
   incomeBenefit {
     ...IncomeBenefitValues

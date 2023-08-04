@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
+import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import HouseholdAssessments from '@/modules/assessments/components/household/HouseholdAssessments';
 import { isHouseholdAssesmentRole } from '@/modules/assessments/components/household/util';
@@ -35,6 +36,7 @@ const AssessmentPage = () => {
       formRole: FormRole;
       assessmentId?: string;
     };
+  const isPrintView = useIsPrintView();
 
   const navigateToEnrollment = useCallback(
     () =>
@@ -64,7 +66,8 @@ const AssessmentPage = () => {
   // If household has 2+ members and this is a household assessment, render household workflow
   if (
     isHouseholdAssesmentRole(formRole) &&
-    showAssessmentInHousehold(enrollment, formRole)
+    showAssessmentInHousehold(enrollment, formRole) &&
+    !isPrintView
   ) {
     return <HouseholdAssessments role={formRole} enrollment={enrollment} />;
   }

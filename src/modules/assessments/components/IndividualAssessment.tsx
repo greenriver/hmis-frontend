@@ -1,7 +1,5 @@
-import PrintIcon from '@mui/icons-material/Print';
 import { Box, Stack, Typography } from '@mui/material';
-import { isNil } from 'lodash-es';
-import { Ref, useEffect, useMemo, useState } from 'react';
+import { Ref, useEffect, useMemo } from 'react';
 
 import { assessmentDate } from '../util';
 
@@ -14,10 +12,8 @@ import {
   HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import PrintViewButton from '@/components/layout/PrintViewButton';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
-import useIsPrintView from '@/hooks/useIsPrintView';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/hooks/useAssessment';
@@ -44,7 +40,6 @@ export interface IndividualAssessmentProps {
   clientName?: string;
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
-  readOnly?: boolean;
   visible?: boolean;
   getFormActionProps?: (
     assessment?: AssessmentFieldsFragment
@@ -71,8 +66,6 @@ const IndividualAssessment = ({
   formRef,
 }: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useClientDashboardContext();
-
-  const isPrintView = useIsPrintView();
 
   // Fetch the enrollment, which may be different from the current context enrollment if this assessment is part of a workflow.
   const { enrollment, loading: enrollmentLoading } =
@@ -128,17 +121,6 @@ const IndividualAssessment = ({
     overrideBreadcrumbTitles,
   ]);
 
-  const canEdit = enrollment?.access.canEditEnrollments;
-
-  // Whether assessment is read-only
-  const [readOnly, setReadOnly] = useState<boolean | null>(null);
-  useEffect(() => {
-    if (dataLoading) return;
-    if (!isNil(readOnly)) return;
-    const isSubmitted = assessment && !assessment.inProgress;
-    setReadOnly(isSubmitted || !canEdit);
-  }, [dataLoading, canEdit, readOnly, assessment]);
-
   const topOffsetHeight =
     STICKY_BAR_HEIGHT +
     CONTEXT_HEADER_HEIGHT +
@@ -147,7 +129,6 @@ const IndividualAssessment = ({
   useScrollToHash(dataLoading || enrollmentLoading, topOffsetHeight);
 
   if (dataLoading || enrollmentLoading) return <Loading />;
-  if (isNil(readOnly)) return <Loading />;
   if (!enrollment) return <NotFound />;
   if (assessmentId && !assessment) return <NotFound />;
 
@@ -157,17 +138,6 @@ const IndividualAssessment = ({
         <AssessmentTitle
           assessmentTitle={assessmentTitle}
           clientName={clientName || undefined}
-          actions={
-            !isPrintView && readOnly ? (
-              <PrintViewButton
-                color='secondary'
-                variant='outlined'
-                startIcon={<PrintIcon />}
-              >
-                Print Assessment
-              </PrintViewButton>
-            ) : undefined
-          }
         />
       )}
       {!definition && <MissingDefinitionAlert />}
@@ -181,7 +151,6 @@ const IndividualAssessment = ({
           top={topOffsetHeight}
           embeddedInWorkflow={embeddedInWorkflow}
           FormActionProps={FormActionProps}
-          locked={readOnly || false}
           visible={visible}
           formRef={formRef}
           navigationTitle={

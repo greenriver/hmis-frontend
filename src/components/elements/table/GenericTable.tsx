@@ -304,7 +304,7 @@ const GenericTable = <T extends { id: string }>({
                     tabIndex={handleRowClick ? 0 : undefined}
                   >
                     {selectable && (
-                      <TableCell padding='checkbox'>
+                      <TableCell padding='checkbox' key='selection'>
                         <Checkbox
                           color='primary'
                           disabled={!isSelectable}
