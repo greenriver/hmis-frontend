@@ -106,6 +106,22 @@ export enum AgeRange {
   Under5 = 'Under5',
 }
 
+/** V7.B */
+export enum AnnualPercentAmi {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (3) More than 30% of AMI for household size */
+  MoreThan_30OfAmiForHouseholdSize = 'MORE_THAN_30_OF_AMI_FOR_HOUSEHOLD_SIZE',
+  /** (0) $0 (i.e., not employed, not receiving cash benefits, no other current income) */
+  Num_0IENotEmployedNotReceivingCashBenefitsNoOtherCurrentIncome = 'NUM_0_I_E_NOT_EMPLOYED_NOT_RECEIVING_CASH_BENEFITS_NO_OTHER_CURRENT_INCOME',
+  /** (1) 1-14% of Area Median Income (AMI) for household size */
+  Num_1_14OfAreaMedianIncomeAmiForHouseholdSize = 'NUM_1_14_OF_AREA_MEDIAN_INCOME_AMI_FOR_HOUSEHOLD_SIZE',
+  /** (2) 15-30% of AMI for household size */
+  Num_15_30OfAmiForHouseholdSize = 'NUM_15_30_OF_AMI_FOR_HOUSEHOLD_SIZE',
+}
+
 /** User account for a user of the system */
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
@@ -1183,6 +1199,20 @@ export type DeleteUnitsPayload = {
   unitIds?: Maybe<Array<Scalars['ID']['output']>>;
 };
 
+/** V7.O */
+export enum DependentUnder6 {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (0) No */
+  No = 'NO',
+  /** (2) Youngest child is 1 to 6 years old and/or one or more children (any age) require significant care */
+  YoungestChildIs_1To_6YearsOldAndOrOneOrMoreChildrenAnyAgeRequireSignificantCare = 'YOUNGEST_CHILD_IS_1_TO_6_YEARS_OLD_AND_OR_ONE_OR_MORE_CHILDREN_ANY_AGE_REQUIRE_SIGNIFICANT_CARE',
+  /** (1) Youngest child is under 1 year old */
+  YoungestChildIsUnder_1YearOld = 'YOUNGEST_CHILD_IS_UNDER_1_YEAR_OLD',
+}
+
 /** 3.12.1 */
 export enum Destination {
   /** (8) Client doesn't know */
@@ -1510,14 +1540,19 @@ export type Enrollment = {
   __typename?: 'Enrollment';
   access: EnrollmentAccess;
   alcoholDrugUseDisorderFam?: Maybe<NoYesMissing>;
+  annualPercentAmi?: Maybe<AnnualPercentAmi>;
   assessments: AssessmentsPaginated;
   ceAssessments: CeAssessmentsPaginated;
   childWelfareMonths?: Maybe<Scalars['Int']['output']>;
   childWelfareYears?: Maybe<RhyNumberofYears>;
   client: Client;
   clientEnrolledInPath?: Maybe<NoYesMissing>;
+  clientLeaseholder?: Maybe<NoYesMissing>;
+  cocPrioritized?: Maybe<NoYesMissing>;
   countOutreachReferralApproaches?: Maybe<Scalars['Int']['output']>;
+  criminalRecord?: Maybe<NoYesMissing>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
+  currentPregnant?: Maybe<NoYesMissing>;
   currentUnit?: Maybe<Unit>;
   customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
@@ -1527,14 +1562,17 @@ export type Enrollment = {
   dateOfPathStatus?: Maybe<Scalars['ISO8601Date']['output']>;
   dateToStreetEssh?: Maybe<Scalars['ISO8601Date']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dependentUnder6?: Maybe<DependentUnder6>;
   disabilities: DisabilitiesPaginated;
   disabilityGroups: Array<DisabilityGroup>;
+  disabledHoh?: Maybe<NoYesMissing>;
   disablingCondition?: Maybe<NoYesReasonsForMissingData>;
   eligibleForRhy?: Maybe<NoYesMissing>;
   employmentEducations: EmploymentEducationsPaginated;
   enrollmentCoc?: Maybe<Scalars['String']['output']>;
   entryDate: Scalars['ISO8601Date']['output'];
   events: EventsPaginated;
+  evictionHistory?: Maybe<EvictionHistory>;
   exitAssessment?: Maybe<Assessment>;
   exitDate?: Maybe<Scalars['ISO8601Date']['output']>;
   exitDestination?: Maybe<Destination>;
@@ -1542,17 +1580,24 @@ export type Enrollment = {
   formerWardChildWelfare?: Maybe<NoYesReasonsForMissingData>;
   formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
   healthAndDvs: HealthAndDvsPaginated;
+  hh5Plus?: Maybe<NoYesMissing>;
+  hohLeaseholder?: Maybe<NoYesMissing>;
   household: Household;
   householdId: Scalars['ID']['output'];
   householdShortId: Scalars['ID']['output'];
   householdSize: Scalars['Int']['output'];
+  hpScreeningScore?: Maybe<NoYesMissing>;
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
+  incarceratedAdult?: Maybe<IncarceratedAdult>;
+  incarceratedParent?: Maybe<NoYesMissing>;
   incomeBenefits: IncomeBenefitsPaginated;
+  insufficientIncome?: Maybe<NoYesMissing>;
   intakeAssessment?: Maybe<Assessment>;
   juvenileJusticeMonths?: Maybe<Scalars['Int']['output']>;
   juvenileJusticeYears?: Maybe<RhyNumberofYears>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
+  literalHomelessHistory?: Maybe<LiteralHomelessHistory>;
   livingSituation?: Maybe<LivingSituation>;
   losUnderThreshold?: Maybe<NoYesMissing>;
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
@@ -1562,6 +1607,7 @@ export type Enrollment = {
   percentAmi?: Maybe<PercentAmi>;
   physicalDisabilityFam?: Maybe<NoYesMissing>;
   previousStreetEssh?: Maybe<NoYesMissing>;
+  prisonDischarge?: Maybe<NoYesMissing>;
   project: Project;
   reasonNoServices?: Maybe<ReasonNoServices>;
   reasonNotEnrolled?: Maybe<ReasonNotEnrolled>;
@@ -1570,12 +1616,19 @@ export type Enrollment = {
   reminders: Array<Reminder>;
   runawayYouth?: Maybe<NoYesReasonsForMissingData>;
   services: ServicesPaginated;
+  sexOffender?: Maybe<NoYesMissing>;
   sexualOrientation?: Maybe<SexualOrientation>;
   sexualOrientationOther?: Maybe<Scalars['String']['output']>;
+  singleParent?: Maybe<NoYesMissing>;
   status: EnrollmentStatus;
+  subsidyAtRisk?: Maybe<NoYesMissing>;
+  targetScreenReqd?: Maybe<NoYesMissing>;
+  thresholdScore?: Maybe<NoYesMissing>;
+  timeToHousingLoss?: Maybe<TimeToHousingLoss>;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
   unemploymentFam?: Maybe<NoYesMissing>;
   user?: Maybe<User>;
+  vamcStation?: Maybe<VamcStationNumber>;
   youthEducationStatuses: YouthEducationStatusesPaginated;
 };
 
@@ -1846,6 +1899,20 @@ export type EventsPaginated = {
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
 };
+
+/** V7.G */
+export enum EvictionHistory {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (0) No prior rental evictions */
+  NoPriorRentalEvictions = 'NO_PRIOR_RENTAL_EVICTIONS',
+  /** (1) 1 prior rental eviction */
+  Num_1PriorRentalEviction = 'NUM_1_PRIOR_RENTAL_EVICTION',
+  /** (2) 2 or more prior rental evictions */
+  Num_2OrMorePriorRentalEvictions = 'NUM_2_OR_MORE_PRIOR_RENTAL_EVICTIONS',
+}
 
 export type Exit = {
   __typename?: 'Exit';
@@ -2487,6 +2554,20 @@ export enum HousingType {
   TenantBasedScatteredSite = 'TENANT_BASED_SCATTERED_SITE',
 }
 
+/** V7.I */
+export enum IncarceratedAdult {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (1) Incarcerated once */
+  IncarceratedOnce = 'INCARCERATED_ONCE',
+  /** (2) Incarcerated two or more times */
+  IncarceratedTwoOrMoreTimes = 'INCARCERATED_TWO_OR_MORE_TIMES',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (0) Not incarcerated */
+  NotIncarcerated = 'NOT_INCARCERATED',
+}
+
 export type IncomeBenefit = {
   __typename?: 'IncomeBenefit';
   adap?: Maybe<NoYesReasonsForMissingData>;
@@ -2718,6 +2799,20 @@ export enum LastGradeCompleted {
   SomeCollege = 'SOME_COLLEGE',
   /** (14) Vocational certification */
   VocationalCertification = 'VOCATIONAL_CERTIFICATION',
+}
+
+/** V7.C */
+export enum LiteralHomelessHistory {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (0) Most recent episode occurred in the last year */
+  MostRecentEpisodeOccurredInTheLastYear = 'MOST_RECENT_EPISODE_OCCURRED_IN_THE_LAST_YEAR',
+  /** (1) Most recent episode occurred more than one year ago */
+  MostRecentEpisodeOccurredMoreThanOneYearAgo = 'MOST_RECENT_EPISODE_OCCURRED_MORE_THAN_ONE_YEAR_AGO',
+  /** (2) None */
+  None = 'NONE',
 }
 
 /** 3.12.1 */
@@ -3297,7 +3392,6 @@ export enum PickListType {
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
-  VamcStation = 'VAMC_STATION',
 }
 
 /** 4.19.7 */
@@ -4663,6 +4757,22 @@ export enum TargetPopulation {
   PersonsWithHivAids = 'PERSONS_WITH_HIV_AIDS',
 }
 
+/** V7.A */
+export enum TimeToHousingLoss {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (3) More than 21 days */
+  MoreThan_21Days = 'MORE_THAN_21_DAYS',
+  /** (0) 1-6 days */
+  Num_1_6Days = 'NUM_1_6_DAYS',
+  /** (1) 7-13 days */
+  Num_7_13Days = 'NUM_7_13_DAYS',
+  /** (2) 14-21 days */
+  Num_14_21Days = 'NUM_14_21_DAYS',
+}
+
 /** 3.917.4 */
 export enum TimesHomelessPastThreeYears {
   /** (8) Client doesn't know */
@@ -4901,6 +5011,298 @@ export type ValueBound = {
   valueLocalConstant?: Maybe<Scalars['String']['output']>;
   valueNumber?: Maybe<Scalars['Int']['output']>;
 };
+
+/** V6.1 */
+export enum VamcStationNumber {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (402) (402) Togus, ME */
+  Num_402TogusMe = 'NUM_402_TOGUS_ME',
+  /** (405) (405) White River Junction, VT */
+  Num_405WhiteRiverJunctionVt = 'NUM_405_WHITE_RIVER_JUNCTION_VT',
+  /** (436) (436) Montana HCS */
+  Num_436MontanaHcs = 'NUM_436_MONTANA_HCS',
+  /** (437) (437) Fargo, ND */
+  Num_437FargoNd = 'NUM_437_FARGO_ND',
+  /** (438) (438) Sioux Falls, SD */
+  Num_438SiouxFallsSd = 'NUM_438_SIOUX_FALLS_SD',
+  /** (442) (442) Cheyenne, WY */
+  Num_442CheyenneWy = 'NUM_442_CHEYENNE_WY',
+  /** (459GE) (459GE) Guam */
+  Num_459GeGuam = 'NUM_459_GE_GUAM',
+  /** (459) (459) Honolulu, HI */
+  Num_459HonoluluHi = 'NUM_459_HONOLULU_HI',
+  /** (460) (460) Wilmington, DE */
+  Num_460WilmingtonDe = 'NUM_460_WILMINGTON_DE',
+  /** (463) (463) Anchorage, AK */
+  Num_463AnchorageAk = 'NUM_463_ANCHORAGE_AK',
+  /** (501) (501) New Mexico HCS */
+  Num_501NewMexicoHcs = 'NUM_501_NEW_MEXICO_HCS',
+  /** (502) (502) Alexandria, LA */
+  Num_502AlexandriaLa = 'NUM_502_ALEXANDRIA_LA',
+  /** (503) (503) Altoona, PA */
+  Num_503AltoonaPa = 'NUM_503_ALTOONA_PA',
+  /** (504) (504) Amarillo, TX */
+  Num_504AmarilloTx = 'NUM_504_AMARILLO_TX',
+  /** (506) (506) Ann Arbor, MI */
+  Num_506AnnArborMi = 'NUM_506_ANN_ARBOR_MI',
+  /** (508) (508) Atlanta, GA */
+  Num_508AtlantaGa = 'NUM_508_ATLANTA_GA',
+  /** (509) (509) Augusta, GA */
+  Num_509AugustaGa = 'NUM_509_AUGUSTA_GA',
+  /** (512) (512) Baltimore HCS, MD */
+  Num_512BaltimoreHcsMd = 'NUM_512_BALTIMORE_HCS_MD',
+  /** (515) (515) Battle Creek, MI */
+  Num_515BattleCreekMi = 'NUM_515_BATTLE_CREEK_MI',
+  /** (516) (516) Bay Pines, FL */
+  Num_516BayPinesFl = 'NUM_516_BAY_PINES_FL',
+  /** (517) (517) Beckley, WV */
+  Num_517BeckleyWv = 'NUM_517_BECKLEY_WV',
+  /** (518) (518) Bedford, MA */
+  Num_518BedfordMa = 'NUM_518_BEDFORD_MA',
+  /** (519) (519) Big Spring, TX */
+  Num_519BigSpringTx = 'NUM_519_BIG_SPRING_TX',
+  /** (520) (520) Gulf Coast HCS, MS */
+  Num_520GulfCoastHcsMs = 'NUM_520_GULF_COAST_HCS_MS',
+  /** (521) (521) Birmingham, AL */
+  Num_521BirminghamAl = 'NUM_521_BIRMINGHAM_AL',
+  /** (523) (523) VA Boston HCS, MA */
+  Num_523VaBostonHcsMa = 'NUM_523_VA_BOSTON_HCS_MA',
+  /** (526) (526) Bronx, NY */
+  Num_526BronxNy = 'NUM_526_BRONX_NY',
+  /** (528A5) (528A5) Canandaigua, NY */
+  Num_528A5CanandaiguaNy = 'NUM_528_A5_CANANDAIGUA_NY',
+  /** (528A6) (528A6) Bath, NY */
+  Num_528A6BathNy = 'NUM_528_A6_BATH_NY',
+  /** (528A7) (528A7) Syracuse, NY */
+  Num_528A7SyracuseNy = 'NUM_528_A7_SYRACUSE_NY',
+  /** (528A8) (528A8) Albany, NY */
+  Num_528A8AlbanyNy = 'NUM_528_A8_ALBANY_NY',
+  /** (528) (528) Western New York, NY */
+  Num_528WesternNewYorkNy = 'NUM_528_WESTERN_NEW_YORK_NY',
+  /** (529) (529) Butler, PA */
+  Num_529ButlerPa = 'NUM_529_BUTLER_PA',
+  /** (531) (531) Boise, ID */
+  Num_531BoiseId = 'NUM_531_BOISE_ID',
+  /** (534) (534) Charleston, SC */
+  Num_534CharlestonSc = 'NUM_534_CHARLESTON_SC',
+  /** (537) (537) Jesse Brown VAMC (Chicago), IL */
+  Num_537JesseBrownVamcChicagoIl = 'NUM_537_JESSE_BROWN_VAMC_CHICAGO_IL',
+  /** (538) (538) Chillicothe, OH */
+  Num_538ChillicotheOh = 'NUM_538_CHILLICOTHE_OH',
+  /** (539) (539) Cincinnati, OH */
+  Num_539CincinnatiOh = 'NUM_539_CINCINNATI_OH',
+  /** (540) (540) Clarksburg, WV */
+  Num_540ClarksburgWv = 'NUM_540_CLARKSBURG_WV',
+  /** (541) (541) Cleveland, OH */
+  Num_541ClevelandOh = 'NUM_541_CLEVELAND_OH',
+  /** (542) (542) Coatesville, PA */
+  Num_542CoatesvillePa = 'NUM_542_COATESVILLE_PA',
+  /** (544) (544) Columbia, SC */
+  Num_544ColumbiaSc = 'NUM_544_COLUMBIA_SC',
+  /** (546) (546) Miami, FL */
+  Num_546MiamiFl = 'NUM_546_MIAMI_FL',
+  /** (548) (548) West Palm Beach, FL */
+  Num_548WestPalmBeachFl = 'NUM_548_WEST_PALM_BEACH_FL',
+  /** (549) (549) Dallas, TX */
+  Num_549DallasTx = 'NUM_549_DALLAS_TX',
+  /** (550) (550) Danville, IL */
+  Num_550DanvilleIl = 'NUM_550_DANVILLE_IL',
+  /** (552) (552) Dayton, OH */
+  Num_552DaytonOh = 'NUM_552_DAYTON_OH',
+  /** (553) (553) Detroit, MI */
+  Num_553DetroitMi = 'NUM_553_DETROIT_MI',
+  /** (554) (554) Denver, CO */
+  Num_554DenverCo = 'NUM_554_DENVER_CO',
+  /** (556) (556) Captain James A Lovell FHCC */
+  Num_556CaptainJamesALovellFhcc = 'NUM_556_CAPTAIN_JAMES_A_LOVELL_FHCC',
+  /** (557) (557) Dublin, GA */
+  Num_557DublinGa = 'NUM_557_DUBLIN_GA',
+  /** (558) (558) Durham, NC */
+  Num_558DurhamNc = 'NUM_558_DURHAM_NC',
+  /** (561) (561) New Jersey HCS, NJ */
+  Num_561NewJerseyHcsNj = 'NUM_561_NEW_JERSEY_HCS_NJ',
+  /** (562) (562) Erie, PA */
+  Num_562EriePa = 'NUM_562_ERIE_PA',
+  /** (564) (564) Fayetteville, AR */
+  Num_564FayettevilleAr = 'NUM_564_FAYETTEVILLE_AR',
+  /** (565) (565) Fayetteville, NC */
+  Num_565FayettevilleNc = 'NUM_565_FAYETTEVILLE_NC',
+  /** (568) (568) Black Hills HCS, SD */
+  Num_568BlackHillsHcsSd = 'NUM_568_BLACK_HILLS_HCS_SD',
+  /** (570) (570) Fresno, CA */
+  Num_570FresnoCa = 'NUM_570_FRESNO_CA',
+  /** (573) (573) Gainesville, FL */
+  Num_573GainesvilleFl = 'NUM_573_GAINESVILLE_FL',
+  /** (575) (575) Grand Junction, CO */
+  Num_575GrandJunctionCo = 'NUM_575_GRAND_JUNCTION_CO',
+  /** (578) (578) Hines, IL */
+  Num_578HinesIl = 'NUM_578_HINES_IL',
+  /** (580) (580) Houston, TX */
+  Num_580HoustonTx = 'NUM_580_HOUSTON_TX',
+  /** (581) (581) Huntington, WV */
+  Num_581HuntingtonWv = 'NUM_581_HUNTINGTON_WV',
+  /** (583) (583) Indianapolis, IN */
+  Num_583IndianapolisIn = 'NUM_583_INDIANAPOLIS_IN',
+  /** (585) (585) Iron Mountain, MI */
+  Num_585IronMountainMi = 'NUM_585_IRON_MOUNTAIN_MI',
+  /** (586) (586) Jackson, MS */
+  Num_586JacksonMs = 'NUM_586_JACKSON_MS',
+  /** (589A4) (589A4) Columbia, MO */
+  Num_589A4ColumbiaMo = 'NUM_589_A4_COLUMBIA_MO',
+  /** (589A5) (589A5) Kansas City, MO */
+  Num_589A5KansasCityMo = 'NUM_589_A5_KANSAS_CITY_MO',
+  /** (589A6) (589A6) Eastern KS HCS, KS */
+  Num_589A6EasternKsHcsKs = 'NUM_589_A6_EASTERN_KS_HCS_KS',
+  /** (589A7) (589A7) Wichita, KS */
+  Num_589A7WichitaKs = 'NUM_589_A7_WICHITA_KS',
+  /** (589) (589) Kansas City, MO */
+  Num_589KansasCityMo = 'NUM_589_KANSAS_CITY_MO',
+  /** (590) (590) Hampton, VA */
+  Num_590HamptonVa = 'NUM_590_HAMPTON_VA',
+  /** (593) (593) Las Vegas, NV */
+  Num_593LasVegasNv = 'NUM_593_LAS_VEGAS_NV',
+  /** (595) (595) Lebanon, PA */
+  Num_595LebanonPa = 'NUM_595_LEBANON_PA',
+  /** (596) (596) Lexington, KY */
+  Num_596LexingtonKy = 'NUM_596_LEXINGTON_KY',
+  /** (598) (598) Little Rock, AR */
+  Num_598LittleRockAr = 'NUM_598_LITTLE_ROCK_AR',
+  /** (600) (600) Long Beach, CA */
+  Num_600LongBeachCa = 'NUM_600_LONG_BEACH_CA',
+  /** (603) (603) Louisville, KY */
+  Num_603LouisvilleKy = 'NUM_603_LOUISVILLE_KY',
+  /** (605) (605) Loma Linda, CA */
+  Num_605LomaLindaCa = 'NUM_605_LOMA_LINDA_CA',
+  /** (607) (607) Madison, WI */
+  Num_607MadisonWi = 'NUM_607_MADISON_WI',
+  /** (608) (608) Manchester, NH */
+  Num_608ManchesterNh = 'NUM_608_MANCHESTER_NH',
+  /** (610) (610) Northern Indiana HCS, IN */
+  Num_610NorthernIndianaHcsIn = 'NUM_610_NORTHERN_INDIANA_HCS_IN',
+  /** (612) (612) N. California, CA */
+  Num_612NCaliforniaCa = 'NUM_612_N_CALIFORNIA_CA',
+  /** (613) (613) Martinsburg, WV */
+  Num_613MartinsburgWv = 'NUM_613_MARTINSBURG_WV',
+  /** (614) (614) Memphis, TN */
+  Num_614MemphisTn = 'NUM_614_MEMPHIS_TN',
+  /** (618) (618) Minneapolis, MN */
+  Num_618MinneapolisMn = 'NUM_618_MINNEAPOLIS_MN',
+  /** (619) (619) Central Alabama Veterans HCS, AL */
+  Num_619CentralAlabamaVeteransHcsAl = 'NUM_619_CENTRAL_ALABAMA_VETERANS_HCS_AL',
+  /** (620) (620) VA Hudson Valley HCS, NY */
+  Num_620VaHudsonValleyHcsNy = 'NUM_620_VA_HUDSON_VALLEY_HCS_NY',
+  /** (621) (621) Mountain Home, TN */
+  Num_621MountainHomeTn = 'NUM_621_MOUNTAIN_HOME_TN',
+  /** (623) (623) Muskogee, OK */
+  Num_623MuskogeeOk = 'NUM_623_MUSKOGEE_OK',
+  /** (626) (626) Middle Tennessee HCS, TN */
+  Num_626MiddleTennesseeHcsTn = 'NUM_626_MIDDLE_TENNESSEE_HCS_TN',
+  /** (629) (629) New Orleans, LA */
+  Num_629NewOrleansLa = 'NUM_629_NEW_ORLEANS_LA',
+  /** (630) (630) New York Harbor HCS, NY */
+  Num_630NewYorkHarborHcsNy = 'NUM_630_NEW_YORK_HARBOR_HCS_NY',
+  /** (631) (631) VA Central Western Massachusetts HCS */
+  Num_631VaCentralWesternMassachusettsHcs = 'NUM_631_VA_CENTRAL_WESTERN_MASSACHUSETTS_HCS',
+  /** (632) (632) Northport, NY */
+  Num_632NorthportNy = 'NUM_632_NORTHPORT_NY',
+  /** (635) (635) Oklahoma City, OK */
+  Num_635OklahomaCityOk = 'NUM_635_OKLAHOMA_CITY_OK',
+  /** (636A6) (636A6) Central Iowa, IA */
+  Num_636A6CentralIowaIa = 'NUM_636_A6_CENTRAL_IOWA_IA',
+  /** (636A8) (636A8) Iowa City, IA */
+  Num_636A8IowaCityIa = 'NUM_636_A8_IOWA_CITY_IA',
+  /** (636) (636) Nebraska-W Iowa, NE */
+  Num_636NebraskaWIowaNe = 'NUM_636_NEBRASKA_W_IOWA_NE',
+  /** (637) (637) Asheville, NC */
+  Num_637AshevilleNc = 'NUM_637_ASHEVILLE_NC',
+  /** (640) (640) Palo Alto, CA */
+  Num_640PaloAltoCa = 'NUM_640_PALO_ALTO_CA',
+  /** (642) (642) Philadelphia, PA */
+  Num_642PhiladelphiaPa = 'NUM_642_PHILADELPHIA_PA',
+  /** (644) (644) Phoenix, AZ */
+  Num_644PhoenixAz = 'NUM_644_PHOENIX_AZ',
+  /** (646) (646) Pittsburgh, PA */
+  Num_646PittsburghPa = 'NUM_646_PITTSBURGH_PA',
+  /** (648) (648) Portland, OR */
+  Num_648PortlandOr = 'NUM_648_PORTLAND_OR',
+  /** (649) (649) Northern Arizona HCS */
+  Num_649NorthernArizonaHcs = 'NUM_649_NORTHERN_ARIZONA_HCS',
+  /** (650) (650) Providence, RI */
+  Num_650ProvidenceRi = 'NUM_650_PROVIDENCE_RI',
+  /** (652) (652) Richmond, VA */
+  Num_652RichmondVa = 'NUM_652_RICHMOND_VA',
+  /** (653) (653) Roseburg, OR */
+  Num_653RoseburgOr = 'NUM_653_ROSEBURG_OR',
+  /** (654) (654) Reno, NV */
+  Num_654RenoNv = 'NUM_654_RENO_NV',
+  /** (655) (655) Saginaw, MI */
+  Num_655SaginawMi = 'NUM_655_SAGINAW_MI',
+  /** (656) (656) St. Cloud, MN */
+  Num_656StCloudMn = 'NUM_656_ST_CLOUD_MN',
+  /** (657A4) (657A4) Poplar Bluff, MO */
+  Num_657A4PoplarBluffMo = 'NUM_657_A4_POPLAR_BLUFF_MO',
+  /** (657A5) (657A5) Marion, IL */
+  Num_657A5MarionIl = 'NUM_657_A5_MARION_IL',
+  /** (657) (657) St. Louis, MO */
+  Num_657StLouisMo = 'NUM_657_ST_LOUIS_MO',
+  /** (658) (658) Salem, VA */
+  Num_658SalemVa = 'NUM_658_SALEM_VA',
+  /** (659) (659) Salisbury, NC */
+  Num_659SalisburyNc = 'NUM_659_SALISBURY_NC',
+  /** (660) (660) Salt Lake City, UT */
+  Num_660SaltLakeCityUt = 'NUM_660_SALT_LAKE_CITY_UT',
+  /** (662) (662) San Francisco, CA */
+  Num_662SanFranciscoCa = 'NUM_662_SAN_FRANCISCO_CA',
+  /** (663) (663) VA Puget Sound, WA */
+  Num_663VaPugetSoundWa = 'NUM_663_VA_PUGET_SOUND_WA',
+  /** (664) (664) San Diego, CA */
+  Num_664SanDiegoCa = 'NUM_664_SAN_DIEGO_CA',
+  /** (666) (666) Sheridan, WY */
+  Num_666SheridanWy = 'NUM_666_SHERIDAN_WY',
+  /** (667) (667) Shreveport, LA */
+  Num_667ShreveportLa = 'NUM_667_SHREVEPORT_LA',
+  /** (668) (668) Spokane, WA */
+  Num_668SpokaneWa = 'NUM_668_SPOKANE_WA',
+  /** (671) (671) San Antonio, TX */
+  Num_671SanAntonioTx = 'NUM_671_SAN_ANTONIO_TX',
+  /** (672) (672) San Juan, PR */
+  Num_672SanJuanPr = 'NUM_672_SAN_JUAN_PR',
+  /** (673) (673) Tampa, FL */
+  Num_673TampaFl = 'NUM_673_TAMPA_FL',
+  /** (674) (674) Temple, TX */
+  Num_674TempleTx = 'NUM_674_TEMPLE_TX',
+  /** (675) (675) Orlando, FL */
+  Num_675OrlandoFl = 'NUM_675_ORLANDO_FL',
+  /** (676) (676) Tomah, WI */
+  Num_676TomahWi = 'NUM_676_TOMAH_WI',
+  /** (678) (678) Southern Arizona HCS */
+  Num_678SouthernArizonaHcs = 'NUM_678_SOUTHERN_ARIZONA_HCS',
+  /** (679) (679) Tuscaloosa, AL */
+  Num_679TuscaloosaAl = 'NUM_679_TUSCALOOSA_AL',
+  /** (687) (687) Walla Walla, WA */
+  Num_687WallaWallaWa = 'NUM_687_WALLA_WALLA_WA',
+  /** (688) (688) Washington, DC */
+  Num_688WashingtonDc = 'NUM_688_WASHINGTON_DC',
+  /** (689) (689) VA Connecticut HCS, CT */
+  Num_689VaConnecticutHcsCt = 'NUM_689_VA_CONNECTICUT_HCS_CT',
+  /** (691) (691) Greater Los Angeles HCS */
+  Num_691GreaterLosAngelesHcs = 'NUM_691_GREATER_LOS_ANGELES_HCS',
+  /** (692) (692) White City, OR */
+  Num_692WhiteCityOr = 'NUM_692_WHITE_CITY_OR',
+  /** (693) (693) Wilkes-Barre, PA */
+  Num_693WilkesBarrePa = 'NUM_693_WILKES_BARRE_PA',
+  /** (695) (695) Milwaukee, WI */
+  Num_695MilwaukeeWi = 'NUM_695_MILWAUKEE_WI',
+  /** (740) (740) VA Texas Valley Coastal Bend HCS */
+  Num_740VaTexasValleyCoastalBendHcs = 'NUM_740_VA_TEXAS_VALLEY_COASTAL_BEND_HCS',
+  /** (756) (756) El Paso, TX */
+  Num_756ElPasoTx = 'NUM_756_EL_PASO_TX',
+  /** (757) (757) Columbus, OH */
+  Num_757ColumbusOh = 'NUM_757_COLUMBUS_OH',
+}
 
 /** W4.3 */
 export enum ViralLoadAvailable {
