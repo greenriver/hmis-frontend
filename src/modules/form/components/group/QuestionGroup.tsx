@@ -11,17 +11,17 @@ const QuestionGroup = ({
   viewOnly = false,
 }: GroupItemComponentProps) => {
   const wrappedChildren = (
-    <Grid container direction='column' sx={{ mt: 0 }}>
+    <Grid container direction='column' sx={{ mt: 0 }} gap={2}>
       {renderChildItem &&
         item.item?.map((childItem) => renderChildItem(childItem))}
     </Grid>
   );
 
   const label = viewOnly ? item.readonlyText || item.text : item.text;
-  if (nestingLevel === 1) {
+  if (nestingLevel >= 1) {
     const indentChildren =
       !!item.item &&
-      !!item.item[0].enableWhen &&
+      (!!item.enableWhen || !!item.item[0].enableWhen) &&
       // Don't indent InfoGroup because it already has visual distinction
       item.component !== Component.InfoGroup;
 
@@ -33,6 +33,7 @@ const QuestionGroup = ({
               ? {
                   pl: 2,
                   borderLeft: (theme) => `2px solid ${theme.palette.grey[400]}`,
+                  mb: 2, // extra margin below to separate from next question
                 }
               : undefined
           }

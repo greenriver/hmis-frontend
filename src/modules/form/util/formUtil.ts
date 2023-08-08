@@ -72,8 +72,13 @@ import {
 export const maxWidthAtNestingLevel = (nestingLevel: number) =>
   600 - nestingLevel * 26;
 
-export const isDataNotCollected = (s?: string) =>
-  s && s.endsWith('_NOT_COLLECTED');
+export const isDataNotCollected = (val?: any): boolean => {
+  if (typeof val === 'string') {
+    return val.endsWith('_NOT_COLLECTED') || val.endsWith(' not collected');
+  }
+  if (isPickListOption(val)) return isDataNotCollected(val.code);
+  return false;
+};
 
 export const isValidDate = (value: Date, maxYear = 1900) =>
   isDate(value) && isValid(value) && getYear(value) > maxYear;

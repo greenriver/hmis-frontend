@@ -34,6 +34,33 @@ fragment EnrollmentValues on Enrollment {
   mentalHealthDisorderFam
   physicalDisabilityFam
   alcoholDrugUseDisorderFam
+  unemploymentFam
+  mentalHealthDisorderFam
+  physicalDisabilityFam
+  alcoholDrugUseDisorderFam
+  insufficientIncome
+  incarceratedParent
+  targetScreenReqd
+  timeToHousingLoss
+  annualPercentAmi
+  literalHomelessHistory
+  clientLeaseholder
+  hohLeaseholder
+  subsidyAtRisk
+  evictionHistory
+  criminalRecord
+  incarceratedAdult
+  prisonDischarge
+  sexOffender
+  disabledHoh
+  currentPregnant
+  singleParent
+  dependentUnder6
+  hh5Plus
+  cocPrioritized
+  hpScreeningScore
+  thresholdScore
+  vamcStation
 }
 
 fragment EnrollmentFieldsFromAssessment on Enrollment {

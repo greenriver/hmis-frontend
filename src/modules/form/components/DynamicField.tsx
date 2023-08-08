@@ -11,6 +11,7 @@ import {
 import {
   chooseSelectComponentType,
   hasMeaningfulValue,
+  isDataNotCollected,
   maxWidthAtNestingLevel,
 } from '../util/formUtil';
 
@@ -119,7 +120,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     (!!item.warnIfEmpty || !!item.required) &&
     !commonInputProps.disabled &&
     !commonInputProps.error &&
-    !hasMeaningfulValue(value);
+    (!hasMeaningfulValue(value) || isDataNotCollected(value));
 
   const {
     pickList: options,
