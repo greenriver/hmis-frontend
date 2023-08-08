@@ -127,11 +127,11 @@ const InputGroup = ({
           justifyContent='space-between'
           direction='row'
           sx={{
-            pl: 1,
             pr: 0.5,
-            pt: 2,
-            mt: 1,
-            borderTop: (theme) => `1px solid ${theme.palette.grey[500]}`,
+            py: 2,
+            pl: 1,
+            mb: 2,
+            border: (theme) => `1px solid ${theme.palette.grey[200]}`,
             maxWidth: viewOnly ? undefined : maxWidth,
             textAlign: viewOnly ? 'right' : undefined,
             ...rowSx,
