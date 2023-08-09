@@ -18,7 +18,7 @@ import {
   formatDateForDisplay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { Component, FormItem, ItemType } from '@/types/gqlTypes';
+import { FormItem, ItemType } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -27,12 +27,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 
   return (
     <Stack direction='row' spacing={1}>
-      <Typography
-        variant='body2'
-        fontWeight={
-          item.component === Component.Checkbox || horizontal ? undefined : 600
-        }
-      >
+      <Typography variant='body2' fontWeight={horizontal ? undefined : 600}>
         {label}
       </Typography>
     </Stack>

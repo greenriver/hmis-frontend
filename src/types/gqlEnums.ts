@@ -1,6 +1,12 @@
 // **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
 
 export const HmisEnums = {
+  AftercareMethod: {
+    IN_PERSON_1_ON_1: 'In person: one-on-one',
+    IN_PERSON_GROUP: 'In person: group',
+    VIA_EMAIL_SOCIAL: 'Via email/social media',
+    VIA_TEL: 'Via telephone',
+  },
   AftercareProvided: {
     INVALID: 'Invalid Value',
     NO: 'No',
@@ -145,6 +151,11 @@ export const HmisEnums = {
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
     SSN: 'SSN input component',
+  },
+  CounselingMethod: {
+    FAMILY: 'Family',
+    GROUP: 'Group - including peer counseling',
+    INDIVIDUAL: 'Individual',
   },
   CountExchangeForSex: {
     INVALID: 'Invalid Value',

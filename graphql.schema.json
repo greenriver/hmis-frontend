@@ -235,6 +235,41 @@
       },
       {
         "kind": "ENUM",
+        "name": "AftercareMethod",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "IN_PERSON_1_ON_1",
+            "description": "In person: one-on-one",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "IN_PERSON_GROUP",
+            "description": "In person: group",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VIA_EMAIL_SOCIAL",
+            "description": "Via email/social media",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VIA_TEL",
+            "description": "Via telephone",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "AftercareProvided",
         "description": "R20.2",
         "fields": null,
@@ -5137,6 +5172,35 @@
           {
             "name": "SSN",
             "description": "SSN input component",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "CounselingMethod",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "FAMILY",
+            "description": "Family",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GROUP",
+            "description": "Group - including peer counseling",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INDIVIDUAL",
+            "description": "Individual",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -12839,6 +12903,26 @@
             "deprecationReason": null
           },
           {
+            "name": "aftercareMethods",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "AftercareMethod",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "aftercareProvided",
             "description": null,
             "args": [],
@@ -12915,6 +12999,26 @@
             "deprecationReason": null
           },
           {
+            "name": "counselingMethods",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "CounselingMethod",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "counselingReceived",
             "description": null,
             "args": [],
@@ -12934,6 +13038,30 @@
               "kind": "ENUM",
               "name": "CountExchangeForSex",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "customDataElements",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CustomDataElement",
+                    "ofType": null
+                  }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -13035,18 +13163,6 @@
             "deprecationReason": null
           },
           {
-            "name": "emailSocialMedia",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "enrollment",
             "description": null,
             "args": [],
@@ -13103,30 +13219,6 @@
             "deprecationReason": null
           },
           {
-            "name": "familyCounseling",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "groupCounseling",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "housingAssessment",
             "description": null,
             "args": [],
@@ -13150,42 +13242,6 @@
                 "name": "ID",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "inPersonGroup",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "inPersonIndividual",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "individualCounseling",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -13279,8 +13335,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
+              "kind": "SCALAR",
+              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,
@@ -13305,18 +13361,6 @@
             "type": {
               "kind": "ENUM",
               "name": "SubsidyInformation",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "telephone",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,

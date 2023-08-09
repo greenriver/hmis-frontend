@@ -249,11 +249,13 @@ fragment ExitValues on Exit {
   id
   aftercareDate
   aftercareProvided
+  aftercareMethods
   askedOrForcedToExchangeForSex
   askedOrForcedToExchangeForSexPastThreeMonths
   cmExitReason
   coercedToContinueWork
   counselingReceived
+  counselingMethods
   countOfExchangeForSex
   dateCreated
   dateDeleted
@@ -262,16 +264,10 @@ fragment ExitValues on Exit {
   destinationSafeClient
   destinationSafeWorker
   earlyExitReason
-  emailSocialMedia
   exchangeForSex
   exchangeForSexPastThreeMonths
   exitDate
-  familyCounseling
-  groupCounseling
   housingAssessment
-  inPersonGroup
-  inPersonIndividual
-  individualCounseling
   laborExploitPastThreeMonths
   otherDestination
   posAdultConnections
@@ -282,7 +278,6 @@ fragment ExitValues on Exit {
   sessionCountAtExit
   sessionsInPlan
   subsidyInformation
-  telephone
   workPlaceViolenceThreats
   workplacePromiseDifference
 }

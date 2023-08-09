@@ -925,6 +925,7 @@ export const applyDataCollectedAbout = (
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
 ) => {
+  // FIXME do a recursive check
   function isApplicable(item: FormItem) {
     if (!item.dataCollectedAbout) return true;
 
@@ -1126,6 +1127,7 @@ export const createInitialValuesFromRecord = (
     }
   });
 
+  // console.debug('Created initial values from record', record, initialValues);
   return initialValues;
 };
 

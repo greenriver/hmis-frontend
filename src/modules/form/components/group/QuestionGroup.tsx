@@ -35,6 +35,11 @@ const QuestionGroup = ({
                   borderLeft: (theme) => `2px solid ${theme.palette.grey[400]}`,
                   mb: 2, // extra margin below to separate from next question
                 }
+              : item.text
+              ? {
+                  mt: 2,
+                  mb: 3,
+                }
               : undefined
           }
         >
