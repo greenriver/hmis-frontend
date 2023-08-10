@@ -8984,6 +8984,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   };
   intakeAssessment?: {
     __typename?: 'Assessment';
+    id: string;
     user?: { __typename?: 'User'; name: string } | null;
   } | null;
 };
@@ -10359,6 +10360,7 @@ export type GetNonWipEnrollmentsQuery = {
         };
         intakeAssessment?: {
           __typename?: 'Assessment';
+          id: string;
           user?: { __typename?: 'User'; name: string } | null;
         } | null;
       }>;
@@ -11450,6 +11452,8 @@ export type AllEnrollmentDetailsFragment = {
   thresholdScore?: NoYesMissing | null;
   vamcStation?: VamcStationNumber | null;
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
+  exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -11636,6 +11640,8 @@ export type GetEnrollmentDetailsQuery = {
     thresholdScore?: NoYesMissing | null;
     vamcStation?: VamcStationNumber | null;
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
+    exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -18314,6 +18320,7 @@ export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
       ...ProjectNameAndType
     }
     intakeAssessment {
+      id
       user {
         name
       }
@@ -18727,6 +18734,12 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     currentUnit {
       id
       name
+    }
+    intakeAssessment {
+      id
+    }
+    exitAssessment {
+      id
     }
     customDataElements {
       ...CustomDataElementFields

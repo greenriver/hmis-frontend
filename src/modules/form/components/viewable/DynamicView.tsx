@@ -26,7 +26,7 @@ const DynamicView = ({
   visible = true,
   pickListArgs,
   picklistQueryOptions,
-  localConstants = {},
+  localConstants,
   GridProps,
 }: DynamicViewProps): JSX.Element => {
   const { renderFields } = useDynamicFields({

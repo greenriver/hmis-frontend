@@ -114,7 +114,7 @@ const InputGroup = ({
     <Box id={item.linkId}>
       {label && (
         <Typography
-          sx={{ mb: 1 }}
+          sx={{ mt: 1, mb: 2 }}
           variant={viewOnly ? 'body2' : undefined}
           fontWeight={viewOnly ? 600 : undefined}
         >
@@ -127,7 +127,6 @@ const InputGroup = ({
           justifyContent='space-between'
           direction='row'
           sx={{
-            pr: 0.5,
             py: 2,
             pl: 1,
             mb: 2,
@@ -137,8 +136,14 @@ const InputGroup = ({
             ...rowSx,
           }}
         >
-          <Typography>{summaryItem.text || 'Total'}</Typography>
-          <Typography sx={{ width: '120px', pl: 1 }} data-testid='inputSum'>
+          <Typography variant='body2' sx={{ fontWeight: 600 }}>
+            {summaryItem.text || 'Total'}
+          </Typography>
+          <Typography
+            variant='body2'
+            sx={{ width: '120px', fontWeight: 600 }}
+            data-testid='inputSum'
+          >
             {childItemType === ItemType.Currency
               ? formatCurrency(values[summaryItem.linkId] || 0)
               : values[summaryItem.linkId] || 0}
