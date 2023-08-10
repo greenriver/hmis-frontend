@@ -13367,6 +13367,30 @@
             "deprecationReason": null
           },
           {
+            "name": "subsidyInformationA",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "SubsidyInformationA",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subsidyInformationB",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "SubsidyInformationB",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "user",
             "description": null,
             "args": [],
@@ -29467,17 +29491,11 @@
       {
         "kind": "ENUM",
         "name": "SubsidyInformation",
-        "description": "W5.A",
+        "description": "W5.AB",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
-          {
-            "name": "BUT_ONLY_WITH_OTHER_FINANCIAL_ASSISTANCE_1",
-            "description": "(4) But only with other financial assistance 1",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "INVALID",
             "description": "Invalid Value",
@@ -29485,32 +29503,108 @@
             "deprecationReason": null
           },
           {
-            "name": "WITHOUT_AN_ON_GOING_SUBSIDY_2",
-            "description": "(12) Without an on-going subsidy 2",
+            "name": "ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY",
+            "description": "(4) Only with financial assistance other than a subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "WITHOUT_A_SUBSIDY_1",
-            "description": "(1) Without a subsidy 1",
+            "name": "WITHOUT_AN_ON_GOING_SUBSIDY",
+            "description": "(12) Without an on-going subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY_1",
-            "description": "(3) With an on-going subsidy acquired since project entry 1",
+            "name": "WITHOUT_A_SUBSIDY",
+            "description": "(1) Without a subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "WITH_ON_GOING_SUBSIDY_2",
-            "description": "(11) With on-going subsidy 2",
+            "name": "WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY",
+            "description": "(3) With an on-going subsidy acquired since project entry",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY_1",
-            "description": "(2) With the subsidy they had at project entry 1",
+            "name": "WITH_ON_GOING_SUBSIDY",
+            "description": "(11) With on-going subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY",
+            "description": "(2) With the subsidy they had at project entry",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "SubsidyInformationA",
+        "description": "W5.A",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY",
+            "description": "(4) Only with financial assistance other than a subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WITHOUT_A_SUBSIDY",
+            "description": "(1) Without a subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY",
+            "description": "(3) With an on-going subsidy acquired since project entry",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY",
+            "description": "(2) With the subsidy they had at project entry",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "SubsidyInformationB",
+        "description": "W5.B",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WITHOUT_AN_ON_GOING_SUBSIDY",
+            "description": "(12) Without an on-going subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WITH_ON_GOING_SUBSIDY",
+            "description": "(11) With on-going subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           }

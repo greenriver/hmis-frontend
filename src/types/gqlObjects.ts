@@ -2332,6 +2332,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'SubsidyInformation', ofType: null },
       },
       {
+        name: 'subsidyInformationA',
+        type: { kind: 'ENUM', name: 'SubsidyInformationA', ofType: null },
+      },
+      {
+        name: 'subsidyInformationB',
+        type: { kind: 'ENUM', name: 'SubsidyInformationB', ofType: null },
+      },
+      {
         name: 'workPlaceViolenceThreats',
         type: {
           kind: 'ENUM',

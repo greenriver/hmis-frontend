@@ -1344,15 +1344,30 @@ export const HmisEnums = {
   },
   SubsidyInformation: {
     INVALID: 'Invalid Value',
-    WITHOUT_A_SUBSIDY_1: 'Without a subsidy 1',
-    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY_1:
-      'With the subsidy they had at project entry 1',
-    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY_1:
-      'With an on-going subsidy acquired since project entry 1',
-    BUT_ONLY_WITH_OTHER_FINANCIAL_ASSISTANCE_1:
-      'But only with other financial assistance 1',
-    WITH_ON_GOING_SUBSIDY_2: 'With on-going subsidy 2',
-    WITHOUT_AN_ON_GOING_SUBSIDY_2: 'Without an on-going subsidy 2',
+    WITHOUT_A_SUBSIDY: 'Without a subsidy',
+    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY:
+      'With the subsidy they had at project entry',
+    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY:
+      'With an on-going subsidy acquired since project entry',
+    ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY:
+      'Only with financial assistance other than a subsidy',
+    WITH_ON_GOING_SUBSIDY: 'With on-going subsidy',
+    WITHOUT_AN_ON_GOING_SUBSIDY: 'Without an on-going subsidy',
+  },
+  SubsidyInformationA: {
+    INVALID: 'Invalid Value',
+    WITHOUT_A_SUBSIDY: 'Without a subsidy',
+    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY:
+      'With the subsidy they had at project entry',
+    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY:
+      'With an on-going subsidy acquired since project entry',
+    ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY:
+      'Only with financial assistance other than a subsidy',
+  },
+  SubsidyInformationB: {
+    INVALID: 'Invalid Value',
+    WITH_ON_GOING_SUBSIDY: 'With on-going subsidy',
+    WITHOUT_AN_ON_GOING_SUBSIDY: 'Without an on-going subsidy',
   },
   TCellSourceViralLoadSource: {
     INVALID: 'Invalid Value',

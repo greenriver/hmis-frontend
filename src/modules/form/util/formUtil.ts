@@ -1038,6 +1038,11 @@ export const transformSubmitValues = ({
       // Prefix key like "Enrollment.livingSituation"
       if (keyByFieldName && recordType) key = `${recordType}.${key}`;
 
+      // If key is already in result and has a value, skip.
+      // This can occur if there are multiple questions tied to the same field,
+      // with one of them hidden (eg W5 Subsidy Information)
+      if (hasMeaningfulValue(result[key])) return;
+
       if (item.linkId in values) {
         // Transform into gql value, for example Date -> YYYY-MM-DD string
         const transformedValue = formValueToGqlValue(values[item.linkId], item);

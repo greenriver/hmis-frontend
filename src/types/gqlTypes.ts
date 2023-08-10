@@ -1971,6 +1971,8 @@ export type Exit = {
   sessionCountAtExit?: Maybe<Scalars['Int']['output']>;
   sessionsInPlan?: Maybe<Scalars['Int']['output']>;
   subsidyInformation?: Maybe<SubsidyInformation>;
+  subsidyInformationA?: Maybe<SubsidyInformationA>;
+  subsidyInformationB?: Maybe<SubsidyInformationB>;
   user?: Maybe<User>;
   workPlaceViolenceThreats?: Maybe<NoYesReasonsForMissingData>;
   workplacePromiseDifference?: Maybe<NoYesReasonsForMissingData>;
@@ -4732,22 +4734,46 @@ export type SubmitHouseholdAssessmentsPayload = {
   errors: Array<ValidationError>;
 };
 
-/** W5.A */
+/** W5.AB */
 export enum SubsidyInformation {
-  /** (4) But only with other financial assistance 1 */
-  ButOnlyWithOtherFinancialAssistance_1 = 'BUT_ONLY_WITH_OTHER_FINANCIAL_ASSISTANCE_1',
   /** Invalid Value */
   Invalid = 'INVALID',
-  /** (12) Without an on-going subsidy 2 */
-  WithoutAnOnGoingSubsidy_2 = 'WITHOUT_AN_ON_GOING_SUBSIDY_2',
-  /** (1) Without a subsidy 1 */
-  WithoutASubsidy_1 = 'WITHOUT_A_SUBSIDY_1',
-  /** (3) With an on-going subsidy acquired since project entry 1 */
-  WithAnOnGoingSubsidyAcquiredSinceProjectEntry_1 = 'WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY_1',
-  /** (11) With on-going subsidy 2 */
-  WithOnGoingSubsidy_2 = 'WITH_ON_GOING_SUBSIDY_2',
-  /** (2) With the subsidy they had at project entry 1 */
-  WithTheSubsidyTheyHadAtProjectEntry_1 = 'WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY_1',
+  /** (4) Only with financial assistance other than a subsidy */
+  OnlyWithFinancialAssistanceOtherThanASubsidy = 'ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY',
+  /** (12) Without an on-going subsidy */
+  WithoutAnOnGoingSubsidy = 'WITHOUT_AN_ON_GOING_SUBSIDY',
+  /** (1) Without a subsidy */
+  WithoutASubsidy = 'WITHOUT_A_SUBSIDY',
+  /** (3) With an on-going subsidy acquired since project entry */
+  WithAnOnGoingSubsidyAcquiredSinceProjectEntry = 'WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY',
+  /** (11) With on-going subsidy */
+  WithOnGoingSubsidy = 'WITH_ON_GOING_SUBSIDY',
+  /** (2) With the subsidy they had at project entry */
+  WithTheSubsidyTheyHadAtProjectEntry = 'WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY',
+}
+
+/** W5.A */
+export enum SubsidyInformationA {
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (4) Only with financial assistance other than a subsidy */
+  OnlyWithFinancialAssistanceOtherThanASubsidy = 'ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY',
+  /** (1) Without a subsidy */
+  WithoutASubsidy = 'WITHOUT_A_SUBSIDY',
+  /** (3) With an on-going subsidy acquired since project entry */
+  WithAnOnGoingSubsidyAcquiredSinceProjectEntry = 'WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY',
+  /** (2) With the subsidy they had at project entry */
+  WithTheSubsidyTheyHadAtProjectEntry = 'WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY',
+}
+
+/** W5.B */
+export enum SubsidyInformationB {
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (12) Without an on-going subsidy */
+  WithoutAnOnGoingSubsidy = 'WITHOUT_AN_ON_GOING_SUBSIDY',
+  /** (11) With on-going subsidy */
+  WithOnGoingSubsidy = 'WITH_ON_GOING_SUBSIDY',
 }
 
 /** W4.B */
