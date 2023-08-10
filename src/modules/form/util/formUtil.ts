@@ -1306,3 +1306,19 @@ export const chooseSelectComponentType = (
 export const AlwaysPresentLocalConstants = {
   today: startOfToday(),
 };
+
+export const formDefinitionForModal = (
+  definition?: FormDefinitionJson
+): FormDefinitionJson | undefined => {
+  if (!definition) return definition;
+  if (definition.item.length != 1) return definition;
+
+  // If form has exactly 1 group, just render the group contents
+  const childItem = definition.item[0];
+  if (childItem.type !== ItemType.Group) return definition;
+  if (!childItem.item) return definition;
+  return {
+    ...childItem,
+    __typename: 'FormDefinitionJson',
+  } as FormDefinitionJson;
+};
