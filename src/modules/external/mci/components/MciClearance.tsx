@@ -14,20 +14,15 @@ import {
 } from './alerts';
 import MciMatchSelector from './MciMatchSelector';
 
+import { MciClearanceProps } from './types';
 import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
-import { DynamicInputCommonProps } from '@/modules/form/types';
 import { createHudValuesForSubmit } from '@/modules/form/util/formUtil';
 import { NameDataQuality, useClearMciMutation } from '@/types/gqlTypes';
-
-export interface MciClearanceProps extends DynamicInputCommonProps {
-  value?: string | null;
-  onChange: (value?: string | null) => void;
-}
 
 const MCI_CLEARANCE_FIELDS = ['names', 'dob', 'gender', 'ssn'] as const;
 

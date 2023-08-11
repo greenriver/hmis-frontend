@@ -6,18 +6,9 @@ import TableFilterItemCheckboxes from './items/Checkboxes';
 import PickListWrapper from './items/PickListWrapper';
 import TableFilterItemSelect from './items/Select';
 
-import { FilterType, SelectElementVariant } from '@/modules/dataFetching/types';
+import { TableFilterItemSelectorProps } from './items/types';
+import { FilterType } from '@/modules/dataFetching/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
-import { PickListOption } from '@/types/gqlTypes';
-
-export interface TableFilterItemSelectorProps {
-  variant?: SelectElementVariant;
-  options: PickListOption[];
-  value: string | string[] | null | undefined;
-  onChange: (value: string | string[] | null | undefined) => any;
-  loading?: boolean;
-  placeholder?: string;
-}
 
 const TableFilterItemSelector = ({
   variant = 'select',

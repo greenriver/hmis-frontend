@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { TableFilterItemSelectorProps } from '../FilterItem';
-
+import { TableFilterItemSelectorProps } from './types';
 import FormSelect from '@/modules/form/components/FormSelect';
 
 const TableFilterItemSelect: React.FC<
