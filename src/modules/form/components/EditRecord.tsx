@@ -4,7 +4,10 @@ import { ReactNode, Ref, useMemo } from 'react';
 import { useDynamicFormHandlersForRecord } from '../hooks/useDynamicFormHandlersForRecord';
 import useFormDefinition from '../hooks/useFormDefinition';
 import { LocalConstants, SubmitFormAllowedTypes } from '../types';
-import { shouldEnableItem } from '../util/formUtil';
+import {
+  AlwaysPresentLocalConstants,
+  shouldEnableItem,
+} from '../util/formUtil';
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
@@ -56,12 +59,17 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   title,
   FormNavigationProps,
   inputVariables,
-  localConstants,
+  localConstants: localConstantsProp,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   minGroupsForLeftNav = 3,
   formRef,
   ...props
 }: Props<RecordType>) => {
+  const localConstants: LocalConstants = useMemo(
+    () => ({ ...AlwaysPresentLocalConstants, ...localConstantsProp }),
+    [localConstantsProp]
+  );
+
   const { formDefinition, loading: definitionLoading } = useFormDefinition({
     role: formRole,
     // hack: pull project id from one of the existing args, if it exists.
