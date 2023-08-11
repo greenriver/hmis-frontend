@@ -52,8 +52,12 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
 
   const formRef = useRef<DynamicFormRef>(null);
 
-  const { formDefinition, loading: definitionLoading } =
-    useFormDefinition(formRole);
+  const { formDefinition, loading: definitionLoading } = useFormDefinition({
+    role: formRole,
+    // hack: pull project id from one of the existing args, if it exists.
+    // this project will be used to evaluate and "rules" on the resolved form definition.
+    projectId: localConstants?.projectId || inputVariables?.projectId,
+  });
 
   const hookArgs = useMemo(
     () => ({
@@ -105,7 +109,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
             backgroundColor: 'background.default',
           }
         : {
-            '.HmisForm-card': { px: 0, py: 1, border: 'unset' },
+            '.HmisForm-card': { px: 0, pt: 1, pb: 0, border: 'unset' },
           };
 
       return (

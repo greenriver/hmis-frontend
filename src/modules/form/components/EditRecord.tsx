@@ -55,15 +55,19 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   onCompleted,
   title,
   FormNavigationProps,
-  inputVariables = {},
-  localConstants = {},
+  inputVariables,
+  localConstants,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   minGroupsForLeftNav = 3,
   formRef,
   ...props
 }: Props<RecordType>) => {
-  const { formDefinition, loading: definitionLoading } =
-    useFormDefinition(formRole);
+  const { formDefinition, loading: definitionLoading } = useFormDefinition({
+    role: formRole,
+    // hack: pull project id from one of the existing args, if it exists.
+    // this project will be used to evaluate and "rules" on the resolved form definition.
+    projectId: localConstants?.projectId || inputVariables?.projectId,
+  });
 
   const { initialValues, itemMap, errors, onSubmit, submitLoading } =
     useDynamicFormHandlersForRecord({
@@ -88,7 +92,12 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
 
     // Remove disabled groups
     topLevelItems = topLevelItems.filter((item) =>
-      shouldEnableItem({ item, values: initialValues, itemMap, localConstants })
+      shouldEnableItem({
+        item,
+        values: initialValues,
+        itemMap,
+        localConstants: localConstants || {},
+      })
     );
     if (topLevelItems.length < 3) return false;
     return topLevelItems;
