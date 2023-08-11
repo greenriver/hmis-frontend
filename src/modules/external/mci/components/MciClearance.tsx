@@ -1,6 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Alert, AlertTitle, Box, lighten, Stack } from '@mui/material';
-import { find, isEqual, omit, pick } from 'lodash-es';
+import { find, isEqual, omit, pick, transform } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ClearanceState, ClearanceStatus } from '../types';
@@ -241,7 +241,12 @@ const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
   const [clientId, externalIds, currentMciAttributes] = useMemo(() => {
     if (!getCleanedValues || !definition) return [];
     const values = getCleanedValues();
-    const byKey = createHudValuesForSubmit(values, definition);
+    let byKey = createHudValuesForSubmit(values, definition);
+    byKey = transform(
+      byKey,
+      (result, v, k) => (result[k.replace('Client.', '')] = v)
+    );
+
     const mciFields = pick(byKey, MCI_CLEARANCE_FIELDS);
     return [byKey.id, values['current-mci-id'], mciFields];
   }, [getCleanedValues, definition]);
