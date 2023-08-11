@@ -1,10 +1,16 @@
 // **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
 
 export const HmisEnums = {
+  AftercareMethod: {
+    IN_PERSON_1_ON_1: 'In person: one-on-one',
+    IN_PERSON_GROUP: 'In person: group',
+    VIA_EMAIL_SOCIAL: 'Via email/social media',
+    VIA_TEL: 'Via telephone',
+  },
   AftercareProvided: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     CLIENT_REFUSED: 'Client refused',
   },
   AgeRange: {
@@ -145,6 +151,11 @@ export const HmisEnums = {
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
     SSN: 'SSN input component',
+  },
+  CounselingMethod: {
+    FAMILY: 'Family',
+    GROUP: 'Group - including peer counseling',
+    INDIVIDUAL: 'Individual',
   },
   CountExchangeForSex: {
     INVALID: 'Invalid Value',
@@ -571,9 +582,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Unknown / data not collected',
   },
   HOPWAMedAssistedLivingFac: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     NON_HOPWA_FUNDED_PROJECT: 'Non-HOPWA Funded Project',
   },
   HealthStatus: {
@@ -830,9 +841,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoYesMissing: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoYesReasonsForMissingData: {
@@ -1333,15 +1344,30 @@ export const HmisEnums = {
   },
   SubsidyInformation: {
     INVALID: 'Invalid Value',
-    WITHOUT_A_SUBSIDY_1: 'Without a subsidy 1',
-    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY_1:
-      'With the subsidy they had at project entry 1',
-    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY_1:
-      'With an on-going subsidy acquired since project entry 1',
-    BUT_ONLY_WITH_OTHER_FINANCIAL_ASSISTANCE_1:
-      'But only with other financial assistance 1',
-    WITH_ON_GOING_SUBSIDY_2: 'With on-going subsidy 2',
-    WITHOUT_AN_ON_GOING_SUBSIDY_2: 'Without an on-going subsidy 2',
+    WITHOUT_A_SUBSIDY: 'Without a subsidy',
+    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY:
+      'With the subsidy they had at project entry',
+    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY:
+      'With an on-going subsidy acquired since project entry',
+    ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY:
+      'Only with financial assistance other than a subsidy',
+    WITH_ON_GOING_SUBSIDY: 'With on-going subsidy',
+    WITHOUT_AN_ON_GOING_SUBSIDY: 'Without an on-going subsidy',
+  },
+  SubsidyInformationA: {
+    INVALID: 'Invalid Value',
+    WITHOUT_A_SUBSIDY: 'Without a subsidy',
+    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY:
+      'With the subsidy they had at project entry',
+    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY:
+      'With an on-going subsidy acquired since project entry',
+    ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY:
+      'Only with financial assistance other than a subsidy',
+  },
+  SubsidyInformationB: {
+    INVALID: 'Invalid Value',
+    WITH_ON_GOING_SUBSIDY: 'With on-going subsidy',
+    WITHOUT_AN_ON_GOING_SUBSIDY: 'Without an on-going subsidy',
   },
   TCellSourceViralLoadSource: {
     INVALID: 'Invalid Value',
@@ -1572,9 +1598,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   WorkerResponse: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     WORKER_DOES_NOT_KNOW: 'Worker does not know',
   },
 };

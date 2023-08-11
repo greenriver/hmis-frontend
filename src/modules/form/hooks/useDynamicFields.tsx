@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es';
+import { cloneDeep, omit } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DynamicFormFields, {
@@ -28,7 +28,7 @@ const useDynamicFields = ({
   initialValues,
   bulk = false,
   viewOnly = false,
-  localConstants = {},
+  localConstants,
 }: {
   definition: FormDefinitionJson;
   initialValues?: Record<string, any>;
@@ -75,7 +75,7 @@ const useDynamicFields = ({
             item: itemMap[dependentLinkId],
             values: localValues,
             itemMap,
-            localConstants,
+            localConstants: localConstants || {},
           });
         });
       });
@@ -96,7 +96,7 @@ const useDynamicFields = ({
         callback: setDisabledLinkIds,
         enabledDependencyMap,
         itemMap,
-        localConstants,
+        localConstants: localConstants || {},
       });
     },
     [itemMap, enabledDependencyMap, setDisabledLinkIds, localConstants]
@@ -104,17 +104,18 @@ const useDynamicFields = ({
 
   // Run autofill once for all values on initial load
   useEffect(() => {
-    Object.keys(values).forEach((linkId) => {
-      autofillValues({
-        item: itemMap[linkId],
-        values,
-        itemMap,
-        localConstants,
+    setValues((old) => {
+      const newValues = cloneDeep(old);
+      Object.keys(itemMap).forEach((linkId) => {
+        autofillValues({
+          item: itemMap[linkId],
+          values: newValues,
+          itemMap,
+          localConstants: localConstants || {},
+        });
       });
+      return newValues;
     });
-
-    // Note: disable so it doesnt rerun when any value changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemMap, localConstants]);
 
   const wrappedItemChanged: (wrappedFn?: ItemChangedFn) => ItemChangedFn =

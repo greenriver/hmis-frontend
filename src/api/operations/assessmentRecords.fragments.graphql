@@ -34,6 +34,33 @@ fragment EnrollmentValues on Enrollment {
   mentalHealthDisorderFam
   physicalDisabilityFam
   alcoholDrugUseDisorderFam
+  unemploymentFam
+  mentalHealthDisorderFam
+  physicalDisabilityFam
+  alcoholDrugUseDisorderFam
+  insufficientIncome
+  incarceratedParent
+  targetScreenReqd
+  timeToHousingLoss
+  annualPercentAmi
+  literalHomelessHistory
+  clientLeaseholder
+  hohLeaseholder
+  subsidyAtRisk
+  evictionHistory
+  criminalRecord
+  incarceratedAdult
+  prisonDischarge
+  sexOffender
+  disabledHoh
+  currentPregnant
+  singleParent
+  dependentUnder6
+  hh5Plus
+  cocPrioritized
+  hpScreeningScore
+  thresholdScore
+  vamcStation
 }
 
 fragment EnrollmentFieldsFromAssessment on Enrollment {
@@ -45,6 +72,7 @@ fragment EnrollmentFieldsFromAssessment on Enrollment {
     ...ProjectNameAndType
   }
   intakeAssessment {
+    id
     user {
       name
     }
@@ -222,11 +250,13 @@ fragment ExitValues on Exit {
   id
   aftercareDate
   aftercareProvided
+  aftercareMethods
   askedOrForcedToExchangeForSex
   askedOrForcedToExchangeForSexPastThreeMonths
   cmExitReason
   coercedToContinueWork
   counselingReceived
+  counselingMethods
   countOfExchangeForSex
   dateCreated
   dateDeleted
@@ -235,16 +265,10 @@ fragment ExitValues on Exit {
   destinationSafeClient
   destinationSafeWorker
   earlyExitReason
-  emailSocialMedia
   exchangeForSex
   exchangeForSexPastThreeMonths
   exitDate
-  familyCounseling
-  groupCounseling
   housingAssessment
-  inPersonGroup
-  inPersonIndividual
-  individualCounseling
   laborExploitPastThreeMonths
   otherDestination
   posAdultConnections
@@ -255,7 +279,6 @@ fragment ExitValues on Exit {
   sessionCountAtExit
   sessionsInPlan
   subsidyInformation
-  telephone
   workPlaceViolenceThreats
   workplacePromiseDifference
 }

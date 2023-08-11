@@ -108,6 +108,8 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       </TitleCard>
       {renderFormDialog({
         title: 'Add Current Living Situation',
+        //md to accomodate radio buttons
+        DialogProps: { maxWidth: 'md' },
       })}
     </>
   );

@@ -67,13 +67,19 @@ import {
   RelationshipToHoH,
   ServiceDetailType,
   ValueBound,
+  InputSize,
 } from '@/types/gqlTypes';
 
 export const maxWidthAtNestingLevel = (nestingLevel: number) =>
   600 - nestingLevel * 26;
 
-export const isDataNotCollected = (s?: string) =>
-  s && s.endsWith('_NOT_COLLECTED');
+export const isDataNotCollected = (val?: any): boolean => {
+  if (typeof val === 'string') {
+    return val.endsWith('_NOT_COLLECTED') || val.endsWith(' not collected');
+  }
+  if (isPickListOption(val)) return isDataNotCollected(val.code);
+  return false;
+};
 
 export const isValidDate = (value: Date, maxYear = 1900) =>
   isDate(value) && isValid(value) && getYear(value) > maxYear;
@@ -920,6 +926,7 @@ export const applyDataCollectedAbout = (
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
 ) => {
+  // FIXME do a recursive check
   function isApplicable(item: FormItem) {
     if (!item.dataCollectedAbout) return true;
 
@@ -1032,6 +1039,11 @@ export const transformSubmitValues = ({
       // Prefix key like "Enrollment.livingSituation"
       if (keyByFieldName && recordType) key = `${recordType}.${key}`;
 
+      // If key is already in result and has a value, skip.
+      // This can occur if there are multiple questions tied to the same field,
+      // with one of them hidden (eg W5 Subsidy Information)
+      if (hasMeaningfulValue(result[key])) return;
+
       if (item.linkId in values) {
         // Transform into gql value, for example Date -> YYYY-MM-DD string
         const transformedValue = formValueToGqlValue(values[item.linkId], item);
@@ -1121,6 +1133,7 @@ export const createInitialValuesFromRecord = (
     }
   });
 
+  // console.debug('Created initial values from record', record, initialValues);
   return initialValues;
 };
 
@@ -1293,4 +1306,11 @@ export const chooseSelectComponentType = (
 
 export const AlwaysPresentLocalConstants = {
   today: startOfToday(),
+};
+
+export const placeholderText = (item: FormItem) => {
+  if (item.size === InputSize.Xsmall) return;
+  const text = `Select ${item.briefText || item.text || ''}`;
+  if (text.length > 30) return 'Select Response';
+  return text;
 };

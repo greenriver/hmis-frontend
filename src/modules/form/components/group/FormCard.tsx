@@ -97,6 +97,7 @@ const FormCard = ({
           px: 2.5,
           pageBreakInside: 'avoid',
         }}
+        className='HmisForm-card'
       >
         {/* Card title */}
         {item.text && (
@@ -149,7 +150,7 @@ const FormCard = ({
           container
           direction='column'
           // Spacing between input elements inside the card
-          gap={2}
+          gap={3}
           sx={{
             '& .MuiGrid-item:first-of-type': !item.text ? { pt: 0 } : undefined,
             mt: 0,

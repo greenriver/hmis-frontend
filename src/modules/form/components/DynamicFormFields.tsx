@@ -43,7 +43,7 @@ export interface Props {
   severalItemsChanged: SeveralItemsChangedFn;
   itemMap: ItemMap;
   disabledLinkIds: string[];
-  localConstants: LocalConstants;
+  localConstants?: LocalConstants;
 }
 
 const DynamicFormFields: React.FC<Props> = ({
@@ -139,7 +139,11 @@ const DynamicFormFields: React.FC<Props> = ({
         {...props}
         inputProps={{
           ...props?.inputProps,
-          ...buildCommonInputProps({ item, values, localConstants }),
+          ...buildCommonInputProps({
+            item,
+            values,
+            localConstants: localConstants || {},
+          }),
           disabled: isDisabled || locked || undefined,
         }}
       />

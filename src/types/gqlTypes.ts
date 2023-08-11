@@ -68,6 +68,17 @@ export type AddToHouseholdPayload = {
   household?: Maybe<Household>;
 };
 
+export enum AftercareMethod {
+  /** In person: one-on-one */
+  InPerson_1On_1 = 'IN_PERSON_1_ON_1',
+  /** In person: group */
+  InPersonGroup = 'IN_PERSON_GROUP',
+  /** Via email/social media */
+  ViaEmailSocial = 'VIA_EMAIL_SOCIAL',
+  /** Via telephone */
+  ViaTel = 'VIA_TEL',
+}
+
 /** R20.2 */
 export enum AftercareProvided {
   /** (9) Client refused */
@@ -765,6 +776,15 @@ export enum Component {
   RadioButtonsVertical = 'RADIO_BUTTONS_VERTICAL',
   /** SSN input component */
   Ssn = 'SSN',
+}
+
+export enum CounselingMethod {
+  /** Family */
+  Family = 'FAMILY',
+  /** Group - including peer counseling */
+  Group = 'GROUP',
+  /** Individual */
+  Individual = 'INDIVIDUAL',
 }
 
 /** R15.B */
@@ -1917,14 +1937,17 @@ export enum EvictionHistory {
 export type Exit = {
   __typename?: 'Exit';
   aftercareDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  aftercareMethods?: Maybe<Array<AftercareMethod>>;
   aftercareProvided?: Maybe<AftercareProvided>;
   askedOrForcedToExchangeForSex?: Maybe<NoYesReasonsForMissingData>;
   askedOrForcedToExchangeForSexPastThreeMonths?: Maybe<NoYesReasonsForMissingData>;
   client: Client;
   cmExitReason?: Maybe<CmExitReason>;
   coercedToContinueWork?: Maybe<NoYesReasonsForMissingData>;
+  counselingMethods?: Maybe<Array<CounselingMethod>>;
   counselingReceived?: Maybe<NoYesMissing>;
   countOfExchangeForSex?: Maybe<CountExchangeForSex>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
@@ -1932,18 +1955,12 @@ export type Exit = {
   destinationSafeClient?: Maybe<NoYesReasonsForMissingData>;
   destinationSafeWorker?: Maybe<WorkerResponse>;
   earlyExitReason?: Maybe<ExpelledReason>;
-  emailSocialMedia?: Maybe<NoYesMissing>;
   enrollment: Enrollment;
   exchangeForSex?: Maybe<NoYesReasonsForMissingData>;
   exchangeForSexPastThreeMonths?: Maybe<NoYesReasonsForMissingData>;
   exitDate: Scalars['ISO8601Date']['output'];
-  familyCounseling?: Maybe<NoYesMissing>;
-  groupCounseling?: Maybe<NoYesMissing>;
   housingAssessment?: Maybe<HousingAssessmentAtExit>;
   id: Scalars['ID']['output'];
-  inPersonGroup?: Maybe<NoYesMissing>;
-  inPersonIndividual?: Maybe<NoYesMissing>;
-  individualCounseling?: Maybe<NoYesMissing>;
   laborExploitPastThreeMonths?: Maybe<NoYesReasonsForMissingData>;
   otherDestination?: Maybe<Scalars['String']['output']>;
   posAdultConnections?: Maybe<WorkerResponse>;
@@ -1951,10 +1968,11 @@ export type Exit = {
   posPeerConnections?: Maybe<WorkerResponse>;
   postExitCounselingPlan?: Maybe<NoYesMissing>;
   projectCompletionStatus?: Maybe<ProjectCompletionStatus>;
-  sessionCountAtExit?: Maybe<NoYesMissing>;
+  sessionCountAtExit?: Maybe<Scalars['Int']['output']>;
   sessionsInPlan?: Maybe<Scalars['Int']['output']>;
   subsidyInformation?: Maybe<SubsidyInformation>;
-  telephone?: Maybe<NoYesMissing>;
+  subsidyInformationA?: Maybe<SubsidyInformationA>;
+  subsidyInformationB?: Maybe<SubsidyInformationB>;
   user?: Maybe<User>;
   workPlaceViolenceThreats?: Maybe<NoYesReasonsForMissingData>;
   workplacePromiseDifference?: Maybe<NoYesReasonsForMissingData>;
@@ -2579,6 +2597,7 @@ export type IncomeBenefit = {
   client: Client;
   cobra?: Maybe<NoYesMissing>;
   connectionWithSoar?: Maybe<NoYesReasonsForMissingData>;
+  customDataElements: Array<CustomDataElement>;
   dataCollectionStage: DataCollectionStage;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -4715,22 +4734,46 @@ export type SubmitHouseholdAssessmentsPayload = {
   errors: Array<ValidationError>;
 };
 
-/** W5.A */
+/** W5.AB */
 export enum SubsidyInformation {
-  /** (4) But only with other financial assistance 1 */
-  ButOnlyWithOtherFinancialAssistance_1 = 'BUT_ONLY_WITH_OTHER_FINANCIAL_ASSISTANCE_1',
   /** Invalid Value */
   Invalid = 'INVALID',
-  /** (12) Without an on-going subsidy 2 */
-  WithoutAnOnGoingSubsidy_2 = 'WITHOUT_AN_ON_GOING_SUBSIDY_2',
-  /** (1) Without a subsidy 1 */
-  WithoutASubsidy_1 = 'WITHOUT_A_SUBSIDY_1',
-  /** (3) With an on-going subsidy acquired since project entry 1 */
-  WithAnOnGoingSubsidyAcquiredSinceProjectEntry_1 = 'WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY_1',
-  /** (11) With on-going subsidy 2 */
-  WithOnGoingSubsidy_2 = 'WITH_ON_GOING_SUBSIDY_2',
-  /** (2) With the subsidy they had at project entry 1 */
-  WithTheSubsidyTheyHadAtProjectEntry_1 = 'WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY_1',
+  /** (4) Only with financial assistance other than a subsidy */
+  OnlyWithFinancialAssistanceOtherThanASubsidy = 'ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY',
+  /** (12) Without an on-going subsidy */
+  WithoutAnOnGoingSubsidy = 'WITHOUT_AN_ON_GOING_SUBSIDY',
+  /** (1) Without a subsidy */
+  WithoutASubsidy = 'WITHOUT_A_SUBSIDY',
+  /** (3) With an on-going subsidy acquired since project entry */
+  WithAnOnGoingSubsidyAcquiredSinceProjectEntry = 'WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY',
+  /** (11) With on-going subsidy */
+  WithOnGoingSubsidy = 'WITH_ON_GOING_SUBSIDY',
+  /** (2) With the subsidy they had at project entry */
+  WithTheSubsidyTheyHadAtProjectEntry = 'WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY',
+}
+
+/** W5.A */
+export enum SubsidyInformationA {
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (4) Only with financial assistance other than a subsidy */
+  OnlyWithFinancialAssistanceOtherThanASubsidy = 'ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY',
+  /** (1) Without a subsidy */
+  WithoutASubsidy = 'WITHOUT_A_SUBSIDY',
+  /** (3) With an on-going subsidy acquired since project entry */
+  WithAnOnGoingSubsidyAcquiredSinceProjectEntry = 'WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY',
+  /** (2) With the subsidy they had at project entry */
+  WithTheSubsidyTheyHadAtProjectEntry = 'WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY',
+}
+
+/** W5.B */
+export enum SubsidyInformationB {
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (12) Without an on-going subsidy */
+  WithoutAnOnGoingSubsidy = 'WITHOUT_AN_ON_GOING_SUBSIDY',
+  /** (11) With on-going subsidy */
+  WithOnGoingSubsidy = 'WITH_ON_GOING_SUBSIDY',
 }
 
 /** W4.B */
@@ -5606,6 +5649,29 @@ export type AssessmentWithRecordsFragment = {
     mentalHealthDisorderFam?: NoYesMissing | null;
     physicalDisabilityFam?: NoYesMissing | null;
     alcoholDrugUseDisorderFam?: NoYesMissing | null;
+    insufficientIncome?: NoYesMissing | null;
+    incarceratedParent?: NoYesMissing | null;
+    targetScreenReqd?: NoYesMissing | null;
+    timeToHousingLoss?: TimeToHousingLoss | null;
+    annualPercentAmi?: AnnualPercentAmi | null;
+    literalHomelessHistory?: LiteralHomelessHistory | null;
+    clientLeaseholder?: NoYesMissing | null;
+    hohLeaseholder?: NoYesMissing | null;
+    subsidyAtRisk?: NoYesMissing | null;
+    evictionHistory?: EvictionHistory | null;
+    criminalRecord?: NoYesMissing | null;
+    incarceratedAdult?: IncarceratedAdult | null;
+    prisonDischarge?: NoYesMissing | null;
+    sexOffender?: NoYesMissing | null;
+    disabledHoh?: NoYesMissing | null;
+    currentPregnant?: NoYesMissing | null;
+    singleParent?: NoYesMissing | null;
+    dependentUnder6?: DependentUnder6 | null;
+    hh5Plus?: NoYesMissing | null;
+    cocPrioritized?: NoYesMissing | null;
+    hpScreeningScore?: NoYesMissing | null;
+    thresholdScore?: NoYesMissing | null;
+    vamcStation?: VamcStationNumber | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -5722,6 +5788,43 @@ export type AssessmentWithRecordsFragment = {
     wic?: NoYesMissing | null;
     workersComp?: NoYesMissing | null;
     workersCompAmount?: number | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      atOccurrence: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
   disabilityGroup?: {
     __typename: 'DisabilityGroup';
@@ -5774,11 +5877,13 @@ export type AssessmentWithRecordsFragment = {
     id: string;
     aftercareDate?: string | null;
     aftercareProvided?: AftercareProvided | null;
+    aftercareMethods?: Array<AftercareMethod> | null;
     askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
     askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
     cmExitReason?: CmExitReason | null;
     coercedToContinueWork?: NoYesReasonsForMissingData | null;
     counselingReceived?: NoYesMissing | null;
+    counselingMethods?: Array<CounselingMethod> | null;
     countOfExchangeForSex?: CountExchangeForSex | null;
     dateCreated: string;
     dateDeleted?: string | null;
@@ -5787,16 +5892,10 @@ export type AssessmentWithRecordsFragment = {
     destinationSafeClient?: NoYesReasonsForMissingData | null;
     destinationSafeWorker?: WorkerResponse | null;
     earlyExitReason?: ExpelledReason | null;
-    emailSocialMedia?: NoYesMissing | null;
     exchangeForSex?: NoYesReasonsForMissingData | null;
     exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
     exitDate: string;
-    familyCounseling?: NoYesMissing | null;
-    groupCounseling?: NoYesMissing | null;
     housingAssessment?: HousingAssessmentAtExit | null;
-    inPersonGroup?: NoYesMissing | null;
-    inPersonIndividual?: NoYesMissing | null;
-    individualCounseling?: NoYesMissing | null;
     laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
     otherDestination?: string | null;
     posAdultConnections?: WorkerResponse | null;
@@ -5804,12 +5903,48 @@ export type AssessmentWithRecordsFragment = {
     posPeerConnections?: WorkerResponse | null;
     postExitCounselingPlan?: NoYesMissing | null;
     projectCompletionStatus?: ProjectCompletionStatus | null;
-    sessionCountAtExit?: NoYesMissing | null;
+    sessionCountAtExit?: number | null;
     sessionsInPlan?: number | null;
     subsidyInformation?: SubsidyInformation | null;
-    telephone?: NoYesMissing | null;
     workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
     workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      atOccurrence: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
   youthEducationStatus?: {
     __typename?: 'YouthEducationStatus';
@@ -5952,6 +6087,29 @@ export type FullAssessmentFragment = {
     mentalHealthDisorderFam?: NoYesMissing | null;
     physicalDisabilityFam?: NoYesMissing | null;
     alcoholDrugUseDisorderFam?: NoYesMissing | null;
+    insufficientIncome?: NoYesMissing | null;
+    incarceratedParent?: NoYesMissing | null;
+    targetScreenReqd?: NoYesMissing | null;
+    timeToHousingLoss?: TimeToHousingLoss | null;
+    annualPercentAmi?: AnnualPercentAmi | null;
+    literalHomelessHistory?: LiteralHomelessHistory | null;
+    clientLeaseholder?: NoYesMissing | null;
+    hohLeaseholder?: NoYesMissing | null;
+    subsidyAtRisk?: NoYesMissing | null;
+    evictionHistory?: EvictionHistory | null;
+    criminalRecord?: NoYesMissing | null;
+    incarceratedAdult?: IncarceratedAdult | null;
+    prisonDischarge?: NoYesMissing | null;
+    sexOffender?: NoYesMissing | null;
+    disabledHoh?: NoYesMissing | null;
+    currentPregnant?: NoYesMissing | null;
+    singleParent?: NoYesMissing | null;
+    dependentUnder6?: DependentUnder6 | null;
+    hh5Plus?: NoYesMissing | null;
+    cocPrioritized?: NoYesMissing | null;
+    hpScreeningScore?: NoYesMissing | null;
+    thresholdScore?: NoYesMissing | null;
+    vamcStation?: VamcStationNumber | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -6068,6 +6226,43 @@ export type FullAssessmentFragment = {
     wic?: NoYesMissing | null;
     workersComp?: NoYesMissing | null;
     workersCompAmount?: number | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      atOccurrence: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
   disabilityGroup?: {
     __typename: 'DisabilityGroup';
@@ -6120,11 +6315,13 @@ export type FullAssessmentFragment = {
     id: string;
     aftercareDate?: string | null;
     aftercareProvided?: AftercareProvided | null;
+    aftercareMethods?: Array<AftercareMethod> | null;
     askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
     askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
     cmExitReason?: CmExitReason | null;
     coercedToContinueWork?: NoYesReasonsForMissingData | null;
     counselingReceived?: NoYesMissing | null;
+    counselingMethods?: Array<CounselingMethod> | null;
     countOfExchangeForSex?: CountExchangeForSex | null;
     dateCreated: string;
     dateDeleted?: string | null;
@@ -6133,16 +6330,10 @@ export type FullAssessmentFragment = {
     destinationSafeClient?: NoYesReasonsForMissingData | null;
     destinationSafeWorker?: WorkerResponse | null;
     earlyExitReason?: ExpelledReason | null;
-    emailSocialMedia?: NoYesMissing | null;
     exchangeForSex?: NoYesReasonsForMissingData | null;
     exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
     exitDate: string;
-    familyCounseling?: NoYesMissing | null;
-    groupCounseling?: NoYesMissing | null;
     housingAssessment?: HousingAssessmentAtExit | null;
-    inPersonGroup?: NoYesMissing | null;
-    inPersonIndividual?: NoYesMissing | null;
-    individualCounseling?: NoYesMissing | null;
     laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
     otherDestination?: string | null;
     posAdultConnections?: WorkerResponse | null;
@@ -6150,12 +6341,48 @@ export type FullAssessmentFragment = {
     posPeerConnections?: WorkerResponse | null;
     postExitCounselingPlan?: NoYesMissing | null;
     projectCompletionStatus?: ProjectCompletionStatus | null;
-    sessionCountAtExit?: NoYesMissing | null;
+    sessionCountAtExit?: number | null;
     sessionsInPlan?: number | null;
     subsidyInformation?: SubsidyInformation | null;
-    telephone?: NoYesMissing | null;
     workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
     workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      atOccurrence: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
   youthEducationStatus?: {
     __typename?: 'YouthEducationStatus';
@@ -6751,6 +6978,29 @@ export type GetAssessmentQuery = {
       mentalHealthDisorderFam?: NoYesMissing | null;
       physicalDisabilityFam?: NoYesMissing | null;
       alcoholDrugUseDisorderFam?: NoYesMissing | null;
+      insufficientIncome?: NoYesMissing | null;
+      incarceratedParent?: NoYesMissing | null;
+      targetScreenReqd?: NoYesMissing | null;
+      timeToHousingLoss?: TimeToHousingLoss | null;
+      annualPercentAmi?: AnnualPercentAmi | null;
+      literalHomelessHistory?: LiteralHomelessHistory | null;
+      clientLeaseholder?: NoYesMissing | null;
+      hohLeaseholder?: NoYesMissing | null;
+      subsidyAtRisk?: NoYesMissing | null;
+      evictionHistory?: EvictionHistory | null;
+      criminalRecord?: NoYesMissing | null;
+      incarceratedAdult?: IncarceratedAdult | null;
+      prisonDischarge?: NoYesMissing | null;
+      sexOffender?: NoYesMissing | null;
+      disabledHoh?: NoYesMissing | null;
+      currentPregnant?: NoYesMissing | null;
+      singleParent?: NoYesMissing | null;
+      dependentUnder6?: DependentUnder6 | null;
+      hh5Plus?: NoYesMissing | null;
+      cocPrioritized?: NoYesMissing | null;
+      hpScreeningScore?: NoYesMissing | null;
+      thresholdScore?: NoYesMissing | null;
+      vamcStation?: VamcStationNumber | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
         id: string;
@@ -6867,6 +7117,43 @@ export type GetAssessmentQuery = {
       wic?: NoYesMissing | null;
       workersComp?: NoYesMissing | null;
       workersCompAmount?: number | null;
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        atOccurrence: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
     } | null;
     disabilityGroup?: {
       __typename: 'DisabilityGroup';
@@ -6919,11 +7206,13 @@ export type GetAssessmentQuery = {
       id: string;
       aftercareDate?: string | null;
       aftercareProvided?: AftercareProvided | null;
+      aftercareMethods?: Array<AftercareMethod> | null;
       askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
       askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
       cmExitReason?: CmExitReason | null;
       coercedToContinueWork?: NoYesReasonsForMissingData | null;
       counselingReceived?: NoYesMissing | null;
+      counselingMethods?: Array<CounselingMethod> | null;
       countOfExchangeForSex?: CountExchangeForSex | null;
       dateCreated: string;
       dateDeleted?: string | null;
@@ -6932,16 +7221,10 @@ export type GetAssessmentQuery = {
       destinationSafeClient?: NoYesReasonsForMissingData | null;
       destinationSafeWorker?: WorkerResponse | null;
       earlyExitReason?: ExpelledReason | null;
-      emailSocialMedia?: NoYesMissing | null;
       exchangeForSex?: NoYesReasonsForMissingData | null;
       exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
       exitDate: string;
-      familyCounseling?: NoYesMissing | null;
-      groupCounseling?: NoYesMissing | null;
       housingAssessment?: HousingAssessmentAtExit | null;
-      inPersonGroup?: NoYesMissing | null;
-      inPersonIndividual?: NoYesMissing | null;
-      individualCounseling?: NoYesMissing | null;
       laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
       otherDestination?: string | null;
       posAdultConnections?: WorkerResponse | null;
@@ -6949,12 +7232,48 @@ export type GetAssessmentQuery = {
       posPeerConnections?: WorkerResponse | null;
       postExitCounselingPlan?: NoYesMissing | null;
       projectCompletionStatus?: ProjectCompletionStatus | null;
-      sessionCountAtExit?: NoYesMissing | null;
+      sessionCountAtExit?: number | null;
       sessionsInPlan?: number | null;
       subsidyInformation?: SubsidyInformation | null;
-      telephone?: NoYesMissing | null;
       workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
       workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        atOccurrence: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
     } | null;
     youthEducationStatus?: {
       __typename?: 'YouthEducationStatus';
@@ -7180,6 +7499,29 @@ export type GetHouseholdAssessmentsQuery = {
       mentalHealthDisorderFam?: NoYesMissing | null;
       physicalDisabilityFam?: NoYesMissing | null;
       alcoholDrugUseDisorderFam?: NoYesMissing | null;
+      insufficientIncome?: NoYesMissing | null;
+      incarceratedParent?: NoYesMissing | null;
+      targetScreenReqd?: NoYesMissing | null;
+      timeToHousingLoss?: TimeToHousingLoss | null;
+      annualPercentAmi?: AnnualPercentAmi | null;
+      literalHomelessHistory?: LiteralHomelessHistory | null;
+      clientLeaseholder?: NoYesMissing | null;
+      hohLeaseholder?: NoYesMissing | null;
+      subsidyAtRisk?: NoYesMissing | null;
+      evictionHistory?: EvictionHistory | null;
+      criminalRecord?: NoYesMissing | null;
+      incarceratedAdult?: IncarceratedAdult | null;
+      prisonDischarge?: NoYesMissing | null;
+      sexOffender?: NoYesMissing | null;
+      disabledHoh?: NoYesMissing | null;
+      currentPregnant?: NoYesMissing | null;
+      singleParent?: NoYesMissing | null;
+      dependentUnder6?: DependentUnder6 | null;
+      hh5Plus?: NoYesMissing | null;
+      cocPrioritized?: NoYesMissing | null;
+      hpScreeningScore?: NoYesMissing | null;
+      thresholdScore?: NoYesMissing | null;
+      vamcStation?: VamcStationNumber | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
         id: string;
@@ -7296,6 +7638,43 @@ export type GetHouseholdAssessmentsQuery = {
       wic?: NoYesMissing | null;
       workersComp?: NoYesMissing | null;
       workersCompAmount?: number | null;
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        atOccurrence: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
     } | null;
     disabilityGroup?: {
       __typename: 'DisabilityGroup';
@@ -7348,11 +7727,13 @@ export type GetHouseholdAssessmentsQuery = {
       id: string;
       aftercareDate?: string | null;
       aftercareProvided?: AftercareProvided | null;
+      aftercareMethods?: Array<AftercareMethod> | null;
       askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
       askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
       cmExitReason?: CmExitReason | null;
       coercedToContinueWork?: NoYesReasonsForMissingData | null;
       counselingReceived?: NoYesMissing | null;
+      counselingMethods?: Array<CounselingMethod> | null;
       countOfExchangeForSex?: CountExchangeForSex | null;
       dateCreated: string;
       dateDeleted?: string | null;
@@ -7361,16 +7742,10 @@ export type GetHouseholdAssessmentsQuery = {
       destinationSafeClient?: NoYesReasonsForMissingData | null;
       destinationSafeWorker?: WorkerResponse | null;
       earlyExitReason?: ExpelledReason | null;
-      emailSocialMedia?: NoYesMissing | null;
       exchangeForSex?: NoYesReasonsForMissingData | null;
       exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
       exitDate: string;
-      familyCounseling?: NoYesMissing | null;
-      groupCounseling?: NoYesMissing | null;
       housingAssessment?: HousingAssessmentAtExit | null;
-      inPersonGroup?: NoYesMissing | null;
-      inPersonIndividual?: NoYesMissing | null;
-      individualCounseling?: NoYesMissing | null;
       laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
       otherDestination?: string | null;
       posAdultConnections?: WorkerResponse | null;
@@ -7378,12 +7753,48 @@ export type GetHouseholdAssessmentsQuery = {
       posPeerConnections?: WorkerResponse | null;
       postExitCounselingPlan?: NoYesMissing | null;
       projectCompletionStatus?: ProjectCompletionStatus | null;
-      sessionCountAtExit?: NoYesMissing | null;
+      sessionCountAtExit?: number | null;
       sessionsInPlan?: number | null;
       subsidyInformation?: SubsidyInformation | null;
-      telephone?: NoYesMissing | null;
       workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
       workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        atOccurrence: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
     } | null;
     youthEducationStatus?: {
       __typename?: 'YouthEducationStatus';
@@ -7558,6 +7969,29 @@ export type SubmitAssessmentMutation = {
         mentalHealthDisorderFam?: NoYesMissing | null;
         physicalDisabilityFam?: NoYesMissing | null;
         alcoholDrugUseDisorderFam?: NoYesMissing | null;
+        insufficientIncome?: NoYesMissing | null;
+        incarceratedParent?: NoYesMissing | null;
+        targetScreenReqd?: NoYesMissing | null;
+        timeToHousingLoss?: TimeToHousingLoss | null;
+        annualPercentAmi?: AnnualPercentAmi | null;
+        literalHomelessHistory?: LiteralHomelessHistory | null;
+        clientLeaseholder?: NoYesMissing | null;
+        hohLeaseholder?: NoYesMissing | null;
+        subsidyAtRisk?: NoYesMissing | null;
+        evictionHistory?: EvictionHistory | null;
+        criminalRecord?: NoYesMissing | null;
+        incarceratedAdult?: IncarceratedAdult | null;
+        prisonDischarge?: NoYesMissing | null;
+        sexOffender?: NoYesMissing | null;
+        disabledHoh?: NoYesMissing | null;
+        currentPregnant?: NoYesMissing | null;
+        singleParent?: NoYesMissing | null;
+        dependentUnder6?: DependentUnder6 | null;
+        hh5Plus?: NoYesMissing | null;
+        cocPrioritized?: NoYesMissing | null;
+        hpScreeningScore?: NoYesMissing | null;
+        thresholdScore?: NoYesMissing | null;
+        vamcStation?: VamcStationNumber | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
@@ -7674,6 +8108,43 @@ export type SubmitAssessmentMutation = {
         wic?: NoYesMissing | null;
         workersComp?: NoYesMissing | null;
         workersCompAmount?: number | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          atOccurrence: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
       } | null;
       disabilityGroup?: {
         __typename: 'DisabilityGroup';
@@ -7726,11 +8197,13 @@ export type SubmitAssessmentMutation = {
         id: string;
         aftercareDate?: string | null;
         aftercareProvided?: AftercareProvided | null;
+        aftercareMethods?: Array<AftercareMethod> | null;
         askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
         askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
         cmExitReason?: CmExitReason | null;
         coercedToContinueWork?: NoYesReasonsForMissingData | null;
         counselingReceived?: NoYesMissing | null;
+        counselingMethods?: Array<CounselingMethod> | null;
         countOfExchangeForSex?: CountExchangeForSex | null;
         dateCreated: string;
         dateDeleted?: string | null;
@@ -7739,16 +8212,10 @@ export type SubmitAssessmentMutation = {
         destinationSafeClient?: NoYesReasonsForMissingData | null;
         destinationSafeWorker?: WorkerResponse | null;
         earlyExitReason?: ExpelledReason | null;
-        emailSocialMedia?: NoYesMissing | null;
         exchangeForSex?: NoYesReasonsForMissingData | null;
         exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
         exitDate: string;
-        familyCounseling?: NoYesMissing | null;
-        groupCounseling?: NoYesMissing | null;
         housingAssessment?: HousingAssessmentAtExit | null;
-        inPersonGroup?: NoYesMissing | null;
-        inPersonIndividual?: NoYesMissing | null;
-        individualCounseling?: NoYesMissing | null;
         laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
         otherDestination?: string | null;
         posAdultConnections?: WorkerResponse | null;
@@ -7756,12 +8223,48 @@ export type SubmitAssessmentMutation = {
         posPeerConnections?: WorkerResponse | null;
         postExitCounselingPlan?: NoYesMissing | null;
         projectCompletionStatus?: ProjectCompletionStatus | null;
-        sessionCountAtExit?: NoYesMissing | null;
+        sessionCountAtExit?: number | null;
         sessionsInPlan?: number | null;
         subsidyInformation?: SubsidyInformation | null;
-        telephone?: NoYesMissing | null;
         workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
         workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          atOccurrence: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
       } | null;
       youthEducationStatus?: {
         __typename?: 'YouthEducationStatus';
@@ -7945,6 +8448,29 @@ export type GetAssessmentsForPopulationQuery = {
           mentalHealthDisorderFam?: NoYesMissing | null;
           physicalDisabilityFam?: NoYesMissing | null;
           alcoholDrugUseDisorderFam?: NoYesMissing | null;
+          insufficientIncome?: NoYesMissing | null;
+          incarceratedParent?: NoYesMissing | null;
+          targetScreenReqd?: NoYesMissing | null;
+          timeToHousingLoss?: TimeToHousingLoss | null;
+          annualPercentAmi?: AnnualPercentAmi | null;
+          literalHomelessHistory?: LiteralHomelessHistory | null;
+          clientLeaseholder?: NoYesMissing | null;
+          hohLeaseholder?: NoYesMissing | null;
+          subsidyAtRisk?: NoYesMissing | null;
+          evictionHistory?: EvictionHistory | null;
+          criminalRecord?: NoYesMissing | null;
+          incarceratedAdult?: IncarceratedAdult | null;
+          prisonDischarge?: NoYesMissing | null;
+          sexOffender?: NoYesMissing | null;
+          disabledHoh?: NoYesMissing | null;
+          currentPregnant?: NoYesMissing | null;
+          singleParent?: NoYesMissing | null;
+          dependentUnder6?: DependentUnder6 | null;
+          hh5Plus?: NoYesMissing | null;
+          cocPrioritized?: NoYesMissing | null;
+          hpScreeningScore?: NoYesMissing | null;
+          thresholdScore?: NoYesMissing | null;
+          vamcStation?: VamcStationNumber | null;
           project: {
             __typename?: 'Project';
             id: string;
@@ -8067,6 +8593,43 @@ export type GetAssessmentsForPopulationQuery = {
           wic?: NoYesMissing | null;
           workersComp?: NoYesMissing | null;
           workersCompAmount?: number | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            fieldType: CustomDataElementType;
+            repeats: boolean;
+            atOccurrence: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         } | null;
         disabilityGroup?: {
           __typename: 'DisabilityGroup';
@@ -8119,11 +8682,13 @@ export type GetAssessmentsForPopulationQuery = {
           id: string;
           aftercareDate?: string | null;
           aftercareProvided?: AftercareProvided | null;
+          aftercareMethods?: Array<AftercareMethod> | null;
           askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
           askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
           cmExitReason?: CmExitReason | null;
           coercedToContinueWork?: NoYesReasonsForMissingData | null;
           counselingReceived?: NoYesMissing | null;
+          counselingMethods?: Array<CounselingMethod> | null;
           countOfExchangeForSex?: CountExchangeForSex | null;
           dateCreated: string;
           dateDeleted?: string | null;
@@ -8132,16 +8697,10 @@ export type GetAssessmentsForPopulationQuery = {
           destinationSafeClient?: NoYesReasonsForMissingData | null;
           destinationSafeWorker?: WorkerResponse | null;
           earlyExitReason?: ExpelledReason | null;
-          emailSocialMedia?: NoYesMissing | null;
           exchangeForSex?: NoYesReasonsForMissingData | null;
           exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
           exitDate: string;
-          familyCounseling?: NoYesMissing | null;
-          groupCounseling?: NoYesMissing | null;
           housingAssessment?: HousingAssessmentAtExit | null;
-          inPersonGroup?: NoYesMissing | null;
-          inPersonIndividual?: NoYesMissing | null;
-          individualCounseling?: NoYesMissing | null;
           laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
           otherDestination?: string | null;
           posAdultConnections?: WorkerResponse | null;
@@ -8149,12 +8708,48 @@ export type GetAssessmentsForPopulationQuery = {
           posPeerConnections?: WorkerResponse | null;
           postExitCounselingPlan?: NoYesMissing | null;
           projectCompletionStatus?: ProjectCompletionStatus | null;
-          sessionCountAtExit?: NoYesMissing | null;
+          sessionCountAtExit?: number | null;
           sessionsInPlan?: number | null;
           subsidyInformation?: SubsidyInformation | null;
-          telephone?: NoYesMissing | null;
           workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
           workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            fieldType: CustomDataElementType;
+            repeats: boolean;
+            atOccurrence: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         } | null;
         youthEducationStatus?: {
           __typename?: 'YouthEducationStatus';
@@ -8295,6 +8890,29 @@ export type EnrollmentValuesFragment = {
   mentalHealthDisorderFam?: NoYesMissing | null;
   physicalDisabilityFam?: NoYesMissing | null;
   alcoholDrugUseDisorderFam?: NoYesMissing | null;
+  insufficientIncome?: NoYesMissing | null;
+  incarceratedParent?: NoYesMissing | null;
+  targetScreenReqd?: NoYesMissing | null;
+  timeToHousingLoss?: TimeToHousingLoss | null;
+  annualPercentAmi?: AnnualPercentAmi | null;
+  literalHomelessHistory?: LiteralHomelessHistory | null;
+  clientLeaseholder?: NoYesMissing | null;
+  hohLeaseholder?: NoYesMissing | null;
+  subsidyAtRisk?: NoYesMissing | null;
+  evictionHistory?: EvictionHistory | null;
+  criminalRecord?: NoYesMissing | null;
+  incarceratedAdult?: IncarceratedAdult | null;
+  prisonDischarge?: NoYesMissing | null;
+  sexOffender?: NoYesMissing | null;
+  disabledHoh?: NoYesMissing | null;
+  currentPregnant?: NoYesMissing | null;
+  singleParent?: NoYesMissing | null;
+  dependentUnder6?: DependentUnder6 | null;
+  hh5Plus?: NoYesMissing | null;
+  cocPrioritized?: NoYesMissing | null;
+  hpScreeningScore?: NoYesMissing | null;
+  thresholdScore?: NoYesMissing | null;
+  vamcStation?: VamcStationNumber | null;
 };
 
 export type EnrollmentFieldsFromAssessmentFragment = {
@@ -8334,6 +8952,29 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   mentalHealthDisorderFam?: NoYesMissing | null;
   physicalDisabilityFam?: NoYesMissing | null;
   alcoholDrugUseDisorderFam?: NoYesMissing | null;
+  insufficientIncome?: NoYesMissing | null;
+  incarceratedParent?: NoYesMissing | null;
+  targetScreenReqd?: NoYesMissing | null;
+  timeToHousingLoss?: TimeToHousingLoss | null;
+  annualPercentAmi?: AnnualPercentAmi | null;
+  literalHomelessHistory?: LiteralHomelessHistory | null;
+  clientLeaseholder?: NoYesMissing | null;
+  hohLeaseholder?: NoYesMissing | null;
+  subsidyAtRisk?: NoYesMissing | null;
+  evictionHistory?: EvictionHistory | null;
+  criminalRecord?: NoYesMissing | null;
+  incarceratedAdult?: IncarceratedAdult | null;
+  prisonDischarge?: NoYesMissing | null;
+  sexOffender?: NoYesMissing | null;
+  disabledHoh?: NoYesMissing | null;
+  currentPregnant?: NoYesMissing | null;
+  singleParent?: NoYesMissing | null;
+  dependentUnder6?: DependentUnder6 | null;
+  hh5Plus?: NoYesMissing | null;
+  cocPrioritized?: NoYesMissing | null;
+  hpScreeningScore?: NoYesMissing | null;
+  thresholdScore?: NoYesMissing | null;
+  vamcStation?: VamcStationNumber | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
   project: {
     __typename?: 'Project';
@@ -8343,6 +8984,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   };
   intakeAssessment?: {
     __typename?: 'Assessment';
+    id: string;
     user?: { __typename?: 'User'; name: string } | null;
   } | null;
 };
@@ -8639,11 +9281,13 @@ export type ExitValuesFragment = {
   id: string;
   aftercareDate?: string | null;
   aftercareProvided?: AftercareProvided | null;
+  aftercareMethods?: Array<AftercareMethod> | null;
   askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
   askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
   cmExitReason?: CmExitReason | null;
   coercedToContinueWork?: NoYesReasonsForMissingData | null;
   counselingReceived?: NoYesMissing | null;
+  counselingMethods?: Array<CounselingMethod> | null;
   countOfExchangeForSex?: CountExchangeForSex | null;
   dateCreated: string;
   dateDeleted?: string | null;
@@ -8652,16 +9296,10 @@ export type ExitValuesFragment = {
   destinationSafeClient?: NoYesReasonsForMissingData | null;
   destinationSafeWorker?: WorkerResponse | null;
   earlyExitReason?: ExpelledReason | null;
-  emailSocialMedia?: NoYesMissing | null;
   exchangeForSex?: NoYesReasonsForMissingData | null;
   exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
   exitDate: string;
-  familyCounseling?: NoYesMissing | null;
-  groupCounseling?: NoYesMissing | null;
   housingAssessment?: HousingAssessmentAtExit | null;
-  inPersonGroup?: NoYesMissing | null;
-  inPersonIndividual?: NoYesMissing | null;
-  individualCounseling?: NoYesMissing | null;
   laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
   otherDestination?: string | null;
   posAdultConnections?: WorkerResponse | null;
@@ -8669,10 +9307,9 @@ export type ExitValuesFragment = {
   posPeerConnections?: WorkerResponse | null;
   postExitCounselingPlan?: NoYesMissing | null;
   projectCompletionStatus?: ProjectCompletionStatus | null;
-  sessionCountAtExit?: NoYesMissing | null;
+  sessionCountAtExit?: number | null;
   sessionsInPlan?: number | null;
   subsidyInformation?: SubsidyInformation | null;
-  telephone?: NoYesMissing | null;
   workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
   workplacePromiseDifference?: NoYesReasonsForMissingData | null;
 };
@@ -9691,6 +10328,29 @@ export type GetNonWipEnrollmentsQuery = {
         mentalHealthDisorderFam?: NoYesMissing | null;
         physicalDisabilityFam?: NoYesMissing | null;
         alcoholDrugUseDisorderFam?: NoYesMissing | null;
+        insufficientIncome?: NoYesMissing | null;
+        incarceratedParent?: NoYesMissing | null;
+        targetScreenReqd?: NoYesMissing | null;
+        timeToHousingLoss?: TimeToHousingLoss | null;
+        annualPercentAmi?: AnnualPercentAmi | null;
+        literalHomelessHistory?: LiteralHomelessHistory | null;
+        clientLeaseholder?: NoYesMissing | null;
+        hohLeaseholder?: NoYesMissing | null;
+        subsidyAtRisk?: NoYesMissing | null;
+        evictionHistory?: EvictionHistory | null;
+        criminalRecord?: NoYesMissing | null;
+        incarceratedAdult?: IncarceratedAdult | null;
+        prisonDischarge?: NoYesMissing | null;
+        sexOffender?: NoYesMissing | null;
+        disabledHoh?: NoYesMissing | null;
+        currentPregnant?: NoYesMissing | null;
+        singleParent?: NoYesMissing | null;
+        dependentUnder6?: DependentUnder6 | null;
+        hh5Plus?: NoYesMissing | null;
+        cocPrioritized?: NoYesMissing | null;
+        hpScreeningScore?: NoYesMissing | null;
+        thresholdScore?: NoYesMissing | null;
+        vamcStation?: VamcStationNumber | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
         project: {
           __typename?: 'Project';
@@ -9700,6 +10360,7 @@ export type GetNonWipEnrollmentsQuery = {
         };
         intakeAssessment?: {
           __typename?: 'Assessment';
+          id: string;
           user?: { __typename?: 'User'; name: string } | null;
         } | null;
       }>;
@@ -10767,7 +11428,32 @@ export type AllEnrollmentDetailsFragment = {
   mentalHealthDisorderFam?: NoYesMissing | null;
   physicalDisabilityFam?: NoYesMissing | null;
   alcoholDrugUseDisorderFam?: NoYesMissing | null;
+  insufficientIncome?: NoYesMissing | null;
+  incarceratedParent?: NoYesMissing | null;
+  targetScreenReqd?: NoYesMissing | null;
+  timeToHousingLoss?: TimeToHousingLoss | null;
+  annualPercentAmi?: AnnualPercentAmi | null;
+  literalHomelessHistory?: LiteralHomelessHistory | null;
+  clientLeaseholder?: NoYesMissing | null;
+  hohLeaseholder?: NoYesMissing | null;
+  subsidyAtRisk?: NoYesMissing | null;
+  evictionHistory?: EvictionHistory | null;
+  criminalRecord?: NoYesMissing | null;
+  incarceratedAdult?: IncarceratedAdult | null;
+  prisonDischarge?: NoYesMissing | null;
+  sexOffender?: NoYesMissing | null;
+  disabledHoh?: NoYesMissing | null;
+  currentPregnant?: NoYesMissing | null;
+  singleParent?: NoYesMissing | null;
+  dependentUnder6?: DependentUnder6 | null;
+  hh5Plus?: NoYesMissing | null;
+  cocPrioritized?: NoYesMissing | null;
+  hpScreeningScore?: NoYesMissing | null;
+  thresholdScore?: NoYesMissing | null;
+  vamcStation?: VamcStationNumber | null;
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
+  exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -10930,7 +11616,32 @@ export type GetEnrollmentDetailsQuery = {
     mentalHealthDisorderFam?: NoYesMissing | null;
     physicalDisabilityFam?: NoYesMissing | null;
     alcoholDrugUseDisorderFam?: NoYesMissing | null;
+    insufficientIncome?: NoYesMissing | null;
+    incarceratedParent?: NoYesMissing | null;
+    targetScreenReqd?: NoYesMissing | null;
+    timeToHousingLoss?: TimeToHousingLoss | null;
+    annualPercentAmi?: AnnualPercentAmi | null;
+    literalHomelessHistory?: LiteralHomelessHistory | null;
+    clientLeaseholder?: NoYesMissing | null;
+    hohLeaseholder?: NoYesMissing | null;
+    subsidyAtRisk?: NoYesMissing | null;
+    evictionHistory?: EvictionHistory | null;
+    criminalRecord?: NoYesMissing | null;
+    incarceratedAdult?: IncarceratedAdult | null;
+    prisonDischarge?: NoYesMissing | null;
+    sexOffender?: NoYesMissing | null;
+    disabledHoh?: NoYesMissing | null;
+    currentPregnant?: NoYesMissing | null;
+    singleParent?: NoYesMissing | null;
+    dependentUnder6?: DependentUnder6 | null;
+    hh5Plus?: NoYesMissing | null;
+    cocPrioritized?: NoYesMissing | null;
+    hpScreeningScore?: NoYesMissing | null;
+    thresholdScore?: NoYesMissing | null;
+    vamcStation?: VamcStationNumber | null;
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
+    exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -17267,6 +17978,33 @@ export const EnrollmentValuesFragmentDoc = gql`
     mentalHealthDisorderFam
     physicalDisabilityFam
     alcoholDrugUseDisorderFam
+    unemploymentFam
+    mentalHealthDisorderFam
+    physicalDisabilityFam
+    alcoholDrugUseDisorderFam
+    insufficientIncome
+    incarceratedParent
+    targetScreenReqd
+    timeToHousingLoss
+    annualPercentAmi
+    literalHomelessHistory
+    clientLeaseholder
+    hohLeaseholder
+    subsidyAtRisk
+    evictionHistory
+    criminalRecord
+    incarceratedAdult
+    prisonDischarge
+    sexOffender
+    disabledHoh
+    currentPregnant
+    singleParent
+    dependentUnder6
+    hh5Plus
+    cocPrioritized
+    hpScreeningScore
+    thresholdScore
+    vamcStation
   }
 `;
 export const CustomDataElementValueFieldsFragmentDoc = gql`
@@ -17440,11 +18178,13 @@ export const ExitValuesFragmentDoc = gql`
     id
     aftercareDate
     aftercareProvided
+    aftercareMethods
     askedOrForcedToExchangeForSex
     askedOrForcedToExchangeForSexPastThreeMonths
     cmExitReason
     coercedToContinueWork
     counselingReceived
+    counselingMethods
     countOfExchangeForSex
     dateCreated
     dateDeleted
@@ -17453,16 +18193,10 @@ export const ExitValuesFragmentDoc = gql`
     destinationSafeClient
     destinationSafeWorker
     earlyExitReason
-    emailSocialMedia
     exchangeForSex
     exchangeForSexPastThreeMonths
     exitDate
-    familyCounseling
-    groupCounseling
     housingAssessment
-    inPersonGroup
-    inPersonIndividual
-    individualCounseling
     laborExploitPastThreeMonths
     otherDestination
     posAdultConnections
@@ -17473,7 +18207,6 @@ export const ExitValuesFragmentDoc = gql`
     sessionCountAtExit
     sessionsInPlan
     subsidyInformation
-    telephone
     workPlaceViolenceThreats
     workplacePromiseDifference
   }
@@ -17519,6 +18252,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     }
     incomeBenefit {
       ...IncomeBenefitValues
+      customDataElements {
+        ...CustomDataElementFields
+      }
     }
     disabilityGroup {
       ...DisabilityGroupValues
@@ -17528,6 +18264,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     }
     exit {
       ...ExitValues
+      customDataElements {
+        ...CustomDataElementFields
+      }
     }
     youthEducationStatus {
       ...YouthEducationStatusValues
@@ -17581,6 +18320,7 @@ export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
       ...ProjectNameAndType
     }
     intakeAssessment {
+      id
       user {
         name
       }
@@ -17994,6 +18734,12 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     currentUnit {
       id
       name
+    }
+    intakeAssessment {
+      id
+    }
+    exitAssessment {
+      id
     }
     customDataElements {
       ...CustomDataElementFields

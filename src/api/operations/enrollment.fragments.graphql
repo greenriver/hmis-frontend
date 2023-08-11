@@ -80,6 +80,12 @@ fragment AllEnrollmentDetails on Enrollment {
     id
     name
   }
+  intakeAssessment {
+    id
+  }
+  exitAssessment {
+    id
+  }
   customDataElements {
     ...CustomDataElementFields
   }

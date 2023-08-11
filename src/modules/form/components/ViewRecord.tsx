@@ -25,7 +25,9 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   formRole,
   pickListArgs,
 }: ViewRecordProps<RecordType>): JSX.Element => {
-  const { formDefinition, itemMap, loading } = useFormDefinition(formRole);
+  const { formDefinition, itemMap, loading } = useFormDefinition({
+    role: formRole,
+  });
 
   // Transform record into "form state" for DynamicView
   const values = useMemo(() => {

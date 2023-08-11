@@ -1,6 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Alert, AlertTitle, Box, lighten, Stack } from '@mui/material';
-import { find, isEqual, omit, pick } from 'lodash-es';
+import { find, isEqual, omit, pick, transform } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ClearanceState, ClearanceStatus } from '../types';
@@ -14,20 +14,15 @@ import {
 } from './alerts';
 import MciMatchSelector from './MciMatchSelector';
 
+import { MciClearanceProps } from './types';
 import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
-import { DynamicInputCommonProps } from '@/modules/form/types';
 import { createHudValuesForSubmit } from '@/modules/form/util/formUtil';
 import { NameDataQuality, useClearMciMutation } from '@/types/gqlTypes';
-
-export interface MciClearanceProps extends DynamicInputCommonProps {
-  value?: string | null;
-  onChange: (value?: string | null) => void;
-}
 
 const MCI_CLEARANCE_FIELDS = ['names', 'dob', 'gender', 'ssn'] as const;
 
@@ -246,7 +241,12 @@ const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
   const [clientId, externalIds, currentMciAttributes] = useMemo(() => {
     if (!getCleanedValues || !definition) return [];
     const values = getCleanedValues();
-    const byKey = createHudValuesForSubmit(values, definition);
+    let byKey = createHudValuesForSubmit(values, definition);
+    byKey = transform(
+      byKey,
+      (result, v, k) => (result[k.replace('Client.', '')] = v)
+    );
+
     const mciFields = pick(byKey, MCI_CLEARANCE_FIELDS);
     return [byKey.id, values['current-mci-id'], mciFields];
   }, [getCleanedValues, definition]);

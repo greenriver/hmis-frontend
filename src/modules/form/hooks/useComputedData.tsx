@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-
 import { LocalConstants } from '../types';
 import {
   buildAutofillDependencyMap,
@@ -21,7 +20,7 @@ const useComputedData = ({
   definition,
   initialValues,
   viewOnly = false,
-  localConstants = {},
+  localConstants,
 }: Args) => {
   return useMemo(() => {
     const itemMap = definition ? getItemMap(definition) : {};
@@ -32,7 +31,7 @@ const useComputedData = ({
     const initiallyDisabledLinkIds = getDisabledLinkIds({
       itemMap,
       values: initialValues || {},
-      localConstants,
+      localConstants: localConstants || {},
     });
 
     return {

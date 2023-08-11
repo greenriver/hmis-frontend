@@ -2144,6 +2144,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
+        name: 'aftercareMethods',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'AftercareMethod', ofType: null },
+          },
+        },
+      },
+      {
         name: 'aftercareProvided',
         type: { kind: 'ENUM', name: 'AftercareProvided', ofType: null },
       },
@@ -2173,6 +2185,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'ENUM',
           name: 'NoYesReasonsForMissingData',
           ofType: null,
+        },
+      },
+      {
+        name: 'counselingMethods',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'CounselingMethod', ofType: null },
+          },
         },
       },
       {
@@ -2228,10 +2252,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'ExpelledReason', ofType: null },
       },
       {
-        name: 'emailSocialMedia',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
-      },
-      {
         name: 'exchangeForSex',
         type: {
           kind: 'ENUM',
@@ -2256,14 +2276,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'familyCounseling',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
-      },
-      {
-        name: 'groupCounseling',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
-      },
-      {
         name: 'housingAssessment',
         type: { kind: 'ENUM', name: 'HousingAssessmentAtExit', ofType: null },
       },
@@ -2274,18 +2286,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
-      },
-      {
-        name: 'inPersonGroup',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
-      },
-      {
-        name: 'inPersonIndividual',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
-      },
-      {
-        name: 'individualCounseling',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'laborExploitPastThreeMonths',
@@ -2321,7 +2321,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'sessionCountAtExit',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
       {
         name: 'sessionsInPlan',
@@ -2332,8 +2332,12 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'SubsidyInformation', ofType: null },
       },
       {
-        name: 'telephone',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        name: 'subsidyInformationA',
+        type: { kind: 'ENUM', name: 'SubsidyInformationA', ofType: null },
+      },
+      {
+        name: 'subsidyInformationB',
+        type: { kind: 'ENUM', name: 'SubsidyInformationB', ofType: null },
       },
       {
         name: 'workPlaceViolenceThreats',
