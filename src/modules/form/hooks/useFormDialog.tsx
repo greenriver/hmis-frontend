@@ -23,7 +23,7 @@ import useFormDefinition from './useFormDefinition';
 import CommonDialog from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
 import { emptyErrorState } from '@/modules/errors/util';
-import { formDefinitionForModal } from '@/modules/form/util/formUtil';
+
 import { FormRole, ItemType } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
@@ -86,11 +86,6 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
     if (onClose) onClose();
   }, [setErrors, onClose]);
 
-  const formJson = useMemo(
-    () => formDefinitionForModal(formDefinition?.definition),
-    [formDefinition]
-  );
-
   const renderFormDialog = useCallback(
     ({ title, DialogProps, ...props }: RenderFormDialogProps) => {
       if (!dialogOpen) return null;
@@ -98,9 +93,20 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
         throw new Error(`Form not found: ${formRole} `);
       }
 
-      const hasTopLevelGroup = (formJson?.item || []).find(
-        ({ type }) => type === ItemType.Group
-      );
+      const hasMultipleTopLevelGroups =
+        (formDefinition?.definition?.item || []).filter(
+          ({ type }) => type === ItemType.Group
+        ).length > 1;
+
+      // If there are multiple top level groups, render form "cards" as usual.
+      // If not, hide the card formatting.
+      const contentSx = hasMultipleTopLevelGroups
+        ? {
+            backgroundColor: 'background.default',
+          }
+        : {
+            '.HmisForm-card': { px: 0, py: 1, border: 'unset' },
+          };
 
       return (
         <CommonDialog
@@ -110,21 +116,15 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
           {...DialogProps}
         >
           <DialogTitle>{title}</DialogTitle>
-          <DialogContent
-            sx={{
-              backgroundColor: hasTopLevelGroup
-                ? 'background.default'
-                : undefined,
-            }}
-          >
+          <DialogContent sx={contentSx}>
             {definitionLoading ? (
               <Loading />
-            ) : formJson ? (
+            ) : formDefinition ? (
               <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
                 <Grid item xs>
                   <DynamicForm
                     ref={formRef}
-                    definition={formJson}
+                    definition={formDefinition.definition}
                     onSubmit={onSubmit}
                     initialValues={initialValues}
                     loading={submitLoading}
@@ -164,7 +164,6 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       dialogOpen,
       errors,
       formDefinition,
-      formJson,
       formRole,
       initialValues,
       localConstants,

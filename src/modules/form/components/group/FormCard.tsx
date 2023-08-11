@@ -97,6 +97,7 @@ const FormCard = ({
           px: 2.5,
           pageBreakInside: 'avoid',
         }}
+        className='HmisForm-card'
       >
         {/* Card title */}
         {item.text && (
