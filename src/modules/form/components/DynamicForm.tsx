@@ -87,7 +87,7 @@ const DynamicForm = forwardRef(
       onSubmit,
       onSaveDraft,
       loading,
-      initialValues = {},
+      initialValues,
       errors: errorState,
       showSavePrompt = false,
       alwaysShowSaveSlide = false,
@@ -101,7 +101,7 @@ const DynamicForm = forwardRef(
       hideSubmit = false,
       loadingElement,
       picklistQueryOptions,
-      localConstants = {},
+      localConstants,
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {

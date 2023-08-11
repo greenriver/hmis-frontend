@@ -1317,6 +1317,8 @@ export const formDefinitionForModal = (
   const childItem = definition.item[0];
   if (childItem.type !== ItemType.Group) return definition;
   if (!childItem.item) return definition;
+  if (childItem.item.find((i) => i.type === ItemType.Group)) return definition;
+
   return {
     ...childItem,
     __typename: 'FormDefinitionJson',

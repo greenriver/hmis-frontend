@@ -24,7 +24,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
 import { emptyErrorState } from '@/modules/errors/util';
 import { formDefinitionForModal } from '@/modules/form/util/formUtil';
-import { FormDefinitionJson, FormRole, ItemType } from '@/types/gqlTypes';
+import { FormRole, ItemType } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 type RenderFormDialogProps = PartialPick<
@@ -35,15 +35,17 @@ type RenderFormDialogProps = PartialPick<
   DialogProps?: Omit<DialogProps, 'open'>;
 };
 
-interface Args<T> extends DynamicFormHandlerArgs<T> {
+interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
   formRole: FormRole;
   onClose?: VoidFunction;
 }
 export function useFormDialog<T extends SubmitFormAllowedTypes>({
   onCompleted,
   formRole,
-  onClose = () => null,
-  ...args
+  onClose,
+  record,
+  localConstants,
+  inputVariables,
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const openFormDialog = useCallback(() => setDialogOpen(true), []);
@@ -53,17 +55,27 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   const { formDefinition, loading: definitionLoading } =
     useFormDefinition(formRole);
 
-  const hookArgs = useMemo(() => {
-    return {
-      ...args,
+  const hookArgs = useMemo(
+    () => ({
+      record,
+      localConstants,
+      inputVariables,
       formDefinition,
       onCompleted: (data: T) => {
         setDialogOpen(false);
         if (onCompleted) onCompleted(data);
-        onClose();
+        if (onClose) onClose();
       },
-    };
-  }, [args, onCompleted, formDefinition, onClose]);
+    }),
+    [
+      record,
+      localConstants,
+      inputVariables,
+      onCompleted,
+      formDefinition,
+      onClose,
+    ]
+  );
 
   const { initialValues, errors, onSubmit, submitLoading, setErrors } =
     useDynamicFormHandlersForRecord(hookArgs);
@@ -71,83 +83,95 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   const closeDialog = useCallback(() => {
     setDialogOpen(false);
     setErrors(emptyErrorState);
-    onClose();
+    if (onClose) onClose();
   }, [setErrors, onClose]);
 
-  const renderFormDialog = ({
-    title,
-    DialogProps,
-    ...props
-  }: RenderFormDialogProps) => {
-    if (!dialogOpen) return null;
-    if (!definitionLoading && !formDefinition) {
-      throw new Error(`Form not found: ${formRole} `);
-    }
+  const formJson = useMemo(
+    () => formDefinitionForModal(formDefinition?.definition),
+    [formDefinition]
+  );
 
-    // If this is a form with exactly 1 group, drop the group and just render the contents.
-    const modifiedFormDef: FormDefinitionJson | undefined =
-      formDefinitionForModal(formDefinition?.definition);
+  const renderFormDialog = useCallback(
+    ({ title, DialogProps, ...props }: RenderFormDialogProps) => {
+      if (!dialogOpen) return null;
+      if (!definitionLoading && !formDefinition) {
+        throw new Error(`Form not found: ${formRole} `);
+      }
 
-    const hasTopLevelGroup = (modifiedFormDef?.item || []).find(
-      ({ type }) => type === ItemType.Group
-    );
+      const hasTopLevelGroup = (formJson?.item || []).find(
+        ({ type }) => type === ItemType.Group
+      );
 
-    return (
-      <CommonDialog
-        open={!!dialogOpen}
-        fullWidth
-        onClose={closeDialog}
-        {...DialogProps}
-      >
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent
-          sx={{
-            backgroundColor: hasTopLevelGroup
-              ? 'background.default'
-              : undefined,
-          }}
+      return (
+        <CommonDialog
+          open={!!dialogOpen}
+          fullWidth
+          onClose={closeDialog}
+          {...DialogProps}
         >
-          {definitionLoading ? (
-            <Loading />
-          ) : modifiedFormDef ? (
-            <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
-              <Grid item xs>
-                <DynamicForm
-                  ref={formRef}
-                  definition={modifiedFormDef}
-                  onSubmit={onSubmit}
-                  initialValues={initialValues}
-                  loading={submitLoading}
-                  errors={errors}
-                  localConstants={args.localConstants}
-                  {...props}
-                  FormActionProps={{
-                    onDiscard: () => setDialogOpen(false),
-                    ...props.FormActionProps,
-                  }}
-                  ValidationDialogProps={{
-                    ...props.ValidationDialogProps,
-                  }}
-                  hideSubmit
-                  picklistQueryOptions={{ fetchPolicy: 'cache-first' }}
-                />
+          <DialogTitle>{title}</DialogTitle>
+          <DialogContent
+            sx={{
+              backgroundColor: hasTopLevelGroup
+                ? 'background.default'
+                : undefined,
+            }}
+          >
+            {definitionLoading ? (
+              <Loading />
+            ) : formJson ? (
+              <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
+                <Grid item xs>
+                  <DynamicForm
+                    ref={formRef}
+                    definition={formJson}
+                    onSubmit={onSubmit}
+                    initialValues={initialValues}
+                    loading={submitLoading}
+                    errors={errors}
+                    localConstants={localConstants}
+                    {...props}
+                    FormActionProps={{
+                      onDiscard: () => setDialogOpen(false),
+                      ...props.FormActionProps,
+                    }}
+                    ValidationDialogProps={{
+                      ...props.ValidationDialogProps,
+                    }}
+                    hideSubmit
+                    picklistQueryOptions={{ fetchPolicy: 'cache-first' }}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          ) : null}
-        </DialogContent>
-        <DialogActions>
-          <FormDialogActionContent
-            onSubmit={() => formRef.current && formRef.current.SubmitForm()}
-            onDiscard={closeDialog}
-            discardButtonText={props.discardButtonText}
-            submitButtonText={props.submitButtonText}
-            submitLoading={submitLoading}
-            disabled={definitionLoading}
-          />
-        </DialogActions>
-      </CommonDialog>
-    );
-  };
+            ) : null}
+          </DialogContent>
+          <DialogActions>
+            <FormDialogActionContent
+              onSubmit={() => formRef.current && formRef.current.SubmitForm()}
+              onDiscard={closeDialog}
+              discardButtonText={props.discardButtonText}
+              submitButtonText={props.submitButtonText}
+              submitLoading={submitLoading}
+              disabled={definitionLoading}
+            />
+          </DialogActions>
+        </CommonDialog>
+      );
+    },
+    [
+      closeDialog,
+      definitionLoading,
+      dialogOpen,
+      errors,
+      formDefinition,
+      formJson,
+      formRole,
+      initialValues,
+      localConstants,
+      onSubmit,
+      submitLoading,
+    ]
+  );
   return {
     openFormDialog,
     renderFormDialog,

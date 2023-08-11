@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-
 import { LocalConstants } from '../types';
 import {
   buildAutofillDependencyMap,
