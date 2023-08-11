@@ -79,8 +79,8 @@ const DisabilityTable = ({
                       label: null,
                       placeholder:
                         idx === 0
-                          ? 'Select status...'
-                          : 'Select disabling condition...',
+                          ? 'Select Status'
+                          : 'Select Disabling Condition',
                     },
                   })}
                 </TableCell>

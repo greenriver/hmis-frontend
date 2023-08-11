@@ -136,7 +136,7 @@ const RadioGroupInput = ({
               'label .MuiRadio-root': { p: 1 },
             }),
             ...(warnIfEmptyTreatment && {
-              svg: {
+              '[data-checked="false"] svg': {
                 backgroundColor: 'alerts.lightWarningBackground',
                 borderRadius: 1,
               },
@@ -165,6 +165,7 @@ const RadioGroupInput = ({
               componentsProps={{
                 typography: {
                   variant: 'body2',
+                  mr: 0.5,
                   color:
                     checkbox && value && value?.code !== code
                       ? 'gray'

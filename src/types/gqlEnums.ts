@@ -8,9 +8,9 @@ export const HmisEnums = {
     VIA_TEL: 'Via telephone',
   },
   AftercareProvided: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     CLIENT_REFUSED: 'Client refused',
   },
   AgeRange: {
@@ -582,9 +582,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Unknown / data not collected',
   },
   HOPWAMedAssistedLivingFac: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     NON_HOPWA_FUNDED_PROJECT: 'Non-HOPWA Funded Project',
   },
   HealthStatus: {
@@ -841,9 +841,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoYesMissing: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoYesReasonsForMissingData: {
@@ -1598,9 +1598,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   WorkerResponse: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     WORKER_DOES_NOT_KNOW: 'Worker does not know',
   },
 };

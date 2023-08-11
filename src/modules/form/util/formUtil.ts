@@ -67,6 +67,7 @@ import {
   RelationshipToHoH,
   ServiceDetailType,
   ValueBound,
+  InputSize,
 } from '@/types/gqlTypes';
 
 export const maxWidthAtNestingLevel = (nestingLevel: number) =>
@@ -1305,4 +1306,11 @@ export const chooseSelectComponentType = (
 
 export const AlwaysPresentLocalConstants = {
   today: startOfToday(),
+};
+
+export const placeholderText = (item: FormItem) => {
+  if (item.size === InputSize.Xsmall) return;
+  const text = `Select ${item.briefText || item.text || ''}`;
+  if (text.length > 30) return 'Select Response';
+  return text;
 };

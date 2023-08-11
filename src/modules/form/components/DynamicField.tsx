@@ -13,6 +13,7 @@ import {
   hasMeaningfulValue,
   isDataNotCollected,
   maxWidthAtNestingLevel,
+  placeholderText,
 } from '../util/formUtil';
 
 import MultiAddressInput from './client/addresses/MultiAddressInput';
@@ -54,7 +55,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 };
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
-export const MAX_INPUT_WIDTH = 430;
+export const MAX_INPUT_WIDTH = 500;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
@@ -143,10 +144,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     },
   });
 
-  const placeholder =
-    item.size === InputSize.Xsmall
-      ? undefined
-      : `Select ${item.briefText || item.text || ''}...`;
+  const placeholder = placeholderText(item);
 
   if (item.component === Component.Mci) {
     return (
@@ -320,7 +318,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             options={options || []}
             row={componentType === Component.RadioButtons}
             clearable
-            checkbox
             {...commonInputProps}
           />
         );
