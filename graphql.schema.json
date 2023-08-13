@@ -14658,11 +14658,11 @@
           },
           {
             "name": "prefill",
-            "description": "Whether to allow pre-filling section from a recent records",
+            "description": "Whether to allow pre-filling this section from a previous assessment",
             "args": [],
             "type": {
-              "kind": "ENUM",
-              "name": "RelatedRecordType",
+              "kind": "SCALAR",
+              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,

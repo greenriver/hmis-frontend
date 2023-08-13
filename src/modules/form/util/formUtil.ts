@@ -23,6 +23,7 @@ import {
 } from 'lodash-es';
 
 import {
+  AssessmentForPopulation,
   DynamicInputCommonProps,
   FormValues,
   HIDDEN_VALUE,
@@ -56,18 +57,19 @@ import {
   EnableOperator,
   EnableWhen,
   FieldMapping,
-  FormDefinitionJson,
   FormDefinitionFieldsFragment,
+  FormDefinitionJson,
   FormItem,
   FullAssessmentFragment,
   InitialBehavior,
+  InputSize,
   ItemType,
   NoYesReasonsForMissingData,
   PickListOption,
+  RelatedRecordType,
   RelationshipToHoH,
   ServiceDetailType,
   ValueBound,
-  InputSize,
 } from '@/types/gqlTypes';
 
 export const maxWidthAtNestingLevel = (nestingLevel: number) =>
@@ -1313,4 +1315,34 @@ export const placeholderText = (item: FormItem) => {
   const text = `Select ${item.briefText || item.text || ''}`;
   if (text.length > 30) return 'Select Response';
   return text;
+};
+
+export const getFieldOnAssessment = (
+  assessment: AssessmentForPopulation,
+  mapping: FieldMapping
+) => {
+  const recordType =
+    HmisEnums.RelatedRecordType[mapping.recordType as RelatedRecordType];
+  if (!recordType) {
+    throw new Error(`${mapping.recordType} not a valid record type`);
+  }
+
+  const relatedRecordAttribute = lowerFirst(recordType);
+  if (!assessment.hasOwnProperty(relatedRecordAttribute)) {
+    throw new Error(`Expected assessment to have ${relatedRecordAttribute}`);
+  }
+
+  const record = get(assessment, relatedRecordAttribute);
+
+  let value;
+  if (mapping.fieldName) {
+    value = get(record, mapping.fieldName);
+  } else if (mapping.customFieldKey) {
+    value = customDataElementValueForKey(
+      mapping.customFieldKey,
+      record.customDataElements
+    );
+  }
+
+  return { record, recordType, value };
 };

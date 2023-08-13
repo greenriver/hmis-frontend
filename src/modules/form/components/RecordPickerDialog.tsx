@@ -7,73 +7,31 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
-import { getPopulatableChildren } from '../util/formUtil';
-import {
-  getRecordPickerColumns,
-  isAssessment,
-  isEnrollment,
-  isTypicalRelatedRecord,
-  PopulatableSourceRecordType,
-  RelatedRecord,
-} from '../util/recordPickerUtil';
+import { AssessmentForPopulation } from '../types';
+import { getFieldOnAssessment, getPopulatableChildren } from '../util/formUtil';
+import { assessmentColumns } from '../util/recordPickerUtil';
 
 import AssessmentsForPopulationTable from '@/components/clientDashboard/enrollments/tables/AssessmentsForPopulationTable';
-import DisabilitiesTable from '@/components/clientDashboard/enrollments/tables/DisabilitiesTable';
-import EnrollmentsTable from '@/components/clientDashboard/enrollments/tables/EnrollmentsTable';
-import HealthAndDvsTable from '@/components/clientDashboard/enrollments/tables/HealthAndDvsTable';
-import IncomeBenefitsTable from '@/components/clientDashboard/enrollments/tables/IncomeBenefitsTable';
 import CommonDialog from '@/components/elements/CommonDialog';
 import RelativeDate from '@/components/elements/RelativeDate';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
-import { renderHmisField } from '@/modules/hmis/components/HmisField';
-import { HmisEnums } from '@/types/gqlEnums';
-import { FormItem, FormRole, RelatedRecordType } from '@/types/gqlTypes';
+import HmisField from '@/modules/hmis/components/HmisField';
+import { FormItem, FormRole } from '@/types/gqlTypes';
 
 interface Props extends Omit<DialogProps, 'children'> {
   open: boolean;
   item?: FormItem;
-  recordType: PopulatableSourceRecordType;
   description?: ReactNode;
-  onSelected: (record: RelatedRecord) => void;
+  onSelected: (record: AssessmentForPopulation) => void;
   onCancel: () => void;
   role?: FormRole;
 }
-
-export const tableComponentForType = (
-  recordType: PopulatableSourceRecordType
-):
-  | typeof IncomeBenefitsTable
-  | typeof DisabilitiesTable
-  | typeof HealthAndDvsTable
-  | typeof EnrollmentsTable
-  | typeof AssessmentsForPopulationTable
-  | null => {
-  switch (recordType) {
-    // YouthEducationStatus
-    // EmploymentEducation
-    // CurrentLivingSituation
-    // Exit
-    case RelatedRecordType.IncomeBenefit:
-      return IncomeBenefitsTable;
-    case RelatedRecordType.DisabilityGroup:
-      return DisabilitiesTable;
-    case RelatedRecordType.HealthAndDv:
-      return HealthAndDvsTable;
-    case RelatedRecordType.Enrollment:
-      return EnrollmentsTable;
-    case 'Assessment':
-      return AssessmentsForPopulationTable;
-    default:
-      return null;
-  }
-};
 
 const RecordPickerDialog = ({
   onSelected,
   onCancel,
   item,
-  recordType,
   open,
   role,
   description,
@@ -81,31 +39,37 @@ const RecordPickerDialog = ({
 }: Props) => {
   const { client } = useClientDashboardContext();
 
-  const columns: ColumnDef<RelatedRecord>[] = useMemo(() => {
-    const metadataColumns: ColumnDef<RelatedRecord>[] =
-      getRecordPickerColumns(recordType);
+  const columns: ColumnDef<AssessmentForPopulation>[] = useMemo(() => {
+    // If no item was passed, that means we're pre-filling the entire assessment.
+    // Only metadata columns are shown in that case.
+    if (!item) return assessmentColumns;
 
-    if (!item) return metadataColumns;
-
-    // Select which fields to show in table based on child items in the group
+    // Select additional fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item)
-      .filter((item) => !item.hidden && !!item.mapping?.fieldName)
+      .filter((item) => !item.hidden && !!item.mapping)
       .map((i) => ({
         key: i.mapping?.fieldName || undefined,
         header: i.briefText || i.text || startCase(i.mapping?.fieldName || ''),
-        render: renderHmisField(
-          HmisEnums.RelatedRecordType[recordType as RelatedRecordType],
-          i.mapping?.fieldName || ''
-        ),
-      }));
-    return [...metadataColumns, ...dataColumns];
-  }, [item, recordType]);
+        render: (assessment: AssessmentForPopulation) => {
+          if (!i.mapping) return;
+          const { record, recordType } = getFieldOnAssessment(
+            assessment,
+            i.mapping
+          );
 
-  const TableComponent = tableComponentForType(recordType);
-  if (!TableComponent) {
-    console.error('not implemented', recordType);
-    return null;
-  }
+          return (
+            <HmisField
+              recordType={recordType}
+              fieldName={i.mapping?.fieldName || undefined}
+              customFieldKey={i.mapping?.customFieldKey || undefined}
+              record={record}
+            />
+          );
+        },
+      }));
+    return [...assessmentColumns, ...dataColumns];
+  }, [item]);
+
   // Need to set height on the dialog in order for the scrolling to work
   const height = `${Math.min(Math.max(columns.length * 60 + 250, 550), 850)}px`;
 
@@ -140,7 +104,7 @@ const RecordPickerDialog = ({
         }}
       >
         {description}
-        <TableComponent
+        <AssessmentsForPopulationTable
           queryVariables={{ id: client.id }}
           defaultPageSize={5}
           columns={columns}
@@ -153,24 +117,11 @@ const RecordPickerDialog = ({
             width: 'fit-content',
           }}
           renderVerticalHeaderCell={(record) => {
-            const dateUpdated =
-              isTypicalRelatedRecord(record) || isAssessment(record)
-                ? record.dateUpdated
-                : undefined;
-
-            const informationDate = isTypicalRelatedRecord(record)
-              ? record.informationDate
-              : isEnrollment(record)
-              ? record.entryDate
-              : isAssessment(record)
-              ? record.assessmentDate
-              : '';
-
             return (
               <Stack spacing={2} sx={{ py: 1 }}>
                 <RelativeDate
-                  dateString={informationDate}
-                  dateUpdated={dateUpdated || undefined}
+                  dateString={record.assessmentDate}
+                  dateUpdated={record.dateUpdated || undefined}
                   variant='body2'
                   textAlign={'center'}
                   fontWeight={600}
@@ -183,7 +134,7 @@ const RecordPickerDialog = ({
                   size='small'
                   sx={{ backgroundColor: 'white' }}
                   fullWidth
-                  aria-label={`Select record from ${informationDate}`}
+                  aria-label={`Select record from ${record.assessmentDate}`}
                 >
                   Select
                 </Button>
