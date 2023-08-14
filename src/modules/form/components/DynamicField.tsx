@@ -152,6 +152,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         value={value}
         onChange={onChangeValue}
         {...commonInputProps}
+        disabled={false}
       />
     );
   }

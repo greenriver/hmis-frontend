@@ -2421,11 +2421,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'contentType',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'dateCreated',

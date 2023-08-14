@@ -2055,7 +2055,7 @@ export type FieldMapping = {
 export type File = {
   __typename?: 'File';
   confidential?: Maybe<Scalars['Boolean']['output']>;
-  contentType: Scalars['String']['output'];
+  contentType?: Maybe<Scalars['String']['output']>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   effectiveDate?: Maybe<Scalars['ISO8601Date']['output']>;
@@ -10446,7 +10446,7 @@ export type DeleteClientFileMutation = {
     file?: {
       __typename?: 'File';
       confidential?: boolean | null;
-      contentType: string;
+      contentType?: string | null;
       effectiveDate?: string | null;
       expirationDate?: string | null;
       id: string;
@@ -10757,7 +10757,7 @@ export type GetFileQuery = {
   file?: {
     __typename?: 'File';
     confidential?: boolean | null;
-    contentType: string;
+    contentType?: string | null;
     effectiveDate?: string | null;
     expirationDate?: string | null;
     id: string;
@@ -10804,7 +10804,7 @@ export type GetClientFilesQuery = {
       nodes: Array<{
         __typename?: 'File';
         confidential?: boolean | null;
-        contentType: string;
+        contentType?: string | null;
         effectiveDate?: string | null;
         expirationDate?: string | null;
         id: string;
@@ -11767,7 +11767,7 @@ export type DeleteEnrollmentMutation = {
 export type FileFieldsFragment = {
   __typename?: 'File';
   confidential?: boolean | null;
-  contentType: string;
+  contentType?: string | null;
   effectiveDate?: string | null;
   expirationDate?: string | null;
   id: string;
@@ -14069,7 +14069,7 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'File';
           confidential?: boolean | null;
-          contentType: string;
+          contentType?: string | null;
           effectiveDate?: string | null;
           expirationDate?: string | null;
           id: string;
