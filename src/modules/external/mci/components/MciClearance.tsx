@@ -57,6 +57,7 @@ const fieldsToParams = (
     input.firstName = primaryName.first;
     input.middleName = primaryName.middle;
     input.lastName = primaryName.last;
+    input.nameDataQuality = primaryName.nameDataQuality;
   }
   return rest;
 };
