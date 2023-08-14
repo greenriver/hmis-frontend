@@ -108,7 +108,7 @@ const DynamicForm = forwardRef(
     const [dirty, setDirty] = useState(false);
     const [promptSave, setPromptSave] = useState<boolean | undefined>();
 
-    const afterChange = useCallback((type: ChangeType) => {
+    const onFieldChange = useCallback((type: ChangeType) => {
       if (type === ChangeType.User) {
         setPromptSave(true);
         setDirty(true);
@@ -119,7 +119,7 @@ const DynamicForm = forwardRef(
       definition,
       initialValues,
       localConstants,
-      afterChange,
+      onFieldChange,
     });
 
     const { loading: pickListsLoading } = usePreloadPicklists({

@@ -34,14 +34,14 @@ const useDynamicFields = ({
   bulk = false,
   viewOnly = false,
   localConstants,
-  afterChange,
+  onFieldChange,
 }: {
   definition: FormDefinitionJson;
   initialValues?: Record<string, any>;
   bulk?: boolean;
   viewOnly?: boolean;
   localConstants?: LocalConstants;
-  afterChange?: (type: ChangeType) => void;
+  onFieldChange?: (type: ChangeType) => void;
 }) => {
   const [values, setValues] = useState<FormValues>(
     Object.assign({}, initialValues)
@@ -144,8 +144,7 @@ const useDynamicFields = ({
 
   const itemChanged: ItemChangedFn = useCallback(
     (input) => {
-      if (afterChange) afterChange(input.type);
-      // afterChange(input)
+      if (onFieldChange) onFieldChange(input.type);
       const { linkId, value } = input;
       setValues((currentValues) => {
         const newValues = { ...currentValues };
@@ -158,12 +157,12 @@ const useDynamicFields = ({
         return newValues;
       });
     },
-    [updateAutofillValues, updateDisabledValues, setValues, afterChange]
+    [updateAutofillValues, updateDisabledValues, setValues, onFieldChange]
   );
 
   const severalItemsChanged: SeveralItemsChangedFn = useCallback(
     (input) => {
-      if (afterChange) afterChange(input.type);
+      if (onFieldChange) onFieldChange(input.type);
       setValues((currentValues) => {
         const newValues = { ...currentValues, ...input.values };
         // Update dependent autofill questions (modifies newValues in-place)
@@ -174,7 +173,7 @@ const useDynamicFields = ({
         return newValues;
       });
     },
-    [afterChange, updateAutofillValues, updateDisabledValues]
+    [onFieldChange, updateAutofillValues, updateDisabledValues]
   );
 
   const renderFormFields = useCallback(
