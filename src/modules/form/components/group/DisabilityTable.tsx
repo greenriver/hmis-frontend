@@ -105,9 +105,6 @@ const DisabilityTable = ({
           [disablingConditionLinkId]: { code: 'YES' },
         };
         severalItemsChanged({ values, type });
-      } else if (linkId === disablingConditionLinkId) {
-        setPrev(value); //user-initiated
-        itemChanged({ linkId, value, type });
       } else {
         itemChanged({ linkId, value, type });
       }
