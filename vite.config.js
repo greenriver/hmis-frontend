@@ -85,6 +85,7 @@ export default defineConfig(({ command, mode }) => {
         ],
       },
       sourcemap: true,
+      minify: mode === 'development' ? false : true,
     },
     ...(command !== 'build' && {
       preview: {

@@ -16,17 +16,13 @@ import {
   addDescendants,
   autofillValues,
   dropUnderscorePrefixedKeys,
-  isShown,
   getDependentItemsDisabledStatus,
+  isShown,
 } from '../util/formUtil';
 
 import useComputedData from './useComputedData';
 
-import {
-  DisabledDisplay,
-  FormDefinitionJson,
-  FormItem,
-} from '@/types/gqlTypes';
+import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
 const useDynamicFields = ({
   definition,
@@ -99,23 +95,16 @@ const useDynamicFields = ({
    */
   const updateDisabledValues = useCallback(
     (changedLinkIds: string[], localValues: FormValues) => {
-      // get enabled/disabled link ids, based on the ones that have changed
+      // Get enabled/disabled link ids, based on the ones that have changed
       const { enabledLinkIds, disabledLinkIds } =
         getDependentItemsDisabledStatus({
           changedLinkIds,
-          values: localValues,
+          localValues, // NOTE! This gets updated in-place
           enabledDependencyMap,
           itemMap,
           localConstants: localConstants || {},
         });
-      // if the disabled field is hidden, nullify its value (so that related enableWhens dont consider it present)
-      disabledLinkIds.forEach((id) => {
-        if (
-          itemMap[id].disabledDisplay !== DisabledDisplay.ProtectedWithValue
-        ) {
-          localValues[id] = null;
-        }
-      });
+
       // Update state
       setDisabledLinkIds((old) => {
         const newList = without(old, ...enabledLinkIds);

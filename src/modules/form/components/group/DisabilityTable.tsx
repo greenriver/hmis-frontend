@@ -45,7 +45,8 @@ const DisabilityTable = ({
   // Link ID for DisablingCondition, which is the last row in the table
   const disablingConditionLinkId = useMemo(() => {
     if (!isValidDisabilityGroup(item)) return;
-    return item.item.slice(-1)[0].item[0].linkId;
+    return item.item.slice(-1)[0].item.find((i) => i.type === ItemType.Choice)
+      ?.linkId;
   }, [item]);
 
   // Link IDs for items that, if YES, consitute a Disabling Condition per HUD spec.
@@ -118,7 +119,9 @@ const DisabilityTable = ({
   );
 
   return (
-    <Table sx={{ border: (theme) => `1px solid ${theme.palette.grey[200]}` }}>
+    <Table
+      sx={{ border: (theme) => `1px solid ${theme.palette.grey[200]}`, mb: 2 }}
+    >
       <TableHead>
         <TableRow>
           <TableCell></TableCell>
@@ -163,6 +166,7 @@ const DisabilityTable = ({
                     sx={{
                       minWidth: '220px',
                       maxWidth: '250px',
+                      pr: 2,
                     }}
                   >
                     {renderChildItem(cellItem, {

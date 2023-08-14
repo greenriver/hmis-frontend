@@ -342,12 +342,16 @@ const evaluateEnableWhen = ({
         );
       }
       const dependentItem = itemMap[en.question];
-      result = shouldEnableFn({
-        item: dependentItem,
-        values,
-        itemMap,
-        localConstants,
-      });
+      if (!dependentItem) {
+        result = false; // can happen if item removed because of a 'rule'. treat as not enabled.
+      } else {
+        result = shouldEnableFn({
+          item: dependentItem,
+          values,
+          itemMap,
+          localConstants,
+        });
+      }
       // flip the result if this is "not enabled"
       if (en.answerBoolean === false) {
         result = !result;
@@ -838,21 +842,22 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
   const deps: LinkIdMap = {};
 
   function addEnableWhen(linkId: string, en: EnableWhen) {
-    if (en.question) {
+    if (en.question && itemMap[en.question]) {
       if (!deps[en.question]) deps[en.question] = [];
       deps[en.question].push(linkId);
     }
-    if (en.compareQuestion) {
+    if (en.compareQuestion && itemMap[en.compareQuestion]) {
       if (!deps[en.compareQuestion]) deps[en.compareQuestion] = [];
       deps[en.compareQuestion].push(linkId);
     }
 
     // If this item is dependent on another item being enabled,
     // recusively add those to its dependency list
-    if (en.operator === EnableOperator.Enabled && en.question) {
-      if (!itemMap[en.question]) {
-        throw new Error(`No such question: ${en.question}`);
-      }
+    if (
+      en.operator === EnableOperator.Enabled &&
+      en.question &&
+      itemMap[en.question]
+    ) {
       (itemMap[en.question].enableWhen || []).forEach((en2) =>
         addEnableWhen(linkId, en2)
       );
@@ -862,6 +867,14 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
   Object.values(itemMap).forEach((item) => {
     if (!item.enableWhen) return;
     item.enableWhen.forEach((en) => addEnableWhen(item.linkId, en));
+  });
+
+  // Add deps of deps to deps
+  Object.keys(deps).forEach((id) => {
+    deps[id].forEach((id2) => {
+      if (deps[id2]) deps[id].push(...deps[id2]);
+    });
+    deps[id] = uniq(deps[id]);
   });
   return deps;
 };
@@ -1239,16 +1252,15 @@ export const debugFormValues = (
 
 type GetDependentItemsDisabledStatus = {
   changedLinkIds: string[];
-  values: any;
+  localValues: any;
   enabledDependencyMap: LinkIdMap;
   itemMap: ItemMap;
   localConstants: LocalConstants;
 };
 
-// rename: handleFormChangeDpeendencies
 export const getDependentItemsDisabledStatus = ({
   changedLinkIds,
-  values,
+  localValues,
   enabledDependencyMap,
   itemMap,
   localConstants,
@@ -1262,16 +1274,32 @@ export const getDependentItemsDisabledStatus = ({
   changedLinkIds.forEach((changedLinkId) => {
     if (!enabledDependencyMap[changedLinkId]) return;
 
-    enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-      const enabled = shouldEnableItem({
-        item: itemMap[dependentLinkId],
-        values,
-        itemMap,
-        localConstants,
+    // iterate through all items that are dependent on this item,
+    // and see if they need to be enabled or disabled
+    enabledDependencyMap[changedLinkId]
+      .filter((id) => !!itemMap[id]) // can happen if removed because of a 'rule'. ignore.
+      .forEach((dependentLinkId) => {
+        const enabled = shouldEnableItem({
+          item: itemMap[dependentLinkId],
+          values: localValues,
+          itemMap,
+          localConstants,
+        });
+        if (enabled) {
+          enabledLinkIds.push(dependentLinkId);
+        } else {
+          disabledLinkIds.push(dependentLinkId);
+          // if the disabled field is hidden, nullify its value (so that related enableWhens dont consider it present).
+          // this needs to happen here, rather than in the caller, because subsequent iterations of this loop
+          // may depend on the presence of this item.
+          if (
+            itemMap[dependentLinkId].disabledDisplay !==
+            DisabledDisplay.ProtectedWithValue
+          ) {
+            localValues[dependentLinkId] = null;
+          }
+        }
       });
-      if (enabled) enabledLinkIds.push(dependentLinkId);
-      if (!enabled) disabledLinkIds.push(dependentLinkId);
-    });
   });
 
   return {
