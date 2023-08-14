@@ -2158,8 +2158,8 @@ export type FormItem = {
   pickListOptions?: Maybe<Array<PickListOption>>;
   /** Reference to value set of possible answer options */
   pickListReference?: Maybe<Scalars['String']['output']>;
-  /** Whether to allow pre-filling section from a recent records */
-  prefill?: Maybe<RelatedRecordType>;
+  /** Whether to allow pre-filling this section from a previous assessment */
+  prefill?: Maybe<Scalars['Boolean']['output']>;
   /** Prefix for the item label */
   prefix?: Maybe<Scalars['String']['output']>;
   /** Exclude this item for the listed project types */
@@ -6498,7 +6498,7 @@ export type GetAssessmentQuery = {
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: RelatedRecordType | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -6521,7 +6521,7 @@ export type GetAssessmentQuery = {
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: RelatedRecordType | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -6544,7 +6544,7 @@ export type GetAssessmentQuery = {
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: RelatedRecordType | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -6567,7 +6567,7 @@ export type GetAssessmentQuery = {
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
-                prefill?: RelatedRecordType | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -6590,7 +6590,7 @@ export type GetAssessmentQuery = {
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
-                  prefill?: RelatedRecordType | null;
+                  prefill?: boolean | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -12063,7 +12063,7 @@ export type ItemFieldsFragment = {
   serviceDetailType?: ServiceDetailType | null;
   size?: InputSize | null;
   assessmentDate?: boolean | null;
-  prefill?: RelatedRecordType | null;
+  prefill?: boolean | null;
   dataCollectedAbout?: DataCollectedAbout | null;
   disabledDisplay?: DisabledDisplay | null;
   enableBehavior?: EnableBehavior | null;
@@ -12158,7 +12158,7 @@ export type FormDefinitionJsonFieldsFragment = {
     serviceDetailType?: ServiceDetailType | null;
     size?: InputSize | null;
     assessmentDate?: boolean | null;
-    prefill?: RelatedRecordType | null;
+    prefill?: boolean | null;
     dataCollectedAbout?: DataCollectedAbout | null;
     disabledDisplay?: DisabledDisplay | null;
     enableBehavior?: EnableBehavior | null;
@@ -12181,7 +12181,7 @@ export type FormDefinitionJsonFieldsFragment = {
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
-      prefill?: RelatedRecordType | null;
+      prefill?: boolean | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
@@ -12204,7 +12204,7 @@ export type FormDefinitionJsonFieldsFragment = {
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: RelatedRecordType | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -12227,7 +12227,7 @@ export type FormDefinitionJsonFieldsFragment = {
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: RelatedRecordType | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -12250,7 +12250,7 @@ export type FormDefinitionJsonFieldsFragment = {
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: RelatedRecordType | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -12626,7 +12626,7 @@ export type FormDefinitionFieldsFragment = {
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
-      prefill?: RelatedRecordType | null;
+      prefill?: boolean | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
@@ -12649,7 +12649,7 @@ export type FormDefinitionFieldsFragment = {
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: RelatedRecordType | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -12672,7 +12672,7 @@ export type FormDefinitionFieldsFragment = {
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: RelatedRecordType | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -12695,7 +12695,7 @@ export type FormDefinitionFieldsFragment = {
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: RelatedRecordType | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -12718,7 +12718,7 @@ export type FormDefinitionFieldsFragment = {
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: RelatedRecordType | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -13130,7 +13130,7 @@ export type GetFormDefinitionQuery = {
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: RelatedRecordType | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -13153,7 +13153,7 @@ export type GetFormDefinitionQuery = {
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: RelatedRecordType | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -13176,7 +13176,7 @@ export type GetFormDefinitionQuery = {
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: RelatedRecordType | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -13199,7 +13199,7 @@ export type GetFormDefinitionQuery = {
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: RelatedRecordType | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -13222,7 +13222,7 @@ export type GetFormDefinitionQuery = {
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
-                prefill?: RelatedRecordType | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -13607,7 +13607,7 @@ export type GetServiceFormDefinitionQuery = {
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: RelatedRecordType | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -13630,7 +13630,7 @@ export type GetServiceFormDefinitionQuery = {
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: RelatedRecordType | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -13653,7 +13653,7 @@ export type GetServiceFormDefinitionQuery = {
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: RelatedRecordType | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -13676,7 +13676,7 @@ export type GetServiceFormDefinitionQuery = {
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: RelatedRecordType | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -13699,7 +13699,7 @@ export type GetServiceFormDefinitionQuery = {
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
-                prefill?: RelatedRecordType | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;

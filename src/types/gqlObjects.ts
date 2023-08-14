@@ -2593,7 +2593,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'prefill',
-        type: { kind: 'ENUM', name: 'RelatedRecordType', ofType: null },
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'prefix',

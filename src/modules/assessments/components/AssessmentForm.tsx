@@ -36,13 +36,13 @@ import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
+import { AssessmentForPopulation } from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
   getInitialValues,
   getItemMap,
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
-import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -101,11 +101,14 @@ const AssessmentForm = ({
   // This is needed to support re-selecting the same assessment (which should clear and reload the form again)
   const [reloadInitialValues, setReloadInitialValues] = useState(false);
 
-  const onSelectAutofillRecord = useCallback((record: RelatedRecord) => {
-    setSourceAssessment(record as unknown as FullAssessmentFragment);
-    setDialogOpen(false);
-    setReloadInitialValues((old) => !old);
-  }, []);
+  const onSelectAutofillRecord = useCallback(
+    (record: AssessmentForPopulation) => {
+      setSourceAssessment(record);
+      setDialogOpen(false);
+      setReloadInitialValues((old) => !old);
+    },
+    []
+  );
 
   const isPrintView = useIsPrintView();
 
@@ -326,7 +329,6 @@ const AssessmentForm = ({
       {definition && (
         <RecordPickerDialog
           id='assessmentPickerDialog'
-          recordType='Assessment'
           open={dialogOpen}
           role={formRole}
           onSelected={onSelectAutofillRecord}
