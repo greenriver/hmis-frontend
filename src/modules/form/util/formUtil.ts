@@ -18,8 +18,8 @@ import {
   mapValues,
   omit,
   omitBy,
-  pull,
   sum,
+  uniq,
 } from 'lodash-es';
 
 import {
@@ -132,7 +132,7 @@ export const isEnabled = (
     // This is a group. Only show it if some children are visible.
     return item.item.some(
       (i) =>
-        i.disabledDisplay === DisabledDisplay.Protected ||
+        i.disabledDisplay !== DisabledDisplay.Hidden ||
         isEnabled(i, disabledLinkIds)
     );
   }
@@ -140,12 +140,8 @@ export const isEnabled = (
 };
 
 export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
-  if (
-    !isEnabled(item, disabledLinkIds) &&
-    item.disabledDisplay !== DisabledDisplay.Protected
-  )
-    return false;
-
+  const disabled = !isEnabled(item, disabledLinkIds);
+  if (disabled && item.disabledDisplay === DisabledDisplay.Hidden) return false;
   return true;
 };
 
@@ -260,6 +256,10 @@ type EvaluateEnableWhenArgs = {
   // pass function to avoid circular dependency
   shouldEnableFn: typeof shouldEnableItem;
 };
+// FIXME: issue is that `values` contains values for items that are currently disabled, which it maybe shouldn't.
+// altho sometimes it should, like when DISABLED_DISPLAY = PROTECTED_WITH_VALUE. and for hidden fields, we want conditionals on them.
+// what we DONT WANT is the disabling condition situation, where you changed another value that really should clear it out.
+// I think the hidden ones need to disappear their values when theyre remoed. It coudl be a custom "disabled_values" map if we really watn to keep them to add them back when re-enabled - defer that.
 const evaluateEnableWhen = ({
   en,
   values,
@@ -1237,47 +1237,47 @@ export const debugFormValues = (
   return true;
 };
 
-type SetDisabledLinkIdsBaseArgs = {
+type GetDependentItemsDisabledStatus = {
   changedLinkIds: string[];
-  localValues: any;
-  callback: React.Dispatch<React.SetStateAction<string[]>>;
+  values: any;
   enabledDependencyMap: LinkIdMap;
   itemMap: ItemMap;
   localConstants: LocalConstants;
 };
-export const setDisabledLinkIdsBase = ({
+
+// rename: handleFormChangeDpeendencies
+export const getDependentItemsDisabledStatus = ({
   changedLinkIds,
-  localValues,
-  callback,
+  values,
   enabledDependencyMap,
   itemMap,
   localConstants,
-}: SetDisabledLinkIdsBaseArgs) => {
+}: GetDependentItemsDisabledStatus) => {
+  const enabledLinkIds: string[] = [];
+  const disabledLinkIds: string[] = [];
   // If none of these are dependencies, return immediately
-  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
+  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id]))
+    return { enabledLinkIds, disabledLinkIds };
 
-  callback((oldList) => {
-    const newList = [...oldList];
-    changedLinkIds.forEach((changedLinkId) => {
-      if (!enabledDependencyMap[changedLinkId]) return;
+  changedLinkIds.forEach((changedLinkId) => {
+    if (!enabledDependencyMap[changedLinkId]) return;
 
-      enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-        const enabled = shouldEnableItem({
-          item: itemMap[dependentLinkId],
-          values: localValues,
-          itemMap,
-          localConstants,
-        });
-        if (enabled && newList.includes(dependentLinkId)) {
-          pull(newList, dependentLinkId);
-        } else if (!enabled && !newList.includes(dependentLinkId)) {
-          newList.push(dependentLinkId);
-        }
+    enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+      const enabled = shouldEnableItem({
+        item: itemMap[dependentLinkId],
+        values,
+        itemMap,
+        localConstants,
       });
+      if (enabled) enabledLinkIds.push(dependentLinkId);
+      if (!enabled) disabledLinkIds.push(dependentLinkId);
     });
-
-    return newList;
   });
+
+  return {
+    enabledLinkIds: uniq(enabledLinkIds),
+    disabledLinkIds: uniq(disabledLinkIds),
+  };
 };
 
 const underscoreKey = (v: any, k: string) => k.startsWith('_');

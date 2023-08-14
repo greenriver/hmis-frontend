@@ -2553,22 +2553,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'disabledDisplay',
-        type: { kind: 'ENUM', name: 'DisabledDisplay', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'DisabledDisplay', ofType: null },
+        },
       },
       {
         name: 'enableBehavior',
-        type: { kind: 'ENUM', name: 'EnableBehavior', ofType: null },
-      },
-      {
-        name: 'funders',
         type: {
-          kind: 'LIST',
+          kind: 'NON_NULL',
           name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'FundingSource', ofType: null },
-          },
+          ofType: { kind: 'ENUM', name: 'EnableBehavior', ofType: null },
         },
       },
       {
@@ -2577,7 +2573,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'hidden',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
       {
         name: 'linkId',
@@ -2593,39 +2593,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'prefill',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
       {
         name: 'prefix',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'projectTypesExcluded',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'projectTypesIncluded',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-          },
-        },
-      },
-      {
         name: 'readOnly',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
       {
         name: 'readonlyText',
@@ -2633,11 +2617,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'repeats',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
       {
         name: 'required',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
       {
         name: 'serviceDetailType',
@@ -2655,7 +2647,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'warnIfEmpty',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
     ],
   },

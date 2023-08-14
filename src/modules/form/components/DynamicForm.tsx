@@ -105,10 +105,21 @@ const DynamicForm = forwardRef(
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
+    const [dirty, setDirty] = useState(false);
+    const [promptSave, setPromptSave] = useState<boolean | undefined>();
+
+    const afterChange = useCallback((type: ChangeType) => {
+      if (type === ChangeType.User) {
+        setPromptSave(true);
+        setDirty(true);
+      }
+    }, []);
+
     const { renderFields, getCleanedValues } = useDynamicFields({
       definition,
       initialValues,
       localConstants,
+      afterChange,
     });
 
     const { loading: pickListsLoading } = usePreloadPicklists({
@@ -116,10 +127,6 @@ const DynamicForm = forwardRef(
       queryOptions: picklistQueryOptions,
       pickListArgs,
     });
-
-    const [dirty, setDirty] = useState(false);
-
-    const [promptSave, setPromptSave] = useState<boolean | undefined>();
 
     const saveButtonsRef = React.createRef<HTMLDivElement>();
     const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
