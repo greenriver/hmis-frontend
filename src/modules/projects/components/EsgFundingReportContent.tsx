@@ -1,6 +1,6 @@
+import { ApolloError } from '@apollo/client';
 import { Paper, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
-import { useMemo } from 'react';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -9,7 +9,6 @@ import PrintViewButton from '@/components/layout/PrintViewButton';
 import NotFound from '@/components/pages/NotFound';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
-import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import {
   customDataElementValueForKey,
@@ -19,21 +18,14 @@ import {
 import {
   EsgFundingServiceFieldsFragment,
   useGetEsgFundingReportQuery,
-  useGetReferralPostingQuery,
 } from '@/types/gqlTypes';
 
-const EsgFundingReport: React.FC = () => {
-  const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
-  const { data, loading, error } = useGetReferralPostingQuery({
-    variables: { id: referralPostingId as any as string },
-  });
-
+const EsgFundingReportContent: React.FC<{
+  clientIds?: string[];
+  loading?: boolean;
+  error?: ApolloError;
+}> = ({ clientIds = [], loading, error }) => {
   const isPrint = useIsPrintView();
-
-  const clientIds = useMemo(
-    () => data?.referralPosting?.householdMembers?.map((hm) => hm.client.id),
-    [data]
-  );
 
   const {
     data: reportData,
@@ -159,4 +151,4 @@ const EsgFundingReport: React.FC = () => {
     </>
   );
 };
-export default EsgFundingReport;
+export default EsgFundingReportContent;

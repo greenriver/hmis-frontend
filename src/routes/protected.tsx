@@ -37,6 +37,7 @@ import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenial
 import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
+import EnrollmentEsgFundingReport from '@/modules/enrollment/components/dashboardPages/EnrollmentEsgFundingReport';
 import EnrollmentEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentEventsPage';
 import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/EnrollmentOverview';
 import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
@@ -48,7 +49,6 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import AddServices from '@/modules/projects/components/BulkAddServices';
 import Cocs from '@/modules/projects/components/Cocs';
 import EditProject from '@/modules/projects/components/EditProject';
-import EsgFundingReport from '@/modules/projects/components/EsgFundingReport';
 import Funder from '@/modules/projects/components/Funder';
 import Funders from '@/modules/projects/components/Funders';
 import Inventories from '@/modules/projects/components/Inventories';
@@ -58,6 +58,7 @@ import NewReferralRequest from '@/modules/projects/components/NewReferralRequest
 import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
+import ProjectEsgFundingReport from '@/modules/projects/components/ProjectEsgFundingReport';
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
@@ -119,7 +120,7 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.ESG_FUNDING_REPORT,
-            element: <EsgFundingReport />,
+            element: <ProjectEsgFundingReport />,
           },
           {
             path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
@@ -320,6 +321,10 @@ export const protectedRoutes: RouteNode[] = [
             path: EnrollmentDashboardRoutes.EVENTS,
             // No perm needed because it only requires enrollment visibility
             element: <EnrollmentEventsPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
+            element: <EnrollmentEsgFundingReport />,
           },
           { path: '*', element: <Navigate to='overview' replace /> },
         ],
