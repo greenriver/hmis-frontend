@@ -82,6 +82,7 @@ export const isDataNotCollected = (val?: any): boolean => {
   if (isPickListOption(val)) return isDataNotCollected(val.code);
   return false;
 };
+export const yesCode = { code: 'YES', label: 'Yes' };
 
 export const isValidDate = (value: Date, maxYear = 1900) =>
   isDate(value) && isValid(value) && getYear(value) > maxYear;
@@ -100,6 +101,8 @@ export const hasMeaningfulValue = (value: any): boolean => {
   if (Array.isArray(value) && value.length == 0) return false;
   if (isNil(value)) return false;
   if (value === '') return false;
+  if (isDataNotCollected(value)) return false;
+  if (value == HIDDEN_VALUE) return false;
   return true;
 };
 
@@ -1142,8 +1145,6 @@ export const createInitialValuesFromRecord = (
 
     const value = getMappedValue(record, item.mapping);
     if (hasMeaningfulValue(value)) {
-      // console.log('transforming', value, item);
-      // console.log(gqlValueToFormValue(value, item));
       initialValues[item.linkId] = gqlValueToFormValue(value, item);
     }
   });

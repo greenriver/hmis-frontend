@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ChangeType,
   GroupItemComponentProps,
@@ -16,6 +16,7 @@ import {
   ItemChangedFn,
 } from '../../types';
 
+import { yesCode } from '../../util/formUtil';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
 interface DisabilityGroupRow extends FormItem {
@@ -42,6 +43,7 @@ const DisabilityTable = ({
   itemChanged,
   severalItemsChanged,
 }: GroupItemComponentProps) => {
+  const [dirty, setDirty] = useState(false);
   // Link ID for DisablingCondition, which is the last row in the table
   const disablingConditionLinkId = useMemo(() => {
     if (!isValidDisabilityGroup(item)) return;
@@ -75,17 +77,30 @@ const DisabilityTable = ({
     [dependentLinkIds, values]
   );
 
-  // If all dependents are set to non-YES values, clear out DisablingCondition
+  // Set DisablingCondition
   useEffect(() => {
     if (!itemChanged || !disablingConditionLinkId) return;
+    // If no dependents are yes, set to empty so that the user has to input the value.
     if (dependentsThatAreYes.length === 0) {
       itemChanged({
         linkId: disablingConditionLinkId,
         value: null,
         type: ChangeType.System,
       });
+    } else if (!dirty) {
+      // If some dependents are yes and there hasn't been any user input yet (not dirty), set to yes
+      itemChanged({
+        linkId: disablingConditionLinkId,
+        value: yesCode,
+        type: ChangeType.System,
+      });
     }
-  }, [dependentsThatAreYes.length, disablingConditionLinkId, itemChanged]);
+  }, [
+    dependentsThatAreYes.length,
+    disablingConditionLinkId,
+    itemChanged,
+    dirty,
+  ]);
 
   // Override itemChanged for dependents.
   // If the dependent is Yes, also update DisablingCondition to be Yes.
@@ -95,17 +110,17 @@ const DisabilityTable = ({
       if (!itemChanged || !severalItemsChanged || !disablingConditionLinkId)
         return;
 
+      setDirty(true);
       if (
         dependentLinkIds.indexOf(linkId) !== -1 &&
         value &&
         isPickListOption(value) &&
         value.code === 'YES'
       ) {
-        const values = {
-          [linkId]: value,
-          [disablingConditionLinkId]: { code: 'YES' },
-        };
-        severalItemsChanged({ values, type });
+        severalItemsChanged({
+          values: { [linkId]: value, [disablingConditionLinkId]: yesCode },
+          type,
+        });
       } else {
         itemChanged({ linkId, value, type });
       }
