@@ -57,6 +57,18 @@ fragment EventFields on Event {
   dateDeleted
 }
 
+fragment CeAssessmentFields on CeAssessment {
+  id
+  assessmentDate
+  assessmentLevel
+  assessmentLocation
+  assessmentType
+  dateCreated
+  dateUpdated
+  dateDeleted
+  prioritizationStatus
+}
+
 fragment EnrollmentSummaryFields on EnrollmentSummary {
   id
   entryDate

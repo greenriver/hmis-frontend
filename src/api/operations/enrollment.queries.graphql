@@ -37,6 +37,20 @@ query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
+query GetEnrollmentCeAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    ceAssessments(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeAssessmentFields
+      }
+    }
+  }
+}
+
 query GetEnrollmentReminders($id: ID!) {
   enrollment(id: $id) {
     id
