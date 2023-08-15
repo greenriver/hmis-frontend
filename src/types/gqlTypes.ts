@@ -2184,6 +2184,8 @@ export enum FormRole {
   Annual = 'ANNUAL',
   /** (CE) Coordinated Entry */
   Ce = 'CE',
+  /** (CE_ASSESSMENT) CE Assessment */
+  CeAssessment = 'CE_ASSESSMENT',
   /** (CLIENT) Client */
   Client = 'CLIENT',
   /** (CURRENT_LIVING_SITUATION) Current Living Situation */
@@ -4695,6 +4697,7 @@ export type SubmitFormPayload = {
 
 /** Union type of allowed records for form submission response */
 export type SubmitFormResult =
+  | CeAssessment
   | Client
   | CurrentLivingSituation
   | Enrollment
@@ -13896,6 +13899,18 @@ export type SubmitFormMutation = {
     clientMutationId?: string | null;
     record?:
       | {
+          __typename?: 'CeAssessment';
+          id: string;
+          assessmentDate: string;
+          assessmentLevel?: AssessmentLevel | null;
+          assessmentLocation: string;
+          assessmentType?: AssessmentType | null;
+          dateCreated: string;
+          dateUpdated: string;
+          dateDeleted?: string | null;
+          prioritizationStatus?: PrioritizationStatus | null;
+        }
+      | {
           __typename?: 'Client';
           dobDataQuality: DobDataQuality;
           ethnicity: Ethnicity;
@@ -21846,6 +21861,9 @@ export const SubmitFormDocument = gql`
         ... on CurrentLivingSituation {
           ...CurrentLivingSituationFields
         }
+        ... on CeAssessment {
+          ...CeAssessmentFields
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -21863,6 +21881,7 @@ export const SubmitFormDocument = gql`
   ${FileFieldsFragmentDoc}
   ${EnrollmentFieldsFragmentDoc}
   ${CurrentLivingSituationFieldsFragmentDoc}
+  ${CeAssessmentFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitFormMutationFn = Apollo.MutationFunction<

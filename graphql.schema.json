@@ -14785,6 +14785,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CE_ASSESSMENT",
+            "description": "(CE_ASSESSMENT) CE Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CLIENT",
             "description": "(CLIENT) Client",
             "isDeprecated": false,
@@ -29219,6 +29225,11 @@
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "CeAssessment",
+            "ofType": null
+          },
           {
             "kind": "OBJECT",
             "name": "Client",

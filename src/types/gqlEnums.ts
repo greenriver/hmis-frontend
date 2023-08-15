@@ -467,6 +467,7 @@ export const HmisEnums = {
   FormRole: {
     ANNUAL: 'Annual Assessment',
     CE: 'Coordinated Entry',
+    CE_ASSESSMENT: 'CE Assessment',
     CLIENT: 'Client',
     CURRENT_LIVING_SITUATION: 'Current Living Situation',
     CUSTOM: 'Custom Assessment',
