@@ -61,6 +61,7 @@ import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
+import ProjectServices from '@/modules/projects/components/ProjectServices';
 import ClientServices from '@/modules/services/components/ClientServices';
 import Units from '@/modules/units/components/Units';
 
@@ -108,6 +109,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
             element: <ProjectEnrollments />,
+          },
+          {
+            path: ProjectDashboardRoutes.PROJECT_SERVICES,
+            element: <ProjectServices />,
           },
           {
             path: ProjectDashboardRoutes.REFERRALS,

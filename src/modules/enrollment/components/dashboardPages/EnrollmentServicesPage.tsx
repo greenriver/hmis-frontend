@@ -17,7 +17,7 @@ import {
   ServiceFieldsFragment,
 } from '@/types/gqlTypes';
 
-const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
+export const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
   {
     header: 'Date Provided',
     linkTreatment: true,

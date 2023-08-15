@@ -94,6 +94,35 @@ query GetProjectHouseholds(
   }
 }
 
+query GetProjectServices(
+  $id: ID!
+  $filters: ServicesForProjectFilterOptions
+  $sortOrder: ServiceSortOption
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    services(
+      limit: $limit
+      offset: $offset
+      sortOrder: $sortOrder
+      filters: $filters
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceFields
+        enrollment {
+          id
+          ...EnrollmentFields
+        }
+      }
+    }
+  }
+}
+
 mutation DeleteProject($input: DeleteProjectInput!) {
   deleteProject(input: $input) {
     clientMutationId
