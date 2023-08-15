@@ -5739,6 +5739,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ServiceFilterOptions',
     args: [
       {
+        name: 'dateProvided',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'project',
         type: {
           kind: 'LIST',
@@ -5833,6 +5837,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ServicesForEnrollmentFilterOptions',
     args: [
       {
+        name: 'dateProvided',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'serviceCategory',
         type: {
           kind: 'LIST',
@@ -5861,6 +5869,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'ServicesForProjectFilterOptions',
     args: [
+      {
+        name: 'dateProvided',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
       {
         name: 'serviceCategory',
         type: {

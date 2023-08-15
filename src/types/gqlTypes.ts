@@ -4340,6 +4340,7 @@ export enum ServiceDetailType {
 }
 
 export type ServiceFilterOptions = {
+  dateProvided?: InputMaybe<Scalars['ISO8601Date']['input']>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -4635,11 +4636,13 @@ export enum ServiceTypeProvided {
 }
 
 export type ServicesForEnrollmentFilterOptions = {
+  dateProvided?: InputMaybe<Scalars['ISO8601Date']['input']>;
   serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
   serviceType?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type ServicesForProjectFilterOptions = {
+  dateProvided?: InputMaybe<Scalars['ISO8601Date']['input']>;
   serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
   serviceType?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
