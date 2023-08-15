@@ -2,6 +2,7 @@ import FormSelect from '@/modules/form/components/FormSelect';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import { usePickList } from '@/modules/form/hooks/usePickList';
 import { isPickListOption } from '@/modules/form/types';
+import { itemDefaults } from '@/modules/form/util/formUtil';
 import { ItemType, PickListOption, PickListType } from '@/types/gqlTypes';
 
 const ServiceTypeSelect = ({
@@ -15,6 +16,7 @@ const ServiceTypeSelect = ({
 }) => {
   const { pickList: serviceList, loading: serviceListLoading } = usePickList({
     item: {
+      ...itemDefaults,
       linkId: 'fake',
       type: ItemType.Choice,
       pickListReference: PickListType.AvailableServiceTypes,
