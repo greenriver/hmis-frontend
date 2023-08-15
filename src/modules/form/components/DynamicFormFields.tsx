@@ -82,7 +82,7 @@ const DynamicFormFields: React.FC<Props> = ({
     renderFn?: (children: ReactNode) => ReactNode
   ) => {
     const isDisabled = !isEnabled(item, disabledLinkIds);
-    if (isDisabled && item.disabledDisplay !== DisabledDisplay.Protected)
+    if (isDisabled && item.disabledDisplay === DisabledDisplay.Hidden)
       return null;
     if (bulk && item.serviceDetailType === ServiceDetailType.Client)
       return null;
@@ -130,7 +130,12 @@ const DynamicFormFields: React.FC<Props> = ({
         key={item.linkId}
         item={item}
         itemChanged={itemChanged}
-        value={isDisabled ? undefined : values[item.linkId]}
+        value={
+          isDisabled &&
+          item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
+            ? undefined
+            : values[item.linkId]
+        }
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
         horizontal={horizontal}

@@ -1442,6 +1442,7 @@ export enum DisabilityType {
 export enum DisabledDisplay {
   Hidden = 'HIDDEN',
   Protected = 'PROTECTED',
+  ProtectedWithValue = 'PROTECTED_WITH_VALUE',
 }
 
 /** V1.12 */
@@ -2054,7 +2055,7 @@ export type FieldMapping = {
 export type File = {
   __typename?: 'File';
   confidential?: Maybe<Scalars['Boolean']['output']>;
-  contentType: Scalars['String']['output'];
+  contentType?: Maybe<Scalars['String']['output']>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   effectiveDate?: Maybe<Scalars['ISO8601Date']['output']>;
@@ -2136,15 +2137,13 @@ export type FormItem = {
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
-  disabledDisplay?: Maybe<DisabledDisplay>;
-  enableBehavior?: Maybe<EnableBehavior>;
+  disabledDisplay: DisabledDisplay;
+  enableBehavior: EnableBehavior;
   enableWhen?: Maybe<Array<EnableWhen>>;
-  /** Include this item only for the listed funders */
-  funders?: Maybe<Array<FundingSource>>;
   /** Helper text for the item */
   helperText?: Maybe<Scalars['String']['output']>;
   /** Whether the item should always be hidden */
-  hidden?: Maybe<Scalars['Boolean']['output']>;
+  hidden: Scalars['Boolean']['output'];
   /** Initial value(s) when item is first rendered */
   initial?: Maybe<Array<InitialValue>>;
   /** Nested items */
@@ -2157,21 +2156,17 @@ export type FormItem = {
   /** Reference to value set of possible answer options */
   pickListReference?: Maybe<Scalars['String']['output']>;
   /** Whether to allow pre-filling this section from a previous assessment */
-  prefill?: Maybe<Scalars['Boolean']['output']>;
+  prefill: Scalars['Boolean']['output'];
   /** Prefix for the item label */
   prefix?: Maybe<Scalars['String']['output']>;
-  /** Exclude this item for the listed project types */
-  projectTypesExcluded?: Maybe<Array<ProjectType>>;
-  /** Include this item only for the listed project types */
-  projectTypesIncluded?: Maybe<Array<ProjectType>>;
   /** Whether human editing is allowed */
-  readOnly?: Maybe<Scalars['Boolean']['output']>;
+  readOnly: Scalars['Boolean']['output'];
   /** Text to use for the item when displayed in read-only view */
   readonlyText?: Maybe<Scalars['String']['output']>;
   /** Whether the item may repeat (for choice types, this means multiple choice) */
-  repeats?: Maybe<Scalars['Boolean']['output']>;
+  repeats: Scalars['Boolean']['output'];
   /** Whether the item must be included in data results */
-  required?: Maybe<Scalars['Boolean']['output']>;
+  required: Scalars['Boolean']['output'];
   /** Whether to apply this field to all clients or a single client when bulk creating */
   serviceDetailType?: Maybe<ServiceDetailType>;
   /** Size of the input element */
@@ -2180,7 +2175,7 @@ export type FormItem = {
   text?: Maybe<Scalars['String']['output']>;
   type: ItemType;
   /** Whether to show a warning if this question is unanswered */
-  warnIfEmpty?: Maybe<Scalars['Boolean']['output']>;
+  warnIfEmpty: Scalars['Boolean']['output'];
 };
 
 /** Form Role */
@@ -6487,19 +6482,19 @@ export type GetAssessmentQuery = {
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
-          required?: boolean | null;
-          warnIfEmpty?: boolean | null;
-          hidden?: boolean | null;
-          readOnly?: boolean | null;
-          repeats?: boolean | null;
+          required: boolean;
+          warnIfEmpty: boolean;
+          hidden: boolean;
+          readOnly: boolean;
+          repeats: boolean;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
-          disabledDisplay?: DisabledDisplay | null;
-          enableBehavior?: EnableBehavior | null;
+          disabledDisplay: DisabledDisplay;
+          enableBehavior: EnableBehavior;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -6510,19 +6505,19 @@ export type GetAssessmentQuery = {
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
+            required: boolean;
+            warnIfEmpty: boolean;
+            hidden: boolean;
+            readOnly: boolean;
+            repeats: boolean;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
+            disabledDisplay: DisabledDisplay;
+            enableBehavior: EnableBehavior;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -6533,19 +6528,19 @@ export type GetAssessmentQuery = {
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
+              required: boolean;
+              warnIfEmpty: boolean;
+              hidden: boolean;
+              readOnly: boolean;
+              repeats: boolean;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: boolean | null;
+              prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
+              disabledDisplay: DisabledDisplay;
+              enableBehavior: EnableBehavior;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -6556,19 +6551,19 @@ export type GetAssessmentQuery = {
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
+                required: boolean;
+                warnIfEmpty: boolean;
+                hidden: boolean;
+                readOnly: boolean;
+                repeats: boolean;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
-                prefill?: boolean | null;
+                prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
+                disabledDisplay: DisabledDisplay;
+                enableBehavior: EnableBehavior;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -6579,19 +6574,19 @@ export type GetAssessmentQuery = {
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
-                  required?: boolean | null;
-                  warnIfEmpty?: boolean | null;
-                  hidden?: boolean | null;
-                  readOnly?: boolean | null;
-                  repeats?: boolean | null;
+                  required: boolean;
+                  warnIfEmpty: boolean;
+                  hidden: boolean;
+                  readOnly: boolean;
+                  repeats: boolean;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
-                  prefill?: boolean | null;
+                  prefill: boolean;
                   dataCollectedAbout?: DataCollectedAbout | null;
-                  disabledDisplay?: DisabledDisplay | null;
-                  enableBehavior?: EnableBehavior | null;
+                  disabledDisplay: DisabledDisplay;
+                  enableBehavior: EnableBehavior;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -10451,7 +10446,7 @@ export type DeleteClientFileMutation = {
     file?: {
       __typename?: 'File';
       confidential?: boolean | null;
-      contentType: string;
+      contentType?: string | null;
       effectiveDate?: string | null;
       expirationDate?: string | null;
       id: string;
@@ -10762,7 +10757,7 @@ export type GetFileQuery = {
   file?: {
     __typename?: 'File';
     confidential?: boolean | null;
-    contentType: string;
+    contentType?: string | null;
     effectiveDate?: string | null;
     expirationDate?: string | null;
     id: string;
@@ -10809,7 +10804,7 @@ export type GetClientFilesQuery = {
       nodes: Array<{
         __typename?: 'File';
         confidential?: boolean | null;
-        contentType: string;
+        contentType?: string | null;
         effectiveDate?: string | null;
         expirationDate?: string | null;
         id: string;
@@ -11772,7 +11767,7 @@ export type DeleteEnrollmentMutation = {
 export type FileFieldsFragment = {
   __typename?: 'File';
   confidential?: boolean | null;
-  contentType: string;
+  contentType?: string | null;
   effectiveDate?: string | null;
   expirationDate?: string | null;
   id: string;
@@ -11847,19 +11842,19 @@ export type ItemFieldsFragment = {
   briefText?: string | null;
   readonlyText?: string | null;
   helperText?: string | null;
-  required?: boolean | null;
-  warnIfEmpty?: boolean | null;
-  hidden?: boolean | null;
-  readOnly?: boolean | null;
-  repeats?: boolean | null;
+  required: boolean;
+  warnIfEmpty: boolean;
+  hidden: boolean;
+  readOnly: boolean;
+  repeats: boolean;
   pickListReference?: string | null;
   serviceDetailType?: ServiceDetailType | null;
   size?: InputSize | null;
   assessmentDate?: boolean | null;
-  prefill?: boolean | null;
+  prefill: boolean;
   dataCollectedAbout?: DataCollectedAbout | null;
-  disabledDisplay?: DisabledDisplay | null;
-  enableBehavior?: EnableBehavior | null;
+  disabledDisplay: DisabledDisplay;
+  enableBehavior: EnableBehavior;
   mapping?: {
     __typename?: 'FieldMapping';
     recordType?: RelatedRecordType | null;
@@ -11942,19 +11937,19 @@ export type FormDefinitionJsonFieldsFragment = {
     briefText?: string | null;
     readonlyText?: string | null;
     helperText?: string | null;
-    required?: boolean | null;
-    warnIfEmpty?: boolean | null;
-    hidden?: boolean | null;
-    readOnly?: boolean | null;
-    repeats?: boolean | null;
+    required: boolean;
+    warnIfEmpty: boolean;
+    hidden: boolean;
+    readOnly: boolean;
+    repeats: boolean;
     pickListReference?: string | null;
     serviceDetailType?: ServiceDetailType | null;
     size?: InputSize | null;
     assessmentDate?: boolean | null;
-    prefill?: boolean | null;
+    prefill: boolean;
     dataCollectedAbout?: DataCollectedAbout | null;
-    disabledDisplay?: DisabledDisplay | null;
-    enableBehavior?: EnableBehavior | null;
+    disabledDisplay: DisabledDisplay;
+    enableBehavior: EnableBehavior;
     item?: Array<{
       __typename: 'FormItem';
       linkId: string;
@@ -11965,19 +11960,19 @@ export type FormDefinitionJsonFieldsFragment = {
       briefText?: string | null;
       readonlyText?: string | null;
       helperText?: string | null;
-      required?: boolean | null;
-      warnIfEmpty?: boolean | null;
-      hidden?: boolean | null;
-      readOnly?: boolean | null;
-      repeats?: boolean | null;
+      required: boolean;
+      warnIfEmpty: boolean;
+      hidden: boolean;
+      readOnly: boolean;
+      repeats: boolean;
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
-      prefill?: boolean | null;
+      prefill: boolean;
       dataCollectedAbout?: DataCollectedAbout | null;
-      disabledDisplay?: DisabledDisplay | null;
-      enableBehavior?: EnableBehavior | null;
+      disabledDisplay: DisabledDisplay;
+      enableBehavior: EnableBehavior;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -11988,19 +11983,19 @@ export type FormDefinitionJsonFieldsFragment = {
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
-        required?: boolean | null;
-        warnIfEmpty?: boolean | null;
-        hidden?: boolean | null;
-        readOnly?: boolean | null;
-        repeats?: boolean | null;
+        required: boolean;
+        warnIfEmpty: boolean;
+        hidden: boolean;
+        readOnly: boolean;
+        repeats: boolean;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: boolean | null;
+        prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
-        disabledDisplay?: DisabledDisplay | null;
-        enableBehavior?: EnableBehavior | null;
+        disabledDisplay: DisabledDisplay;
+        enableBehavior: EnableBehavior;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -12011,19 +12006,19 @@ export type FormDefinitionJsonFieldsFragment = {
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
-          required?: boolean | null;
-          warnIfEmpty?: boolean | null;
-          hidden?: boolean | null;
-          readOnly?: boolean | null;
-          repeats?: boolean | null;
+          required: boolean;
+          warnIfEmpty: boolean;
+          hidden: boolean;
+          readOnly: boolean;
+          repeats: boolean;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
-          disabledDisplay?: DisabledDisplay | null;
-          enableBehavior?: EnableBehavior | null;
+          disabledDisplay: DisabledDisplay;
+          enableBehavior: EnableBehavior;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -12034,19 +12029,19 @@ export type FormDefinitionJsonFieldsFragment = {
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
+            required: boolean;
+            warnIfEmpty: boolean;
+            hidden: boolean;
+            readOnly: boolean;
+            repeats: boolean;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
+            disabledDisplay: DisabledDisplay;
+            enableBehavior: EnableBehavior;
             mapping?: {
               __typename?: 'FieldMapping';
               recordType?: RelatedRecordType | null;
@@ -12410,19 +12405,19 @@ export type FormDefinitionFieldsFragment = {
       briefText?: string | null;
       readonlyText?: string | null;
       helperText?: string | null;
-      required?: boolean | null;
-      warnIfEmpty?: boolean | null;
-      hidden?: boolean | null;
-      readOnly?: boolean | null;
-      repeats?: boolean | null;
+      required: boolean;
+      warnIfEmpty: boolean;
+      hidden: boolean;
+      readOnly: boolean;
+      repeats: boolean;
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
-      prefill?: boolean | null;
+      prefill: boolean;
       dataCollectedAbout?: DataCollectedAbout | null;
-      disabledDisplay?: DisabledDisplay | null;
-      enableBehavior?: EnableBehavior | null;
+      disabledDisplay: DisabledDisplay;
+      enableBehavior: EnableBehavior;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -12433,19 +12428,19 @@ export type FormDefinitionFieldsFragment = {
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
-        required?: boolean | null;
-        warnIfEmpty?: boolean | null;
-        hidden?: boolean | null;
-        readOnly?: boolean | null;
-        repeats?: boolean | null;
+        required: boolean;
+        warnIfEmpty: boolean;
+        hidden: boolean;
+        readOnly: boolean;
+        repeats: boolean;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: boolean | null;
+        prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
-        disabledDisplay?: DisabledDisplay | null;
-        enableBehavior?: EnableBehavior | null;
+        disabledDisplay: DisabledDisplay;
+        enableBehavior: EnableBehavior;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -12456,19 +12451,19 @@ export type FormDefinitionFieldsFragment = {
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
-          required?: boolean | null;
-          warnIfEmpty?: boolean | null;
-          hidden?: boolean | null;
-          readOnly?: boolean | null;
-          repeats?: boolean | null;
+          required: boolean;
+          warnIfEmpty: boolean;
+          hidden: boolean;
+          readOnly: boolean;
+          repeats: boolean;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
-          disabledDisplay?: DisabledDisplay | null;
-          enableBehavior?: EnableBehavior | null;
+          disabledDisplay: DisabledDisplay;
+          enableBehavior: EnableBehavior;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -12479,19 +12474,19 @@ export type FormDefinitionFieldsFragment = {
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
+            required: boolean;
+            warnIfEmpty: boolean;
+            hidden: boolean;
+            readOnly: boolean;
+            repeats: boolean;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
+            disabledDisplay: DisabledDisplay;
+            enableBehavior: EnableBehavior;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -12502,19 +12497,19 @@ export type FormDefinitionFieldsFragment = {
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
+              required: boolean;
+              warnIfEmpty: boolean;
+              hidden: boolean;
+              readOnly: boolean;
+              repeats: boolean;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: boolean | null;
+              prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
+              disabledDisplay: DisabledDisplay;
+              enableBehavior: EnableBehavior;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -12914,19 +12909,19 @@ export type GetFormDefinitionQuery = {
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
-        required?: boolean | null;
-        warnIfEmpty?: boolean | null;
-        hidden?: boolean | null;
-        readOnly?: boolean | null;
-        repeats?: boolean | null;
+        required: boolean;
+        warnIfEmpty: boolean;
+        hidden: boolean;
+        readOnly: boolean;
+        repeats: boolean;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: boolean | null;
+        prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
-        disabledDisplay?: DisabledDisplay | null;
-        enableBehavior?: EnableBehavior | null;
+        disabledDisplay: DisabledDisplay;
+        enableBehavior: EnableBehavior;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -12937,19 +12932,19 @@ export type GetFormDefinitionQuery = {
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
-          required?: boolean | null;
-          warnIfEmpty?: boolean | null;
-          hidden?: boolean | null;
-          readOnly?: boolean | null;
-          repeats?: boolean | null;
+          required: boolean;
+          warnIfEmpty: boolean;
+          hidden: boolean;
+          readOnly: boolean;
+          repeats: boolean;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
-          disabledDisplay?: DisabledDisplay | null;
-          enableBehavior?: EnableBehavior | null;
+          disabledDisplay: DisabledDisplay;
+          enableBehavior: EnableBehavior;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -12960,19 +12955,19 @@ export type GetFormDefinitionQuery = {
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
+            required: boolean;
+            warnIfEmpty: boolean;
+            hidden: boolean;
+            readOnly: boolean;
+            repeats: boolean;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
+            disabledDisplay: DisabledDisplay;
+            enableBehavior: EnableBehavior;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -12983,19 +12978,19 @@ export type GetFormDefinitionQuery = {
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
+              required: boolean;
+              warnIfEmpty: boolean;
+              hidden: boolean;
+              readOnly: boolean;
+              repeats: boolean;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: boolean | null;
+              prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
+              disabledDisplay: DisabledDisplay;
+              enableBehavior: EnableBehavior;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -13006,19 +13001,19 @@ export type GetFormDefinitionQuery = {
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
+                required: boolean;
+                warnIfEmpty: boolean;
+                hidden: boolean;
+                readOnly: boolean;
+                repeats: boolean;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
-                prefill?: boolean | null;
+                prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
+                disabledDisplay: DisabledDisplay;
+                enableBehavior: EnableBehavior;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -13391,19 +13386,19 @@ export type GetServiceFormDefinitionQuery = {
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
-        required?: boolean | null;
-        warnIfEmpty?: boolean | null;
-        hidden?: boolean | null;
-        readOnly?: boolean | null;
-        repeats?: boolean | null;
+        required: boolean;
+        warnIfEmpty: boolean;
+        hidden: boolean;
+        readOnly: boolean;
+        repeats: boolean;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: boolean | null;
+        prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
-        disabledDisplay?: DisabledDisplay | null;
-        enableBehavior?: EnableBehavior | null;
+        disabledDisplay: DisabledDisplay;
+        enableBehavior: EnableBehavior;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -13414,19 +13409,19 @@ export type GetServiceFormDefinitionQuery = {
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
-          required?: boolean | null;
-          warnIfEmpty?: boolean | null;
-          hidden?: boolean | null;
-          readOnly?: boolean | null;
-          repeats?: boolean | null;
+          required: boolean;
+          warnIfEmpty: boolean;
+          hidden: boolean;
+          readOnly: boolean;
+          repeats: boolean;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
-          disabledDisplay?: DisabledDisplay | null;
-          enableBehavior?: EnableBehavior | null;
+          disabledDisplay: DisabledDisplay;
+          enableBehavior: EnableBehavior;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -13437,19 +13432,19 @@ export type GetServiceFormDefinitionQuery = {
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
+            required: boolean;
+            warnIfEmpty: boolean;
+            hidden: boolean;
+            readOnly: boolean;
+            repeats: boolean;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
+            disabledDisplay: DisabledDisplay;
+            enableBehavior: EnableBehavior;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -13460,19 +13455,19 @@ export type GetServiceFormDefinitionQuery = {
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
+              required: boolean;
+              warnIfEmpty: boolean;
+              hidden: boolean;
+              readOnly: boolean;
+              repeats: boolean;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: boolean | null;
+              prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
+              disabledDisplay: DisabledDisplay;
+              enableBehavior: EnableBehavior;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -13483,19 +13478,19 @@ export type GetServiceFormDefinitionQuery = {
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
+                required: boolean;
+                warnIfEmpty: boolean;
+                hidden: boolean;
+                readOnly: boolean;
+                repeats: boolean;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
-                prefill?: boolean | null;
+                prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
+                disabledDisplay: DisabledDisplay;
+                enableBehavior: EnableBehavior;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -14074,7 +14069,7 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'File';
           confidential?: boolean | null;
-          contentType: string;
+          contentType?: string | null;
           effectiveDate?: string | null;
           expirationDate?: string | null;
           id: string;

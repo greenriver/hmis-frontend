@@ -203,6 +203,8 @@ export function useServiceDialog({
               loadingElement={
                 <Skeleton variant='rectangular' sx={{ height: 60, pt: 2 }} />
               }
+              // Override default network-only fetch policy for loading pick lists, because service pick lists are static (at least for now)
+              // If we have issues with stale lists in services, this can be removed.
               picklistQueryOptions={{ fetchPolicy: 'cache-first' }}
             />
           )}
@@ -213,6 +215,7 @@ export function useServiceDialog({
             justifyContent={'space-between'}
             sx={{ width: '100%' }}
           >
+            <Box></Box>
             {service && (
               <DeleteMutationButton<
                 DeleteServiceMutation,

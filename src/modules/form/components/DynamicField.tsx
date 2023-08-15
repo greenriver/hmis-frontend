@@ -109,12 +109,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     value === INVALID_ENUM || value?.code === INVALID_ENUM;
 
   const commonInputProps: DynamicInputCommonProps = {
-    disabled,
     label,
     error: !!(errors && errors.length > 0) || isInvalidEnumValue,
     helperText: item.helperText,
     id: linkId,
     ...inputProps,
+    disabled: disabled || inputProps?.disabled,
   };
   commonInputProps.warnIfEmptyTreatment =
     warnIfEmpty &&
@@ -152,6 +152,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         value={value}
         onChange={onChangeValue}
         {...commonInputProps}
+        disabled={false}
       />
     );
   }

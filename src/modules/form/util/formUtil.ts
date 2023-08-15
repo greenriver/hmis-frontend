@@ -18,8 +18,8 @@ import {
   mapValues,
   omit,
   omitBy,
-  pull,
   sum,
+  uniq,
 } from 'lodash-es';
 
 import {
@@ -82,6 +82,7 @@ export const isDataNotCollected = (val?: any): boolean => {
   if (isPickListOption(val)) return isDataNotCollected(val.code);
   return false;
 };
+export const yesCode = { code: 'YES', label: 'Yes' };
 
 export const isValidDate = (value: Date, maxYear = 1900) =>
   isDate(value) && isValid(value) && getYear(value) > maxYear;
@@ -100,6 +101,8 @@ export const hasMeaningfulValue = (value: any): boolean => {
   if (Array.isArray(value) && value.length == 0) return false;
   if (isNil(value)) return false;
   if (value === '') return false;
+  if (isDataNotCollected(value)) return false;
+  if (value == HIDDEN_VALUE) return false;
   return true;
 };
 
@@ -132,7 +135,7 @@ export const isEnabled = (
     // This is a group. Only show it if some children are visible.
     return item.item.some(
       (i) =>
-        i.disabledDisplay === DisabledDisplay.Protected ||
+        i.disabledDisplay !== DisabledDisplay.Hidden ||
         isEnabled(i, disabledLinkIds)
     );
   }
@@ -140,12 +143,8 @@ export const isEnabled = (
 };
 
 export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
-  if (
-    !isEnabled(item, disabledLinkIds) &&
-    item.disabledDisplay !== DisabledDisplay.Protected
-  )
-    return false;
-
+  const disabled = !isEnabled(item, disabledLinkIds);
+  if (disabled && item.disabledDisplay === DisabledDisplay.Hidden) return false;
   return true;
 };
 
@@ -260,6 +259,10 @@ type EvaluateEnableWhenArgs = {
   // pass function to avoid circular dependency
   shouldEnableFn: typeof shouldEnableItem;
 };
+// FIXME: issue is that `values` contains values for items that are currently disabled, which it maybe shouldn't.
+// altho sometimes it should, like when DISABLED_DISPLAY = PROTECTED_WITH_VALUE. and for hidden fields, we want conditionals on them.
+// what we DONT WANT is the disabling condition situation, where you changed another value that really should clear it out.
+// I think the hidden ones need to disappear their values when theyre remoed. It coudl be a custom "disabled_values" map if we really watn to keep them to add them back when re-enabled - defer that.
 const evaluateEnableWhen = ({
   en,
   values,
@@ -342,12 +345,16 @@ const evaluateEnableWhen = ({
         );
       }
       const dependentItem = itemMap[en.question];
-      result = shouldEnableFn({
-        item: dependentItem,
-        values,
-        itemMap,
-        localConstants,
-      });
+      if (!dependentItem) {
+        result = false; // can happen if item removed because of a 'rule'. treat as not enabled.
+      } else {
+        result = shouldEnableFn({
+          item: dependentItem,
+          values,
+          itemMap,
+          localConstants,
+        });
+      }
       // flip the result if this is "not enabled"
       if (en.answerBoolean === false) {
         result = !result;
@@ -838,21 +845,22 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
   const deps: LinkIdMap = {};
 
   function addEnableWhen(linkId: string, en: EnableWhen) {
-    if (en.question) {
+    if (en.question && itemMap[en.question]) {
       if (!deps[en.question]) deps[en.question] = [];
       deps[en.question].push(linkId);
     }
-    if (en.compareQuestion) {
+    if (en.compareQuestion && itemMap[en.compareQuestion]) {
       if (!deps[en.compareQuestion]) deps[en.compareQuestion] = [];
       deps[en.compareQuestion].push(linkId);
     }
 
     // If this item is dependent on another item being enabled,
     // recusively add those to its dependency list
-    if (en.operator === EnableOperator.Enabled && en.question) {
-      if (!itemMap[en.question]) {
-        throw new Error(`No such question: ${en.question}`);
-      }
+    if (
+      en.operator === EnableOperator.Enabled &&
+      en.question &&
+      itemMap[en.question]
+    ) {
       (itemMap[en.question].enableWhen || []).forEach((en2) =>
         addEnableWhen(linkId, en2)
       );
@@ -862,6 +870,14 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
   Object.values(itemMap).forEach((item) => {
     if (!item.enableWhen) return;
     item.enableWhen.forEach((en) => addEnableWhen(item.linkId, en));
+  });
+
+  // Add deps of deps to deps
+  Object.keys(deps).forEach((id) => {
+    deps[id].forEach((id2) => {
+      if (deps[id2]) deps[id].push(...deps[id2]);
+    });
+    deps[id] = uniq(deps[id]);
   });
   return deps;
 };
@@ -1129,8 +1145,6 @@ export const createInitialValuesFromRecord = (
 
     const value = getMappedValue(record, item.mapping);
     if (hasMeaningfulValue(value)) {
-      // console.log('transforming', value, item);
-      // console.log(gqlValueToFormValue(value, item));
       initialValues[item.linkId] = gqlValueToFormValue(value, item);
     }
   });
@@ -1237,47 +1251,62 @@ export const debugFormValues = (
   return true;
 };
 
-type SetDisabledLinkIdsBaseArgs = {
+type GetDependentItemsDisabledStatus = {
   changedLinkIds: string[];
   localValues: any;
-  callback: React.Dispatch<React.SetStateAction<string[]>>;
   enabledDependencyMap: LinkIdMap;
   itemMap: ItemMap;
   localConstants: LocalConstants;
 };
-export const setDisabledLinkIdsBase = ({
+
+export const getDependentItemsDisabledStatus = ({
   changedLinkIds,
   localValues,
-  callback,
   enabledDependencyMap,
   itemMap,
   localConstants,
-}: SetDisabledLinkIdsBaseArgs) => {
+}: GetDependentItemsDisabledStatus) => {
+  const enabledLinkIds: string[] = [];
+  const disabledLinkIds: string[] = [];
   // If none of these are dependencies, return immediately
-  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
+  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id]))
+    return { enabledLinkIds, disabledLinkIds };
 
-  callback((oldList) => {
-    const newList = [...oldList];
-    changedLinkIds.forEach((changedLinkId) => {
-      if (!enabledDependencyMap[changedLinkId]) return;
+  changedLinkIds.forEach((changedLinkId) => {
+    if (!enabledDependencyMap[changedLinkId]) return;
 
-      enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+    // iterate through all items that are dependent on this item,
+    // and see if they need to be enabled or disabled
+    enabledDependencyMap[changedLinkId]
+      .filter((id) => !!itemMap[id]) // can happen if removed because of a 'rule'. ignore.
+      .forEach((dependentLinkId) => {
         const enabled = shouldEnableItem({
           item: itemMap[dependentLinkId],
           values: localValues,
           itemMap,
           localConstants,
         });
-        if (enabled && newList.includes(dependentLinkId)) {
-          pull(newList, dependentLinkId);
-        } else if (!enabled && !newList.includes(dependentLinkId)) {
-          newList.push(dependentLinkId);
+        if (enabled) {
+          enabledLinkIds.push(dependentLinkId);
+        } else {
+          disabledLinkIds.push(dependentLinkId);
+          // if the disabled field is hidden, nullify its value (so that related enableWhens dont consider it present).
+          // this needs to happen here, rather than in the caller, because subsequent iterations of this loop
+          // may depend on the presence of this item.
+          if (
+            itemMap[dependentLinkId].disabledDisplay !==
+            DisabledDisplay.ProtectedWithValue
+          ) {
+            localValues[dependentLinkId] = null;
+          }
         }
       });
-    });
-
-    return newList;
   });
+
+  return {
+    enabledLinkIds: uniq(enabledLinkIds),
+    disabledLinkIds: uniq(disabledLinkIds),
+  };
 };
 
 const underscoreKey = (v: any, k: string) => k.startsWith('_');
@@ -1345,4 +1374,15 @@ export const getFieldOnAssessment = (
   }
 
   return { record, recordType, value };
+};
+
+export const itemDefaults = {
+  disabledDisplay: DisabledDisplay.Hidden,
+  enableBehavior: EnableBehavior.Any,
+  required: false,
+  prefill: false,
+  readOnly: false,
+  warnIfEmpty: false,
+  hidden: false,
+  repeats: false,
 };
