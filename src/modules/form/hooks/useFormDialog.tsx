@@ -27,7 +27,7 @@ import { emptyErrorState } from '@/modules/errors/util';
 import { FormRole, ItemType } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
-type RenderFormDialogProps = PartialPick<
+export type RenderFormDialogProps = PartialPick<
   DynamicFormProps,
   'onSubmit' | 'definition' | 'errors'
 > & {
@@ -134,7 +134,6 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                     loading={submitLoading}
                     errors={errors}
                     localConstants={localConstants}
-                    {...props}
                     FormActionProps={{
                       onDiscard: () => setDialogOpen(false),
                       ...props.FormActionProps,
@@ -143,7 +142,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                       ...props.ValidationDialogProps,
                     }}
                     hideSubmit
-                    picklistQueryOptions={{ fetchPolicy: 'cache-first' }}
+                    {...props}
                   />
                 </Grid>
               </Grid>

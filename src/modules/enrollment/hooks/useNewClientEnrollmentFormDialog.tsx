@@ -38,9 +38,9 @@ export function useNewClientEnrollmentFormDialog({
       title: 'Enroll a New Client',
       submitButtonText: 'Create & Enroll Client',
       DialogProps: { maxWidth: 'lg' },
-      pickListArgs: { projectId },
+      pickListArgs: { projectId, householdId },
     });
-  }, [renderFormDialog, projectId]);
+  }, [renderFormDialog, projectId, householdId]);
 
   return {
     openNewClientEnrollmentFormDialog: openFormDialog,

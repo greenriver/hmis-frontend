@@ -97,6 +97,7 @@ const NumberInput = ({
       InputProps={{ ...currencyInputProps, ...InputProps }}
       onBlur={handleBlur}
       value={value}
+      placeholder='0'
       {...props}
       error={error || !!errorMessage}
       // If there is a server error, show that instead of the local message

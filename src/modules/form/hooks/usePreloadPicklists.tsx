@@ -80,7 +80,7 @@ const usePreloadPicklists = ({
   return useMemo(
     () => ({
       fetch,
-      loading,
+      loading: loading && data.length === 0,
       data,
     }),
     [fetch, loading, data]
