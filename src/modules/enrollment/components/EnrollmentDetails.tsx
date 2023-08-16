@@ -24,11 +24,9 @@ import {
   Destination,
   EnrollmentFieldsFragment,
   FormRole,
-  PickListType,
   ProjectType,
   useGetEnrollmentDetailsQuery,
 } from '@/types/gqlTypes';
-import { evictPickList } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 // TODO: move to backend?
@@ -122,11 +120,6 @@ const EnrollmentDetails = ({
           }
           icon='pencil'
           enrollment={enrollment}
-          onCompleted={() =>
-            evictPickList(PickListType.AvailableUnitsForEnrollment, {
-              projectId: enrollment.project.id,
-            })
-          }
         >
           {enrollment.currentUnit?.name || noneText}
         </OccurrencePointValue>

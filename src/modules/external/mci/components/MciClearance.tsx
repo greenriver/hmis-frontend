@@ -1,6 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Alert, AlertTitle, Box, lighten, Stack } from '@mui/material';
-import { find, isEqual, omit, pick, transform } from 'lodash-es';
+import { find, isEqual, pick, transform } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ClearanceState, ClearanceStatus } from '../types';
@@ -22,9 +22,58 @@ import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
 import { createHudValuesForSubmit } from '@/modules/form/util/formUtil';
-import { NameDataQuality, useClearMciMutation } from '@/types/gqlTypes';
+import {
+  DobDataQuality,
+  MciClearanceInput,
+  NameDataQuality,
+  useClearMciMutation,
+} from '@/types/gqlTypes';
 
-const MCI_CLEARANCE_FIELDS = ['names', 'dob', 'gender', 'ssn'] as const;
+const MCI_CLEARANCE_FIELDS = [
+  'names',
+  'firstName',
+  'middleName',
+  'lastName',
+  'dob',
+  'gender',
+  'ssn',
+  'nameDataQuality',
+  'dobDataQuality',
+] as const;
+
+const fieldsToParams = (
+  fields: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>
+): MciClearanceInput & {
+  nameDataQuality: NameDataQuality;
+  dobDataQuality: DobDataQuality;
+} => {
+  const { names, ...rest } = fields;
+  const primaryName = find(names || [], {
+    primary: true,
+  });
+
+  const input = rest;
+  if (primaryName) {
+    input.firstName = primaryName.first;
+    input.middleName = primaryName.middle;
+    input.lastName = primaryName.last;
+    input.nameDataQuality = primaryName.nameDataQuality;
+  }
+  return rest;
+};
+
+const enoughFieldsForClearance = (
+  fields: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>
+): boolean => {
+  const params = fieldsToParams(fields);
+  return !!(
+    params.firstName &&
+    params.lastName &&
+    params.nameDataQuality === NameDataQuality.FullNameReported &&
+    params.dob &&
+    params.dobDataQuality === DobDataQuality.FullDobReported
+  );
+};
 
 const initialClearanceState: ClearanceState = {
   status: 'initial',
@@ -92,17 +141,9 @@ const MciClearance = ({
   const handleSearch = useCallback(() => {
     if (!currentMciAttributes) return;
     onChange(null);
-
-    const primaryName = find(currentMciAttributes.names, { primary: true });
-    if (!primaryName) return;
-
-    const input = {
-      ...omit(currentMciAttributes, 'names'),
-      firstName: primaryName.first,
-      middleName: primaryName.middle,
-      lastName: primaryName.last,
-    };
     setErrorState(emptyErrorState);
+    const { dobDataQuality, nameDataQuality, ...input } =
+      fieldsToParams(currentMciAttributes);
     clearMci({ variables: { input: { input } } });
   }, [clearMci, onChange, currentMciAttributes]);
 
@@ -195,15 +236,7 @@ const MciClearanceWrapper = ({
   const mciSearchUnavailable = useMemo(() => {
     if (disabled) return true;
     if (!currentMciAttributes) return true;
-
-    const primaryName = find(currentMciAttributes.names, { primary: true });
-    if (!primaryName) return true;
-
-    return (
-      !primaryName.first ||
-      !primaryName.last ||
-      primaryName.nameDataQuality !== NameDataQuality.FullNameReported
-    );
+    return !enoughFieldsForClearance(currentMciAttributes);
   }, [disabled, currentMciAttributes]);
 
   // If element becomes disabled, set value to uncleared

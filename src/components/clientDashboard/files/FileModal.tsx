@@ -122,7 +122,10 @@ const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
 const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
   const { clientId } = useSafeParams() as { clientId?: string };
   const previewContent = useMemo(() => {
-    if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.contentType)) {
+    if (
+      file.contentType &&
+      ['image/jpeg', 'image/jpg', 'image/png'].includes(file.contentType)
+    ) {
       return <ImagePreview file={file} />;
     } else if (file.contentType === 'application/pdf') {
       return <PdfPreview file={file} />;

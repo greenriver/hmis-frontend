@@ -18,7 +18,7 @@ import {
   formatDateForDisplay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { FormItem, ItemType } from '@/types/gqlTypes';
+import { DisabledDisplay, FormItem, ItemType } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -73,7 +73,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     [label, value, horizontal, item]
   );
 
-  if (disabled) {
+  if (disabled && item.disabledDisplay !== DisabledDisplay.ProtectedWithValue) {
     return (
       <LabelWithContent {...commonProps}>
         <NotCollectedText variant='body2'>N/A</NotCollectedText>

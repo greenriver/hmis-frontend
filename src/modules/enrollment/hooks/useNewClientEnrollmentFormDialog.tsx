@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
+import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
@@ -17,8 +18,7 @@ export function useNewClientEnrollmentFormDialog({
 }) {
   const localConstants = useMemo(
     () => ({
-      canViewFullSsn: true,
-      canViewDob: true,
+      ...localConstantsForClientForm(),
       householdId,
     }),
     [householdId]
@@ -38,9 +38,9 @@ export function useNewClientEnrollmentFormDialog({
       title: 'Enroll a New Client',
       submitButtonText: 'Create & Enroll Client',
       DialogProps: { maxWidth: 'lg' },
-      pickListArgs: { projectId },
+      pickListArgs: { projectId, householdId },
     });
-  }, [renderFormDialog, projectId]);
+  }, [renderFormDialog, projectId, householdId]);
 
   return {
     openNewClientEnrollmentFormDialog: openFormDialog,

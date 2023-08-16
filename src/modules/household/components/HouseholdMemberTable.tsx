@@ -6,6 +6,7 @@ import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
 
 import HouseholdActionButtons from './elements/HouseholdActionButtons';
 
+import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -15,13 +16,17 @@ import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
 } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
+import {
+  ExternalIdentifierType,
+  HouseholdClientFieldsFragment,
+} from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 export const nameColumnConfig = (currentClientId: string) => {
@@ -151,6 +156,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
       />
     ),
   },
+  mciIds: externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
   // {
   //   header: 'Enrollment Period',
   //   key: 'enrollment_period',
@@ -188,13 +194,14 @@ const HouseholdMemberTable = ({
   columns?: ColumnDef<HouseholdClientFieldsFragment>[];
   condensed?: boolean;
 }) => {
+  const { globalFeatureFlags } = useHmisAppSettings();
   const [householdMembers, { loading: householdMembersLoading, error }] =
     useHouseholdMembers(enrollmentId);
 
   const columns = useMemo(() => {
     if (!householdMembers) return;
     if (columnProp) return columnProp;
-    return [
+    const cols = [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
       HOUSEHOLD_MEMBER_COLUMNS.clientName({ currentClientId: clientId }),
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentStatus,
@@ -203,7 +210,14 @@ const HouseholdMemberTable = ({
       HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
       HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(householdMembers),
     ];
-  }, [clientId, columnProp, householdMembers]);
+    if (globalFeatureFlags?.mciId) {
+      return [
+        ...cols,
+        externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
+      ];
+    }
+    return cols;
+  }, [clientId, columnProp, globalFeatureFlags?.mciId, householdMembers]);
 
   if (error) throw error;
   if (householdMembersLoading && !householdMembers) return <Loading />;

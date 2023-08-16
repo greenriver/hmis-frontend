@@ -4,10 +4,12 @@ import { ReactNode } from 'react';
 
 import ExternalLink from './ExternalLink';
 
+import { isHouseholdClient } from '@/modules/household/types';
 import {
   ClientFieldsFragment,
   ExternalIdentifier,
   ExternalIdentifierType,
+  HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
 
 export interface ExternalIdDisplayProps {
@@ -52,13 +54,19 @@ export const externalIdColumn = (
 ) => ({
   header: label,
   width: '5%',
-  render: (client: ClientFieldsFragment, props?: ExternalIdDisplayProps) => (
-    <Stack gap={0.8}>
-      {filter(client.externalIds, { type }).map((val) => (
-        <ExternalIdDisplay value={val} {...props} />
-      ))}
-    </Stack>
-  ),
+  render: (
+    record: ClientFieldsFragment | HouseholdClientFieldsFragment,
+    props?: ExternalIdDisplayProps
+  ) => {
+    const client = isHouseholdClient(record) ? record.client : record;
+    return (
+      <Stack gap={0.8}>
+        {filter(client.externalIds, { type }).map((val) => (
+          <ExternalIdDisplay value={val} {...props} />
+        ))}
+      </Stack>
+    );
+  },
   dontLink: true,
 });
 

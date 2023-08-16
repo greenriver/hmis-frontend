@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
-import { isHouseholdClient, RecentHouseholdMember } from '../types';
+import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
 
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   ClientFieldsFragment,
-  PickListType,
   useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
-import { evictPickList } from '@/utils/cacheUtil';
 
 interface Args {
   householdId?: string;
@@ -28,11 +26,7 @@ export default function useAddToHouseholdColumns({
   const refetchHousehold = useCallback(() => {
     if (!householdId) return;
     getHousehold({ variables: { id: householdId } });
-    evictPickList(PickListType.AvailableUnitsForEnrollment, {
-      projectId,
-      householdId,
-    });
-  }, [getHousehold, householdId, projectId]);
+  }, [getHousehold, householdId]);
 
   // Refetch household when household ID changes
   useEffect(() => refetchHousehold(), [refetchHousehold, householdId]);
@@ -56,13 +50,9 @@ export default function useAddToHouseholdColumns({
   const onSuccess = useCallback(
     (updatedHouseholdId: string) => {
       setHouseholdId(updatedHouseholdId);
-      evictPickList(PickListType.AvailableUnitsForEnrollment, {
-        projectId,
-        householdId: updatedHouseholdId,
-      });
       getHousehold({ variables: { id: updatedHouseholdId } });
     },
-    [getHousehold, projectId]
+    [getHousehold]
   );
 
   const addToEnrollmentColumns = useMemo(() => {
@@ -73,7 +63,9 @@ export default function useAddToHouseholdColumns({
         width: '10%',
         minWidth: '180px',
         render: (record: ClientFieldsFragment | RecentHouseholdMember) => {
-          const client = isHouseholdClient(record) ? record.client : record;
+          const client = isRecentHouseholdMember(record)
+            ? record.client
+            : record;
           return (
             <AddToHouseholdButton
               clientId={client.id}

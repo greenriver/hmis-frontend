@@ -23,7 +23,7 @@ const Image: React.FC<ImageProps> = ({ id }) => {
         return {
           url: file?.url || '',
           name: file?.name,
-          contentType: file?.contentType,
+          contentType: file?.contentType || '',
         };
       }}
     />
