@@ -1,11 +1,12 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
@@ -14,6 +15,9 @@ import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeAssessmentFieldsFragment,
+  DeleteCeAssessmentDocument,
+  DeleteCeAssessmentMutation,
+  DeleteCeAssessmentMutationVariables,
   FormRole,
   GetEnrollmentCeAssessmentsDocument,
   GetEnrollmentCeAssessmentsQuery,
@@ -61,7 +65,7 @@ const EnrollmentCeAssessmentsPage = () => {
     CeAssessmentFieldsFragment | undefined
   >();
 
-  const { openFormDialog, renderFormDialog } =
+  const { openFormDialog, renderFormDialog, closeDialog } =
     useFormDialog<CeAssessmentFieldsFragment>({
       formRole: FormRole.CeAssessment,
       onCompleted: () => {
@@ -74,6 +78,14 @@ const EnrollmentCeAssessmentsPage = () => {
       record: viewingRecord,
       onClose: () => setViewingRecord(undefined),
     });
+
+  const onSuccessfulDelete = useCallback(() => {
+    cache.evict({
+      id: `Enrollment:${enrollmentId}`,
+      fieldName: 'ceAssessments',
+    });
+    closeDialog();
+  }, [closeDialog, enrollmentId]);
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
   const canEditCeAssessments = enrollment.access.canEditEnrollments;
@@ -117,9 +129,27 @@ const EnrollmentCeAssessmentsPage = () => {
         />
       </TitleCard>
       {renderFormDialog({
-        title: 'Add CE Assessment',
+        title: viewingRecord ? 'Edit CE Assessment' : 'Add CE Assessment',
         //md to accomodate radio buttons
         DialogProps: { maxWidth: 'md' },
+        otherActions: (
+          <>
+            {viewingRecord && (
+              <DeleteMutationButton<
+                DeleteCeAssessmentMutation,
+                DeleteCeAssessmentMutationVariables
+              >
+                queryDocument={DeleteCeAssessmentDocument}
+                variables={{ id: viewingRecord.id }}
+                idPath={'deleteCeAssessment.ceAssessment.id'}
+                recordName='CE Assessment'
+                onSuccess={onSuccessfulDelete}
+              >
+                Delete
+              </DeleteMutationButton>
+            )}
+          </>
+        ),
       })}
     </>
   );
