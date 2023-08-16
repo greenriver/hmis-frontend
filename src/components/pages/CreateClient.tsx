@@ -1,10 +1,11 @@
 import { Box, Container, Typography } from '@mui/material';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import { STICKY_BAR_HEIGHT } from '../layout/layoutConstants';
 
+import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { Routes } from '@/routes/routes';
 import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
@@ -12,7 +13,6 @@ import generateSafePath from '@/utils/generateSafePath';
 
 const CreateClient: React.FC = () => {
   const navigate = useNavigate();
-
   // const { pathname, state } = useLocation();
   const onCompleted = useCallback(
     (data: ClientFieldsFragment) => {
@@ -22,6 +22,8 @@ const CreateClient: React.FC = () => {
     },
     [navigate]
   );
+
+  const localConstants = useMemo(() => localConstantsForClientForm(), []);
 
   const crumbs = [
     // { label: state?.prevPathName || 'Search', to: state?.prevPath || '/' },
@@ -39,12 +41,7 @@ const CreateClient: React.FC = () => {
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Client' }}
         top={STICKY_BAR_HEIGHT}
-        localConstants={{
-          // For Client creation, allow the user to input SSN and DOB
-          // even if they don't have read-access to those fields
-          canViewFullSsn: true,
-          canViewDob: true,
-        }}
+        localConstants={localConstants}
         title={
           <>
             <Box sx={{ mb: 2 }}>
