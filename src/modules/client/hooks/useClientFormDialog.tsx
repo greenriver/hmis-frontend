@@ -1,11 +1,31 @@
+import { filter } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import {
   ClientFieldsFragment,
+  ExternalIdentifierType,
   FormRole,
   useGetClientQuery,
 } from '@/types/gqlTypes';
+
+export const localConstantsForClientForm = (
+  client?: ClientFieldsFragment | null
+) => {
+  if (!client) {
+    // For Client creation, allow the user to input SSN and DOB
+    // even if they don't have read-access to those fields
+    return { canViewFullSsn: true, canViewDob: true };
+  }
+
+  return {
+    canViewDob: client.access.canViewDob,
+    canViewFullSsn: client.access.canViewFullSsn,
+    mciIds: filter(client.externalIds, {
+      type: ExternalIdentifierType.MciId,
+    }),
+  };
+};
 
 /**
  * Form for creating or editing a client
@@ -27,17 +47,10 @@ export function useClientFormDialog({
   });
   if (error) throw error;
 
-  const localConstants = useMemo(() => {
-    if (!clientId) {
-      // For Client creation, allow the user to input SSN and DOB
-      // even if they don't have read-access to those fields
-      return { canViewFullSsn: true, canViewDob: true };
-    }
-
-    if (!client) return;
-    const { canViewFullSsn, canViewDob } = client.access;
-    return { canViewFullSsn, canViewDob };
-  }, [clientId, client]);
+  const localConstants = useMemo(
+    () => localConstantsForClientForm(client),
+    [client]
+  );
 
   const { openFormDialog, renderFormDialog } =
     useFormDialog<ClientFieldsFragment>({

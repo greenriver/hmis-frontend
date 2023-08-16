@@ -47,7 +47,6 @@ import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import AddServices from '@/modules/projects/components/BulkAddServices';
 import Cocs from '@/modules/projects/components/Cocs';
 import EditProject from '@/modules/projects/components/EditProject';
 import Funder from '@/modules/projects/components/Funder';
@@ -113,11 +112,28 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.REFERRALS,
-            element: <ProjectReferrals />,
+            element: (
+              <ProjectEditRoute
+                permissions={[
+                  'canManageIncomingReferrals',
+                  'canManageOutgoingReferrals',
+                ]}
+                redirectRoute={Routes.PROJECT}
+              >
+                <ProjectReferrals />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.REFERRAL_POSTING,
-            element: <ProjectReferralPosting />,
+            element: (
+              <ProjectEditRoute
+                permissions={['canManageIncomingReferrals']}
+                redirectRoute={Routes.PROJECT}
+              >
+                <ProjectReferralPosting />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.ESG_FUNDING_REPORT,
@@ -224,17 +240,18 @@ export const protectedRoutes: RouteNode[] = [
               </ProjectEditRoute>
             ),
           },
-          {
-            path: ProjectDashboardRoutes.ADD_SERVICES,
-            element: (
-              <ProjectEditRoute
-                permissions={['canEditEnrollments']}
-                redirectRoute={ProjectDashboardRoutes.PROJECT_ENROLLMENTS}
-              >
-                <AddServices />
-              </ProjectEditRoute>
-            ),
-          },
+          // Disabled for now because it's not ready for MVP.
+          // {
+          //   path: ProjectDashboardRoutes.ADD_SERVICES,
+          //   element: (
+          //     <ProjectEditRoute
+          //       permissions={['canEditEnrollments']}
+          //       redirectRoute={ProjectDashboardRoutes.PROJECT_ENROLLMENTS}
+          //     >
+          //       <AddServices />
+          //     </ProjectEditRoute>
+          //   ),
+          // },
           {
             path: ProjectDashboardRoutes.ADD_HOUSEHOLD,
             element: (
@@ -471,11 +488,19 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: Routes.ADMIN_REFERRAL_DENIALS,
-            element: <AdminReferralDenials />,
+            element: (
+              <RootPermissionsFilter permissions='canManageDeniedReferrals'>
+                <AdminReferralDenials />
+              </RootPermissionsFilter>
+            ),
           },
           {
             path: Routes.ADMIN_REFERRAL_DENIAL,
-            element: <AdminReferralPosting />,
+            element: (
+              <RootPermissionsFilter permissions='canManageDeniedReferrals'>
+                <AdminReferralPosting />
+              </RootPermissionsFilter>
+            ),
           },
         ],
       },
