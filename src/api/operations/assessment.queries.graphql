@@ -161,15 +161,3 @@ mutation DeleteAssessment($id: ID!) {
     }
   }
 }
-
-mutation DeleteCeAssessment($id: ID!) {
-  deleteCeAssessment(input: { id: $id }) {
-    clientMutationId
-    ceAssessment {
-      id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}

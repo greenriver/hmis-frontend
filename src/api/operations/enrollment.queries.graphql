@@ -83,3 +83,27 @@ mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
     }
   }
 }
+
+mutation DeleteCeAssessment($id: ID!) {
+  deleteCeAssessment(input: { id: $id }) {
+    clientMutationId
+    ceAssessment {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteCeEvent($id: ID!) {
+  deleteCeEvent(input: { id: $id }) {
+    clientMutationId
+    ceEvent {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

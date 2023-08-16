@@ -144,7 +144,7 @@ const EnrollmentCeAssessmentsPage = () => {
                 queryDocument={DeleteCeAssessmentDocument}
                 variables={{ id: viewingRecord.id }}
                 idPath={'deleteCeAssessment.ceAssessment.id'}
-                recordName='CE Assessment'
+                recordName='Coordinated Entry Assessment'
                 onSuccess={onSuccessfulDelete}
               >
                 Delete

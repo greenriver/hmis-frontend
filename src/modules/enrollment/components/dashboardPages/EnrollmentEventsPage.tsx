@@ -1,11 +1,12 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
@@ -16,6 +17,9 @@ import {
 import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  DeleteCeEventDocument,
+  DeleteCeEventMutation,
+  DeleteCeEventMutationVariables,
   EventFieldsFragment,
   FormRole,
   GetEnrollmentEventsDocument,
@@ -47,7 +51,7 @@ const EnrollmentEventsPage = () => {
     EventFieldsFragment | undefined
   >();
 
-  const { openFormDialog, renderFormDialog } =
+  const { openFormDialog, renderFormDialog, closeDialog } =
     useFormDialog<EventFieldsFragment>({
       formRole: FormRole.CeEvent,
       onCompleted: () => {
@@ -60,6 +64,14 @@ const EnrollmentEventsPage = () => {
       record: viewingRecord,
       onClose: () => setViewingRecord(undefined),
     });
+
+  const onSuccessfulDelete = useCallback(() => {
+    cache.evict({
+      id: `Enrollment:${enrollmentId}`,
+      fieldName: 'events',
+    });
+    closeDialog();
+  }, [closeDialog, enrollmentId]);
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
   const canEditCeEvents = enrollment.access.canEditEnrollments;
@@ -108,24 +120,24 @@ const EnrollmentEventsPage = () => {
           : 'Add Coordinated Entry Event',
         //md to accomodate radio buttons
         DialogProps: { maxWidth: 'md' },
-        // otherActions: (
-        //   <>
-        //     {viewingRecord && (
-        //       <DeleteMutationButton<
-        //         DeleteCeAssessmentMutation,
-        //         DeleteCeAssessmentMutationVariables
-        //       >
-        //         queryDocument={DeleteCeAssessmentDocument}
-        //         variables={{ id: viewingRecord.id }}
-        //         idPath={'deleteCeAssessment.ceAssessment.id'}
-        //         recordName='CE Assessment'
-        //         onSuccess={onSuccessfulDelete}
-        //       >
-        //         Delete
-        //       </DeleteMutationButton>
-        //     )}
-        //   </>
-        // ),
+        otherActions: (
+          <>
+            {viewingRecord && (
+              <DeleteMutationButton<
+                DeleteCeEventMutation,
+                DeleteCeEventMutationVariables
+              >
+                queryDocument={DeleteCeEventDocument}
+                variables={{ id: viewingRecord.id }}
+                idPath={'deleteCeEvent.ceEvent.id'}
+                recordName='Coordinated Entry Event'
+                onSuccess={onSuccessfulDelete}
+              >
+                Delete
+              </DeleteMutationButton>
+            )}
+          </>
+        ),
       })}
     </>
   );
