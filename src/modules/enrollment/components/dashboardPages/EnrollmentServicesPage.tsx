@@ -32,7 +32,7 @@ export const SERVICE_COLUMNS: ColumnDef<ServiceFieldsFragment>[] = [
     },
   },
   {
-    header: 'Details',
+    header: 'Service Details',
     render: (e) => (
       <Stack>
         {serviceDetails(e).map((s, i) => (

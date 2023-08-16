@@ -24,15 +24,15 @@ const COLUMNS: ColumnDef<ServiceFields>[] = [
     linkTreatment: true,
     render: (s) => <ClientName client={s.enrollment.client} />,
   },
+  ...SERVICE_COLUMNS.map((c) => {
+    if (c.header === 'Date Provided') return { ...c, linkTreatment: false };
+    return c;
+  }),
   {
     header: 'Enrollment Period',
     render: (s) =>
       parseAndFormatDateRange(s.enrollment.entryDate, s.enrollment.exitDate),
   },
-  ...SERVICE_COLUMNS.map((c) => {
-    if (c.header === 'Date Provided') return { ...c, linkTreatment: false };
-    return c;
-  }),
 ];
 
 const ProjectServicesTable = ({
