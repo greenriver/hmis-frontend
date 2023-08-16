@@ -60,7 +60,7 @@ const FIXED_WIDTH_X_SMALL = 100;
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
-  nestingLevel,
+  nestingLevel = 0,
   value,
   disabled = false,
   horizontal = false,

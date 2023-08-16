@@ -1,14 +1,13 @@
-import { Box } from '@mui/material';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import { Box, Stack, Typography } from '@mui/material';
 import { sortBy } from 'lodash-es';
 import { useMemo } from 'react';
-
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-
 import {
   AssessmentRole,
   RelationshipToHoH,
@@ -21,15 +20,15 @@ import generateSafePath from '@/utils/generateSafePath';
 const describeReminder = (reminder: ReminderFieldsFragment): string => {
   switch (reminder.topic) {
     case ReminderTopic.AnnualAssessment:
-      return 'Annual Assessment';
+      return 'Perform Annual Assessment';
     case ReminderTopic.AgedIntoAdulthood:
-      return 'Update Assessment';
+      return 'Perform Update Assessment';
     case ReminderTopic.IntakeIncomplete:
-      return 'Intake Assessment';
+      return 'Finish Intake Assessment';
     case ReminderTopic.ExitIncomplete:
-      return 'Incomplete Exit';
+      return 'Incomplete Exit Assessment';
     case ReminderTopic.CurrentLivingSituation:
-      return 'Current Living Situation';
+      return 'Record Current Living Situation';
   }
 };
 
@@ -45,7 +44,9 @@ const columns: ColumnDef<ReminderFieldsFragment>[] = [
     header: 'Due',
     render: ({ dueDate, overdue }) => {
       return overdue ? (
-        <Box color='error.main'>Overdue</Box>
+        <Box color='error.main' fontWeight={600}>
+          Overdue
+        </Box>
       ) : dueDate ? (
         `Due ${parseAndFormatDate(dueDate)}`
       ) : null;
@@ -145,8 +146,12 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
 
   return (
     <TitleCard
-      title={`To Do (${displayReminders.length})`}
-      headerVariant='border'
+      title={
+        loading && !data
+          ? 'Household Tasks'
+          : `Household Tasks (${displayReminders.length})`
+      }
+      headerSx={{ '.MuiTypography-root': { fontWeight: 800 } }}
     >
       {loading && !data ? (
         <Loading />
@@ -156,7 +161,17 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
           rows={displayReminders}
           columns={columns}
           rowLinkTo={rowLinkTo}
-          noData='No Reminders'
+          noData={
+            <Stack
+              direction={'row'}
+              alignItems='center'
+              justifyContent='center'
+              gap={1}
+            >
+              <TaskAltIcon fontSize='small' />
+              <Typography variant='body2'>All tasks complete</Typography>
+            </Stack>
+          }
         />
       )}
     </TitleCard>

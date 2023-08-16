@@ -37,34 +37,47 @@ const SessionStatusManager: React.FC<HmisSessionProps> = ({
           loading={loading}
           hideCancelButton
           onConfirm={handleKeepAlive}
+          maxWidth='sm'
+          fullWidth
         >
-          <Typography>Your session will expire soon!</Typography>
+          <Typography>
+            Your session will expire soon due to inactivity.
+          </Typography>
         </ConfirmationDialog>
       );
     case 'invalid':
       return (
         <ConfirmationDialog
           open={true}
-          confirmText='Continue'
+          confirmText='OK'
           title='Your session has ended'
           loading={loading}
           hideCancelButton
           onConfirm={handleReload}
+          maxWidth='sm'
+          fullWidth
         >
-          <Typography>You may have signed out in another window</Typography>
+          <Typography>
+            You may have signed out in another window. Click OK to log in again.
+          </Typography>
         </ConfirmationDialog>
       );
     case 'expired':
       return (
         <ConfirmationDialog
           open={true}
-          confirmText='Continue'
+          confirmText='OK'
           title='Your session has expired'
           loading={loading}
           hideCancelButton
           onConfirm={handleReload}
+          maxWidth='sm'
+          fullWidth
         >
-          <Typography>Your session has timed out due to inactivity.</Typography>
+          <Typography>
+            Your session has timed out due to inactivity. Click OK to log in
+            again.
+          </Typography>
         </ConfirmationDialog>
       );
   }

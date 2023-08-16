@@ -2,10 +2,9 @@ fragment EnrollmentFields on Enrollment {
   id
   entryDate
   exitDate
+  exitDestination
   project {
-    id
-    projectName
-    projectType
+    ...ProjectNameAndType
   }
   inProgress
   relationshipToHoH
@@ -13,6 +12,11 @@ fragment EnrollmentFields on Enrollment {
   householdId
   householdShortId
   householdSize
+  moveInDate
+  dateOfEngagement
+  dateOfPathStatus
+  clientEnrolledInPath
+  reasonNotEnrolled
   client {
     ...ClientNameDobVet
   }
@@ -53,6 +57,17 @@ fragment EventFields on Event {
   dateDeleted
 }
 
+fragment EnrollmentSummaryFields on EnrollmentSummary {
+  id
+  entryDate
+  inProgress
+  moveInDate
+  projectId
+  projectName
+  projectType
+  canViewEnrollment
+}
+
 fragment AllEnrollmentDetails on Enrollment {
   ...EnrollmentValues
   inProgress
@@ -61,12 +76,18 @@ fragment AllEnrollmentDetails on Enrollment {
   householdId
   householdShortId
   householdSize
-  exitDestination
   currentUnit {
     id
     name
   }
   customDataElements {
     ...CustomDataElementFields
+  }
+  openEnrollmentSummary {
+    ...EnrollmentSummaryFields
+  }
+  project {
+    ...ProjectNameAndType
+    hasUnits
   }
 }

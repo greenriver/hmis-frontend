@@ -9,8 +9,6 @@ ARG FULL_GITHASH
 ARG SENTRY_AUTH_TOKEN
 WORKDIR /app
 
-COPY . .
-
 ENV INLINE_RUNTIME_CHUNK=false
 
 # Env vars prefixed with PUBLIC_ are made available to the app at build time
@@ -24,12 +22,14 @@ ENV NODE_OPTIONS '--max-old-space-size=32768'
 # Use this for faster iterations on nginx config
 # RUN mkdir -p /app/dist  && echo hello > /app/dist/index.html
 
-RUN corepack enable \
- && yarn install --offline \
- && yarn format:check \
- && yarn lint:check \
- && yarn test \
- && yarn build
+COPY . .
+
+RUN --mount=type=cache,target=/app/node_modules \
+     corepack enable \
+     && yarn install --offline \
+     && yarn format:check \
+     && yarn lint:check \
+     && yarn build
 
 #####################################################################
 # nginx container

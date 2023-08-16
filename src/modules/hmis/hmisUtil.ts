@@ -22,9 +22,11 @@ import {
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
   EnrollmentFieldsFragment,
+  EnrollmentSummaryFieldsFragment,
   EventFieldsFragment,
   GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
+  NoYesMissing,
   ProjectType,
   ServiceFieldsFragment,
   ServiceTypeFieldsFragment,
@@ -38,6 +40,18 @@ export const MISSING_DATA_KEYS = [
   'DATA_NOT_COLLECTED',
   'CLIENT_REFUSED',
   'CLIENT_DOESN_T_KNOW',
+];
+
+export const PERMANENT_HOUSING_PROJECT_TYPES = [
+  ProjectType.Psh,
+  ProjectType.Ph,
+  ProjectType.Oph,
+  ProjectType.Rrh,
+];
+
+export const STREET_OUTREACH_SERVICES_ONLY = [
+  ProjectType.ServicesOnly,
+  ProjectType.So,
 ];
 
 export const INVALID_ENUM = 'INVALID';
@@ -232,12 +246,13 @@ export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
 export const entryExitRange = (
   enrollment:
     | EnrollmentFieldsFragment
-    | HouseholdClientFieldsFragment['enrollment'],
+    | HouseholdClientFieldsFragment['enrollment']
+    | EnrollmentSummaryFieldsFragment,
   endPlaceholder?: string
 ) => {
   return parseAndFormatDateRange(
     enrollment.entryDate,
-    enrollment.exitDate,
+    'exitDate' in enrollment ? enrollment.exitDate : undefined,
     undefined,
     endPlaceholder
   );
@@ -338,12 +353,25 @@ export const briefProjectType = (projectType: ProjectType) => {
   return projectType;
 };
 
-const customDataElementValue = (
-  val: CustomDataElementValueFieldsFragment
+export const customDataElementValue = (
+  val?: CustomDataElementValueFieldsFragment | null,
+  transform?: 'for_display' | 'for_input' | undefined
 ): any => {
+  if (!val) return;
+  let bool: any = val.valueBoolean;
+  if (transform === 'for_display') {
+    bool = yesNo(bool);
+  }
+
+  let date: any = val.valueDate;
+  if (transform === 'for_display') {
+    date = parseAndFormatDate(val.valueDate);
+  } else if (transform === 'for_input') {
+    date = parseHmisDateString(val.valueDate);
+  }
   return [
-    val.valueBoolean,
-    val.valueDate,
+    bool,
+    date,
     val.valueFloat,
     val.valueInteger,
     val.valueJson,
@@ -371,6 +399,18 @@ export const serviceTypeSummary = (st: ServiceTypeFieldsFragment) => {
   return [st.category, st.name].join(': ');
 };
 
+export const customDataElementValueAsString = (
+  cde: CustomDataElementFieldsFragment
+): string | undefined => {
+  if (cde.value) return customDataElementValue(cde.value, 'for_display');
+  if (cde.values) {
+    return cde.values
+      .map((val) => customDataElementValue(val, 'for_display'))
+      .filter((s) => hasMeaningfulValue(s))
+      .join(', ');
+  }
+};
+
 export const serviceDetails = (service: ServiceFieldsFragment): string[] => {
   const detailRows = [
     service.otherTypeProvided,
@@ -391,16 +431,23 @@ export const serviceDetails = (service: ServiceFieldsFragment): string[] => {
   ].filter((s) => hasMeaningfulValue(s)) as string[];
 
   if (service.customDataElements) {
-    service.customDataElements.map((cde) => {
-      if (cde.value) detailRows.push(customDataElementValue(cde.value));
-      if (cde.values)
-        return detailRows.push(
-          cde.values
-            .map((val) => customDataElementValue(val))
-            .filter((s) => hasMeaningfulValue(s))
-            .join(', ')
-        );
+    service.customDataElements.forEach((cde) => {
+      const val = customDataElementValueAsString(cde);
+      if (val) detailRows.push(val);
     });
   }
   return detailRows;
+};
+
+export const pathStatusString = (enrollment: EnrollmentFieldsFragment) => {
+  if (
+    !enrollment.clientEnrolledInPath ||
+    enrollment.clientEnrolledInPath === NoYesMissing.DataNotCollected
+  )
+    return;
+
+  const val = HmisEnums.NoYesMissing[enrollment.clientEnrolledInPath];
+  const date = parseAndFormatDate(enrollment.dateOfPathStatus);
+  if (!date) return val;
+  return `${val} (${date})`;
 };

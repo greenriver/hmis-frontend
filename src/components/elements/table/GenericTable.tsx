@@ -36,7 +36,7 @@ import {
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
-  rowLinkTo?: (row: T) => To;
+  rowLinkTo?: (row: T) => To | null | undefined;
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
@@ -279,7 +279,9 @@ const GenericTable = <T extends { id: string }>({
                   ? isSelectable && handleSelectRow
                   : undefined;
 
-                const isClickable = !!onClickHandler || !!rowLinkTo;
+                const rowLink = (rowLinkTo && rowLinkTo(row)) || undefined;
+
+                const isClickable = !!onClickHandler || !!rowLink;
 
                 return (
                   <TableRow
@@ -323,7 +325,7 @@ const GenericTable = <T extends { id: string }>({
                       } = def;
                       const isFirstLinkWithTreatment =
                         columns.findIndex((c) => c.linkTreatment) === index;
-                      const isLinked = rowLinkTo && !dontLink;
+                      const isLinked = rowLink && !dontLink;
                       const onClickLinkTreatment =
                         handleRowClick && !dontLink && linkTreatment
                           ? {
@@ -345,7 +347,7 @@ const GenericTable = <T extends { id: string }>({
                         >
                           {isLinked ? (
                             <RouterLink
-                              to={rowLinkTo(row)}
+                              to={rowLink}
                               aria-label={ariaLabel && ariaLabel(row)}
                               plain={!linkTreatment}
                               data-testid={linkTreatment && 'table-linkedCell'}

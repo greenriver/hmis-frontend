@@ -18,7 +18,9 @@ fragment CustomDataElementFields on CustomDataElement {
   id
   key
   label
+  fieldType
   repeats
+  atOccurrence
   value {
     ...CustomDataElementValueFields
   }

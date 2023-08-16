@@ -22,14 +22,19 @@ services:
         GROUPID: ${GROUPID:-10001}
     ports: ["8080"]
     environment:
-      NGINX_HOST: hmis-frontend.127.0.0.1.nip.io
-      NGINX_PORT: '8080'
-      HMIS_BACKEND: qa-hmis-warehouse.openpath.host
+      NGINX_HOST: ${NGINX_HOST:-hmis-frontend.127.0.0.1.nip.io}
+      NGINX_PORT: ${NGINX_PORT:-8080}
+      HMIS_BACKEND: ${HMIS_BACKEND:-qa-hmis-warehouse.openpath.host}
+    labels:
+      - "traefik.http.routers.hmis-frontend.rule=Host(`hmis-frontend.127.0.0.1.nip.io`)"
+      - "traefik.http.services.hmis-frontend.loadbalancer.server.port=8080"
+      - "traefik.http.routers.hmis-frontend.tls=true"
+      # https://traefik.io/blog/traefik-2-tls-101-23b4fbee81f1/
     tmpfs:
       - /tmp
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080"]
-      interval: 10s
+      interval: 30s
       timeout: 5s
       retries: 5
 
