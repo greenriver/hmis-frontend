@@ -111,15 +111,39 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.REFERRALS,
-            element: <ProjectReferrals />,
+            element: (
+              <ProjectEditRoute
+                permissions={[
+                  'canManageIncomingReferrals',
+                  'canManageOutgoingReferrals',
+                ]}
+                redirectRoute={Routes.PROJECT}
+              >
+                <ProjectReferrals />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.REFERRAL_POSTING,
-            element: <ProjectReferralPosting />,
+            element: (
+              <ProjectEditRoute
+                permissions={['canManageIncomingReferrals']}
+                redirectRoute={Routes.PROJECT}
+              >
+                <ProjectReferralPosting />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.ESG_FUNDING_REPORT,
-            element: <EsgFundingReport />,
+            element: (
+              <ProjectEditRoute
+                permissions={['canManageIncomingReferrals']}
+                redirectRoute={Routes.PROJECT}
+              >
+                <EsgFundingReport />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
