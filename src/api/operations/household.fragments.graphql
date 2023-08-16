@@ -27,6 +27,9 @@ fragment HouseholdClientFields on HouseholdClient {
     access {
       ...ClientAccessFields
     }
+    externalIds {
+      ...ClientIdentifierFields
+    }
   }
   enrollment {
     id

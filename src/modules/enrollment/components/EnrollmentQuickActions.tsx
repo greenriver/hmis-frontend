@@ -15,6 +15,7 @@ const EnrollmentQuickActions = ({
     enrollment,
   });
 
+  // FIXME: MCI LOCAL CONSTANT ISNT GETTING SET
   const { openClientFormDialog, renderClientFormDialog, clientLoading } =
     useClientFormDialog({
       clientId: enrollment.client.id,

@@ -107,7 +107,6 @@ const ProjectOverview = () => {
           >
             <ButtonLink
               data-testid='updateProjectButton'
-              color='secondary'
               to={generateSafePath(ProjectDashboardRoutes.EDIT_PROJECT, {
                 projectId: project.id,
               })}

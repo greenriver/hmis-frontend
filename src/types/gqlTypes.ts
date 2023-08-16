@@ -10728,6 +10728,14 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canViewAnyConfidentialClientFiles: boolean;
                 canViewAnyNonconfidentialClientFiles: boolean;
               };
+              externalIds: Array<{
+                __typename?: 'ExternalIdentifier';
+                id: string;
+                identifier?: string | null;
+                url?: string | null;
+                label: string;
+                type: ExternalIdentifierType;
+              }>;
             };
             enrollment: {
               __typename?: 'Enrollment';
@@ -11103,6 +11111,14 @@ export type EnrollmentWithHouseholdFragmentFragment = {
           canViewAnyConfidentialClientFiles: boolean;
           canViewAnyNonconfidentialClientFiles: boolean;
         };
+        externalIds: Array<{
+          __typename?: 'ExternalIdentifier';
+          id: string;
+          identifier?: string | null;
+          url?: string | null;
+          label: string;
+          type: ExternalIdentifierType;
+        }>;
       };
       enrollment: {
         __typename?: 'Enrollment';
@@ -11547,6 +11563,14 @@ export type GetEnrollmentWithHouseholdQuery = {
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
           };
+          externalIds: Array<{
+            __typename?: 'ExternalIdentifier';
+            id: string;
+            identifier?: string | null;
+            url?: string | null;
+            label: string;
+            type: ExternalIdentifierType;
+          }>;
         };
         enrollment: {
           __typename?: 'Enrollment';
@@ -14451,6 +14475,14 @@ export type HouseholdFieldsFragment = {
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
       };
+      externalIds: Array<{
+        __typename?: 'ExternalIdentifier';
+        id: string;
+        identifier?: string | null;
+        url?: string | null;
+        label: string;
+        type: ExternalIdentifierType;
+      }>;
     };
     enrollment: {
       __typename?: 'Enrollment';
@@ -14531,6 +14563,14 @@ export type HouseholdClientFieldsFragment = {
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
     };
+    externalIds: Array<{
+      __typename?: 'ExternalIdentifier';
+      id: string;
+      identifier?: string | null;
+      url?: string | null;
+      label: string;
+      type: ExternalIdentifierType;
+    }>;
   };
   enrollment: {
     __typename?: 'Enrollment';
@@ -14615,6 +14655,14 @@ export type GetHouseholdQuery = {
           canViewAnyConfidentialClientFiles: boolean;
           canViewAnyNonconfidentialClientFiles: boolean;
         };
+        externalIds: Array<{
+          __typename?: 'ExternalIdentifier';
+          id: string;
+          identifier?: string | null;
+          url?: string | null;
+          label: string;
+          type: ExternalIdentifierType;
+        }>;
       };
       enrollment: {
         __typename?: 'Enrollment';
@@ -14690,6 +14738,14 @@ export type UpdateRelationshipToHoHMutation = {
               canViewAnyConfidentialClientFiles: boolean;
               canViewAnyNonconfidentialClientFiles: boolean;
             };
+            externalIds: Array<{
+              __typename?: 'ExternalIdentifier';
+              id: string;
+              identifier?: string | null;
+              url?: string | null;
+              label: string;
+              type: ExternalIdentifierType;
+            }>;
           };
           enrollment: {
             __typename?: 'Enrollment';
@@ -14800,6 +14856,14 @@ export type AddToHouseholdMutation = {
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
           };
+          externalIds: Array<{
+            __typename?: 'ExternalIdentifier';
+            id: string;
+            identifier?: string | null;
+            url?: string | null;
+            label: string;
+            type: ExternalIdentifierType;
+          }>;
         };
         enrollment: {
           __typename?: 'Enrollment';
@@ -18453,6 +18517,9 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       access {
         ...ClientAccessFields
       }
+      externalIds {
+        ...ClientIdentifierFields
+      }
     }
     enrollment {
       id
@@ -18468,6 +18535,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
 `;
 export const EnrollmentWithHouseholdFragmentFragmentDoc = gql`
   fragment EnrollmentWithHouseholdFragment on Enrollment {

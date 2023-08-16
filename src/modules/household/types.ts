@@ -11,12 +11,24 @@ export type RecentHouseholdMember = HouseholdClientFieldsFragment & {
 };
 
 export function isHouseholdClient(
+  value: ClientFieldsFragment | HouseholdClientFieldsFragment
+): value is HouseholdClientFieldsFragment {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    value.__typename === 'HouseholdClient' &&
+    !!value.hasOwnProperty('client')
+  );
+}
+
+export function isRecentHouseholdMember(
   value: ClientFieldsFragment | RecentHouseholdMember
 ): value is RecentHouseholdMember {
   return (
     !isNil(value) &&
     typeof value === 'object' &&
-    !!value.hasOwnProperty('client')
+    value.__typename === 'HouseholdClient' &&
+    !!value.hasOwnProperty('projectName')
   );
 }
 
