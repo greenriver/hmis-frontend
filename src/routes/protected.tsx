@@ -9,6 +9,7 @@ import {
 } from './routes';
 
 import ClientRoute from '@/components/accessWrappers/ClientRoute';
+import EnrollmentProjectRoute from '@/components/accessWrappers/EnrollmentProjectRoute';
 import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
@@ -120,7 +121,14 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.ESG_FUNDING_REPORT,
-            element: <ProjectEsgFundingReport />,
+            element: (
+              <ProjectEditRoute
+                permissions={['canManageIncomingReferrals']}
+                redirectRoute={Routes.PROJECT}
+              >
+                <ProjectEsgFundingReport />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
@@ -324,7 +332,14 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
-            element: <EnrollmentEsgFundingReport />,
+            element: (
+              <EnrollmentProjectRoute
+                permissions='canManageIncomingReferrals'
+                redirectRoute={EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW}
+              >
+                <EnrollmentEsgFundingReport />
+              </EnrollmentProjectRoute>
+            ),
           },
           { path: '*', element: <Navigate to='overview' replace /> },
         ],
