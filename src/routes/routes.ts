@@ -41,6 +41,7 @@ const enrollmentDashboardRoutes = {
   CURRENT_LIVING_SITUATIONS: 'current-living-situations',
   EVENTS: 'events',
   ASSESSMENT: 'assessments/:formRole/:assessmentId?',
+  ESG_FUNDING_REPORT: 'esg-funding-report',
 };
 
 // Routes within the project dashboard
@@ -121,5 +122,6 @@ export const FOCUS_MODE_ROUTES = [
 
 export const PRINTABLE_ROUTES = [
   EnrollmentDashboardRoutes.ASSESSMENT,
+  EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];

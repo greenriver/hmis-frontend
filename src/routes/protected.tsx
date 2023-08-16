@@ -9,6 +9,7 @@ import {
 } from './routes';
 
 import ClientRoute from '@/components/accessWrappers/ClientRoute';
+import EnrollmentProjectRoute from '@/components/accessWrappers/EnrollmentProjectRoute';
 import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
@@ -37,6 +38,7 @@ import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenial
 import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
+import EnrollmentEsgFundingReport from '@/modules/enrollment/components/dashboardPages/EnrollmentEsgFundingReport';
 import EnrollmentEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentEventsPage';
 import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/EnrollmentOverview';
 import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
@@ -47,7 +49,6 @@ import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage'
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import Cocs from '@/modules/projects/components/Cocs';
 import EditProject from '@/modules/projects/components/EditProject';
-import EsgFundingReport from '@/modules/projects/components/EsgFundingReport';
 import Funder from '@/modules/projects/components/Funder';
 import Funders from '@/modules/projects/components/Funders';
 import Inventories from '@/modules/projects/components/Inventories';
@@ -57,6 +58,7 @@ import NewReferralRequest from '@/modules/projects/components/NewReferralRequest
 import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
+import ProjectEsgFundingReport from '@/modules/projects/components/ProjectEsgFundingReport';
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
@@ -140,7 +142,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions={['canManageIncomingReferrals']}
                 redirectRoute={Routes.PROJECT}
               >
-                <EsgFundingReport />
+                <ProjectEsgFundingReport />
               </ProjectEditRoute>
             ),
           },
@@ -344,6 +346,17 @@ export const protectedRoutes: RouteNode[] = [
             path: EnrollmentDashboardRoutes.EVENTS,
             // No perm needed because it only requires enrollment visibility
             element: <EnrollmentEventsPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
+            element: (
+              <EnrollmentProjectRoute
+                permissions='canManageIncomingReferrals'
+                redirectRoute={EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW}
+              >
+                <EnrollmentEsgFundingReport />
+              </EnrollmentProjectRoute>
+            ),
           },
           { path: '*', element: <Navigate to='overview' replace /> },
         ],
