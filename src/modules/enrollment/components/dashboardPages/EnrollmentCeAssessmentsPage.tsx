@@ -9,6 +9,7 @@ import NotFound from '@/components/pages/NotFound';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import useViewDialog from '@/modules/form/hooks/useViewDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
@@ -65,6 +66,13 @@ const EnrollmentCeAssessmentsPage = () => {
     CeAssessmentFieldsFragment | undefined
   >();
 
+  const { openViewDialog, renderViewDialog, closeViewDialog } =
+    useViewDialog<CeAssessmentFieldsFragment>({
+      record: viewingRecord,
+      onClose: () => setViewingRecord(undefined),
+      formRole: FormRole.CeAssessment,
+    });
+
   const { openFormDialog, renderFormDialog, closeDialog } =
     useFormDialog<CeAssessmentFieldsFragment>({
       formRole: FormRole.CeAssessment,
@@ -73,10 +81,10 @@ const EnrollmentCeAssessmentsPage = () => {
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'ceAssessments',
         });
+        closeViewDialog();
       },
       inputVariables: { enrollmentId },
       record: viewingRecord,
-      onClose: () => setViewingRecord(undefined),
     });
 
   const onSuccessfulDelete = useCallback(() => {
@@ -85,7 +93,8 @@ const EnrollmentCeAssessmentsPage = () => {
       fieldName: 'ceAssessments',
     });
     closeDialog();
-  }, [closeDialog, enrollmentId]);
+    closeViewDialog();
+  }, [closeDialog, closeViewDialog, enrollmentId]);
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
   const canEditCeAssessments = enrollment.access.canEditEnrollments;
@@ -118,40 +127,45 @@ const EnrollmentCeAssessmentsPage = () => {
           pagePath='enrollment.ceAssessments'
           noData='No CE assessments'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={
-            canEditCeAssessments
-              ? (record) => {
-                  setViewingRecord(record);
-                  openFormDialog();
-                }
-              : undefined
-          }
+          handleRowClick={(record) => {
+            setViewingRecord(record);
+            openViewDialog();
+          }}
         />
       </TitleCard>
+      {renderViewDialog({
+        title: 'View Coordinated Entry Event',
+        maxWidth: 'md',
+        actions: (
+          <>
+            {viewingRecord && canEditCeAssessments && (
+              <>
+                <Button variant='outlined' onClick={openFormDialog}>
+                  Edit
+                </Button>
+                <DeleteMutationButton<
+                  DeleteCeAssessmentMutation,
+                  DeleteCeAssessmentMutationVariables
+                >
+                  queryDocument={DeleteCeAssessmentDocument}
+                  variables={{ id: viewingRecord.id }}
+                  idPath={'deleteCeAssessment.ceAssessment.id'}
+                  recordName='Coordinated Entry Assessment'
+                  onSuccess={onSuccessfulDelete}
+                >
+                  Delete
+                </DeleteMutationButton>
+              </>
+            )}
+          </>
+        ),
+      })}
       {renderFormDialog({
         title: viewingRecord
           ? 'Edit Coordinated Entry Assessment'
           : 'Add Coordinated Entry Assessment',
         //md to accomodate radio buttons
         DialogProps: { maxWidth: 'md' },
-        otherActions: (
-          <>
-            {viewingRecord && (
-              <DeleteMutationButton<
-                DeleteCeAssessmentMutation,
-                DeleteCeAssessmentMutationVariables
-              >
-                queryDocument={DeleteCeAssessmentDocument}
-                variables={{ id: viewingRecord.id }}
-                idPath={'deleteCeAssessment.ceAssessment.id'}
-                recordName='Coordinated Entry Assessment'
-                onSuccess={onSuccessfulDelete}
-              >
-                Delete
-              </DeleteMutationButton>
-            )}
-          </>
-        ),
       })}
     </>
   );

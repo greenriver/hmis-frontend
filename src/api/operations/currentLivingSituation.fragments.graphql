@@ -9,4 +9,6 @@ fragment CurrentLivingSituationFields on CurrentLivingSituation {
   movedTwoOrMore
   resourcesToObtain
   subsequentResidence
+  dateUpdated
+  dateCreated
 }

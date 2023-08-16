@@ -9,6 +9,7 @@ import NotFound from '@/components/pages/NotFound';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import useViewDialog from '@/modules/form/hooks/useViewDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
   eventReferralResult,
@@ -51,6 +52,13 @@ const EnrollmentEventsPage = () => {
     EventFieldsFragment | undefined
   >();
 
+  const { openViewDialog, renderViewDialog, closeViewDialog } =
+    useViewDialog<EventFieldsFragment>({
+      record: viewingRecord,
+      onClose: () => setViewingRecord(undefined),
+      formRole: FormRole.CeEvent,
+    });
+
   const { openFormDialog, renderFormDialog, closeDialog } =
     useFormDialog<EventFieldsFragment>({
       formRole: FormRole.CeEvent,
@@ -59,10 +67,10 @@ const EnrollmentEventsPage = () => {
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'events',
         });
+        closeViewDialog();
       },
       inputVariables: { enrollmentId },
       record: viewingRecord,
-      onClose: () => setViewingRecord(undefined),
     });
 
   const onSuccessfulDelete = useCallback(() => {
@@ -71,7 +79,9 @@ const EnrollmentEventsPage = () => {
       fieldName: 'events',
     });
     closeDialog();
-  }, [closeDialog, enrollmentId]);
+    closeViewDialog();
+    setViewingRecord(undefined);
+  }, [closeDialog, closeViewDialog, enrollmentId]);
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
   const canEditCeEvents = enrollment.access.canEditEnrollments;
@@ -104,40 +114,44 @@ const EnrollmentEventsPage = () => {
           pagePath='enrollment.events'
           noData='No events'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={
-            canEditCeEvents
-              ? (record) => {
-                  setViewingRecord(record);
-                  openFormDialog();
-                }
-              : undefined
-          }
+          handleRowClick={(record) => {
+            setViewingRecord(record);
+            openViewDialog();
+          }}
         />
       </TitleCard>
+      {renderViewDialog({
+        title: 'View Coordinated Entry Event',
+        maxWidth: 'md',
+        actions: (
+          <>
+            {viewingRecord && canEditCeEvents && (
+              <>
+                <Button variant='outlined' onClick={openFormDialog}>
+                  Edit
+                </Button>
+                <DeleteMutationButton<
+                  DeleteCeEventMutation,
+                  DeleteCeEventMutationVariables
+                >
+                  queryDocument={DeleteCeEventDocument}
+                  variables={{ id: viewingRecord.id }}
+                  idPath={'deleteCeEvent.ceEvent.id'}
+                  recordName='Coordinated Entry Event'
+                  onSuccess={onSuccessfulDelete}
+                >
+                  Delete
+                </DeleteMutationButton>
+              </>
+            )}
+          </>
+        ),
+      })}
       {renderFormDialog({
         title: viewingRecord
           ? 'Edit Coordinated Entry Event'
           : 'Add Coordinated Entry Event',
-        //md to accomodate radio buttons
         DialogProps: { maxWidth: 'md' },
-        otherActions: (
-          <>
-            {viewingRecord && (
-              <DeleteMutationButton<
-                DeleteCeEventMutation,
-                DeleteCeEventMutationVariables
-              >
-                queryDocument={DeleteCeEventDocument}
-                variables={{ id: viewingRecord.id }}
-                idPath={'deleteCeEvent.ceEvent.id'}
-                recordName='Coordinated Entry Event'
-                onSuccess={onSuccessfulDelete}
-              >
-                Delete
-              </DeleteMutationButton>
-            )}
-          </>
-        ),
       })}
     </>
   );

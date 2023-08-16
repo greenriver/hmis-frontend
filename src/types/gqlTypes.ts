@@ -10894,6 +10894,8 @@ export type CurrentLivingSituationFieldsFragment = {
   movedTwoOrMore?: NoYesReasonsForMissingData | null;
   resourcesToObtain?: NoYesReasonsForMissingData | null;
   subsequentResidence?: NoYesReasonsForMissingData | null;
+  dateUpdated: string;
+  dateCreated: string;
 };
 
 export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
@@ -10924,6 +10926,8 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         movedTwoOrMore?: NoYesReasonsForMissingData | null;
         resourcesToObtain?: NoYesReasonsForMissingData | null;
         subsequentResidence?: NoYesReasonsForMissingData | null;
+        dateUpdated: string;
+        dateCreated: string;
       }>;
     };
   } | null;
@@ -14175,6 +14179,8 @@ export type SubmitFormMutation = {
           movedTwoOrMore?: NoYesReasonsForMissingData | null;
           resourcesToObtain?: NoYesReasonsForMissingData | null;
           subsequentResidence?: NoYesReasonsForMissingData | null;
+          dateUpdated: string;
+          dateCreated: string;
         }
       | {
           __typename?: 'Enrollment';
@@ -18559,6 +18565,8 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     movedTwoOrMore
     resourcesToObtain
     subsequentResidence
+    dateUpdated
+    dateCreated
   }
 `;
 export const ClientNameDobVetFragmentDoc = gql`
