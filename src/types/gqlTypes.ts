@@ -3447,6 +3447,7 @@ export type Project = {
   projectType?: Maybe<ProjectType>;
   referralRequests: ReferralRequestsPaginated;
   residentialAffiliation?: Maybe<NoYesMissing>;
+  services: ServicesPaginated;
   targetPopulation?: Maybe<TargetPopulation>;
   trackingMethod?: Maybe<TrackingMethod>;
   unitTypes: Array<UnitTypeCapacity>;
@@ -3498,6 +3499,13 @@ export type ProjectProjectCocsArgs = {
 export type ProjectReferralRequestsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ProjectServicesArgs = {
+  filters?: InputMaybe<ServicesForProjectFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<ServiceSortOption>;
 };
 
 export type ProjectUnitsArgs = {
@@ -4327,6 +4335,7 @@ export enum ServiceDetailType {
 }
 
 export type ServiceFilterOptions = {
+  dateProvided?: InputMaybe<Scalars['ISO8601Date']['input']>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -4622,6 +4631,13 @@ export enum ServiceTypeProvided {
 }
 
 export type ServicesForEnrollmentFilterOptions = {
+  dateProvided?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
+  serviceType?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
+export type ServicesForProjectFilterOptions = {
+  dateProvided?: InputMaybe<Scalars['ISO8601Date']['input']>;
   serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
   serviceType?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
@@ -15810,6 +15826,107 @@ export type GetProjectHouseholdsQuery = {
   } | null;
 };
 
+export type GetProjectServicesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  filters?: InputMaybe<ServicesForProjectFilterOptions>;
+  sortOrder?: InputMaybe<ServiceSortOption>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetProjectServicesQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    services: {
+      __typename?: 'ServicesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Service';
+        id: string;
+        dateProvided: string;
+        faAmount?: number | null;
+        faStartDate?: string | null;
+        faEndDate?: string | null;
+        movingOnOtherType?: string | null;
+        referralOutcome?: PathReferralOutcome | null;
+        subTypeProvided?: ServiceSubTypeProvided | null;
+        otherTypeProvided?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          client: {
+            __typename?: 'Client';
+            dob?: string | null;
+            veteranStatus: NoYesReasonsForMissingData;
+            id: string;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+        };
+        user?: { __typename: 'User'; id: string; name: string } | null;
+        serviceType: {
+          __typename?: 'ServiceType';
+          id: string;
+          name: string;
+          hudRecordType?: RecordType | null;
+          hudTypeProvided?: ServiceTypeProvided | null;
+          category: string;
+          dateCreated: string;
+          dateUpdated: string;
+        };
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          atOccurrence: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
+      }>;
+    };
+  } | null;
+};
+
 export type DeleteProjectMutationVariables = Exact<{
   input: DeleteProjectInput;
 }>;
@@ -23032,6 +23149,97 @@ export type GetProjectHouseholdsLazyQueryHookResult = ReturnType<
 export type GetProjectHouseholdsQueryResult = Apollo.QueryResult<
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables
+>;
+export const GetProjectServicesDocument = gql`
+  query GetProjectServices(
+    $id: ID!
+    $filters: ServicesForProjectFilterOptions
+    $sortOrder: ServiceSortOption
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    project(id: $id) {
+      id
+      services(
+        limit: $limit
+        offset: $offset
+        sortOrder: $sortOrder
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ServiceFields
+          enrollment {
+            id
+            entryDate
+            exitDate
+            client {
+              ...ClientNameDobVet
+            }
+          }
+        }
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+  ${ClientNameDobVetFragmentDoc}
+`;
+
+/**
+ * __useGetProjectServicesQuery__
+ *
+ * To run a query within a React component, call `useGetProjectServicesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectServicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectServicesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProjectServicesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectServicesQuery,
+    GetProjectServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectServicesQuery,
+    GetProjectServicesQueryVariables
+  >(GetProjectServicesDocument, options);
+}
+export function useGetProjectServicesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectServicesQuery,
+    GetProjectServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectServicesQuery,
+    GetProjectServicesQueryVariables
+  >(GetProjectServicesDocument, options);
+}
+export type GetProjectServicesQueryHookResult = ReturnType<
+  typeof useGetProjectServicesQuery
+>;
+export type GetProjectServicesLazyQueryHookResult = ReturnType<
+  typeof useGetProjectServicesLazyQuery
+>;
+export type GetProjectServicesQueryResult = Apollo.QueryResult<
+  GetProjectServicesQuery,
+  GetProjectServicesQueryVariables
 >;
 export const DeleteProjectDocument = gql`
   mutation DeleteProject($input: DeleteProjectInput!) {

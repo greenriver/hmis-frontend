@@ -113,6 +113,18 @@ const ProjectDashboard: React.FC = () => {
                 },
               ]
             : []),
+          ...(canViewEnrollmentDetails
+            ? [
+                {
+                  id: 'services',
+                  title: 'Services',
+                  path: generateSafePath(
+                    ProjectDashboardRoutes.PROJECT_SERVICES,
+                    params
+                  ),
+                },
+              ]
+            : []),
           ...(enableReferrals
             ? [
                 {
