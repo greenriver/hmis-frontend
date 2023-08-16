@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
@@ -18,38 +18,49 @@ export type ServiceFields = NonNullable<
   GetProjectServicesQuery['project']
 >['services']['nodes'][number];
 
-const COLUMNS: ColumnDef<ServiceFields>[] = [
-  {
-    header: 'Client',
-    linkTreatment: true,
-    render: (s) => <ClientName client={s.enrollment.client} />,
-  },
-  ...SERVICE_COLUMNS.map((c) => {
-    if (c.header === 'Date Provided') return { ...c, linkTreatment: false };
-    return c;
-  }),
-  {
-    header: 'Enrollment Period',
-    render: (s) =>
-      parseAndFormatDateRange(s.enrollment.entryDate, s.enrollment.exitDate),
-  },
-];
-
 const ProjectServicesTable = ({
   projectId,
   columns,
 }: {
   projectId: string;
-  columns?: typeof COLUMNS;
+  columns?: typeof SERVICE_COLUMNS;
 }) => {
-  const rowLinkTo = useCallback(
-    (service: ServiceFields) =>
-      generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-        clientId: service.enrollment.client.id,
-        enrollmentId: service.enrollment.id,
+  const displayColumns: ColumnDef<ServiceFields>[] = useMemo(() => {
+    if (columns) return columns;
+    return [
+      {
+        header: 'Client',
+        linkTreatment: true,
+        render: (s: ServiceFields) => {
+          const viewEnrollmentPath = generateSafePath(
+            EnrollmentDashboardRoutes.SERVICES,
+            {
+              clientId: s.enrollment.client.id,
+              enrollmentId: s.enrollment.id,
+            }
+          );
+          return (
+            <ClientName
+              client={s.enrollment.client}
+              routerLinkProps={{ to: viewEnrollmentPath }}
+            />
+          );
+        },
+      },
+      ...SERVICE_COLUMNS.map((c) => {
+        if (c.header === 'Date Provided') return { ...c, linkTreatment: false };
+        return c;
       }),
-    []
-  );
+      {
+        header: 'Enrollment Period',
+        render: (s: ServiceFields) =>
+          parseAndFormatDateRange(
+            s.enrollment.entryDate,
+            s.enrollment.exitDate
+          ),
+      },
+    ];
+  }, [columns]);
 
   return (
     <GenericTableWithData<
@@ -62,8 +73,7 @@ const ProjectServicesTable = ({
         id: projectId,
       }}
       queryDocument={GetProjectServicesDocument}
-      columns={columns || COLUMNS}
-      rowLinkTo={rowLinkTo}
+      columns={displayColumns}
       noData='No services'
       pagePath='project.services'
       recordType='Service'
