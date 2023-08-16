@@ -2202,6 +2202,8 @@ export enum FormRole {
   Ce = 'CE',
   /** (CE_ASSESSMENT) CE Assessment */
   CeAssessment = 'CE_ASSESSMENT',
+  /** (CE_EVENT) CE Event */
+  CeEvent = 'CE_EVENT',
   /** (CLIENT) Client */
   Client = 'CLIENT',
   /** (CURRENT_LIVING_SITUATION) Current Living Situation */
@@ -4722,6 +4724,7 @@ export type SubmitFormResult =
   | Client
   | CurrentLivingSituation
   | Enrollment
+  | Event
   | File
   | Funder
   | Inventory
@@ -14175,6 +14178,20 @@ export type SubmitFormMutation = {
           } | null;
         }
       | {
+          __typename?: 'Event';
+          id: string;
+          event: EventType;
+          eventDate: string;
+          locationCrisisOrPhHousing?: string | null;
+          probSolDivRrResult?: NoYesMissing | null;
+          referralCaseManageAfter?: NoYesMissing | null;
+          referralResult?: ReferralResult | null;
+          resultDate?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          dateDeleted?: string | null;
+        }
+      | {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType?: string | null;
@@ -21969,6 +21986,9 @@ export const SubmitFormDocument = gql`
         ... on CeAssessment {
           ...CeAssessmentFields
         }
+        ... on Event {
+          ...EventFields
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -21987,6 +22007,7 @@ export const SubmitFormDocument = gql`
   ${EnrollmentFieldsFragmentDoc}
   ${CurrentLivingSituationFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
+  ${EventFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitFormMutationFn = Apollo.MutationFunction<

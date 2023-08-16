@@ -468,6 +468,7 @@ export const HmisEnums = {
     ANNUAL: 'Annual Assessment',
     CE: 'Coordinated Entry',
     CE_ASSESSMENT: 'CE Assessment',
+    CE_EVENT: 'CE Event',
     CLIENT: 'Client',
     CURRENT_LIVING_SITUATION: 'Current Living Situation',
     CUSTOM: 'Custom Assessment',

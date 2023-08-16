@@ -102,7 +102,7 @@ const EnrollmentCeAssessmentsPage = () => {
               variant='outlined'
               startIcon={<AddIcon fontSize='small' />}
             >
-              Add CE Assessment
+              Add Coordinated Entry Assessment
             </Button>
           ) : null
         }
@@ -129,7 +129,9 @@ const EnrollmentCeAssessmentsPage = () => {
         />
       </TitleCard>
       {renderFormDialog({
-        title: viewingRecord ? 'Edit CE Assessment' : 'Add CE Assessment',
+        title: viewingRecord
+          ? 'Edit Coordinated Entry Assessment'
+          : 'Add Coordinated Entry Assessment',
         //md to accomodate radio buttons
         DialogProps: { maxWidth: 'md' },
         otherActions: (

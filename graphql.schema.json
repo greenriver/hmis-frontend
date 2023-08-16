@@ -14889,6 +14889,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CE_EVENT",
+            "description": "(CE_EVENT) CE Event",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CLIENT",
             "description": "(CLIENT) Client",
             "isDeprecated": false,
@@ -29370,6 +29376,11 @@
           {
             "kind": "OBJECT",
             "name": "Enrollment",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Event",
             "ofType": null
           },
           {
