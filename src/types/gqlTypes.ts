@@ -331,6 +331,7 @@ export type Client = {
   __typename?: 'Client';
   access: ClientAccess;
   addresses: Array<ClientAddress>;
+  afghanistanOef?: Maybe<NoYesReasonsForMissingData>;
   age?: Maybe<Scalars['Int']>;
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
@@ -340,8 +341,10 @@ export type Client = {
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
+  desertStorm?: Maybe<NoYesReasonsForMissingData>;
   disabilities: DisabilitiesPaginated;
   disabilityGroups: Array<DisabilityGroup>;
+  dischargeStatus?: Maybe<DischargeStatus>;
   dob?: Maybe<Scalars['ISO8601Date']>;
   dobDataQuality: DobDataQuality;
   emailAddresses: Array<ClientContactPoint>;
@@ -356,11 +359,16 @@ export type Client = {
   id: Scalars['ID'];
   image?: Maybe<ClientImage>;
   incomeBenefits: IncomeBenefitsPaginated;
+  iraqOif?: Maybe<NoYesReasonsForMissingData>;
+  iraqOnd?: Maybe<NoYesReasonsForMissingData>;
+  koreanWar?: Maybe<NoYesReasonsForMissingData>;
   lastName?: Maybe<Scalars['String']>;
   middleName?: Maybe<Scalars['String']>;
+  militaryBranch?: Maybe<MilitaryBranch>;
   nameDataQuality: NameDataQuality;
   nameSuffix?: Maybe<Scalars['String']>;
   names: Array<ClientName>;
+  otherTheater?: Maybe<NoYesReasonsForMissingData>;
   personalId: Scalars['String'];
   phoneNumbers: Array<ClientContactPoint>;
   pronouns: Array<Scalars['String']>;
@@ -370,6 +378,10 @@ export type Client = {
   ssnDataQuality: SsnDataQuality;
   user?: Maybe<User>;
   veteranStatus: NoYesReasonsForMissingData;
+  vietnamWar?: Maybe<NoYesReasonsForMissingData>;
+  worldWarIi?: Maybe<NoYesReasonsForMissingData>;
+  yearEnteredService?: Maybe<Scalars['Int']>;
+  yearSeparated?: Maybe<Scalars['Int']>;
   youthEducationStatuses: YouthEducationStatusesPaginated;
 };
 
@@ -1354,6 +1366,30 @@ export enum DisabledDisplay {
   Protected = 'PROTECTED',
 }
 
+/** V1.12 */
+export enum DischargeStatus {
+  /** (4) Bad conduct */
+  BadConduct = 'BAD_CONDUCT',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (5) Dishonorable */
+  Dishonorable = 'DISHONORABLE',
+  /** (2) General under honorable conditions */
+  GeneralUnderHonorableConditions = 'GENERAL_UNDER_HONORABLE_CONDITIONS',
+  /** (1) Honorable */
+  Honorable = 'HONORABLE',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (7) Uncharacterized */
+  Uncharacterized = 'UNCHARACTERIZED',
+  /** (6) Under other than honorable conditions (OTH) */
+  UnderOtherThanHonorableConditionsOth = 'UNDER_OTHER_THAN_HONORABLE_CONDITIONS_OTH',
+}
+
 /** HUD Employment Education */
 export type EmploymentEducation = {
   __typename?: 'EmploymentEducation';
@@ -1451,10 +1487,12 @@ export type Enrollment = {
   clientEnrolledInPath?: Maybe<NoYesMissing>;
   countOutreachReferralApproaches?: Maybe<Scalars['Int']>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
+  currentUnit?: Maybe<Unit>;
   customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateOfBcpStatus?: Maybe<Scalars['ISO8601Date']>;
+  dateOfEngagement?: Maybe<Scalars['ISO8601Date']>;
   dateOfPathStatus?: Maybe<Scalars['ISO8601Date']>;
   dateToStreetEssh?: Maybe<Scalars['ISO8601Date']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -1468,6 +1506,7 @@ export type Enrollment = {
   events: EventsPaginated;
   exitAssessment?: Maybe<Assessment>;
   exitDate?: Maybe<Scalars['ISO8601Date']>;
+  exitDestination?: Maybe<Destination>;
   files: FilesPaginated;
   formerWardChildWelfare?: Maybe<NoYesReasonsForMissingData>;
   formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
@@ -1487,6 +1526,7 @@ export type Enrollment = {
   losUnderThreshold?: Maybe<NoYesMissing>;
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
+  moveInDate?: Maybe<Scalars['ISO8601Date']>;
   percentAmi?: Maybe<PercentAmi>;
   physicalDisabilityFam?: Maybe<NoYesMissing>;
   previousStreetEssh?: Maybe<NoYesMissing>;
@@ -1495,6 +1535,7 @@ export type Enrollment = {
   reasonNotEnrolled?: Maybe<ReasonNotEnrolled>;
   referralSource?: Maybe<ReferralSource>;
   relationshipToHoH: RelationshipToHoH;
+  reminders: Array<Reminder>;
   runawayYouth?: Maybe<NoYesReasonsForMissingData>;
   services: ServicesPaginated;
   sexualOrientation?: Maybe<SexualOrientation>;
@@ -2734,6 +2775,28 @@ export type MciClearanceMatch = {
   ssn?: Maybe<Scalars['String']>;
 };
 
+/** V1.11 */
+export enum MilitaryBranch {
+  /** (2) Air Force */
+  AirForce = 'AIR_FORCE',
+  /** (1) Army */
+  Army = 'ARMY',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (6) Coast Guard */
+  CoastGuard = 'COAST_GUARD',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (4) Marines */
+  Marines = 'MARINES',
+  /** (3) Navy */
+  Navy = 'NAVY',
+}
+
 /** 3.917.5 */
 export enum MonthsHomelessPastThreeYears {
   /** (8) Client doesn't know */
@@ -3144,42 +3207,35 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
-  /** Referral Posting Status */
-  AssignedReferralPostingStatuses = 'ASSIGNED_REFERRAL_POSTING_STATUSES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
-  /** Unoccupied units in the specified project */
-  AvailableUnits = 'AVAILABLE_UNITS',
+  /** Units available for the given household at the given project */
+  AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
-  /** All Enrollments, including WIP and exited, for the client. */
-  ClientEnrollments = 'CLIENT_ENROLLMENTS',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
-  /** Referral Posting Status */
-  DeniedPendingReferralPostingStatuses = 'DENIED_PENDING_REFERRAL_POSTING_STATUSES',
   Destination = 'DESTINATION',
   /** Projects that the User can enroll Clients in */
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
+  /** Enrollments for the client, including WIP and Exited. */
+  EnrollmentsForClient = 'ENROLLMENTS_FOR_CLIENT',
   Geocode = 'GEOCODE',
+  /** Open HoH enrollments at the project. */
+  OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
   /** All Organizations that the User can see */
   Organization = 'ORGANIZATION',
+  /** Unit types that are eligible to be added to project */
+  PossibleUnitTypesForProject = 'POSSIBLE_UNIT_TYPES_FOR_PROJECT',
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   /** All Projects that the User can see */
   Project = 'PROJECT',
-  /** Project HOH Enrollments, including WIP and exited, for the client. */
-  ProjectHohEnrollments = 'PROJECT_HOH_ENROLLMENTS',
   ReferralOutcome = 'REFERRAL_OUTCOME',
-  /** Referral Result  */
-  ReferralResultTypes = 'REFERRAL_RESULT_TYPES',
   State = 'STATE',
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
-  /** Units in the specified project */
-  Units = 'UNITS',
-  /** Unit types. If project is specified, limited to unit types in the project. */
-  UnitTypes = 'UNIT_TYPES',
+  VamcStation = 'VAMC_STATION',
 }
 
 /** 4.19.7 */
@@ -3539,8 +3595,11 @@ export type QueryOrganizationsArgs = {
 };
 
 export type QueryPickListArgs = {
+  clientId?: InputMaybe<Scalars['ID']>;
+  enrollmentId?: InputMaybe<Scalars['ID']>;
+  householdId?: InputMaybe<Scalars['ID']>;
   pickListType: PickListType;
-  relationId?: InputMaybe<Scalars['ID']>;
+  projectId?: InputMaybe<Scalars['ID']>;
 };
 
 export type QueryProjectArgs = {
@@ -3937,6 +3996,24 @@ export enum RelationshipToHoH {
   SpouseOrPartner = 'SPOUSE_OR_PARTNER',
   /** (5) Unrelated household member */
   UnrelatedHouseholdMember = 'UNRELATED_HOUSEHOLD_MEMBER',
+}
+
+export type Reminder = {
+  __typename?: 'Reminder';
+  client: Client;
+  dueDate?: Maybe<Scalars['ISO8601Date']>;
+  enrollment: Enrollment;
+  id: Scalars['ID'];
+  overdue: Scalars['Boolean'];
+  topic: ReminderTopic;
+};
+
+export enum ReminderTopic {
+  AgedIntoAdulthood = 'aged_into_adulthood',
+  AnnualAssessment = 'annual_assessment',
+  CurrentLivingSituation = 'current_living_situation',
+  ExitIncomplete = 'exit_incomplete',
+  IntakeIncomplete = 'intake_incomplete',
 }
 
 /** 3.917.2 */
@@ -4512,15 +4589,13 @@ export type Unit = {
   __typename?: 'Unit';
   dateCreated: Scalars['ISO8601DateTime'];
   dateUpdated: Scalars['ISO8601DateTime'];
-  endDate?: Maybe<Scalars['ISO8601Date']>;
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   occupants: Array<Enrollment>;
   project?: Maybe<Project>;
-  startDate: Scalars['ISO8601Date'];
   unitSize?: Maybe<Scalars['Int']>;
   unitType?: Maybe<UnitTypeObject>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 export enum UnitFilterOptionStatus {
@@ -4783,7 +4858,7 @@ export type YouthEducationStatusesPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-export type RootPermissionsFragmentFragment = {
+export type RootPermissionsFragment = {
   __typename?: 'QueryAccess';
   id: string;
   canAdministerHmis: boolean;
@@ -4944,6 +5019,8 @@ export type AssessmentWithRecordsFragment = {
     id: string;
     entryDate: string;
     exitDate?: string | null;
+    dateOfEngagement?: string | null;
+    moveInDate?: string | null;
     livingSituation?: LivingSituation | null;
     lengthOfStay?: ResidencePriorLengthOfStay | null;
     losUnderThreshold?: NoYesMissing | null;
@@ -5277,6 +5354,8 @@ export type FullAssessmentFragment = {
     id: string;
     entryDate: string;
     exitDate?: string | null;
+    dateOfEngagement?: string | null;
+    moveInDate?: string | null;
     livingSituation?: LivingSituation | null;
     lengthOfStay?: ResidencePriorLengthOfStay | null;
     losUnderThreshold?: NoYesMissing | null;
@@ -6048,6 +6127,8 @@ export type GetAssessmentQuery = {
       id: string;
       entryDate: string;
       exitDate?: string | null;
+      dateOfEngagement?: string | null;
+      moveInDate?: string | null;
       livingSituation?: LivingSituation | null;
       lengthOfStay?: ResidencePriorLengthOfStay | null;
       losUnderThreshold?: NoYesMissing | null;
@@ -6464,6 +6545,8 @@ export type GetHouseholdAssessmentsQuery = {
       id: string;
       entryDate: string;
       exitDate?: string | null;
+      dateOfEngagement?: string | null;
+      moveInDate?: string | null;
       livingSituation?: LivingSituation | null;
       lengthOfStay?: ResidencePriorLengthOfStay | null;
       losUnderThreshold?: NoYesMissing | null;
@@ -6829,6 +6912,8 @@ export type SubmitAssessmentMutation = {
         id: string;
         entryDate: string;
         exitDate?: string | null;
+        dateOfEngagement?: string | null;
+        moveInDate?: string | null;
         livingSituation?: LivingSituation | null;
         lengthOfStay?: ResidencePriorLengthOfStay | null;
         losUnderThreshold?: NoYesMissing | null;
@@ -7203,6 +7288,8 @@ export type GetAssessmentsForPopulationQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          dateOfEngagement?: string | null;
+          moveInDate?: string | null;
           livingSituation?: LivingSituation | null;
           lengthOfStay?: ResidencePriorLengthOfStay | null;
           losUnderThreshold?: NoYesMissing | null;
@@ -7540,6 +7627,8 @@ export type EnrollmentValuesFragment = {
   id: string;
   entryDate: string;
   exitDate?: string | null;
+  dateOfEngagement?: string | null;
+  moveInDate?: string | null;
   livingSituation?: LivingSituation | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
   losUnderThreshold?: NoYesMissing | null;
@@ -7577,6 +7666,8 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   id: string;
   entryDate: string;
   exitDate?: string | null;
+  dateOfEngagement?: string | null;
+  moveInDate?: string | null;
   livingSituation?: LivingSituation | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
   losUnderThreshold?: NoYesMissing | null;
@@ -7983,6 +8074,18 @@ export type ClientFieldsFragment = {
   dob?: string | null;
   age?: number | null;
   ssn?: string | null;
+  yearEnteredService?: number | null;
+  yearSeparated?: number | null;
+  worldWarIi?: NoYesReasonsForMissingData | null;
+  koreanWar?: NoYesReasonsForMissingData | null;
+  vietnamWar?: NoYesReasonsForMissingData | null;
+  desertStorm?: NoYesReasonsForMissingData | null;
+  afghanistanOef?: NoYesReasonsForMissingData | null;
+  iraqOif?: NoYesReasonsForMissingData | null;
+  iraqOnd?: NoYesReasonsForMissingData | null;
+  otherTheater?: NoYesReasonsForMissingData | null;
+  militaryBranch?: MilitaryBranch | null;
+  dischargeStatus?: DischargeStatus | null;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -8108,6 +8211,18 @@ export type ClientFieldsFragment = {
 
 export type ClientNameFragment = {
   __typename?: 'Client';
+  id: string;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+};
+
+export type ClientNameDobVetFragment = {
+  __typename?: 'Client';
+  dob?: string | null;
+  veteranStatus: NoYesReasonsForMissingData;
+  id: string;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -8182,6 +8297,23 @@ export type ClientIdentificationFieldsFragment = {
   };
 };
 
+export type ClientVeteranInfoFieldsFragment = {
+  __typename?: 'Client';
+  id: string;
+  yearEnteredService?: number | null;
+  yearSeparated?: number | null;
+  worldWarIi?: NoYesReasonsForMissingData | null;
+  koreanWar?: NoYesReasonsForMissingData | null;
+  vietnamWar?: NoYesReasonsForMissingData | null;
+  desertStorm?: NoYesReasonsForMissingData | null;
+  afghanistanOef?: NoYesReasonsForMissingData | null;
+  iraqOif?: NoYesReasonsForMissingData | null;
+  iraqOnd?: NoYesReasonsForMissingData | null;
+  otherTheater?: NoYesReasonsForMissingData | null;
+  militaryBranch?: MilitaryBranch | null;
+  dischargeStatus?: DischargeStatus | null;
+};
+
 export type ClientIdentifierFieldsFragment = {
   __typename?: 'ExternalIdentifier';
   id: string;
@@ -8254,6 +8386,18 @@ export type SearchClientsQuery = {
       dob?: string | null;
       age?: number | null;
       ssn?: string | null;
+      yearEnteredService?: number | null;
+      yearSeparated?: number | null;
+      worldWarIi?: NoYesReasonsForMissingData | null;
+      koreanWar?: NoYesReasonsForMissingData | null;
+      vietnamWar?: NoYesReasonsForMissingData | null;
+      desertStorm?: NoYesReasonsForMissingData | null;
+      afghanistanOef?: NoYesReasonsForMissingData | null;
+      iraqOif?: NoYesReasonsForMissingData | null;
+      iraqOnd?: NoYesReasonsForMissingData | null;
+      otherTheater?: NoYesReasonsForMissingData | null;
+      militaryBranch?: MilitaryBranch | null;
+      dischargeStatus?: DischargeStatus | null;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -8403,6 +8547,18 @@ export type GetClientQuery = {
     dob?: string | null;
     age?: number | null;
     ssn?: string | null;
+    yearEnteredService?: number | null;
+    yearSeparated?: number | null;
+    worldWarIi?: NoYesReasonsForMissingData | null;
+    koreanWar?: NoYesReasonsForMissingData | null;
+    vietnamWar?: NoYesReasonsForMissingData | null;
+    desertStorm?: NoYesReasonsForMissingData | null;
+    afghanistanOef?: NoYesReasonsForMissingData | null;
+    iraqOif?: NoYesReasonsForMissingData | null;
+    iraqOnd?: NoYesReasonsForMissingData | null;
+    otherTheater?: NoYesReasonsForMissingData | null;
+    militaryBranch?: MilitaryBranch | null;
+    dischargeStatus?: DischargeStatus | null;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -8624,13 +8780,31 @@ export type GetClientEnrollmentsQuery = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        client: { __typename?: 'Client'; id: string };
+        client: {
+          __typename?: 'Client';
+          dob?: string | null;
+          veteranStatus: NoYesReasonsForMissingData;
+          id: string;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
         access: {
           __typename?: 'EnrollmentAccess';
           id: string;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
         };
+        currentUnit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            description?: string | null;
+          } | null;
+        } | null;
       }>;
     };
   } | null;
@@ -8719,13 +8893,31 @@ export type GetClientServicesQuery = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          client: { __typename?: 'Client'; id: string };
+          client: {
+            __typename?: 'Client';
+            dob?: string | null;
+            veteranStatus: NoYesReasonsForMissingData;
+            id: string;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
           access: {
             __typename?: 'EnrollmentAccess';
             id: string;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
           };
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+            unitType?: {
+              __typename?: 'UnitTypeObject';
+              description?: string | null;
+            } | null;
+          } | null;
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
         serviceType: {
@@ -8799,6 +8991,8 @@ export type GetNonWipEnrollmentsQuery = {
         id: string;
         entryDate: string;
         exitDate?: string | null;
+        dateOfEngagement?: string | null;
+        moveInDate?: string | null;
         livingSituation?: LivingSituation | null;
         lengthOfStay?: ResidencePriorLengthOfStay | null;
         losUnderThreshold?: NoYesMissing | null;
@@ -8918,84 +9112,6 @@ export type DeleteClientImageMutation = {
   } | null;
 };
 
-export type CreateEnrollmentMutationVariables = Exact<{
-  input: CreateEnrollmentInput;
-}>;
-
-export type CreateEnrollmentMutation = {
-  __typename?: 'Mutation';
-  createEnrollment?: {
-    __typename?: 'CreateEnrollmentPayload';
-    clientMutationId?: string | null;
-    enrollments?: Array<{
-      __typename?: 'Enrollment';
-      id: string;
-      entryDate: string;
-      exitDate?: string | null;
-      inProgress: boolean;
-      relationshipToHoH: RelationshipToHoH;
-      enrollmentCoc?: string | null;
-      householdId: string;
-      householdShortId: string;
-      householdSize: number;
-      project: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      };
-      client: { __typename?: 'Client'; id: string };
-      access: {
-        __typename?: 'EnrollmentAccess';
-        id: string;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
-      };
-    }> | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type DeleteEnrollmentMutationVariables = Exact<{
-  input: DeleteEnrollmentInput;
-}>;
-
-export type DeleteEnrollmentMutation = {
-  __typename?: 'Mutation';
-  deleteEnrollment?: {
-    __typename?: 'DeleteEnrollmentPayload';
-    clientMutationId?: string | null;
-    enrollment?: { __typename?: 'Enrollment'; id: string } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
 export type DeleteClientFileMutationVariables = Exact<{
   input: DeleteClientFileInput;
 }>;
@@ -9078,6 +9194,18 @@ export type DeleteClientMutation = {
       dob?: string | null;
       age?: number | null;
       ssn?: string | null;
+      yearEnteredService?: number | null;
+      yearSeparated?: number | null;
+      worldWarIi?: NoYesReasonsForMissingData | null;
+      koreanWar?: NoYesReasonsForMissingData | null;
+      vietnamWar?: NoYesReasonsForMissingData | null;
+      desertStorm?: NoYesReasonsForMissingData | null;
+      afghanistanOef?: NoYesReasonsForMissingData | null;
+      iraqOif?: NoYesReasonsForMissingData | null;
+      iraqOnd?: NoYesReasonsForMissingData | null;
+      otherTheater?: NoYesReasonsForMissingData | null;
+      militaryBranch?: MilitaryBranch | null;
+      dischargeStatus?: DischargeStatus | null;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -9217,152 +9345,6 @@ export type DeleteClientMutation = {
   } | null;
 };
 
-export type GetEnrollmentQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-export type GetEnrollmentQuery = {
-  __typename?: 'Query';
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
-    relationshipToHoH: RelationshipToHoH;
-    enrollmentCoc?: string | null;
-    householdId: string;
-    householdShortId: string;
-    householdSize: number;
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    };
-    client: { __typename?: 'Client'; id: string };
-    access: {
-      __typename?: 'EnrollmentAccess';
-      id: string;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
-    };
-  } | null;
-};
-
-export type GetEnrollmentWithHouseholdQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-export type GetEnrollmentWithHouseholdQuery = {
-  __typename?: 'Query';
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
-    relationshipToHoH: RelationshipToHoH;
-    enrollmentCoc?: string | null;
-    householdId: string;
-    householdShortId: string;
-    householdSize: number;
-    household: {
-      __typename?: 'Household';
-      id: string;
-      shortId: string;
-      householdClients: Array<{
-        __typename?: 'HouseholdClient';
-        id: string;
-        relationshipToHoH: RelationshipToHoH;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          veteranStatus: NoYesReasonsForMissingData;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-          dob?: string | null;
-          age?: number | null;
-          ssn?: string | null;
-          access: {
-            __typename?: 'ClientAccess';
-            id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
-            canEditClient: boolean;
-            canDeleteClient: boolean;
-            canViewDob: boolean;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-            canViewEnrollmentDetails: boolean;
-            canDeleteAssessments: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canViewAnyConfidentialClientFiles: boolean;
-            canViewAnyNonconfidentialClientFiles: boolean;
-          };
-        };
-        enrollment: {
-          __typename?: 'Enrollment';
-          id: string;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
-        };
-      }>;
-    };
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    };
-    client: { __typename?: 'Client'; id: string };
-    access: {
-      __typename?: 'EnrollmentAccess';
-      id: string;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
-    };
-  } | null;
-};
-
-export type GetEnrollmentEventsQueryVariables = Exact<{
-  id: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-}>;
-
-export type GetEnrollmentEventsQuery = {
-  __typename?: 'Query';
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    events: {
-      __typename?: 'EventsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Event';
-        id: string;
-        event: EventType;
-        eventDate: string;
-        locationCrisisOrPhHousing?: string | null;
-        probSolDivRrResult?: NoYesMissing | null;
-        referralCaseManageAfter?: NoYesMissing | null;
-        referralResult?: ReferralResult | null;
-        resultDate?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
-        dateDeleted?: string | null;
-      }>;
-    };
-  } | null;
-};
-
 export type GetClientHouseholdMemberCandidatesQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -9429,6 +9411,11 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
+              currentUnit?: {
+                __typename?: 'Unit';
+                id: string;
+                name: string;
+              } | null;
             };
           }>;
         };
@@ -9790,13 +9777,31 @@ export type EnrollmentFieldsFragment = {
     projectName: string;
     projectType?: ProjectType | null;
   };
-  client: { __typename?: 'Client'; id: string };
+  client: {
+    __typename?: 'Client';
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
   access: {
     __typename?: 'EnrollmentAccess';
     id: string;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
   };
+  currentUnit?: {
+    __typename?: 'Unit';
+    id: string;
+    name: string;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      description?: string | null;
+    } | null;
+  } | null;
 };
 
 export type EnrollmentWithHouseholdFragmentFragment = {
@@ -9853,6 +9858,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       };
     }>;
   };
@@ -9862,13 +9868,31 @@ export type EnrollmentWithHouseholdFragmentFragment = {
     projectName: string;
     projectType?: ProjectType | null;
   };
-  client: { __typename?: 'Client'; id: string };
+  client: {
+    __typename?: 'Client';
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
   access: {
     __typename?: 'EnrollmentAccess';
     id: string;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
   };
+  currentUnit?: {
+    __typename?: 'Unit';
+    id: string;
+    name: string;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      description?: string | null;
+    } | null;
+  } | null;
 };
 
 export type EventFieldsFragment = {
@@ -9884,6 +9908,490 @@ export type EventFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
+};
+
+export type AllEnrollmentDetailsFragment = {
+  __typename?: 'Enrollment';
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  exitDestination?: Destination | null;
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  dateOfEngagement?: string | null;
+  moveInDate?: string | null;
+  livingSituation?: LivingSituation | null;
+  lengthOfStay?: ResidencePriorLengthOfStay | null;
+  losUnderThreshold?: NoYesMissing | null;
+  previousStreetEssh?: NoYesMissing | null;
+  dateToStreetEssh?: string | null;
+  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
+  percentAmi?: PercentAmi | null;
+  referralSource?: ReferralSource | null;
+  countOutreachReferralApproaches?: number | null;
+  dateOfBcpStatus?: string | null;
+  eligibleForRhy?: NoYesMissing | null;
+  reasonNoServices?: ReasonNoServices | null;
+  runawayYouth?: NoYesReasonsForMissingData | null;
+  sexualOrientation?: SexualOrientation | null;
+  sexualOrientationOther?: string | null;
+  formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+  childWelfareYears?: RhyNumberofYears | null;
+  childWelfareMonths?: number | null;
+  formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+  juvenileJusticeYears?: RhyNumberofYears | null;
+  juvenileJusticeMonths?: number | null;
+  unemploymentFam?: NoYesMissing | null;
+  mentalHealthDisorderFam?: NoYesMissing | null;
+  physicalDisabilityFam?: NoYesMissing | null;
+  alcoholDrugUseDisorderFam?: NoYesMissing | null;
+  currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+};
+
+export type GetEnrollmentQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetEnrollmentQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
+    householdSize: number;
+    project: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+    client: {
+      __typename?: 'Client';
+      dob?: string | null;
+      veteranStatus: NoYesReasonsForMissingData;
+      id: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+    };
+    currentUnit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        description?: string | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
+export type GetEnrollmentDetailsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetEnrollmentDetailsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
+    householdSize: number;
+    exitDestination?: Destination | null;
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    dateOfEngagement?: string | null;
+    moveInDate?: string | null;
+    livingSituation?: LivingSituation | null;
+    lengthOfStay?: ResidencePriorLengthOfStay | null;
+    losUnderThreshold?: NoYesMissing | null;
+    previousStreetEssh?: NoYesMissing | null;
+    dateToStreetEssh?: string | null;
+    timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+    monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+    dateOfPathStatus?: string | null;
+    clientEnrolledInPath?: NoYesMissing | null;
+    reasonNotEnrolled?: ReasonNotEnrolled | null;
+    percentAmi?: PercentAmi | null;
+    referralSource?: ReferralSource | null;
+    countOutreachReferralApproaches?: number | null;
+    dateOfBcpStatus?: string | null;
+    eligibleForRhy?: NoYesMissing | null;
+    reasonNoServices?: ReasonNoServices | null;
+    runawayYouth?: NoYesReasonsForMissingData | null;
+    sexualOrientation?: SexualOrientation | null;
+    sexualOrientationOther?: string | null;
+    formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+    childWelfareYears?: RhyNumberofYears | null;
+    childWelfareMonths?: number | null;
+    formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+    juvenileJusticeYears?: RhyNumberofYears | null;
+    juvenileJusticeMonths?: number | null;
+    unemploymentFam?: NoYesMissing | null;
+    mentalHealthDisorderFam?: NoYesMissing | null;
+    physicalDisabilityFam?: NoYesMissing | null;
+    alcoholDrugUseDisorderFam?: NoYesMissing | null;
+    currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+  } | null;
+};
+
+export type GetEnrollmentWithHouseholdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetEnrollmentWithHouseholdQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
+    householdSize: number;
+    household: {
+      __typename?: 'Household';
+      id: string;
+      shortId: string;
+      householdClients: Array<{
+        __typename?: 'HouseholdClient';
+        id: string;
+        relationshipToHoH: RelationshipToHoH;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          veteranStatus: NoYesReasonsForMissingData;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+          dob?: string | null;
+          age?: number | null;
+          ssn?: string | null;
+          access: {
+            __typename?: 'ClientAccess';
+            id: string;
+            canViewFullSsn: boolean;
+            canViewPartialSsn: boolean;
+            canEditClient: boolean;
+            canDeleteClient: boolean;
+            canViewDob: boolean;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+            canViewEnrollmentDetails: boolean;
+            canDeleteAssessments: boolean;
+            canManageAnyClientFiles: boolean;
+            canManageOwnClientFiles: boolean;
+            canViewAnyConfidentialClientFiles: boolean;
+            canViewAnyNonconfidentialClientFiles: boolean;
+          };
+        };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+          } | null;
+        };
+      }>;
+    };
+    project: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+    client: {
+      __typename?: 'Client';
+      dob?: string | null;
+      veteranStatus: NoYesReasonsForMissingData;
+      id: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+    };
+    currentUnit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        description?: string | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
+export type GetEnrollmentEventsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetEnrollmentEventsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    events: {
+      __typename?: 'EventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetEnrollmentRemindersQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetEnrollmentRemindersQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    reminders: Array<{
+      __typename?: 'Reminder';
+      id: string;
+      topic: ReminderTopic;
+      dueDate?: string | null;
+      overdue: boolean;
+      enrollment: {
+        __typename?: 'Enrollment';
+        id: string;
+        relationshipToHoH: RelationshipToHoH;
+      };
+      client: {
+        __typename?: 'Client';
+        id: string;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+    }>;
+  } | null;
+};
+
+export type CreateEnrollmentMutationVariables = Exact<{
+  input: CreateEnrollmentInput;
+}>;
+
+export type CreateEnrollmentMutation = {
+  __typename?: 'Mutation';
+  createEnrollment?: {
+    __typename?: 'CreateEnrollmentPayload';
+    clientMutationId?: string | null;
+    enrollments?: Array<{
+      __typename?: 'Enrollment';
+      id: string;
+      entryDate: string;
+      exitDate?: string | null;
+      inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
+      enrollmentCoc?: string | null;
+      householdId: string;
+      householdShortId: string;
+      householdSize: number;
+      project: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+      };
+      client: {
+        __typename?: 'Client';
+        dob?: string | null;
+        veteranStatus: NoYesReasonsForMissingData;
+        id: string;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+      access: {
+        __typename?: 'EnrollmentAccess';
+        id: string;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+      };
+      currentUnit?: {
+        __typename?: 'Unit';
+        id: string;
+        name: string;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          description?: string | null;
+        } | null;
+      } | null;
+    }> | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteEnrollmentMutationVariables = Exact<{
+  input: DeleteEnrollmentInput;
+}>;
+
+export type DeleteEnrollmentMutation = {
+  __typename?: 'Mutation';
+  deleteEnrollment?: {
+    __typename?: 'DeleteEnrollmentPayload';
+    clientMutationId?: string | null;
+    enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
 };
 
 export type FileFieldsFragment = {
@@ -10954,7 +11462,10 @@ export type UserFieldsFragment = {
 
 export type GetPickListQueryVariables = Exact<{
   pickListType: PickListType;
-  relationId?: InputMaybe<Scalars['ID']>;
+  projectId?: InputMaybe<Scalars['ID']>;
+  clientId?: InputMaybe<Scalars['ID']>;
+  householdId?: InputMaybe<Scalars['ID']>;
+  enrollmentId?: InputMaybe<Scalars['ID']>;
 }>;
 
 export type GetPickListQuery = {
@@ -11923,6 +12434,18 @@ export type SubmitFormMutation = {
           dob?: string | null;
           age?: number | null;
           ssn?: string | null;
+          yearEnteredService?: number | null;
+          yearSeparated?: number | null;
+          worldWarIi?: NoYesReasonsForMissingData | null;
+          koreanWar?: NoYesReasonsForMissingData | null;
+          vietnamWar?: NoYesReasonsForMissingData | null;
+          desertStorm?: NoYesReasonsForMissingData | null;
+          afghanistanOef?: NoYesReasonsForMissingData | null;
+          iraqOif?: NoYesReasonsForMissingData | null;
+          iraqOnd?: NoYesReasonsForMissingData | null;
+          otherTheater?: NoYesReasonsForMissingData | null;
+          militaryBranch?: MilitaryBranch | null;
+          dischargeStatus?: DischargeStatus | null;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -12062,13 +12585,31 @@ export type SubmitFormMutation = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          client: { __typename?: 'Client'; id: string };
+          client: {
+            __typename?: 'Client';
+            dob?: string | null;
+            veteranStatus: NoYesReasonsForMissingData;
+            id: string;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
           access: {
             __typename?: 'EnrollmentAccess';
             id: string;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
           };
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+            unitType?: {
+              __typename?: 'UnitTypeObject';
+              description?: string | null;
+            } | null;
+          } | null;
         }
       | {
           __typename?: 'File';
@@ -12454,6 +12995,7 @@ export type HouseholdFieldsFragment = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     };
   }>;
 };
@@ -12533,6 +13075,7 @@ export type HouseholdClientFieldsFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   };
 };
 
@@ -12616,6 +13159,7 @@ export type GetHouseholdQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       };
     }>;
   } | null;
@@ -12684,6 +13228,11 @@ export type UpdateRelationshipToHoHMutation = {
             entryDate: string;
             exitDate?: string | null;
             inProgress: boolean;
+            currentUnit?: {
+              __typename?: 'Unit';
+              id: string;
+              name: string;
+            } | null;
           };
         }>;
       };
@@ -12693,13 +13242,31 @@ export type UpdateRelationshipToHoHMutation = {
         projectName: string;
         projectType?: ProjectType | null;
       };
-      client: { __typename?: 'Client'; id: string };
+      client: {
+        __typename?: 'Client';
+        dob?: string | null;
+        veteranStatus: NoYesReasonsForMissingData;
+        id: string;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
       access: {
         __typename?: 'EnrollmentAccess';
         id: string;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
       };
+      currentUnit?: {
+        __typename?: 'Unit';
+        id: string;
+        name: string;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          description?: string | null;
+        } | null;
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -12771,6 +13338,11 @@ export type AddToHouseholdMutation = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+          } | null;
         };
       }>;
     } | null;
@@ -13596,6 +14168,7 @@ export type GetProjectEnrollmentsQuery = {
           dob?: string | null;
           age?: number | null;
           ssn?: string | null;
+          veteranStatus: NoYesReasonsForMissingData;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -13615,6 +14188,15 @@ export type GetProjectEnrollmentsQuery = {
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
         };
+        currentUnit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            description?: string | null;
+          } | null;
+        } | null;
       }>;
     };
   } | null;
@@ -14700,6 +15282,27 @@ export type ReferralRequestFieldsFragment = {
   };
 };
 
+export type ReminderFieldsFragment = {
+  __typename?: 'Reminder';
+  id: string;
+  topic: ReminderTopic;
+  dueDate?: string | null;
+  overdue: boolean;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    relationshipToHoH: RelationshipToHoH;
+  };
+  client: {
+    __typename?: 'Client';
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+};
+
 export type EsgFundingServiceFieldsFragment = {
   __typename?: 'EsgFundingService';
   id: string;
@@ -15262,8 +15865,6 @@ export type UnitTypeFieldsFragment = {
 export type UnitFieldsFragment = {
   __typename?: 'Unit';
   id: string;
-  startDate: string;
-  endDate?: string | null;
   unitSize?: number | null;
   unitType?: {
     __typename?: 'UnitTypeObject';
@@ -15277,6 +15878,7 @@ export type UnitFieldsFragment = {
   occupants: Array<{
     __typename?: 'Enrollment';
     id: string;
+    relationshipToHoH: RelationshipToHoH;
     client: {
       __typename?: 'Client';
       id: string;
@@ -15308,8 +15910,6 @@ export type GetUnitsQuery = {
       nodes: Array<{
         __typename?: 'Unit';
         id: string;
-        startDate: string;
-        endDate?: string | null;
         unitSize?: number | null;
         unitType?: {
           __typename?: 'UnitTypeObject';
@@ -15323,6 +15923,7 @@ export type GetUnitsQuery = {
         occupants: Array<{
           __typename?: 'Enrollment';
           id: string;
+          relationshipToHoH: RelationshipToHoH;
           client: {
             __typename?: 'Client';
             id: string;
@@ -15368,8 +15969,6 @@ export type CreateUnitsMutation = {
     units?: Array<{
       __typename?: 'Unit';
       id: string;
-      startDate: string;
-      endDate?: string | null;
       unitSize?: number | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
@@ -15383,6 +15982,7 @@ export type CreateUnitsMutation = {
       occupants: Array<{
         __typename?: 'Enrollment';
         id: string;
+        relationshipToHoH: RelationshipToHoH;
         client: {
           __typename?: 'Client';
           id: string;
@@ -15449,8 +16049,6 @@ export type UpdateUnitsMutation = {
     units: Array<{
       __typename?: 'Unit';
       id: string;
-      startDate: string;
-      endDate?: string | null;
       unitSize?: number | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
@@ -15464,6 +16062,7 @@ export type UpdateUnitsMutation = {
       occupants: Array<{
         __typename?: 'Enrollment';
         id: string;
+        relationshipToHoH: RelationshipToHoH;
         client: {
           __typename?: 'Client';
           id: string;
@@ -15507,8 +16106,8 @@ export type CreateDirectUploadMutationMutation = {
   } | null;
 };
 
-export const RootPermissionsFragmentFragmentDoc = gql`
-  fragment RootPermissionsFragment on QueryAccess {
+export const RootPermissionsFragmentDoc = gql`
+  fragment RootPermissions on QueryAccess {
     id
     canAdministerHmis
     canEditClients
@@ -15585,6 +16184,8 @@ export const EnrollmentValuesFragmentDoc = gql`
     id
     entryDate
     exitDate
+    dateOfEngagement
+    moveInDate
     livingSituation
     lengthOfStay
     losUnderThreshold
@@ -15990,8 +16591,26 @@ export const ClientIdentificationFieldsFragmentDoc = gql`
     }
   }
 `;
+export const ClientVeteranInfoFieldsFragmentDoc = gql`
+  fragment ClientVeteranInfoFields on Client {
+    id
+    yearEnteredService
+    yearSeparated
+    worldWarIi
+    koreanWar
+    vietnamWar
+    desertStorm
+    afghanistanOef
+    iraqOif
+    iraqOnd
+    otherTheater
+    militaryBranch
+    dischargeStatus
+  }
+`;
 export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
+    id
     firstName
     middleName
     lastName
@@ -16087,6 +16706,7 @@ export const ClientContactPointFieldsFragmentDoc = gql`
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
+    ...ClientVeteranInfoFields
     dobDataQuality
     ethnicity
     gender
@@ -16127,6 +16747,7 @@ export const ClientFieldsFragmentDoc = gql`
     }
   }
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientVeteranInfoFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientImageFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
@@ -16162,6 +16783,14 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
     }
   }
 `;
+export const ClientNameDobVetFragmentDoc = gql`
+  fragment ClientNameDobVet on Client {
+    ...ClientName
+    dob
+    veteranStatus
+  }
+  ${ClientNameFragmentDoc}
+`;
 export const EnrollmentAccessFieldsFragmentDoc = gql`
   fragment EnrollmentAccessFields on EnrollmentAccess {
     id
@@ -16186,12 +16815,20 @@ export const EnrollmentFieldsFragmentDoc = gql`
     householdShortId
     householdSize
     client {
-      id
+      ...ClientNameDobVet
     }
     access {
       ...EnrollmentAccessFields
     }
+    currentUnit {
+      id
+      name
+      unitType {
+        description
+      }
+    }
   }
+  ${ClientNameDobVetFragmentDoc}
   ${EnrollmentAccessFieldsFragmentDoc}
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
@@ -16212,6 +16849,10 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       entryDate
       exitDate
       inProgress
+      currentUnit {
+        id
+        name
+      }
     }
   }
   ${ClientNameFragmentDoc}
@@ -16246,6 +16887,27 @@ export const EventFieldsFragmentDoc = gql`
     dateUpdated
     dateDeleted
   }
+`;
+export const AllEnrollmentDetailsFragmentDoc = gql`
+  fragment AllEnrollmentDetails on Enrollment {
+    ...EnrollmentValues
+    inProgress
+    relationshipToHoH
+    enrollmentCoc
+    householdId
+    householdShortId
+    householdSize
+    exitDestination
+    currentUnit {
+      id
+      name
+    }
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${EnrollmentValuesFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -16752,6 +17414,23 @@ export const ReferralRequestFieldsFragmentDoc = gql`
   }
   ${UnitTypeFieldsFragmentDoc}
 `;
+export const ReminderFieldsFragmentDoc = gql`
+  fragment ReminderFields on Reminder {
+    id
+    topic
+    dueDate
+    overdue
+    enrollment {
+      id
+      relationshipToHoH
+    }
+    client {
+      id
+      ...ClientName
+    }
+  }
+  ${ClientNameFragmentDoc}
+`;
 export const EsgFundingServiceFieldsFragmentDoc = gql`
   fragment EsgFundingServiceFields on EsgFundingService {
     id
@@ -16826,14 +17505,13 @@ export const UnitTypeCapacityFieldsFragmentDoc = gql`
 export const UnitFieldsFragmentDoc = gql`
   fragment UnitFields on Unit {
     id
-    startDate
-    endDate
     unitSize
     unitType {
       ...UnitTypeFields
     }
     occupants {
       id
+      relationshipToHoH
       client {
         id
         ...ClientName
@@ -16846,10 +17524,10 @@ export const UnitFieldsFragmentDoc = gql`
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
     access {
-      ...RootPermissionsFragment
+      ...RootPermissions
     }
   }
-  ${RootPermissionsFragmentFragmentDoc}
+  ${RootPermissionsFragmentDoc}
 `;
 
 /**
@@ -18273,121 +18951,6 @@ export type DeleteClientImageMutationOptions = Apollo.BaseMutationOptions<
   DeleteClientImageMutation,
   DeleteClientImageMutationVariables
 >;
-export const CreateEnrollmentDocument = gql`
-  mutation CreateEnrollment($input: CreateEnrollmentInput!) {
-    createEnrollment(input: $input) {
-      clientMutationId
-      enrollments {
-        ...EnrollmentFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${EnrollmentFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type CreateEnrollmentMutationFn = Apollo.MutationFunction<
-  CreateEnrollmentMutation,
-  CreateEnrollmentMutationVariables
->;
-
-/**
- * __useCreateEnrollmentMutation__
- *
- * To run a mutation, you first call `useCreateEnrollmentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateEnrollmentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createEnrollmentMutation, { data, loading, error }] = useCreateEnrollmentMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateEnrollmentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateEnrollmentMutation,
-    CreateEnrollmentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateEnrollmentMutation,
-    CreateEnrollmentMutationVariables
-  >(CreateEnrollmentDocument, options);
-}
-export type CreateEnrollmentMutationHookResult = ReturnType<
-  typeof useCreateEnrollmentMutation
->;
-export type CreateEnrollmentMutationResult =
-  Apollo.MutationResult<CreateEnrollmentMutation>;
-export type CreateEnrollmentMutationOptions = Apollo.BaseMutationOptions<
-  CreateEnrollmentMutation,
-  CreateEnrollmentMutationVariables
->;
-export const DeleteEnrollmentDocument = gql`
-  mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
-    deleteEnrollment(input: $input) {
-      clientMutationId
-      enrollment {
-        id
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type DeleteEnrollmentMutationFn = Apollo.MutationFunction<
-  DeleteEnrollmentMutation,
-  DeleteEnrollmentMutationVariables
->;
-
-/**
- * __useDeleteEnrollmentMutation__
- *
- * To run a mutation, you first call `useDeleteEnrollmentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteEnrollmentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteEnrollmentMutation, { data, loading, error }] = useDeleteEnrollmentMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useDeleteEnrollmentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteEnrollmentMutation,
-    DeleteEnrollmentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteEnrollmentMutation,
-    DeleteEnrollmentMutationVariables
-  >(DeleteEnrollmentDocument, options);
-}
-export type DeleteEnrollmentMutationHookResult = ReturnType<
-  typeof useDeleteEnrollmentMutation
->;
-export type DeleteEnrollmentMutationResult =
-  Apollo.MutationResult<DeleteEnrollmentMutation>;
-export type DeleteEnrollmentMutationOptions = Apollo.BaseMutationOptions<
-  DeleteEnrollmentMutation,
-  DeleteEnrollmentMutationVariables
->;
 export const DeleteClientFileDocument = gql`
   mutation DeleteClientFile($input: DeleteClientFileInput!) {
     deleteClientFile(input: $input) {
@@ -18503,201 +19066,6 @@ export type DeleteClientMutationResult =
 export type DeleteClientMutationOptions = Apollo.BaseMutationOptions<
   DeleteClientMutation,
   DeleteClientMutationVariables
->;
-export const GetEnrollmentDocument = gql`
-  query GetEnrollment($id: ID!) {
-    enrollment(id: $id) {
-      ...EnrollmentFields
-    }
-  }
-  ${EnrollmentFieldsFragmentDoc}
-`;
-
-/**
- * __useGetEnrollmentQuery__
- *
- * To run a query within a React component, call `useGetEnrollmentQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEnrollmentQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetEnrollmentQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentQuery,
-    GetEnrollmentQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
-    GetEnrollmentDocument,
-    options
-  );
-}
-export function useGetEnrollmentLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentQuery,
-    GetEnrollmentQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
-    GetEnrollmentDocument,
-    options
-  );
-}
-export type GetEnrollmentQueryHookResult = ReturnType<
-  typeof useGetEnrollmentQuery
->;
-export type GetEnrollmentLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentLazyQuery
->;
-export type GetEnrollmentQueryResult = Apollo.QueryResult<
-  GetEnrollmentQuery,
-  GetEnrollmentQueryVariables
->;
-export const GetEnrollmentWithHouseholdDocument = gql`
-  query GetEnrollmentWithHousehold($id: ID!) {
-    enrollment(id: $id) {
-      ...EnrollmentFields
-      household {
-        id
-        shortId
-        householdClients {
-          ...HouseholdClientFields
-        }
-      }
-    }
-  }
-  ${EnrollmentFieldsFragmentDoc}
-  ${HouseholdClientFieldsFragmentDoc}
-`;
-
-/**
- * __useGetEnrollmentWithHouseholdQuery__
- *
- * To run a query within a React component, call `useGetEnrollmentWithHouseholdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentWithHouseholdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEnrollmentWithHouseholdQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetEnrollmentWithHouseholdQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentWithHouseholdQuery,
-    GetEnrollmentWithHouseholdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetEnrollmentWithHouseholdQuery,
-    GetEnrollmentWithHouseholdQueryVariables
-  >(GetEnrollmentWithHouseholdDocument, options);
-}
-export function useGetEnrollmentWithHouseholdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentWithHouseholdQuery,
-    GetEnrollmentWithHouseholdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetEnrollmentWithHouseholdQuery,
-    GetEnrollmentWithHouseholdQueryVariables
-  >(GetEnrollmentWithHouseholdDocument, options);
-}
-export type GetEnrollmentWithHouseholdQueryHookResult = ReturnType<
-  typeof useGetEnrollmentWithHouseholdQuery
->;
-export type GetEnrollmentWithHouseholdLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentWithHouseholdLazyQuery
->;
-export type GetEnrollmentWithHouseholdQueryResult = Apollo.QueryResult<
-  GetEnrollmentWithHouseholdQuery,
-  GetEnrollmentWithHouseholdQueryVariables
->;
-export const GetEnrollmentEventsDocument = gql`
-  query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-    enrollment(id: $id) {
-      id
-      events(limit: $limit, offset: $offset) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...EventFields
-        }
-      }
-    }
-  }
-  ${EventFieldsFragmentDoc}
-`;
-
-/**
- * __useGetEnrollmentEventsQuery__
- *
- * To run a query within a React component, call `useGetEnrollmentEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEnrollmentEventsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetEnrollmentEventsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentEventsQuery,
-    GetEnrollmentEventsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetEnrollmentEventsQuery,
-    GetEnrollmentEventsQueryVariables
-  >(GetEnrollmentEventsDocument, options);
-}
-export function useGetEnrollmentEventsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentEventsQuery,
-    GetEnrollmentEventsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetEnrollmentEventsQuery,
-    GetEnrollmentEventsQueryVariables
-  >(GetEnrollmentEventsDocument, options);
-}
-export type GetEnrollmentEventsQueryHookResult = ReturnType<
-  typeof useGetEnrollmentEventsQuery
->;
-export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentEventsLazyQuery
->;
-export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
-  GetEnrollmentEventsQuery,
-  GetEnrollmentEventsQueryVariables
 >;
 export const GetClientHouseholdMemberCandidatesDocument = gql`
   query GetClientHouseholdMemberCandidates(
@@ -19095,9 +19463,452 @@ export type GetClientFilesQueryResult = Apollo.QueryResult<
   GetClientFilesQuery,
   GetClientFilesQueryVariables
 >;
+export const GetEnrollmentDocument = gql`
+  query GetEnrollment($id: ID!) {
+    enrollment(id: $id) {
+      ...EnrollmentFields
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentQuery,
+    GetEnrollmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
+    GetEnrollmentDocument,
+    options
+  );
+}
+export function useGetEnrollmentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentQuery,
+    GetEnrollmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
+    GetEnrollmentDocument,
+    options
+  );
+}
+export type GetEnrollmentQueryHookResult = ReturnType<
+  typeof useGetEnrollmentQuery
+>;
+export type GetEnrollmentLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentLazyQuery
+>;
+export type GetEnrollmentQueryResult = Apollo.QueryResult<
+  GetEnrollmentQuery,
+  GetEnrollmentQueryVariables
+>;
+export const GetEnrollmentDetailsDocument = gql`
+  query GetEnrollmentDetails($id: ID!) {
+    enrollment(id: $id) {
+      ...AllEnrollmentDetails
+    }
+  }
+  ${AllEnrollmentDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentDetailsQuery,
+    GetEnrollmentDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentDetailsQuery,
+    GetEnrollmentDetailsQueryVariables
+  >(GetEnrollmentDetailsDocument, options);
+}
+export function useGetEnrollmentDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentDetailsQuery,
+    GetEnrollmentDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentDetailsQuery,
+    GetEnrollmentDetailsQueryVariables
+  >(GetEnrollmentDetailsDocument, options);
+}
+export type GetEnrollmentDetailsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentDetailsQuery
+>;
+export type GetEnrollmentDetailsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentDetailsLazyQuery
+>;
+export type GetEnrollmentDetailsQueryResult = Apollo.QueryResult<
+  GetEnrollmentDetailsQuery,
+  GetEnrollmentDetailsQueryVariables
+>;
+export const GetEnrollmentWithHouseholdDocument = gql`
+  query GetEnrollmentWithHousehold($id: ID!) {
+    enrollment(id: $id) {
+      ...EnrollmentFields
+      household {
+        id
+        shortId
+        householdClients {
+          ...HouseholdClientFields
+        }
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${HouseholdClientFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentWithHouseholdQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentWithHouseholdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentWithHouseholdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentWithHouseholdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentWithHouseholdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >(GetEnrollmentWithHouseholdDocument, options);
+}
+export function useGetEnrollmentWithHouseholdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >(GetEnrollmentWithHouseholdDocument, options);
+}
+export type GetEnrollmentWithHouseholdQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHouseholdQuery
+>;
+export type GetEnrollmentWithHouseholdLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHouseholdLazyQuery
+>;
+export type GetEnrollmentWithHouseholdQueryResult = Apollo.QueryResult<
+  GetEnrollmentWithHouseholdQuery,
+  GetEnrollmentWithHouseholdQueryVariables
+>;
+export const GetEnrollmentEventsDocument = gql`
+  query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    enrollment(id: $id) {
+      id
+      events(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EventFields
+        }
+      }
+    }
+  }
+  ${EventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentEventsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >(GetEnrollmentEventsDocument, options);
+}
+export function useGetEnrollmentEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >(GetEnrollmentEventsDocument, options);
+}
+export type GetEnrollmentEventsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentEventsQuery
+>;
+export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentEventsLazyQuery
+>;
+export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
+  GetEnrollmentEventsQuery,
+  GetEnrollmentEventsQueryVariables
+>;
+export const GetEnrollmentRemindersDocument = gql`
+  query GetEnrollmentReminders($id: ID!) {
+    enrollment(id: $id) {
+      id
+      reminders {
+        ...ReminderFields
+      }
+    }
+  }
+  ${ReminderFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentRemindersQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentRemindersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentRemindersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentRemindersQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentRemindersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentRemindersQuery,
+    GetEnrollmentRemindersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentRemindersQuery,
+    GetEnrollmentRemindersQueryVariables
+  >(GetEnrollmentRemindersDocument, options);
+}
+export function useGetEnrollmentRemindersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentRemindersQuery,
+    GetEnrollmentRemindersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentRemindersQuery,
+    GetEnrollmentRemindersQueryVariables
+  >(GetEnrollmentRemindersDocument, options);
+}
+export type GetEnrollmentRemindersQueryHookResult = ReturnType<
+  typeof useGetEnrollmentRemindersQuery
+>;
+export type GetEnrollmentRemindersLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentRemindersLazyQuery
+>;
+export type GetEnrollmentRemindersQueryResult = Apollo.QueryResult<
+  GetEnrollmentRemindersQuery,
+  GetEnrollmentRemindersQueryVariables
+>;
+export const CreateEnrollmentDocument = gql`
+  mutation CreateEnrollment($input: CreateEnrollmentInput!) {
+    createEnrollment(input: $input) {
+      clientMutationId
+      enrollments {
+        ...EnrollmentFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateEnrollmentMutationFn = Apollo.MutationFunction<
+  CreateEnrollmentMutation,
+  CreateEnrollmentMutationVariables
+>;
+
+/**
+ * __useCreateEnrollmentMutation__
+ *
+ * To run a mutation, you first call `useCreateEnrollmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEnrollmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEnrollmentMutation, { data, loading, error }] = useCreateEnrollmentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateEnrollmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateEnrollmentMutation,
+    CreateEnrollmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateEnrollmentMutation,
+    CreateEnrollmentMutationVariables
+  >(CreateEnrollmentDocument, options);
+}
+export type CreateEnrollmentMutationHookResult = ReturnType<
+  typeof useCreateEnrollmentMutation
+>;
+export type CreateEnrollmentMutationResult =
+  Apollo.MutationResult<CreateEnrollmentMutation>;
+export type CreateEnrollmentMutationOptions = Apollo.BaseMutationOptions<
+  CreateEnrollmentMutation,
+  CreateEnrollmentMutationVariables
+>;
+export const DeleteEnrollmentDocument = gql`
+  mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
+    deleteEnrollment(input: $input) {
+      clientMutationId
+      enrollment {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteEnrollmentMutationFn = Apollo.MutationFunction<
+  DeleteEnrollmentMutation,
+  DeleteEnrollmentMutationVariables
+>;
+
+/**
+ * __useDeleteEnrollmentMutation__
+ *
+ * To run a mutation, you first call `useDeleteEnrollmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEnrollmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEnrollmentMutation, { data, loading, error }] = useDeleteEnrollmentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteEnrollmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteEnrollmentMutation,
+    DeleteEnrollmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteEnrollmentMutation,
+    DeleteEnrollmentMutationVariables
+  >(DeleteEnrollmentDocument, options);
+}
+export type DeleteEnrollmentMutationHookResult = ReturnType<
+  typeof useDeleteEnrollmentMutation
+>;
+export type DeleteEnrollmentMutationResult =
+  Apollo.MutationResult<DeleteEnrollmentMutation>;
+export type DeleteEnrollmentMutationOptions = Apollo.BaseMutationOptions<
+  DeleteEnrollmentMutation,
+  DeleteEnrollmentMutationVariables
+>;
 export const GetPickListDocument = gql`
-  query GetPickList($pickListType: PickListType!, $relationId: ID) {
-    pickList(pickListType: $pickListType, relationId: $relationId) {
+  query GetPickList(
+    $pickListType: PickListType!
+    $projectId: ID
+    $clientId: ID
+    $householdId: ID
+    $enrollmentId: ID
+  ) {
+    pickList(
+      pickListType: $pickListType
+      projectId: $projectId
+      clientId: $clientId
+      householdId: $householdId
+      enrollmentId: $enrollmentId
+    ) {
       ...PickListOptionFields
     }
   }
@@ -19117,7 +19928,10 @@ export const GetPickListDocument = gql`
  * const { data, loading, error } = useGetPickListQuery({
  *   variables: {
  *      pickListType: // value for 'pickListType'
- *      relationId: // value for 'relationId'
+ *      projectId: // value for 'projectId'
+ *      clientId: // value for 'clientId'
+ *      householdId: // value for 'householdId'
+ *      enrollmentId: // value for 'enrollmentId'
  *   },
  * });
  */

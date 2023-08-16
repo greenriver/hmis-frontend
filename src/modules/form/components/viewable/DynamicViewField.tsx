@@ -20,7 +20,8 @@ import { Component, FormItem, ItemType } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
-  if (!item.prefix && !item.text) return null;
+  const label = item.readonlyText || item.text;
+  if (!label) return;
 
   return (
     <Stack direction='row' spacing={1}>
@@ -30,7 +31,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
           item.component === Component.Checkbox || horizontal ? undefined : 600
         }
       >
-        {item.text}
+        {label}
       </Typography>
     </Stack>
   );
@@ -41,26 +42,29 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   // nestingLevel,
   value,
   horizontal = false,
-  pickListRelationId,
+  pickListArgs,
   noLabel = false,
   adjustValue = () => {},
 }) => {
   const label = noLabel ? null : getLabel(item, horizontal);
 
-  const [, pickListLoading] = usePickList(item, pickListRelationId, {
-    onCompleted: (data) => {
-      const newValue = getValueFromPickListData({
-        item,
-        value,
-        linkId: item.linkId,
-        data,
-        setInitial: false,
-      });
-      // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
-      if (newValue) setTimeout(() => adjustValue(newValue));
+  const { loading: pickListLoading } = usePickList({
+    item,
+    ...pickListArgs,
+    fetchOptions: {
+      onCompleted: (data) => {
+        const newValue = getValueFromPickListData({
+          item,
+          value,
+          linkId: item.linkId,
+          data,
+          setInitial: false,
+        });
+        // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
+        if (newValue) setTimeout(() => adjustValue(newValue));
+      },
     },
   });
-
   const commonProps = useMemo(
     () => ({
       label,

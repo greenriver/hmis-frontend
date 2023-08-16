@@ -14,10 +14,17 @@ fragment EnrollmentFields on Enrollment {
   householdShortId
   householdSize
   client {
-    id
+    ...ClientNameDobVet
   }
   access {
     ...EnrollmentAccessFields
+  }
+  currentUnit {
+    id
+    name
+    unitType {
+      description
+    }
   }
 }
 
@@ -44,4 +51,22 @@ fragment EventFields on Event {
   dateCreated
   dateUpdated
   dateDeleted
+}
+
+fragment AllEnrollmentDetails on Enrollment {
+  ...EnrollmentValues
+  inProgress
+  relationshipToHoH
+  enrollmentCoc
+  householdId
+  householdShortId
+  householdSize
+  exitDestination
+  currentUnit {
+    id
+    name
+  }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }

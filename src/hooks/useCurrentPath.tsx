@@ -1,16 +1,22 @@
+import { flatMap } from 'lodash-es';
 import { matchRoutes, useLocation } from 'react-router-dom';
 
 import {
   ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
   Routes,
 } from '@/routes/routes';
 
-const allRoutes = Object.values({
-  ...Routes,
-  ...ClientDashboardRoutes,
-  ...ProjectDashboardRoutes,
-}).map((s) => ({
+const allRoutes = flatMap(
+  [
+    Routes,
+    ClientDashboardRoutes,
+    EnrollmentDashboardRoutes,
+    ProjectDashboardRoutes,
+  ],
+  (obj) => Object.values(obj)
+).map((s) => ({
   path: s,
 }));
 

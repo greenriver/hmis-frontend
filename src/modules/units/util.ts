@@ -2,10 +2,6 @@ import { cache } from '@/providers/apolloClient';
 import { PickListType } from '@/types/gqlTypes';
 import { evictPickList } from '@/utils/cacheUtil';
 
-export const evictUnitPickList = (projectId: string) => {
-  evictPickList(PickListType.AvailableUnits, projectId);
-};
-
 export const evictUnitsQuery = (id: string) => {
   cache.evict({
     id: `Project:${id}`,
@@ -15,5 +11,5 @@ export const evictUnitsQuery = (id: string) => {
     id: `Project:${id}`,
     fieldName: 'unitTypes',
   });
-  evictUnitPickList(id);
+  evictPickList(PickListType.AvailableUnitsForEnrollment, { projectId: id });
 };

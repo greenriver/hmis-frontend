@@ -7,7 +7,6 @@ import {
   ChangeType,
   DynamicFieldProps,
   DynamicInputCommonProps,
-  isPickListOption,
 } from '../types';
 import {
   chooseSelectComponentType,
@@ -67,7 +66,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   horizontal = false,
   errors,
   inputProps,
-  pickListRelationId,
+  pickListArgs,
   noLabel = false,
   warnIfEmpty = false,
 }) => {
@@ -122,10 +121,14 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     !commonInputProps.error &&
     !hasMeaningfulValue(value);
 
-  const [options, pickListLoading, isLocalPickList] = usePickList(
+  const {
+    pickList: options,
+    loading: pickListLoading,
+    isLocalPickList,
+  } = usePickList({
     item,
-    pickListRelationId,
-    {
+    ...pickListArgs,
+    fetchOptions: {
       onCompleted: (data) => {
         const newValue = getValueFromPickListData({
           item,
@@ -136,19 +139,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
         if (newValue) setTimeout(() => itemChanged(newValue));
       },
-    }
-  );
-
-  // If we have a code but no label, set the label. This can happen when auto-filling a section from a record, like Prior Living Situation
-  if (
-    options &&
-    isPickListOption(value) &&
-    value.code &&
-    !value.label &&
-    !isLocalPickList
-  ) {
-    value.label = options.find((o) => o.code === value.code)?.label;
-  }
+    },
+  });
 
   const placeholder =
     item.size === InputSize.Xsmall

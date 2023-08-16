@@ -117,9 +117,9 @@ const DashboardContentNav: React.FC<Props> = ({
           <CloseMenuRow onClose={handleCloseDesktopMenu} label={label} />
           <Box
             sx={{
-              px: 2,
-              pt: 2,
-              pb: 3,
+              pl: 3,
+              pr: 2,
+              py: 2,
               borderBottomColor: 'borders.light',
               borderBottomWidth: 1,
               borderBottomStyle: 'solid',

@@ -6,6 +6,7 @@ import {
   ItemChangedFn,
   ItemMap,
   OverrideableDynamicFieldProps,
+  PickListArgs,
 } from '../../types';
 import { isEnabled } from '../../util/formUtil';
 
@@ -28,7 +29,7 @@ export interface Props {
   horizontal?: boolean;
   bulk?: boolean;
   visible?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   values: FormValues;
   itemChanged: ItemChangedFn;
   itemMap: ItemMap;
@@ -40,7 +41,7 @@ const DynamicViewFields: React.FC<Props> = ({
   bulk,
   itemMap,
   horizontal = false,
-  pickListRelationId,
+  pickListArgs,
   values,
   disabledLinkIds,
   itemChanged,
@@ -81,7 +82,7 @@ const DynamicViewFields: React.FC<Props> = ({
           value={isDisabled ? undefined : values[item.linkId]}
           nestingLevel={nestingLevel}
           horizontal={horizontal}
-          pickListRelationId={pickListRelationId}
+          pickListArgs={pickListArgs}
           // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
           adjustValue={itemChanged}
           {...props}

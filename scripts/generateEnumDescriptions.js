@@ -171,7 +171,9 @@ output += '}';
 
 const filename = 'src/types/gqlEnums.ts';
 fs.writeFile(filename, output, (err) => {
+  // eslint-disable-next-line no-console
   if (err) return console.log(err);
+  // eslint-disable-next-line no-console
   console.log(filename);
 });
 
@@ -250,5 +252,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = ${JSON.stringify(
 )};
 `;
 fs.writeFile('src/types/gqlObjects.ts', schemaOutput, (err) => {
+  // eslint-disable-next-line no-console
   if (err) return console.log(err);
 });

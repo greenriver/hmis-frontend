@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 
 import { getCsrfToken } from '@/utils/csrf';
+import { reloadWindow } from '@/utils/location';
 
 interface Props {
   path: string;
@@ -9,11 +10,7 @@ const OktaLoginForm: React.FC<Props> = ({ path }) => {
   const csrf = getCsrfToken();
   if (!csrf) {
     // FIXME- if no crsrf yet, maybe reloading the window
-    return (
-      <Button onClick={() => window.location.reload()}>
-        Sign In with Okta
-      </Button>
-    );
+    return <Button onClick={reloadWindow}>Sign In with Okta</Button>;
   }
   return (
     <form method='post' action={path}>

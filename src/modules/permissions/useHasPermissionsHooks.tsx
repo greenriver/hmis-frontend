@@ -1,10 +1,14 @@
 import { useMemo } from 'react';
 
 import {
-  ClientAccess,
+  ClientPermissions,
+  PermissionsMode,
+  ProjectPermissions,
+  RootPermissions,
+} from './types';
+
+import {
   Maybe,
-  ProjectAccess,
-  QueryAccess,
   useGetClientPermissionsQuery,
   useGetProjectPermissionsQuery,
   useGetRootPermissionsQuery,
@@ -13,7 +17,6 @@ import {
 export interface PermissionsObject {
   [key: string]: boolean | null | undefined;
 }
-export type PermissionsMode = 'any' | 'all';
 
 export const hasPermissionsOnObject = <T,>(
   permissions: (keyof T)[],
@@ -38,8 +41,6 @@ export const useHasPermissions = <T,>(
   if (!permObject) return false;
   return hasPermissionsOnObject(permissionsList, permObject, mode);
 };
-
-export type ProjectPermissions = keyof Omit<ProjectAccess, '__typename'>;
 
 export const useHasProjectPermissions = (
   projectId: string,
@@ -69,7 +70,6 @@ export const useProjectPermissions = (projectId: string) => {
   );
 };
 
-export type ClientPermissions = keyof Omit<ClientAccess, '__typename'>;
 export const useHasClientPermissions = (
   id: string,
   permissions: ClientPermissions[],
@@ -100,7 +100,6 @@ export const useClientPermissions = (id: string) => {
   );
 };
 
-export type RootPermissions = keyof Omit<QueryAccess, '__typename'>;
 export const useHasRootPermissions = (
   permissions: RootPermissions[],
   mode?: PermissionsMode

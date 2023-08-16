@@ -113,8 +113,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
         }),
       };
 
-      console.debug('Search', input);
-
       const errors = validateSearchFormInput(input);
 
       if (!isEmpty(errors)) {

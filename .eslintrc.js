@@ -79,7 +79,7 @@ module.exports = {
   ],
   rules: {
     'import/order': [
-      'error',
+      'warn',
       {
         groups: [
           'builtin',
@@ -90,12 +90,17 @@ module.exports = {
           'index',
           'object',
         ],
-        'newlines-between': 'always',
         alphabetize: {
           order: 'asc',
           caseInsensitive: true,
         },
         warnOnUnassignedImports: false,
+      },
+    ],
+    'no-console': [
+      'warn',
+      {
+        allow: ['warn', 'error'],
       },
     ],
     'import/no-duplicates': 'error',

@@ -1,5 +1,7 @@
 import { Box, Typography } from '@mui/material';
 
+import { find } from 'lodash-es';
+import { useCallback } from 'react';
 import { DynamicInputCommonProps } from '../types';
 
 import GenericSelect, {
@@ -43,6 +45,18 @@ const renderOption = (props: object, option: Option) => (
   </li>
 );
 
+export function getOptionLabelFromOptions(
+  option: Option,
+  options: readonly Option[]
+): string {
+  if (option.label) return option.label;
+  if (option.code === INVALID_ENUM) return 'Invalid Value';
+  if (options && options[0].label) {
+    return find(options, { code: option.code })?.label || '';
+  }
+  return option.code || '';
+}
+
 const FormSelect = <Multiple extends boolean | undefined>({
   options,
   multiple,
@@ -56,15 +70,25 @@ const FormSelect = <Multiple extends boolean | undefined>({
 }: GenericSelectProps<Option, Multiple, false> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.groupLabel;
 
+  const getOptionLabel = useCallback(
+    (option: Option) => getOptionLabelFromOptions(option, options),
+    [options]
+  );
+
+  const isOptionEqualToValue = useCallback(
+    (option: Option, val: Option) => optionId(option) === optionId(val),
+    []
+  );
+
   return (
     <GenericSelect
-      getOptionLabel={(option) => optionLabel(option)}
+      getOptionLabel={getOptionLabel}
       label={label}
       multiple={multiple}
       options={options}
       renderOption={renderOption}
       groupBy={isGrouped ? (option) => option.groupLabel || '' : undefined}
-      isOptionEqualToValue={(option, val) => optionId(option) === optionId(val)}
+      isOptionEqualToValue={isOptionEqualToValue}
       value={value}
       {...props}
       textInputProps={{

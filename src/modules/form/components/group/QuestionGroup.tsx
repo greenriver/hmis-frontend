@@ -8,6 +8,7 @@ const QuestionGroup = ({
   item,
   nestingLevel,
   renderChildItem,
+  viewOnly = false,
 }: GroupItemComponentProps) => {
   const wrappedChildren = (
     <Grid container direction='column' sx={{ mt: 0 }}>
@@ -16,6 +17,7 @@ const QuestionGroup = ({
     </Grid>
   );
 
+  const label = viewOnly ? item.readonlyText || item.text : item.text;
   if (nestingLevel === 1) {
     const indentChildren =
       !!item.item &&
@@ -35,7 +37,7 @@ const QuestionGroup = ({
               : undefined
           }
         >
-          {item.text && <Typography sx={{ mb: 2 }}>{item.text}</Typography>}
+          {label && <Typography sx={{ mb: 2 }}>{label}</Typography>}
           {wrappedChildren}
         </Box>
       </Grid>
@@ -44,7 +46,7 @@ const QuestionGroup = ({
 
   return (
     <Grid item xs>
-      {item.text && <Typography sx={{ mb: 2 }}>{item.text}</Typography>}
+      {label && <Typography sx={{ mb: 2 }}>{label}</Typography>}
       {wrappedChildren}
     </Grid>
   );

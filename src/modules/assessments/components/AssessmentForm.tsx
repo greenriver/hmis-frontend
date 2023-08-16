@@ -35,7 +35,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
   FormDefinition,
@@ -162,7 +162,7 @@ const AssessmentForm = ({
   const navigateToEnrollment = useMemo(
     () => () =>
       navigate(
-        generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+        generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
           clientId: enrollment.client.id,
           enrollmentId: enrollment.id,
         })
@@ -174,10 +174,15 @@ const AssessmentForm = ({
 
   const canEdit = enrollment?.access.canEditEnrollments;
 
+  const pickListArgs = useMemo(
+    () => ({ projectId: enrollment?.project.id }),
+    [enrollment]
+  );
+
   // Manually preload picklists here so we can prevent printing until they're fetched
   const { loading: pickListsLoading } = usePreloadPicklists({
     definition: definition.definition,
-    relationId: enrollment?.project?.id,
+    pickListArgs,
   });
   usePrintTrigger({
     startReady: isPrintView,
@@ -246,7 +251,7 @@ const AssessmentForm = ({
             // dont use `initialValues` because we don't want the OVERWRITE fields
             values={initialValuesFromAssessment(itemMap, assessment)}
             definition={definition.definition}
-            pickListRelationId={enrollment.project.id}
+            pickListArgs={pickListArgs}
           />
         ) : (
           <DynamicForm
@@ -261,7 +266,7 @@ const AssessmentForm = ({
                 : saveDraftHandler
             }
             initialValues={initialValues || undefined}
-            pickListRelationId={enrollment?.project?.id}
+            pickListArgs={pickListArgs}
             loading={mutationLoading}
             errors={errors}
             locked={locked}

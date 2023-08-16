@@ -6,6 +6,7 @@ import {
   ItemChangedFn,
   ItemMap,
   OverrideableDynamicFieldProps,
+  PickListArgs,
   SeveralItemsChangedFn,
 } from '../types';
 import {
@@ -35,7 +36,7 @@ export interface Props {
   locked?: boolean;
   bulk?: boolean;
   visible?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   values: FormValues;
   itemChanged: ItemChangedFn;
   severalItemsChanged: SeveralItemsChangedFn;
@@ -51,7 +52,7 @@ const DynamicFormFields: React.FC<Props> = ({
   warnIfEmpty = false,
   locked = false,
   visible = true,
-  pickListRelationId,
+  pickListArgs,
   values,
   disabledLinkIds,
   itemChanged,
@@ -106,9 +107,13 @@ const DynamicFormFields: React.FC<Props> = ({
                     values: sectionValues,
                     keyByFieldName: true,
                   });
+                  // eslint-disable-next-line no-console
                   console.group(item.text || item.linkId);
+                  // eslint-disable-next-line no-console
                   console.log(sectionValues);
+                  // eslint-disable-next-line no-console
                   console.log(valuesByKey);
+                  // eslint-disable-next-line no-console
                   console.groupEnd();
                 }
               : undefined
@@ -126,7 +131,7 @@ const DynamicFormFields: React.FC<Props> = ({
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
         horizontal={horizontal}
-        pickListRelationId={pickListRelationId}
+        pickListArgs={pickListArgs}
         warnIfEmpty={warnIfEmpty}
         {...props}
         inputProps={{

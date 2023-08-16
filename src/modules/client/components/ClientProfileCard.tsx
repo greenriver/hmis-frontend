@@ -15,6 +15,8 @@ import {
 } from '@mui/material';
 import { useCallback, useRef, useState } from 'react';
 
+import ClientAddress from './ClientAddress';
+import ClientContactPoint from './ClientContactPoint';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
@@ -90,6 +92,10 @@ export const ClientProfileCardTextTable = ({
 };
 
 export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
+  const hasContactInformation =
+    client.addresses.length > 0 ||
+    client.phoneNumbers.length > 0 ||
+    client.emailAddresses.length > 0;
   return (
     <Box
       sx={{
@@ -123,6 +129,37 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
               />
             ),
           },
+          ...(hasContactInformation
+            ? [
+                {
+                  key: 'Client Contact Information',
+                  content: (
+                    <ClientProfileCardTextTable
+                      content={[
+                        ...client.addresses.map((address) => {
+                          return [
+                            <>Address</>,
+                            <ClientAddress address={address} />,
+                          ] as const;
+                        }),
+                        ...client.phoneNumbers.map((phoneNumber) => {
+                          return [
+                            <>Phone Number</>,
+                            <ClientContactPoint contactPoint={phoneNumber} />,
+                          ] as const;
+                        }),
+                        ...client.emailAddresses.map((email) => {
+                          return [
+                            <>Email</>,
+                            <ClientContactPoint contactPoint={email} />,
+                          ] as const;
+                        }),
+                      ]}
+                    />
+                  ),
+                },
+              ]
+            : []),
           {
             key: 'Demographics',
             defaultExpanded: true,

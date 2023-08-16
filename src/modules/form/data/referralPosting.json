@@ -6,7 +6,21 @@
       "required": true,
       "text": "Referral Status",
       "mapping": { "fieldName": "status" },
-      "pickListReference": "ASSIGNED_REFERRAL_POSTING_STATUSES"
+      "component": "DROPDOWN",
+      "pickListOptions": [
+        {
+          "code": "assigned_status",
+          "label": "Assigned"
+        },
+        {
+          "code": "accepted_pending_status",
+          "label": "Accepted Pending"
+        },
+        {
+          "code": "denied_pending_status",
+          "label": "Denied Pending"
+        }
+      ]
     },
     {
       "type": "CHOICE",

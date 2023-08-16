@@ -4,10 +4,8 @@ import Loading from '../elements/Loading';
 import NotFound from '../pages/NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
-import {
-  ProjectPermissions,
-  useHasProjectPermissions,
-} from '@/modules/permissions/useHasPermissionsHooks';
+import { ProjectPermissions } from '@/modules/permissions/types';
+import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import generateSafePath from '@/utils/generateSafePath';
 
 const ProjectEditRoute: React.FC<

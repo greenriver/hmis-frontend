@@ -30,7 +30,7 @@ type SubmitFormInputVariables = Omit<
 export interface DynamicFormHandlerArgs<T> {
   // formRole: FormRole;
   formDefinition?: FormDefinitionFieldsFragment;
-  record?: T;
+  record?: T | null;
   onCompleted?: (data: T) => void;
   localConstants?: LocalConstants;
   inputVariables?: SubmitFormInputVariables;
@@ -98,7 +98,6 @@ export function useDynamicFormHandlersForRecord<
         confirmed,
         ...inputVariables,
       };
-      console.debug('Submitting', input);
 
       setErrors(emptyErrorState);
       void submitForm({ variables: { input: { input } } });

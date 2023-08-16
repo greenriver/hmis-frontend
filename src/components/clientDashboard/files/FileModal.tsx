@@ -172,6 +172,7 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
       );
     }
   }, [file]);
+  const pickListArgs = useMemo(() => ({ clientId }), [clientId]);
 
   return (
     <>
@@ -182,7 +183,7 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
           formRole={FormRole.File}
           title={file.name}
           actions={actions}
-          pickListRelationId={clientId}
+          pickListArgs={pickListArgs}
         >
           <Stack
             width='100%'

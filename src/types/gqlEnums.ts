@@ -286,6 +286,19 @@ export const HmisEnums = {
     MENTAL_HEALTH_DISORDER: 'Mental health disorder',
   },
   DisabledDisplay: { HIDDEN: 'HIDDEN', PROTECTED: 'PROTECTED' },
+  DischargeStatus: {
+    INVALID: 'Invalid Value',
+    HONORABLE: 'Honorable',
+    GENERAL_UNDER_HONORABLE_CONDITIONS: 'General under honorable conditions',
+    BAD_CONDUCT: 'Bad conduct',
+    DISHONORABLE: 'Dishonorable',
+    UNDER_OTHER_THAN_HONORABLE_CONDITIONS_OTH:
+      'Under other than honorable conditions (OTH)',
+    UNCHARACTERIZED: 'Uncharacterized',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   EmploymentType: {
     INVALID: 'Invalid Value',
     FULL_TIME: 'Full-time',
@@ -697,6 +710,17 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  MilitaryBranch: {
+    INVALID: 'Invalid Value',
+    ARMY: 'Army',
+    AIR_FORCE: 'Air Force',
+    NAVY: 'Navy',
+    MARINES: 'Marines',
+    COAST_GUARD: 'Coast Guard',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   MonthsHomelessPastThreeYears: {
     INVALID: 'Invalid Value',
     NUM_1: '1',
@@ -791,34 +815,31 @@ export const HmisEnums = {
     ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
     ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ALL_UNIT_TYPES: 'All unit types.',
-    ASSIGNED_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
-    AVAILABLE_UNITS: 'Unoccupied units in the specified project',
+    AVAILABLE_UNITS_FOR_ENROLLMENT:
+      'Units available for the given household at the given project',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
-    CLIENT_ENROLLMENTS:
-      'All Enrollments, including WIP and exited, for the client.',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
-    DENIED_PENDING_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     DESTINATION: 'DESTINATION',
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
+    ENROLLMENTS_FOR_CLIENT:
+      'Enrollments for the client, including WIP and Exited.',
     GEOCODE: 'GEOCODE',
+    OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     ORGANIZATION: 'All Organizations that the User can see',
+    POSSIBLE_UNIT_TYPES_FOR_PROJECT:
+      'Unit types that are eligible to be added to project',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
-    PROJECT_HOH_ENROLLMENTS:
-      'Project HOH Enrollments, including WIP and exited, for the client.',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
-    REFERRAL_RESULT_TYPES: 'Referral Result ',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
-    UNITS: 'Units in the specified project',
-    UNIT_TYPES:
-      'Unit types. If project is specified, limited to unit types in the project.',
+    VAMC_STATION: 'VAMC_STATION',
   },
   PrioritizationStatus: {
     INVALID: 'Invalid Value',
@@ -981,6 +1002,13 @@ export const HmisEnums = {
     OTHER_RELATIVE: 'Other relative',
     UNRELATED_HOUSEHOLD_MEMBER: 'Unrelated household member',
     DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  ReminderTopic: {
+    aged_into_adulthood: 'aged_into_adulthood',
+    annual_assessment: 'annual_assessment',
+    current_living_situation: 'current_living_situation',
+    exit_incomplete: 'exit_incomplete',
+    intake_incomplete: 'intake_incomplete',
   },
   ResidencePriorLengthOfStay: {
     ONE_NIGHT_OR_LESS: 'One night or less',

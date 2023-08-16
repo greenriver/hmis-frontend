@@ -48,7 +48,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { cache } from '@/providers/apolloClient';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   SubmitHouseholdAssessmentsMutation,
@@ -77,8 +77,6 @@ const HouseholdSummaryTabPanel = memo(
     refetch,
     setCurrentTab,
   }: HouseholdSummaryTabPanelProps) => {
-    console.debug('Rendering summary panel');
-
     const [checkedState, setCheckedState] = useState<Record<string, boolean>>(
       fromPairs(
         tabs
@@ -194,10 +192,13 @@ const HouseholdSummaryTabPanel = memo(
                 before other members. In order to exit the HoH, you must either
                 exit all members or{' '}
                 <RouterLink
-                  to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
-                    clientId: hohClientId,
-                    enrollmentId: hohEnrollmentId,
-                  })}
+                  to={generateSafePath(
+                    EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
+                    {
+                      clientId: hohClientId,
+                      enrollmentId: hohEnrollmentId,
+                    }
+                  )}
                   variant='body1'
                 >
                   change the Head of Household

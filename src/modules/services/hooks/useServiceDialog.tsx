@@ -5,13 +5,22 @@ import {
   DialogContent,
   DialogTitle,
   Skeleton,
+  Typography,
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import ServiceTypeSelect from '../components/ServiceTypeSelect';
 
 import CommonDialog from '@/components/elements/CommonDialog';
+import LabelWithContent from '@/components/elements/LabelWithContent';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { emptyErrorState } from '@/modules/errors/util';
 import DynamicForm, {
@@ -39,12 +48,40 @@ type RenderServiceDialogProps = PartialPick<
   dialogContent?: ReactNode;
 };
 
+const ServiceCategoryAndType = ({
+  service,
+}: {
+  service: ServiceFieldsFragment;
+}) => (
+  <>
+    {service.serviceType.category !== service.serviceType.name && (
+      <LabelWithContent
+        label='Service Category'
+        LabelProps={{ sx: { fontWeight: 600 } }}
+        sx={{ mb: 2 }}
+      >
+        <Typography variant='body2'>{service.serviceType.category}</Typography>
+      </LabelWithContent>
+    )}
+
+    <LabelWithContent
+      label='Service Type'
+      LabelProps={{ sx: { fontWeight: 600 } }}
+      sx={{ mb: 2 }}
+    >
+      <Typography variant='body2'>{service.serviceType.name}</Typography>
+    </LabelWithContent>
+  </>
+);
+
 export function useServiceDialog({
   enrollment,
   service,
+  onClose = () => null,
 }: {
   enrollment?: EnrollmentFieldsFragment;
   service?: ServiceFieldsFragment;
+  onClose?: VoidFunction;
 }) {
   const projectId = enrollment?.project?.id || '';
   const enrollmentId = enrollment?.id || '';
@@ -53,6 +90,10 @@ export function useServiceDialog({
   const [selectedService, setSelectedService] = useState<PickListOption | null>(
     null
   );
+
+  useEffect(() => {
+    if (service) setSelectedService({ code: service.serviceType.id });
+  }, [service]);
 
   const { data: { serviceType } = {}, loading: serviceTypeLoading } =
     useGetServiceTypeQuery({
@@ -63,7 +104,7 @@ export function useServiceDialog({
   const { formDefinition, loading: definitionLoading } =
     useServiceFormDefinition({
       projectId,
-      serviceTypeId: selectedService?.code,
+      serviceTypeId: selectedService?.code || service?.serviceType?.id,
     });
 
   const hookArgs = useMemo(() => {
@@ -84,6 +125,7 @@ export function useServiceDialog({
         });
         setSelectedService(null);
         setDialogOpen(false);
+        onClose();
       },
     };
   }, [
@@ -93,6 +135,7 @@ export function useServiceDialog({
     service,
     enrollmentId,
     enrollment,
+    onClose,
   ]);
 
   const { initialValues, errors, onSubmit, submitLoading, setErrors } =
@@ -102,7 +145,8 @@ export function useServiceDialog({
     setDialogOpen(false);
     setSelectedService(null);
     setErrors(emptyErrorState);
-  }, [setErrors]);
+    onClose();
+  }, [setErrors, onClose]);
 
   const openServiceDialog = useCallback(() => setDialogOpen(true), []);
 
@@ -126,7 +170,11 @@ export function useServiceDialog({
         <DialogContent sx={{ mt: 2 }}>
           {dialogContent}
           <Box sx={{ mb: 2 }}>
-            {!service && (
+            {service ? (
+              // We have a service, so show read-only category and type
+              <ServiceCategoryAndType service={service} />
+            ) : (
+              // Select service type
               <ServiceTypeSelect
                 projectId={projectId}
                 value={selectedService}
@@ -139,7 +187,7 @@ export function useServiceDialog({
           )}
           {selectedService && formDefinition && serviceType && (
             <DynamicForm
-              key={selectedService.code}
+              key={service?.id || selectedService.code}
               definition={formDefinition.definition}
               onSubmit={onSubmit}
               initialValues={initialValues}

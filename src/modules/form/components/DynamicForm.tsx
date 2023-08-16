@@ -13,7 +13,12 @@ import React, {
 import useDynamicFields from '../hooks/useDynamicFields';
 import { DynamicFormContext } from '../hooks/useDynamicFormContext';
 import usePreloadPicklists from '../hooks/usePreloadPicklists';
-import { ChangeType, FormActionTypes, FormValues } from '../types';
+import {
+  ChangeType,
+  FormActionTypes,
+  FormValues,
+  PickListArgs,
+} from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
@@ -51,7 +56,7 @@ export interface DynamicFormProps
   showSavePrompt?: boolean;
   alwaysShowSaveSlide?: boolean;
   horizontal?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   warnIfEmpty?: boolean;
   locked?: boolean;
   visible?: boolean;
@@ -88,7 +93,7 @@ const DynamicForm = forwardRef(
       warnIfEmpty = false,
       locked = false,
       visible = true,
-      pickListRelationId,
+      pickListArgs,
       FormActionProps = {},
       ValidationDialogProps = {},
       hideSubmit = false,
@@ -101,10 +106,11 @@ const DynamicForm = forwardRef(
       definition,
       initialValues,
     });
+
     const { loading: pickListsLoading } = usePreloadPicklists({
       definition,
-      relationId: pickListRelationId,
       queryOptions: picklistQueryOptions,
+      pickListArgs,
     });
 
     const [dirty, setDirty] = useState(false);
@@ -237,7 +243,7 @@ const DynamicForm = forwardRef(
               errors: errorState.errors,
               warnings: errorState.warnings,
               horizontal,
-              pickListRelationId,
+              pickListArgs,
               warnIfEmpty,
               locked,
               visible,

@@ -1,5 +1,6 @@
 fragment ClientFields on Client {
   ...ClientIdentificationFields
+  ...ClientVeteranInfoFields
   dobDataQuality
   ethnicity
   gender
@@ -41,10 +42,17 @@ fragment ClientFields on Client {
 }
 
 fragment ClientName on Client {
+  id
   firstName
   middleName
   lastName
   nameSuffix
+}
+
+fragment ClientNameDobVet on Client {
+  ...ClientName
+  dob
+  veteranStatus
 }
 
 fragment ClientNameObjectFields on ClientName {
@@ -103,6 +111,22 @@ fragment ClientIdentificationFields on Client {
     canViewFullSsn
     canViewPartialSsn
   }
+}
+
+fragment ClientVeteranInfoFields on Client {
+  id
+  yearEnteredService
+  yearSeparated
+  worldWarIi
+  koreanWar
+  vietnamWar
+  desertStorm
+  afghanistanOef
+  iraqOif
+  iraqOnd
+  otherTheater
+  militaryBranch
+  dischargeStatus
 }
 
 fragment ClientIdentifierFields on ExternalIdentifier {

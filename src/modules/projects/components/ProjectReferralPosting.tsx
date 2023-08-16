@@ -104,7 +104,9 @@ const ProjectReferralPosting: React.FC = () => {
                 referralPosting={referralPosting}
                 readOnly={
                   referralPosting.status !==
-                  ReferralPostingStatus.AssignedStatus
+                    ReferralPostingStatus.AssignedStatus &&
+                  referralPosting.status !==
+                    ReferralPostingStatus.AcceptedPendingStatus
                 }
               />
             </CommonCard>

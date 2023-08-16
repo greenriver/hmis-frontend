@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, lighten, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, lighten, Stack } from '@mui/material';
 import pluralize from 'pluralize';
 
 import { ClearanceState } from '../types';
@@ -62,7 +62,11 @@ export const MciUnavailableAlert = () => (
   </Alert>
 );
 
-export const MciSuccessAlert = ({ mci }: { mci: ExternalIdentifier }) => (
+export const MciSuccessAlert = ({
+  mciIds,
+}: {
+  mciIds: ExternalIdentifier[];
+}) => (
   <Alert
     severity='success'
     sx={{
@@ -71,9 +75,26 @@ export const MciSuccessAlert = ({ mci }: { mci: ExternalIdentifier }) => (
     }}
   >
     <AlertTitle>Client has been cleared.</AlertTitle>
-    <Stack direction='row' gap={0.8}>
-      <Typography variant='inherit'>MCI ID:</Typography>
-      <ExternalIdDisplay value={mci} />
+    <Stack direction='column' gap={1} sx={{ pt: 1 }}>
+      {mciIds.map((mci) => (
+        <ExternalIdDisplay value={mci} />
+      ))}
     </Stack>
+  </Alert>
+);
+
+export const MciFieldsChangedAlert = () => (
+  <Alert
+    severity='warning'
+    sx={{
+      backgroundColor: (theme) => lighten(theme.palette.warning.light, 0.95),
+      border: 'none',
+    }}
+  >
+    <AlertTitle>Some MCI-linked fields have been changed.</AlertTitle>
+    <Box sx={{ pt: 1 }}>
+      The client's <b>name, gender, DOB, </b> and <b>SSN</b> will be updated in
+      MCI.
+    </Box>
   </Alert>
 );

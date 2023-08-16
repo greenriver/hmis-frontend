@@ -25,7 +25,17 @@
       "required": true,
       "text": "Referral Status",
       "mapping": { "fieldName": "status" },
-      "pickListReference": "DENIED_PENDING_REFERRAL_POSTING_STATUSES"
+      "component": "RADIO_BUTTONS",
+      "pickListOptions": [
+        {
+          "code": "assigned_status",
+          "label": "Send Back"
+        },
+        {
+          "code": "denied_status",
+          "label": "Approve Denial"
+        }
+      ]
     },
     {
       "type": "BOOLEAN",
@@ -54,13 +64,23 @@
       "required": true,
       "text": "Referral Result",
       "mapping": { "fieldName": "referralResult" },
-      "pickListReference": "REFERRAL_RESULT_TYPES",
+      "component": "DROPDOWN",
       "enableBehavior": "ALL",
       "enableWhen": [
         {
           "question": "status",
           "operator": "EQUAL",
           "answerCode": "denied_status"
+        }
+      ],
+      "pickListOptions": [
+        {
+          "code": "UNSUCCESSFUL_REFERRAL_CLIENT_REJECTED",
+          "label": "Unsuccessful referral: client rejected"
+        },
+        {
+          "code": "UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED",
+          "label": "Unsuccessful referral: provider rejected"
         }
       ]
     },

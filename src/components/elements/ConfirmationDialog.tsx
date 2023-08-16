@@ -25,7 +25,7 @@ export interface ConfirmationDialogProps extends DialogProps {
   children: React.ReactNode;
   confirmText?: React.ReactNode;
   onConfirm: React.MouseEventHandler<HTMLButtonElement>;
-  onCancel: () => void;
+  onCancel?: VoidFunction;
   color?: ButtonProps['color'];
   errorState?: ErrorState;
   hideCancelButton?: boolean;
