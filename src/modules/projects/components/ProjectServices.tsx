@@ -19,28 +19,6 @@ const ProjectServices = () => {
     <>
       <PageTitle
         title='Services'
-        actions={
-          <ProjectPermissionsFilter
-            id={projectId}
-            permissions='canEditEnrollments'
-          >
-            <Stack direction='row' gap={2}>
-              <ButtonLink
-                data-testid='recordServicesButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
-                to={generateSafePath(ProjectDashboardRoutes.ADD_SERVICES, {
-                  projectId,
-                })}
-                Icon={LibraryAddIcon}
-              >
-                Record Services
-              </ButtonLink>
-            </Stack>
-          </ProjectPermissionsFilter>
-        }
-      />
       <Paper>
         <ProjectServicesTable projectId={projectId} />
       </Paper>
