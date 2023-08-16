@@ -42,6 +42,7 @@ const enrollmentDashboardRoutes = {
   EVENTS: 'events',
   CE_ASSESSMENTS: 'ce-assessments',
   ASSESSMENT: 'assessments/:formRole/:assessmentId?',
+  ESG_FUNDING_REPORT: 'esg-funding-report',
 };
 
 // Routes within the project dashboard
@@ -122,5 +123,6 @@ export const FOCUS_MODE_ROUTES = [
 
 export const PRINTABLE_ROUTES = [
   EnrollmentDashboardRoutes.ASSESSMENT,
+  EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];
