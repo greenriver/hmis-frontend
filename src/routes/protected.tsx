@@ -475,11 +475,19 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: Routes.ADMIN_REFERRAL_DENIALS,
-            element: <AdminReferralDenials />,
+            element: (
+              <RootPermissionsFilter permissions='canManageDeniedReferrals'>
+                <AdminReferralDenials />
+              </RootPermissionsFilter>
+            ),
           },
           {
             path: Routes.ADMIN_REFERRAL_DENIAL,
-            element: <AdminReferralPosting />,
+            element: (
+              <RootPermissionsFilter permissions='canManageDeniedReferrals'>
+                <AdminReferralPosting />
+              </RootPermissionsFilter>
+            ),
           },
         ],
       },
