@@ -15804,24 +15804,6 @@ export type GetProjectServicesQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
-          exitDestination?: Destination | null;
-          inProgress: boolean;
-          relationshipToHoH: RelationshipToHoH;
-          enrollmentCoc?: string | null;
-          householdId: string;
-          householdShortId: string;
-          householdSize: number;
-          moveInDate?: string | null;
-          dateOfEngagement?: string | null;
-          dateOfPathStatus?: string | null;
-          clientEnrolledInPath?: NoYesMissing | null;
-          reasonNotEnrolled?: ReasonNotEnrolled | null;
-          project: {
-            __typename?: 'Project';
-            id: string;
-            projectName: string;
-            projectType?: ProjectType | null;
-          };
           client: {
             __typename?: 'Client';
             dob?: string | null;
@@ -15832,21 +15814,6 @@ export type GetProjectServicesQuery = {
             lastName?: string | null;
             nameSuffix?: string | null;
           };
-          access: {
-            __typename?: 'EnrollmentAccess';
-            id: string;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-          };
-          currentUnit?: {
-            __typename?: 'Unit';
-            id: string;
-            name: string;
-            unitType?: {
-              __typename?: 'UnitTypeObject';
-              description?: string | null;
-            } | null;
-          } | null;
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
         serviceType: {
@@ -23143,14 +23110,18 @@ export const GetProjectServicesDocument = gql`
           ...ServiceFields
           enrollment {
             id
-            ...EnrollmentFields
+            entryDate
+            exitDate
+            client {
+              ...ClientNameDobVet
+            }
           }
         }
       }
     }
   }
   ${ServiceFieldsFragmentDoc}
-  ${EnrollmentFieldsFragmentDoc}
+  ${ClientNameDobVetFragmentDoc}
 `;
 
 /**

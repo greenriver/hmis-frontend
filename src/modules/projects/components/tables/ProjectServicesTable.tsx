@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { baseColumns } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
+import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
@@ -29,7 +29,7 @@ const COLUMNS: ColumnDef<ServiceFields>[] = [
     render: (s) =>
       parseAndFormatDateRange(s.enrollment.entryDate, s.enrollment.exitDate),
   },
-  ...baseColumns.map((c) => {
+  ...SERVICE_COLUMNS.map((c) => {
     if (c.header === 'Date Provided') return { ...c, linkTreatment: false };
     return c;
   }),

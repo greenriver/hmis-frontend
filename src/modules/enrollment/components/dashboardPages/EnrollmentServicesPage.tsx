@@ -17,19 +17,19 @@ import {
   ServiceFieldsFragment,
 } from '@/types/gqlTypes';
 
-export const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
+export const SERVICE_COLUMNS: ColumnDef<ServiceFieldsFragment>[] = [
   {
     header: 'Date Provided',
     linkTreatment: true,
     render: (e) => parseAndFormatDate(e.dateProvided),
   },
   {
-    header: 'Category',
-    render: 'serviceType.category' as keyof ServiceFieldsFragment,
-  },
-  {
     header: 'Service Type',
-    render: 'serviceType.name' as keyof ServiceFieldsFragment,
+    render: (service) => {
+      const { name, category } = service.serviceType;
+      if (name === category) return name;
+      return `${category} - ${name}`;
+    },
   },
   {
     header: 'Details',
@@ -93,7 +93,7 @@ const EnrollmentServicesPage = () => {
           }
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentServicesDocument}
-          columns={baseColumns}
+          columns={SERVICE_COLUMNS}
           pagePath='enrollment.services'
           noData='No services'
           recordType='Service'

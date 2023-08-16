@@ -116,7 +116,11 @@ query GetProjectServices(
         ...ServiceFields
         enrollment {
           id
-          ...EnrollmentFields
+          entryDate
+          exitDate
+          client {
+            ...ClientNameDobVet
+          }
         }
       }
     }
