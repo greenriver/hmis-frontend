@@ -33,7 +33,7 @@ import generateSafePath from '@/utils/generateSafePath';
 const DOE_PROJECT_TYPES = [
   ProjectType.Es, // TODO(2024) should be nbn only
   ProjectType.So,
-  ProjectType.ServicesOnly,
+  ProjectType.Sso,
 ];
 
 const EnrollmentDetails = ({
