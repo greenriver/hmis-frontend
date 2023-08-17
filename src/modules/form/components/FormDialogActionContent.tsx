@@ -1,5 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, ButtonProps, Stack } from '@mui/material';
+import { ReactNode } from 'react';
 
 export const FormDialogActionContent = ({
   onDiscard,
@@ -8,6 +9,7 @@ export const FormDialogActionContent = ({
   submitButtonText,
   submitLoading,
   disabled,
+  otherActions,
 }: {
   onDiscard: ButtonProps['onClick'];
   onSubmit: ButtonProps['onClick'];
@@ -15,6 +17,7 @@ export const FormDialogActionContent = ({
   discardButtonText?: string;
   submitButtonText?: string;
   disabled?: boolean;
+  otherActions?: ReactNode;
 }) => {
   return (
     <Stack
@@ -22,7 +25,7 @@ export const FormDialogActionContent = ({
       justifyContent={'space-between'}
       sx={{ width: '100%' }}
     >
-      <Box></Box>
+      <Box flexGrow={1}>{otherActions}</Box>
       <Stack gap={3} direction='row'>
         <Button
           onClick={onDiscard}

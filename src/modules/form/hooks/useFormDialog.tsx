@@ -32,6 +32,7 @@ export type RenderFormDialogProps = PartialPick<
   'onSubmit' | 'definition' | 'errors'
 > & {
   title: ReactNode;
+  otherActions?: ReactNode;
   DialogProps?: Omit<DialogProps, 'open'>;
 };
 
@@ -91,7 +92,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   }, [setErrors, onClose]);
 
   const renderFormDialog = useCallback(
-    ({ title, DialogProps, ...props }: RenderFormDialogProps) => {
+    ({ title, otherActions, DialogProps, ...props }: RenderFormDialogProps) => {
       if (!dialogOpen) return null;
       if (!definitionLoading && !formDefinition) {
         throw new Error(`Form not found: ${formRole} `);
@@ -156,6 +157,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
               submitButtonText={props.submitButtonText}
               submitLoading={submitLoading}
               disabled={definitionLoading}
+              otherActions={otherActions}
             />
           </DialogActions>
         </CommonDialog>
@@ -177,5 +179,6 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   return {
     openFormDialog,
     renderFormDialog,
+    closeDialog,
   };
 }

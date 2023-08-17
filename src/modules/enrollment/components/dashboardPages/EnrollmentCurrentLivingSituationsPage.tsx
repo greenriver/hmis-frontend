@@ -8,6 +8,7 @@ import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDash
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import useViewDialog from '@/modules/form/hooks/useViewDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
@@ -50,6 +51,13 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     CurrentLivingSituationFieldsFragment | undefined
   >();
 
+  const { openViewDialog, renderViewDialog, closeViewDialog } =
+    useViewDialog<CurrentLivingSituationFieldsFragment>({
+      record: viewingRecord,
+      onClose: () => setViewingRecord(undefined),
+      formRole: FormRole.CurrentLivingSituation,
+    });
+
   const { openFormDialog, renderFormDialog } =
     useFormDialog<CurrentLivingSituationFieldsFragment>({
       formRole: FormRole.CurrentLivingSituation,
@@ -58,10 +66,10 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'currentLivingSituations',
         });
+        closeViewDialog();
       },
       inputVariables: { enrollmentId },
       record: viewingRecord,
-      onClose: () => setViewingRecord(undefined),
     });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
@@ -96,18 +104,29 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           noData='No current living situations'
           recordType='CurrentLivingSituation'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={
-            canEditCls
-              ? (record) => {
-                  setViewingRecord(record);
-                  openFormDialog();
-                }
-              : undefined
-          }
+          handleRowClick={(record) => {
+            setViewingRecord(record);
+            openViewDialog();
+          }}
         />
       </TitleCard>
+      {renderViewDialog({
+        title: 'View Current Living Situation',
+        maxWidth: 'md',
+        actions: (
+          <>
+            {viewingRecord && canEditCls && (
+              <>
+                <Button variant='outlined' onClick={openFormDialog}>
+                  Edit
+                </Button>
+              </>
+            )}
+          </>
+        ),
+      })}
       {renderFormDialog({
-        title: 'Add Current Living Situation',
+        title: `${viewingRecord ? 'Update' : 'Add'} Current Living Situation`,
         //md to accomodate radio buttons
         DialogProps: { maxWidth: 'md' },
       })}

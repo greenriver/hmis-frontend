@@ -10920,6 +10920,9 @@ export type CurrentLivingSituationFieldsFragment = {
   movedTwoOrMore?: NoYesReasonsForMissingData | null;
   resourcesToObtain?: NoYesReasonsForMissingData | null;
   subsequentResidence?: NoYesReasonsForMissingData | null;
+  dateUpdated: string;
+  dateCreated: string;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
@@ -10950,6 +10953,9 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         movedTwoOrMore?: NoYesReasonsForMissingData | null;
         resourcesToObtain?: NoYesReasonsForMissingData | null;
         subsequentResidence?: NoYesReasonsForMissingData | null;
+        dateUpdated: string;
+        dateCreated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -11242,6 +11248,21 @@ export type EventFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
+export type CeAssessmentFieldsFragment = {
+  __typename?: 'CeAssessment';
+  id: string;
+  assessmentDate: string;
+  assessmentLevel?: AssessmentLevel | null;
+  assessmentLocation: string;
+  assessmentType?: AssessmentType | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+  prioritizationStatus?: PrioritizationStatus | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type EnrollmentSummaryFieldsFragment = {
@@ -11715,6 +11736,40 @@ export type GetEnrollmentEventsQuery = {
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetEnrollmentCeAssessmentsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetEnrollmentCeAssessmentsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    ceAssessments: {
+      __typename?: 'CeAssessmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CeAssessment';
+        id: string;
+        assessmentDate: string;
+        assessmentLevel?: AssessmentLevel | null;
+        assessmentLocation: string;
+        assessmentType?: AssessmentType | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+        prioritizationStatus?: PrioritizationStatus | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -11837,6 +11892,60 @@ export type DeleteEnrollmentMutation = {
     __typename?: 'DeleteEnrollmentPayload';
     clientMutationId?: string | null;
     enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteCeAssessmentMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteCeAssessmentMutation = {
+  __typename?: 'Mutation';
+  deleteCeAssessment?: {
+    __typename?: 'DeleteCeAssessmentPayload';
+    clientMutationId?: string | null;
+    ceAssessment?: { __typename?: 'CeAssessment'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteCeEventMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteCeEventMutation = {
+  __typename?: 'Mutation';
+  deleteCeEvent?: {
+    __typename?: 'DeleteCeEventPayload';
+    clientMutationId?: string | null;
+    ceEvent?: { __typename?: 'Event'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -13942,6 +14051,19 @@ export type SubmitFormMutation = {
     record?:
       | { __typename?: 'CeAssessment' }
       | {
+          __typename?: 'CeAssessment';
+          id: string;
+          assessmentDate: string;
+          assessmentLevel?: AssessmentLevel | null;
+          assessmentLocation: string;
+          assessmentType?: AssessmentType | null;
+          dateCreated: string;
+          dateUpdated: string;
+          dateDeleted?: string | null;
+          prioritizationStatus?: PrioritizationStatus | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }
+      | {
           __typename?: 'Client';
           dobDataQuality: DobDataQuality;
           ethnicity: Ethnicity;
@@ -14107,6 +14229,9 @@ export type SubmitFormMutation = {
           movedTwoOrMore?: NoYesReasonsForMissingData | null;
           resourcesToObtain?: NoYesReasonsForMissingData | null;
           subsequentResidence?: NoYesReasonsForMissingData | null;
+          dateUpdated: string;
+          dateCreated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'Enrollment';
@@ -14158,6 +14283,21 @@ export type SubmitFormMutation = {
           } | null;
         }
       | { __typename?: 'Event' }
+      | {
+          __typename?: 'Event';
+          id: string;
+          event: EventType;
+          eventDate: string;
+          locationCrisisOrPhHousing?: string | null;
+          probSolDivRrResult?: NoYesMissing | null;
+          referralCaseManageAfter?: NoYesMissing | null;
+          referralResult?: ReferralResult | null;
+          resultDate?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          dateDeleted?: string | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }
       | {
           __typename?: 'File';
           confidential?: boolean | null;
@@ -18619,7 +18759,13 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     movedTwoOrMore
     resourcesToObtain
     subsequentResidence
+    dateUpdated
+    dateCreated
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
 `;
 export const ClientNameDobVetFragmentDoc = gql`
   fragment ClientNameDobVet on Client {
@@ -18733,7 +18879,28 @@ export const EventFieldsFragmentDoc = gql`
     dateCreated
     dateUpdated
     dateDeleted
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
+`;
+export const CeAssessmentFieldsFragmentDoc = gql`
+  fragment CeAssessmentFields on CeAssessment {
+    id
+    assessmentDate
+    assessmentLevel
+    assessmentLocation
+    assessmentType
+    dateCreated
+    dateUpdated
+    dateDeleted
+    prioritizationStatus
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
 `;
 export const EnrollmentSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentSummaryFields on EnrollmentSummary {
@@ -21536,6 +21703,79 @@ export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables
 >;
+export const GetEnrollmentCeAssessmentsDocument = gql`
+  query GetEnrollmentCeAssessments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    enrollment(id: $id) {
+      id
+      ceAssessments(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CeAssessmentFields
+        }
+      }
+    }
+  }
+  ${CeAssessmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentCeAssessmentsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentCeAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentCeAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentCeAssessmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentCeAssessmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentCeAssessmentsQuery,
+    GetEnrollmentCeAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentCeAssessmentsQuery,
+    GetEnrollmentCeAssessmentsQueryVariables
+  >(GetEnrollmentCeAssessmentsDocument, options);
+}
+export function useGetEnrollmentCeAssessmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentCeAssessmentsQuery,
+    GetEnrollmentCeAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentCeAssessmentsQuery,
+    GetEnrollmentCeAssessmentsQueryVariables
+  >(GetEnrollmentCeAssessmentsDocument, options);
+}
+export type GetEnrollmentCeAssessmentsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentCeAssessmentsQuery
+>;
+export type GetEnrollmentCeAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentCeAssessmentsLazyQuery
+>;
+export type GetEnrollmentCeAssessmentsQueryResult = Apollo.QueryResult<
+  GetEnrollmentCeAssessmentsQuery,
+  GetEnrollmentCeAssessmentsQueryVariables
+>;
 export const GetEnrollmentRemindersDocument = gql`
   query GetEnrollmentReminders($id: ID!) {
     enrollment(id: $id) {
@@ -21712,6 +21952,120 @@ export type DeleteEnrollmentMutationResult =
 export type DeleteEnrollmentMutationOptions = Apollo.BaseMutationOptions<
   DeleteEnrollmentMutation,
   DeleteEnrollmentMutationVariables
+>;
+export const DeleteCeAssessmentDocument = gql`
+  mutation DeleteCeAssessment($id: ID!) {
+    deleteCeAssessment(input: { id: $id }) {
+      clientMutationId
+      ceAssessment {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteCeAssessmentMutationFn = Apollo.MutationFunction<
+  DeleteCeAssessmentMutation,
+  DeleteCeAssessmentMutationVariables
+>;
+
+/**
+ * __useDeleteCeAssessmentMutation__
+ *
+ * To run a mutation, you first call `useDeleteCeAssessmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCeAssessmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCeAssessmentMutation, { data, loading, error }] = useDeleteCeAssessmentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCeAssessmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteCeAssessmentMutation,
+    DeleteCeAssessmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteCeAssessmentMutation,
+    DeleteCeAssessmentMutationVariables
+  >(DeleteCeAssessmentDocument, options);
+}
+export type DeleteCeAssessmentMutationHookResult = ReturnType<
+  typeof useDeleteCeAssessmentMutation
+>;
+export type DeleteCeAssessmentMutationResult =
+  Apollo.MutationResult<DeleteCeAssessmentMutation>;
+export type DeleteCeAssessmentMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCeAssessmentMutation,
+  DeleteCeAssessmentMutationVariables
+>;
+export const DeleteCeEventDocument = gql`
+  mutation DeleteCeEvent($id: ID!) {
+    deleteCeEvent(input: { id: $id }) {
+      clientMutationId
+      ceEvent {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteCeEventMutationFn = Apollo.MutationFunction<
+  DeleteCeEventMutation,
+  DeleteCeEventMutationVariables
+>;
+
+/**
+ * __useDeleteCeEventMutation__
+ *
+ * To run a mutation, you first call `useDeleteCeEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCeEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCeEventMutation, { data, loading, error }] = useDeleteCeEventMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCeEventMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteCeEventMutation,
+    DeleteCeEventMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteCeEventMutation,
+    DeleteCeEventMutationVariables
+  >(DeleteCeEventDocument, options);
+}
+export type DeleteCeEventMutationHookResult = ReturnType<
+  typeof useDeleteCeEventMutation
+>;
+export type DeleteCeEventMutationResult =
+  Apollo.MutationResult<DeleteCeEventMutation>;
+export type DeleteCeEventMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCeEventMutation,
+  DeleteCeEventMutationVariables
 >;
 export const GetPickListDocument = gql`
   query GetPickList(
@@ -21952,6 +22306,12 @@ export const SubmitFormDocument = gql`
         ... on CurrentLivingSituation {
           ...CurrentLivingSituationFields
         }
+        ... on CeAssessment {
+          ...CeAssessmentFields
+        }
+        ... on Event {
+          ...EventFields
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -21969,6 +22329,8 @@ export const SubmitFormDocument = gql`
   ${FileFieldsFragmentDoc}
   ${EnrollmentFieldsFragmentDoc}
   ${CurrentLivingSituationFieldsFragmentDoc}
+  ${CeAssessmentFieldsFragmentDoc}
+  ${EventFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitFormMutationFn = Apollo.MutationFunction<

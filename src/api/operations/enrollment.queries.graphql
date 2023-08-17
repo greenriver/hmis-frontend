@@ -37,6 +37,20 @@ query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
+query GetEnrollmentCeAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    ceAssessments(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeAssessmentFields
+      }
+    }
+  }
+}
+
 query GetEnrollmentReminders($id: ID!) {
   enrollment(id: $id) {
     id
@@ -62,6 +76,30 @@ mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
   deleteEnrollment(input: $input) {
     clientMutationId
     enrollment {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteCeAssessment($id: ID!) {
+  deleteCeAssessment(input: { id: $id }) {
+    clientMutationId
+    ceAssessment {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteCeEvent($id: ID!) {
+  deleteCeEvent(input: { id: $id }) {
+    clientMutationId
+    ceEvent {
       id
     }
     errors {
