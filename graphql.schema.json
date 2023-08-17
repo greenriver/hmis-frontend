@@ -21846,6 +21846,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CE_EVENTS",
+            "description": "Grouped HUD CE Event types",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "COC",
             "description": null,
             "isDeprecated": false,
