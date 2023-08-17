@@ -3653,26 +3653,26 @@ export enum ProjectType {
   DayShelter = 'DAY_SHELTER',
   /** Emergency Shelter */
   Es = 'ES',
+  /** Homelessness Prevention */
+  Hp = 'HP',
   /** Invalid Value */
   Invalid = 'INVALID',
-  /** Permanent Housing Only */
-  Oph = 'OPH',
   /** Other */
   Other = 'OTHER',
-  /** Permanent Housing */
-  Ph = 'PH',
-  /** Homelessness Prevention */
-  Prevention = 'PREVENTION',
-  /** Permanent Supportive Housing */
-  Psh = 'PSH',
-  /** Rapid Re-Housing */
-  Rrh = 'RRH',
-  /** Services Only */
-  ServicesOnly = 'SERVICES_ONLY',
+  /** PH - Housing with Services */
+  PhOph = 'PH_OPH',
+  /** PH - Housing Only */
+  PhPh = 'PH_PH',
+  /** PH - Permanent Supportive Housing */
+  PhPsh = 'PH_PSH',
+  /** PH - Rapid Re-Housing */
+  PhRrh = 'PH_RRH',
   /** Safe Haven */
   Sh = 'SH',
   /** Street Outreach */
   So = 'SO',
+  /** Services Only */
+  Sso = 'SSO',
   /** Transitional Housing */
   Th = 'TH',
 }

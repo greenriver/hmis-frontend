@@ -23668,14 +23668,14 @@
             "deprecationReason": null
           },
           {
-            "name": "INVALID",
-            "description": "Invalid Value",
+            "name": "HP",
+            "description": "Homelessness Prevention",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "OPH",
-            "description": "Permanent Housing Only",
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -23686,32 +23686,26 @@
             "deprecationReason": null
           },
           {
-            "name": "PH",
-            "description": "Permanent Housing",
+            "name": "PH_OPH",
+            "description": "PH - Housing with Services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "PREVENTION",
-            "description": "Homelessness Prevention",
+            "name": "PH_PH",
+            "description": "PH - Housing Only",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "PSH",
-            "description": "Permanent Supportive Housing",
+            "name": "PH_PSH",
+            "description": "PH - Permanent Supportive Housing",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RRH",
-            "description": "Rapid Re-Housing",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SERVICES_ONLY",
-            "description": "Services Only",
+            "name": "PH_RRH",
+            "description": "PH - Rapid Re-Housing",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -23724,6 +23718,12 @@
           {
             "name": "SO",
             "description": "Street Outreach",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSO",
+            "description": "Services Only",
             "isDeprecated": false,
             "deprecationReason": null
           },

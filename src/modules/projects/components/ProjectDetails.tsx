@@ -76,7 +76,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
           />
         ),
       },
-      ...(project.projectType === ProjectType.ServicesOnly
+      ...(project.projectType === ProjectType.Sso
         ? [
             {
               label: 'Residential Affiliation',

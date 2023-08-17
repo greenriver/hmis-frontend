@@ -44,16 +44,13 @@ export const MISSING_DATA_KEYS = [
 ];
 
 export const PERMANENT_HOUSING_PROJECT_TYPES = [
-  ProjectType.Psh,
-  ProjectType.Ph,
-  ProjectType.Oph,
-  ProjectType.Rrh,
+  ProjectType.PhPsh,
+  ProjectType.PhPh,
+  ProjectType.PhOph,
+  ProjectType.PhRrh,
 ];
 
-export const STREET_OUTREACH_SERVICES_ONLY = [
-  ProjectType.ServicesOnly,
-  ProjectType.So,
-];
+export const STREET_OUTREACH_SERVICES_ONLY = [ProjectType.Sso, ProjectType.So];
 
 export const INVALID_ENUM = 'INVALID';
 
@@ -354,10 +351,14 @@ export const getSchemaForInputType = (type: string) => {
 };
 
 export const briefProjectType = (projectType: ProjectType) => {
-  if (projectType.length > 3) {
-    return startCase(projectType.toLowerCase());
+  switch (projectType) {
+    case ProjectType.DayShelter:
+    case ProjectType.Other:
+    case ProjectType.Invalid:
+      return startCase(projectType.toLowerCase());
+    default:
+      return projectType.replace('_', ' - ');
   }
-  return projectType;
 };
 
 export const customDataElementValue = (
