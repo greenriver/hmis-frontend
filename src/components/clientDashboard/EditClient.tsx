@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -9,26 +9,17 @@ import {
 import { useClientDashboardContext } from '../pages/ClientDashboard';
 
 import DeleteClientButton from '@/modules/client/components/DeleteClientButton';
+import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
-import {
-  ClientFieldsFragment,
-  ExternalIdentifierType,
-  FormRole,
-  useGetClientPermissionsQuery,
-} from '@/types/gqlTypes';
+import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const Profile = () => {
   const { client } = useClientDashboardContext();
   const navigate = useNavigate();
-  const { data, loading } = useGetClientPermissionsQuery({
-    variables: { id: client.id },
-  });
-
-  const { canViewDob, canViewFullSsn } = data?.client?.access || {};
 
   const onCompleted = useCallback(
     (data: ClientFieldsFragment) => {
@@ -40,19 +31,16 @@ const Profile = () => {
     [navigate]
   );
 
-  if (loading) return null;
+  const localConstants = useMemo(
+    () => localConstantsForClientForm(client),
+    [client]
+  );
 
   return (
     <EditRecord<ClientFieldsFragment>
       formRole={FormRole.Client}
       record={client}
-      localConstants={{
-        canViewFullSsn,
-        canViewDob,
-        mciId: client.externalIds.find(
-          (c) => c.type == ExternalIdentifierType.MciId
-        ),
-      }}
+      localConstants={localConstants}
       onCompleted={onCompleted}
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={

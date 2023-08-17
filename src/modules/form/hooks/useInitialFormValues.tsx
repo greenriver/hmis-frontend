@@ -1,8 +1,8 @@
-import { startOfToday } from 'date-fns';
 import { useMemo } from 'react';
 
 import { ItemMap, LocalConstants, SubmitFormAllowedTypes } from '../types';
 import {
+  AlwaysPresentLocalConstants,
   createInitialValuesFromRecord,
   getInitialValues,
   getItemMap,
@@ -11,15 +11,11 @@ import {
 import { FormDefinitionJsonFieldsFragment } from '@/types/gqlTypes';
 
 interface Args {
-  record?: SubmitFormAllowedTypes;
+  record?: SubmitFormAllowedTypes | null;
   itemMap?: ItemMap;
   definition?: FormDefinitionJsonFieldsFragment;
   localConstants?: LocalConstants;
 }
-
-export const AlwaysPresentLocalConstants = {
-  today: startOfToday(),
-};
 
 const useInitialFormValues = ({
   record,

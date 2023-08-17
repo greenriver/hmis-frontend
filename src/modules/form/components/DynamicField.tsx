@@ -11,7 +11,9 @@ import {
 import {
   chooseSelectComponentType,
   hasMeaningfulValue,
+  isDataNotCollected,
   maxWidthAtNestingLevel,
+  placeholderText,
 } from '../util/formUtil';
 
 import MultiAddressInput from './client/addresses/MultiAddressInput';
@@ -53,20 +55,20 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 };
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
-export const MAX_INPUT_WIDTH = 430;
+export const MAX_INPUT_WIDTH = 500;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
-  nestingLevel,
+  nestingLevel = 0,
   value,
   disabled = false,
   horizontal = false,
   errors,
   inputProps,
-  pickListRelationId,
+  pickListArgs,
   noLabel = false,
   warnIfEmpty = false,
 }) => {
@@ -107,24 +109,28 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     value === INVALID_ENUM || value?.code === INVALID_ENUM;
 
   const commonInputProps: DynamicInputCommonProps = {
-    disabled,
     label,
     error: !!(errors && errors.length > 0) || isInvalidEnumValue,
     helperText: item.helperText,
     id: linkId,
     ...inputProps,
+    disabled: disabled || inputProps?.disabled,
   };
   commonInputProps.warnIfEmptyTreatment =
     warnIfEmpty &&
     (!!item.warnIfEmpty || !!item.required) &&
     !commonInputProps.disabled &&
     !commonInputProps.error &&
-    !hasMeaningfulValue(value);
+    (!hasMeaningfulValue(value) || isDataNotCollected(value));
 
-  const [options, pickListLoading, isLocalPickList] = usePickList(
+  const {
+    pickList: options,
+    loading: pickListLoading,
+    isLocalPickList,
+  } = usePickList({
     item,
-    pickListRelationId,
-    {
+    ...pickListArgs,
+    fetchOptions: {
       onCompleted: (data) => {
         const newValue = getValueFromPickListData({
           item,
@@ -135,13 +141,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
         if (newValue) setTimeout(() => itemChanged(newValue));
       },
-    }
-  );
+    },
+  });
 
-  const placeholder =
-    item.size === InputSize.Xsmall
-      ? undefined
-      : `Select ${item.briefText || item.text || ''}...`;
+  const placeholder = placeholderText(item);
 
   if (item.component === Component.Mci) {
     return (
@@ -149,6 +152,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         value={value}
         onChange={onChangeValue}
         {...commonInputProps}
+        disabled={false}
       />
     );
   }
@@ -315,7 +319,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             options={options || []}
             row={componentType === Component.RadioButtons}
             clearable
-            checkbox
             {...commonInputProps}
           />
         );

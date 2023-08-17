@@ -111,7 +111,6 @@ const columns: ColumnDef<AssessmentType>[] = [
               render: ({ values, fieldName }) => {
                 if (values === 'changed') return changedText;
 
-                console.log(values);
                 const [from, to] = values.map((val) =>
                   isNil(val) ? null : (
                     <HmisField

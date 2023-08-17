@@ -17,7 +17,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import {
-  FormDefinitionWithJsonFragment,
+  FormDefinitionFieldsFragment,
   FormInput,
   useSubmitFormMutation,
 } from '@/types/gqlTypes';
@@ -28,9 +28,8 @@ type SubmitFormInputVariables = Omit<
 >;
 
 export interface DynamicFormHandlerArgs<T> {
-  // formRole: FormRole;
-  formDefinition?: FormDefinitionWithJsonFragment;
-  record?: T;
+  formDefinition?: FormDefinitionFieldsFragment;
+  record?: T | null;
   onCompleted?: (data: T) => void;
   localConstants?: LocalConstants;
   inputVariables?: SubmitFormInputVariables;
@@ -98,7 +97,6 @@ export function useDynamicFormHandlersForRecord<
         confirmed,
         ...inputVariables,
       };
-      console.debug('Submitting', input);
 
       setErrors(emptyErrorState);
       void submitForm({ variables: { input: { input } } });

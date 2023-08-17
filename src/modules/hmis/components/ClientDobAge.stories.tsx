@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 
 import ClientDobAge from './ClientDobAge';
 
@@ -8,9 +8,9 @@ import { ClientFieldsFragment } from '@/types/gqlTypes';
 export default {
   title: 'ClientDobAge',
   component: ClientDobAge,
-} as ComponentMeta<typeof ClientDobAge>;
+} as Meta<typeof ClientDobAge>;
 
-const Template: ComponentStory<typeof ClientDobAge> = (args) => (
+const Template: StoryFn<typeof ClientDobAge> = (args) => (
   <ClientDobAge {...args} />
 );
 

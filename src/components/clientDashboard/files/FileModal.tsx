@@ -122,7 +122,10 @@ const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
 const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
   const { clientId } = useSafeParams() as { clientId?: string };
   const previewContent = useMemo(() => {
-    if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.contentType)) {
+    if (
+      file.contentType &&
+      ['image/jpeg', 'image/jpg', 'image/png'].includes(file.contentType)
+    ) {
       return <ImagePreview file={file} />;
     } else if (file.contentType === 'application/pdf') {
       return <PdfPreview file={file} />;
@@ -172,6 +175,7 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
       );
     }
   }, [file]);
+  const pickListArgs = useMemo(() => ({ clientId }), [clientId]);
 
   return (
     <>
@@ -182,7 +186,7 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
           formRole={FormRole.File}
           title={file.name}
           actions={actions}
-          pickListRelationId={clientId}
+          pickListArgs={pickListArgs}
         >
           <Stack
             width='100%'

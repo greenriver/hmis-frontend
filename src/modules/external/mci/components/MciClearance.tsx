@@ -1,6 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Alert, AlertTitle, Box, lighten, Stack } from '@mui/material';
-import { find, isEqual, omit, pick } from 'lodash-es';
+import { find, isEqual, pick, transform } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ClearanceState, ClearanceStatus } from '../types';
@@ -8,27 +8,72 @@ import { UNCLEARED_CLIENT_STRING } from '../util';
 
 import {
   getClearanceAlertText,
+  MciFieldsChangedAlert,
   MciSuccessAlert,
   MciUnavailableAlert,
 } from './alerts';
 import MciMatchSelector from './MciMatchSelector';
 
+import { MciClearanceProps } from './types';
 import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
-import { DynamicInputCommonProps } from '@/modules/form/types';
 import { createHudValuesForSubmit } from '@/modules/form/util/formUtil';
-import { NameDataQuality, useClearMciMutation } from '@/types/gqlTypes';
+import {
+  DobDataQuality,
+  MciClearanceInput,
+  NameDataQuality,
+  useClearMciMutation,
+} from '@/types/gqlTypes';
 
-export interface MciClearanceProps extends DynamicInputCommonProps {
-  value?: string | null;
-  onChange: (value?: string | null) => void;
-}
+const MCI_CLEARANCE_FIELDS = [
+  'names',
+  'firstName',
+  'middleName',
+  'lastName',
+  'dob',
+  'gender',
+  'ssn',
+  'nameDataQuality',
+  'dobDataQuality',
+] as const;
 
-const MCI_CLEARANCE_FIELDS = ['names', 'dob', 'gender', 'ssn'] as const;
+const fieldsToParams = (
+  fields: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>
+): MciClearanceInput & {
+  nameDataQuality: NameDataQuality;
+  dobDataQuality: DobDataQuality;
+} => {
+  const { names, ...rest } = fields;
+  const primaryName = find(names || [], {
+    primary: true,
+  });
+
+  const input = rest;
+  if (primaryName) {
+    input.firstName = primaryName.first;
+    input.middleName = primaryName.middle;
+    input.lastName = primaryName.last;
+    input.nameDataQuality = primaryName.nameDataQuality;
+  }
+  return rest;
+};
+
+const enoughFieldsForClearance = (
+  fields: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>
+): boolean => {
+  const params = fieldsToParams(fields);
+  return !!(
+    params.firstName &&
+    params.lastName &&
+    params.nameDataQuality === NameDataQuality.FullNameReported &&
+    params.dob &&
+    params.dobDataQuality === DobDataQuality.FullDobReported
+  );
+};
 
 const initialClearanceState: ClearanceState = {
   status: 'initial',
@@ -40,10 +85,10 @@ const MciClearance = ({
   onChange,
   existingClient,
   error: hasValidationError,
-  currentFormValues,
+  currentMciAttributes,
 }: MciClearanceProps & {
   existingClient: boolean;
-  currentFormValues: Record<typeof MCI_CLEARANCE_FIELDS[number], any>;
+  currentMciAttributes: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>;
 }) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [{ status, candidates }, setState] = useState<ClearanceState>(
@@ -70,7 +115,6 @@ const MciClearance = ({
           status = 'several_matches';
         }
 
-        console.debug('Cleared MCI:', status, matches);
         setState({ status, candidates: matches });
         if (status == 'auto_cleared') {
           onChange(matches[0].mciId);
@@ -85,34 +129,23 @@ const MciClearance = ({
   });
 
   // When MCI-related fields change, re-set to initial state
-  const previousFormValues = usePrevious(currentFormValues);
+  const previousMciAttributes = usePrevious(currentMciAttributes);
   useEffect(() => {
-    const relevantFieldChanged = !isEqual(
-      currentFormValues,
-      previousFormValues
-    );
-    if (relevantFieldChanged && status !== 'initial') {
+    if (status === 'initial') return;
+    if (!isEqual(currentMciAttributes, previousMciAttributes)) {
       onChange(null);
       setState(initialClearanceState);
     }
-  }, [status, onChange, currentFormValues, previousFormValues]);
+  }, [status, onChange, currentMciAttributes, previousMciAttributes]);
 
   const handleSearch = useCallback(() => {
-    if (!currentFormValues) return;
-    console.debug('Clearing MCI with input', currentFormValues);
+    if (!currentMciAttributes) return;
     onChange(null);
-
-    const primaryName = find(currentFormValues.names, { primary: true });
-    if (!primaryName) return;
-
-    const input = {
-      ...omit(currentFormValues, 'names'),
-      firstName: primaryName.first,
-      middleName: primaryName.middle,
-      lastName: primaryName.last,
-    };
+    setErrorState(emptyErrorState);
+    const { dobDataQuality, nameDataQuality, ...input } =
+      fieldsToParams(currentMciAttributes);
     clearMci({ variables: { input: { input } } });
-  }, [clearMci, onChange, currentFormValues]);
+  }, [clearMci, onChange, currentMciAttributes]);
 
   const { title, subtitle, buttonText, rightAlignButton } = useMemo(
     () =>
@@ -146,6 +179,12 @@ const MciClearance = ({
             : 'Please make a selection.'}
         </Alert>
       )}
+      {errorState && hasErrors(errorState) && (
+        <Stack gap={1}>
+          <ApolloErrorAlert error={errorState.apolloError} />
+          <ErrorAlert errors={errorState.errors} />
+        </Stack>
+      )}
       <Alert
         color='info'
         icon={false}
@@ -166,12 +205,6 @@ const MciClearance = ({
           <Box sx={{ mt: 2, mb: 1 }}>{searchButton}</Box>
         )}
       </Alert>
-      {errorState && hasErrors(errorState) && (
-        <Stack gap={1} sx={{ mt: 4 }}>
-          <ApolloErrorAlert error={errorState.apolloError} />
-          <ErrorAlert errors={errorState.errors} />
-        </Stack>
-      )}
 
       {candidates && status !== 'initial' && !loading && (
         <MciMatchSelector
@@ -194,33 +227,17 @@ const MciClearance = ({
 const MciClearanceWrapper = ({
   disabled,
   onChange,
+  currentMciAttributes,
   ...props
-}: MciClearanceProps & { existingClient: boolean }) => {
-  const { getCleanedValues, definition } = useDynamicFormContext();
-
-  // Gets re-calculated any time one of the dependent values changes (because of enableWhen dependency)
-  const currentFormValues = useMemo(() => {
-    if (!definition || !getCleanedValues) {
-      console.error('Context missing, unable to do MCI search');
-      return;
-    }
-    const values = createHudValuesForSubmit(getCleanedValues(), definition);
-    return pick(values, [...MCI_CLEARANCE_FIELDS, 'names']);
-  }, [definition, getCleanedValues]);
-
+}: MciClearanceProps & {
+  existingClient: boolean;
+  currentMciAttributes?: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>;
+}) => {
   const mciSearchUnavailable = useMemo(() => {
     if (disabled) return true;
-    if (!currentFormValues) return true;
-
-    const primaryName = find(currentFormValues.names, { primary: true });
-    if (!primaryName) return true;
-
-    return (
-      !primaryName.first ||
-      !primaryName.last ||
-      primaryName.nameDataQuality !== NameDataQuality.FullNameReported
-    );
-  }, [disabled, currentFormValues]);
+    if (!currentMciAttributes) return true;
+    return !enoughFieldsForClearance(currentMciAttributes);
+  }, [disabled, currentMciAttributes]);
 
   // If element becomes disabled, set value to uncleared
   // If element becomes enabled, set value to null
@@ -233,7 +250,7 @@ const MciClearanceWrapper = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mciSearchUnavailable]);
 
-  if (mciSearchUnavailable || !currentFormValues) {
+  if (mciSearchUnavailable || !currentMciAttributes) {
     return <MciUnavailableAlert />;
   }
 
@@ -241,7 +258,7 @@ const MciClearanceWrapper = ({
     <MciClearance
       disabled={disabled}
       onChange={onChange}
-      currentFormValues={currentFormValues}
+      currentMciAttributes={currentMciAttributes}
       {...props}
     />
   );
@@ -251,24 +268,54 @@ const MciClearanceWrapper = ({
  * Wrapper to show existing MCI ID if client already has one.
  */
 const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
-  const { getCleanedValues } = useDynamicFormContext();
+  const { getCleanedValues, definition } = useDynamicFormContext();
 
-  const [clientId, externalId] = useMemo(() => {
-    if (!getCleanedValues) return [];
+  // currentMciAttributes gets re-calculated any time one of the dependent values changes (because of enableWhen dependency)
+  const [clientId, externalIds, currentMciAttributes] = useMemo(() => {
+    if (!getCleanedValues || !definition) return [];
     const values = getCleanedValues();
-    return [values['client-id'], values['current-mci-id']];
-  }, [getCleanedValues]);
+    let byKey = createHudValuesForSubmit(values, definition);
+    byKey = transform(
+      byKey,
+      (result, v, k) => (result[k.replace('Client.', '')] = v)
+    );
+
+    const mciFields = pick(byKey, MCI_CLEARANCE_FIELDS);
+    return [byKey.id, values['current-mci-id'], mciFields];
+  }, [getCleanedValues, definition]);
+
+  const previousMciAttributes = usePrevious(currentMciAttributes);
+
+  const [hasChanged, setHasChanged] = useState(false);
+  useEffect(() => {
+    if (!previousMciAttributes) return;
+
+    const changed = !isEqual(currentMciAttributes, previousMciAttributes);
+    if (changed) setHasChanged(true);
+  }, [currentMciAttributes, previousMciAttributes]);
 
   if (!getCleanedValues) return null;
 
   // If client already has an MCI ID, just show that.
   // Post-MVP: allow re-clear
-  if (externalId && externalId.identifier) {
-    if (!props.value) props.onChange(externalId?.identifier);
-    return <MciSuccessAlert mci={externalId} />;
+  if (externalIds && externalIds.length > 0 && externalIds[0].identifier) {
+    if (!props.value) props.onChange(externalIds[0].identifier);
+
+    return (
+      <>
+        <MciSuccessAlert mciIds={externalIds} />
+        {hasChanged && <MciFieldsChangedAlert />}
+      </>
+    );
   }
 
-  return <MciClearanceWrapper {...props} existingClient={!!clientId} />;
+  return (
+    <MciClearanceWrapper
+      {...props}
+      currentMciAttributes={currentMciAttributes}
+      existingClient={!!clientId}
+    />
+  );
 };
 
 export default MciClearanceWrapperWithValue;

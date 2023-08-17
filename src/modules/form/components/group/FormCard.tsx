@@ -9,19 +9,18 @@ import {
 import { includes, isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
-import { ChangeType, GroupItemComponentProps } from '../../types';
+import {
+  AssessmentForPopulation,
+  ChangeType,
+  GroupItemComponentProps,
+} from '../../types';
 import {
   getAllChildLinkIds,
+  getFieldOnAssessment,
   getPopulatableChildren,
   gqlValueToFormValue,
 } from '../../util/formUtil';
-import {
-  isTypicalRelatedRecord,
-  RelatedRecord,
-} from '../../util/recordPickerUtil';
-import RecordPickerDialog, {
-  tableComponentForType,
-} from '../RecordPickerDialog';
+import RecordPickerDialog from '../RecordPickerDialog';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -40,13 +39,9 @@ const FormCard = ({
 }) => {
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
-  const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
-
-  const fillable = useMemo(
-    () =>
-      item.recordType && item.prefill && tableComponentForType(item.recordType),
-    [item]
-  );
+  const [sourceRecord, setSourceRecord] = useState<
+    AssessmentForPopulation | undefined
+  >();
 
   const childLinkIds = useMemo(() => getAllChildLinkIds(item), [item]);
   const hasAnyChildValues = useMemo(
@@ -68,16 +63,15 @@ const FormCard = ({
   }, [severalItemsChanged, childLinkIds]);
 
   const onSelectAutofillRecord = useCallback(
-    (record: RelatedRecord) => {
+    (record: AssessmentForPopulation) => {
       setSourceRecord(record);
       setFillDialogOpen(false);
 
       const newFormValues: Record<string, any> = {};
       getPopulatableChildren(item).forEach((i) => {
-        if (!i.fieldName) return;
-
-        const gqlValue = record[i.fieldName as keyof RelatedRecord];
-        newFormValues[i.linkId] = gqlValueToFormValue(gqlValue, i);
+        if (!i.mapping) return;
+        const { value } = getFieldOnAssessment(record, i.mapping);
+        newFormValues[i.linkId] = gqlValueToFormValue(value, i);
       });
 
       severalItemsChanged({ values: newFormValues, type: ChangeType.User });
@@ -98,6 +92,7 @@ const FormCard = ({
           px: 2.5,
           pageBreakInside: 'avoid',
         }}
+        className='HmisForm-card'
       >
         {/* Card title */}
         {item.text && (
@@ -112,7 +107,7 @@ const FormCard = ({
                   Debug
                 </Button>
               )}
-              {fillable && (
+              {item.prefill && (
                 <>
                   <Button
                     data-testid='fillSectionButton'
@@ -138,10 +133,10 @@ const FormCard = ({
         )}
 
         {/* Source record description */}
-        {sourceRecord && isTypicalRelatedRecord(sourceRecord) && (
+        {sourceRecord && (
           <Typography variant='body2' sx={{ mb: 3 }}>
             Filled with record from{' '}
-            {parseAndFormatDate(sourceRecord.informationDate)}
+            {parseAndFormatDate(sourceRecord.assessmentDate)}
           </Typography>
         )}
 
@@ -150,7 +145,7 @@ const FormCard = ({
           container
           direction='column'
           // Spacing between input elements inside the card
-          gap={2}
+          gap={3}
           sx={{
             '& .MuiGrid-item:first-of-type': !item.text ? { pt: 0 } : undefined,
             mt: 0,
@@ -163,12 +158,11 @@ const FormCard = ({
         </Grid>
 
         {/* Dialog for selecting autofill record */}
-        {fillable && item.recordType && (
+        {item.prefill && (
           <>
             <RecordPickerDialog
               id={`recordPickerDialog-${item.linkId}`}
               item={item}
-              recordType={item.recordType}
               open={fillDialogOpen}
               onSelected={onSelectAutofillRecord}
               onCancel={() => setFillDialogOpen(false)}

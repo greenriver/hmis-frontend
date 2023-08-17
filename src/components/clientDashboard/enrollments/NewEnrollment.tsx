@@ -24,7 +24,10 @@ import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHouseholdMembers';
 import { useRecentHouseholdMembers } from '@/modules/household/hooks/useRecentHouseholdMembers';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
 import {
   CreateEnrollmentInput,
   RelationshipToHoH,
@@ -59,11 +62,11 @@ const NewEnrollment = () => {
           (e) => e.client.id === clientId
         )?.id;
         const path = enrollmentId
-          ? generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+          ? generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
               clientId,
               enrollmentId,
             })
-          : generateSafePath(ClientDashboardRoutes.ALL_ENROLLMENTS, {
+          : generateSafePath(ClientDashboardRoutes.CLIENT_ENROLLMENTS, {
               clientId,
             });
         navigate(path);
@@ -90,7 +93,6 @@ const NewEnrollment = () => {
         })),
         confirmed,
       };
-      console.log('CreateEnrollment with input:', input);
       void mutateFunction({ variables: { input } });
     },
     [entryDate, members, project, mutateFunction]

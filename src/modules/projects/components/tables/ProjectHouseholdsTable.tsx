@@ -1,7 +1,8 @@
-import { Box, Link, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { omit } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
+import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -14,7 +15,7 @@ import {
   formatDateForGql,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   EnrollmentFilterOptionStatus,
@@ -53,7 +54,9 @@ export const HOUSEHOLD_COLUMNS: {
               relationshipToHoh={c.relationshipToHoH}
             />
           ) : (
-            <Typography variant='body2'>&#160;</Typography>
+            <Typography variant='body2' key={c.id}>
+              &#160;
+            </Typography>
           )
         )}
       </TableCellConatiner>
@@ -64,20 +67,21 @@ export const HOUSEHOLD_COLUMNS: {
     render: (hh) => (
       <TableCellConatiner>
         {hh.householdClients.map((c) => (
-          <Stack
+          <RouterLink
             key={c.id}
-            direction='row'
-            gap={0.5}
-            whiteSpace='nowrap'
-            component={Link}
-            href={generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
-              clientId: c.client.id,
-              enrollmentId: c.enrollment.id,
-            })}
+            to={generateSafePath(
+              EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+              {
+                clientId: c.client.id,
+                enrollmentId: c.enrollment.id,
+              }
+            )}
           >
-            <ClientName client={c.client} />
-            <ClientDobAge client={c.client} noDob />
-          </Stack>
+            <Stack direction='row' gap={0.5} whiteSpace='nowrap'>
+              <ClientName client={c.client} key='name' />
+              <ClientDobAge client={c.client} noDob key='age' />
+            </Stack>
+          </RouterLink>
         ))}
       </TableCellConatiner>
     ),
@@ -88,7 +92,9 @@ export const HOUSEHOLD_COLUMNS: {
       <TableCellConatiner>
         {hh.householdClients.map((c) =>
           c.relationshipToHoH === RelationshipToHoH.DataNotCollected ? (
-            <Typography variant='body2'>&#160;</Typography>
+            <Typography variant='body2' key={c.id}>
+              &#160;
+            </Typography>
           ) : (
             <HmisEnum
               key={c.id}

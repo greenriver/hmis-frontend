@@ -1,10 +1,11 @@
 import { SxProps } from '@mui/system';
-import { isNil } from 'lodash-es';
+import { isNil, isObject } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FormItem,
+  GetAssessmentsForPopulationQuery,
   ItemType,
   PickListOption,
   SubmitFormMutation,
@@ -35,17 +36,23 @@ export type SubmitFormAllowedTypes = NonNullable<
   NonNullable<SubmitFormMutation['submitForm']>['record']
 >;
 
+export type PickListArgs = {
+  projectId?: string;
+  clientId?: string;
+  householdId?: string;
+  enrollmentId?: string;
+};
 // Props to DynamicField. Need to put here to avoid circular deps.
 export interface DynamicFieldProps {
   item: FormItem;
   itemChanged: ItemChangedFn;
-  nestingLevel: number;
+  nestingLevel?: number;
   value: any;
   disabled?: boolean;
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
   horizontal?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   noLabel?: boolean;
   warnIfEmpty?: boolean;
 }
@@ -55,9 +62,10 @@ export interface DynamicViewFieldProps {
   nestingLevel: number;
   value: any;
   horizontal?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   noLabel?: boolean;
   adjustValue?: ItemChangedFn;
+  disabled?: boolean;
 }
 
 // Props accepted by all input components
@@ -127,6 +135,7 @@ export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
+export type TypedObject = { __typename: string };
 
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
   return k in HmisEnums;
@@ -167,3 +176,17 @@ export function isPickListOptionArray(
     isPickListOption(value[0])
   );
 }
+
+export const isTypedObject = (o: any): o is TypedObject => {
+  return isObject(o) && o.hasOwnProperty('__typename');
+};
+
+export const isTypedObjectWithId = (
+  o: any
+): o is TypedObject & { id: string } => {
+  return isTypedObject(o) && o.hasOwnProperty('id');
+};
+
+export type AssessmentForPopulation = NonNullable<
+  GetAssessmentsForPopulationQuery['client']
+>['assessments']['nodes'][0];

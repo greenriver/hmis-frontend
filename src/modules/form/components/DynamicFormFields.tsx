@@ -5,7 +5,9 @@ import {
   FormValues,
   ItemChangedFn,
   ItemMap,
+  LocalConstants,
   OverrideableDynamicFieldProps,
+  PickListArgs,
   SeveralItemsChangedFn,
 } from '../types';
 import {
@@ -35,12 +37,13 @@ export interface Props {
   locked?: boolean;
   bulk?: boolean;
   visible?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   values: FormValues;
   itemChanged: ItemChangedFn;
   severalItemsChanged: SeveralItemsChangedFn;
   itemMap: ItemMap;
   disabledLinkIds: string[];
+  localConstants?: LocalConstants;
 }
 
 const DynamicFormFields: React.FC<Props> = ({
@@ -51,18 +54,21 @@ const DynamicFormFields: React.FC<Props> = ({
   warnIfEmpty = false,
   locked = false,
   visible = true,
-  pickListRelationId,
+  pickListArgs,
   values,
   disabledLinkIds,
   itemChanged,
   severalItemsChanged,
+  localConstants,
 }) => {
   // Get errors for a particular field
   const getFieldErrors = useCallback(
     (item: FormItem) => {
-      if (!errors || !item.fieldName) return undefined;
+      if (!errors || !item.mapping) return undefined;
       return errors.filter(
-        (e) => e.attribute === item.fieldName || e.linkId === item.linkId
+        (e) =>
+          e.linkId === item.linkId ||
+          (e.attribute && e.attribute === item.mapping?.fieldName)
       );
     },
     [errors]
@@ -76,7 +82,7 @@ const DynamicFormFields: React.FC<Props> = ({
     renderFn?: (children: ReactNode) => ReactNode
   ) => {
     const isDisabled = !isEnabled(item, disabledLinkIds);
-    if (isDisabled && item.disabledDisplay !== DisabledDisplay.Protected)
+    if (isDisabled && item.disabledDisplay === DisabledDisplay.Hidden)
       return null;
     if (bulk && item.serviceDetailType === ServiceDetailType.Client)
       return null;
@@ -104,9 +110,13 @@ const DynamicFormFields: React.FC<Props> = ({
                     values: sectionValues,
                     keyByFieldName: true,
                   });
+                  // eslint-disable-next-line no-console
                   console.group(item.text || item.linkId);
+                  // eslint-disable-next-line no-console
                   console.log(sectionValues);
+                  // eslint-disable-next-line no-console
                   console.log(valuesByKey);
+                  // eslint-disable-next-line no-console
                   console.groupEnd();
                 }
               : undefined
@@ -120,16 +130,25 @@ const DynamicFormFields: React.FC<Props> = ({
         key={item.linkId}
         item={item}
         itemChanged={itemChanged}
-        value={isDisabled ? undefined : values[item.linkId]}
+        value={
+          isDisabled &&
+          item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
+            ? undefined
+            : values[item.linkId]
+        }
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
         horizontal={horizontal}
-        pickListRelationId={pickListRelationId}
+        pickListArgs={pickListArgs}
         warnIfEmpty={warnIfEmpty}
         {...props}
         inputProps={{
           ...props?.inputProps,
-          ...buildCommonInputProps(item, values),
+          ...buildCommonInputProps({
+            item,
+            values,
+            localConstants: localConstants || {},
+          }),
           disabled: isDisabled || locked || undefined,
         }}
       />

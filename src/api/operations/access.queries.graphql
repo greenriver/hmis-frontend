@@ -1,5 +1,5 @@
 query GetRootPermissions {
   access {
-    ...RootPermissionsFragment
+    ...RootPermissions
   }
 }

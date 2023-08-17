@@ -8,8 +8,10 @@ import {
   Typography,
 } from '@mui/material';
 import { findIndex } from 'lodash-es';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
+import { useHouseholdAssessments } from '../../hooks/useHouseholdAssessments';
 
 import HouseholdAssessmentTabPanel from './HouseholdAssessmentTabPanel';
 import HouseholdSummaryTabPanel from './HouseholdSummaryTabPanel';
@@ -17,6 +19,8 @@ import LabeledTabGroup from './LabeledTabGroup';
 import TabLabel, { SummaryTabLabel } from './TabLabel';
 import {
   AssessmentStatus,
+  HouseholdAssesmentRole,
+  householdAssesmentTitle,
   SUMMARY_TAB_ID,
   tabA11yProps,
   TabDefinition,
@@ -33,52 +37,56 @@ import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { router } from '@/routes/router';
 import {
+  AssessmentRole,
   EnrollmentFieldsFragment,
-  FormRole,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
 interface HouseholdAssessmentsProps {
   enrollment: EnrollmentFieldsFragment;
-  type: 'ENTRY' | 'EXIT';
-  title: ReactNode;
+  role: HouseholdAssesmentRole;
+  assessmentId?: string;
 }
 
 const HouseholdAssessments = ({
-  type,
-  title,
+  role,
   enrollment,
+  assessmentId,
 }: HouseholdAssessmentsProps) => {
-  const [householdMembers, { loading, error, refetch, networkStatus }] =
-    useHouseholdMembers(enrollment.id);
+  const [householdMembers, fetchMembersStatus] = useHouseholdMembers(
+    enrollment.id
+  );
 
+  const { assessmentByEnrollmentId, refetch, ...fetchAssessmentsStatus } =
+    useHouseholdAssessments({
+      role,
+      householdId: enrollment.householdId,
+      assessmentId,
+    });
   const [currentTab, setCurrentTab] = useState<string | undefined>('1');
 
   const [tabs, setTabs] = useState<TabDefinition[]>([]);
 
-  const hasRefetched = useHasRefetched(networkStatus);
+  const hasRefetched = useHasRefetched(fetchAssessmentsStatus.networkStatus);
 
   useEffect(() => {
     if (!householdMembers) return;
+    if (!assessmentByEnrollmentId) return;
     setTabs((oldTabs) => {
       const newTabs: TabDefinition[] = householdMembers.map(
         ({ client, enrollment, relationshipToHoH }, index) => {
-          const assessmentId =
-            type === 'ENTRY'
-              ? enrollment.intakeAssessment?.id
-              : enrollment.exitAssessment?.id;
-          const assessmentInProgress =
-            type === 'ENTRY'
-              ? !!enrollment.intakeAssessment?.inProgress
-              : !!enrollment.exitAssessment?.inProgress;
-          const assessmentDate =
-            type === 'ENTRY'
-              ? enrollment.intakeAssessment?.assessmentDate
-              : enrollment.exitAssessment?.assessmentDate;
+          const assessment = assessmentByEnrollmentId[enrollment.id];
+          const assessmentId = assessment?.id;
+          const assessmentInProgress = assessment?.inProgress;
+          const assessmentDate = assessment?.assessmentDate;
 
           // Whether the actual Entry/Exit has been completed (notwithstanding assessment status)
           const entryOrExitCompleted =
-            type === 'ENTRY' ? !enrollment.inProgress : !!enrollment.exitDate;
+            role === AssessmentRole.Intake
+              ? !enrollment.inProgress
+              : role === AssessmentRole.Exit
+              ? !!enrollment.exitDate
+              : undefined;
 
           const isSubmitted = assessmentId && !assessmentInProgress;
 
@@ -122,7 +130,7 @@ const HouseholdAssessments = ({
       );
       return newTabs;
     });
-  }, [householdMembers, type]);
+  }, [householdMembers, assessmentByEnrollmentId, role]);
 
   const { hash } = useLocation();
 
@@ -173,8 +181,15 @@ const HouseholdAssessments = ({
     []
   );
 
-  if (loading && networkStatus === 1) return <Loading />;
-  if (error) throw error;
+  if (
+    (!householdMembers && fetchMembersStatus.loading) ||
+    (!assessmentByEnrollmentId && fetchAssessmentsStatus.loading)
+  ) {
+    return <Loading />;
+  }
+
+  if (fetchMembersStatus.error) throw fetchMembersStatus.error;
+  if (fetchAssessmentsStatus.error) throw fetchAssessmentsStatus.error;
 
   const tabsSx = {
     '&.MuiTabs-root': { height: '70%' },
@@ -192,8 +207,6 @@ const HouseholdAssessments = ({
     pb: 1,
     px: 4,
   };
-
-  const formRole = type === 'ENTRY' ? FormRole.Intake : FormRole.Exit;
 
   return (
     <>
@@ -237,7 +250,9 @@ const HouseholdAssessments = ({
             }}
           >
             <Stack gap={0.2}>
-              {title}
+              <Typography variant='body1' fontWeight={600}>
+                {householdAssesmentTitle(role)}
+              </Typography>
               {enrollment && (
                 <Typography variant='body1'>
                   {enrollmentName(enrollment)}
@@ -263,7 +278,7 @@ const HouseholdAssessments = ({
                   <Tab
                     value={definition.id}
                     key={definition.id}
-                    label={<TabLabel definition={definition} role={formRole} />}
+                    label={<TabLabel definition={definition} role={role} />}
                     sx={tabSx}
                     {...tabA11yProps(definition.id)}
                   />
@@ -292,7 +307,7 @@ const HouseholdAssessments = ({
                 <Tab
                   value={SUMMARY_TAB_ID}
                   key={SUMMARY_TAB_ID}
-                  label={<SummaryTabLabel role={formRole} />}
+                  label={<SummaryTabLabel role={role} />}
                   sx={{
                     ...tabSx,
                     // justifyContent: 'left',
@@ -317,15 +332,20 @@ const HouseholdAssessments = ({
               navigateToTab={navigateToTab}
               nextTab={tabs[index + 1]?.id || SUMMARY_TAB_ID}
               previousTab={tabs[index - 1]?.id}
-              formRole={formRole}
+              role={role}
               updateTabStatus={updateTabStatus}
               {...tabDefinition}
             />
           ))}
           {tabs.length === 0 ? (
             <Alert severity='info'>
-              No household members can be{' '}
-              {type === 'ENTRY' ? 'entered' : 'exited'} at this time
+              {role === AssessmentRole.Intake ? (
+                <>No household members can be entered at this time</>
+              ) : role === AssessmentRole.Exit ? (
+                <>No household members can be exited at this time</>
+              ) : (
+                <>No assessments to perform</>
+              )}
             </Alert>
           ) : (
             <HouseholdSummaryTabPanel
@@ -333,7 +353,7 @@ const HouseholdAssessments = ({
               id={SUMMARY_TAB_ID}
               tabs={tabs}
               active={SUMMARY_TAB_ID === currentTab}
-              formRole={formRole}
+              role={role}
               projectName={enrollmentName(enrollment)}
               refetch={refetch}
               setCurrentTab={setCurrentTab}

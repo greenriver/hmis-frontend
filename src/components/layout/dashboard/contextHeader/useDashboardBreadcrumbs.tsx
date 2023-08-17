@@ -1,12 +1,17 @@
+import { SvgIconComponent } from '@mui/icons-material';
+import PersonIcon from '@mui/icons-material/Person';
+import { merge, startCase } from 'lodash-es';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
   Routes,
 } from '@/routes/routes';
@@ -15,6 +20,7 @@ type CrumbConfig = {
   [x: string]: {
     title: string;
     parent?: string;
+    icon?: SvgIconComponent;
   };
 };
 
@@ -35,6 +41,25 @@ const buildParentPaths = (
   }
 };
 
+const buildDefaultCrumbs = (
+  routes:
+    | typeof EnrollmentDashboardRoutes
+    | typeof ClientDashboardRoutes
+    | typeof ProjectDashboardRoutes,
+  defaultParent: string,
+  overrides: CrumbConfig
+) => {
+  const defaults: CrumbConfig = {};
+  Object.keys(routes).forEach((key) => {
+    const path = routes[key as keyof typeof routes];
+    defaults[path] = {
+      title: startCase(key.toLowerCase()),
+      parent: path === defaultParent ? undefined : defaultParent,
+    };
+  });
+  return merge(defaults, overrides);
+};
+
 export const useProjectBreadcrumbConfig = (
   context: ProjectDashboardContext | undefined
 ): CrumbConfig => {
@@ -42,29 +67,16 @@ export const useProjectBreadcrumbConfig = (
     if (context == undefined) {
       return {};
     }
-    return {
+    const overrides = {
       [ProjectDashboardRoutes.OVERVIEW]: {
         title: context.project.projectName,
       },
-      [ProjectDashboardRoutes.EDIT_PROJECT]: {
-        title: 'Edit Project',
-        parent: ProjectDashboardRoutes.OVERVIEW,
-      },
-      [ProjectDashboardRoutes.ENROLLMENTS]: {
+      [ProjectDashboardRoutes.PROJECT_ENROLLMENTS]: {
         title: 'Enrollments',
-        parent: ProjectDashboardRoutes.OVERVIEW,
-      },
-      [ProjectDashboardRoutes.ADD_SERVICES]: {
-        title: 'Add Services',
-        parent: ProjectDashboardRoutes.OVERVIEW,
       },
       [ProjectDashboardRoutes.ADD_HOUSEHOLD]: {
         title: 'Add Enrollment',
-        parent: ProjectDashboardRoutes.ENROLLMENTS,
-      },
-      [ProjectDashboardRoutes.REFERRALS]: {
-        title: 'Referrals',
-        parent: ProjectDashboardRoutes.OVERVIEW,
+        parent: ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
       },
       [ProjectDashboardRoutes.ESG_FUNDING_REPORT]: {
         title: 'ESG Funding Report',
@@ -82,10 +94,6 @@ export const useProjectBreadcrumbConfig = (
         title: 'Request a Referral',
         parent: ProjectDashboardRoutes.REFERRALS,
       },
-      [ProjectDashboardRoutes.FUNDERS]: {
-        title: 'Funders',
-        parent: ProjectDashboardRoutes.OVERVIEW,
-      },
       [ProjectDashboardRoutes.NEW_FUNDER]: {
         title: 'Add Funder',
         parent: ProjectDashboardRoutes.FUNDERS,
@@ -96,7 +104,6 @@ export const useProjectBreadcrumbConfig = (
       },
       [ProjectDashboardRoutes.COCS]: {
         title: 'Project CoCs',
-        parent: ProjectDashboardRoutes.OVERVIEW,
       },
       [ProjectDashboardRoutes.NEW_COC]: {
         title: 'Add CoC',
@@ -106,10 +113,6 @@ export const useProjectBreadcrumbConfig = (
         title: 'Edit CoC',
         parent: ProjectDashboardRoutes.COCS,
       },
-      [ProjectDashboardRoutes.INVENTORY]: {
-        title: 'Inventory',
-        parent: ProjectDashboardRoutes.OVERVIEW,
-      },
       [ProjectDashboardRoutes.NEW_INVENTORY]: {
         title: 'Add Inventory',
         parent: ProjectDashboardRoutes.INVENTORY,
@@ -118,11 +121,9 @@ export const useProjectBreadcrumbConfig = (
         title: 'Update Inventory',
         parent: ProjectDashboardRoutes.INVENTORY,
       },
-      [ProjectDashboardRoutes.UNITS]: {
-        title: 'Units',
-        parent: ProjectDashboardRoutes.OVERVIEW,
-      },
     };
+    const projectRoot = ProjectDashboardRoutes.OVERVIEW;
+    return buildDefaultCrumbs(ProjectDashboardRoutes, projectRoot, overrides);
   }, [context]);
 };
 
@@ -130,73 +131,25 @@ export const useClientBreadcrumbConfig = (
   context: ClientDashboardContext | undefined
 ): CrumbConfig => {
   return useMemo(() => {
-    if (context == undefined) {
-      return {};
-    }
-    return {
-      /**
-       * Map each path to it's title and it's direct parent
-       */
+    if (!context) return {};
+
+    const clientRoot = ClientDashboardRoutes.PROFILE;
+    const overrides = {
       [ClientDashboardRoutes.PROFILE]: {
         title: clientBriefName(context.client),
       },
       [ClientDashboardRoutes.EDIT]: {
         title: 'Update Client Details',
-        parent: ClientDashboardRoutes.PROFILE,
       },
-      [ClientDashboardRoutes.ALL_ENROLLMENTS]: {
+      [ClientDashboardRoutes.CLIENT_ENROLLMENTS]: {
         title: 'Enrollments',
-        parent: ClientDashboardRoutes.PROFILE,
-      },
-      [ClientDashboardRoutes.SERVICES]: {
-        title: 'Services',
-        parent: ClientDashboardRoutes.PROFILE,
       },
       [ClientDashboardRoutes.NEW_ENROLLMENT]: {
         title: 'Add Enrollment',
-        parent: ClientDashboardRoutes.ALL_ENROLLMENTS,
-      },
-      [ClientDashboardRoutes.VIEW_ENROLLMENT]: {
-        title: context.enrollment
-          ? enrollmentName(context.enrollment)
-          : 'Enrollment',
-        parent: ClientDashboardRoutes.ALL_ENROLLMENTS,
-      },
-      [ClientDashboardRoutes.VIEW_ASSESSMENT]: {
-        title: 'Assessment',
-        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
-      },
-      [ClientDashboardRoutes.NEW_ASSESSMENT]: {
-        title: 'Assessment',
-        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
-      },
-      [ClientDashboardRoutes.NEW_SERVICE]: {
-        title: 'Add Service',
-        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
-      },
-      [ClientDashboardRoutes.EDIT_SERVICE]: {
-        title: 'Edit Service',
-        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
-      },
-      [ClientDashboardRoutes.EDIT_HOUSEHOLD]: {
-        title: 'Edit Household',
-        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
-      },
-      [ClientDashboardRoutes.ASSESSMENTS]: {
-        title: 'Assessments',
-        parent: ClientDashboardRoutes.PROFILE,
-      },
-      [ClientDashboardRoutes.NOTES]: {
-        title: 'Notes',
-        parent: ClientDashboardRoutes.PROFILE,
-      },
-      [ClientDashboardRoutes.FILES]: {
-        title: 'Files',
-        parent: ClientDashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.CLIENT_ENROLLMENTS,
       },
       [ClientDashboardRoutes.AUDIT_HISTORY]: {
         title: 'Client Audit History',
-        parent: ClientDashboardRoutes.PROFILE,
       },
       [ClientDashboardRoutes.NEW_FILE]: {
         title: 'Upload',
@@ -207,6 +160,39 @@ export const useClientBreadcrumbConfig = (
         parent: ClientDashboardRoutes.FILES,
       },
     };
+    return buildDefaultCrumbs(ClientDashboardRoutes, clientRoot, overrides);
+  }, [context]);
+};
+
+export const useEnrollmentBreadcrumbConfig = (
+  context: EnrollmentDashboardContext | undefined
+): CrumbConfig => {
+  return useMemo(() => {
+    if (!context) return {};
+
+    const clientRoot = ClientDashboardRoutes.PROFILE;
+    const enrollmentRoot = EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW;
+    const enrollmentTitle = context.enrollment
+      ? enrollmentName(context.enrollment)
+      : 'Enrollment';
+
+    const overrides: CrumbConfig = {
+      [clientRoot]: {
+        title: clientBriefName(context.client),
+        icon: PersonIcon,
+      },
+      [enrollmentRoot]: { parent: clientRoot, title: enrollmentTitle },
+      [EnrollmentDashboardRoutes.EDIT_HOUSEHOLD]: { title: 'Edit Household' },
+      [EnrollmentDashboardRoutes.ASSESSMENT]: {
+        title: 'Assessment',
+        parent: EnrollmentDashboardRoutes.ASSESSMENTS,
+      },
+    };
+    return buildDefaultCrumbs(
+      EnrollmentDashboardRoutes,
+      enrollmentRoot,
+      overrides
+    );
   }, [context]);
 };
 
@@ -247,6 +233,7 @@ export const useDashboardBreadcrumbs = (
     const crumbs = paths.map((path) => ({
       to: path,
       label: breadcrumbOverrides?.[path] || crumbConfig[path]?.title || 'Page',
+      icon: crumbConfig[path]?.icon,
     }));
 
     return crumbs;

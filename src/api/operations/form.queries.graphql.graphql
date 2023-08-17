@@ -1,5 +1,17 @@
-query GetPickList($pickListType: PickListType!, $relationId: ID) {
-  pickList(pickListType: $pickListType, relationId: $relationId) {
+query GetPickList(
+  $pickListType: PickListType!
+  $projectId: ID
+  $clientId: ID
+  $householdId: ID
+  $enrollmentId: ID
+) {
+  pickList(
+    pickListType: $pickListType
+    projectId: $projectId
+    clientId: $clientId
+    householdId: $householdId
+    enrollmentId: $enrollmentId
+  ) {
     ...PickListOptionFields
   }
 }
@@ -10,7 +22,7 @@ query GetFormDefinition($role: FormRole!, $enrollmentId: ID, $projectId: ID) {
     enrollmentId: $enrollmentId
     projectId: $projectId
   ) {
-    ...FormDefinitionWithJson
+    ...FormDefinitionFields
   }
 }
 
@@ -19,7 +31,7 @@ query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
     serviceTypeId: $serviceTypeId
     projectId: $projectId
   ) {
-    ...FormDefinitionWithJson
+    ...FormDefinitionFields
   }
 }
 
@@ -56,6 +68,9 @@ mutation SubmitForm($input: SubmitFormInput!) {
       }
       ... on Enrollment {
         ...EnrollmentFields
+      }
+      ... on CurrentLivingSituation {
+        ...CurrentLivingSituationFields
       }
     }
     errors {

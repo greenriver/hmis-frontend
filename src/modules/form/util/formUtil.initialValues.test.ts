@@ -1,6 +1,6 @@
 import { parseISO } from 'date-fns';
 
-import { getInitialValues } from './formUtil';
+import { getInitialValues, itemDefaults } from './formUtil';
 
 import { InitialBehavior, ItemType } from '@/types/gqlTypes';
 
@@ -8,6 +8,7 @@ describe('getInitialValues', () => {
   it('fills booleans', () => {
     const item = [
       {
+        ...itemDefaults,
         linkId: '1',
         type: ItemType.Boolean,
         initial: [
@@ -18,6 +19,7 @@ describe('getInitialValues', () => {
         ],
       },
       {
+        ...itemDefaults,
         linkId: '2',
         type: ItemType.Boolean,
         initial: [
@@ -34,6 +36,7 @@ describe('getInitialValues', () => {
   it('fills numeric', () => {
     const item = [
       {
+        ...itemDefaults,
         linkId: '1',
         type: ItemType.Integer,
         initial: [
@@ -44,6 +47,7 @@ describe('getInitialValues', () => {
         ],
       },
       {
+        ...itemDefaults,
         linkId: '2',
         type: ItemType.Currency,
         initial: [
@@ -60,6 +64,7 @@ describe('getInitialValues', () => {
   it('fills from local constants', () => {
     const item = [
       {
+        ...itemDefaults,
         linkId: '1',
         type: ItemType.Date,
         initial: [
@@ -70,6 +75,7 @@ describe('getInitialValues', () => {
         ],
       },
       {
+        ...itemDefaults,
         linkId: '2',
         type: ItemType.Date,
         initial: [
@@ -89,6 +95,7 @@ describe('getInitialValues', () => {
   it('fills from local constants with falsy values', () => {
     const item = [
       {
+        ...itemDefaults,
         linkId: '1',
         type: ItemType.Boolean,
         initial: [
@@ -99,6 +106,7 @@ describe('getInitialValues', () => {
         ],
       },
       {
+        ...itemDefaults,
         linkId: '2',
         type: ItemType.Integer,
         initial: [
@@ -119,6 +127,7 @@ describe('getInitialValues', () => {
   it('fills code (with full picklist option if resolvable)', () => {
     const item = [
       {
+        ...itemDefaults,
         linkId: '1',
         type: ItemType.Choice,
         pickListReference: 'NoYesReasonsForMissingData',
@@ -130,6 +139,7 @@ describe('getInitialValues', () => {
         ],
       },
       {
+        ...itemDefaults,
         linkId: '2',
         type: ItemType.Choice,
         pickListReference: 'NoYesReasonsForMissingData',
@@ -141,6 +151,7 @@ describe('getInitialValues', () => {
         ],
       },
       {
+        ...itemDefaults,
         linkId: '3',
         type: ItemType.Choice,
         pickListReference: 'UNRESOLVABLE',
@@ -154,7 +165,7 @@ describe('getInitialValues', () => {
     ];
     expect(getInitialValues({ item })).toMatchObject({
       '1': { code: 'YES', label: 'Yes' },
-      '2': null,
+      '2': { code: 'DATA_NOT_COLLECTED', label: 'Data not collected' },
       '3': { code: 'FOO' },
     });
   });

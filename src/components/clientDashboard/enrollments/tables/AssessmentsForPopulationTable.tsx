@@ -1,31 +1,28 @@
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/modules/dataFetching/components/GenericTableWithData';
+import { AssessmentForPopulation } from '@/modules/form/types';
 import {
   GetAssessmentsForPopulationDocument,
   GetAssessmentsForPopulationQuery,
   GetAssessmentsForPopulationQueryVariables,
 } from '@/types/gqlTypes';
 
-type Fragment = NonNullable<
-  GetAssessmentsForPopulationQuery['client']
->['assessments']['nodes'][0];
-
 type Props = Omit<
   GenericTableWithDataProps<
     GetAssessmentsForPopulationQuery,
     GetAssessmentsForPopulationQueryVariables,
-    Fragment
+    AssessmentForPopulation
   >,
   'queryDocument' | 'pagePath'
 >;
 
-const AssessmentsTable = (props: Props) => {
+const AssessmentsForPopulationTable = (props: Props) => {
   return (
     <GenericTableWithData<
       GetAssessmentsForPopulationQuery,
       GetAssessmentsForPopulationQueryVariables,
-      Fragment
+      AssessmentForPopulation
     >
       queryDocument={GetAssessmentsForPopulationDocument}
       recordType='Assessment'
@@ -34,4 +31,4 @@ const AssessmentsTable = (props: Props) => {
     />
   );
 };
-export default AssessmentsTable;
+export default AssessmentsForPopulationTable;

@@ -3,19 +3,31 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
-import React, { useState } from 'react';
+import React, { FormEvent, useCallback, useState } from 'react';
 
-import useAuth from '@/modules/auth/hooks/useAuth';
+import { HmisUser, login } from '../api/sessions';
 
-export default function OneTimePassword() {
+interface Props {
+  onSuccess: (user: HmisUser) => void;
+}
+const OneTimePassword: React.FC<Props> = ({ onSuccess }) => {
+  const [error, setError] = useState<Error>();
   const [otpAttempt, setOtpAttempt] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { login, loading, error } = useAuth();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    login({ otpAttempt: otpAttempt });
-  }
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
+      event.preventDefault();
+      setLoading(true);
+      login({ otpAttempt: otpAttempt })
+        .then((user) => onSuccess(user))
+        .catch((error: Error) => {
+          setError(error);
+          setLoading(false);
+        });
+    },
+    [onSuccess, otpAttempt]
+  );
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -51,4 +63,5 @@ export default function OneTimePassword() {
       </Box>
     </Container>
   );
-}
+};
+export default OneTimePassword;

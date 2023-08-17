@@ -81,7 +81,7 @@ export const EmptyInsurance = {
 export const EmptyPriorLivingSituation = {
   'Enrollment.livingSituation': null,
   'Enrollment.lengthOfStay': null,
-  'Enrollment.losUnderThreshold': null,
+  'Enrollment.losUnderThreshold': 'DATA_NOT_COLLECTED',
   'Enrollment.previousStreetEssh': null,
   'Enrollment.dateToStreetEssh': null,
   'Enrollment.timesHomelessPastThreeYears': null,

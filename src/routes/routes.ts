@@ -2,6 +2,7 @@ export const Routes = {
   CLIENT_SEARCH: '/',
   CREATE_CLIENT: '/client/new',
   CLIENT_DASHBOARD: '/client/:clientId',
+  ENROLLMENT_DASHBOARD: '/client/:clientId/enrollments/:enrollmentId',
   ALL_PROJECTS: '/projects',
   ADMIN: '/admin',
   ADMIN_REFERRAL_DENIALS: '/admin/referral-denials',
@@ -14,20 +15,12 @@ export const Routes = {
 } as const;
 
 // Routes within the client dashboard
-const clientClientDashboardRoutes = {
+const clientDashboardRoutes = {
   PROFILE: 'profile',
   EDIT: 'profile/edit',
   NEW_ENROLLMENT: 'enrollments/new',
-  VIEW_ENROLLMENT: 'enrollments/:enrollmentId',
-  EDIT_HOUSEHOLD: 'enrollments/:enrollmentId/edit-household',
-  HOUSEHOLD_EXIT: 'enrollments/:enrollmentId/household-exit',
-  HOUSEHOLD_INTAKE: 'enrollments/:enrollmentId/household-intake',
-  NEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:formRole/new',
-  VIEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId',
   SERVICES: 'services',
-  NEW_SERVICE: 'enrollments/:enrollmentId/services/new',
-  EDIT_SERVICE: 'enrollments/:enrollmentId/services/:serviceId/edit',
-  ALL_ENROLLMENTS: 'enrollments',
+  CLIENT_ENROLLMENTS: 'enrollments',
   AUDIT_HISTORY: 'history',
   ASSESSMENTS: 'assessments',
   NOTES: 'notes',
@@ -39,13 +32,25 @@ const clientClientDashboardRoutes = {
   REFERRALS: 'referrals',
 };
 
+const enrollmentDashboardRoutes = {
+  ENROLLMENT_OVERVIEW: 'overview',
+  HOUSEHOLD: 'household',
+  EDIT_HOUSEHOLD: 'household/edit',
+  ASSESSMENTS: 'assessments',
+  SERVICES: 'services',
+  CURRENT_LIVING_SITUATIONS: 'current-living-situations',
+  EVENTS: 'events',
+  ASSESSMENT: 'assessments/:formRole/:assessmentId?',
+  ESG_FUNDING_REPORT: 'esg-funding-report',
+};
+
 // Routes within the project dashboard
-const projectClientDashboardRoutes = {
+const projectDashboardRoutes = {
   OVERVIEW: 'overview',
   EDIT_PROJECT: 'overview/edit',
-
   // Enrollment-related
-  ENROLLMENTS: 'enrollments',
+  PROJECT_ENROLLMENTS: 'enrollments',
+  PROJECT_SERVICES: 'services',
   ADD_SERVICES: 'add-services',
   ADD_HOUSEHOLD: 'add-household',
   REFERRALS: 'referrals',
@@ -69,45 +74,55 @@ const projectClientDashboardRoutes = {
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`
-type SubRoutesType = keyof typeof clientClientDashboardRoutes;
-let key: SubRoutesType;
-for (key in clientClientDashboardRoutes) {
-  clientClientDashboardRoutes[
+type ClientSubRoutesType = keyof typeof clientDashboardRoutes;
+let key: ClientSubRoutesType;
+for (key in clientDashboardRoutes) {
+  clientDashboardRoutes[
     key
-  ] = `${Routes.CLIENT_DASHBOARD}/${clientClientDashboardRoutes[key]}`;
+  ] = `${Routes.CLIENT_DASHBOARD}/${clientDashboardRoutes[key]}`;
 }
-type DashboardSubRoutesType = keyof typeof projectClientDashboardRoutes;
-let key2: DashboardSubRoutesType;
-for (key2 in projectClientDashboardRoutes) {
-  projectClientDashboardRoutes[
+type EnrollmentSubRoutesType = keyof typeof enrollmentDashboardRoutes;
+let key2: EnrollmentSubRoutesType;
+for (key2 in enrollmentDashboardRoutes) {
+  enrollmentDashboardRoutes[
     key2
-  ] = `${Routes.PROJECT}/${projectClientDashboardRoutes[key2]}`;
+  ] = `${Routes.ENROLLMENT_DASHBOARD}/${enrollmentDashboardRoutes[key2]}`;
 }
 
-export const ClientDashboardRoutes: { [k in SubRoutesType]: string } =
-  clientClientDashboardRoutes;
+type ProjectSubRoutesType = keyof typeof projectDashboardRoutes;
+let key3: ProjectSubRoutesType;
+for (key3 in projectDashboardRoutes) {
+  projectDashboardRoutes[
+    key3
+  ] = `${Routes.PROJECT}/${projectDashboardRoutes[key3]}`;
+}
+
+export const ClientDashboardRoutes: { [k in ClientSubRoutesType]: string } =
+  clientDashboardRoutes;
+
+export const EnrollmentDashboardRoutes: {
+  [k in EnrollmentSubRoutesType]: string;
+} = enrollmentDashboardRoutes;
 
 export const ProjectDashboardRoutes: {
-  [k in DashboardSubRoutesType]: string;
-} = projectClientDashboardRoutes;
+  [k in ProjectSubRoutesType]: string;
+} = projectDashboardRoutes;
 
-export const HIDE_NAV_ROUTES = [
-  ClientDashboardRoutes.VIEW_ASSESSMENT,
-  ClientDashboardRoutes.NEW_ASSESSMENT,
-];
+export const HIDE_NAV_ROUTES = [EnrollmentDashboardRoutes.ASSESSMENT];
 
 export const FOCUS_MODE_ROUTES = [
-  {
-    route: ClientDashboardRoutes.HOUSEHOLD_EXIT,
-    previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
-  },
-  {
-    route: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
-    previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
-  },
+  // {
+  //   route: ClientDashboardRoutes.HOUSEHOLD_EXIT,
+  //   previous: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+  // },
+  // {
+  //   route: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
+  //   previous: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+  // },
 ];
 
 export const PRINTABLE_ROUTES = [
-  ClientDashboardRoutes.VIEW_ASSESSMENT,
+  EnrollmentDashboardRoutes.ASSESSMENT,
+  EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];

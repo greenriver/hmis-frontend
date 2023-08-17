@@ -1,4 +1,5 @@
-import { Box } from '@mui/material';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { Box, Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import { ReactNode, useEffect, useState } from 'react';
 
@@ -6,19 +7,23 @@ import useAddToHouseholdColumns from '../hooks/useAddToHouseholdColumns';
 import { useRecentHouseholdMembers } from '../hooks/useRecentHouseholdMembers';
 
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
-
 import { CommonCard } from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import { useNewClientEnrollmentFormDialog } from '@/modules/enrollment/hooks/useNewClientEnrollmentFormDialog';
 import AssociatedHouseholdMembers, {
   householdMemberColumns,
 } from '@/modules/household/components/AssociatedHouseholdMembers';
 import { RecentHouseholdMember } from '@/modules/household/types';
+import AddClientPrompt from '@/modules/search/components/AddClientPrompt';
 import ClientSearch from '@/modules/search/components/ClientSearch';
-import { ClientFieldsFragment } from '@/types/gqlTypes';
+import {
+  ClientFieldsFragment,
+  EnrollmentFieldsFragment,
+} from '@/types/gqlTypes';
 
 interface Props {
   householdId?: string;
@@ -39,6 +44,7 @@ const ManageHousehold = ({
     addToEnrollmentColumns,
     refetchHousehold,
     household,
+    onHouseholdIdChange,
     loading,
     // refetchLoading,
     // householdLoading,
@@ -73,6 +79,21 @@ const ManageHousehold = ({
     ...addToEnrollmentColumns,
   ];
 
+  const {
+    openNewClientEnrollmentFormDialog,
+    renderNewClientEnrollmentFormDialog,
+  } = useNewClientEnrollmentFormDialog({
+    projectId,
+    householdId: household?.id,
+    onCompleted: (data: EnrollmentFieldsFragment) => {
+      if (data.householdId !== household?.id) {
+        onHouseholdIdChange(data.householdId);
+      } else {
+        refetchHousehold();
+      }
+    },
+  });
+
   if (initialHouseholdId && !household && loading) {
     return <Loading />;
   }
@@ -87,11 +108,16 @@ const ManageHousehold = ({
         </CommonCard>
       )}
       {household && (
-        <TitleCard title='Current Household' headerVariant='border'>
+        <TitleCard
+          title='Current Household'
+          headerVariant='border'
+          data-testid='editHouseholdMemberTable'
+        >
           <EditHouseholdMemberTable
             household={household}
             currentDashboardClientId={currentDashboardClientId}
             refetchHousehold={refetchHousehold}
+            loading={loading}
           />
         </TitleCard>
       )}
@@ -118,14 +144,31 @@ const ManageHousehold = ({
           cardsEnabled={false}
           pageSize={10}
           wrapperComponent={Box}
-          addClientInDialog
           searchResultsTableProps={{
             rowLinkTo: undefined,
             tableProps: { size: 'small' },
             columns,
           }}
+          hideAddClient
+          renderActions={(searchPerformed) => {
+            if (!searchPerformed) return null;
+            return (
+              <AddClientPrompt>
+                <Button
+                  onClick={openNewClientEnrollmentFormDialog}
+                  data-testid='addClientButton'
+                  sx={{ px: 3 }}
+                  startIcon={<PersonAddIcon />}
+                  variant='outlined'
+                >
+                  Add Client
+                </Button>
+              </AddClientPrompt>
+            );
+          }}
         />
       </CommonCard>
+      {renderNewClientEnrollmentFormDialog()}
     </Stack>
   );
 };

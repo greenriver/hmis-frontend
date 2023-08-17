@@ -8,13 +8,16 @@ import { AddressInputType } from '../types';
 import TextInput from '@/components/elements/input/TextInput';
 import { usePickList } from '@/modules/form/hooks/usePickList';
 import { isPickListOption } from '@/modules/form/types';
-import { localResolvePickList } from '@/modules/form/util/formUtil';
+import {
+  itemDefaults,
+  localResolvePickList,
+} from '@/modules/form/util/formUtil';
 import { ClientAddressType, ItemType } from '@/types/gqlTypes';
 
-const addressTypePicklist =
-  localResolvePickList('ClientAddressType', false) || [];
+const addressTypePicklist = localResolvePickList('ClientAddressType') || [];
 
 const fakeStateItem = {
+  ...itemDefaults,
   linkId: 'fake',
   type: ItemType.Choice,
   pickListReference: 'STATE',
@@ -27,7 +30,7 @@ const AddressInput = ({
   value: AddressInputType;
   onChange: (value: AddressInputType) => void;
 }) => {
-  const [stateList, loading] = usePickList(fakeStateItem);
+  const { pickList: stateList, loading } = usePickList({ item: fakeStateItem });
   const typeValue = useMemo(
     () => addressTypePicklist.find((o) => o.code == value.addressType) || null,
     [value]

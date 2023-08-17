@@ -1,12 +1,12 @@
 import { Box } from '@mui/material';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import DynamicForm from './DynamicForm';
+import { Default as ViewStory } from './viewable/DynamicView.stories';
 
 import { emptyErrorState } from '@/modules/errors/util';
 import formData from '@/modules/form/data/mock.json';
 import { FormDefinitionJson } from '@/types/gqlTypes';
-
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
 
@@ -21,9 +21,10 @@ export default {
       </Box>
     ),
   ],
-} as ComponentMeta<typeof DynamicForm>;
+} as Meta<typeof DynamicForm>;
 
-const Template: ComponentStory<typeof DynamicForm> = (args) => (
+const Template: StoryFn<typeof DynamicForm> = (args) => (
+  // eslint-disable-next-line no-console
   <DynamicForm {...args} onSubmit={(values) => console.log(values)} />
 );
 
@@ -34,5 +35,12 @@ export const WithWarnIfEmpty = Template.bind({});
 WithWarnIfEmpty.args = {
   definition: formDefinition,
   warnIfEmpty: true,
+  errors: emptyErrorState,
+};
+
+export const WithValues = Template.bind({});
+WithValues.args = {
+  definition: formDefinition,
+  initialValues: ViewStory.args?.values,
   errors: emptyErrorState,
 };

@@ -40,6 +40,7 @@ fs.readFile('geocodes.csv', 'utf8', function (err, data) {
       `geocodes-${s}.json`,
       JSON.stringify(geocodesByState[s]),
       (err) => {
+        // eslint-disable-next-line no-console
         if (err) return console.log(err);
       }
     );

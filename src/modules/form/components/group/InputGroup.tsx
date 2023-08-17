@@ -50,6 +50,14 @@ const InputGroup = ({
             pl: 1,
             pb: 0.5,
             pr: 0.5,
+            // full width so entire label area is clickable for checkboxes
+            '.MuiFormControl-root': { width: '100%' },
+            '.MuiFormControlLabel-root': {
+              width: '100%',
+              '.MuiTypography-root': {
+                py: 0.3,
+              },
+            },
             ...(item.type === ItemType.String
               ? {
                   pt: 0.5,
@@ -67,10 +75,9 @@ const InputGroup = ({
     [rowSx]
   );
 
+  const maxWidth = maxWidthAtNestingLevel(nestingLevel + 1) + 80;
+
   const wrappedChildren = useMemo(() => {
-    const maxWidth = isNumeric
-      ? maxWidthAtNestingLevel(nestingLevel + 1)
-      : undefined;
     return (
       <Grid
         container
@@ -81,40 +88,42 @@ const InputGroup = ({
           '& .MuiGrid-item': { pt: 0, maxWidth: '100%' },
           mt: 0,
           border: (theme) => `1px solid ${theme.palette.grey[200]}`,
-          maxWidth: viewOnly ? undefined : maxWidth,
+          maxWidth,
         }}
       >
         {renderChildItem &&
           childItems &&
-          childItems.map((childItem, index) =>
-            renderChildItem(
-              childItem,
-              childProps,
-              // pass render function so child gets wrapped in box.
-              // can't wrap here because child might be hidden, in which case we shouldn't wrap it.
-              childRenderFunc(childItem, index)
-            )
-          )}
+          childItems
+            // Removed for now: hide "no" items in readonly view
+            // .filter((item) => {
+            //   if (!viewOnly) return true;
+
+            //   const val = values[item.linkId];
+            //   if (isNil(val)) return false;
+            //   if (isDataNotCollected(val)) return false;
+            //   if (isPickListOption(val) && val.code === 'NO') return false;
+            //   return true;
+            // })
+            .map((childItem, index) =>
+              renderChildItem(
+                childItem,
+                childProps,
+                // pass render function so child gets wrapped in box.
+                // can't wrap here because child might be hidden, in which case we shouldn't wrap it.
+                childRenderFunc(childItem, index)
+              )
+            )}
       </Grid>
     );
-  }, [
-    renderChildItem,
-    nestingLevel,
-    isNumeric,
-    childItems,
-    childProps,
-    viewOnly,
-    childRenderFunc,
-  ]);
+  }, [childItems, maxWidth, renderChildItem, childProps, childRenderFunc]);
 
-  const maxWidth = maxWidthAtNestingLevel(nestingLevel + 1);
   let label = item.text;
   if (viewOnly && !isNil(item.readonlyText)) label = item.readonlyText;
   return (
-    <Box id={item.linkId}>
+    <Box id={item.linkId} sx={{ mb: 2 }}>
       {label && (
         <Typography
-          sx={{ mb: 1 }}
+          sx={{ mt: 1, mb: 2 }}
           variant={viewOnly ? 'body2' : undefined}
           fontWeight={viewOnly ? 600 : undefined}
         >
@@ -127,18 +136,22 @@ const InputGroup = ({
           justifyContent='space-between'
           direction='row'
           sx={{
+            py: 2,
             pl: 1,
-            pr: 0.5,
-            pt: 2,
-            mt: 1,
-            borderTop: (theme) => `1px solid ${theme.palette.grey[500]}`,
-            maxWidth: viewOnly ? undefined : maxWidth,
+            border: (theme) => `1px solid ${theme.palette.grey[200]}`,
+            maxWidth,
             textAlign: viewOnly ? 'right' : undefined,
             ...rowSx,
           }}
         >
-          <Typography>{summaryItem.text || 'Total'}</Typography>
-          <Typography sx={{ width: '120px', pl: 1 }} data-testid='inputSum'>
+          <Typography variant='body2' sx={{ fontWeight: 600 }}>
+            {summaryItem.text || 'Total'}
+          </Typography>
+          <Typography
+            variant='body2'
+            sx={{ width: '120px', fontWeight: 600 }}
+            data-testid='inputSum'
+          >
             {childItemType === ItemType.Currency
               ? formatCurrency(values[summaryItem.linkId] || 0)
               : values[summaryItem.linkId] || 0}

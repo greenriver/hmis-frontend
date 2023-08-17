@@ -3,11 +3,12 @@ import { Typography } from '@mui/material';
 import pluralize from 'pluralize';
 import { useCallback, useMemo } from 'react';
 
+import UnitOccupants from './UnitOccupants';
+
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { evictUnitsQuery } from '@/modules/units/util';
 import {
   DeleteUnitsDocument,
@@ -88,21 +89,20 @@ const UnitManagementTable = ({
   const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
     return [
       {
-        header: 'Unit ID',
-        render: 'id',
-      },
-      {
         header: 'Unit Type',
         render: (unit) => unit.unitType?.description,
       },
       {
-        header: 'Status',
+        header: 'Unit ID',
+        render: 'id',
+      },
+      {
+        header: 'Active Status',
         render: (unit) => (unit.occupants.length > 0 ? 'Filled' : 'Available'),
       },
       {
-        header: 'Occupant',
-        render: (unit) =>
-          unit.occupants.map((u) => clientBriefName(u.client)).join(', '),
+        header: 'Client(s)',
+        render: (unit) => <UnitOccupants unit={unit} />,
       },
       ...(allowDeleteUnits
         ? [

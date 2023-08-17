@@ -1,6 +1,42 @@
 query GetAssessment($id: ID!) {
   assessment(id: $id) {
-    ...AssessmentWithDefinitionAndValues
+    ...FullAssessment
+    definition {
+      ...FormDefinitionFields
+    }
+  }
+}
+
+query GetClientAssessments(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+  $filters: AssessmentFilterOptions = null
+) {
+  client(id: $id) {
+    id
+    assessments(
+      limit: $limit
+      offset: $offset
+      sortOrder: $sortOrder
+      filters: $filters
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...AssessmentFields
+        enrollment {
+          id
+          entryDate
+          exitDate
+          project {
+            ...ProjectNameAndType
+          }
+        }
+      }
+    }
   }
 }
 
@@ -31,10 +67,28 @@ query GetEnrollmentAssessments(
   }
 }
 
+query GetHouseholdAssessments(
+  $householdId: ID!
+  $assessmentRole: AssessmentRole!
+  $assessmentId: ID
+) {
+  householdAssessments(
+    householdId: $householdId
+    assessmentRole: $assessmentRole
+    assessmentId: $assessmentId
+  ) {
+    ...AssessmentWithValues
+    ...AssessmentWithRecords
+    enrollment {
+      id
+    }
+  }
+}
+
 mutation SaveAssessment($input: SaveAssessmentInput!) {
   saveAssessment(input: $input) {
     assessment {
-      ...AssessmentWithDefinitionAndValues
+      ...AssessmentWithValues
     }
     errors {
       ...ValidationErrorFields
@@ -45,7 +99,7 @@ mutation SaveAssessment($input: SaveAssessmentInput!) {
 mutation SubmitAssessment($input: SubmitAssessmentInput!) {
   submitAssessment(input: $input) {
     assessment {
-      ...AssessmentWithDefinitionAndValues
+      ...AssessmentWithRecords
     }
     errors {
       ...ValidationErrorFields
@@ -70,7 +124,6 @@ query GetAssessmentsForPopulation(
   $limit: Int = 10
   $offset: Int = 0
   $roles: [AssessmentRole!]
-  $inProgress: Boolean
 ) {
   client(id: $id) {
     id
@@ -78,14 +131,22 @@ query GetAssessmentsForPopulation(
       limit: $limit
       offset: $offset
       filters: { type: $roles }
-      inProgress: $inProgress
+      inProgress: false
       sortOrder: ASSESSMENT_DATE
     ) {
       offset
       limit
       nodesCount
       nodes {
-        ...AssessmentWithValues
+        ...AssessmentWithRecords
+        enrollment {
+          id
+          entryDate
+          exitDate
+          project {
+            ...ProjectNameAndType
+          }
+        }
       }
     }
   }

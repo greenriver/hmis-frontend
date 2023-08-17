@@ -27,12 +27,19 @@ fragment HouseholdClientFields on HouseholdClient {
     access {
       ...ClientAccessFields
     }
+    externalIds {
+      ...ClientIdentifierFields
+    }
   }
   enrollment {
     id
     entryDate
     exitDate
     inProgress
+    currentUnit {
+      id
+      name
+    }
   }
 }
 
@@ -49,25 +56,5 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
     entryDate
     exitDate
     inProgress
-  }
-}
-
-fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
-  ...HouseholdClientFields
-  enrollment {
-    id
-    entryDate
-    exitDate
-    inProgress
-    intakeAssessment {
-      id
-      inProgress
-      assessmentDate
-    }
-    exitAssessment {
-      id
-      inProgress
-      assessmentDate
-    }
   }
 }

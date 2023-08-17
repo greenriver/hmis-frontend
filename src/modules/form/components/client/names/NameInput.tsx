@@ -10,7 +10,7 @@ import { isPickListOption } from '@/modules/form/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { NameDataQuality } from '@/types/gqlTypes';
 
-const nameDqPickList = localResolvePickList('NameDataQuality', false) || [];
+const nameDqPickList = localResolvePickList('NameDataQuality') || [];
 
 const NameInput = ({
   value,

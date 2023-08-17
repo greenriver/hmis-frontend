@@ -4,7 +4,8 @@ import {
   WatchQueryFetchPolicy,
 } from '@apollo/client';
 import { Box, Stack } from '@mui/material';
-import { get, isEmpty, isEqual, some, startCase } from 'lodash-es';
+import { get, isEmpty, isEqual, startCase } from 'lodash-es';
+import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import Pagination from '../../../components/elements/table/Pagination';
@@ -262,10 +263,13 @@ const GenericTableWithData = <
   const noDataValue = useMemo(() => {
     if (!showFilters) return noData;
 
-    const isFiltered = some(Object.values(filterValues), hasMeaningfulValue);
-    if (isFiltered) return `No results for selected filters`;
+    const isFiltered = Object.values(filterValues).some(hasMeaningfulValue);
+    if (isFiltered)
+      return `No ${pluralize(
+        startCase(recordType || 'record').toLowerCase()
+      )} matching selected filters`;
     return noData;
-  }, [noData, showFilters, filterValues]);
+  }, [noData, recordType, showFilters, filterValues]);
 
   // If this is the first time loading, return loading (hide search headers)
   if (loading && !hasRefetched && !data) return <Loading />;
@@ -296,8 +300,7 @@ const GenericTableWithData = <
           columns={columnDefs}
           noData={noDataValue}
           filterToolbar={
-            showFilters &&
-            !noResultsOnFirstLoad && (
+            showFilters && (
               <Box
                 px={2}
                 py={1}

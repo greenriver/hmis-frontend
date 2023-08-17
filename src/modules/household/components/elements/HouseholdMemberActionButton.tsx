@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
   FormRole,
@@ -35,20 +35,12 @@ const HouseholdMemberActionButton = ({
   ...props
 }: Props) => {
   const pathToAssessment = useCallback(
-    (id: string) =>
-      generateSafePath(ClientDashboardRoutes.VIEW_ASSESSMENT, {
-        clientId,
-        enrollmentId,
-        assessmentId: id,
-      }),
-    [clientId, enrollmentId]
-  );
-  const pathToNewAssessment = useCallback(
-    (role: FormRole) =>
-      generateSafePath(ClientDashboardRoutes.NEW_ASSESSMENT, {
+    (role: FormRole, assessmentId?: string) =>
+      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
         clientId,
         enrollmentId,
         formRole: role.toLowerCase(),
+        assessmentId,
       }),
     [clientId, enrollmentId]
   );
@@ -59,7 +51,7 @@ const HouseholdMemberActionButton = ({
     return (
       <ButtonLink
         data-testid='beginIntake'
-        to={pathToNewAssessment(FormRole.Intake)}
+        to={pathToAssessment(FormRole.Intake)}
         {...buttonProps}
         {...props}
       >
@@ -71,7 +63,7 @@ const HouseholdMemberActionButton = ({
     return (
       <ButtonLink
         data-testid='finishIntake'
-        to={pathToAssessment(intake.id)}
+        to={pathToAssessment(FormRole.Intake, intake.id)}
         {...buttonProps}
         {...props}
       >
@@ -83,7 +75,7 @@ const HouseholdMemberActionButton = ({
     return (
       <ButtonLink
         data-testid='finishExit'
-        to={pathToAssessment(exit.id)}
+        to={pathToAssessment(FormRole.Exit, exit.id)}
         {...buttonProps}
         {...props}
       >
@@ -95,7 +87,7 @@ const HouseholdMemberActionButton = ({
     return (
       <ButtonLink
         data-testid='finishAnnual'
-        to={pathToAssessment(annual.id)}
+        to={pathToAssessment(FormRole.Annual, annual.id)}
         {...buttonProps}
         {...props}
       >
@@ -111,7 +103,7 @@ const HouseholdMemberActionButton = ({
     return (
       <ButtonLink
         data-testid='beginExit'
-        to={pathToNewAssessment(FormRole.Exit)}
+        to={pathToAssessment(FormRole.Exit)}
         {...buttonProps}
         color='primary'
         {...props}

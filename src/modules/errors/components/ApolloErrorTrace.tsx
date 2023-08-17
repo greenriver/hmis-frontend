@@ -1,28 +1,18 @@
-import { ApolloError } from '@apollo/client';
 import { Typography } from '@mui/material';
 import { GraphQLError } from 'graphql';
 
-import { isServerError } from '../util';
-
-const ApolloErrorTrace = ({ error }: { error: ApolloError }) => {
+const ApolloErrorTrace = ({
+  graphqlErrors,
+}: {
+  graphqlErrors: GraphQLError[];
+}) => {
   if (import.meta.env.MODE !== 'development') return null;
-
-  let graphQLErrors = error.graphQLErrors;
-  if (graphQLErrors.length < 1 && isServerError(error.networkError)) {
-    graphQLErrors = error.networkError?.result?.errors || [];
-  }
+  if (graphqlErrors.length === 0) return null;
 
   return (
     <>
-      {graphQLErrors.map((e) => (
+      {graphqlErrors.map((e) => (
         <>
-          <Typography
-            key={e.message}
-            variant='body2'
-            sx={{ fontFamily: 'Monospace', my: 2 }}
-          >
-            {e.message}
-          </Typography>
           {((e as GraphQLError & { backtrace: string[] })?.backtrace || []).map(
             (line) => (
               <Typography

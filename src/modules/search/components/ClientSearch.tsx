@@ -1,7 +1,13 @@
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Button, Paper } from '@mui/material';
 import { isEmpty, isNil, omitBy } from 'lodash-es';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
 
 import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
@@ -18,9 +24,9 @@ import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';
+import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
@@ -34,7 +40,6 @@ import {
   ClientFieldsFragment,
   ClientSortOption,
   ExternalIdentifierType,
-  FormRole,
   useSearchClientsLazyQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -115,7 +120,10 @@ export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
 ];
 
 interface Props
-  extends Omit<SearchFormProps, 'definition' | 'onSubmit' | 'initialValues'> {
+  extends Omit<
+    SearchFormProps,
+    'definition' | 'onSubmit' | 'initialValues' | 'actions'
+  > {
   cardsEnabled: boolean;
   searchResultsTableProps?: Omit<
     GenericTableProps<ClientFieldsFragment>,
@@ -124,6 +132,8 @@ interface Props
   wrapperComponent?: React.ElementType;
   pageSize?: number;
   addClientInDialog?: boolean;
+  renderActions?: (searchPerformed: boolean) => ReactNode;
+  hideAddClient?: boolean;
 }
 const ClientSearch: React.FC<Props> = ({
   cardsEnabled,
@@ -131,6 +141,8 @@ const ClientSearch: React.FC<Props> = ({
   wrapperComponent: WrapperComponent = Paper,
   pageSize = 20,
   addClientInDialog = false,
+  renderActions,
+  hideAddClient,
   ...searchFormProps
 }) => {
   // URL search parameters
@@ -149,7 +161,7 @@ const ClientSearch: React.FC<Props> = ({
     ClientSortOption.LastNameAToZ
   );
   const [offset, setOffset] = useState(0);
-
+  const [hasSearched, setHasSearched] = useState(false);
   const isMobile = useIsMobile();
 
   const { globalFeatureFlags } = useHmisAppSettings();
@@ -186,6 +198,7 @@ const ClientSearch: React.FC<Props> = ({
       if (!hasSetCards && cardsEnabled) {
         setCards(data.clientSearch.nodesCount <= MAX_CARDS_THRESHOLD);
       }
+      setHasSearched(true);
     },
   });
 
@@ -242,19 +255,19 @@ const ClientSearch: React.FC<Props> = ({
     []
   );
 
-  const { openFormDialog, renderFormDialog } =
-    useFormDialog<ClientFieldsFragment>({
-      formRole: FormRole.Client,
-      onCompleted: (data: ClientFieldsFragment) => {
-        searchClients({
-          variables: { input: { id: data.id } },
-          fetchPolicy: 'cache-first',
-        });
-      },
-      // For Client creation, allow the user to input SSN and DOB
-      // even if they don't have read-access to those fields
-      localConstants: { canViewFullSsn: true, canViewDob: true },
-    });
+  const { openClientFormDialog, renderClientFormDialog } = useClientFormDialog({
+    onCompleted: (data: ClientFieldsFragment) => {
+      searchClients({
+        variables: { input: { id: data.id } },
+        fetchPolicy: 'cache-first',
+      });
+    },
+  });
+
+  const actions = useMemo(() => {
+    if (renderActions) return renderActions(hasSearched);
+  }, [hasSearched, renderActions]);
+
   if (!initialValues) return <Loading />;
 
   const paginationProps = {
@@ -270,6 +283,7 @@ const ClientSearch: React.FC<Props> = ({
         definition={SearchFormDefinition}
         onSubmit={handleSubmitSearch}
         initialValues={initialValues}
+        actions={actions}
         {...searchFormProps}
       />
       {error && (
@@ -283,10 +297,11 @@ const ClientSearch: React.FC<Props> = ({
           onChangeCards={handleChangeDisplayType}
           sortOrder={sortOrder}
           onChangeSortOrder={handleSetSortOrder}
+          hideAddClient={hideAddClient}
           addClientButton={
             addClientInDialog ? (
               <Button
-                onClick={openFormDialog}
+                onClick={openClientFormDialog}
                 data-testid='addClientButton'
                 sx={{ px: 3 }}
                 startIcon={<LibraryAddIcon />}
@@ -333,11 +348,7 @@ const ClientSearch: React.FC<Props> = ({
           />
         </>
       )}
-      {renderFormDialog({
-        title: 'Add client',
-        submitButtonText: 'Create Client',
-        DialogProps: { maxWidth: 'lg' },
-      })}
+      {renderClientFormDialog()}
     </>
   );
 };

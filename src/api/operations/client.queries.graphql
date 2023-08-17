@@ -85,34 +85,6 @@ query GetClientAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-query GetClientAssessments(
-  $id: ID!
-  $limit: Int = 10
-  $offset: Int = 0
-  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-  $filters: AssessmentFilterOptions = null
-) {
-  client(id: $id) {
-    id
-    assessments(
-      limit: $limit
-      offset: $offset
-      sortOrder: $sortOrder
-      filters: $filters
-    ) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...AssessmentFields
-        enrollment {
-          ...EnrollmentFields
-        }
-      }
-    }
-  }
-}
-
 query GetClientServices(
   $id: ID!
   $limit: Int = 10
@@ -184,30 +156,6 @@ mutation DeleteClientImage($clientId: ID!) {
   }
 }
 
-mutation CreateEnrollment($input: CreateEnrollmentInput!) {
-  createEnrollment(input: $input) {
-    clientMutationId
-    enrollments {
-      ...EnrollmentFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
-  deleteEnrollment(input: $input) {
-    clientMutationId
-    enrollment {
-      id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeleteClientFile($input: DeleteClientFileInput!) {
   deleteClientFile(input: $input) {
     clientMutationId
@@ -228,39 +176,6 @@ mutation DeleteClient($input: DeleteClientInput!) {
     }
     errors {
       ...ValidationErrorFields
-    }
-  }
-}
-
-query GetEnrollment($id: ID!) {
-  enrollment(id: $id) {
-    ...EnrollmentFields
-  }
-}
-
-query GetEnrollmentWithHousehold($id: ID!) {
-  enrollment(id: $id) {
-    ...EnrollmentFields
-    household {
-      id
-      shortId
-      householdClients {
-        ...HouseholdClientFieldsWithAssessments
-      }
-    }
-  }
-}
-
-query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-  enrollment(id: $id) {
-    id
-    events(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...EventFields
-      }
     }
   }
 }
@@ -286,39 +201,6 @@ query GetClientHouseholdMemberCandidates(
             ...HouseholdClientFields
           }
         }
-      }
-    }
-  }
-}
-
-query GetRecentIncomeBenefits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-  client(id: $id) {
-    id
-    incomeBenefits(offset: $offset, limit: $limit) {
-      nodesCount
-      nodes {
-        ...IncomeBenefitFields
-      }
-    }
-  }
-}
-
-query GetRecentDisabilities($id: ID!) {
-  client(id: $id) {
-    id
-    disabilityGroups {
-      ...DisabilityGroupFields
-    }
-  }
-}
-
-query GetRecentHealthAndDvs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-  client(id: $id) {
-    id
-    healthAndDvs(offset: $offset, limit: $limit) {
-      nodesCount
-      nodes {
-        ...HealthAndDvFields
       }
     }
   }

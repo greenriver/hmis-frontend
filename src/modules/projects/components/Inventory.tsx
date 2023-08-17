@@ -51,8 +51,11 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
       inventoryId,
+      projectType: project.projectType,
     };
   }, [project, inventoryId]);
+  const pickListArgs = useMemo(() => ({ projectId }), [projectId]);
+  const inputVariables = useMemo(() => ({ projectId }), [projectId]);
 
   if (loading) return <Loading />;
   if (!create && !inventory) return <NotFound />;
@@ -65,10 +68,10 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
       }
       onCompleted={onCompleted}
       formRole={FormRole.Inventory}
-      inputVariables={{ projectId }}
       record={inventory || undefined}
       localConstants={localConstants}
-      pickListRelationId={projectId}
+      inputVariables={inputVariables}
+      pickListArgs={pickListArgs}
       title={
         !create &&
         inventory && <ProjectFormTitle title={title} project={project} />

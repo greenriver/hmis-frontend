@@ -1,23 +1,50 @@
 import { Box, Checkbox, CheckboxProps, Link, Typography } from '@mui/material';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
-import { AssessmentStatus, TabDefinition } from './util';
+import {
+  AssessmentStatus,
+  HouseholdAssesmentRole,
+  TabDefinition,
+} from './util';
 
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { FormRole } from '@/types/gqlTypes';
+import { AssessmentRole } from '@/types/gqlTypes';
 
 const NOT_STARTED = 'Assessment not started';
 
 interface Props {
   tabs: TabDefinition[];
-  role: FormRole.Intake | FormRole.Exit;
+  role: HouseholdAssesmentRole;
   checked: Record<string, boolean>;
   onClickCheckbox: (...assessmentIds: string[]) => CheckboxProps['onChange'];
   setCurrentTab: Dispatch<SetStateAction<string | undefined>>;
 }
+
+const roleLabels = (role: HouseholdAssesmentRole) => {
+  switch (role) {
+    case AssessmentRole.Intake:
+      return {
+        dateHeader: 'Entry Date',
+        completedText: 'Entered',
+        statusHeader: 'Entry Status',
+      };
+    case AssessmentRole.Exit:
+      return {
+        dateHeader: 'Exit Date',
+        completedText: 'Exited',
+        statusHeader: 'Exit Status',
+      };
+    default:
+      return {
+        dateHeader: 'Assessment Date',
+        completedText: 'Completed',
+        statusHeader: 'Assessment Status',
+      };
+  }
+};
 
 const HouseholdSummaryTable = ({
   tabs,
@@ -31,6 +58,7 @@ const HouseholdSummaryTable = ({
       .filter((tab) => tab.assessmentId && tab.assessmentInProgress)
       .map(({ assessmentId }) => assessmentId) as string[];
 
+    const { dateHeader, statusHeader, completedText } = roleLabels(role);
     return [
       {
         key: 'checkbox',
@@ -100,7 +128,7 @@ const HouseholdSummaryTable = ({
         render: ({ clientName }) => <Typography>{clientName}</Typography>,
       },
       {
-        header: `${role === FormRole.Exit ? 'Exit' : 'Entry'} Status`,
+        header: statusHeader,
         key: 'status',
         width: '20%',
         render: (row) => {
@@ -111,9 +139,7 @@ const HouseholdSummaryTable = ({
             const assessmentWip = row.assessmentId && row.assessmentInProgress;
             return (
               <>
-                <Typography>
-                  {role === FormRole.Exit ? 'Exited' : 'Entered'}
-                </Typography>
+                <Typography>{completedText}</Typography>
                 {assessmentWip && (
                   <Typography color='error' fontStyle='italic'>
                     {assessmentWip && 'Assessment Not Submitted'}
@@ -149,20 +175,19 @@ const HouseholdSummaryTable = ({
         },
       },
       {
-        header: `${role === FormRole.Exit ? 'Exit' : 'Entry'} Date`,
+        header: dateHeader,
         key: 'date',
         width: '10%',
         render: (row) => {
-          let dateString;
+          let dateString = row.assessmentDate;
           if (!row.assessmentId) {
             // No assessment has been started yet
-            dateString = role === FormRole.Exit ? row.exitDate : row.entryDate;
+            if (role === AssessmentRole.Exit) dateString = row.exitDate;
+            if (role === AssessmentRole.Intake) dateString = row.entryDate;
           } else if (row.assessmentSubmitted) {
             // Assessment has been submitted
-            dateString = role === FormRole.Exit ? row.exitDate : row.entryDate;
-          } else {
-            // Assessment is in-progress
-            dateString = row.assessmentDate;
+            if (role === AssessmentRole.Exit) dateString = row.exitDate;
+            if (role === AssessmentRole.Intake) dateString = row.entryDate;
           }
 
           if (!dateString) return null;
@@ -171,7 +196,7 @@ const HouseholdSummaryTable = ({
         },
       },
       // TODO pull out Destination from WIP assmt
-      // ...(role === FormRole.Exit
+      // ...(role === AssessmentRole.Exit
       //   ? [
       //       {
       //         header: `Destination`,

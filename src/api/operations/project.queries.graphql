@@ -1,3 +1,29 @@
+query GetProjects(
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ProjectFilterOptions
+  $sortOrder: ProjectSortOption
+) {
+  projects(
+    limit: $limit
+    offset: $offset
+    filters: $filters
+    sortOrder: $sortOrder
+  ) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      id
+      ...ProjectNameAndType
+      ...ProjectOperatingPeriod
+      organization {
+        ...OrganizationNameFields
+      }
+    }
+  }
+}
+
 query GetProject($id: ID!) {
   project(id: $id) {
     ...ProjectAllFields
@@ -63,6 +89,39 @@ query GetProjectHouseholds(
       nodesCount
       nodes {
         ...ProjectEnrollmentsHouseholdFields
+      }
+    }
+  }
+}
+
+query GetProjectServices(
+  $id: ID!
+  $filters: ServicesForProjectFilterOptions
+  $sortOrder: ServiceSortOption
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    services(
+      limit: $limit
+      offset: $offset
+      sortOrder: $sortOrder
+      filters: $filters
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceFields
+        enrollment {
+          id
+          entryDate
+          exitDate
+          client {
+            ...ClientNameDobVet
+          }
+        }
       }
     }
   }

@@ -95,9 +95,8 @@ const createThemeOptions = (theme: Theme) => ({
     },
     h6: {
       fontFamily: "'Montserrat', sans-serif",
-      fontSize: 12,
-      textTransform: 'uppercase',
-      color: '#10182899',
+      fontSize: 14,
+      // color: '#10182899',
     },
     button: {
       textTransform: 'none',
@@ -159,6 +158,17 @@ const createThemeOptions = (theme: Theme) => ({
       styleOverrides: {
         sizeSmall: {
           fontSize: '0.875rem',
+        },
+        root: theme.unstable_sx({
+          '&.Mui-disabled': {
+            color: 'red',
+            backgroundColor: theme.palette.grey[100],
+          },
+        }),
+        input: {
+          '&::placeholder': {
+            opacity: 0.6,
+          },
         },
       },
     },

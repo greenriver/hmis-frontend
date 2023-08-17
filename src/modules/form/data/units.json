@@ -5,15 +5,15 @@
       "linkId": "type",
       "required": true,
       "text": "Unit Type",
-      "fieldName": "unitTypeId",
-      "pickListReference": "UNIT_TYPES"
+      "mapping": { "fieldName": "unitTypeId" },
+      "pickListReference": "POSSIBLE_UNIT_TYPES_FOR_PROJECT"
     },
     {
       "type": "INTEGER",
       "linkId": "unit",
       "required": true,
       "text": "Number of Units to Add",
-      "fieldName": "count"
+      "mapping": { "fieldName": "count" }
     }
   ]
 }

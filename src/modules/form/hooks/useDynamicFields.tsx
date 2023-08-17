@@ -1,17 +1,23 @@
-import { omit } from 'lodash-es';
+import { cloneDeep, omit, without } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DynamicFormFields, {
   Props as DynamicFormFieldsProps,
 } from '../components/DynamicFormFields';
 import DynamicViewFields from '../components/viewable/DynamicViewFields';
-import { FormValues, ItemChangedFn, SeveralItemsChangedFn } from '../types';
+import {
+  ChangeType,
+  FormValues,
+  ItemChangedFn,
+  LocalConstants,
+  SeveralItemsChangedFn,
+} from '../types';
 import {
   addDescendants,
   autofillValues,
   dropUnderscorePrefixedKeys,
+  getDependentItemsDisabledStatus,
   isShown,
-  setDisabledLinkIdsBase,
 } from '../util/formUtil';
 
 import useComputedData from './useComputedData';
@@ -23,11 +29,15 @@ const useDynamicFields = ({
   initialValues,
   bulk = false,
   viewOnly = false,
+  localConstants,
+  onFieldChange,
 }: {
   definition: FormDefinitionJson;
   initialValues?: Record<string, any>;
   bulk?: boolean;
   viewOnly?: boolean;
+  localConstants?: LocalConstants;
+  onFieldChange?: (type: ChangeType) => void;
 }) => {
   const [values, setValues] = useState<FormValues>(
     Object.assign({}, initialValues)
@@ -38,7 +48,7 @@ const useDynamicFields = ({
     autofillDependencyMap,
     enabledDependencyMap,
     initiallyDisabledLinkIds = [],
-  } = useComputedData({ definition, initialValues, viewOnly });
+  } = useComputedData({ definition, initialValues, viewOnly, localConstants });
 
   const [disabledLinkIds, setDisabledLinkIds] = useState(
     initiallyDisabledLinkIds
@@ -64,70 +74,95 @@ const useDynamicFields = ({
       changedLinkIds.forEach((changedLinkId) => {
         if (!autofillDependencyMap[changedLinkId]) return;
         autofillDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-          autofillValues(itemMap[dependentLinkId], localValues, itemMap);
+          autofillValues({
+            item: itemMap[dependentLinkId],
+            values: localValues,
+            itemMap,
+            localConstants: localConstants || {},
+          });
         });
       });
     },
-    [itemMap, autofillDependencyMap]
+    [itemMap, autofillDependencyMap, localConstants]
   );
 
   /**
    * Update the `disabledLinkIds` state.
    * This only evaluates the enableWhen conditions for items that are
    * dependent on the item that just changed ("changedLinkid").
+   *
+   * Also modifies localValues in-place to nullify disabled fields (when appropriate).
    */
-  const updateDisabledLinkIds = useCallback(
-    (changedLinkIds: string[], localValues: any) => {
-      setDisabledLinkIdsBase(changedLinkIds, localValues, setDisabledLinkIds, {
-        enabledDependencyMap,
-        itemMap,
+  const updateDisabledValues = useCallback(
+    (changedLinkIds: string[], localValues: FormValues) => {
+      // Get enabled/disabled link ids, based on the ones that have changed
+      const { enabledLinkIds, disabledLinkIds } =
+        getDependentItemsDisabledStatus({
+          changedLinkIds,
+          localValues, // NOTE! This gets updated in-place
+          enabledDependencyMap,
+          itemMap,
+          localConstants: localConstants || {},
+        });
+
+      // Update state
+      setDisabledLinkIds((old) => {
+        const newList = without(old, ...enabledLinkIds);
+        newList.push(...disabledLinkIds);
+        return newList;
       });
     },
-    [itemMap, enabledDependencyMap, setDisabledLinkIds]
+    [itemMap, enabledDependencyMap, localConstants]
   );
 
   // Run autofill once for all values on initial load
   useEffect(() => {
-    updateAutofillValues(Object.keys(values), values);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const wrappedItemChanged: (wrappedFn?: ItemChangedFn) => ItemChangedFn =
-    useCallback(
-      (wrappedFn) => (input) => {
-        if (wrappedFn) wrappedFn(input);
-        const { linkId, value } = input;
-        setValues((currentValues) => {
-          const newValues = { ...currentValues };
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          newValues[linkId] = value;
-          // Updates dependent autofill questions (modifies newValues in-place)
-          updateAutofillValues([linkId], newValues);
-          // Update list of disabled linkIds based on new values
-          updateDisabledLinkIds([linkId], newValues);
-
-          return newValues;
+    setValues((old) => {
+      const newValues = cloneDeep(old);
+      Object.keys(itemMap).forEach((linkId) => {
+        autofillValues({
+          item: itemMap[linkId],
+          values: newValues,
+          itemMap,
+          localConstants: localConstants || {},
         });
-      },
-      [updateAutofillValues, updateDisabledLinkIds, setValues]
-    );
+      });
+      return newValues;
+    });
+  }, [itemMap, localConstants]);
 
-  const wrappedSeveralItemsChanged: (
-    wrappedFn?: SeveralItemsChangedFn
-  ) => SeveralItemsChangedFn = useCallback(
-    (wrappedFn) => (input) => {
-      if (wrappedFn) wrappedFn(input);
+  const itemChanged: ItemChangedFn = useCallback(
+    (input) => {
+      if (onFieldChange) onFieldChange(input.type);
+      const { linkId, value } = input;
       setValues((currentValues) => {
-        const newValues = { ...currentValues, ...input.values };
-        // Updates dependent autofill questions (modifies newValues in-place)
-        updateAutofillValues(Object.keys(input.values), newValues);
-        // Update list of disabled linkIds based on new values
-        updateDisabledLinkIds(Object.keys(input.values), newValues);
-        // console.debug('DynamicForm', newValues);
+        const newValues = { ...currentValues };
+        newValues[linkId] = value;
+        // Update dependent autofill questions (modifies newValues in-place)
+        updateAutofillValues([linkId], newValues);
+        // Update list of disabled linkIds based on new values.
+        // Also modifies newValues in-place to nullify some disabled values.
+        updateDisabledValues([linkId], newValues);
         return newValues;
       });
     },
-    [updateDisabledLinkIds, updateAutofillValues, setValues]
+    [updateAutofillValues, updateDisabledValues, setValues, onFieldChange]
+  );
+
+  const severalItemsChanged: SeveralItemsChangedFn = useCallback(
+    (input) => {
+      if (onFieldChange) onFieldChange(input.type);
+      setValues((currentValues) => {
+        const newValues = { ...currentValues, ...input.values };
+        // Update dependent autofill questions (modifies newValues in-place)
+        updateAutofillValues(Object.keys(input.values), newValues);
+        // Update list of disabled linkIds based on new values.
+        // Also modifies newValues in-place to nullify some disabled values.
+        updateDisabledValues(Object.keys(input.values), newValues);
+        return newValues;
+      });
+    },
+    [onFieldChange, updateAutofillValues, updateDisabledValues]
   );
 
   const renderFormFields = useCallback(
@@ -145,6 +180,7 @@ const useDynamicFields = ({
         | 'bulk'
         | 'itemChanged'
         | 'severalItemsChanged'
+        | 'localConstants'
       > & {
         itemChanged?: ItemChangedFn;
         severalItemsChanged?: SeveralItemsChangedFn;
@@ -159,10 +195,9 @@ const useDynamicFields = ({
             disabledLinkIds,
             values,
             bulk,
-            itemChanged: wrappedItemChanged(props.itemChanged),
-            severalItemsChanged: wrappedSeveralItemsChanged(
-              props.severalItemsChanged
-            ),
+            itemChanged,
+            severalItemsChanged,
+            localConstants,
           }}
         />
       );
@@ -173,8 +208,9 @@ const useDynamicFields = ({
       disabledLinkIds,
       values,
       bulk,
-      wrappedItemChanged,
-      wrappedSeveralItemsChanged,
+      itemChanged,
+      severalItemsChanged,
+      localConstants,
     ]
   );
 
@@ -193,6 +229,7 @@ const useDynamicFields = ({
         | 'bulk'
         | 'itemChanged'
         | 'severalItemsChanged'
+        | 'localConstants'
       > & {
         itemChanged?: ItemChangedFn;
       }
@@ -205,11 +242,11 @@ const useDynamicFields = ({
           disabledLinkIds,
           values,
           bulk,
-          itemChanged: wrappedItemChanged(props.itemChanged),
+          itemChanged: itemChanged,
         }}
       />
     ),
-    [definition, itemMap, disabledLinkIds, values, bulk, wrappedItemChanged]
+    [definition, itemMap, disabledLinkIds, values, bulk, itemChanged]
   );
 
   return useMemo(

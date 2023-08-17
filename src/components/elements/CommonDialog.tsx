@@ -5,7 +5,11 @@ import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary
 
 const CommonDialog = ({ children, ...props }: DialogProps) => {
   return (
-    <Dialog {...props} sx={{ '.MuiDialogTitle-root': { mr: 2 }, ...props.sx }}>
+    <Dialog
+      data-testid='dialog'
+      {...props}
+      sx={{ '.MuiDialogTitle-root': { mr: 2 }, ...props.sx }}
+    >
       <SentryErrorBoundary>{children}</SentryErrorBoundary>
       {props.onClose && (
         <IconButton

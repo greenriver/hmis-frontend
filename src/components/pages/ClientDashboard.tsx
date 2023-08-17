@@ -23,16 +23,13 @@ import useSafeParams from '@/hooks/useSafeParams';
 import ClientCardMini from '@/modules/client/components/ClientCardMini';
 import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import {
-  ClientFieldsFragment,
-  EnrollmentFieldsFragment,
-  useGetClientQuery,
-} from '@/types/gqlTypes';
+import { ClientFieldsFragment, useGetClientQuery } from '@/types/gqlTypes';
 
 const ClientDashboard: React.FC = () => {
   const params = useSafeParams() as {
     clientId: string;
     enrollmentId?: string;
+    formRole?: string;
   };
   const isPrint = useIsPrintView();
 
@@ -55,7 +52,7 @@ const ClientDashboard: React.FC = () => {
 
   const navItems: NavItem[] = useDashboardNavItems(client || undefined);
 
-  const dashboardState = useDashboardState();
+  const { currentPath, ...dashboardState } = useDashboardState();
 
   const outletContext: ClientDashboardContext | undefined = useMemo(
     () =>
@@ -98,21 +95,15 @@ const ClientDashboard: React.FC = () => {
       navLabel='Client Navigation'
       {...dashboardState}
     >
-      {dashboardState.focusMode ? (
-        // focused views like household intake/exit shouldn't have a container
+      <Container maxWidth='xl' sx={{ pb: 6 }}>
         <Outlet context={outletContext} />
-      ) : (
-        <Container maxWidth='lg' sx={{ pb: 6 }}>
-          <Outlet context={outletContext} />
-        </Container>
-      )}
+      </Container>
     </DashboardContentContainer>
   );
 };
 
 export type ClientDashboardContext = {
   client: ClientFieldsFragment;
-  enrollment?: EnrollmentFieldsFragment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
 };
 

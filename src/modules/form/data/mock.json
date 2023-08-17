@@ -237,7 +237,7 @@
                   "warnIfEmpty": true,
                   "linkId": "4.05.2",
                   "text": "Physical Disability",
-                  "fieldName": "physicalDisability",
+                  "mapping": { "fieldName": "physicalDisability" },
                   "pickListReference": "NoYesReasonsForMissingData"
                 },
                 {
@@ -246,7 +246,9 @@
                   "linkId": "4.05.A",
                   "text": "Is this a disabling condition?",
                   "briefText": "Disabling Condition",
-                  "fieldName": "physicalDisabilityIndefiniteAndImpairs",
+                  "mapping": {
+                    "fieldName": "physicalDisabilityIndefiniteAndImpairs"
+                  },
                   "pickListReference": "NoYesReasonsForMissingData"
                 }
               ]
@@ -261,7 +263,7 @@
                   "warnIfEmpty": true,
                   "linkId": "4.06.2",
                   "text": "Developmental Disability",
-                  "fieldName": "developmentalDisability",
+                  "mapping": { "fieldName": "developmentalDisability" },
                   "pickListReference": "NoYesReasonsForMissingData"
                 },
                 {
@@ -281,7 +283,7 @@
                   "warnIfEmpty": true,
                   "linkId": "4.07.2",
                   "text": "Chronic Health Condition",
-                  "fieldName": "chronicHealthCondition",
+                  "mapping": { "fieldName": "chronicHealthCondition" },
                   "pickListReference": "NoYesReasonsForMissingData"
                 },
                 {
@@ -290,7 +292,9 @@
                   "linkId": "4.07.A",
                   "text": "Is this a disabling condition?",
                   "briefText": "Disabling Condition",
-                  "fieldName": "chronicHealthConditionIndefiniteAndImpairs",
+                  "mapping": {
+                    "fieldName": "chronicHealthConditionIndefiniteAndImpairs"
+                  },
                   "pickListReference": "NoYesReasonsForMissingData"
                 }
               ]

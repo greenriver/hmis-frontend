@@ -1,0 +1,309 @@
+fragment EnrollmentValues on Enrollment {
+  id
+  entryDate
+  exitDate
+  dateOfEngagement
+  moveInDate
+  livingSituation
+  lengthOfStay
+  losUnderThreshold
+  previousStreetEssh
+  dateToStreetEssh
+  timesHomelessPastThreeYears
+  monthsHomelessPastThreeYears
+  enrollmentCoc
+  dateOfPathStatus
+  clientEnrolledInPath
+  reasonNotEnrolled
+  percentAmi
+  referralSource
+  countOutreachReferralApproaches
+  dateOfBcpStatus
+  eligibleForRhy
+  reasonNoServices
+  runawayYouth
+  sexualOrientation
+  sexualOrientationOther
+  formerWardChildWelfare
+  childWelfareYears
+  childWelfareMonths
+  formerWardJuvenileJustice
+  juvenileJusticeYears
+  juvenileJusticeMonths
+  unemploymentFam
+  mentalHealthDisorderFam
+  physicalDisabilityFam
+  alcoholDrugUseDisorderFam
+  unemploymentFam
+  mentalHealthDisorderFam
+  physicalDisabilityFam
+  alcoholDrugUseDisorderFam
+  insufficientIncome
+  incarceratedParent
+  targetScreenReqd
+  timeToHousingLoss
+  annualPercentAmi
+  literalHomelessHistory
+  clientLeaseholder
+  hohLeaseholder
+  subsidyAtRisk
+  evictionHistory
+  criminalRecord
+  incarceratedAdult
+  prisonDischarge
+  sexOffender
+  disabledHoh
+  currentPregnant
+  singleParent
+  dependentUnder6
+  hh5Plus
+  cocPrioritized
+  hpScreeningScore
+  thresholdScore
+  vamcStation
+}
+
+fragment EnrollmentFieldsFromAssessment on Enrollment {
+  ...EnrollmentValues
+  user {
+    ...UserFields
+  }
+  project {
+    ...ProjectNameAndType
+  }
+  intakeAssessment {
+    id
+    user {
+      name
+    }
+  }
+}
+
+fragment IncomeBenefitValues on IncomeBenefit {
+  __typename
+  adap
+  alimony
+  alimonyAmount
+  benefitsFromAnySource
+  childSupport
+  childSupportAmount
+  cobra
+  connectionWithSoar
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  dateUpdated
+  earned
+  earnedAmount
+  employerProvided
+  ga
+  gaAmount
+  hivaidsAssistance
+  id
+  incomeFromAnySource
+  indianHealthServices
+  informationDate
+  insuranceFromAnySource
+  medicaid
+  medicare
+  noAdapReason
+  noCobraReason
+  noEmployerProvidedReason
+  noHivaidsAssistanceReason
+  noIndianHealthServicesReason
+  noMedicaidReason
+  noMedicareReason
+  noPrivatePayReason
+  noRyanWhiteReason
+  noSchipReason
+  noStateHealthInsReason
+  noVaMedReason
+  otherBenefitsSource
+  otherBenefitsSourceIdentify
+  otherIncomeAmount
+  otherIncomeSource
+  otherIncomeSourceIdentify
+  otherInsurance
+  otherInsuranceIdentify
+  otherTanf
+  pension
+  pensionAmount
+  privateDisability
+  privateDisabilityAmount
+  privatePay
+  ryanWhiteMedDent
+  schip
+  snap
+  socSecRetirement
+  socSecRetirementAmount
+  ssdi
+  ssdiAmount
+  ssi
+  ssiAmount
+  stateHealthIns
+  tanf
+  tanfAmount
+  tanfChildCare
+  tanfTransportation
+  totalMonthlyIncome
+  unemployment
+  unemploymentAmount
+  vaDisabilityNonService
+  vaDisabilityNonServiceAmount
+  vaDisabilityService
+  vaDisabilityServiceAmount
+  vaMedicalServices
+  wic
+  workersComp
+  workersCompAmount
+}
+
+fragment IncomeBenefitFields on IncomeBenefit {
+  ...IncomeBenefitValues
+  user {
+    ...UserFields
+  }
+  enrollment {
+    id
+    project {
+      ...ProjectNameAndType
+    }
+  }
+}
+
+fragment DisabilityGroupValues on DisabilityGroup {
+  __typename
+  id
+  dataCollectionStage
+  informationDate
+  disablingCondition
+  chronicHealthCondition
+  chronicHealthConditionIndefiniteAndImpairs
+  developmentalDisability
+  hivAids
+  mentalHealthDisorder
+  mentalHealthDisorderIndefiniteAndImpairs
+  physicalDisability
+  physicalDisabilityIndefiniteAndImpairs
+  substanceUseDisorder
+  substanceUseDisorderIndefiniteAndImpairs
+  dateCreated
+  dateUpdated
+  hivAids
+  tCellCountAvailable
+  tCellCount
+  tCellSource
+  viralLoadAvailable
+  viralLoad
+  antiRetroviral
+}
+
+fragment DisabilityGroupFields on DisabilityGroup {
+  ...DisabilityGroupValues
+  user {
+    ...UserFields
+  }
+  enrollment {
+    id
+    project {
+      ...ProjectNameAndType
+    }
+  }
+}
+
+fragment HealthAndDvValues on HealthAndDv {
+  __typename
+  bounceBack
+  currentlyFleeing
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  dateUpdated
+  dentalHealthStatus
+  domesticViolenceVictim
+  dueDate
+  feelingFrequency
+  generalHealthStatus
+  id
+  informationDate
+  lifeValue
+  mentalHealthStatus
+  pregnancyStatus
+  supportFromOthers
+  whenOccurred
+}
+
+fragment HealthAndDvFields on HealthAndDv {
+  ...HealthAndDvValues
+  user {
+    ...UserFields
+  }
+  enrollment {
+    id
+    project {
+      ...ProjectNameAndType
+    }
+  }
+}
+
+fragment ExitValues on Exit {
+  id
+  aftercareDate
+  aftercareProvided
+  aftercareMethods
+  askedOrForcedToExchangeForSex
+  askedOrForcedToExchangeForSexPastThreeMonths
+  cmExitReason
+  coercedToContinueWork
+  counselingReceived
+  counselingMethods
+  countOfExchangeForSex
+  dateCreated
+  dateDeleted
+  dateUpdated
+  destination
+  destinationSafeClient
+  destinationSafeWorker
+  earlyExitReason
+  exchangeForSex
+  exchangeForSexPastThreeMonths
+  exitDate
+  housingAssessment
+  laborExploitPastThreeMonths
+  otherDestination
+  posAdultConnections
+  posCommunityConnections
+  posPeerConnections
+  postExitCounselingPlan
+  projectCompletionStatus
+  sessionCountAtExit
+  sessionsInPlan
+  subsidyInformation
+  workPlaceViolenceThreats
+  workplacePromiseDifference
+}
+
+fragment YouthEducationStatusValues on YouthEducationStatus {
+  currentEdStatus
+  currentSchoolAttend
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  dateUpdated
+  id
+  informationDate
+  mostRecentEdStatus
+}
+
+fragment EmploymentEducationValues on EmploymentEducation {
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  employed
+  employmentType
+  id
+  informationDate
+  lastGradeCompleted
+  notEmployedReason
+  schoolStatus
+}

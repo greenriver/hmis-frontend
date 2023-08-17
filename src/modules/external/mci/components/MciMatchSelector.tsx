@@ -12,7 +12,7 @@ import { ReactNode, useMemo } from 'react';
 
 import { NEW_MCI_STRING, UNCLEARED_CLIENT_STRING } from '../util';
 
-import { MciClearanceProps } from './MciClearance';
+import { MciClearanceProps } from './types';
 
 import RouterLink from '@/components/elements/RouterLink';
 import GenericTable from '@/components/elements/table/GenericTable';

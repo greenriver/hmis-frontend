@@ -2,11 +2,12 @@ import { mapValues } from 'lodash-es';
 
 import { HIDDEN_VALUE } from '../types';
 
-import { transformSubmitValues } from './formUtil';
+import { itemDefaults, transformSubmitValues } from './formUtil';
 
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import {
   FormDefinitionJson,
+  FormItem,
   ItemType,
   RelatedRecordType,
 } from '@/types/gqlTypes';
@@ -14,21 +15,53 @@ import {
 const definition: FormDefinitionJson = {
   item: [
     {
+      ...itemDefaults,
       type: ItemType.Group,
       linkId: '1',
       item: [
-        { linkId: '1.1', type: ItemType.Boolean, fieldName: 'boolField' },
-        { linkId: '1.2', type: ItemType.String, fieldName: 'strField' },
-        { linkId: '1.3', type: ItemType.Date, fieldName: 'dateField' },
-        { linkId: '1.4', type: ItemType.Integer, fieldName: 'numField' },
-        { linkId: '1.5', type: ItemType.Currency, fieldName: 'numField2' },
         {
+          ...itemDefaults,
+          linkId: '1.1',
+          type: ItemType.Boolean,
+          mapping: { fieldName: 'boolField' },
+        },
+        {
+          ...itemDefaults,
+          linkId: '1.2',
+          type: ItemType.String,
+          mapping: { fieldName: 'strField' },
+        },
+        {
+          ...itemDefaults,
+          linkId: '1.3',
+          type: ItemType.Date,
+          mapping: { fieldName: 'dateField' },
+        },
+        {
+          ...itemDefaults,
+          linkId: '1.4',
+          type: ItemType.Integer,
+          mapping: { fieldName: 'numField' },
+        },
+        {
+          ...itemDefaults,
+          linkId: '1.5',
+          type: ItemType.Currency,
+          mapping: { fieldName: 'numField2' },
+        },
+        {
+          ...itemDefaults,
           linkId: '1.6',
           type: ItemType.Choice,
-          fieldName: 'choiceField',
+          mapping: { fieldName: 'choiceField' },
           pickListReference: 'NoYesReasonsForMissingData',
         },
-        { linkId: '1.7', type: ItemType.Text, fieldName: 'textField' },
+        {
+          ...itemDefaults,
+          linkId: '1.7',
+          type: ItemType.Text,
+          mapping: { fieldName: 'textField' },
+        },
       ],
     },
   ],
@@ -86,7 +119,9 @@ describe('transformSubmitValues', () => {
 
   it('prepends record type', () => {
     const clone = JSON.parse(JSON.stringify(definition));
-    clone.item[0].recordType = RelatedRecordType.Exit;
+    clone.item[0].item.forEach((i: FormItem) =>
+      i.mapping ? (i.mapping.recordType = RelatedRecordType.Exit) : null
+    );
     const values = {
       '1.1': true,
       '1.2': 'foo',
@@ -115,18 +150,23 @@ describe('transformSubmitValues', () => {
     const def: FormDefinitionJson = {
       item: [
         {
+          ...itemDefaults,
           type: ItemType.Group,
           linkId: '1',
-          recordType: RelatedRecordType.Exit,
           item: [
             {
+              ...itemDefaults,
               linkId: '1.1',
               type: ItemType.Group,
               item: [
                 {
+                  ...itemDefaults,
                   linkId: '1.1.1',
                   type: ItemType.Boolean,
-                  fieldName: 'boolField',
+                  mapping: {
+                    recordType: RelatedRecordType.Exit,
+                    fieldName: 'boolField',
+                  },
                 },
               ],
             },

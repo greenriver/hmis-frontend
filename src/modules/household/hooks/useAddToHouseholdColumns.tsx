@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
-import { isHouseholdClient, RecentHouseholdMember } from '../types';
+import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
 
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
@@ -63,7 +63,9 @@ export default function useAddToHouseholdColumns({
         width: '10%',
         minWidth: '180px',
         render: (record: ClientFieldsFragment | RecentHouseholdMember) => {
-          const client = isHouseholdClient(record) ? record.client : record;
+          const client = isRecentHouseholdMember(record)
+            ? record.client
+            : record;
           return (
             <AddToHouseholdButton
               clientId={client.id}
@@ -82,6 +84,7 @@ export default function useAddToHouseholdColumns({
   return {
     addToEnrollmentColumns,
     householdId,
+    onHouseholdIdChange: onSuccess,
     household: data?.household,
     refetchHousehold,
     loading,

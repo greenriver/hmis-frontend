@@ -2,8 +2,8 @@ import { QueryOptions } from '@apollo/client';
 import { Box, Grid, Stack } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, {
-  forwardRef,
   Ref,
+  forwardRef,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -13,7 +13,13 @@ import React, {
 import useDynamicFields from '../hooks/useDynamicFields';
 import { DynamicFormContext } from '../hooks/useDynamicFormContext';
 import usePreloadPicklists from '../hooks/usePreloadPicklists';
-import { ChangeType, FormActionTypes, FormValues } from '../types';
+import {
+  ChangeType,
+  FormActionTypes,
+  FormValues,
+  LocalConstants,
+  PickListArgs,
+} from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
@@ -51,7 +57,7 @@ export interface DynamicFormProps
   showSavePrompt?: boolean;
   alwaysShowSaveSlide?: boolean;
   horizontal?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   warnIfEmpty?: boolean;
   locked?: boolean;
   visible?: boolean;
@@ -66,6 +72,7 @@ export interface DynamicFormProps
   hideSubmit?: boolean;
   loadingElement?: JSX.Element;
   picklistQueryOptions?: Omit<QueryOptions, 'query'>;
+  localConstants?: LocalConstants;
 }
 export interface DynamicFormRef {
   SaveIfDirty: (callback: VoidFunction) => void;
@@ -80,7 +87,7 @@ const DynamicForm = forwardRef(
       onSubmit,
       onSaveDraft,
       loading,
-      initialValues = {},
+      initialValues,
       errors: errorState,
       showSavePrompt = false,
       alwaysShowSaveSlide = false,
@@ -88,28 +95,38 @@ const DynamicForm = forwardRef(
       warnIfEmpty = false,
       locked = false,
       visible = true,
-      pickListRelationId,
+      pickListArgs,
       FormActionProps = {},
       ValidationDialogProps = {},
       hideSubmit = false,
       loadingElement,
       picklistQueryOptions,
+      localConstants,
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
+    const [dirty, setDirty] = useState(false);
+    const [promptSave, setPromptSave] = useState<boolean | undefined>();
+
+    const onFieldChange = useCallback((type: ChangeType) => {
+      if (type === ChangeType.User) {
+        setPromptSave(true);
+        setDirty(true);
+      }
+    }, []);
+
     const { renderFields, getCleanedValues } = useDynamicFields({
       definition,
       initialValues,
+      localConstants,
+      onFieldChange,
     });
+
     const { loading: pickListsLoading } = usePreloadPicklists({
       definition,
-      relationId: pickListRelationId,
       queryOptions: picklistQueryOptions,
+      pickListArgs,
     });
-
-    const [dirty, setDirty] = useState(false);
-
-    const [promptSave, setPromptSave] = useState<boolean | undefined>();
 
     const saveButtonsRef = React.createRef<HTMLDivElement>();
     const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
@@ -237,7 +254,7 @@ const DynamicForm = forwardRef(
               errors: errorState.errors,
               warnings: errorState.warnings,
               horizontal,
-              pickListRelationId,
+              pickListArgs,
               warnIfEmpty,
               locked,
               visible,

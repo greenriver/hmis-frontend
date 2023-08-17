@@ -5,15 +5,29 @@
       "linkId": "status",
       "required": true,
       "text": "Referral Status",
-      "fieldName": "status",
-      "pickListReference": "ASSIGNED_REFERRAL_POSTING_STATUSES"
+      "mapping": { "fieldName": "status" },
+      "component": "DROPDOWN",
+      "pickListOptions": [
+        {
+          "code": "assigned_status",
+          "label": "Assigned"
+        },
+        {
+          "code": "accepted_pending_status",
+          "label": "Accepted Pending"
+        },
+        {
+          "code": "denied_pending_status",
+          "label": "Denied Pending"
+        }
+      ]
     },
     {
       "type": "CHOICE",
       "linkId": "denialReason",
       "required": true,
       "text": "Reason for Denial",
-      "fieldName": "denialReason",
+      "mapping": { "fieldName": "denialReason" },
       "enableBehavior": "ALL",
       "enableWhen": [
         {
@@ -29,7 +43,7 @@
       "linkId": "statusNote",
       "required": true,
       "text": "Provider Notes",
-      "fieldName": "statusNote"
+      "mapping": { "fieldName": "statusNote" }
     }
   ]
 }

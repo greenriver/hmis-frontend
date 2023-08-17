@@ -104,6 +104,7 @@ const BulkAdd = <
     useDynamicFields({
       definition,
       bulk: true,
+      localConstants: props.localConstants,
     });
 
   const targetItems = useMemo(
@@ -182,7 +183,11 @@ const BulkAdd = <
                   {...props}
                   {...fieldProps}
                   inputProps={{
-                    ...buildCommonInputProps(item, values),
+                    ...buildCommonInputProps({
+                      item,
+                      values,
+                      localConstants: props.localConstants || {},
+                    }),
                     ...fieldProps?.inputProps,
                   }}
                 />

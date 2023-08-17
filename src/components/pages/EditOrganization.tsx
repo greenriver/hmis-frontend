@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,10 +7,20 @@ import Loading from '../elements/Loading';
 import NotFound from './NotFound';
 
 import OrganizationLayout from '@/components/layout/OrganizationLayout';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
+import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
-import { FormRole, OrganizationFieldsFragment } from '@/types/gqlTypes';
+import {
+  DeleteOrganizationDocument,
+  DeleteOrganizationMutation,
+  DeleteOrganizationMutationVariables,
+  FormRole,
+  OrganizationFieldsFragment,
+  PickListType,
+} from '@/types/gqlTypes';
+import { evictPickList, evictQuery } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EditOrganization = () => {
@@ -28,10 +38,17 @@ const EditOrganization = () => {
     [navigate]
   );
 
+  const onSuccessfulDelete = useCallback(() => {
+    evictPickList(PickListType.Project);
+    evictQuery('organizations');
+    navigate(generateSafePath(Routes.ALL_PROJECTS));
+  }, [navigate]);
+
   if (loading) return <Loading />;
   if (!crumbs || !organization) return <NotFound />;
   if (!organization.access.canEditOrganization) return <NotFound />;
 
+  const organizationId = organization.id;
   return (
     <OrganizationLayout crumbs={crumbs}>
       {loading && <Loading />}
@@ -40,7 +57,40 @@ const EditOrganization = () => {
           formRole={FormRole.Organization}
           record={organization}
           onCompleted={onCompleted}
-          title={<Typography variant='h3'>Edit {organizationName}</Typography>}
+          title={
+            <Stack
+              direction={'row'}
+              // justifyContent='space-between'
+              alignItems={'end'}
+              gap={3}
+              sx={{ my: 1 }}
+            >
+              <Stack direction={'row'} spacing={2}>
+                <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+                  Edit {organizationName}
+                </Typography>
+              </Stack>
+              <OrganizationPermissionsFilter
+                id={organizationId}
+                permissions={['canDeleteOrganization']}
+              >
+                <DeleteMutationButton<
+                  DeleteOrganizationMutation,
+                  DeleteOrganizationMutationVariables
+                >
+                  queryDocument={DeleteOrganizationDocument}
+                  variables={{ input: { id: organizationId } }}
+                  idPath='deleteOrganization.organization.id'
+                  recordName='Organization'
+                  onSuccess={onSuccessfulDelete}
+                  ButtonProps={{ size: 'small' }}
+                  deleteIcon
+                >
+                  Delete Organization
+                </DeleteMutationButton>
+              </OrganizationPermissionsFilter>
+            </Stack>
+          }
         />
       )}
     </OrganizationLayout>

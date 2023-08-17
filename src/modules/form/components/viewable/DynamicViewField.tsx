@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 
 import { getValueFromPickListData, usePickList } from '../../hooks/usePickList';
 import { DynamicViewFieldProps } from '../../types';
+import { isDataNotCollected } from '../../util/formUtil';
 import DynamicDisplay from '../DynamicDisplay';
 
 import File from './item/File';
@@ -12,25 +13,22 @@ import NotCollectedText from './item/NotCollectedText';
 import TextContent from './item/TextContent';
 
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
+import LabelWithContent from '@/components/elements/LabelWithContent';
 import {
   formatDateForDisplay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { Component, FormItem, ItemType } from '@/types/gqlTypes';
+import { DisabledDisplay, FormItem, ItemType } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
-  if (!item.prefix && !item.text) return null;
+  const label = item.readonlyText || item.text;
+  if (!label) return;
 
   return (
     <Stack direction='row' spacing={1}>
-      <Typography
-        variant='body2'
-        fontWeight={
-          item.component === Component.Checkbox || horizontal ? undefined : 600
-        }
-      >
-        {item.text}
+      <Typography variant='body2' fontWeight={horizontal ? undefined : 600}>
+        {label}
       </Typography>
     </Stack>
   );
@@ -41,26 +39,30 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   // nestingLevel,
   value,
   horizontal = false,
-  pickListRelationId,
+  pickListArgs,
   noLabel = false,
   adjustValue = () => {},
+  disabled = false,
 }) => {
   const label = noLabel ? null : getLabel(item, horizontal);
 
-  const [, pickListLoading] = usePickList(item, pickListRelationId, {
-    onCompleted: (data) => {
-      const newValue = getValueFromPickListData({
-        item,
-        value,
-        linkId: item.linkId,
-        data,
-        setInitial: false,
-      });
-      // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
-      if (newValue) setTimeout(() => adjustValue(newValue));
+  const { loading: pickListLoading } = usePickList({
+    item,
+    ...pickListArgs,
+    fetchOptions: {
+      onCompleted: (data) => {
+        const newValue = getValueFromPickListData({
+          item,
+          value,
+          linkId: item.linkId,
+          data,
+          setInitial: false,
+        });
+        // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
+        if (newValue) setTimeout(() => adjustValue(newValue));
+      },
     },
   });
-
   const commonProps = useMemo(
     () => ({
       label,
@@ -71,6 +73,13 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     [label, value, horizontal, item]
   );
 
+  if (disabled && item.disabledDisplay !== DisabledDisplay.ProtectedWithValue) {
+    return (
+      <LabelWithContent {...commonProps}>
+        <NotCollectedText variant='body2'>N/A</NotCollectedText>
+      </LabelWithContent>
+    );
+  }
   switch (item.type) {
     case ItemType.Display:
       return <DynamicDisplay item={item} viewOnly />;
@@ -110,6 +119,15 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       );
     case ItemType.OpenChoice:
     case ItemType.Choice:
+      if (isDataNotCollected(value?.code)) {
+        return (
+          <LabelWithContent {...commonProps}>
+            <NotCollectedText variant='body2'>
+              {value.label || 'Data not collected'}
+            </NotCollectedText>
+          </LabelWithContent>
+        );
+      }
       return (
         <TextContent
           {...commonProps}

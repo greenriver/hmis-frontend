@@ -5,6 +5,7 @@ import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
+import EnrollmentSummaryCount from '@/modules/enrollment/components/EnrollmentSummaryCount';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
@@ -40,7 +41,7 @@ const columns: ColumnDef<Row>[] = [
       <Stack gap={0.8}>
         {filter(client.externalIds, { type: ExternalIdentifierType.MciId }).map(
           (val) => (
-            <ExternalIdDisplay value={val} />
+            <ExternalIdDisplay key={val.id} value={val} />
           )
         )}
       </Stack>
@@ -58,6 +59,17 @@ const columns: ColumnDef<Row>[] = [
   {
     header: 'DOB / Age',
     render: ({ client }: Row) => <ClientDobAge client={client} reveal />,
+  },
+  {
+    header: 'Open Enrollments',
+    render: (row: Row) => {
+      return (
+        <EnrollmentSummaryCount
+          enrollmentSummary={row.openEnrollmentSummary}
+          clientId={row.client.id}
+        />
+      );
+    },
   },
   // {
   //   header: 'Gender',

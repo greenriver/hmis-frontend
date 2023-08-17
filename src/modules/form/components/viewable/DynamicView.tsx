@@ -3,6 +3,7 @@ import { Grid, GridProps } from '@mui/material';
 
 import useDynamicFields from '../../hooks/useDynamicFields';
 import usePreloadPicklists from '../../hooks/usePreloadPicklists';
+import { LocalConstants, PickListArgs } from '../../types';
 
 import Loading from '@/components/elements/Loading';
 import { FormDefinitionJson } from '@/types/gqlTypes';
@@ -11,10 +12,11 @@ export interface DynamicViewProps {
   definition: FormDefinitionJson;
   values: Record<string, any>;
   horizontal?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   visible?: boolean;
   picklistQueryOptions?: Omit<QueryOptions, 'query'>;
   GridProps?: GridProps;
+  localConstants?: LocalConstants;
 }
 
 const DynamicView = ({
@@ -22,19 +24,21 @@ const DynamicView = ({
   values,
   horizontal = false,
   visible = true,
-  pickListRelationId,
+  pickListArgs,
   picklistQueryOptions,
+  localConstants,
   GridProps,
 }: DynamicViewProps): JSX.Element => {
   const { renderFields } = useDynamicFields({
     definition,
     initialValues: values,
     viewOnly: true,
+    localConstants,
   });
 
   const { loading: pickListsLoading } = usePreloadPicklists({
     definition,
-    relationId: pickListRelationId,
+    pickListArgs,
     queryOptions: picklistQueryOptions,
   });
 
@@ -50,7 +54,7 @@ const DynamicView = ({
     >
       {renderFields({
         horizontal,
-        pickListRelationId,
+        pickListArgs,
         visible,
       })}
     </Grid>

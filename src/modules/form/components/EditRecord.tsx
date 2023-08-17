@@ -4,7 +4,10 @@ import { ReactNode, Ref, useMemo } from 'react';
 import { useDynamicFormHandlersForRecord } from '../hooks/useDynamicFormHandlersForRecord';
 import useFormDefinition from '../hooks/useFormDefinition';
 import { LocalConstants, SubmitFormAllowedTypes } from '../types';
-import { shouldEnableItem } from '../util/formUtil';
+import {
+  AlwaysPresentLocalConstants,
+  shouldEnableItem,
+} from '../util/formUtil';
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
@@ -55,15 +58,24 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   onCompleted,
   title,
   FormNavigationProps,
-  inputVariables = {},
-  localConstants = {},
+  inputVariables,
+  localConstants: localConstantsProp,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   minGroupsForLeftNav = 3,
   formRef,
   ...props
 }: Props<RecordType>) => {
-  const { formDefinition, loading: definitionLoading } =
-    useFormDefinition(formRole);
+  const localConstants: LocalConstants = useMemo(
+    () => ({ ...AlwaysPresentLocalConstants, ...localConstantsProp }),
+    [localConstantsProp]
+  );
+
+  const { formDefinition, loading: definitionLoading } = useFormDefinition({
+    role: formRole,
+    // hack: pull project id from one of the existing args, if it exists.
+    // this project will be used to evaluate and "rules" on the resolved form definition.
+    projectId: localConstants?.projectId || inputVariables?.projectId,
+  });
 
   const { initialValues, itemMap, errors, onSubmit, submitLoading } =
     useDynamicFormHandlersForRecord({
@@ -88,11 +100,22 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
 
     // Remove disabled groups
     topLevelItems = topLevelItems.filter((item) =>
-      shouldEnableItem(item, initialValues, itemMap)
+      shouldEnableItem({
+        item,
+        values: initialValues,
+        itemMap,
+        localConstants: localConstants || {},
+      })
     );
     if (topLevelItems.length < 3) return false;
     return topLevelItems;
-  }, [itemMap, formDefinition, initialValues, minGroupsForLeftNav]);
+  }, [
+    itemMap,
+    formDefinition,
+    initialValues,
+    minGroupsForLeftNav,
+    localConstants,
+  ]);
 
   if (definitionLoading) return <Loading />;
   if (!formDefinition) return <NotFound text='Form definition not found.' />;
@@ -106,6 +129,7 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
         initialValues={initialValues}
         loading={submitLoading}
         errors={errors}
+        localConstants={localConstants}
         {...props}
         FormActionProps={{
           submitButtonText: 'Save Changes',

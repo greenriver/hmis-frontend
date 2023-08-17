@@ -2,16 +2,16 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import { Stack, Typography } from '@mui/material';
 
 import TabIndicator from './TabIndicator';
-import { TabDefinition } from './util';
+import { HouseholdAssesmentRole, TabDefinition } from './util';
 
-import { FormRole } from '@/types/gqlTypes';
+import { AssessmentRole } from '@/types/gqlTypes';
 
 const TabLabel = ({
   definition: { clientName, isHoh, status },
   role,
 }: {
   definition: TabDefinition;
-  role: FormRole.Intake | FormRole.Exit;
+  role: HouseholdAssesmentRole;
 }) => {
   return (
     <Stack gap={1} direction='row' display='flex' alignItems='center'>
@@ -23,17 +23,13 @@ const TabLabel = ({
   );
 };
 // add back household button even when all entered
-export const SummaryTabLabel = ({
-  role,
-}: {
-  role: FormRole.Intake | FormRole.Exit;
-}) => (
+export const SummaryTabLabel = ({ role }: { role: HouseholdAssesmentRole }) => (
   <Stack gap={0.8} direction='row'>
     <ReceiptIcon fontSize='small' />
     <Typography variant='inherit'>
-      {role === FormRole.Intake
+      {role === AssessmentRole.Intake
         ? 'Complete Entry'
-        : role === FormRole.Exit
+        : role === AssessmentRole.Exit
         ? 'Complete Exit'
         : 'Submit Assessments'}
     </Typography>

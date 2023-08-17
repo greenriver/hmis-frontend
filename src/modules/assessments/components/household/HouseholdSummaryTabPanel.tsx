@@ -7,7 +7,14 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import { fromPairs, isNil, keyBy, mapValues, pickBy } from 'lodash-es';
+import {
+  fromPairs,
+  isNil,
+  keyBy,
+  mapValues,
+  pickBy,
+  startCase,
+} from 'lodash-es';
 import pluralize from 'pluralize';
 import {
   Dispatch,
@@ -23,7 +30,12 @@ import { assessmentPrefix } from '../../util';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
 import HouseholdSummaryTable from './HouseholdSummaryTable';
-import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
+import {
+  AssessmentStatus,
+  HouseholdAssesmentRole,
+  TabDefinition,
+  tabPanelA11yProps,
+} from './util';
 
 import LoadingButton from '@/components/elements/LoadingButton';
 import RouterLink from '@/components/elements/RouterLink';
@@ -36,9 +48,9 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { cache } from '@/providers/apolloClient';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  FormRole,
+  AssessmentRole,
   SubmitHouseholdAssessmentsMutation,
   useSubmitHouseholdAssessmentsMutation,
 } from '@/types/gqlTypes';
@@ -46,7 +58,7 @@ import generateSafePath from '@/utils/generateSafePath';
 
 interface HouseholdSummaryTabPanelProps {
   active: boolean;
-  formRole: FormRole.Intake | FormRole.Exit;
+  role: HouseholdAssesmentRole;
   tabs: TabDefinition[];
   id: string;
   projectName: string;
@@ -57,7 +69,7 @@ interface HouseholdSummaryTabPanelProps {
 // Memoized to only re-render when props change (shallow compare)
 const HouseholdSummaryTabPanel = memo(
   ({
-    formRole,
+    role,
     active,
     id,
     tabs,
@@ -65,8 +77,6 @@ const HouseholdSummaryTabPanel = memo(
     refetch,
     setCurrentTab,
   }: HouseholdSummaryTabPanelProps) => {
-    console.debug('Rendering summary panel');
-
     const [checkedState, setCheckedState] = useState<Record<string, boolean>>(
       fromPairs(
         tabs
@@ -174,18 +184,21 @@ const HouseholdSummaryTabPanel = memo(
         >
           <Grid item xs={12} md={10} lg={8}>
             <Typography variant='h4' sx={{ mb: 3 }}>
-              Complete {assessmentPrefix(formRole)} {projectName}
+              Complete {assessmentPrefix(role)} {projectName}
             </Typography>
-            {formRole === FormRole.Exit && hohEnrollmentId && hohClientId && (
+            {role === AssessmentRole.Exit && hohEnrollmentId && hohClientId && (
               <Typography sx={{ mb: 3 }}>
                 Select members to exit. The Head of Household cannot be exited
                 before other members. In order to exit the HoH, you must either
                 exit all members or{' '}
                 <RouterLink
-                  to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
-                    clientId: hohClientId,
-                    enrollmentId: hohEnrollmentId,
-                  })}
+                  to={generateSafePath(
+                    EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
+                    {
+                      clientId: hohClientId,
+                      enrollmentId: hohEnrollmentId,
+                    }
+                  )}
                   variant='body1'
                 >
                   change the Head of Household
@@ -216,7 +229,7 @@ const HouseholdSummaryTabPanel = memo(
             <Paper sx={{ mt: 2 }}>
               <HouseholdSummaryTable
                 tabs={tabs}
-                role={formRole}
+                role={role}
                 checked={checkedState}
                 onClickCheckbox={onClickCheckbox}
                 setCurrentTab={setCurrentTab}
@@ -227,9 +240,9 @@ const HouseholdSummaryTabPanel = memo(
                   onClick={() => handleSubmit(false)}
                   disabled={assessmentsToSubmit.length === 0}
                 >
-                  {`Submit (${assessmentsToSubmit.length}) ${
-                    formRole === FormRole.Intake ? 'Intake' : 'Exit'
-                  }`}{' '}
+                  {`Submit (${assessmentsToSubmit.length}) ${startCase(
+                    role.toLowerCase()
+                  )}`}{' '}
                   {pluralize('Assessment', assessmentsToSubmit.length)}
                 </LoadingButton>
               </Box>

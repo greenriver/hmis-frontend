@@ -1,4 +1,4 @@
-fragment RootPermissionsFragment on QueryAccess {
+fragment RootPermissions on QueryAccess {
   id
   canAdministerHmis
   canEditClients
@@ -15,6 +15,7 @@ fragment RootPermissionsFragment on QueryAccess {
   canEnrollClients
   canEditEnrollments
   canViewEnrollmentDetails
+  canViewOpenEnrollmentSummary
   canDeleteEnrollments
   canDeleteAssessments
   canEditProjectDetails

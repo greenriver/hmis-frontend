@@ -1,7 +1,9 @@
-import { Chip, Container, Stack, Typography } from '@mui/material';
+import { Container, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
+import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
 import RouterLink from '@/components/elements/RouterLink';
 import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
@@ -17,7 +19,6 @@ import { useDashboardState } from '@/hooks/useDashboardState';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -30,47 +31,37 @@ const ProjectNavHeader = ({
   project: ProjectAllFieldsFragment;
 }) => {
   return (
-    <Stack gap={1}>
-      <RouterLink
-        to={generateSafePath(Routes.ORGANIZATION, {
-          organizationId: project.organization.id,
-        })}
-        fontStyle='italic'
-        data-testid='organizationLink'
-      >
-        {project.organization.organizationName}
-      </RouterLink>
-      <Typography variant='h4'>{project.projectName}</Typography>
-      {project.projectType && (
-        <Chip
-          label={
-            <HmisEnum
-              value={project.projectType}
-              enumMap={HmisEnums.ProjectType}
-            />
-          }
-          size='small'
-          variant='filled'
-          sx={{ width: 'fit-content', px: 1, mt: 0.5 }}
-        />
-      )}
-      <Stack gap={0.5} sx={{ mt: 1 }}>
-        <IdDisplay
-          prefix='Project'
-          color='text.primary'
-          value={project.hudId}
-          shortenUuid
-          withoutEmphasis
-        />
-        <IdDisplay
-          prefix='Organization'
-          color='text.primary'
-          value={project.organization.hudId}
-          shortenUuid
-          withoutEmphasis
-        />
+    <>
+      <Typography variant='h4' sx={{ mb: 2 }}>
+        {project.projectName}
+      </Typography>
+      <Stack gap={2}>
+        <CommonLabeledTextBlock title='Project Type'>
+          <HmisEnum
+            value={project.projectType}
+            enumMap={HmisEnums.ProjectType}
+          />
+        </CommonLabeledTextBlock>
+        <CommonLabeledTextBlock title='Organization'>
+          <RouterLink
+            data-testid='organizationLink'
+            to={generateSafePath(Routes.ORGANIZATION, {
+              organizationId: project.organization.id,
+            })}
+          >
+            {project.organization.organizationName}
+          </RouterLink>
+        </CommonLabeledTextBlock>
+        <Stack gap={0.5}>
+          <CommonLabeledTextBlock title='Project ID' horizontal>
+            <ClickToCopyId value={project.hudId} />
+          </CommonLabeledTextBlock>
+          <CommonLabeledTextBlock title='Organization ID' horizontal>
+            <ClickToCopyId value={project.organization.hudId} />
+          </CommonLabeledTextBlock>
+        </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 };
 
@@ -86,6 +77,14 @@ const ProjectDashboard: React.FC = () => {
   });
 
   const isPrint = useIsPrintView();
+  const {
+    canManageIncomingReferrals,
+    canManageOutgoingReferrals,
+    canViewEnrollmentDetails,
+  } = project?.access || {};
+  const enableReferrals =
+    globalFeatureFlags?.externalReferrals &&
+    (canManageIncomingReferrals || canManageOutgoingReferrals);
 
   if (error) throw error;
 
@@ -102,13 +101,31 @@ const ProjectDashboard: React.FC = () => {
             title: 'Overview',
             path: generateSafePath(ProjectDashboardRoutes.OVERVIEW, params),
           },
-
-          {
-            id: 'enrollments',
-            title: 'Enrollments',
-            path: generateSafePath(ProjectDashboardRoutes.ENROLLMENTS, params),
-          },
-          ...(globalFeatureFlags?.externalReferrals
+          ...(canViewEnrollmentDetails
+            ? [
+                {
+                  id: 'enrollments',
+                  title: 'Enrollments',
+                  path: generateSafePath(
+                    ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
+                    params
+                  ),
+                },
+              ]
+            : []),
+          ...(canViewEnrollmentDetails
+            ? [
+                {
+                  id: 'services',
+                  title: 'Services',
+                  path: generateSafePath(
+                    ProjectDashboardRoutes.PROJECT_SERVICES,
+                    params
+                  ),
+                },
+              ]
+            : []),
+          ...(enableReferrals
             ? [
                 {
                   id: 'referals',
@@ -150,7 +167,7 @@ const ProjectDashboard: React.FC = () => {
         ],
       },
     ];
-  }, [project, params, globalFeatureFlags]);
+  }, [project, params, enableReferrals, canViewEnrollmentDetails]);
 
   const dashboardState = useDashboardState();
 
@@ -182,7 +199,7 @@ const ProjectDashboard: React.FC = () => {
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       {...dashboardState}
     >
-      <Container maxWidth='lg' sx={{ pb: 6 }}>
+      <Container maxWidth='xl' sx={{ pb: 6 }}>
         <Outlet context={outletContext} />
       </Container>
     </DashboardContentContainer>

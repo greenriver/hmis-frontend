@@ -1,40 +1,45 @@
-import { Grid } from '@mui/material';
+import { Stack } from '@mui/material';
 
-import DetailGrid from '@/components/elements/DetailGrid';
-import MultilineTypography from '@/components/elements/MultilineTypography';
-import NotSpecified from '@/components/elements/NotSpecified';
-import YesNoDisplay from '@/components/elements/YesNoDisplay';
+import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
+import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { HmisEnums } from '@/types/gqlEnums';
 import { OrganizationDetailFieldsFragment } from '@/types/gqlTypes';
 
 const OrganizationDetails = ({
   organization,
 }: {
   organization: OrganizationDetailFieldsFragment;
-}) => (
-  <Grid container spacing={3}>
-    {organization.description && (
-      <Grid item xs={12}>
-        <MultilineTypography variant='body1'>
-          {organization.description}
-        </MultilineTypography>
-      </Grid>
-    )}
-    {organization?.victimServiceProvider && (
-      <DetailGrid
-        data={[
-          {
-            label: 'Victim Service Provider',
-            value: (
-              <YesNoDisplay
-                enumValue={organization?.victimServiceProvider}
-                fallback={<NotSpecified />}
-              />
-            ),
-          },
-        ]}
-      />
-    )}
-  </Grid>
-);
+}) => {
+  const fallback = <NotCollectedText variant='body2' />;
+  const hasMaybeLongDetail =
+    organization.description || organization.contactInformation;
+  return (
+    <Stack
+      columnGap={10}
+      rowGap={3}
+      direction={hasMaybeLongDetail ? 'column' : 'row'}
+      flexWrap='wrap'
+      sx={{ p: 2 }}
+    >
+      <CommonLabeledTextBlock title='Description'>
+        {organization.description || fallback}
+      </CommonLabeledTextBlock>
+      <CommonLabeledTextBlock title='Contact Information'>
+        {organization.contactInformation || fallback}
+      </CommonLabeledTextBlock>
+      <CommonLabeledTextBlock title='Victim Service Provider'>
+        <HmisEnum
+          value={organization?.victimServiceProvider}
+          enumMap={HmisEnums.NoYesMissing}
+        />
+      </CommonLabeledTextBlock>
+      <CommonLabeledTextBlock title='Organization ID'>
+        <ClickToCopyId value={organization.id} />
+      </CommonLabeledTextBlock>
+    </Stack>
+  );
+};
 
 export default OrganizationDetails;

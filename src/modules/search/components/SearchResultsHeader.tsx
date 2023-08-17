@@ -26,6 +26,7 @@ const SearchResultsHeader = ({
   sortOrder,
   onChangeSortOrder,
   addClientButton,
+  hideAddClient,
 }: {
   showCardToggle: boolean;
   disabled: boolean;
@@ -34,6 +35,7 @@ const SearchResultsHeader = ({
   sortOrder?: ClientSortOption | null | undefined;
   onChangeSortOrder: (value: ClientSortOption) => void;
   addClientButton?: ReactNode;
+  hideAddClient?: boolean;
 }) => {
   return (
     <Grid
@@ -101,20 +103,22 @@ const SearchResultsHeader = ({
           value={sortOrder}
         />
       </Grid>
-      <AddClientPrompt>
-        {addClientButton ? (
-          addClientButton
-        ) : (
-          <ButtonLink
-            data-testid='addClientButton'
-            to={Routes.CREATE_CLIENT}
-            sx={{ px: 3 }}
-            Icon={LibraryAddIcon}
-          >
-            Add Client
-          </ButtonLink>
-        )}
-      </AddClientPrompt>
+      {!hideAddClient && (
+        <AddClientPrompt>
+          {addClientButton ? (
+            addClientButton
+          ) : (
+            <ButtonLink
+              data-testid='addClientButton'
+              to={Routes.CREATE_CLIENT}
+              sx={{ px: 3 }}
+              Icon={LibraryAddIcon}
+            >
+              Add Client
+            </ButtonLink>
+          )}
+        </AddClientPrompt>
+      )}
     </Grid>
   );
 };

@@ -1,19 +1,21 @@
 import { Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import { assessmentRole } from '../util';
-
 import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { cache } from '@/providers/apolloClient';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
+  AssessmentRole,
   DeleteAssessmentDocument,
   DeleteAssessmentMutation,
   DeleteAssessmentMutationVariables,
-  FormRole,
 } from '@/types/gqlTypes';
+import { evictDeletedEnrollment } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 const DeleteAssessmentButton = ({
@@ -35,7 +37,7 @@ const DeleteAssessmentButton = ({
   if (!canEditEnrollments) return null;
 
   const isSubmitted = !assessment.inProgress;
-  const deletesEnrollment = assessmentRole(assessment) === FormRole.Intake;
+  const deletesEnrollment = assessment.role === AssessmentRole.Intake;
   if (isSubmitted) {
     // canDeleteAssessments is required for deleting submitted assessments
     if (!canDeleteAssessments) return null;
@@ -60,8 +62,7 @@ const DeleteAssessmentButton = ({
         });
         cache.evict({ id: `Client:${clientId}`, fieldName: 'assessments' });
         if (deletesEnrollment) {
-          cache.evict({ id: `Enrollment:${enrollmentId}` });
-          cache.evict({ id: `Client:${clientId}`, fieldName: 'enrollments' });
+          evictDeletedEnrollment({ enrollmentId, clientId });
           // If we deleted the enrollment, navigate back to the profile.
           // FIXME: this may result in "not found" if the user lost access to the client.
           // we should probably show a modal that says something like "Success! Go to Client|Home" depending on access
@@ -86,7 +87,7 @@ const DeleteAssessmentButton = ({
           <Typography>
             Are you sure you want to delete this intake assessment?
           </Typography>
-          {assessmentRole(assessment) === FormRole.Intake && (
+          {assessment.role === AssessmentRole.Intake && (
             <>
               <Typography fontWeight={600}>
                 This will delete the enrollment.
@@ -95,10 +96,13 @@ const DeleteAssessmentButton = ({
               <Typography>
                 If there are other household members, you may need to{' '}
                 <RouterLink
-                  to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
-                    clientId,
-                    enrollmentId,
-                  })}
+                  to={generateSafePath(
+                    EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
+                    {
+                      clientId,
+                      enrollmentId,
+                    }
+                  )}
                   variant='inherit'
                 >
                   change the Head of Household

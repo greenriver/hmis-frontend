@@ -13,7 +13,7 @@ import {
   parseAndFormatDate,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentSortOption,
   GetClientAssessmentsDocument,
@@ -61,10 +61,11 @@ const AllAssessments = () => {
 
   const rowLinkTo = useCallback(
     (record: AssessmentType) =>
-      generateSafePath(ClientDashboardRoutes.VIEW_ASSESSMENT, {
+      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
         clientId,
         enrollmentId: record.enrollment.id,
         assessmentId: record.id,
+        formRole: record.role,
       }),
     [clientId]
   );

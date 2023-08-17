@@ -1,6 +1,7 @@
 import {
   Box,
   Checkbox,
+  LinearProgress,
   SxProps,
   Table,
   TableBody,
@@ -36,10 +37,11 @@ import {
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
-  rowLinkTo?: (row: T) => To;
+  rowLinkTo?: (row: T) => To | null | undefined;
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
+  loadingVariant?: 'circular' | 'linear';
   tablePaginationProps?: TablePaginationProps;
   tableContainerProps?: TableContainerProps;
   actionRow?: ReactNode;
@@ -89,7 +91,7 @@ const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
   rowLinkTo,
-  columns = [],
+  columns: columnProp,
   paginated = false,
   loading = false,
   vertical = false,
@@ -106,7 +108,12 @@ const GenericTable = <T extends { id: string }>({
   EnhancedTableToolbarProps,
   filterToolbar,
   noData = 'No data',
+  loadingVariant = 'circular',
 }: Props<T>) => {
+  const columns = useMemo(
+    () => (columnProp || []).filter((c) => !c.hide),
+    [columnProp]
+  );
   const hasHeaders = columns.find((c) => !!c.header);
 
   const [selected, setSelected] = useState<readonly string[]>([]);
@@ -139,7 +146,7 @@ const GenericTable = <T extends { id: string }>({
   // Clear selection when data changes
   useEffect(() => setSelected([]), [rows]);
 
-  if (loading) return <Loading />;
+  if (loading && loadingVariant === 'circular') return <Loading />;
 
   const renderCellContents = (row: T, render: ColumnDef<T>['render']) => {
     if (isRenderFunction<T>(render)) return <>{render(row)}</>;
@@ -159,6 +166,7 @@ const GenericTable = <T extends { id: string }>({
   const key = (def: ColumnDef<T>) =>
     def.key || (typeof def.header === 'string' ? def.header : '');
 
+  const fullColSpan = columns.length + (selectable ? 1 : 0);
   const tableHead = noHead ? null : vertical ? (
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
@@ -206,6 +214,13 @@ const GenericTable = <T extends { id: string }>({
           ))}
         </TableRow>
       )}
+      {loading && loadingVariant === 'linear' && (
+        <TableRow>
+          <TableCell colSpan={fullColSpan} sx={{ p: 0, m: 0 }}>
+            <LinearProgress sx={{ height: '2px' }} />
+          </TableCell>
+        </TableRow>
+      )}
     </TableHead>
   );
 
@@ -213,7 +228,7 @@ const GenericTable = <T extends { id: string }>({
     rows.length > 0 ? null : (
       <TableRow>
         <TableCell
-          colSpan={columns.length + (selectable ? 1 : 0)}
+          colSpan={fullColSpan}
           sx={{
             py: 4,
             textAlign: 'center',
@@ -275,7 +290,9 @@ const GenericTable = <T extends { id: string }>({
                   ? isSelectable && handleSelectRow
                   : undefined;
 
-                const isClickable = !!onClickHandler || !!rowLinkTo;
+                const rowLink = (rowLinkTo && rowLinkTo(row)) || undefined;
+
+                const isClickable = !!onClickHandler || !!rowLink;
 
                 return (
                   <TableRow
@@ -298,7 +315,7 @@ const GenericTable = <T extends { id: string }>({
                     tabIndex={handleRowClick ? 0 : undefined}
                   >
                     {selectable && (
-                      <TableCell padding='checkbox'>
+                      <TableCell padding='checkbox' key='selection'>
                         <Checkbox
                           color='primary'
                           disabled={!isSelectable}
@@ -319,7 +336,7 @@ const GenericTable = <T extends { id: string }>({
                       } = def;
                       const isFirstLinkWithTreatment =
                         columns.findIndex((c) => c.linkTreatment) === index;
-                      const isLinked = rowLinkTo && !dontLink;
+                      const isLinked = rowLink && !dontLink;
                       const onClickLinkTreatment =
                         handleRowClick && !dontLink && linkTreatment
                           ? {
@@ -341,7 +358,7 @@ const GenericTable = <T extends { id: string }>({
                         >
                           {isLinked ? (
                             <RouterLink
-                              to={rowLinkTo(row)}
+                              to={rowLink}
                               aria-label={ariaLabel && ariaLabel(row)}
                               plain={!linkTreatment}
                               data-testid={linkTreatment && 'table-linkedCell'}

@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentStory, Meta } from '@storybook/react';
 
 import TextInput from './TextInput';
 
@@ -14,7 +14,7 @@ export default {
       </Box>
     ),
   ],
-} as ComponentMeta<typeof TextInput>;
+} as Meta<typeof TextInput>;
 
 const Template: ComponentStory<typeof TextInput> = (args) => (
   <TextInput {...args} />

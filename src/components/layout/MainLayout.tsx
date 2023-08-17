@@ -15,7 +15,6 @@ import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
 import useIsPrintView from '@/hooks/useIsPrintView';
-import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import OmniSearch from '@/modules/search/components/OmniSearch';
@@ -27,7 +26,6 @@ interface Props {
 }
 
 const MainLayout: React.FC<Props> = ({ children }) => {
-  const { user, loading: userLoading } = useAuth();
   const { appName } = useHmisAppSettings();
   const isPrint = useIsPrintView();
 
@@ -39,7 +37,6 @@ const MainLayout: React.FC<Props> = ({ children }) => {
   } = useGetRootPermissionsQuery();
   if (error) throw error;
 
-  if (userLoading && !user) return <Loading />;
   if (permissionLoading && !data) return <Loading />;
 
   if (isPrint)

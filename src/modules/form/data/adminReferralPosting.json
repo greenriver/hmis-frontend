@@ -16,7 +16,7 @@
       "linkId": "denialReason",
       "required": true,
       "text": "Reason for Denial",
-      "fieldName": "denialReason",
+      "mapping": { "fieldName": "denialReason" },
       "pickListReference": "ReferralPostingDenialReasonType"
     },
     {
@@ -24,15 +24,25 @@
       "linkId": "status",
       "required": true,
       "text": "Referral Status",
-      "fieldName": "status",
-      "pickListReference": "DENIED_PENDING_REFERRAL_POSTING_STATUSES"
+      "mapping": { "fieldName": "status" },
+      "component": "RADIO_BUTTONS",
+      "pickListOptions": [
+        {
+          "code": "assigned_status",
+          "label": "Send Back"
+        },
+        {
+          "code": "denied_status",
+          "label": "Approve Denial"
+        }
+      ]
     },
     {
       "type": "BOOLEAN",
       "linkId": "resendReferralRequest",
       "required": false,
       "text": "Re-request?",
-      "fieldName": "resendReferralRequest",
+      "mapping": { "fieldName": "resendReferralRequest" },
       "enableBehavior": "ALL",
       "enableWhen": [
         {
@@ -53,14 +63,24 @@
       "linkId": "referralResult",
       "required": true,
       "text": "Referral Result",
-      "fieldName": "referralResult",
-      "pickListReference": "REFERRAL_RESULT_TYPES",
+      "mapping": { "fieldName": "referralResult" },
+      "component": "DROPDOWN",
       "enableBehavior": "ALL",
       "enableWhen": [
         {
           "question": "status",
           "operator": "EQUAL",
           "answerCode": "denied_status"
+        }
+      ],
+      "pickListOptions": [
+        {
+          "code": "UNSUCCESSFUL_REFERRAL_CLIENT_REJECTED",
+          "label": "Unsuccessful referral: client rejected"
+        },
+        {
+          "code": "UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED",
+          "label": "Unsuccessful referral: provider rejected"
         }
       ]
     },
@@ -69,7 +89,7 @@
       "linkId": "denialNote",
       "required": false,
       "text": "Denial Note",
-      "fieldName": "denialNote"
+      "mapping": { "fieldName": "denialNote" }
     }
   ]
 }

@@ -1,8 +1,6 @@
-import AddIcon from '@mui/icons-material/Add';
 import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 
-import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -13,8 +11,7 @@ import {
   enrollmentName,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
   EnrollmentSortOption,
@@ -57,7 +54,7 @@ const AllEnrollments = () => {
 
   const rowLinkTo = useCallback(
     (enrollment: EnrollmentFieldsFragment) =>
-      generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+      generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
         clientId,
         enrollmentId: enrollment.id,
       }),
@@ -68,18 +65,19 @@ const AllEnrollments = () => {
     <>
       <PageTitle
         title='Enrollments'
-        actions={
-          <RootPermissionsFilter permissions={['canEnrollClients']}>
-            <ButtonLink
-              to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
-                clientId,
-              })}
-              Icon={AddIcon}
-            >
-              Add Enrollment
-            </ButtonLink>
-          </RootPermissionsFilter>
-        }
+        // disabled for now #185750557
+        // actions={
+        //   <RootPermissionsFilter permissions={['canEnrollClients']}>
+        //     <ButtonLink
+        //       to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
+        //         clientId,
+        //       })}
+        //       Icon={AddIcon}
+        //     >
+        //       Add Enrollment
+        //     </ButtonLink>
+        //   </RootPermissionsFilter>
+        // }
       />
       <Paper>
         <GenericTableWithData<
