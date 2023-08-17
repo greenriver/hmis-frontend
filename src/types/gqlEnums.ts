@@ -934,7 +934,7 @@ export const HmisEnums = {
     ES: 'Emergency Shelter',
     HP: 'Homelessness Prevention',
     INVALID: 'Invalid Value',
-    PH_OPH: 'PH - Housing with Services (no disability required for entry)',
+    PH_OPH: 'PH - Housing with Services',
     PH_PH: 'PH - Housing Only',
     PH_PSH: 'PH - Permanent Supportive Housing',
     PH_RRH: 'PH - Rapid Re-Housing',

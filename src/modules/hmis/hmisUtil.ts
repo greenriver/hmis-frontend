@@ -44,16 +44,13 @@ export const MISSING_DATA_KEYS = [
 ];
 
 export const PERMANENT_HOUSING_PROJECT_TYPES = [
-  ProjectType.Psh,
-  ProjectType.Ph,
-  ProjectType.Oph,
-  ProjectType.Rrh,
+  ProjectType.PhPsh,
+  ProjectType.PhPh,
+  ProjectType.PhOph,
+  ProjectType.PhRrh,
 ];
 
-export const STREET_OUTREACH_SERVICES_ONLY = [
-  ProjectType.ServicesOnly,
-  ProjectType.So,
-];
+export const STREET_OUTREACH_SERVICES_ONLY = [ProjectType.Sso, ProjectType.So];
 
 export const INVALID_ENUM = 'INVALID';
 

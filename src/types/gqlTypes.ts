@@ -3659,7 +3659,7 @@ export enum ProjectType {
   Invalid = 'INVALID',
   /** Other */
   Other = 'OTHER',
-  /** PH - Housing with Services (no disability required for entry) */
+  /** PH - Housing with Services */
   PhOph = 'PH_OPH',
   /** PH - Housing Only */
   PhPh = 'PH_PH',
@@ -14049,7 +14049,6 @@ export type SubmitFormMutation = {
     __typename?: 'SubmitFormPayload';
     clientMutationId?: string | null;
     record?:
-      | { __typename?: 'CeAssessment' }
       | {
           __typename?: 'CeAssessment';
           id: string;
@@ -14282,7 +14281,6 @@ export type SubmitFormMutation = {
             } | null;
           } | null;
         }
-      | { __typename?: 'Event' }
       | {
           __typename?: 'Event';
           id: string;

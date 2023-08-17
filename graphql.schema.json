@@ -23687,7 +23687,7 @@
           },
           {
             "name": "PH_OPH",
-            "description": "PH - Housing with Services (no disability required for entry)",
+            "description": "PH - Housing with Services",
             "isDeprecated": false,
             "deprecationReason": null
           },
