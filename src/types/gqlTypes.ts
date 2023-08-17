@@ -10922,6 +10922,7 @@ export type CurrentLivingSituationFieldsFragment = {
   subsequentResidence?: NoYesReasonsForMissingData | null;
   dateUpdated: string;
   dateCreated: string;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
@@ -10954,6 +10955,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         subsequentResidence?: NoYesReasonsForMissingData | null;
         dateUpdated: string;
         dateCreated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -11246,6 +11248,7 @@ export type EventFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type CeAssessmentFieldsFragment = {
@@ -11259,6 +11262,7 @@ export type CeAssessmentFieldsFragment = {
   dateUpdated: string;
   dateDeleted?: string | null;
   prioritizationStatus?: PrioritizationStatus | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type EnrollmentSummaryFieldsFragment = {
@@ -11732,6 +11736,7 @@ export type GetEnrollmentEventsQuery = {
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -11764,6 +11769,7 @@ export type GetEnrollmentCeAssessmentsQuery = {
         dateUpdated: string;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -14054,6 +14060,7 @@ export type SubmitFormMutation = {
           dateUpdated: string;
           dateDeleted?: string | null;
           prioritizationStatus?: PrioritizationStatus | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'Client';
@@ -14223,6 +14230,7 @@ export type SubmitFormMutation = {
           subsequentResidence?: NoYesReasonsForMissingData | null;
           dateUpdated: string;
           dateCreated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'Enrollment';
@@ -14286,6 +14294,7 @@ export type SubmitFormMutation = {
           dateCreated: string;
           dateUpdated: string;
           dateDeleted?: string | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'File';
@@ -18750,7 +18759,11 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     subsequentResidence
     dateUpdated
     dateCreated
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
 `;
 export const ClientNameDobVetFragmentDoc = gql`
   fragment ClientNameDobVet on Client {
@@ -18864,7 +18877,11 @@ export const EventFieldsFragmentDoc = gql`
     dateCreated
     dateUpdated
     dateDeleted
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
 `;
 export const CeAssessmentFieldsFragmentDoc = gql`
   fragment CeAssessmentFields on CeAssessment {
@@ -18877,7 +18894,11 @@ export const CeAssessmentFieldsFragmentDoc = gql`
     dateUpdated
     dateDeleted
     prioritizationStatus
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
 `;
 export const EnrollmentSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentSummaryFields on EnrollmentSummary {

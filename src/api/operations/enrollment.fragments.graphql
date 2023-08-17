@@ -55,6 +55,9 @@ fragment EventFields on Event {
   dateCreated
   dateUpdated
   dateDeleted
+  user {
+    ...UserFields
+  }
 }
 
 fragment CeAssessmentFields on CeAssessment {
@@ -67,6 +70,9 @@ fragment CeAssessmentFields on CeAssessment {
   dateUpdated
   dateDeleted
   prioritizationStatus
+  user {
+    ...UserFields
+  }
 }
 
 fragment EnrollmentSummaryFields on EnrollmentSummary {

@@ -94,6 +94,7 @@ const EnrollmentCeAssessmentsPage = () => {
     });
     closeDialog();
     closeViewDialog();
+    setViewingRecord(undefined);
   }, [closeDialog, closeViewDialog, enrollmentId]);
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
