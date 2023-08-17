@@ -40,6 +40,7 @@ const enrollmentDashboardRoutes = {
   SERVICES: 'services',
   CURRENT_LIVING_SITUATIONS: 'current-living-situations',
   EVENTS: 'events',
+  CE_ASSESSMENTS: 'ce-assessments',
   ASSESSMENT: 'assessments/:formRole/:assessmentId?',
   ESG_FUNDING_REPORT: 'esg-funding-report',
 };

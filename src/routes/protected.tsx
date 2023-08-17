@@ -37,6 +37,7 @@ import AdminDashboard from '@/modules/admin/components/AdminDashboard';
 import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
+import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
 import EnrollmentEsgFundingReport from '@/modules/enrollment/components/dashboardPages/EnrollmentEsgFundingReport';
 import EnrollmentEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentEventsPage';
@@ -351,6 +352,11 @@ export const protectedRoutes: RouteNode[] = [
             path: EnrollmentDashboardRoutes.EVENTS,
             // No perm needed because it only requires enrollment visibility
             element: <EnrollmentEventsPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
+            // No perm needed because it only requires enrollment visibility
+            element: <EnrollmentCeAssessmentsPage />,
           },
           {
             path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,

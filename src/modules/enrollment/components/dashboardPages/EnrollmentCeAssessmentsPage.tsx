@@ -11,61 +11,75 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import useViewDialog from '@/modules/form/hooks/useViewDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import {
-  eventReferralResult,
-  parseAndFormatDate,
-} from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  DeleteCeEventDocument,
-  DeleteCeEventMutation,
-  DeleteCeEventMutationVariables,
-  EventFieldsFragment,
+  CeAssessmentFieldsFragment,
+  DeleteCeAssessmentDocument,
+  DeleteCeAssessmentMutation,
+  DeleteCeAssessmentMutationVariables,
   FormRole,
-  GetEnrollmentEventsDocument,
-  GetEnrollmentEventsQuery,
-  GetEnrollmentEventsQueryVariables,
+  GetEnrollmentCeAssessmentsDocument,
+  GetEnrollmentCeAssessmentsQuery,
+  GetEnrollmentCeAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
 
-const columns: ColumnDef<EventFieldsFragment>[] = [
-  {
-    header: 'Type',
-    render: (e) => <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />,
-  },
+const columns: ColumnDef<CeAssessmentFieldsFragment>[] = [
   {
     header: 'Date',
-    render: (e) => parseAndFormatDate(e.eventDate),
+    render: (a) => parseAndFormatDate(a.assessmentDate),
   },
   {
-    header: 'Result',
-    render: (e) => eventReferralResult(e),
+    header: 'Level',
+    render: (a) => (
+      <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
+    ),
+  },
+  {
+    header: 'Type',
+    render: (a) => (
+      <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
+    ),
+  },
+  {
+    header: 'Location',
+    render: (a) => a.assessmentLocation,
+  },
+  {
+    header: 'Prioritization Status',
+    render: (a) => (
+      <HmisEnum
+        value={a.prioritizationStatus}
+        enumMap={HmisEnums.PrioritizationStatus}
+      />
+    ),
   },
 ];
 
-const EnrollmentEventsPage = () => {
+const EnrollmentCeAssessmentsPage = () => {
   const { enrollment } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
   const [viewingRecord, setViewingRecord] = useState<
-    EventFieldsFragment | undefined
+    CeAssessmentFieldsFragment | undefined
   >();
 
   const { openViewDialog, renderViewDialog, closeViewDialog } =
-    useViewDialog<EventFieldsFragment>({
+    useViewDialog<CeAssessmentFieldsFragment>({
       record: viewingRecord,
       onClose: () => setViewingRecord(undefined),
-      formRole: FormRole.CeEvent,
+      formRole: FormRole.CeAssessment,
     });
 
   const { openFormDialog, renderFormDialog, closeDialog } =
-    useFormDialog<EventFieldsFragment>({
-      formRole: FormRole.CeEvent,
+    useFormDialog<CeAssessmentFieldsFragment>({
+      formRole: FormRole.CeAssessment,
       onCompleted: () => {
         cache.evict({
           id: `Enrollment:${enrollmentId}`,
-          fieldName: 'events',
+          fieldName: 'ceAssessments',
         });
         closeViewDialog();
       },
@@ -76,7 +90,7 @@ const EnrollmentEventsPage = () => {
   const onSuccessfulDelete = useCallback(() => {
     cache.evict({
       id: `Enrollment:${enrollmentId}`,
-      fieldName: 'events',
+      fieldName: 'ceAssessments',
     });
     closeDialog();
     closeViewDialog();
@@ -84,35 +98,35 @@ const EnrollmentEventsPage = () => {
   }, [closeDialog, closeViewDialog, enrollmentId]);
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
-  const canEditCeEvents = enrollment.access.canEditEnrollments;
+  const canEditCeAssessments = enrollment.access.canEditEnrollments;
 
   return (
     <>
       <TitleCard
-        title='Coordinated Entry Events'
+        title='Coordinated Entry Assessments'
         headerVariant='border'
         actions={
-          canEditCeEvents ? (
+          canEditCeAssessments ? (
             <Button
               onClick={openFormDialog}
               variant='outlined'
               startIcon={<AddIcon fontSize='small' />}
             >
-              Add Coordinated Entry Event
+              Add Coordinated Entry Assessment
             </Button>
           ) : null
         }
       >
         <GenericTableWithData<
-          GetEnrollmentEventsQuery,
-          GetEnrollmentEventsQueryVariables,
-          EventFieldsFragment
+          GetEnrollmentCeAssessmentsQuery,
+          GetEnrollmentCeAssessmentsQueryVariables,
+          CeAssessmentFieldsFragment
         >
           queryVariables={{ id: enrollmentId }}
-          queryDocument={GetEnrollmentEventsDocument}
+          queryDocument={GetEnrollmentCeAssessmentsDocument}
           columns={columns}
-          pagePath='enrollment.events'
-          noData='No events'
+          pagePath='enrollment.ceAssessments'
+          noData='No CE assessments'
           headerCellSx={() => ({ color: 'text.secondary' })}
           handleRowClick={(record) => {
             setViewingRecord(record);
@@ -125,19 +139,19 @@ const EnrollmentEventsPage = () => {
         maxWidth: 'md',
         actions: (
           <>
-            {viewingRecord && canEditCeEvents && (
+            {viewingRecord && canEditCeAssessments && (
               <>
                 <Button variant='outlined' onClick={openFormDialog}>
                   Edit
                 </Button>
                 <DeleteMutationButton<
-                  DeleteCeEventMutation,
-                  DeleteCeEventMutationVariables
+                  DeleteCeAssessmentMutation,
+                  DeleteCeAssessmentMutationVariables
                 >
-                  queryDocument={DeleteCeEventDocument}
+                  queryDocument={DeleteCeAssessmentDocument}
                   variables={{ id: viewingRecord.id }}
-                  idPath={'deleteCeEvent.ceEvent.id'}
-                  recordName='Coordinated Entry Event'
+                  idPath={'deleteCeAssessment.ceAssessment.id'}
+                  recordName='Coordinated Entry Assessment'
                   onSuccess={onSuccessfulDelete}
                 >
                   Delete
@@ -149,12 +163,13 @@ const EnrollmentEventsPage = () => {
       })}
       {renderFormDialog({
         title: viewingRecord
-          ? 'Edit Coordinated Entry Event'
-          : 'Add Coordinated Entry Event',
+          ? 'Edit Coordinated Entry Assessment'
+          : 'Add Coordinated Entry Assessment',
+        //md to accomodate radio buttons
         DialogProps: { maxWidth: 'md' },
       })}
     </>
   );
 };
 
-export default EnrollmentEventsPage;
+export default EnrollmentCeAssessmentsPage;

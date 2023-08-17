@@ -17,7 +17,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import HudRecordMetadata from '@/modules/hmis/components/HudRecordMetadata';
 import { FormRole } from '@/types/gqlTypes';
 
-interface RecordDialogProps<RecordType> extends DialogProps {
+export interface RecordDialogProps<RecordType> extends DialogProps {
   record: RecordType;
   formRole: FormRole;
   pickListArgs?: PickListArgs;

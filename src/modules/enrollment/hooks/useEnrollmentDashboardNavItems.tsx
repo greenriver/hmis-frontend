@@ -67,6 +67,14 @@ export const useEnrollmentDashboardNavItems = (
             title: 'CE Events',
             path: generateSafePath(EnrollmentDashboardRoutes.EVENTS, params),
           },
+          {
+            id: 'ce-assessments',
+            title: 'CE Assessments',
+            path: generateSafePath(
+              EnrollmentDashboardRoutes.CE_ASSESSMENTS,
+              params
+            ),
+          },
         ],
       },
     ];
