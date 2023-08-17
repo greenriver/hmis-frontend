@@ -60,9 +60,9 @@ const reminderDesciption = (
         : 'Client turned 18.';
     case ReminderTopic.IntakeIncomplete:
       return multiple
-        ? `${reminder.count} intake assessments must be submitted.`
+        ? `${reminder.count} intake assessments has not been submitted.`
         : notCurrentClient
-        ? `${clientName}'s intake assessment must be submitted.`
+        ? `${clientName}'s intake assessment has not been submitted.`
         : null;
     case ReminderTopic.ExitIncomplete:
       return multiple
