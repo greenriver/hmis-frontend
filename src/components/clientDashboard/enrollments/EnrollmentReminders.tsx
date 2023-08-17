@@ -1,6 +1,7 @@
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import { Box, Stack, Typography } from '@mui/material';
-import { sortBy } from 'lodash-es';
+import { isToday } from 'date-fns';
+import { lowerCase, sortBy } from 'lodash-es';
 import { useMemo } from 'react';
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -49,18 +50,19 @@ const reminderDesciption = (
   switch (reminder.topic) {
     case ReminderTopic.AnnualAssessment:
       const dueDate = parseHmisDateString(reminder.dueDate);
-      return reminder.overdue && dueDate
-        ? `Annual was due ${formatRelativeDate(dueDate)}.`
-        : dueDate
-        ? `Annual due in ${formatRelativeDate(dueDate)}.`
-        : null;
+      if (!dueDate) return null;
+      return reminder.overdue && isToday(dueDate)
+        ? `Annual assessment is due today.`
+        : reminder.overdue
+        ? `Annual was due ${lowerCase(formatRelativeDate(dueDate))}.`
+        : `Annual is due ${lowerCase(formatRelativeDate(dueDate))}.`;
     case ReminderTopic.AgedIntoAdulthood:
       return notCurrentClient
         ? `${clientName} turned 18.`
         : 'Client turned 18.';
     case ReminderTopic.IntakeIncomplete:
       return multiple
-        ? `${reminder.count} intake assessments has not been submitted.`
+        ? `${reminder.count} intake assessments have not been submitted.`
         : notCurrentClient
         ? `${clientName}'s intake assessment has not been submitted.`
         : null;
@@ -112,9 +114,9 @@ const generateColumns = (
           Overdue
         </Box>
       ) : dueDate ? (
-        <Box color='error.main' fontWeight={600} alignSelf='flex-start'>
-          {`Due ${parseAndFormatDate(dueDate)}`}
-        </Box>
+        <Box alignSelf='flex-start' flexShrink={0}>{`Due ${parseAndFormatDate(
+          dueDate
+        )}`}</Box>
       ) : null;
     },
   },
