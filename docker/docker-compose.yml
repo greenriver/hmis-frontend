@@ -20,6 +20,7 @@ services:
         GITHASH: 12345
         USERID: ${USERID:-10000}
         GROUPID: ${GROUPID:-10001}
+    expose: ["8080"]
     ports: ["8080"]
     environment:
       NGINX_HOST: ${NGINX_HOST:-hmis-frontend.127.0.0.1.nip.io}
