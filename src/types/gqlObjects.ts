@@ -1751,6 +1751,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'RHYNumberofYears', ofType: null },
       },
       {
+        name: 'lastBedNightDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'lengthOfStay',
         type: {
           kind: 'ENUM',
@@ -5437,6 +5441,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'EnrollmentsForProjectFilterOptions',
     args: [
       {
+        name: 'bedNightOnDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'openOnDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
@@ -6028,6 +6036,43 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'unitTypeId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'UpdateBedNightsInput',
+    args: [
+      {
+        name: 'action',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'BulkActionType', ofType: null },
+        },
+      },
+      {
+        name: 'bedNightDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'enrollmentIds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
+          },
+        },
       },
     ],
   },

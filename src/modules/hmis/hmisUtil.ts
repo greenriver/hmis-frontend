@@ -73,13 +73,11 @@ export const formatDateForGql = (date: Date) => {
   }
 };
 
-export const formatDateForDisplay = (date: Date) => {
+export const formatDateForDisplay = (date: Date, fmt = DATE_DISPLAY_FORMAT) => {
   try {
-    return format(date, DATE_DISPLAY_FORMAT);
+    return format(date, fmt);
   } catch (RangeError) {
-    console.error(
-      `Failed to format date '${date.toString()}' as ${DATE_DISPLAY_FORMAT}`
-    );
+    console.error(`Failed to format date '${date.toString()}' as ${fmt}`);
     return null;
   }
 };

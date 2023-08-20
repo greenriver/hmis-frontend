@@ -13,10 +13,10 @@ import { isEmpty, isNil, omit, omitBy, trim } from 'lodash-es';
 import React, { ReactNode, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import ClientSearchInput from './ClientSearchInput';
 import ProjectSelect, {
   Option as ProjectOption,
 } from '@/components/elements/input/ProjectSelect';
-import TextInput from '@/components/elements/input/TextInput';
 import DynamicField from '@/modules/form/components/DynamicField';
 import { ItemChangedFn } from '@/modules/form/types';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
@@ -164,15 +164,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
           flexWrap='wrap'
         >
           <Grid item xs={hideProject ? 8 : 5}>
-            <TextInput
+            <ClientSearchInput
               name='textSearch'
-              label='Search Clients'
-              placeholder={
-                hideInstructions
-                  ? 'Search by name, DOB, SSN, or Personal ID'
-                  : 'Search clients...'
-              }
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               value={values.textSearch || ''}
               onChange={(e) => {
                 fieldChanged('textSearch', e.target.value);
@@ -185,7 +178,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
           {!hideProject && (
             <Grid item xs={4}>
               <ProjectSelect
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 value={values.projects || []}
                 onChange={(_, selectedOption) => {
                   fieldChanged('projects', selectedOption);

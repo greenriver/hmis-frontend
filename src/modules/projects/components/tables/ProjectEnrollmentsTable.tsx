@@ -8,10 +8,10 @@ import ProjectClientEnrollmentsTable, {
 } from './ProjectClientEnrollmentsTable';
 import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 
-import TextInput from '@/components/elements/input/TextInput';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import ClientSearchInput from '@/modules/search/components/ClientSearchInput';
 
 type Mode = 'clients' | 'households';
 
@@ -89,12 +89,10 @@ const ProjectEnrollmentsTable = ({
           )}
           <Box flexGrow={1}>
             {searchable ? (
-              <TextInput
-                label='Search Clients'
-                name='search client'
-                placeholder='Search clients...'
+              <ClientSearchInput
                 value={search || ''}
                 onChange={(e) => setSearch(e.target.value)}
+                helperText={null}
               />
             ) : undefined}
           </Box>

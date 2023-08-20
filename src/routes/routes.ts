@@ -52,6 +52,8 @@ const projectDashboardRoutes = {
   // Enrollment-related
   PROJECT_ENROLLMENTS: 'enrollments',
   PROJECT_SERVICES: 'services',
+  PROJECT_BED_NIGHTS: 'bed-nights',
+  PROJECT_BED_NIGHTS_NEW_ENROLLMENT: 'bed-nights/enroll',
   ADD_SERVICES: 'add-services',
   ADD_HOUSEHOLD: 'add-household',
   REFERRALS: 'referrals',

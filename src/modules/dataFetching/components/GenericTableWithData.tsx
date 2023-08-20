@@ -45,7 +45,7 @@ export interface Props<
   SortOptionsType = Record<string, string>
 > extends Omit<
     GenericTableProps<RowDataType>,
-    'rows' | 'tablePaginationProps' | 'loading' | 'paginated'
+    'rows' | 'tablePaginationProps' | 'loading' | 'paginated' | 'noData'
   > {
   filters?:
     | TableFilterType<FilterOptionsType>
@@ -63,8 +63,9 @@ export interface Props<
   fetchPolicy?: WatchQueryFetchPolicy;
   pagePath?: string; // path to page, if paginated results
   rowsPath?: string; // path to data rows, if non-paginated results
-  noData?: string;
+  noData?: ReactNode | ((filters: Partial<FilterOptionsType>) => ReactNode);
   defaultPageSize?: number;
+  rowsPerPageOptions?: number[];
   recordType?: string; // record type for inferring columns if not provided
   filterInputType?: string; // filter input type type for inferring filters if not provided
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
@@ -129,6 +130,7 @@ const GenericTableWithData = <
   noFilter,
   header,
   noData,
+  rowsPerPageOptions,
   ...props
 }: Props<
   Query,
@@ -215,6 +217,7 @@ const GenericTableWithData = <
     return {
       rowsPerPage,
       page,
+      rowsPerPageOptions,
       onPageChange: (_: any, newPage: number) => setPage(newPage),
       onRowsPerPageChange: (
         event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -225,7 +228,14 @@ const GenericTableWithData = <
       },
       count: nodesCount,
     };
-  }, [nodesCount, page, rowsPerPage, defaultPageSize, nonTablePagination]);
+  }, [
+    nodesCount,
+    page,
+    rowsPerPage,
+    defaultPageSize,
+    nonTablePagination,
+    rowsPerPageOptions,
+  ]);
 
   const columnDefs = useMemo(() => {
     if (columns) return columns;
@@ -261,6 +271,7 @@ const GenericTableWithData = <
   );
 
   const noDataValue = useMemo(() => {
+    if (typeof noData === 'function') return noData(filterValues);
     if (!showFilters) return noData;
 
     const isFiltered = Object.values(filterValues).some(hasMeaningfulValue);

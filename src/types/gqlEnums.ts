@@ -74,6 +74,7 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  BulkActionType: { ADD: 'ADD', REMOVE: 'REMOVE' },
   ClientAddressType: { both: 'Both', physical: 'Physical', postal: 'Postal' },
   ClientAddressUse: {
     home: 'Home',
@@ -366,6 +367,7 @@ export const HmisEnums = {
   },
   EnrollmentSortOption: {
     HOUSEHOLD_ID: 'Household ID',
+    LAST_BED_NIGHT: 'Last Bed Night Date',
     MOST_RECENT: 'Most Recent',
   },
   EnrollmentStatus: {

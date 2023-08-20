@@ -24,9 +24,11 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
     popupId: 'filterMenu',
   });
 
-  const filterCount = Object.entries(props.filterValues).filter(([, v]) =>
-    Array.isArray(v) ? !isEmpty(v) : !isNil(v)
-  ).length;
+  // Count # of filters that have values applied
+  const filterCount = Object.entries(props.filterValues)
+    // Skip filters that aren't visible to the user
+    .filter(([k]) => props.filters.hasOwnProperty(k))
+    .filter(([, v]) => (Array.isArray(v) ? !isEmpty(v) : !isNil(v))).length;
 
   return (
     <>

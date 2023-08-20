@@ -322,6 +322,13 @@ const createThemeOptions = (theme: Theme) => ({
         }),
       },
     },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          fontSize: '1em',
+        },
+      },
+    },
   },
 });
 
