@@ -91,7 +91,6 @@ const ProjectEnrollmentsTableForBedNights = ({
       queryVariables={queryVariables}
       queryDocument={GetProjectEnrollmentsForBedNightsDocument}
       columns={columns}
-      noData={'No open enrollments'}
       pagePath='project.enrollments'
       recordType='Enrollment'
       showFilters

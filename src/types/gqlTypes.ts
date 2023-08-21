@@ -622,6 +622,11 @@ export enum ClientContactPointUse {
   Work = 'work',
 }
 
+export type ClientFilterOptions = {
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 /** Client Image */
 export type ClientImage = {
   __typename?: 'ClientImage';
@@ -698,6 +703,8 @@ export enum ClientSortOption {
   LastNameAToZ = 'LAST_NAME_A_TO_Z',
   /** Last Name: Z-A */
   LastNameZToA = 'LAST_NAME_Z_TO_A',
+  /** Recently Added */
+  RecentlyAdded = 'RECENTLY_ADDED',
 }
 
 export type ClientsPaginated = {
@@ -1789,8 +1796,6 @@ export type EnrollmentHouseholdMemberInput = {
 export enum EnrollmentSortOption {
   /** Household ID */
   HouseholdId = 'HOUSEHOLD_ID',
-  /** Last Bed Night Date */
-  LastBedNight = 'LAST_BED_NIGHT',
   /** Most Recent */
   MostRecent = 'MOST_RECENT',
 }
@@ -3764,6 +3769,7 @@ export type QueryClientArgs = {
 };
 
 export type QueryClientOmniSearchArgs = {
+  filters?: InputMaybe<ClientFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<ClientSortOption>;
@@ -3771,6 +3777,7 @@ export type QueryClientOmniSearchArgs = {
 };
 
 export type QueryClientSearchArgs = {
+  filters?: InputMaybe<ClientFilterOptions>;
   input: ClientSearchInput;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -9859,6 +9866,7 @@ export type ClientAuditEventFieldsFragment = {
 };
 
 export type SearchClientsQueryVariables = Exact<{
+  filters?: InputMaybe<ClientFilterOptions>;
   input: ClientSearchInput;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -20630,6 +20638,7 @@ export type UpdateBedNightsMutationOptions = Apollo.BaseMutationOptions<
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
+    $filters: ClientFilterOptions
     $input: ClientSearchInput!
     $limit: Int
     $offset: Int
@@ -20637,6 +20646,7 @@ export const SearchClientsDocument = gql`
   ) {
     clientSearch(
       input: $input
+      filters: $filters
       limit: $limit
       offset: $offset
       sortOrder: $sortOrder
@@ -20664,6 +20674,7 @@ export const SearchClientsDocument = gql`
  * @example
  * const { data, loading, error } = useSearchClientsQuery({
  *   variables: {
+ *      filters: // value for 'filters'
  *      input: // value for 'input'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'

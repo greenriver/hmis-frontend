@@ -62,7 +62,7 @@ export const externalIdColumn = (
     return (
       <Stack gap={0.8}>
         {filter(client.externalIds, { type }).map((val) => (
-          <ExternalIdDisplay value={val} {...props} />
+          <ExternalIdDisplay key={val?.identifier} value={val} {...props} />
         ))}
       </Stack>
     );

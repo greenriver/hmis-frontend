@@ -71,6 +71,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   pickListArgs,
   noLabel = false,
   warnIfEmpty = false,
+  breakpoints,
 }) => {
   const { linkId } = item;
   const onChangeEvent = useCallback(
@@ -103,7 +104,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     maxWidth = 600;
   }
 
-  const commonContainerProps = { errors, horizontal };
+  const commonContainerProps = { errors, horizontal, breakpoints };
 
   const isInvalidEnumValue =
     value === INVALID_ENUM || value?.code === INVALID_ENUM;

@@ -1,6 +1,6 @@
-import { Box, Skeleton, Typography } from '@mui/material';
+import { Box, Skeleton, Stack, Typography } from '@mui/material';
 import { min } from 'lodash-es';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import TableFilterMenu from './filters/FilterMenu';
 import TableSortMenu from './filters/SortMenu';
@@ -28,6 +28,7 @@ export interface TableFiltersProps<T, S> {
   loading?: boolean;
   noSort?: boolean;
   noFilter?: boolean;
+  tableDisplayOptionButtons?: ReactNode;
 }
 
 const PaginationDisplay: React.FC<PaginationProps> = ({
@@ -52,13 +53,14 @@ const TableFilters = <T, S extends Record<string, string>>({
   filters,
   sorting,
   pagination,
+  tableDisplayOptionButtons,
   loading,
   noSort = false,
   noFilter = false,
 }: TableFiltersProps<T, S>) => {
   return (
     <Box display='flex' alignItems='center' gap={1}>
-      <Box flexGrow={1}>
+      <Stack flexGrow={1} direction='row' gap={6} alignItems='center'>
         {loading ? (
           <Skeleton variant='text'>
             <Typography variant='body2'>Displaying X of X results</Typography>
@@ -66,7 +68,8 @@ const TableFilters = <T, S extends Record<string, string>>({
         ) : (
           pagination && <PaginationDisplay {...pagination} />
         )}
-      </Box>
+        {tableDisplayOptionButtons}
+      </Stack>
       {filters && !noFilter && (
         <Box>
           <TableFilterMenu {...filters} />

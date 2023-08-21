@@ -1,4 +1,5 @@
 query SearchClients(
+  $filters: ClientFilterOptions
   $input: ClientSearchInput!
   $limit: Int
   $offset: Int
@@ -6,6 +7,7 @@ query SearchClients(
 ) {
   clientSearch(
     input: $input
+    filters: $filters
     limit: $limit
     offset: $offset
     sortOrder: $sortOrder

@@ -16,7 +16,9 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
-import TableFilters from '@/components/elements/tableFilters/TableFilters';
+import TableFilters, {
+  TableFiltersProps,
+} from '@/components/elements/tableFilters/TableFilters';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
@@ -72,6 +74,11 @@ export interface Props<
   clientSidePagination?: boolean; // whether to use client-side pagination
   header?: ReactNode;
   fullHeight?: boolean; // used for scrollable table body
+  tableDisplayOptionButtons?: TableFiltersProps<
+    TableFilterType<FilterOptionsType>,
+    SortOptionsType
+  >['tableDisplayOptionButtons'];
+  onCompleted?: (data: Query) => void;
 }
 
 function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
@@ -131,6 +138,8 @@ const GenericTableWithData = <
   header,
   noData,
   rowsPerPageOptions,
+  tableDisplayOptionButtons,
+  onCompleted,
   ...props
 }: Props<
   Query,
@@ -173,6 +182,11 @@ const GenericTableWithData = <
   });
 
   const hasRefetched = useHasRefetched(networkStatus);
+
+  // workaround to fire "onCompleted" even if data was fetched from cache
+  useEffect(() => {
+    if (onCompleted && data) onCompleted(data);
+  }, [data, onCompleted]);
 
   useEffect(() => {
     if (!isEqual(previousQueryVariables, queryVariables)) {
@@ -323,6 +337,7 @@ const GenericTableWithData = <
                   noSort={noSort}
                   noFilter={noFilter}
                   loading={loading && !data}
+                  tableDisplayOptionButtons={tableDisplayOptionButtons}
                   sorting={
                     sortOptions
                       ? {
