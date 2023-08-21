@@ -6,6 +6,7 @@ import {
   isDate,
   isFuture,
   isToday,
+  isTomorrow,
   isValid,
   isYesterday,
   parseISO,
@@ -163,8 +164,10 @@ export const formatRelativeDateTime = (date: Date): string => {
 };
 
 export const formatRelativeDate = (date: Date): string => {
+  if (isTomorrow(date)) return 'Tomorrow'; // avoid returning hours diff
   if (isToday(date)) return 'Today';
   if (isYesterday(date)) return 'Yesterday';
+
   return formatRelativeDateTime(date);
 };
 
