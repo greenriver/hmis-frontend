@@ -698,6 +698,8 @@ export enum ClientSortOption {
   LastNameAToZ = 'LAST_NAME_A_TO_Z',
   /** Last Name: Z-A */
   LastNameZToA = 'LAST_NAME_Z_TO_A',
+  /** Recently Added */
+  RecentlyAdded = 'RECENTLY_ADDED',
 }
 
 export type ClientsPaginated = {
@@ -1789,8 +1791,6 @@ export type EnrollmentHouseholdMemberInput = {
 export enum EnrollmentSortOption {
   /** Household ID */
   HouseholdId = 'HOUSEHOLD_ID',
-  /** Last Bed Night Date */
-  LastBedNight = 'LAST_BED_NIGHT',
   /** Most Recent */
   MostRecent = 'MOST_RECENT',
 }

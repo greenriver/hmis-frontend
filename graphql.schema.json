@@ -4828,6 +4828,12 @@
             "description": "Last Name: Z-A",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "RECENTLY_ADDED",
+            "description": "Recently Added",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -11820,12 +11826,6 @@
           {
             "name": "HOUSEHOLD_ID",
             "description": "Household ID",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "LAST_BED_NIGHT",
-            "description": "Last Bed Night Date",
             "isDeprecated": false,
             "deprecationReason": null
           },
