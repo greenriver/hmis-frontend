@@ -96,7 +96,6 @@ const ProjectEnrollmentsTableForBedNights = ({
       showFilters
       filters={(f) => omit(f, 'searchTerm', 'status', 'openOnDate')}
       filterInputType='EnrollmentsForProjectFilterOptions'
-      // noSort
       defaultSortOption={EnrollmentSortOption.MostRecent}
       defaultFilters={{
         status: [

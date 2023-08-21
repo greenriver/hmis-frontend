@@ -296,9 +296,10 @@ const GenericTable = <T extends { id: string }>({
                   : undefined;
 
                 const rowLink = (rowLinkTo && rowLinkTo(row)) || undefined;
-
                 const isClickable = !!onClickHandler || !!rowLink;
-
+                const firstIndexWithLinkTreatment = columns.findIndex(
+                  (c) => c.linkTreatment
+                );
                 return (
                   <TableRow
                     key={row.id}
@@ -339,9 +340,16 @@ const GenericTable = <T extends { id: string }>({
                         dontLink = false,
                         textAlign,
                       } = def;
-                      const isFirstLinkWithTreatment =
-                        columns.findIndex((c) => c.linkTreatment) === index;
+
                       const isLinked = rowLink && !dontLink;
+
+                      const enableTabIndex =
+                        firstIndexWithLinkTreatment === index ||
+                        // if none have link treatment, we still need tab index. default to first col.
+                        (isLinked &&
+                          firstIndexWithLinkTreatment === -1 &&
+                          index === 0);
+
                       const onClickLinkTreatment =
                         handleRowClick && !dontLink && linkTreatment
                           ? {
@@ -375,7 +383,7 @@ const GenericTable = <T extends { id: string }>({
                                   outlineOffset: '-2px',
                                 },
                               }}
-                              tabIndex={isFirstLinkWithTreatment ? 0 : '-1'}
+                              tabIndex={enableTabIndex ? 0 : '-1'}
                             >
                               <Box
                                 component='span'
