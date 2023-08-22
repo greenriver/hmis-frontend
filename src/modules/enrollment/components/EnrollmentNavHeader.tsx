@@ -1,12 +1,14 @@
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Theme, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
 import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import RouterLink from '@/components/elements/RouterLink';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -21,18 +23,21 @@ const EnrollmentNavHeader = ({
   return (
     <Stack gap={2}>
       <Stack direction={'row'}>
-        <Typography variant='h4'>{enrollment.project.projectName}</Typography>
-        <RouterLink
-          to={projectPath}
-          aria-label={`Go to project '${enrollment.project.projectName}'`}
-          sx={{
-            fontSize: (theme: Theme) => theme.typography.h4.fontSize,
-            display: 'flex',
-            pl: 0.8,
-          }}
-          Icon={ExitToAppIcon}
-        ></RouterLink>
+        <Typography variant='h4'>
+          {clientBriefName(enrollment.client)}
+        </Typography>
       </Stack>
+      <CommonLabeledTextBlock title='Project'>
+        <RouterLink data-testid='projectLink' to={projectPath}>
+          {enrollment.project.projectName}
+        </RouterLink>
+      </CommonLabeledTextBlock>
+      <CommonLabeledTextBlock title='Project Type'>
+        <HmisEnum
+          value={enrollment.project.projectType}
+          enumMap={HmisEnums.ProjectType}
+        />
+      </CommonLabeledTextBlock>
       <CommonLabeledTextBlock title='Enrollment Period'>
         <EnrollmentDateRangeWithStatus enrollment={enrollment} />
       </CommonLabeledTextBlock>

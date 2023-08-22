@@ -53,6 +53,7 @@ const RecentEnrollments = ({
       </Box>
     );
   }
+  if (!client) throw new Error('client not found');
 
   if (recentEnrollments && recentEnrollments.length === 0)
     return (

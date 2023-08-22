@@ -8,7 +8,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import EnrollmentClientNameWithAge from '@/modules/hmis/components/EnrollmentClientNameWithAge';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 
-import EnrollmentEntryDateWithStatusIndicator from '@/modules/hmis/components/EnrollmentEntryDateWIthStatusIndicator';
+import EnrollmentEntryDateWithStatusIndicator from '@/modules/hmis/components/EnrollmentEntryDateWithStatusIndicator';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import {
@@ -148,7 +148,7 @@ const ProjectClientEnrollmentsTable = ({
     [openOnDate]
   );
 
-  const defaultColumns: ColumnDef<EnrollmentFieldsFragment>[] = useMemo(() => {
+  const defaultColumns: ColumnDef<EnrollmentFields>[] = useMemo(() => {
     return [
       ENROLLMENT_COLUMNS.clientNameLinkedToEnrollmentWithAge,
       ENROLLMENT_COLUMNS.enrollmentStatus,
