@@ -30,7 +30,6 @@ fragment ClientFields on Client {
   dateDeleted
   dateUpdated
   ...ClientName
-  ...ClientImage
   externalIds {
     ...ClientIdentifierFields
   }

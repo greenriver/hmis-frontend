@@ -174,7 +174,7 @@ mutation DeleteClient($input: DeleteClientInput!) {
   deleteClient(input: $input) {
     clientMutationId
     client {
-      ...ClientFields
+      id
     }
     errors {
       ...ValidationErrorFields
