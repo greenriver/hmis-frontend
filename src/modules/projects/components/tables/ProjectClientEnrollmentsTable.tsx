@@ -106,11 +106,6 @@ export const ENROLLMENT_COLUMNS: {
       </Stack>
     ),
   },
-  // dobAge: {
-  //   header: 'DOB / Age',
-  //   key: 'dob',
-  //   render: (e) => <ClientDobAge client={e.client} />,
-  // },
   clientId: {
     header: 'Client ID',
     key: 'id',

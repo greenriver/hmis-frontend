@@ -71,7 +71,6 @@ const SsnInput = ({
           inputProps: {
             ...baseInputProps,
             disabled: onlylast4 ? true : false,
-            // placeholder: has ? undefined : 'XXX',
             placeholder: 'XXX',
             // Allow pasting into first box to fill the entire SSN
             onPaste: (event) => {
