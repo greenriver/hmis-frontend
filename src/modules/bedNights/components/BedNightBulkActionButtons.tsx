@@ -34,6 +34,7 @@ const BedNightBulkActionButtons: React.FC<Props> = ({
     (e) => {
       e.stopPropagation();
       const input = {
+        projectId,
         enrollmentIds: selectedEnrollmentIds,
         action: BulkActionType.Remove,
         bedNightDate: formatDateForGql(bedNightDate) || '',
@@ -41,12 +42,13 @@ const BedNightBulkActionButtons: React.FC<Props> = ({
       setLastAction(BulkActionType.Remove);
       updateBedNights({ variables: { input } });
     },
-    [bedNightDate, selectedEnrollmentIds, updateBedNights]
+    [bedNightDate, projectId, selectedEnrollmentIds, updateBedNights]
   );
   const onClickAdd = useCallback<NonNullable<ButtonProps['onClick']>>(
     (e) => {
       e.stopPropagation();
       const input = {
+        projectId,
         enrollmentIds: selectedEnrollmentIds,
         action: BulkActionType.Add,
         bedNightDate: formatDateForGql(bedNightDate) || '',
@@ -54,7 +56,7 @@ const BedNightBulkActionButtons: React.FC<Props> = ({
       setLastAction(BulkActionType.Add);
       updateBedNights({ variables: { input } });
     },
-    [bedNightDate, selectedEnrollmentIds, updateBedNights]
+    [bedNightDate, projectId, selectedEnrollmentIds, updateBedNights]
   );
 
   if (!enrollmentIdsWithBedNights) return null;

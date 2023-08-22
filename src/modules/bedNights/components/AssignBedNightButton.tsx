@@ -63,13 +63,14 @@ const AssignBedNightButton: React.FC<Props> = ({
     (e) => {
       e.stopPropagation();
       const input = {
+        projectId,
         enrollmentIds: [enrollmentId],
         action: isAssignedOnDate ? BulkActionType.Remove : BulkActionType.Add,
         bedNightDate: formatDateForGql(bedNightDate) || '',
       };
       updateBedNights({ variables: { input } });
     },
-    [bedNightDate, enrollmentId, isAssignedOnDate, updateBedNights]
+    [bedNightDate, enrollmentId, isAssignedOnDate, projectId, updateBedNights]
   );
 
   return (
