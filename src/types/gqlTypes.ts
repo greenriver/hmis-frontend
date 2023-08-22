@@ -622,6 +622,11 @@ export enum ClientContactPointUse {
   Work = 'work',
 }
 
+export type ClientFilterOptions = {
+  organization?: InputMaybe<Array<Scalars['ID']['input']>>;
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 /** Client Image */
 export type ClientImage = {
   __typename?: 'ClientImage';
@@ -3764,6 +3769,7 @@ export type QueryClientArgs = {
 };
 
 export type QueryClientOmniSearchArgs = {
+  filters?: InputMaybe<ClientFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<ClientSortOption>;
@@ -3771,6 +3777,7 @@ export type QueryClientOmniSearchArgs = {
 };
 
 export type QueryClientSearchArgs = {
+  filters?: InputMaybe<ClientFilterOptions>;
   input: ClientSearchInput;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -9559,6 +9566,46 @@ export type UpdateBedNightsMutation = {
   } | null;
 };
 
+export type ClientSearchResultFieldsFragment = {
+  __typename?: 'Client';
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  id: string;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+  dob?: string | null;
+  age?: number | null;
+  ssn?: string | null;
+  externalIds: Array<{
+    __typename?: 'ExternalIdentifier';
+    id: string;
+    identifier?: string | null;
+    url?: string | null;
+    label: string;
+    type: ExternalIdentifierType;
+  }>;
+  access: {
+    __typename?: 'ClientAccess';
+    id: string;
+    canViewFullSsn: boolean;
+    canViewPartialSsn: boolean;
+    canEditClient: boolean;
+    canDeleteClient: boolean;
+    canViewDob: boolean;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+    canViewEnrollmentDetails: boolean;
+    canDeleteAssessments: boolean;
+    canManageAnyClientFiles: boolean;
+    canManageOwnClientFiles: boolean;
+    canViewAnyConfidentialClientFiles: boolean;
+    canViewAnyNonconfidentialClientFiles: boolean;
+  };
+};
+
 export type ClientFieldsFragment = {
   __typename?: 'Client';
   dobDataQuality: DobDataQuality;
@@ -9706,12 +9753,6 @@ export type ClientFieldsFragment = {
     dateCreated: string;
     dateUpdated: string;
   }>;
-  image?: {
-    __typename?: 'ClientImage';
-    id: string;
-    contentType: string;
-    base64: string;
-  } | null;
 };
 
 export type ClientNameFragment = {
@@ -9860,6 +9901,7 @@ export type ClientAuditEventFieldsFragment = {
 };
 
 export type SearchClientsQueryVariables = Exact<{
+  filters?: InputMaybe<ClientFilterOptions>;
   input: ClientSearchInput;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -9875,38 +9917,17 @@ export type SearchClientsQuery = {
     nodesCount: number;
     nodes: Array<{
       __typename?: 'Client';
-      dobDataQuality: DobDataQuality;
-      ethnicity: Ethnicity;
-      gender: Array<Gender>;
-      pronouns: Array<string>;
-      nameDataQuality: NameDataQuality;
-      personalId: string;
-      race: Array<Race>;
-      ssnDataQuality: SsnDataQuality;
-      veteranStatus: NoYesReasonsForMissingData;
       dateCreated: string;
       dateDeleted?: string | null;
       dateUpdated: string;
       id: string;
-      dob?: string | null;
-      age?: number | null;
-      ssn?: string | null;
-      yearEnteredService?: number | null;
-      yearSeparated?: number | null;
-      worldWarIi?: NoYesReasonsForMissingData | null;
-      koreanWar?: NoYesReasonsForMissingData | null;
-      vietnamWar?: NoYesReasonsForMissingData | null;
-      desertStorm?: NoYesReasonsForMissingData | null;
-      afghanistanOef?: NoYesReasonsForMissingData | null;
-      iraqOif?: NoYesReasonsForMissingData | null;
-      iraqOnd?: NoYesReasonsForMissingData | null;
-      otherTheater?: NoYesReasonsForMissingData | null;
-      militaryBranch?: MilitaryBranch | null;
-      dischargeStatus?: DischargeStatus | null;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      dob?: string | null;
+      age?: number | null;
+      ssn?: string | null;
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
         id: string;
@@ -9915,7 +9936,6 @@ export type SearchClientsQuery = {
         label: string;
         type: ExternalIdentifierType;
       }>;
-      user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
         __typename?: 'ClientAccess';
         id: string;
@@ -9933,99 +9953,6 @@ export type SearchClientsQuery = {
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
       };
-      customDataElements: Array<{
-        __typename?: 'CustomDataElement';
-        id: string;
-        key: string;
-        label: string;
-        fieldType: CustomDataElementType;
-        repeats: boolean;
-        atOccurrence: boolean;
-        value?: {
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        } | null;
-        values?: Array<{
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        }> | null;
-      }>;
-      names: Array<{
-        __typename?: 'ClientName';
-        id: string;
-        first?: string | null;
-        middle?: string | null;
-        last?: string | null;
-        suffix?: string | null;
-        nameDataQuality?: NameDataQuality | null;
-        use?: ClientNameUse | null;
-        notes?: string | null;
-        primary?: boolean | null;
-        dateCreated: string;
-        dateUpdated: string;
-      }>;
-      addresses: Array<{
-        __typename?: 'ClientAddress';
-        id: string;
-        line1?: string | null;
-        line2?: string | null;
-        city?: string | null;
-        state?: string | null;
-        district?: string | null;
-        country?: string | null;
-        postalCode?: string | null;
-        notes?: string | null;
-        use?: ClientAddressUse | null;
-        addressType?: ClientAddressType | null;
-        dateCreated: string;
-        dateUpdated: string;
-      }>;
-      phoneNumbers: Array<{
-        __typename?: 'ClientContactPoint';
-        id: string;
-        value?: string | null;
-        notes?: string | null;
-        use?: ClientContactPointUse | null;
-        system?: ClientContactPointSystem | null;
-        dateCreated: string;
-        dateUpdated: string;
-      }>;
-      emailAddresses: Array<{
-        __typename?: 'ClientContactPoint';
-        id: string;
-        value?: string | null;
-        notes?: string | null;
-        use?: ClientContactPointUse | null;
-        system?: ClientContactPointSystem | null;
-        dateCreated: string;
-        dateUpdated: string;
-      }>;
-      image?: {
-        __typename?: 'ClientImage';
-        id: string;
-        contentType: string;
-        base64: string;
-      } | null;
     }>;
   };
 };
@@ -10183,12 +10110,6 @@ export type GetClientQuery = {
       dateCreated: string;
       dateUpdated: string;
     }>;
-    image?: {
-      __typename?: 'ClientImage';
-      id: string;
-      contentType: string;
-      base64: string;
-    } | null;
   } | null;
 };
 
@@ -10723,160 +10644,7 @@ export type DeleteClientMutation = {
   deleteClient?: {
     __typename?: 'DeleteClientPayload';
     clientMutationId?: string | null;
-    client?: {
-      __typename?: 'Client';
-      dobDataQuality: DobDataQuality;
-      ethnicity: Ethnicity;
-      gender: Array<Gender>;
-      pronouns: Array<string>;
-      nameDataQuality: NameDataQuality;
-      personalId: string;
-      race: Array<Race>;
-      ssnDataQuality: SsnDataQuality;
-      veteranStatus: NoYesReasonsForMissingData;
-      dateCreated: string;
-      dateDeleted?: string | null;
-      dateUpdated: string;
-      id: string;
-      dob?: string | null;
-      age?: number | null;
-      ssn?: string | null;
-      yearEnteredService?: number | null;
-      yearSeparated?: number | null;
-      worldWarIi?: NoYesReasonsForMissingData | null;
-      koreanWar?: NoYesReasonsForMissingData | null;
-      vietnamWar?: NoYesReasonsForMissingData | null;
-      desertStorm?: NoYesReasonsForMissingData | null;
-      afghanistanOef?: NoYesReasonsForMissingData | null;
-      iraqOif?: NoYesReasonsForMissingData | null;
-      iraqOnd?: NoYesReasonsForMissingData | null;
-      otherTheater?: NoYesReasonsForMissingData | null;
-      militaryBranch?: MilitaryBranch | null;
-      dischargeStatus?: DischargeStatus | null;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-      externalIds: Array<{
-        __typename?: 'ExternalIdentifier';
-        id: string;
-        identifier?: string | null;
-        url?: string | null;
-        label: string;
-        type: ExternalIdentifierType;
-      }>;
-      user?: { __typename: 'User'; id: string; name: string } | null;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
-        canEditClient: boolean;
-        canDeleteClient: boolean;
-        canViewDob: boolean;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
-        canViewEnrollmentDetails: boolean;
-        canDeleteAssessments: boolean;
-        canManageAnyClientFiles: boolean;
-        canManageOwnClientFiles: boolean;
-        canViewAnyConfidentialClientFiles: boolean;
-        canViewAnyNonconfidentialClientFiles: boolean;
-      };
-      customDataElements: Array<{
-        __typename?: 'CustomDataElement';
-        id: string;
-        key: string;
-        label: string;
-        fieldType: CustomDataElementType;
-        repeats: boolean;
-        atOccurrence: boolean;
-        value?: {
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        } | null;
-        values?: Array<{
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        }> | null;
-      }>;
-      names: Array<{
-        __typename?: 'ClientName';
-        id: string;
-        first?: string | null;
-        middle?: string | null;
-        last?: string | null;
-        suffix?: string | null;
-        nameDataQuality?: NameDataQuality | null;
-        use?: ClientNameUse | null;
-        notes?: string | null;
-        primary?: boolean | null;
-        dateCreated: string;
-        dateUpdated: string;
-      }>;
-      addresses: Array<{
-        __typename?: 'ClientAddress';
-        id: string;
-        line1?: string | null;
-        line2?: string | null;
-        city?: string | null;
-        state?: string | null;
-        district?: string | null;
-        country?: string | null;
-        postalCode?: string | null;
-        notes?: string | null;
-        use?: ClientAddressUse | null;
-        addressType?: ClientAddressType | null;
-        dateCreated: string;
-        dateUpdated: string;
-      }>;
-      phoneNumbers: Array<{
-        __typename?: 'ClientContactPoint';
-        id: string;
-        value?: string | null;
-        notes?: string | null;
-        use?: ClientContactPointUse | null;
-        system?: ClientContactPointSystem | null;
-        dateCreated: string;
-        dateUpdated: string;
-      }>;
-      emailAddresses: Array<{
-        __typename?: 'ClientContactPoint';
-        id: string;
-        value?: string | null;
-        notes?: string | null;
-        use?: ClientContactPointUse | null;
-        system?: ClientContactPointSystem | null;
-        dateCreated: string;
-        dateUpdated: string;
-      }>;
-      image?: {
-        __typename?: 'ClientImage';
-        id: string;
-        contentType: string;
-        base64: string;
-      } | null;
-    } | null;
+    client?: { __typename?: 'Client'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -14368,12 +14136,6 @@ export type SubmitFormMutation = {
             dateCreated: string;
             dateUpdated: string;
           }>;
-          image?: {
-            __typename?: 'ClientImage';
-            id: string;
-            contentType: string;
-            base64: string;
-          } | null;
         }
       | {
           __typename?: 'CurrentLivingSituation';
@@ -18699,6 +18461,15 @@ export const HealthAndDvFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
+export const ClientNameFragmentDoc = gql`
+  fragment ClientName on Client {
+    id
+    firstName
+    middleName
+    lastName
+    nameSuffix
+  }
+`;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
@@ -18711,48 +18482,6 @@ export const ClientIdentificationFieldsFragmentDoc = gql`
       canViewPartialSsn
     }
   }
-`;
-export const ClientVeteranInfoFieldsFragmentDoc = gql`
-  fragment ClientVeteranInfoFields on Client {
-    id
-    yearEnteredService
-    yearSeparated
-    worldWarIi
-    koreanWar
-    vietnamWar
-    desertStorm
-    afghanistanOef
-    iraqOif
-    iraqOnd
-    otherTheater
-    militaryBranch
-    dischargeStatus
-  }
-`;
-export const ClientNameFragmentDoc = gql`
-  fragment ClientName on Client {
-    id
-    firstName
-    middleName
-    lastName
-    nameSuffix
-  }
-`;
-export const ClientImageFieldsFragmentDoc = gql`
-  fragment ClientImageFields on ClientImage {
-    id
-    contentType
-    base64
-  }
-`;
-export const ClientImageFragmentDoc = gql`
-  fragment ClientImage on Client {
-    id
-    image {
-      ...ClientImageFields
-    }
-  }
-  ${ClientImageFieldsFragmentDoc}
 `;
 export const ClientIdentifierFieldsFragmentDoc = gql`
   fragment ClientIdentifierFields on ExternalIdentifier {
@@ -18779,6 +18508,42 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canManageOwnClientFiles
     canViewAnyConfidentialClientFiles
     canViewAnyNonconfidentialClientFiles
+  }
+`;
+export const ClientSearchResultFieldsFragmentDoc = gql`
+  fragment ClientSearchResultFields on Client {
+    ...ClientName
+    ...ClientIdentificationFields
+    dateCreated
+    dateDeleted
+    dateUpdated
+    externalIds {
+      ...ClientIdentifierFields
+    }
+    access {
+      ...ClientAccessFields
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
+`;
+export const ClientVeteranInfoFieldsFragmentDoc = gql`
+  fragment ClientVeteranInfoFields on Client {
+    id
+    yearEnteredService
+    yearSeparated
+    worldWarIi
+    koreanWar
+    vietnamWar
+    desertStorm
+    afghanistanOef
+    iraqOif
+    iraqOnd
+    otherTheater
+    militaryBranch
+    dischargeStatus
   }
 `;
 export const ClientNameObjectFieldsFragmentDoc = gql`
@@ -18841,7 +18606,6 @@ export const ClientFieldsFragmentDoc = gql`
     dateDeleted
     dateUpdated
     ...ClientName
-    ...ClientImage
     externalIds {
       ...ClientIdentifierFields
     }
@@ -18870,7 +18634,6 @@ export const ClientFieldsFragmentDoc = gql`
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientVeteranInfoFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
-  ${ClientImageFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
@@ -18878,6 +18641,22 @@ export const ClientFieldsFragmentDoc = gql`
   ${ClientNameObjectFieldsFragmentDoc}
   ${ClientAddressFieldsFragmentDoc}
   ${ClientContactPointFieldsFragmentDoc}
+`;
+export const ClientImageFieldsFragmentDoc = gql`
+  fragment ClientImageFields on ClientImage {
+    id
+    contentType
+    base64
+  }
+`;
+export const ClientImageFragmentDoc = gql`
+  fragment ClientImage on Client {
+    id
+    image {
+      ...ClientImageFields
+    }
+  }
+  ${ClientImageFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
@@ -20631,6 +20410,7 @@ export type UpdateBedNightsMutationOptions = Apollo.BaseMutationOptions<
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
+    $filters: ClientFilterOptions
     $input: ClientSearchInput!
     $limit: Int
     $offset: Int
@@ -20638,6 +20418,7 @@ export const SearchClientsDocument = gql`
   ) {
     clientSearch(
       input: $input
+      filters: $filters
       limit: $limit
       offset: $offset
       sortOrder: $sortOrder
@@ -20646,11 +20427,11 @@ export const SearchClientsDocument = gql`
       limit
       nodesCount
       nodes {
-        ...ClientFields
+        ...ClientSearchResultFields
       }
     }
   }
-  ${ClientFieldsFragmentDoc}
+  ${ClientSearchResultFieldsFragmentDoc}
 `;
 
 /**
@@ -20665,6 +20446,7 @@ export const SearchClientsDocument = gql`
  * @example
  * const { data, loading, error } = useSearchClientsQuery({
  *   variables: {
+ *      filters: // value for 'filters'
  *      input: // value for 'input'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
@@ -21432,14 +21214,13 @@ export const DeleteClientDocument = gql`
     deleteClient(input: $input) {
       clientMutationId
       client {
-        ...ClientFields
+        id
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${ClientFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type DeleteClientMutationFn = Apollo.MutationFunction<

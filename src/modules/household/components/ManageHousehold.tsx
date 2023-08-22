@@ -1,5 +1,5 @@
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { Box, Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { Stack } from '@mui/system';
 import { ReactNode, useEffect, useState } from 'react';
 
@@ -13,16 +13,22 @@ import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useNewClientEnrollmentFormDialog } from '@/modules/enrollment/hooks/useNewClientEnrollmentFormDialog';
 import AssociatedHouseholdMembers, {
   householdMemberColumns,
 } from '@/modules/household/components/AssociatedHouseholdMembers';
 import { RecentHouseholdMember } from '@/modules/household/types';
-import AddClientPrompt from '@/modules/search/components/AddClientPrompt';
-import ClientSearch from '@/modules/search/components/ClientSearch';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { ClientTextSearchInputForm } from '@/modules/search/components/ClientTextSearchInput';
 import {
   ClientFieldsFragment,
+  ClientSearchInput,
+  ClientSortOption,
   EnrollmentFieldsFragment,
+  SearchClientsDocument,
+  SearchClientsQuery,
+  SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -94,9 +100,13 @@ const ManageHousehold = ({
     },
   });
 
+  const [searchInput, setSearchInput] = useState<ClientSearchInput>();
+  const [hasSearched, setHasSearched] = useState(false);
+
   if (initialHouseholdId && !household && loading) {
     return <Loading />;
   }
+
   return (
     <Stack gap={4}>
       {!household && loading && <Loading />}
@@ -137,7 +147,53 @@ const ManageHousehold = ({
       )}
 
       <CommonCard title='Client Search'>
-        <ClientSearch
+        <Stack gap={6}>
+          <Grid container alignItems={'flex-start'}>
+            <Grid item xs={12} md={9} lg={8}>
+              <ClientTextSearchInputForm
+                onSearch={(text) => setSearchInput({ textSearch: text })}
+                searchAdornment
+                minChars={3}
+              />
+            </Grid>
+            <Grid item xs></Grid>
+            <Grid item xs={12} md={3}>
+              {hasSearched && (
+                <RootPermissionsFilter permissions='canEditClients'>
+                  <Button
+                    onClick={openNewClientEnrollmentFormDialog}
+                    data-testid='addClientButton'
+                    sx={{ px: 3, mt: 3, float: 'right' }}
+                    startIcon={<PersonAddIcon />}
+                    variant='outlined'
+                  >
+                    Add New Client
+                  </Button>
+                </RootPermissionsFilter>
+              )}
+            </Grid>
+          </Grid>
+
+          {searchInput && (
+            <GenericTableWithData<
+              SearchClientsQuery,
+              SearchClientsQueryVariables,
+              ClientFieldsFragment
+            >
+              queryVariables={{ input: searchInput }}
+              queryDocument={SearchClientsDocument}
+              columns={columns}
+              pagePath='clientSearch'
+              fetchPolicy='cache-and-network'
+              showFilters
+              recordType='Client'
+              filterInputType='ClientFilterOptions'
+              defaultSortOption={ClientSortOption.LastNameAToZ}
+              onCompleted={() => setHasSearched(true)}
+            />
+          )}
+        </Stack>
+        {/* <ClientSearch
           hideInstructions
           hideProject
           hideAdvanced
@@ -166,7 +222,7 @@ const ManageHousehold = ({
               </AddClientPrompt>
             );
           }}
-        />
+        /> */}
       </CommonCard>
       {renderNewClientEnrollmentFormDialog()}
     </Stack>

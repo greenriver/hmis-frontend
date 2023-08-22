@@ -17,7 +17,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { ClientSearchInputWithSearchButton } from '@/modules/search/components/ClientSearchInput';
+import { ClientTextSearchInputForm } from '@/modules/search/components/ClientTextSearchInput';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -117,11 +117,15 @@ const ProjectBedNights = () => {
                 textInputProps={{ id: 'bed-night-date' }}
               />
             </Grid>
-            <Grid item xs={12} lg={10} xl={8}>
+            <Grid item xs={12} lg={10}>
               <Box flexGrow={1} sx={{ mb: 1 }}>
-                <ClientSearchInputWithSearchButton
-                  onClickSearch={(value) => setSearchTerm(value)}
-                />
+                <Stack direction={'row'} gap={2} alignItems={'flex-start'}>
+                  <ClientTextSearchInputForm
+                    onSearch={(value) => setSearchTerm(value)}
+                    onClearSearch={() => setSearchTerm(undefined)}
+                    clearButtonLocation='outside_input'
+                  />
+                </Stack>
               </Box>
             </Grid>
           </Grid>

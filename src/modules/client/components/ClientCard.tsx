@@ -1,13 +1,5 @@
 import PersonIcon from '@mui/icons-material/Person';
-import {
-  Alert,
-  Box,
-  Card,
-  Grid,
-  Skeleton,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Grid, Skeleton, Stack, Typography } from '@mui/material';
 import { isEmpty, isNil } from 'lodash-es';
 import { Fragment, useMemo } from 'react';
 
@@ -96,14 +88,12 @@ const RecentEnrollments = ({
 
 interface Props {
   client: ClientFieldsFragment;
-  showNotices?: boolean;
   linkTargetBlank?: boolean;
   hideImage?: boolean;
 }
 
 const ClientCard: React.FC<Props> = ({
   client,
-  showNotices = false,
   linkTargetBlank = false,
   hideImage = false,
 }) => {
@@ -136,7 +126,6 @@ const ClientCard: React.FC<Props> = ({
         sx={{
           height: 180,
           width: '100%',
-          mb: 3,
           borderRadius: 1,
         }}
       />
@@ -144,119 +133,106 @@ const ClientCard: React.FC<Props> = ({
   }
 
   return (
-    <Card sx={{ mb: 2, p: 2 }}>
-      {showNotices && (
-        <Grid container spacing={4} justifyContent='space-between'>
-          <Grid item xs={4}>
-            <Alert severity='error'>
-              An immediate action needs to be taken
-            </Alert>
-          </Grid>
-          <Grid item xs={4}>
-            <Alert severity='info'>Information notes</Alert>
-          </Grid>
-        </Grid>
-      )}
-      <Grid container sx={{ p: 1 }}>
-        <Grid item xs={5} lg={4}>
-          <Stack spacing={1}>
-            <RouterLink
-              plain
-              to={generateSafePath(ClientDashboardRoutes.PROFILE, {
-                clientId: client.id,
-              })}
-            >
-              <Stack direction='row' spacing={1}>
-                <Typography variant='h5' fontWeight={600}>
-                  {clientNameAllParts(client)}
+    <Grid container sx={{ p: 1 }}>
+      <Grid item xs={5} lg={4}>
+        <Stack spacing={1}>
+          <RouterLink
+            plain
+            to={generateSafePath(ClientDashboardRoutes.PROFILE, {
+              clientId: client.id,
+            })}
+          >
+            <Stack direction='row' spacing={1}>
+              <Typography variant='h5' fontWeight={600}>
+                {clientNameAllParts(client)}
+              </Typography>
+              {!isEmpty(client.pronouns) && (
+                <Typography variant='h5' color='text.secondary'>
+                  ({pronouns(client)})
                 </Typography>
-                {!isEmpty(client.pronouns) && (
-                  <Typography variant='h5' color='text.secondary'>
-                    ({pronouns(client)})
-                  </Typography>
-                )}
-              </Stack>
-            </RouterLink>
-            <Stack spacing={3} direction='row'>
-              {!hideImage && clientImageData?.image && (
-                <ClientCardImageElement size={150} client={clientImageData} />
               )}
-              <Stack spacing={0.5} sx={{ pr: 1 }}>
-                {globalFeatureFlags?.mciId && (
-                  <LabeledExternalIdDisplay
-                    type={ExternalIdentifierType.MciId}
-                    externalIds={client.externalIds}
-                  />
-                )}
-                <IdDisplay
-                  prefix='HMIS'
-                  value={client.id}
-                  color='text.primary'
-                  withoutEmphasis
+            </Stack>
+          </RouterLink>
+          <Stack spacing={3} direction='row'>
+            {!hideImage && clientImageData?.image && (
+              <ClientCardImageElement size={150} client={clientImageData} />
+            )}
+            <Stack spacing={0.5} sx={{ pr: 1 }}>
+              {globalFeatureFlags?.mciId && (
+                <LabeledExternalIdDisplay
+                  type={ExternalIdentifierType.MciId}
+                  externalIds={client.externalIds}
                 />
+              )}
+              <IdDisplay
+                prefix='HMIS'
+                value={client.id}
+                color='text.primary'
+                withoutEmphasis
+              />
 
-                {!isNil(client.age) && (
+              {!isNil(client.age) && (
+                <Typography
+                  variant='body2'
+                  component={Box}
+                  sx={{ display: 'flex', gap: 0.5 }}
+                >
+                  Age: <ClientDobAge client={client} />
+                </Typography>
+              )}
+              {client.ssn && (
+                <ClientPermissionsFilter
+                  id={client.id}
+                  permissions={['canViewFullSsn', 'canViewPartialSsn']}
+                >
                   <Typography
                     variant='body2'
                     component={Box}
                     sx={{ display: 'flex', gap: 0.5 }}
                   >
-                    Age: <ClientDobAge client={client} />
+                    SSN: <ClientSafeSsn client={client} />
                   </Typography>
-                )}
-                {client.ssn && (
-                  <ClientPermissionsFilter
-                    id={client.id}
-                    permissions={['canViewFullSsn', 'canViewPartialSsn']}
-                  >
-                    <Typography
-                      variant='body2'
-                      component={Box}
-                      sx={{ display: 'flex', gap: 0.5 }}
-                    >
-                      SSN: <ClientSafeSsn client={client} />
-                    </Typography>
-                  </ClientPermissionsFilter>
-                )}
-              </Stack>
+                </ClientPermissionsFilter>
+              )}
             </Stack>
-            <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-              Last Updated on {lastUpdated(client)}
-            </Typography>
           </Stack>
-        </Grid>
-        <ClientPermissionsFilter
-          permissions={['canViewEnrollmentDetails']}
-          id={client.id}
-        >
-          <Grid item xs={5} lg={6}>
-            <Typography variant='h6' sx={{ mb: 1 }}>
-              Recent Enrollments
-            </Typography>
-            <RecentEnrollments
-              recentEnrollments={recentEnrollments}
-              linkTargetBlank={linkTargetBlank}
-            />
-          </Grid>
-        </ClientPermissionsFilter>
-        <Grid item xs={2}>
-          <Typography variant='h6' sx={{ mb: 1 }}>
-            Actions
+          <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
+            Last Updated on {lastUpdated(client)}
           </Typography>
-          <Stack spacing={1}>
-            <ButtonLink
-              data-testid='goToProfileButton'
-              to={generateSafePath(ClientDashboardRoutes.PROFILE, {
-                clientId: client.id,
-              })}
-              target={linkTargetBlank ? '_blank' : undefined}
-              Icon={PersonIcon}
-              leftAlign
-            >
-              Client Profile
-            </ButtonLink>
-            {/* disabled for now #185750557 */}
-            {/* <RootPermissionsFilter permissions='canEnrollClients'>
+        </Stack>
+      </Grid>
+      <ClientPermissionsFilter
+        permissions={['canViewEnrollmentDetails']}
+        id={client.id}
+      >
+        <Grid item xs={5} lg={6}>
+          <Typography variant='h6' sx={{ mb: 1 }}>
+            Recent Enrollments
+          </Typography>
+          <RecentEnrollments
+            recentEnrollments={recentEnrollments}
+            linkTargetBlank={linkTargetBlank}
+          />
+        </Grid>
+      </ClientPermissionsFilter>
+      <Grid item xs={2}>
+        <Typography variant='h6' sx={{ mb: 1 }}>
+          Actions
+        </Typography>
+        <Stack spacing={1}>
+          <ButtonLink
+            data-testid='goToProfileButton'
+            to={generateSafePath(ClientDashboardRoutes.PROFILE, {
+              clientId: client.id,
+            })}
+            target={linkTargetBlank ? '_blank' : undefined}
+            Icon={PersonIcon}
+            leftAlign
+          >
+            Client Profile
+          </ButtonLink>
+          {/* disabled for now #185750557 */}
+          {/* <RootPermissionsFilter permissions='canEnrollClients'>
               <ButtonLink
                 fullWidth
                 data-testid='enrollButton'
@@ -270,7 +246,7 @@ const ClientCard: React.FC<Props> = ({
               </ButtonLink>
             </RootPermissionsFilter> */}
 
-            {/* <Button fullWidth variant='outlined' color='error'>
+          {/* <Button fullWidth variant='outlined' color='error'>
               Exit
             </Button>
             <Button variant='outlined' color='secondary'>
@@ -279,10 +255,9 @@ const ClientCard: React.FC<Props> = ({
             <Button variant='outlined' color='secondary'>
               Add Service
             </Button> */}
-          </Stack>
-        </Grid>
+        </Stack>
       </Grid>
-    </Card>
+    </Grid>
   );
 };
 

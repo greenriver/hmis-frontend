@@ -11,7 +11,7 @@ import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
-import ClientSearchInput from '@/modules/search/components/ClientSearchInput';
+import ClientSearchInput from '@/modules/search/components/ClientTextSearchInput';
 
 type Mode = 'clients' | 'households';
 

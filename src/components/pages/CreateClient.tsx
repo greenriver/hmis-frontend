@@ -13,7 +13,6 @@ import generateSafePath from '@/utils/generateSafePath';
 
 const CreateClient: React.FC = () => {
   const navigate = useNavigate();
-  // const { pathname, state } = useLocation();
   const onCompleted = useCallback(
     (data: ClientFieldsFragment) => {
       navigate(
