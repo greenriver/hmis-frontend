@@ -7480,6 +7480,7 @@ export type GetClientAssessmentsQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          inProgress: boolean;
           project: {
             __typename?: 'Project';
             id: string;
@@ -19649,6 +19650,7 @@ export const GetClientAssessmentsDocument = gql`
             id
             entryDate
             exitDate
+            inProgress
             project {
               ...ProjectNameAndType
             }

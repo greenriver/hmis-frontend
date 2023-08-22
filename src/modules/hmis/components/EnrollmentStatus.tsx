@@ -32,7 +32,7 @@ const EnrollmentStatus = ({
 }) => {
   let Icon = TimerIcon;
   let color: 'disabled' | 'error' | 'secondary' = 'disabled';
-  let text = 'Closed';
+  let text = 'Exited';
   let textColor = closedColor;
 
   if (enrollment.inProgress) {
@@ -43,7 +43,7 @@ const EnrollmentStatus = ({
   } else if (!enrollment.exitDate) {
     Icon = HistoryIcon;
     color = 'secondary';
-    text = 'Active';
+    text = 'Open';
     textColor = activeColor;
   }
 

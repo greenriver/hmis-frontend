@@ -7,7 +7,7 @@ import {
   HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
 
-const EnrollmentEntryDateWIthStatusIndicator = ({
+const EnrollmentEntryDateWithStatusIndicator = ({
   enrollment,
 }: {
   enrollment:
@@ -34,4 +34,4 @@ const EnrollmentEntryDateWIthStatusIndicator = ({
   );
 };
 
-export default EnrollmentEntryDateWIthStatusIndicator;
+export default EnrollmentEntryDateWithStatusIndicator;

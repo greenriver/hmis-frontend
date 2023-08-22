@@ -28,6 +28,7 @@ const SsnInput = ({
 }: SsnInputProps) => {
   const baseInputProps: TextFieldProps = {
     inputProps: {
+      // FIXME: switch to string input, allow use to type "X" or "x"
       inputMode: 'numeric',
       pattern: '[0-9]+',
       ...inputProps,
@@ -61,8 +62,6 @@ const SsnInput = ({
     };
   }, [value, onlylast4]);
 
-  const hasValue = !!value?.replace(/X/g, '').trim() || false;
-
   return (
     <MultiFieldInput<TextFieldProps>
       inputs={[
@@ -72,7 +71,8 @@ const SsnInput = ({
           inputProps: {
             ...baseInputProps,
             disabled: onlylast4 ? true : false,
-            placeholder: hasValue ? undefined : '000',
+            // placeholder: has ? undefined : 'XXX',
+            placeholder: 'XXX',
             // Allow pasting into first box to fill the entire SSN
             onPaste: (event) => {
               const pasted = event.clipboardData.getData('text/plain');
@@ -91,7 +91,7 @@ const SsnInput = ({
           inputProps: {
             ...baseInputProps,
             disabled: onlylast4 ? true : false,
-            placeholder: hasValue ? undefined : '00',
+            placeholder: 'XX',
           },
         },
         {
@@ -99,7 +99,7 @@ const SsnInput = ({
           chars: 4,
           inputProps: {
             ...baseInputProps,
-            placeholder: hasValue ? undefined : '0000',
+            placeholder: 'XXXX',
           },
         },
       ]}

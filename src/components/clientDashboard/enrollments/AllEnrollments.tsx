@@ -5,12 +5,10 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import {
-  enrollmentName,
-  parseAndFormatDateRange,
-} from '@/modules/hmis/hmisUtil';
+import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -40,8 +38,11 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
     ),
   },
   {
-    header: 'Date Range',
-    render: (e) => parseAndFormatDateRange(e.entryDate, e.exitDate),
+    key: 'en-period',
+    header: 'Enrollment Period',
+    render: (row) => (
+      <EnrollmentDateRangeWithStatus enrollment={row} treatIncompleteAsActive />
+    ),
   },
   {
     header: 'Household Size',

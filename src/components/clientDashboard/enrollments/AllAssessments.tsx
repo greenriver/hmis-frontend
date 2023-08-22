@@ -4,14 +4,13 @@ import { useCallback } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
-import AssessmentStatus from '@/modules/assessments/components/AssessmentStatus';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import {
   assessmentDescription,
   enrollmentName,
   formRoleDisplay,
-  parseAndFormatDate,
-  parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
@@ -28,31 +27,22 @@ type AssessmentType = NonNullable<
 
 const columns: ColumnDef<AssessmentType>[] = [
   {
-    header: 'Status',
-    width: '15%',
-    render: (a) => <AssessmentStatus assessment={a} />,
+    header: 'Assessment Date',
+    render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
   },
   {
-    header: 'Type',
-    width: '15%',
-    render: (assessment) => `${formRoleDisplay(assessment)} Assessment`,
+    header: 'Assessment Type',
+    render: (assessment) => formRoleDisplay(assessment),
     linkTreatment: true,
     ariaLabel: (row) => assessmentDescription(row),
   },
   {
-    header: 'Project',
+    header: 'Project Name',
     render: (row) => enrollmentName(row.enrollment),
   },
   {
-    header: 'Date',
-    width: '15%',
-    render: (e) => parseAndFormatDate(e.assessmentDate),
-  },
-
-  {
     header: 'Enrollment Period',
-    render: (a) =>
-      parseAndFormatDateRange(a.enrollment.entryDate, a.enrollment.exitDate),
+    render: (a) => <EnrollmentDateRangeWithStatus enrollment={a.enrollment} />,
   },
 ];
 
