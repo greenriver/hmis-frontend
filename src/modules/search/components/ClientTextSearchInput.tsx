@@ -1,9 +1,9 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, InputAdornment } from '@mui/material';
+import { Button, ButtonProps, InputAdornment } from '@mui/material';
 import { Stack } from '@mui/system';
 import { isNull } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import TextInput, {
   TextInputProps,
@@ -113,6 +113,19 @@ const ClientTextSearchInput: React.FC<Props> = ({
   );
 };
 
+export const ClearSearchButton: React.FC<ButtonProps> = (props) => {
+  return (
+    <Button
+      variant='gray'
+      startIcon={<ClearIcon />}
+      {...props}
+      sx={{ px: 3, ...props.sx }}
+    >
+      {props.children || <>Clear Search</>}
+    </Button>
+  );
+};
+
 export const ClientTextSearchInputForm: React.FC<
   Omit<Props, 'onChange' | 'value'> & {
     initialValue?: string;
@@ -120,12 +133,14 @@ export const ClientTextSearchInputForm: React.FC<
     hideSearchButton?: boolean;
     minChars?: number;
     onClearSearch?: VoidFunction;
+    clearButtonLocation?: 'inside_input' | 'outside_input';
   }
 > = ({
   onSearch,
   initialValue,
   hideSearchButton,
   onClearSearch,
+  clearButtonLocation,
   minChars = 3,
   ...props
 }) => {
@@ -150,18 +165,20 @@ export const ClientTextSearchInputForm: React.FC<
     }
   }, [minChars, onSearch, value]);
 
+  const handleClear = useCallback(() => {
+    setValue('');
+    if (onClearSearch) onClearSearch();
+  }, [onClearSearch]);
+
   const InputProps =
-    onClearSearch && value
+    onClearSearch && value && clearButtonLocation === 'inside_input'
       ? {
           endAdornment: (
             <Button
               variant='text'
               sx={{ color: 'text.disabled', width: '200px' }}
               startIcon={<ClearIcon />}
-              onClick={() => {
-                setValue('');
-                onClearSearch();
-              }}
+              onClick={handleClear}
             >
               Clear Search
             </Button>
@@ -170,6 +187,7 @@ export const ClientTextSearchInputForm: React.FC<
         }
       : props.InputProps;
 
+  const buttonSx = { mt: 3, px: 4, height: 'fit-content' };
   return (
     <Stack direction={'row'} alignItems='flex-start' gap={2}>
       <ClientTextSearchInput
@@ -187,12 +205,21 @@ export const ClientTextSearchInputForm: React.FC<
       {!hideSearchButton && (
         <Button
           startIcon={<SearchIcon />}
-          sx={{ mt: 3, px: 4, height: 'fit-content' }}
+          sx={buttonSx}
           variant='outlined'
           onClick={handleSearch}
         >
           Search
         </Button>
+      )}
+      {onClearSearch && clearButtonLocation === 'outside_input' && (
+        <ClearSearchButton
+          onClick={handleClear}
+          sx={buttonSx}
+          disabled={!value}
+        >
+          Clear
+        </ClearSearchButton>
       )}
     </Stack>
   );

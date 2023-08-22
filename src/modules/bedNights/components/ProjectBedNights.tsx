@@ -120,11 +120,15 @@ const ProjectBedNights = () => {
                 textInputProps={{ id: 'bed-night-date' }}
               />
             </Grid>
-            <Grid item xs={12} lg={10} xl={8}>
+            <Grid item xs={12} lg={10}>
               <Box flexGrow={1} sx={{ mb: 1 }}>
-                <ClientTextSearchInputForm
-                  onSearch={(value) => setSearchTerm(value)}
-                />
+                <Stack direction={'row'} gap={2} alignItems={'flex-start'}>
+                  <ClientTextSearchInputForm
+                    onSearch={(value) => setSearchTerm(value)}
+                    onClearSearch={() => setSearchTerm(undefined)}
+                    clearButtonLocation='outside_input'
+                  />
+                </Stack>
               </Box>
             </Grid>
           </Grid>

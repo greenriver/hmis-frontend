@@ -1,9 +1,9 @@
-import ClearIcon from '@mui/icons-material/Clear';
 import { Button, Grid, Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { keySearchParamsByLinkId } from '../searchUtil';
+import { ClearSearchButton } from './ClientTextSearchInput';
 import DynamicField from '@/modules/form/components/DynamicField';
 import { SearchFormDefinition } from '@/modules/form/data';
 
@@ -89,18 +89,13 @@ const ClientSearchAdvancedForm: React.FC<Props> = ({
         >
           Search
         </Button>
-        <Button
+        <ClearSearchButton
           onClick={() => {
             setValues({});
             onClearSearch();
           }}
-          variant='gray'
-          startIcon={<ClearIcon />}
-          sx={{ px: 3 }}
           size='large'
-        >
-          Clear Search
-        </Button>
+        />
       </Stack>
     </Paper>
   );

@@ -25,11 +25,7 @@ export const toggleButtonGroupSx: SxProps<Theme> = {
     margin: 0.5,
     border: 0,
     px: 2,
-    variant: 'primary',
-    // '&.Mui-disabled': {
-    //   border: 0,
-    // },
-    '&.Mui-selected': {
+    '&.Mui-selected, &.Mui-selected:hover': {
       backgroundColor: (theme) => theme.palette.primary.main,
       color: (theme) => theme.palette.primary.contrastText,
     },
