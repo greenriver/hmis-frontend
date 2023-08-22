@@ -1,3 +1,19 @@
+fragment ClientSearchResultFields on Client {
+  ...ClientName
+  ...ClientIdentificationFields
+  dateCreated
+  dateDeleted
+  dateUpdated
+  # needed for mci id display in search results
+  externalIds {
+    ...ClientIdentifierFields
+  }
+  # needed to determine whether to show ssn/dob
+  access {
+    ...ClientAccessFields
+  }
+}
+
 fragment ClientFields on Client {
   ...ClientIdentificationFields
   ...ClientVeteranInfoFields

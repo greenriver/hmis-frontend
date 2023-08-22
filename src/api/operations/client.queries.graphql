@@ -16,7 +16,7 @@ query SearchClients(
     limit
     nodesCount
     nodes {
-      ...ClientFields
+      ...ClientSearchResultFields
     }
   }
 }
