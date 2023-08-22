@@ -6,6 +6,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import EnrollmentEntryDateWIthStatusIndicator from '@/modules/hmis/components/EnrollmentEntryDateWIthStatusIndicator';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import {
@@ -16,8 +17,8 @@ import {
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFilterOptionStatus,
-  EnrollmentsForProjectFilterOptions,
   EnrollmentSortOption,
+  EnrollmentsForProjectFilterOptions,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
@@ -38,16 +39,27 @@ export const ENROLLMENT_COLUMNS: {
   },
   clientNameLinkedToEnrollment: {
     header: 'Client',
+    render: (e) => <ClientName client={e.client} linkToEnrollmentId={e.id} />,
+    linkTreatment: true,
+  },
+  firstNameLinkedToEnrollment: {
+    header: 'First Name',
     render: (e) => (
       <ClientName
         client={e.client}
-        routerLinkProps={{
-          to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-            clientId: e.client.id,
-            enrollmentId: e.id,
-          }),
-          target: '_blank',
-        }}
+        linkToEnrollmentId={e.id}
+        nameParts='first_only'
+      />
+    ),
+    linkTreatment: true,
+  },
+  lastNameLinkedToEnrollment: {
+    header: 'Last Name',
+    render: (e) => (
+      <ClientName
+        client={e.client}
+        linkToEnrollmentId={e.id}
+        nameParts='last_only'
       />
     ),
     linkTreatment: true,
@@ -55,6 +67,11 @@ export const ENROLLMENT_COLUMNS: {
   enrollmentStatus: {
     header: 'Status',
     render: (e) => <EnrollmentStatus enrollment={e} />,
+  },
+  entryDate: {
+    header: 'Entry Date',
+    // should only be used for open enrollments, because it doesnt indicate if closed or not
+    render: (e) => <EnrollmentEntryDateWIthStatusIndicator enrollment={e} />,
   },
   enrollmentPeriod: {
     header: 'Enrollment Period',
@@ -148,7 +165,7 @@ const ProjectClientEnrollmentsTable = ({
       pagePath='project.enrollments'
       recordType='Enrollment'
       showFilters
-      filters={(f) => omit(f, 'searchTerm')}
+      filters={(f) => omit(f, 'searchTerm', 'bedNightOnDate')}
       filterInputType='EnrollmentsForProjectFilterOptions'
       defaultSortOption={EnrollmentSortOption.MostRecent}
       defaultFilters={{

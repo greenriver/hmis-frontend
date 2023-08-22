@@ -36,6 +36,7 @@ import Dashboard from '@/components/pages/UserDashboard';
 import AdminDashboard from '@/modules/admin/components/AdminDashboard';
 import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
+import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
@@ -115,6 +116,21 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
             element: <ProjectServices />,
+          },
+          {
+            path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
+            element: <ProjectBedNights />,
+          },
+          {
+            path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT,
+            element: (
+              <ProjectEditRoute
+                permissions={['canEnrollClients']}
+                redirectRoute={ProjectDashboardRoutes.PROJECT_ENROLLMENTS}
+              >
+                <CreateHouseholdPage />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.REFERRALS,

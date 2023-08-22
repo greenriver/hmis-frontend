@@ -16,7 +16,9 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
-import TableFilters from '@/components/elements/tableFilters/TableFilters';
+import TableFilters, {
+  TableFiltersProps,
+} from '@/components/elements/tableFilters/TableFilters';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
@@ -45,7 +47,7 @@ export interface Props<
   SortOptionsType = Record<string, string>
 > extends Omit<
     GenericTableProps<RowDataType>,
-    'rows' | 'tablePaginationProps' | 'loading' | 'paginated'
+    'rows' | 'tablePaginationProps' | 'loading' | 'paginated' | 'noData'
   > {
   filters?:
     | TableFilterType<FilterOptionsType>
@@ -63,14 +65,20 @@ export interface Props<
   fetchPolicy?: WatchQueryFetchPolicy;
   pagePath?: string; // path to page, if paginated results
   rowsPath?: string; // path to data rows, if non-paginated results
-  noData?: string;
+  noData?: ReactNode | ((filters: Partial<FilterOptionsType>) => ReactNode);
   defaultPageSize?: number;
+  rowsPerPageOptions?: number[];
   recordType?: string; // record type for inferring columns if not provided
   filterInputType?: string; // filter input type type for inferring filters if not provided
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
   header?: ReactNode;
   fullHeight?: boolean; // used for scrollable table body
+  tableDisplayOptionButtons?: TableFiltersProps<
+    TableFilterType<FilterOptionsType>,
+    SortOptionsType
+  >['tableDisplayOptionButtons'];
+  onCompleted?: (data: Query) => void;
 }
 
 function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
@@ -129,6 +137,9 @@ const GenericTableWithData = <
   noFilter,
   header,
   noData,
+  rowsPerPageOptions,
+  tableDisplayOptionButtons,
+  onCompleted,
   ...props
 }: Props<
   Query,
@@ -171,6 +182,11 @@ const GenericTableWithData = <
   });
 
   const hasRefetched = useHasRefetched(networkStatus);
+
+  // workaround to fire "onCompleted" even if data was fetched from cache
+  useEffect(() => {
+    if (onCompleted && data) onCompleted(data);
+  }, [data, onCompleted]);
 
   useEffect(() => {
     if (!isEqual(previousQueryVariables, queryVariables)) {
@@ -215,6 +231,7 @@ const GenericTableWithData = <
     return {
       rowsPerPage,
       page,
+      rowsPerPageOptions,
       onPageChange: (_: any, newPage: number) => setPage(newPage),
       onRowsPerPageChange: (
         event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -225,7 +242,14 @@ const GenericTableWithData = <
       },
       count: nodesCount,
     };
-  }, [nodesCount, page, rowsPerPage, defaultPageSize, nonTablePagination]);
+  }, [
+    nodesCount,
+    page,
+    rowsPerPage,
+    defaultPageSize,
+    nonTablePagination,
+    rowsPerPageOptions,
+  ]);
 
   const columnDefs = useMemo(() => {
     if (columns) return columns;
@@ -261,6 +285,7 @@ const GenericTableWithData = <
   );
 
   const noDataValue = useMemo(() => {
+    if (typeof noData === 'function') return noData(filterValues);
     if (!showFilters) return noData;
 
     const isFiltered = Object.values(filterValues).some(hasMeaningfulValue);
@@ -312,6 +337,7 @@ const GenericTableWithData = <
                   noSort={noSort}
                   noFilter={noFilter}
                   loading={loading && !data}
+                  tableDisplayOptionButtons={tableDisplayOptionButtons}
                   sorting={
                     sortOptions
                       ? {

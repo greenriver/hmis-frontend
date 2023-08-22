@@ -18,16 +18,11 @@ import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 export const nameColumnConfig = (currentClientId: string) => {
   return {
@@ -35,24 +30,10 @@ export const nameColumnConfig = (currentClientId: string) => {
     key: 'name',
     render: (h: HouseholdClientFieldsFragment) => {
       const isCurrentClient = h.client.id === currentClientId;
-      const viewEnrollmentPath = generateSafePath(
-        EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-        {
-          clientId: h.client.id,
-          enrollmentId: h.enrollment.id,
-        }
-      );
-      const routerLinkProps = isCurrentClient
-        ? undefined
-        : {
-            to: viewEnrollmentPath,
-            target: '_blank',
-          };
-
       return (
         <ClientName
           client={h.client}
-          routerLinkProps={routerLinkProps}
+          linkToEnrollmentId={isCurrentClient ? undefined : h.enrollment.id}
           bold={isCurrentClient}
         />
       );
@@ -80,19 +61,14 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     key: 'name',
     render: (h: HouseholdClientFieldsFragment) => {
       const isCurrentClient = h.client.id === currentClientId;
-      const linkTo = linkToProfile
-        ? generateSafePath(ClientDashboardRoutes.PROFILE, {
-            clientId: h.client.id,
-          })
-        : generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-            clientId: h.client.id,
-            enrollmentId: h.enrollment.id,
-          });
 
       return (
         <ClientName
           client={h.client}
-          routerLinkProps={isCurrentClient ? undefined : { to: linkTo }}
+          linkToProfile={!isCurrentClient && linkToProfile}
+          linkToEnrollmentId={
+            !isCurrentClient && !linkToProfile ? h.enrollment.id : undefined
+          }
           bold={isCurrentClient}
         />
       );

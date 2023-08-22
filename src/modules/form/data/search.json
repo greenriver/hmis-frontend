@@ -3,13 +3,6 @@
     {
       "type": "STRING",
       "required": false,
-      "linkId": "1",
-      "text": "Personal ID",
-      "mapping": { "fieldName": "personalId" }
-    },
-    {
-      "type": "STRING",
-      "required": false,
       "linkId": "2",
       "text": "First Name",
       "mapping": { "fieldName": "firstName" }
@@ -20,6 +13,13 @@
       "linkId": "3",
       "text": "Last Name",
       "mapping": { "fieldName": "lastName" }
+    },
+    {
+      "type": "STRING",
+      "required": false,
+      "linkId": "1",
+      "text": "Personal ID",
+      "mapping": { "fieldName": "personalId" }
     },
     {
       "type": "STRING",

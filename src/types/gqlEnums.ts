@@ -74,6 +74,7 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  BulkActionType: { ADD: 'ADD', REMOVE: 'REMOVE' },
   ClientAddressType: { both: 'Both', physical: 'Physical', postal: 'Postal' },
   ClientAddressUse: {
     home: 'Home',
@@ -100,6 +101,7 @@ export const HmisEnums = {
     usual: 'Usual',
   },
   ClientSortOption: {
+    RECENTLY_ADDED: 'Recently Added',
     FIRST_NAME_A_TO_Z: 'First Name: A-Z',
     FIRST_NAME_Z_TO_A: 'First Name: Z-A',
     LAST_NAME_A_TO_Z: 'Last Name: A-Z',

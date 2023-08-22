@@ -1,50 +1,41 @@
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import { Button, Paper } from '@mui/material';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
+
 import { isEmpty, isNil, omitBy } from 'lodash-es';
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
-
 import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
-
+import ClientSearchAdvancedForm from './ClientAdvancedSearchForm';
+import ClientDisplayTypeToggle, {
+  DisplayType,
+} from './ClientDisplayTypeToggle';
+import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
+import { ClientTextSearchInputForm } from './ClientTextSearchInput';
+import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
-import Loading from '@/components/elements/Loading';
-import GenericTable, {
-  Props as GenericTableProps,
-} from '@/components/elements/table/GenericTable';
-import Pagination, {
-  PaginationSummary,
-} from '@/components/elements/table/Pagination';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';
-import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
-import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import SearchForm, {
-  SearchFormProps,
-} from '@/modules/search/components/SearchForm';
-import SearchResultsHeader from '@/modules/search/components/SearchResultsHeader';
-import { ClientDashboardRoutes } from '@/routes/routes';
+
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
+  ClientSearchInput as ClientSearchInputType,
   ClientSortOption,
   ExternalIdentifierType,
-  useSearchClientsLazyQuery,
+  SearchClientsDocument,
+  SearchClientsQuery,
+  SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
-
-const MAX_CARDS_THRESHOLD = 10;
 
 export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<ClientFieldsFragment>;
@@ -119,54 +110,36 @@ export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   { ...CLIENT_COLUMNS.dobAge, width: '10%' },
 ];
 
-interface Props
-  extends Omit<
-    SearchFormProps,
-    'definition' | 'onSubmit' | 'initialValues' | 'actions'
-  > {
-  cardsEnabled: boolean;
-  searchResultsTableProps?: Omit<
-    GenericTableProps<ClientFieldsFragment>,
-    'rows'
-  >;
-  wrapperComponent?: React.ElementType;
-  pageSize?: number;
-  addClientInDialog?: boolean;
-  renderActions?: (searchPerformed: boolean) => ReactNode;
-  hideAddClient?: boolean;
-}
-const ClientSearch: React.FC<Props> = ({
-  cardsEnabled,
-  searchResultsTableProps,
-  wrapperComponent: WrapperComponent = Paper,
-  pageSize = 20,
-  addClientInDialog = false,
-  renderActions,
-  hideAddClient,
-  ...searchFormProps
-}) => {
+/**
+ * Client Search page
+ */
+const ClientSearch = () => {
+  // type of search (broad or specific)
+  const [searchType, setSearchType] = useState<SearchType>('broad');
+  // type of display (table or cards)
+  const [displayType, setDisplayType] = useState<DisplayType>('table');
   // URL search parameters
   const [searchParams, setSearchParams] = useSearchParams();
   // whether the search params were derived
   const [derivedSearchParams, setDerivedSearchParams] =
     useState<boolean>(false);
   // initial form state derived from the SearchParams
-  const [initialValues, setInitialValues] = useState<Record<string, any>>();
-  // whether to display results as cards or a table
-  const [cards, setCards] = useState<boolean>(false);
-  // whether user has manually selected display format
-  const [hasSetCards, setHasSetCards] = useState<boolean>(false);
-  // Sort option
-  const [sortOrder, setSortOrder] = useState<ClientSortOption>(
-    ClientSortOption.LastNameAToZ
-  );
-  const [offset, setOffset] = useState(0);
+  const [initialValues, setInitialValues] = useState<ClientSearchInputType>();
+  // whether search has occurred
   const [hasSearched, setHasSearched] = useState(false);
+
   const isMobile = useIsMobile();
+
+  const [searchInput, setSearchInput] = useState<ClientSearchInputType | null>(
+    null
+  );
 
   const { globalFeatureFlags } = useHmisAppSettings();
 
   const columns = useMemo(() => {
+    if (displayType === 'cards') {
+      return [];
+    }
     let baseColumns = isMobile
       ? MOBILE_SEARCH_RESULT_COLUMNS
       : SEARCH_RESULT_COLUMNS;
@@ -177,30 +150,7 @@ const ClientSearch: React.FC<Props> = ({
       ];
     }
     return baseColumns;
-  }, [isMobile, globalFeatureFlags]);
-  const handleSetSortOrder: typeof setSortOrder = useCallback((value) => {
-    setOffset(0);
-    return setSortOrder(value);
-  }, []);
-
-  const [searchClients, { data, loading, error }] = useSearchClientsLazyQuery({
-    variables: {
-      input: {},
-      limit: pageSize,
-      offset,
-      sortOrder,
-    },
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'network-only',
-    onCompleted: (data) => {
-      // update display type (card vs table) based on length of results
-      // if the use has manually set the display type alread, don't change it
-      if (!hasSetCards && cardsEnabled) {
-        setCards(data.clientSearch.nodesCount <= MAX_CARDS_THRESHOLD);
-      }
-      setHasSearched(true);
-    },
-  });
+  }, [isMobile, globalFeatureFlags, displayType]);
 
   useEffect(() => {
     // if search params are derived, we don't want to perform a search on them
@@ -214,15 +164,26 @@ const ClientSearch: React.FC<Props> = ({
     if (isEmpty(variables)) {
       setInitialValues({});
     } else {
-      const initState = searchParamsToState(SearchFormDefinition, searchParams);
+      const initState = searchParamsToState(searchParams);
       setInitialValues(initState);
-      // Perform search using the cache so when you nav back/forward it doesn't refetch
-      searchClients({
-        variables: { input: variables, sortOrder },
-        fetchPolicy: 'cache-first',
-      });
+      setSearchInput(initState);
+      if (!initState.textSearch) setSearchType('specific');
     }
-  }, [derivedSearchParams, searchParams, searchClients, sortOrder]);
+  }, [derivedSearchParams, searchParams]);
+
+  const rowLinkTo = useCallback(
+    (row: ClientFieldsFragment) =>
+      generateSafePath(ClientDashboardRoutes.PROFILE, {
+        clientId: row.id,
+      }),
+    []
+  );
+
+  const onClearSearch = useCallback(() => {
+    setSearchInput(null);
+    setSearchParams({});
+    setHasSearched(false);
+  }, [setSearchParams]);
 
   // When form is submitted, update the search parameters and perform the search
   const handleSubmitSearch = useMemo(() => {
@@ -236,119 +197,94 @@ const ClientSearch: React.FC<Props> = ({
       setDerivedSearchParams(true); // so that searchParam change doesn't trigger a query
 
       // Perform the search
-      searchClients({ variables: { input: cleaned } });
-      setOffset(0);
+      setSearchInput(cleaned);
     };
-  }, [searchClients, setSearchParams, setDerivedSearchParams]);
+  }, [setSearchParams, setDerivedSearchParams]);
 
-  const handleChangeDisplayType = useCallback((_: any, checked: boolean) => {
-    if (isNil(checked)) return;
-    setCards(checked);
-    setHasSetCards(true);
-  }, []);
-
-  const rowLinkTo = useCallback(
-    (row: ClientFieldsFragment) =>
-      generateSafePath(ClientDashboardRoutes.PROFILE, {
-        clientId: row.id,
-      }),
-    []
-  );
-
-  const { openClientFormDialog, renderClientFormDialog } = useClientFormDialog({
-    onCompleted: (data: ClientFieldsFragment) => {
-      searchClients({
-        variables: { input: { id: data.id } },
-        fetchPolicy: 'cache-first',
-      });
-    },
-  });
-
-  const actions = useMemo(() => {
-    if (renderActions) return renderActions(hasSearched);
-  }, [hasSearched, renderActions]);
-
-  if (!initialValues) return <Loading />;
-
-  const paginationProps = {
-    limit: pageSize,
-    offset,
-    totalEntries: data?.clientSearch.nodesCount || -1,
-    itemName: 'clients',
-  };
-  const hasResults = !!data?.clientSearch?.nodes.length;
   return (
     <>
-      <SearchForm
-        definition={SearchFormDefinition}
-        onSubmit={handleSubmitSearch}
-        initialValues={initialValues}
-        actions={actions}
-        {...searchFormProps}
-      />
-      {error && (
-        <ApolloErrorAlert AlertProps={{ sx: { p: 2 } }} error={error} />
-      )}
-      {(data || loading) && (
-        <SearchResultsHeader
-          showCardToggle={cardsEnabled}
-          disabled={!hasResults}
-          cardsEnabled={!!cards}
-          onChangeCards={handleChangeDisplayType}
-          sortOrder={sortOrder}
-          onChangeSortOrder={handleSetSortOrder}
-          hideAddClient={hideAddClient}
-          addClientButton={
-            addClientInDialog ? (
-              <Button
-                onClick={openClientFormDialog}
+      <Stack
+        mb={2}
+        direction='row'
+        justifyContent='space-between'
+        alignItems={'flex-end'}
+      >
+        <ClientSearchTypeToggle value={searchType} onChange={setSearchType} />
+        {hasSearched && (
+          <RootPermissionsFilter permissions='canEditClients'>
+            <Box sx={{ height: 'fit-content' }}>
+              <ButtonLink
                 data-testid='addClientButton'
-                sx={{ px: 3 }}
-                startIcon={<LibraryAddIcon />}
-                variant='outlined'
-                color='secondary'
+                to={Routes.CREATE_CLIENT}
+                sx={{ px: 4, py: 2 }}
+                Icon={PersonAddIcon}
+                size='medium'
               >
-                Add Client
-              </Button>
-            ) : undefined
-          }
-        />
-      )}
-      {loading && <Loading />}
-      {data && !loading && (
-        <>
-          <PaginationSummary {...paginationProps} sx={{ mb: 2 }} />
-          {!hasResults && (
-            <WrapperComponent sx={{ mb: 2, p: 2 }}>
-              No clients found.
-            </WrapperComponent>
-          )}
-          {hasResults &&
-            (cards ? (
-              data.clientSearch.nodes.map((client) => (
-                <ClientCard key={client.id} client={client} />
-              ))
-            ) : (
-              <WrapperComponent>
-                <GenericTable
-                  columns={columns}
-                  rowLinkTo={rowLinkTo}
-                  rows={data.clientSearch.nodes || []}
-                  headerCellSx={() => ({
-                    fontWeight: 800,
-                  })}
-                  {...searchResultsTableProps}
-                />
-              </WrapperComponent>
-            ))}
-          <Pagination
-            {...paginationProps}
-            setOffset={setOffset}
-            gridProps={{ mt: 2 }}
+                Add New Client
+              </ButtonLink>
+            </Box>
+          </RootPermissionsFilter>
+        )}
+      </Stack>
+      <Box mb={5}>
+        {searchType === 'broad' ? (
+          <ClientTextSearchInputForm
+            initialValue={initialValues?.textSearch || ''}
+            onSearch={(text) => handleSubmitSearch({ textSearch: text })}
+            label={null}
+            size='medium'
+            searchAdornment
+            hideSearchButton
+            showSearchTips
+            minChars={3}
+            onClearSearch={onClearSearch}
           />
-        </>
+        ) : (
+          <ClientSearchAdvancedForm
+            initialValues={initialValues}
+            onSearch={(input) => handleSubmitSearch(input)}
+            onClearSearch={onClearSearch}
+          />
+        )}
+      </Box>
+      {searchInput && (
+        <Paper>
+          <GenericTableWithData<
+            SearchClientsQuery,
+            SearchClientsQueryVariables,
+            ClientFieldsFragment
+          >
+            queryVariables={{ input: searchInput }}
+            queryDocument={SearchClientsDocument}
+            onCompleted={() => setHasSearched(true)}
+            rowLinkTo={rowLinkTo}
+            columns={columns}
+            pagePath='clientSearch'
+            fetchPolicy='cache-and-network'
+            showFilters
+            recordType='Client'
+            filterInputType='ClientFilterOptions'
+            defaultSortOption={ClientSortOption.LastNameAToZ}
+            tableDisplayOptionButtons={
+              <ClientDisplayTypeToggle
+                value={displayType}
+                onChange={setDisplayType}
+              />
+            }
+            renderRow={
+              displayType === 'cards'
+                ? (client) => (
+                    <TableRow>
+                      <TableCell colSpan={columns.length} sx={{ py: 2 }}>
+                        <ClientCard key={client.id} client={client} />
+                      </TableCell>
+                    </TableRow>
+                  )
+                : undefined
+            }
+          />
+        </Paper>
       )}
-      {renderClientFormDialog()}
     </>
   );
 };

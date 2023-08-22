@@ -22,7 +22,11 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import { ProjectAllFieldsFragment, useGetProjectQuery } from '@/types/gqlTypes';
+import {
+  ProjectAllFieldsFragment,
+  ProjectType,
+  useGetProjectQuery,
+} from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const ProjectNavHeader = ({
@@ -125,10 +129,23 @@ const ProjectDashboard: React.FC = () => {
                 },
               ]
             : []),
+          // TODO(2024) fix
+          ...(canViewEnrollmentDetails && project.projectType === ProjectType.Es
+            ? [
+                {
+                  id: 'bed-nights',
+                  title: 'Bed Nights',
+                  path: generateSafePath(
+                    ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
+                    params
+                  ),
+                },
+              ]
+            : []),
           ...(enableReferrals
             ? [
                 {
-                  id: 'referals',
+                  id: 'referrals',
                   title: 'Referrals',
                   path: generateSafePath(
                     ProjectDashboardRoutes.REFERRALS,

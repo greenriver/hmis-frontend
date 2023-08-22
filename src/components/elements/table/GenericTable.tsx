@@ -57,6 +57,7 @@ export interface Props<T> {
   EnhancedTableToolbarProps?: Omit<EnhancedTableToolbarProps, 'selectedIds'>;
   filterToolbar?: ReactNode;
   noData?: ReactNode;
+  renderRow?: (row: T) => ReactNode;
 }
 
 const clickableRowStyles = {
@@ -107,6 +108,7 @@ const GenericTable = <T extends { id: string }>({
   isRowSelectable,
   EnhancedTableToolbarProps,
   filterToolbar,
+  renderRow,
   noData = 'No data',
   loadingVariant = 'circular',
 }: Props<T>) => {
@@ -281,6 +283,9 @@ const GenericTable = <T extends { id: string }>({
               ))}
             {!vertical &&
               rows.map((row) => {
+                // prop to completely take over row rendering
+                if (renderRow) return renderRow(row);
+
                 const isSelectable =
                   selectable && (isRowSelectable ? isRowSelectable(row) : true);
 
@@ -411,7 +416,7 @@ const GenericTable = <T extends { id: string }>({
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  rowsPerPageOptions={[5, 10, 25, 50, 100]}
                   SelectProps={{
                     inputProps: {
                       'aria-label': 'rows per page',
