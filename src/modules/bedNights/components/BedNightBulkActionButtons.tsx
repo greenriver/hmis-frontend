@@ -2,6 +2,7 @@ import { LoadingButton } from '@mui/lab';
 import { ButtonProps, Stack } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useBedNightsOnDate } from '../hooks/useBedNightsOnDate';
+import { onCompletedBedNightAssignment } from './AssignBedNightButton';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import {
   formatDateForDisplay,
@@ -25,7 +26,7 @@ const BedNightBulkActionButtons: React.FC<Props> = ({
 
   const [updateBedNights, { loading: mutationLoading }] =
     useUpdateBedNightsMutation({
-      onCompleted: () => refetch(),
+      onCompleted: onCompletedBedNightAssignment(refetch),
     });
   const [lastAction, setLastAction] = useState<BulkActionType | null>(null);
 
