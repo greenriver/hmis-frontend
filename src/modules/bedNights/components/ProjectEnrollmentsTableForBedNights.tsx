@@ -59,6 +59,7 @@ const ProjectEnrollmentsTableForBedNights = ({
       ENROLLMENT_COLUMNS.lastNameLinkedToEnrollment,
       ENROLLMENT_COLUMNS.dobAge, // if user cant see dob, it just shows age
       ENROLLMENT_COLUMNS.entryDate,
+      ENROLLMENT_COLUMNS.householdId,
       {
         header: 'Last Bed Night',
         key: 'last-bed-night',

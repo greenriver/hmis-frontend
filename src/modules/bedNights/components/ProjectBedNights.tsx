@@ -34,9 +34,6 @@ const ProjectBedNights = () => {
   const { enrollmentIdsWithBedNights } = useBedNightsOnDate(projectId, date);
 
   const canEdit = project.access.canEditEnrollments;
-  // NEW_SORT:
-  // incomplete enrollments first (just got added), then last bed night
-  // no bed nights ever (just got added), then last bed night
 
   const additionalColumns = useMemo(() => {
     return [
