@@ -28,9 +28,11 @@ export const SummaryTabLabel = ({ role }: { role: HouseholdAssesmentRole }) => (
     <ReceiptIcon fontSize='small' />
     <Typography variant='inherit'>
       {role === AssessmentRole.Intake
-        ? 'Complete Entry'
+        ? 'Complete Intake'
         : role === AssessmentRole.Exit
         ? 'Complete Exit'
+        : role === AssessmentRole.Annual
+        ? 'Complete Annual'
         : 'Submit Assessments'}
     </Typography>
   </Stack>
