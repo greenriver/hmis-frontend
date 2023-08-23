@@ -1,7 +1,7 @@
 import { Box, Typography, TypographyProps } from '@mui/material';
 import { ReactNode } from 'react';
 
-import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 
 interface Props {
   children: string | null | undefined;

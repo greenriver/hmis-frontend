@@ -5,12 +5,16 @@ import { formatDateForDisplay, parseHmisDateString } from '../hmisUtil';
 
 import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 
-const ACTIVE_TEXT = 'Active';
+const ACTIVE_TEXT = 'Ongoing';
 
 const EnrollmentDateRangeWithStatus = ({
   enrollment,
+  treatIncompleteAsActive = false,
 }: {
   enrollment: HouseholdClientFieldsFragment['enrollment'];
+  // if the status is called out separately, use this prop to render
+  // incomplete as if it were active
+  treatIncompleteAsActive?: boolean;
 }) => {
   if (!enrollment.entryDate && !enrollment.exitDate) return null;
   const start = enrollment.entryDate
@@ -27,11 +31,15 @@ const EnrollmentDateRangeWithStatus = ({
     : enrollment.exitDate || ACTIVE_TEXT;
 
   let color;
-  if (!enrollment.exitDate && enrollment.inProgress) {
+  if (
+    !enrollment.exitDate &&
+    enrollment.inProgress &&
+    !treatIncompleteAsActive
+  ) {
     color = 'error.main';
     endFormatted = 'Incomplete';
   } else if (!enrollment.exitDate) {
-    color = 'success.main';
+    color = 'text.disabled';
   }
 
   return (

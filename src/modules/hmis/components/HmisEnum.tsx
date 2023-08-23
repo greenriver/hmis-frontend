@@ -16,7 +16,7 @@ const getLabelAndColor = (
   } else if (value === INVALID_ENUM) {
     color = 'error';
   } else if (isDataNotCollected(value) || MISSING_DATA_KEYS.includes(value)) {
-    color = 'text.secondary';
+    color = 'text.disabled';
   }
   return [label, color];
 };

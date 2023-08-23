@@ -74,7 +74,7 @@ const createThemeOptions = (theme: Theme) => ({
   typography: {
     h1: {
       fontFamily: "'Montserrat', sans-serif",
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: 600,
     },
     h2: {

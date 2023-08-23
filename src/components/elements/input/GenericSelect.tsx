@@ -46,7 +46,6 @@ const GenericSelect = <
     <Autocomplete
       options={options}
       value={value}
-      disableCloseOnSelect={!!rest.multiple}
       renderInput={(params) => (
         <TextInput
           {...params}

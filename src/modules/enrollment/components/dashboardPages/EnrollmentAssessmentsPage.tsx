@@ -1,5 +1,4 @@
 import { Stack } from '@mui/system';
-import { startCase } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -8,10 +7,10 @@ import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
-import AssessmentStatus from '@/modules/assessments/components/AssessmentStatus';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
 import {
-  parseAndFormatDate,
+  formRoleDisplay,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
@@ -130,47 +129,19 @@ const AssessmentActionButtons = ({
   );
 };
 
-// const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
-//   {
-//     header: 'CE Type',
-//     render: (a) => (
-//       <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
-//     ),
-//     linkTreatment: true,
-//   },
-//   {
-//     header: 'Level',
-//     render: (a) => (
-//       <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
-//     ),
-//   },
-//   {
-//     header: 'Location',
-//     render: (e) => e.assessmentLocation,
-//   },
-// ];
-
+// FIXME: share configuration with AllAssesments component
 const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
-    header: 'Date',
-    width: '10%',
+    header: 'Assessment Date',
+    render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
+  },
+  {
+    header: 'Assessment Type',
+    render: (assessment) => formRoleDisplay(assessment),
     linkTreatment: true,
-    render: (e) => parseAndFormatDate(e.assessmentDate),
   },
-  {
-    header: 'Type',
-    width: '10%',
-    render: (assessment) => startCase(assessment.role?.toLowerCase()),
-  },
-  {
-    header: 'Status',
-    width: '10%',
-    render: (assessment) => <AssessmentStatus assessment={assessment} />,
-  },
-
   {
     header: 'Last Updated',
-    width: '25%',
     render: (e) =>
       `${parseAndFormatDateTime(e.dateUpdated)} by ${
         e.user?.name || 'Unknown User'

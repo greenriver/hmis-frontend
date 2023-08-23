@@ -34,6 +34,7 @@ const EsgFundingReportContent: React.FC<{
   } = useGetEsgFundingReportQuery({
     variables: { clientIds: clientIds || [] },
     skip: isNil(clientIds),
+    fetchPolicy: 'cache-and-network',
   });
 
   const report = reportData?.esgFundingReport;
@@ -43,7 +44,7 @@ const EsgFundingReportContent: React.FC<{
     hold: loading || reportLoading,
   });
 
-  if (loading || reportLoading) {
+  if (loading || (reportLoading && !report)) {
     return <Loading />;
   }
   if (error || reportError) {

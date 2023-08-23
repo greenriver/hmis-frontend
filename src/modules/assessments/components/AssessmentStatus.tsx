@@ -1,7 +1,6 @@
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import TimerIcon from '@mui/icons-material/Timer';
+import LockIcon from '@mui/icons-material/Lock';
 import { Stack, Typography } from '@mui/material';
-
 import { AssessmentFieldsFragment } from '@/types/gqlTypes';
 
 const AssessmentStatus = ({
@@ -9,9 +8,9 @@ const AssessmentStatus = ({
 }: {
   assessment: AssessmentFieldsFragment;
 }) => {
-  let Icon = TimerIcon;
+  let Icon = LockIcon;
   let color: 'disabled' | 'error' | 'secondary' = 'disabled';
-  let text = 'Completed';
+  let text = 'Submitted';
   let textColor = 'gray';
   if (assessment.inProgress) {
     Icon = ErrorOutlineIcon;

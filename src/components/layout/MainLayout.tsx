@@ -1,6 +1,14 @@
-import { AppBar, Box, CssBaseline, Toolbar } from '@mui/material';
+import {
+  AppBar,
+  Box,
+  CssBaseline,
+  SxProps,
+  Theme,
+  Toolbar,
+} from '@mui/material';
 import * as React from 'react';
 
+import { useLocation } from 'react-router-dom';
 import ButtonLink from '../elements/ButtonLink';
 import RouterLink from '../elements/RouterLink';
 
@@ -35,6 +43,22 @@ const MainLayout: React.FC<Props> = ({ children }) => {
     loading: permissionLoading,
     error,
   } = useGetRootPermissionsQuery();
+
+  const { pathname } = useLocation();
+  const activeItem = React.useMemo(() => {
+    const val = pathname.split('/').find((s) => !!s);
+    switch (val) {
+      case 'client':
+        return 'client';
+      case 'project':
+        return 'project';
+      case 'admin':
+        return 'admin';
+      default:
+        return null;
+    }
+  }, [pathname]);
+
   if (error) throw error;
 
   if (permissionLoading && !data) return <Loading />;
@@ -65,13 +89,14 @@ const MainLayout: React.FC<Props> = ({ children }) => {
       </>
     );
 
-  const navItemSx = {
+  const navItemSx = (enabled: boolean): SxProps<Theme> => ({
     fontSize: '1rem',
     fontWeight: 400,
     px: 2,
     ml: 1,
     color: 'text.primary',
-  };
+    backgroundColor: enabled ? (theme) => theme.palette.grey[100] : undefined,
+  });
   return (
     <React.Fragment>
       {SHOW_OP_LINK_BAR && <WarehouseLinkBar />}
@@ -83,6 +108,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           height: APP_BAR_HEIGHT,
           borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
           top: SHOW_OP_LINK_BAR ? OP_LINK_BAR_HEIGHT : 0,
+          backgroundColor: 'white',
         }}
       >
         {/* fixme: make responsive */}
@@ -92,7 +118,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             noWrap
             underline='none'
             to='/'
-            sx={{ textTransform: 'uppercase', color: 'secondary.main' }}
+            sx={{ color: 'text.primary' }}
           >
             {appName || 'Open Path HMIS'}
           </RouterLink>
@@ -102,7 +128,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
               variant='text'
               to='/'
               data-testid='navToClients'
-              sx={navItemSx}
+              sx={navItemSx(activeItem === 'client')}
             >
               Clients
             </ButtonLink>
@@ -111,7 +137,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             variant='text'
             to={Routes.ALL_PROJECTS}
             data-testid='navToProjects'
-            sx={navItemSx}
+            sx={navItemSx(activeItem === 'project')}
           >
             Projects
           </ButtonLink>
@@ -120,12 +146,12 @@ const MainLayout: React.FC<Props> = ({ children }) => {
               variant='text'
               to={Routes.ADMIN}
               data-testid='navToAdmin'
-              sx={navItemSx}
+              sx={navItemSx(activeItem === 'admin')}
             >
               Admin
             </ButtonLink>
           </RootPermissionsFilter>
-          <Box sx={{ mx: 2 }}>
+          <Box sx={{ mx: 2, height: '44px', div: { height: '100%' } }}>
             <OmniSearch />
           </Box>
           <UserMenu />

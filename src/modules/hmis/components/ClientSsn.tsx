@@ -2,7 +2,7 @@ import { Typography, TypographyProps } from '@mui/material';
 import { ReactNode } from 'react';
 
 import ClickToShow from '@/components/elements/ClickToShow';
-import NotSpecified from '@/components/elements/NotSpecified';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import { maskSSN } from '@/modules/hmis/hmisUtil';
 import { ClientIdentificationFieldsFragment } from '@/types/gqlTypes';
 
@@ -42,7 +42,7 @@ export const ClientSafeSsn: React.FC<Props> = ({ client, ...props }) => {
 
   return (
     <ClientSsn
-      noValue={<NotSpecified />}
+      noValue={<NotCollectedText />}
       lastFour={!canViewFullSsn && canViewPartialSsn}
       {...props}
       client={client}

@@ -94,6 +94,17 @@ export const formatDateTimeForDisplay = (date: Date) => {
   }
 };
 
+export const briefProjectType = (projectType: ProjectType) => {
+  switch (projectType) {
+    case ProjectType.DayShelter:
+    case ProjectType.Other:
+    case ProjectType.Invalid:
+      return startCase(projectType.toLowerCase());
+    default:
+      return projectType.replace('_', ' - ');
+  }
+};
+
 export const yesNo = (bool: boolean | null | undefined) => {
   if (isNil(bool)) return null;
   return bool ? 'Yes' : 'No';
@@ -283,13 +294,10 @@ export const enrollmentName = (
 ) => {
   const projectName = enrollment.project?.projectName;
   if (!includeType) return projectName;
-
-  let projectType = enrollment.project?.projectType as string | undefined;
+  const projectType = enrollment.project?.projectType;
   if (!projectType) return projectName;
 
-  if (projectType.length > 3)
-    projectType = startCase(projectType.toLowerCase());
-  return `${projectName} (${projectType})`;
+  return `${projectName} (${briefProjectType(projectType)})`;
 };
 
 const dataCollectionStageDisplay = {
@@ -349,17 +357,6 @@ export const getSchemaForType = (type: string) => {
 
 export const getSchemaForInputType = (type: string) => {
   return HmisInputObjectSchemas.find((t: any) => t.name === type);
-};
-
-export const briefProjectType = (projectType: ProjectType) => {
-  switch (projectType) {
-    case ProjectType.DayShelter:
-    case ProjectType.Other:
-    case ProjectType.Invalid:
-      return startCase(projectType.toLowerCase());
-    default:
-      return projectType.replace('_', ' - ');
-  }
 };
 
 export const customDataElementValue = (

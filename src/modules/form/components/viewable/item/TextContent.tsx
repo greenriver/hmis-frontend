@@ -1,9 +1,8 @@
 import { ReactNode, useMemo } from 'react';
 
-import NotCollectedText from './NotCollectedText';
-
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import MultilineTypography from '@/components/elements/MultilineTypography';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 
 export interface TextContentProps<T extends ReactNode> {

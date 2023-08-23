@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 
 import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
-import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
 import { OrganizationDetailFieldsFragment } from '@/types/gqlTypes';
