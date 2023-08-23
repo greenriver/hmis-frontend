@@ -48,9 +48,11 @@ const MainLayout: React.FC<Props> = ({ children }) => {
   const activeItem = React.useMemo(() => {
     const val = pathname.split('/').find((s) => !!s);
     switch (val) {
+      case undefined:
       case 'client':
         return 'client';
-      case 'project':
+      case 'projects':
+      case 'organizations':
         return 'project';
       case 'admin':
         return 'admin';

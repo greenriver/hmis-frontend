@@ -7,6 +7,7 @@ import NotCollectedText from '@/components/elements/NotCollectedText';
 import { EnhancedTableToolbarProps } from '@/components/elements/table/EnhancedTableToolbar';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import {
   formatDateForDisplay,
   formatDateForGql,
@@ -57,7 +58,11 @@ const ProjectEnrollmentsTableForBedNights = ({
     const defaultColumns: ColumnDef<EnrollmentFields>[] = [
       ENROLLMENT_COLUMNS.firstNameLinkedToEnrollment,
       ENROLLMENT_COLUMNS.lastNameLinkedToEnrollment,
-      ENROLLMENT_COLUMNS.dobAge, // if user cant see dob, it just shows age
+      {
+        header: 'DOB / Age',
+        key: 'dob',
+        render: (e) => <ClientDobAge client={e.client} reveal />,
+      },
       ENROLLMENT_COLUMNS.entryDate,
       ENROLLMENT_COLUMNS.householdId,
       {
@@ -82,6 +87,7 @@ const ProjectEnrollmentsTableForBedNights = ({
     if (!additionalColumns) return defaultColumns;
     return [...defaultColumns, ...additionalColumns];
   }, [additionalColumns]);
+
   return (
     <GenericTableWithData<
       GetProjectEnrollmentsForBedNightsQuery,
