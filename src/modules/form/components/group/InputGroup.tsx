@@ -69,7 +69,7 @@ const InputGroup = ({
                     },
                   },
                 }),
-            ...(item.type === ItemType.String
+            ...(item.type === ItemType.String && !viewOnly
               ? {
                   pt: 0.5,
                   label: {
