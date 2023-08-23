@@ -20,7 +20,7 @@ import ClientContactPoint from './ClientContactPoint';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
-import NotSpecified from '@/components/elements/NotSpecified';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
@@ -188,7 +188,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                       }}
                     />
                   ),
-                  Pronouns: pronouns(client) || <NotSpecified />,
+                  Pronouns: pronouns(client) || <NotCollectedText />,
                   'Veteran Status': (
                     <HmisEnum
                       value={client.veteranStatus}
@@ -416,7 +416,10 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     ? { Pronouns: pronouns(client) }
                     : undefined),
                   Age: (
-                    <ClientDobAge client={client} noValue={<NotSpecified />} />
+                    <ClientDobAge
+                      client={client}
+                      noValue={<NotCollectedText />}
+                    />
                   ),
                   ...(canViewSsn
                     ? {

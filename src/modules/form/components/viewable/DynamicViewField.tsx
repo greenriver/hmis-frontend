@@ -9,11 +9,12 @@ import DynamicDisplay from '../DynamicDisplay';
 
 import File from './item/File';
 import Image from './item/Image';
-import NotCollectedText from './item/NotCollectedText';
+
 import TextContent from './item/TextContent';
 
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import {
   formatDateForDisplay,
   parseAndFormatDate,

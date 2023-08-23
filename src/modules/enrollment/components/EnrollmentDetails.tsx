@@ -7,8 +7,8 @@ import OccurrencePointValue from './EditableOccurrencePointValue';
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import IconButtonContainer from './IconButtonContainer';
 import Loading from '@/components/elements/Loading';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import SimpleTable from '@/components/elements/SimpleTable';
-import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {

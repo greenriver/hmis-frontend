@@ -6,11 +6,16 @@ export interface NotCollectedTextProps extends TypographyProps {
 }
 
 const NotCollectedText = ({
-  children = 'Not Provided',
+  children = 'Data not collected',
   ...props
 }: NotCollectedTextProps): JSX.Element => {
   return (
-    <Typography color='text.disabled' {...props}>
+    <Typography
+      color='text.disabled'
+      variant='inherit'
+      className='HmisForm-notCollectedText'
+      {...props}
+    >
       {children}
     </Typography>
   );

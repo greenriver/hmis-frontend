@@ -71,6 +71,7 @@ const LabelWithContent = ({
           direction='row'
           justifyContent='space-between'
           alignItems='center'
+          gap={2}
         >
           {labelContent}
           <Box>{inputContent}</Box>

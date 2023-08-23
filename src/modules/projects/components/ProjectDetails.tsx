@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import DetailGrid from '@/components/elements/DetailGrid';
 import MultilineTypography from '@/components/elements/MultilineTypography';
-import NotSpecified from '@/components/elements/NotSpecified';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
@@ -18,7 +18,7 @@ import {
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const notSpecified = <NotSpecified />;
+const notSpecified = <NotCollectedText />;
 
 const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
   const data = useMemo(

@@ -2,8 +2,7 @@ import { useQuery } from '@apollo/client';
 import { Box, CircularProgress, Link, Typography } from '@mui/material';
 import { DocumentNode } from 'graphql';
 import React, { useMemo } from 'react';
-
-import NotCollectedText from './NotCollectedText';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 
 export interface AttachmentAttrs {
   name?: string;

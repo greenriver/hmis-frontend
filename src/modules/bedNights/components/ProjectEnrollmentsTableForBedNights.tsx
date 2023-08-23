@@ -3,10 +3,10 @@ import { omit } from 'lodash-es';
 import { useMemo } from 'react';
 
 import { ENROLLMENT_COLUMNS } from '../../projects/components/tables/ProjectClientEnrollmentsTable';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import { EnhancedTableToolbarProps } from '@/components/elements/table/EnhancedTableToolbar';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import {
   formatDateForDisplay,
   formatDateForGql,
