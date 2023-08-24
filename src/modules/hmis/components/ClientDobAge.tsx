@@ -10,14 +10,14 @@ interface Props {
   client: ClientIdentificationFieldsFragment;
   noValue?: ReactNode;
   variant?: TypographyProps['variant'];
-  reveal?: boolean;
+  alwaysShow?: boolean;
   noDob?: boolean;
 }
 
 const ClientDobAge = ({
   client,
   noValue,
-  reveal,
+  alwaysShow,
   variant = 'body2',
   noDob = false,
 }: Props) => {
@@ -31,12 +31,10 @@ const ClientDobAge = ({
       {!noDob &&
         client.dob &&
         !onlyAge &&
-        (reveal ? (
+        (alwaysShow ? (
           dobComponent
         ) : (
-          <ClickToShow text='Reveal DOB' variant={variant}>
-            {dobComponent}
-          </ClickToShow>
+          <ClickToShow variant={variant}>{dobComponent}</ClickToShow>
         ))}
       <Typography variant={variant}>
         {onlyAge ? client.age : <>({client.age})</>}

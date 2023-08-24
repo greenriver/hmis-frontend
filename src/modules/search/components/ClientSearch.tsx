@@ -69,18 +69,14 @@ export const CLIENT_COLUMNS: {
     header: 'SSN',
     key: 'ssn',
     width: '8%',
-    render: (client: ClientFieldsFragment) => (
-      <ClientSsn client={client} lastFour />
-    ),
-    // dontLink: true,
+    render: (client: ClientFieldsFragment) => <ClientSsn client={client} />,
+    dontLink: true,
   },
   dobAge: {
     header: 'DOB / Age',
     key: 'dob',
-    render: (client: ClientFieldsFragment) => (
-      <ClientDobAge client={client} reveal />
-    ),
-    // dontLink: true,
+    render: (client: ClientFieldsFragment) => <ClientDobAge client={client} />,
+    dontLink: true,
   },
 };
 

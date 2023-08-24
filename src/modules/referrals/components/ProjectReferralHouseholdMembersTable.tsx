@@ -58,7 +58,7 @@ const columns: ColumnDef<Row>[] = [
   },
   {
     header: 'DOB / Age',
-    render: ({ client }: Row) => <ClientDobAge client={client} reveal />,
+    render: ({ client }: Row) => <ClientDobAge client={client} alwaysShow />,
   },
   {
     header: 'Open Enrollments',

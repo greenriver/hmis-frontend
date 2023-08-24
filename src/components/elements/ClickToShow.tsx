@@ -1,18 +1,33 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button, Stack, Typography, TypographyProps } from '@mui/material';
-import React, { useState } from 'react';
-interface Props extends TypographyProps {
+import { isNil } from 'lodash-es';
+import React, { useCallback, useMemo, useState } from 'react';
+
+export interface Props extends TypographyProps {
   children: React.ReactNode;
   text?: string;
+  // Use these to control the component from without
+  hide?: boolean | null;
+  onToggle?: (val?: boolean) => any;
 }
 
 const ClickToShow: React.FC<Props> = ({
   children,
-  text = 'Click to Show',
+  text = 'Hidden',
+  hide,
+  onToggle: onToggleProp,
   ...props
 }) => {
-  const [hidden, setHidden] = useState(true);
-  if (!hidden) return <>{children}</>;
+  const [hiddenState, setHiddenState] = useState(true);
+
+  const hidden = useMemo(
+    () => (isNil(hide) ? hiddenState : hide),
+    [hiddenState, hide]
+  );
+  const onToggle = useCallback(() => {
+    if (onToggleProp) onToggleProp(!hidden);
+    if (isNil(hide)) setHiddenState((prev) => !prev);
+  }, [hidden, onToggleProp, hide]);
 
   return (
     <Button
@@ -20,21 +35,28 @@ const ClickToShow: React.FC<Props> = ({
       aria-label={text}
       sx={{
         textDecoration: 'none',
-        color: 'text.disabled',
+        color: hidden ? 'text.disabled' : 'text.primary',
         justifyContent: 'flex-start',
         width: 'fit-content',
         textAlign: 'left',
         // userSelect: 'text',
         p: 0,
       }}
-      onClick={() => setHidden(false)}
+      onClick={onToggle}
       size='small'
     >
       <Stack direction='row' alignItems='center' gap={0.8}>
-        <VisibilityIcon color='disabled' fontSize='small' />
-        <Typography {...props} sx={{ textDecoration: 'none', ...props.sx }}>
-          {text}
-        </Typography>
+        <VisibilityIcon
+          color={hidden ? 'disabled' : 'primary'}
+          fontSize='small'
+        />
+        {hidden ? (
+          <Typography {...props} sx={{ textDecoration: 'none', ...props.sx }}>
+            {text}
+          </Typography>
+        ) : (
+          <>{children}</>
+        )}
       </Stack>
     </Button>
   );

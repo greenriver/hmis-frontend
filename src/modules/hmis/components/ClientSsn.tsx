@@ -1,17 +1,21 @@
 import { Typography, TypographyProps } from '@mui/material';
 import { ReactNode } from 'react';
 
-import ClickToShow from '@/components/elements/ClickToShow';
+import ClickToShow, {
+  Props as ClickToShowProps,
+} from '@/components/elements/ClickToShow';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { maskSSN } from '@/modules/hmis/hmisUtil';
 import { ClientIdentificationFieldsFragment } from '@/types/gqlTypes';
 
-export interface Props extends TypographyProps {
+export interface Props
+  extends TypographyProps,
+    Pick<ClickToShowProps, 'hide' | 'onToggle'> {
   client: ClientIdentificationFieldsFragment;
   noValue?: ReactNode;
   variant?: TypographyProps['variant'];
   lastFour?: boolean; // show the last 4 digits only (not hidden)
-  reveal?: boolean;
+  alwaysShow?: boolean;
 }
 
 const ClientSsn = ({
@@ -19,7 +23,9 @@ const ClientSsn = ({
   noValue,
   lastFour,
   variant = 'body2',
-  reveal = false,
+  alwaysShow = false,
+  hide,
+  onToggle,
 }: Props) => {
   const masked = maskSSN(client.ssn || undefined);
   if (!masked) return <>{noValue}</> || null;
@@ -28,9 +34,9 @@ const ClientSsn = ({
     return <Typography variant={variant}>{masked.slice(-4)}</Typography>;
 
   const fullSsn = <Typography variant={variant}>{masked}</Typography>;
-  if (reveal) return fullSsn;
+  if (alwaysShow) return fullSsn;
   return (
-    <ClickToShow text='Reveal SSN' variant={variant}>
+    <ClickToShow variant={variant} hide={hide} onToggle={onToggle}>
       {fullSsn}
     </ClickToShow>
   );
