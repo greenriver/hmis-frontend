@@ -1,7 +1,8 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Button, Stack, Typography, TypographyProps } from '@mui/material';
 import { isNil } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 export interface Props extends TypographyProps {
   children: React.ReactNode;
@@ -29,6 +30,10 @@ const ClickToShow: React.FC<Props> = ({
     if (isNil(hide)) setHiddenState((prev) => !prev);
   }, [hidden, onToggleProp, hide]);
 
+  useEffect(() => {
+    if (!isNil(hide)) setHiddenState(!hide);
+  }, [hide]);
+
   return (
     <Button
       variant='text'
@@ -46,10 +51,11 @@ const ClickToShow: React.FC<Props> = ({
       size='small'
     >
       <Stack direction='row' alignItems='center' gap={0.8}>
-        <VisibilityIcon
-          color={hidden ? 'disabled' : 'primary'}
-          fontSize='small'
-        />
+        {hidden ? (
+          <VisibilityOffIcon color='disabled' fontSize='small' />
+        ) : (
+          <VisibilityIcon color='primary' fontSize='small' />
+        )}
         {hidden ? (
           <Typography {...props} sx={{ textDecoration: 'none', ...props.sx }}>
             {text}

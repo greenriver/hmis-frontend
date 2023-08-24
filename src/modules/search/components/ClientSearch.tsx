@@ -17,10 +17,15 @@ import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';
+import {
+  ContextualClientDobAge,
+  ContextualClientSsn,
+  ContextualDobToggleButton,
+  ContextualSsnToggleButton,
+  SsnDobShowContextProvider,
+} from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
-import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
@@ -66,16 +71,27 @@ export const CLIENT_COLUMNS: {
     render: 'lastName',
   },
   ssn: {
-    header: 'SSN',
+    header: (
+      <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
+    ),
     key: 'ssn',
     width: '8%',
-    render: (client: ClientFieldsFragment) => <ClientSsn client={client} />,
+    render: (client: ClientFieldsFragment) => (
+      <ContextualClientSsn client={client} />
+    ),
     dontLink: true,
   },
   dobAge: {
-    header: 'DOB / Age',
+    header: (
+      <Stack direction='row' justifyContent='space-between'>
+        <ContextualDobToggleButton sx={{ p: 0 }} variant='text' size='small' />
+        <strong>(Age)</strong>
+      </Stack>
+    ),
     key: 'dob',
-    render: (client: ClientFieldsFragment) => <ClientDobAge client={client} />,
+    render: (client: ClientFieldsFragment) => (
+      <ContextualClientDobAge client={client} />
+    ),
     dontLink: true,
   },
 };
@@ -198,7 +214,7 @@ const ClientSearch = () => {
   }, [setSearchParams, setDerivedSearchParams]);
 
   return (
-    <>
+    <SsnDobShowContextProvider>
       <Stack
         mb={2}
         direction='row'
@@ -278,10 +294,28 @@ const ClientSearch = () => {
                   )
                 : undefined
             }
+            toolbars={
+              displayType === 'cards'
+                ? [
+                    <Stack direction='row-reverse' gap={2}>
+                      <ContextualDobToggleButton
+                        sx={{ p: 0 }}
+                        variant='text'
+                        size='small'
+                      />
+                      <ContextualSsnToggleButton
+                        sx={{ p: 0 }}
+                        variant='text'
+                        size='small'
+                      />
+                    </Stack>,
+                  ]
+                : undefined
+            }
           />
         </Paper>
       )}
-    </>
+    </SsnDobShowContextProvider>
   );
 };
 

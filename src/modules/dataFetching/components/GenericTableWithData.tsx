@@ -73,6 +73,7 @@ export interface Props<
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
   header?: ReactNode;
+  toolbars?: ReactNode[];
   fullHeight?: boolean; // used for scrollable table body
   tableDisplayOptionButtons?: TableFiltersProps<
     TableFilterType<FilterOptionsType>,
@@ -136,6 +137,7 @@ const GenericTableWithData = <
   noSort,
   noFilter,
   header,
+  toolbars = [],
   noData,
   rowsPerPageOptions,
   tableDisplayOptionButtons,
@@ -325,44 +327,61 @@ const GenericTableWithData = <
           columns={columnDefs}
           noData={noDataValue}
           filterToolbar={
-            showFilters && (
-              <Box
-                px={2}
-                py={1}
-                sx={(theme) => ({
-                  borderBottom: `1px solid ${theme.palette.divider}`,
-                })}
-              >
-                <TableFilters
-                  noSort={noSort}
-                  noFilter={noFilter}
-                  loading={loading && !data}
-                  tableDisplayOptionButtons={tableDisplayOptionButtons}
-                  sorting={
-                    sortOptions
-                      ? {
-                          sortOptions,
-                          sortOptionValue: sortOrder,
-                          setSortOptionValue: setSortOrder,
-                        }
-                      : undefined
-                  }
-                  filters={
-                    !isEmpty(filterDefs)
-                      ? {
-                          filters: filterDefs,
-                          filterValues,
-                          setFilterValues,
-                        }
-                      : undefined
-                  }
-                  pagination={{
-                    limit,
-                    offset,
-                    totalEntries: nodesCount,
-                  }}
-                />
-              </Box>
+            (showFilters || !isEmpty(toolbars)) && (
+              <>
+                {showFilters && (
+                  <Box
+                    px={2}
+                    py={1}
+                    sx={(theme) => ({
+                      borderBottom: `1px solid ${theme.palette.divider}`,
+                    })}
+                  >
+                    <TableFilters
+                      noSort={noSort}
+                      noFilter={noFilter}
+                      loading={loading && !data}
+                      tableDisplayOptionButtons={tableDisplayOptionButtons}
+                      sorting={
+                        sortOptions
+                          ? {
+                              sortOptions,
+                              sortOptionValue: sortOrder,
+                              setSortOptionValue: setSortOrder,
+                            }
+                          : undefined
+                      }
+                      filters={
+                        !isEmpty(filterDefs)
+                          ? {
+                              filters: filterDefs,
+                              filterValues,
+                              setFilterValues,
+                            }
+                          : undefined
+                      }
+                      pagination={{
+                        limit,
+                        offset,
+                        totalEntries: nodesCount,
+                      }}
+                    />
+                  </Box>
+                )}
+                {!isEmpty(toolbars) &&
+                  toolbars.map((t) => (
+                    <Box
+                      key={String(t)}
+                      px={2}
+                      py={1}
+                      sx={(theme) => ({
+                        borderBottom: `1px solid ${theme.palette.divider}`,
+                      })}
+                    >
+                      {t}
+                    </Box>
+                  ))}
+              </>
             )
           }
           {...props}
