@@ -30,6 +30,7 @@ import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -146,6 +147,11 @@ const ClientSearch = () => {
     null
   );
 
+  const [canViewSsn] = useHasRootPermissions([
+    'canViewFullSsn',
+    'canViewPartialSsn',
+  ]);
+
   const { globalFeatureFlags } = useHmisAppSettings();
 
   const columns = useMemo(() => {
@@ -161,8 +167,9 @@ const ClientSearch = () => {
         ...baseColumns,
       ];
     }
+    if (!canViewSsn) return baseColumns.filter((c) => c.key !== 'ssn');
     return baseColumns;
-  }, [isMobile, globalFeatureFlags, displayType]);
+  }, [isMobile, globalFeatureFlags, displayType, canViewSsn]);
 
   useEffect(() => {
     // if search params are derived, we don't want to perform a search on them
