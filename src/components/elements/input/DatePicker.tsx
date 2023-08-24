@@ -32,11 +32,12 @@ const DatePicker = ({
   warnIfEmptyTreatment,
   ...props
 }: Props) => {
+  // If max date is in the past, default to the max date's month
   const defaultOpenMonth = useMemo(() => {
-    if (isDate(min)) return min;
+    // if (isDate(min)) return min;
     if (isDate(max) && isPast(max)) return max;
     return undefined;
-  }, [min, max]);
+  }, [max]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleBlur = useCallback(() => {

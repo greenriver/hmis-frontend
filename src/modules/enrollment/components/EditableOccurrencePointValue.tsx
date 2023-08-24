@@ -3,6 +3,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ReactNode, useMemo } from 'react';
 import IconButtonContainer from './IconButtonContainer';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 interface Props {
@@ -41,6 +42,7 @@ const EditableOccurrencePointValue = ({
       entryDate: enrollment.entryDate,
       exitDate: enrollment.exitDate,
       projectType: enrollment.project.projectType,
+      ...AlwaysPresentLocalConstants,
     },
     onCompleted,
   });
