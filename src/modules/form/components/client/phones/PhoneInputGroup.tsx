@@ -5,6 +5,7 @@ import FormSelect from '../../FormSelect';
 import { getRequiredLabel } from '../../RequiredLabel';
 import { PhoneInputType } from '../types';
 
+import PhoneInput from '@/components/elements/input/PhoneInput';
 import TextInput from '@/components/elements/input/TextInput';
 import { isPickListOption } from '@/modules/form/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
@@ -12,7 +13,7 @@ import { ClientContactPointUse } from '@/types/gqlTypes';
 
 const contactUsePicklist = localResolvePickList('ClientContactPointUse') || [];
 
-const PhoneInput = ({
+const PhoneInputGroup = ({
   value,
   onChange,
 }: {
@@ -29,7 +30,7 @@ const PhoneInput = ({
       <Grid container columnSpacing={8} rowSpacing={2}>
         <Grid item xs={7}>
           <Stack rowGap={2}>
-            <TextInput
+            <PhoneInput
               value={value.value || ''}
               onChange={(e) => onChange({ ...value, value: e.target.value })}
               label={getRequiredLabel('Phone Number')}
@@ -70,4 +71,4 @@ const PhoneInput = ({
   );
 };
 
-export default PhoneInput;
+export default PhoneInputGroup;
