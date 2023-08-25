@@ -144,12 +144,14 @@ schema.__schema.types.forEach((type) => {
     });
 
     // Always last
-    ['CLIENT_REFUSED', 'CLIENT_DOESN_T_KNOW', 'DATA_NOT_COLLECTED'].forEach(
-      (name) => {
-        const idx = enumValues.findIndex((item) => item.name === name);
-        if (idx !== -1) enumValues.push(enumValues.splice(idx, 1)[0]);
-      }
-    );
+    [
+      'CLIENT_PREFERS_NOT_TO_ANSWER',
+      'CLIENT_DOESN_T_KNOW',
+      'DATA_NOT_COLLECTED',
+    ].forEach((name) => {
+      const idx = enumValues.findIndex((item) => item.name === name);
+      if (idx !== -1) enumValues.push(enumValues.splice(idx, 1)[0]);
+    });
 
     const values = enumValues.map((elem) => {
       let description = elem.description?.replaceAll(/\n/g, ' ') || elem.name;

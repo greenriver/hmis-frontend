@@ -5,6 +5,7 @@ fragment EnrollmentValues on Enrollment {
   dateOfEngagement
   moveInDate
   livingSituation
+  rentalSubsidyType
   lengthOfStay
   losUnderThreshold
   previousStreetEssh
@@ -213,7 +214,6 @@ fragment DisabilityGroupFields on DisabilityGroup {
 
 fragment HealthAndDvValues on HealthAndDv {
   __typename
-  bounceBack
   currentlyFleeing
   dataCollectionStage
   dateCreated
@@ -222,14 +222,11 @@ fragment HealthAndDvValues on HealthAndDv {
   dentalHealthStatus
   domesticViolenceVictim
   dueDate
-  feelingFrequency
   generalHealthStatus
   id
   informationDate
-  lifeValue
   mentalHealthStatus
   pregnancyStatus
-  supportFromOthers
   whenOccurred
 }
 
@@ -264,6 +261,7 @@ fragment ExitValues on Exit {
   destination
   destinationSafeClient
   destinationSafeWorker
+  destinationSubsidyType
   earlyExitReason
   exchangeForSex
   exchangeForSexPastThreeMonths

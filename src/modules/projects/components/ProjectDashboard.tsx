@@ -129,8 +129,8 @@ const ProjectDashboard: React.FC = () => {
                 },
               ]
             : []),
-          // TODO(2024) fix
-          ...(canViewEnrollmentDetails && project.projectType === ProjectType.Es
+          ...(canViewEnrollmentDetails &&
+          project.projectType === ProjectType.EsNbn
             ? [
                 {
                   id: 'bed-nights',

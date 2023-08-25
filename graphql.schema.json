@@ -277,8 +277,8 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -2659,22 +2659,6 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "EnrollmentsPaginated",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ethnicity",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "Ethnicity",
                 "ofType": null
               }
             },
@@ -5278,8 +5262,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -5785,8 +5769,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -5877,7 +5861,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "LivingSituation",
+                "name": "CurrentLivingSituationOptions",
                 "ofType": null
               }
             },
@@ -6079,6 +6063,167 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "CurrentLivingSituationOptions",
+        "description": "4.12",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER",
+            "description": "(101) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME",
+            "description": "(215) Foster care home or foster care group home",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY",
+            "description": "(206) Hospital or other residential non-psychiatric medical facility",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOST_HOME_NON_CRISIS",
+            "description": "(332) Host Home (non-crisis)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER",
+            "description": "(314) Hotel or motel paid for without emergency shelter voucher",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY",
+            "description": "(207) Jail, prison or juvenile detention facility",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LONG_TERM_CARE_FACILITY_OR_NURSING_HOME",
+            "description": "(225) Long-term care facility or nursing home",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER",
+            "description": "(17) Other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY",
+            "description": "(411) Owned by client, no ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY",
+            "description": "(421) Owned by client, with ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE",
+            "description": "(116) Place not meant for habitation (e.g., a vehicle, an abandoned building,\nbus/train/subway station/airport or anywhere outside)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY",
+            "description": "(204) Psychiatric hospital or other psychiatric facility",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY",
+            "description": "(410) Rental by client, no ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RENTAL_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY",
+            "description": "(435) Rental by client, with ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA",
+            "description": "(329) Residential project or halfway house with no homeless criteria",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SAFE_HAVEN",
+            "description": "(118) Safe Haven",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE",
+            "description": "(335) Staying or living in a family member’s room, apartment, or house",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE",
+            "description": "(336) Staying or living in a friend's room, apartment or house",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER",
+            "description": "(205) Substance abuse treatment facility or detox center",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH",
+            "description": "(302) Transitional housing for homeless persons (including homeless youth)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WORKER_UNABLE_TO_DETERMINE",
+            "description": "(37) Worker unable to determine",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "CurrentLivingSituationsPaginated",
         "description": null,
@@ -6224,8 +6369,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -6630,8 +6775,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -8200,7 +8345,7 @@
       {
         "kind": "ENUM",
         "name": "Destination",
-        "description": "3.12.1",
+        "description": "3.12",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -8212,8 +8357,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -8230,32 +8375,32 @@
             "deprecationReason": null
           },
           {
-            "name": "EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER",
-            "description": "(1) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter",
+            "name": "EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER",
+            "description": "(101) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME",
-            "description": "(15) Foster care home or foster care group home",
+            "description": "(215) Foster care home or foster care group home",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY",
-            "description": "(6) Hospital or other residential non-psychiatric medical facility",
+            "description": "(206) Hospital or other residential non-psychiatric medical facility",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOST_HOME_NON_CRISIS",
-            "description": "(32) Host Home (non-crisis)",
+            "description": "(332) Host Home (non-crisis)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER",
-            "description": "(14) Hotel or motel paid for without emergency shelter voucher",
+            "description": "(314) Hotel or motel paid for without emergency shelter voucher",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -8267,25 +8412,25 @@
           },
           {
             "name": "JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY",
-            "description": "(7) Jail, prison or juvenile detention facility",
+            "description": "(207) Jail, prison or juvenile detention facility",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "LONG_TERM_CARE_FACILITY_OR_NURSING_HOME",
-            "description": "(25) Long-term care facility or nursing home",
+            "description": "(225) Long-term care facility or nursing home",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH",
-            "description": "(26) Moved from one HOPWA funded project to HOPWA PH",
+            "description": "(426) Moved from one HOPWA funded project to HOPWA PH",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH",
-            "description": "(27) Moved from one HOPWA funded project to HOPWA TH",
+            "description": "(327) Moved from one HOPWA funded project to HOPWA TH",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -8303,121 +8448,91 @@
           },
           {
             "name": "OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY",
-            "description": "(11) Owned by client, no ongoing housing subsidy",
+            "description": "(411) Owned by client, no ongoing housing subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY",
-            "description": "(21) Owned by client, with ongoing housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PERMANENT_HOUSING_OTHER_THAN_RRH_FOR_FORMERLY_HOMELESS_PERSONS",
-            "description": "(3) Permanent housing (other than RRH) for formerly homeless persons",
+            "description": "(421) Owned by client, with ongoing housing subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE",
-            "description": "(16) Place not meant for habitation (e.g., a vehicle, an abandoned building,\nbus/train/subway station/airport or anywhere outside)",
+            "description": "(116) Place not meant for habitation (e.g., a vehicle, an abandoned building,\nbus/train/subway station/airport or anywhere outside)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY",
-            "description": "(4) Psychiatric hospital or other psychiatric facility",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT",
-            "description": "(34) Rental by client in a public housing unit",
+            "description": "(204) Psychiatric hospital or other psychiatric facility",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY",
-            "description": "(10) Rental by client, no ongoing housing subsidy",
+            "description": "(410) Rental by client, no ongoing housing subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY",
-            "description": "(28) Rental by client, with GPD TIP housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_WITH_HCV_VOUCHER_TENANT_OR_PROJECT_BASED",
-            "description": "(33) Rental by client, with HCV voucher (tenant or project based)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY",
-            "description": "(20) Rental by client, with other ongoing housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_WITH_RRH_OR_EQUIVALENT_SUBSIDY",
-            "description": "(31) Rental by client, with RRH or equivalent subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_WITH_VASH_HOUSING_SUBSIDY",
-            "description": "(19) Rental by client, with VASH housing subsidy",
+            "name": "RENTAL_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY",
+            "description": "(435) Rental by client, with ongoing housing subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA",
-            "description": "(29) Residential project or halfway house with no homeless criteria",
+            "description": "(329) Residential project or halfway house with no homeless criteria",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SAFE_HAVEN",
-            "description": "(18) Safe Haven",
+            "description": "(118) Safe Haven",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE",
-            "description": "(22) Staying or living with family, permanent tenure",
+            "description": "(422) Staying or living with family, permanent tenure",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE",
-            "description": "(12) Staying or living with family, temporary tenure (e.g. room, apartment or house)",
+            "description": "(312) Staying or living with family, temporary tenure (e.g. room, apartment or house)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE",
-            "description": "(23) Staying or living with friends, permanent tenure",
+            "description": "(423) Staying or living with friends, permanent tenure",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE",
-            "description": "(13) Staying or living with friends, temporary tenure (e.g. room apartment or house)",
+            "description": "(313) Staying or living with friends, temporary tenure (e.g. room apartment or house)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER",
-            "description": "(5) Substance abuse treatment facility or detox center",
+            "description": "(205) Substance abuse treatment facility or detox center",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH",
-            "description": "(2) Transitional housing for homeless persons (including homeless youth)",
+            "description": "(302) Transitional housing for homeless persons (including homeless youth)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WORKER_UNABLE_TO_DETERMINE",
+            "description": "(37) Worker unable to determine",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -9330,8 +9445,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -9465,8 +9580,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -11233,7 +11348,7 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "LivingSituation",
+              "name": "PriorLivingSituation",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11447,6 +11562,18 @@
                   }
                 }
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "rentalSubsidyType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RentalSubsidyType",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -12576,53 +12703,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "ENUM",
-        "name": "Ethnicity",
-        "description": "3.05.1",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "CLIENT_DOESN_T_KNOW",
-            "description": "(8) Client doesn't know",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "DATA_NOT_COLLECTED",
-            "description": "(99) Data not collected",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HISPANIC_LATIN_A_O_X",
-            "description": "(1) Hispanic/Latin(a)(o)(x)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INVALID",
-            "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NON_HISPANIC_NON_LATIN_A_O_X",
-            "description": "(0) Non-Hispanic/Non-Latin(a)(o)(x)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "Event",
         "description": "HUD Event",
@@ -13409,6 +13489,18 @@
             "deprecationReason": null
           },
           {
+            "name": "destinationSubsidyType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RentalSubsidyType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "earlyExitReason",
             "description": null,
             "args": [],
@@ -13855,71 +13947,6 @@
           {
             "name": "WAREHOUSE_ID",
             "description": "Warehouse ID",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "FeelingFrequency",
-        "description": "C1.2",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "AT_LEAST_EVERY_DAY",
-            "description": "(4) At least every day",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT_DOESN_T_KNOW",
-            "description": "(8) Client doesn't know",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "DATA_NOT_COLLECTED",
-            "description": "(99) Data not collected",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INVALID",
-            "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NOT_AT_ALL",
-            "description": "(0) Not at all",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ONCE_A_MONTH",
-            "description": "(1) Once a month",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SEVERAL_TIMES_A_MONTH",
-            "description": "(2) Several times a month",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SEVERAL_TIMES_A_WEEK",
-            "description": "(3) Several times a week",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -15635,8 +15662,8 @@
             "deprecationReason": null
           },
           {
-            "name": "HUD_COC_JOINT_COMPONENT_RRH_PSH",
-            "description": "(49) HUD: CoC - Joint Component RRH/PSH",
+            "name": "HUD_COC_JOINT_COMPONENT_RRH_PSH_DEPRECATED",
+            "description": "(49) HUD: CoC - Joint Component RRH/PSH [Deprecated]",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -15809,8 +15836,20 @@
             "deprecationReason": null
           },
           {
-            "name": "HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM",
-            "description": "(12) HUD: Rural Housing Stability Assistance Program",
+            "name": "HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM_DEPRECATED",
+            "description": "(12) HUD: Rural Housing Stability Assistance Program [Deprecated]",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_RURAL_SPECIAL_NOFO",
+            "description": "(55) HUD: Rural Special NOFO",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_UNSHELTERED_SPECIAL_NOFO",
+            "description": "(54) HUD: Unsheltered Special NOFO",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -15916,8 +15955,14 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CULTURALLY_SPECIFIC",
+            "description": "(2) Culturally Specific Identity (e.g., Two-Spirit)",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -15928,20 +15973,20 @@
             "deprecationReason": null
           },
           {
-            "name": "FEMALE",
-            "description": "(0) Female",
+            "name": "DIFFERENT_IDENTITY",
+            "description": "(3) Different Identity",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "MALE",
-            "description": "(1) Male",
+            "name": "MAN",
+            "description": "(1) Man (Boy, if child)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "NO_SINGLE_GENDER",
-            "description": "(4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)",
+            "name": "NON_BINARY",
+            "description": "(4) Non-Binary",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -15954,6 +15999,12 @@
           {
             "name": "TRANSGENDER",
             "description": "(5) Transgender",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WOMAN",
+            "description": "(0) Woman (Girl, if child)",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -16003,8 +16054,43 @@
       },
       {
         "kind": "ENUM",
+        "name": "HMISParticipationType",
+        "description": "2.08.1",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "COMPARABLE_DATABASE_PARTICIPATING",
+            "description": "(2) Comparable Database Participating",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HMIS_PARTICIPATING",
+            "description": "(1) HMIS Participating",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NOT_PARTICIPATING",
+            "description": "(0) Not Participating",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "HOPWAMedAssistedLivingFac",
-        "description": "2.02.9",
+        "description": "2.02.8",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -16041,18 +16127,6 @@
         "name": "HealthAndDv",
         "description": null,
         "fields": [
-          {
-            "name": "bounceBack",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "WellbeingAgreement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "client",
             "description": null,
@@ -16194,18 +16268,6 @@
             "deprecationReason": null
           },
           {
-            "name": "feelingFrequency",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "FeelingFrequency",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "generalHealthStatus",
             "description": null,
             "args": [],
@@ -16250,18 +16312,6 @@
             "deprecationReason": null
           },
           {
-            "name": "lifeValue",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "WellbeingAgreement",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "mentalHealthStatus",
             "description": null,
             "args": [],
@@ -16280,18 +16330,6 @@
             "type": {
               "kind": "ENUM",
               "name": "NoYesReasonsForMissingData",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "supportFromOthers",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "WellbeingAgreement",
               "ofType": null
             },
             "isDeprecated": false,
@@ -16473,8 +16511,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16952,26 +16990,14 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_DIED",
-            "description": "(10) Client died",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "CLIENT_DOESN_T_KNOW",
             "description": "(8) Client doesn't know",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT_WENT_TO_JAIL_PRISON",
-            "description": "(7) Client went to jail/prison",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16982,8 +17008,20 @@
             "deprecationReason": null
           },
           {
+            "name": "DECEASED",
+            "description": "(10) Deceased",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "INVALID",
             "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "JAIL_PRISON",
+            "description": "(7) Jail/prison",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -19059,8 +19097,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -19174,251 +19212,6 @@
           {
             "name": "NONE",
             "description": "(2) None",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "LivingSituation",
-        "description": "3.12.1",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "CLIENT_DOESN_T_KNOW",
-            "description": "(8) Client doesn't know",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "DATA_NOT_COLLECTED",
-            "description": "(99) Data not collected",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "DECEASED",
-            "description": "(24) Deceased",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER",
-            "description": "(1) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME",
-            "description": "(15) Foster care home or foster care group home",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY",
-            "description": "(6) Hospital or other residential non-psychiatric medical facility",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HOST_HOME_NON_CRISIS",
-            "description": "(32) Host Home (non-crisis)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER",
-            "description": "(14) Hotel or motel paid for without emergency shelter voucher",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INVALID",
-            "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY",
-            "description": "(7) Jail, prison or juvenile detention facility",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "LONG_TERM_CARE_FACILITY_OR_NURSING_HOME",
-            "description": "(25) Long-term care facility or nursing home",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH",
-            "description": "(26) Moved from one HOPWA funded project to HOPWA PH",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH",
-            "description": "(27) Moved from one HOPWA funded project to HOPWA TH",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NO_EXIT_INTERVIEW_COMPLETED",
-            "description": "(30) No exit interview completed",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "OTHER",
-            "description": "(17) Other",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY",
-            "description": "(11) Owned by client, no ongoing housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY",
-            "description": "(21) Owned by client, with ongoing housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PERMANENT_HOUSING_OTHER_THAN_RRH_FOR_FORMERLY_HOMELESS_PERSONS",
-            "description": "(3) Permanent housing (other than RRH) for formerly homeless persons",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE",
-            "description": "(16) Place not meant for habitation (e.g., a vehicle, an abandoned building,\nbus/train/subway station/airport or anywhere outside)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY",
-            "description": "(4) Psychiatric hospital or other psychiatric facility",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT",
-            "description": "(34) Rental by client in a public housing unit",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY",
-            "description": "(10) Rental by client, no ongoing housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY",
-            "description": "(28) Rental by client, with GPD TIP housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_WITH_HCV_VOUCHER_TENANT_OR_PROJECT_BASED",
-            "description": "(33) Rental by client, with HCV voucher (tenant or project based)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY",
-            "description": "(20) Rental by client, with other ongoing housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_WITH_RRH_OR_EQUIVALENT_SUBSIDY",
-            "description": "(31) Rental by client, with RRH or equivalent subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RENTAL_BY_CLIENT_WITH_VASH_HOUSING_SUBSIDY",
-            "description": "(19) Rental by client, with VASH housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA",
-            "description": "(29) Residential project or halfway house with no homeless criteria",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SAFE_HAVEN",
-            "description": "(18) Safe Haven",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE",
-            "description": "(35) Staying or living in a family member's room, apartment or house",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE",
-            "description": "(36) Staying or living in a friend's room, apartment or house",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE",
-            "description": "(22) Staying or living with family, permanent tenure",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE",
-            "description": "(12) Staying or living with family, temporary tenure (e.g. room, apartment or house)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE",
-            "description": "(23) Staying or living with friends, permanent tenure",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE",
-            "description": "(13) Staying or living with friends, temporary tenure (e.g. room apartment or house)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER",
-            "description": "(5) Substance abuse treatment facility or detox center",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH",
-            "description": "(2) Transitional housing for homeless persons (including homeless youth)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "WORKER_UNABLE_TO_DETERMINE",
-            "description": "(37) Worker unable to determine",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -19750,8 +19543,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -19784,6 +19577,12 @@
             "description": "(3) Navy",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "SPACE_FORCE",
+            "description": "(7) Space Force",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -19803,8 +19602,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -19916,8 +19715,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -21004,8 +20803,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -21069,8 +20868,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -21089,6 +20888,35 @@
           {
             "name": "INVALID",
             "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "NoYes",
+        "description": "1.10",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NO",
+            "description": "(0) No",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YES",
+            "description": "(1) Yes",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -21145,8 +20973,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -21815,26 +21643,32 @@
             "deprecationReason": null
           },
           {
-            "name": "GREATER_THAN_50",
-            "description": "(3) Greater than 50%",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "INVALID",
             "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "LESS_THAN_30",
-            "description": "(1) Less than 30%",
+            "name": "NUM_30_OR_LESS",
+            "description": "(1) 30% or less",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "NUM_30_TO_50",
-            "description": "(2) 30% to 50%",
+            "name": "NUM_31_TO_50",
+            "description": "(2) 31% to 50%",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NUM_51_TO_80",
+            "description": "(3) 51% to 80%",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NUM_81_OR_GREATER",
+            "description": "(4) 81% or greater",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -22085,6 +21919,155 @@
       },
       {
         "kind": "ENUM",
+        "name": "PriorLivingSituation",
+        "description": "3.917",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER",
+            "description": "(101) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME",
+            "description": "(215) Foster care home or foster care group home",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY",
+            "description": "(206) Hospital or other residential non-psychiatric medical facility",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOST_HOME_NON_CRISIS",
+            "description": "(332) Host Home (non-crisis)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER",
+            "description": "(314) Hotel or motel paid for without emergency shelter voucher",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY",
+            "description": "(207) Jail, prison or juvenile detention facility",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LONG_TERM_CARE_FACILITY_OR_NURSING_HOME",
+            "description": "(225) Long-term care facility or nursing home",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY",
+            "description": "(411) Owned by client, no ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY",
+            "description": "(421) Owned by client, with ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE",
+            "description": "(116) Place not meant for habitation (e.g., a vehicle, an abandoned building,\nbus/train/subway station/airport or anywhere outside)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY",
+            "description": "(204) Psychiatric hospital or other psychiatric facility",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY",
+            "description": "(410) Rental by client, no ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RENTAL_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY",
+            "description": "(435) Rental by client, with ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA",
+            "description": "(329) Residential project or halfway house with no homeless criteria",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SAFE_HAVEN",
+            "description": "(118) Safe Haven",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE",
+            "description": "(335) Staying or living in a family member’s room, apartment, or house",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE",
+            "description": "(336) Staying or living in a friend's room, apartment or house",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER",
+            "description": "(205) Substance abuse treatment facility or detox center",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH",
+            "description": "(302) Transitional housing for homeless persons (including homeless youth)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "PrioritizationStatus",
         "description": "4.19.7",
         "fields": null,
@@ -22117,18 +22100,6 @@
         "name": "Project",
         "description": null,
         "fields": [
-          {
-            "name": "HMISParticipatingProject",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "HOPWAMedAssistedLivingFac",
             "description": null,
@@ -22191,7 +22162,7 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "NoYesMissing",
+              "name": "NoYes",
               "ofType": null
             },
             "isDeprecated": false,
@@ -22407,6 +22378,18 @@
                 "name": "Boolean",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hmisParticipationStatus",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "HMISParticipationType",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -22815,7 +22798,19 @@
             "args": [],
             "type": {
               "kind": "ENUM",
-              "name": "NoYesMissing",
+              "name": "NoYes",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "rrhSubType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RRHSubType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -22893,18 +22888,6 @@
             "type": {
               "kind": "ENUM",
               "name": "TargetPopulation",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "trackingMethod",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "TrackingMethod",
               "ofType": null
             },
             "isDeprecated": false,
@@ -23599,6 +23582,18 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "CLIENT_VOLUNTARILY_LEFT_EARLY",
+            "description": "(2) Client voluntarily left early",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT",
+            "description": "(3) Client was expelled or otherwise involuntarily discharged from project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "COMPLETED_PROJECT",
             "description": "(1) Completed project",
             "isDeprecated": false,
@@ -23607,18 +23602,6 @@
           {
             "name": "INVALID",
             "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "YOUTH_VOLUNTARILY_LEFT_EARLY",
-            "description": "(2) Youth voluntarily left early",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "YOUTH_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT",
-            "description": "(3) Youth was expelled or otherwise involuntarily discharged from project",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -23795,8 +23778,14 @@
             "deprecationReason": null
           },
           {
-            "name": "ES",
-            "description": "Emergency Shelter",
+            "name": "ES_ENTRY_EXIT",
+            "description": "Emergency Shelter - Entry Exit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ES_NBN",
+            "description": "Emergency Shelter - Night-by-Night",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -25623,6 +25612,35 @@
       },
       {
         "kind": "ENUM",
+        "name": "RRHSubType",
+        "description": "2.02.A",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RRH_HOUSING_WITH_OR_WITHOUT_SERVICES",
+            "description": "(2) RRH: Housing with or without services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RRH_SERVICES_ONLY",
+            "description": "(1) RRH: Services Only",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "Race",
         "description": "HUD Race (1.7)",
         "fields": null,
@@ -25654,14 +25672,26 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HISPANIC_LATINAEO",
+            "description": "(HispanicLatinaeo) Hispanic/Latina/e/o",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MID_EAST_N_AFRICAN",
+            "description": "(MidEastNAfrican) Middle Eastern or North African",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -25789,8 +25819,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -25853,18 +25883,6 @@
             "deprecationReason": null
           },
           {
-            "name": "CONTACT_12",
-            "description": "(12) Contact 12",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CONTACT_13",
-            "description": "(13) Contact 13",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "HOPWA_FINANCIAL_ASSISTANCE",
             "description": "(151) HOPWA Financial Assistance",
             "isDeprecated": false,
@@ -25903,12 +25921,6 @@
           {
             "name": "PATH_SERVICE",
             "description": "(141) PATH Service",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RHY_REFERRAL",
-            "description": "(162) RHY Referral",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -27105,8 +27117,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -27563,8 +27575,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -27640,8 +27652,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -27791,8 +27803,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -28787,8 +28799,8 @@
             "deprecationReason": null
           },
           {
-            "name": "HOPWA_SERVICE__SUBSTANCE_ABUSE_SERVICES_TREATMENT",
-            "description": "(12) Substance abuse services/treatment",
+            "name": "HOPWA_SERVICE__SUBSTANCE_USE_SERVICES_TREATMENT",
+            "description": "(12) Substance use services/treatment",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -29099,8 +29111,8 @@
             "deprecationReason": null
           },
           {
-            "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE",
-            "description": "(12) Post-natal care",
+            "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE_FOR_CLIENT_PERSON_WHO_GAVE_BIRTH",
+            "description": "(12) Post-natal care for client (person who gave birth)",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -29153,12 +29165,6 @@
             "deprecationReason": null
           },
           {
-            "name": "SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY_RENTAL_ASSISTANCE",
-            "description": "(15) Extended Shallow Subsidy - Rental Assistance",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE",
             "description": "(16) Food Assistance",
             "isDeprecated": false,
@@ -29171,8 +29177,14 @@
             "deprecationReason": null
           },
           {
-            "name": "SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES",
-            "description": "(11) General housing stability assistance - emergency supplies",
+            "name": "SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED",
+            "description": "(11) General housing stability assistance - emergency supplies [Deprecated]",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__LANDLORD_INCENTIVE",
+            "description": "(17) Landlord Incentive",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -29191,6 +29203,18 @@
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__SECURITY_DEPOSIT",
             "description": "(2) Security deposit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__SHALLOW_SUBSIDY_FINANCIAL_ASSISTANCE",
+            "description": "(15) Shallow Subsidy - Financial Assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__TENANT_INCENTIVE",
+            "description": "(18) Tenant Incentive",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -29251,6 +29275,24 @@
           {
             "name": "SSVF_SERVICE__OUTREACH_SERVICES",
             "description": "(1) Outreach services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__RAPID_RESOLUTION",
+            "description": "(9) Rapid Resolution",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__RETURNING_HOME",
+            "description": "(8) Returning Home",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__SHALLOW_SUBSIDY",
+            "description": "(7) Shallow Subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -29535,8 +29577,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -30166,14 +30208,20 @@
       {
         "kind": "ENUM",
         "name": "TargetPopulation",
-        "description": "2.02.8",
+        "description": "2.02.7",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
-            "name": "DOMESTIC_VIOLENCE_VICTIMS",
-            "description": "(1) Domestic violence victims",
+            "name": "DV_SURVIVOR_OF_DOMESTIC_VIOLENCE",
+            "description": "(1) DV: Survivor of Domestic Violence",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HIV_PERSONS_WITH_HIV_AIDS",
+            "description": "(3) HIV: Persons with HIV/AIDS",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -30184,14 +30232,8 @@
             "deprecationReason": null
           },
           {
-            "name": "NOT_APPLICABLE",
-            "description": "(4) Not applicable",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PERSONS_WITH_HIV_AIDS",
-            "description": "(3) Persons with HIV/AIDS",
+            "name": "NA_NOT_APPLICABLE",
+            "description": "(4) NA: Not applicable",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -30260,8 +30302,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -30298,35 +30340,6 @@
           {
             "name": "TWO_TIMES",
             "description": "(2) Two times",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "TrackingMethod",
-        "description": "2.02.C",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "ENTRY_EXIT_DATE",
-            "description": "(0) Entry/Exit Date",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INVALID",
-            "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NIGHT_BY_NIGHT",
-            "description": "(3) Night-by-Night",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -33042,8 +33055,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -33123,71 +33136,6 @@
       },
       {
         "kind": "ENUM",
-        "name": "WellbeingAgreement",
-        "description": "C1.1",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "CLIENT_DOESN_T_KNOW",
-            "description": "(8) Client doesn't know",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "DATA_NOT_COLLECTED",
-            "description": "(99) Data not collected",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INVALID",
-            "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NEITHER_AGREE_NOR_DISAGREE",
-            "description": "(2) Neither agree nor disagree",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SOMEWHAT_AGREE",
-            "description": "(3) Somewhat agree",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SOMEWHAT_DISAGREE",
-            "description": "(1) Somewhat disagree",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STRONGLY_AGREE",
-            "description": "(4) Strongly agree",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "STRONGLY_DISAGREE",
-            "description": "(0) Strongly disagree",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
         "name": "WhenDVOccurred",
         "description": "4.11.A",
         "fields": null,
@@ -33201,8 +33149,8 @@
             "deprecationReason": null
           },
           {
-            "name": "CLIENT_REFUSED",
-            "description": "(9) Client refused",
+            "name": "CLIENT_PREFERS_NOT_TO_ANSWER",
+            "description": "(9) Client prefers not to answer",
             "isDeprecated": false,
             "deprecationReason": null
           },

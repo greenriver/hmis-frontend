@@ -31,7 +31,7 @@ const baseColumns: ColumnDef<CurrentLivingSituationFieldsFragment>[] = [
     render: (e) => (
       <HmisEnum
         value={e.currentLivingSituation}
-        enumMap={HmisEnums.LivingSituation}
+        enumMap={HmisEnums.CurrentLivingSituationOptions}
       />
     ),
   },

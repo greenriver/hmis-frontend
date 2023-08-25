@@ -361,14 +361,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'ethnicity',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'Ethnicity', ofType: null },
-        },
-      },
-      {
         name: 'firstName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -903,7 +895,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'ENUM', name: 'LivingSituation', ofType: null },
+          ofType: {
+            kind: 'ENUM',
+            name: 'CurrentLivingSituationOptions',
+            ofType: null,
+          },
         },
       },
       {
@@ -1768,7 +1764,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'livingSituation',
-        type: { kind: 'ENUM', name: 'LivingSituation', ofType: null },
+        type: { kind: 'ENUM', name: 'PriorLivingSituation', ofType: null },
       },
       {
         name: 'losUnderThreshold',
@@ -1825,6 +1821,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
         },
+      },
+      {
+        name: 'rentalSubsidyType',
+        type: { kind: 'ENUM', name: 'RentalSubsidyType', ofType: null },
       },
       {
         name: 'runawayYouth',
@@ -2250,6 +2250,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'destinationSafeWorker',
         type: { kind: 'ENUM', name: 'WorkerResponse', ofType: null },
+      },
+      {
+        name: 'destinationSubsidyType',
+        type: { kind: 'ENUM', name: 'RentalSubsidyType', ofType: null },
       },
       {
         name: 'earlyExitReason',
@@ -2732,10 +2736,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'HealthAndDv',
     fields: [
       {
-        name: 'bounceBack',
-        type: { kind: 'ENUM', name: 'WellbeingAgreement', ofType: null },
-      },
-      {
         name: 'currentlyFleeing',
         type: {
           kind: 'ENUM',
@@ -2788,10 +2788,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
-        name: 'feelingFrequency',
-        type: { kind: 'ENUM', name: 'FeelingFrequency', ofType: null },
-      },
-      {
         name: 'generalHealthStatus',
         type: { kind: 'ENUM', name: 'HealthStatus', ofType: null },
       },
@@ -2812,10 +2808,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'lifeValue',
-        type: { kind: 'ENUM', name: 'WellbeingAgreement', ofType: null },
-      },
-      {
         name: 'mentalHealthStatus',
         type: { kind: 'ENUM', name: 'HealthStatus', ofType: null },
       },
@@ -2826,10 +2818,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: 'NoYesReasonsForMissingData',
           ofType: null,
         },
-      },
-      {
-        name: 'supportFromOthers',
-        type: { kind: 'ENUM', name: 'WellbeingAgreement', ofType: null },
       },
       {
         name: 'whenOccurred',
@@ -3608,10 +3596,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Project',
     fields: [
       {
-        name: 'HMISParticipatingProject',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
-      },
-      {
         name: 'HOPWAMedAssistedLivingFac',
         type: { kind: 'ENUM', name: 'HOPWAMedAssistedLivingFac', ofType: null },
       },
@@ -3629,7 +3613,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'continuumProject',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
       },
       {
         name: 'dateCreated',
@@ -3662,6 +3646,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
+      },
+      {
+        name: 'hmisParticipationStatus',
+        type: { kind: 'ENUM', name: 'HMISParticipationType', ofType: null },
       },
       {
         name: 'housingType',
@@ -3709,15 +3697,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'residentialAffiliation',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
+      },
+      {
+        name: 'rrhSubType',
+        type: { kind: 'ENUM', name: 'RRHSubType', ofType: null },
       },
       {
         name: 'targetPopulation',
         type: { kind: 'ENUM', name: 'TargetPopulation', ofType: null },
-      },
-      {
-        name: 'trackingMethod',
-        type: { kind: 'ENUM', name: 'TrackingMethod', ofType: null },
       },
     ],
   },

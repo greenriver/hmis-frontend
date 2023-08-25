@@ -16,14 +16,14 @@ fragment ProjectAllFields on Project {
   ...ProjectNameAndType
   ...ProjectOperatingPeriod
   description
-  HMISParticipatingProject
+  hmisParticipationStatus
   HOPWAMedAssistedLivingFac
   contactInformation
   continuumProject
   housingType
   residentialAffiliation
+  rrhSubType
   targetPopulation
-  trackingMethod
   organization {
     ...OrganizationNameFields
   }

@@ -12,7 +12,7 @@ import { ProjectType } from '@/types/gqlTypes';
 describe('Other fns', () => {
   it('enrollment name', () => {
     const withProjectType = {
-      project: { projectName: 'Foo Bar', projectType: ProjectType.Es },
+      project: { projectName: 'Foo Bar', projectType: ProjectType.EsNbn },
     };
     const withProjectTypeDayShelter = {
       project: { projectName: 'Foo Bar', projectType: ProjectType.DayShelter },

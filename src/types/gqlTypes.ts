@@ -81,8 +81,8 @@ export enum AftercareMethod {
 
 /** R20.2 */
 export enum AftercareProvided {
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (0) No */
@@ -390,7 +390,6 @@ export type Client = {
   emailAddresses: Array<ClientContactPoint>;
   employmentEducations: EmploymentEducationsPaginated;
   enrollments: EnrollmentsPaginated;
-  ethnicity: Ethnicity;
   externalIds: Array<ExternalIdentifier>;
   files: FilesPaginated;
   firstName?: Maybe<Scalars['String']['output']>;
@@ -802,8 +801,8 @@ export enum CounselingMethod {
 export enum CountExchangeForSex {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
@@ -887,8 +886,8 @@ export type CreateUnitsPayload = {
 export enum CurrentEdStatus {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
@@ -910,7 +909,7 @@ export type CurrentLivingSituation = {
   __typename?: 'CurrentLivingSituation';
   client: Client;
   clsSubsidyType?: Maybe<RentalSubsidyType>;
-  currentLivingSituation: LivingSituation;
+  currentLivingSituation: CurrentLivingSituationOptions;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
@@ -927,6 +926,63 @@ export type CurrentLivingSituation = {
   verifiedBy?: Maybe<Scalars['String']['output']>;
 };
 
+/** 4.12 */
+export enum CurrentLivingSituationOptions {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (101) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter */
+  EmergencyShelterIncludingHotelOrMotelPaidForWithEmergencyShelterVoucherOrHostHomeShelter = 'EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER',
+  /** (215) Foster care home or foster care group home */
+  FosterCareHomeOrFosterCareGroupHome = 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
+  /** (206) Hospital or other residential non-psychiatric medical facility */
+  HospitalOrOtherResidentialNonPsychiatricMedicalFacility = 'HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY',
+  /** (332) Host Home (non-crisis) */
+  HostHomeNonCrisis = 'HOST_HOME_NON_CRISIS',
+  /** (314) Hotel or motel paid for without emergency shelter voucher */
+  HotelOrMotelPaidForWithoutEmergencyShelterVoucher = 'HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (207) Jail, prison or juvenile detention facility */
+  JailPrisonOrJuvenileDetentionFacility = 'JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY',
+  /** (225) Long-term care facility or nursing home */
+  LongTermCareFacilityOrNursingHome = 'LONG_TERM_CARE_FACILITY_OR_NURSING_HOME',
+  /** (17) Other */
+  Other = 'OTHER',
+  /** (411) Owned by client, no ongoing housing subsidy */
+  OwnedByClientNoOngoingHousingSubsidy = 'OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
+  /** (421) Owned by client, with ongoing housing subsidy */
+  OwnedByClientWithOngoingHousingSubsidy = 'OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY',
+  /**
+   * (116) Place not meant for habitation (e.g., a vehicle, an abandoned building,
+   * bus/train/subway station/airport or anywhere outside)
+   */
+  PlaceNotMeantForHabitationEGAVehicleAnAbandonedBuildingBusTrainSubwayStationAirportOrAnywhereOutside = 'PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE',
+  /** (204) Psychiatric hospital or other psychiatric facility */
+  PsychiatricHospitalOrOtherPsychiatricFacility = 'PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY',
+  /** (410) Rental by client, no ongoing housing subsidy */
+  RentalByClientNoOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
+  /** (435) Rental by client, with ongoing housing subsidy */
+  RentalByClientWithOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY',
+  /** (329) Residential project or halfway house with no homeless criteria */
+  ResidentialProjectOrHalfwayHouseWithNoHomelessCriteria = 'RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA',
+  /** (118) Safe Haven */
+  SafeHaven = 'SAFE_HAVEN',
+  /** (335) Staying or living in a family member’s room, apartment, or house */
+  StayingOrLivingInAFamilyMemberSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE',
+  /** (336) Staying or living in a friend's room, apartment or house */
+  StayingOrLivingInAFriendSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE',
+  /** (205) Substance abuse treatment facility or detox center */
+  SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
+  /** (302) Transitional housing for homeless persons (including homeless youth) */
+  TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
+  /** (37) Worker unable to determine */
+  WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
+}
+
 export type CurrentLivingSituationsPaginated = {
   __typename?: 'CurrentLivingSituationsPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -942,8 +998,8 @@ export type CurrentLivingSituationsPaginated = {
 export enum CurrentSchoolAttended {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (2) Currently enrolled and attending regularly (when school or the course is in session) */
   CurrentlyEnrolledAndAttendingRegularlyWhenSchoolOrTheCourseIsInSession = 'CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION',
   /** (1) Currently enrolled but NOT attending regularly (when school or the course is in session) */
@@ -1000,8 +1056,8 @@ export enum DobDataQuality {
   ApproximateOrPartialDobReported = 'APPROXIMATE_OR_PARTIAL_DOB_REPORTED',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Full DOB reported */
@@ -1276,83 +1332,73 @@ export enum DependentUnder6 {
   YoungestChildIsUnder_1YearOld = 'YOUNGEST_CHILD_IS_UNDER_1_YEAR_OLD',
 }
 
-/** 3.12.1 */
+/** 3.12 */
 export enum Destination {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (24) Deceased */
   Deceased = 'DECEASED',
-  /** (1) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter */
-  EmergencyShelterIncludingHotelOrMotelPaidForWithEmergencyShelterVoucherOrRhyFundedHostHomeShelter = 'EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER',
-  /** (15) Foster care home or foster care group home */
+  /** (101) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter */
+  EmergencyShelterIncludingHotelOrMotelPaidForWithEmergencyShelterVoucherOrHostHomeShelter = 'EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER',
+  /** (215) Foster care home or foster care group home */
   FosterCareHomeOrFosterCareGroupHome = 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
-  /** (6) Hospital or other residential non-psychiatric medical facility */
+  /** (206) Hospital or other residential non-psychiatric medical facility */
   HospitalOrOtherResidentialNonPsychiatricMedicalFacility = 'HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY',
-  /** (32) Host Home (non-crisis) */
+  /** (332) Host Home (non-crisis) */
   HostHomeNonCrisis = 'HOST_HOME_NON_CRISIS',
-  /** (14) Hotel or motel paid for without emergency shelter voucher */
+  /** (314) Hotel or motel paid for without emergency shelter voucher */
   HotelOrMotelPaidForWithoutEmergencyShelterVoucher = 'HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER',
   /** Invalid Value */
   Invalid = 'INVALID',
-  /** (7) Jail, prison or juvenile detention facility */
+  /** (207) Jail, prison or juvenile detention facility */
   JailPrisonOrJuvenileDetentionFacility = 'JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY',
-  /** (25) Long-term care facility or nursing home */
+  /** (225) Long-term care facility or nursing home */
   LongTermCareFacilityOrNursingHome = 'LONG_TERM_CARE_FACILITY_OR_NURSING_HOME',
-  /** (26) Moved from one HOPWA funded project to HOPWA PH */
+  /** (426) Moved from one HOPWA funded project to HOPWA PH */
   MovedFromOneHopwaFundedProjectToHopwaPh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH',
-  /** (27) Moved from one HOPWA funded project to HOPWA TH */
+  /** (327) Moved from one HOPWA funded project to HOPWA TH */
   MovedFromOneHopwaFundedProjectToHopwaTh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH',
   /** (30) No exit interview completed */
   NoExitInterviewCompleted = 'NO_EXIT_INTERVIEW_COMPLETED',
   /** (17) Other */
   Other = 'OTHER',
-  /** (11) Owned by client, no ongoing housing subsidy */
+  /** (411) Owned by client, no ongoing housing subsidy */
   OwnedByClientNoOngoingHousingSubsidy = 'OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
-  /** (21) Owned by client, with ongoing housing subsidy */
+  /** (421) Owned by client, with ongoing housing subsidy */
   OwnedByClientWithOngoingHousingSubsidy = 'OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY',
-  /** (3) Permanent housing (other than RRH) for formerly homeless persons */
-  PermanentHousingOtherThanRrhForFormerlyHomelessPersons = 'PERMANENT_HOUSING_OTHER_THAN_RRH_FOR_FORMERLY_HOMELESS_PERSONS',
   /**
-   * (16) Place not meant for habitation (e.g., a vehicle, an abandoned building,
+   * (116) Place not meant for habitation (e.g., a vehicle, an abandoned building,
    * bus/train/subway station/airport or anywhere outside)
    */
   PlaceNotMeantForHabitationEGAVehicleAnAbandonedBuildingBusTrainSubwayStationAirportOrAnywhereOutside = 'PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE',
-  /** (4) Psychiatric hospital or other psychiatric facility */
+  /** (204) Psychiatric hospital or other psychiatric facility */
   PsychiatricHospitalOrOtherPsychiatricFacility = 'PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY',
-  /** (34) Rental by client in a public housing unit */
-  RentalByClientInAPublicHousingUnit = 'RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT',
-  /** (10) Rental by client, no ongoing housing subsidy */
+  /** (410) Rental by client, no ongoing housing subsidy */
   RentalByClientNoOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
-  /** (28) Rental by client, with GPD TIP housing subsidy */
-  RentalByClientWithGpdTipHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY',
-  /** (33) Rental by client, with HCV voucher (tenant or project based) */
-  RentalByClientWithHcvVoucherTenantOrProjectBased = 'RENTAL_BY_CLIENT_WITH_HCV_VOUCHER_TENANT_OR_PROJECT_BASED',
-  /** (20) Rental by client, with other ongoing housing subsidy */
-  RentalByClientWithOtherOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY',
-  /** (31) Rental by client, with RRH or equivalent subsidy */
-  RentalByClientWithRrhOrEquivalentSubsidy = 'RENTAL_BY_CLIENT_WITH_RRH_OR_EQUIVALENT_SUBSIDY',
-  /** (19) Rental by client, with VASH housing subsidy */
-  RentalByClientWithVashHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_VASH_HOUSING_SUBSIDY',
-  /** (29) Residential project or halfway house with no homeless criteria */
+  /** (435) Rental by client, with ongoing housing subsidy */
+  RentalByClientWithOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY',
+  /** (329) Residential project or halfway house with no homeless criteria */
   ResidentialProjectOrHalfwayHouseWithNoHomelessCriteria = 'RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA',
-  /** (18) Safe Haven */
+  /** (118) Safe Haven */
   SafeHaven = 'SAFE_HAVEN',
-  /** (22) Staying or living with family, permanent tenure */
+  /** (422) Staying or living with family, permanent tenure */
   StayingOrLivingWithFamilyPermanentTenure = 'STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE',
-  /** (12) Staying or living with family, temporary tenure (e.g. room, apartment or house) */
+  /** (312) Staying or living with family, temporary tenure (e.g. room, apartment or house) */
   StayingOrLivingWithFamilyTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE',
-  /** (23) Staying or living with friends, permanent tenure */
+  /** (423) Staying or living with friends, permanent tenure */
   StayingOrLivingWithFriendsPermanentTenure = 'STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE',
-  /** (13) Staying or living with friends, temporary tenure (e.g. room apartment or house) */
+  /** (313) Staying or living with friends, temporary tenure (e.g. room apartment or house) */
   StayingOrLivingWithFriendsTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE',
-  /** (5) Substance abuse treatment facility or detox center */
+  /** (205) Substance abuse treatment facility or detox center */
   SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
-  /** (2) Transitional housing for homeless persons (including homeless youth) */
+  /** (302) Transitional housing for homeless persons (including homeless youth) */
   TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
+  /** (37) Worker unable to determine */
+  WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
 }
 
 /** Represents direct upload credentials */
@@ -1453,8 +1499,8 @@ export enum DisabilityResponse {
   BothAlcoholAndDrugUseDisorders = 'BOTH_ALCOHOL_AND_DRUG_USE_DISORDERS',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (2) Drug use disorder */
@@ -1495,8 +1541,8 @@ export enum DischargeStatus {
   BadConduct = 'BAD_CONDUCT',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (5) Dishonorable */
@@ -1662,7 +1708,7 @@ export type Enrollment = {
   lastBedNightDate?: Maybe<Scalars['ISO8601Date']['output']>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   literalHomelessHistory?: Maybe<LiteralHomelessHistory>;
-  livingSituation?: Maybe<LivingSituation>;
+  livingSituation?: Maybe<PriorLivingSituation>;
   losUnderThreshold?: Maybe<NoYesMissing>;
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
@@ -1678,6 +1724,7 @@ export type Enrollment = {
   referralSource?: Maybe<ReferralSource>;
   relationshipToHoH: RelationshipToHoH;
   reminders: Array<Reminder>;
+  rentalSubsidyType?: Maybe<RentalSubsidyType>;
   runawayYouth?: Maybe<NoYesReasonsForMissingData>;
   services: ServicesPaginated;
   sexOffender?: Maybe<NoYesMissing>;
@@ -1872,22 +1919,6 @@ export type EsgFundingService = {
   projectName: Scalars['String']['output'];
 };
 
-/** 3.05.1 */
-export enum Ethnicity {
-  /** (8) Client doesn't know */
-  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (1) Hispanic/Latin(a)(o)(x) */
-  HispanicLatinAOX = 'HISPANIC_LATIN_A_O_X',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (0) Non-Hispanic/Non-Latin(a)(o)(x) */
-  NonHispanicNonLatinAOX = 'NON_HISPANIC_NON_LATIN_A_O_X',
-}
-
 /** HUD Event */
 export type Event = {
   __typename?: 'Event';
@@ -1999,6 +2030,7 @@ export type Exit = {
   destination: Destination;
   destinationSafeClient?: Maybe<NoYesReasonsForMissingData>;
   destinationSafeWorker?: Maybe<WorkerResponse>;
+  destinationSubsidyType?: Maybe<RentalSubsidyType>;
   earlyExitReason?: Maybe<ExpelledReason>;
   enrollment: Enrollment;
   exchangeForSex?: Maybe<NoYesReasonsForMissingData>;
@@ -2063,28 +2095,6 @@ export enum ExternalIdentifierType {
   PersonalId = 'PERSONAL_ID',
   /** Warehouse ID */
   WarehouseId = 'WAREHOUSE_ID',
-}
-
-/** C1.2 */
-export enum FeelingFrequency {
-  /** (4) At least every day */
-  AtLeastEveryDay = 'AT_LEAST_EVERY_DAY',
-  /** (8) Client doesn't know */
-  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (0) Not at all */
-  NotAtAll = 'NOT_AT_ALL',
-  /** (1) Once a month */
-  OnceAMonth = 'ONCE_A_MONTH',
-  /** (2) Several times a month */
-  SeveralTimesAMonth = 'SEVERAL_TIMES_A_MONTH',
-  /** (3) Several times a week */
-  SeveralTimesAWeek = 'SEVERAL_TIMES_A_WEEK',
 }
 
 export type FieldMapping = {
@@ -2327,8 +2337,8 @@ export enum FundingSource {
   HhsRhyTransitionalLivingProgram = 'HHS_RHY_TRANSITIONAL_LIVING_PROGRAM',
   /** (1) HUD: CoC - Homelessness Prevention (High Performing Communities Only) */
   HudCocHomelessnessPreventionHighPerformingCommunitiesOnly = 'HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY',
-  /** (49) HUD: CoC - Joint Component RRH/PSH */
-  HudCocJointComponentRrhPsh = 'HUD_COC_JOINT_COMPONENT_RRH_PSH',
+  /** (49) HUD: CoC - Joint Component RRH/PSH [Deprecated] */
+  HudCocJointComponentRrhPshDeprecated = 'HUD_COC_JOINT_COMPONENT_RRH_PSH_DEPRECATED',
   /** (44) HUD: CoC - Joint Component TH/RRH */
   HudCocJointComponentThRrh = 'HUD_COC_JOINT_COMPONENT_TH_RRH',
   /** (2) HUD: CoC - Permanent Supportive Housing */
@@ -2385,8 +2395,12 @@ export enum FundingSource {
   HudPihEmergencyHousingVoucher = 'HUD_PIH_EMERGENCY_HOUSING_VOUCHER',
   /** (36) HUD: Public and Indian Housing (PIH) Programs */
   HudPublicAndIndianHousingPihPrograms = 'HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS',
-  /** (12) HUD: Rural Housing Stability Assistance Program */
-  HudRuralHousingStabilityAssistanceProgram = 'HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM',
+  /** (12) HUD: Rural Housing Stability Assistance Program [Deprecated] */
+  HudRuralHousingStabilityAssistanceProgramDeprecated = 'HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM_DEPRECATED',
+  /** (55) HUD: Rural Special NOFO */
+  HudRuralSpecialNofo = 'HUD_RURAL_SPECIAL_NOFO',
+  /** (54) HUD: Unsheltered Special NOFO */
+  HudUnshelteredSpecialNofo = 'HUD_UNSHELTERED_SPECIAL_NOFO',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (46) Local or Other Funding Source */
@@ -2421,20 +2435,24 @@ export enum FundingSource {
 export enum Gender {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
+  /** (2) Culturally Specific Identity (e.g., Two-Spirit) */
+  CulturallySpecific = 'CULTURALLY_SPECIFIC',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (0) Female */
-  Female = 'FEMALE',
-  /** (1) Male */
-  Male = 'MALE',
-  /** (4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender) */
-  NoSingleGender = 'NO_SINGLE_GENDER',
+  /** (3) Different Identity */
+  DifferentIdentity = 'DIFFERENT_IDENTITY',
+  /** (1) Man (Boy, if child) */
+  Man = 'MAN',
+  /** (4) Non-Binary */
+  NonBinary = 'NON_BINARY',
   /** (6) Questioning */
   Questioning = 'QUESTIONING',
   /** (5) Transgender */
   Transgender = 'TRANSGENDER',
+  /** (0) Woman (Girl, if child) */
+  Woman = 'WOMAN',
 }
 
 /** 2.03.4 */
@@ -2451,7 +2469,19 @@ export enum GeographyType {
   Urban = 'URBAN',
 }
 
-/** 2.02.9 */
+/** 2.08.1 */
+export enum HmisParticipationType {
+  /** (2) Comparable Database Participating */
+  ComparableDatabaseParticipating = 'COMPARABLE_DATABASE_PARTICIPATING',
+  /** (1) HMIS Participating */
+  HmisParticipating = 'HMIS_PARTICIPATING',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (0) Not Participating */
+  NotParticipating = 'NOT_PARTICIPATING',
+}
+
+/** 2.02.8 */
 export enum HopwaMedAssistedLivingFac {
   /** Invalid Value */
   Invalid = 'INVALID',
@@ -2465,7 +2495,6 @@ export enum HopwaMedAssistedLivingFac {
 
 export type HealthAndDv = {
   __typename?: 'HealthAndDv';
-  bounceBack?: Maybe<WellbeingAgreement>;
   client: Client;
   currentlyFleeing?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
@@ -2476,14 +2505,11 @@ export type HealthAndDv = {
   domesticViolenceVictim?: Maybe<NoYesReasonsForMissingData>;
   dueDate?: Maybe<Scalars['ISO8601Date']['output']>;
   enrollment: Enrollment;
-  feelingFrequency?: Maybe<FeelingFrequency>;
   generalHealthStatus?: Maybe<HealthStatus>;
   id: Scalars['ID']['output'];
   informationDate: Scalars['ISO8601Date']['output'];
-  lifeValue?: Maybe<WellbeingAgreement>;
   mentalHealthStatus?: Maybe<HealthStatus>;
   pregnancyStatus?: Maybe<NoYesReasonsForMissingData>;
-  supportFromOthers?: Maybe<WellbeingAgreement>;
   user?: Maybe<User>;
   whenOccurred?: Maybe<WhenDvOccurred>;
 };
@@ -2503,8 +2529,8 @@ export type HealthAndDvsPaginated = {
 export enum HealthStatus {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Excellent */
@@ -2581,18 +2607,18 @@ export enum HousingAssessmentAtExit {
   AbleToMaintainTheHousingTheyHadAtProjectEntry = 'ABLE_TO_MAINTAIN_THE_HOUSING_THEY_HAD_AT_PROJECT_ENTRY',
   /** (6) Client became homeless - moving to a shelter or other place unfit for human habitation */
   ClientBecameHomelessMovingToAShelterOrOtherPlaceUnfitForHumanHabitation = 'CLIENT_BECAME_HOMELESS_MOVING_TO_A_SHELTER_OR_OTHER_PLACE_UNFIT_FOR_HUMAN_HABITATION',
-  /** (10) Client died */
-  ClientDied = 'CLIENT_DIED',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
-  /** (7) Client went to jail/prison */
-  ClientWentToJailPrison = 'CLIENT_WENT_TO_JAIL_PRISON',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (10) Deceased */
+  Deceased = 'DECEASED',
   /** Invalid Value */
   Invalid = 'INVALID',
+  /** (7) Jail/prison */
+  JailPrison = 'JAIL_PRISON',
   /** (4) Moved in with family/friends on a permanent basis */
   MovedInWithFamilyFriendsOnAPermanentBasis = 'MOVED_IN_WITH_FAMILY_FRIENDS_ON_A_PERMANENT_BASIS',
   /** (3) Moved in with family/friends on a temporary basis */
@@ -2835,8 +2861,8 @@ export enum LastGradeCompleted {
   BachelorSDegree = 'BACHELOR_S_DEGREE',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (7) GED */
@@ -2877,91 +2903,6 @@ export enum LiteralHomelessHistory {
   None = 'NONE',
 }
 
-/** 3.12.1 */
-export enum LivingSituation {
-  /** (8) Client doesn't know */
-  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (24) Deceased */
-  Deceased = 'DECEASED',
-  /** (1) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter */
-  EmergencyShelterIncludingHotelOrMotelPaidForWithEmergencyShelterVoucherOrRhyFundedHostHomeShelter = 'EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER',
-  /** (15) Foster care home or foster care group home */
-  FosterCareHomeOrFosterCareGroupHome = 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
-  /** (6) Hospital or other residential non-psychiatric medical facility */
-  HospitalOrOtherResidentialNonPsychiatricMedicalFacility = 'HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY',
-  /** (32) Host Home (non-crisis) */
-  HostHomeNonCrisis = 'HOST_HOME_NON_CRISIS',
-  /** (14) Hotel or motel paid for without emergency shelter voucher */
-  HotelOrMotelPaidForWithoutEmergencyShelterVoucher = 'HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (7) Jail, prison or juvenile detention facility */
-  JailPrisonOrJuvenileDetentionFacility = 'JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY',
-  /** (25) Long-term care facility or nursing home */
-  LongTermCareFacilityOrNursingHome = 'LONG_TERM_CARE_FACILITY_OR_NURSING_HOME',
-  /** (26) Moved from one HOPWA funded project to HOPWA PH */
-  MovedFromOneHopwaFundedProjectToHopwaPh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH',
-  /** (27) Moved from one HOPWA funded project to HOPWA TH */
-  MovedFromOneHopwaFundedProjectToHopwaTh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH',
-  /** (30) No exit interview completed */
-  NoExitInterviewCompleted = 'NO_EXIT_INTERVIEW_COMPLETED',
-  /** (17) Other */
-  Other = 'OTHER',
-  /** (11) Owned by client, no ongoing housing subsidy */
-  OwnedByClientNoOngoingHousingSubsidy = 'OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
-  /** (21) Owned by client, with ongoing housing subsidy */
-  OwnedByClientWithOngoingHousingSubsidy = 'OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY',
-  /** (3) Permanent housing (other than RRH) for formerly homeless persons */
-  PermanentHousingOtherThanRrhForFormerlyHomelessPersons = 'PERMANENT_HOUSING_OTHER_THAN_RRH_FOR_FORMERLY_HOMELESS_PERSONS',
-  /**
-   * (16) Place not meant for habitation (e.g., a vehicle, an abandoned building,
-   * bus/train/subway station/airport or anywhere outside)
-   */
-  PlaceNotMeantForHabitationEGAVehicleAnAbandonedBuildingBusTrainSubwayStationAirportOrAnywhereOutside = 'PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE',
-  /** (4) Psychiatric hospital or other psychiatric facility */
-  PsychiatricHospitalOrOtherPsychiatricFacility = 'PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY',
-  /** (34) Rental by client in a public housing unit */
-  RentalByClientInAPublicHousingUnit = 'RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT',
-  /** (10) Rental by client, no ongoing housing subsidy */
-  RentalByClientNoOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
-  /** (28) Rental by client, with GPD TIP housing subsidy */
-  RentalByClientWithGpdTipHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY',
-  /** (33) Rental by client, with HCV voucher (tenant or project based) */
-  RentalByClientWithHcvVoucherTenantOrProjectBased = 'RENTAL_BY_CLIENT_WITH_HCV_VOUCHER_TENANT_OR_PROJECT_BASED',
-  /** (20) Rental by client, with other ongoing housing subsidy */
-  RentalByClientWithOtherOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY',
-  /** (31) Rental by client, with RRH or equivalent subsidy */
-  RentalByClientWithRrhOrEquivalentSubsidy = 'RENTAL_BY_CLIENT_WITH_RRH_OR_EQUIVALENT_SUBSIDY',
-  /** (19) Rental by client, with VASH housing subsidy */
-  RentalByClientWithVashHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_VASH_HOUSING_SUBSIDY',
-  /** (29) Residential project or halfway house with no homeless criteria */
-  ResidentialProjectOrHalfwayHouseWithNoHomelessCriteria = 'RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA',
-  /** (18) Safe Haven */
-  SafeHaven = 'SAFE_HAVEN',
-  /** (35) Staying or living in a family member's room, apartment or house */
-  StayingOrLivingInAFamilyMemberSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE',
-  /** (36) Staying or living in a friend's room, apartment or house */
-  StayingOrLivingInAFriendSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE',
-  /** (22) Staying or living with family, permanent tenure */
-  StayingOrLivingWithFamilyPermanentTenure = 'STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE',
-  /** (12) Staying or living with family, temporary tenure (e.g. room, apartment or house) */
-  StayingOrLivingWithFamilyTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE',
-  /** (23) Staying or living with friends, permanent tenure */
-  StayingOrLivingWithFriendsPermanentTenure = 'STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE',
-  /** (13) Staying or living with friends, temporary tenure (e.g. room apartment or house) */
-  StayingOrLivingWithFriendsTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE',
-  /** (5) Substance abuse treatment facility or detox center */
-  SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
-  /** (2) Transitional housing for homeless persons (including homeless youth) */
-  TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
-  /** (37) Worker unable to determine */
-  WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
-}
-
 export type MciClearanceInput = {
   dob: Scalars['ISO8601Date']['input'];
   firstName: Scalars['String']['input'];
@@ -2996,8 +2937,8 @@ export enum MilitaryBranch {
   Army = 'ARMY',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (6) Coast Guard */
   CoastGuard = 'COAST_GUARD',
   /** (99) Data not collected */
@@ -3008,14 +2949,16 @@ export enum MilitaryBranch {
   Marines = 'MARINES',
   /** (3) Navy */
   Navy = 'NAVY',
+  /** (7) Space Force */
+  SpaceForce = 'SPACE_FORCE',
 }
 
 /** 3.917.5 */
 export enum MonthsHomelessPastThreeYears {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
@@ -3052,8 +2995,8 @@ export enum MonthsHomelessPastThreeYears {
 export enum MostRecentEdStatus {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (6) Higher education: Dropped out */
@@ -3263,8 +3206,8 @@ export type MutationVoidReferralRequestArgs = {
 export enum NameDataQuality {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Full name reported */
@@ -3285,14 +3228,24 @@ export enum NoAssistanceReason {
   ClientDidNotApply = 'CLIENT_DID_NOT_APPLY',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (4) Insurance type not applicable for this client */
   InsuranceTypeNotApplicableForThisClient = 'INSURANCE_TYPE_NOT_APPLICABLE_FOR_THIS_CLIENT',
   /** Invalid Value */
   Invalid = 'INVALID',
+}
+
+/** 1.10 */
+export enum NoYes {
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (0) No */
+  No = 'NO',
+  /** (1) Yes */
+  Yes = 'YES',
 }
 
 /** 1.7 */
@@ -3311,8 +3264,8 @@ export enum NoYesMissing {
 export enum NoYesReasonsForMissingData {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
@@ -3410,14 +3363,16 @@ export enum PathReferralOutcome {
 export enum PercentAmi {
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (3) Greater than 50% */
-  GreaterThan_50 = 'GREATER_THAN_50',
   /** Invalid Value */
   Invalid = 'INVALID',
-  /** (1) Less than 30% */
-  LessThan_30 = 'LESS_THAN_30',
-  /** (2) 30% to 50% */
-  Num_30To_50 = 'NUM_30_TO_50',
+  /** (1) 30% or less */
+  Num_30OrLess = 'NUM_30_OR_LESS',
+  /** (2) 31% to 50% */
+  Num_31To_50 = 'NUM_31_TO_50',
+  /** (3) 51% to 80% */
+  Num_51To_80 = 'NUM_51_TO_80',
+  /** (4) 81% or greater */
+  Num_81OrGreater = 'NUM_81_OR_GREATER',
 }
 
 export type PickListOption = {
@@ -3473,6 +3428,59 @@ export enum PickListType {
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
 }
 
+/** 3.917 */
+export enum PriorLivingSituation {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (101) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter */
+  EmergencyShelterIncludingHotelOrMotelPaidForWithEmergencyShelterVoucherOrHostHomeShelter = 'EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER',
+  /** (215) Foster care home or foster care group home */
+  FosterCareHomeOrFosterCareGroupHome = 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
+  /** (206) Hospital or other residential non-psychiatric medical facility */
+  HospitalOrOtherResidentialNonPsychiatricMedicalFacility = 'HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY',
+  /** (332) Host Home (non-crisis) */
+  HostHomeNonCrisis = 'HOST_HOME_NON_CRISIS',
+  /** (314) Hotel or motel paid for without emergency shelter voucher */
+  HotelOrMotelPaidForWithoutEmergencyShelterVoucher = 'HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (207) Jail, prison or juvenile detention facility */
+  JailPrisonOrJuvenileDetentionFacility = 'JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY',
+  /** (225) Long-term care facility or nursing home */
+  LongTermCareFacilityOrNursingHome = 'LONG_TERM_CARE_FACILITY_OR_NURSING_HOME',
+  /** (411) Owned by client, no ongoing housing subsidy */
+  OwnedByClientNoOngoingHousingSubsidy = 'OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
+  /** (421) Owned by client, with ongoing housing subsidy */
+  OwnedByClientWithOngoingHousingSubsidy = 'OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY',
+  /**
+   * (116) Place not meant for habitation (e.g., a vehicle, an abandoned building,
+   * bus/train/subway station/airport or anywhere outside)
+   */
+  PlaceNotMeantForHabitationEGAVehicleAnAbandonedBuildingBusTrainSubwayStationAirportOrAnywhereOutside = 'PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE',
+  /** (204) Psychiatric hospital or other psychiatric facility */
+  PsychiatricHospitalOrOtherPsychiatricFacility = 'PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY',
+  /** (410) Rental by client, no ongoing housing subsidy */
+  RentalByClientNoOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
+  /** (435) Rental by client, with ongoing housing subsidy */
+  RentalByClientWithOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY',
+  /** (329) Residential project or halfway house with no homeless criteria */
+  ResidentialProjectOrHalfwayHouseWithNoHomelessCriteria = 'RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA',
+  /** (118) Safe Haven */
+  SafeHaven = 'SAFE_HAVEN',
+  /** (335) Staying or living in a family member’s room, apartment, or house */
+  StayingOrLivingInAFamilyMemberSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE',
+  /** (336) Staying or living in a friend's room, apartment or house */
+  StayingOrLivingInAFriendSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE',
+  /** (205) Substance abuse treatment facility or detox center */
+  SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
+  /** (302) Transitional housing for homeless persons (including homeless youth) */
+  TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
+}
+
 /** 4.19.7 */
 export enum PrioritizationStatus {
   /** Invalid Value */
@@ -3485,12 +3493,11 @@ export enum PrioritizationStatus {
 
 export type Project = {
   __typename?: 'Project';
-  HMISParticipatingProject?: Maybe<NoYesMissing>;
   HOPWAMedAssistedLivingFac?: Maybe<HopwaMedAssistedLivingFac>;
   access: ProjectAccess;
   active: Scalars['Boolean']['output'];
   contactInformation?: Maybe<Scalars['String']['output']>;
-  continuumProject?: Maybe<NoYesMissing>;
+  continuumProject?: Maybe<NoYes>;
   customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3499,6 +3506,7 @@ export type Project = {
   enrollments: EnrollmentsPaginated;
   funders: FundersPaginated;
   hasUnits: Scalars['Boolean']['output'];
+  hmisParticipationStatus?: Maybe<HmisParticipationType>;
   households: HouseholdsPaginated;
   housingType?: Maybe<HousingType>;
   hudId: Scalars['ID']['output'];
@@ -3513,10 +3521,10 @@ export type Project = {
   projectName: Scalars['String']['output'];
   projectType?: Maybe<ProjectType>;
   referralRequests: ReferralRequestsPaginated;
-  residentialAffiliation?: Maybe<NoYesMissing>;
+  residentialAffiliation?: Maybe<NoYes>;
+  rrhSubType?: Maybe<RrhSubType>;
   services: ServicesPaginated;
   targetPopulation?: Maybe<TargetPopulation>;
-  trackingMethod?: Maybe<TrackingMethod>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   user?: Maybe<User>;
@@ -3631,14 +3639,14 @@ export type ProjectCocsPaginated = {
 
 /** R17.1 */
 export enum ProjectCompletionStatus {
+  /** (2) Client voluntarily left early */
+  ClientVoluntarilyLeftEarly = 'CLIENT_VOLUNTARILY_LEFT_EARLY',
+  /** (3) Client was expelled or otherwise involuntarily discharged from project */
+  ClientWasExpelledOrOtherwiseInvoluntarilyDischargedFromProject = 'CLIENT_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT',
   /** (1) Completed project */
   CompletedProject = 'COMPLETED_PROJECT',
   /** Invalid Value */
   Invalid = 'INVALID',
-  /** (2) Youth voluntarily left early */
-  YouthVoluntarilyLeftEarly = 'YOUTH_VOLUNTARILY_LEFT_EARLY',
-  /** (3) Youth was expelled or otherwise involuntarily discharged from project */
-  YouthWasExpelledOrOtherwiseInvoluntarilyDischargedFromProject = 'YOUTH_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT',
 }
 
 export enum ProjectFilterOptionStatus {
@@ -3670,8 +3678,10 @@ export enum ProjectType {
   Ce = 'CE',
   /** Day Shelter */
   DayShelter = 'DAY_SHELTER',
-  /** Emergency Shelter */
-  Es = 'ES',
+  /** Emergency Shelter - Entry Exit */
+  EsEntryExit = 'ES_ENTRY_EXIT',
+  /** Emergency Shelter - Night-by-Night */
+  EsNbn = 'ES_NBN',
   /** Homelessness Prevention */
   Hp = 'HP',
   /** Invalid Value */
@@ -3921,6 +3931,16 @@ export enum RhyNumberofYears {
   Num_3To_5OrMoreYears = 'NUM_3_TO_5_OR_MORE_YEARS',
 }
 
+/** 2.02.A */
+export enum RrhSubType {
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (2) RRH: Housing with or without services */
+  RrhHousingWithOrWithoutServices = 'RRH_HOUSING_WITH_OR_WITHOUT_SERVICES',
+  /** (1) RRH: Services Only */
+  RrhServicesOnly = 'RRH_SERVICES_ONLY',
+}
+
 /** HUD Race (1.7) */
 export enum Race {
   /** (AmIndAKNative) American Indian, Alaska Native, or Indigenous */
@@ -3931,10 +3951,14 @@ export enum Race {
   BlackAfAmerican = 'BLACK_AF_AMERICAN',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (HispanicLatinaeo) Hispanic/Latina/e/o */
+  HispanicLatinaeo = 'HISPANIC_LATINAEO',
+  /** (MidEastNAfrican) Middle Eastern or North African */
+  MidEastNAfrican = 'MID_EAST_N_AFRICAN',
   /** (NativeHIPacific) Native Hawaiian or Pacific Islander */
   NativeHiPacific = 'NATIVE_HI_PACIFIC',
   /** (White) White */
@@ -3977,8 +4001,8 @@ export enum ReasonNotInsured {
   ClientDidNotApply = 'CLIENT_DID_NOT_APPLY',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (4) Insurance type N/A for this client */
@@ -3997,10 +4021,6 @@ export enum RecentItemType {
 export enum RecordType {
   /** (200) Bed Night */
   BedNight = 'BED_NIGHT',
-  /** (12) Contact 12 */
-  Contact_12 = 'CONTACT_12',
-  /** (13) Contact 13 */
-  Contact_13 = 'CONTACT_13',
   /** (151) HOPWA Financial Assistance */
   HopwaFinancialAssistance = 'HOPWA_FINANCIAL_ASSISTANCE',
   /** (143) HOPWA Service */
@@ -4015,8 +4035,6 @@ export enum RecordType {
   PathReferral = 'PATH_REFERRAL',
   /** (141) PATH Service */
   PathService = 'PATH_SERVICE',
-  /** (162) RHY Referral */
-  RhyReferral = 'RHY_REFERRAL',
   /** (142) RHY Service Connections */
   RhyServiceConnections = 'RHY_SERVICE_CONNECTIONS',
   /** (152) SSVF Financial Assistance */
@@ -4174,8 +4192,8 @@ export enum ReferralSource {
   ChildWelfareCps = 'CHILD_WELFARE_CPS',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (28) Hotline */
@@ -4298,8 +4316,8 @@ export enum RentalSubsidyType {
 export enum ResidencePriorLengthOfStay {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
@@ -4324,8 +4342,8 @@ export enum SsnDataQuality {
   ApproximateOrPartialSsnReported = 'APPROXIMATE_OR_PARTIAL_SSN_REPORTED',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Full SSN reported */
@@ -4358,8 +4376,8 @@ export enum SchoolStatus {
   AttendingSchoolRegularly = 'ATTENDING_SCHOOL_REGULARLY',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (5) Dropped out */
@@ -4541,8 +4559,8 @@ export enum ServiceTypeProvided {
   HopwaServiceOtherHopwaFundedService = 'HOPWA_SERVICE__OTHER_HOPWA_FUNDED_SERVICE',
   /** (11) Outreach and/or engagement */
   HopwaServiceOutreachAndOrEngagement = 'HOPWA_SERVICE__OUTREACH_AND_OR_ENGAGEMENT',
-  /** (12) Substance abuse services/treatment */
-  HopwaServiceSubstanceAbuseServicesTreatment = 'HOPWA_SERVICE__SUBSTANCE_ABUSE_SERVICES_TREATMENT',
+  /** (12) Substance use services/treatment */
+  HopwaServiceSubstanceUseServicesTreatment = 'HOPWA_SERVICE__SUBSTANCE_USE_SERVICES_TREATMENT',
   /** (13) Transportation */
   HopwaServiceTransportation = 'HOPWA_SERVICE__TRANSPORTATION',
   /** (12) Other */
@@ -4645,8 +4663,8 @@ export enum ServiceTypeProvided {
   RhyServiceConnectionsLifeSkillsTraining = 'RHY_SERVICE_CONNECTIONS__LIFE_SKILLS_TRAINING',
   /** (10) Parenting education for youth with children */
   RhyServiceConnectionsParentingEducationForYouthWithChildren = 'RHY_SERVICE_CONNECTIONS__PARENTING_EDUCATION_FOR_YOUTH_WITH_CHILDREN',
-  /** (12) Post-natal care */
-  RhyServiceConnectionsPostNatalCare = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE',
+  /** (12) Post-natal care for client (person who gave birth) */
+  RhyServiceConnectionsPostNatalCareForClientPersonWhoGaveBirth = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE_FOR_CLIENT_PERSON_WHO_GAVE_BIRTH',
   /** (27) Post-natal newborn care (wellness exams; immunizations) */
   RhyServiceConnectionsPostNatalNewbornCareWellnessExamsImmunizations = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS',
   /** (13) Pre-natal care */
@@ -4663,20 +4681,24 @@ export enum ServiceTypeProvided {
   SsvfFinancialAssistanceChildCare = 'SSVF_FINANCIAL_ASSISTANCE__CHILD_CARE',
   /** (14) Emergency housing assistance */
   SsvfFinancialAssistanceEmergencyHousingAssistance = 'SSVF_FINANCIAL_ASSISTANCE__EMERGENCY_HOUSING_ASSISTANCE',
-  /** (15) Extended Shallow Subsidy - Rental Assistance */
-  SsvfFinancialAssistanceExtendedShallowSubsidyRentalAssistance = 'SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY_RENTAL_ASSISTANCE',
   /** (16) Food Assistance */
   SsvfFinancialAssistanceFoodAssistance = 'SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE',
   /** (12) General housing stability assistance */
   SsvfFinancialAssistanceGeneralHousingStabilityAssistance = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE',
-  /** (11) General housing stability assistance - emergency supplies */
-  SsvfFinancialAssistanceGeneralHousingStabilityAssistanceEmergencySupplies = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES',
+  /** (11) General housing stability assistance - emergency supplies [Deprecated] */
+  SsvfFinancialAssistanceGeneralHousingStabilityAssistanceEmergencySuppliesDeprecated = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED',
+  /** (17) Landlord Incentive */
+  SsvfFinancialAssistanceLandlordIncentive = 'SSVF_FINANCIAL_ASSISTANCE__LANDLORD_INCENTIVE',
   /** (5) Moving costs */
   SsvfFinancialAssistanceMovingCosts = 'SSVF_FINANCIAL_ASSISTANCE__MOVING_COSTS',
   /** (1) Rental assistance */
   SsvfFinancialAssistanceRentalAssistance = 'SSVF_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE',
   /** (2) Security deposit */
   SsvfFinancialAssistanceSecurityDeposit = 'SSVF_FINANCIAL_ASSISTANCE__SECURITY_DEPOSIT',
+  /** (15) Shallow Subsidy - Financial Assistance */
+  SsvfFinancialAssistanceShallowSubsidyFinancialAssistance = 'SSVF_FINANCIAL_ASSISTANCE__SHALLOW_SUBSIDY_FINANCIAL_ASSISTANCE',
+  /** (18) Tenant Incentive */
+  SsvfFinancialAssistanceTenantIncentive = 'SSVF_FINANCIAL_ASSISTANCE__TENANT_INCENTIVE',
   /** (8) Transportation services: tokens/vouchers */
   SsvfFinancialAssistanceTransportationServicesTokensVouchers = 'SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_TOKENS_VOUCHERS',
   /** (9) Transportation services: vehicle repair/maintenance */
@@ -4697,6 +4719,12 @@ export enum ServiceTypeProvided {
   SsvfServiceOtherNonTfaSupportiveServiceApprovedByVa = 'SSVF_SERVICE__OTHER_NON_TFA_SUPPORTIVE_SERVICE_APPROVED_BY_VA',
   /** (1) Outreach services */
   SsvfServiceOutreachServices = 'SSVF_SERVICE__OUTREACH_SERVICES',
+  /** (9) Rapid Resolution */
+  SsvfServiceRapidResolution = 'SSVF_SERVICE__RAPID_RESOLUTION',
+  /** (8) Returning Home */
+  SsvfServiceReturningHome = 'SSVF_SERVICE__RETURNING_HOME',
+  /** (7) Shallow Subsidy */
+  SsvfServiceShallowSubsidy = 'SSVF_SERVICE__SHALLOW_SUBSIDY',
 }
 
 export type ServicesForEnrollmentFilterOptions = {
@@ -4728,8 +4756,8 @@ export enum SexualOrientation {
   Bisexual = 'BISEXUAL',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (2) Gay */
@@ -4868,16 +4896,16 @@ export enum TCellSourceViralLoadSource {
   Other = 'OTHER',
 }
 
-/** 2.02.8 */
+/** 2.02.7 */
 export enum TargetPopulation {
-  /** (1) Domestic violence victims */
-  DomesticViolenceVictims = 'DOMESTIC_VIOLENCE_VICTIMS',
+  /** (1) DV: Survivor of Domestic Violence */
+  DvSurvivorOfDomesticViolence = 'DV_SURVIVOR_OF_DOMESTIC_VIOLENCE',
+  /** (3) HIV: Persons with HIV/AIDS */
+  HivPersonsWithHivAids = 'HIV_PERSONS_WITH_HIV_AIDS',
   /** Invalid Value */
   Invalid = 'INVALID',
-  /** (4) Not applicable */
-  NotApplicable = 'NOT_APPLICABLE',
-  /** (3) Persons with HIV/AIDS */
-  PersonsWithHivAids = 'PERSONS_WITH_HIV_AIDS',
+  /** (4) NA: Not applicable */
+  NaNotApplicable = 'NA_NOT_APPLICABLE',
 }
 
 /** V7.A */
@@ -4900,8 +4928,8 @@ export enum TimeToHousingLoss {
 export enum TimesHomelessPastThreeYears {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (4) Four or more times */
@@ -4914,16 +4942,6 @@ export enum TimesHomelessPastThreeYears {
   ThreeTimes = 'THREE_TIMES',
   /** (2) Two times */
   TwoTimes = 'TWO_TIMES',
-}
-
-/** 2.02.C */
-export enum TrackingMethod {
-  /** (0) Entry/Exit Date */
-  EntryExitDate = 'ENTRY_EXIT_DATE',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (3) Night-by-Night */
-  NightByNight = 'NIGHT_BY_NIGHT',
 }
 
 export type Unit = {
@@ -5452,8 +5470,8 @@ export enum ViralLoadAvailable {
   Available = 'AVAILABLE',
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
@@ -5471,34 +5489,12 @@ export type VoidReferralRequestPayload = {
   record?: Maybe<ReferralRequest>;
 };
 
-/** C1.1 */
-export enum WellbeingAgreement {
-  /** (8) Client doesn't know */
-  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (2) Neither agree nor disagree */
-  NeitherAgreeNorDisagree = 'NEITHER_AGREE_NOR_DISAGREE',
-  /** (3) Somewhat agree */
-  SomewhatAgree = 'SOMEWHAT_AGREE',
-  /** (1) Somewhat disagree */
-  SomewhatDisagree = 'SOMEWHAT_DISAGREE',
-  /** (4) Strongly agree */
-  StronglyAgree = 'STRONGLY_AGREE',
-  /** (0) Strongly disagree */
-  StronglyDisagree = 'STRONGLY_DISAGREE',
-}
-
 /** 4.11.A */
 export enum WhenDvOccurred {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
@@ -5718,7 +5714,8 @@ export type AssessmentWithRecordsFragment = {
     exitDate?: string | null;
     dateOfEngagement?: string | null;
     moveInDate?: string | null;
-    livingSituation?: LivingSituation | null;
+    livingSituation?: PriorLivingSituation | null;
+    rentalSubsidyType?: RentalSubsidyType | null;
     lengthOfStay?: ResidencePriorLengthOfStay | null;
     losUnderThreshold?: NoYesMissing | null;
     previousStreetEssh?: NoYesMissing | null;
@@ -5952,7 +5949,6 @@ export type AssessmentWithRecordsFragment = {
   } | null;
   healthAndDv?: {
     __typename: 'HealthAndDv';
-    bounceBack?: WellbeingAgreement | null;
     currentlyFleeing?: NoYesReasonsForMissingData | null;
     dataCollectionStage: DataCollectionStage;
     dateCreated: string;
@@ -5961,14 +5957,11 @@ export type AssessmentWithRecordsFragment = {
     dentalHealthStatus?: HealthStatus | null;
     domesticViolenceVictim?: NoYesReasonsForMissingData | null;
     dueDate?: string | null;
-    feelingFrequency?: FeelingFrequency | null;
     generalHealthStatus?: HealthStatus | null;
     id: string;
     informationDate: string;
-    lifeValue?: WellbeingAgreement | null;
     mentalHealthStatus?: HealthStatus | null;
     pregnancyStatus?: NoYesReasonsForMissingData | null;
-    supportFromOthers?: WellbeingAgreement | null;
     whenOccurred?: WhenDvOccurred | null;
   } | null;
   exit?: {
@@ -5990,6 +5983,7 @@ export type AssessmentWithRecordsFragment = {
     destination: Destination;
     destinationSafeClient?: NoYesReasonsForMissingData | null;
     destinationSafeWorker?: WorkerResponse | null;
+    destinationSubsidyType?: RentalSubsidyType | null;
     earlyExitReason?: ExpelledReason | null;
     exchangeForSex?: NoYesReasonsForMissingData | null;
     exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
@@ -6156,7 +6150,8 @@ export type FullAssessmentFragment = {
     exitDate?: string | null;
     dateOfEngagement?: string | null;
     moveInDate?: string | null;
-    livingSituation?: LivingSituation | null;
+    livingSituation?: PriorLivingSituation | null;
+    rentalSubsidyType?: RentalSubsidyType | null;
     lengthOfStay?: ResidencePriorLengthOfStay | null;
     losUnderThreshold?: NoYesMissing | null;
     previousStreetEssh?: NoYesMissing | null;
@@ -6390,7 +6385,6 @@ export type FullAssessmentFragment = {
   } | null;
   healthAndDv?: {
     __typename: 'HealthAndDv';
-    bounceBack?: WellbeingAgreement | null;
     currentlyFleeing?: NoYesReasonsForMissingData | null;
     dataCollectionStage: DataCollectionStage;
     dateCreated: string;
@@ -6399,14 +6393,11 @@ export type FullAssessmentFragment = {
     dentalHealthStatus?: HealthStatus | null;
     domesticViolenceVictim?: NoYesReasonsForMissingData | null;
     dueDate?: string | null;
-    feelingFrequency?: FeelingFrequency | null;
     generalHealthStatus?: HealthStatus | null;
     id: string;
     informationDate: string;
-    lifeValue?: WellbeingAgreement | null;
     mentalHealthStatus?: HealthStatus | null;
     pregnancyStatus?: NoYesReasonsForMissingData | null;
-    supportFromOthers?: WellbeingAgreement | null;
     whenOccurred?: WhenDvOccurred | null;
   } | null;
   exit?: {
@@ -6428,6 +6419,7 @@ export type FullAssessmentFragment = {
     destination: Destination;
     destinationSafeClient?: NoYesReasonsForMissingData | null;
     destinationSafeWorker?: WorkerResponse | null;
+    destinationSubsidyType?: RentalSubsidyType | null;
     earlyExitReason?: ExpelledReason | null;
     exchangeForSex?: NoYesReasonsForMissingData | null;
     exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
@@ -7047,7 +7039,8 @@ export type GetAssessmentQuery = {
       exitDate?: string | null;
       dateOfEngagement?: string | null;
       moveInDate?: string | null;
-      livingSituation?: LivingSituation | null;
+      livingSituation?: PriorLivingSituation | null;
+      rentalSubsidyType?: RentalSubsidyType | null;
       lengthOfStay?: ResidencePriorLengthOfStay | null;
       losUnderThreshold?: NoYesMissing | null;
       previousStreetEssh?: NoYesMissing | null;
@@ -7281,7 +7274,6 @@ export type GetAssessmentQuery = {
     } | null;
     healthAndDv?: {
       __typename: 'HealthAndDv';
-      bounceBack?: WellbeingAgreement | null;
       currentlyFleeing?: NoYesReasonsForMissingData | null;
       dataCollectionStage: DataCollectionStage;
       dateCreated: string;
@@ -7290,14 +7282,11 @@ export type GetAssessmentQuery = {
       dentalHealthStatus?: HealthStatus | null;
       domesticViolenceVictim?: NoYesReasonsForMissingData | null;
       dueDate?: string | null;
-      feelingFrequency?: FeelingFrequency | null;
       generalHealthStatus?: HealthStatus | null;
       id: string;
       informationDate: string;
-      lifeValue?: WellbeingAgreement | null;
       mentalHealthStatus?: HealthStatus | null;
       pregnancyStatus?: NoYesReasonsForMissingData | null;
-      supportFromOthers?: WellbeingAgreement | null;
       whenOccurred?: WhenDvOccurred | null;
     } | null;
     exit?: {
@@ -7319,6 +7308,7 @@ export type GetAssessmentQuery = {
       destination: Destination;
       destinationSafeClient?: NoYesReasonsForMissingData | null;
       destinationSafeWorker?: WorkerResponse | null;
+      destinationSubsidyType?: RentalSubsidyType | null;
       earlyExitReason?: ExpelledReason | null;
       exchangeForSex?: NoYesReasonsForMissingData | null;
       exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
@@ -7569,7 +7559,8 @@ export type GetHouseholdAssessmentsQuery = {
       exitDate?: string | null;
       dateOfEngagement?: string | null;
       moveInDate?: string | null;
-      livingSituation?: LivingSituation | null;
+      livingSituation?: PriorLivingSituation | null;
+      rentalSubsidyType?: RentalSubsidyType | null;
       lengthOfStay?: ResidencePriorLengthOfStay | null;
       losUnderThreshold?: NoYesMissing | null;
       previousStreetEssh?: NoYesMissing | null;
@@ -7803,7 +7794,6 @@ export type GetHouseholdAssessmentsQuery = {
     } | null;
     healthAndDv?: {
       __typename: 'HealthAndDv';
-      bounceBack?: WellbeingAgreement | null;
       currentlyFleeing?: NoYesReasonsForMissingData | null;
       dataCollectionStage: DataCollectionStage;
       dateCreated: string;
@@ -7812,14 +7802,11 @@ export type GetHouseholdAssessmentsQuery = {
       dentalHealthStatus?: HealthStatus | null;
       domesticViolenceVictim?: NoYesReasonsForMissingData | null;
       dueDate?: string | null;
-      feelingFrequency?: FeelingFrequency | null;
       generalHealthStatus?: HealthStatus | null;
       id: string;
       informationDate: string;
-      lifeValue?: WellbeingAgreement | null;
       mentalHealthStatus?: HealthStatus | null;
       pregnancyStatus?: NoYesReasonsForMissingData | null;
-      supportFromOthers?: WellbeingAgreement | null;
       whenOccurred?: WhenDvOccurred | null;
     } | null;
     exit?: {
@@ -7841,6 +7828,7 @@ export type GetHouseholdAssessmentsQuery = {
       destination: Destination;
       destinationSafeClient?: NoYesReasonsForMissingData | null;
       destinationSafeWorker?: WorkerResponse | null;
+      destinationSubsidyType?: RentalSubsidyType | null;
       earlyExitReason?: ExpelledReason | null;
       exchangeForSex?: NoYesReasonsForMissingData | null;
       exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
@@ -8039,7 +8027,8 @@ export type SubmitAssessmentMutation = {
         exitDate?: string | null;
         dateOfEngagement?: string | null;
         moveInDate?: string | null;
-        livingSituation?: LivingSituation | null;
+        livingSituation?: PriorLivingSituation | null;
+        rentalSubsidyType?: RentalSubsidyType | null;
         lengthOfStay?: ResidencePriorLengthOfStay | null;
         losUnderThreshold?: NoYesMissing | null;
         previousStreetEssh?: NoYesMissing | null;
@@ -8273,7 +8262,6 @@ export type SubmitAssessmentMutation = {
       } | null;
       healthAndDv?: {
         __typename: 'HealthAndDv';
-        bounceBack?: WellbeingAgreement | null;
         currentlyFleeing?: NoYesReasonsForMissingData | null;
         dataCollectionStage: DataCollectionStage;
         dateCreated: string;
@@ -8282,14 +8270,11 @@ export type SubmitAssessmentMutation = {
         dentalHealthStatus?: HealthStatus | null;
         domesticViolenceVictim?: NoYesReasonsForMissingData | null;
         dueDate?: string | null;
-        feelingFrequency?: FeelingFrequency | null;
         generalHealthStatus?: HealthStatus | null;
         id: string;
         informationDate: string;
-        lifeValue?: WellbeingAgreement | null;
         mentalHealthStatus?: HealthStatus | null;
         pregnancyStatus?: NoYesReasonsForMissingData | null;
-        supportFromOthers?: WellbeingAgreement | null;
         whenOccurred?: WhenDvOccurred | null;
       } | null;
       exit?: {
@@ -8311,6 +8296,7 @@ export type SubmitAssessmentMutation = {
         destination: Destination;
         destinationSafeClient?: NoYesReasonsForMissingData | null;
         destinationSafeWorker?: WorkerResponse | null;
+        destinationSubsidyType?: RentalSubsidyType | null;
         earlyExitReason?: ExpelledReason | null;
         exchangeForSex?: NoYesReasonsForMissingData | null;
         exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
@@ -8518,7 +8504,8 @@ export type GetAssessmentsForPopulationQuery = {
           exitDate?: string | null;
           dateOfEngagement?: string | null;
           moveInDate?: string | null;
-          livingSituation?: LivingSituation | null;
+          livingSituation?: PriorLivingSituation | null;
+          rentalSubsidyType?: RentalSubsidyType | null;
           lengthOfStay?: ResidencePriorLengthOfStay | null;
           losUnderThreshold?: NoYesMissing | null;
           previousStreetEssh?: NoYesMissing | null;
@@ -8758,7 +8745,6 @@ export type GetAssessmentsForPopulationQuery = {
         } | null;
         healthAndDv?: {
           __typename: 'HealthAndDv';
-          bounceBack?: WellbeingAgreement | null;
           currentlyFleeing?: NoYesReasonsForMissingData | null;
           dataCollectionStage: DataCollectionStage;
           dateCreated: string;
@@ -8767,14 +8753,11 @@ export type GetAssessmentsForPopulationQuery = {
           dentalHealthStatus?: HealthStatus | null;
           domesticViolenceVictim?: NoYesReasonsForMissingData | null;
           dueDate?: string | null;
-          feelingFrequency?: FeelingFrequency | null;
           generalHealthStatus?: HealthStatus | null;
           id: string;
           informationDate: string;
-          lifeValue?: WellbeingAgreement | null;
           mentalHealthStatus?: HealthStatus | null;
           pregnancyStatus?: NoYesReasonsForMissingData | null;
-          supportFromOthers?: WellbeingAgreement | null;
           whenOccurred?: WhenDvOccurred | null;
         } | null;
         exit?: {
@@ -8796,6 +8779,7 @@ export type GetAssessmentsForPopulationQuery = {
           destination: Destination;
           destinationSafeClient?: NoYesReasonsForMissingData | null;
           destinationSafeWorker?: WorkerResponse | null;
+          destinationSubsidyType?: RentalSubsidyType | null;
           earlyExitReason?: ExpelledReason | null;
           exchangeForSex?: NoYesReasonsForMissingData | null;
           exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
@@ -8960,7 +8944,8 @@ export type EnrollmentValuesFragment = {
   exitDate?: string | null;
   dateOfEngagement?: string | null;
   moveInDate?: string | null;
-  livingSituation?: LivingSituation | null;
+  livingSituation?: PriorLivingSituation | null;
+  rentalSubsidyType?: RentalSubsidyType | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
   losUnderThreshold?: NoYesMissing | null;
   previousStreetEssh?: NoYesMissing | null;
@@ -9022,7 +9007,8 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   exitDate?: string | null;
   dateOfEngagement?: string | null;
   moveInDate?: string | null;
-  livingSituation?: LivingSituation | null;
+  livingSituation?: PriorLivingSituation | null;
+  rentalSubsidyType?: RentalSubsidyType | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
   losUnderThreshold?: NoYesMissing | null;
   previousStreetEssh?: NoYesMissing | null;
@@ -9323,7 +9309,6 @@ export type DisabilityGroupFieldsFragment = {
 
 export type HealthAndDvValuesFragment = {
   __typename: 'HealthAndDv';
-  bounceBack?: WellbeingAgreement | null;
   currentlyFleeing?: NoYesReasonsForMissingData | null;
   dataCollectionStage: DataCollectionStage;
   dateCreated: string;
@@ -9332,20 +9317,16 @@ export type HealthAndDvValuesFragment = {
   dentalHealthStatus?: HealthStatus | null;
   domesticViolenceVictim?: NoYesReasonsForMissingData | null;
   dueDate?: string | null;
-  feelingFrequency?: FeelingFrequency | null;
   generalHealthStatus?: HealthStatus | null;
   id: string;
   informationDate: string;
-  lifeValue?: WellbeingAgreement | null;
   mentalHealthStatus?: HealthStatus | null;
   pregnancyStatus?: NoYesReasonsForMissingData | null;
-  supportFromOthers?: WellbeingAgreement | null;
   whenOccurred?: WhenDvOccurred | null;
 };
 
 export type HealthAndDvFieldsFragment = {
   __typename: 'HealthAndDv';
-  bounceBack?: WellbeingAgreement | null;
   currentlyFleeing?: NoYesReasonsForMissingData | null;
   dataCollectionStage: DataCollectionStage;
   dateCreated: string;
@@ -9354,14 +9335,11 @@ export type HealthAndDvFieldsFragment = {
   dentalHealthStatus?: HealthStatus | null;
   domesticViolenceVictim?: NoYesReasonsForMissingData | null;
   dueDate?: string | null;
-  feelingFrequency?: FeelingFrequency | null;
   generalHealthStatus?: HealthStatus | null;
   id: string;
   informationDate: string;
-  lifeValue?: WellbeingAgreement | null;
   mentalHealthStatus?: HealthStatus | null;
   pregnancyStatus?: NoYesReasonsForMissingData | null;
-  supportFromOthers?: WellbeingAgreement | null;
   whenOccurred?: WhenDvOccurred | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
   enrollment: {
@@ -9395,6 +9373,7 @@ export type ExitValuesFragment = {
   destination: Destination;
   destinationSafeClient?: NoYesReasonsForMissingData | null;
   destinationSafeWorker?: WorkerResponse | null;
+  destinationSubsidyType?: RentalSubsidyType | null;
   earlyExitReason?: ExpelledReason | null;
   exchangeForSex?: NoYesReasonsForMissingData | null;
   exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
@@ -9610,7 +9589,6 @@ export type ClientSearchResultFieldsFragment = {
 export type ClientFieldsFragment = {
   __typename?: 'Client';
   dobDataQuality: DobDataQuality;
-  ethnicity: Ethnicity;
   gender: Array<Gender>;
   pronouns: Array<string>;
   nameDataQuality: NameDataQuality;
@@ -9967,7 +9945,6 @@ export type GetClientQuery = {
   client?: {
     __typename?: 'Client';
     dobDataQuality: DobDataQuality;
-    ethnicity: Ethnicity;
     gender: Array<Gender>;
     pronouns: Array<string>;
     nameDataQuality: NameDataQuality;
@@ -10438,7 +10415,8 @@ export type GetNonWipEnrollmentsQuery = {
         exitDate?: string | null;
         dateOfEngagement?: string | null;
         moveInDate?: string | null;
-        livingSituation?: LivingSituation | null;
+        livingSituation?: PriorLivingSituation | null;
+        rentalSubsidyType?: RentalSubsidyType | null;
         lengthOfStay?: ResidencePriorLengthOfStay | null;
         losUnderThreshold?: NoYesMissing | null;
         previousStreetEssh?: NoYesMissing | null;
@@ -10840,7 +10818,7 @@ export type CurrentLivingSituationFieldsFragment = {
   __typename?: 'CurrentLivingSituation';
   id: string;
   clsSubsidyType?: RentalSubsidyType | null;
-  currentLivingSituation: LivingSituation;
+  currentLivingSituation: CurrentLivingSituationOptions;
   informationDate: string;
   leaseOwn60Day?: NoYesReasonsForMissingData | null;
   leaveSituation14Days?: NoYesReasonsForMissingData | null;
@@ -10873,7 +10851,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         __typename?: 'CurrentLivingSituation';
         id: string;
         clsSubsidyType?: RentalSubsidyType | null;
-        currentLivingSituation: LivingSituation;
+        currentLivingSituation: CurrentLivingSituationOptions;
         informationDate: string;
         leaseOwn60Day?: NoYesReasonsForMissingData | null;
         leaveSituation14Days?: NoYesReasonsForMissingData | null;
@@ -11218,7 +11196,8 @@ export type AllEnrollmentDetailsFragment = {
   exitDate?: string | null;
   dateOfEngagement?: string | null;
   moveInDate?: string | null;
-  livingSituation?: LivingSituation | null;
+  livingSituation?: PriorLivingSituation | null;
+  rentalSubsidyType?: RentalSubsidyType | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
   losUnderThreshold?: NoYesMissing | null;
   previousStreetEssh?: NoYesMissing | null;
@@ -11406,7 +11385,8 @@ export type GetEnrollmentDetailsQuery = {
     exitDate?: string | null;
     dateOfEngagement?: string | null;
     moveInDate?: string | null;
-    livingSituation?: LivingSituation | null;
+    livingSituation?: PriorLivingSituation | null;
+    rentalSubsidyType?: RentalSubsidyType | null;
     lengthOfStay?: ResidencePriorLengthOfStay | null;
     losUnderThreshold?: NoYesMissing | null;
     previousStreetEssh?: NoYesMissing | null;
@@ -13993,7 +13973,6 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'Client';
           dobDataQuality: DobDataQuality;
-          ethnicity: Ethnicity;
           gender: Array<Gender>;
           pronouns: Array<string>;
           nameDataQuality: NameDataQuality;
@@ -14142,7 +14121,7 @@ export type SubmitFormMutation = {
           __typename?: 'CurrentLivingSituation';
           id: string;
           clsSubsidyType?: RentalSubsidyType | null;
-          currentLivingSituation: LivingSituation;
+          currentLivingSituation: CurrentLivingSituationOptions;
           informationDate: string;
           leaseOwn60Day?: NoYesReasonsForMissingData | null;
           leaveSituation14Days?: NoYesReasonsForMissingData | null;
@@ -14375,14 +14354,14 @@ export type SubmitFormMutation = {
           id: string;
           hudId: string;
           description?: string | null;
-          HMISParticipatingProject?: NoYesMissing | null;
+          hmisParticipationStatus?: HmisParticipationType | null;
           HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
           contactInformation?: string | null;
-          continuumProject?: NoYesMissing | null;
+          continuumProject?: NoYes | null;
           housingType?: HousingType | null;
-          residentialAffiliation?: NoYesMissing | null;
+          residentialAffiliation?: NoYes | null;
+          rrhSubType?: RrhSubType | null;
           targetPopulation?: TargetPopulation | null;
-          trackingMethod?: TrackingMethod | null;
           projectName: string;
           projectType?: ProjectType | null;
           operatingEndDate?: string | null;
@@ -15546,14 +15525,14 @@ export type ProjectAllFieldsFragment = {
   id: string;
   hudId: string;
   description?: string | null;
-  HMISParticipatingProject?: NoYesMissing | null;
+  hmisParticipationStatus?: HmisParticipationType | null;
   HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
   contactInformation?: string | null;
-  continuumProject?: NoYesMissing | null;
+  continuumProject?: NoYes | null;
   housingType?: HousingType | null;
-  residentialAffiliation?: NoYesMissing | null;
+  residentialAffiliation?: NoYes | null;
+  rrhSubType?: RrhSubType | null;
   targetPopulation?: TargetPopulation | null;
-  trackingMethod?: TrackingMethod | null;
   projectName: string;
   projectType?: ProjectType | null;
   operatingEndDate?: string | null;
@@ -15695,14 +15674,14 @@ export type GetProjectQuery = {
     id: string;
     hudId: string;
     description?: string | null;
-    HMISParticipatingProject?: NoYesMissing | null;
+    hmisParticipationStatus?: HmisParticipationType | null;
     HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
     contactInformation?: string | null;
-    continuumProject?: NoYesMissing | null;
+    continuumProject?: NoYes | null;
     housingType?: HousingType | null;
-    residentialAffiliation?: NoYesMissing | null;
+    residentialAffiliation?: NoYes | null;
+    rrhSubType?: RrhSubType | null;
     targetPopulation?: TargetPopulation | null;
-    trackingMethod?: TrackingMethod | null;
     projectName: string;
     projectType?: ProjectType | null;
     operatingEndDate?: string | null;
@@ -18030,6 +18009,7 @@ export const EnrollmentValuesFragmentDoc = gql`
     dateOfEngagement
     moveInDate
     livingSituation
+    rentalSubsidyType
     lengthOfStay
     losUnderThreshold
     previousStreetEssh
@@ -18234,7 +18214,6 @@ export const DisabilityGroupValuesFragmentDoc = gql`
 export const HealthAndDvValuesFragmentDoc = gql`
   fragment HealthAndDvValues on HealthAndDv {
     __typename
-    bounceBack
     currentlyFleeing
     dataCollectionStage
     dateCreated
@@ -18243,14 +18222,11 @@ export const HealthAndDvValuesFragmentDoc = gql`
     dentalHealthStatus
     domesticViolenceVictim
     dueDate
-    feelingFrequency
     generalHealthStatus
     id
     informationDate
-    lifeValue
     mentalHealthStatus
     pregnancyStatus
-    supportFromOthers
     whenOccurred
   }
 `;
@@ -18273,6 +18249,7 @@ export const ExitValuesFragmentDoc = gql`
     destination
     destinationSafeClient
     destinationSafeWorker
+    destinationSubsidyType
     earlyExitReason
     exchangeForSex
     exchangeForSexPastThreeMonths
@@ -18595,7 +18572,6 @@ export const ClientFieldsFragmentDoc = gql`
     ...ClientIdentificationFields
     ...ClientVeteranInfoFields
     dobDataQuality
-    ethnicity
     gender
     pronouns
     nameDataQuality
@@ -19211,14 +19187,14 @@ export const ProjectAllFieldsFragmentDoc = gql`
     ...ProjectNameAndType
     ...ProjectOperatingPeriod
     description
-    HMISParticipatingProject
+    hmisParticipationStatus
     HOPWAMedAssistedLivingFac
     contactInformation
     continuumProject
     housingType
     residentialAffiliation
+    rrhSubType
     targetPopulation
-    trackingMethod
     organization {
       ...OrganizationNameFields
     }

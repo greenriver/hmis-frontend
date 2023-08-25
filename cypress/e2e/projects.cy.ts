@@ -68,13 +68,13 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.getById(trackingMethod).should('not.exist');
   cy.getById(residentialAffiliation).should('not.exist');
 
-  cy.choose(projectType, ProjectType.Es);
+  cy.choose(projectType, ProjectType.PhRrh);
   cy.getById(trackingMethod).should('exist');
 
   cy.choose(projectType, ProjectType.Ce);
   cy.getById(trackingMethod).should('not.exist');
 
-  cy.choose(projectType, ProjectType.ServicesOnly);
+  cy.choose(projectType, ProjectType.Sso);
   cy.getById(residentialAffiliation).should('exist');
 
   cy.choose(projectType, ProjectType.DayShelter);

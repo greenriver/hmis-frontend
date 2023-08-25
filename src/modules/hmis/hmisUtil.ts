@@ -29,6 +29,7 @@ import {
   GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
   NoYesMissing,
+  NoYesReasonsForMissingData,
   ProjectType,
   ServiceFieldsFragment,
   ServiceTypeFieldsFragment,
@@ -39,9 +40,9 @@ import {
  */
 
 export const MISSING_DATA_KEYS = [
-  'DATA_NOT_COLLECTED',
-  'CLIENT_REFUSED',
-  'CLIENT_DOESN_T_KNOW',
+  NoYesReasonsForMissingData.DataNotCollected,
+  NoYesReasonsForMissingData.ClientPrefersNotToAnswer,
+  NoYesReasonsForMissingData.ClientDoesnTKnow,
 ];
 
 export const PERMANENT_HOUSING_PROJECT_TYPES = [
