@@ -1338,7 +1338,7 @@ export const chooseSelectComponentType = (
 
 export const AlwaysPresentLocalConstants = {
   today: startOfToday(),
-  over18Dob: sub(startOfToday(), { years: 18 }),
+  age18Dob: sub(startOfToday(), { years: 18 }),
 };
 
 export const placeholderText = (item: FormItem) => {
