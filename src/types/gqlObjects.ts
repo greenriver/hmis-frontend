@@ -4845,51 +4845,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'AddToHouseholdInput',
-    args: [
-      {
-        name: 'clientId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'confirmed',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-      {
-        name: 'entryDate',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-        },
-      },
-      {
-        name: 'householdId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
-        name: 'projectId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'relationshipToHoh',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
-        },
-      },
-    ],
-  },
-  {
     name: 'AssessmentFilterOptions',
     args: [
       {
@@ -5090,51 +5045,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             name: 'DirectUploadInput',
             ofType: null,
           },
-        },
-      },
-    ],
-  },
-  {
-    name: 'CreateEnrollmentInput',
-    args: [
-      {
-        name: 'confirmed',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-      {
-        name: 'entryDate',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-        },
-      },
-      {
-        name: 'householdMembers',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: {
-                kind: 'INPUT_OBJECT',
-                name: 'EnrollmentHouseholdMemberInput',
-                ofType: null,
-              },
-            },
-          },
-        },
-      },
-      {
-        name: 'projectId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
     ],
@@ -5392,27 +5302,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-    ],
-  },
-  {
-    name: 'EnrollmentHouseholdMemberInput',
-    args: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'relationshipToHoH',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
         },
       },
     ],

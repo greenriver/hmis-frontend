@@ -217,12 +217,6 @@ query GetProjectOutgoingReferralPostings(
   }
 }
 
-query GetReferralPosting($id: ID!) {
-  referralPosting(id: $id) {
-    ...ReferralPostingDetailFields
-  }
-}
-
 query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   project(id: $id) {
     id
