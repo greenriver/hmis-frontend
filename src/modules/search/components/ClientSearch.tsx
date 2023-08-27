@@ -93,7 +93,6 @@ export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
     ariaLabel: (row) => clientNameAllParts(row),
   },
   { ...CLIENT_COLUMNS.last, width: '15%', linkTreatment: true },
-  { ...CLIENT_COLUMNS.preferred, width: '15%', linkTreatment: true },
   { ...CLIENT_COLUMNS.ssn, width: '10%' },
   { ...CLIENT_COLUMNS.dobAge, width: '10%' },
 ];
@@ -274,7 +273,7 @@ const ClientSearch = () => {
             renderRow={
               displayType === 'cards'
                 ? (client) => (
-                    <TableRow>
+                    <TableRow key={client.id}>
                       <TableCell colSpan={columns.length} sx={{ py: 2 }}>
                         <ClientCard key={client.id} client={client} />
                       </TableCell>

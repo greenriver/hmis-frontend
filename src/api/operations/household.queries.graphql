@@ -15,15 +15,3 @@ mutation UpdateRelationshipToHoH($input: UpdateRelationshipToHoHInput!) {
     }
   }
 }
-
-mutation AddToHousehold($input: AddToHouseholdInput!) {
-  addToHousehold(input: $input) {
-    clientMutationId
-    household {
-      ...HouseholdFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
