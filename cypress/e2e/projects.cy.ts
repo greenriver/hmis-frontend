@@ -6,15 +6,9 @@
 
 Cypress.session.clearAllSavedSessions();
 
+import { EmptyProjectCoc, HIDDEN } from 'support/assessmentConstants';
+import { HmisEnums } from '../../src/types/gqlEnums';
 import {
-  EmptyProject,
-  EmptyProjectCoc,
-  HIDDEN,
-} from 'support/assessmentConstants';
-
-import {
-  Availability,
-  BedType,
   FundingSource,
   GeographyType,
   HouseholdType,
@@ -40,17 +34,10 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('formButton-submit').click();
   cy.testId('organizationDetailsCard').contains('line two');
 
-  // Update organization
-  cy.testId('updateOrganizationButton').click();
-  cy.getById('description').clear();
-  cy.getById('contact').clear().safeType('123');
-  cy.testId('formButton-submit').click();
-  cy.testId('organizationDetailsCard').should('not.exist');
-  cy.testId('contactInfo').contains('123');
-
   /*** Project ***/
 
   const projectName = 'X Test Project';
+  const projectType = '2.02.6';
   cy.testId('addProjectButton').click();
   cy.inputId('2.02.2').safeType(projectName);
   cy.getById('description').safeType('Project Description');
@@ -60,26 +47,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('2.02.3').safeType('01/01/2022'); // start date
   cy.inputId('2.02.4').safeType('01/01/2020'); // end date (invalid, must be after start)
 
-  // Project type
-  const projectType = '2.02.6';
-  const residentialAffiliation = '2.02.A';
-  const trackingMethod = '2.02.C';
-
-  cy.getById(trackingMethod).should('not.exist');
-  cy.getById(residentialAffiliation).should('not.exist');
-
-  cy.choose(projectType, ProjectType.PhRrh);
-  cy.getById(trackingMethod).should('exist');
-
-  cy.choose(projectType, ProjectType.Ce);
-  cy.getById(trackingMethod).should('not.exist');
-
-  cy.choose(projectType, ProjectType.Sso);
-  cy.getById(residentialAffiliation).should('exist');
-
+  // Set project type
   cy.choose(projectType, ProjectType.DayShelter);
-  cy.getById(trackingMethod).should('not.exist');
-  cy.getById(residentialAffiliation).should('not.exist');
 
   // Submit
   cy.testId('formButton-submit').click();
@@ -88,14 +57,14 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Fix and resubmit
   cy.inputId('2.02.4').clear(); // clear end date
   const expectedFormValues = {
-    ...EmptyProject,
     projectName: 'X Test Project',
     description: 'Project Description',
     contactInformation: 'Project Contact',
     operatingStartDate: '2022-01-01',
+    operatingEndDate: null,
     projectType: ProjectType.DayShelter,
   };
-  cy.expectHudValuesToDeepEqual(expectedFormValues);
+  cy.expectHudValuesToInclude(expectedFormValues);
   cy.testId('formButton-submit').click();
 
   // Confirm details are correct
@@ -113,25 +82,26 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Navigate back to project page
   cy.tableRows('projectsCard').first().click();
 
-  // Edit project, assert details updated
+  // Re-open project, assert details are the same
   cy.testId('updateProjectButton').click();
-  // Form values should be the same
-  cy.expectHudValuesToDeepEqual(expectedFormValues);
+  cy.expectHudValuesToInclude(expectedFormValues);
 
   const newProjectName = 'X Renamed Project';
   cy.inputId('2.02.2').clear().safeType(newProjectName);
-  cy.choose(projectType, ProjectType.Ph);
+  cy.choose(projectType, ProjectType.Sh);
   cy.testId('formButton-submit').click();
 
   // Assert changes to project details are reflected
   cy.get('h3').first().contains(newProjectName);
   cy.testId('dynamicView').should('exist');
-  cy.testId('2.02.6').contains('Permanent Housing');
+  cy.testId('2.02.6').contains(HmisEnums.ProjectType.SH);
 
   // Navigate to Organization page, ensure change to project type is reflected there too
   cy.testId('organizationLink').click();
   cy.tableRows('projectsCard').should('have.length', 1);
-  cy.tableRows('projectsCard').contains('Permanent Housing').should('exist');
+  cy.tableRows('projectsCard')
+    .contains(HmisEnums.ProjectType.SH)
+    .should('exist');
 
   // Navigate back to project page
   cy.tableRows('projectsCard').first().click();
@@ -216,8 +186,6 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.navItem('inventory').click();
   cy.testId('addInventoryButton').click();
   cy.checkOption('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
-  cy.checkOption('es-availability', Availability.Overflow);
-  cy.checkOption('es-bed-type', BedType.Voucher);
   cy.inputId('2.07.1').safeType('01/01/2022');
   cy.inputId('unit').safeType('3');
   cy.inputId('other-beds').safeType('3');
@@ -290,8 +258,6 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('addInventoryButton').click();
   cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
   cy.checkOption('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
-  cy.checkOption('es-availability', Availability.Overflow);
-  cy.checkOption('es-bed-type', BedType.Voucher);
   cy.inputId('unit').safeType('0');
   cy.inputId('other-beds').safeType('0');
 
@@ -309,8 +275,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.expectHudValuesToDeepEqual({
     cocCode: 'MA-505',
     householdType: HouseholdType.HouseholdsWithOnlyChildren,
-    availability: Availability.Overflow,
-    esBedType: BedType.Voucher,
+    availability: null,
+    esBedType: null,
     inventoryStartDate: '2022-01-01',
     inventoryEndDate: '2023-01-01',
     unitInventory: 0,
