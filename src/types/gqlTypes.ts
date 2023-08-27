@@ -1679,6 +1679,8 @@ export type Enrollment = {
   openEnrollmentSummary: Array<EnrollmentSummary>;
   percentAmi?: Maybe<PercentAmi>;
   physicalDisabilityFam?: Maybe<NoYesMissing>;
+  preferredLanguage?: Maybe<PreferredLanguage>;
+  preferredLanguageDifferent?: Maybe<Scalars['String']['output']>;
   previousStreetEssh?: Maybe<NoYesMissing>;
   prisonDischarge?: Maybe<NoYesMissing>;
   project: Project;
@@ -1700,6 +1702,7 @@ export type Enrollment = {
   thresholdScore?: Maybe<NoYesMissing>;
   timeToHousingLoss?: Maybe<TimeToHousingLoss>;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
+  translationNeeded?: Maybe<NoYesReasonsForMissingData>;
   unemploymentFam?: Maybe<NoYesMissing>;
   user?: Maybe<User>;
   vamcStation?: Maybe<VamcStationNumber>;
@@ -3363,6 +3366,674 @@ export enum PickListType {
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
 }
 
+/** C4.A */
+export enum PreferredLanguage {
+  /** (100) Acholi */
+  Acholi = 'ACHOLI',
+  /** (101) Afar */
+  Afar = 'AFAR',
+  /** (102) Afrikaans */
+  Afrikaans = 'AFRIKAANS',
+  /** (103) Ahtna */
+  Ahtna = 'AHTNA',
+  /** (104) Akan */
+  Akan = 'AKAN',
+  /** (105) Akateko */
+  Akateko = 'AKATEKO',
+  /** (106) Akuzipigestun / St. Lawrence Island Yupik (aka Siberian Yupik) */
+  AkuzipigestunStLawrenceIslandYupik = 'AKUZIPIGESTUN_ST_LAWRENCE_ISLAND_YUPIK',
+  /** (107) Albanian */
+  Albanian = 'ALBANIAN',
+  /** (108) Algonquian */
+  Algonquian = 'ALGONQUIAN',
+  /** (109) Alutiiq */
+  Alutiiq = 'ALUTIIQ',
+  /** (110) American Sign Language */
+  AmericanSignLanguage = 'AMERICAN_SIGN_LANGUAGE',
+  /** (111) Amharic */
+  Amharic = 'AMHARIC',
+  /** (112) Anuak */
+  Anuak = 'ANUAK',
+  /** (113) Apache */
+  Apache = 'APACHE',
+  /** (114) Arabic */
+  Arabic = 'ARABIC',
+  /** (115) Armenian */
+  Armenian = 'ARMENIAN',
+  /** (116) Assyrian */
+  Assyrian = 'ASSYRIAN',
+  /** (117) Atnakenaege’ / Ahtna */
+  AtnakenaegeAhtna = 'ATNAKENAEGE_AHTNA',
+  /** (118) Aymara */
+  Aymara = 'AYMARA',
+  /** (119) Azerbaijani */
+  Azerbaijani = 'AZERBAIJANI',
+  /** (120) Bahasa */
+  Bahasa = 'BAHASA',
+  /** (121) Bahdini */
+  Bahdini = 'BAHDINI',
+  /** (122) Bajuni */
+  Bajuni = 'BAJUNI',
+  /** (123) Bambara */
+  Bambara = 'BAMBARA',
+  /** (124) Bantu */
+  Bantu = 'BANTU',
+  /** (125) Barese */
+  Barese = 'BARESE',
+  /** (126) Basque */
+  Basque = 'BASQUE',
+  /** (127) Bassa */
+  Bassa = 'BASSA',
+  /** (128) Belorussian */
+  Belorussian = 'BELORUSSIAN',
+  /** (129) Bemba */
+  Bemba = 'BEMBA',
+  /** (130) Benaadir */
+  Benaadir = 'BENAADIR',
+  /** (131) Bengali */
+  Bengali = 'BENGALI',
+  /** (132) Berber */
+  Berber = 'BERBER',
+  /** (133) Black American Sign Language */
+  BlackAmericanSignLanguage = 'BLACK_AMERICAN_SIGN_LANGUAGE',
+  /** (134) Bosnian */
+  Bosnian = 'BOSNIAN',
+  /** (135) Bravanese */
+  Bravanese = 'BRAVANESE',
+  /** (136) Bulgarian */
+  Bulgarian = 'BULGARIAN',
+  /** (137) Burmese */
+  Burmese = 'BURMESE',
+  /** (138) Cambodian */
+  Cambodian = 'CAMBODIAN',
+  /** (139) Cantonese */
+  Cantonese = 'CANTONESE',
+  /** (140) Cape Verdean Creole */
+  CapeVerdeanCreole = 'CAPE_VERDEAN_CREOLE',
+  /** (141) Catalan */
+  Catalan = 'CATALAN',
+  /** (142) Cebuano */
+  Cebuano = 'CEBUANO',
+  /** (143) Central Alaskan Yup’ik / Yugtun */
+  CentralAlaskanYupIkYugtun = 'CENTRAL_ALASKAN_YUP_IK_YUGTUN',
+  /** (144) Chaldean */
+  Chaldean = 'CHALDEAN',
+  /** (145) Chamorro */
+  Chamorro = 'CHAMORRO',
+  /** (146) Chaochow */
+  Chaochow = 'CHAOCHOW',
+  /** (147) Cherokee */
+  Cherokee = 'CHEROKEE',
+  /** (148) Chinese */
+  Chinese = 'CHINESE',
+  /** (149) Chipewyan */
+  Chipewyan = 'CHIPEWYAN',
+  /** (150) Choctaw */
+  Choctaw = 'CHOCTAW',
+  /** (151) Chuukese */
+  Chuukese = 'CHUUKESE',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
+  /** (152) Cree */
+  Cree = 'CREE',
+  /** (153) Croatian */
+  Croatian = 'CROATIAN',
+  /** (154) Czech */
+  Czech = 'CZECH',
+  /** (155) Dakota */
+  Dakota = 'DAKOTA',
+  /** (156) Danish */
+  Danish = 'DANISH',
+  /** (157) Dari */
+  Dari = 'DARI',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (158) Deg Xinag */
+  DegXinag = 'DEG_XINAG',
+  /** (160) Denaakk'e / Koyukon */
+  DenaakkEKoyukon = 'DENAAKK_E_KOYUKON',
+  /** (159) Dena'inaq' / Dena'ina */
+  DenaInaqDenaIna = 'DENA_INAQ_DENA_INA',
+  /** (161) Dewoin */
+  Dewoin = 'DEWOIN',
+  /** (21) Different preferred language */
+  DifferentPreferredLanguage = 'DIFFERENT_PREFERRED_LANGUAGE',
+  /** (162) Dinak'i / Upper Kuskokwim */
+  DinakIUpperKuskokwim = 'DINAK_I_UPPER_KUSKOKWIM',
+  /** (163) Dinjii Zhuh K'yaa / Gwich'in */
+  DinjiiZhuhKYaaGwichIn = 'DINJII_ZHUH_K_YAA_GWICH_IN',
+  /** (164) Dinka */
+  Dinka = 'DINKA',
+  /** (165) Doogh Qinaq / Holikachuk */
+  DooghQinaqHolikachuk = 'DOOGH_QINAQ_HOLIKACHUK',
+  /** (166) Duala */
+  Duala = 'DUALA',
+  /** (167) Dutch */
+  Dutch = 'DUTCH',
+  /** (168) Dzongkha */
+  Dzongkha = 'DZONGKHA',
+  /** (169) Edo */
+  Edo = 'EDO',
+  /** (170) Ekegusli */
+  Ekegusli = 'EKEGUSLI',
+  /** (171) English */
+  English = 'ENGLISH',
+  /** (172) Estonian */
+  Estonian = 'ESTONIAN',
+  /** (173) Ewe */
+  Ewe = 'EWE',
+  /** (174) Eyak */
+  Eyak = 'EYAK',
+  /** (175) Farsi */
+  Farsi = 'FARSI',
+  /** (176) Fijian */
+  Fijian = 'FIJIAN',
+  /** (177) Filipino */
+  Filipino = 'FILIPINO',
+  /** (178) Finnish */
+  Finnish = 'FINNISH',
+  /** (179) Flemish */
+  Flemish = 'FLEMISH',
+  /** (180) French */
+  French = 'FRENCH',
+  /** (181) French Cajun */
+  FrenchCajun = 'FRENCH_CAJUN',
+  /** (182) French Canadian */
+  FrenchCanadian = 'FRENCH_CANADIAN',
+  /** (183) French Creole */
+  FrenchCreole = 'FRENCH_CREOLE',
+  /** (184) French Haitian */
+  FrenchHaitian = 'FRENCH_HAITIAN',
+  /** (185) Fukienese */
+  Fukienese = 'FUKIENESE',
+  /** (186) Fulani */
+  Fulani = 'FULANI',
+  /** (187) Fuzhou */
+  Fuzhou = 'FUZHOU',
+  /** (188) Ga */
+  Ga = 'GA',
+  /** (189) Gaddang */
+  Gaddang = 'GADDANG',
+  /** (190) Gaelic */
+  Gaelic = 'GAELIC',
+  /** (191) Garre */
+  Garre = 'GARRE',
+  /** (192) Gen */
+  Gen = 'GEN',
+  /** (193) Georgian */
+  Georgian = 'GEORGIAN',
+  /** (194) German */
+  German = 'GERMAN',
+  /** (195) Gheg */
+  Gheg = 'GHEG',
+  /** (196) Gokana */
+  Gokana = 'GOKANA',
+  /** (197) Greek */
+  Greek = 'GREEK',
+  /** (198) Gujarati */
+  Gujarati = 'GUJARATI',
+  /** (199) Gulay */
+  Gulay = 'GULAY',
+  /** (200) Gullah */
+  Gullah = 'GULLAH',
+  /** (201) Gurani */
+  Gurani = 'GURANI',
+  /** (202) Gwich'in */
+  GwichIn = 'GWICH_IN',
+  /** (203) Haida */
+  Haida = 'HAIDA',
+  /** (204) Haitian */
+  Haitian = 'HAITIAN',
+  /** (205) Haitian Creole */
+  HaitianCreole = 'HAITIAN_CREOLE',
+  /** (206) Hakka */
+  Hakka = 'HAKKA',
+  /** (208) Hassaniyya */
+  Hassaniyya = 'HASSANIYYA',
+  /** (209) Hausa */
+  Hausa = 'HAUSA',
+  /** (211) Hawaiian */
+  Hawaiian = 'HAWAIIAN',
+  /** (210) Hawai'i Sign Language */
+  HawaiISignLanguage = 'HAWAI_I_SIGN_LANGUAGE',
+  /** (212) Hebrew */
+  Hebrew = 'HEBREW',
+  /** (213) Hiligaynon */
+  Hiligaynon = 'HILIGAYNON',
+  /** (214) Hindi */
+  Hindi = 'HINDI',
+  /** (215) Hindko */
+  Hindko = 'HINDKO',
+  /** (216) Hmong */
+  Hmong = 'HMONG',
+  /** (217) Hokkien */
+  Hokkien = 'HOKKIEN',
+  /** (218) Holikachuk */
+  Holikachuk = 'HOLIKACHUK',
+  /** (219) Hopi */
+  Hopi = 'HOPI',
+  /** (220) Huanese */
+  Huanese = 'HUANESE',
+  /** (221) Hungarian */
+  Hungarian = 'HUNGARIAN',
+  /** (207) Häl golan / Hän */
+  HLGolanHN = 'H_L_GOLAN_H_N',
+  /** (222) Ibanag */
+  Ibanag = 'IBANAG',
+  /** (223) Icelandic */
+  Icelandic = 'ICELANDIC',
+  /** (224) Igbo */
+  Igbo = 'IGBO',
+  /** (225) Ilocano */
+  Ilocano = 'ILOCANO',
+  /** (226) Indonesian */
+  Indonesian = 'INDONESIAN',
+  /** (227) Inuktitut */
+  Inuktitut = 'INUKTITUT',
+  /** (228) Inupiatun / Inupiaq */
+  InupiatunInupiaq = 'INUPIATUN_INUPIAQ',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (229) Italian */
+  Italian = 'ITALIAN',
+  /** (230) Jakartanese */
+  Jakartanese = 'JAKARTANESE',
+  /** (231) Jamaican Patois */
+  JamaicanPatois = 'JAMAICAN_PATOIS',
+  /** (232) Japanese */
+  Japanese = 'JAPANESE',
+  /** (233) Jarai */
+  Jarai = 'JARAI',
+  /** (234) Javanese */
+  Javanese = 'JAVANESE',
+  /** (235) Jingpho */
+  Jingpho = 'JINGPHO',
+  /** (236) Jinyu */
+  Jinyu = 'JINYU',
+  /** (237) Juba Arabic */
+  JubaArabic = 'JUBA_ARABIC',
+  /** (238) Jula */
+  Jula = 'JULA',
+  /** (239) Kaba */
+  Kaba = 'KABA',
+  /** (240) Kamba */
+  Kamba = 'KAMBA',
+  /** (241) Kam Muang */
+  KamMuang = 'KAM_MUANG',
+  /** (242) Kanjobal */
+  Kanjobal = 'KANJOBAL',
+  /** (243) Kannada */
+  Kannada = 'KANNADA',
+  /** (244) Karen */
+  Karen = 'KAREN',
+  /** (245) Kashmiri */
+  Kashmiri = 'KASHMIRI',
+  /** (246) Kayah */
+  Kayah = 'KAYAH',
+  /** (247) Kazakh */
+  Kazakh = 'KAZAKH',
+  /** (248) Keresan */
+  Keresan = 'KERESAN',
+  /** (249) Keresan Sign Language */
+  KeresanSignLanguage = 'KERESAN_SIGN_LANGUAGE',
+  /** (250) Kham */
+  Kham = 'KHAM',
+  /** (251) Khana */
+  Khana = 'KHANA',
+  /** (252) Khmer */
+  Khmer = 'KHMER',
+  /** (254) Kikuyu */
+  Kikuyu = 'KIKUYU',
+  /** (255) Kimiiru */
+  Kimiiru = 'KIMIIRU',
+  /** (256) Kinyarwanda */
+  Kinyarwanda = 'KINYARWANDA',
+  /** (257) Kiowa */
+  Kiowa = 'KIOWA',
+  /** (345) Kirundi */
+  Kirundi = 'KIRUNDI',
+  /** (258) Koho */
+  Koho = 'KOHO',
+  /** (259) Korean */
+  Korean = 'KOREAN',
+  /** (260) Koyukon */
+  Koyukon = 'KOYUKON',
+  /** (261) Krahn */
+  Krahn = 'KRAHN',
+  /** (262) Krio */
+  Krio = 'KRIO',
+  /** (263) Kunama */
+  Kunama = 'KUNAMA',
+  /** (264) Kurmanji */
+  Kurmanji = 'KURMANJI',
+  /** (265) Kyrgyz */
+  Kyrgyz = 'KYRGYZ',
+  /** (253) K'iche' */
+  KIche = 'K_ICHE',
+  /** (266) Lakota */
+  Lakota = 'LAKOTA',
+  /** (267) Laotian */
+  Laotian = 'LAOTIAN',
+  /** (268) Latvian */
+  Latvian = 'LATVIAN',
+  /** (269) Liberian Pidgin English */
+  LiberianPidginEnglish = 'LIBERIAN_PIDGIN_ENGLISH',
+  /** (270) Lingala */
+  Lingala = 'LINGALA',
+  /** (271) Lingít / Tlingit */
+  LingTTlingit = 'LING_T_TLINGIT',
+  /** (272) Lithuanian */
+  Lithuanian = 'LITHUANIAN',
+  /** (273) Lombard */
+  Lombard = 'LOMBARD',
+  /** (274) Luba-Kasai */
+  LubaKasai = 'LUBA_KASAI',
+  /** (275) Luganda */
+  Luganda = 'LUGANDA',
+  /** (276) Luo */
+  Luo = 'LUO',
+  /** (277) Maay */
+  Maay = 'MAAY',
+  /** (278) Macedonian */
+  Macedonian = 'MACEDONIAN',
+  /** (279) Malay */
+  Malay = 'MALAY',
+  /** (280) Malayalam */
+  Malayalam = 'MALAYALAM',
+  /** (281) Maltese */
+  Maltese = 'MALTESE',
+  /** (282) Mam */
+  Mam = 'MAM',
+  /** (283) Mandarin */
+  Mandarin = 'MANDARIN',
+  /** (284) Mandinka */
+  Mandinka = 'MANDINKA',
+  /** (285) Maninka */
+  Maninka = 'MANINKA',
+  /** (286) Manobo */
+  Manobo = 'MANOBO',
+  /** (287) Marathi */
+  Marathi = 'MARATHI',
+  /** (288) Marka */
+  Marka = 'MARKA',
+  /** (289) Marshallese */
+  Marshallese = 'MARSHALLESE',
+  /** (290) Masalit */
+  Masalit = 'MASALIT',
+  /** (291) Mbay */
+  Mbay = 'MBAY',
+  /** (292) Mien */
+  Mien = 'MIEN',
+  /** (293) Mirpuri */
+  Mirpuri = 'MIRPURI',
+  /** (294) Mixteco */
+  Mixteco = 'MIXTECO',
+  /** (295) Mizo */
+  Mizo = 'MIZO',
+  /** (296) Mnong */
+  Mnong = 'MNONG',
+  /** (297) Mongolian */
+  Mongolian = 'MONGOLIAN',
+  /** (298) Montenegrin */
+  Montenegrin = 'MONTENEGRIN',
+  /** (299) Moroccan Arabic */
+  MoroccanArabic = 'MOROCCAN_ARABIC',
+  /** (300) Mortlockese */
+  Mortlockese = 'MORTLOCKESE',
+  /** (301) Muscogee */
+  Muscogee = 'MUSCOGEE',
+  /** (302) Napoletano */
+  Napoletano = 'NAPOLETANO',
+  /** (303) Navajo */
+  Navajo = 'NAVAJO',
+  /** (304) Navajo Family Sign */
+  NavajoFamilySign = 'NAVAJO_FAMILY_SIGN',
+  /** (305) Ndebele */
+  Ndebele = 'NDEBELE',
+  /** (306) Neapolitan */
+  Neapolitan = 'NEAPOLITAN',
+  /** (307) Nee’aandeg’ / Tanacross */
+  NeeAandegTanacross = 'NEE_AANDEG_TANACROSS',
+  /** (308) Nepali */
+  Nepali = 'NEPALI',
+  /** (309) Ngambay */
+  Ngambay = 'NGAMBAY',
+  /** (310) Nigerian Pidgin */
+  NigerianPidgin = 'NIGERIAN_PIDGIN',
+  /** (311) Northern Sotho */
+  NorthernSotho = 'NORTHERN_SOTHO',
+  /** (312) Norwegian */
+  Norwegian = 'NORWEGIAN',
+  /** (313) Nuer */
+  Nuer = 'NUER',
+  /** (314) Nupe */
+  Nupe = 'NUPE',
+  /** (315) Nyanja */
+  Nyanja = 'NYANJA',
+  /** (316) Nyoro */
+  Nyoro = 'NYORO',
+  /** (318) Ojibwe */
+  Ojibwe = 'OJIBWE',
+  /** (319) Oromo */
+  Oromo = 'OROMO',
+  /** (317) O'odham */
+  OOdham = 'O_ODHAM',
+  /** (320) Pampangan */
+  Pampangan = 'PAMPANGAN',
+  /** (321) Papiamento */
+  Papiamento = 'PAPIAMENTO',
+  /** (322) Pashto */
+  Pashto = 'PASHTO',
+  /** (323) Pennsylvania Dutch */
+  PennsylvaniaDutch = 'PENNSYLVANIA_DUTCH',
+  /** (324) Persian */
+  Persian = 'PERSIAN',
+  /** (325) Plains Sign Language */
+  PlainsSignLanguage = 'PLAINS_SIGN_LANGUAGE',
+  /** (326) Plateau Sign Language */
+  PlateauSignLanguage = 'PLATEAU_SIGN_LANGUAGE',
+  /** (327) Plautdietsch */
+  Plautdietsch = 'PLAUTDIETSCH',
+  /** (328) Pohnpeian */
+  Pohnpeian = 'POHNPEIAN',
+  /** (329) Polish */
+  Polish = 'POLISH',
+  /** (330) Portuguese */
+  Portuguese = 'PORTUGUESE',
+  /** (331) Portuguese Brazilian */
+  PortugueseBrazilian = 'PORTUGUESE_BRAZILIAN',
+  /** (332) Portuguese Cape Verdean */
+  PortugueseCapeVerdean = 'PORTUGUESE_CAPE_VERDEAN',
+  /** (333) Portuguese Creole */
+  PortugueseCreole = 'PORTUGUESE_CREOLE',
+  /** (334) Puerto Rican Sign Language */
+  PuertoRicanSignLanguage = 'PUERTO_RICAN_SIGN_LANGUAGE',
+  /** (335) Pugliese */
+  Pugliese = 'PUGLIESE',
+  /** (336) Pulaar */
+  Pulaar = 'PULAAR',
+  /** (337) Punjabi */
+  Punjabi = 'PUNJABI',
+  /** (338) Putian */
+  Putian = 'PUTIAN',
+  /** (339) Quechua */
+  Quechua = 'QUECHUA',
+  /** (340) Quichua */
+  Quichua = 'QUICHUA',
+  /** (341) Rade */
+  Rade = 'RADE',
+  /** (342) Rakhine */
+  Rakhine = 'RAKHINE',
+  /** (343) Rohingya */
+  Rohingya = 'ROHINGYA',
+  /** (344) Romanian */
+  Romanian = 'ROMANIAN',
+  /** (346) Russian */
+  Russian = 'RUSSIAN',
+  /** (347) Samoan */
+  Samoan = 'SAMOAN',
+  /** (348) Samoan Sign Language */
+  SamoanSignLanguage = 'SAMOAN_SIGN_LANGUAGE',
+  /** (349) Sango */
+  Sango = 'SANGO',
+  /** (350) Seraiki */
+  Seraiki = 'SERAIKI',
+  /** (351) Serbian */
+  Serbian = 'SERBIAN',
+  /** (352) Shanghainese */
+  Shanghainese = 'SHANGHAINESE',
+  /** (353) Shona */
+  Shona = 'SHONA',
+  /** (354) Sichuan Yi */
+  SichuanYi = 'SICHUAN_YI',
+  /** (355) Sicilian */
+  Sicilian = 'SICILIAN',
+  /** (356) Sindhi */
+  Sindhi = 'SINDHI',
+  /** (357) Sinhalese */
+  Sinhalese = 'SINHALESE',
+  /** (358) Sioux */
+  Sioux = 'SIOUX',
+  /** (359) Slovak */
+  Slovak = 'SLOVAK',
+  /** (360) Slovenian */
+  Slovenian = 'SLOVENIAN',
+  /** (361) Sm’algyax / (Coast) Tsimshian */
+  SmAlgyaxCoastTsimshian = 'SM_ALGYAX_COAST_TSIMSHIAN',
+  /** (362) Soga */
+  Soga = 'SOGA',
+  /** (363) Somali */
+  Somali = 'SOMALI',
+  /** (364) Soninke */
+  Soninke = 'SONINKE',
+  /** (365) Sorani */
+  Sorani = 'SORANI',
+  /** (366) Sothern Sotho */
+  SothernSotho = 'SOTHERN_SOTHO',
+  /** (367) Spanish */
+  Spanish = 'SPANISH',
+  /** (368) Spanish Creole */
+  SpanishCreole = 'SPANISH_CREOLE',
+  /** (369) Sudanese Arabic */
+  SudaneseArabic = 'SUDANESE_ARABIC',
+  /** (370) Sugpiaq / Alutiiq */
+  SugpiaqAlutiiq = 'SUGPIAQ_ALUTIIQ',
+  /** (371) Sunda */
+  Sunda = 'SUNDA',
+  /** (372) Susu */
+  Susu = 'SUSU',
+  /** (373) Swahili */
+  Swahili = 'SWAHILI',
+  /** (374) Swati */
+  Swati = 'SWATI',
+  /** (375) Swedish */
+  Swedish = 'SWEDISH',
+  /** (376) Sylhetti */
+  Sylhetti = 'SYLHETTI',
+  /** (377) Tagalog */
+  Tagalog = 'TAGALOG',
+  /** (378) Taiwanese */
+  Taiwanese = 'TAIWANESE',
+  /** (379) Tajik */
+  Tajik = 'TAJIK',
+  /** (380) Tamil */
+  Tamil = 'TAMIL',
+  /** (381) Tanacross */
+  Tanacross = 'TANACROSS',
+  /** (382) Tanana */
+  Tanana = 'TANANA',
+  /** (383) Telugu */
+  Telugu = 'TELUGU',
+  /** (384) Thai */
+  Thai = 'THAI',
+  /** (385) Tibetan */
+  Tibetan = 'TIBETAN',
+  /** (386) Tigre */
+  Tigre = 'TIGRE',
+  /** (387) Tigrigna */
+  Tigrigna = 'TIGRIGNA',
+  /** (388) Tlingit */
+  Tlingit = 'TLINGIT',
+  /** (389) Toishanese */
+  Toishanese = 'TOISHANESE',
+  /** (390) Tongan */
+  Tongan = 'TONGAN',
+  /** (391) Tooro */
+  Tooro = 'TOORO',
+  /** (392) Trique */
+  Trique = 'TRIQUE',
+  /** (393) Tsimshian */
+  Tsimshian = 'TSIMSHIAN',
+  /** (394) Tsonga */
+  Tsonga = 'TSONGA',
+  /** (395) Tswana */
+  Tswana = 'TSWANA',
+  /** (396) Turkish */
+  Turkish = 'TURKISH',
+  /** (397) Turkmen */
+  Turkmen = 'TURKMEN',
+  /** (398) Twi */
+  Twi = 'TWI',
+  /** (399) Tzotzil */
+  Tzotzil = 'TZOTZIL',
+  /** (400) Ukrainian */
+  Ukrainian = 'UKRAINIAN',
+  /** (401) Unangam Tunuu / Aleutian Aleut */
+  UnangamTunuuAleutianAleut = 'UNANGAM_TUNUU_ALEUTIAN_ALEUT',
+  /** (402) Upper Kuskokwim */
+  UpperKuskokwim = 'UPPER_KUSKOKWIM',
+  /** (403) Urdu */
+  Urdu = 'URDU',
+  /** (404) Uyghur */
+  Uyghur = 'UYGHUR',
+  /** (405) Uzbek */
+  Uzbek = 'UZBEK',
+  /** (406) Venda */
+  Venda = 'VENDA',
+  /** (407) Vietnamese */
+  Vietnamese = 'VIETNAMESE',
+  /** (408) Visayan */
+  Visayan = 'VISAYAN',
+  /** (409) Welsh */
+  Welsh = 'WELSH',
+  /** (410) Wodaabe */
+  Wodaabe = 'WODAABE',
+  /** (411) Wolof */
+  Wolof = 'WOLOF',
+  /** (412) Wuzhou */
+  Wuzhou = 'WUZHOU',
+  /** (413) Xaat Kíl / Haida */
+  XaatKLHaida = 'XAAT_K_L_HAIDA',
+  /** (414) Xhosa */
+  Xhosa = 'XHOSA',
+  /** (415) Xiang */
+  Xiang = 'XIANG',
+  /** (416) Yemeni Arabic */
+  YemeniArabic = 'YEMENI_ARABIC',
+  /** (417) Yiddish */
+  Yiddish = 'YIDDISH',
+  /** (418) Yoruba */
+  Yoruba = 'YORUBA',
+  /** (419) Yunnanese */
+  Yunnanese = 'YUNNANESE',
+  /** (420) Yupik */
+  Yupik = 'YUPIK',
+  /** (421) Zapoteco */
+  Zapoteco = 'ZAPOTECO',
+  /** (422) Zarma */
+  Zarma = 'ZARMA',
+  /** (423) Zo */
+  Zo = 'ZO',
+  /** (424) Zulu */
+  Zulu = 'ZULU',
+  /** (425) Zuni */
+  Zuni = 'ZUNI',
+  /** (426) Zyphe */
+  Zyphe = 'ZYPHE',
+}
+
 /** 3.917 */
 export enum PriorLivingSituation {
   /** (8) Client doesn't know */
@@ -4460,7 +5131,7 @@ export type ServiceType = {
 
 /** HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2) */
 export enum ServiceTypeProvided {
-  /** (200) BedNight */
+  /** (200) Bed Night */
   BedNightBedNight = 'BED_NIGHT__BED_NIGHT',
   /** (7) Mortgage assistance */
   HopwaFinancialAssistanceMortgageAssistance = 'HOPWA_FINANCIAL_ASSISTANCE__MORTGAGE_ASSISTANCE',
@@ -5705,6 +6376,9 @@ export type AssessmentWithRecordsFragment = {
     hpScreeningScore?: NoYesMissing | null;
     thresholdScore?: NoYesMissing | null;
     vamcStation?: VamcStationNumber | null;
+    translationNeeded?: NoYesReasonsForMissingData | null;
+    preferredLanguage?: PreferredLanguage | null;
+    preferredLanguageDifferent?: string | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -6139,6 +6813,9 @@ export type FullAssessmentFragment = {
     hpScreeningScore?: NoYesMissing | null;
     thresholdScore?: NoYesMissing | null;
     vamcStation?: VamcStationNumber | null;
+    translationNeeded?: NoYesReasonsForMissingData | null;
+    preferredLanguage?: PreferredLanguage | null;
+    preferredLanguageDifferent?: string | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -7026,6 +7703,9 @@ export type GetAssessmentQuery = {
       hpScreeningScore?: NoYesMissing | null;
       thresholdScore?: NoYesMissing | null;
       vamcStation?: VamcStationNumber | null;
+      translationNeeded?: NoYesReasonsForMissingData | null;
+      preferredLanguage?: PreferredLanguage | null;
+      preferredLanguageDifferent?: string | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
         id: string;
@@ -7544,6 +8224,9 @@ export type GetHouseholdAssessmentsQuery = {
       hpScreeningScore?: NoYesMissing | null;
       thresholdScore?: NoYesMissing | null;
       vamcStation?: VamcStationNumber | null;
+      translationNeeded?: NoYesReasonsForMissingData | null;
+      preferredLanguage?: PreferredLanguage | null;
+      preferredLanguageDifferent?: string | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
         id: string;
@@ -8010,6 +8693,9 @@ export type SubmitAssessmentMutation = {
         hpScreeningScore?: NoYesMissing | null;
         thresholdScore?: NoYesMissing | null;
         vamcStation?: VamcStationNumber | null;
+        translationNeeded?: NoYesReasonsForMissingData | null;
+        preferredLanguage?: PreferredLanguage | null;
+        preferredLanguageDifferent?: string | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
@@ -8485,6 +9171,9 @@ export type GetAssessmentsForPopulationQuery = {
           hpScreeningScore?: NoYesMissing | null;
           thresholdScore?: NoYesMissing | null;
           vamcStation?: VamcStationNumber | null;
+          translationNeeded?: NoYesReasonsForMissingData | null;
+          preferredLanguage?: PreferredLanguage | null;
+          preferredLanguageDifferent?: string | null;
           project: {
             __typename?: 'Project';
             id: string;
@@ -8923,6 +9612,9 @@ export type EnrollmentValuesFragment = {
   hpScreeningScore?: NoYesMissing | null;
   thresholdScore?: NoYesMissing | null;
   vamcStation?: VamcStationNumber | null;
+  translationNeeded?: NoYesReasonsForMissingData | null;
+  preferredLanguage?: PreferredLanguage | null;
+  preferredLanguageDifferent?: string | null;
 };
 
 export type EnrollmentFieldsFromAssessmentFragment = {
@@ -8986,6 +9678,9 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   hpScreeningScore?: NoYesMissing | null;
   thresholdScore?: NoYesMissing | null;
   vamcStation?: VamcStationNumber | null;
+  translationNeeded?: NoYesReasonsForMissingData | null;
+  preferredLanguage?: PreferredLanguage | null;
+  preferredLanguageDifferent?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
   project: {
     __typename?: 'Project';
@@ -10394,6 +11089,9 @@ export type GetNonWipEnrollmentsQuery = {
         hpScreeningScore?: NoYesMissing | null;
         thresholdScore?: NoYesMissing | null;
         vamcStation?: VamcStationNumber | null;
+        translationNeeded?: NoYesReasonsForMissingData | null;
+        preferredLanguage?: PreferredLanguage | null;
+        preferredLanguageDifferent?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
         project: {
           __typename?: 'Project';
@@ -11174,6 +11872,9 @@ export type AllEnrollmentDetailsFragment = {
   hpScreeningScore?: NoYesMissing | null;
   thresholdScore?: NoYesMissing | null;
   vamcStation?: VamcStationNumber | null;
+  translationNeeded?: NoYesReasonsForMissingData | null;
+  preferredLanguage?: PreferredLanguage | null;
+  preferredLanguageDifferent?: string | null;
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
   exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
@@ -11363,6 +12064,9 @@ export type GetEnrollmentDetailsQuery = {
     hpScreeningScore?: NoYesMissing | null;
     thresholdScore?: NoYesMissing | null;
     vamcStation?: VamcStationNumber | null;
+    translationNeeded?: NoYesReasonsForMissingData | null;
+    preferredLanguage?: PreferredLanguage | null;
+    preferredLanguageDifferent?: string | null;
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
     exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
@@ -17832,6 +18536,9 @@ export const EnrollmentValuesFragmentDoc = gql`
     hpScreeningScore
     thresholdScore
     vamcStation
+    translationNeeded
+    preferredLanguage
+    preferredLanguageDifferent
   }
 `;
 export const CustomDataElementValueFieldsFragmentDoc = gql`

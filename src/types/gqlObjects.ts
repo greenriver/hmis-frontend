@@ -1803,6 +1803,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
+        name: 'preferredLanguage',
+        type: { kind: 'ENUM', name: 'PreferredLanguage', ofType: null },
+      },
+      {
+        name: 'preferredLanguageDifferent',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'previousStreetEssh',
         type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
@@ -1887,6 +1895,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'ENUM',
           name: 'TimesHomelessPastThreeYears',
+          ofType: null,
+        },
+      },
+      {
+        name: 'translationNeeded',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
           ofType: null,
         },
       },

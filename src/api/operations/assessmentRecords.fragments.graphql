@@ -62,6 +62,9 @@ fragment EnrollmentValues on Enrollment {
   hpScreeningScore
   thresholdScore
   vamcStation
+  translationNeeded
+  preferredLanguage
+  preferredLanguageDifferent
 }
 
 fragment EnrollmentFieldsFromAssessment on Enrollment {
