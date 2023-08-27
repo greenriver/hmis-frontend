@@ -15683,41 +15683,6 @@
       },
       {
         "kind": "ENUM",
-        "name": "HMISParticipationType",
-        "description": "2.08.1",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "COMPARABLE_DATABASE_PARTICIPATING",
-            "description": "(2) Comparable Database Participating",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HMIS_PARTICIPATING",
-            "description": "(1) HMIS Participating",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INVALID",
-            "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NOT_PARTICIPATING",
-            "description": "(0) Not Participating",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
         "name": "HOPWAMedAssistedLivingFac",
         "description": "2.02.8",
         "fields": null,
@@ -21462,6 +21427,12 @@
             "deprecationReason": null
           },
           {
+            "name": "RESIDENTIAL_PROJECTS",
+            "description": "Residential Projects",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "STATE",
             "description": null,
             "isDeprecated": false,
@@ -21716,6 +21687,30 @@
             "deprecationReason": null
           },
           {
+            "name": "affiliatedProjects",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Project",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "contactInformation",
             "description": null,
             "args": [],
@@ -21949,18 +21944,6 @@
                 "name": "Boolean",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "hmisParticipationStatus",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "HMISParticipationType",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -22371,6 +22354,54 @@
               "kind": "ENUM",
               "name": "NoYes",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "residentialAffiliationProjectIds",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "residentialAffiliationProjects",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Project",
+                    "ofType": null
+                  }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

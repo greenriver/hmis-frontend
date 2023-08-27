@@ -2422,18 +2422,6 @@ export enum GeographyType {
   Urban = 'URBAN',
 }
 
-/** 2.08.1 */
-export enum HmisParticipationType {
-  /** (2) Comparable Database Participating */
-  ComparableDatabaseParticipating = 'COMPARABLE_DATABASE_PARTICIPATING',
-  /** (1) HMIS Participating */
-  HmisParticipating = 'HMIS_PARTICIPATING',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (0) Not Participating */
-  NotParticipating = 'NOT_PARTICIPATING',
-}
-
 /** 2.02.8 */
 export enum HopwaMedAssistedLivingFac {
   /** Invalid Value */
@@ -3365,6 +3353,8 @@ export enum PickListType {
   /** All Projects that the User can see */
   Project = 'PROJECT',
   ReferralOutcome = 'REFERRAL_OUTCOME',
+  /** Residential Projects */
+  ResidentialProjects = 'RESIDENTIAL_PROJECTS',
   State = 'STATE',
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
@@ -3439,6 +3429,7 @@ export type Project = {
   HOPWAMedAssistedLivingFac?: Maybe<HopwaMedAssistedLivingFac>;
   access: ProjectAccess;
   active: Scalars['Boolean']['output'];
+  affiliatedProjects: Array<Project>;
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
   customDataElements: Array<CustomDataElement>;
@@ -3449,7 +3440,6 @@ export type Project = {
   enrollments: EnrollmentsPaginated;
   funders: FundersPaginated;
   hasUnits: Scalars['Boolean']['output'];
-  hmisParticipationStatus?: Maybe<HmisParticipationType>;
   households: HouseholdsPaginated;
   housingType?: Maybe<HousingType>;
   hudId: Scalars['ID']['output'];
@@ -3465,6 +3455,8 @@ export type Project = {
   projectType?: Maybe<ProjectType>;
   referralRequests: ReferralRequestsPaginated;
   residentialAffiliation?: Maybe<NoYes>;
+  residentialAffiliationProjectIds: Array<Scalars['ID']['output']>;
+  residentialAffiliationProjects: Array<Project>;
   rrhSubType?: Maybe<RrhSubType>;
   services: ServicesPaginated;
   targetPopulation?: Maybe<TargetPopulation>;
@@ -14222,12 +14214,12 @@ export type SubmitFormMutation = {
           id: string;
           hudId: string;
           description?: string | null;
-          hmisParticipationStatus?: HmisParticipationType | null;
           HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
           contactInformation?: string | null;
           continuumProject?: NoYes | null;
           housingType?: HousingType | null;
           residentialAffiliation?: NoYes | null;
+          residentialAffiliationProjectIds: Array<string>;
           rrhSubType?: RrhSubType | null;
           targetPopulation?: TargetPopulation | null;
           projectName: string;
@@ -15307,12 +15299,12 @@ export type ProjectAllFieldsFragment = {
   id: string;
   hudId: string;
   description?: string | null;
-  hmisParticipationStatus?: HmisParticipationType | null;
   HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
   contactInformation?: string | null;
   continuumProject?: NoYes | null;
   housingType?: HousingType | null;
   residentialAffiliation?: NoYes | null;
+  residentialAffiliationProjectIds: Array<string>;
   rrhSubType?: RrhSubType | null;
   targetPopulation?: TargetPopulation | null;
   projectName: string;
@@ -15456,12 +15448,12 @@ export type GetProjectQuery = {
     id: string;
     hudId: string;
     description?: string | null;
-    hmisParticipationStatus?: HmisParticipationType | null;
     HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
     contactInformation?: string | null;
     continuumProject?: NoYes | null;
     housingType?: HousingType | null;
     residentialAffiliation?: NoYes | null;
+    residentialAffiliationProjectIds: Array<string>;
     rrhSubType?: RrhSubType | null;
     targetPopulation?: TargetPopulation | null;
     projectName: string;
@@ -18969,12 +18961,12 @@ export const ProjectAllFieldsFragmentDoc = gql`
     ...ProjectNameAndType
     ...ProjectOperatingPeriod
     description
-    hmisParticipationStatus
     HOPWAMedAssistedLivingFac
     contactInformation
     continuumProject
     housingType
     residentialAffiliation
+    residentialAffiliationProjectIds
     rrhSubType
     targetPopulation
     organization {

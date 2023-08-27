@@ -3648,10 +3648,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'hmisParticipationStatus',
-        type: { kind: 'ENUM', name: 'HMISParticipationType', ofType: null },
-      },
-      {
         name: 'housingType',
         type: { kind: 'ENUM', name: 'HousingType', ofType: null },
       },
@@ -3698,6 +3694,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'residentialAffiliation',
         type: { kind: 'ENUM', name: 'NoYes', ofType: null },
+      },
+      {
+        name: 'residentialAffiliationProjectIds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
+          },
+        },
       },
       {
         name: 'rrhSubType',

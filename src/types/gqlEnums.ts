@@ -607,12 +607,6 @@ export const HmisEnums = {
     RURAL: 'Rural',
     DATA_NOT_COLLECTED: 'Unknown / data not collected',
   },
-  HMISParticipationType: {
-    INVALID: 'Invalid Value',
-    NOT_PARTICIPATING: 'Not Participating',
-    HMIS_PARTICIPATING: 'HMIS Participating',
-    COMPARABLE_DATABASE_PARTICIPATING: 'Comparable Database Participating',
-  },
   HOPWAMedAssistedLivingFac: {
     YES: 'Yes',
     INVALID: 'Invalid Value',
@@ -865,6 +859,7 @@ export const HmisEnums = {
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
+    RESIDENTIAL_PROJECTS: 'Residential Projects',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
