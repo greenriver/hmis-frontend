@@ -12,8 +12,9 @@ import DynamicForm, {
   DynamicFormRef,
 } from '../components/DynamicForm';
 import FormDialogActionContent from '../components/FormDialogActionContent';
-import { SubmitFormAllowedTypes } from '../types';
+import { LocalConstants, SubmitFormAllowedTypes } from '../types';
 
+import { AlwaysPresentLocalConstants } from '../util/formUtil';
 import {
   DynamicFormHandlerArgs,
   useDynamicFormHandlersForRecord,
@@ -45,13 +46,18 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   formRole,
   onClose,
   record,
-  localConstants,
+  localConstants: localConstantsProp,
   inputVariables,
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const openFormDialog = useCallback(() => setDialogOpen(true), []);
 
   const formRef = useRef<DynamicFormRef>(null);
+
+  const localConstants: LocalConstants = useMemo(
+    () => ({ ...AlwaysPresentLocalConstants, ...localConstantsProp }),
+    [localConstantsProp]
+  );
 
   const { formDefinition, loading: definitionLoading } = useFormDefinition({
     role: formRole,

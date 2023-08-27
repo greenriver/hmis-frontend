@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
@@ -58,6 +58,13 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       formRole: FormRole.CurrentLivingSituation,
     });
 
+  const localConstants = useMemo(
+    () => ({
+      entryDate: enrollment?.entryDate,
+      exitDate: enrollment?.exitDate,
+    }),
+    [enrollment]
+  );
   const { openFormDialog, renderFormDialog } =
     useFormDialog<CurrentLivingSituationFieldsFragment>({
       formRole: FormRole.CurrentLivingSituation,
@@ -70,6 +77,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       },
       inputVariables: { enrollmentId },
       record: viewingRecord,
+      localConstants,
     });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
