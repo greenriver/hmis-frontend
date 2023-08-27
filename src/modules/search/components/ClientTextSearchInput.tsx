@@ -108,6 +108,10 @@ const ClientTextSearchInput: React.FC<Props> = ({
           </InputAdornment>
         ) : undefined,
         ...props.InputProps,
+        inputProps: {
+          'data-testid': 'clientSearchInput',
+          ...props.InputProps?.inputProps,
+        },
       }}
     />
   );
