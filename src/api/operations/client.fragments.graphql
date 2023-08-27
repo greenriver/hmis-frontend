@@ -19,10 +19,12 @@ fragment ClientFields on Client {
   ...ClientVeteranInfoFields
   dobDataQuality
   gender
+  differentIdentityText
   pronouns
   nameDataQuality
   personalId
   race
+  additionalRaceEthnicity
   ssnDataQuality
   veteranStatus
   dateCreated

@@ -1974,6 +1974,18 @@
             "deprecationReason": null
           },
           {
+            "name": "additionalRaceEthnicity",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "addresses",
             "description": null,
             "args": [],
@@ -2279,6 +2291,18 @@
             "type": {
               "kind": "ENUM",
               "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "differentIdentityText",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -9749,6 +9773,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INCLUDES",
+            "description": "Whether the value includes the given item",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "LESS_THAN",
             "description": null,
             "isDeprecated": false,
@@ -15822,7 +15852,7 @@
             "deprecationReason": null
           },
           {
-            "name": "domesticViolenceVictim",
+            "name": "domesticViolenceSurvivor",
             "description": null,
             "args": [],
             "type": {
@@ -17030,18 +17060,6 @@
             "deprecationReason": null
           },
           {
-            "name": "hivaidsAssistance",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoYesReasonsForMissingData",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "id",
             "description": null,
             "args": [],
@@ -17170,18 +17188,6 @@
             "deprecationReason": null
           },
           {
-            "name": "noHivaidsAssistanceReason",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "NoAssistanceReason",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "noIndianHealthServicesReason",
             "description": null,
             "args": [],
@@ -17266,7 +17272,7 @@
             "deprecationReason": null
           },
           {
-            "name": "noVaMedReason",
+            "name": "noVhaReason",
             "description": null,
             "args": [],
             "type": {
@@ -17698,7 +17704,7 @@
             "deprecationReason": null
           },
           {
-            "name": "vaMedicalServices",
+            "name": "vhaServices",
             "description": null,
             "args": [],
             "type": {

@@ -308,6 +308,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Client',
     fields: [
       {
+        name: 'additionalRaceEthnicity',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'afghanistanOef',
         type: {
           kind: 'ENUM',
@@ -343,6 +347,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: 'NoYesReasonsForMissingData',
           ofType: null,
         },
+      },
+      {
+        name: 'differentIdentityText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'dischargeStatus',
@@ -2776,7 +2784,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'HealthStatus', ofType: null },
       },
       {
-        name: 'domesticViolenceVictim',
+        name: 'domesticViolenceSurvivor',
         type: {
           kind: 'ENUM',
           name: 'NoYesReasonsForMissingData',
@@ -2971,14 +2979,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
-        name: 'hivaidsAssistance',
-        type: {
-          kind: 'ENUM',
-          name: 'NoYesReasonsForMissingData',
-          ofType: null,
-        },
-      },
-      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -3035,10 +3035,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'ReasonNotInsured', ofType: null },
       },
       {
-        name: 'noHivaidsAssistanceReason',
-        type: { kind: 'ENUM', name: 'NoAssistanceReason', ofType: null },
-      },
-      {
         name: 'noIndianHealthServicesReason',
         type: { kind: 'ENUM', name: 'ReasonNotInsured', ofType: null },
       },
@@ -3067,7 +3063,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'ReasonNotInsured', ofType: null },
       },
       {
-        name: 'noVaMedReason',
+        name: 'noVhaReason',
         type: { kind: 'ENUM', name: 'ReasonNotInsured', ofType: null },
       },
       {
@@ -3211,7 +3207,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
-        name: 'vaMedicalServices',
+        name: 'vhaServices',
         type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {

@@ -349,6 +349,7 @@ export type ClearRecentItemsInput = {
 export type Client = {
   __typename?: 'Client';
   access: ClientAccess;
+  additionalRaceEthnicity?: Maybe<Scalars['String']['output']>;
   addresses: Array<ClientAddress>;
   afghanistanOef?: Maybe<NoYesReasonsForMissingData>;
   age?: Maybe<Scalars['Int']['output']>;
@@ -361,6 +362,7 @@ export type Client = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   desertStorm?: Maybe<NoYesReasonsForMissingData>;
+  differentIdentityText?: Maybe<Scalars['String']['output']>;
   disabilities: DisabilitiesPaginated;
   dischargeStatus?: Maybe<DischargeStatus>;
   dob?: Maybe<Scalars['ISO8601Date']['output']>;
@@ -1577,6 +1579,8 @@ export enum EnableOperator {
   GreaterThanEqual = 'GREATER_THAN_EQUAL',
   /** Whether the value is in the answerCodes array. */
   In = 'IN',
+  /** Whether the value includes the given item */
+  Includes = 'INCLUDES',
   LessThan = 'LESS_THAN',
   LessThanEqual = 'LESS_THAN_EQUAL',
   NotEqual = 'NOT_EQUAL',
@@ -2443,7 +2447,7 @@ export type HealthAndDv = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   dentalHealthStatus?: Maybe<HealthStatus>;
-  domesticViolenceVictim?: Maybe<NoYesReasonsForMissingData>;
+  domesticViolenceSurvivor?: Maybe<NoYesReasonsForMissingData>;
   dueDate?: Maybe<Scalars['ISO8601Date']['output']>;
   enrollment: Enrollment;
   generalHealthStatus?: Maybe<HealthStatus>;
@@ -2618,7 +2622,6 @@ export type IncomeBenefit = {
   enrollment: Enrollment;
   ga?: Maybe<NoYesMissing>;
   gaAmount?: Maybe<Scalars['Float']['output']>;
-  hivaidsAssistance?: Maybe<NoYesReasonsForMissingData>;
   id: Scalars['ID']['output'];
   incomeFromAnySource?: Maybe<NoYesReasonsForMissingData>;
   indianHealthServices?: Maybe<NoYesMissing>;
@@ -2629,7 +2632,6 @@ export type IncomeBenefit = {
   noAdapReason?: Maybe<NoAssistanceReason>;
   noCobraReason?: Maybe<ReasonNotInsured>;
   noEmployerProvidedReason?: Maybe<ReasonNotInsured>;
-  noHivaidsAssistanceReason?: Maybe<NoAssistanceReason>;
   noIndianHealthServicesReason?: Maybe<ReasonNotInsured>;
   noMedicaidReason?: Maybe<ReasonNotInsured>;
   noMedicareReason?: Maybe<ReasonNotInsured>;
@@ -2637,7 +2639,7 @@ export type IncomeBenefit = {
   noRyanWhiteReason?: Maybe<NoAssistanceReason>;
   noSchipReason?: Maybe<ReasonNotInsured>;
   noStateHealthInsReason?: Maybe<ReasonNotInsured>;
-  noVaMedReason?: Maybe<ReasonNotInsured>;
+  noVhaReason?: Maybe<ReasonNotInsured>;
   otherBenefitsSource?: Maybe<NoYesMissing>;
   otherBenefitsSourceIdentify?: Maybe<Scalars['String']['output']>;
   otherIncomeAmount?: Maybe<Scalars['Float']['output']>;
@@ -2673,7 +2675,7 @@ export type IncomeBenefit = {
   vaDisabilityNonServiceAmount?: Maybe<Scalars['Float']['output']>;
   vaDisabilityService?: Maybe<NoYesMissing>;
   vaDisabilityServiceAmount?: Maybe<Scalars['Float']['output']>;
-  vaMedicalServices?: Maybe<NoYesMissing>;
+  vhaServices?: Maybe<NoYesMissing>;
   wic?: Maybe<NoYesMissing>;
   workersComp?: Maybe<NoYesMissing>;
   workersCompAmount?: Maybe<Scalars['Float']['output']>;
@@ -5761,7 +5763,6 @@ export type AssessmentWithRecordsFragment = {
     employerProvided?: NoYesMissing | null;
     ga?: NoYesMissing | null;
     gaAmount?: number | null;
-    hivaidsAssistance?: NoYesReasonsForMissingData | null;
     id: string;
     incomeFromAnySource?: NoYesReasonsForMissingData | null;
     indianHealthServices?: NoYesMissing | null;
@@ -5772,7 +5773,6 @@ export type AssessmentWithRecordsFragment = {
     noAdapReason?: NoAssistanceReason | null;
     noCobraReason?: ReasonNotInsured | null;
     noEmployerProvidedReason?: ReasonNotInsured | null;
-    noHivaidsAssistanceReason?: NoAssistanceReason | null;
     noIndianHealthServicesReason?: ReasonNotInsured | null;
     noMedicaidReason?: ReasonNotInsured | null;
     noMedicareReason?: ReasonNotInsured | null;
@@ -5780,7 +5780,7 @@ export type AssessmentWithRecordsFragment = {
     noRyanWhiteReason?: NoAssistanceReason | null;
     noSchipReason?: ReasonNotInsured | null;
     noStateHealthInsReason?: ReasonNotInsured | null;
-    noVaMedReason?: ReasonNotInsured | null;
+    noVhaReason?: ReasonNotInsured | null;
     otherBenefitsSource?: NoYesMissing | null;
     otherBenefitsSourceIdentify?: string | null;
     otherIncomeAmount?: number | null;
@@ -5815,7 +5815,7 @@ export type AssessmentWithRecordsFragment = {
     vaDisabilityNonServiceAmount?: number | null;
     vaDisabilityService?: NoYesMissing | null;
     vaDisabilityServiceAmount?: number | null;
-    vaMedicalServices?: NoYesMissing | null;
+    vhaServices?: NoYesMissing | null;
     wic?: NoYesMissing | null;
     workersComp?: NoYesMissing | null;
     workersCompAmount?: number | null;
@@ -5890,7 +5890,7 @@ export type AssessmentWithRecordsFragment = {
     dateDeleted?: string | null;
     dateUpdated: string;
     dentalHealthStatus?: HealthStatus | null;
-    domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+    domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
     dueDate?: string | null;
     generalHealthStatus?: HealthStatus | null;
     id: string;
@@ -6197,7 +6197,6 @@ export type FullAssessmentFragment = {
     employerProvided?: NoYesMissing | null;
     ga?: NoYesMissing | null;
     gaAmount?: number | null;
-    hivaidsAssistance?: NoYesReasonsForMissingData | null;
     id: string;
     incomeFromAnySource?: NoYesReasonsForMissingData | null;
     indianHealthServices?: NoYesMissing | null;
@@ -6208,7 +6207,6 @@ export type FullAssessmentFragment = {
     noAdapReason?: NoAssistanceReason | null;
     noCobraReason?: ReasonNotInsured | null;
     noEmployerProvidedReason?: ReasonNotInsured | null;
-    noHivaidsAssistanceReason?: NoAssistanceReason | null;
     noIndianHealthServicesReason?: ReasonNotInsured | null;
     noMedicaidReason?: ReasonNotInsured | null;
     noMedicareReason?: ReasonNotInsured | null;
@@ -6216,7 +6214,7 @@ export type FullAssessmentFragment = {
     noRyanWhiteReason?: NoAssistanceReason | null;
     noSchipReason?: ReasonNotInsured | null;
     noStateHealthInsReason?: ReasonNotInsured | null;
-    noVaMedReason?: ReasonNotInsured | null;
+    noVhaReason?: ReasonNotInsured | null;
     otherBenefitsSource?: NoYesMissing | null;
     otherBenefitsSourceIdentify?: string | null;
     otherIncomeAmount?: number | null;
@@ -6251,7 +6249,7 @@ export type FullAssessmentFragment = {
     vaDisabilityNonServiceAmount?: number | null;
     vaDisabilityService?: NoYesMissing | null;
     vaDisabilityServiceAmount?: number | null;
-    vaMedicalServices?: NoYesMissing | null;
+    vhaServices?: NoYesMissing | null;
     wic?: NoYesMissing | null;
     workersComp?: NoYesMissing | null;
     workersCompAmount?: number | null;
@@ -6326,7 +6324,7 @@ export type FullAssessmentFragment = {
     dateDeleted?: string | null;
     dateUpdated: string;
     dentalHealthStatus?: HealthStatus | null;
-    domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+    domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
     dueDate?: string | null;
     generalHealthStatus?: HealthStatus | null;
     id: string;
@@ -7086,7 +7084,6 @@ export type GetAssessmentQuery = {
       employerProvided?: NoYesMissing | null;
       ga?: NoYesMissing | null;
       gaAmount?: number | null;
-      hivaidsAssistance?: NoYesReasonsForMissingData | null;
       id: string;
       incomeFromAnySource?: NoYesReasonsForMissingData | null;
       indianHealthServices?: NoYesMissing | null;
@@ -7097,7 +7094,6 @@ export type GetAssessmentQuery = {
       noAdapReason?: NoAssistanceReason | null;
       noCobraReason?: ReasonNotInsured | null;
       noEmployerProvidedReason?: ReasonNotInsured | null;
-      noHivaidsAssistanceReason?: NoAssistanceReason | null;
       noIndianHealthServicesReason?: ReasonNotInsured | null;
       noMedicaidReason?: ReasonNotInsured | null;
       noMedicareReason?: ReasonNotInsured | null;
@@ -7105,7 +7101,7 @@ export type GetAssessmentQuery = {
       noRyanWhiteReason?: NoAssistanceReason | null;
       noSchipReason?: ReasonNotInsured | null;
       noStateHealthInsReason?: ReasonNotInsured | null;
-      noVaMedReason?: ReasonNotInsured | null;
+      noVhaReason?: ReasonNotInsured | null;
       otherBenefitsSource?: NoYesMissing | null;
       otherBenefitsSourceIdentify?: string | null;
       otherIncomeAmount?: number | null;
@@ -7140,7 +7136,7 @@ export type GetAssessmentQuery = {
       vaDisabilityNonServiceAmount?: number | null;
       vaDisabilityService?: NoYesMissing | null;
       vaDisabilityServiceAmount?: number | null;
-      vaMedicalServices?: NoYesMissing | null;
+      vhaServices?: NoYesMissing | null;
       wic?: NoYesMissing | null;
       workersComp?: NoYesMissing | null;
       workersCompAmount?: number | null;
@@ -7215,7 +7211,7 @@ export type GetAssessmentQuery = {
       dateDeleted?: string | null;
       dateUpdated: string;
       dentalHealthStatus?: HealthStatus | null;
-      domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+      domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
       dueDate?: string | null;
       generalHealthStatus?: HealthStatus | null;
       id: string;
@@ -7606,7 +7602,6 @@ export type GetHouseholdAssessmentsQuery = {
       employerProvided?: NoYesMissing | null;
       ga?: NoYesMissing | null;
       gaAmount?: number | null;
-      hivaidsAssistance?: NoYesReasonsForMissingData | null;
       id: string;
       incomeFromAnySource?: NoYesReasonsForMissingData | null;
       indianHealthServices?: NoYesMissing | null;
@@ -7617,7 +7612,6 @@ export type GetHouseholdAssessmentsQuery = {
       noAdapReason?: NoAssistanceReason | null;
       noCobraReason?: ReasonNotInsured | null;
       noEmployerProvidedReason?: ReasonNotInsured | null;
-      noHivaidsAssistanceReason?: NoAssistanceReason | null;
       noIndianHealthServicesReason?: ReasonNotInsured | null;
       noMedicaidReason?: ReasonNotInsured | null;
       noMedicareReason?: ReasonNotInsured | null;
@@ -7625,7 +7619,7 @@ export type GetHouseholdAssessmentsQuery = {
       noRyanWhiteReason?: NoAssistanceReason | null;
       noSchipReason?: ReasonNotInsured | null;
       noStateHealthInsReason?: ReasonNotInsured | null;
-      noVaMedReason?: ReasonNotInsured | null;
+      noVhaReason?: ReasonNotInsured | null;
       otherBenefitsSource?: NoYesMissing | null;
       otherBenefitsSourceIdentify?: string | null;
       otherIncomeAmount?: number | null;
@@ -7660,7 +7654,7 @@ export type GetHouseholdAssessmentsQuery = {
       vaDisabilityNonServiceAmount?: number | null;
       vaDisabilityService?: NoYesMissing | null;
       vaDisabilityServiceAmount?: number | null;
-      vaMedicalServices?: NoYesMissing | null;
+      vhaServices?: NoYesMissing | null;
       wic?: NoYesMissing | null;
       workersComp?: NoYesMissing | null;
       workersCompAmount?: number | null;
@@ -7735,7 +7729,7 @@ export type GetHouseholdAssessmentsQuery = {
       dateDeleted?: string | null;
       dateUpdated: string;
       dentalHealthStatus?: HealthStatus | null;
-      domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+      domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
       dueDate?: string | null;
       generalHealthStatus?: HealthStatus | null;
       id: string;
@@ -8074,7 +8068,6 @@ export type SubmitAssessmentMutation = {
         employerProvided?: NoYesMissing | null;
         ga?: NoYesMissing | null;
         gaAmount?: number | null;
-        hivaidsAssistance?: NoYesReasonsForMissingData | null;
         id: string;
         incomeFromAnySource?: NoYesReasonsForMissingData | null;
         indianHealthServices?: NoYesMissing | null;
@@ -8085,7 +8078,6 @@ export type SubmitAssessmentMutation = {
         noAdapReason?: NoAssistanceReason | null;
         noCobraReason?: ReasonNotInsured | null;
         noEmployerProvidedReason?: ReasonNotInsured | null;
-        noHivaidsAssistanceReason?: NoAssistanceReason | null;
         noIndianHealthServicesReason?: ReasonNotInsured | null;
         noMedicaidReason?: ReasonNotInsured | null;
         noMedicareReason?: ReasonNotInsured | null;
@@ -8093,7 +8085,7 @@ export type SubmitAssessmentMutation = {
         noRyanWhiteReason?: NoAssistanceReason | null;
         noSchipReason?: ReasonNotInsured | null;
         noStateHealthInsReason?: ReasonNotInsured | null;
-        noVaMedReason?: ReasonNotInsured | null;
+        noVhaReason?: ReasonNotInsured | null;
         otherBenefitsSource?: NoYesMissing | null;
         otherBenefitsSourceIdentify?: string | null;
         otherIncomeAmount?: number | null;
@@ -8128,7 +8120,7 @@ export type SubmitAssessmentMutation = {
         vaDisabilityNonServiceAmount?: number | null;
         vaDisabilityService?: NoYesMissing | null;
         vaDisabilityServiceAmount?: number | null;
-        vaMedicalServices?: NoYesMissing | null;
+        vhaServices?: NoYesMissing | null;
         wic?: NoYesMissing | null;
         workersComp?: NoYesMissing | null;
         workersCompAmount?: number | null;
@@ -8203,7 +8195,7 @@ export type SubmitAssessmentMutation = {
         dateDeleted?: string | null;
         dateUpdated: string;
         dentalHealthStatus?: HealthStatus | null;
-        domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+        domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
         dueDate?: string | null;
         generalHealthStatus?: HealthStatus | null;
         id: string;
@@ -8557,7 +8549,6 @@ export type GetAssessmentsForPopulationQuery = {
           employerProvided?: NoYesMissing | null;
           ga?: NoYesMissing | null;
           gaAmount?: number | null;
-          hivaidsAssistance?: NoYesReasonsForMissingData | null;
           id: string;
           incomeFromAnySource?: NoYesReasonsForMissingData | null;
           indianHealthServices?: NoYesMissing | null;
@@ -8568,7 +8559,6 @@ export type GetAssessmentsForPopulationQuery = {
           noAdapReason?: NoAssistanceReason | null;
           noCobraReason?: ReasonNotInsured | null;
           noEmployerProvidedReason?: ReasonNotInsured | null;
-          noHivaidsAssistanceReason?: NoAssistanceReason | null;
           noIndianHealthServicesReason?: ReasonNotInsured | null;
           noMedicaidReason?: ReasonNotInsured | null;
           noMedicareReason?: ReasonNotInsured | null;
@@ -8576,7 +8566,7 @@ export type GetAssessmentsForPopulationQuery = {
           noRyanWhiteReason?: NoAssistanceReason | null;
           noSchipReason?: ReasonNotInsured | null;
           noStateHealthInsReason?: ReasonNotInsured | null;
-          noVaMedReason?: ReasonNotInsured | null;
+          noVhaReason?: ReasonNotInsured | null;
           otherBenefitsSource?: NoYesMissing | null;
           otherBenefitsSourceIdentify?: string | null;
           otherIncomeAmount?: number | null;
@@ -8611,7 +8601,7 @@ export type GetAssessmentsForPopulationQuery = {
           vaDisabilityNonServiceAmount?: number | null;
           vaDisabilityService?: NoYesMissing | null;
           vaDisabilityServiceAmount?: number | null;
-          vaMedicalServices?: NoYesMissing | null;
+          vhaServices?: NoYesMissing | null;
           wic?: NoYesMissing | null;
           workersComp?: NoYesMissing | null;
           workersCompAmount?: number | null;
@@ -8686,7 +8676,7 @@ export type GetAssessmentsForPopulationQuery = {
           dateDeleted?: string | null;
           dateUpdated: string;
           dentalHealthStatus?: HealthStatus | null;
-          domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+          domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
           dueDate?: string | null;
           generalHealthStatus?: HealthStatus | null;
           id: string;
@@ -9029,7 +9019,6 @@ export type IncomeBenefitValuesFragment = {
   employerProvided?: NoYesMissing | null;
   ga?: NoYesMissing | null;
   gaAmount?: number | null;
-  hivaidsAssistance?: NoYesReasonsForMissingData | null;
   id: string;
   incomeFromAnySource?: NoYesReasonsForMissingData | null;
   indianHealthServices?: NoYesMissing | null;
@@ -9040,7 +9029,6 @@ export type IncomeBenefitValuesFragment = {
   noAdapReason?: NoAssistanceReason | null;
   noCobraReason?: ReasonNotInsured | null;
   noEmployerProvidedReason?: ReasonNotInsured | null;
-  noHivaidsAssistanceReason?: NoAssistanceReason | null;
   noIndianHealthServicesReason?: ReasonNotInsured | null;
   noMedicaidReason?: ReasonNotInsured | null;
   noMedicareReason?: ReasonNotInsured | null;
@@ -9048,7 +9036,7 @@ export type IncomeBenefitValuesFragment = {
   noRyanWhiteReason?: NoAssistanceReason | null;
   noSchipReason?: ReasonNotInsured | null;
   noStateHealthInsReason?: ReasonNotInsured | null;
-  noVaMedReason?: ReasonNotInsured | null;
+  noVhaReason?: ReasonNotInsured | null;
   otherBenefitsSource?: NoYesMissing | null;
   otherBenefitsSourceIdentify?: string | null;
   otherIncomeAmount?: number | null;
@@ -9083,7 +9071,7 @@ export type IncomeBenefitValuesFragment = {
   vaDisabilityNonServiceAmount?: number | null;
   vaDisabilityService?: NoYesMissing | null;
   vaDisabilityServiceAmount?: number | null;
-  vaMedicalServices?: NoYesMissing | null;
+  vhaServices?: NoYesMissing | null;
   wic?: NoYesMissing | null;
   workersComp?: NoYesMissing | null;
   workersCompAmount?: number | null;
@@ -9108,7 +9096,6 @@ export type IncomeBenefitFieldsFragment = {
   employerProvided?: NoYesMissing | null;
   ga?: NoYesMissing | null;
   gaAmount?: number | null;
-  hivaidsAssistance?: NoYesReasonsForMissingData | null;
   id: string;
   incomeFromAnySource?: NoYesReasonsForMissingData | null;
   indianHealthServices?: NoYesMissing | null;
@@ -9119,7 +9106,6 @@ export type IncomeBenefitFieldsFragment = {
   noAdapReason?: NoAssistanceReason | null;
   noCobraReason?: ReasonNotInsured | null;
   noEmployerProvidedReason?: ReasonNotInsured | null;
-  noHivaidsAssistanceReason?: NoAssistanceReason | null;
   noIndianHealthServicesReason?: ReasonNotInsured | null;
   noMedicaidReason?: ReasonNotInsured | null;
   noMedicareReason?: ReasonNotInsured | null;
@@ -9127,7 +9113,7 @@ export type IncomeBenefitFieldsFragment = {
   noRyanWhiteReason?: NoAssistanceReason | null;
   noSchipReason?: ReasonNotInsured | null;
   noStateHealthInsReason?: ReasonNotInsured | null;
-  noVaMedReason?: ReasonNotInsured | null;
+  noVhaReason?: ReasonNotInsured | null;
   otherBenefitsSource?: NoYesMissing | null;
   otherBenefitsSourceIdentify?: string | null;
   otherIncomeAmount?: number | null;
@@ -9162,7 +9148,7 @@ export type IncomeBenefitFieldsFragment = {
   vaDisabilityNonServiceAmount?: number | null;
   vaDisabilityService?: NoYesMissing | null;
   vaDisabilityServiceAmount?: number | null;
-  vaMedicalServices?: NoYesMissing | null;
+  vhaServices?: NoYesMissing | null;
   wic?: NoYesMissing | null;
   workersComp?: NoYesMissing | null;
   workersCompAmount?: number | null;
@@ -9250,7 +9236,7 @@ export type HealthAndDvValuesFragment = {
   dateDeleted?: string | null;
   dateUpdated: string;
   dentalHealthStatus?: HealthStatus | null;
-  domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+  domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
   dueDate?: string | null;
   generalHealthStatus?: HealthStatus | null;
   id: string;
@@ -9268,7 +9254,7 @@ export type HealthAndDvFieldsFragment = {
   dateDeleted?: string | null;
   dateUpdated: string;
   dentalHealthStatus?: HealthStatus | null;
-  domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+  domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
   dueDate?: string | null;
   generalHealthStatus?: HealthStatus | null;
   id: string;
@@ -9525,10 +9511,12 @@ export type ClientFieldsFragment = {
   __typename?: 'Client';
   dobDataQuality: DobDataQuality;
   gender: Array<Gender>;
+  differentIdentityText?: string | null;
   pronouns: Array<string>;
   nameDataQuality: NameDataQuality;
   personalId: string;
   race: Array<Race>;
+  additionalRaceEthnicity?: string | null;
   ssnDataQuality: SsnDataQuality;
   veteranStatus: NoYesReasonsForMissingData;
   dateCreated: string;
@@ -9881,10 +9869,12 @@ export type GetClientQuery = {
     __typename?: 'Client';
     dobDataQuality: DobDataQuality;
     gender: Array<Gender>;
+    differentIdentityText?: string | null;
     pronouns: Array<string>;
     nameDataQuality: NameDataQuality;
     personalId: string;
     race: Array<Race>;
+    additionalRaceEthnicity?: string | null;
     ssnDataQuality: SsnDataQuality;
     veteranStatus: NoYesReasonsForMissingData;
     dateCreated: string;
@@ -13834,10 +13824,12 @@ export type SubmitFormMutation = {
           __typename?: 'Client';
           dobDataQuality: DobDataQuality;
           gender: Array<Gender>;
+          differentIdentityText?: string | null;
           pronouns: Array<string>;
           nameDataQuality: NameDataQuality;
           personalId: string;
           race: Array<Race>;
+          additionalRaceEthnicity?: string | null;
           ssnDataQuality: SsnDataQuality;
           veteranStatus: NoYesReasonsForMissingData;
           dateCreated: string;
@@ -17897,7 +17889,6 @@ export const IncomeBenefitValuesFragmentDoc = gql`
     employerProvided
     ga
     gaAmount
-    hivaidsAssistance
     id
     incomeFromAnySource
     indianHealthServices
@@ -17908,7 +17899,6 @@ export const IncomeBenefitValuesFragmentDoc = gql`
     noAdapReason
     noCobraReason
     noEmployerProvidedReason
-    noHivaidsAssistanceReason
     noIndianHealthServicesReason
     noMedicaidReason
     noMedicareReason
@@ -17916,7 +17906,7 @@ export const IncomeBenefitValuesFragmentDoc = gql`
     noRyanWhiteReason
     noSchipReason
     noStateHealthInsReason
-    noVaMedReason
+    noVhaReason
     otherBenefitsSource
     otherBenefitsSourceIdentify
     otherIncomeAmount
@@ -17951,7 +17941,7 @@ export const IncomeBenefitValuesFragmentDoc = gql`
     vaDisabilityNonServiceAmount
     vaDisabilityService
     vaDisabilityServiceAmount
-    vaMedicalServices
+    vhaServices
     wic
     workersComp
     workersCompAmount
@@ -17994,7 +17984,7 @@ export const HealthAndDvValuesFragmentDoc = gql`
     dateDeleted
     dateUpdated
     dentalHealthStatus
-    domesticViolenceVictim
+    domesticViolenceSurvivor
     dueDate
     generalHealthStatus
     id
@@ -18347,10 +18337,12 @@ export const ClientFieldsFragmentDoc = gql`
     ...ClientVeteranInfoFields
     dobDataQuality
     gender
+    differentIdentityText
     pronouns
     nameDataQuality
     personalId
     race
+    additionalRaceEthnicity
     ssnDataQuality
     veteranStatus
     dateCreated

@@ -390,6 +390,7 @@ export const HmisEnums = {
     GREATER_THAN: 'GREATER_THAN',
     GREATER_THAN_EQUAL: 'GREATER_THAN_EQUAL',
     IN: 'Whether the value is in the answerCodes array.',
+    INCLUDES: 'Whether the value includes the given item',
     LESS_THAN: 'LESS_THAN',
     LESS_THAN_EQUAL: 'LESS_THAN_EQUAL',
     NOT_EQUAL: 'NOT_EQUAL',

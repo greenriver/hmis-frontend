@@ -99,7 +99,6 @@ fragment IncomeBenefitValues on IncomeBenefit {
   employerProvided
   ga
   gaAmount
-  hivaidsAssistance
   id
   incomeFromAnySource
   indianHealthServices
@@ -110,7 +109,6 @@ fragment IncomeBenefitValues on IncomeBenefit {
   noAdapReason
   noCobraReason
   noEmployerProvidedReason
-  noHivaidsAssistanceReason
   noIndianHealthServicesReason
   noMedicaidReason
   noMedicareReason
@@ -118,7 +116,7 @@ fragment IncomeBenefitValues on IncomeBenefit {
   noRyanWhiteReason
   noSchipReason
   noStateHealthInsReason
-  noVaMedReason
+  noVhaReason
   otherBenefitsSource
   otherBenefitsSourceIdentify
   otherIncomeAmount
@@ -153,7 +151,7 @@ fragment IncomeBenefitValues on IncomeBenefit {
   vaDisabilityNonServiceAmount
   vaDisabilityService
   vaDisabilityServiceAmount
-  vaMedicalServices
+  vhaServices
   wic
   workersComp
   workersCompAmount
@@ -220,7 +218,7 @@ fragment HealthAndDvValues on HealthAndDv {
   dateDeleted
   dateUpdated
   dentalHealthStatus
-  domesticViolenceVictim
+  domesticViolenceSurvivor
   dueDate
   generalHealthStatus
   id
