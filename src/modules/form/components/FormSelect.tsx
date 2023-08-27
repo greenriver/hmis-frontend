@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, createFilterOptions } from '@mui/material';
 
 import { find } from 'lodash-es';
 import { useCallback } from 'react';
@@ -44,6 +44,17 @@ const renderOption = (props: object, option: Option) => (
     </Box>
   </li>
 );
+
+const filterOptions = createFilterOptions<Option>({
+  trim: true,
+  stringify: (option) => {
+    // Ignore some chars when filtering.
+    // Ex. "HUD: ESG - Homelessness Prevention" => "HUD ESG Homelessness Prevention"
+    return optionLabel(option)
+      .replace(/[-\/:&]\s/g, ' ')
+      .replace(/\s+/g, ' ');
+  },
+});
 
 export function getOptionLabelFromOptions(
   option: Option,
@@ -122,6 +133,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
       multiple={multiple}
       options={options}
       renderOption={renderOption}
+      filterOptions={filterOptions}
       groupBy={isGrouped ? (option) => option.groupLabel || '' : undefined}
       isOptionEqualToValue={isOptionEqualToValue}
       value={value}
