@@ -12,6 +12,7 @@ import {
   FundingSource,
   GeographyType,
   HouseholdType,
+  NoYes,
   NoYesMissing,
   ProjectType,
 } from '../../src/types/gqlTypes';
@@ -49,6 +50,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Set project type
   cy.choose(projectType, ProjectType.DayShelter);
+  // Set continuum project
+  cy.checkOption('2.02.5', NoYes.Yes);
 
   // Submit
   cy.testId('formButton-submit').click();
@@ -185,7 +188,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   /** Try to create inventory (unable to because there are no ProjectCoC records yet) */
   cy.navItem('inventory').click();
   cy.testId('addInventoryButton').click();
-  cy.checkOption('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
+  cy.choose('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
   cy.inputId('2.07.1').safeType('01/01/2022');
   cy.inputId('unit').safeType('3');
   cy.inputId('other-beds').safeType('3');
@@ -200,7 +203,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('addProjectCocButton').click();
   cy.choose('coc', 'MA-505');
   cy.choose('geocode', '250126');
-  cy.checkOption('geotype', GeographyType.Rural);
+  cy.choose('geotype', GeographyType.Rural);
   cy.inputId('address1').safeType('Addr 1');
   cy.inputId('address2').safeType('Addr 2');
   cy.inputId('city').safeType('City');
@@ -257,7 +260,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.navItem('inventory').click();
   cy.testId('addInventoryButton').click();
   cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
-  cy.checkOption('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
+  cy.choose('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
   cy.inputId('unit').safeType('0');
   cy.inputId('other-beds').safeType('0');
 
@@ -302,7 +305,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Update it and ensure changes are reflected in the table
   cy.tableRows('inventoryCard').first().click();
   cy.testId('updateInventoryButton').click();
-  cy.checkOption('hhtype', HouseholdType.HouseholdsWithoutChildren);
+  cy.choose('hhtype', HouseholdType.HouseholdsWithoutChildren);
   cy.testId('formButton-submit').click();
   cy.tableRows('inventoryCard').should('have.length', 1);
   cy.tableRows('inventoryCard')
@@ -312,10 +315,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Add another Inventory record
   cy.testId('addInventoryButton').click();
   cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
-  cy.checkOption(
-    'hhtype',
-    HouseholdType.HouseholdsWithAtLeastOneAdultAndOneChild
-  );
+  cy.choose('hhtype', HouseholdType.HouseholdsWithAtLeastOneAdultAndOneChild);
   cy.inputId('unit').safeType('0');
   cy.inputId('other-beds').safeType('0');
   cy.inputId('2.07.1').safeType('01/01/2020'); // start date (too early)
