@@ -28,7 +28,7 @@ export const HmisEnums = {
   },
   AnnualPercentAMI: {
     INVALID: 'Invalid Value',
-    NUM_0_I_E_NOT_EMPLOYED_NOT_RECEIVING_CASH_BENEFITS_NO_OTHER_CURRENT_INCOME:
+    NUM_0:
       '$0 (i.e., not employed, not receiving cash benefits, no other current income)',
     NUM_1_14_OF_AREA_MEDIAN_INCOME_AMI_FOR_HOUSEHOLD_SIZE:
       '1-14% of Area Median Income (AMI) for household size',
@@ -188,7 +188,7 @@ export const HmisEnums = {
     WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
     EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER:
       'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter',
-    PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE:
+    PLACE_NOT_MEANT_FOR_HABITATION:
       'Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)',
     SAFE_HAVEN: 'Safe Haven',
     PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY:
@@ -203,7 +203,7 @@ export const HmisEnums = {
       'Foster care home or foster care group home',
     LONG_TERM_CARE_FACILITY_OR_NURSING_HOME:
       'Long-term care facility or nursing home',
-    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH:
+    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS:
       'Transitional housing for homeless persons (including homeless youth)',
     HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER:
       'Hotel or motel paid for without emergency shelter voucher',
@@ -230,9 +230,9 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     NOT_CURRENTLY_ENROLLED_IN_ANY_SCHOOL_OR_EDUCATIONAL_COURSE:
       'Not currently enrolled in any school or educational course',
-    CURRENTLY_ENROLLED_BUT_NOT_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION:
+    CURRENTLY_ENROLLED_BUT_NOT_ATTENDING_REGULARLY:
       'Currently enrolled but NOT attending regularly (when school or the course is in session)',
-    CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION:
+    CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY:
       'Currently enrolled and attending regularly (when school or the course is in session)',
     CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
@@ -289,7 +289,7 @@ export const HmisEnums = {
     WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
     EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER:
       'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter',
-    PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE:
+    PLACE_NOT_MEANT_FOR_HABITATION:
       'Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)',
     SAFE_HAVEN: 'Safe Haven',
     PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY:
@@ -304,11 +304,11 @@ export const HmisEnums = {
       'Foster care home or foster care group home',
     LONG_TERM_CARE_FACILITY_OR_NURSING_HOME:
       'Long-term care facility or nursing home',
-    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH:
+    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS:
       'Transitional housing for homeless persons (including homeless youth)',
-    STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE:
+    STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE:
       'Staying or living with family, temporary tenure (e.g. room, apartment or house)',
-    STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE:
+    STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE:
       'Staying or living with friends, temporary tenure (e.g. room apartment or house)',
     HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER:
       'Hotel or motel paid for without emergency shelter voucher',
@@ -376,8 +376,7 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     FULL_TIME: 'Full-time',
     PART_TIME: 'Part-time',
-    SEASONAL_SPORADIC_INCLUDING_DAY_LABOR:
-      'Seasonal / sporadic (including day labor)',
+    SEASONAL_SPORADIC: 'Seasonal / sporadic (including day labor)',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   EnableBehavior: { ALL: 'ALL', ANY: 'ANY' },
@@ -512,7 +511,7 @@ export const HmisEnums = {
   FundingSource: {
     HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY:
       'HHS: PATH - Street Outreach & Supportive Services Only',
-    HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER:
+    HHS_RHY_BASIC_CENTER_PROGRAM:
       'HHS: RHY - Basic Center Program (prevention and shelter)',
     HHS_RHY_DEMONSTRATION_PROJECT: 'HHS: RHY - Demonstration Project',
     HHS_RHY_MATERNITY_GROUP_HOME_FOR_PREGNANT_AND_PARENTING_YOUTH:
@@ -520,7 +519,7 @@ export const HmisEnums = {
     HHS_RHY_STREET_OUTREACH_PROJECT: 'HHS: RHY - Street Outreach Project',
     HHS_RHY_TRANSITIONAL_LIVING_PROGRAM:
       'HHS: RHY - Transitional Living Program',
-    HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY:
+    HUD_COC_HOMELESSNESS_PREVENTION:
       'HUD: CoC - Homelessness Prevention (High Performing Communities Only)',
     HUD_COC_JOINT_COMPONENT_RRH_PSH_DEPRECATED:
       'HUD: CoC - Joint Component RRH/PSH [Deprecated]',
@@ -535,7 +534,7 @@ export const HmisEnums = {
     HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP:
       'HUD: CoC - Youth Homeless Demonstration Program (YHDP)',
     HUD_ESG_CV: 'HUD: ESG - CV',
-    HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES:
+    HUD_ESG_EMERGENCY_SHELTER:
       'HUD: ESG - Emergency Shelter (operating and/or essential services)',
     HUD_ESG_HOMELESSNESS_PREVENTION: 'HUD: ESG - Homelessness Prevention',
     HUD_ESG_RAPID_REHOUSING: 'HUD: ESG - Rapid Rehousing',
@@ -546,7 +545,7 @@ export const HmisEnums = {
     HUD_HOPWA_CV: 'HUD: HOPWA - CV',
     HUD_HOPWA_HOTEL_MOTEL_VOUCHERS: 'HUD: HOPWA - Hotel/Motel Vouchers',
     HUD_HOPWA_HOUSING_INFORMATION: 'HUD: HOPWA - Housing Information',
-    HUD_HOPWA_PERMANENT_HOUSING_FACILITY_BASED_OR_TBRA:
+    HUD_HOPWA_PERMANENT_HOUSING:
       'HUD: HOPWA - Permanent Housing (facility based or TBRA)',
     HUD_HOPWA_PERMANENT_HOUSING_PLACEMENT:
       'HUD: HOPWA - Permanent Housing Placement',
@@ -554,11 +553,11 @@ export const HmisEnums = {
       'HUD: HOPWA - Short-Term Rent, Mortgage, Utility assistance',
     HUD_HOPWA_SHORT_TERM_SUPPORTIVE_FACILITY:
       'HUD: HOPWA - Short-Term Supportive Facility',
-    HUD_HOPWA_TRANSITIONAL_HOUSING_FACILITY_BASED_OR_TBRA:
+    HUD_HOPWA_TRANSITIONAL_HOUSING:
       'HUD: HOPWA - Transitional Housing (facility based or TBRA)',
     HUD_HUD_VASH: 'HUD: HUD/VASH',
     HUD_PAY_FOR_SUCCESS: 'HUD: Pay for Success',
-    HUD_PIH_EMERGENCY_HOUSING_VOUCHER: 'HUD: PIH (Emergency Housing Voucher)',
+    HUD_PIH: 'HUD: PIH (Emergency Housing Voucher)',
     HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS:
       'HUD: Public and Indian Housing (PIH) Programs',
     HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM_DEPRECATED:
@@ -870,7 +869,7 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER:
       'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter',
-    PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE:
+    PLACE_NOT_MEANT_FOR_HABITATION:
       'Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)',
     SAFE_HAVEN: 'Safe Haven',
     PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY:
@@ -885,7 +884,7 @@ export const HmisEnums = {
       'Foster care home or foster care group home',
     LONG_TERM_CARE_FACILITY_OR_NURSING_HOME:
       'Long-term care facility or nursing home',
-    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH:
+    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS:
       'Transitional housing for homeless persons (including homeless youth)',
     HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER:
       'Hotel or motel paid for without emergency shelter voucher',
@@ -1091,8 +1090,7 @@ export const HmisEnums = {
       'Rental by client, with other ongoing housing subsidy',
     GPD_TIP_HOUSING_SUBSIDY: 'GPD TIP housing subsidy',
     RRH_OR_EQUIVALENT_SUBSIDY: 'RRH or equivalent subsidy',
-    HCV_VOUCHER_TENANT_OR_PROJECT_BASED_NOT_DEDICATED:
-      'HCV voucher (tenant or project based) (not dedicated)',
+    HCV_VOUCHER: 'HCV voucher (tenant or project based) (not dedicated)',
     PUBLIC_HOUSING_UNIT: 'Public housing unit',
     EMERGENCY_HOUSING_VOUCHER: 'Emergency Housing Voucher',
     FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP:
@@ -1217,7 +1215,7 @@ export const HmisEnums = {
     HOPWA_SERVICE__CASE_MANAGEMENT: 'Case management',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_DENIED_BY_PHA:
       'Voucher denied by PHA',
-    MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES:
+    MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON:
       'Financial assistance for Moving On (e.g., security deposit, moving expenses)',
     PATH_REFERRAL__SUBSTANCE_USE_TREATMENT: 'Substance use treatment',
     PATH_SERVICE__SCREENING: 'Screening',
@@ -1229,7 +1227,7 @@ export const HmisEnums = {
     HOPWA_SERVICE__CHILD_CARE: 'Child care',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_ISSUED_BY_PHA:
       'Voucher issued by PHA',
-    MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT:
+    MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON:
       'Non-financial assistance for Moving On (e.g., housing navigation, transition support)',
     PATH_REFERRAL__PRIMARY_HEALTH_DENTAL_CARE: 'Primary health/dental care',
     PATH_SERVICE__HABILITATION_REHABILITATION: 'Habilitation/rehabilitation',
@@ -1302,7 +1300,7 @@ export const HmisEnums = {
     HUD_VASH_OTH_VOUCHER_TRACKING__OTHER: 'Other',
     PATH_SERVICE__ONE_TIME_RENT_FOR_EVICTION_PREVENTION:
       'One-time rent for eviction prevention',
-    RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE_FOR_CLIENT_PERSON_WHO_GAVE_BIRTH:
+    RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE_FOR_CLIENT:
       'Post-natal care for client (person who gave birth)',
     SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE:
       'General housing stability assistance',
@@ -1323,7 +1321,7 @@ export const HmisEnums = {
       'Substance use disorder/Prevention Services',
     SSVF_FINANCIAL_ASSISTANCE__TENANT_INCENTIVE: 'Tenant Incentive',
     RHY_SERVICE_CONNECTIONS__HOME_BASED_SERVICES: 'Home-based Services',
-    RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS:
+    RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE:
       'Post-natal newborn care (wellness exams; immunizations)',
     RHY_SERVICE_CONNECTIONS__STD_TESTING: 'STD Testing',
     RHY_SERVICE_CONNECTIONS__STREET_BASED_SERVICES: 'Street-based Services',
@@ -1588,9 +1586,9 @@ export const HmisEnums = {
   WhenDVOccurred: {
     INVALID: 'Invalid Value',
     WITHIN_THE_PAST_THREE_MONTHS: 'Within the past three months',
-    THREE_TO_SIX_MONTHS_AGO_EXCLUDING_SIX_MONTHS_EXACTLY:
+    THREE_TO_SIX_MONTHS_AGO:
       'Three to six months ago (excluding six months exactly)',
-    SIX_MONTHS_TO_ONE_YEAR_AGO_EXCLUDING_ONE_YEAR_EXACTLY:
+    SIX_MONTHS_TO_ONE_YEAR_AGO:
       'Six months to one year ago (excluding one year exactly)',
     ONE_YEAR_OR_MORE: 'One year or more',
     CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',

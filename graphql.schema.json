@@ -237,7 +237,7 @@
             "deprecationReason": null
           },
           {
-            "name": "NUM_0_I_E_NOT_EMPLOYED_NOT_RECEIVING_CASH_BENEFITS_NO_OTHER_CURRENT_INCOME",
+            "name": "NUM_0",
             "description": "(0) $0 (i.e., not employed, not receiving cash benefits, no other current income)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -5851,7 +5851,7 @@
             "deprecationReason": null
           },
           {
-            "name": "PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE",
+            "name": "PLACE_NOT_MEANT_FOR_HABITATION",
             "description": "(116) Place not meant for habitation (e.g., a vehicle, an abandoned building,\nbus/train/subway station/airport or anywhere outside)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -5905,7 +5905,7 @@
             "deprecationReason": null
           },
           {
-            "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH",
+            "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS",
             "description": "(302) Transitional housing for homeless persons (including homeless youth)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -6071,13 +6071,13 @@
             "deprecationReason": null
           },
           {
-            "name": "CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION",
+            "name": "CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY",
             "description": "(2) Currently enrolled and attending regularly (when school or the course is in session)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "CURRENTLY_ENROLLED_BUT_NOT_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION",
+            "name": "CURRENTLY_ENROLLED_BUT_NOT_ATTENDING_REGULARLY",
             "description": "(1) Currently enrolled but NOT attending regularly (when school or the course is in session)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -8155,7 +8155,7 @@
             "deprecationReason": null
           },
           {
-            "name": "PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE",
+            "name": "PLACE_NOT_MEANT_FOR_HABITATION",
             "description": "(116) Place not meant for habitation (e.g., a vehicle, an abandoned building,\nbus/train/subway station/airport or anywhere outside)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -8197,7 +8197,7 @@
             "deprecationReason": null
           },
           {
-            "name": "STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE",
+            "name": "STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE",
             "description": "(312) Staying or living with family, temporary tenure (e.g. room, apartment or house)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -8209,7 +8209,7 @@
             "deprecationReason": null
           },
           {
-            "name": "STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE",
+            "name": "STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE",
             "description": "(313) Staying or living with friends, temporary tenure (e.g. room apartment or house)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -8221,7 +8221,7 @@
             "deprecationReason": null
           },
           {
-            "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH",
+            "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS",
             "description": "(302) Transitional housing for homeless persons (including homeless youth)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -9697,7 +9697,7 @@
             "deprecationReason": null
           },
           {
-            "name": "SEASONAL_SPORADIC_INCLUDING_DAY_LABOR",
+            "name": "SEASONAL_SPORADIC",
             "description": "(3) Seasonal / sporadic (including day labor)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -15285,7 +15285,7 @@
             "deprecationReason": null
           },
           {
-            "name": "HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER",
+            "name": "HHS_RHY_BASIC_CENTER_PROGRAM",
             "description": "(22) HHS: RHY - Basic Center Program (prevention and shelter)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -15315,7 +15315,7 @@
             "deprecationReason": null
           },
           {
-            "name": "HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY",
+            "name": "HUD_COC_HOMELESSNESS_PREVENTION",
             "description": "(1) HUD: CoC - Homelessness Prevention (High Performing Communities Only)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -15381,7 +15381,7 @@
             "deprecationReason": null
           },
           {
-            "name": "HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES",
+            "name": "HUD_ESG_EMERGENCY_SHELTER",
             "description": "(8) HUD: ESG - Emergency Shelter (operating and/or essential services)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -15441,7 +15441,7 @@
             "deprecationReason": null
           },
           {
-            "name": "HUD_HOPWA_PERMANENT_HOUSING_FACILITY_BASED_OR_TBRA",
+            "name": "HUD_HOPWA_PERMANENT_HOUSING",
             "description": "(15) HUD: HOPWA - Permanent Housing (facility based or TBRA)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -15465,7 +15465,7 @@
             "deprecationReason": null
           },
           {
-            "name": "HUD_HOPWA_TRANSITIONAL_HOUSING_FACILITY_BASED_OR_TBRA",
+            "name": "HUD_HOPWA_TRANSITIONAL_HOUSING",
             "description": "(19) HUD: HOPWA - Transitional Housing (facility based or TBRA)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -15483,7 +15483,7 @@
             "deprecationReason": null
           },
           {
-            "name": "HUD_PIH_EMERGENCY_HOUSING_VOUCHER",
+            "name": "HUD_PIH",
             "description": "(52) HUD: PIH (Emergency Housing Voucher)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -21552,7 +21552,7 @@
             "deprecationReason": null
           },
           {
-            "name": "PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE",
+            "name": "PLACE_NOT_MEANT_FOR_HABITATION",
             "description": "(116) Place not meant for habitation (e.g., a vehicle, an abandoned building,\nbus/train/subway station/airport or anywhere outside)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -21606,7 +21606,7 @@
             "deprecationReason": null
           },
           {
-            "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH",
+            "name": "TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS",
             "description": "(302) Transitional housing for homeless persons (including homeless youth)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -27118,7 +27118,7 @@
             "deprecationReason": null
           },
           {
-            "name": "HCV_VOUCHER_TENANT_OR_PROJECT_BASED_NOT_DEDICATED",
+            "name": "HCV_VOUCHER",
             "description": "(433) HCV voucher (tenant or project based) (not dedicated)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -28497,7 +28497,7 @@
             "deprecationReason": null
           },
           {
-            "name": "MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES",
+            "name": "MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON",
             "description": "(2) Financial assistance for Moving On (e.g., security deposit, moving expenses)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -28509,7 +28509,7 @@
             "deprecationReason": null
           },
           {
-            "name": "MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT",
+            "name": "MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON",
             "description": "(3) Non-financial assistance for Moving On (e.g., housing navigation, transition support)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -28719,13 +28719,13 @@
             "deprecationReason": null
           },
           {
-            "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE_FOR_CLIENT_PERSON_WHO_GAVE_BIRTH",
+            "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE_FOR_CLIENT",
             "description": "(12) Post-natal care for client (person who gave birth)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS",
+            "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE",
             "description": "(27) Post-natal newborn care (wellness exams; immunizations)",
             "isDeprecated": false,
             "deprecationReason": null
@@ -32781,13 +32781,13 @@
             "deprecationReason": null
           },
           {
-            "name": "SIX_MONTHS_TO_ONE_YEAR_AGO_EXCLUDING_ONE_YEAR_EXACTLY",
+            "name": "SIX_MONTHS_TO_ONE_YEAR_AGO",
             "description": "(3) Six months to one year ago (excluding one year exactly)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "THREE_TO_SIX_MONTHS_AGO_EXCLUDING_SIX_MONTHS_EXACTLY",
+            "name": "THREE_TO_SIX_MONTHS_AGO",
             "description": "(2) Three to six months ago (excluding six months exactly)",
             "isDeprecated": false,
             "deprecationReason": null

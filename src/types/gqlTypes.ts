@@ -104,7 +104,7 @@ export enum AnnualPercentAmi {
   /** (3) More than 30% of AMI for household size */
   MoreThan_30OfAmiForHouseholdSize = 'MORE_THAN_30_OF_AMI_FOR_HOUSEHOLD_SIZE',
   /** (0) $0 (i.e., not employed, not receiving cash benefits, no other current income) */
-  Num_0IENotEmployedNotReceivingCashBenefitsNoOtherCurrentIncome = 'NUM_0_I_E_NOT_EMPLOYED_NOT_RECEIVING_CASH_BENEFITS_NO_OTHER_CURRENT_INCOME',
+  Num_0 = 'NUM_0',
   /** (1) 1-14% of Area Median Income (AMI) for household size */
   Num_1_14OfAreaMedianIncomeAmiForHouseholdSize = 'NUM_1_14_OF_AREA_MEDIAN_INCOME_AMI_FOR_HOUSEHOLD_SIZE',
   /** (2) 15-30% of AMI for household size */
@@ -921,7 +921,7 @@ export enum CurrentLivingSituationOptions {
    * (116) Place not meant for habitation (e.g., a vehicle, an abandoned building,
    * bus/train/subway station/airport or anywhere outside)
    */
-  PlaceNotMeantForHabitationEGAVehicleAnAbandonedBuildingBusTrainSubwayStationAirportOrAnywhereOutside = 'PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE',
+  PlaceNotMeantForHabitation = 'PLACE_NOT_MEANT_FOR_HABITATION',
   /** (204) Psychiatric hospital or other psychiatric facility */
   PsychiatricHospitalOrOtherPsychiatricFacility = 'PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY',
   /** (410) Rental by client, no ongoing housing subsidy */
@@ -939,7 +939,7 @@ export enum CurrentLivingSituationOptions {
   /** (205) Substance abuse treatment facility or detox center */
   SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
   /** (302) Transitional housing for homeless persons (including homeless youth) */
-  TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
+  TransitionalHousingForHomelessPersons = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS',
   /** (37) Worker unable to determine */
   WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
 }
@@ -962,9 +962,9 @@ export enum CurrentSchoolAttended {
   /** (9) Client prefers not to answer */
   ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
   /** (2) Currently enrolled and attending regularly (when school or the course is in session) */
-  CurrentlyEnrolledAndAttendingRegularlyWhenSchoolOrTheCourseIsInSession = 'CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION',
+  CurrentlyEnrolledAndAttendingRegularly = 'CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY',
   /** (1) Currently enrolled but NOT attending regularly (when school or the course is in session) */
-  CurrentlyEnrolledButNotAttendingRegularlyWhenSchoolOrTheCourseIsInSession = 'CURRENTLY_ENROLLED_BUT_NOT_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION',
+  CurrentlyEnrolledButNotAttendingRegularly = 'CURRENTLY_ENROLLED_BUT_NOT_ATTENDING_REGULARLY',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
@@ -1335,7 +1335,7 @@ export enum Destination {
    * (116) Place not meant for habitation (e.g., a vehicle, an abandoned building,
    * bus/train/subway station/airport or anywhere outside)
    */
-  PlaceNotMeantForHabitationEGAVehicleAnAbandonedBuildingBusTrainSubwayStationAirportOrAnywhereOutside = 'PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE',
+  PlaceNotMeantForHabitation = 'PLACE_NOT_MEANT_FOR_HABITATION',
   /** (204) Psychiatric hospital or other psychiatric facility */
   PsychiatricHospitalOrOtherPsychiatricFacility = 'PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY',
   /** (410) Rental by client, no ongoing housing subsidy */
@@ -1349,15 +1349,15 @@ export enum Destination {
   /** (422) Staying or living with family, permanent tenure */
   StayingOrLivingWithFamilyPermanentTenure = 'STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE',
   /** (312) Staying or living with family, temporary tenure (e.g. room, apartment or house) */
-  StayingOrLivingWithFamilyTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE',
+  StayingOrLivingWithFamilyTemporaryTenure = 'STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE',
   /** (423) Staying or living with friends, permanent tenure */
   StayingOrLivingWithFriendsPermanentTenure = 'STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE',
   /** (313) Staying or living with friends, temporary tenure (e.g. room apartment or house) */
-  StayingOrLivingWithFriendsTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE',
+  StayingOrLivingWithFriendsTemporaryTenure = 'STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE',
   /** (205) Substance abuse treatment facility or detox center */
   SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
   /** (302) Transitional housing for homeless persons (including homeless youth) */
-  TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
+  TransitionalHousingForHomelessPersons = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS',
   /** (37) Worker unable to determine */
   WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
 }
@@ -1561,7 +1561,7 @@ export enum EmploymentType {
   /** (2) Part-time */
   PartTime = 'PART_TIME',
   /** (3) Seasonal / sporadic (including day labor) */
-  SeasonalSporadicIncludingDayLabor = 'SEASONAL_SPORADIC_INCLUDING_DAY_LABOR',
+  SeasonalSporadic = 'SEASONAL_SPORADIC',
 }
 
 export enum EnableBehavior {
@@ -2283,7 +2283,7 @@ export enum FundingSource {
   /** (21) HHS: PATH - Street Outreach & Supportive Services Only */
   HhsPathStreetOutreachSupportiveServicesOnly = 'HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY',
   /** (22) HHS: RHY - Basic Center Program (prevention and shelter) */
-  HhsRhyBasicCenterProgramPreventionAndShelter = 'HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER',
+  HhsRhyBasicCenterProgram = 'HHS_RHY_BASIC_CENTER_PROGRAM',
   /** (26) HHS: RHY - Demonstration Project */
   HhsRhyDemonstrationProject = 'HHS_RHY_DEMONSTRATION_PROJECT',
   /** (23) HHS: RHY - Maternity Group Home for Pregnant and Parenting Youth */
@@ -2293,7 +2293,7 @@ export enum FundingSource {
   /** (24) HHS: RHY - Transitional Living Program */
   HhsRhyTransitionalLivingProgram = 'HHS_RHY_TRANSITIONAL_LIVING_PROGRAM',
   /** (1) HUD: CoC - Homelessness Prevention (High Performing Communities Only) */
-  HudCocHomelessnessPreventionHighPerformingCommunitiesOnly = 'HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY',
+  HudCocHomelessnessPrevention = 'HUD_COC_HOMELESSNESS_PREVENTION',
   /** (49) HUD: CoC - Joint Component RRH/PSH [Deprecated] */
   HudCocJointComponentRrhPshDeprecated = 'HUD_COC_JOINT_COMPONENT_RRH_PSH_DEPRECATED',
   /** (44) HUD: CoC - Joint Component TH/RRH */
@@ -2315,7 +2315,7 @@ export enum FundingSource {
   /** (47) HUD: ESG - CV */
   HudEsgCv = 'HUD_ESG_CV',
   /** (8) HUD: ESG - Emergency Shelter (operating and/or essential services) */
-  HudEsgEmergencyShelterOperatingAndOrEssentialServices = 'HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES',
+  HudEsgEmergencyShelter = 'HUD_ESG_EMERGENCY_SHELTER',
   /** (9) HUD: ESG - Homelessness Prevention */
   HudEsgHomelessnessPrevention = 'HUD_ESG_HOMELESSNESS_PREVENTION',
   /** (10) HUD: ESG - Rapid Rehousing */
@@ -2335,7 +2335,7 @@ export enum FundingSource {
   /** (14) HUD: HOPWA - Housing Information */
   HudHopwaHousingInformation = 'HUD_HOPWA_HOUSING_INFORMATION',
   /** (15) HUD: HOPWA - Permanent Housing (facility based or TBRA) */
-  HudHopwaPermanentHousingFacilityBasedOrTbra = 'HUD_HOPWA_PERMANENT_HOUSING_FACILITY_BASED_OR_TBRA',
+  HudHopwaPermanentHousing = 'HUD_HOPWA_PERMANENT_HOUSING',
   /** (16) HUD: HOPWA - Permanent Housing Placement */
   HudHopwaPermanentHousingPlacement = 'HUD_HOPWA_PERMANENT_HOUSING_PLACEMENT',
   /** (17) HUD: HOPWA - Short-Term Rent, Mortgage, Utility assistance */
@@ -2343,13 +2343,13 @@ export enum FundingSource {
   /** (18) HUD: HOPWA - Short-Term Supportive Facility */
   HudHopwaShortTermSupportiveFacility = 'HUD_HOPWA_SHORT_TERM_SUPPORTIVE_FACILITY',
   /** (19) HUD: HOPWA - Transitional Housing (facility based or TBRA) */
-  HudHopwaTransitionalHousingFacilityBasedOrTbra = 'HUD_HOPWA_TRANSITIONAL_HOUSING_FACILITY_BASED_OR_TBRA',
+  HudHopwaTransitionalHousing = 'HUD_HOPWA_TRANSITIONAL_HOUSING',
   /** (20) HUD: HUD/VASH */
   HudHudVash = 'HUD_HUD_VASH',
   /** (35) HUD: Pay for Success */
   HudPayForSuccess = 'HUD_PAY_FOR_SUCCESS',
   /** (52) HUD: PIH (Emergency Housing Voucher) */
-  HudPihEmergencyHousingVoucher = 'HUD_PIH_EMERGENCY_HOUSING_VOUCHER',
+  HudPih = 'HUD_PIH',
   /** (36) HUD: Public and Indian Housing (PIH) Programs */
   HudPublicAndIndianHousingPihPrograms = 'HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS',
   /** (12) HUD: Rural Housing Stability Assistance Program [Deprecated] */
@@ -3395,7 +3395,7 @@ export enum PriorLivingSituation {
    * (116) Place not meant for habitation (e.g., a vehicle, an abandoned building,
    * bus/train/subway station/airport or anywhere outside)
    */
-  PlaceNotMeantForHabitationEGAVehicleAnAbandonedBuildingBusTrainSubwayStationAirportOrAnywhereOutside = 'PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE',
+  PlaceNotMeantForHabitation = 'PLACE_NOT_MEANT_FOR_HABITATION',
   /** (204) Psychiatric hospital or other psychiatric facility */
   PsychiatricHospitalOrOtherPsychiatricFacility = 'PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY',
   /** (410) Rental by client, no ongoing housing subsidy */
@@ -3413,7 +3413,7 @@ export enum PriorLivingSituation {
   /** (205) Substance abuse treatment facility or detox center */
   SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
   /** (302) Transitional housing for homeless persons (including homeless youth) */
-  TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
+  TransitionalHousingForHomelessPersons = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS',
 }
 
 /** 4.19.7 */
@@ -4232,7 +4232,7 @@ export enum RentalSubsidyType {
   /** (428) GPD TIP housing subsidy */
   GpdTipHousingSubsidy = 'GPD_TIP_HOUSING_SUBSIDY',
   /** (433) HCV voucher (tenant or project based) (not dedicated) */
-  HcvVoucherTenantOrProjectBasedNotDedicated = 'HCV_VOUCHER_TENANT_OR_PROJECT_BASED_NOT_DEDICATED',
+  HcvVoucher = 'HCV_VOUCHER',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (440) Other permanent housing dedicated for formerly homeless persons */
@@ -4527,11 +4527,11 @@ export enum ServiceTypeProvided {
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (2) Financial assistance for Moving On (e.g., security deposit, moving expenses) */
-  MovingOnAssistanceFinancialAssistanceForMovingOnEGSecurityDepositMovingExpenses = 'MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES',
+  MovingOnAssistanceFinancialAssistanceForMovingOn = 'MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON',
   /** (4) Housing referral/placement */
   MovingOnAssistanceHousingReferralPlacement = 'MOVING_ON_ASSISTANCE__HOUSING_REFERRAL_PLACEMENT',
   /** (3) Non-financial assistance for Moving On (e.g., housing navigation, transition support) */
-  MovingOnAssistanceNonFinancialAssistanceForMovingOnEGHousingNavigationTransitionSupport = 'MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT',
+  MovingOnAssistanceNonFinancialAssistanceForMovingOn = 'MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON',
   /** (5) Other */
   MovingOnAssistanceOther = 'MOVING_ON_ASSISTANCE__OTHER',
   /** (1) Subsidized housing application assistance */
@@ -4601,9 +4601,9 @@ export enum ServiceTypeProvided {
   /** (10) Parenting education for youth with children */
   RhyServiceConnectionsParentingEducationForYouthWithChildren = 'RHY_SERVICE_CONNECTIONS__PARENTING_EDUCATION_FOR_YOUTH_WITH_CHILDREN',
   /** (12) Post-natal care for client (person who gave birth) */
-  RhyServiceConnectionsPostNatalCareForClientPersonWhoGaveBirth = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE_FOR_CLIENT_PERSON_WHO_GAVE_BIRTH',
+  RhyServiceConnectionsPostNatalCareForClient = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE_FOR_CLIENT',
   /** (27) Post-natal newborn care (wellness exams; immunizations) */
-  RhyServiceConnectionsPostNatalNewbornCareWellnessExamsImmunizations = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS',
+  RhyServiceConnectionsPostNatalNewbornCare = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE',
   /** (13) Pre-natal care */
   RhyServiceConnectionsPreNatalCare = 'RHY_SERVICE_CONNECTIONS__PRE_NATAL_CARE',
   /** (28) STD Testing */
@@ -5439,9 +5439,9 @@ export enum WhenDvOccurred {
   /** (4) One year or more */
   OneYearOrMore = 'ONE_YEAR_OR_MORE',
   /** (3) Six months to one year ago (excluding one year exactly) */
-  SixMonthsToOneYearAgoExcludingOneYearExactly = 'SIX_MONTHS_TO_ONE_YEAR_AGO_EXCLUDING_ONE_YEAR_EXACTLY',
+  SixMonthsToOneYearAgo = 'SIX_MONTHS_TO_ONE_YEAR_AGO',
   /** (2) Three to six months ago (excluding six months exactly) */
-  ThreeToSixMonthsAgoExcludingSixMonthsExactly = 'THREE_TO_SIX_MONTHS_AGO_EXCLUDING_SIX_MONTHS_EXACTLY',
+  ThreeToSixMonthsAgo = 'THREE_TO_SIX_MONTHS_AGO',
   /** (1) Within the past three months */
   WithinThePastThreeMonths = 'WITHIN_THE_PAST_THREE_MONTHS',
 }
