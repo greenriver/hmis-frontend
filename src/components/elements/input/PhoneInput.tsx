@@ -9,28 +9,39 @@ interface CustomProps {
   name: string;
 }
 
+export const phoneMaskOptions = {
+  mask: [
+    {
+      mask: '(000) 000-0000',
+    },
+    {
+      mask: '{+}0` (000) 000-0000',
+    },
+    {
+      mask: '{+}00` (000) 000-0000',
+    },
+  ],
+};
+
 const TextMaskCustom = forwardRef<HTMLInputElement, CustomProps>(
   function TextMaskCustom(props, ref) {
     const { onChange, ...other } = props;
     return (
       <IMaskInput
         {...other}
-        mask={[
-          {
-            mask: '(000) 000-0000',
-          },
-          {
-            mask: '{+}0` (000) 000-0000',
-          },
-        ]}
-        definitions={{
-          '#': /[0-9]*/,
-        }}
-        inputRef={ref}
-        onAccept={(value: any) =>
-          onChange({ target: { name: props.name, value } })
-        }
+        mask={phoneMaskOptions.mask}
         overwrite='shift'
+        inputRef={ref}
+        onAccept={(value, mask) => {
+          const numericValue = mask.unmaskedValue.replace(/\D/gi, '');
+          const hasCountryCode = numericValue.length > 10;
+          return onChange({
+            target: {
+              name: props.name,
+              value: hasCountryCode ? mask.unmaskedValue : numericValue,
+            },
+          });
+        }}
       />
     );
   }
