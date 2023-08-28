@@ -6,6 +6,7 @@ import {
   max,
   min,
   startOfToday,
+  sub,
 } from 'date-fns';
 import {
   compact,
@@ -1337,6 +1338,7 @@ export const chooseSelectComponentType = (
 
 export const AlwaysPresentLocalConstants = {
   today: startOfToday(),
+  age18Dob: sub(startOfToday(), { years: 18 }),
 };
 
 export const placeholderText = (item: FormItem) => {
