@@ -92,7 +92,7 @@ const ClientDashboard: React.FC = () => {
       navHeader={<ClientCardMini client={client} />}
       sidebar={<SideNavMenu items={navItems} />}
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
-      navLabel='Client Navigation'
+      navLabel='Client'
       {...dashboardState}
     >
       <Container maxWidth='xl' sx={{ pb: 6 }}>

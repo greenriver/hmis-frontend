@@ -2,6 +2,7 @@ import { filter } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import {
   ClientFieldsFragment,
   ExternalIdentifierType,
@@ -15,7 +16,11 @@ export const localConstantsForClientForm = (
   if (!client) {
     // For Client creation, allow the user to input SSN and DOB
     // even if they don't have read-access to those fields
-    return { canViewFullSsn: true, canViewDob: true };
+    return {
+      canViewFullSsn: true,
+      canViewDob: true,
+      ...AlwaysPresentLocalConstants,
+    };
   }
 
   return {
@@ -24,6 +29,7 @@ export const localConstantsForClientForm = (
     mciIds: filter(client.externalIds, {
       type: ExternalIdentifierType.MciId,
     }),
+    ...AlwaysPresentLocalConstants,
   };
 };
 

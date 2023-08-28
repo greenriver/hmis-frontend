@@ -60,18 +60,6 @@ query GetEnrollmentReminders($id: ID!) {
   }
 }
 
-mutation CreateEnrollment($input: CreateEnrollmentInput!) {
-  createEnrollment(input: $input) {
-    clientMutationId
-    enrollments {
-      ...EnrollmentFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
   deleteEnrollment(input: $input) {
     clientMutationId

@@ -2,7 +2,6 @@ import ViewCompactIcon from '@mui/icons-material/ViewCompact';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { Dispatch, SetStateAction, useCallback } from 'react';
-import { toggleButtonGroupSx } from './ClientSearchTypeToggle';
 
 export type DisplayType = 'table' | 'cards';
 
@@ -26,13 +25,13 @@ const ClientDisplayTypeToggle: React.FC<ClientDisplayTypeToggleProps> = ({
       exclusive
       onChange={handleChange}
       aria-label='results display format'
-      sx={toggleButtonGroupSx}
     >
       <ToggleButton
         value='table'
         data-testid='tableToggleButton'
         aria-label='view as table'
         size='small'
+        sx={{ px: 2 }}
       >
         <ViewHeadlineIcon />
         <Box sx={{ pl: 1 }}>Table</Box>
@@ -42,6 +41,7 @@ const ClientDisplayTypeToggle: React.FC<ClientDisplayTypeToggleProps> = ({
         data-testid='cardToggleButton'
         aria-label='view as cards'
         size='small'
+        sx={{ px: 2 }}
       >
         <ViewCompactIcon />
         <Box sx={{ pl: 1 }}>Cards</Box>
