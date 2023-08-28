@@ -92,8 +92,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
     );
 
   const navItemSx = (enabled: boolean): SxProps<Theme> => ({
-    fontSize: '1rem',
-    fontWeight: 400,
+    fontWeight: 600,
+    fontSize: 14,
     px: 2,
     ml: 1,
     color: 'text.primary',
@@ -114,7 +114,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         }}
       >
         {/* fixme: make responsive */}
-        <Toolbar sx={{ flexWrap: 'none', overflow: 'hidden', gap: 2 }}>
+        <Toolbar sx={{ flexWrap: 'none', overflow: 'hidden', gap: 1 }}>
           <RouterLink
             variant='h1'
             noWrap

@@ -208,6 +208,7 @@ const OmniSearch: React.FC = () => {
   return (
     <Box {...values.getRootProps()}>
       <TextInput
+        name='Client and Project search'
         inputProps={{
           ...values.getInputProps(),
           value,
@@ -215,7 +216,7 @@ const OmniSearch: React.FC = () => {
         placeholder='Search'
         size='small'
         InputProps={{
-          startAdornment: <SearchIcon color='disabled' />,
+          startAdornment: <SearchIcon sx={{ mr: 0.5 }} color='disabled' />,
           ref: values.setAnchorEl,
         }}
       />
