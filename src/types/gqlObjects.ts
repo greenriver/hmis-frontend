@@ -305,6 +305,67 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CeParticipation',
+    fields: [
+      {
+        name: 'accessPoint',
+        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
+      },
+      {
+        name: 'ceParticipationStatusEndDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'ceParticipationStatusStartDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'crisisAssessment',
+        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
+      },
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'directServices',
+        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
+      },
+      {
+        name: 'housingAssessment',
+        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'preventionAssessment',
+        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'Client',
     fields: [
       {
@@ -2846,6 +2907,51 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'whenOccurred',
         type: { kind: 'ENUM', name: 'WhenDVOccurred', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'HmisParticipation',
+    fields: [
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'hmisParticipationStatusEndDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'hmisParticipationStatusStartDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'hmisParticipationType',
+        type: { kind: 'ENUM', name: 'HMISParticipationType', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
       },
     ],
   },

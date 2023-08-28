@@ -607,6 +607,12 @@ export const HmisEnums = {
     RURAL: 'Rural',
     DATA_NOT_COLLECTED: 'Unknown / data not collected',
   },
+  HMISParticipationType: {
+    INVALID: 'Invalid Value',
+    NOT_PARTICIPATING: 'Not Participating',
+    HMIS_PARTICIPATING: 'HMIS Participating',
+    COMPARABLE_DATABASE_PARTICIPATING: 'Comparable Database Participating',
+  },
   HOPWAMedAssistedLivingFac: {
     YES: 'Yes',
     INVALID: 'Invalid Value',
