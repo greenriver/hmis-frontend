@@ -1,6 +1,6 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
 import {
   Button,
   Link,
@@ -54,9 +54,9 @@ const UserMenu: React.FC = () => {
   return (
     <>
       <Button
-        startIcon={<AccountCircleIcon />}
+        startIcon={<PersonPinIcon />}
         variant='text'
-        sx={{ fontSize: '1rem', color: 'text.primary' }}
+        sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
         {...bindTrigger(popupState)}
       >
         {user.name}

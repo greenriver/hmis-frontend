@@ -102,7 +102,12 @@ const FormSelect = <Multiple extends boolean | undefined>({
     (event, value, reason, details) => {
       if (!onChange) return;
 
-      if (multiple && Array.isArray(value) && details) {
+      if (
+        multiple &&
+        reason === 'selectOption' &&
+        details &&
+        Array.isArray(value)
+      ) {
         const clickedOption = details.option;
         let modified;
         // If a "DNC" item was clicked, everything else should be cleared
