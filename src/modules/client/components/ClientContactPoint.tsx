@@ -1,4 +1,4 @@
-import { createMask } from 'imask/esm/index';
+import { createMask } from 'imask';
 import React from 'react';
 
 import { phoneMaskOptions } from '@/components/elements/input/PhoneInput';
