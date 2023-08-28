@@ -33,7 +33,11 @@ const ClientSsn = ({
   if (lastFour)
     return <Typography variant={variant}>{masked.slice(-4)}</Typography>;
 
-  const fullSsn = <Typography variant={variant}>{masked}</Typography>;
+  const fullSsn = (
+    <Typography variant={variant} sx={{ whiteSpace: 'nowrap' }}>
+      {masked}
+    </Typography>
+  );
   if (alwaysShow) return fullSsn;
   return (
     <ClickToShow variant={variant} hide={hide} onToggle={onToggle}>

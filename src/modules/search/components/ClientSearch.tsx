@@ -86,7 +86,6 @@ export const CLIENT_COLUMNS: {
     header: (
       <Stack direction='row' justifyContent='space-between'>
         <ContextualDobToggleButton sx={{ p: 0 }} variant='text' size='small' />
-        <strong>(Age)</strong>
       </Stack>
     ),
     key: 'dob',
@@ -101,13 +100,13 @@ export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
   {
     ...CLIENT_COLUMNS.first,
-    width: '15%',
+    width: '30%',
     linkTreatment: true,
     ariaLabel: (row) => clientNameAllParts(row),
   },
-  { ...CLIENT_COLUMNS.last, width: '15%', linkTreatment: true },
-  { ...CLIENT_COLUMNS.ssn, width: '10%' },
-  { ...CLIENT_COLUMNS.dobAge, width: '10%' },
+  { ...CLIENT_COLUMNS.last, width: '30%', linkTreatment: true },
+  { ...CLIENT_COLUMNS.ssn, width: '15%' },
+  { ...CLIENT_COLUMNS.dobAge, width: '15%' },
 ];
 
 export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
@@ -151,6 +150,8 @@ const ClientSearch = () => {
     'canViewPartialSsn',
   ]);
 
+  const [canViewDob] = useHasRootPermissions(['canViewDob']);
+
   const { globalFeatureFlags } = useHmisAppSettings();
 
   const columns = useMemo(() => {
@@ -166,9 +167,13 @@ const ClientSearch = () => {
         ...baseColumns,
       ];
     }
-    if (!canViewSsn) return baseColumns.filter((c) => c.key !== 'ssn');
+    if (!canViewSsn) baseColumns = baseColumns.filter((c) => c.key !== 'ssn');
+    if (!canViewDob)
+      baseColumns = baseColumns.map((c) =>
+        c.key === 'dob' ? { ...c, header: 'Age' } : c
+      );
     return baseColumns;
-  }, [isMobile, globalFeatureFlags, displayType, canViewSsn]);
+  }, [isMobile, globalFeatureFlags, displayType, canViewSsn, canViewDob]);
 
   useEffect(() => {
     // if search params are derived, we don't want to perform a search on them
@@ -301,19 +306,23 @@ const ClientSearch = () => {
                 : undefined
             }
             toolbars={
-              displayType === 'cards'
+              displayType === 'cards' && (canViewDob || canViewSsn)
                 ? [
                     <Stack direction='row-reverse' gap={2}>
-                      <ContextualDobToggleButton
-                        sx={{ p: 0 }}
-                        variant='text'
-                        size='small'
-                      />
-                      <ContextualSsnToggleButton
-                        sx={{ p: 0 }}
-                        variant='text'
-                        size='small'
-                      />
+                      {canViewDob && (
+                        <ContextualDobToggleButton
+                          sx={{ p: 0 }}
+                          variant='text'
+                          size='small'
+                        />
+                      )}
+                      {canViewSsn && (
+                        <ContextualSsnToggleButton
+                          sx={{ p: 0 }}
+                          variant='text'
+                          size='small'
+                        />
+                      )}
                     </Stack>,
                   ]
                 : undefined

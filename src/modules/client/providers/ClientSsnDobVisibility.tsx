@@ -1,6 +1,6 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Button, ButtonProps } from '@mui/material';
+import { Button, ButtonProps, useTheme } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { PropsWithChildren } from 'react';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
@@ -34,23 +34,29 @@ export const SsnDobShowContextProvider: React.FC<
 
 export const VisibilityToggleButton: React.FC<
   { on?: boolean | null | undefined; onToggle?: VoidFunction } & ButtonProps
-> = ({ on, onToggle = () => {}, ...props }) => (
-  <Button
-    onClick={(...args) => {
-      onToggle();
-      if (props.onClick) props.onClick(...args);
-    }}
-    color={on ? 'primary' : 'inherit'}
-    startIcon={
-      on ? (
-        <VisibilityIcon color='inherit' />
-      ) : (
-        <VisibilityOffIcon color='inherit' />
-      )
-    }
-    {...props}
-  />
-);
+> = ({ on, onToggle = () => {}, ...props }) => {
+  const theme = useTheme();
+  return (
+    <Button
+      onClick={(...args) => {
+        onToggle();
+        if (props.onClick) props.onClick(...args);
+      }}
+      color={on ? 'primary' : 'inherit'}
+      startIcon={
+        on ? (
+          <VisibilityIcon color='inherit' />
+        ) : (
+          <VisibilityOffIcon
+            sx={(theme) => ({ color: theme.palette.text.secondary })}
+          />
+        )
+      }
+      {...props}
+      sx={{ ...props.sx, backgroundColor: theme.palette.grey[100] }}
+    />
+  );
+};
 
 export const ContextualSsnToggleButton: React.FC<ButtonProps> = (props) => (
   <SsnShowContext.Consumer>
@@ -60,7 +66,7 @@ export const ContextualSsnToggleButton: React.FC<ButtonProps> = (props) => (
         on={show}
         onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
       >
-        SSN
+        <strong>SSN</strong>
       </VisibilityToggleButton>
     )}
   </SsnShowContext.Consumer>
@@ -74,7 +80,7 @@ export const ContextualDobToggleButton: React.FC<ButtonProps> = (props) => (
         on={show}
         onToggle={() => setShow((prev) => (isNil(prev) ? true : !prev))}
       >
-        DOB
+        <strong>DOB</strong>
       </VisibilityToggleButton>
     )}
   </DobShowContext.Consumer>
