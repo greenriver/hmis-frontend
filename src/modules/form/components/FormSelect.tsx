@@ -7,7 +7,7 @@ import { DynamicInputCommonProps } from '../types';
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
-import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
+import { INVALID_ENUM, MISSING_DATA_KEYS } from '@/modules/hmis/hmisUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 type Option = PickListOption;
@@ -57,6 +57,9 @@ export function getOptionLabelFromOptions(
   return option.code || '';
 }
 
+const isDoesntKnowRefusedOrNotCollected = (option: Option): boolean =>
+  (MISSING_DATA_KEYS as string[]).includes(option.code);
+
 const FormSelect = <Multiple extends boolean | undefined>({
   options,
   multiple,
@@ -66,6 +69,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
   placeholder,
   helperText,
   warnIfEmptyTreatment,
+  onChange,
   ...props
 }: GenericSelectProps<Option, Multiple, false> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.groupLabel;
@@ -80,6 +84,42 @@ const FormSelect = <Multiple extends boolean | undefined>({
     []
   );
 
+  // On-change wrapper to handle special logic for multi-select with 8/9/99 values
+  const handleChange = useCallback<
+    NonNullable<GenericSelectProps<Option, Multiple, false>['onChange']>
+  >(
+    (event, value, reason, details) => {
+      if (!onChange) return;
+
+      if (
+        multiple &&
+        reason === 'selectOption' &&
+        details &&
+        Array.isArray(value)
+      ) {
+        const clickedOption = details.option;
+        let modified;
+        // If a "DNC" item was clicked, everything else should be cleared
+        if (isDoesntKnowRefusedOrNotCollected(clickedOption)) {
+          modified = [clickedOption];
+        }
+        // If a NON-"DNC" item was clicked, all the DNC items should be cleared
+        else if (value.find(isDoesntKnowRefusedOrNotCollected)) {
+          modified = value.filter(
+            (option) => !isDoesntKnowRefusedOrNotCollected(option)
+          );
+        }
+
+        if (modified) {
+          return onChange(event, modified as typeof value, reason, details);
+        }
+      }
+
+      return onChange(event, value, reason, details);
+    },
+    [multiple, onChange]
+  );
+
   return (
     <GenericSelect
       getOptionLabel={getOptionLabel}
@@ -91,6 +131,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
       isOptionEqualToValue={isOptionEqualToValue}
       value={value}
       {...props}
+      onChange={handleChange}
       textInputProps={{
         ...props.textInputProps,
         placeholder,
