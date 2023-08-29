@@ -1,6 +1,7 @@
-import { compact } from 'lodash-es';
+import { createMask } from 'imask';
 import React from 'react';
 
+import { phoneMaskOptions } from '@/components/elements/input/PhoneInput';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -16,27 +17,30 @@ interface Props {
   >;
 }
 
+const minExpectedMaskedPhoneLength = Math.min(
+  ...phoneMaskOptions.mask.map((i) => i.mask.length)
+);
+
 export const formatPhone = (num: any) => {
-  const match =
-    String(num).match(/^(\(?(\d{3})\)?\s*)?(\d{3})\s*-?\s*(\d{4})/) || [];
-  if (!match) {
-    console.warn(`Could not format phone number '${num}'`);
+  const mask = createMask(phoneMaskOptions);
+  mask.value = num;
+
+  // if value doesn't reach the min mask length, just display it raw.
+  // this could occur if we have malformatted phone numbers, or strings.
+  if (mask.value.length < minExpectedMaskedPhoneLength) {
     return num;
+  } else {
+    return mask.value;
   }
-
-  const [, , area, first3, last4] =
-    String(num).match(/^(\(?(\d{3})\)?\s*)?(\d{3})\s*-?\s*(\d{4})/) || [];
-
-  const base = [first3, last4].join('-');
-  return compact([area ? `(${area})` : undefined, base]).join(' ');
 };
 
 const ClientContactPoint: React.FC<Props> = ({
   contactPoint: { value, system, use, notes },
 }) => {
   let formattedValue = value;
-  if (system === ClientContactPointSystem.Phone)
+  if (system === ClientContactPointSystem.Phone) {
     formattedValue = formatPhone(value);
+  }
 
   return (
     <>
