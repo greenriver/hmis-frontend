@@ -9,6 +9,7 @@ import IconButtonContainer from './IconButtonContainer';
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import SimpleTable from '@/components/elements/SimpleTable';
+import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
@@ -22,10 +23,8 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentRole,
   Destination,
-  EnrollmentFieldsFragment,
   FormRole,
   ProjectType,
-  useGetEnrollmentDetailsQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -39,13 +38,8 @@ const DOE_PROJECT_TYPES = [
 const EnrollmentDetails = ({
   enrollment,
 }: {
-  enrollment: EnrollmentFieldsFragment;
+  enrollment: NonNullable<EnrollmentDashboardContext['enrollment']>;
 }) => {
-  const { data, error } = useGetEnrollmentDetailsQuery({
-    variables: { id: enrollment.id },
-  });
-  const enrollmentWithDetails = useMemo(() => data?.enrollment, [data]);
-
   const navigate = useNavigate();
   const intakePath = useMemo(
     () =>
@@ -53,9 +47,9 @@ const EnrollmentDetails = ({
         clientId: enrollment.client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Intake,
-        assessmentId: enrollmentWithDetails?.intakeAssessment?.id,
+        assessmentId: enrollment.intakeAssessment?.id,
       }),
-    [enrollment, enrollmentWithDetails]
+    [enrollment]
   );
   const exitPath = useMemo(
     () =>
@@ -63,13 +57,12 @@ const EnrollmentDetails = ({
         clientId: enrollment.client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Exit,
-        assessmentId: enrollmentWithDetails?.intakeAssessment?.id,
+        assessmentId: enrollment.intakeAssessment?.id,
       }),
-    [enrollment, enrollmentWithDetails]
+    [enrollment]
   );
 
   const rows = useMemo(() => {
-    if (!enrollmentWithDetails) return;
     const noneText = <NotCollectedText variant='body2'>None</NotCollectedText>;
     const content: Record<string, ReactNode> = {
       'Enrollment Status': <EnrollmentStatus enrollment={enrollment} />,
@@ -107,7 +100,7 @@ const EnrollmentDetails = ({
     // Show unit if enrollment is open, or enrollment has unit.
     // it is unexpected for a closed enrollment to have an assigned unit.
     if (
-      enrollmentWithDetails.project.hasUnits &&
+      enrollment.project.hasUnits &&
       (!enrollment.exitDate || enrollment.currentUnit)
     ) {
       content['Assigned Unit'] = (
@@ -170,20 +163,17 @@ const EnrollmentDetails = ({
       );
     }
 
-    if (
-      enrollmentWithDetails &&
-      enrollmentWithDetails.openEnrollmentSummary.length > 0
-    ) {
+    if (enrollment && enrollment.openEnrollmentSummary.length > 0) {
       const title = 'Other Open Enrollments';
       content[title] = (
         <EnrollmentSummaryCount
-          enrollmentSummary={enrollmentWithDetails.openEnrollmentSummary}
+          enrollmentSummary={enrollment.openEnrollmentSummary}
           clientId={enrollment.client.id}
         />
       );
     }
 
-    enrollmentWithDetails.customDataElements
+    enrollment.customDataElements
       .filter((cde) => cde.atOccurrence)
       .forEach((cde) => {
         content[cde.label] = (
@@ -200,11 +190,12 @@ const EnrollmentDetails = ({
       label: id,
       value,
     }));
-  }, [enrollment, enrollmentWithDetails, intakePath, exitPath, navigate]);
+  }, [enrollment, intakePath, exitPath, navigate]);
 
-  if (error) throw error;
-  if (!enrollmentWithDetails || !rows) return <Loading />;
+  if (!enrollment || !rows) return <Loading />;
 
+  // TODO: use these
+  console.log(enrollment.project.dataCollectionPoints);
   return (
     <SimpleTable
       TableCellProps={{

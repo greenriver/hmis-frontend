@@ -36,6 +36,31 @@ fragment ProjectAllFields on Project {
   customDataElements {
     ...CustomDataElementFields
   }
+  dataCollectionFeatures {
+    ...DataCollectionFeatureFields
+  }
+  # occurrencePointForms {
+  #   id # instance ID
+  #   dataCollectedAbout
+  #   formDefinition {
+
+  #   }
+  # }
+}
+
+fragment DataCollectionFeatureFields on DataCollectionFeature {
+  id # instance IDs concatenated
+  role # if present, show on Project Dashboard
+  dataCollectedAbout
+  legacyDataCollectedAbout
+  legacy
+}
+
+fragment DataCollectionPointFields on DataCollectionPoint {
+  id # instance ID
+  dataCollectedAbout
+  legacyDataCollectedAbout
+  legacy
 }
 
 fragment ProjectCocFields on ProjectCoc {

@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
+import { AllEnrollmentDetailsFragment, FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 export const useEnrollmentDashboardNavItems = (
-  enrollment?: EnrollmentFieldsFragment
+  enrollment?: AllEnrollmentDetailsFragment
 ) => {
   // const [canViewEnrollments] = useHasClientPermissions(client?.id || '', [
   //   'canViewEnrollmentDetails',
@@ -22,60 +22,65 @@ export const useEnrollmentDashboardNavItems = (
       clientId: enrollment.client.id,
       enrollmentId: enrollment.id,
     };
+    const dataCollectionRoles = enrollment.project.dataCollectionFeatures.map(
+      (r) => r.role
+    );
+
     return [
       {
         id: 'enrollment-nav',
-        // title: 'Client Navigation',
         type: 'category',
         items: [
           {
             id: 'overview',
             title: 'Enrollment Overview',
-            path: generateSafePath(
-              EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-              params
-            ),
+            path: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
           },
           {
             id: 'household',
             title: 'Household',
-            path: generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, params),
+            path: EnrollmentDashboardRoutes.HOUSEHOLD,
           },
           {
             id: 'assessments',
             title: 'Assessments',
-            path: generateSafePath(
-              EnrollmentDashboardRoutes.ASSESSMENTS,
-              params
-            ),
+            path: EnrollmentDashboardRoutes.ASSESSMENTS,
           },
           {
             id: 'services',
             title: 'Services',
-            path: generateSafePath(EnrollmentDashboardRoutes.SERVICES, params),
+            path: EnrollmentDashboardRoutes.SERVICES,
+            requiredRole: FormRole.Service,
           },
           {
             id: 'cls',
             title: 'Current Living Situations',
-            path: generateSafePath(
-              EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-              params
-            ),
+            path: EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
+            requiredRole: FormRole.CurrentLivingSituation,
           },
           {
             id: 'events',
             title: 'CE Events',
-            path: generateSafePath(EnrollmentDashboardRoutes.EVENTS, params),
+            path: EnrollmentDashboardRoutes.EVENTS,
+            requiredRole: FormRole.CeEvent,
           },
           {
             id: 'ce-assessments',
             title: 'CE Assessments',
-            path: generateSafePath(
-              EnrollmentDashboardRoutes.CE_ASSESSMENTS,
-              params
-            ),
+            path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
+            requiredRole: FormRole.CeAssessment,
           },
-        ],
+        ]
+          .filter(
+            (item) =>
+              !item.requiredRole ||
+              // FIXME: needs to check data collected about too
+              dataCollectionRoles.includes(item.requiredRole)
+          )
+          .map(({ path, ...rest }) => ({
+            path: generateSafePath(path, params),
+            ...rest,
+          })),
       },
     ];
   }, [enrollment]);

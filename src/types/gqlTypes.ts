@@ -1020,6 +1020,24 @@ export enum DataCollectedAbout {
   VeteranHoh = 'VETERAN_HOH',
 }
 
+export type DataCollectionFeature = {
+  __typename?: 'DataCollectionFeature';
+  dataCollectedAbout: Array<DataCollectedAbout>;
+  id: Scalars['ID']['output'];
+  legacy: Scalars['Boolean']['output'];
+  legacyDataCollectedAbout: Array<DataCollectedAbout>;
+  role: FormRole;
+};
+
+export type DataCollectionPoint = {
+  __typename?: 'DataCollectionPoint';
+  dataCollectedAbout: Array<DataCollectedAbout>;
+  formDefinition: FormDefinition;
+  id: Scalars['ID']['output'];
+  legacy: Scalars['Boolean']['output'];
+  legacyDataCollectedAbout: Array<DataCollectedAbout>;
+};
+
 /** 5.03.1 */
 export enum DataCollectionStage {
   /** (5) Annual assessment */
@@ -2258,6 +2276,8 @@ export enum FormRole {
   MoveInDate = 'MOVE_IN_DATE',
   /** (NEW_CLIENT_ENROLLMENT) New Client Enrollment */
   NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
+  /** (OCCURRENCE_POINT) Occurrence point collection form */
+  OccurrencePoint = 'OCCURRENCE_POINT',
   /** (ORGANIZATION) Organization */
   Organization = 'ORGANIZATION',
   /** (PATH_STATUS) PATH Status */
@@ -3492,6 +3512,8 @@ export type Project = {
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYesMissing>;
   customDataElements: Array<CustomDataElement>;
+  dataCollectionFeatures: Array<DataCollectionFeature>;
+  dataCollectionPoints: Array<DataCollectionPoint>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
@@ -9507,15 +9529,7 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
         };
-        currentUnit?: {
-          __typename?: 'Unit';
-          id: string;
-          name: string;
-          unitType?: {
-            __typename?: 'UnitTypeObject';
-            description?: string | null;
-          } | null;
-        } | null;
+        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -10233,15 +10247,7 @@ export type GetClientEnrollmentsQuery = {
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
         };
-        currentUnit?: {
-          __typename?: 'Unit';
-          id: string;
-          name: string;
-          unitType?: {
-            __typename?: 'UnitTypeObject';
-            description?: string | null;
-          } | null;
-        } | null;
+        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -10356,10 +10362,6 @@ export type GetClientServicesQuery = {
             __typename?: 'Unit';
             id: string;
             name: string;
-            unitType?: {
-              __typename?: 'UnitTypeObject';
-              description?: string | null;
-            } | null;
           } | null;
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
@@ -11047,15 +11049,164 @@ export type EnrollmentFieldsFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
   };
-  currentUnit?: {
-    __typename?: 'Unit';
+  currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+};
+
+export type AllEnrollmentDetailsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  exitDestination?: Destination | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  moveInDate?: string | null;
+  dateOfEngagement?: string | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
+  livingSituation?: LivingSituation | null;
+  lengthOfStay?: ResidencePriorLengthOfStay | null;
+  losUnderThreshold?: NoYesMissing | null;
+  previousStreetEssh?: NoYesMissing | null;
+  dateToStreetEssh?: string | null;
+  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  percentAmi?: PercentAmi | null;
+  referralSource?: ReferralSource | null;
+  countOutreachReferralApproaches?: number | null;
+  dateOfBcpStatus?: string | null;
+  eligibleForRhy?: NoYesMissing | null;
+  reasonNoServices?: ReasonNoServices | null;
+  runawayYouth?: NoYesReasonsForMissingData | null;
+  sexualOrientation?: SexualOrientation | null;
+  sexualOrientationOther?: string | null;
+  formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+  childWelfareYears?: RhyNumberofYears | null;
+  childWelfareMonths?: number | null;
+  formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+  juvenileJusticeYears?: RhyNumberofYears | null;
+  juvenileJusticeMonths?: number | null;
+  unemploymentFam?: NoYesMissing | null;
+  mentalHealthDisorderFam?: NoYesMissing | null;
+  physicalDisabilityFam?: NoYesMissing | null;
+  alcoholDrugUseDisorderFam?: NoYesMissing | null;
+  insufficientIncome?: NoYesMissing | null;
+  incarceratedParent?: NoYesMissing | null;
+  targetScreenReqd?: NoYesMissing | null;
+  timeToHousingLoss?: TimeToHousingLoss | null;
+  annualPercentAmi?: AnnualPercentAmi | null;
+  literalHomelessHistory?: LiteralHomelessHistory | null;
+  clientLeaseholder?: NoYesMissing | null;
+  hohLeaseholder?: NoYesMissing | null;
+  subsidyAtRisk?: NoYesMissing | null;
+  evictionHistory?: EvictionHistory | null;
+  criminalRecord?: NoYesMissing | null;
+  incarceratedAdult?: IncarceratedAdult | null;
+  prisonDischarge?: NoYesMissing | null;
+  sexOffender?: NoYesMissing | null;
+  disabledHoh?: NoYesMissing | null;
+  currentPregnant?: NoYesMissing | null;
+  singleParent?: NoYesMissing | null;
+  dependentUnder6?: DependentUnder6 | null;
+  hh5Plus?: NoYesMissing | null;
+  cocPrioritized?: NoYesMissing | null;
+  hpScreeningScore?: NoYesMissing | null;
+  thresholdScore?: NoYesMissing | null;
+  vamcStation?: VamcStationNumber | null;
+  intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
+  exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
     id: string;
-    name: string;
-    unitType?: {
-      __typename?: 'UnitTypeObject';
-      description?: string | null;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    atOccurrence: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
-  } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+  openEnrollmentSummary: Array<{
+    __typename?: 'EnrollmentSummary';
+    id: string;
+    entryDate: string;
+    inProgress: boolean;
+    moveInDate?: string | null;
+    projectId: string;
+    projectName: string;
+    projectType: ProjectType;
+    canViewEnrollment: boolean;
+  }>;
+  project: {
+    __typename?: 'Project';
+    hasUnits: boolean;
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+    dataCollectionFeatures: Array<{
+      __typename?: 'DataCollectionFeature';
+      id: string;
+      role: FormRole;
+      dataCollectedAbout: Array<DataCollectedAbout>;
+      legacyDataCollectedAbout: Array<DataCollectedAbout>;
+      legacy: boolean;
+    }>;
+    dataCollectionPoints: Array<{
+      __typename?: 'DataCollectionPoint';
+      id: string;
+      dataCollectedAbout: Array<DataCollectedAbout>;
+      legacyDataCollectedAbout: Array<DataCollectedAbout>;
+      legacy: boolean;
+    }>;
+  };
+  client: {
+    __typename?: 'Client';
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+  access: {
+    __typename?: 'EnrollmentAccess';
+    id: string;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+  };
+  currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
 
 export type EnrollmentWithHouseholdFragmentFragment = {
@@ -11152,15 +11303,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
   };
-  currentUnit?: {
-    __typename?: 'Unit';
-    id: string;
-    name: string;
-    unitType?: {
-      __typename?: 'UnitTypeObject';
-      description?: string | null;
-    } | null;
-  } | null;
+  currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
 
 export type EventFieldsFragment = {
@@ -11203,131 +11346,6 @@ export type EnrollmentSummaryFieldsFragment = {
   projectName: string;
   projectType: ProjectType;
   canViewEnrollment: boolean;
-};
-
-export type AllEnrollmentDetailsFragment = {
-  __typename?: 'Enrollment';
-  inProgress: boolean;
-  relationshipToHoH: RelationshipToHoH;
-  enrollmentCoc?: string | null;
-  householdId: string;
-  householdShortId: string;
-  householdSize: number;
-  id: string;
-  entryDate: string;
-  exitDate?: string | null;
-  dateOfEngagement?: string | null;
-  moveInDate?: string | null;
-  livingSituation?: LivingSituation | null;
-  lengthOfStay?: ResidencePriorLengthOfStay | null;
-  losUnderThreshold?: NoYesMissing | null;
-  previousStreetEssh?: NoYesMissing | null;
-  dateToStreetEssh?: string | null;
-  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
-  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-  dateOfPathStatus?: string | null;
-  clientEnrolledInPath?: NoYesMissing | null;
-  reasonNotEnrolled?: ReasonNotEnrolled | null;
-  percentAmi?: PercentAmi | null;
-  referralSource?: ReferralSource | null;
-  countOutreachReferralApproaches?: number | null;
-  dateOfBcpStatus?: string | null;
-  eligibleForRhy?: NoYesMissing | null;
-  reasonNoServices?: ReasonNoServices | null;
-  runawayYouth?: NoYesReasonsForMissingData | null;
-  sexualOrientation?: SexualOrientation | null;
-  sexualOrientationOther?: string | null;
-  formerWardChildWelfare?: NoYesReasonsForMissingData | null;
-  childWelfareYears?: RhyNumberofYears | null;
-  childWelfareMonths?: number | null;
-  formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
-  juvenileJusticeYears?: RhyNumberofYears | null;
-  juvenileJusticeMonths?: number | null;
-  unemploymentFam?: NoYesMissing | null;
-  mentalHealthDisorderFam?: NoYesMissing | null;
-  physicalDisabilityFam?: NoYesMissing | null;
-  alcoholDrugUseDisorderFam?: NoYesMissing | null;
-  insufficientIncome?: NoYesMissing | null;
-  incarceratedParent?: NoYesMissing | null;
-  targetScreenReqd?: NoYesMissing | null;
-  timeToHousingLoss?: TimeToHousingLoss | null;
-  annualPercentAmi?: AnnualPercentAmi | null;
-  literalHomelessHistory?: LiteralHomelessHistory | null;
-  clientLeaseholder?: NoYesMissing | null;
-  hohLeaseholder?: NoYesMissing | null;
-  subsidyAtRisk?: NoYesMissing | null;
-  evictionHistory?: EvictionHistory | null;
-  criminalRecord?: NoYesMissing | null;
-  incarceratedAdult?: IncarceratedAdult | null;
-  prisonDischarge?: NoYesMissing | null;
-  sexOffender?: NoYesMissing | null;
-  disabledHoh?: NoYesMissing | null;
-  currentPregnant?: NoYesMissing | null;
-  singleParent?: NoYesMissing | null;
-  dependentUnder6?: DependentUnder6 | null;
-  hh5Plus?: NoYesMissing | null;
-  cocPrioritized?: NoYesMissing | null;
-  hpScreeningScore?: NoYesMissing | null;
-  thresholdScore?: NoYesMissing | null;
-  vamcStation?: VamcStationNumber | null;
-  currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-  intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
-  exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
-  customDataElements: Array<{
-    __typename?: 'CustomDataElement';
-    id: string;
-    key: string;
-    label: string;
-    fieldType: CustomDataElementType;
-    repeats: boolean;
-    atOccurrence: boolean;
-    value?: {
-      __typename?: 'CustomDataElementValue';
-      id: string;
-      valueBoolean?: boolean | null;
-      valueDate?: string | null;
-      valueFloat?: number | null;
-      valueInteger?: number | null;
-      valueJson?: any | null;
-      valueString?: string | null;
-      valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
-      user?: { __typename: 'User'; id: string; name: string } | null;
-    } | null;
-    values?: Array<{
-      __typename?: 'CustomDataElementValue';
-      id: string;
-      valueBoolean?: boolean | null;
-      valueDate?: string | null;
-      valueFloat?: number | null;
-      valueInteger?: number | null;
-      valueJson?: any | null;
-      valueString?: string | null;
-      valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
-      user?: { __typename: 'User'; id: string; name: string } | null;
-    }> | null;
-  }>;
-  openEnrollmentSummary: Array<{
-    __typename?: 'EnrollmentSummary';
-    id: string;
-    entryDate: string;
-    inProgress: boolean;
-    moveInDate?: string | null;
-    projectId: string;
-    projectName: string;
-    projectType: ProjectType;
-    canViewEnrollment: boolean;
-  }>;
-  project: {
-    __typename?: 'Project';
-    hasUnits: boolean;
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  };
 };
 
 export type GetEnrollmentQueryVariables = Exact<{
@@ -11375,15 +11393,7 @@ export type GetEnrollmentQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
     };
-    currentUnit?: {
-      __typename?: 'Unit';
-      id: string;
-      name: string;
-      unitType?: {
-        __typename?: 'UnitTypeObject';
-        description?: string | null;
-      } | null;
-    } | null;
+    currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
 };
 
@@ -11395,17 +11405,21 @@ export type GetEnrollmentDetailsQuery = {
   __typename?: 'Query';
   enrollment?: {
     __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    exitDestination?: Destination | null;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
     householdId: string;
     householdShortId: string;
     householdSize: number;
-    id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    dateOfEngagement?: string | null;
     moveInDate?: string | null;
+    dateOfEngagement?: string | null;
+    dateOfPathStatus?: string | null;
+    clientEnrolledInPath?: NoYesMissing | null;
+    reasonNotEnrolled?: ReasonNotEnrolled | null;
     livingSituation?: LivingSituation | null;
     lengthOfStay?: ResidencePriorLengthOfStay | null;
     losUnderThreshold?: NoYesMissing | null;
@@ -11413,9 +11427,6 @@ export type GetEnrollmentDetailsQuery = {
     dateToStreetEssh?: string | null;
     timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
     monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-    dateOfPathStatus?: string | null;
-    clientEnrolledInPath?: NoYesMissing | null;
-    reasonNotEnrolled?: ReasonNotEnrolled | null;
     percentAmi?: PercentAmi | null;
     referralSource?: ReferralSource | null;
     countOutreachReferralApproaches?: number | null;
@@ -11458,7 +11469,6 @@ export type GetEnrollmentDetailsQuery = {
     hpScreeningScore?: NoYesMissing | null;
     thresholdScore?: NoYesMissing | null;
     vamcStation?: VamcStationNumber | null;
-    currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
     exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
     customDataElements: Array<{
@@ -11515,7 +11525,39 @@ export type GetEnrollmentDetailsQuery = {
       id: string;
       projectName: string;
       projectType?: ProjectType | null;
+      dataCollectionFeatures: Array<{
+        __typename?: 'DataCollectionFeature';
+        id: string;
+        role: FormRole;
+        dataCollectedAbout: Array<DataCollectedAbout>;
+        legacyDataCollectedAbout: Array<DataCollectedAbout>;
+        legacy: boolean;
+      }>;
+      dataCollectionPoints: Array<{
+        __typename?: 'DataCollectionPoint';
+        id: string;
+        dataCollectedAbout: Array<DataCollectedAbout>;
+        legacyDataCollectedAbout: Array<DataCollectedAbout>;
+        legacy: boolean;
+      }>;
     };
+    client: {
+      __typename?: 'Client';
+      dob?: string | null;
+      veteranStatus: NoYesReasonsForMissingData;
+      id: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+    };
+    currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
 };
 
@@ -11623,15 +11665,7 @@ export type GetEnrollmentWithHouseholdQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
     };
-    currentUnit?: {
-      __typename?: 'Unit';
-      id: string;
-      name: string;
-      unitType?: {
-        __typename?: 'UnitTypeObject';
-        description?: string | null;
-      } | null;
-    } | null;
+    currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
 };
 
@@ -14122,10 +14156,6 @@ export type SubmitFormMutation = {
             __typename?: 'Unit';
             id: string;
             name: string;
-            unitType?: {
-              __typename?: 'UnitTypeObject';
-              description?: string | null;
-            } | null;
           } | null;
         }
       | {
@@ -14373,6 +14403,14 @@ export type SubmitFormMutation = {
               dateUpdated: string;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
+          }>;
+          dataCollectionFeatures: Array<{
+            __typename?: 'DataCollectionFeature';
+            id: string;
+            role: FormRole;
+            dataCollectedAbout: Array<DataCollectedAbout>;
+            legacyDataCollectedAbout: Array<DataCollectedAbout>;
+            legacy: boolean;
           }>;
         }
       | {
@@ -14836,15 +14874,7 @@ export type UpdateRelationshipToHoHMutation = {
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
       };
-      currentUnit?: {
-        __typename?: 'Unit';
-        id: string;
-        name: string;
-        unitType?: {
-          __typename?: 'UnitTypeObject';
-          description?: string | null;
-        } | null;
-      } | null;
+      currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -15459,6 +15489,31 @@ export type ProjectAllFieldsFragment = {
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
+  dataCollectionFeatures: Array<{
+    __typename?: 'DataCollectionFeature';
+    id: string;
+    role: FormRole;
+    dataCollectedAbout: Array<DataCollectedAbout>;
+    legacyDataCollectedAbout: Array<DataCollectedAbout>;
+    legacy: boolean;
+  }>;
+};
+
+export type DataCollectionFeatureFieldsFragment = {
+  __typename?: 'DataCollectionFeature';
+  id: string;
+  role: FormRole;
+  dataCollectedAbout: Array<DataCollectedAbout>;
+  legacyDataCollectedAbout: Array<DataCollectedAbout>;
+  legacy: boolean;
+};
+
+export type DataCollectionPointFieldsFragment = {
+  __typename?: 'DataCollectionPoint';
+  id: string;
+  dataCollectedAbout: Array<DataCollectedAbout>;
+  legacyDataCollectedAbout: Array<DataCollectedAbout>;
+  legacy: boolean;
 };
 
 export type ProjectCocFieldsFragment = {
@@ -15608,6 +15663,14 @@ export type GetProjectQuery = {
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
+    dataCollectionFeatures: Array<{
+      __typename?: 'DataCollectionFeature';
+      id: string;
+      role: FormRole;
+      dataCollectedAbout: Array<DataCollectedAbout>;
+      legacyDataCollectedAbout: Array<DataCollectedAbout>;
+      legacy: boolean;
+    }>;
   } | null;
 };
 
@@ -15706,15 +15769,7 @@ export type GetProjectEnrollmentsQuery = {
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
         };
-        currentUnit?: {
-          __typename?: 'Unit';
-          id: string;
-          name: string;
-          unitType?: {
-            __typename?: 'UnitTypeObject';
-            description?: string | null;
-          } | null;
-        } | null;
+        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -18587,14 +18642,75 @@ export const EnrollmentFieldsFragmentDoc = gql`
     currentUnit {
       id
       name
-      unitType {
-        description
-      }
     }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
   ${EnrollmentAccessFieldsFragmentDoc}
+`;
+export const EnrollmentSummaryFieldsFragmentDoc = gql`
+  fragment EnrollmentSummaryFields on EnrollmentSummary {
+    id
+    entryDate
+    inProgress
+    moveInDate
+    projectId
+    projectName
+    projectType
+    canViewEnrollment
+  }
+`;
+export const DataCollectionFeatureFieldsFragmentDoc = gql`
+  fragment DataCollectionFeatureFields on DataCollectionFeature {
+    id
+    role
+    dataCollectedAbout
+    legacyDataCollectedAbout
+    legacy
+  }
+`;
+export const DataCollectionPointFieldsFragmentDoc = gql`
+  fragment DataCollectionPointFields on DataCollectionPoint {
+    id
+    dataCollectedAbout
+    legacyDataCollectedAbout
+    legacy
+  }
+`;
+export const AllEnrollmentDetailsFragmentDoc = gql`
+  fragment AllEnrollmentDetails on Enrollment {
+    ...EnrollmentFields
+    ...EnrollmentValues
+    intakeAssessment {
+      id
+    }
+    exitAssessment {
+      id
+    }
+    customDataElements {
+      ...CustomDataElementFields
+    }
+    openEnrollmentSummary {
+      ...EnrollmentSummaryFields
+    }
+    project {
+      ...ProjectNameAndType
+      hasUnits
+      dataCollectionFeatures {
+        ...DataCollectionFeatureFields
+      }
+      dataCollectionPoints {
+        ...DataCollectionPointFields
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${EnrollmentValuesFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
+  ${EnrollmentSummaryFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+  ${DataCollectionFeatureFieldsFragmentDoc}
+  ${DataCollectionPointFieldsFragmentDoc}
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
   fragment HouseholdClientFields on HouseholdClient {
@@ -18677,53 +18793,6 @@ export const CeAssessmentFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
-`;
-export const EnrollmentSummaryFieldsFragmentDoc = gql`
-  fragment EnrollmentSummaryFields on EnrollmentSummary {
-    id
-    entryDate
-    inProgress
-    moveInDate
-    projectId
-    projectName
-    projectType
-    canViewEnrollment
-  }
-`;
-export const AllEnrollmentDetailsFragmentDoc = gql`
-  fragment AllEnrollmentDetails on Enrollment {
-    ...EnrollmentValues
-    inProgress
-    relationshipToHoH
-    enrollmentCoc
-    householdId
-    householdShortId
-    householdSize
-    currentUnit {
-      id
-      name
-    }
-    intakeAssessment {
-      id
-    }
-    exitAssessment {
-      id
-    }
-    customDataElements {
-      ...CustomDataElementFields
-    }
-    openEnrollmentSummary {
-      ...EnrollmentSummaryFields
-    }
-    project {
-      ...ProjectNameAndType
-      hasUnits
-    }
-  }
-  ${EnrollmentValuesFragmentDoc}
-  ${CustomDataElementFieldsFragmentDoc}
-  ${EnrollmentSummaryFieldsFragmentDoc}
-  ${ProjectNameAndTypeFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -19070,6 +19139,9 @@ export const ProjectAllFieldsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    dataCollectionFeatures {
+      ...DataCollectionFeatureFields
+    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectOperatingPeriodFragmentDoc}
@@ -19077,6 +19149,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
   ${ProjectAccessFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+  ${DataCollectionFeatureFieldsFragmentDoc}
 `;
 export const ProjectCocFieldsFragmentDoc = gql`
   fragment ProjectCocFields on ProjectCoc {

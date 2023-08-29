@@ -26,8 +26,33 @@ fragment EnrollmentFields on Enrollment {
   currentUnit {
     id
     name
-    unitType {
-      description
+  }
+}
+
+fragment AllEnrollmentDetails on Enrollment {
+  ...EnrollmentFields
+  ...EnrollmentValues
+  # can we remove these? just always link to it
+  intakeAssessment {
+    id
+  }
+  exitAssessment {
+    id
+  }
+  customDataElements {
+    ...CustomDataElementFields
+  }
+  openEnrollmentSummary {
+    ...EnrollmentSummaryFields
+  }
+  project {
+    ...ProjectNameAndType
+    hasUnits
+    dataCollectionFeatures {
+      ...DataCollectionFeatureFields
+    }
+    dataCollectionPoints {
+      ...DataCollectionPointFields
     }
   }
 }
@@ -84,34 +109,4 @@ fragment EnrollmentSummaryFields on EnrollmentSummary {
   projectName
   projectType
   canViewEnrollment
-}
-
-fragment AllEnrollmentDetails on Enrollment {
-  ...EnrollmentValues
-  inProgress
-  relationshipToHoH
-  enrollmentCoc
-  householdId
-  householdShortId
-  householdSize
-  currentUnit {
-    id
-    name
-  }
-  intakeAssessment {
-    id
-  }
-  exitAssessment {
-    id
-  }
-  customDataElements {
-    ...CustomDataElementFields
-  }
-  openEnrollmentSummary {
-    ...EnrollmentSummaryFields
-  }
-  project {
-    ...ProjectNameAndType
-    hasUnits
-  }
 }

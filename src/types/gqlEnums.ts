@@ -483,6 +483,7 @@ export const HmisEnums = {
     INVENTORY: 'Inventory',
     MOVE_IN_DATE: 'Move-in Date',
     NEW_CLIENT_ENROLLMENT: 'New Client Enrollment',
+    OCCURRENCE_POINT: 'Occurrence point collection form',
     ORGANIZATION: 'Organization',
     PATH_STATUS: 'PATH Status',
     POST_EXIT: 'Post-Exit Assessment',

@@ -17,7 +17,7 @@ import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/hooks/useAssessment';
-import { useEnrollment } from '@/modules/dataFetching/hooks/useEnrollment';
+import { useBasicEnrollment } from '@/modules/enrollment/hooks/useBasicEnrollment';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import {
   DynamicFormProps,
@@ -69,7 +69,7 @@ const IndividualAssessment = ({
 
   // Fetch the enrollment, which may be different from the current context enrollment if this assessment is part of a workflow.
   const { enrollment, loading: enrollmentLoading } =
-    useEnrollment(enrollmentId);
+    useBasicEnrollment(enrollmentId);
 
   const {
     definition,
