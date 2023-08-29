@@ -17,10 +17,21 @@ interface Props {
   >;
 }
 
+const minExpectedMaskedPhoneLength = Math.min(
+  ...phoneMaskOptions.mask.map((i) => i.mask.length)
+);
+
 export const formatPhone = (num: any) => {
   const mask = createMask(phoneMaskOptions);
   mask.value = num;
-  return mask.value;
+
+  // if value doesn't reach the min mask length, just display it raw.
+  // this could occur if we have malformatted phone numbers, or strings.
+  if (mask.value.length < minExpectedMaskedPhoneLength) {
+    return num;
+  } else {
+    return mask.value;
+  }
 };
 
 const ClientContactPoint: React.FC<Props> = ({
