@@ -59,6 +59,22 @@ export const MAX_INPUT_WIDTH = 500;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
+const minWidthForType = (item: FormItem) => {
+  if (
+    [
+      ItemType.Choice,
+      ItemType.OpenChoice,
+      ItemType.Text,
+      ItemType.String,
+      ItemType,
+    ].includes(item.type) &&
+    !item.component
+  ) {
+    return 350;
+  }
+  return undefined;
+};
+
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
@@ -91,7 +107,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
 
   const label = noLabel ? null : getLabel(item, horizontal);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
-  const minWidth = undefined;
+  const minWidth = minWidthForType(item);
   let width;
 
   if (item.size === InputSize.Small || item.type === ItemType.Date) {

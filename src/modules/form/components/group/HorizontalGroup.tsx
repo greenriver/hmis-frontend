@@ -8,7 +8,7 @@ const HorizontalGroup = ({
 }: GroupItemComponentProps & { horizontal?: boolean }) => (
   <Grid item xs>
     {item.text && <Typography sx={{ mb: 2 }}>{item.text}</Typography>}
-    <Grid container direction='row' columnGap={2} rowGap={1}>
+    <Grid container direction='row' columnGap={4} rowGap={2}>
       {renderChildItem &&
         item.item?.map((childItem) => renderChildItem(childItem))}
     </Grid>
