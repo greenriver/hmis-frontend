@@ -1811,8 +1811,20 @@ export type EnrollmentHouseholdMemberInput = {
 
 /** HUD Enrollment Sorting Options */
 export enum EnrollmentSortOption {
+  /** Age: Oldest to Youngest */
+  AgeOldestToYoungest = 'AGE_OLDEST_TO_YOUNGEST',
+  /** Age: Youngest to Oldest */
+  AgeYoungestToOldest = 'AGE_YOUNGEST_TO_OLDEST',
+  /** First Name: A-Z */
+  FirstNameAToZ = 'FIRST_NAME_A_TO_Z',
+  /** First Name: Z-A */
+  FirstNameZToA = 'FIRST_NAME_Z_TO_A',
   /** Household ID */
   HouseholdId = 'HOUSEHOLD_ID',
+  /** Last Name: A-Z */
+  LastNameAToZ = 'LAST_NAME_A_TO_Z',
+  /** Last Name: Z-A */
+  LastNameZToA = 'LAST_NAME_Z_TO_A',
   /** Most Recent */
   MostRecent = 'MOST_RECENT',
 }
@@ -4526,7 +4538,7 @@ export type ServiceType = {
 
 /** HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2) */
 export enum ServiceTypeProvided {
-  /** (200) BedNight */
+  /** (200) Bed Night */
   BedNightBedNight = 'BED_NIGHT__BED_NIGHT',
   /** (7) Mortgage assistance */
   HopwaFinancialAssistanceMortgageAssistance = 'HOPWA_FINANCIAL_ASSISTANCE__MORTGAGE_ASSISTANCE',

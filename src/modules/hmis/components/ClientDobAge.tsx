@@ -2,24 +2,28 @@ import { Stack, Typography, TypographyProps } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
-import ClickToShow from '@/components/elements/ClickToShow';
+import ClickToShow, {
+  Props as ClickToShowProps,
+} from '@/components/elements/ClickToShow';
 import { dob } from '@/modules/hmis/hmisUtil';
 import { ClientIdentificationFieldsFragment } from '@/types/gqlTypes';
 
-interface Props {
+interface Props extends Pick<ClickToShowProps, 'hide' | 'onToggle'> {
   client: ClientIdentificationFieldsFragment;
   noValue?: ReactNode;
   variant?: TypographyProps['variant'];
-  reveal?: boolean;
+  alwaysShow?: boolean;
   noDob?: boolean;
 }
 
 const ClientDobAge = ({
   client,
   noValue,
-  reveal,
+  alwaysShow,
   variant = 'body2',
   noDob = false,
+  hide,
+  onToggle,
 }: Props) => {
   if (isNil(client.dob) && isNil(client.age)) return <>{noValue}</> || null;
 
@@ -31,10 +35,10 @@ const ClientDobAge = ({
       {!noDob &&
         client.dob &&
         !onlyAge &&
-        (reveal ? (
+        (alwaysShow ? (
           dobComponent
         ) : (
-          <ClickToShow text='Reveal DOB' variant={variant}>
+          <ClickToShow variant={variant} hide={hide} onToggle={onToggle}>
             {dobComponent}
           </ClickToShow>
         ))}

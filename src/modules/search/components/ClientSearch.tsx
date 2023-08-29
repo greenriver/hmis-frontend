@@ -17,14 +17,20 @@ import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';
+import {
+  ContextualClientDobAge,
+  ContextualClientSsn,
+  ContextualDobToggleButton,
+  ContextualSsnToggleButton,
+  SsnDobShowContextProvider,
+} from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
-import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -66,21 +72,27 @@ export const CLIENT_COLUMNS: {
     render: 'lastName',
   },
   ssn: {
-    header: 'SSN',
+    header: (
+      <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
+    ),
     key: 'ssn',
     width: '8%',
     render: (client: ClientFieldsFragment) => (
-      <ClientSsn client={client} lastFour />
+      <ContextualClientSsn client={client} />
     ),
-    // dontLink: true,
+    dontLink: true,
   },
   dobAge: {
-    header: 'DOB / Age',
+    header: (
+      <Stack direction='row' justifyContent='space-between'>
+        <ContextualDobToggleButton sx={{ p: 0 }} variant='text' size='small' />
+      </Stack>
+    ),
     key: 'dob',
     render: (client: ClientFieldsFragment) => (
-      <ClientDobAge client={client} reveal />
+      <ContextualClientDobAge client={client} />
     ),
-    // dontLink: true,
+    dontLink: true,
   },
 };
 
@@ -88,13 +100,13 @@ export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
   {
     ...CLIENT_COLUMNS.first,
-    width: '15%',
+    width: '30%',
     linkTreatment: true,
     ariaLabel: (row) => clientNameAllParts(row),
   },
-  { ...CLIENT_COLUMNS.last, width: '15%', linkTreatment: true },
-  { ...CLIENT_COLUMNS.ssn, width: '10%' },
-  { ...CLIENT_COLUMNS.dobAge, width: '10%' },
+  { ...CLIENT_COLUMNS.last, width: '30%', linkTreatment: true },
+  { ...CLIENT_COLUMNS.ssn, width: '15%' },
+  { ...CLIENT_COLUMNS.dobAge, width: '15%' },
 ];
 
 export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
@@ -133,6 +145,13 @@ const ClientSearch = () => {
     null
   );
 
+  const [canViewSsn] = useHasRootPermissions([
+    'canViewFullSsn',
+    'canViewPartialSsn',
+  ]);
+
+  const [canViewDob] = useHasRootPermissions(['canViewDob']);
+
   const { globalFeatureFlags } = useHmisAppSettings();
 
   const columns = useMemo(() => {
@@ -148,8 +167,13 @@ const ClientSearch = () => {
         ...baseColumns,
       ];
     }
+    if (!canViewSsn) baseColumns = baseColumns.filter((c) => c.key !== 'ssn');
+    if (!canViewDob)
+      baseColumns = baseColumns.map((c) =>
+        c.key === 'dob' ? { ...c, header: 'Age' } : c
+      );
     return baseColumns;
-  }, [isMobile, globalFeatureFlags, displayType]);
+  }, [isMobile, globalFeatureFlags, displayType, canViewSsn, canViewDob]);
 
   useEffect(() => {
     // if search params are derived, we don't want to perform a search on them
@@ -201,7 +225,7 @@ const ClientSearch = () => {
   }, [setSearchParams, setDerivedSearchParams]);
 
   return (
-    <>
+    <SsnDobShowContextProvider>
       <Stack
         mb={2}
         direction='row'
@@ -281,10 +305,32 @@ const ClientSearch = () => {
                   )
                 : undefined
             }
+            toolbars={
+              displayType === 'cards' && (canViewDob || canViewSsn)
+                ? [
+                    <Stack direction='row-reverse' gap={2}>
+                      {canViewDob && (
+                        <ContextualDobToggleButton
+                          sx={{ p: 0 }}
+                          variant='text'
+                          size='small'
+                        />
+                      )}
+                      {canViewSsn && (
+                        <ContextualSsnToggleButton
+                          sx={{ p: 0 }}
+                          variant='text'
+                          size='small'
+                        />
+                      )}
+                    </Stack>,
+                  ]
+                : undefined
+            }
           />
         </Paper>
       )}
-    </>
+    </SsnDobShowContextProvider>
   );
 };
 
