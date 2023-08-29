@@ -20,7 +20,7 @@ describe('Other fns', () => {
     const withoutProjectType = { project: { projectName: 'Foo Bar' } };
 
     expect(enrollmentName(withProjectType)).toBe('Foo Bar');
-    expect(enrollmentName(withProjectType, true)).toBe('Foo Bar (ES)');
+    expect(enrollmentName(withProjectType, true)).toBe('Foo Bar (ES - NBN)');
     expect(enrollmentName(withoutProjectType, true)).toBe('Foo Bar');
     expect(enrollmentName(withProjectTypeDayShelter, true)).toBe(
       'Foo Bar (Day Shelter)'
