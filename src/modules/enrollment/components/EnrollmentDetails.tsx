@@ -28,12 +28,8 @@ import {
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-// TODO: move to backend?
-const DOE_PROJECT_TYPES = [
-  ProjectType.Es, // TODO(2024) should be nbn only
-  ProjectType.So,
-  ProjectType.Sso,
-];
+// TODO(#185848386): move to backend
+const DOE_PROJECT_TYPES = [ProjectType.EsNbn, ProjectType.So, ProjectType.Sso];
 
 const EnrollmentDetails = ({
   enrollment,

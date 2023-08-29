@@ -50,7 +50,7 @@ export const useProjectDashboardNavItems = (
             title: 'Bed Nights',
             path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
             requiresEnrollmentAccess: true,
-            condition: () => project.projectType === ProjectType.Es,
+            condition: () => project.projectType === ProjectType.EsNbn,
           },
           {
             id: 'referrals',

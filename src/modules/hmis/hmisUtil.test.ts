@@ -12,7 +12,7 @@ import { ProjectType } from '@/types/gqlTypes';
 describe('Other fns', () => {
   it('enrollment name', () => {
     const withProjectType = {
-      project: { projectName: 'Foo Bar', projectType: ProjectType.Es },
+      project: { projectName: 'Foo Bar', projectType: ProjectType.EsNbn },
     };
     const withProjectTypeDayShelter = {
       project: { projectName: 'Foo Bar', projectType: ProjectType.DayShelter },
@@ -20,7 +20,7 @@ describe('Other fns', () => {
     const withoutProjectType = { project: { projectName: 'Foo Bar' } };
 
     expect(enrollmentName(withProjectType)).toBe('Foo Bar');
-    expect(enrollmentName(withProjectType, true)).toBe('Foo Bar (ES)');
+    expect(enrollmentName(withProjectType, true)).toBe('Foo Bar (ES - NBN)');
     expect(enrollmentName(withoutProjectType, true)).toBe('Foo Bar');
     expect(enrollmentName(withProjectTypeDayShelter, true)).toBe(
       'Foo Bar (Day Shelter)'
