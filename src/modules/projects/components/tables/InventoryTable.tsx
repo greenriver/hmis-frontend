@@ -52,7 +52,8 @@ const InventoryTable = () => {
   const tableColumns = useMemo(() => {
     return [
       ...columns,
-      ...(project.projectType === ProjectType.Es
+      ...(project.projectType &&
+      [ProjectType.EsNbn, ProjectType.EsEntryExit].includes(project.projectType)
         ? [
             {
               header: 'Availability',
