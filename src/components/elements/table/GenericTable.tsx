@@ -213,7 +213,7 @@ const GenericTable = <T extends { id: string }>({
                 textAlign: def.textAlign,
               }}
             >
-              {def.header}
+              <strong>{def.header}</strong>
             </HeaderCell>
           ))}
         </TableRow>
@@ -274,7 +274,7 @@ const GenericTable = <T extends { id: string }>({
                     key={key(def)}
                   >
                     {' '}
-                    {def.header}
+                    <strong>{def.header}</strong>
                   </HeaderCell>
                   {rows.map((row, idx) => (
                     <TableCell key={row.id} sx={{ ...verticalCellSx(idx) }}>

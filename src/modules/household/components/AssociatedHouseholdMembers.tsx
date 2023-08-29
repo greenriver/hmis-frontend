@@ -39,7 +39,7 @@ export const householdMemberColumns: ColumnDef<
     width: '10%',
     key: 'dob',
     render: (client) => (
-      <ClientDobAge client={getClientIdentification(client)} reveal />
+      <ClientDobAge client={getClientIdentification(client)} alwaysShow />
     ),
   },
 ];
