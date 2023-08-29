@@ -80,8 +80,6 @@ const positionCompare = (first, second, positionMap) => {
 
 // Get numeric sort value from enum value
 const getSortValue = (elem, name) => {
-  // const custom = CUSTOM_SORT_VALUES[name] || {};
-
   // 9 from "(9) Client refused"
   const m = elem.description.match(CODE_PATTERN_NUMERIC);
 
@@ -91,12 +89,6 @@ const getSortValue = (elem, name) => {
     if (num === 99) return 500;
     if (num === 9) return 499;
     if (num === 8) return 498;
-
-    // Other fields with custom sort values
-    // if (custom[elem.name]) {
-    //   return custom[elem.name];
-    // }
-
     // By default, sort by HUD number if it exists
     return num;
   }
@@ -145,6 +137,13 @@ schema.__schema.types.forEach((type) => {
       });
     }
 
+    // Always first
+    ['YES'].forEach((name) => {
+      const idx = enumValues.findIndex((item) => item.name === name);
+      if (idx !== -1) enumValues.unshift(enumValues.splice(idx, 1)[0]);
+    });
+
+    // Always last
     ['CLIENT_REFUSED', 'CLIENT_DOESN_T_KNOW', 'DATA_NOT_COLLECTED'].forEach(
       (name) => {
         const idx = enumValues.findIndex((item) => item.name === name);

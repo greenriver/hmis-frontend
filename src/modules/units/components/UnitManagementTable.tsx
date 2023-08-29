@@ -89,15 +89,19 @@ const UnitManagementTable = ({
   const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
     return [
       {
-        header: 'Unit ID',
-        render: 'id',
-      },
-      {
         header: 'Unit Type',
         render: (unit) => unit.unitType?.description,
       },
       {
-        header: 'Occupants',
+        header: 'Unit ID',
+        render: 'id',
+      },
+      {
+        header: 'Active Status',
+        render: (unit) => (unit.occupants.length > 0 ? 'Filled' : 'Available'),
+      },
+      {
+        header: 'Client(s)',
         render: (unit) => <UnitOccupants unit={unit} />,
       },
       ...(allowDeleteUnits

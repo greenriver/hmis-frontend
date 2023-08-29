@@ -40,7 +40,9 @@ const enrollmentDashboardRoutes = {
   SERVICES: 'services',
   CURRENT_LIVING_SITUATIONS: 'current-living-situations',
   EVENTS: 'events',
+  CE_ASSESSMENTS: 'ce-assessments',
   ASSESSMENT: 'assessments/:formRole/:assessmentId?',
+  ESG_FUNDING_REPORT: 'esg-funding-report',
 };
 
 // Routes within the project dashboard
@@ -49,6 +51,7 @@ const projectDashboardRoutes = {
   EDIT_PROJECT: 'overview/edit',
   // Enrollment-related
   PROJECT_ENROLLMENTS: 'enrollments',
+  PROJECT_SERVICES: 'services',
   ADD_SERVICES: 'add-services',
   ADD_HOUSEHOLD: 'add-household',
   REFERRALS: 'referrals',
@@ -121,5 +124,6 @@ export const FOCUS_MODE_ROUTES = [
 
 export const PRINTABLE_ROUTES = [
   EnrollmentDashboardRoutes.ASSESSMENT,
+  EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];

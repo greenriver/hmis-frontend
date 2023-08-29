@@ -1,4 +1,3 @@
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import PersonIcon from '@mui/icons-material/Person';
 import {
   Alert,
@@ -29,10 +28,7 @@ import {
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import {
-  ClientPermissionsFilter,
-  RootPermissionsFilter,
-} from '@/modules/permissions/PermissionsFilters';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
@@ -259,7 +255,8 @@ const ClientCard: React.FC<Props> = ({
             >
               Client Profile
             </ButtonLink>
-            <RootPermissionsFilter permissions='canEnrollClients'>
+            {/* disabled for now #185750557 */}
+            {/* <RootPermissionsFilter permissions='canEnrollClients'>
               <ButtonLink
                 fullWidth
                 data-testid='enrollButton'
@@ -271,7 +268,7 @@ const ClientCard: React.FC<Props> = ({
               >
                 Enroll
               </ButtonLink>
-            </RootPermissionsFilter>
+            </RootPermissionsFilter> */}
 
             {/* <Button fullWidth variant='outlined' color='error'>
               Exit

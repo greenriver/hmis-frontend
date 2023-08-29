@@ -2,11 +2,14 @@ import { useMemo } from 'react';
 
 import { getItemMap } from '../util/formUtil';
 
-import { FormRole, useGetFormDefinitionQuery } from '@/types/gqlTypes';
+import {
+  GetFormDefinitionQueryVariables,
+  useGetFormDefinitionQuery,
+} from '@/types/gqlTypes';
 
-const useFormDefinition = (role: FormRole) => {
+const useFormDefinition = (queryVariables: GetFormDefinitionQueryVariables) => {
   const { data, loading, error } = useGetFormDefinitionQuery({
-    variables: { role },
+    variables: queryVariables,
   });
   const { formDefinition, itemMap } = useMemo(() => {
     if (!data?.getFormDefinition) return {};
@@ -18,7 +21,9 @@ const useFormDefinition = (role: FormRole) => {
   }, [data]);
 
   if (error)
-    throw new Error(`Failed to fetch form definition for role ${role}`);
+    throw new Error(
+      `Failed to fetch form definition for role ${queryVariables.role}`
+    );
 
   return { formDefinition, itemMap, loading };
 };

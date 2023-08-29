@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 
 import { getValueFromPickListData, usePickList } from '../../hooks/usePickList';
 import { DynamicViewFieldProps } from '../../types';
+import { isDataNotCollected } from '../../util/formUtil';
 import DynamicDisplay from '../DynamicDisplay';
 
 import File from './item/File';
@@ -12,11 +13,12 @@ import NotCollectedText from './item/NotCollectedText';
 import TextContent from './item/TextContent';
 
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
+import LabelWithContent from '@/components/elements/LabelWithContent';
 import {
   formatDateForDisplay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { Component, FormItem, ItemType } from '@/types/gqlTypes';
+import { DisabledDisplay, FormItem, ItemType } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -25,12 +27,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 
   return (
     <Stack direction='row' spacing={1}>
-      <Typography
-        variant='body2'
-        fontWeight={
-          item.component === Component.Checkbox || horizontal ? undefined : 600
-        }
-      >
+      <Typography variant='body2' fontWeight={horizontal ? undefined : 600}>
         {label}
       </Typography>
     </Stack>
@@ -45,6 +42,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   pickListArgs,
   noLabel = false,
   adjustValue = () => {},
+  disabled = false,
 }) => {
   const label = noLabel ? null : getLabel(item, horizontal);
 
@@ -75,6 +73,13 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     [label, value, horizontal, item]
   );
 
+  if (disabled && item.disabledDisplay !== DisabledDisplay.ProtectedWithValue) {
+    return (
+      <LabelWithContent {...commonProps}>
+        <NotCollectedText variant='body2'>N/A</NotCollectedText>
+      </LabelWithContent>
+    );
+  }
   switch (item.type) {
     case ItemType.Display:
       return <DynamicDisplay item={item} viewOnly />;
@@ -114,6 +119,15 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       );
     case ItemType.OpenChoice:
     case ItemType.Choice:
+      if (isDataNotCollected(value?.code)) {
+        return (
+          <LabelWithContent {...commonProps}>
+            <NotCollectedText variant='body2'>
+              {value.label || 'Data not collected'}
+            </NotCollectedText>
+          </LabelWithContent>
+        );
+      }
       return (
         <TextContent
           {...commonProps}

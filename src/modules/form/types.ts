@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FormItem,
+  GetAssessmentsForPopulationQuery,
   ItemType,
   PickListOption,
   SubmitFormMutation,
@@ -64,6 +65,7 @@ export interface DynamicViewFieldProps {
   pickListArgs?: PickListArgs;
   noLabel?: boolean;
   adjustValue?: ItemChangedFn;
+  disabled?: boolean;
 }
 
 // Props accepted by all input components
@@ -184,3 +186,7 @@ export const isTypedObjectWithId = (
 ): o is TypedObject & { id: string } => {
   return isTypedObject(o) && o.hasOwnProperty('id');
 };
+
+export type AssessmentForPopulation = NonNullable<
+  GetAssessmentsForPopulationQuery['client']
+>['assessments']['nodes'][0];

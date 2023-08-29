@@ -1,5 +1,4 @@
 import AddIcon from '@mui/icons-material/Add';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Paper, Stack } from '@mui/material';
 
 import ProjectEnrollmentsTable from './tables/ProjectEnrollmentsTable';
@@ -26,7 +25,8 @@ const ProjectEnrollments = () => {
             permissions='canEditEnrollments'
           >
             <Stack direction='row' gap={2}>
-              <ButtonLink
+              {/* Disabled for now because it's not ready for MVP. */}
+              {/* <ButtonLink
                 data-testid='recordServicesButton'
                 variant='outlined'
                 color='secondary'
@@ -37,7 +37,7 @@ const ProjectEnrollments = () => {
                 Icon={LibraryAddIcon}
               >
                 Record Services
-              </ButtonLink>
+              </ButtonLink> */}
               <ProjectPermissionsFilter
                 id={projectId}
                 permissions='canEnrollClients'
@@ -45,7 +45,6 @@ const ProjectEnrollments = () => {
                 <ButtonLink
                   data-testid='addHouseholdButton'
                   variant='outlined'
-                  color='secondary'
                   sx={{ pl: 3, justifyContent: 'left' }}
                   to={generateSafePath(ProjectDashboardRoutes.ADD_HOUSEHOLD, {
                     projectId,

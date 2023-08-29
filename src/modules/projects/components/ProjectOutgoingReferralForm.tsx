@@ -10,6 +10,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import DynamicField from '@/modules/form/components/DynamicField';
+import { itemDefaults } from '@/modules/form/util/formUtil';
 import {
   ItemType,
   PickListOption,
@@ -87,6 +88,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
         <DynamicField
           value={formState.selectedEnrollment}
           item={{
+            ...itemDefaults,
             type: ItemType.Choice,
             required: true,
             linkId: 'enrollment',
@@ -101,6 +103,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
         <DynamicField
           value={formState.selectedProject}
           item={{
+            ...itemDefaults,
             type: ItemType.Choice,
             required: true,
             linkId: 'project',
@@ -119,6 +122,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
           <DynamicField
             value={formState.selectedUnitType}
             item={{
+              ...itemDefaults,
               type: ItemType.Choice,
               required: true,
               linkId: 'unitType',
@@ -134,6 +138,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
         <DynamicField
           value={formState.note}
           item={{
+            ...itemDefaults,
             type: ItemType.Text,
             linkId: 'note',
             text: 'Resource Coordinator Notes',

@@ -1,10 +1,16 @@
 // **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
 
 export const HmisEnums = {
+  AftercareMethod: {
+    IN_PERSON_1_ON_1: 'In person: one-on-one',
+    IN_PERSON_GROUP: 'In person: group',
+    VIA_EMAIL_SOCIAL: 'Via email/social media',
+    VIA_TEL: 'Via telephone',
+  },
   AftercareProvided: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     CLIENT_REFUSED: 'Client refused',
   },
   AgeRange: {
@@ -19,6 +25,17 @@ export const HmisEnums = {
     Ages55to64: '55-64',
     Age62Plus: '62+',
     Age65Plus: '65+',
+  },
+  AnnualPercentAMI: {
+    INVALID: 'Invalid Value',
+    NUM_0_I_E_NOT_EMPLOYED_NOT_RECEIVING_CASH_BENEFITS_NO_OTHER_CURRENT_INCOME:
+      '$0 (i.e., not employed, not receiving cash benefits, no other current income)',
+    NUM_1_14_OF_AREA_MEDIAN_INCOME_AMI_FOR_HOUSEHOLD_SIZE:
+      '1-14% of Area Median Income (AMI) for household size',
+    NUM_15_30_OF_AMI_FOR_HOUSEHOLD_SIZE: '15-30% of AMI for household size',
+    MORE_THAN_30_OF_AMI_FOR_HOUSEHOLD_SIZE:
+      'More than 30% of AMI for household size',
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   AssessmentLevel: {
     INVALID: 'Invalid Value',
@@ -135,6 +152,11 @@ export const HmisEnums = {
       'Render a choice input item as vertical radio buttons',
     SSN: 'SSN input component',
   },
+  CounselingMethod: {
+    FAMILY: 'Family',
+    GROUP: 'Group - including peer counseling',
+    INDIVIDUAL: 'Individual',
+  },
   CountExchangeForSex: {
     INVALID: 'Invalid Value',
     NUM_1_3: '1-3',
@@ -205,6 +227,14 @@ export const HmisEnums = {
     ANNUAL_ASSESSMENT: 'Annual assessment',
     POST_EXIT: 'Post-exit',
   },
+  DependentUnder6: {
+    INVALID: 'Invalid Value',
+    NO: 'No',
+    YOUNGEST_CHILD_IS_UNDER_1_YEAR_OLD: 'Youngest child is under 1 year old',
+    YOUNGEST_CHILD_IS_1_TO_6_YEARS_OLD_AND_OR_ONE_OR_MORE_CHILDREN_ANY_AGE_REQUIRE_SIGNIFICANT_CARE:
+      'Youngest child is 1 to 6 years old and/or one or more children (any age) require significant care',
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   Destination: {
     INVALID: 'Invalid Value',
     EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER:
@@ -266,11 +296,6 @@ export const HmisEnums = {
       'Rental by client, with HCV voucher (tenant or project based)',
     RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT:
       'Rental by client in a public housing unit',
-    STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE:
-      "Staying or living in a family member's room, apartment or house",
-    STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE:
-      "Staying or living in a friend's room, apartment or house",
-    WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
@@ -294,7 +319,11 @@ export const HmisEnums = {
     HIV_AIDS: 'HIV/AIDS',
     MENTAL_HEALTH_DISORDER: 'Mental health disorder',
   },
-  DisabledDisplay: { HIDDEN: 'HIDDEN', PROTECTED: 'PROTECTED' },
+  DisabledDisplay: {
+    HIDDEN: 'HIDDEN',
+    PROTECTED: 'PROTECTED',
+    PROTECTED_WITH_VALUE: 'PROTECTED_WITH_VALUE',
+  },
   DischargeStatus: {
     INVALID: 'Invalid Value',
     HONORABLE: 'Honorable',
@@ -395,6 +424,13 @@ export const HmisEnums = {
     REFERRAL_TO_NON_CONTINUUM_SERVICES_NO_AVAILABILITY_IN_CONTINUUM_SERVICES:
       'Referral to Non-continuum services: No availability in continuum services',
   },
+  EvictionHistory: {
+    INVALID: 'Invalid Value',
+    NO_PRIOR_RENTAL_EVICTIONS: 'No prior rental evictions',
+    NUM_1_PRIOR_RENTAL_EVICTION: '1 prior rental eviction',
+    NUM_2_OR_MORE_PRIOR_RENTAL_EVICTIONS: '2 or more prior rental evictions',
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   ExpelledReason: {
     INVALID: 'Invalid Value',
     CRIMINAL_ACTIVITY_DESTRUCTION_OF_PROPERTY_VIOLENCE:
@@ -431,6 +467,8 @@ export const HmisEnums = {
   FormRole: {
     ANNUAL: 'Annual Assessment',
     CE: 'Coordinated Entry',
+    CE_ASSESSMENT: 'CE Assessment',
+    CE_EVENT: 'CE Event',
     CLIENT: 'Client',
     CURRENT_LIVING_SITUATION: 'Current Living Situation',
     CUSTOM: 'Custom Assessment',
@@ -442,6 +480,7 @@ export const HmisEnums = {
     INTAKE: 'Intake Assessment',
     INVENTORY: 'Inventory',
     MOVE_IN_DATE: 'Move-in Date',
+    NEW_CLIENT_ENROLLMENT: 'New Client Enrollment',
     ORGANIZATION: 'Organization',
     PATH_STATUS: 'PATH Status',
     POST_EXIT: 'Post-Exit Assessment',
@@ -549,9 +588,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Unknown / data not collected',
   },
   HOPWAMedAssistedLivingFac: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     NON_HOPWA_FUNDED_PROJECT: 'Non-HOPWA Funded Project',
   },
   HealthStatus: {
@@ -598,6 +637,13 @@ export const HmisEnums = {
     SITE_BASED_CLUSTERED_MULTIPLE_SITES:
       'Site-based - clustered / multiple sites',
     TENANT_BASED_SCATTERED_SITE: 'Tenant-based - scattered site',
+  },
+  IncarceratedAdult: {
+    INVALID: 'Invalid Value',
+    NOT_INCARCERATED: 'Not incarcerated',
+    INCARCERATED_ONCE: 'Incarcerated once',
+    INCARCERATED_TWO_OR_MORE_TIMES: 'Incarcerated two or more times',
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   InitialBehavior: {
     IF_EMPTY:
@@ -655,6 +701,15 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  LiteralHomelessHistory: {
+    INVALID: 'Invalid Value',
+    MOST_RECENT_EPISODE_OCCURRED_IN_THE_LAST_YEAR:
+      'Most recent episode occurred in the last year',
+    MOST_RECENT_EPISODE_OCCURRED_MORE_THAN_ONE_YEAR_AGO:
+      'Most recent episode occurred more than one year ago',
+    NONE: 'None',
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   LivingSituation: {
     INVALID: 'Invalid Value',
     EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER:
@@ -702,7 +757,8 @@ export const HmisEnums = {
       'Long-term care facility or nursing home',
     MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH:
       'Moved from one HOPWA funded project to HOPWA PH',
-    INTERIM_HOUSING: 'Interim Housing',
+    MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH:
+      'Moved from one HOPWA funded project to HOPWA TH',
     RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY:
       'Rental by client, with GPD TIP housing subsidy',
     RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA:
@@ -791,9 +847,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoYesMissing: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoYesReasonsForMissingData: {
@@ -835,6 +891,7 @@ export const HmisEnums = {
       'Units available for the given household at the given project',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
+    CE_EVENTS: 'Grouped HUD CE Event types',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     DESTINATION: 'DESTINATION',
@@ -853,7 +910,6 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
-    VAMC_STATION: 'VAMC_STATION',
   },
   PrioritizationStatus: {
     INVALID: 'Invalid Value',
@@ -998,6 +1054,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   RelatedRecordType: {
+    CLIENT: 'Client',
     CURRENT_LIVING_SITUATION: 'CurrentLivingSituation',
     DISABILITY_GROUP: 'DisabilityGroup',
     EMPLOYMENT_EDUCATION: 'EmploymentEducation',
@@ -1294,21 +1351,50 @@ export const HmisEnums = {
   },
   SubsidyInformation: {
     INVALID: 'Invalid Value',
-    WITHOUT_A_SUBSIDY_1: 'Without a subsidy 1',
-    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY_1:
-      'With the subsidy they had at project entry 1',
-    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY_1:
-      'With an on-going subsidy acquired since project entry 1',
-    BUT_ONLY_WITH_OTHER_FINANCIAL_ASSISTANCE_1:
-      'But only with other financial assistance 1',
-    WITH_ON_GOING_SUBSIDY_2: 'With on-going subsidy 2',
-    WITHOUT_AN_ON_GOING_SUBSIDY_2: 'Without an on-going subsidy 2',
+    WITHOUT_A_SUBSIDY: 'Without a subsidy',
+    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY:
+      'With the subsidy they had at project entry',
+    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY:
+      'With an on-going subsidy acquired since project entry',
+    ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY:
+      'Only with financial assistance other than a subsidy',
+    WITH_ON_GOING_SUBSIDY: 'With on-going subsidy',
+    WITHOUT_AN_ON_GOING_SUBSIDY: 'Without an on-going subsidy',
+  },
+  SubsidyInformationA: {
+    INVALID: 'Invalid Value',
+    WITHOUT_A_SUBSIDY: 'Without a subsidy',
+    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY:
+      'With the subsidy they had at project entry',
+    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY:
+      'With an on-going subsidy acquired since project entry',
+    ONLY_WITH_FINANCIAL_ASSISTANCE_OTHER_THAN_A_SUBSIDY:
+      'Only with financial assistance other than a subsidy',
+  },
+  SubsidyInformationB: {
+    INVALID: 'Invalid Value',
+    WITH_ON_GOING_SUBSIDY: 'With on-going subsidy',
+    WITHOUT_AN_ON_GOING_SUBSIDY: 'Without an on-going subsidy',
+  },
+  TCellSourceViralLoadSource: {
+    INVALID: 'Invalid Value',
+    MEDICAL_REPORT: 'Medical Report',
+    CLIENT_REPORT: 'Client Report',
+    OTHER: 'Other',
   },
   TargetPopulation: {
     INVALID: 'Invalid Value',
     DOMESTIC_VIOLENCE_VICTIMS: 'Domestic violence victims',
     PERSONS_WITH_HIV_AIDS: 'Persons with HIV/AIDS',
     NOT_APPLICABLE: 'Not applicable',
+  },
+  TimeToHousingLoss: {
+    INVALID: 'Invalid Value',
+    NUM_1_6_DAYS: '1-6 days',
+    NUM_7_13_DAYS: '7-13 days',
+    NUM_14_21_DAYS: '14-21 days',
+    MORE_THAN_21_DAYS: 'More than 21 days',
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   TimesHomelessPastThreeYears: {
     INVALID: 'Invalid Value',
@@ -1337,6 +1423,164 @@ export const HmisEnums = {
     required: 'required',
     server_error: 'server_error',
   },
+  VamcStationNumber: {
+    INVALID: 'Invalid Value',
+    NUM_459_GE_GUAM: '(459GE) Guam',
+    NUM_528_A5_CANANDAIGUA_NY: '(528A5) Canandaigua, NY',
+    NUM_528_A6_BATH_NY: '(528A6) Bath, NY',
+    NUM_528_A7_SYRACUSE_NY: '(528A7) Syracuse, NY',
+    NUM_528_A8_ALBANY_NY: '(528A8) Albany, NY',
+    NUM_589_A4_COLUMBIA_MO: '(589A4) Columbia, MO',
+    NUM_589_A5_KANSAS_CITY_MO: '(589A5) Kansas City, MO',
+    NUM_589_A6_EASTERN_KS_HCS_KS: '(589A6) Eastern KS HCS, KS',
+    NUM_589_A7_WICHITA_KS: '(589A7) Wichita, KS',
+    NUM_636_A6_CENTRAL_IOWA_IA: '(636A6) Central Iowa, IA',
+    NUM_636_A8_IOWA_CITY_IA: '(636A8) Iowa City, IA',
+    NUM_657_A4_POPLAR_BLUFF_MO: '(657A4) Poplar Bluff, MO',
+    NUM_657_A5_MARION_IL: '(657A5) Marion, IL',
+    NUM_402_TOGUS_ME: '(402) Togus, ME',
+    NUM_405_WHITE_RIVER_JUNCTION_VT: '(405) White River Junction, VT',
+    NUM_436_MONTANA_HCS: '(436) Montana HCS',
+    NUM_437_FARGO_ND: '(437) Fargo, ND',
+    NUM_438_SIOUX_FALLS_SD: '(438) Sioux Falls, SD',
+    NUM_442_CHEYENNE_WY: '(442) Cheyenne, WY',
+    NUM_459_HONOLULU_HI: '(459) Honolulu, HI',
+    NUM_460_WILMINGTON_DE: '(460) Wilmington, DE',
+    NUM_463_ANCHORAGE_AK: '(463) Anchorage, AK',
+    NUM_501_NEW_MEXICO_HCS: '(501) New Mexico HCS',
+    NUM_502_ALEXANDRIA_LA: '(502) Alexandria, LA',
+    NUM_503_ALTOONA_PA: '(503) Altoona, PA',
+    NUM_504_AMARILLO_TX: '(504) Amarillo, TX',
+    NUM_506_ANN_ARBOR_MI: '(506) Ann Arbor, MI',
+    NUM_508_ATLANTA_GA: '(508) Atlanta, GA',
+    NUM_509_AUGUSTA_GA: '(509) Augusta, GA',
+    NUM_512_BALTIMORE_HCS_MD: '(512) Baltimore HCS, MD',
+    NUM_515_BATTLE_CREEK_MI: '(515) Battle Creek, MI',
+    NUM_516_BAY_PINES_FL: '(516) Bay Pines, FL',
+    NUM_517_BECKLEY_WV: '(517) Beckley, WV',
+    NUM_518_BEDFORD_MA: '(518) Bedford, MA',
+    NUM_519_BIG_SPRING_TX: '(519) Big Spring, TX',
+    NUM_520_GULF_COAST_HCS_MS: '(520) Gulf Coast HCS, MS',
+    NUM_521_BIRMINGHAM_AL: '(521) Birmingham, AL',
+    NUM_523_VA_BOSTON_HCS_MA: '(523) VA Boston HCS, MA',
+    NUM_526_BRONX_NY: '(526) Bronx, NY',
+    NUM_528_WESTERN_NEW_YORK_NY: '(528) Western New York, NY',
+    NUM_529_BUTLER_PA: '(529) Butler, PA',
+    NUM_531_BOISE_ID: '(531) Boise, ID',
+    NUM_534_CHARLESTON_SC: '(534) Charleston, SC',
+    NUM_537_JESSE_BROWN_VAMC_CHICAGO_IL: '(537) Jesse Brown VAMC (Chicago), IL',
+    NUM_538_CHILLICOTHE_OH: '(538) Chillicothe, OH',
+    NUM_539_CINCINNATI_OH: '(539) Cincinnati, OH',
+    NUM_540_CLARKSBURG_WV: '(540) Clarksburg, WV',
+    NUM_541_CLEVELAND_OH: '(541) Cleveland, OH',
+    NUM_542_COATESVILLE_PA: '(542) Coatesville, PA',
+    NUM_544_COLUMBIA_SC: '(544) Columbia, SC',
+    NUM_546_MIAMI_FL: '(546) Miami, FL',
+    NUM_548_WEST_PALM_BEACH_FL: '(548) West Palm Beach, FL',
+    NUM_549_DALLAS_TX: '(549) Dallas, TX',
+    NUM_550_DANVILLE_IL: '(550) Danville, IL',
+    NUM_552_DAYTON_OH: '(552) Dayton, OH',
+    NUM_553_DETROIT_MI: '(553) Detroit, MI',
+    NUM_554_DENVER_CO: '(554) Denver, CO',
+    NUM_556_CAPTAIN_JAMES_A_LOVELL_FHCC: '(556) Captain James A Lovell FHCC',
+    NUM_557_DUBLIN_GA: '(557) Dublin, GA',
+    NUM_558_DURHAM_NC: '(558) Durham, NC',
+    NUM_561_NEW_JERSEY_HCS_NJ: '(561) New Jersey HCS, NJ',
+    NUM_562_ERIE_PA: '(562) Erie, PA',
+    NUM_564_FAYETTEVILLE_AR: '(564) Fayetteville, AR',
+    NUM_565_FAYETTEVILLE_NC: '(565) Fayetteville, NC',
+    NUM_568_BLACK_HILLS_HCS_SD: '(568) Black Hills HCS, SD',
+    NUM_570_FRESNO_CA: '(570) Fresno, CA',
+    NUM_573_GAINESVILLE_FL: '(573) Gainesville, FL',
+    NUM_575_GRAND_JUNCTION_CO: '(575) Grand Junction, CO',
+    NUM_578_HINES_IL: '(578) Hines, IL',
+    NUM_580_HOUSTON_TX: '(580) Houston, TX',
+    NUM_581_HUNTINGTON_WV: '(581) Huntington, WV',
+    NUM_583_INDIANAPOLIS_IN: '(583) Indianapolis, IN',
+    NUM_585_IRON_MOUNTAIN_MI: '(585) Iron Mountain, MI',
+    NUM_586_JACKSON_MS: '(586) Jackson, MS',
+    NUM_589_KANSAS_CITY_MO: '(589) Kansas City, MO',
+    NUM_590_HAMPTON_VA: '(590) Hampton, VA',
+    NUM_593_LAS_VEGAS_NV: '(593) Las Vegas, NV',
+    NUM_595_LEBANON_PA: '(595) Lebanon, PA',
+    NUM_596_LEXINGTON_KY: '(596) Lexington, KY',
+    NUM_598_LITTLE_ROCK_AR: '(598) Little Rock, AR',
+    NUM_600_LONG_BEACH_CA: '(600) Long Beach, CA',
+    NUM_603_LOUISVILLE_KY: '(603) Louisville, KY',
+    NUM_605_LOMA_LINDA_CA: '(605) Loma Linda, CA',
+    NUM_607_MADISON_WI: '(607) Madison, WI',
+    NUM_608_MANCHESTER_NH: '(608) Manchester, NH',
+    NUM_610_NORTHERN_INDIANA_HCS_IN: '(610) Northern Indiana HCS, IN',
+    NUM_612_N_CALIFORNIA_CA: '(612) N. California, CA',
+    NUM_613_MARTINSBURG_WV: '(613) Martinsburg, WV',
+    NUM_614_MEMPHIS_TN: '(614) Memphis, TN',
+    NUM_618_MINNEAPOLIS_MN: '(618) Minneapolis, MN',
+    NUM_619_CENTRAL_ALABAMA_VETERANS_HCS_AL:
+      '(619) Central Alabama Veterans HCS, AL',
+    NUM_620_VA_HUDSON_VALLEY_HCS_NY: '(620) VA Hudson Valley HCS, NY',
+    NUM_621_MOUNTAIN_HOME_TN: '(621) Mountain Home, TN',
+    NUM_623_MUSKOGEE_OK: '(623) Muskogee, OK',
+    NUM_626_MIDDLE_TENNESSEE_HCS_TN: '(626) Middle Tennessee HCS, TN',
+    NUM_629_NEW_ORLEANS_LA: '(629) New Orleans, LA',
+    NUM_630_NEW_YORK_HARBOR_HCS_NY: '(630) New York Harbor HCS, NY',
+    NUM_631_VA_CENTRAL_WESTERN_MASSACHUSETTS_HCS:
+      '(631) VA Central Western Massachusetts HCS',
+    NUM_632_NORTHPORT_NY: '(632) Northport, NY',
+    NUM_635_OKLAHOMA_CITY_OK: '(635) Oklahoma City, OK',
+    NUM_636_NEBRASKA_W_IOWA_NE: '(636) Nebraska-W Iowa, NE',
+    NUM_637_ASHEVILLE_NC: '(637) Asheville, NC',
+    NUM_640_PALO_ALTO_CA: '(640) Palo Alto, CA',
+    NUM_642_PHILADELPHIA_PA: '(642) Philadelphia, PA',
+    NUM_644_PHOENIX_AZ: '(644) Phoenix, AZ',
+    NUM_646_PITTSBURGH_PA: '(646) Pittsburgh, PA',
+    NUM_648_PORTLAND_OR: '(648) Portland, OR',
+    NUM_649_NORTHERN_ARIZONA_HCS: '(649) Northern Arizona HCS',
+    NUM_650_PROVIDENCE_RI: '(650) Providence, RI',
+    NUM_652_RICHMOND_VA: '(652) Richmond, VA',
+    NUM_653_ROSEBURG_OR: '(653) Roseburg, OR',
+    NUM_654_RENO_NV: '(654) Reno, NV',
+    NUM_655_SAGINAW_MI: '(655) Saginaw, MI',
+    NUM_656_ST_CLOUD_MN: '(656) St. Cloud, MN',
+    NUM_657_ST_LOUIS_MO: '(657) St. Louis, MO',
+    NUM_658_SALEM_VA: '(658) Salem, VA',
+    NUM_659_SALISBURY_NC: '(659) Salisbury, NC',
+    NUM_660_SALT_LAKE_CITY_UT: '(660) Salt Lake City, UT',
+    NUM_662_SAN_FRANCISCO_CA: '(662) San Francisco, CA',
+    NUM_663_VA_PUGET_SOUND_WA: '(663) VA Puget Sound, WA',
+    NUM_664_SAN_DIEGO_CA: '(664) San Diego, CA',
+    NUM_666_SHERIDAN_WY: '(666) Sheridan, WY',
+    NUM_667_SHREVEPORT_LA: '(667) Shreveport, LA',
+    NUM_668_SPOKANE_WA: '(668) Spokane, WA',
+    NUM_671_SAN_ANTONIO_TX: '(671) San Antonio, TX',
+    NUM_672_SAN_JUAN_PR: '(672) San Juan, PR',
+    NUM_673_TAMPA_FL: '(673) Tampa, FL',
+    NUM_674_TEMPLE_TX: '(674) Temple, TX',
+    NUM_675_ORLANDO_FL: '(675) Orlando, FL',
+    NUM_676_TOMAH_WI: '(676) Tomah, WI',
+    NUM_678_SOUTHERN_ARIZONA_HCS: '(678) Southern Arizona HCS',
+    NUM_679_TUSCALOOSA_AL: '(679) Tuscaloosa, AL',
+    NUM_687_WALLA_WALLA_WA: '(687) Walla Walla, WA',
+    NUM_688_WASHINGTON_DC: '(688) Washington, DC',
+    NUM_689_VA_CONNECTICUT_HCS_CT: '(689) VA Connecticut HCS, CT',
+    NUM_691_GREATER_LOS_ANGELES_HCS: '(691) Greater Los Angeles HCS',
+    NUM_692_WHITE_CITY_OR: '(692) White City, OR',
+    NUM_693_WILKES_BARRE_PA: '(693) Wilkes-Barre, PA',
+    NUM_695_MILWAUKEE_WI: '(695) Milwaukee, WI',
+    NUM_740_VA_TEXAS_VALLEY_COASTAL_BEND_HCS:
+      '(740) VA Texas Valley Coastal Bend HCS',
+    NUM_756_EL_PASO_TX: '(756) El Paso, TX',
+    NUM_757_COLUMBUS_OH: '(757) Columbus, OH',
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  ViralLoadAvailable: {
+    INVALID: 'Invalid Value',
+    NOT_AVAILABLE: 'Not available',
+    AVAILABLE: 'Available',
+    UNDETECTABLE: 'Undetectable',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   WellbeingAgreement: {
     INVALID: 'Invalid Value',
     STRONGLY_DISAGREE: 'Strongly disagree',
@@ -1361,9 +1605,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   WorkerResponse: {
+    YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    YES: 'Yes',
     WORKER_DOES_NOT_KNOW: 'Worker does not know',
   },
 };

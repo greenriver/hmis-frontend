@@ -5,6 +5,7 @@ import {
   FormValues,
   ItemChangedFn,
   ItemMap,
+  LocalConstants,
   OverrideableDynamicFieldProps,
   PickListArgs,
   SeveralItemsChangedFn,
@@ -42,6 +43,7 @@ export interface Props {
   severalItemsChanged: SeveralItemsChangedFn;
   itemMap: ItemMap;
   disabledLinkIds: string[];
+  localConstants?: LocalConstants;
 }
 
 const DynamicFormFields: React.FC<Props> = ({
@@ -57,6 +59,7 @@ const DynamicFormFields: React.FC<Props> = ({
   disabledLinkIds,
   itemChanged,
   severalItemsChanged,
+  localConstants,
 }) => {
   // Get errors for a particular field
   const getFieldErrors = useCallback(
@@ -79,7 +82,7 @@ const DynamicFormFields: React.FC<Props> = ({
     renderFn?: (children: ReactNode) => ReactNode
   ) => {
     const isDisabled = !isEnabled(item, disabledLinkIds);
-    if (isDisabled && item.disabledDisplay !== DisabledDisplay.Protected)
+    if (isDisabled && item.disabledDisplay === DisabledDisplay.Hidden)
       return null;
     if (bulk && item.serviceDetailType === ServiceDetailType.Client)
       return null;
@@ -127,7 +130,12 @@ const DynamicFormFields: React.FC<Props> = ({
         key={item.linkId}
         item={item}
         itemChanged={itemChanged}
-        value={isDisabled ? undefined : values[item.linkId]}
+        value={
+          isDisabled &&
+          item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
+            ? undefined
+            : values[item.linkId]
+        }
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
         horizontal={horizontal}
@@ -136,7 +144,11 @@ const DynamicFormFields: React.FC<Props> = ({
         {...props}
         inputProps={{
           ...props?.inputProps,
-          ...buildCommonInputProps(item, values),
+          ...buildCommonInputProps({
+            item,
+            values,
+            localConstants: localConstants || {},
+          }),
           disabled: isDisabled || locked || undefined,
         }}
       />

@@ -159,6 +159,17 @@ const createThemeOptions = (theme: Theme) => ({
         sizeSmall: {
           fontSize: '0.875rem',
         },
+        root: theme.unstable_sx({
+          '&.Mui-disabled': {
+            color: 'red',
+            backgroundColor: theme.palette.grey[100],
+          },
+        }),
+        input: {
+          '&::placeholder': {
+            opacity: 0.6,
+          },
+        },
       },
     },
     MuiTextField: {

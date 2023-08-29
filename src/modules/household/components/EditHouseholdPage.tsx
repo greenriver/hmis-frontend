@@ -1,8 +1,9 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -35,31 +36,26 @@ const EditHousehold = () => {
 
   return (
     <>
-      <Grid container spacing={4} sx={{ pb: 10 }}>
-        <Grid item xs={12}>
-          <Typography variant='h4' sx={{ mb: 2 }}>
-            Edit Household
-            <Box component='span' fontWeight={400}>
-              {` for ${enrollmentName(enrollment)} `} enrollment
-            </Box>
-          </Typography>
-          <ManageHousehold
-            householdId={enrollment.householdId}
-            projectId={enrollment.project.id}
-            BackButton={
-              <Button
-                startIcon={<ArrowBackIcon />}
-                variant='gray'
-                size='small'
-                sx={{ width: 'fit-content' }}
-                onClick={navigateToEnrollment}
-              >
-                Back to Enrollment
-              </Button>
-            }
-          />
-        </Grid>
-      </Grid>
+      <PageTitle
+        title={`Edit Household
+             for ${enrollmentName(enrollment)} enrollment`}
+      />
+
+      <ManageHousehold
+        householdId={enrollment.householdId}
+        projectId={enrollment.project.id}
+        BackButton={
+          <Button
+            startIcon={<ArrowBackIcon />}
+            variant='gray'
+            size='small'
+            sx={{ width: 'fit-content' }}
+            onClick={navigateToEnrollment}
+          >
+            Back to Enrollment
+          </Button>
+        }
+      />
     </>
   );
 };

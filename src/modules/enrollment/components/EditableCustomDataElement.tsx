@@ -19,6 +19,7 @@ import DynamicForm, {
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
+import { itemDefaults } from '@/modules/form/util/formUtil';
 import {
   customDataElementValue,
   customDataElementValueAsString,
@@ -68,6 +69,7 @@ const EditableCustomDataElement = ({
     () => ({
       item: [
         {
+          ...itemDefaults,
           linkId: LINK_ID,
           type: itemType(element.fieldType),
           text: element.label,

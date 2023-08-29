@@ -1,12 +1,14 @@
 import { get, isNil } from 'lodash-es';
 
 import {
+  customDataElementValueAsString,
   formatCurrency,
   getSchemaForType,
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '../hmisUtil';
 
+import { hasCustomDataElements } from '../types';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import { isHmisEnum } from '@/modules/form/types';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
@@ -18,12 +20,6 @@ import { GqlSchemaType } from '@/types/gqlObjects';
  * field on a record, according to its type
  * defined in the graphql schema.
  */
-
-interface Props {
-  record: any;
-  recordType: string;
-  fieldName: string;
-}
 
 const getType = (type: GqlSchemaType): GqlSchemaType['name'] => {
   if (!type.ofType) return type.name;
@@ -63,21 +59,50 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
   return value;
 };
 
-const HmisField = ({ record, recordType, fieldName }: Props) => {
-  const value = get(record, fieldName);
-  if (isNil(value)) return null;
-  const defaultDisplay = <>{`${value}`}</>;
+interface Props {
+  record: any;
+  recordType: string;
+  fieldName?: string;
+  customFieldKey?: string;
+}
 
-  const fieldSchema = (getSchemaForType(recordType)?.fields || []).find(
-    (f) => f.name == fieldName
-  );
-  if (!fieldSchema) return defaultDisplay;
+const HmisField = ({
+  record,
+  recordType,
+  fieldName,
+  customFieldKey,
+}: Props) => {
+  if (fieldName) {
+    const value = get(record, fieldName);
+    if (isNil(value)) return null;
+    const defaultDisplay = <>{`${value}`}</>;
 
-  const type = getType(fieldSchema.type);
-  if (!type) return defaultDisplay;
+    const fieldSchema = (getSchemaForType(recordType)?.fields || []).find(
+      (f) => f.name == fieldName
+    );
+    if (!fieldSchema) return defaultDisplay;
 
-  return <>{getPrimitiveDisplay(value, type)}</>;
-  // return <>{JSON.stringify(value)}</>;
+    const type = getType(fieldSchema.type);
+    if (!type) return defaultDisplay;
+
+    return <>{getPrimitiveDisplay(value, type)}</>;
+  }
+
+  if (customFieldKey) {
+    if (!hasCustomDataElements(record)) throw new Error('Expected to have CDE');
+
+    const cde = record.customDataElements.find(
+      (cde) => cde.key === customFieldKey
+    );
+    if (!cde) {
+      throw new Error(`Expected to have CDE with key ${customFieldKey}`);
+    }
+
+    const value = customDataElementValueAsString(cde);
+    if (isNil(value)) return null;
+    return <>{value}</>;
+  }
+  return null;
 };
 
 export const renderHmisField =

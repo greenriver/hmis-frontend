@@ -29,6 +29,7 @@ import DynamicForm, {
 } from '@/modules/form/components/DynamicForm';
 import { useDynamicFormHandlersForRecord } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
 import useServiceFormDefinition from '@/modules/form/hooks/useServiceFormDefinition';
+import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   DeleteServiceDocument,
@@ -112,6 +113,8 @@ export function useServiceDialog({
       hudRecordType: serviceType?.hudRecordType,
       hudTypeProvided: serviceType?.hudTypeProvided,
       entryDate: enrollment?.entryDate,
+      exitDate: enrollment?.exitDate,
+      ...AlwaysPresentLocalConstants,
     };
     return {
       formDefinition,
@@ -195,10 +198,13 @@ export function useServiceDialog({
               errors={errors}
               ref={formRef}
               {...props}
+              localConstants={hookArgs?.localConstants}
               hideSubmit
               loadingElement={
                 <Skeleton variant='rectangular' sx={{ height: 60, pt: 2 }} />
               }
+              // Override default network-only fetch policy for loading pick lists, because service pick lists are static (at least for now)
+              // If we have issues with stale lists in services, this can be removed.
               picklistQueryOptions={{ fetchPolicy: 'cache-first' }}
             />
           )}
@@ -209,6 +215,7 @@ export function useServiceDialog({
             justifyContent={'space-between'}
             sx={{ width: '100%' }}
           >
+            <Box></Box>
             {service && (
               <DeleteMutationButton<
                 DeleteServiceMutation,

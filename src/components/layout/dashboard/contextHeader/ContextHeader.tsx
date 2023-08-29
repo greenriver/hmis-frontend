@@ -3,17 +3,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Button } from '@mui/material';
 import React, { ReactNode } from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '../../layoutConstants';
 
-import ButtonLink from '@/components/elements/ButtonLink';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   isOpen: boolean;
@@ -31,7 +30,7 @@ const ContextHeader: React.FC<Props> = ({
   const isMobile = useIsMobile();
   const params = useSafeParams();
   const { client } = useClientName(params.clientId);
-
+  const navigate = useNavigate();
   return (
     <AppBar
       position='sticky'
@@ -53,15 +52,18 @@ const ContextHeader: React.FC<Props> = ({
     >
       {focusMode ? (
         <Box>
-          <ButtonLink
-            to={generateSafePath(focusMode, params)}
+          <Button
+            onClick={() => {
+              navigate(-1);
+              handleOpenMenu();
+            }}
             variant='transparent'
             startIcon={<ArrowBackIcon fontSize='small' />}
             sx={{ height: '32px', fontWeight: 600, ml: 2 }}
             data-testid='headerBackButton'
           >
             {`Back ${client ? 'to ' + clientBriefName(client) : ''}`}
-          </ButtonLink>
+          </Button>
         </Box>
       ) : (
         <Box display='flex' alignItems='stretch' width='100%' flex={1}>

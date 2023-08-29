@@ -11,6 +11,7 @@ interface Props {
   formRole: FormRole;
   children?: ReactNode;
   title: string;
+  onCompleted?: VoidFunction;
 }
 
 const EditableOccurrencePointValue = ({
@@ -19,6 +20,7 @@ const EditableOccurrencePointValue = ({
   enrollment,
   formRole,
   title,
+  onCompleted,
 }: Props) => {
   const formDialogArgs = useMemo(
     () => ({
@@ -38,7 +40,9 @@ const EditableOccurrencePointValue = ({
     localConstants: {
       entryDate: enrollment.entryDate,
       exitDate: enrollment.exitDate,
+      projectType: enrollment.project.projectType,
     },
+    onCompleted,
   });
   return (
     <>

@@ -23,9 +23,15 @@ fragment AssessmentWithRecords on Assessment {
     customDataElements {
       ...CustomDataElementFields
     }
+    client {
+      id
+    }
   }
   incomeBenefit {
     ...IncomeBenefitValues
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   disabilityGroup {
     ...DisabilityGroupValues
@@ -35,6 +41,9 @@ fragment AssessmentWithRecords on Assessment {
   }
   exit {
     ...ExitValues
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   youthEducationStatus {
     ...YouthEducationStatusValues

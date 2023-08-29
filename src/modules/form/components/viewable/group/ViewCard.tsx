@@ -17,7 +17,7 @@ const ViewCard = ({
     !(item.item || []).find((item) => item.type === ItemType.Group);
   return (
     <Grid id={anchor} item>
-      <CommonCard title={item.text}>
+      <CommonCard title={item.text} className='HmisForm-card'>
         {/* Dynamically render child items */}
         <Grid
           container

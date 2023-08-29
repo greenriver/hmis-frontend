@@ -1,7 +1,6 @@
 import { Checkbox, FormControlLabel } from '@mui/material';
 import React from 'react';
-
-import { TableFilterItemSelectorProps } from '../FilterItem';
+import { TableFilterItemSelectorProps } from './types';
 
 const TableFilterItemCheckboxes: React.FC<
   Omit<TableFilterItemSelectorProps, 'variant'>

@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import pluralize from 'pluralize';
 
 import RouterLink from '@/components/elements/RouterLink';
@@ -8,13 +7,7 @@ import { RelationshipToHoH, UnitFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const UnitOccupants = ({ unit }: { unit: UnitFieldsFragment }) => {
-  if (unit.occupants.length === 0) {
-    return (
-      <Typography variant='body2' color='text.disabled'>
-        Empty
-      </Typography>
-    );
-  }
+  if (unit.occupants.length === 0) return null;
   let occupant = unit.occupants.find(
     (e) => e.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
   );

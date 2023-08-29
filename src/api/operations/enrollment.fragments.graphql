@@ -55,6 +55,24 @@ fragment EventFields on Event {
   dateCreated
   dateUpdated
   dateDeleted
+  user {
+    ...UserFields
+  }
+}
+
+fragment CeAssessmentFields on CeAssessment {
+  id
+  assessmentDate
+  assessmentLevel
+  assessmentLocation
+  assessmentType
+  dateCreated
+  dateUpdated
+  dateDeleted
+  prioritizationStatus
+  user {
+    ...UserFields
+  }
 }
 
 fragment EnrollmentSummaryFields on EnrollmentSummary {
@@ -79,6 +97,12 @@ fragment AllEnrollmentDetails on Enrollment {
   currentUnit {
     id
     name
+  }
+  intakeAssessment {
+    id
+  }
+  exitAssessment {
+    id
   }
   customDataElements {
     ...CustomDataElementFields

@@ -1,7 +1,13 @@
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Button, Paper } from '@mui/material';
 import { isEmpty, isNil, omitBy } from 'lodash-es';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
 
 import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
@@ -114,7 +120,10 @@ export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
 ];
 
 interface Props
-  extends Omit<SearchFormProps, 'definition' | 'onSubmit' | 'initialValues'> {
+  extends Omit<
+    SearchFormProps,
+    'definition' | 'onSubmit' | 'initialValues' | 'actions'
+  > {
   cardsEnabled: boolean;
   searchResultsTableProps?: Omit<
     GenericTableProps<ClientFieldsFragment>,
@@ -123,6 +132,8 @@ interface Props
   wrapperComponent?: React.ElementType;
   pageSize?: number;
   addClientInDialog?: boolean;
+  renderActions?: (searchPerformed: boolean) => ReactNode;
+  hideAddClient?: boolean;
 }
 const ClientSearch: React.FC<Props> = ({
   cardsEnabled,
@@ -130,6 +141,8 @@ const ClientSearch: React.FC<Props> = ({
   wrapperComponent: WrapperComponent = Paper,
   pageSize = 20,
   addClientInDialog = false,
+  renderActions,
+  hideAddClient,
   ...searchFormProps
 }) => {
   // URL search parameters
@@ -148,7 +161,7 @@ const ClientSearch: React.FC<Props> = ({
     ClientSortOption.LastNameAToZ
   );
   const [offset, setOffset] = useState(0);
-
+  const [hasSearched, setHasSearched] = useState(false);
   const isMobile = useIsMobile();
 
   const { globalFeatureFlags } = useHmisAppSettings();
@@ -185,6 +198,7 @@ const ClientSearch: React.FC<Props> = ({
       if (!hasSetCards && cardsEnabled) {
         setCards(data.clientSearch.nodesCount <= MAX_CARDS_THRESHOLD);
       }
+      setHasSearched(true);
     },
   });
 
@@ -250,6 +264,10 @@ const ClientSearch: React.FC<Props> = ({
     },
   });
 
+  const actions = useMemo(() => {
+    if (renderActions) return renderActions(hasSearched);
+  }, [hasSearched, renderActions]);
+
   if (!initialValues) return <Loading />;
 
   const paginationProps = {
@@ -265,6 +283,7 @@ const ClientSearch: React.FC<Props> = ({
         definition={SearchFormDefinition}
         onSubmit={handleSubmitSearch}
         initialValues={initialValues}
+        actions={actions}
         {...searchFormProps}
       />
       {error && (
@@ -278,6 +297,7 @@ const ClientSearch: React.FC<Props> = ({
           onChangeCards={handleChangeDisplayType}
           sortOrder={sortOrder}
           onChangeSortOrder={handleSetSortOrder}
+          hideAddClient={hideAddClient}
           addClientButton={
             addClientInDialog ? (
               <Button
