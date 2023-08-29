@@ -116,7 +116,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     header: 'DOB / Age',
     key: 'dob',
     render: (hc: HouseholdClientFieldsFragment) => (
-      <ClientDobAge client={hc.client} reveal />
+      <ClientDobAge client={hc.client} alwaysShow />
     ),
   },
   enrollmentPeriod: {

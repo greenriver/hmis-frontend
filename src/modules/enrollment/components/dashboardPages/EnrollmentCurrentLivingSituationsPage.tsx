@@ -1,7 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
@@ -35,7 +34,7 @@ const baseColumns: ColumnDef<CurrentLivingSituationFieldsFragment>[] = [
     render: (e) => (
       <HmisEnum
         value={e.currentLivingSituation}
-        enumMap={HmisEnums.LivingSituation}
+        enumMap={HmisEnums.CurrentLivingSituationOptions}
       />
     ),
   },
@@ -62,6 +61,14 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       formRole: FormRole.CurrentLivingSituation,
     });
 
+  const localConstants = useMemo(
+    () => ({
+      entryDate: enrollment?.entryDate,
+      exitDate: enrollment?.exitDate,
+    }),
+    [enrollment]
+  );
+
   const { openFormDialog, renderFormDialog, closeDialog } =
     useFormDialog<CurrentLivingSituationFieldsFragment>({
       formRole: FormRole.CurrentLivingSituation,
@@ -74,6 +81,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       },
       inputVariables: { enrollmentId },
       record: viewingRecord,
+      localConstants,
     });
 
   const onSuccessfulDelete = useCallback(() => {

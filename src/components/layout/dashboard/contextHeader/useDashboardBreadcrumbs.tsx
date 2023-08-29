@@ -1,5 +1,4 @@
 import { SvgIconComponent } from '@mui/icons-material';
-import PersonIcon from '@mui/icons-material/Person';
 import { merge, startCase } from 'lodash-es';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -184,12 +183,11 @@ export const useEnrollmentBreadcrumbConfig = (
       : 'Enrollment';
 
     const overrides: CrumbConfig = {
-      [clientRoot]: {
-        title: clientBriefName(context.client),
-        icon: PersonIcon,
-      },
+      [clientRoot]: { title: clientBriefName(context.client) },
       [enrollmentRoot]: { parent: clientRoot, title: enrollmentTitle },
       [EnrollmentDashboardRoutes.EDIT_HOUSEHOLD]: { title: 'Edit Household' },
+      [EnrollmentDashboardRoutes.CE_ASSESSMENTS]: { title: 'CE Assessments' },
+      [EnrollmentDashboardRoutes.EVENTS]: { title: 'CE Events' },
       [EnrollmentDashboardRoutes.ASSESSMENT]: {
         title: 'Assessment',
         parent: EnrollmentDashboardRoutes.ASSESSMENTS,

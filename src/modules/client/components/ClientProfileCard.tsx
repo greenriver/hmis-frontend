@@ -42,7 +42,6 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
   ClientImageFragment,
-  Gender,
   useGetClientImageQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -173,19 +172,10 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                       oneRowPerValue
                     />
                   ),
-                  Ethnicity: (
-                    <HmisEnum
-                      value={client.ethnicity}
-                      enumMap={HmisEnums.Ethnicity}
-                    />
-                  ),
                   Gender: (
                     <MultiHmisEnum
                       values={client.gender}
-                      enumMap={{
-                        ...HmisEnums.Gender,
-                        [Gender.NoSingleGender]: 'Non-Binary',
-                      }}
+                      enumMap={HmisEnums.Gender}
                     />
                   ),
                   Pronouns: pronouns(client) || <NotCollectedText />,

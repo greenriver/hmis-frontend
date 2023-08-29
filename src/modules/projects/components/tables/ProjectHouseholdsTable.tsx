@@ -109,6 +109,7 @@ export const HOUSEHOLD_COLUMNS: {
       <TableCellConatiner>
         {hh.householdClients.map((c) => (
           <EnrollmentDateRangeWithStatus
+            key={c.id}
             enrollment={c.enrollment}
             treatIncompleteAsActive
           />

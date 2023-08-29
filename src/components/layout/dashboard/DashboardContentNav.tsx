@@ -1,4 +1,4 @@
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
@@ -7,7 +7,6 @@ import {
   DESKTOP_NAV_SIDEBAR_WIDTH,
   STICKY_BAR_HEIGHT,
 } from '../layoutConstants';
-
 interface Props {
   children: ReactNode;
   navHeader: ReactNode;
@@ -39,14 +38,20 @@ const CloseMenuRow = ({
       height: CONTEXT_HEADER_HEIGHT,
     }}
   >
-    {label ? <Typography variant='h6'>{label}</Typography> : <Box />}
+    {label ? (
+      <Typography variant='body2' color='text.secondary'>
+        {label}
+      </Typography>
+    ) : (
+      <Box />
+    )}
     <Button
       variant='transparent'
       onClick={onClose}
-      endIcon={<ChevronLeftIcon fontSize='small' />}
+      startIcon={<MenuOpenIcon fontSize='small' />}
       size='small'
     >
-      Hide
+      Close
     </Button>
   </Stack>
 );

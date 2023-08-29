@@ -58,6 +58,7 @@ export interface Props<T> {
   filterToolbar?: ReactNode;
   noData?: ReactNode;
   renderRow?: (row: T) => ReactNode;
+  condensed?: boolean;
 }
 
 const clickableRowStyles = {
@@ -111,6 +112,7 @@ const GenericTable = <T extends { id: string }>({
   renderRow,
   noData = 'No data',
   loadingVariant = 'circular',
+  condensed = false,
 }: Props<T>) => {
   const columns = useMemo(
     () => (columnProp || []).filter((c) => !c.hide),
@@ -211,7 +213,7 @@ const GenericTable = <T extends { id: string }>({
                 textAlign: def.textAlign,
               }}
             >
-              {def.header}
+              <strong>{def.header}</strong>
             </HeaderCell>
           ))}
         </TableRow>
@@ -272,7 +274,7 @@ const GenericTable = <T extends { id: string }>({
                     key={key(def)}
                   >
                     {' '}
-                    {def.header}
+                    <strong>{def.header}</strong>
                   </HeaderCell>
                   {rows.map((row, idx) => (
                     <TableCell key={row.id} sx={{ ...verticalCellSx(idx) }}>
@@ -391,9 +393,8 @@ const GenericTable = <T extends { id: string }>({
                                   display: 'flex',
                                   height: '100%',
                                   alignItems: 'center',
-                                  // TODO may want to adjust for small table size
                                   px: 2,
-                                  py: 1,
+                                  py: condensed ? 1 : 2,
                                 }}
                               >
                                 {renderCellContents(row, render)}
