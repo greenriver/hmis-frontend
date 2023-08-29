@@ -58,9 +58,11 @@ fragment DataCollectionFeatureFields on DataCollectionFeature {
 
 fragment DataCollectionPointFields on DataCollectionPoint {
   id # instance ID
+  title
   dataCollectedAbout
-  legacyDataCollectedAbout
-  legacy
+  definition {
+    ...FormDefinitionFields
+  }
 }
 
 fragment ProjectCocFields on ProjectCoc {

@@ -6829,24 +6829,16 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "DataCollectedAbout",
-                    "ofType": null
-                  }
-                }
+                "kind": "ENUM",
+                "name": "DataCollectedAbout",
+                "ofType": null
               }
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "formDefinition",
+            "name": "definition",
             "description": null,
             "args": [],
             "type": {
@@ -6878,7 +6870,7 @@
             "deprecationReason": null
           },
           {
-            "name": "legacy",
+            "name": "title",
             "description": null,
             "args": [],
             "type": {
@@ -6886,32 +6878,8 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Boolean",
+                "name": "String",
                 "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "legacyDataCollectedAbout",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "DataCollectedAbout",
-                    "ofType": null
-                  }
-                }
               }
             },
             "isDeprecated": false,
