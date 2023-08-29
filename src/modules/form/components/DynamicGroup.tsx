@@ -2,9 +2,7 @@ import { Box, Grid, lighten } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { GroupItemComponentProps } from '../types';
-import { maxWidthAtNestingLevel } from '../util/formUtil';
 
-import { MAX_INPUT_WIDTH } from './DynamicField';
 import DisabilityTable from './group/DisabilityTable';
 import FormCard from './group/FormCard';
 import HorizontalGroup from './group/HorizontalGroup';
@@ -15,7 +13,6 @@ import { Component } from '@/types/gqlTypes';
 
 export const InfoGroup = ({
   children,
-  nestingLevel = 1,
 }: {
   children: ReactNode;
   nestingLevel?: number;
@@ -24,10 +21,7 @@ export const InfoGroup = ({
     sx={{
       backgroundColor: (theme) => lighten(theme.palette.grey[100], 0.2),
       borderRadius: 1,
-      maxWidth:
-        nestingLevel == 1
-          ? MAX_INPUT_WIDTH + 16
-          : maxWidthAtNestingLevel(nestingLevel + 1),
+      width: 'fit-content',
       p: 1,
     }}
   >

@@ -56,23 +56,23 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
 export const MAX_INPUT_WIDTH = 500;
+const FIXED_WIDTH_MEDIUM = 350;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
 const minWidthForType = (item: FormItem) => {
-  if (
-    [
-      ItemType.Choice,
-      ItemType.OpenChoice,
-      ItemType.Text,
-      ItemType.String,
-      ItemType,
-    ].includes(item.type) &&
-    !item.component
-  ) {
-    return 350;
+  if (item.component || item.size) return undefined;
+
+  switch (item.type) {
+    case ItemType.String:
+    case ItemType.Text:
+      return 300;
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+      return FIXED_WIDTH_MEDIUM;
+    default:
+      return undefined;
   }
-  return undefined;
 };
 
 const DynamicField: React.FC<DynamicFieldProps> = ({
@@ -114,6 +114,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     width = FIXED_WIDTH_SMALL;
   } else if (item.size === InputSize.Xsmall) {
     width = FIXED_WIDTH_X_SMALL;
+  } else if (item.size === InputSize.Medium) {
+    width = FIXED_WIDTH_MEDIUM;
   }
 
   if (item.component === Component.RadioButtons) {
