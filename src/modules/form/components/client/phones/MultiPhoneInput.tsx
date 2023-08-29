@@ -7,7 +7,7 @@ import { PhoneInputType } from '../types';
 import { useRenderLastUpdated } from '../useRenderLastUpdated';
 import { createInitialValue } from '../util';
 
-import PhoneInput from './PhoneInput';
+import PhoneInput from './PhoneInputGroup';
 
 import { ClientContactPointFieldsFragmentDoc } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
