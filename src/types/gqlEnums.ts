@@ -367,7 +367,13 @@ export const HmisEnums = {
     EXITED: 'Exited',
   },
   EnrollmentSortOption: {
+    AGE_OLDEST_TO_YOUNGEST: 'Age: Oldest to Youngest',
+    AGE_YOUNGEST_TO_OLDEST: 'Age: Youngest to Oldest',
+    FIRST_NAME_A_TO_Z: 'First Name: A-Z',
+    FIRST_NAME_Z_TO_A: 'First Name: Z-A',
     HOUSEHOLD_ID: 'Household ID',
+    LAST_NAME_A_TO_Z: 'Last Name: A-Z',
+    LAST_NAME_Z_TO_A: 'Last Name: Z-A',
     MOST_RECENT: 'Most Recent',
   },
   EnrollmentStatus: {
@@ -1322,7 +1328,7 @@ export const HmisEnums = {
       'Post-natal newborn care (wellness exams; immunizations)',
     RHY_SERVICE_CONNECTIONS__STD_TESTING: 'STD Testing',
     RHY_SERVICE_CONNECTIONS__STREET_BASED_SERVICES: 'Street-based Services',
-    BED_NIGHT__BED_NIGHT: 'BedNight',
+    BED_NIGHT__BED_NIGHT: 'Bed Night',
     HOPWA_SERVICE__HEALTH_MEDICAL_CARE: 'Health/medical care',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_CONVERTED_TO_HOUSING_CHOICE_VOUCHER:
       'Voucher was converted to Housing Choice Voucher',

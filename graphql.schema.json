@@ -11875,8 +11875,44 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "AGE_OLDEST_TO_YOUNGEST",
+            "description": "Age: Oldest to Youngest",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "AGE_YOUNGEST_TO_OLDEST",
+            "description": "Age: Youngest to Oldest",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FIRST_NAME_A_TO_Z",
+            "description": "First Name: A-Z",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FIRST_NAME_Z_TO_A",
+            "description": "First Name: Z-A",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "HOUSEHOLD_ID",
             "description": "Household ID",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LAST_NAME_A_TO_Z",
+            "description": "Last Name: A-Z",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LAST_NAME_Z_TO_A",
+            "description": "Last Name: Z-A",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -28680,7 +28716,7 @@
         "enumValues": [
           {
             "name": "BED_NIGHT__BED_NIGHT",
-            "description": "(200) BedNight",
+            "description": "(200) Bed Night",
             "isDeprecated": false,
             "deprecationReason": null
           },
