@@ -2602,7 +2602,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'FormDefinition',
     fields: [
-      { name: 'cacheKey', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'cacheKey',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
       {
         name: 'id',
         type: {
