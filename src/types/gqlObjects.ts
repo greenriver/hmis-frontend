@@ -2603,6 +2603,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'FormDefinition',
     fields: [
       {
+        name: 'forProjectId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
