@@ -39,13 +39,6 @@ fragment ProjectAllFields on Project {
   dataCollectionFeatures {
     ...DataCollectionFeatureFields
   }
-  # occurrencePointForms {
-  #   id # instance ID
-  #   dataCollectedAbout
-  #   formDefinition {
-
-  #   }
-  # }
 }
 
 fragment DataCollectionFeatureFields on DataCollectionFeature {

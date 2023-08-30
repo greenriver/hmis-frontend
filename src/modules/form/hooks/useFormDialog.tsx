@@ -25,7 +25,11 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
 import { emptyErrorState } from '@/modules/errors/util';
 
-import { FormRole, ItemType } from '@/types/gqlTypes';
+import {
+  FormDefinitionFieldsFragment,
+  FormRole,
+  ItemType,
+} from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 export type RenderFormDialogProps = PartialPick<
@@ -40,6 +44,7 @@ export type RenderFormDialogProps = PartialPick<
 interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
   formRole: FormRole;
   onClose?: VoidFunction;
+  localDefinition?: FormDefinitionFieldsFragment;
 }
 export function useFormDialog<T extends SubmitFormAllowedTypes>({
   onCompleted,
@@ -48,6 +53,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   record,
   localConstants: localConstantsProp,
   inputVariables,
+  localDefinition,
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const openFormDialog = useCallback(() => setDialogOpen(true), []);
@@ -59,12 +65,15 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
     [localConstantsProp]
   );
 
-  const { formDefinition, loading: definitionLoading } = useFormDefinition({
-    role: formRole,
-    // hack: pull project id from one of the existing args, if it exists.
-    // this project will be used to evaluate and "rules" on the resolved form definition.
-    projectId: localConstants?.projectId || inputVariables?.projectId,
-  });
+  const { formDefinition, loading: definitionLoading } = useFormDefinition(
+    {
+      role: formRole,
+      // hack: pull project id from one of the existing args, if it exists.
+      // this project will be used to evaluate and "rules" on the resolved form definition.
+      projectId: localConstants?.projectId || inputVariables?.projectId,
+    },
+    localDefinition
+  );
 
   const hookArgs = useMemo(
     () => ({

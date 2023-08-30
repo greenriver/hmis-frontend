@@ -12,11 +12,6 @@ fragment EnrollmentFields on Enrollment {
   householdId
   householdShortId
   householdSize
-  moveInDate
-  dateOfEngagement
-  dateOfPathStatus
-  clientEnrolledInPath
-  reasonNotEnrolled
   client {
     ...ClientNameDobVet
   }
@@ -31,7 +26,7 @@ fragment EnrollmentFields on Enrollment {
 
 fragment AllEnrollmentDetails on Enrollment {
   ...EnrollmentFields
-  ...EnrollmentValues
+  ...EnrollmentOccurrencePointFields
   # can we remove these? just always link to it
   intakeAssessment {
     id
@@ -55,6 +50,95 @@ fragment AllEnrollmentDetails on Enrollment {
       ...DataCollectionPointFields
     }
   }
+}
+
+# Values that could possibly need to be displayed/edited on the Enrollment Details card
+# (as opposed to values that are only needed for assessments, which is the whole EnrollmentValues fragment)
+fragment EnrollmentOccurrencePointFields on Enrollment {
+  id
+  entryDate
+  exitDate
+  dateOfEngagement
+  moveInDate
+  livingSituation
+  enrollmentCoc
+  dateOfPathStatus
+  clientEnrolledInPath
+  reasonNotEnrolled
+  disablingCondition
+  translationNeeded
+  preferredLanguage
+  preferredLanguageDifferent
+}
+
+# for assessments
+fragment EnrollmentValues on Enrollment {
+  id
+  entryDate
+  exitDate
+  dateOfEngagement
+  moveInDate
+  livingSituation
+  rentalSubsidyType
+  lengthOfStay
+  losUnderThreshold
+  previousStreetEssh
+  dateToStreetEssh
+  timesHomelessPastThreeYears
+  monthsHomelessPastThreeYears
+  enrollmentCoc
+  dateOfPathStatus
+  clientEnrolledInPath
+  reasonNotEnrolled
+  percentAmi
+  referralSource
+  countOutreachReferralApproaches
+  dateOfBcpStatus
+  eligibleForRhy
+  reasonNoServices
+  runawayYouth
+  sexualOrientation
+  sexualOrientationOther
+  formerWardChildWelfare
+  childWelfareYears
+  childWelfareMonths
+  formerWardJuvenileJustice
+  juvenileJusticeYears
+  juvenileJusticeMonths
+  unemploymentFam
+  mentalHealthDisorderFam
+  physicalDisabilityFam
+  alcoholDrugUseDisorderFam
+  unemploymentFam
+  mentalHealthDisorderFam
+  physicalDisabilityFam
+  alcoholDrugUseDisorderFam
+  insufficientIncome
+  incarceratedParent
+  targetScreenReqd
+  timeToHousingLoss
+  annualPercentAmi
+  literalHomelessHistory
+  clientLeaseholder
+  hohLeaseholder
+  subsidyAtRisk
+  evictionHistory
+  criminalRecord
+  incarceratedAdult
+  prisonDischarge
+  sexOffender
+  disabledHoh
+  currentPregnant
+  singleParent
+  dependentUnder6
+  hh5Plus
+  cocPrioritized
+  hpScreeningScore
+  thresholdScore
+  vamcStation
+  translationNeeded
+  preferredLanguage
+  preferredLanguageDifferent
 }
 
 fragment EnrollmentWithHouseholdFragment on Enrollment {

@@ -3,7 +3,9 @@ import { ReactNode, useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import EditableCustomDataElement from './EditableCustomDataElement';
-import OccurrencePointValue from './EditableOccurrencePointValue';
+import OccurrencePointValue, {
+  DataCollectionPointValue,
+} from './EditableOccurrencePointValue';
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import IconButtonContainer from './IconButtonContainer';
 import Loading from '@/components/elements/Loading';
@@ -181,6 +183,16 @@ const EnrollmentDetails = ({
         );
       });
 
+    enrollment.project.dataCollectionPoints.forEach(({ definition, title }) => {
+      content[title || 'OTHER'] = (
+        <DataCollectionPointValue
+          enrollment={enrollment}
+          definition={definition}
+          title={title}
+        />
+      );
+    });
+
     return Object.entries(content).map(([id, value], index) => ({
       id: String(index),
       label: id,
@@ -190,8 +202,6 @@ const EnrollmentDetails = ({
 
   if (!enrollment || !rows) return <Loading />;
 
-  // TODO: use these
-  console.log(enrollment.project.dataCollectionPoints);
   return (
     <SimpleTable
       TableCellProps={{

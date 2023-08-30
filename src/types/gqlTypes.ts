@@ -9655,72 +9655,6 @@ export type DeleteAssessmentMutation = {
   } | null;
 };
 
-export type EnrollmentValuesFragment = {
-  __typename?: 'Enrollment';
-  id: string;
-  entryDate: string;
-  exitDate?: string | null;
-  dateOfEngagement?: string | null;
-  moveInDate?: string | null;
-  livingSituation?: PriorLivingSituation | null;
-  rentalSubsidyType?: RentalSubsidyType | null;
-  lengthOfStay?: ResidencePriorLengthOfStay | null;
-  losUnderThreshold?: NoYesMissing | null;
-  previousStreetEssh?: NoYesMissing | null;
-  dateToStreetEssh?: string | null;
-  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
-  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-  enrollmentCoc?: string | null;
-  dateOfPathStatus?: string | null;
-  clientEnrolledInPath?: NoYesMissing | null;
-  reasonNotEnrolled?: ReasonNotEnrolled | null;
-  percentAmi?: PercentAmi | null;
-  referralSource?: ReferralSource | null;
-  countOutreachReferralApproaches?: number | null;
-  dateOfBcpStatus?: string | null;
-  eligibleForRhy?: NoYesMissing | null;
-  reasonNoServices?: ReasonNoServices | null;
-  runawayYouth?: NoYesReasonsForMissingData | null;
-  sexualOrientation?: SexualOrientation | null;
-  sexualOrientationOther?: string | null;
-  formerWardChildWelfare?: NoYesReasonsForMissingData | null;
-  childWelfareYears?: RhyNumberofYears | null;
-  childWelfareMonths?: number | null;
-  formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
-  juvenileJusticeYears?: RhyNumberofYears | null;
-  juvenileJusticeMonths?: number | null;
-  unemploymentFam?: NoYesMissing | null;
-  mentalHealthDisorderFam?: NoYesMissing | null;
-  physicalDisabilityFam?: NoYesMissing | null;
-  alcoholDrugUseDisorderFam?: NoYesMissing | null;
-  insufficientIncome?: NoYesMissing | null;
-  incarceratedParent?: NoYesMissing | null;
-  targetScreenReqd?: NoYesMissing | null;
-  timeToHousingLoss?: TimeToHousingLoss | null;
-  annualPercentAmi?: AnnualPercentAmi | null;
-  literalHomelessHistory?: LiteralHomelessHistory | null;
-  clientLeaseholder?: NoYesMissing | null;
-  hohLeaseholder?: NoYesMissing | null;
-  subsidyAtRisk?: NoYesMissing | null;
-  evictionHistory?: EvictionHistory | null;
-  criminalRecord?: NoYesMissing | null;
-  incarceratedAdult?: IncarceratedAdult | null;
-  prisonDischarge?: NoYesMissing | null;
-  sexOffender?: NoYesMissing | null;
-  disabledHoh?: NoYesMissing | null;
-  currentPregnant?: NoYesMissing | null;
-  singleParent?: NoYesMissing | null;
-  dependentUnder6?: DependentUnder6 | null;
-  hh5Plus?: NoYesMissing | null;
-  cocPrioritized?: NoYesMissing | null;
-  hpScreeningScore?: NoYesMissing | null;
-  thresholdScore?: NoYesMissing | null;
-  vamcStation?: VamcStationNumber | null;
-  translationNeeded?: NoYesReasonsForMissingData | null;
-  preferredLanguage?: PreferredLanguage | null;
-  preferredLanguageDifferent?: string | null;
-};
-
 export type EnrollmentFieldsFromAssessmentFragment = {
   __typename?: 'Enrollment';
   id: string;
@@ -10171,11 +10105,6 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
         householdId: string;
         householdShortId: string;
         householdSize: number;
-        moveInDate?: string | null;
-        dateOfEngagement?: string | null;
-        dateOfPathStatus?: string | null;
-        clientEnrolledInPath?: NoYesMissing | null;
-        reasonNotEnrolled?: ReasonNotEnrolled | null;
         client: {
           __typename?: 'Client';
           id: string;
@@ -10899,11 +10828,6 @@ export type GetClientEnrollmentsQuery = {
         householdId: string;
         householdShortId: string;
         householdSize: number;
-        moveInDate?: string | null;
-        dateOfEngagement?: string | null;
-        dateOfPathStatus?: string | null;
-        clientEnrolledInPath?: NoYesMissing | null;
-        reasonNotEnrolled?: ReasonNotEnrolled | null;
         project: {
           __typename?: 'Project';
           id: string;
@@ -11010,11 +10934,6 @@ export type GetClientServicesQuery = {
           householdId: string;
           householdShortId: string;
           householdSize: number;
-          moveInDate?: string | null;
-          dateOfEngagement?: string | null;
-          dateOfPathStatus?: string | null;
-          clientEnrolledInPath?: NoYesMissing | null;
-          reasonNotEnrolled?: ReasonNotEnrolled | null;
           project: {
             __typename?: 'Project';
             id: string;
@@ -11705,11 +11624,6 @@ export type EnrollmentFieldsFragment = {
   householdId: string;
   householdShortId: string;
   householdSize: number;
-  moveInDate?: string | null;
-  dateOfEngagement?: string | null;
-  dateOfPathStatus?: string | null;
-  clientEnrolledInPath?: NoYesMissing | null;
-  reasonNotEnrolled?: ReasonNotEnrolled | null;
   project: {
     __typename?: 'Project';
     id: string;
@@ -11747,61 +11661,13 @@ export type AllEnrollmentDetailsFragment = {
   householdId: string;
   householdShortId: string;
   householdSize: number;
-  moveInDate?: string | null;
   dateOfEngagement?: string | null;
+  moveInDate?: string | null;
+  livingSituation?: PriorLivingSituation | null;
   dateOfPathStatus?: string | null;
   clientEnrolledInPath?: NoYesMissing | null;
   reasonNotEnrolled?: ReasonNotEnrolled | null;
-  livingSituation?: PriorLivingSituation | null;
-  rentalSubsidyType?: RentalSubsidyType | null;
-  lengthOfStay?: ResidencePriorLengthOfStay | null;
-  losUnderThreshold?: NoYesMissing | null;
-  previousStreetEssh?: NoYesMissing | null;
-  dateToStreetEssh?: string | null;
-  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
-  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-  percentAmi?: PercentAmi | null;
-  referralSource?: ReferralSource | null;
-  countOutreachReferralApproaches?: number | null;
-  dateOfBcpStatus?: string | null;
-  eligibleForRhy?: NoYesMissing | null;
-  reasonNoServices?: ReasonNoServices | null;
-  runawayYouth?: NoYesReasonsForMissingData | null;
-  sexualOrientation?: SexualOrientation | null;
-  sexualOrientationOther?: string | null;
-  formerWardChildWelfare?: NoYesReasonsForMissingData | null;
-  childWelfareYears?: RhyNumberofYears | null;
-  childWelfareMonths?: number | null;
-  formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
-  juvenileJusticeYears?: RhyNumberofYears | null;
-  juvenileJusticeMonths?: number | null;
-  unemploymentFam?: NoYesMissing | null;
-  mentalHealthDisorderFam?: NoYesMissing | null;
-  physicalDisabilityFam?: NoYesMissing | null;
-  alcoholDrugUseDisorderFam?: NoYesMissing | null;
-  insufficientIncome?: NoYesMissing | null;
-  incarceratedParent?: NoYesMissing | null;
-  targetScreenReqd?: NoYesMissing | null;
-  timeToHousingLoss?: TimeToHousingLoss | null;
-  annualPercentAmi?: AnnualPercentAmi | null;
-  literalHomelessHistory?: LiteralHomelessHistory | null;
-  clientLeaseholder?: NoYesMissing | null;
-  hohLeaseholder?: NoYesMissing | null;
-  subsidyAtRisk?: NoYesMissing | null;
-  evictionHistory?: EvictionHistory | null;
-  criminalRecord?: NoYesMissing | null;
-  incarceratedAdult?: IncarceratedAdult | null;
-  prisonDischarge?: NoYesMissing | null;
-  sexOffender?: NoYesMissing | null;
-  disabledHoh?: NoYesMissing | null;
-  currentPregnant?: NoYesMissing | null;
-  singleParent?: NoYesMissing | null;
-  dependentUnder6?: DependentUnder6 | null;
-  hh5Plus?: NoYesMissing | null;
-  cocPrioritized?: NoYesMissing | null;
-  hpScreeningScore?: NoYesMissing | null;
-  thresholdScore?: NoYesMissing | null;
-  vamcStation?: VamcStationNumber | null;
+  disablingCondition?: NoYesReasonsForMissingData | null;
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
   preferredLanguageDifferent?: string | null;
@@ -12363,6 +12229,90 @@ export type AllEnrollmentDetailsFragment = {
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
 
+export type EnrollmentOccurrencePointFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  dateOfEngagement?: string | null;
+  moveInDate?: string | null;
+  livingSituation?: PriorLivingSituation | null;
+  enrollmentCoc?: string | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
+  disablingCondition?: NoYesReasonsForMissingData | null;
+  translationNeeded?: NoYesReasonsForMissingData | null;
+  preferredLanguage?: PreferredLanguage | null;
+  preferredLanguageDifferent?: string | null;
+};
+
+export type EnrollmentValuesFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  dateOfEngagement?: string | null;
+  moveInDate?: string | null;
+  livingSituation?: PriorLivingSituation | null;
+  rentalSubsidyType?: RentalSubsidyType | null;
+  lengthOfStay?: ResidencePriorLengthOfStay | null;
+  losUnderThreshold?: NoYesMissing | null;
+  previousStreetEssh?: NoYesMissing | null;
+  dateToStreetEssh?: string | null;
+  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  enrollmentCoc?: string | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
+  percentAmi?: PercentAmi | null;
+  referralSource?: ReferralSource | null;
+  countOutreachReferralApproaches?: number | null;
+  dateOfBcpStatus?: string | null;
+  eligibleForRhy?: NoYesMissing | null;
+  reasonNoServices?: ReasonNoServices | null;
+  runawayYouth?: NoYesReasonsForMissingData | null;
+  sexualOrientation?: SexualOrientation | null;
+  sexualOrientationOther?: string | null;
+  formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+  childWelfareYears?: RhyNumberofYears | null;
+  childWelfareMonths?: number | null;
+  formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+  juvenileJusticeYears?: RhyNumberofYears | null;
+  juvenileJusticeMonths?: number | null;
+  unemploymentFam?: NoYesMissing | null;
+  mentalHealthDisorderFam?: NoYesMissing | null;
+  physicalDisabilityFam?: NoYesMissing | null;
+  alcoholDrugUseDisorderFam?: NoYesMissing | null;
+  insufficientIncome?: NoYesMissing | null;
+  incarceratedParent?: NoYesMissing | null;
+  targetScreenReqd?: NoYesMissing | null;
+  timeToHousingLoss?: TimeToHousingLoss | null;
+  annualPercentAmi?: AnnualPercentAmi | null;
+  literalHomelessHistory?: LiteralHomelessHistory | null;
+  clientLeaseholder?: NoYesMissing | null;
+  hohLeaseholder?: NoYesMissing | null;
+  subsidyAtRisk?: NoYesMissing | null;
+  evictionHistory?: EvictionHistory | null;
+  criminalRecord?: NoYesMissing | null;
+  incarceratedAdult?: IncarceratedAdult | null;
+  prisonDischarge?: NoYesMissing | null;
+  sexOffender?: NoYesMissing | null;
+  disabledHoh?: NoYesMissing | null;
+  currentPregnant?: NoYesMissing | null;
+  singleParent?: NoYesMissing | null;
+  dependentUnder6?: DependentUnder6 | null;
+  hh5Plus?: NoYesMissing | null;
+  cocPrioritized?: NoYesMissing | null;
+  hpScreeningScore?: NoYesMissing | null;
+  thresholdScore?: NoYesMissing | null;
+  vamcStation?: VamcStationNumber | null;
+  translationNeeded?: NoYesReasonsForMissingData | null;
+  preferredLanguage?: PreferredLanguage | null;
+  preferredLanguageDifferent?: string | null;
+};
+
 export type EnrollmentWithHouseholdFragmentFragment = {
   __typename?: 'Enrollment';
   id: string;
@@ -12375,11 +12325,6 @@ export type EnrollmentWithHouseholdFragmentFragment = {
   householdId: string;
   householdShortId: string;
   householdSize: number;
-  moveInDate?: string | null;
-  dateOfEngagement?: string | null;
-  dateOfPathStatus?: string | null;
-  clientEnrolledInPath?: NoYesMissing | null;
-  reasonNotEnrolled?: ReasonNotEnrolled | null;
   household: {
     __typename?: 'Household';
     id: string;
@@ -12520,11 +12465,6 @@ export type GetEnrollmentQuery = {
     householdId: string;
     householdShortId: string;
     householdSize: number;
-    moveInDate?: string | null;
-    dateOfEngagement?: string | null;
-    dateOfPathStatus?: string | null;
-    clientEnrolledInPath?: NoYesMissing | null;
-    reasonNotEnrolled?: ReasonNotEnrolled | null;
     project: {
       __typename?: 'Project';
       id: string;
@@ -12569,61 +12509,13 @@ export type GetEnrollmentDetailsQuery = {
     householdId: string;
     householdShortId: string;
     householdSize: number;
-    moveInDate?: string | null;
     dateOfEngagement?: string | null;
+    moveInDate?: string | null;
+    livingSituation?: PriorLivingSituation | null;
     dateOfPathStatus?: string | null;
     clientEnrolledInPath?: NoYesMissing | null;
     reasonNotEnrolled?: ReasonNotEnrolled | null;
-    livingSituation?: PriorLivingSituation | null;
-    rentalSubsidyType?: RentalSubsidyType | null;
-    lengthOfStay?: ResidencePriorLengthOfStay | null;
-    losUnderThreshold?: NoYesMissing | null;
-    previousStreetEssh?: NoYesMissing | null;
-    dateToStreetEssh?: string | null;
-    timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
-    monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-    percentAmi?: PercentAmi | null;
-    referralSource?: ReferralSource | null;
-    countOutreachReferralApproaches?: number | null;
-    dateOfBcpStatus?: string | null;
-    eligibleForRhy?: NoYesMissing | null;
-    reasonNoServices?: ReasonNoServices | null;
-    runawayYouth?: NoYesReasonsForMissingData | null;
-    sexualOrientation?: SexualOrientation | null;
-    sexualOrientationOther?: string | null;
-    formerWardChildWelfare?: NoYesReasonsForMissingData | null;
-    childWelfareYears?: RhyNumberofYears | null;
-    childWelfareMonths?: number | null;
-    formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
-    juvenileJusticeYears?: RhyNumberofYears | null;
-    juvenileJusticeMonths?: number | null;
-    unemploymentFam?: NoYesMissing | null;
-    mentalHealthDisorderFam?: NoYesMissing | null;
-    physicalDisabilityFam?: NoYesMissing | null;
-    alcoholDrugUseDisorderFam?: NoYesMissing | null;
-    insufficientIncome?: NoYesMissing | null;
-    incarceratedParent?: NoYesMissing | null;
-    targetScreenReqd?: NoYesMissing | null;
-    timeToHousingLoss?: TimeToHousingLoss | null;
-    annualPercentAmi?: AnnualPercentAmi | null;
-    literalHomelessHistory?: LiteralHomelessHistory | null;
-    clientLeaseholder?: NoYesMissing | null;
-    hohLeaseholder?: NoYesMissing | null;
-    subsidyAtRisk?: NoYesMissing | null;
-    evictionHistory?: EvictionHistory | null;
-    criminalRecord?: NoYesMissing | null;
-    incarceratedAdult?: IncarceratedAdult | null;
-    prisonDischarge?: NoYesMissing | null;
-    sexOffender?: NoYesMissing | null;
-    disabledHoh?: NoYesMissing | null;
-    currentPregnant?: NoYesMissing | null;
-    singleParent?: NoYesMissing | null;
-    dependentUnder6?: DependentUnder6 | null;
-    hh5Plus?: NoYesMissing | null;
-    cocPrioritized?: NoYesMissing | null;
-    hpScreeningScore?: NoYesMissing | null;
-    thresholdScore?: NoYesMissing | null;
-    vamcStation?: VamcStationNumber | null;
+    disablingCondition?: NoYesReasonsForMissingData | null;
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
     preferredLanguageDifferent?: string | null;
@@ -13204,11 +13096,6 @@ export type GetEnrollmentWithHouseholdQuery = {
     householdId: string;
     householdShortId: string;
     householdSize: number;
-    moveInDate?: string | null;
-    dateOfEngagement?: string | null;
-    dateOfPathStatus?: string | null;
-    clientEnrolledInPath?: NoYesMissing | null;
-    reasonNotEnrolled?: ReasonNotEnrolled | null;
     household: {
       __typename?: 'Household';
       id: string;
@@ -15751,11 +15638,16 @@ export type SubmitFormMutation = {
           householdId: string;
           householdShortId: string;
           householdSize: number;
-          moveInDate?: string | null;
           dateOfEngagement?: string | null;
+          moveInDate?: string | null;
+          livingSituation?: PriorLivingSituation | null;
           dateOfPathStatus?: string | null;
           clientEnrolledInPath?: NoYesMissing | null;
           reasonNotEnrolled?: ReasonNotEnrolled | null;
+          disablingCondition?: NoYesReasonsForMissingData | null;
+          translationNeeded?: NoYesReasonsForMissingData | null;
+          preferredLanguage?: PreferredLanguage | null;
+          preferredLanguageDifferent?: string | null;
           project: {
             __typename?: 'Project';
             id: string;
@@ -16414,11 +16306,6 @@ export type UpdateRelationshipToHoHMutation = {
       householdId: string;
       householdShortId: string;
       householdSize: number;
-      moveInDate?: string | null;
-      dateOfEngagement?: string | null;
-      dateOfPathStatus?: string | null;
-      clientEnrolledInPath?: NoYesMissing | null;
-      reasonNotEnrolled?: ReasonNotEnrolled | null;
       household: {
         __typename?: 'Household';
         id: string;
@@ -17827,11 +17714,6 @@ export type GetProjectEnrollmentsQuery = {
         householdId: string;
         householdShortId: string;
         householdSize: number;
-        moveInDate?: string | null;
-        dateOfEngagement?: string | null;
-        dateOfPathStatus?: string | null;
-        clientEnrolledInPath?: NoYesMissing | null;
-        reasonNotEnrolled?: ReasonNotEnrolled | null;
         client: {
           __typename?: 'Client';
           id: string;
@@ -20721,11 +20603,6 @@ export const EnrollmentFieldsFragmentDoc = gql`
     householdId
     householdShortId
     householdSize
-    moveInDate
-    dateOfEngagement
-    dateOfPathStatus
-    clientEnrolledInPath
-    reasonNotEnrolled
     client {
       ...ClientNameDobVet
     }
@@ -20740,6 +20617,24 @@ export const EnrollmentFieldsFragmentDoc = gql`
   ${ProjectNameAndTypeFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
   ${EnrollmentAccessFieldsFragmentDoc}
+`;
+export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
+  fragment EnrollmentOccurrencePointFields on Enrollment {
+    id
+    entryDate
+    exitDate
+    dateOfEngagement
+    moveInDate
+    livingSituation
+    enrollmentCoc
+    dateOfPathStatus
+    clientEnrolledInPath
+    reasonNotEnrolled
+    disablingCondition
+    translationNeeded
+    preferredLanguage
+    preferredLanguageDifferent
+  }
 `;
 export const EnrollmentSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentSummaryFields on EnrollmentSummary {
@@ -20897,7 +20792,7 @@ export const DataCollectionPointFieldsFragmentDoc = gql`
 export const AllEnrollmentDetailsFragmentDoc = gql`
   fragment AllEnrollmentDetails on Enrollment {
     ...EnrollmentFields
-    ...EnrollmentValues
+    ...EnrollmentOccurrencePointFields
     intakeAssessment {
       id
     }
@@ -20922,7 +20817,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     }
   }
   ${EnrollmentFieldsFragmentDoc}
-  ${EnrollmentValuesFragmentDoc}
+  ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${EnrollmentSummaryFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
@@ -24407,6 +24302,7 @@ export const SubmitFormDocument = gql`
         }
         ... on Enrollment {
           ...EnrollmentFields
+          ...EnrollmentOccurrencePointFields
         }
         ... on CurrentLivingSituation {
           ...CurrentLivingSituationFields
@@ -24433,6 +24329,7 @@ export const SubmitFormDocument = gql`
   ${ServiceFieldsFragmentDoc}
   ${FileFieldsFragmentDoc}
   ${EnrollmentFieldsFragmentDoc}
+  ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CurrentLivingSituationFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
   ${EventFieldsFragmentDoc}

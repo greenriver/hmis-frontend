@@ -1,6 +1,7 @@
 import { QueryOptions } from '@apollo/client';
 import { Grid, GridProps } from '@mui/material';
 
+import { ReactNode, useEffect, useState } from 'react';
 import useDynamicFields from '../../hooks/useDynamicFields';
 import usePreloadPicklists from '../../hooks/usePreloadPicklists';
 import { LocalConstants, PickListArgs } from '../../types';
@@ -17,6 +18,7 @@ export interface DynamicViewProps {
   picklistQueryOptions?: Omit<QueryOptions, 'query'>;
   GridProps?: GridProps;
   localConstants?: LocalConstants;
+  loadingElement?: ReactNode;
 }
 
 const DynamicView = ({
@@ -28,6 +30,7 @@ const DynamicView = ({
   picklistQueryOptions,
   localConstants,
   GridProps,
+  loadingElement,
 }: DynamicViewProps): JSX.Element => {
   const { renderFields } = useDynamicFields({
     definition,
@@ -36,13 +39,20 @@ const DynamicView = ({
     localConstants,
   });
 
+  const [, updateState] = useState();
+  useEffect(() => {
+    updateState(undefined);
+  }, [values]);
+
   const { loading: pickListsLoading } = usePreloadPicklists({
     definition,
     pickListArgs,
     queryOptions: picklistQueryOptions,
   });
 
-  if (pickListsLoading) return <Loading />;
+  if (pickListsLoading) {
+    return loadingElement ? <>{loadingElement}</> : <Loading />;
+  }
 
   return (
     <Grid

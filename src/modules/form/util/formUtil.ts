@@ -9,6 +9,7 @@ import {
   sub,
 } from 'date-fns';
 import {
+  cloneDeep,
   compact,
   get,
   isArray,
@@ -237,16 +238,35 @@ export const getItemMap = (
 /**
  * Recursively find a question item by linkId
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const findItem = (
+export const findItem = (
   items: FormItem[] | null | undefined,
   linkId: string
 ): FormItem | undefined => {
   if (!items || items.length === 0) return undefined;
   const found = items.find((i) => i.linkId === linkId);
   if (found) return found;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   return items.find((item) => findItem(item.item, linkId));
+};
+
+/**
+ * Recursively modify a form definition. Returns a deep copy.
+ */
+export const modifyFormDefinition = (
+  definition: FormDefinitionJson,
+  operation: (item: FormItem) => void
+): FormDefinitionJson => {
+  const copy = cloneDeep(definition);
+
+  function recur(items: FormItem[]) {
+    items.forEach((item: FormItem) => {
+      operation(item);
+      if (Array.isArray(item.item)) recur(item.item);
+    });
+  }
+
+  recur(copy.item);
+  return copy;
 };
 
 /**
