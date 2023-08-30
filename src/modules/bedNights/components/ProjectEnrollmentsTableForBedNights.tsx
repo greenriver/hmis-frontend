@@ -61,7 +61,7 @@ const ProjectEnrollmentsTableForBedNights = ({
       {
         header: 'DOB / Age',
         key: 'dob',
-        render: (e) => <ClientDobAge client={e.client} reveal />,
+        render: (e) => <ClientDobAge client={e.client} alwaysShow />,
       },
       ENROLLMENT_COLUMNS.entryDate,
       ENROLLMENT_COLUMNS.householdId,

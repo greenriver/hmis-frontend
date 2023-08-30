@@ -5,7 +5,7 @@ import { To } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
 
-type NavMenuItem = {
+export type NavMenuItem = {
   key: string;
   to?: To;
   title?: ReactNode;

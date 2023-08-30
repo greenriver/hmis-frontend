@@ -1,8 +1,11 @@
 import { Stack } from '@mui/system';
+import { isEmpty } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import CommonMenuButton from '@/components/elements/CommonMenuButton';
+import CommonMenuButton, {
+  NavMenuItem,
+} from '@/components/elements/CommonMenuButton';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
@@ -22,6 +25,7 @@ import {
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables,
   HouseholdClientFieldsFragment,
+  useGetEnrollmentAssessmentsQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -29,9 +33,11 @@ const FinishIntakeButton = ({
   enrollmentId,
   clientId,
   householdMembers,
+  assessmentId,
 }: {
   enrollmentId: string;
   clientId: string;
+  assessmentId?: string;
   householdMembers: HouseholdClientFieldsFragment[];
 }) => {
   const numIncompleteIntakes = useMemo(() => {
@@ -44,6 +50,7 @@ const FinishIntakeButton = ({
     clientId,
     enrollmentId,
     formRole: AssessmentRole.Intake,
+    assessmentId,
   });
   return (
     <ButtonLink color='error' variant='contained' to={intakePath}>
@@ -61,6 +68,10 @@ const NewAssessmentMenu = ({
   clientId: string;
   individual: boolean;
 }) => {
+  const { enrollment } = useEnrollmentDashboardContext();
+  const { data: assessmentData } = useGetEnrollmentAssessmentsQuery({
+    variables: { id: enrollmentId },
+  });
   const getPath = useCallback(
     (formRole: AssessmentRole) =>
       generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
@@ -71,22 +82,34 @@ const NewAssessmentMenu = ({
     [clientId, enrollmentId]
   );
 
-  const pluralAssmt = individual ? 'Assessment' : 'Assessments';
-  return (
-    <CommonMenuButton
-      title='Assessments'
-      items={[
-        {
-          key: 'intake',
-          to: getPath(AssessmentRole.Intake),
-          title: `Intake ${pluralAssmt}`,
-        },
-        {
-          key: 'exit',
-          to: getPath(AssessmentRole.Exit),
-          title: `Exit ${pluralAssmt}`,
-        },
-        { key: 'd1', divider: true },
+  const items: NavMenuItem[] = useMemo(() => {
+    const assessments = assessmentData?.enrollment?.assessments?.nodes;
+    const hasIntake = !!assessments?.find(
+      (a) => a.role === AssessmentRole.Intake
+    );
+    const hasExit = !!assessments?.find((a) => a.role === AssessmentRole.Exit);
+    const hasCompletedExit = !!assessments?.find(
+      (a) => a.role === AssessmentRole.Exit && !a.inProgress
+    );
+    const pluralAssmt = individual ? 'Assessment' : 'Assessments';
+
+    // only action is to finish the intake in both cases, so show no options in the menu
+    if (!hasIntake) return [];
+    if (enrollment?.inProgress) return [];
+
+    const topItems: NavMenuItem[] = [];
+    const bottomItems: NavMenuItem[] = [];
+
+    if (!hasExit) {
+      topItems.push({
+        key: 'exit',
+        to: getPath(AssessmentRole.Exit),
+        title: `Exit ${pluralAssmt}`,
+      });
+    }
+
+    if (!hasCompletedExit) {
+      bottomItems.push(
         {
           key: 'update',
           to: getPath(AssessmentRole.Update),
@@ -96,11 +119,22 @@ const NewAssessmentMenu = ({
           key: 'annual',
           to: getPath(AssessmentRole.Annual),
           title: `New Annual ${pluralAssmt}`,
-        },
-        // Custom assessments will go here..
-      ]}
-    />
-  );
+        }
+      );
+    }
+
+    return [
+      ...topItems,
+      ...(!isEmpty(topItems) && !isEmpty(bottomItems)
+        ? [{ key: 'd1', divider: true }]
+        : []),
+      ...bottomItems,
+    ];
+  }, [enrollment, getPath, assessmentData, individual]);
+
+  if (isEmpty(items)) return null;
+
+  return <CommonMenuButton title='Assessments' items={items} />;
 };
 
 const AssessmentActionButtons = ({
@@ -111,6 +145,13 @@ const AssessmentActionButtons = ({
   clientId: string;
 }) => {
   const [householdMembers] = useHouseholdMembers(enrollmentId);
+  const { data: assessmentData } = useGetEnrollmentAssessmentsQuery({
+    variables: { id: enrollmentId },
+  });
+  const assessments = assessmentData?.enrollment?.assessments?.nodes;
+  const intakeAssessment = assessments?.find(
+    (a) => a.role === AssessmentRole.Intake
+  );
   return (
     <Stack direction='row' gap={2}>
       {householdMembers && (
@@ -118,6 +159,7 @@ const AssessmentActionButtons = ({
           enrollmentId={enrollmentId}
           clientId={clientId}
           householdMembers={householdMembers}
+          assessmentId={intakeAssessment?.id}
         />
       )}
       <NewAssessmentMenu
@@ -163,6 +205,7 @@ const AssessmentsTable = () => {
       }),
     [clientId, enrollmentId]
   );
+
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   return (

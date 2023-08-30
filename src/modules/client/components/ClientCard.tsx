@@ -3,13 +3,15 @@ import { Box, Grid, Skeleton, Stack, Typography } from '@mui/material';
 import { isEmpty, isNil } from 'lodash-es';
 import { Fragment, useMemo } from 'react';
 
+import {
+  ContextualClientDobAge,
+  ContextualClientSsn,
+} from '../providers/ClientSsnDobVisibility';
 import { ClientCardImageElement } from './ClientProfileCard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { LabeledExternalIdDisplay } from '@/components/elements/ExternalIdDisplay';
 import RouterLink from '@/components/elements/RouterLink';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
-import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
   clientNameAllParts,
@@ -177,7 +179,7 @@ const ClientCard: React.FC<Props> = ({
                   component={Box}
                   sx={{ display: 'flex', gap: 0.5 }}
                 >
-                  Age: <ClientDobAge client={client} />
+                  Age: <ContextualClientDobAge client={client} />
                 </Typography>
               )}
               {client.ssn && (
@@ -190,7 +192,7 @@ const ClientCard: React.FC<Props> = ({
                     component={Box}
                     sx={{ display: 'flex', gap: 0.5 }}
                   >
-                    SSN: <ClientSafeSsn client={client} />
+                    SSN: <ContextualClientSsn client={client} />
                   </Typography>
                 </ClientPermissionsFilter>
               )}

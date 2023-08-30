@@ -30,6 +30,7 @@ import {
   HIDDEN_VALUE,
   isHmisEnum,
   isPickListOption,
+  isPickListOptionArray,
   isQuestionItem,
   isTypedObject,
   isTypedObjectWithId,
@@ -84,6 +85,7 @@ export const isDataNotCollected = (val?: any): boolean => {
   return false;
 };
 export const yesCode = { code: 'YES', label: 'Yes' };
+export const noCode = { code: 'NO', label: 'No' };
 
 export const isValidDate = (value: Date, maxYear = 1900) =>
   isDate(value) && isValid(value) && getYear(value) > maxYear;
@@ -260,10 +262,7 @@ type EvaluateEnableWhenArgs = {
   // pass function to avoid circular dependency
   shouldEnableFn: typeof shouldEnableItem;
 };
-// FIXME: issue is that `values` contains values for items that are currently disabled, which it maybe shouldn't.
-// altho sometimes it should, like when DISABLED_DISPLAY = PROTECTED_WITH_VALUE. and for hidden fields, we want conditionals on them.
-// what we DONT WANT is the disabling condition situation, where you changed another value that really should clear it out.
-// I think the hidden ones need to disappear their values when theyre remoed. It coudl be a custom "disabled_values" map if we really watn to keep them to add them back when re-enabled - defer that.
+
 const evaluateEnableWhen = ({
   en,
   values,
@@ -285,10 +284,12 @@ const evaluateEnableWhen = ({
     currentValue = en.answerGroupCode
       ? currentValue.groupCode
       : currentValue.code;
+  } else if (isPickListOptionArray(currentValue)) {
+    currentValue = currentValue.map((o) => o.code);
   }
 
   // Comparison value
-  let comparisonValue;
+  let comparisonValue: any;
   if (en.operator !== EnableOperator.Exists) {
     comparisonValue = [
       en.answerBoolean,
@@ -364,6 +365,13 @@ const evaluateEnableWhen = ({
     case EnableOperator.In:
       if (Array.isArray(comparisonValue)) {
         result = !!comparisonValue.find((val) => val === currentValue);
+      } else {
+        console.warn("Can't use INCLUDES operator without array value");
+      }
+      break;
+    case EnableOperator.Includes:
+      if (Array.isArray(currentValue)) {
+        result = !!currentValue.find((v) => v === comparisonValue);
       } else {
         console.warn("Can't use IN operator without array comparison value");
       }

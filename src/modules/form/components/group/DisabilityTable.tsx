@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   ChangeType,
   GroupItemComponentProps,
@@ -43,7 +43,6 @@ const DisabilityTable = ({
   itemChanged,
   severalItemsChanged,
 }: GroupItemComponentProps) => {
-  const [dirty, setDirty] = useState(false);
   // Link ID for DisablingCondition, which is the last row in the table
   const disablingConditionLinkId = useMemo(() => {
     if (!isValidDisabilityGroup(item)) return;
@@ -77,48 +76,52 @@ const DisabilityTable = ({
     [dependentLinkIds, values]
   );
 
-  // Set DisablingCondition
+  // Set DisablingCondition initially to YES if applicable.
   useEffect(() => {
     if (!itemChanged || !disablingConditionLinkId) return;
-    // If no dependents are yes, set to empty so that the user has to input the value.
-    if (dependentsThatAreYes.length === 0) {
-      itemChanged({
-        linkId: disablingConditionLinkId,
-        value: null,
-        type: ChangeType.System,
-      });
-    } else if (!dirty) {
-      // If some dependents are yes and there hasn't been any user input yet (not dirty), set to yes
+    if (dependentsThatAreYes.length > 0) {
       itemChanged({
         linkId: disablingConditionLinkId,
         value: yesCode,
         type: ChangeType.System,
       });
     }
-  }, [
-    dependentsThatAreYes.length,
-    disablingConditionLinkId,
-    itemChanged,
-    dirty,
-  ]);
+
+    // DANGER: this doesn't need to run each time values change, just on first load.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [disablingConditionLinkId, itemChanged]);
 
   // Override itemChanged for dependents.
-  // If the dependent is Yes, also update DisablingCondition to be Yes.
-  // If all the dependents are NOT Yes, update DisablingCondition to its original value (if it was previously system-generated).
   const handleItemChanged: ItemChangedFn = useCallback(
     ({ linkId, value, type }) => {
       if (!itemChanged || !severalItemsChanged || !disablingConditionLinkId)
         return;
 
-      setDirty(true);
-      if (
-        dependentLinkIds.indexOf(linkId) !== -1 &&
-        value &&
-        isPickListOption(value) &&
-        value.code === 'YES'
-      ) {
+      const modifiesOverallDisablingCondition =
+        dependentLinkIds.indexOf(linkId) !== -1;
+
+      if (!modifiesOverallDisablingCondition) {
+        return itemChanged({ linkId, value, type });
+      }
+
+      const wasOnlyRemainingYes =
+        dependentsThatAreYes.length === 1 && dependentsThatAreYes[0] === linkId;
+
+      // If the dependent is Yes, also update DisablingCondition to be Yes.
+
+      const isChangedToYes =
+        value && isPickListOption(value) && value.code === 'YES';
+      if (isChangedToYes) {
+        // Make "DisablingCondition" be yes, because this dependent is yes
         severalItemsChanged({
           values: { [linkId]: value, [disablingConditionLinkId]: yesCode },
+          type,
+        });
+      } else if (wasOnlyRemainingYes) {
+        // This was the last remaining "yes" that was forcing DisablingCondition to be yes.
+        // So, we set DisablingCondition to NULL, so the user has to input a value.
+        severalItemsChanged({
+          values: { [linkId]: value, [disablingConditionLinkId]: null },
           type,
         });
       } else {
@@ -128,8 +131,9 @@ const DisabilityTable = ({
     [
       itemChanged,
       severalItemsChanged,
-      dependentLinkIds,
       disablingConditionLinkId,
+      dependentLinkIds,
+      dependentsThatAreYes,
     ]
   );
 
