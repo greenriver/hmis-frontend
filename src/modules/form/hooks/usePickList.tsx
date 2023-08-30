@@ -92,6 +92,7 @@ export function usePickList({
     },
     // Skip if it was already resolve with local enums, or if it's an unrecognized reference
     skip: !!resolved || !isKnownType,
+    fetchPolicy: 'cache-and-network',
     ...fetchOptions,
   });
 
