@@ -90,7 +90,7 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
 export const cache = new InMemoryCache({
   typePolicies: {
     FormDefinition: {
-      keyFields: ['id', 'forProjectId'],
+      keyFields: ['cacheKey'],
     },
   },
 });

@@ -119,7 +119,7 @@ fragment FormDefinitionJsonFields on FormDefinitionJson {
 fragment FormDefinitionFields on FormDefinition {
   id
   role
-  forProjectId
+  cacheKey
   definition {
     ...FormDefinitionJsonFields
   }

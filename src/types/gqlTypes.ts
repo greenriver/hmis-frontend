@@ -2165,8 +2165,8 @@ export type FilesPaginated = {
 /** FormDefinition */
 export type FormDefinition = {
   __typename?: 'FormDefinition';
+  cacheKey?: Maybe<Scalars['ID']['output']>;
   definition: FormDefinitionJson;
-  forProjectId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   role: FormRole;
 };
@@ -7283,7 +7283,7 @@ export type GetAssessmentQuery = {
       __typename?: 'FormDefinition';
       id: string;
       role: FormRole;
-      forProjectId?: string | null;
+      cacheKey?: string | null;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -13190,7 +13190,7 @@ export type FormDefinitionFieldsFragment = {
   __typename?: 'FormDefinition';
   id: string;
   role: FormRole;
-  forProjectId?: string | null;
+  cacheKey?: string | null;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -13695,7 +13695,7 @@ export type GetFormDefinitionQuery = {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
-    forProjectId?: string | null;
+    cacheKey?: string | null;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -14173,7 +14173,7 @@ export type GetServiceFormDefinitionQuery = {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
-    forProjectId?: string | null;
+    cacheKey?: string | null;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -19637,7 +19637,7 @@ export const FormDefinitionFieldsFragmentDoc = gql`
   fragment FormDefinitionFields on FormDefinition {
     id
     role
-    forProjectId
+    cacheKey
     definition {
       ...FormDefinitionJsonFields
     }
