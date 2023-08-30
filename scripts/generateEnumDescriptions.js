@@ -46,6 +46,10 @@ const DESCRIPTIONS_OVERRIDES = {
   RelationshipToHoH: {
     SELF_HEAD_OF_HOUSEHOLD: 'Self (HoH)',
   },
+  Gender: {
+    MAN: 'Man',
+    WOMAN: 'Woman',
+  },
 };
 
 const POSITION_MAPS = {
@@ -53,6 +57,20 @@ const POSITION_MAPS = {
     (desc) => desc.match(/^First Name/),
     (desc) => desc.match(/^Last Name/),
     (desc) => desc.match(/^Age/),
+  ],
+  EnrollmentSortOption: [
+    (desc) => desc.match(/^First Name/),
+    (desc) => desc.match(/^Last Name/),
+    (desc) => desc.match(/^Age/),
+  ],
+  Gender: [
+    (desc) => desc.match(/Man/),
+    (desc) => desc.match(/Woman/),
+    (desc) => desc.match(/Trans/),
+    (desc) => desc.match(/Non/),
+    (desc) => desc.match(/Question/),
+    (desc) => desc.match(/Culturally/),
+    (desc) => desc.match(/Different/),
   ],
 };
 
