@@ -1,4 +1,4 @@
-import { Button, Divider, Stack, Typography } from '@mui/material';
+import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
 import TableFilterItem from './FilterItem';
@@ -9,12 +9,14 @@ export interface TableFilterContentProps<T> {
   filters: Partial<Record<keyof T, FilterType<T>>>;
   filterValues: Partial<T>;
   setFilterValues: (value: Partial<T>) => any;
+  onCancel: VoidFunction;
 }
 
 const TableFilterContent = <T,>({
   filters,
   filterValues,
   setFilterValues,
+  onCancel,
 }: TableFilterContentProps<T>): JSX.Element => {
   const [intermediateValues, setIntermediateValues] =
     useState<Partial<T>>(filterValues);
@@ -37,19 +39,36 @@ const TableFilterContent = <T,>({
       </Stack>
       <Divider sx={{ my: 3 }} />
       <Stack direction='row' gap={1}>
+        <Box flexGrow={1}>
+          <Button
+            variant='text'
+            color='error'
+            size='small'
+            onClick={() => {
+              setIntermediateValues({});
+              setFilterValues({});
+            }}
+          >
+            <strong>Reset</strong>
+          </Button>
+        </Box>
         <Button
-          variant='outlined'
+          variant='text'
           size='small'
           color='inherit'
-          onClick={() => setIntermediateValues({})}
+          sx={(theme) => ({ color: theme.palette.text.secondary })}
+          onClick={() => {
+            setIntermediateValues(filterValues);
+            onCancel();
+          }}
         >
-          Clear All
+          <strong>Cancel</strong>
         </Button>
         <Button
           size='small'
           onClick={() => setFilterValues(intermediateValues)}
         >
-          Apply Filters
+          <strong>Apply Filters</strong>
         </Button>
       </Stack>
     </>

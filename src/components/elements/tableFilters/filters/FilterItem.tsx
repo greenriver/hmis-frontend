@@ -34,7 +34,7 @@ const TableFilterItem = <T,>({
   onChange,
 }: TableFilterItemProps<T>): JSX.Element => {
   return (
-    <LabelWithContent label={filter.label || keyName}>
+    <LabelWithContent label={<strong>{filter.label || keyName}</strong>}>
       {(() => {
         if (filter.type === 'text')
           return (
