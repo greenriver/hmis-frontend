@@ -136,10 +136,11 @@ const AssessmentForm = ({
     }),
     [enrollment]
   );
+
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
-    if (mutationLoading || !definition || !enrollment) return;
+    if (!definition || !enrollment) return;
     if (locked && assessment) return {};
 
     const source = sourceAssessment || assessment;
@@ -173,7 +174,6 @@ const AssessmentForm = ({
   }, [
     assessment,
     definition,
-    mutationLoading,
     enrollment,
     sourceAssessment,
     reloadInitialValues,

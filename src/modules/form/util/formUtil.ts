@@ -85,6 +85,7 @@ export const isDataNotCollected = (val?: any): boolean => {
   return false;
 };
 export const yesCode = { code: 'YES', label: 'Yes' };
+export const noCode = { code: 'NO', label: 'No' };
 
 export const isValidDate = (value: Date, maxYear = 1900) =>
   isDate(value) && isValid(value) && getYear(value) > maxYear;
