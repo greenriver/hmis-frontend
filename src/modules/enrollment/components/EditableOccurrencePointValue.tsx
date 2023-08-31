@@ -1,6 +1,6 @@
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import EditIcon from '@mui/icons-material/Edit';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode } from 'react';
 import IconButtonContainer from './IconButtonContainer';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
@@ -23,18 +23,6 @@ const EditableOccurrencePointValue = ({
   title,
   onCompleted,
 }: Props) => {
-  const formDialogArgs = useMemo(
-    () => ({
-      title,
-      submitButtonText: 'Save',
-      pickListArgs: {
-        projectId: enrollment.project.id,
-        householdId: enrollment.householdId,
-      },
-    }),
-    [title, enrollment]
-  );
-
   const { openFormDialog, renderFormDialog } = useFormDialog({
     formRole,
     record: enrollment,
@@ -45,7 +33,12 @@ const EditableOccurrencePointValue = ({
       ...AlwaysPresentLocalConstants,
     },
     onCompleted,
+    pickListArgs: {
+      projectId: enrollment.project.id,
+      householdId: enrollment.householdId,
+    },
   });
+
   return (
     <>
       <IconButtonContainer
@@ -54,7 +47,10 @@ const EditableOccurrencePointValue = ({
       >
         {children}
       </IconButtonContainer>
-      {renderFormDialog(formDialogArgs)}
+      {renderFormDialog({
+        title,
+        submitButtonText: 'Save',
+      })}
     </>
   );
 };
