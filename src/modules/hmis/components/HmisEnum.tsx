@@ -46,6 +46,7 @@ export const MultiHmisEnum = ({
   enumMap,
   noValue,
   oneRowPerValue = false,
+  children,
   ...props
 }: Omit<Props, 'value'> & { values: any[]; oneRowPerValue?: boolean }) => {
   if (oneRowPerValue && values.length > 1) {
@@ -54,6 +55,7 @@ export const MultiHmisEnum = ({
         {values.map((val) => (
           <HmisEnum key={val} value={val} enumMap={enumMap} noValue={noValue} />
         ))}
+        {children}
       </Stack>
     );
   }

@@ -212,10 +212,12 @@ const AssessmentsTable = () => {
     <TitleCard
       title='Assessments'
       actions={
-        <AssessmentActionButtons
-          enrollmentId={enrollmentId}
-          clientId={clientId}
-        />
+        enrollment.access.canEditEnrollments && (
+          <AssessmentActionButtons
+            enrollmentId={enrollmentId}
+            clientId={clientId}
+          />
+        )
       }
       headerVariant='border'
       data-testid='enrollmentAssessmentsCard'

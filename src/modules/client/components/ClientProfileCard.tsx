@@ -173,10 +173,19 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                     />
                   ),
                   Gender: (
-                    <MultiHmisEnum
-                      values={client.gender}
-                      enumMap={HmisEnums.Gender}
-                    />
+                    <>
+                      <MultiHmisEnum
+                        values={client.gender}
+                        enumMap={HmisEnums.Gender}
+                        oneRowPerValue
+                      >
+                        {client.differentIdentityText && (
+                          <Typography variant='body2'>
+                            {client.differentIdentityText}
+                          </Typography>
+                        )}{' '}
+                      </MultiHmisEnum>
+                    </>
                   ),
                   Pronouns: pronouns(client) || <NotCollectedText />,
                   'Veteran Status': (
@@ -189,18 +198,6 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
               />
             ),
           },
-          // {
-          //   key: 'Case Manager',
-          //   content: 'TK',
-          // },
-          // {
-          //   key: 'Housing Status',
-          //   content: 'TK',
-          // },
-          // {
-          //   key: 'Client Contact Information',
-          //   content: 'TK',
-          // },
         ]}
       />
     </Box>

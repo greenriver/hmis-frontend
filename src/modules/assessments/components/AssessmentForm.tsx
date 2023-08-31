@@ -228,7 +228,7 @@ const AssessmentForm = ({
           />
         </Paper>
         <Stack gap={2} sx={{ mt: 2 }}>
-          {!assessment && (
+          {!assessment && canEdit && (
             <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
               <Button
                 variant='outlined'
