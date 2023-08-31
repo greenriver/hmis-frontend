@@ -37,6 +37,13 @@ fragment AllEnrollmentDetails on Enrollment {
   customDataElements {
     ...CustomDataElementFields
   }
+  # Need to resolve CDEs on Client too, so they can be shown on enrollment dash.
+  client {
+    ...ClientNameDobVet
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
   openEnrollmentSummary {
     ...EnrollmentSummaryFields
   }

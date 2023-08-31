@@ -6407,22 +6407,6 @@
         "description": null,
         "fields": [
           {
-            "name": "atOccurrence",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "fieldType",
             "description": null,
             "args": [],
@@ -7013,13 +6997,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -15467,12 +15447,6 @@
             "deprecationReason": null
           },
           {
-            "name": "DATE_OF_ENGAGEMENT",
-            "description": "(DATE_OF_ENGAGEMENT) Date of Engagement",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "ENROLLMENT",
             "description": "(ENROLLMENT) Enrollment",
             "isDeprecated": false,
@@ -15509,12 +15483,6 @@
             "deprecationReason": null
           },
           {
-            "name": "MOVE_IN_DATE",
-            "description": "(MOVE_IN_DATE) Move-in Date",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "NEW_CLIENT_ENROLLMENT",
             "description": "(NEW_CLIENT_ENROLLMENT) New Client Enrollment",
             "isDeprecated": false,
@@ -15529,12 +15497,6 @@
           {
             "name": "ORGANIZATION",
             "description": "(ORGANIZATION) Organization",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PATH_STATUS",
-            "description": "(PATH_STATUS) PATH Status",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -15565,12 +15527,6 @@
           {
             "name": "SERVICE",
             "description": "(SERVICE) Service",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "UNIT_ASSIGNMENT",
-            "description": "(UNIT_ASSIGNMENT) Unit Assignment",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -21116,35 +21072,6 @@
             "type": {
               "kind": "OBJECT",
               "name": "UpdateClientImagePayload",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "updateCustomEnrollmentValue",
-            "description": null,
-            "args": [
-              {
-                "name": "input",
-                "description": "Parameters for UpdateCustomEnrollmentValue",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "UpdateCustomEnrollmentValueInput",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "UpdateCustomEnrollmentValuePayload",
               "ofType": null
             },
             "isDeprecated": false,
@@ -33844,196 +33771,6 @@
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "errors",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ValidationError",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "UpdateCustomEnrollmentValueInput",
-        "description": "Autogenerated input type of UpdateCustomEnrollmentValue",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "clientMutationId",
-            "description": "A unique identifier for the client performing the mutation.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "customDataElementDefinitionId",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "enrollmentId",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueBoolean",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueDate",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "ISO8601Date",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueFloat",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueInteger",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueString",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueText",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "UpdateCustomEnrollmentValuePayload",
-        "description": "Autogenerated return type of UpdateCustomEnrollmentValue.",
-        "fields": [
-          {
-            "name": "clientMutationId",
-            "description": "A unique identifier for the client performing the mutation.",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "enrollment",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Enrollment",
-                "ofType": null
-              }
             },
             "isDeprecated": false,
             "deprecationReason": null

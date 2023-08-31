@@ -1,7 +1,5 @@
-import DateRangeIcon from '@mui/icons-material/DateRange';
 import EditIcon from '@mui/icons-material/Edit';
-import { Skeleton } from '@mui/material';
-import { ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
 import IconButtonContainer from './IconButtonContainer';
 import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
@@ -13,40 +11,53 @@ import {
   getItemMap,
   modifyFormDefinition,
 } from '@/modules/form/util/formUtil';
-import { FormDefinitionFieldsFragment, FormRole } from '@/types/gqlTypes';
+import {
+  FormDefinitionFieldsFragment,
+  FormDefinitionJson,
+  FormItem,
+  FormRole,
+} from '@/types/gqlTypes';
 
-interface Props {
-  icon: 'calendar' | 'pencil';
-  enrollment: NonNullable<EnrollmentDashboardContext['enrollment']>;
-  formRole: FormRole;
-  children?: ReactNode;
-  title: string;
-  onCompleted?: VoidFunction;
+function matchesTitle(item: FormItem, title: string) {
+  return !![item.text, item.readonlyText].find(
+    (s) => s && s.toLowerCase() === title.toLowerCase()
+  );
 }
 
-interface DataCollectionPointValueProps {
-  enrollment: NonNullable<EnrollmentDashboardContext['enrollment']>;
-  definition: FormDefinitionFieldsFragment;
-  title: string;
-}
-export const DataCollectionPointValue: React.FC<
-  DataCollectionPointValueProps
-> = ({ enrollment, title, definition }) => {
-  // Remove redundant labels from the form definition for read-only display
-  const [modifiedReadOnlyDefinition, isEditable] = useMemo(() => {
-    let isEditable = false;
-    const modified = modifyFormDefinition(definition.definition, (item) => {
-      if (item.text === title || item.readonlyText === title) {
+export const parseOccurrencePointFormDefinition = (
+  definition: FormDefinitionFieldsFragment,
+  title?: string
+) => {
+  let displayTitle = title;
+  let isEditable = false;
+  const readOnlyDefinition = modifyFormDefinition(
+    definition.definition,
+    (item) => {
+      if (title && matchesTitle(item, title)) {
+        displayTitle = item.readonlyText || item.text || displayTitle;
         delete item.text;
         delete item.readonlyText;
       }
       if (isQuestionItem(item) && !item.readOnly) {
         isEditable = true;
       }
-    });
-    return [modified, isEditable];
-  }, [definition.definition, title]);
+    }
+  );
 
+  return { displayTitle, isEditable, readOnlyDefinition };
+};
+
+interface DataCollectionPointValueProps {
+  enrollment: NonNullable<EnrollmentDashboardContext['enrollment']>;
+  definition: FormDefinitionFieldsFragment;
+  readOnlyDefinition: FormDefinitionJson;
+  editable?: boolean;
+  dialogTitle?: string;
+}
+
+export const DataCollectionPointValue: React.FC<
+  DataCollectionPointValueProps
+> = ({ enrollment, definition, editable, readOnlyDefinition, dialogTitle }) => {
   // Build values for DynamicView
   const values = useMemo(() => {
     const itemMap = getItemMap(definition.definition, false);
@@ -83,72 +94,23 @@ export const DataCollectionPointValue: React.FC<
     <DynamicView
       key={JSON.stringify(values)}
       values={values}
-      definition={modifiedReadOnlyDefinition}
+      definition={readOnlyDefinition}
       pickListArgs={pickListArgs}
-      loadingElement={<Skeleton width='80px' height='100%' />}
     />
   );
 
-  if (!isEditable) return dynamicView;
+  if (!editable) return dynamicView;
+
   return (
     <>
       <IconButtonContainer onClick={openFormDialog} Icon={EditIcon}>
         {dynamicView}
       </IconButtonContainer>
       {renderFormDialog({
-        title,
+        title: dialogTitle,
         submitButtonText: 'Save',
         pickListArgs,
       })}
     </>
   );
 };
-
-const EditableOccurrencePointValue = ({
-  children,
-  icon,
-  enrollment,
-  formRole,
-  title,
-  onCompleted,
-}: Props) => {
-  const { openFormDialog, renderFormDialog } = useFormDialog({
-    formRole,
-    record: enrollment,
-    localConstants: {
-      entryDate: enrollment.entryDate,
-      exitDate: enrollment.exitDate,
-      projectType: enrollment.project.projectType,
-      ...AlwaysPresentLocalConstants,
-    },
-    onCompleted,
-    pickListArgs: {
-      projectId: enrollment.project.id,
-      householdId: enrollment.householdId,
-    },
-  });
-
-  return (
-    <>
-      <IconButtonContainer
-        onClick={openFormDialog}
-        Icon={icon === 'calendar' ? DateRangeIcon : EditIcon}
-      >
-        {children}
-      </IconButtonContainer>
-      {renderFormDialog({
-        title,
-        submitButtonText: 'Save',
-      })}
-    </>
-  );
-};
-
-const PermissionWrappedEditableOccurrencePointValue = (props: Props) => {
-  if (!props.enrollment.access.canEditEnrollments) {
-    return <>{props.children}</>;
-  }
-  return <EditableOccurrencePointValue {...props} />;
-};
-
-export default PermissionWrappedEditableOccurrencePointValue;
