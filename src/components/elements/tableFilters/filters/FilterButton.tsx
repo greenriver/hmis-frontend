@@ -12,14 +12,13 @@ const TableFilterButton: React.FC<TableFilterButtonProps> = ({
   return (
     <Button
       size='small'
-      color='primary'
       variant='text'
       sx={(theme) => ({
-        color: active ? theme.palette.primary.main : theme.palette.text.primary,
+        color: active ? theme.palette.links : theme.palette.text.primary,
         fontWeight: 600,
         '&:hover': {
           backgroundColor: active
-            ? alpha(theme.palette.primary.main, 0.15)
+            ? alpha(theme.palette.links, 0.15)
             : theme.palette.grey[100],
         },
         px: 2,
