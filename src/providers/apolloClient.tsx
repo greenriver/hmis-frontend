@@ -89,11 +89,9 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
 
 export const cache = new InMemoryCache({
   typePolicies: {
-    // FormDefinition: {
-    //   // Singleton types that have no identifying field can use an empty
-    //   // array for their keyFields.
-    //   keyFields: [],
-    // },
+    FormDefinition: {
+      keyFields: ['cacheKey'],
+    },
   },
 });
 
