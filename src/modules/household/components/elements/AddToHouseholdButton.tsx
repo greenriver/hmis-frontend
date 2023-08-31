@@ -3,10 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
-import {
-  RenderFormDialogProps,
-  useFormDialog,
-} from '@/modules/form/hooks/useFormDialog';
+import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 interface Props {
@@ -28,7 +25,6 @@ const AddToHouseholdButton = ({
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
-  // TODO: disabled button if client has an open enrollment at this project
 
   useEffect(() => {
     // If client was previously added but has since been removed
@@ -41,25 +37,22 @@ const AddToHouseholdButton = ({
   const color: 'secondary' | 'error' = 'secondary';
   if (added) text = 'Added';
 
-  const { openFormDialog, renderFormDialog } =
-    useFormDialog<EnrollmentFieldsFragment>({
+  const memoedArgs = useMemo(
+    () => ({
       formRole: FormRole.Enrollment,
       onCompleted: (data: EnrollmentFieldsFragment) => {
         setAdded(true);
         onSuccess(data.householdId);
       },
       inputVariables: { projectId, clientId },
-      localConstants: { householdId },
-    });
-
-  const formArgs: RenderFormDialogProps = useMemo(
-    () => ({
-      title: <>Enroll {clientName}</>,
-      submitButtonText: `Enroll`,
       pickListArgs: { projectId, householdId },
+      localConstants: { householdId },
     }),
-    [clientName, householdId, projectId]
+    [clientId, householdId, onSuccess, projectId]
   );
+  const { openFormDialog, renderFormDialog } =
+    useFormDialog<EnrollmentFieldsFragment>(memoedArgs);
+
   return (
     <>
       <ButtonTooltipContainer
@@ -76,7 +69,10 @@ const AddToHouseholdButton = ({
           {text}
         </Button>
       </ButtonTooltipContainer>
-      {renderFormDialog(formArgs)}
+      {renderFormDialog({
+        title: <>Enroll {clientName}</>,
+        submitButtonText: `Enroll`,
+      })}
     </>
   );
 };

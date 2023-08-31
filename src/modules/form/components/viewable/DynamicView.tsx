@@ -1,11 +1,8 @@
-import { QueryOptions } from '@apollo/client';
 import { Grid, GridProps } from '@mui/material';
 
 import useDynamicFields from '../../hooks/useDynamicFields';
-import usePreloadPicklists from '../../hooks/usePreloadPicklists';
 import { LocalConstants, PickListArgs } from '../../types';
 
-import Loading from '@/components/elements/Loading';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 export interface DynamicViewProps {
@@ -14,7 +11,6 @@ export interface DynamicViewProps {
   horizontal?: boolean;
   pickListArgs?: PickListArgs;
   visible?: boolean;
-  picklistQueryOptions?: Omit<QueryOptions, 'query'>;
   GridProps?: GridProps;
   localConstants?: LocalConstants;
 }
@@ -25,7 +21,6 @@ const DynamicView = ({
   horizontal = false,
   visible = true,
   pickListArgs,
-  picklistQueryOptions,
   localConstants,
   GridProps,
 }: DynamicViewProps): JSX.Element => {
@@ -35,14 +30,6 @@ const DynamicView = ({
     viewOnly: true,
     localConstants,
   });
-
-  const { loading: pickListsLoading } = usePreloadPicklists({
-    definition,
-    pickListArgs,
-    queryOptions: picklistQueryOptions,
-  });
-
-  if (pickListsLoading) return <Loading />;
 
   return (
     <Grid
