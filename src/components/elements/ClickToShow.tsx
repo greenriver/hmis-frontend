@@ -38,15 +38,15 @@ const ClickToShow: React.FC<Props> = ({
     <Button
       variant='text'
       aria-label={text}
-      sx={{
+      sx={(theme) => ({
         textDecoration: 'none',
-        color: hidden ? 'text.disabled' : 'text.primary',
+        // color: hidden ? 'text.disabled' : 'text.primary',
         justifyContent: 'flex-start',
         width: 'fit-content',
         textAlign: 'left',
-        // userSelect: 'text',
+        color: hidden ? 'text.disabled' : theme.palette.links,
         p: 0,
-      }}
+      })}
       onClick={onToggle}
       size='small'
     >
@@ -54,7 +54,10 @@ const ClickToShow: React.FC<Props> = ({
         {hidden ? (
           <VisibilityOffIcon color='disabled' fontSize='small' />
         ) : (
-          <VisibilityIcon color='primary' fontSize='small' />
+          <VisibilityIcon
+            sx={(theme) => ({ color: theme.palette.links })}
+            fontSize='small'
+          />
         )}
         {hidden ? (
           <Typography {...props} sx={{ textDecoration: 'none', ...props.sx }}>
