@@ -67,10 +67,12 @@ const EnrollmentDetails = ({
   const rows = useMemo(() => {
     if (!enrollmentWithDetails) return;
     const noneText = <NotCollectedText variant='body2'>None</NotCollectedText>;
+    const canLinkToIntake =
+      enrollment.access.canEditEnrollments || !enrollment.inProgress;
+
     const content: Record<string, ReactNode> = {
       'Enrollment Status': <EnrollmentStatus enrollment={enrollment} />,
-      'Entry Date': (
-        // For now, only allow editing Entry Date via Intake Assessment. Link to it.
+      'Entry Date': canLinkToIntake ? (
         <IconButtonContainer
           Icon={DescriptionIcon}
           onClick={() => navigate(intakePath)}
@@ -78,6 +80,8 @@ const EnrollmentDetails = ({
         >
           {parseAndFormatDate(enrollment.entryDate)}
         </IconButtonContainer>
+      ) : (
+        parseAndFormatDate(enrollment.entryDate)
       ),
       'Exit Date': enrollment.exitDate ? (
         <IconButtonContainer
