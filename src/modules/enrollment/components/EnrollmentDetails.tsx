@@ -2,7 +2,6 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import { ReactNode, useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import EditableCustomDataElement from './EditableCustomDataElement';
 import OccurrencePointValue, {
   DataCollectionPointValue,
 } from './EditableOccurrencePointValue';
@@ -14,24 +13,11 @@ import SimpleTable from '@/components/elements/SimpleTable';
 import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import {
-  parseAndFormatDate,
-  pathStatusString,
-  PERMANENT_HOUSING_PROJECT_TYPES,
-  STREET_OUTREACH_SERVICES_ONLY,
-} from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  AssessmentRole,
-  Destination,
-  FormRole,
-  ProjectType,
-} from '@/types/gqlTypes';
+import { AssessmentRole, Destination, FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
-
-// TODO(#185848386): move to backend
-const DOE_PROJECT_TYPES = [ProjectType.EsNbn, ProjectType.So, ProjectType.Sso];
 
 const EnrollmentDetails = ({
   enrollment,
@@ -121,49 +107,49 @@ const EnrollmentDetails = ({
       );
     }
 
-    const projectType = enrollment.project.projectType;
-    if (projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)) {
-      const title = 'Move-in Date';
-      content[title] = (
-        <OccurrencePointValue
-          formRole={FormRole.MoveInDate}
-          title={title}
-          icon='calendar'
-          enrollment={enrollment}
-        >
-          {parseAndFormatDate(enrollment.moveInDate) || noneText}
-        </OccurrencePointValue>
-      );
-    }
+    // const projectType = enrollment.project.projectType;
+    // if (projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)) {
+    //   const title = 'Move-in Date';
+    //   content[title] = (
+    //     <OccurrencePointValue
+    //       formRole={FormRole.MoveInDate}
+    //       title={title}
+    //       icon='calendar'
+    //       enrollment={enrollment}
+    //     >
+    //       {parseAndFormatDate(enrollment.moveInDate) || noneText}
+    //     </OccurrencePointValue>
+    //   );
+    // }
 
-    if (projectType && DOE_PROJECT_TYPES.includes(projectType)) {
-      const title = 'Date of Engagement';
-      content[title] = (
-        <OccurrencePointValue
-          formRole={FormRole.DateOfEngagement}
-          title={title}
-          icon='calendar'
-          enrollment={enrollment}
-        >
-          {parseAndFormatDate(enrollment.dateOfEngagement) || noneText}
-        </OccurrencePointValue>
-      );
-    }
+    // if (projectType && DOE_PROJECT_TYPES.includes(projectType)) {
+    //   const title = 'Date of Engagement';
+    //   content[title] = (
+    //     <OccurrencePointValue
+    //       formRole={FormRole.DateOfEngagement}
+    //       title={title}
+    //       icon='calendar'
+    //       enrollment={enrollment}
+    //     >
+    //       {parseAndFormatDate(enrollment.dateOfEngagement) || noneText}
+    //     </OccurrencePointValue>
+    //   );
+    // }
 
-    // FIXME: needs to check for funder
-    if (projectType && STREET_OUTREACH_SERVICES_ONLY.includes(projectType)) {
-      const title = 'PATH Status';
-      content[title] = (
-        <OccurrencePointValue
-          formRole={FormRole.PathStatus}
-          title={title}
-          icon='pencil'
-          enrollment={enrollment}
-        >
-          {pathStatusString(enrollment) || noneText}
-        </OccurrencePointValue>
-      );
-    }
+    // // FIXME: needs to check for funder
+    // if (projectType && STREET_OUTREACH_SERVICES_ONLY.includes(projectType)) {
+    //   const title = 'PATH Status';
+    //   content[title] = (
+    //     <OccurrencePointValue
+    //       formRole={FormRole.PathStatus}
+    //       title={title}
+    //       icon='pencil'
+    //       enrollment={enrollment}
+    //     >
+    //       {pathStatusString(enrollment) || noneText}
+    //     </OccurrencePointValue>
+    //   );
+    // }
 
     if (enrollment && enrollment.openEnrollmentSummary.length > 0) {
       const title = 'Other Open Enrollments';
@@ -175,17 +161,17 @@ const EnrollmentDetails = ({
       );
     }
 
-    enrollment.customDataElements
-      .filter((cde) => cde.atOccurrence)
-      .forEach((cde) => {
-        content[cde.label] = (
-          <EditableCustomDataElement
-            element={cde}
-            enrollment={enrollment}
-            fallback={noneText}
-          />
-        );
-      });
+    // enrollment.customDataElements
+    //   .filter((cde) => cde.atOccurrence)
+    //   .forEach((cde) => {
+    //     content[cde.label] = (
+    //       <EditableCustomDataElement
+    //         element={cde}
+    //         enrollment={enrollment}
+    //         fallback={noneText}
+    //       />
+    //     );
+    //   });
 
     enrollment.project.dataCollectionPoints.forEach(({ definition, title }) => {
       content[title || 'OTHER'] = (

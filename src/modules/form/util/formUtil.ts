@@ -386,14 +386,16 @@ const evaluateEnableWhen = ({
       if (Array.isArray(comparisonValue)) {
         result = !!comparisonValue.find((val) => val === currentValue);
       } else {
-        console.warn("Can't use INCLUDES operator without array value");
+        console.warn("Can't use IN operator without array value");
       }
       break;
     case EnableOperator.Includes:
       if (Array.isArray(currentValue)) {
         result = !!currentValue.find((v) => v === comparisonValue);
       } else {
-        console.warn("Can't use IN operator without array comparison value");
+        console.warn(
+          "Can't use INCLUDES operator without array comparison value"
+        );
       }
       break;
     default:

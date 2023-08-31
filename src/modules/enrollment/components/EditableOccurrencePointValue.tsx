@@ -112,18 +112,6 @@ const EditableOccurrencePointValue = ({
   title,
   onCompleted,
 }: Props) => {
-  const formDialogArgs = useMemo(
-    () => ({
-      title,
-      submitButtonText: 'Save',
-      pickListArgs: {
-        projectId: enrollment.project.id,
-        householdId: enrollment.householdId,
-      },
-    }),
-    [title, enrollment]
-  );
-
   const { openFormDialog, renderFormDialog } = useFormDialog({
     formRole,
     record: enrollment,
@@ -134,7 +122,12 @@ const EditableOccurrencePointValue = ({
       ...AlwaysPresentLocalConstants,
     },
     onCompleted,
+    pickListArgs: {
+      projectId: enrollment.project.id,
+      householdId: enrollment.householdId,
+    },
   });
+
   return (
     <>
       <IconButtonContainer
@@ -143,7 +136,10 @@ const EditableOccurrencePointValue = ({
       >
         {children}
       </IconButtonContainer>
-      {renderFormDialog(formDialogArgs)}
+      {renderFormDialog({
+        title,
+        submitButtonText: 'Save',
+      })}
     </>
   );
 };

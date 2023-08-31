@@ -42,18 +42,19 @@ export const VisibilityToggleButton: React.FC<
         onToggle();
         if (props.onClick) props.onClick(...args);
       }}
-      color={on ? 'primary' : 'inherit'}
       startIcon={
         on ? (
           <VisibilityIcon color='inherit' />
         ) : (
-          <VisibilityOffIcon
-            sx={(theme) => ({ color: theme.palette.text.secondary })}
-          />
+          <VisibilityOffIcon sx={{ color: theme.palette.text.secondary }} />
         )
       }
       {...props}
-      sx={{ ...props.sx, backgroundColor: theme.palette.grey[100] }}
+      sx={{
+        ...props.sx,
+        backgroundColor: theme.palette.grey[100],
+        color: on ? theme.palette.links : 'inherit',
+      }}
     />
   );
 };

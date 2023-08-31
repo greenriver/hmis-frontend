@@ -1,12 +1,12 @@
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { Button, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Stack } from '@mui/system';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import useAddToHouseholdColumns from '../hooks/useAddToHouseholdColumns';
 import { useRecentHouseholdMembers } from '../hooks/useRecentHouseholdMembers';
 
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
+import AddNewClientButton from './elements/AddNewClientButton';
 import { CommonCard } from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -14,7 +14,6 @@ import TitleCard from '@/components/elements/TitleCard';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useNewClientEnrollmentFormDialog } from '@/modules/enrollment/hooks/useNewClientEnrollmentFormDialog';
 import AssociatedHouseholdMembers, {
   householdMemberColumns,
 } from '@/modules/household/components/AssociatedHouseholdMembers';
@@ -52,8 +51,7 @@ const ManageHousehold = ({
     household,
     onHouseholdIdChange,
     loading,
-    // refetchLoading,
-    // householdLoading,
+    householdId,
   } = useAddToHouseholdColumns({
     householdId: initialHouseholdId,
     projectId,
@@ -85,20 +83,16 @@ const ManageHousehold = ({
     ...addToEnrollmentColumns,
   ];
 
-  const {
-    openNewClientEnrollmentFormDialog,
-    renderNewClientEnrollmentFormDialog,
-  } = useNewClientEnrollmentFormDialog({
-    projectId,
-    householdId: household?.id,
-    onCompleted: (data: EnrollmentFieldsFragment) => {
-      if (data.householdId !== household?.id) {
+  const handleNewClientAdded = useCallback(
+    (data: EnrollmentFieldsFragment) => {
+      if (data.householdId !== householdId) {
         onHouseholdIdChange(data.householdId);
       } else {
         refetchHousehold();
       }
     },
-  });
+    [householdId, onHouseholdIdChange, refetchHousehold]
+  );
 
   const [searchInput, setSearchInput] = useState<ClientSearchInput>();
   const [hasSearched, setHasSearched] = useState(false);
@@ -160,15 +154,11 @@ const ManageHousehold = ({
             <Grid item xs={12} md={3}>
               {hasSearched && (
                 <RootPermissionsFilter permissions='canEditClients'>
-                  <Button
-                    onClick={openNewClientEnrollmentFormDialog}
-                    data-testid='addClientButton'
-                    sx={{ px: 3, mt: 3, float: 'right' }}
-                    startIcon={<PersonAddIcon />}
-                    variant='outlined'
-                  >
-                    Add New Client
-                  </Button>
+                  <AddNewClientButton
+                    projectId={projectId}
+                    householdId={householdId}
+                    onCompleted={handleNewClientAdded}
+                  />
                 </RootPermissionsFilter>
               )}
             </Grid>
@@ -193,38 +183,7 @@ const ManageHousehold = ({
             />
           )}
         </Stack>
-        {/* <ClientSearch
-          hideInstructions
-          hideProject
-          hideAdvanced
-          cardsEnabled={false}
-          pageSize={10}
-          wrapperComponent={Box}
-          searchResultsTableProps={{
-            rowLinkTo: undefined,
-            tableProps: { size: 'small' },
-            columns,
-          }}
-          hideAddClient
-          renderActions={(searchPerformed) => {
-            if (!searchPerformed) return null;
-            return (
-              <AddClientPrompt>
-                <Button
-                  onClick={openNewClientEnrollmentFormDialog}
-                  data-testid='addClientButton'
-                  sx={{ px: 3 }}
-                  startIcon={<PersonAddIcon />}
-                  variant='outlined'
-                >
-                  Add Client
-                </Button>
-              </AddClientPrompt>
-            );
-          }}
-        /> */}
       </CommonCard>
-      {renderNewClientEnrollmentFormDialog()}
     </Stack>
   );
 };

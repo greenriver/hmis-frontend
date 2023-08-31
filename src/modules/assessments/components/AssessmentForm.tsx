@@ -205,7 +205,9 @@ const AssessmentForm = ({
   const { loading: pickListsLoading } = usePreloadPicklists({
     definition: definition.definition,
     pickListArgs,
+    skip: !isPrintView,
   });
+
   usePrintTrigger({
     startReady: isPrintView,
     hold: pickListsLoading,

@@ -12,7 +12,7 @@ import DynamicForm, {
   DynamicFormRef,
 } from '../components/DynamicForm';
 import FormDialogActionContent from '../components/FormDialogActionContent';
-import { LocalConstants, SubmitFormAllowedTypes } from '../types';
+import { LocalConstants, PickListArgs, SubmitFormAllowedTypes } from '../types';
 
 import { AlwaysPresentLocalConstants } from '../util/formUtil';
 import {
@@ -34,7 +34,7 @@ import { PartialPick } from '@/utils/typeUtil';
 
 export type RenderFormDialogProps = PartialPick<
   DynamicFormProps,
-  'onSubmit' | 'definition' | 'errors'
+  'onSubmit' | 'definition' | 'errors' | 'pickListArgs'
 > & {
   title: ReactNode;
   otherActions?: ReactNode;
@@ -43,6 +43,7 @@ export type RenderFormDialogProps = PartialPick<
 
 interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
   formRole: FormRole;
+  pickListArgs?: PickListArgs;
   onClose?: VoidFunction;
   localDefinition?: FormDefinitionFieldsFragment;
 }
@@ -54,6 +55,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   localConstants: localConstantsProp,
   inputVariables,
   localDefinition,
+  pickListArgs,
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const openFormDialog = useCallback(() => setDialogOpen(true), []);
@@ -150,6 +152,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                     loading={submitLoading}
                     errors={errors}
                     localConstants={localConstants}
+                    pickListArgs={pickListArgs}
                     FormActionProps={{
                       onDiscard: () => setDialogOpen(false),
                       ...props.FormActionProps,
@@ -188,6 +191,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       initialValues,
       localConstants,
       onSubmit,
+      pickListArgs,
       submitLoading,
     ]
   );
