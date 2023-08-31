@@ -238,7 +238,9 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
           noHead
           rows={displayReminders}
           columns={columns}
-          rowLinkTo={rowLinkTo}
+          rowLinkTo={
+            enrollment.access.canEditEnrollments ? rowLinkTo : undefined
+          }
           rowSx={() => ({ '&:nth-last-of-type(1) td': { pb: 1 } })}
           noData={
             <Stack

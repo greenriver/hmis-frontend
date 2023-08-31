@@ -1,5 +1,5 @@
 import PersonIcon from '@mui/icons-material/Person';
-import { Box, Grid, Skeleton, Stack, Typography } from '@mui/material';
+import { Grid, Skeleton, Stack, Typography } from '@mui/material';
 import { isEmpty, isNil } from 'lodash-es';
 import { Fragment, useMemo } from 'react';
 
@@ -10,9 +10,9 @@ import {
 import { ClientCardImageElement } from './ClientProfileCard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { LabeledExternalIdDisplay } from '@/components/elements/ExternalIdDisplay';
 import RouterLink from '@/components/elements/RouterLink';
-import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
   clientNameAllParts,
   enrollmentName,
@@ -159,41 +159,34 @@ const ClientCard: React.FC<Props> = ({
             {!hideImage && clientImageData?.image && (
               <ClientCardImageElement size={150} client={clientImageData} />
             )}
-            <Stack spacing={0.5} sx={{ pr: 1 }}>
+            <Stack gap={1} sx={{ pr: 1 }}>
               {globalFeatureFlags?.mciId && (
                 <LabeledExternalIdDisplay
                   type={ExternalIdentifierType.MciId}
                   externalIds={client.externalIds}
+                  label={'MCI ID:'}
+                  gap={0.5}
                 />
               )}
-              <IdDisplay
-                prefix='HMIS'
-                value={client.id}
-                color='text.primary'
-                withoutEmphasis
-              />
-
+              <CommonLabeledTextBlock title='HMIS ID:' horizontal>
+                {client.id}
+              </CommonLabeledTextBlock>
               {!isNil(client.age) && (
-                <Typography
-                  variant='body2'
-                  component={Box}
-                  sx={{ display: 'flex', gap: 0.5 }}
+                <CommonLabeledTextBlock
+                  title={client.dob ? 'DOB (Age):' : 'Age:'}
+                  horizontal
                 >
-                  Age: <ContextualClientDobAge client={client} />
-                </Typography>
+                  <ContextualClientDobAge client={client} />
+                </CommonLabeledTextBlock>
               )}
               {client.ssn && (
                 <ClientPermissionsFilter
                   id={client.id}
                   permissions={['canViewFullSsn', 'canViewPartialSsn']}
                 >
-                  <Typography
-                    variant='body2'
-                    component={Box}
-                    sx={{ display: 'flex', gap: 0.5 }}
-                  >
-                    SSN: <ContextualClientSsn client={client} />
-                  </Typography>
+                  <CommonLabeledTextBlock title='SSN:' horizontal>
+                    <ContextualClientSsn client={client} />
+                  </CommonLabeledTextBlock>
                 </ClientPermissionsFilter>
               )}
             </Stack>

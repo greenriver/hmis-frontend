@@ -51,7 +51,7 @@ const ClientSearchTypeToggle: React.FC<ClientSearchTypeToggleProps> = ({
   return (
     <LabelWithContent
       label='Search Type'
-      LabelProps={{ sx: { fontWeight: 600, fontSize: 16 } }}
+      LabelProps={{ sx: { fontSize: 16 } }}
       labelId='search-type-label'
       renderChildren={(labelElement) => (
         <ToggleButtonGroup

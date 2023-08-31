@@ -84,29 +84,30 @@ const EnrollmentOverview = () => {
             <TitleCard title='Quick Actions'>
               <EnrollmentQuickActions enrollment={enrollment} />
             </TitleCard>
-            {enrollment.inProgress && (
-              <DeleteMutationButton<
-                DeleteEnrollmentMutation,
-                DeleteEnrollmentMutationVariables
-              >
-                queryDocument={DeleteEnrollmentDocument}
-                variables={{ input: { id: enrollment.id } }}
-                idPath='deleteEnrollment.enrollment.id'
-                recordName='Enrollment'
-                onSuccess={onSuccessfulDelete}
-                ButtonProps={{
-                  sx: {
-                    justifyContent: 'left',
-                    alignSelf: 'flex-end',
-                    width: 'fit-content',
-                  },
-                  size: 'small',
-                }}
-                deleteIcon
-              >
-                Delete Enrollment
-              </DeleteMutationButton>
-            )}
+            {enrollment.inProgress &&
+              enrollment.access.canDeleteEnrollments && (
+                <DeleteMutationButton<
+                  DeleteEnrollmentMutation,
+                  DeleteEnrollmentMutationVariables
+                >
+                  queryDocument={DeleteEnrollmentDocument}
+                  variables={{ input: { id: enrollment.id } }}
+                  idPath='deleteEnrollment.enrollment.id'
+                  recordName='Enrollment'
+                  onSuccess={onSuccessfulDelete}
+                  ButtonProps={{
+                    sx: {
+                      justifyContent: 'left',
+                      alignSelf: 'flex-end',
+                      width: 'fit-content',
+                    },
+                    size: 'small',
+                  }}
+                  deleteIcon
+                >
+                  Delete Enrollment
+                </DeleteMutationButton>
+              )}
           </Stack>
         </Grid>
       </Grid>

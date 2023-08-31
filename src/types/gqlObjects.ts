@@ -2701,6 +2701,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'FormDefinition',
     fields: [
       {
+        name: 'cacheKey',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -5375,6 +5383,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'confirmed',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'DeleteCurrentLivingSituationInput',
+    args: [
       {
         name: 'id',
         type: {

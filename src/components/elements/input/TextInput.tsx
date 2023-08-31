@@ -98,6 +98,7 @@ const TextInput = ({
           whiteSpace: 'break-spaces',
           display: 'flex',
           alignItems: 'center',
+          fontWeight: 600,
           // backgroundColor: horizontal ? 'white' : undefined,
           pr: horizontal ? 1 : undefined,
           ...(props.InputLabelProps?.sx || {}),

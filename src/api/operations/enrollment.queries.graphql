@@ -95,3 +95,15 @@ mutation DeleteCeEvent($id: ID!) {
     }
   }
 }
+
+mutation DeleteCurrentLivingSituation($id: ID!) {
+  deleteCurrentLivingSituation(input: { id: $id }) {
+    clientMutationId
+    currentLivingSituation {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

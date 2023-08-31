@@ -1,11 +1,11 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import useViewDialog from '@/modules/form/hooks/useViewDialog';
@@ -15,6 +15,9 @@ import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   CurrentLivingSituationFieldsFragment,
+  DeleteCurrentLivingSituationDocument,
+  DeleteCurrentLivingSituationMutation,
+  DeleteCurrentLivingSituationMutationVariables,
   FormRole,
   GetEnrollmentCurrentLivingSituationsDocument,
   GetEnrollmentCurrentLivingSituationsQuery,
@@ -65,7 +68,8 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     }),
     [enrollment]
   );
-  const { openFormDialog, renderFormDialog } =
+
+  const { openFormDialog, renderFormDialog, closeDialog } =
     useFormDialog<CurrentLivingSituationFieldsFragment>({
       formRole: FormRole.CurrentLivingSituation,
       onCompleted: () => {
@@ -79,6 +83,16 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       record: viewingRecord,
       localConstants,
     });
+
+  const onSuccessfulDelete = useCallback(() => {
+    cache.evict({
+      id: `Enrollment:${enrollmentId}`,
+      fieldName: 'currentLivingSituations',
+    });
+    closeDialog();
+    closeViewDialog();
+    setViewingRecord(undefined);
+  }, [closeDialog, closeViewDialog, enrollmentId]);
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
   const canEditCls = enrollment.access.canEditEnrollments;
@@ -128,6 +142,20 @@ const EnrollmentCurrentLivingSituationsPage = () => {
                 <Button variant='outlined' onClick={openFormDialog}>
                   Edit
                 </Button>
+                <DeleteMutationButton<
+                  DeleteCurrentLivingSituationMutation,
+                  DeleteCurrentLivingSituationMutationVariables
+                >
+                  queryDocument={DeleteCurrentLivingSituationDocument}
+                  variables={{ id: viewingRecord.id }}
+                  idPath={
+                    'deleteCurrentLivingSituation.currentLivingSituation.id'
+                  }
+                  recordName='Current Living Situation'
+                  onSuccess={onSuccessfulDelete}
+                >
+                  Delete
+                </DeleteMutationButton>
               </>
             )}
           </>
