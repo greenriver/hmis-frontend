@@ -40,6 +40,7 @@ const LabelWithContent = ({
       sx={{
         color: theme.palette.text.primary,
         fontSize: theme.typography.body2,
+        fontWeight: 600,
         ...LabelProps?.sx,
       }}
     >

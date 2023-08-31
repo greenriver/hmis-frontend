@@ -21,7 +21,6 @@ const EnrollmentQuickActions = ({
     enrollment,
   });
 
-  // FIXME: MCI LOCAL CONSTANT ISNT GETTING SET
   const { openClientFormDialog, renderClientFormDialog, clientLoading } =
     useClientFormDialog({
       clientId: enrollment.client.id,
@@ -33,15 +32,6 @@ const EnrollmentQuickActions = ({
         id={enrollment.client.id}
         permissions={['canEditEnrollments']}
       >
-        {/* <ButtonLink
-          to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-            clientId,
-            enrollmentId,
-            formRole: FormRole.Update,
-          })}
-        >
-          Add Assessment
-        </ButtonLink> */}
         <Button onClick={openServiceDialog} variant='outlined'>
           Record Service
         </Button>
