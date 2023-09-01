@@ -1,4 +1,5 @@
 import { Theme } from '@mui/material';
+import { deepPurple, orange, red } from '@mui/material/colors';
 import {
   createTheme,
   ThemeOptions,
@@ -102,16 +103,16 @@ export const baseThemeDef: ThemeOptions = {
         background: '#FFF',
       },
       changed: {
-        color: '#75559F', // Mui Purple 700?
-        background: '#EDE7F6', // Deep Purple 50
+        color: '#75559F', // Not a MUI color
+        background: deepPurple[50],
       },
       warning: {
-        color: '#F57C00', // Mui Orange 700
-        background: '#FFF3E0', // Mui Orange 50
+        color: orange[700],
+        background: orange[50],
       },
       error: {
-        color: '#D50000', // Mui Red A700
-        background: '#FEEBEE', // Mui Red 50
+        color: red.A700,
+        background: red[50],
       },
     },
   },

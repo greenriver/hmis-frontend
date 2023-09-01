@@ -134,6 +134,7 @@ const FormStepperContextProvider: React.FC<
               complete:
                 !isEmpty(filteredValues) &&
                 Object.values(filteredValues).every(
+                  // Currently hasMeaninfulValue includes isDataNotCollected, but that may be removed, so handle it here explicitly
                   (val) => hasMeaningfulValue(val) && !isDataNotCollected(val)
                 ),
             },
