@@ -987,37 +987,43 @@
         "enumValues": [
           {
             "name": "ANNUAL",
-            "description": "(ANNUAL) Annual Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE",
-            "description": "(CE) Coordinated Entry",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CUSTOM_ASSESSMENT",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "EXIT",
-            "description": "(EXIT) Exit Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INTAKE",
-            "description": "(INTAKE) Intake Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "POST_EXIT",
-            "description": "(POST_EXIT) Post-Exit Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "UPDATE",
-            "description": "(UPDATE) Update Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -6926,7 +6932,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "FormRole",
+                "name": "DataCollectionFeatureRole",
                 "ofType": null
               }
             },
@@ -6940,74 +6946,44 @@
         "possibleTypes": null
       },
       {
-        "kind": "OBJECT",
-        "name": "DataCollectionPoint",
+        "kind": "ENUM",
+        "name": "DataCollectionFeatureRole",
         "description": null,
-        "fields": [
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
           {
-            "name": "dataCollectedAbout",
+            "name": "CE_ASSESSMENT",
             "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "DataCollectedAbout",
-                "ofType": null
-              }
-            },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "definition",
+            "name": "CE_EVENT",
             "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "FormDefinition",
-                "ofType": null
-              }
-            },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "id",
+            "name": "CURRENT_LIVING_SITUATION",
             "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "title",
+            "name": "REFERRAL_REQUEST",
             "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SERVICE",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
         ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
         "possibleTypes": null
       },
       {
@@ -14784,6 +14760,22 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -15399,140 +15391,140 @@
       {
         "kind": "ENUM",
         "name": "FormRole",
-        "description": "Form Role",
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
             "name": "ANNUAL",
-            "description": "(ANNUAL) Annual Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE",
-            "description": "(CE) Coordinated Entry",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_ASSESSMENT",
-            "description": "(CE_ASSESSMENT) CE Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_EVENT",
-            "description": "(CE_EVENT) CE Event",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CLIENT",
-            "description": "(CLIENT) Client",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CURRENT_LIVING_SITUATION",
-            "description": "(CURRENT_LIVING_SITUATION) Current Living Situation",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "CUSTOM",
-            "description": "(CUSTOM) Custom Assessment",
+            "name": "CUSTOM_ASSESSMENT",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ENROLLMENT",
-            "description": "(ENROLLMENT) Enrollment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "EXIT",
-            "description": "(EXIT) Exit Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FILE",
-            "description": "(FILE) File",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FUNDER",
-            "description": "(FUNDER) Funder",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INTAKE",
-            "description": "(INTAKE) Intake Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INVENTORY",
-            "description": "(INVENTORY) Inventory",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "NEW_CLIENT_ENROLLMENT",
-            "description": "(NEW_CLIENT_ENROLLMENT) New Client Enrollment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "OCCURRENCE_POINT",
-            "description": "(OCCURRENCE_POINT) Occurrence point collection form",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ORGANIZATION",
-            "description": "(ORGANIZATION) Organization",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "POST_EXIT",
-            "description": "(POST_EXIT) Post-Exit Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PROJECT",
-            "description": "(PROJECT) Project",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PROJECT_COC",
-            "description": "(PROJECT_COC) Project CoC",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "REFERRAL_REQUEST",
-            "description": "(REFERRAL_REQUEST) Referral Request",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SERVICE",
-            "description": "(SERVICE) Service",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "UPDATE",
-            "description": "(UPDATE) Update Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -21470,6 +21462,65 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "OccurrencePointForm",
+        "description": null,
+        "fields": [
+          {
+            "name": "dataCollectedAbout",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "DataCollectedAbout",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "definition",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "FormDefinition",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "UNION",
         "name": "OmnisearchResult",
         "description": "Results from client/project omnisearch",
@@ -24691,7 +24742,7 @@
           },
           {
             "name": "dataCollectionFeatures",
-            "description": null,
+            "description": "Occurrence Point data collection features that are enabled for this Project (e.g. Current Living Situations, Events)",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -24705,30 +24756,6 @@
                   "ofType": {
                     "kind": "OBJECT",
                     "name": "DataCollectionFeature",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "dataCollectionPoints",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "DataCollectionPoint",
                     "ofType": null
                   }
                 }
@@ -25166,6 +25193,30 @@
                 "kind": "OBJECT",
                 "name": "InventoriesPaginated",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "occurrencePointForms",
+            "description": "Forms for individual data elements that are collected at occurrence for this Project (e.g. Move-In Date)",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "OccurrencePointForm",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,

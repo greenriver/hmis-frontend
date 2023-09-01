@@ -191,17 +191,12 @@ export enum AssessmentLevel {
 }
 
 export enum AssessmentRole {
-  /** (ANNUAL) Annual Assessment */
   Annual = 'ANNUAL',
-  /** (CE) Coordinated Entry */
   Ce = 'CE',
-  /** (EXIT) Exit Assessment */
+  CustomAssessment = 'CUSTOM_ASSESSMENT',
   Exit = 'EXIT',
-  /** (INTAKE) Intake Assessment */
   Intake = 'INTAKE',
-  /** (POST_EXIT) Post-Exit Assessment */
   PostExit = 'POST_EXIT',
-  /** (UPDATE) Update Assessment */
   Update = 'UPDATE',
 }
 
@@ -1069,16 +1064,16 @@ export type DataCollectionFeature = {
   id: Scalars['ID']['output'];
   legacy: Scalars['Boolean']['output'];
   legacyDataCollectedAbout: Array<DataCollectedAbout>;
-  role: FormRole;
+  role: DataCollectionFeatureRole;
 };
 
-export type DataCollectionPoint = {
-  __typename?: 'DataCollectionPoint';
-  dataCollectedAbout: DataCollectedAbout;
-  definition: FormDefinition;
-  id: Scalars['ID']['output'];
-  title?: Maybe<Scalars['String']['output']>;
-};
+export enum DataCollectionFeatureRole {
+  CeAssessment = 'CE_ASSESSMENT',
+  CeEvent = 'CE_EVENT',
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  ReferralRequest = 'REFERRAL_REQUEST',
+  Service = 'SERVICE',
+}
 
 /** 5.03.1 */
 export enum DataCollectionStage {
@@ -2185,6 +2180,7 @@ export type FormDefinition = {
   definition: FormDefinitionJson;
   id: Scalars['ID']['output'];
   role: FormRole;
+  title: Scalars['String']['output'];
 };
 
 export type FormDefinitionJson = {
@@ -2266,51 +2262,28 @@ export type FormItem = {
   warnIfEmpty: Scalars['Boolean']['output'];
 };
 
-/** Form Role */
 export enum FormRole {
-  /** (ANNUAL) Annual Assessment */
   Annual = 'ANNUAL',
-  /** (CE) Coordinated Entry */
   Ce = 'CE',
-  /** (CE_ASSESSMENT) CE Assessment */
   CeAssessment = 'CE_ASSESSMENT',
-  /** (CE_EVENT) CE Event */
   CeEvent = 'CE_EVENT',
-  /** (CLIENT) Client */
   Client = 'CLIENT',
-  /** (CURRENT_LIVING_SITUATION) Current Living Situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
-  /** (CUSTOM) Custom Assessment */
-  Custom = 'CUSTOM',
-  /** (ENROLLMENT) Enrollment */
+  CustomAssessment = 'CUSTOM_ASSESSMENT',
   Enrollment = 'ENROLLMENT',
-  /** (EXIT) Exit Assessment */
   Exit = 'EXIT',
-  /** (FILE) File */
   File = 'FILE',
-  /** (FUNDER) Funder */
   Funder = 'FUNDER',
-  /** (INTAKE) Intake Assessment */
   Intake = 'INTAKE',
-  /** (INVENTORY) Inventory */
   Inventory = 'INVENTORY',
-  /** (NEW_CLIENT_ENROLLMENT) New Client Enrollment */
   NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
-  /** (OCCURRENCE_POINT) Occurrence point collection form */
   OccurrencePoint = 'OCCURRENCE_POINT',
-  /** (ORGANIZATION) Organization */
   Organization = 'ORGANIZATION',
-  /** (POST_EXIT) Post-Exit Assessment */
   PostExit = 'POST_EXIT',
-  /** (PROJECT) Project */
   Project = 'PROJECT',
-  /** (PROJECT_COC) Project CoC */
   ProjectCoc = 'PROJECT_COC',
-  /** (REFERRAL_REQUEST) Referral Request */
   ReferralRequest = 'REFERRAL_REQUEST',
-  /** (SERVICE) Service */
   Service = 'SERVICE',
-  /** (UPDATE) Update Assessment */
   Update = 'UPDATE',
 }
 
@@ -3325,6 +3298,13 @@ export enum NotEmployedReason {
   UnableToWork = 'UNABLE_TO_WORK',
 }
 
+export type OccurrencePointForm = {
+  __typename?: 'OccurrencePointForm';
+  dataCollectedAbout: DataCollectedAbout;
+  definition: FormDefinition;
+  id: Scalars['ID']['output'];
+};
+
 /** Results from client/project omnisearch */
 export type OmnisearchResult = Client | Project;
 
@@ -4206,8 +4186,8 @@ export type Project = {
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
   customDataElements: Array<CustomDataElement>;
+  /** Occurrence Point data collection features that are enabled for this Project (e.g. Current Living Situations, Events) */
   dataCollectionFeatures: Array<DataCollectionFeature>;
-  dataCollectionPoints: Array<DataCollectionPoint>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
@@ -4222,6 +4202,8 @@ export type Project = {
   id: Scalars['ID']['output'];
   incomingReferralPostings: ReferralPostingsPaginated;
   inventories: InventoriesPaginated;
+  /** Forms for individual data elements that are collected at occurrence for this Project (e.g. Move-In Date) */
+  occurrencePointForms: Array<OccurrencePointForm>;
   operatingEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   operatingStartDate: Scalars['ISO8601Date']['output'];
   organization: Organization;
@@ -7259,6 +7241,7 @@ export type GetAssessmentQuery = {
       __typename?: 'FormDefinition';
       id: string;
       role: FormRole;
+      title: string;
       cacheKey: string;
       definition: {
         __typename?: 'FormDefinitionJson';
@@ -11667,20 +11650,20 @@ export type AllEnrollmentDetailsFragment = {
     dataCollectionFeatures: Array<{
       __typename?: 'DataCollectionFeature';
       id: string;
-      role: FormRole;
+      role: DataCollectionFeatureRole;
       dataCollectedAbout: Array<DataCollectedAbout>;
       legacyDataCollectedAbout: Array<DataCollectedAbout>;
       legacy: boolean;
     }>;
-    dataCollectionPoints: Array<{
-      __typename?: 'DataCollectionPoint';
+    occurrencePointForms: Array<{
+      __typename?: 'OccurrencePointForm';
       id: string;
-      title?: string | null;
       dataCollectedAbout: DataCollectedAbout;
       definition: {
         __typename?: 'FormDefinition';
         id: string;
         role: FormRole;
+        title: string;
         cacheKey: string;
         definition: {
           __typename?: 'FormDefinitionJson';
@@ -12241,6 +12224,89 @@ export type EnrollmentValuesFragment = {
   preferredLanguageDifferent?: string | null;
 };
 
+export type SubmittedEnrollmentResultFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  exitDestination?: Destination | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  dateOfEngagement?: string | null;
+  moveInDate?: string | null;
+  livingSituation?: PriorLivingSituation | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
+  disablingCondition?: NoYesReasonsForMissingData | null;
+  translationNeeded?: NoYesReasonsForMissingData | null;
+  preferredLanguage?: PreferredLanguage | null;
+  preferredLanguageDifferent?: string | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+  project: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
+  client: {
+    __typename?: 'Client';
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+  access: {
+    __typename?: 'EnrollmentAccess';
+    id: string;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+  };
+  currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+};
+
 export type EnrollmentWithHouseholdFragmentFragment = {
   __typename?: 'Enrollment';
   id: string;
@@ -12551,20 +12617,20 @@ export type GetEnrollmentDetailsQuery = {
       dataCollectionFeatures: Array<{
         __typename?: 'DataCollectionFeature';
         id: string;
-        role: FormRole;
+        role: DataCollectionFeatureRole;
         dataCollectedAbout: Array<DataCollectedAbout>;
         legacyDataCollectedAbout: Array<DataCollectedAbout>;
         legacy: boolean;
       }>;
-      dataCollectionPoints: Array<{
-        __typename?: 'DataCollectionPoint';
+      occurrencePointForms: Array<{
+        __typename?: 'OccurrencePointForm';
         id: string;
-        title?: string | null;
         dataCollectedAbout: DataCollectedAbout;
         definition: {
           __typename?: 'FormDefinition';
           id: string;
           role: FormRole;
+          title: string;
           cacheKey: string;
           definition: {
             __typename?: 'FormDefinitionJson';
@@ -13985,6 +14051,7 @@ export type FormDefinitionFieldsFragment = {
   __typename?: 'FormDefinition';
   id: string;
   role: FormRole;
+  title: string;
   cacheKey: string;
   definition: {
     __typename?: 'FormDefinitionJson';
@@ -14490,6 +14557,7 @@ export type GetFormDefinitionQuery = {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
+    title: string;
     cacheKey: string;
     definition: {
       __typename?: 'FormDefinitionJson';
@@ -14968,6 +15036,7 @@ export type GetServiceFormDefinitionQuery = {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
+    title: string;
     cacheKey: string;
     definition: {
       __typename?: 'FormDefinitionJson';
@@ -15954,7 +16023,7 @@ export type SubmitFormMutation = {
           dataCollectionFeatures: Array<{
             __typename?: 'DataCollectionFeature';
             id: string;
-            role: FormRole;
+            role: DataCollectionFeatureRole;
             dataCollectedAbout: Array<DataCollectedAbout>;
             legacyDataCollectedAbout: Array<DataCollectedAbout>;
             legacy: boolean;
@@ -17028,7 +17097,7 @@ export type ProjectAllFieldsFragment = {
   dataCollectionFeatures: Array<{
     __typename?: 'DataCollectionFeature';
     id: string;
-    role: FormRole;
+    role: DataCollectionFeatureRole;
     dataCollectedAbout: Array<DataCollectedAbout>;
     legacyDataCollectedAbout: Array<DataCollectedAbout>;
     legacy: boolean;
@@ -17038,21 +17107,21 @@ export type ProjectAllFieldsFragment = {
 export type DataCollectionFeatureFieldsFragment = {
   __typename?: 'DataCollectionFeature';
   id: string;
-  role: FormRole;
+  role: DataCollectionFeatureRole;
   dataCollectedAbout: Array<DataCollectedAbout>;
   legacyDataCollectedAbout: Array<DataCollectedAbout>;
   legacy: boolean;
 };
 
-export type DataCollectionPointFieldsFragment = {
-  __typename?: 'DataCollectionPoint';
+export type OccurrencePointFormFieldsFragment = {
+  __typename?: 'OccurrencePointForm';
   id: string;
-  title?: string | null;
   dataCollectedAbout: DataCollectedAbout;
   definition: {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
+    title: string;
     cacheKey: string;
     definition: {
       __typename?: 'FormDefinitionJson';
@@ -17669,7 +17738,7 @@ export type GetProjectQuery = {
     dataCollectionFeatures: Array<{
       __typename?: 'DataCollectionFeature';
       id: string;
-      role: FormRole;
+      role: DataCollectionFeatureRole;
       dataCollectedAbout: Array<DataCollectedAbout>;
       legacyDataCollectedAbout: Array<DataCollectedAbout>;
       legacy: boolean;
@@ -20784,6 +20853,7 @@ export const FormDefinitionFieldsFragmentDoc = gql`
   fragment FormDefinitionFields on FormDefinition {
     id
     role
+    title
     cacheKey
     definition {
       ...FormDefinitionJsonFields
@@ -20791,10 +20861,9 @@ export const FormDefinitionFieldsFragmentDoc = gql`
   }
   ${FormDefinitionJsonFieldsFragmentDoc}
 `;
-export const DataCollectionPointFieldsFragmentDoc = gql`
-  fragment DataCollectionPointFields on DataCollectionPoint {
+export const OccurrencePointFormFieldsFragmentDoc = gql`
+  fragment OccurrencePointFormFields on OccurrencePointForm {
     id
-    title
     dataCollectedAbout
     definition {
       ...FormDefinitionFields
@@ -20830,8 +20899,8 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       dataCollectionFeatures {
         ...DataCollectionFeatureFields
       }
-      dataCollectionPoints {
-        ...DataCollectionPointFields
+      occurrencePointForms {
+        ...OccurrencePointFormFields
       }
     }
   }
@@ -20842,7 +20911,19 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   ${EnrollmentSummaryFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
   ${DataCollectionFeatureFieldsFragmentDoc}
-  ${DataCollectionPointFieldsFragmentDoc}
+  ${OccurrencePointFormFieldsFragmentDoc}
+`;
+export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
+  fragment SubmittedEnrollmentResultFields on Enrollment {
+    ...EnrollmentFields
+    ...EnrollmentOccurrencePointFields
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${EnrollmentOccurrencePointFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
   fragment HouseholdClientFields on HouseholdClient {
@@ -24316,11 +24397,7 @@ export const SubmitFormDocument = gql`
           ...FileFields
         }
         ... on Enrollment {
-          ...EnrollmentFields
-          ...EnrollmentOccurrencePointFields
-          customDataElements {
-            ...CustomDataElementFields
-          }
+          ...SubmittedEnrollmentResultFields
         }
         ... on CurrentLivingSituation {
           ...CurrentLivingSituationFields
@@ -24346,9 +24423,7 @@ export const SubmitFormDocument = gql`
   ${ReferralRequestFieldsFragmentDoc}
   ${ServiceFieldsFragmentDoc}
   ${FileFieldsFragmentDoc}
-  ${EnrollmentFieldsFragmentDoc}
-  ${EnrollmentOccurrencePointFieldsFragmentDoc}
-  ${CustomDataElementFieldsFragmentDoc}
+  ${SubmittedEnrollmentResultFieldsFragmentDoc}
   ${CurrentLivingSituationFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
   ${EventFieldsFragmentDoc}

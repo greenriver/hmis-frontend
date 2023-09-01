@@ -1223,31 +1223,13 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
+          ofType: {
+            kind: 'ENUM',
+            name: 'DataCollectionFeatureRole',
+            ofType: null,
+          },
         },
       },
-    ],
-  },
-  {
-    name: 'DataCollectionPoint',
-    fields: [
-      {
-        name: 'dataCollectedAbout',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
-        },
-      },
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      { name: 'title', type: { kind: 'SCALAR', name: 'String', ofType: null } },
     ],
   },
   {
@@ -2709,6 +2691,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
         },
       },
+      {
+        name: 'title',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
     ],
   },
   { name: 'FormDefinitionJson', fields: [] },
@@ -3675,6 +3665,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
+    name: 'OccurrencePointForm',
+    fields: [
+      {
+        name: 'dataCollectedAbout',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
     ],
   },
   {
