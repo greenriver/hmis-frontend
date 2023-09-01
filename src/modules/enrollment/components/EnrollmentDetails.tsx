@@ -2,19 +2,21 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import { ReactNode, useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import {
-  DataCollectionPointValue,
-  parseOccurrencePointFormDefinition,
-} from './EditableOccurrencePointValue';
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import IconButtonContainer from './IconButtonContainer';
+import OccurrencePointValue, {
+  parseOccurrencePointFormDefinition,
+} from './OccurrencePointValue';
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import SimpleTable from '@/components/elements/SimpleTable';
-import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  occurrencePointCollectedForEnrollment,
+  parseAndFormatDate,
+} from '@/modules/hmis/hmisUtil';
+import { DashboardEnrollment } from '@/modules/hmis/types';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { AssessmentRole, Destination } from '@/types/gqlTypes';
@@ -23,7 +25,7 @@ import generateSafePath from '@/utils/generateSafePath';
 const EnrollmentDetails = ({
   enrollment,
 }: {
-  enrollment: NonNullable<EnrollmentDashboardContext['enrollment']>;
+  enrollment: DashboardEnrollment;
 }) => {
   const navigate = useNavigate();
   const intakePath = useMemo(
@@ -42,7 +44,7 @@ const EnrollmentDetails = ({
         clientId: enrollment.client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Exit,
-        assessmentId: enrollment.intakeAssessment?.id,
+        assessmentId: enrollment.exitAssessment?.id,
       }),
     [enrollment]
   );
@@ -96,24 +98,22 @@ const EnrollmentDetails = ({
       );
     }
 
-    enrollment.project.dataCollectionPoints.forEach(({ definition, title }) => {
-      if (!title) {
-        console.warn('skipping collection point, no title');
-        return;
-      }
-      const { displayTitle, isEditable, readOnlyDefinition } =
-        parseOccurrencePointFormDefinition(definition, title);
+    enrollment.project.occurrencePointForms
+      .filter((form) => occurrencePointCollectedForEnrollment(form, enrollment))
+      .forEach(({ definition }) => {
+        const { displayTitle, isEditable, readOnlyDefinition } =
+          parseOccurrencePointFormDefinition(definition);
 
-      content[displayTitle || title] = (
-        <DataCollectionPointValue
-          enrollment={enrollment}
-          definition={definition}
-          readOnlyDefinition={readOnlyDefinition}
-          editable={isEditable && enrollment.access.canEditEnrollments}
-          dialogTitle={displayTitle || title}
-        />
-      );
-    });
+        content[displayTitle] = (
+          <OccurrencePointValue
+            enrollment={enrollment}
+            definition={definition}
+            readOnlyDefinition={readOnlyDefinition}
+            editable={isEditable && enrollment.access.canEditEnrollments}
+            dialogTitle={displayTitle}
+          />
+        );
+      });
 
     return Object.entries(content).map(([id, value], index) => ({
       id: String(index),

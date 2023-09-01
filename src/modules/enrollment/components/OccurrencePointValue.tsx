@@ -1,7 +1,6 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { useMemo } from 'react';
 import IconButtonContainer from './IconButtonContainer';
-import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { isQuestionItem } from '@/modules/form/types';
@@ -11,6 +10,7 @@ import {
   getItemMap,
   modifyFormDefinition,
 } from '@/modules/form/util/formUtil';
+import { DashboardEnrollment } from '@/modules/hmis/types';
 import {
   FormDefinitionFieldsFragment,
   FormDefinitionJson,
@@ -25,15 +25,14 @@ function matchesTitle(item: FormItem, title: string) {
 }
 
 export const parseOccurrencePointFormDefinition = (
-  definition: FormDefinitionFieldsFragment,
-  title?: string
+  definition: FormDefinitionFieldsFragment
 ) => {
-  let displayTitle = title;
+  let displayTitle = definition.title;
   let isEditable = false;
   const readOnlyDefinition = modifyFormDefinition(
     definition.definition,
     (item) => {
-      if (title && matchesTitle(item, title)) {
+      if (definition.title && matchesTitle(item, definition.title)) {
         displayTitle = item.readonlyText || item.text || displayTitle;
         delete item.text;
         delete item.readonlyText;
@@ -47,17 +46,21 @@ export const parseOccurrencePointFormDefinition = (
   return { displayTitle, isEditable, readOnlyDefinition };
 };
 
-interface DataCollectionPointValueProps {
-  enrollment: NonNullable<EnrollmentDashboardContext['enrollment']>;
+interface OccurrencePointValueProps {
+  enrollment: DashboardEnrollment;
   definition: FormDefinitionFieldsFragment;
   readOnlyDefinition: FormDefinitionJson;
   editable?: boolean;
   dialogTitle?: string;
 }
 
-export const DataCollectionPointValue: React.FC<
-  DataCollectionPointValueProps
-> = ({ enrollment, definition, editable, readOnlyDefinition, dialogTitle }) => {
+const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
+  enrollment,
+  definition,
+  editable,
+  readOnlyDefinition,
+  dialogTitle,
+}) => {
   // Build values for DynamicView
   const values = useMemo(() => {
     const itemMap = getItemMap(definition.definition, false);
@@ -74,6 +77,7 @@ export const DataCollectionPointValue: React.FC<
     [enrollment]
   );
 
+  // Form dialog for editing
   const { openFormDialog, renderFormDialog } = useFormDialog({
     formRole: FormRole.OccurrencePoint,
     localDefinition: definition,
@@ -114,3 +118,5 @@ export const DataCollectionPointValue: React.FC<
     </>
   );
 };
+
+export default OccurrencePointValue;

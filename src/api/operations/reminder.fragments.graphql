@@ -9,6 +9,6 @@ fragment ReminderFields on Reminder {
   }
   client {
     id
-    ...ClientName
+    ...ClientNameDobVet
   }
 }

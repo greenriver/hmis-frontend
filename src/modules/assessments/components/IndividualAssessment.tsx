@@ -25,7 +25,6 @@ import {
 } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
   FormRole,
@@ -159,15 +158,11 @@ const IndividualAssessment = ({
                 <Typography variant='body1' fontWeight={600}>
                   {clientName}
                 </Typography>
-                {formRole && (
-                  <Typography variant='h6'>
-                    {HmisEnums.FormRole[formRole]}
-                  </Typography>
-                )}
+                <Typography variant='h6'>{definition.title}</Typography>
               </Stack>
             ) : (
               <Typography variant='h6' sx={{ mb: 2 }}>
-                {formRole ? HmisEnums.FormRole[formRole] : 'Form Navigation'}
+                {definition.title}
               </Typography>
             )
           }

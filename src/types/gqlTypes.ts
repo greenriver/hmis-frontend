@@ -13302,6 +13302,8 @@ export type GetEnrollmentRemindersQuery = {
       client: {
         __typename?: 'Client';
         id: string;
+        dob?: string | null;
+        veteranStatus: NoYesReasonsForMissingData;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -19082,6 +19084,8 @@ export type ReminderFieldsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -21413,10 +21417,10 @@ export const ReminderFieldsFragmentDoc = gql`
     }
     client {
       id
-      ...ClientName
+      ...ClientNameDobVet
     }
   }
-  ${ClientNameFragmentDoc}
+  ${ClientNameDobVetFragmentDoc}
 `;
 export const EsgFundingServiceFieldsFragmentDoc = gql`
   fragment EsgFundingServiceFields on EsgFundingService {

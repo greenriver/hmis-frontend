@@ -27,7 +27,6 @@ fragment EnrollmentFields on Enrollment {
 fragment AllEnrollmentDetails on Enrollment {
   ...EnrollmentFields
   ...EnrollmentOccurrencePointFields
-  # can we remove these? just always link to it
   intakeAssessment {
     id
   }
@@ -53,8 +52,8 @@ fragment AllEnrollmentDetails on Enrollment {
     dataCollectionFeatures {
       ...DataCollectionFeatureFields
     }
-    dataCollectionPoints {
-      ...DataCollectionPointFields
+    occurrencePointForms {
+      ...OccurrencePointFormFields
     }
   }
 }
@@ -146,6 +145,16 @@ fragment EnrollmentValues on Enrollment {
   translationNeeded
   preferredLanguage
   preferredLanguageDifferent
+}
+
+# Fields that need to be returned from SubmitForm. This should include anything
+# that can be changed via form submission
+fragment SubmittedEnrollmentResultFields on Enrollment {
+  ...EnrollmentFields
+  ...EnrollmentOccurrencePointFields
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }
 
 fragment EnrollmentWithHouseholdFragment on Enrollment {

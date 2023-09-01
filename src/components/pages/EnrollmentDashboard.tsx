@@ -22,12 +22,10 @@ import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
 import EnrollmentNavHeader from '@/modules/enrollment/components/EnrollmentNavHeader';
 import { useDetailedEnrollment } from '@/modules/enrollment/hooks/useDetailedEnrollment';
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
+import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import {
-  AllEnrollmentDetailsFragment,
-  ClientNameDobVetFragment,
-} from '@/types/gqlTypes';
+import { ClientNameDobVetFragment } from '@/types/gqlTypes';
 
 const EnrollmentDashboard: React.FC = () => {
   const params = useSafeParams() as {
@@ -115,7 +113,7 @@ const EnrollmentDashboard: React.FC = () => {
 
 export type EnrollmentDashboardContext = {
   client: ClientNameDobVetFragment;
-  enrollment?: AllEnrollmentDetailsFragment;
+  enrollment?: DashboardEnrollment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
 };
 

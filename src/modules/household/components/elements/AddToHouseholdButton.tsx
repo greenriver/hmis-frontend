@@ -4,7 +4,10 @@ import { useEffect, useMemo, useState } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
+import {
+  FormRole,
+  SubmittedEnrollmentResultFieldsFragment,
+} from '@/types/gqlTypes';
 
 interface Props {
   clientId: string;
@@ -40,7 +43,7 @@ const AddToHouseholdButton = ({
   const memoedArgs = useMemo(
     () => ({
       formRole: FormRole.Enrollment,
-      onCompleted: (data: EnrollmentFieldsFragment) => {
+      onCompleted: (data: SubmittedEnrollmentResultFieldsFragment) => {
         setAdded(true);
         onSuccess(data.householdId);
       },
@@ -51,7 +54,7 @@ const AddToHouseholdButton = ({
     [clientId, householdId, onSuccess, projectId]
   );
   const { openFormDialog, renderFormDialog } =
-    useFormDialog<EnrollmentFieldsFragment>(memoedArgs);
+    useFormDialog<SubmittedEnrollmentResultFieldsFragment>(memoedArgs);
 
   return (
     <>

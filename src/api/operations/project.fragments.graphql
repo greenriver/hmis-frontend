@@ -49,9 +49,8 @@ fragment DataCollectionFeatureFields on DataCollectionFeature {
   legacy
 }
 
-fragment DataCollectionPointFields on DataCollectionPoint {
-  id # instance ID
-  title
+fragment OccurrencePointFormFields on OccurrencePointForm {
+  id
   dataCollectedAbout
   definition {
     ...FormDefinitionFields

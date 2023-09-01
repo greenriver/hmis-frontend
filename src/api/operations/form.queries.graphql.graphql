@@ -67,11 +67,7 @@ mutation SubmitForm($input: SubmitFormInput!) {
         ...FileFields
       }
       ... on Enrollment {
-        ...EnrollmentFields
-        ...EnrollmentOccurrencePointFields
-        customDataElements {
-          ...CustomDataElementFields
-        }
+        ...SubmittedEnrollmentResultFields
       }
       ... on CurrentLivingSituation {
         ...CurrentLivingSituationFields

@@ -21,7 +21,7 @@ export const useProjectDashboardNavItems = (
     const dataCollectionRoles = project.dataCollectionFeatures.map(
       (r) => r.role
     );
-    console.log(dataCollectionRoles);
+
     return [
       {
         id: 'project-nav',
