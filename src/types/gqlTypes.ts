@@ -1060,10 +1060,9 @@ export enum DataCollectedAbout {
 
 export type DataCollectionFeature = {
   __typename?: 'DataCollectionFeature';
-  dataCollectedAbout: Array<DataCollectedAbout>;
+  dataCollectedAbout: DataCollectedAbout;
   id: Scalars['ID']['output'];
   legacy: Scalars['Boolean']['output'];
-  legacyDataCollectedAbout: Array<DataCollectedAbout>;
   role: DataCollectionFeatureRole;
 };
 
@@ -11651,8 +11650,7 @@ export type AllEnrollmentDetailsFragment = {
       __typename?: 'DataCollectionFeature';
       id: string;
       role: DataCollectionFeatureRole;
-      dataCollectedAbout: Array<DataCollectedAbout>;
-      legacyDataCollectedAbout: Array<DataCollectedAbout>;
+      dataCollectedAbout: DataCollectedAbout;
       legacy: boolean;
     }>;
     occurrencePointForms: Array<{
@@ -12618,8 +12616,7 @@ export type GetEnrollmentDetailsQuery = {
         __typename?: 'DataCollectionFeature';
         id: string;
         role: DataCollectionFeatureRole;
-        dataCollectedAbout: Array<DataCollectedAbout>;
-        legacyDataCollectedAbout: Array<DataCollectedAbout>;
+        dataCollectedAbout: DataCollectedAbout;
         legacy: boolean;
       }>;
       occurrencePointForms: Array<{
@@ -16026,8 +16023,7 @@ export type SubmitFormMutation = {
             __typename?: 'DataCollectionFeature';
             id: string;
             role: DataCollectionFeatureRole;
-            dataCollectedAbout: Array<DataCollectedAbout>;
-            legacyDataCollectedAbout: Array<DataCollectedAbout>;
+            dataCollectedAbout: DataCollectedAbout;
             legacy: boolean;
           }>;
         }
@@ -17100,8 +17096,7 @@ export type ProjectAllFieldsFragment = {
     __typename?: 'DataCollectionFeature';
     id: string;
     role: DataCollectionFeatureRole;
-    dataCollectedAbout: Array<DataCollectedAbout>;
-    legacyDataCollectedAbout: Array<DataCollectedAbout>;
+    dataCollectedAbout: DataCollectedAbout;
     legacy: boolean;
   }>;
 };
@@ -17110,8 +17105,7 @@ export type DataCollectionFeatureFieldsFragment = {
   __typename?: 'DataCollectionFeature';
   id: string;
   role: DataCollectionFeatureRole;
-  dataCollectedAbout: Array<DataCollectedAbout>;
-  legacyDataCollectedAbout: Array<DataCollectedAbout>;
+  dataCollectedAbout: DataCollectedAbout;
   legacy: boolean;
 };
 
@@ -17741,8 +17735,7 @@ export type GetProjectQuery = {
       __typename?: 'DataCollectionFeature';
       id: string;
       role: DataCollectionFeatureRole;
-      dataCollectedAbout: Array<DataCollectedAbout>;
-      legacyDataCollectedAbout: Array<DataCollectedAbout>;
+      dataCollectedAbout: DataCollectedAbout;
       legacy: boolean;
     }>;
   } | null;
@@ -20738,7 +20731,6 @@ export const DataCollectionFeatureFieldsFragmentDoc = gql`
     id
     role
     dataCollectedAbout
-    legacyDataCollectedAbout
     legacy
   }
 `;

@@ -1167,19 +1167,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: {
-                kind: 'ENUM',
-                name: 'DataCollectedAbout',
-                ofType: null,
-              },
-            },
-          },
+          ofType: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
         },
       },
       {
@@ -1196,26 +1184,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'legacyDataCollectedAbout',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: {
-                kind: 'ENUM',
-                name: 'DataCollectedAbout',
-                ofType: null,
-              },
-            },
-          },
         },
       },
       {

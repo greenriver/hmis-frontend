@@ -515,7 +515,9 @@ export const featureEnabledForEnrollment = (
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
 ) => {
-  return !!feature.dataCollectedAbout.find((condition) =>
-    evaluateDataCollectedAbout(condition, client, relationshipToHoH)
+  return evaluateDataCollectedAbout(
+    feature.dataCollectedAbout,
+    client,
+    relationshipToHoH
   );
 };

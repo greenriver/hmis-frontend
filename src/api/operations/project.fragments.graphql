@@ -45,7 +45,6 @@ fragment DataCollectionFeatureFields on DataCollectionFeature {
   id # instance IDs concatenated
   role # if present, show on Project Dashboard
   dataCollectedAbout
-  legacyDataCollectedAbout
   legacy
 }
 

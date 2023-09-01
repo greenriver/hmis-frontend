@@ -6851,17 +6851,9 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "DataCollectedAbout",
-                    "ofType": null
-                  }
-                }
+                "kind": "ENUM",
+                "name": "DataCollectedAbout",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -6894,30 +6886,6 @@
                 "kind": "SCALAR",
                 "name": "Boolean",
                 "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "legacyDataCollectedAbout",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "DataCollectedAbout",
-                    "ofType": null
-                  }
-                }
               }
             },
             "isDeprecated": false,
