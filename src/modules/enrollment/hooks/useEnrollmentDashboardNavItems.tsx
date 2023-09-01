@@ -1,30 +1,32 @@
 import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
+import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { AllEnrollmentDetailsFragment, FormRole } from '@/types/gqlTypes';
+import {
+  AllEnrollmentDetailsFragment,
+  DataCollectionFeatureRole,
+} from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 export const useEnrollmentDashboardNavItems = (
   enrollment?: AllEnrollmentDetailsFragment
 ) => {
-  // const [canViewEnrollments] = useHasClientPermissions(client?.id || '', [
-  //   'canViewEnrollmentDetails',
-  // ]);
-  // const [canViewFiles] = useHasClientPermissions(client?.id || '', [
-  //   'canViewAnyConfidentialClientFiles',
-  //   'canViewAnyNonconfidentialClientFiles',
-  //   'canManageOwnClientFiles',
-  // ]);
   const navItems: NavItem[] = useMemo(() => {
     if (!enrollment) return [];
     const params = {
       clientId: enrollment.client.id,
       enrollmentId: enrollment.id,
     };
-    const dataCollectionRoles = enrollment.project.dataCollectionFeatures.map(
-      (r) => r.role
-    );
+    const enabledFeatures = enrollment.project.dataCollectionFeatures
+      .filter((feature) =>
+        featureEnabledForEnrollment(
+          feature,
+          enrollment.client,
+          enrollment.relationshipToHoH
+        )
+      )
+      .map((r) => r.role);
 
     return [
       {
@@ -50,32 +52,30 @@ export const useEnrollmentDashboardNavItems = (
             id: 'services',
             title: 'Services',
             path: EnrollmentDashboardRoutes.SERVICES,
-            requiredRole: FormRole.Service,
+            requiredRole: DataCollectionFeatureRole.Service,
           },
           {
             id: 'cls',
             title: 'Current Living Situations',
             path: EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-            requiredRole: FormRole.CurrentLivingSituation,
+            requiredRole: DataCollectionFeatureRole.CurrentLivingSituation,
           },
           {
             id: 'events',
             title: 'CE Events',
             path: EnrollmentDashboardRoutes.EVENTS,
-            requiredRole: FormRole.CeEvent,
+            requiredRole: DataCollectionFeatureRole.CeEvent,
           },
           {
             id: 'ce-assessments',
             title: 'CE Assessments',
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
-            requiredRole: FormRole.CeAssessment,
+            requiredRole: DataCollectionFeatureRole.CeAssessment,
           },
         ]
           .filter(
             (item) =>
-              !item.requiredRole ||
-              // FIXME: needs to check data collected about too
-              dataCollectionRoles.includes(item.requiredRole)
+              !item.requiredRole || enabledFeatures.includes(item.requiredRole)
           )
           .map(({ path, ...rest }) => ({
             path: generateSafePath(path, params),
