@@ -31,11 +31,6 @@ const DynamicView = ({
     localConstants,
   });
 
-  // const [, updateState] = useState();
-  // useEffect(() => {
-  //   updateState(undefined);
-  // }, [values]);
-
   return (
     <Grid
       container

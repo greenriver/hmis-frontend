@@ -1,6 +1,8 @@
 import EditIcon from '@mui/icons-material/Edit';
+import { assign, isEmpty, omit } from 'lodash-es';
 import { useMemo } from 'react';
 import IconButtonContainer from './IconButtonContainer';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { isQuestionItem } from '@/modules/form/types';
@@ -8,7 +10,9 @@ import {
   AlwaysPresentLocalConstants,
   createInitialValuesFromRecord,
   getItemMap,
+  getInitialValues,
   modifyFormDefinition,
+  getDisabledLinkIds,
 } from '@/modules/form/util/formUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import {
@@ -16,6 +20,7 @@ import {
   FormDefinitionJson,
   FormItem,
   FormRole,
+  InitialBehavior,
 } from '@/types/gqlTypes';
 
 function matchesTitle(item: FormItem, title: string) {
@@ -61,12 +66,47 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
   readOnlyDefinition,
   dialogTitle,
 }) => {
+  const itemMap = useMemo(
+    () => getItemMap(definition.definition, false),
+    [definition]
+  );
+
+  const localConstants = useMemo(
+    () => ({
+      entryDate: enrollment.entryDate,
+      exitDate: enrollment.exitDate,
+      projectType: enrollment.project.projectType,
+      ...AlwaysPresentLocalConstants,
+    }),
+    [enrollment.entryDate, enrollment.exitDate, enrollment.project.projectType]
+  );
+
   // Build values for DynamicView
   const values = useMemo(() => {
-    const itemMap = getItemMap(definition.definition, false);
+    // Set initial values (for "If Empty") behavior, so that forms can set
+    // defaults for custom data elements (for example).
+    const initialsIfEmpty = getInitialValues(
+      definition.definition,
+      localConstants,
+      InitialBehavior.IfEmpty
+    );
+    // Apply values from the Enrollment
     const formValues = createInitialValuesFromRecord(itemMap, enrollment);
-    return formValues;
-  }, [definition.definition, enrollment]);
+    return assign(initialsIfEmpty, formValues);
+  }, [itemMap, definition.definition, enrollment, localConstants]);
+
+  const hasAnyContent = useMemo(() => !isEmpty(values), [values]);
+
+  const hasAnyEditableContent = useMemo(() => {
+    if (!editable) return false;
+    if (!hasAnyContent) return false;
+    const initiallyDisabledLinkIds = getDisabledLinkIds({
+      itemMap,
+      values,
+      localConstants: localConstants || {},
+    });
+    return !isEmpty(omit(values, initiallyDisabledLinkIds));
+  }, [itemMap, editable, hasAnyContent, localConstants, values]);
 
   // Pick list args for form and display
   const pickListArgs = useMemo(
@@ -86,15 +126,13 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
       clientId: enrollment.client.id,
       enrollmentId: enrollment.id,
     },
-    localConstants: {
-      entryDate: enrollment.entryDate,
-      exitDate: enrollment.exitDate,
-      projectType: enrollment.project.projectType,
-      ...AlwaysPresentLocalConstants,
-    },
+    localConstants,
   });
 
-  const dynamicView = (
+  const dynamicView = isEmpty(values) ? (
+    // If there is NO data present, show DNC directly, rather than showing DNC for each field in the form.
+    <NotCollectedText />
+  ) : (
     <DynamicView
       key={JSON.stringify(values)}
       values={values}
@@ -103,7 +141,7 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
     />
   );
 
-  if (!editable) return dynamicView;
+  if (!hasAnyEditableContent) return dynamicView;
 
   return (
     <>
