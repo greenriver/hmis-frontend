@@ -4,7 +4,7 @@ import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  FormRole,
+  DataCollectionFeatureRole,
   ProjectAllFieldsFragment,
   ProjectType,
 } from '@/types/gqlTypes';
@@ -43,7 +43,7 @@ export const useProjectDashboardNavItems = (
             title: 'Services',
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
             requiresEnrollmentAccess: true,
-            requiredRole: FormRole.Service,
+            requiredRole: DataCollectionFeatureRole.Service,
           },
           {
             id: 'bed-nights',
