@@ -27,6 +27,9 @@ type Args = {
   enrollmentId: string;
   assessmentId?: string;
   onSuccessfulSubmit?: (assessment: AssessmentFieldsFragment) => void;
+  onCompleted?: (
+    data: SubmitAssessmentMutation | SaveAssessmentMutation
+  ) => any;
 };
 
 export const createValuesForSubmit = (
@@ -50,6 +53,7 @@ export function useAssessmentHandlers({
   enrollmentId,
   assessmentId,
   onSuccessfulSubmit = () => null,
+  onCompleted: onCompletedProp,
 }: Args) {
   const formDefinitionId = definition.id;
 
@@ -57,6 +61,8 @@ export function useAssessmentHandlers({
 
   const onCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
+      if (onCompletedProp) onCompletedProp(data);
+
       let errs;
       if (data.hasOwnProperty('saveAssessment')) {
         errs = (data as SaveAssessmentMutation).saveAssessment?.errors || [];
@@ -72,7 +78,7 @@ export function useAssessmentHandlers({
       }
       setErrors(emptyErrorState);
     },
-    [setErrors]
+    [setErrors, onCompletedProp]
   );
 
   const onError = useCallback((apolloError: ApolloError) => {

@@ -5,20 +5,25 @@ import React, {
   Ref,
   forwardRef,
   useCallback,
+  useContext,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from 'react';
 
 import useDynamicFields from '../hooks/useDynamicFields';
 import { DynamicFormContext } from '../hooks/useDynamicFormContext';
+import { FormStepperDispatchContext } from '../hooks/useFormStepperContext';
 import usePreloadPicklists from '../hooks/usePreloadPicklists';
 import {
   ChangeType,
   FormActionTypes,
   FormValues,
+  ItemChangedFnInput,
   LocalConstants,
   PickListArgs,
+  SeveralItemsChangedFnInput,
 } from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
@@ -107,13 +112,34 @@ const DynamicForm = forwardRef(
   ) => {
     const [dirty, setDirty] = useState(false);
     const [promptSave, setPromptSave] = useState<boolean | undefined>();
+    const getCleanedValuesRef = useRef<() => FormValues>(() => ({}));
 
-    const onFieldChange = useCallback((type: ChangeType) => {
-      if (type === ChangeType.User) {
-        setPromptSave(true);
-        setDirty(true);
-      }
-    }, []);
+    const formStepperDispatch = useContext(FormStepperDispatchContext);
+
+    const onFieldChange = useCallback(
+      (input: ItemChangedFnInput | SeveralItemsChangedFnInput) => {
+        if (input.type === ChangeType.User) {
+          if ('values' in input) {
+            formStepperDispatch({
+              type: 'changeFields',
+              fields: Object.keys(input.values),
+            });
+          } else {
+            formStepperDispatch({ type: 'changeField', field: input.linkId });
+          }
+          setPromptSave(true);
+          setDirty(true);
+          // timeout to wait until values update before dispatching
+          setTimeout(() =>
+            formStepperDispatch({
+              type: 'updateValues',
+              values: getCleanedValuesRef.current(),
+            })
+          );
+        }
+      },
+      [formStepperDispatch]
+    );
 
     const { renderFields, getCleanedValues } = useDynamicFields({
       definition,
@@ -121,6 +147,19 @@ const DynamicForm = forwardRef(
       localConstants,
       onFieldChange,
     });
+
+    // Ugly, but needed to get around the circular dependency above
+    useEffect(() => {
+      getCleanedValuesRef.current = getCleanedValues;
+    }, [getCleanedValues]);
+
+    // Initialize the form stepper with the initial values
+    useEffect(() => {
+      formStepperDispatch({
+        type: 'updateValues',
+        values: getCleanedValuesRef.current(),
+      });
+    }, [formStepperDispatch]);
 
     const { loading: pickListsLoading } = usePreloadPicklists({
       definition,
