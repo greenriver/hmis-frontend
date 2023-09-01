@@ -5,7 +5,7 @@ import IconButtonContainer from './IconButtonContainer';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { isQuestionItem } from '@/modules/form/types';
+import { FormValues, isQuestionItem } from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
   createInitialValuesFromRecord,
@@ -51,6 +51,10 @@ export const parseOccurrencePointFormDefinition = (
   return { displayTitle, isEditable, readOnlyDefinition };
 };
 
+function hasAnyValues(object: FormValues) {
+  return !!Object.keys(object).find((k) => !!object[k]);
+}
+
 interface OccurrencePointValueProps {
   enrollment: DashboardEnrollment;
   definition: FormDefinitionFieldsFragment;
@@ -95,18 +99,17 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
     return assign(initialsIfEmpty, formValues);
   }, [itemMap, definition.definition, enrollment, localConstants]);
 
-  const hasAnyContent = useMemo(() => !isEmpty(values), [values]);
+  const hasAnyContent = useMemo(() => hasAnyValues(values), [values]);
 
   const hasAnyEditableContent = useMemo(() => {
     if (!editable) return false;
-    if (!hasAnyContent) return false;
     const initiallyDisabledLinkIds = getDisabledLinkIds({
       itemMap,
       values,
       localConstants: localConstants || {},
     });
     return !isEmpty(omit(values, initiallyDisabledLinkIds));
-  }, [itemMap, editable, hasAnyContent, localConstants, values]);
+  }, [itemMap, editable, localConstants, values]);
 
   // Pick list args for form and display
   const pickListArgs = useMemo(
@@ -129,16 +132,16 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
     localConstants,
   });
 
-  const dynamicView = isEmpty(values) ? (
-    // If there is NO data present, show DNC directly, rather than showing DNC for each field in the form.
-    <NotCollectedText />
-  ) : (
+  // If there is NO data present, show DNC directly, rather than showing DNC for each field in the form.
+  const dynamicView = hasAnyContent ? (
     <DynamicView
       key={JSON.stringify(values)}
       values={values}
       definition={readOnlyDefinition}
       pickListArgs={pickListArgs}
     />
+  ) : (
+    <NotCollectedText />
   );
 
   if (!hasAnyEditableContent) return dynamicView;
