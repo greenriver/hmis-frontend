@@ -209,8 +209,7 @@ export function useServiceDialog({
             justifyContent={'space-between'}
             sx={{ width: '100%' }}
           >
-            <Box></Box>
-            {service && (
+            {service ? (
               <DeleteMutationButton<
                 DeleteServiceMutation,
                 DeleteServiceMutationVariables
@@ -223,6 +222,8 @@ export function useServiceDialog({
               >
                 Delete
               </DeleteMutationButton>
+            ) : (
+              <Box></Box>
             )}
             <Stack gap={3} direction='row'>
               <Button

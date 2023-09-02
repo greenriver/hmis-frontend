@@ -26,6 +26,7 @@ import FormSelect from './FormSelect';
 import InputContainer from './InputContainer';
 import RequiredLabel from './RequiredLabel';
 
+import CheckboxGroupInput from '@/components/elements/input/CheckboxGroupInput';
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
@@ -331,7 +332,15 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         componentType === Component.RadioButtons ||
         componentType === Component.RadioButtonsVertical
       ) {
-        inputComponent = (
+        inputComponent = item.repeats ? (
+          <CheckboxGroupInput
+            value={currentValue}
+            onChange={onChangeValue}
+            options={options || []}
+            row={componentType === Component.RadioButtons}
+            {...commonInputProps}
+          />
+        ) : (
           <RadioGroupInput
             value={currentValue}
             onChange={onChangeValue}
