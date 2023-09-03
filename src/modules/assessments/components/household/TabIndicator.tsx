@@ -1,74 +1,63 @@
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { SvgIconComponent } from '@mui/icons-material';
+import ReadyToSubmitIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import SubmittedIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorIcon from '@mui/icons-material/Error';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import LockIcon from '@mui/icons-material/Lock';
+import NotStartedIcon from '@mui/icons-material/PendingOutlined';
+import InProgressIcon from '@mui/icons-material/Timelapse';
 
-import { AssessmentStatus, HouseholdAssesmentRole } from './util';
+import { Stack, SvgIconProps, Typography } from '@mui/material';
+import { AssessmentStatus } from './util';
 
-const TabIndicator = ({
-  status,
-}: {
-  status: AssessmentStatus;
-  role: HouseholdAssesmentRole;
-}) => {
-  let Icon;
-  let color:
-    | 'primary'
-    | 'secondary'
-    | 'error'
-    | 'info'
-    | 'success'
-    | 'warning'
-    | 'disabled'
-    | undefined;
+const Display: React.FC<{
+  icon: SvgIconComponent;
+  caption: string;
+  color: SvgIconProps['color'];
+}> = ({ icon, caption, color }) => {
+  const Icon = icon;
+  return (
+    <Stack direction='row' spacing={0.5} alignItems='center'>
+      <Icon color={color} sx={{ fontSize: 16 }} />
+      <Typography component='div' variant='caption'>
+        {caption}
+      </Typography>
+    </Stack>
+  );
+};
 
-  // const text = labelForStatus(status, role);
+const TabIndicator = ({ status }: { status: AssessmentStatus }) => {
   switch (status) {
     case AssessmentStatus.NotStarted:
-      Icon = HighlightOffIcon;
-      break;
+      return (
+        <Display icon={NotStartedIcon} color='disabled' caption='Not Started' />
+      );
     case AssessmentStatus.Started:
-      Icon = CheckCircleOutlineIcon;
-      // color = 'warning';
-      break;
+      return (
+        <Display
+          icon={InProgressIcon}
+          color='warning'
+          caption='Ready to Submit'
+        />
+      );
     case AssessmentStatus.ReadyToSubmit:
-      Icon = CheckCircleOutlineIcon;
-      color = 'success';
-      break;
+      return (
+        <Display
+          icon={ReadyToSubmitIcon}
+          color='primary'
+          caption='Ready to Submit'
+        />
+      );
     case AssessmentStatus.Submitted:
-      Icon = LockIcon;
-      color = 'disabled';
-      break;
+      return (
+        <Display icon={SubmittedIcon} color='success' caption='Submitted' />
+      );
     case AssessmentStatus.Warning:
-      Icon = ErrorOutlineIcon;
-      color = 'warning';
-      break;
+      return (
+        <Display icon={ErrorOutlineIcon} color='warning' caption='Has Issues' />
+      );
     case AssessmentStatus.Error:
-      Icon = ErrorIcon;
-      color = 'error';
-      break;
+      return <Display icon={ErrorIcon} color='error' caption='Has Issues' />;
   }
-
-  return <Icon fontSize='small' color={color || 'inherit'} />;
-  // return (
-  //   <Stack direction='row' alignItems='center' alignSelf='center' gap={0.8}>
-  //     <Box component='span' sx={{ fontSize: 16, display: 'flex' }}>
-  //       <Icon fontSize='inherit' color={color || 'inherit'} />
-  //     </Box>
-  //     <Typography
-  //       variant='subtitle2'
-  //       fontSize={'.8rem'}
-  //       // color='text.primary'
-  //       // color={(theme) =>
-  //       //   color ? darken(theme.palette[color].main, 0.3) : 'text.primary'
-  //       // }
-  //       sx={{ fontWeight: 600 }}
-  //     >
-  //       {text}
-  //     </Typography>
-  //   </Stack>
-  // );
 };
 
 export default TabIndicator;

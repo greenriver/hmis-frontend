@@ -15,7 +15,6 @@ import { useHouseholdAssessments } from '../../hooks/useHouseholdAssessments';
 
 import HouseholdAssessmentTabPanel from './HouseholdAssessmentTabPanel';
 import HouseholdSummaryTabPanel from './HouseholdSummaryTabPanel';
-import LabeledTabGroup from './LabeledTabGroup';
 import TabLabel, { SummaryTabLabel } from './TabLabel';
 import {
   AssessmentStatus,
@@ -191,20 +190,10 @@ const HouseholdAssessments = ({
   if (fetchMembersStatus.error) throw fetchMembersStatus.error;
   if (fetchAssessmentsStatus.error) throw fetchAssessmentsStatus.error;
 
-  const tabsSx = {
-    '&.MuiTabs-root': { height: '70%' },
-    '.MuiTabs-flexContainer': { height: '70%' },
-    '.MuiTabScrollButton-root': {
-      alignItems: 'end',
-      pb: 2,
-    },
-  };
+  const tabsSx = {};
 
   const tabSx = {
     minWidth: '140px',
-    justifyContent: 'end',
-    fontWeight: 800,
-    pb: 1,
     px: 4,
   };
 
@@ -213,18 +202,14 @@ const HouseholdAssessments = ({
       <AppBar
         position='sticky'
         color='default'
-        elevation={0}
+        variant='elevation'
+        elevation={2}
         sx={{
-          borderTop: 'unset',
-          borderLeft: 'unset',
           height: HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
           alignItems: 'stretch',
           justifyContent: 'center',
           top: STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
           backgroundColor: 'white',
-          borderBottomWidth: '1px',
-          borderBottomColor: 'borders.light',
-          borderBottomStyle: 'solid',
           px: { sm: 3, lg: 5 },
           ml: { xs: -2, sm: -3, lg: -4 },
           mt: { xs: -1, sm: -2 },
@@ -236,89 +221,105 @@ const HouseholdAssessments = ({
           container
           sx={{
             height: '100%',
-            alignItems: 'center',
           }}
         >
           <Grid
             item
             xs={2}
-            sx={{
+            sx={({ shadows }) => ({
               height: '100%',
-              boxShadow: '0 0 15px rgb(0 0 0 / 25%)',
+              boxShadow: shadows[2],
               clipPath: 'inset(0px -15px 0px 0px)',
-              py: 1,
-            }}
+              display: 'flex',
+              alignItems: 'flex-end',
+              pt: 1,
+              pb: 2,
+            })}
           >
             <Stack gap={0.2}>
-              <Typography variant='body1' fontWeight={600}>
+              <Typography variant='body2' fontWeight={600}>
                 {householdAssesmentTitle(role)}
               </Typography>
               {enrollment && (
-                <Typography variant='body1'>
+                <Typography
+                  variant='body2'
+                  sx={{
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    paddingRight: 2,
+                  }}
+                >
                   {enrollmentName(enrollment)}
                 </Typography>
               )}
             </Stack>
           </Grid>
           {/* <Grid item xs={1} sm={0.1}></Grid> */}
-          <Grid item xs={8} sx={{ height: '100%', pr: 6 }}>
-            <LabeledTabGroup
-              label='Step 1 - Perform Assessments'
-              labelSx={{ pl: 4 }}
+          <Grid
+            item
+            xs={8}
+            sx={{
+              height: '100%',
+              pr: 6,
+              display: 'flex',
+              alignItems: 'flex-end',
+            }}
+          >
+            <Tabs
+              value={currentTab === SUMMARY_TAB_ID ? false : currentTab}
+              onChange={handleChangeTab}
+              aria-label='household member tabs'
+              variant='scrollable'
+              scrollButtons='auto'
+              TabIndicatorProps={{ style: { height: '4px' } }}
+              sx={tabsSx}
             >
-              <Tabs
-                value={currentTab === SUMMARY_TAB_ID ? false : currentTab}
-                onChange={handleChangeTab}
-                aria-label='household member tabs'
-                variant='scrollable'
-                scrollButtons='auto'
-                sx={tabsSx}
-              >
-                {tabs.map((definition) => (
-                  <Tab
-                    value={definition.id}
-                    key={definition.id}
-                    label={<TabLabel definition={definition} role={role} />}
-                    sx={tabSx}
-                    {...tabA11yProps(definition.id)}
-                  />
-                ))}
-              </Tabs>
-            </LabeledTabGroup>
+              {tabs.map((definition) => (
+                <Tab
+                  value={definition.id}
+                  key={definition.id}
+                  label={<TabLabel definition={definition} />}
+                  sx={tabSx}
+                  {...tabA11yProps(definition.id)}
+                />
+              ))}
+            </Tabs>
           </Grid>
           <Grid
             item
             xs={2}
-            sx={{
+            sx={({ shadows }) => ({
               height: '100%',
-              boxShadow: '0 0 15px rgb(0 0 0 / 25%)',
+              boxShadow: shadows[2],
               clipPath: 'inset(0px 0px 0px -15px)',
               pl: 3,
-            }}
+              pb: 2,
+              display: 'flex',
+              alignItems: 'flex-end',
+            })}
           >
-            <LabeledTabGroup label='Step 2 - Review and Submit'>
-              <Tabs
-                value={currentTab === SUMMARY_TAB_ID ? currentTab : false}
-                onChange={handleChangeTab}
-                aria-label='review and submit tab'
-                scrollButtons={false}
-                sx={tabsSx}
-              >
-                <Tab
-                  value={SUMMARY_TAB_ID}
-                  key={SUMMARY_TAB_ID}
-                  label={<SummaryTabLabel role={role} />}
-                  sx={{
-                    ...tabSx,
-                    // justifyContent: 'left',
-                    pl: 0,
-                    alignItems: 'flex-start',
-                  }}
-                  onClick={() => setCurrentTab('summary')}
-                  {...tabA11yProps(SUMMARY_TAB_ID)}
-                />
-              </Tabs>
-            </LabeledTabGroup>
+            <Tabs
+              value={currentTab === SUMMARY_TAB_ID ? currentTab : false}
+              onChange={handleChangeTab}
+              aria-label='review and submit tab'
+              scrollButtons={false}
+              sx={tabsSx}
+            >
+              <Tab
+                value={SUMMARY_TAB_ID}
+                key={SUMMARY_TAB_ID}
+                label={<SummaryTabLabel role={role} />}
+                sx={{
+                  ...tabSx,
+                  // justifyContent: 'left',
+                  pl: 0,
+                  alignItems: 'flex-start',
+                }}
+                onClick={() => setCurrentTab('summary')}
+                {...tabA11yProps(SUMMARY_TAB_ID)}
+              />
+            </Tabs>
           </Grid>
         </Grid>
       </AppBar>
