@@ -16,16 +16,19 @@ import MciMatchSelector from './MciMatchSelector';
 
 import { MciClearanceProps } from './types';
 import LoadingButton from '@/components/elements/LoadingButton';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import usePrevious from '@/hooks/usePrevious';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
 import { createHudValuesForSubmit } from '@/modules/form/util/formUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   DobDataQuality,
   MciClearanceInput,
   NameDataQuality,
+  ProjectType,
   useClearMciMutation,
 } from '@/types/gqlTypes';
 
@@ -40,6 +43,9 @@ const MCI_CLEARANCE_FIELDS = [
   'nameDataQuality',
   'dobDataQuality',
 ] as const;
+
+const CLEARANCE_REQUIRED_MSG = 'MCI clearance is required.';
+const MCI_OPTIONAL_PROJECT_TYPES = [ProjectType.So, ProjectType.EsNbn];
 
 const fieldsToParams = (
   fields: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>
@@ -175,7 +181,7 @@ const MciClearance = ({
       {hasValidationError && !value && (
         <Alert severity='error'>
           {status === 'initial'
-            ? 'MCI search is required.'
+            ? CLEARANCE_REQUIRED_MSG
             : 'Please make a selection.'}
         </Alert>
       )}
@@ -239,19 +245,47 @@ const MciClearanceWrapper = ({
     return !enoughFieldsForClearance(currentMciAttributes);
   }, [disabled, currentMciAttributes]);
 
+  // Uncleared clients are ONLY allowed if they are enrolled in
+  // a Services Only (SSO) or ES Night-by-night project.
+
+  // If this client is being created in order to enroll them, we'll have a Project Context.
+  const projectCtx = useProjectDashboardContext();
+  // If this client is being edited from the enrollment dash, we'll have an Enrollment Context.
+  // If this client is being created because they're being added to an existing household, we'll have an Enrollment Context.
+  const enrollmentCtx = useEnrollmentDashboardContext();
+  // If this client is being edited from  the client dash, we don't have enough info. Backend will reject.
+
+  const clearanceRequired = useMemo(() => {
+    const projectType =
+      projectCtx?.project?.projectType ||
+      enrollmentCtx?.enrollment?.project?.projectType;
+    // if we don't know, dont required it. The backend will handle it
+    if (!projectType) return false;
+
+    // if we're in a SO or ES NBN project, its not required
+    return !MCI_OPTIONAL_PROJECT_TYPES.includes(projectType);
+  }, [enrollmentCtx, projectCtx]);
+
   // If element becomes disabled, set value to uncleared
   // If element becomes enabled, set value to null
   useEffect(() => {
-    if (mciSearchUnavailable) {
+    if (mciSearchUnavailable && !clearanceRequired) {
       onChange(UNCLEARED_CLIENT_STRING);
     } else {
       onChange(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mciSearchUnavailable]);
+  }, [mciSearchUnavailable, clearanceRequired]);
 
   if (mciSearchUnavailable || !currentMciAttributes) {
-    return <MciUnavailableAlert />;
+    return (
+      <>
+        {props.error && !props.value && (
+          <Alert severity='error'>{CLEARANCE_REQUIRED_MSG}</Alert>
+        )}
+        <MciUnavailableAlert />
+      </>
+    );
   }
 
   return (
