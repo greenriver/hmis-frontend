@@ -11628,6 +11628,23 @@ export type AllEnrollmentDetailsFragment = {
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
+    access: {
+      __typename?: 'ClientAccess';
+      id: string;
+      canEditClient: boolean;
+      canDeleteClient: boolean;
+      canViewDob: boolean;
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+      canViewEnrollmentDetails: boolean;
+      canDeleteAssessments: boolean;
+      canManageAnyClientFiles: boolean;
+      canManageOwnClientFiles: boolean;
+      canViewAnyConfidentialClientFiles: boolean;
+      canViewAnyNonconfidentialClientFiles: boolean;
+    };
   };
   openEnrollmentSummary: Array<{
     __typename?: 'EnrollmentSummary';
@@ -12128,6 +12145,24 @@ export type AllEnrollmentDetailsFragment = {
         };
       };
     }>;
+    access: {
+      __typename?: 'ProjectAccess';
+      id: string;
+      canViewDob: boolean;
+      canViewFullSsn: boolean;
+      canDeleteProject: boolean;
+      canViewPartialSsn: boolean;
+      canEnrollClients: boolean;
+      canEditEnrollments: boolean;
+      canViewEnrollmentDetails: boolean;
+      canDeleteEnrollments: boolean;
+      canDeleteAssessments: boolean;
+      canEditProjectDetails: boolean;
+      canManageInventory: boolean;
+      canManageDeniedReferrals: boolean;
+      canManageIncomingReferrals: boolean;
+      canManageOutgoingReferrals: boolean;
+    };
   };
   access: {
     __typename?: 'EnrollmentAccess';
@@ -12594,6 +12629,23 @@ export type GetEnrollmentDetailsQuery = {
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canEditClient: boolean;
+        canDeleteClient: boolean;
+        canViewDob: boolean;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+        canViewEnrollmentDetails: boolean;
+        canDeleteAssessments: boolean;
+        canManageAnyClientFiles: boolean;
+        canManageOwnClientFiles: boolean;
+        canViewAnyConfidentialClientFiles: boolean;
+        canViewAnyNonconfidentialClientFiles: boolean;
+      };
     };
     openEnrollmentSummary: Array<{
       __typename?: 'EnrollmentSummary';
@@ -13094,6 +13146,24 @@ export type GetEnrollmentDetailsQuery = {
           };
         };
       }>;
+      access: {
+        __typename?: 'ProjectAccess';
+        id: string;
+        canViewDob: boolean;
+        canViewFullSsn: boolean;
+        canDeleteProject: boolean;
+        canViewPartialSsn: boolean;
+        canEnrollClients: boolean;
+        canEditEnrollments: boolean;
+        canViewEnrollmentDetails: boolean;
+        canDeleteEnrollments: boolean;
+        canDeleteAssessments: boolean;
+        canEditProjectDetails: boolean;
+        canManageInventory: boolean;
+        canManageDeniedReferrals: boolean;
+        canManageIncomingReferrals: boolean;
+        canManageOutgoingReferrals: boolean;
+      };
     };
     access: {
       __typename?: 'EnrollmentAccess';
@@ -20867,6 +20937,25 @@ export const OccurrencePointFormFieldsFragmentDoc = gql`
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
+export const ProjectAccessFieldsFragmentDoc = gql`
+  fragment ProjectAccessFields on ProjectAccess {
+    id
+    canViewDob
+    canViewFullSsn
+    canDeleteProject
+    canViewPartialSsn
+    canEnrollClients
+    canEditEnrollments
+    canViewEnrollmentDetails
+    canDeleteEnrollments
+    canDeleteAssessments
+    canEditProjectDetails
+    canManageInventory
+    canManageDeniedReferrals
+    canManageIncomingReferrals
+    canManageOutgoingReferrals
+  }
+`;
 export const AllEnrollmentDetailsFragmentDoc = gql`
   fragment AllEnrollmentDetails on Enrollment {
     ...EnrollmentFields
@@ -20885,6 +20974,9 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       customDataElements {
         ...CustomDataElementFields
       }
+      access {
+        ...ClientAccessFields
+      }
     }
     openEnrollmentSummary {
       ...EnrollmentSummaryFields
@@ -20898,16 +20990,21 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       occurrencePointForms {
         ...OccurrencePointFormFields
       }
+      access {
+        ...ProjectAccessFields
+      }
     }
   }
   ${EnrollmentFieldsFragmentDoc}
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
   ${EnrollmentSummaryFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
   ${DataCollectionFeatureFieldsFragmentDoc}
   ${OccurrencePointFormFieldsFragmentDoc}
+  ${ProjectAccessFieldsFragmentDoc}
 `;
 export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   fragment SubmittedEnrollmentResultFields on Enrollment {
@@ -21179,25 +21276,6 @@ export const ProjectOperatingPeriodFragmentDoc = gql`
     id
     operatingEndDate
     operatingStartDate
-  }
-`;
-export const ProjectAccessFieldsFragmentDoc = gql`
-  fragment ProjectAccessFields on ProjectAccess {
-    id
-    canViewDob
-    canViewFullSsn
-    canDeleteProject
-    canViewPartialSsn
-    canEnrollClients
-    canEditEnrollments
-    canViewEnrollmentDetails
-    canDeleteEnrollments
-    canDeleteAssessments
-    canEditProjectDetails
-    canManageInventory
-    canManageDeniedReferrals
-    canManageIncomingReferrals
-    canManageOutgoingReferrals
   }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`

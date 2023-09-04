@@ -81,12 +81,10 @@ const EnrollmentOverview = () => {
         <Grid item xs={4}>
           <Stack spacing={4}>
             <EnrollmentReminders enrollmentId={enrollment.id} />
-            <TitleCard title='Quick Actions'>
-              <EnrollmentQuickActions
-                enrollment={enrollment}
-                enabledFeatures={enabledFeatures}
-              />
-            </TitleCard>
+            <EnrollmentQuickActions
+              enrollment={enrollment}
+              enabledFeatures={enabledFeatures}
+            />
             {enrollment.inProgress &&
               enrollment.access.canDeleteEnrollments && (
                 <DeleteMutationButton<

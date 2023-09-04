@@ -1,84 +1,39 @@
-import DescriptionIcon from '@mui/icons-material/Description';
 import { ReactNode, useMemo } from 'react';
 
-import { useNavigate } from 'react-router-dom';
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
-import IconButtonContainer from './IconButtonContainer';
+import EntryExitDatesWithAssessmentLinks from './EntryExitDatesWithAssessmentLinks';
 import OccurrencePointValue, {
   parseOccurrencePointFormDefinition,
 } from './OccurrencePointValue';
 import Loading from '@/components/elements/Loading';
-import NotCollectedText from '@/components/elements/NotCollectedText';
 import SimpleTable from '@/components/elements/SimpleTable';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import {
-  occurrencePointCollectedForEnrollment,
-  parseAndFormatDate,
-} from '@/modules/hmis/hmisUtil';
+import { occurrencePointCollectedForEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import { AssessmentRole, Destination } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { Destination } from '@/types/gqlTypes';
 
 const EnrollmentDetails = ({
   enrollment,
 }: {
   enrollment: DashboardEnrollment;
 }) => {
-  const navigate = useNavigate();
-  const intakePath = useMemo(
-    () =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-        clientId: enrollment.client.id,
-        enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Intake,
-        assessmentId: enrollment.intakeAssessment?.id,
-      }),
-    [enrollment]
-  );
-  const exitPath = useMemo(
-    () =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-        clientId: enrollment.client.id,
-        enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Exit,
-        assessmentId: enrollment.exitAssessment?.id,
-      }),
-    [enrollment]
-  );
-
   const rows = useMemo(() => {
-    const noneText = <NotCollectedText variant='body2'>None</NotCollectedText>;
-    const canLinkToIntake =
-      enrollment.access.canEditEnrollments || !enrollment.inProgress;
+    const content: Record<string, ReactNode> = {};
+    // If enrollment is incomplete, show that first
+    if (enrollment.inProgress) {
+      content['Enrollment Status'] = (
+        <EnrollmentStatus enrollment={enrollment} />
+      );
+    }
 
-    const content: Record<string, ReactNode> = {
-      'Enrollment Status': <EnrollmentStatus enrollment={enrollment} />,
-      'Entry Date': canLinkToIntake ? (
-        <IconButtonContainer
-          Icon={DescriptionIcon}
-          onClick={() => navigate(intakePath)}
-          tooltip='Go to Intake Assessment'
-        >
-          {parseAndFormatDate(enrollment.entryDate)}
-        </IconButtonContainer>
-      ) : (
-        parseAndFormatDate(enrollment.entryDate)
-      ),
-      'Exit Date': enrollment.exitDate ? (
-        <IconButtonContainer
-          Icon={DescriptionIcon}
-          onClick={() => navigate(exitPath)}
-          tooltip='Go to Exit Assessment'
-        >
-          {parseAndFormatDate(enrollment.exitDate)}
-        </IconButtonContainer>
-      ) : (
-        noneText
-      ),
-    };
+    // Entry - Exit date, with assmt links to change them
+    content['Entry / Exit Dates'] = (
+      <EntryExitDatesWithAssessmentLinks enrollment={enrollment} />
+    );
+
+    // Exit Destination
     if (enrollment.exitDate) {
       content['Exit Destination'] = (
         <HmisEnum
@@ -88,6 +43,7 @@ const EnrollmentDetails = ({
       );
     }
 
+    // Summary of open enrollments. Arr will be empty unless user has access to see summaries.
     if (enrollment && enrollment.openEnrollmentSummary.length > 0) {
       const title = 'Other Open Enrollments';
       content[title] = (
@@ -120,7 +76,7 @@ const EnrollmentDetails = ({
       label: id,
       value,
     }));
-  }, [enrollment, intakePath, exitPath, navigate]);
+  }, [enrollment]);
 
   if (!enrollment || !rows) return <Loading />;
 
