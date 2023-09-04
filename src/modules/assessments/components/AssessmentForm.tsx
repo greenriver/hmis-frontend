@@ -59,6 +59,7 @@ interface Props {
   formRole?: FormRole;
   definition: FormDefinition;
   assessment?: FullAssessmentFragment;
+  assessmentTitle?: ReactNode;
   top?: number;
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
@@ -69,6 +70,7 @@ interface Props {
 
 const AssessmentForm = ({
   assessment,
+  assessmentTitle,
   formRole,
   definition,
   navigationTitle,
@@ -283,6 +285,7 @@ const AssessmentForm = ({
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
       {!isPrintView && navigation}
       <Grid item xs sx={{ pt: '0 !important' }}>
+        {assessmentTitle}
         {!isPrintView && assessment && !assessment.inProgress && locked && (
           <LockedAssessmentAlert
             allowUnlock={canEdit}

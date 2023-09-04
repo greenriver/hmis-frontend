@@ -1,25 +1,41 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 export interface AssessmentTitleProps {
+  projectName: string;
   assessmentTitle?: ReactNode;
   clientName?: ReactNode;
-  actions?: ReactNode;
 }
 
 const AssessmentTitle = ({
+  projectName,
   assessmentTitle,
   clientName,
-  actions,
 }: AssessmentTitleProps) => {
+  if (clientName) {
+    return (
+      <Box sx={{ mb: 1 }}>
+        <Typography variant='h4'>{clientName}</Typography>
+        <Typography variant='h5'>
+          <Box
+            component='span'
+            sx={({ typography, palette }) => ({
+              fontWeight: typography.fontWeightBold,
+              color: palette.grey[700],
+            })}
+          >
+            {assessmentTitle}
+            {': '}
+          </Box>
+          {projectName}
+        </Typography>
+      </Box>
+    );
+  }
   return (
-    <Stack direction='row' justifyContent='space-between'>
-      <Typography variant='h4' sx={{ mt: 1, mb: 3, fontWeight: 400 }}>
-        <b>{assessmentTitle}</b>
-        {clientName && ` for ${clientName}`}
-      </Typography>
-      <Box>{actions}</Box>
-    </Stack>
+    <Typography variant='h4' sx={{ mb: 1 }}>
+      {assessmentTitle}
+    </Typography>
   );
 };
 

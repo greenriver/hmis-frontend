@@ -131,17 +131,19 @@ const IndividualAssessment = ({
   if (!enrollment) return <NotFound />;
   if (assessmentId && !assessment) return <NotFound />;
 
+  const title = embeddedInWorkflow ? undefined : (
+    <AssessmentTitle
+      assessmentTitle={assessmentTitle}
+      clientName={clientName || undefined}
+      projectName={enrollment.project.projectName}
+    />
+  );
   return (
     <>
-      {!embeddedInWorkflow && (
-        <AssessmentTitle
-          assessmentTitle={assessmentTitle}
-          clientName={clientName || undefined}
-        />
-      )}
       {!definition && <MissingDefinitionAlert />}
       {definition && (
         <AssessmentForm
+          assessmentTitle={title}
           key={assessment?.id}
           formRole={formRole}
           definition={definition}
@@ -173,7 +175,7 @@ const IndividualAssessment = ({
 };
 
 const WrappedAssessment = (props: IndividualAssessmentProps) => (
-  <Box>
+  <Box sx={{ mt: props.embeddedInWorkflow ? undefined : 3 }}>
     <SentryErrorBoundary>
       <IndividualAssessment {...props} />
     </SentryErrorBoundary>
