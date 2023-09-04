@@ -987,37 +987,43 @@
         "enumValues": [
           {
             "name": "ANNUAL",
-            "description": "(ANNUAL) Annual Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE",
-            "description": "(CE) Coordinated Entry",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CUSTOM_ASSESSMENT",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "EXIT",
-            "description": "(EXIT) Exit Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INTAKE",
-            "description": "(INTAKE) Intake Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "POST_EXIT",
-            "description": "(POST_EXIT) Post-Exit Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "UPDATE",
-            "description": "(UPDATE) Update Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -6407,22 +6413,6 @@
         "description": null,
         "fields": [
           {
-            "name": "atOccurrence",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "fieldType",
             "description": null,
             "args": [],
@@ -6841,6 +6831,122 @@
           },
           {
             "name": "VETERAN_HOH",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "DataCollectionFeature",
+        "description": null,
+        "fields": [
+          {
+            "name": "dataCollectedAbout",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "DataCollectedAbout",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "legacy",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "role",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "DataCollectionFeatureRole",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "DataCollectionFeatureRole",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CE_ASSESSMENT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE_EVENT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CURRENT_LIVING_SITUATION",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_REQUEST",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SERVICE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -14622,6 +14728,22 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -15237,158 +15359,140 @@
       {
         "kind": "ENUM",
         "name": "FormRole",
-        "description": "Form Role",
+        "description": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
             "name": "ANNUAL",
-            "description": "(ANNUAL) Annual Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE",
-            "description": "(CE) Coordinated Entry",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_ASSESSMENT",
-            "description": "(CE_ASSESSMENT) CE Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_EVENT",
-            "description": "(CE_EVENT) CE Event",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CLIENT",
-            "description": "(CLIENT) Client",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CURRENT_LIVING_SITUATION",
-            "description": "(CURRENT_LIVING_SITUATION) Current Living Situation",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "CUSTOM",
-            "description": "(CUSTOM) Custom Assessment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "DATE_OF_ENGAGEMENT",
-            "description": "(DATE_OF_ENGAGEMENT) Date of Engagement",
+            "name": "CUSTOM_ASSESSMENT",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ENROLLMENT",
-            "description": "(ENROLLMENT) Enrollment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "EXIT",
-            "description": "(EXIT) Exit Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FILE",
-            "description": "(FILE) File",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FUNDER",
-            "description": "(FUNDER) Funder",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INTAKE",
-            "description": "(INTAKE) Intake Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INVENTORY",
-            "description": "(INVENTORY) Inventory",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "MOVE_IN_DATE",
-            "description": "(MOVE_IN_DATE) Move-in Date",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "NEW_CLIENT_ENROLLMENT",
-            "description": "(NEW_CLIENT_ENROLLMENT) New Client Enrollment",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OCCURRENCE_POINT",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ORGANIZATION",
-            "description": "(ORGANIZATION) Organization",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PATH_STATUS",
-            "description": "(PATH_STATUS) PATH Status",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "POST_EXIT",
-            "description": "(POST_EXIT) Post-Exit Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PROJECT",
-            "description": "(PROJECT) Project",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PROJECT_COC",
-            "description": "(PROJECT_COC) Project CoC",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "REFERRAL_REQUEST",
-            "description": "(REFERRAL_REQUEST) Referral Request",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SERVICE",
-            "description": "(SERVICE) Service",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "UNIT_ASSIGNMENT",
-            "description": "(UNIT_ASSIGNMENT) Unit Assignment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "UPDATE",
-            "description": "(UPDATE) Update Assessment",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -20934,35 +21038,6 @@
             "deprecationReason": null
           },
           {
-            "name": "updateCustomEnrollmentValue",
-            "description": null,
-            "args": [
-              {
-                "name": "input",
-                "description": "Parameters for UpdateCustomEnrollmentValue",
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "UpdateCustomEnrollmentValueInput",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "UpdateCustomEnrollmentValuePayload",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "updateReferralPosting",
             "description": "Update a referral posting",
             "args": [
@@ -21352,6 +21427,65 @@
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OccurrencePointForm",
+        "description": null,
+        "fields": [
+          {
+            "name": "dataCollectedAbout",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "DataCollectedAbout",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "definition",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "FormDefinition",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
         "possibleTypes": null
       },
       {
@@ -24575,6 +24709,30 @@
             "deprecationReason": null
           },
           {
+            "name": "dataCollectionFeatures",
+            "description": "Occurrence Point data collection features that are enabled for this Project (e.g. Current Living Situations, Events)",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "DataCollectionFeature",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dateCreated",
             "description": null,
             "args": [],
@@ -25003,6 +25161,30 @@
                 "kind": "OBJECT",
                 "name": "InventoriesPaginated",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "occurrencePointForms",
+            "description": "Forms for individual data elements that are collected at occurrence for this Project (e.g. Move-In Date)",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "OccurrencePointForm",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
@@ -33608,196 +33790,6 @@
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "errors",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "ValidationError",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "UpdateCustomEnrollmentValueInput",
-        "description": "Autogenerated input type of UpdateCustomEnrollmentValue",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "clientMutationId",
-            "description": "A unique identifier for the client performing the mutation.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "customDataElementDefinitionId",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "enrollmentId",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueBoolean",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueDate",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "ISO8601Date",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueFloat",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueInteger",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueString",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueText",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "UpdateCustomEnrollmentValuePayload",
-        "description": "Autogenerated return type of UpdateCustomEnrollmentValue.",
-        "fields": [
-          {
-            "name": "clientMutationId",
-            "description": "A unique identifier for the client performing the mutation.",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "enrollment",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Enrollment",
-                "ofType": null
-              }
             },
             "isDeprecated": false,
             "deprecationReason": null

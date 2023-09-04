@@ -3,13 +3,11 @@ import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
-import { useEnrollment } from '../../modules/dataFetching/hooks/useEnrollment';
 import { showAssessmentInHousehold } from '../clientDashboard/enrollments/AssessmentPage';
 import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
 import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
-import { NavItem } from '../layout/dashboard/sideNav/types';
 
 import NotFound from './NotFound';
 
@@ -22,13 +20,12 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
 import EnrollmentNavHeader from '@/modules/enrollment/components/EnrollmentNavHeader';
+import { useDetailedEnrollment } from '@/modules/enrollment/hooks/useDetailedEnrollment';
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
+import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import {
-  ClientNameDobVetFragment,
-  EnrollmentFieldsFragment,
-} from '@/types/gqlTypes';
+import { ClientNameDobVetFragment } from '@/types/gqlTypes';
 
 const EnrollmentDashboard: React.FC = () => {
   const params = useSafeParams() as {
@@ -42,12 +39,10 @@ const EnrollmentDashboard: React.FC = () => {
     Record<string, string> | undefined
   >();
 
-  const { enrollment, loading } = useEnrollment(params.enrollmentId);
+  const { enrollment, loading } = useDetailedEnrollment(params.enrollmentId);
   const client = enrollment?.client;
 
-  const navItems: NavItem[] = useEnrollmentDashboardNavItems(
-    enrollment || undefined
-  );
+  const navItems = useEnrollmentDashboardNavItems(enrollment || undefined);
 
   const { currentPath, ...dashboardState } = useDashboardState();
 
@@ -118,7 +113,7 @@ const EnrollmentDashboard: React.FC = () => {
 
 export type EnrollmentDashboardContext = {
   client: ClientNameDobVetFragment;
-  enrollment?: EnrollmentFieldsFragment;
+  enrollment?: DashboardEnrollment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
 };
 

@@ -2,46 +2,31 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import { ReactNode, useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import EditableCustomDataElement from './EditableCustomDataElement';
-import OccurrencePointValue from './EditableOccurrencePointValue';
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import IconButtonContainer from './IconButtonContainer';
+import OccurrencePointValue, {
+  parseOccurrencePointFormDefinition,
+} from './OccurrencePointValue';
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import SimpleTable from '@/components/elements/SimpleTable';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
+  occurrencePointCollectedForEnrollment,
   parseAndFormatDate,
-  pathStatusString,
-  PERMANENT_HOUSING_PROJECT_TYPES,
-  STREET_OUTREACH_SERVICES_ONLY,
 } from '@/modules/hmis/hmisUtil';
+import { DashboardEnrollment } from '@/modules/hmis/types';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  AssessmentRole,
-  Destination,
-  EnrollmentFieldsFragment,
-  FormRole,
-  ProjectType,
-  useGetEnrollmentDetailsQuery,
-} from '@/types/gqlTypes';
+import { AssessmentRole, Destination } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
-
-// TODO(#185848386): move to backend
-const DOE_PROJECT_TYPES = [ProjectType.EsNbn, ProjectType.So, ProjectType.Sso];
 
 const EnrollmentDetails = ({
   enrollment,
 }: {
-  enrollment: EnrollmentFieldsFragment;
+  enrollment: DashboardEnrollment;
 }) => {
-  const { data, error } = useGetEnrollmentDetailsQuery({
-    variables: { id: enrollment.id },
-  });
-  const enrollmentWithDetails = useMemo(() => data?.enrollment, [data]);
-
   const navigate = useNavigate();
   const intakePath = useMemo(
     () =>
@@ -49,9 +34,9 @@ const EnrollmentDetails = ({
         clientId: enrollment.client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Intake,
-        assessmentId: enrollmentWithDetails?.intakeAssessment?.id,
+        assessmentId: enrollment.intakeAssessment?.id,
       }),
-    [enrollment, enrollmentWithDetails]
+    [enrollment]
   );
   const exitPath = useMemo(
     () =>
@@ -59,13 +44,12 @@ const EnrollmentDetails = ({
         clientId: enrollment.client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Exit,
-        assessmentId: enrollmentWithDetails?.intakeAssessment?.id,
+        assessmentId: enrollment.exitAssessment?.id,
       }),
-    [enrollment, enrollmentWithDetails]
+    [enrollment]
   );
 
   const rows = useMemo(() => {
-    if (!enrollmentWithDetails) return;
     const noneText = <NotCollectedText variant='body2'>None</NotCollectedText>;
     const canLinkToIntake =
       enrollment.access.canEditEnrollments || !enrollment.inProgress;
@@ -104,93 +88,29 @@ const EnrollmentDetails = ({
       );
     }
 
-    // Show unit if enrollment is open, or enrollment has unit.
-    // it is unexpected for a closed enrollment to have an assigned unit.
-    if (
-      enrollmentWithDetails.project.hasUnits &&
-      (!enrollment.exitDate || enrollment.currentUnit)
-    ) {
-      content['Assigned Unit'] = (
-        <OccurrencePointValue
-          formRole={FormRole.UnitAssignment}
-          title={
-            enrollment.currentUnit
-              ? 'Change Unit Assignment'
-              : 'Unit Assignment'
-          }
-          icon='pencil'
-          enrollment={enrollment}
-        >
-          {enrollment.currentUnit?.name || noneText}
-        </OccurrencePointValue>
-      );
-    }
-
-    const projectType = enrollment.project.projectType;
-    if (projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)) {
-      const title = 'Move-in Date';
-      content[title] = (
-        <OccurrencePointValue
-          formRole={FormRole.MoveInDate}
-          title={title}
-          icon='calendar'
-          enrollment={enrollment}
-        >
-          {parseAndFormatDate(enrollment.moveInDate) || noneText}
-        </OccurrencePointValue>
-      );
-    }
-
-    if (projectType && DOE_PROJECT_TYPES.includes(projectType)) {
-      const title = 'Date of Engagement';
-      content[title] = (
-        <OccurrencePointValue
-          formRole={FormRole.DateOfEngagement}
-          title={title}
-          icon='calendar'
-          enrollment={enrollment}
-        >
-          {parseAndFormatDate(enrollment.dateOfEngagement) || noneText}
-        </OccurrencePointValue>
-      );
-    }
-
-    // FIXME: needs to check for funder
-    if (projectType && STREET_OUTREACH_SERVICES_ONLY.includes(projectType)) {
-      const title = 'PATH Status';
-      content[title] = (
-        <OccurrencePointValue
-          formRole={FormRole.PathStatus}
-          title={title}
-          icon='pencil'
-          enrollment={enrollment}
-        >
-          {pathStatusString(enrollment) || noneText}
-        </OccurrencePointValue>
-      );
-    }
-
-    if (
-      enrollmentWithDetails &&
-      enrollmentWithDetails.openEnrollmentSummary.length > 0
-    ) {
+    if (enrollment && enrollment.openEnrollmentSummary.length > 0) {
       const title = 'Other Open Enrollments';
       content[title] = (
         <EnrollmentSummaryCount
-          enrollmentSummary={enrollmentWithDetails.openEnrollmentSummary}
+          enrollmentSummary={enrollment.openEnrollmentSummary}
           clientId={enrollment.client.id}
         />
       );
     }
 
-    enrollmentWithDetails.customDataElements
-      .filter((cde) => cde.atOccurrence)
-      .forEach((cde) => {
-        content[cde.label] = (
-          <EditableCustomDataElement
-            element={cde}
+    enrollment.project.occurrencePointForms
+      .filter((form) => occurrencePointCollectedForEnrollment(form, enrollment))
+      .forEach(({ definition }) => {
+        const { displayTitle, isEditable, readOnlyDefinition } =
+          parseOccurrencePointFormDefinition(definition);
+
+        content[displayTitle] = (
+          <OccurrencePointValue
             enrollment={enrollment}
-            fallback={noneText}
+            definition={definition}
+            readOnlyDefinition={readOnlyDefinition}
+            editable={isEditable && enrollment.access.canEditEnrollments}
+            dialogTitle={displayTitle}
           />
         );
       });
@@ -200,10 +120,9 @@ const EnrollmentDetails = ({
       label: id,
       value,
     }));
-  }, [enrollment, enrollmentWithDetails, intakePath, exitPath, navigate]);
+  }, [enrollment, intakePath, exitPath, navigate]);
 
-  if (error) throw error;
-  if (!enrollmentWithDetails || !rows) return <Loading />;
+  if (!enrollment || !rows) return <Loading />;
 
   return (
     <SimpleTable

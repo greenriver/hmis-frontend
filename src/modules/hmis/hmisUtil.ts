@@ -13,8 +13,12 @@ import {
 } from 'date-fns';
 import { find, isNil, sortBy, startCase } from 'lodash-es';
 
-import { hasMeaningfulValue } from '../form/util/formUtil';
+import {
+  ClientNameDobVeteranFields,
+  hasMeaningfulValue,
+} from '../form/util/formUtil';
 
+import { DashboardEnrollment } from './types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
@@ -23,14 +27,19 @@ import {
   ClientNameFragment,
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
+  DataCollectedAbout,
+  DataCollectionFeatureFieldsFragment,
   EnrollmentFieldsFragment,
+  EnrollmentOccurrencePointFieldsFragment,
   EnrollmentSummaryFieldsFragment,
   EventFieldsFragment,
   GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
   NoYesMissing,
   NoYesReasonsForMissingData,
+  OccurrencePointFormFieldsFragment,
   ProjectType,
+  RelationshipToHoH,
   ServiceFieldsFragment,
   ServiceTypeFieldsFragment,
 } from '@/types/gqlTypes';
@@ -446,7 +455,9 @@ export const serviceDetails = (service: ServiceFieldsFragment): string[] => {
   return detailRows;
 };
 
-export const pathStatusString = (enrollment: EnrollmentFieldsFragment) => {
+export const pathStatusString = (
+  enrollment: EnrollmentOccurrencePointFieldsFragment
+) => {
   if (
     !enrollment.clientEnrolledInPath ||
     enrollment.clientEnrolledInPath === NoYesMissing.DataNotCollected
@@ -457,4 +468,56 @@ export const pathStatusString = (enrollment: EnrollmentFieldsFragment) => {
   const date = parseAndFormatDate(enrollment.dateOfPathStatus);
   if (!date) return val;
   return `${val} (${date})`;
+};
+
+export const evaluateDataCollectedAbout = (
+  dataCollectedAbout: DataCollectedAbout,
+  client: ClientNameDobVeteranFields,
+  relationshipToHoH: RelationshipToHoH
+) => {
+  switch (dataCollectedAbout) {
+    case DataCollectedAbout.AllClients:
+      return true;
+    case DataCollectedAbout.Hoh:
+      return relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold;
+    case DataCollectedAbout.HohAndAdults:
+      const clientAge = age(client);
+      return (
+        relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
+        isNil(client.dob) ||
+        (!isNil(clientAge) && clientAge >= 18)
+      );
+    case DataCollectedAbout.VeteranHoh:
+      return (
+        relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold &&
+        client.veteranStatus === NoYesReasonsForMissingData.Yes
+      );
+    default:
+      throw new Error(
+        `Unable to evaluate Data Collected About: ${dataCollectedAbout}`
+      );
+  }
+};
+
+export const occurrencePointCollectedForEnrollment = (
+  occurrencePoint: OccurrencePointFormFieldsFragment,
+  enrollment: DashboardEnrollment
+) => {
+  return evaluateDataCollectedAbout(
+    occurrencePoint.dataCollectedAbout,
+    enrollment.client,
+    enrollment.relationshipToHoH
+  );
+};
+
+export const featureEnabledForEnrollment = (
+  feature: DataCollectionFeatureFieldsFragment,
+  client: ClientNameDobVeteranFields,
+  relationshipToHoH: RelationshipToHoH
+) => {
+  return evaluateDataCollectedAbout(
+    feature.dataCollectedAbout,
+    client,
+    relationshipToHoH
+  );
 };
