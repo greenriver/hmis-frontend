@@ -1,27 +1,11 @@
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  CheckboxProps,
-  Grid,
-  Paper,
-  Typography,
-} from '@mui/material';
-import {
-  fromPairs,
-  isNil,
-  keyBy,
-  mapValues,
-  pickBy,
-  startCase,
-} from 'lodash-es';
+import { Alert, AlertTitle, Box, Grid, Typography } from '@mui/material';
+import { keyBy, mapValues, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
 import {
   Dispatch,
   memo,
   SetStateAction,
   useCallback,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -31,7 +15,6 @@ import { assessmentPrefix } from '../../util';
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
 import HouseholdSummaryTable from './HouseholdSummaryTable';
 import {
-  AssessmentStatus,
   HouseholdAssesmentRole,
   TabDefinition,
   tabPanelA11yProps,
@@ -39,6 +22,7 @@ import {
 
 import LoadingButton from '@/components/elements/LoadingButton';
 import RouterLink from '@/components/elements/RouterLink';
+import TitleCard from '@/components/elements/TitleCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
@@ -77,40 +61,7 @@ const HouseholdSummaryTabPanel = memo(
     refetch,
     setCurrentTab,
   }: HouseholdSummaryTabPanelProps) => {
-    const [checkedState, setCheckedState] = useState<Record<string, boolean>>(
-      fromPairs(
-        tabs
-          .filter((t) => !!t.assessmentId)
-          .map((t) => [
-            t.assessmentId,
-            t.status === AssessmentStatus.ReadyToSubmit,
-          ])
-      )
-    );
-
-    useEffect(() => {
-      if (!active) setCheckedState({});
-    }, [active]);
-
-    const onClickCheckbox: (
-      ...assessmentIds: string[]
-    ) => CheckboxProps['onChange'] = useCallback(
-      (...assessmentIds: string[]) =>
-        (_event, checked) => {
-          if (!assessmentIds.length) return;
-          setCheckedState((old) => {
-            const copy = { ...old };
-            assessmentIds.forEach((id) => {
-              if (!isNil(id)) copy[id] = checked;
-            });
-            return copy;
-          });
-        },
-      []
-    );
-
     const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
-
     const [submitMutation, { loading }] = useSubmitHouseholdAssessmentsMutation(
       {
         onError: (apolloError) =>
@@ -118,10 +69,9 @@ const HouseholdSummaryTabPanel = memo(
       }
     );
 
-    const assessmentsToSubmit = useMemo(
-      () => Object.keys(pickBy(checkedState)),
-      [checkedState]
-    );
+    const [assessmentsToSubmit, setAssessmentsToSubmit] = useState<
+      readonly string[]
+    >([]);
 
     const onCompleted = useCallback(
       ({ submitHouseholdAssessments }: SubmitHouseholdAssessmentsMutation) => {
@@ -131,7 +81,6 @@ const HouseholdSummaryTabPanel = memo(
           window.scrollTo(0, 0);
         } else if (submitHouseholdAssessments.assessments) {
           setErrors(emptyErrorState);
-          setCheckedState({});
           refetch();
 
           tabs.forEach(({ clientId, enrollmentId }) => {
@@ -155,7 +104,10 @@ const HouseholdSummaryTabPanel = memo(
       (confirmed: boolean) => {
         submitMutation({
           variables: {
-            input: { assessmentIds: assessmentsToSubmit, confirmed },
+            input: {
+              assessmentIds: assessmentsToSubmit as string[],
+              confirmed,
+            },
           },
           onCompleted,
         });
@@ -223,15 +175,11 @@ const HouseholdSummaryTabPanel = memo(
                 </Alert>
               </Grid>
             )}
-            <Typography fontWeight={600} variant='body2'>
-              Select Household Members for Submission
-            </Typography>
-            <Paper sx={{ mt: 2 }}>
+            <TitleCard title='Select Household Members for Submission'>
               <HouseholdSummaryTable
                 tabs={tabs}
                 role={role}
-                checked={checkedState}
-                onClickCheckbox={onClickCheckbox}
+                setAssessmentsToSubmit={setAssessmentsToSubmit}
                 setCurrentTab={setCurrentTab}
               />
               <Box sx={{ px: 2, py: 3 }}>
@@ -246,7 +194,7 @@ const HouseholdSummaryTabPanel = memo(
                   {pluralize('Assessment', assessmentsToSubmit.length)}
                 </LoadingButton>
               </Box>
-            </Paper>
+            </TitleCard>
           </Grid>
         </Grid>
         {renderValidationDialog({
