@@ -3,19 +3,22 @@ import { Stack } from '@mui/system';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
+import { DashboardEnrollment } from '@/modules/hmis/types';
 import {
   ClientPermissionsFilter,
   ProjectPermissionsFilter,
 } from '@/modules/permissions/PermissionsFilters';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
+import { DataCollectionFeatureRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EnrollmentQuickActions = ({
   enrollment,
+  enabledFeatures,
 }: {
-  enrollment: EnrollmentFieldsFragment;
+  enrollment: DashboardEnrollment;
+  enabledFeatures: DataCollectionFeatureRole[];
 }) => {
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
     enrollment,
@@ -28,14 +31,15 @@ const EnrollmentQuickActions = ({
 
   return (
     <Stack spacing={2} sx={{ px: 2, pb: 2 }}>
-      <ClientPermissionsFilter
-        id={enrollment.client.id}
-        permissions={['canEditEnrollments']}
-      >
-        <Button onClick={openServiceDialog} variant='outlined'>
-          Record Service
-        </Button>
-      </ClientPermissionsFilter>
+      {/* Record a Service */}
+      {enabledFeatures.includes(DataCollectionFeatureRole.Service) &&
+        enrollment.access.canEditEnrollments && (
+          <Button onClick={openServiceDialog} variant='outlined'>
+            Record Service
+          </Button>
+        )}
+
+      {/* Edit Client details */}
       <ClientPermissionsFilter
         id={enrollment.client.id}
         permissions='canEditClient'
@@ -47,6 +51,8 @@ const EnrollmentQuickActions = ({
           Update Client Details
         </Button>
       </ClientPermissionsFilter>
+
+      {/* View ESG Funding Report */}
       <ProjectPermissionsFilter
         id={enrollment.project.id}
         permissions='canManageIncomingReferrals'

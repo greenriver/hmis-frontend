@@ -26,7 +26,7 @@ import { evictDeletedEnrollment } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EnrollmentOverview = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, enabledFeatures } = useEnrollmentDashboardContext();
   const navigate = useNavigate();
   const { clientId, enrollmentId } = useSafeParams() as {
     enrollmentId: string;
@@ -82,7 +82,10 @@ const EnrollmentOverview = () => {
           <Stack spacing={4}>
             <EnrollmentReminders enrollmentId={enrollment.id} />
             <TitleCard title='Quick Actions'>
-              <EnrollmentQuickActions enrollment={enrollment} />
+              <EnrollmentQuickActions
+                enrollment={enrollment}
+                enabledFeatures={enabledFeatures}
+              />
             </TitleCard>
             {enrollment.inProgress &&
               enrollment.access.canDeleteEnrollments && (

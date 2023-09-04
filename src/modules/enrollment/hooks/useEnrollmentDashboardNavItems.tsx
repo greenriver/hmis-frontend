@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
-import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AllEnrollmentDetailsFragment,
@@ -10,6 +9,7 @@ import {
 import generateSafePath from '@/utils/generateSafePath';
 
 export const useEnrollmentDashboardNavItems = (
+  enabledFeatures: DataCollectionFeatureRole[],
   enrollment?: AllEnrollmentDetailsFragment
 ) => {
   const navItems: NavItem[] = useMemo(() => {
@@ -18,15 +18,6 @@ export const useEnrollmentDashboardNavItems = (
       clientId: enrollment.client.id,
       enrollmentId: enrollment.id,
     };
-    const enabledFeatures = enrollment.project.dataCollectionFeatures
-      .filter((feature) =>
-        featureEnabledForEnrollment(
-          feature,
-          enrollment.client,
-          enrollment.relationshipToHoH
-        )
-      )
-      .map((r) => r.role);
 
     return [
       {
@@ -52,30 +43,30 @@ export const useEnrollmentDashboardNavItems = (
             id: 'services',
             title: 'Services',
             path: EnrollmentDashboardRoutes.SERVICES,
-            requiredRole: DataCollectionFeatureRole.Service,
+            featureName: DataCollectionFeatureRole.Service,
           },
           {
             id: 'cls',
             title: 'Current Living Situations',
             path: EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-            requiredRole: DataCollectionFeatureRole.CurrentLivingSituation,
+            featureName: DataCollectionFeatureRole.CurrentLivingSituation,
           },
           {
             id: 'events',
             title: 'CE Events',
             path: EnrollmentDashboardRoutes.EVENTS,
-            requiredRole: DataCollectionFeatureRole.CeEvent,
+            featureName: DataCollectionFeatureRole.CeEvent,
           },
           {
             id: 'ce-assessments',
             title: 'CE Assessments',
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
-            requiredRole: DataCollectionFeatureRole.CeAssessment,
+            featureName: DataCollectionFeatureRole.CeAssessment,
           },
         ]
           .filter(
             (item) =>
-              !item.requiredRole || enabledFeatures.includes(item.requiredRole)
+              !item.featureName || enabledFeatures.includes(item.featureName)
           )
           .map(({ path, ...rest }) => ({
             path: generateSafePath(path, params),
@@ -83,7 +74,7 @@ export const useEnrollmentDashboardNavItems = (
           })),
       },
     ];
-  }, [enrollment]);
+  }, [enabledFeatures, enrollment]);
 
   return navItems;
 };
