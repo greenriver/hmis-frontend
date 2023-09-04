@@ -11,13 +11,13 @@ import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ExternalIdentifierType,
@@ -112,13 +112,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
         hc.enrollment.currentUnit?.name,
     };
   },
-  dobAge: {
-    header: 'DOB / Age',
-    key: 'dob',
-    render: (hc: HouseholdClientFieldsFragment) => (
-      <ClientDobAge client={hc.client} alwaysShow />
-    ),
-  },
+  dobAge: CLIENT_COLUMNS.dobAge,
   enrollmentPeriod: {
     header: 'Enrollment Period',
     key: 'status',

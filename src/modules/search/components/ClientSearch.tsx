@@ -15,6 +15,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { EnrollmentFields } from '@/modules/bedNights/components/ProjectEnrollmentsTableForBedNights';
 import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';
 import {
@@ -29,6 +30,7 @@ import { SearchFormDefinition } from '@/modules/form/data';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
+import { isEnrollment, isHouseholdClient } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes, Routes } from '@/routes/routes';
@@ -37,27 +39,40 @@ import {
   ClientSearchInput as ClientSearchInputType,
   ClientSortOption,
   ExternalIdentifierType,
+  HouseholdClientFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
+function asClient(
+  record:
+    | ClientFieldsFragment
+    | HouseholdClientFieldsFragment
+    | EnrollmentFields
+) {
+  if (isHouseholdClient(record)) return record.client;
+  if (isEnrollment(record)) return record.client;
+  return record;
+}
 export const CLIENT_COLUMNS: {
-  [key: string]: ColumnDef<ClientFieldsFragment>;
+  [key: string]: ColumnDef<
+    ClientFieldsFragment | HouseholdClientFieldsFragment | EnrollmentFields
+  >;
 } = {
   id: { header: 'HMIS ID', render: 'id' },
   name: {
     header: 'Name',
     key: 'name',
-    render: (client: ClientFieldsFragment) => <ClientName client={client} />,
+    render: (client) => <ClientName client={asClient(client)} />,
   },
   linkedName: {
     header: 'Name',
     key: 'name',
-    render: (client: ClientFieldsFragment) => (
+    render: (client) => (
       <ClientName
-        client={client}
+        client={asClient(client)}
         routerLinkProps={{ target: '_blank' }}
         linkToProfile
       />
@@ -65,20 +80,18 @@ export const CLIENT_COLUMNS: {
   },
   first: {
     header: 'First Name',
-    render: 'firstName',
+    render: (client) => asClient(client).firstName,
   },
   last: {
     header: 'Last Name',
-    render: 'lastName',
+    render: (client) => asClient(client).lastName,
   },
   ssn: {
     header: (
       <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
     ),
     key: 'ssn',
-    render: (client: ClientFieldsFragment) => (
-      <ContextualClientSsn client={client} />
-    ),
+    render: (client) => <ContextualClientSsn client={asClient(client)} />,
     dontLink: true,
   },
   dobAge: {
@@ -88,9 +101,7 @@ export const CLIENT_COLUMNS: {
       </Stack>
     ),
     key: 'dob',
-    render: (client: ClientFieldsFragment) => (
-      <ContextualClientDobAge client={client} />
-    ),
+    render: (client) => <ContextualClientDobAge client={asClient(client)} />,
     dontLink: true,
   },
 };
