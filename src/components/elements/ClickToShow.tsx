@@ -40,6 +40,7 @@ const ClickToShow: React.FC<Props> = ({
       aria-label={text}
       sx={(theme) => ({
         textDecoration: 'none',
+        userSelect: 'text',
         // color: hidden ? 'text.disabled' : 'text.primary',
         justifyContent: 'flex-start',
         width: 'fit-content',

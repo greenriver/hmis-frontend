@@ -4,12 +4,15 @@ import { useMemo } from 'react';
 
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
+import {
+  SubmittedEnrollmentResultFieldsFragment,
+  FormRole,
+} from '@/types/gqlTypes';
 
 interface Props {
   projectId: string;
   householdId?: string;
-  onCompleted?: (data: EnrollmentFieldsFragment) => void;
+  onCompleted?: (data: SubmittedEnrollmentResultFieldsFragment) => void;
 }
 const AddNewClientButton: React.FC<Props> = ({
   projectId,
@@ -32,7 +35,7 @@ const AddNewClientButton: React.FC<Props> = ({
   );
 
   const { openFormDialog, renderFormDialog } =
-    useFormDialog<EnrollmentFieldsFragment>(memoedArgs);
+    useFormDialog<SubmittedEnrollmentResultFieldsFragment>(memoedArgs);
   return (
     <>
       <Button
