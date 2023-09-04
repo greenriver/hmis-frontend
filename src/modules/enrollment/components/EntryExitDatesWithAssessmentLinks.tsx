@@ -41,7 +41,7 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
     enrollment.access.canEditEnrollments || !enrollment.inProgress;
 
   return (
-    <Stack direction='row' alignItems='center' gap={1}>
+    <Stack direction='row' alignItems='center' gap={2}>
       <Box component='span'>
         {canLinkToIntake ? (
           <IconButtonContainer
