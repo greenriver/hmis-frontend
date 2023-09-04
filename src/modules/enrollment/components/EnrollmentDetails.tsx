@@ -1,3 +1,4 @@
+import { Box, Grid, Typography } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
@@ -6,7 +7,6 @@ import OccurrencePointValue, {
   parseOccurrencePointFormDefinition,
 } from './OccurrencePointValue';
 import Loading from '@/components/elements/Loading';
-import SimpleTable from '@/components/elements/SimpleTable';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { occurrencePointCollectedForEnrollment } from '@/modules/hmis/hmisUtil';
@@ -54,6 +54,7 @@ const EnrollmentDetails = ({
       );
     }
 
+    // Occurrence point values (move in date, date of engagement, etc.)
     enrollment.project.occurrencePointForms
       .filter((form) => occurrencePointCollectedForEnrollment(form, enrollment))
       .forEach(({ definition }) => {
@@ -80,29 +81,67 @@ const EnrollmentDetails = ({
 
   if (!enrollment || !rows) return <Loading />;
 
+  const itemSx = {
+    py: 1.5,
+    px: 2,
+    display: 'flex',
+    alignItems: 'center',
+  };
+
   return (
-    <SimpleTable
-      TableCellProps={{
-        sx: {
-          py: 2,
-          '&:first-of-type': {
-            pr: 4,
-            width: '1px',
-            whiteSpace: 'nowrap',
+    <Box>
+      <Grid
+        container
+        rowGap={0}
+        sx={{
+          '> .MuiGrid-item': {
+            borderBottomColor: 'borders.light',
+            borderBottomWidth: 1,
+            borderBottomStyle: 'solid',
           },
-        },
-      }}
-      columns={[
-        {
-          name: 'key',
-          render: (row) => (
-            <strong style={{ fontWeight: 600 }}>{row.label}</strong>
-          ),
-        },
-        { name: 'value', render: (row) => row.value },
-      ]}
-      rows={rows}
-    />
+          '> .MuiGrid-item:nth-last-of-type(2)': {
+            border: 'unset',
+          },
+          '> .MuiGrid-item:nth-last-of-type(1)': {
+            border: 'unset',
+          },
+        }}
+      >
+        {rows.map(({ id, label, value }) => (
+          <>
+            <Grid
+              item
+              xs={12}
+              md={4}
+              lg={5}
+              sx={{ ...itemSx }}
+              key={id + 'label'}
+            >
+              <Typography fontWeight={600} variant='body2'>
+                {label}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={8}
+              lg={7}
+              sx={{ ...itemSx }}
+              key={id + 'value'}
+            >
+              <Typography
+                variant='body2'
+                component='div'
+                sx={{ width: '100%' }}
+              >
+                {value}
+              </Typography>
+            </Grid>
+          </>
+        ))}
+      </Grid>
+    </Box>
   );
 };
+
 export default EnrollmentDetails;
