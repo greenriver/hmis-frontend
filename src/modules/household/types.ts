@@ -3,6 +3,7 @@ import { isNil } from 'lodash-es';
 import {
   ClientFieldsFragment,
   ClientIdentificationFieldsFragment,
+  EnrollmentFieldsFragment,
   HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
 
@@ -11,12 +12,29 @@ export type RecentHouseholdMember = HouseholdClientFieldsFragment & {
 };
 
 export function isHouseholdClient(
-  value: ClientFieldsFragment | HouseholdClientFieldsFragment
+  value:
+    | ClientFieldsFragment
+    | HouseholdClientFieldsFragment
+    | EnrollmentFieldsFragment
 ): value is HouseholdClientFieldsFragment {
   return (
     !isNil(value) &&
     typeof value === 'object' &&
     value.__typename === 'HouseholdClient' &&
+    !!value.hasOwnProperty('client')
+  );
+}
+
+export function isEnrollment(
+  value:
+    | ClientFieldsFragment
+    | HouseholdClientFieldsFragment
+    | EnrollmentFieldsFragment
+): value is EnrollmentFieldsFragment {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    value.__typename === 'Enrollment' &&
     !!value.hasOwnProperty('client')
   );
 }

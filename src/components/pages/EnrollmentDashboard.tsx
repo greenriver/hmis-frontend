@@ -8,7 +8,6 @@ import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
 import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
-
 import NotFound from './NotFound';
 
 import {
@@ -22,10 +21,14 @@ import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
 import EnrollmentNavHeader from '@/modules/enrollment/components/EnrollmentNavHeader';
 import { useDetailedEnrollment } from '@/modules/enrollment/hooks/useDetailedEnrollment';
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
+import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { ClientNameDobVetFragment } from '@/types/gqlTypes';
+import {
+  ClientNameDobVetFragment,
+  DataCollectionFeatureRole,
+} from '@/types/gqlTypes';
 
 const EnrollmentDashboard: React.FC = () => {
   const params = useSafeParams() as {
@@ -42,7 +45,26 @@ const EnrollmentDashboard: React.FC = () => {
   const { enrollment, loading } = useDetailedEnrollment(params.enrollmentId);
   const client = enrollment?.client;
 
-  const navItems = useEnrollmentDashboardNavItems(enrollment || undefined);
+  const enabledFeatures = useMemo(
+    () =>
+      enrollment
+        ? enrollment.project.dataCollectionFeatures
+            .filter((feature) =>
+              featureEnabledForEnrollment(
+                feature,
+                enrollment.client,
+                enrollment.relationshipToHoH
+              )
+            )
+            .map((r) => r.role)
+        : [],
+    [enrollment]
+  );
+
+  const navItems = useEnrollmentDashboardNavItems(
+    enabledFeatures,
+    enrollment || undefined
+  );
 
   const { currentPath, ...dashboardState } = useDashboardState();
 
@@ -64,9 +86,10 @@ const EnrollmentDashboard: React.FC = () => {
             client,
             overrideBreadcrumbTitles,
             enrollment,
+            enabledFeatures,
           }
         : undefined,
-    [client, enrollment]
+    [client, enrollment, enabledFeatures]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);
@@ -115,6 +138,7 @@ export type EnrollmentDashboardContext = {
   client: ClientNameDobVetFragment;
   enrollment?: DashboardEnrollment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
+  enabledFeatures: DataCollectionFeatureRole[];
 };
 
 export function isEnrollmentDashboardContext(

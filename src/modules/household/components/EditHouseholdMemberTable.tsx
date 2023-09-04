@@ -13,6 +13,7 @@ import { HOUSEHOLD_MEMBER_COLUMNS } from './HouseholdMemberTable';
 
 import GenericTable from '@/components/elements/table/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
+import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
   emptyErrorState,
@@ -234,16 +235,18 @@ const EditHouseholdMemberTable = ({
 
   return (
     <>
-      <GenericTable<HouseholdClientFieldsFragment>
-        rows={currentMembers}
-        columns={columns}
-        rowSx={() => ({
-          // HoH indicator column
-          'td:nth-of-type(1)': { px: 0 },
-        })}
-        loading={loading}
-        loadingVariant='linear'
-      />
+      <SsnDobShowContextProvider>
+        <GenericTable<HouseholdClientFieldsFragment>
+          rows={currentMembers}
+          columns={columns}
+          rowSx={() => ({
+            // HoH indicator column
+            'td:nth-of-type(1)': { px: 0 },
+          })}
+          loading={loading}
+          loadingVariant='linear'
+        />
+      </SsnDobShowContextProvider>
       {renderValidationDialog({
         title: 'Change Head of Household',
         onConfirm: () => proposedHoH && onChangeHoH(proposedHoH, true),

@@ -24,6 +24,8 @@ fragment EnrollmentFields on Enrollment {
   }
 }
 
+# FIXME: stop resolving client/project access objects. Instead, put what we need to know
+# inside of the Enrollment access obj
 fragment AllEnrollmentDetails on Enrollment {
   ...EnrollmentFields
   ...EnrollmentOccurrencePointFields
@@ -42,6 +44,9 @@ fragment AllEnrollmentDetails on Enrollment {
     customDataElements {
       ...CustomDataElementFields
     }
+    access {
+      ...ClientAccessFields
+    }
   }
   openEnrollmentSummary {
     ...EnrollmentSummaryFields
@@ -54,6 +59,9 @@ fragment AllEnrollmentDetails on Enrollment {
     }
     occurrencePointForms {
       ...OccurrencePointFormFields
+    }
+    access {
+      ...ProjectAccessFields
     }
   }
 }
