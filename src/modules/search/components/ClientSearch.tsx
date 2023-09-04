@@ -46,7 +46,7 @@ import generateSafePath from '@/utils/generateSafePath';
 export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<ClientFieldsFragment>;
 } = {
-  id: { header: 'HMIS ID', render: 'id', width: '10%' },
+  id: { header: 'HMIS ID', render: 'id' },
   name: {
     header: 'Name',
     key: 'name',
@@ -76,7 +76,6 @@ export const CLIENT_COLUMNS: {
       <ContextualSsnToggleButton sx={{ p: 0 }} variant='text' size='small' />
     ),
     key: 'ssn',
-    width: '8%',
     render: (client: ClientFieldsFragment) => (
       <ContextualClientSsn client={client} />
     ),
@@ -100,25 +99,23 @@ export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
   {
     ...CLIENT_COLUMNS.first,
-    width: '30%',
     linkTreatment: true,
     ariaLabel: (row) => clientNameAllParts(row),
   },
-  { ...CLIENT_COLUMNS.last, width: '30%', linkTreatment: true },
-  { ...CLIENT_COLUMNS.ssn, width: '15%' },
-  { ...CLIENT_COLUMNS.dobAge, width: '15%' },
+  { ...CLIENT_COLUMNS.last, linkTreatment: true },
+  { ...CLIENT_COLUMNS.ssn, width: '150px' },
+  { ...CLIENT_COLUMNS.dobAge, width: '180px' },
 ];
 
 export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
   {
     ...CLIENT_COLUMNS.name,
-    width: '15%',
     linkTreatment: true,
     ariaLabel: (row) => clientNameAllParts(row),
   },
-  { ...CLIENT_COLUMNS.ssn, width: '10%' },
-  { ...CLIENT_COLUMNS.dobAge, width: '10%' },
+  { ...CLIENT_COLUMNS.ssn },
+  { ...CLIENT_COLUMNS.dobAge },
 ];
 
 /**
