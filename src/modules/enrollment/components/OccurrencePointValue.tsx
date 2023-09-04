@@ -1,5 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { assign, isEmpty, omit } from 'lodash-es';
+import { assign, isEmpty, isNil, omit } from 'lodash-es';
 import { useMemo } from 'react';
 import IconButtonContainer from './IconButtonContainer';
 import NotCollectedText from '@/components/elements/NotCollectedText';
@@ -52,7 +52,7 @@ export const parseOccurrencePointFormDefinition = (
 };
 
 function hasAnyValues(object: FormValues) {
-  return !!Object.keys(object).find((k) => !!object[k]);
+  return !!Object.keys(object).find((k) => !isNil(object[k]));
 }
 
 interface OccurrencePointValueProps {
