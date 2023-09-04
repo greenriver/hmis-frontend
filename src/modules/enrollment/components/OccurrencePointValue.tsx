@@ -1,4 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit';
+import { Box } from '@mui/material';
 import { assign, isEmpty, isNil, omit } from 'lodash-es';
 import { useMemo } from 'react';
 import IconButtonContainer from './IconButtonContainer';
@@ -141,7 +142,9 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
       pickListArgs={pickListArgs}
     />
   ) : (
-    <NotCollectedText />
+    <Box width='100%'>
+      <NotCollectedText />
+    </Box>
   );
 
   if (!hasAnyEditableContent) return dynamicView;
