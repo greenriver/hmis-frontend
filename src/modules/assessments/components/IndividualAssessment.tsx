@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Ref, useEffect, useMemo } from 'react';
 
 import { assessmentDate } from '../util';
@@ -16,6 +16,8 @@ import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
+import AssessmentStatusIndicator from '@/modules/assessments/components/AssessmentStatusIndicator';
+import { AssessmentStatus } from '@/modules/assessments/components/household/util';
 import { useAssessment } from '@/modules/assessments/hooks/useAssessment';
 import { useBasicEnrollment } from '@/modules/enrollment/hooks/useBasicEnrollment';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
@@ -39,6 +41,7 @@ export interface IndividualAssessmentProps {
   clientName?: string;
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
+  assessmentStatus?: AssessmentStatus;
   visible?: boolean;
   getFormActionProps?: (
     assessment?: AssessmentFieldsFragment
@@ -55,6 +58,7 @@ export interface IndividualAssessmentProps {
 const IndividualAssessment = ({
   enrollmentId,
   assessmentId,
+  assessmentStatus,
   formRole: formRoleParam,
   embeddedInWorkflow = false,
   clientName,
@@ -130,6 +134,7 @@ const IndividualAssessment = ({
   if (dataLoading || enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
   if (assessmentId && !assessment) return <NotFound />;
+  if (!definition) return <MissingDefinitionAlert />;
 
   const title = embeddedInWorkflow ? undefined : (
     <AssessmentTitle
@@ -138,39 +143,49 @@ const IndividualAssessment = ({
       projectName={enrollment.project.projectName}
     />
   );
+
+  const navigationTitle = (
+    <Box>
+      <Typography
+        variant='h5'
+        sx={({ typography }) => ({
+          mb: 1,
+          fontWeight: typography.fontWeightBold,
+        })}
+      >
+        {clientName}
+      </Typography>
+      <Typography variant='h6' component='div'>
+        <Box
+          component='span'
+          sx={({ typography }) => ({ fontWeight: typography.fontWeightBold })}
+        >
+          {`${definition.title}: `}
+        </Box>
+        {enrollment.project.projectName}
+        {assessmentStatus && (
+          <AssessmentStatusIndicator status={assessmentStatus} />
+        )}
+      </Typography>
+    </Box>
+  );
+
+  // const navigationTitle=<> </>
   return (
-    <>
-      {!definition && <MissingDefinitionAlert />}
-      {definition && (
-        <AssessmentForm
-          assessmentTitle={title}
-          key={assessment?.id}
-          formRole={formRole}
-          definition={definition}
-          assessment={assessment}
-          enrollment={enrollment}
-          top={topOffsetHeight}
-          embeddedInWorkflow={embeddedInWorkflow}
-          FormActionProps={FormActionProps}
-          visible={visible}
-          formRef={formRef}
-          navigationTitle={
-            embeddedInWorkflow ? (
-              <Stack sx={{ mb: 2 }} gap={1}>
-                <Typography variant='body1' fontWeight={600}>
-                  {clientName}
-                </Typography>
-                <Typography variant='h6'>{definition.title}</Typography>
-              </Stack>
-            ) : (
-              <Typography variant='h6' sx={{ mb: 2 }}>
-                {definition.title}
-              </Typography>
-            )
-          }
-        />
-      )}
-    </>
+    <AssessmentForm
+      assessmentTitle={title}
+      navigationTitle={navigationTitle}
+      key={assessment?.id}
+      formRole={formRole}
+      definition={definition}
+      assessment={assessment}
+      enrollment={enrollment}
+      top={topOffsetHeight}
+      embeddedInWorkflow={embeddedInWorkflow}
+      FormActionProps={FormActionProps}
+      visible={visible}
+      formRef={formRef}
+    />
   );
 };
 

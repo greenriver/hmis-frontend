@@ -7,7 +7,7 @@ import NotStartedIcon from '@mui/icons-material/PendingOutlined';
 import InProgressIcon from '@mui/icons-material/Timelapse';
 
 import { Stack, SvgIconProps, Typography } from '@mui/material';
-import { AssessmentStatus } from './util';
+import { AssessmentStatus } from './household/util';
 
 const Display: React.FC<{
   icon: SvgIconComponent;
@@ -25,7 +25,11 @@ const Display: React.FC<{
   );
 };
 
-const TabIndicator = ({ status }: { status: AssessmentStatus }) => {
+const AssessmentStatusIndicator = ({
+  status,
+}: {
+  status: AssessmentStatus;
+}) => {
   switch (status) {
     case AssessmentStatus.NotStarted:
       return (
@@ -60,4 +64,4 @@ const TabIndicator = ({ status }: { status: AssessmentStatus }) => {
   }
 };
 
-export default TabIndicator;
+export default AssessmentStatusIndicator;

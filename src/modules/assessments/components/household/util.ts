@@ -106,3 +106,18 @@ export const labelForStatus = (
       return 'Error';
   }
 };
+
+export const useAssessmentStatus = ({
+  assessmentId,
+  assessmentInProgress,
+}: {
+  assessmentId?: string;
+  assessmentInProgress?: boolean;
+}): AssessmentStatus => {
+  const submitted = !!assessmentId && assessmentInProgress;
+  return submitted
+    ? AssessmentStatus.Submitted
+    : assessmentId
+    ? AssessmentStatus.Started
+    : AssessmentStatus.NotStarted;
+};

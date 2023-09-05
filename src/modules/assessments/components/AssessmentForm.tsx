@@ -1,4 +1,12 @@
-import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { assign } from 'lodash-es';
 import {
   ReactNode,
@@ -224,59 +232,65 @@ const AssessmentForm = ({
         }}
       >
         <Paper sx={{ p: 2 }}>
-          {navigationTitle}
+          {navigationTitle && (
+            <Box>
+              {navigationTitle}
+              <Divider sx={{ my: 2 }} />
+            </Box>
+          )}
           <FormStepper
             items={definition.definition.item}
             scrollOffset={top}
             useUrlHash={!embeddedInWorkflow}
           />
-        </Paper>
-        <Stack gap={2} sx={{ mt: 2 }}>
-          {!assessment && canEdit && (
-            <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
-              <Button
-                variant='outlined'
-                onClick={() => setDialogOpen(true)}
-                sx={{ height: 'fit-content' }}
-                fullWidth
+          <Divider sx={{ my: 2 }} />
+          <Stack gap={2} sx={{ mt: 2 }}>
+            {!assessment && canEdit && (
+              <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
+                <Button
+                  variant='outlined'
+                  onClick={() => setDialogOpen(true)}
+                  sx={{ height: 'fit-content' }}
+                  fullWidth
+                >
+                  Autofill Assessment
+                </Button>
+              </ButtonTooltipContainer>
+            )}
+            {!isPrintView && locked && assessment && (
+              <PrintViewButton
+                // If embedded in household workflow, we need to link
+                // over to the individual view for the specific assessment in order to print it
+                openInNew={embeddedInWorkflow}
+                to={
+                  embeddedInWorkflow
+                    ? generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+                        clientId: assessment.enrollment.client.id,
+                        enrollmentId: assessment.enrollment.id,
+                        assessmentId: assessment.id,
+                        formRole,
+                      })
+                    : undefined
+                }
               >
-                Autofill Assessment
-              </Button>
-            </ButtonTooltipContainer>
-          )}
-          {!isPrintView && locked && assessment && (
-            <PrintViewButton
-              // If embedded in household workflow, we need to link
-              // over to the individual view for the specific assessment in order to print it
-              openInNew={embeddedInWorkflow}
-              to={
-                embeddedInWorkflow
-                  ? generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-                      clientId: assessment.enrollment.client.id,
-                      enrollmentId: assessment.enrollment.id,
-                      assessmentId: assessment.id,
-                      formRole,
-                    })
-                  : undefined
-              }
-            >
-              Print Assessment
-            </PrintViewButton>
-          )}
-          {assessment && (
-            <DeleteAssessmentButton
-              assessment={assessment}
-              clientId={enrollment.client.id}
-              enrollmentId={enrollment.id}
-              onSuccess={navigateToEnrollment}
-            />
-          )}
-          {assessment && (
-            <Typography color='text.secondary' variant='body2' sx={{ mt: 1 }}>
-              <b>Assessment ID:</b> {assessment.id}
-            </Typography>
-          )}
-        </Stack>
+                Print Assessment
+              </PrintViewButton>
+            )}
+            {assessment && (
+              <DeleteAssessmentButton
+                assessment={assessment}
+                clientId={enrollment.client.id}
+                enrollmentId={enrollment.id}
+                onSuccess={navigateToEnrollment}
+              />
+            )}
+            {assessment && (
+              <Typography color='text.secondary' variant='body2' sx={{ mt: 1 }}>
+                <b>Assessment ID:</b> {assessment.id}
+              </Typography>
+            )}
+          </Stack>
+        </Paper>
       </Box>
     </Grid>
   );

@@ -1,16 +1,17 @@
 import CompleteIcon from '@mui/icons-material/Send';
 import { Stack, Typography } from '@mui/material';
 
-import TabIndicator from './TabIndicator';
+import AssessmentStatusIndicator from '../AssessmentStatusIndicator';
 import { HouseholdAssesmentRole, TabDefinition } from './util';
 
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { AssessmentRole } from '@/types/gqlTypes';
 
-const TabLabel = ({
-  definition: { clientName, status, relationshipToHoH },
-}: {
+interface Props {
   definition: TabDefinition;
+}
+const TabLabel: React.FC<Props> = ({
+  definition: { clientName, status, relationshipToHoH },
 }) => {
   return (
     <Stack
@@ -31,7 +32,7 @@ const TabLabel = ({
         />
         {clientName}
       </Typography>
-      <TabIndicator status={status} />
+      <AssessmentStatusIndicator status={status} />
     </Stack>
   );
 };

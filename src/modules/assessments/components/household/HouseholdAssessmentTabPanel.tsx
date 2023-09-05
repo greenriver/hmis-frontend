@@ -25,6 +25,7 @@ interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   previousTab?: string;
   navigateToTab: (t: string) => void;
   updateTabStatus: (status: AssessmentStatus, tabId: string) => void;
+  assessmentStatus: AssessmentStatus;
 }
 
 // Memoized to only re-render when props change (shallow compare)
@@ -44,6 +45,7 @@ const HouseholdAssessmentTabPanel = memo(
     refetch,
     updateTabStatus,
     assessmentSubmitted,
+    assessmentStatus,
   }: HouseholdAssessmentTabPanelProps) => {
     // console.debug('Rendering assessment panel for', clientName);
 
@@ -153,6 +155,7 @@ const HouseholdAssessmentTabPanel = memo(
           embeddedInWorkflow={false}
           enrollmentId={enrollmentId}
           assessmentId={assessmentId}
+          assessmentStatus={assessmentStatus}
           formRole={role as unknown as FormRole}
           getFormActionProps={getFormActionProps}
           visible={active}

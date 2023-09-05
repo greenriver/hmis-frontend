@@ -335,6 +335,7 @@ const HouseholdAssessments = ({
               previousTab={tabs[index - 1]?.id}
               role={role}
               updateTabStatus={updateTabStatus}
+              assessmentStatus={tabDefinition.status}
               {...tabDefinition}
             />
           ))}

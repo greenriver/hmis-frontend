@@ -3,7 +3,10 @@ import { useMemo } from 'react';
 
 import { HouseholdAssesmentRole } from '../components/household/util';
 
-import { useGetHouseholdAssessmentsQuery } from '@/types/gqlTypes';
+import {
+  AssessmentWithExtraToppingsFragment,
+  useGetHouseholdAssessmentsQuery,
+} from '@/types/gqlTypes';
 
 interface Args {
   householdId: string;
@@ -32,7 +35,10 @@ export function useHouseholdAssessments({
       enrollment.id,
       assessment,
     ]);
-    return fromPairs(pairs);
+    return fromPairs(pairs) as Record<
+      string,
+      AssessmentWithExtraToppingsFragment | undefined
+    >;
   }, [householdAssessments]);
   return { householdAssessments, assessmentByEnrollmentId, ...status } as const;
 }
