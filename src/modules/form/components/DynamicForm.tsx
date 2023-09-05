@@ -141,7 +141,7 @@ const DynamicForm = forwardRef(
       [formStepperDispatch]
     );
 
-    const { renderFields, getCleanedValues } = useDynamicFields({
+    const { renderFields, getCleanedValues, values } = useDynamicFields({
       definition,
       initialValues,
       localConstants,
@@ -207,6 +207,15 @@ const DynamicForm = forwardRef(
       setPromptSave(!isSaveButtonVisible);
     }, [isSaveButtonVisible, promptSave]);
 
+    // Validate form on load if warnIfEmpty
+    useEffect(() => {
+      if (warnIfEmpty && !dirty)
+        formStepperDispatch({
+          type: 'validateForm',
+          values: getCleanedValues(),
+        });
+    }, [dirty, warnIfEmpty, formStepperDispatch, getCleanedValues]);
+
     const handleSubmit = useCallback(
       (
         event: React.MouseEvent<HTMLButtonElement>,
@@ -218,8 +227,9 @@ const DynamicForm = forwardRef(
           event,
           onSuccess,
         });
+        formStepperDispatch({ type: 'validateForm', values });
       },
-      [onSubmit, getCleanedValues]
+      [onSubmit, getCleanedValues, formStepperDispatch, values]
     );
 
     const handleConfirm = useCallback(
@@ -246,8 +256,9 @@ const DynamicForm = forwardRef(
       (onSuccess?: VoidFunction) => {
         if (!onSaveDraft) return;
         onSaveDraft(getCleanedValues(), onSuccess);
+        formStepperDispatch({ type: 'validateForm', values });
       },
-      [onSaveDraft, getCleanedValues]
+      [onSaveDraft, getCleanedValues, formStepperDispatch, values]
     );
 
     const handleChangeCallback = useCallback(

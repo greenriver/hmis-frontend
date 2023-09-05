@@ -48,6 +48,18 @@ export const createHudValuesForSubmit = (
     includeMissingKeys: 'AS_HIDDEN',
   });
 
+export const getErrorsFromMutationResult = (
+  data: SubmitAssessmentMutation | SaveAssessmentMutation
+) => {
+  let errs;
+  if (data.hasOwnProperty('saveAssessment')) {
+    errs = (data as SaveAssessmentMutation).saveAssessment?.errors || [];
+  } else {
+    errs = (data as SubmitAssessmentMutation).submitAssessment?.errors || [];
+  }
+  return errs;
+};
+
 export function useAssessmentHandlers({
   definition,
   enrollmentId,
@@ -63,13 +75,7 @@ export function useAssessmentHandlers({
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
       if (onCompletedProp) onCompletedProp(data);
 
-      let errs;
-      if (data.hasOwnProperty('saveAssessment')) {
-        errs = (data as SaveAssessmentMutation).saveAssessment?.errors || [];
-      } else {
-        errs =
-          (data as SubmitAssessmentMutation).submitAssessment?.errors || [];
-      }
+      const errs = getErrorsFromMutationResult(data);
 
       if (errs.length > 0) {
         window.scrollTo(0, 0);

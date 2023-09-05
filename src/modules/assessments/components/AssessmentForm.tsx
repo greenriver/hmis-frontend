@@ -126,7 +126,9 @@ const AssessmentForm = ({
       onSuccessfulSubmit: (assmt) => {
         if (!assmt.inProgress) setLocked(true);
       },
-      onCompleted: () => formStepperDispatch({ type: 'saveForm' }),
+      onCompleted: () => {
+        formStepperDispatch({ type: 'saveForm' });
+      },
     });
 
   useEffect(() => {

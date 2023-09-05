@@ -1,4 +1,4 @@
-import { fromPairs, omitBy, uniq, pick, isEmpty } from 'lodash-es';
+import { fromPairs, omitBy, uniq, pick, isEmpty, compact } from 'lodash-es';
 import React, {
   useCallback,
   createContext,
@@ -19,6 +19,10 @@ import { FormDefinitionJson, ItemType } from '@/types/gqlTypes';
 
 export type FromStepperSectionState = {
   errors: ErrorState;
+  formErrors: {
+    warnings: { linkId: string; message?: string }[];
+    errors: { linkId: string; message?: string }[];
+  };
   changed: string[];
   complete: boolean;
 };
@@ -28,7 +32,8 @@ export type FormStepperActionType =
   | { type: 'changeFields'; fields: string[] }
   | { type: 'updateValues'; values: FormValues }
   | { type: 'saveForm' }
-  | { type: 'updateErrors'; errors?: ErrorState };
+  | { type: 'updateErrors'; errors?: ErrorState }
+  | { type: 'validateForm'; values: FormValues };
 export type FormStepperDispatchContextType = Dispatch<FormStepperActionType>;
 
 export const FormStepperStateContext = createContext<FormStepperStateType>({});
@@ -79,6 +84,10 @@ const FormStepperContextProvider: React.FC<
         ...prevState,
         [group]: {
           complete: prevState[group]?.complete || false,
+          formErrors: prevState[group]?.formErrors || {
+            errors: [],
+            warnings: [],
+          },
           errors: prevState[group]?.errors || { errors: [], warnings: [] },
           changed: uniq([...(prevState[group]?.changed || []), field]),
         },
@@ -91,12 +100,21 @@ const FormStepperContextProvider: React.FC<
     (prevState: FormStepperStateType, errors: ErrorState) =>
       fromPairs(
         Object.entries(fieldMap).map(([group, items]) => {
+          const groupKeys = Object.keys(items);
+          const groupAttributes = compact(
+            Object.values(items).map((item) => item.mapping?.fieldName)
+          );
+
           const filteredErrors: ErrorState = {
-            errors: errors.errors.filter((err) =>
-              Object.keys(items).includes(err.linkId || '')
+            errors: errors.errors.filter(
+              (err) =>
+                groupKeys.includes(err.linkId || '') ||
+                groupAttributes.includes(err.attribute)
             ),
-            warnings: errors.warnings.filter((err) =>
-              Object.keys(items).includes(err.linkId || '')
+            warnings: errors.warnings.filter(
+              (err) =>
+                groupKeys.includes(err.linkId || '') ||
+                groupAttributes.includes(err.attribute)
             ),
           };
 
@@ -104,7 +122,46 @@ const FormStepperContextProvider: React.FC<
             group,
             {
               changed: prevState[group]?.changed || [],
+              formErrors: prevState[group]?.formErrors || {
+                errors: [],
+                warnings: [],
+              },
               errors: filteredErrors,
+              complete: prevState[group]?.complete || false,
+            },
+          ];
+        })
+      ),
+    [fieldMap]
+  );
+
+  const applyFormValidationErrors = useCallback(
+    (prevState: FormStepperStateType, values: FormValues) =>
+      fromPairs(
+        Object.entries(fieldMap).map(([group, items]) => {
+          const filteredValues: FormValues = pick(values, Object.keys(items));
+
+          const errors: FromStepperSectionState['formErrors'] = {
+            errors: [],
+            warnings: [],
+          };
+
+          Object.entries(items).forEach(([linkId, item]) => {
+            const value = filteredValues[linkId];
+            if (!(linkId in filteredValues)) return;
+
+            if (item.required && !hasMeaningfulValue(value))
+              errors.errors.push({ linkId, message: 'required' });
+            if (item.warnIfEmpty && !hasMeaningfulValue(value))
+              errors.warnings.push({ linkId, message: 'required' });
+          });
+
+          return [
+            group,
+            {
+              formErrors: errors,
+              changed: prevState[group]?.changed || [],
+              errors: prevState[group]?.errors || [],
               complete: prevState[group]?.complete || false,
             },
           ];
@@ -131,10 +188,14 @@ const FormStepperContextProvider: React.FC<
             {
               changed: prevState[group]?.changed || [],
               errors: prevState[group]?.errors || {},
+              formErrors: prevState[group]?.formErrors || {
+                errors: [],
+                warnings: [],
+              },
               complete:
                 !isEmpty(filteredValues) &&
                 Object.values(filteredValues).every(
-                  // Currently hasMeaninfulValue includes isDataNotCollected, but that may be removed, so handle it here explicitly
+                  // Currently hasMeaningfulValue includes isDataNotCollected, but that may be removed, so handle it here explicitly
                   (val) => hasMeaningfulValue(val) && !isDataNotCollected(val)
                 ),
             },
@@ -157,6 +218,7 @@ const FormStepperContextProvider: React.FC<
             }
             return next;
           case 'updateValues':
+            // return applyFormValidationErrors(applyValuesForCompletion(state, action.values), action.values);
             return applyValuesForCompletion(state, action.values);
           case 'saveForm':
             return fromPairs(
@@ -165,12 +227,21 @@ const FormStepperContextProvider: React.FC<
                 { ...val, changed: [] },
               ])
             );
+          case 'validateForm':
+            return applyFormValidationErrors(state, action.values);
           case 'updateErrors':
             if (!action.errors) return state;
             return applyErrorsChange(state, action.errors);
+          default:
+            return state;
         }
       },
-      [applyFieldChange, applyErrorsChange, applyValuesForCompletion]
+      [
+        applyFieldChange,
+        applyErrorsChange,
+        applyValuesForCompletion,
+        applyFormValidationErrors,
+      ]
     );
 
   const [state, dispatch] = useReducer(reducer, {});

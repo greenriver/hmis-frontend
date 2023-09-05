@@ -143,8 +143,14 @@ const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
     <Stepper activeStep={10000} orientation='vertical' nonLinear>
       {steps.map((step) => {
         const changes = stepperState[step.anchor]?.changed || [];
-        const errors = stepperState[step.anchor]?.errors?.errors || [];
-        const warnings = stepperState[step.anchor]?.errors?.warnings || [];
+        const errors = [
+          ...(stepperState[step.anchor]?.errors?.errors || []),
+          ...(stepperState[step.anchor]?.formErrors?.errors || []),
+        ];
+        const warnings = [
+          ...(stepperState[step.anchor]?.errors?.warnings || []),
+          ...(stepperState[step.anchor]?.formErrors?.warnings || []),
+        ];
 
         let StepIconComponent: ComponentType<SvgIconProps> = EmptyIcon;
         let stepText = '';
