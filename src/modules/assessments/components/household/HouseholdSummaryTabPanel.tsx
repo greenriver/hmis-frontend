@@ -69,9 +69,9 @@ const HouseholdSummaryTabPanel = memo(
       }
     );
 
-    const [assessmentsToSubmit, setAssessmentsToSubmit] = useState<
-      readonly string[]
-    >([]);
+    const [assessmentsToSubmit, setAssessmentsToSubmit] = useState<string[]>(
+      []
+    );
 
     const onCompleted = useCallback(
       ({ submitHouseholdAssessments }: SubmitHouseholdAssessmentsMutation) => {

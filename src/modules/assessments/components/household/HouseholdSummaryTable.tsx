@@ -1,5 +1,5 @@
 import { Link, Typography } from '@mui/material';
-import { Dispatch, SetStateAction, useMemo } from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 
 import { HouseholdAssesmentRole, TabDefinition } from './util';
 
@@ -14,7 +14,7 @@ const NOT_STARTED = 'Not started';
 interface Props {
   tabs: TabDefinition[];
   role: HouseholdAssesmentRole;
-  setAssessmentsToSubmit: (assessmentIds: readonly string[]) => void;
+  setAssessmentsToSubmit: (assessmentIds: string[]) => void;
   setCurrentTab: Dispatch<SetStateAction<string | undefined>>;
 }
 
@@ -50,10 +50,6 @@ const HouseholdSummaryTable = ({
   setCurrentTab,
   setAssessmentsToSubmit,
 }: Props) => {
-  const submittable = tabs
-    .filter((tab) => tab.assessmentId && tab.assessmentInProgress)
-    .map(({ assessmentId }) => assessmentId) as string[];
-
   const columns: ColumnDef<TabDefinition>[] = useMemo(() => {
     const { dateHeader, statusHeader, completedText } = roleLabels(role);
     return [
@@ -151,11 +147,21 @@ const HouseholdSummaryTable = ({
     ];
   }, [role, setCurrentTab]);
 
+  const handleSetSelected = useCallback(
+    (rowIds: readonly string[]) => {
+      const assessmentIds = tabs
+        .filter((t) => rowIds.includes(t.id))
+        .map((t) => t.assessmentId)
+        .filter((id): id is string => !!id);
+      setAssessmentsToSubmit(assessmentIds);
+    },
+    [setAssessmentsToSubmit, tabs]
+  );
   return (
     <GenericTable<TabDefinition>
       rows={tabs}
       columns={columns}
-      selectable={submittable.length > 0}
+      selectable
       isRowSelectable={isSubmittable}
       rowSx={(row) => ({
         backgroundColor: isSubmittable(row)
@@ -165,7 +171,7 @@ const HouseholdSummaryTable = ({
           color: row.assessmentSubmitted ? 'text.secondary' : undefined,
         },
       })}
-      setSelectedRowIds={setAssessmentsToSubmit}
+      setSelectedRowIds={handleSetSelected}
     />
   );
 };
