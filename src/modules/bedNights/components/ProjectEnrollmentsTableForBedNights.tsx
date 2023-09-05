@@ -6,14 +6,15 @@ import { ENROLLMENT_COLUMNS } from '../../projects/components/tables/ProjectClie
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { EnhancedTableToolbarProps } from '@/components/elements/table/EnhancedTableToolbar';
 import { ColumnDef } from '@/components/elements/table/types';
+import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import {
   formatDateForDisplay,
   formatDateForGql,
   formatRelativeDate,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import {
   EnrollmentFilterOptionStatus,
   EnrollmentSortOption,
@@ -58,11 +59,8 @@ const ProjectEnrollmentsTableForBedNights = ({
     const defaultColumns: ColumnDef<EnrollmentFields>[] = [
       ENROLLMENT_COLUMNS.firstNameLinkedToEnrollment,
       ENROLLMENT_COLUMNS.lastNameLinkedToEnrollment,
-      {
-        header: 'DOB / Age',
-        key: 'dob',
-        render: (e) => <ClientDobAge client={e.client} alwaysShow />,
-      },
+      CLIENT_COLUMNS.ssn,
+      CLIENT_COLUMNS.dobAge,
       ENROLLMENT_COLUMNS.entryDate,
       ENROLLMENT_COLUMNS.householdId,
       {
@@ -89,54 +87,58 @@ const ProjectEnrollmentsTableForBedNights = ({
   }, [additionalColumns]);
 
   return (
-    <GenericTableWithData<
-      GetProjectEnrollmentsForBedNightsQuery,
-      GetProjectEnrollmentsForBedNightsQueryVariables,
-      EnrollmentFields,
-      EnrollmentsForProjectFilterOptions
-    >
-      queryVariables={queryVariables}
-      queryDocument={GetProjectEnrollmentsForBedNightsDocument}
-      columns={columns}
-      pagePath='project.enrollments'
-      recordType='Enrollment'
-      showFilters
-      filters={(f) => omit(f, 'searchTerm', 'status', 'openOnDate')}
-      filterInputType='EnrollmentsForProjectFilterOptions'
-      defaultSortOption={EnrollmentSortOption.MostRecent}
-      defaultFilters={{
-        status: [
-          EnrollmentFilterOptionStatus.Active,
-          EnrollmentFilterOptionStatus.Incomplete,
-        ],
-      }}
-      noData={(filters) => {
-        const dateDisplay =
-          filters.bedNightOnDate && isDate(filters.bedNightOnDate)
-            ? formatDateForDisplay(filters.bedNightOnDate as unknown as Date)
-            : null;
+    <SsnDobShowContextProvider>
+      <GenericTableWithData<
+        GetProjectEnrollmentsForBedNightsQuery,
+        GetProjectEnrollmentsForBedNightsQueryVariables,
+        EnrollmentFields,
+        EnrollmentsForProjectFilterOptions
+      >
+        queryVariables={queryVariables}
+        queryDocument={GetProjectEnrollmentsForBedNightsDocument}
+        columns={columns}
+        pagePath='project.enrollments'
+        recordType='Enrollment'
+        showFilters
+        filters={(f) => omit(f, 'searchTerm', 'status', 'openOnDate')}
+        filterInputType='EnrollmentsForProjectFilterOptions'
+        defaultSortOption={EnrollmentSortOption.MostRecent}
+        defaultFilters={{
+          status: [
+            EnrollmentFilterOptionStatus.Active,
+            EnrollmentFilterOptionStatus.Incomplete,
+          ],
+        }}
+        noData={(filters) => {
+          const dateDisplay =
+            filters.bedNightOnDate && isDate(filters.bedNightOnDate)
+              ? formatDateForDisplay(filters.bedNightOnDate as unknown as Date)
+              : null;
 
-        const enrolledDate = formatDateForDisplay(openOnDate);
-        if (!dateDisplay)
+          const enrolledDate = formatDateForDisplay(openOnDate);
+          if (!dateDisplay)
+            return (
+              <>{`No clients enrolled on ${formatDateForDisplay(
+                openOnDate
+              )}`}</>
+            );
           return (
-            <>{`No clients enrolled on ${formatDateForDisplay(openOnDate)}`}</>
+            <>
+              {enrolledDate === dateDisplay
+                ? `No clients with bed nights on ${dateDisplay}`
+                : `No clients enrolled on ${enrolledDate} with bed nights on ${dateDisplay}`}
+            </>
           );
-        return (
-          <>
-            {enrolledDate === dateDisplay
-              ? `No clients with bed nights on ${dateDisplay}`
-              : `No clients enrolled on ${enrolledDate} with bed nights on ${dateDisplay}`}
-          </>
-        );
-      }}
-      selectable={editable}
-      defaultPageSize={25}
-      rowsPerPageOptions={[25, 50, 100, 150, 200]}
-      EnhancedTableToolbarProps={{
-        title: 'Enrolled Clients',
-        renderBulkAction,
-      }}
-    />
+        }}
+        selectable={editable}
+        defaultPageSize={25}
+        rowsPerPageOptions={[25, 50, 100, 150, 200]}
+        EnhancedTableToolbarProps={{
+          title: 'Enrolled Clients',
+          renderBulkAction,
+        }}
+      />
+    </SsnDobShowContextProvider>
   );
 };
 export default ProjectEnrollmentsTableForBedNights;

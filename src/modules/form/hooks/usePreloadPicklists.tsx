@@ -16,11 +16,13 @@ interface Args {
   definition: FormDefinitionJson | undefined;
   pickListArgs?: PickListArgs;
   queryOptions?: Omit<QueryOptions, 'query'>;
+  skip?: boolean;
 }
 const usePreloadPicklists = ({
   definition,
   pickListArgs,
   queryOptions,
+  skip,
 }: Args) => {
   const client = useApolloClient();
   const [loading, setLoading] = useState(true);
@@ -46,7 +48,7 @@ const usePreloadPicklists = ({
   );
 
   const fetch = useCallback(() => {
-    if (isEmpty(pickListTypesToFetch)) {
+    if (skip || isEmpty(pickListTypesToFetch)) {
       setLoading(false);
       return;
     }
@@ -71,7 +73,7 @@ const usePreloadPicklists = ({
       })
       .catch(() => setData([]))
       .finally(() => setLoading(false));
-  }, [pickListTypesToFetch, pickListArgs, client, queryOptions]);
+  }, [skip, pickListTypesToFetch, client, pickListArgs, queryOptions]);
 
   useEffect(() => {
     fetch();

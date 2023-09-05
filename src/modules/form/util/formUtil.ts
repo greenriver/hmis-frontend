@@ -9,6 +9,7 @@ import {
   sub,
 } from 'date-fns';
 import {
+  cloneDeep,
   compact,
   get,
   isArray,
@@ -41,8 +42,8 @@ import {
 } from '../types';
 
 import {
-  age,
   customDataElementValueForKey,
+  evaluateDataCollectedAbout,
   formatDateForGql,
   INVALID_ENUM,
   parseHmisDateString,
@@ -53,7 +54,6 @@ import {
   AutofillValue,
   BoundType,
   Component,
-  DataCollectedAbout,
   DisabledDisplay,
   EnableBehavior,
   EnableOperator,
@@ -238,16 +238,35 @@ export const getItemMap = (
 /**
  * Recursively find a question item by linkId
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const findItem = (
+export const findItem = (
   items: FormItem[] | null | undefined,
   linkId: string
 ): FormItem | undefined => {
   if (!items || items.length === 0) return undefined;
   const found = items.find((i) => i.linkId === linkId);
   if (found) return found;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   return items.find((item) => findItem(item.item, linkId));
+};
+
+/**
+ * Recursively modify a form definition. Returns a deep copy.
+ */
+export const modifyFormDefinition = (
+  definition: FormDefinitionJson,
+  operation: (item: FormItem) => void
+): FormDefinitionJson => {
+  const copy = cloneDeep(definition);
+
+  function recur(items: FormItem[]) {
+    items.forEach((item: FormItem) => {
+      operation(item);
+      if (Array.isArray(item.item)) recur(item.item);
+    });
+  }
+
+  recur(copy.item);
+  return copy;
 };
 
 /**
@@ -366,14 +385,16 @@ const evaluateEnableWhen = ({
       if (Array.isArray(comparisonValue)) {
         result = !!comparisonValue.find((val) => val === currentValue);
       } else {
-        console.warn("Can't use INCLUDES operator without array value");
+        console.warn("Can't use IN operator without array value");
       }
       break;
     case EnableOperator.Includes:
       if (Array.isArray(currentValue)) {
         result = !!currentValue.find((v) => v === comparisonValue);
       } else {
-        console.warn("Can't use IN operator without array comparison value");
+        console.warn(
+          "Can't use INCLUDES operator without array comparison value"
+        );
       }
       break;
     default:
@@ -944,51 +965,36 @@ export type ClientNameDobVeteranFields = {
 };
 
 /**
- * Apply "data collected about" filters.
+ * Recursively filters out any items where "data collected about" does not apply.
  * Returns a modified copy of the definition.
- * Only checks at 2 levels of nesting.
  */
 export const applyDataCollectedAbout = (
   items: FormDefinitionFieldsFragment['definition']['item'],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
-) => {
-  // FIXME do a recursive check
+): FormDefinitionFieldsFragment['definition']['item'] => {
   function isApplicable(item: FormItem) {
     if (!item.dataCollectedAbout) return true;
 
-    switch (item.dataCollectedAbout) {
-      case DataCollectedAbout.AllClients:
-        return true;
-      case DataCollectedAbout.Hoh:
-        return relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold;
-      case DataCollectedAbout.HohAndAdults:
-        const clientAge = age(client);
-        return (
-          relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
-          isNil(client.dob) ||
-          (!isNil(clientAge) && clientAge >= 18)
-        );
-      case DataCollectedAbout.VeteranHoh:
-        return (
-          relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold &&
-          client.veteranStatus === NoYesReasonsForMissingData.Yes
-        );
-      default:
-        return true;
-    }
+    return evaluateDataCollectedAbout(
+      item.dataCollectedAbout,
+      client,
+      relationshipToHoH
+    );
+  }
+
+  function recur(item: (typeof items)[0]) {
+    if (!item.item) return item;
+    const { item: childItems, ...rest } = item;
+    const filteredItems: typeof items = childItems
+      .filter((child) => isApplicable(child))
+      .map((child) => recur(child));
+    return { ...rest, item: filteredItems };
   }
 
   return items
-    .map((item) => {
-      if (!item.item) return item;
-      const { item: childItems, ...rest } = item;
-      return {
-        item: childItems.filter((child) => isApplicable(child)),
-        ...rest,
-      };
-    })
-    .filter((item) => isApplicable(item));
+    .filter((child) => isApplicable(child))
+    .map((child) => recur(child));
 };
 
 /**

@@ -54,7 +54,6 @@ export const externalIdColumn = (
   label: string
 ) => ({
   header: label,
-  width: '5%',
   render: (
     record: ClientFieldsFragment | HouseholdClientFieldsFragment,
     props?: ExternalIdDisplayProps

@@ -1,4 +1,3 @@
-import { QueryOptions } from '@apollo/client';
 import { Box, Grid, Stack } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, {
@@ -15,7 +14,6 @@ import React, {
 import useDynamicFields from '../hooks/useDynamicFields';
 import { DynamicFormContext } from '../hooks/useDynamicFormContext';
 import { FormStepperDispatchContext } from '../hooks/useFormStepperContext';
-import usePreloadPicklists from '../hooks/usePreloadPicklists';
 import {
   ChangeType,
   FormActionTypes,
@@ -29,7 +27,6 @@ import {
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
 
-import Loading from '@/components/elements/Loading';
 import useElementInView from '@/hooks/useElementInView';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
@@ -75,8 +72,6 @@ export interface DynamicFormProps
     'errorState' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
   >;
   hideSubmit?: boolean;
-  loadingElement?: JSX.Element;
-  picklistQueryOptions?: Omit<QueryOptions, 'query'>;
   localConstants?: LocalConstants;
 }
 export interface DynamicFormRef {
@@ -104,8 +99,6 @@ const DynamicForm = forwardRef(
       FormActionProps = {},
       ValidationDialogProps = {},
       hideSubmit = false,
-      loadingElement,
-      picklistQueryOptions,
       localConstants,
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
@@ -160,12 +153,6 @@ const DynamicForm = forwardRef(
         values: getCleanedValuesRef.current(),
       });
     }, [formStepperDispatch]);
-
-    const { loading: pickListsLoading } = usePreloadPicklists({
-      definition,
-      queryOptions: picklistQueryOptions,
-      pickListArgs,
-    });
 
     const saveButtonsRef = React.createRef<HTMLDivElement>();
     const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
@@ -270,8 +257,6 @@ const DynamicForm = forwardRef(
       },
       []
     );
-
-    if (pickListsLoading) return loadingElement || <Loading />;
 
     const saveButtons = (
       <FormActions
