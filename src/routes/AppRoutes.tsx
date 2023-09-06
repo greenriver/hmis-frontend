@@ -13,6 +13,7 @@ import Login from '@/modules/auth/components/Login';
 import SessionStatusManager from '@/modules/auth/components/SessionStatusManager';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import useSessionStatus from '@/modules/auth/hooks/useSessionStatus';
+import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 
 export interface RouteLocationState {
   /** Previous pathname, so we can redirect to it when logging back in */
@@ -21,6 +22,11 @@ export interface RouteLocationState {
   in.  */
   clearPrev?: boolean;
 }
+
+const SystemStatusRoute = {
+  path: '/system_status/:detailType',
+  element: <SystemStatus />,
+};
 
 const PublicRoutes: React.FC = () => {
   const { pathname, state } = useLocation();
@@ -37,6 +43,7 @@ const PublicRoutes: React.FC = () => {
         path: '/',
         element: <Login />,
       },
+      SystemStatusRoute,
       {
         path: '*',
         element: <Navigate to='/' state={navigationState} />,
@@ -64,7 +71,9 @@ const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
     <>
       <SessionStatusManager {...sessionStatus} />
       {useRoutes(
-        sessionStatus.status == 'valid' ? protectedRoutes : blankRoutes
+        sessionStatus.status == 'valid'
+          ? [...protectedRoutes, SystemStatusRoute]
+          : blankRoutes
       )}
     </>
   );
