@@ -110,6 +110,8 @@ export const briefProjectType = (projectType: ProjectType) => {
     case ProjectType.Other:
     case ProjectType.Invalid:
       return startCase(projectType.toLowerCase());
+    case ProjectType.EsEntryExit:
+      return 'ES - Entry/Exit';
     default:
       return projectType.replace('_', ' - ');
   }
