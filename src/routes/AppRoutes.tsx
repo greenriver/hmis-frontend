@@ -23,11 +23,6 @@ export interface RouteLocationState {
   clearPrev?: boolean;
 }
 
-const SystemStatusRoute = {
-  path: '/system_status/:detailType',
-  element: <SystemStatus />,
-};
-
 const PublicRoutes: React.FC = () => {
   const { pathname, state } = useLocation();
 
@@ -39,7 +34,10 @@ const PublicRoutes: React.FC = () => {
       ? null
       : { prev: pathname };
     return [
-      SystemStatusRoute,
+      {
+        path: '/system_status/:detailType',
+        element: <SystemStatus />,
+      },
       {
         path: '/',
         element: <Login />,
@@ -71,9 +69,7 @@ const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
     <>
       <SessionStatusManager {...sessionStatus} />
       {useRoutes(
-        sessionStatus.status == 'valid'
-          ? [...protectedRoutes, SystemStatusRoute]
-          : blankRoutes
+        sessionStatus.status == 'valid' ? protectedRoutes : blankRoutes
       )}
     </>
   );
