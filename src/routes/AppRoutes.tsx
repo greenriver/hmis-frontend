@@ -39,11 +39,11 @@ const PublicRoutes: React.FC = () => {
       ? null
       : { prev: pathname };
     return [
+      SystemStatusRoute,
       {
         path: '/',
         element: <Login />,
       },
-      SystemStatusRoute,
       {
         path: '*',
         element: <Navigate to='/' state={navigationState} />,
