@@ -28,6 +28,7 @@
       "required": true,
       "text": "Reason for Denial",
       "mapping": { "fieldName": "denialReason" },
+      "disabledDisplay": "HIDDEN",
       "enableBehavior": "ALL",
       "enableWhen": [
         {
