@@ -58,8 +58,8 @@ export const useProjectDashboardNavItems = (
             path: generateSafePath(ProjectDashboardRoutes.REFERRALS, params),
             condition: () =>
               globalFeatureFlags?.externalReferrals &&
-              !project.access.canManageIncomingReferrals &&
-              !project.access.canManageOutgoingReferrals,
+              (project.access.canManageIncomingReferrals ||
+                project.access.canManageOutgoingReferrals),
           },
         ]
           .filter((item) => !item.condition || item.condition())
