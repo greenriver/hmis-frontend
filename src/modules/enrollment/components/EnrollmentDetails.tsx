@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { ReactNode, useMemo } from 'react';
+import { Fragment, ReactNode, useMemo } from 'react';
 
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import EntryExitDatesWithAssessmentLinks from './EntryExitDatesWithAssessmentLinks';
@@ -108,15 +108,8 @@ const EnrollmentDetails = ({
         }}
       >
         {rows.map(({ id, label, value }) => (
-          <>
-            <Grid
-              item
-              xs={12}
-              md={4}
-              lg={5}
-              sx={{ ...itemSx }}
-              key={id + 'label'}
-            >
+          <Fragment key={id + 'label'}>
+            <Grid item xs={12} md={4} lg={5} sx={{ ...itemSx }}>
               <Typography fontWeight={600} variant='body2'>
                 {label}
               </Typography>
@@ -137,7 +130,7 @@ const EnrollmentDetails = ({
                 {value}
               </Typography>
             </Grid>
-          </>
+          </Fragment>
         ))}
       </Grid>
     </Box>
