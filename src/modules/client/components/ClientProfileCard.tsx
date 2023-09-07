@@ -402,7 +402,7 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   ...(pronouns(client)
                     ? { Pronouns: pronouns(client) }
                     : undefined),
-                  Age: (
+                  [client.dob ? 'DOB' : 'Age']: (
                     <ClientDobAge
                       client={client}
                       noValue={<NotCollectedText />}

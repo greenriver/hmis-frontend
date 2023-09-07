@@ -3,14 +3,11 @@ import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
-import { useEnrollment } from '../../modules/dataFetching/hooks/useEnrollment';
 import { showAssessmentInHousehold } from '../clientDashboard/enrollments/AssessmentPage';
 import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
 import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
-import { NavItem } from '../layout/dashboard/sideNav/types';
-
 import NotFound from './NotFound';
 
 import {
@@ -22,12 +19,15 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
 import EnrollmentNavHeader from '@/modules/enrollment/components/EnrollmentNavHeader';
+import { useDetailedEnrollment } from '@/modules/enrollment/hooks/useDetailedEnrollment';
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
+import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
+import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientNameDobVetFragment,
-  EnrollmentFieldsFragment,
+  DataCollectionFeatureRole,
 } from '@/types/gqlTypes';
 
 const EnrollmentDashboard: React.FC = () => {
@@ -42,10 +42,27 @@ const EnrollmentDashboard: React.FC = () => {
     Record<string, string> | undefined
   >();
 
-  const { enrollment, loading } = useEnrollment(params.enrollmentId);
+  const { enrollment, loading } = useDetailedEnrollment(params.enrollmentId);
   const client = enrollment?.client;
 
-  const navItems: NavItem[] = useEnrollmentDashboardNavItems(
+  const enabledFeatures = useMemo(
+    () =>
+      enrollment
+        ? enrollment.project.dataCollectionFeatures
+            .filter((feature) =>
+              featureEnabledForEnrollment(
+                feature,
+                enrollment.client,
+                enrollment.relationshipToHoH
+              )
+            )
+            .map((r) => r.role)
+        : [],
+    [enrollment]
+  );
+
+  const navItems = useEnrollmentDashboardNavItems(
+    enabledFeatures,
     enrollment || undefined
   );
 
@@ -69,9 +86,10 @@ const EnrollmentDashboard: React.FC = () => {
             client,
             overrideBreadcrumbTitles,
             enrollment,
+            enabledFeatures,
           }
         : undefined,
-    [client, enrollment]
+    [client, enrollment, enabledFeatures]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);
@@ -118,8 +136,9 @@ const EnrollmentDashboard: React.FC = () => {
 
 export type EnrollmentDashboardContext = {
   client: ClientNameDobVetFragment;
-  enrollment?: EnrollmentFieldsFragment;
+  enrollment?: DashboardEnrollment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
+  enabledFeatures: DataCollectionFeatureRole[];
 };
 
 export function isEnrollmentDashboardContext(

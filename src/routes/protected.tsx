@@ -66,6 +66,7 @@ import ProjectReferralPosting from '@/modules/projects/components/ProjectReferra
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
 import ClientServices from '@/modules/services/components/ClientServices';
+import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
 
 const App = () => {
@@ -534,5 +535,9 @@ export const protectedRoutes: RouteNode[] = [
       { path: '/', element: <Dashboard /> },
       { path: '*', element: <NotFound /> },
     ],
+  },
+  {
+    path: '/system_status/:detailType',
+    element: <SystemStatus />,
   },
 ];

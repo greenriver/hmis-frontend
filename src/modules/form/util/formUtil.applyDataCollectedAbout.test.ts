@@ -98,6 +98,58 @@ describe('applyDataCollectedAbout', () => {
     ).toHaveLength(0);
   });
 
+  it('works for deeply nested conditions', () => {
+    const items = [
+      {
+        linkId: '1',
+        item: [
+          {
+            linkId: '2',
+            item: [
+              {
+                linkId: '3',
+                item: [
+                  { linkId: '4' },
+                  { linkId: '5', dataCollectedAbout: DataCollectedAbout.Hoh },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    expect(
+      applyDataCollectedAbout(
+        items as FormDefinitionFieldsFragment['definition']['item'],
+        client,
+        RelationshipToHoH.SelfHeadOfHousehold
+      )
+    ).toMatchObject(items);
+
+    expect(
+      applyDataCollectedAbout(
+        items as FormDefinitionFieldsFragment['definition']['item'],
+        client,
+        RelationshipToHoH.OtherRelative
+      )
+    ).toMatchObject([
+      {
+        linkId: '1',
+        item: [
+          {
+            linkId: '2',
+            item: [
+              {
+                linkId: '3',
+                item: [{ linkId: '4' }],
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+  });
+
   it('works for VETERAN_HOH', () => {
     const items = [
       { linkId: '1', dataCollectedAbout: DataCollectedAbout.VeteranHoh },

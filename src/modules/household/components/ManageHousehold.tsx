@@ -13,6 +13,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssociatedHouseholdMembers, {
   householdMemberColumns,
@@ -165,22 +166,24 @@ const ManageHousehold = ({
           </Grid>
 
           {searchInput && (
-            <GenericTableWithData<
-              SearchClientsQuery,
-              SearchClientsQueryVariables,
-              ClientFieldsFragment
-            >
-              queryVariables={{ input: searchInput }}
-              queryDocument={SearchClientsDocument}
-              columns={columns}
-              pagePath='clientSearch'
-              fetchPolicy='cache-and-network'
-              showFilters
-              recordType='Client'
-              filterInputType='ClientFilterOptions'
-              defaultSortOption={ClientSortOption.LastNameAToZ}
-              onCompleted={() => setHasSearched(true)}
-            />
+            <SsnDobShowContextProvider>
+              <GenericTableWithData<
+                SearchClientsQuery,
+                SearchClientsQueryVariables,
+                ClientFieldsFragment
+              >
+                queryVariables={{ input: searchInput }}
+                queryDocument={SearchClientsDocument}
+                columns={columns}
+                pagePath='clientSearch'
+                fetchPolicy='cache-and-network'
+                showFilters
+                recordType='Client'
+                filterInputType='ClientFilterOptions'
+                defaultSortOption={ClientSortOption.LastNameAToZ}
+                onCompleted={() => setHasSearched(true)}
+              />
+            </SsnDobShowContextProvider>
           )}
         </Stack>
       </CommonCard>
