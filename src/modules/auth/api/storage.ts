@@ -15,39 +15,39 @@ const parseJson = <T>(value: string | undefined) => {
 
 // Stores user name and email. No sensitive information stored!
 export const setUser = (value: HmisUser) =>
-  localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(value));
+  sessionStorage.setItem(USER_STORAGE_KEY, JSON.stringify(value));
 
 export const getUser = () => {
-  const value = localStorage.getItem(USER_STORAGE_KEY);
+  const value = sessionStorage.getItem(USER_STORAGE_KEY);
   return value ? parseJson<HmisUser>(value) : undefined;
 };
 
-export const clearUser = () => localStorage.removeItem(USER_STORAGE_KEY);
+export const clearUser = () => sessionStorage.removeItem(USER_STORAGE_KEY);
 
 export const setAppSettings = (value: HmisAppSettings) =>
-  localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(value));
+  sessionStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(value));
 
 export const getAppSettings = () => {
-  const value = localStorage.getItem(SETTINGS_STORAGE_KEY);
+  const value = sessionStorage.getItem(SETTINGS_STORAGE_KEY);
   return value ? parseJson<HmisAppSettings>(value) : undefined;
 };
 
 export const clearAppSettings = () =>
-  localStorage.removeItem(SETTINGS_STORAGE_KEY);
+  sessionStorage.removeItem(SETTINGS_STORAGE_KEY);
 
 export interface HmisSessionTracking {
   userId: string;
   timestamp: number;
 }
 export const setSessionTracking = (session: HmisSessionTracking) => {
-  localStorage.setItem(SESSION_TRACKING_STORAGE_KEY, JSON.stringify(session));
+  sessionStorage.setItem(SESSION_TRACKING_STORAGE_KEY, JSON.stringify(session));
 };
 
 export const clearSessionTacking = () => {
-  localStorage.removeItem(SESSION_TRACKING_STORAGE_KEY);
+  sessionStorage.removeItem(SESSION_TRACKING_STORAGE_KEY);
 };
 
 export const getSessionTracking = () => {
-  const value = localStorage.getItem(SESSION_TRACKING_STORAGE_KEY);
+  const value = sessionStorage.getItem(SESSION_TRACKING_STORAGE_KEY);
   return value ? (parseJson(value) as HmisSessionTracking) : undefined;
 };
