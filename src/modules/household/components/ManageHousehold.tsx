@@ -11,7 +11,7 @@ import { CommonCard } from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -42,9 +42,9 @@ const ManageHousehold = ({
   projectId,
   BackButton,
 }: Props) => {
-  // This may or may not be in a Client Dashboard. If it is, we need to treat the dashboard client differently.
-  const { client } = useClientDashboardContext();
-  const currentDashboardClientId = client?.id;
+  // This may be rendered either on the Project Dashboard or the Enrollment Dashboard. If on the Enrollment Dash, we need to treat the "current" client differently.
+  const enrollmentContext = useEnrollmentDashboardContext();
+  const currentDashboardClientId = enrollmentContext?.client?.id;
 
   const {
     addToEnrollmentColumns,

@@ -12163,6 +12163,7 @@ export type AllEnrollmentDetailsFragment = {
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
     };
+    projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   };
   access: {
     __typename?: 'EnrollmentAccess';
@@ -13164,6 +13165,7 @@ export type GetEnrollmentDetailsQuery = {
         canManageIncomingReferrals: boolean;
         canManageOutgoingReferrals: boolean;
       };
+      projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
     };
     access: {
       __typename?: 'EnrollmentAccess';
@@ -16096,6 +16098,10 @@ export type SubmitFormMutation = {
             dataCollectedAbout: DataCollectedAbout;
             legacy: boolean;
           }>;
+          projectCocs: {
+            __typename?: 'ProjectCocsPaginated';
+            nodesCount: number;
+          };
         }
       | {
           __typename?: 'ProjectCoc';
@@ -17084,6 +17090,11 @@ export type ProjectOperatingPeriodFragment = {
   operatingStartDate: string;
 };
 
+export type ProjectCocCountFragment = {
+  __typename?: 'Project';
+  projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
+};
+
 export type ProjectAllFieldsFragment = {
   __typename?: 'Project';
   id: string;
@@ -17169,6 +17180,7 @@ export type ProjectAllFieldsFragment = {
     dataCollectedAbout: DataCollectedAbout;
     legacy: boolean;
   }>;
+  projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
 };
 
 export type DataCollectionFeatureFieldsFragment = {
@@ -17808,6 +17820,7 @@ export type GetProjectQuery = {
       dataCollectedAbout: DataCollectedAbout;
       legacy: boolean;
     }>;
+    projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   } | null;
 };
 
@@ -20796,6 +20809,13 @@ export const EnrollmentSummaryFieldsFragmentDoc = gql`
     canViewEnrollment
   }
 `;
+export const ProjectCocCountFragmentDoc = gql`
+  fragment ProjectCocCount on Project {
+    projectCocs {
+      nodesCount
+    }
+  }
+`;
 export const DataCollectionFeatureFieldsFragmentDoc = gql`
   fragment DataCollectionFeatureFields on DataCollectionFeature {
     id
@@ -20983,6 +21003,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     }
     project {
       ...ProjectNameAndType
+      ...ProjectCocCount
       hasUnits
       dataCollectionFeatures {
         ...DataCollectionFeatureFields
@@ -21002,6 +21023,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   ${ClientAccessFieldsFragmentDoc}
   ${EnrollmentSummaryFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
+  ${ProjectCocCountFragmentDoc}
   ${DataCollectionFeatureFieldsFragmentDoc}
   ${OccurrencePointFormFieldsFragmentDoc}
   ${ProjectAccessFieldsFragmentDoc}
@@ -21308,6 +21330,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
     dataCollectionFeatures {
       ...DataCollectionFeatureFields
     }
+    ...ProjectCocCount
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectOperatingPeriodFragmentDoc}
@@ -21316,6 +21339,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${DataCollectionFeatureFieldsFragmentDoc}
+  ${ProjectCocCountFragmentDoc}
 `;
 export const ProjectCocFieldsFragmentDoc = gql`
   fragment ProjectCocFields on ProjectCoc {

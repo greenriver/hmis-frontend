@@ -4,9 +4,10 @@ import { useMemo } from 'react';
 
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
-  SubmittedEnrollmentResultFieldsFragment,
   FormRole,
+  SubmittedEnrollmentResultFieldsFragment,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -19,19 +20,21 @@ const AddNewClientButton: React.FC<Props> = ({
   householdId,
   onCompleted,
 }) => {
+  const cocCount = useProjectCocsCountFromCache(projectId);
+
   const memoedArgs = useMemo(
     () => ({
       formRole: FormRole.NewClientEnrollment,
-
       localConstants: {
         ...localConstantsForClientForm(),
         householdId,
+        projectHasExactlyOneCoc: cocCount === 1,
       },
       inputVariables: { projectId },
       pickListArgs: { projectId, householdId },
       onCompleted,
     }),
-    [householdId, onCompleted, projectId]
+    [cocCount, householdId, onCompleted, projectId]
   );
 
   const { openFormDialog, renderFormDialog } =
