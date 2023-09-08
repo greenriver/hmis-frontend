@@ -28,7 +28,7 @@ const AddNewClientButton: React.FC<Props> = ({
       localConstants: {
         ...localConstantsForClientForm(),
         householdId,
-        projectHasExactlyOneCoc: cocCount === 1,
+        projectCocCount: cocCount,
       },
       inputVariables: { projectId },
       pickListArgs: { projectId, householdId },

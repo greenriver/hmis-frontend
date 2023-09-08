@@ -51,7 +51,7 @@ const AddToHouseholdButton = ({
       },
       inputVariables: { projectId, clientId },
       pickListArgs: { projectId, householdId },
-      localConstants: { householdId, projectHasExactlyOneCoc: cocCount === 1 },
+      localConstants: { householdId, projectCocCount: cocCount },
     }),
     [projectId, clientId, householdId, cocCount, onSuccess]
   );
