@@ -4,7 +4,6 @@ import { find, isEqual, pick, transform } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ClearanceState, ClearanceStatus } from '../types';
-import { UNCLEARED_CLIENT_STRING } from '../util';
 
 import {
   getClearanceAlertText,
@@ -40,6 +39,8 @@ const MCI_CLEARANCE_FIELDS = [
   'nameDataQuality',
   'dobDataQuality',
 ] as const;
+
+const CLEARANCE_REQUIRED_MSG = 'MCI clearance is required';
 
 const fieldsToParams = (
   fields: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>
@@ -175,7 +176,7 @@ const MciClearance = ({
       {hasValidationError && !value && (
         <Alert severity='error'>
           {status === 'initial'
-            ? 'MCI search is required.'
+            ? CLEARANCE_REQUIRED_MSG
             : 'Please make a selection.'}
         </Alert>
       )}
@@ -239,19 +240,21 @@ const MciClearanceWrapper = ({
     return !enoughFieldsForClearance(currentMciAttributes);
   }, [disabled, currentMciAttributes]);
 
-  // If element becomes disabled, set value to uncleared
-  // If element becomes enabled, set value to null
+  // When enabled/disabled state changes, clear value
   useEffect(() => {
-    if (mciSearchUnavailable) {
-      onChange(UNCLEARED_CLIENT_STRING);
-    } else {
-      onChange(null);
-    }
+    onChange(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mciSearchUnavailable]);
 
   if (mciSearchUnavailable || !currentMciAttributes) {
-    return <MciUnavailableAlert />;
+    return (
+      <>
+        {props.error && !props.value && (
+          <Alert severity='error'>{CLEARANCE_REQUIRED_MSG}</Alert>
+        )}
+        <MciUnavailableAlert />
+      </>
+    );
   }
 
   return (
