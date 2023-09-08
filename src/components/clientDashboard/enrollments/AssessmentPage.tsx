@@ -9,6 +9,7 @@ import HouseholdAssessments from '@/modules/assessments/components/household/Hou
 import { isHouseholdAssesmentRole } from '@/modules/assessments/components/household/util';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
 import { FormActionTypes } from '@/modules/form/types';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
@@ -37,6 +38,7 @@ const AssessmentPage = () => {
       assessmentId?: string;
     };
   const isPrintView = useIsPrintView();
+  const clientName = clientBriefName(client);
 
   const navigateToEnrollment = useCallback(
     () =>
@@ -76,6 +78,7 @@ const AssessmentPage = () => {
     <IndividualAssessment
       formRole={formRole}
       enrollmentId={enrollmentId}
+      clientName={clientName}
       assessmentId={assessmentId}
       client={client}
       relationshipToHoH={enrollment.relationshipToHoH}

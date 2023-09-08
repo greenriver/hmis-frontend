@@ -274,7 +274,7 @@ const AssessmentForm = ({
               definition={definition.definition}
               pickListArgs={pickListArgs}
             />
-            {canEdit && (
+            {canEdit && !isPrintView && (
               <Box mt={3}>
                 <FormActions
                   onSubmit={() => undefined}

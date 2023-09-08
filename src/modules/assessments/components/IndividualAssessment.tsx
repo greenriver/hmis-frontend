@@ -163,9 +163,7 @@ const IndividualAssessment = ({
           {`${definition.title}: `}
         </Box>
         {enrollment.project.projectName}
-        {assessmentStatus && (
-          <AssessmentStatusIndicator status={assessmentStatus} />
-        )}
+        <AssessmentStatusIndicator status={assessmentStatus} />
       </Typography>
     </Box>
   );

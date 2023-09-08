@@ -37,6 +37,7 @@ import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembe
 import { router } from '@/routes/router';
 import {
   AssessmentRole,
+  AssessmentWithExtraToppingsFragment,
   EnrollmentFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
@@ -46,6 +47,19 @@ interface HouseholdAssessmentsProps {
   role: HouseholdAssesmentRole;
   assessmentId?: string;
 }
+
+const calculateAssessmentStatus = (
+  assessment: AssessmentWithExtraToppingsFragment | undefined
+): AssessmentStatus => {
+  if (!assessment) {
+    return AssessmentStatus.NotStarted;
+  }
+  if (assessment.inProgress) {
+    return AssessmentStatus.Started;
+  } else {
+    return AssessmentStatus.Submitted;
+  }
+};
 
 const HouseholdAssessments = ({
   role,
@@ -87,8 +101,7 @@ const HouseholdAssessments = ({
               ? !!enrollment.exitDate
               : undefined;
 
-          const isSubmitted = assessmentId && !assessmentInProgress;
-
+          const status = calculateAssessmentStatus(assessment);
           const tabData: TabDefinition = {
             clientName: clientBriefName(client),
             id: (index + 1).toString(),
@@ -108,18 +121,14 @@ const HouseholdAssessments = ({
             },
             relationshipToHoH,
             assessmentDate,
-            status: isSubmitted
-              ? AssessmentStatus.Submitted
-              : assessmentId
-              ? AssessmentStatus.Started
-              : AssessmentStatus.NotStarted,
+            status: status,
           };
 
           // If membership hasn't changed, make sure we keep the "local" state parts if present
           if (
             oldTabs.length === householdMembers.length &&
             oldTabs[index] &&
-            !isSubmitted
+            status !== AssessmentStatus.Submitted
           ) {
             tabData.status = oldTabs[index].status;
           }

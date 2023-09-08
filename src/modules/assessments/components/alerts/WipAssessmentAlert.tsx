@@ -1,26 +1,28 @@
-import { Alert, AlertTitle, Box, Stack } from '@mui/material';
+import InProgressIcon from '@mui/icons-material/Timelapse';
+import { Alert, AlertTitle, Stack } from '@mui/material';
 
 const WipAssessmentAlert = () => {
   return (
-    <Box sx={{ mb: 3 }}>
-      <Alert
-        severity='warning'
-        sx={{
-          '.MuiAlert-message': { width: '100%' },
-          '.MuiAlert-icon': { alignItems: 'center' },
-        }}
+    <Alert
+      severity='warning'
+      variant='outlined'
+      icon={<InProgressIcon />}
+      sx={{
+        my: 2,
+        '.MuiAlert-message': { width: '100%' },
+        '.MuiAlert-icon': { alignItems: 'center' },
+      }}
+    >
+      <Stack
+        direction='row'
+        justifyContent={'space-between'}
+        display='flex'
+        alignItems={'flex-end'}
+        sx={{ width: '100%' }}
       >
-        <Stack
-          direction='row'
-          justifyContent={'space-between'}
-          display='flex'
-          alignItems={'flex-end'}
-          sx={{ width: '100%' }}
-        >
-          <AlertTitle>This assessment has not been submitted.</AlertTitle>
-        </Stack>
-      </Alert>
-    </Box>
+        <AlertTitle>This assessment is in progress</AlertTitle>
+      </Stack>
+    </Alert>
   );
 };
 export default WipAssessmentAlert;

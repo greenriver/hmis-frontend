@@ -1,5 +1,4 @@
 import { SvgIconComponent } from '@mui/icons-material';
-import ReadyToSubmitIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import SubmittedIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorIcon from '@mui/icons-material/Error';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
@@ -28,9 +27,11 @@ const Display: React.FC<{
 const AssessmentStatusIndicator = ({
   status,
 }: {
-  status: AssessmentStatus;
+  status: AssessmentStatus | undefined;
 }) => {
   switch (status) {
+    case undefined:
+      return undefined;
     case AssessmentStatus.NotStarted:
       return (
         <Display icon={NotStartedIcon} color='disabled' caption='Not Started' />
@@ -40,14 +41,6 @@ const AssessmentStatusIndicator = ({
         <Display
           icon={InProgressIcon}
           color='warning'
-          caption='Ready to Submit'
-        />
-      );
-    case AssessmentStatus.ReadyToSubmit:
-      return (
-        <Display
-          icon={ReadyToSubmitIcon}
-          color='primary'
           caption='Ready to Submit'
         />
       );

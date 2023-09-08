@@ -1,5 +1,6 @@
-import LockIcon from '@mui/icons-material/Lock';
-import { Alert, AlertTitle, Box, Button, Stack } from '@mui/material';
+import SubmittedIcon from '@mui/icons-material/CheckCircle';
+import UnlockIcon from '@mui/icons-material/Lock';
+import { Alert, AlertTitle, Button, Stack } from '@mui/material';
 
 const LockedAssessmentAlert = ({
   allowUnlock,
@@ -9,36 +10,38 @@ const LockedAssessmentAlert = ({
   onUnlock?: VoidFunction;
 }) => {
   return (
-    <Box sx={{ mb: 3 }}>
-      <Alert
-        severity='info'
-        icon={<LockIcon />}
-        sx={{
-          '.MuiAlert-message': { width: '100%' },
-          '.MuiAlert-icon': { alignItems: 'center' },
-        }}
+    <Alert
+      severity='success'
+      icon={<SubmittedIcon />}
+      variant='outlined'
+      sx={{
+        my: 2,
+        '.MuiAlert-message': { width: '100%' },
+        '.MuiAlert-icon': { alignItems: 'center' },
+      }}
+    >
+      <Stack
+        direction='row'
+        justifyContent={'space-between'}
+        display='flex'
+        alignItems={'flex-end'}
+        sx={{ width: '100%' }}
       >
-        <Stack
-          direction='row'
-          justifyContent={'space-between'}
-          display='flex'
-          alignItems={'flex-end'}
-          sx={{ width: '100%' }}
-        >
-          <AlertTitle>This assessment has been submitted.</AlertTitle>
-          {allowUnlock && (
-            <Button
-              data-testid='unlockAssessmentButton'
-              variant='text'
-              onClick={onUnlock}
-              sx={{ fontWeight: 600 }}
-            >
-              Unlock to make changes
-            </Button>
-          )}
-        </Stack>
-      </Alert>
-    </Box>
+        <AlertTitle>This assessment has been submitted.</AlertTitle>
+        {allowUnlock && (
+          <Button
+            startIcon={<UnlockIcon />}
+            variant='contained'
+            data-testid='unlockAssessmentButton'
+            onClick={onUnlock}
+            color='inherit'
+            sx={{ fontWeight: 600 }}
+          >
+            Unlock to make changes
+          </Button>
+        )}
+      </Stack>
+    </Alert>
   );
 };
 export default LockedAssessmentAlert;

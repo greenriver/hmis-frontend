@@ -240,6 +240,18 @@ const createThemeOptions = (theme: Theme) => ({
         variant: 'contained',
       },
     },
+    MuiAlert: {
+      styleOverrides: {
+        outlined: {
+          // override default transparent bg
+          backgroundColor: '#fff',
+        },
+        message: {
+          // margin for alignment with alerticon
+          marginTop: '4px',
+        },
+      },
+    },
     MuiButton: {
       defaultProps: {
         variant: 'contained',

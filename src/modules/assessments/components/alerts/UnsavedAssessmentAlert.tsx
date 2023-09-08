@@ -1,26 +1,18 @@
-import { Alert, AlertTitle, Box, Stack } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/material';
 
 const WipAssessmentAlert = () => {
   return (
-    <Box sx={{ mb: 3 }}>
-      <Alert
-        severity='info'
-        sx={{
-          '.MuiAlert-message': { width: '100%' },
-          '.MuiAlert-icon': { alignItems: 'center' },
-        }}
-      >
-        <Stack
-          direction='row'
-          justifyContent={'space-between'}
-          display='flex'
-          alignItems={'flex-end'}
-          sx={{ width: '100%' }}
-        >
-          <AlertTitle>This assessment has not been saved.</AlertTitle>
-        </Stack>
-      </Alert>
-    </Box>
+    <Alert
+      severity='info'
+      sx={{
+        my: 2,
+        '.MuiAlert-message': { width: '100%' },
+        '.MuiAlert-icon': { alignItems: 'center' },
+      }}
+      variant='outlined'
+    >
+      <AlertTitle>This assessment has not been saved.</AlertTitle>
+    </Alert>
   );
 };
 export default WipAssessmentAlert;
