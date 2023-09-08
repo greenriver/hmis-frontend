@@ -153,9 +153,11 @@ const FormActions = ({
 
   return (
     <Stack direction='row' spacing={2} justifyContent={'space-between'}>
-      <Stack direction='row' spacing={2}>
-        {leftConfig.map((c) => renderButton(c))}
-      </Stack>
+      {leftConfig.length > 0 && (
+        <Stack direction='row' spacing={2}>
+          {leftConfig.map((c) => renderButton(c))}
+        </Stack>
+      )}
       {centerConfig.length === 0 && (
         <AssessmentLastUpdated
           lastSaved={lastSaved}

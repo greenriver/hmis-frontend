@@ -136,7 +136,7 @@ const IndividualAssessment = ({
   if (assessmentId && !assessment) return <NotFound />;
   if (!definition) return <MissingDefinitionAlert />;
 
-  const title = embeddedInWorkflow ? undefined : (
+  const title = (
     <AssessmentTitle
       assessmentTitle={assessmentTitle}
       clientName={clientName || undefined}
@@ -190,7 +190,7 @@ const IndividualAssessment = ({
 };
 
 const WrappedAssessment = (props: IndividualAssessmentProps) => (
-  <Box sx={{ mt: props.embeddedInWorkflow ? undefined : 3 }}>
+  <Box sx={{ mt: 3 }}>
     <SentryErrorBoundary>
       <IndividualAssessment {...props} />
     </SentryErrorBoundary>

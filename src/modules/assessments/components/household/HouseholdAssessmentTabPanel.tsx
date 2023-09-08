@@ -152,7 +152,7 @@ const HouseholdAssessmentTabPanel = memo(
           clientName={clientName}
           client={client}
           relationshipToHoH={relationshipToHoH}
-          embeddedInWorkflow={false}
+          embeddedInWorkflow
           enrollmentId={enrollmentId}
           assessmentId={assessmentId}
           assessmentStatus={assessmentStatus}

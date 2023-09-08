@@ -1,3 +1,4 @@
+import UnlockIcon from '@mui/icons-material/Lock';
 import { Box, Grid, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
@@ -28,11 +29,12 @@ import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
+import FormActions from '@/modules/form/components/FormActions';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
-import { AssessmentForPopulation } from '@/modules/form/types';
+import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
   getInitialValues,
@@ -83,6 +85,7 @@ const AssessmentForm = ({
   const [locked, setLocked] = useState(
     !canEdit || !!(assessment && !assessment.inProgress)
   );
+  const handleUnlock = () => setLocked(false);
 
   useEffect(() => {
     if (!canEdit) return;
@@ -197,6 +200,30 @@ const AssessmentForm = ({
     hold: pickListsLoading,
   });
 
+  const formActionPropsWithLock = useMemo<typeof FormActionProps>(() => {
+    if (!locked || !FormActionProps) return FormActionProps;
+
+    const config = (FormActionProps.config?.slice() || [])
+      .map((item) => {
+        if (item.action != FormActionTypes.Submit) return item;
+        return {
+          action: FormActionTypes.Unlock,
+          id: 'unlock',
+          label: 'Unlock Assessment',
+          centerAlign: embeddedInWorkflow,
+          // danger! button props is untyped :(
+          buttonProps: {
+            onClick: handleUnlock,
+            startIcon: <UnlockIcon />,
+            size: 'large',
+            color: 'inherit',
+          },
+        };
+      })
+      .filter((item) => item.action !== FormActionTypes.Discard);
+    return { ...FormActionProps, config };
+  }, [FormActionProps, locked, embeddedInWorkflow]);
+
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
       <Box
@@ -227,21 +254,38 @@ const AssessmentForm = ({
       {!isPrintView && navigation}
       <Grid item xs sx={{ pt: '0 !important' }}>
         {assessmentTitle}
-        {!isPrintView && assessment && !assessment.inProgress && locked && (
-          <LockedAssessmentAlert
-            allowUnlock={canEdit}
-            onUnlock={() => setLocked(false)}
-          />
-        )}
+        {!embeddedInWorkflow &&
+          !isPrintView &&
+          assessment &&
+          !assessment.inProgress &&
+          locked && (
+            <LockedAssessmentAlert
+              allowUnlock={canEdit}
+              onUnlock={handleUnlock}
+            />
+          )}
         {assessment && assessment.inProgress && <WipAssessmentAlert />}
         {embeddedInWorkflow && !assessment && <UnsavedAssessmentAlert />}
         {locked && assessment ? (
-          <DynamicView
-            // dont use `initialValues` because we don't want the OVERWRITE fields
-            values={initialValuesFromAssessment(itemMap, assessment)}
-            definition={definition.definition}
-            pickListArgs={pickListArgs}
-          />
+          <>
+            <DynamicView
+              // dont use `initialValues` because we don't want the OVERWRITE fields
+              values={initialValuesFromAssessment(itemMap, assessment)}
+              definition={definition.definition}
+              pickListArgs={pickListArgs}
+            />
+            {canEdit && (
+              <Box mt={3}>
+                <FormActions
+                  onSubmit={() => undefined}
+                  onSaveDraft={() => undefined}
+                  disabled={false}
+                  loading={false}
+                  {...formActionPropsWithLock}
+                />
+              </Box>
+            )}
+          </>
         ) : (
           <DynamicForm
             // Remount component if a source assessment has been selected
