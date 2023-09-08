@@ -32,7 +32,7 @@ const TabLabel: React.FC<Props> = ({
         />
         {clientName}
       </Typography>
-      <AssessmentStatusIndicator status={status} />
+      <AssessmentStatusIndicator status={status} size='small' />
     </Stack>
   );
 };
@@ -40,7 +40,7 @@ const TabLabel: React.FC<Props> = ({
 export const SummaryTabLabel = ({ role }: { role: HouseholdAssesmentRole }) => (
   <Stack gap={0.8} direction='row'>
     <CompleteIcon fontSize='small' />
-    <Typography variant='inherit'>
+    <Typography variant='inherit' sx={{ fontWeight: 800 }}>
       {role === AssessmentRole.Intake
         ? 'Complete Intake'
         : role === AssessmentRole.Exit

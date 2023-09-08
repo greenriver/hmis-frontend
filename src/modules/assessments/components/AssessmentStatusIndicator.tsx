@@ -12,29 +12,42 @@ const Display: React.FC<{
   icon: SvgIconComponent;
   caption: string;
   color: SvgIconProps['color'];
-}> = ({ icon, caption, color }) => {
+  size?: 'small' | 'default';
+}> = ({ icon, caption, color, size }) => {
   const Icon = icon;
   return (
     <Stack direction='row' spacing={0.5} alignItems='center'>
-      <Icon color={color} sx={{ fontSize: 16 }} />
-      <Typography component='div' variant='caption'>
+      <Icon color={color} sx={{ fontSize: size == 'small' ? 16 : undefined }} />
+      <Typography
+        component='div'
+        variant={size == 'default' ? 'body1' : 'caption'}
+      >
         {caption}
       </Typography>
     </Stack>
   );
 };
 
-const AssessmentStatusIndicator = ({
-  status,
-}: {
+interface Props {
   status: AssessmentStatus | undefined;
+  size?: 'small' | 'default';
+}
+
+const AssessmentStatusIndicator: React.FC<Props> = ({
+  status,
+  size = 'default',
 }) => {
   switch (status) {
     case undefined:
       return undefined;
     case AssessmentStatus.NotStarted:
       return (
-        <Display icon={NotStartedIcon} color='disabled' caption='Not Started' />
+        <Display
+          icon={NotStartedIcon}
+          color='disabled'
+          caption='Not Started'
+          size={size}
+        />
       );
     case AssessmentStatus.Started:
       return (
@@ -42,18 +55,36 @@ const AssessmentStatusIndicator = ({
           icon={InProgressIcon}
           color='warning'
           caption='Ready to Submit'
+          size={size}
         />
       );
     case AssessmentStatus.Submitted:
       return (
-        <Display icon={SubmittedIcon} color='success' caption='Submitted' />
+        <Display
+          icon={SubmittedIcon}
+          color='success'
+          caption='Submitted'
+          size={size}
+        />
       );
     case AssessmentStatus.Warning:
       return (
-        <Display icon={ErrorOutlineIcon} color='warning' caption='Has Issues' />
+        <Display
+          icon={ErrorOutlineIcon}
+          color='warning'
+          caption='Has Issues'
+          size={size}
+        />
       );
     case AssessmentStatus.Error:
-      return <Display icon={ErrorIcon} color='error' caption='Has Issues' />;
+      return (
+        <Display
+          icon={ErrorIcon}
+          color='error'
+          caption='Has Issues'
+          size={size}
+        />
+      );
   }
 };
 

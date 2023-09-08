@@ -302,8 +302,6 @@ const HouseholdAssessments = ({
               height: '100%',
               boxShadow: shadows[2],
               clipPath: 'inset(0px 0px 0px -15px)',
-              pl: 3,
-              pb: 2,
               display: 'flex',
               alignItems: 'flex-end',
             })}
@@ -314,6 +312,7 @@ const HouseholdAssessments = ({
               aria-label='review and submit tab'
               scrollButtons={false}
               sx={tabsSx}
+              TabIndicatorProps={{ style: { height: '4px' } }}
             >
               <Tab
                 value={SUMMARY_TAB_ID}
@@ -322,7 +321,7 @@ const HouseholdAssessments = ({
                 sx={{
                   ...tabSx,
                   // justifyContent: 'left',
-                  pl: 0,
+                  pb: 3,
                   alignItems: 'flex-start',
                 }}
                 onClick={() => setCurrentTab('summary')}

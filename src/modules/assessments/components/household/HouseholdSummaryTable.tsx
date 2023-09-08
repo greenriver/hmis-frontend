@@ -1,15 +1,14 @@
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 
 import { HouseholdAssesmentRole, TabDefinition } from './util';
 
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
+import AssessmentStatusIndicator from '@/modules/assessments/components/AssessmentStatusIndicator';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { AssessmentRole } from '@/types/gqlTypes';
-
-const NOT_STARTED = 'Not started';
 
 interface Props {
   tabs: TabDefinition[];
@@ -23,19 +22,16 @@ const roleLabels = (role: HouseholdAssesmentRole) => {
     case AssessmentRole.Intake:
       return {
         dateHeader: 'Entry Date',
-        completedText: 'Submitted',
         statusHeader: 'Intake Assessment Status',
       };
     case AssessmentRole.Exit:
       return {
         dateHeader: 'Exit Date',
-        completedText: 'Exited',
         statusHeader: 'Exit Assessment Status',
       };
     default:
       return {
         dateHeader: 'Assessment Date',
-        completedText: 'Submitted',
         statusHeader: 'Assessment Status',
       };
   }
@@ -47,11 +43,10 @@ const isSubmittable = (row: TabDefinition) =>
 const HouseholdSummaryTable = ({
   tabs,
   role,
-  setCurrentTab,
   setAssessmentsToSubmit,
 }: Props) => {
   const columns: ColumnDef<TabDefinition>[] = useMemo(() => {
-    const { dateHeader, statusHeader, completedText } = roleLabels(role);
+    const { dateHeader, statusHeader } = roleLabels(role);
     return [
       {
         header: '',
@@ -69,46 +64,38 @@ const HouseholdSummaryTable = ({
         header: statusHeader,
         key: 'status',
         render: (row) => {
-          if (row.entryOrExitCompleted) {
-            // Enrollment is fully Entered/Exited, but the assessment itself is missing.
-            const assessmentMissing = !row.assessmentId;
-            // Enrollment is fully Entered/Exited, but the assessment is still in WIP status.
-            const assessmentWip = row.assessmentId && row.assessmentInProgress;
-            return (
-              <>
-                <Typography>{completedText}</Typography>
-                {assessmentWip && (
-                  <Typography color='error' fontStyle='italic'>
-                    {assessmentWip && 'Assessment Not Submitted'}
-                  </Typography>
-                )}
-                {assessmentMissing && (
-                  <Link onClick={() => setCurrentTab(row.id)}>
-                    <Typography>{NOT_STARTED}</Typography>
-                  </Link>
-                )}
-              </>
-            );
-          }
+          //if (row.entryOrExitCompleted) {
+          //  // Enrollment is fully Entered/Exited, but the assessment itself is missing.
+          //  const assessmentMissing = !row.assessmentId;
+          //  // Enrollment is fully Entered/Exited, but the assessment is still in WIP status.
+          //  const assessmentWip = row.assessmentId && row.assessmentInProgress;
+          //  return (
+          //    <>
+          //      <Typography>{completedText}</Typography>
+          //      {assessmentWip && (
+          //        <Typography color='error' fontStyle='italic'>
+          //          {assessmentWip && 'Assessment Not Submitted'}
+          //        </Typography>
+          //      )}
+          //      {assessmentMissing && (
+          //        <Link onClick={() => setCurrentTab(row.id)}>
+          //          <Typography>{NOT_STARTED}</Typography>
+          //        </Link>
+          //      )}
+          //    </>
+          //  );
+          //}
 
           // No assessment has been started yet
-          if (!row.assessmentId) {
-            return (
-              <Link onClick={() => setCurrentTab(row.id)}>
-                <Typography>{NOT_STARTED}</Typography>
-              </Link>
-            );
-          }
+          //if (!row.assessmentId) {
+          //  return (
+          //    <Link onClick={() => setCurrentTab(row.id)}>
+          //      <Typography>{NOT_STARTED}</Typography>
+          //    </Link>
+          //  );
+          //}
 
-          let assessmentStatus;
-          if (row.assessmentSubmitted) {
-            // Assessment has been submitted (bad state, entry/exit should be completed if this is the case)
-            assessmentStatus = 'Assessment submitted';
-          } else {
-            // Assessment is in-progress
-            assessmentStatus = 'In Progress';
-          }
-          return <Typography>{assessmentStatus}</Typography>;
+          return <AssessmentStatusIndicator status={row.status} />;
         },
       },
       {
@@ -145,7 +132,7 @@ const HouseholdSummaryTable = ({
       //     ]
       //   : []),
     ];
-  }, [role, setCurrentTab]);
+  }, [role]);
 
   const handleSetSelected = useCallback(
     (rowIds: readonly string[]) => {

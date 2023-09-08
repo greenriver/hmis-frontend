@@ -163,7 +163,7 @@ const IndividualAssessment = ({
           {`${definition.title}: `}
         </Box>
         {enrollment.project.projectName}
-        <AssessmentStatusIndicator status={assessmentStatus} />
+        <AssessmentStatusIndicator status={assessmentStatus} size='small' />
       </Typography>
     </Box>
   );

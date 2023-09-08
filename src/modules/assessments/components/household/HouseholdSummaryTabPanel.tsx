@@ -1,14 +1,7 @@
 import { Alert, AlertTitle, Box, Grid, Typography } from '@mui/material';
 import { keyBy, mapValues, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
-import {
-  Dispatch,
-  memo,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react';
 
 import { assessmentPrefix } from '../../util';
 
@@ -21,8 +14,9 @@ import {
 } from './util';
 
 import LoadingButton from '@/components/elements/LoadingButton';
-import RouterLink from '@/components/elements/RouterLink';
 import TitleCard from '@/components/elements/TitleCard';
+import HouseholdSummaryExitHelpCard from '@/modules/assessments/components/household/HouseholdSummaryExitHelpCard';
+import HouseholdSummaryIntakeHelpCard from '@/modules/assessments/components/household/HouseholdSummaryIntakeHelpCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
@@ -32,13 +26,11 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { cache } from '@/providers/apolloClient';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   SubmitHouseholdAssessmentsMutation,
   useSubmitHouseholdAssessmentsMutation,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 interface HouseholdSummaryTabPanelProps {
   active: boolean;
@@ -117,11 +109,6 @@ const HouseholdSummaryTabPanel = memo(
 
     const { renderValidationDialog } = useValidationDialog({ errorState });
 
-    const [hohClientId, hohEnrollmentId] = useMemo(() => {
-      const tab = tabs.find(({ isHoh }) => isHoh);
-      return [tab?.clientId, tab?.enrollmentId];
-    }, [tabs]);
-
     return (
       <AlwaysMountedTabPanel
         active={active}
@@ -135,31 +122,17 @@ const HouseholdSummaryTabPanel = memo(
           sx={{ py: 2 }}
         >
           <Grid item xs={12} md={10} lg={8}>
-            <Typography variant='h4' sx={{ mb: 3 }}>
+            <Typography variant='h5' sx={{ mb: 2 }}>
               Complete {assessmentPrefix(role)} {projectName}
             </Typography>
-            {role === AssessmentRole.Exit && hohEnrollmentId && hohClientId && (
-              <Typography sx={{ mb: 3 }}>
-                Select members to exit. The Head of Household cannot be exited
-                before other members. In order to exit the HoH, you must either
-                exit all members or{' '}
-                <RouterLink
-                  to={generateSafePath(
-                    EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
-                    {
-                      clientId: hohClientId,
-                      enrollmentId: hohEnrollmentId,
-                    }
-                  )}
-                  variant='body1'
-                >
-                  change the Head of Household
-                </RouterLink>
-                .
-              </Typography>
+            {role == AssessmentRole.Exit && (
+              <HouseholdSummaryExitHelpCard tabs={tabs} />
+            )}
+            {role == AssessmentRole.Intake && (
+              <HouseholdSummaryIntakeHelpCard tabs={tabs} />
             )}
             {errorState.apolloError && (
-              <Box sx={{ mb: 3 }}>
+              <Box sx={{ my: 3 }}>
                 <ApolloErrorAlert error={errorState.apolloError} />
               </Box>
             )}
