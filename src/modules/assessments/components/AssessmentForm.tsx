@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
   ReactNode,
@@ -16,30 +8,26 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { useAssessmentHandlers } from '../hooks/useAssessmentHandlers';
 
 import LockedAssessmentAlert from './alerts/LockedAssessmentAlert';
 import UnsavedAssessmentAlert from './alerts/UnsavedAssessmentAlert';
 import WipAssessmentAlert from './alerts/WipAssessmentAlert';
-import DeleteAssessmentButton from './DeleteAssessmentButton';
 
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import PrintViewButton from '@/components/layout/PrintViewButton';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
 import { hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 
@@ -51,7 +39,6 @@ import {
   getItemMap,
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
   FormDefinition,
@@ -59,7 +46,6 @@ import {
   FullAssessmentFragment,
   InitialBehavior,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
@@ -95,7 +81,7 @@ const AssessmentForm = ({
   // Whether assessment is locked. By default, submitted assessments are locked.
   const canEdit = enrollment?.access.canEditEnrollments;
   const [locked, setLocked] = useState(
-    !canEdit || (assessment && !assessment.inProgress)
+    !canEdit || !!(assessment && !assessment.inProgress)
   );
 
   useEffect(() => {
@@ -192,18 +178,6 @@ const AssessmentForm = ({
     localConstants,
   ]);
 
-  const navigate = useNavigate();
-  const navigateToEnrollment = useMemo(
-    () => () =>
-      navigate(
-        generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
-          clientId: enrollment.client.id,
-          enrollmentId: enrollment.id,
-        })
-      ),
-    [enrollment, navigate]
-  );
-
   useScrollToHash(!enrollment || mutationLoading, top);
 
   const pickListArgs = useMemo(
@@ -231,66 +205,19 @@ const AssessmentForm = ({
           top: top + 16,
         }}
       >
-        <Paper sx={{ p: 2 }}>
-          {navigationTitle && (
-            <Box>
-              {navigationTitle}
-              <Divider sx={{ my: 2 }} />
-            </Box>
-          )}
-          <FormStepper
-            items={definition.definition.item}
-            scrollOffset={top}
-            useUrlHash={!embeddedInWorkflow}
-          />
-          <Divider sx={{ my: 2 }} />
-          <Stack gap={2} sx={{ mt: 2 }}>
-            {!assessment && canEdit && (
-              <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
-                <Button
-                  variant='outlined'
-                  onClick={() => setDialogOpen(true)}
-                  sx={{ height: 'fit-content' }}
-                  fullWidth
-                >
-                  Autofill Assessment
-                </Button>
-              </ButtonTooltipContainer>
-            )}
-            {!isPrintView && locked && assessment && (
-              <PrintViewButton
-                // If embedded in household workflow, we need to link
-                // over to the individual view for the specific assessment in order to print it
-                openInNew={embeddedInWorkflow}
-                to={
-                  embeddedInWorkflow
-                    ? generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-                        clientId: assessment.enrollment.client.id,
-                        enrollmentId: assessment.enrollment.id,
-                        assessmentId: assessment.id,
-                        formRole,
-                      })
-                    : undefined
-                }
-              >
-                Print Assessment
-              </PrintViewButton>
-            )}
-            {assessment && (
-              <DeleteAssessmentButton
-                assessment={assessment}
-                clientId={enrollment.client.id}
-                enrollmentId={enrollment.id}
-                onSuccess={navigateToEnrollment}
-              />
-            )}
-            {assessment && (
-              <Typography color='text.secondary' variant='body2' sx={{ mt: 1 }}>
-                <b>Assessment ID:</b> {assessment.id}
-              </Typography>
-            )}
-          </Stack>
-        </Paper>
+        <AssessmentFormSideBar
+          enrollment={enrollment}
+          definition={definition}
+          assessment={assessment}
+          title={navigationTitle}
+          formRole={formRole}
+          isPrintView={isPrintView}
+          locked={locked}
+          embeddedInWorkflow={embeddedInWorkflow}
+          onAutofill={() => setDialogOpen(true)}
+          canEdit={canEdit}
+          top={top}
+        />
       </Box>
     </Grid>
   );
