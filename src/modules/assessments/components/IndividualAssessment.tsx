@@ -155,7 +155,7 @@ const IndividualAssessment = ({
       >
         {clientName}
       </Typography>
-      <Typography variant='h6' component='div'>
+      <Typography variant='h6' component='div' sx={{ lineHeight: 1.25 }}>
         <Box
           component='span'
           sx={({ typography }) => ({ fontWeight: typography.fontWeightBold })}

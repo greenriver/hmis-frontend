@@ -16,6 +16,7 @@ import LockedAssessmentAlert from './alerts/LockedAssessmentAlert';
 import UnsavedAssessmentAlert from './alerts/UnsavedAssessmentAlert';
 import WipAssessmentAlert from './alerts/WipAssessmentAlert';
 
+import FormContainer from '@/components/layout/FormContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -267,15 +268,9 @@ const AssessmentForm = ({
         {assessment && assessment.inProgress && <WipAssessmentAlert />}
         {embeddedInWorkflow && !assessment && <UnsavedAssessmentAlert />}
         {locked && assessment ? (
-          <>
-            <DynamicView
-              // dont use `initialValues` because we don't want the OVERWRITE fields
-              values={initialValuesFromAssessment(itemMap, assessment)}
-              definition={definition.definition}
-              pickListArgs={pickListArgs}
-            />
-            {canEdit && !isPrintView && (
-              <Box mt={3}>
+          <FormContainer
+            saveButtons={
+              canEdit && !isPrintView ? (
                 <FormActions
                   onSubmit={() => undefined}
                   onSaveDraft={() => undefined}
@@ -283,9 +278,17 @@ const AssessmentForm = ({
                   loading={false}
                   {...formActionPropsWithLock}
                 />
-              </Box>
-            )}
-          </>
+              ) : undefined
+            }
+            variant={embeddedInWorkflow ? 'stickyActions' : 'inlineActions'}
+          >
+            <DynamicView
+              // dont use `initialValues` because we don't want the OVERWRITE fields
+              values={initialValuesFromAssessment(itemMap, assessment)}
+              definition={definition.definition}
+              pickListArgs={pickListArgs}
+            />
+          </FormContainer>
         ) : (
           <DynamicForm
             // Remount component if a source assessment has been selected

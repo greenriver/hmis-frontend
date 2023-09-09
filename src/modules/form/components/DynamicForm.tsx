@@ -1,4 +1,4 @@
-import { Box, Grid, Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, {
   Ref,
@@ -20,8 +20,8 @@ import {
 } from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
-import SaveSlide from './SaveSlide';
 
+import FormContainer from '@/components/layout/FormContainer';
 import useElementInView from '@/hooks/useElementInView';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
@@ -218,10 +218,20 @@ const DynamicForm = forwardRef(
       />
     );
 
+    const stickyActions =
+      alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible);
     return (
-      <Box
+      <FormContainer
         component='form'
         onSubmit={(e: React.FormEvent<HTMLDivElement>) => e.preventDefault()}
+        saveButtons={saveButtons}
+        variant={stickyActions ? 'stickyActions' : 'inlineActions'}
+        hideActions={
+          alwaysShowSaveSlide
+            ? false
+            : hideSubmit ||
+              (stickyActions && !(promptSave && !isSaveButtonVisible))
+        }
       >
         <Grid container direction='column' spacing={2}>
           {hasErrors(errorState) && (
@@ -246,28 +256,13 @@ const DynamicForm = forwardRef(
             })}
           </DynamicFormContext.Provider>
         </Grid>
-        {!alwaysShowSaveSlide && !hideSubmit && (
-          <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
-            {saveButtons}
-          </Box>
-        )}
         {renderValidationDialog({
           onConfirm: handleConfirm,
           loading: loading || false,
           confirmText: FormActionProps?.submitButtonText || 'Confirm',
           ...ValidationDialogProps,
         })}
-        {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
-          <SaveSlide
-            in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}
-            appear
-            timeout={300}
-            direction='up'
-          >
-            {saveButtons}
-          </SaveSlide>
-        )}
-      </Box>
+      </FormContainer>
     );
   }
 );
