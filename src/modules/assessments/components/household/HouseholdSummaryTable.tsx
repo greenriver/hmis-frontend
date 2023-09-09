@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 
 import { HouseholdAssesmentRole, TabDefinition } from './util';
@@ -43,6 +43,7 @@ const isSubmittable = (row: TabDefinition) =>
 const HouseholdSummaryTable = ({
   tabs,
   role,
+  setCurrentTab,
   setAssessmentsToSubmit,
 }: Props) => {
   const columns: ColumnDef<TabDefinition>[] = useMemo(() => {
@@ -58,12 +59,18 @@ const HouseholdSummaryTable = ({
       {
         header: 'Name',
         key: 'name',
-        render: ({ clientName }) => <Typography>{clientName}</Typography>,
+        linkTreatment: true,
+        render: ({ clientName, id }) => (
+          <Link onClick={() => setCurrentTab(id)}>
+            <Typography>{clientName}</Typography>
+          </Link>
+        ),
       },
       {
         header: statusHeader,
         key: 'status',
         render: (row) => {
+          // Unclear if additional info about if the enrollment status is needed here
           //if (row.entryOrExitCompleted) {
           //  // Enrollment is fully Entered/Exited, but the assessment itself is missing.
           //  const assessmentMissing = !row.assessmentId;
@@ -83,15 +90,6 @@ const HouseholdSummaryTable = ({
           //        </Link>
           //      )}
           //    </>
-          //  );
-          //}
-
-          // No assessment has been started yet
-          //if (!row.assessmentId) {
-          //  return (
-          //    <Link onClick={() => setCurrentTab(row.id)}>
-          //      <Typography>{NOT_STARTED}</Typography>
-          //    </Link>
           //  );
           //}
 
@@ -132,7 +130,7 @@ const HouseholdSummaryTable = ({
       //     ]
       //   : []),
     ];
-  }, [role]);
+  }, [role, setCurrentTab]);
 
   const handleSetSelected = useCallback(
     (rowIds: readonly string[]) => {
