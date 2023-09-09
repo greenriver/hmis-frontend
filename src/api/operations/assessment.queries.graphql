@@ -78,7 +78,7 @@ query GetHouseholdAssessments(
     assessmentRole: $assessmentRole
     assessmentId: $assessmentId
   ) {
-    ...AssessmentWithExtraToppings
+    ...AssessmentWithValuesAndRecords
   }
 }
 

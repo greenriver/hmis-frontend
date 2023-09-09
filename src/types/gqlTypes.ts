@@ -6375,7 +6375,7 @@ export type AssessmentFieldsFragment = {
   };
 };
 
-export type AssessmentWithExtraToppingsFragment = {
+export type AssessmentWithValuesAndRecordsFragment = {
   __typename?: 'Assessment';
   wipValues?: any | null;
   id: string;
@@ -20804,8 +20804,8 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${YouthEducationStatusValuesFragmentDoc}
   ${EmploymentEducationValuesFragmentDoc}
 `;
-export const AssessmentWithExtraToppingsFragmentDoc = gql`
-  fragment AssessmentWithExtraToppings on Assessment {
+export const AssessmentWithValuesAndRecordsFragmentDoc = gql`
+  fragment AssessmentWithValuesAndRecords on Assessment {
     ...AssessmentWithValues
     ...AssessmentWithRecords
     enrollment {
@@ -22314,10 +22314,10 @@ export const GetHouseholdAssessmentsDocument = gql`
       assessmentRole: $assessmentRole
       assessmentId: $assessmentId
     ) {
-      ...AssessmentWithExtraToppings
+      ...AssessmentWithValuesAndRecords
     }
   }
-  ${AssessmentWithExtraToppingsFragmentDoc}
+  ${AssessmentWithValuesAndRecordsFragmentDoc}
 `;
 
 /**

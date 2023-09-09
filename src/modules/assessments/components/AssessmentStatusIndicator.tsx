@@ -8,12 +8,13 @@ import InProgressIcon from '@mui/icons-material/Timelapse';
 import { Stack, SvgIconProps, Typography } from '@mui/material';
 import { AssessmentStatus } from './household/util';
 
-const Display: React.FC<{
+interface DisplayProps {
   icon: SvgIconComponent;
   caption: string;
   color: SvgIconProps['color'];
   size?: 'small' | 'default';
-}> = ({ icon, caption, color, size }) => {
+}
+const Display: React.FC<DisplayProps> = ({ icon, caption, color, size }) => {
   const Icon = icon;
   return (
     <Stack direction='row' spacing={0.5} alignItems='center'>

@@ -36,7 +36,7 @@ interface Props {
   top?: number;
 }
 
-const AssessmentFormSideBar = ({
+const AssessmentFormSideBar: React.FC<Props> = ({
   enrollment,
   definition,
   assessment,
@@ -48,7 +48,7 @@ const AssessmentFormSideBar = ({
   locked,
   canEdit,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
-}: Props) => {
+}) => {
   const navigate = useNavigate();
   const navigateToEnrollment = useMemo(
     () => () =>

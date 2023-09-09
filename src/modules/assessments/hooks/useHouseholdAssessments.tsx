@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { HouseholdAssesmentRole } from '../components/household/util';
 
 import {
-  AssessmentWithExtraToppingsFragment,
+  AssessmentWithValuesAndRecordsFragment,
   useGetHouseholdAssessmentsQuery,
 } from '@/types/gqlTypes';
 
@@ -37,7 +37,7 @@ export function useHouseholdAssessments({
     ]);
     return fromPairs(pairs) as Record<
       string,
-      AssessmentWithExtraToppingsFragment | undefined
+      AssessmentWithValuesAndRecordsFragment | undefined
     >;
   }, [householdAssessments]);
   return { householdAssessments, assessmentByEnrollmentId, ...status } as const;

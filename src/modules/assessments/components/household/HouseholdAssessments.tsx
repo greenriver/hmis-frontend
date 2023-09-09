@@ -37,7 +37,7 @@ import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembe
 import { router } from '@/routes/router';
 import {
   AssessmentRole,
-  AssessmentWithExtraToppingsFragment,
+  AssessmentWithValuesAndRecordsFragment,
   EnrollmentFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
@@ -49,7 +49,7 @@ interface HouseholdAssessmentsProps {
 }
 
 const calculateAssessmentStatus = (
-  assessment: AssessmentWithExtraToppingsFragment | undefined
+  assessment: AssessmentWithValuesAndRecordsFragment | undefined
 ): AssessmentStatus => {
   if (!assessment) {
     return AssessmentStatus.NotStarted;
@@ -199,8 +199,6 @@ const HouseholdAssessments = ({
   if (fetchMembersStatus.error) throw fetchMembersStatus.error;
   if (fetchAssessmentsStatus.error) throw fetchAssessmentsStatus.error;
 
-  const tabsSx = {};
-
   const tabSx = {
     minWidth: '140px',
     px: 4,
@@ -282,7 +280,6 @@ const HouseholdAssessments = ({
               variant='scrollable'
               scrollButtons='auto'
               TabIndicatorProps={{ style: { height: '4px' } }}
-              sx={tabsSx}
             >
               {tabs.map((definition) => (
                 <Tab
@@ -311,7 +308,6 @@ const HouseholdAssessments = ({
               onChange={handleChangeTab}
               aria-label='review and submit tab'
               scrollButtons={false}
-              sx={tabsSx}
               TabIndicatorProps={{ style: { height: '4px' } }}
             >
               <Tab

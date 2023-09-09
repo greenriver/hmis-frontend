@@ -86,7 +86,7 @@ const AssessmentForm = ({
   const [locked, setLocked] = useState(
     !canEdit || !!(assessment && !assessment.inProgress)
   );
-  const handleUnlock = () => setLocked(false);
+  const handleUnlock = useCallback(() => setLocked(false), []);
 
   useEffect(() => {
     if (!canEdit) return;
@@ -201,8 +201,9 @@ const AssessmentForm = ({
     hold: pickListsLoading,
   });
 
+  // the form is locked, replace the submit button with an 'unlock' button
   const formActionPropsWithLock = useMemo<typeof FormActionProps>(() => {
-    if (!locked || !FormActionProps) return FormActionProps;
+    if (!locked || !FormActionProps || !canEdit) return FormActionProps;
 
     const config = (FormActionProps.config?.slice() || [])
       .map((item) => {
@@ -223,7 +224,7 @@ const AssessmentForm = ({
       })
       .filter((item) => item.action !== FormActionTypes.Discard);
     return { ...FormActionProps, config };
-  }, [FormActionProps, locked, embeddedInWorkflow]);
+  }, [FormActionProps, locked, canEdit, embeddedInWorkflow, handleUnlock]);
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
