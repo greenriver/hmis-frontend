@@ -11,7 +11,7 @@ const ExpandInfoButton: React.FC<Props> = ({ expanded, ...props }) => {
     <Button
       variant='text'
       size='large'
-      sx={{ fontWeight: '800' }}
+      sx={({ typography }) => ({ fontWeight: typography.fontWeightBold })}
       endIcon={
         expanded ? <CollapseIcon key='expand' /> : <ExpandIcon key='collapse' />
       }

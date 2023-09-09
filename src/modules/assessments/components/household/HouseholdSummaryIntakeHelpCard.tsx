@@ -19,7 +19,7 @@ const HouseholdSummaryIntakeHelpCard: React.FC<Props> = ({ tabs }) => {
   const toggleExpanded = () => setExpanded((c) => !c);
   return (
     <CommonCard sx={{ my: 2 }}>
-      <Typography sx={{ fontWeight: 800 }}>
+      <Typography variant='body3'>
         Only household members who are eligible for intake will have checkboxes
       </Typography>
       <Typography>Intake help text pending</Typography>

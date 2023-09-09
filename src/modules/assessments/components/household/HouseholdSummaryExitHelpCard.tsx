@@ -23,7 +23,7 @@ const HouseholdSummaryExitHelpCard: React.FC<Props> = ({ tabs }) => {
   const toggleExpanded = () => setExpanded((c) => !c);
   return (
     <CommonCard sx={{ my: 2 }}>
-      <Typography sx={{ fontWeight: 800 }}>
+      <Typography variant='body3'>
         Only household members who are eligible for exit will have checkboxes
       </Typography>
       <Typography>
@@ -34,9 +34,7 @@ const HouseholdSummaryExitHelpCard: React.FC<Props> = ({ tabs }) => {
       </ExpandInfoButton>
       {hohEnrollmentId && hohClientId && (
         <Collapse in={expanded}>
-          <Typography sx={{ fontWeight: 800 }}>
-            How to Exit Household
-          </Typography>
+          <Typography variant='body3'>How to Exit Household</Typography>
           <CommonOrderedList>
             <li>
               Complete the exit assessment for each household member. Until the
@@ -47,9 +45,7 @@ const HouseholdSummaryExitHelpCard: React.FC<Props> = ({ tabs }) => {
             </li>
             <li>Press the Submit Assessments button</li>
           </CommonOrderedList>
-          <Typography sx={{ fontWeight: 800 }}>
-            Exiting the Head of Household
-          </Typography>
+          <Typography variant='body3'>Exiting the Head of Household</Typography>
           <Typography>
             {
               'The head of household cannot be exited before other members. In order to exit the HoH, you must either exit all members or '

@@ -40,7 +40,7 @@ const TabLabel: React.FC<Props> = ({
 export const SummaryTabLabel = ({ role }: { role: HouseholdAssesmentRole }) => (
   <Stack gap={0.8} direction='row'>
     <CompleteIcon fontSize='small' />
-    <Typography variant='inherit' sx={{ fontWeight: 800 }}>
+    <Typography color='inherit' variant='body3'>
       {role === AssessmentRole.Intake
         ? 'Complete Intake'
         : role === AssessmentRole.Exit

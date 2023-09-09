@@ -16,14 +16,14 @@ declare module '@mui/material/Button' {
 }
 
 declare module '@mui/material/styles' {
-  // interface TypographyVariants {
-  //   body3: React.CSSProperties;
-  // }
+  interface TypographyVariants {
+    body3: React.CSSProperties;
+  }
 
-  // // allow configuration using `createTheme`
-  // interface TypographyVariantsOptions {
-  //   body3?: React.CSSProperties;
-  // }
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    body3?: React.CSSProperties;
+  }
 
   interface Palette {
     borders: PaletteColor;
@@ -34,6 +34,12 @@ declare module '@mui/material/styles' {
     borders: SimplePaletteColorOptions;
     alerts: { lightWarningBackground?: string };
     links: string;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    body3: true;
   }
 }
 
@@ -97,6 +103,10 @@ const createThemeOptions = (theme: Theme) => ({
       fontFamily: "'Montserrat', sans-serif",
       fontSize: 14,
       // color: '#10182899',
+    },
+    body3: {
+      // bold body1
+      fontWeight: 800,
     },
     button: {
       textTransform: 'none',
