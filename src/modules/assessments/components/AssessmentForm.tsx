@@ -270,7 +270,7 @@ const AssessmentForm = ({
         {embeddedInWorkflow && !assessment && <UnsavedAssessmentAlert />}
         {locked && assessment ? (
           <FormContainer
-            saveButtons={
+            actions={
               canEdit && !isPrintView ? (
                 <FormActions
                   onSubmit={() => undefined}
@@ -281,7 +281,7 @@ const AssessmentForm = ({
                 />
               ) : undefined
             }
-            variant={embeddedInWorkflow ? 'stickyActions' : 'inlineActions'}
+            sticky={embeddedInWorkflow ? 'always' : 'auto'}
           >
             <DynamicView
               // dont use `initialValues` because we don't want the OVERWRITE fields

@@ -1,35 +1,47 @@
 import { Box, BoxProps } from '@mui/material';
-import { ReactNode, forwardRef } from 'react';
+import { ReactNode, forwardRef, useRef } from 'react';
 
 import SaveSlide from '../../modules/form/components/SaveSlide';
+import useElementInView from '@/hooks/useElementInView';
 
+export type FormActionStickyType = 'always' | 'never' | 'auto';
 interface Props extends BoxProps {
   children: ReactNode;
   hideActions?: boolean;
-  saveButtons?: JSX.Element;
-  variant?: 'stickyActions' | 'inlineActions';
+  actions?: JSX.Element;
+  sticky?: FormActionStickyType;
 }
 
 const FormContainer = forwardRef<HTMLElement, Props>(
   (
-    {
-      hideActions = false,
-      saveButtons,
-      variant = 'inlineActions',
-      children,
-      ...props
-    },
+    { hideActions = false, actions, children, sticky = 'auto', ...props },
     ref
   ) => {
+    const actionsRef = useRef<HTMLDivElement>();
+    const isSaveButtonVisible = useElementInView(actionsRef, '200px');
+
+    if (!actions) {
+      return (
+        <Box {...props} ref={ref}>
+          <Box mb={2}>{children}</Box>
+        </Box>
+      );
+    }
+
     return (
       <Box {...props} ref={ref}>
         <Box mb={2}>{children}</Box>
-        {variant == 'inlineActions' && saveButtons && !hideActions && (
-          <Box sx={{ mt: 3 }}>{saveButtons}</Box>
+        {sticky === 'auto' && !hideActions && (
+          <Box ref={actionsRef}>{actions}</Box>
         )}
-        {variant == 'stickyActions' && saveButtons && (
-          <SaveSlide in={!hideActions} appear timeout={300} direction='up'>
-            {saveButtons}
+        {sticky !== 'never' && (
+          <SaveSlide
+            in={!isSaveButtonVisible || sticky === 'always'}
+            appear
+            timeout={300}
+            direction='up'
+          >
+            {actions}
           </SaveSlide>
         )}
       </Box>
