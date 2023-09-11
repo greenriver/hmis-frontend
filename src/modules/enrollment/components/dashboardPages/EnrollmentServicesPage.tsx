@@ -68,13 +68,15 @@ const EnrollmentServicesPage = () => {
       <TitleCard
         title='Services'
         actions={
-          <Button
-            onClick={openServiceDialog}
-            variant='outlined'
-            startIcon={<AddIcon fontSize='small' />}
-          >
-            Add Service
-          </Button>
+          enrollment.access.canEditEnrollments && (
+            <Button
+              onClick={openServiceDialog}
+              variant='outlined'
+              startIcon={<AddIcon fontSize='small' />}
+            >
+              Add Service
+            </Button>
+          )
         }
         headerVariant='border'
       >

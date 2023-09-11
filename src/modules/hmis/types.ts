@@ -1,5 +1,8 @@
 import { isNil } from 'lodash-es';
-import { CustomDataElementFieldsFragment } from '@/types/gqlTypes';
+import {
+  AllEnrollmentDetailsFragment,
+  CustomDataElementFieldsFragment,
+} from '@/types/gqlTypes';
 
 export function hasCustomDataElements(
   value: any | null | undefined
@@ -12,3 +15,6 @@ export function hasCustomDataElements(
     !!value.customDataElements
   );
 }
+
+// Type of enrollment provided by EnrollmentDashboard
+export type DashboardEnrollment = AllEnrollmentDetailsFragment;

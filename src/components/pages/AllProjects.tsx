@@ -108,7 +108,7 @@ const AllProjects = () => {
           <TextInput
             label='Search Projects'
             name='search projects'
-            placeholder='Search projects...'
+            placeholder='Search by Project Name or ID'
             value={search || ''}
             onChange={(e) => setSearch(e.target.value)}
             inputWidth='100%'

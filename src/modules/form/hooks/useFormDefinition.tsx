@@ -3,22 +3,28 @@ import { useMemo } from 'react';
 import { getItemMap } from '../util/formUtil';
 
 import {
+  FormDefinitionFieldsFragment,
   GetFormDefinitionQueryVariables,
   useGetFormDefinitionQuery,
 } from '@/types/gqlTypes';
 
-const useFormDefinition = (queryVariables: GetFormDefinitionQueryVariables) => {
+const useFormDefinition = (
+  queryVariables: GetFormDefinitionQueryVariables,
+  // Bypass query by passing a local definition instead
+  localDefinition?: FormDefinitionFieldsFragment
+) => {
   const { data, loading, error } = useGetFormDefinitionQuery({
     variables: queryVariables,
+    skip: !!localDefinition,
   });
   const { formDefinition, itemMap } = useMemo(() => {
-    if (!data?.getFormDefinition) return {};
-
+    const formDefinition = localDefinition || data?.getFormDefinition;
+    if (!formDefinition) return {};
     return {
-      formDefinition: data.getFormDefinition,
-      itemMap: getItemMap(data.getFormDefinition.definition, false),
+      formDefinition,
+      itemMap: getItemMap(formDefinition.definition, false),
     };
-  }, [data]);
+  }, [data?.getFormDefinition, localDefinition]);
 
   if (error)
     throw new Error(

@@ -12,11 +12,6 @@ fragment EnrollmentFields on Enrollment {
   householdId
   householdShortId
   householdSize
-  moveInDate
-  dateOfEngagement
-  dateOfPathStatus
-  clientEnrolledInPath
-  reasonNotEnrolled
   client {
     ...ClientNameDobVet
   }
@@ -26,9 +21,147 @@ fragment EnrollmentFields on Enrollment {
   currentUnit {
     id
     name
-    unitType {
-      description
+  }
+}
+
+# FIXME: stop resolving client/project access objects. Instead, put what we need to know
+# inside of the Enrollment access obj
+fragment AllEnrollmentDetails on Enrollment {
+  ...EnrollmentFields
+  ...EnrollmentOccurrencePointFields
+  intakeAssessment {
+    id
+  }
+  exitAssessment {
+    id
+  }
+  customDataElements {
+    ...CustomDataElementFields
+  }
+  # Need to resolve CDEs on Client too, so they can be shown on enrollment dash.
+  client {
+    ...ClientNameDobVet
+    customDataElements {
+      ...CustomDataElementFields
     }
+    access {
+      ...ClientAccessFields
+    }
+  }
+  openEnrollmentSummary {
+    ...EnrollmentSummaryFields
+  }
+  project {
+    ...ProjectNameAndType
+    hasUnits
+    dataCollectionFeatures {
+      ...DataCollectionFeatureFields
+    }
+    occurrencePointForms {
+      ...OccurrencePointFormFields
+    }
+    access {
+      ...ProjectAccessFields
+    }
+  }
+}
+
+# Values that could possibly need to be displayed/edited on the Enrollment Details card
+# (as opposed to values that are only needed for assessments, which is the whole EnrollmentValues fragment)
+fragment EnrollmentOccurrencePointFields on Enrollment {
+  id
+  entryDate
+  exitDate
+  dateOfEngagement
+  moveInDate
+  livingSituation
+  enrollmentCoc
+  dateOfPathStatus
+  clientEnrolledInPath
+  reasonNotEnrolled
+  disablingCondition
+  translationNeeded
+  preferredLanguage
+  preferredLanguageDifferent
+}
+
+# for assessments
+fragment EnrollmentValues on Enrollment {
+  id
+  entryDate
+  exitDate
+  dateOfEngagement
+  moveInDate
+  livingSituation
+  rentalSubsidyType
+  lengthOfStay
+  losUnderThreshold
+  previousStreetEssh
+  dateToStreetEssh
+  timesHomelessPastThreeYears
+  monthsHomelessPastThreeYears
+  enrollmentCoc
+  dateOfPathStatus
+  clientEnrolledInPath
+  reasonNotEnrolled
+  percentAmi
+  referralSource
+  countOutreachReferralApproaches
+  dateOfBcpStatus
+  eligibleForRhy
+  reasonNoServices
+  runawayYouth
+  sexualOrientation
+  sexualOrientationOther
+  formerWardChildWelfare
+  childWelfareYears
+  childWelfareMonths
+  formerWardJuvenileJustice
+  juvenileJusticeYears
+  juvenileJusticeMonths
+  unemploymentFam
+  mentalHealthDisorderFam
+  physicalDisabilityFam
+  alcoholDrugUseDisorderFam
+  unemploymentFam
+  mentalHealthDisorderFam
+  physicalDisabilityFam
+  alcoholDrugUseDisorderFam
+  insufficientIncome
+  incarceratedParent
+  targetScreenReqd
+  timeToHousingLoss
+  annualPercentAmi
+  literalHomelessHistory
+  clientLeaseholder
+  hohLeaseholder
+  subsidyAtRisk
+  evictionHistory
+  criminalRecord
+  incarceratedAdult
+  prisonDischarge
+  sexOffender
+  disabledHoh
+  currentPregnant
+  singleParent
+  dependentUnder6
+  hh5Plus
+  cocPrioritized
+  hpScreeningScore
+  thresholdScore
+  vamcStation
+  translationNeeded
+  preferredLanguage
+  preferredLanguageDifferent
+}
+
+# Fields that need to be returned from SubmitForm. This should include anything
+# that can be changed via form submission
+fragment SubmittedEnrollmentResultFields on Enrollment {
+  ...EnrollmentFields
+  ...EnrollmentOccurrencePointFields
+  customDataElements {
+    ...CustomDataElementFields
   }
 }
 
@@ -84,34 +217,4 @@ fragment EnrollmentSummaryFields on EnrollmentSummary {
   projectName
   projectType
   canViewEnrollment
-}
-
-fragment AllEnrollmentDetails on Enrollment {
-  ...EnrollmentValues
-  inProgress
-  relationshipToHoH
-  enrollmentCoc
-  householdId
-  householdShortId
-  householdSize
-  currentUnit {
-    id
-    name
-  }
-  intakeAssessment {
-    id
-  }
-  exitAssessment {
-    id
-  }
-  customDataElements {
-    ...CustomDataElementFields
-  }
-  openEnrollmentSummary {
-    ...EnrollmentSummaryFields
-  }
-  project {
-    ...ProjectNameAndType
-    hasUnits
-  }
 }

@@ -55,10 +55,12 @@ export const MciUnavailableAlert = () => (
     <AlertTitle>Not enough information.</AlertTitle>
     <p>
       <b>First Name</b>, <b>Last Name</b>, and <b>Date of Birth</b> are required
-      to clear MCI. Name Data Quality and DOB Data Quality must also be
+      to clear MCI.
+    </p>{' '}
+    <p>
+      <b>Name Data Quality</b> and <b>DOB Data Quality</b> must also be
       complete.
     </p>
-    <p>You can save this record, but the client will be uncleared.</p>
   </Alert>
 );
 

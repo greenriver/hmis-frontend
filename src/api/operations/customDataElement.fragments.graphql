@@ -20,7 +20,6 @@ fragment CustomDataElementFields on CustomDataElement {
   label
   fieldType
   repeats
-  atOccurrence
   value {
     ...CustomDataElementValueFields
   }

@@ -4,6 +4,7 @@
       "type": "STRING",
       "linkId": "has-referral-request",
       "hidden": true,
+      "disabledDisplay": "HIDDEN",
       "initial": [
         {
           "initialBehavior": "OVERWRITE",
@@ -44,6 +45,7 @@
       "text": "Re-request?",
       "mapping": { "fieldName": "resendReferralRequest" },
       "enableBehavior": "ALL",
+      "disabledDisplay": "HIDDEN",
       "enableWhen": [
         {
           "question": "status",
@@ -65,6 +67,7 @@
       "text": "Referral Result",
       "mapping": { "fieldName": "referralResult" },
       "component": "DROPDOWN",
+      "disabledDisplay": "HIDDEN",
       "enableBehavior": "ALL",
       "enableWhen": [
         {

@@ -11,13 +11,16 @@ import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDash
 import NotFound from '@/components/pages/NotFound';
 import {
   clientBriefName,
+  featureEnabledForEnrollment,
   formatRelativeDate,
   parseAndFormatDate,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
+import { DashboardEnrollment } from '@/modules/hmis/types';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
+  DataCollectionFeatureRole,
   RelationshipToHoH,
   ReminderFieldsFragment,
   ReminderTopic,
@@ -163,12 +166,36 @@ const rowLinkTo = ({
       );
   }
 };
-
 type Reminders = Array<ReminderFieldsFragment & { count?: number }>;
+
+// Whether reminder is applicable to this enrollment.
+// E.g. disable CLS if the feature is not enabled or applicable to this client.
+const reminderApplicableToEnrollment = (
+  reminder: Reminders[0],
+  enrollment: DashboardEnrollment
+) => {
+  switch (reminder.topic) {
+    case ReminderTopic.CurrentLivingSituation:
+      return !!enrollment.project.dataCollectionFeatures.find(
+        (feature) =>
+          feature.role === DataCollectionFeatureRole.CurrentLivingSituation &&
+          featureEnabledForEnrollment(
+            feature,
+            // Evaluate against the client who's reminder this is.
+            // For example if on non-HOH page, you should still see reminder that CLS is due for HOH.
+            reminder.client,
+            reminder.enrollment.relationshipToHoH
+          )
+      );
+    default:
+      return true;
+  }
+};
 
 interface Props {
   enrollmentId: string;
 }
+
 const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
   const { data, loading, error } = useGetEnrollmentRemindersQuery({
     variables: { id: enrollmentId },
@@ -178,6 +205,8 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
   const { enrollment } = useEnrollmentDashboardContext();
 
   const displayReminders = useMemo<Reminders>(() => {
+    if (!enrollment) return [];
+
     // reminders for these topics are deduplicated
     const remindersByTopic: Record<string, Reminders> = {
       [ReminderTopic.AnnualAssessment]: [],
@@ -210,8 +239,10 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
 
       if (item) results.push({ ...item, count: list.length });
     }
-    return sortBy(results, 'id');
-  }, [enrollmentId, data?.enrollment?.reminders]);
+    return sortBy(results, 'id').filter((reminder) =>
+      reminderApplicableToEnrollment(reminder, enrollment)
+    );
+  }, [enrollmentId, data?.enrollment?.reminders, enrollment]);
 
   const columns = useMemo(
     () => (enrollment ? generateColumns(enrollment.client.id) : []),
@@ -238,7 +269,9 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
           noHead
           rows={displayReminders}
           columns={columns}
-          rowLinkTo={rowLinkTo}
+          rowLinkTo={
+            enrollment.access.canEditEnrollments ? rowLinkTo : undefined
+          }
           rowSx={() => ({ '&:nth-last-of-type(1) td': { pb: 1 } })}
           noData={
             <Stack

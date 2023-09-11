@@ -1061,14 +1061,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CustomDataElement',
     fields: [
       {
-        name: 'atOccurrence',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'fieldType',
         type: {
           kind: 'NON_NULL',
@@ -1164,6 +1156,47 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'valueText',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'DataCollectionFeature',
+    fields: [
+      {
+        name: 'dataCollectedAbout',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'legacy',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'role',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'DataCollectionFeatureRole',
+            ofType: null,
+          },
+        },
       },
     ],
   },
@@ -2603,6 +2636,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'FormDefinition',
     fields: [
       {
+        name: 'cacheKey',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -2616,6 +2657,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
+        },
+      },
+      {
+        name: 'title',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
     ],
@@ -3584,6 +3633,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
+    name: 'OccurrencePointForm',
+    fields: [
+      {
+        name: 'dataCollectedAbout',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -6151,51 +6221,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
-      },
-    ],
-  },
-  {
-    name: 'UpdateCustomEnrollmentValueInput',
-    args: [
-      {
-        name: 'customDataElementDefinitionId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'enrollmentId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'valueBoolean',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-      {
-        name: 'valueDate',
-        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-      },
-      {
-        name: 'valueFloat',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
-      },
-      {
-        name: 'valueInteger',
-        type: { kind: 'SCALAR', name: 'Int', ofType: null },
-      },
-      {
-        name: 'valueString',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'valueText',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { omit } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
@@ -120,11 +120,9 @@ export const HOUSEHOLD_COLUMNS: {
   householdId: {
     header: 'Household ID',
     render: (hh) => (
-      <Box height='100%'>
-        <Typography variant='body2' whiteSpace='nowrap'>
-          {hh.shortId} ({hh.householdSize})
-        </Typography>
-      </Box>
+      <Typography variant='body2' whiteSpace='nowrap'>
+        {hh.shortId} ({hh.householdSize})
+      </Typography>
     ),
   },
 };

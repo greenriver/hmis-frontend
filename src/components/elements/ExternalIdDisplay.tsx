@@ -1,7 +1,8 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, StackProps, Typography } from '@mui/material';
 import { filter, isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
+import { CommonLabeledTextBlock } from './CommonLabeledTextBlock';
 import ExternalLink from './ExternalLink';
 
 import { isHouseholdClient } from '@/modules/household/types';
@@ -53,7 +54,6 @@ export const externalIdColumn = (
   label: string
 ) => ({
   header: label,
-  width: '5%',
   render: (
     record: ClientFieldsFragment | HouseholdClientFieldsFragment,
     props?: ExternalIdDisplayProps
@@ -73,30 +73,33 @@ export const externalIdColumn = (
 export const LabeledExternalIdDisplay = ({
   type,
   externalIds,
+  label,
+  gap,
   ...props
 }: Omit<ExternalIdDisplayProps, 'value'> & {
   type?: ExternalIdentifierType;
+  label?: ReactNode;
   externalIds: ExternalIdentifier[];
+  gap?: StackProps['gap'];
 }) => {
   const filtered = filter(externalIds, { type });
   if (!filtered || filtered.length === 0) return null;
   return (
-    <Stack>
-      {filtered.map((externalId) => (
-        <Typography
-          key={externalId.id}
-          variant='body2'
-          sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 0.8,
-          }}
+    <Stack gap={gap}>
+      {filtered.map((externalId, idx) => (
+        <CommonLabeledTextBlock
+          title={
+            idx > 0 && label ? (
+              // If there are multiple w same label, hide label for subsequent
+              <Box visibility='hidden'>{label}</Box>
+            ) : (
+              label || externalId.label
+            )
+          }
+          horizontal
         >
-          {externalId.label}:{' '}
-          <Box component='span' sx={{ wordBreak: 'break-all' }}>
-            <ExternalIdDisplay {...props} value={externalId} />
-          </Box>
-        </Typography>
+          <ExternalIdDisplay {...props} value={externalId} />
+        </CommonLabeledTextBlock>
       ))}
     </Stack>
   );
