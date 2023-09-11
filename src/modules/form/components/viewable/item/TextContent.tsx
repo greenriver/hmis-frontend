@@ -3,7 +3,10 @@ import { ReactNode, useMemo } from 'react';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import MultilineTypography from '@/components/elements/MultilineTypography';
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
+import {
+  hasMeaningfulValue,
+  isDataNotCollected,
+} from '@/modules/form/util/formUtil';
 
 export interface TextContentProps<T extends ReactNode> {
   label: ReactNode;
@@ -23,7 +26,7 @@ const TextContent = <T extends ReactNode>({
 }: TextContentProps<T>): JSX.Element => {
   const testId = props['data-testid'];
   const displayValue = useMemo(() => {
-    if (hasMeaningfulValue(value)) {
+    if (hasMeaningfulValue(value) && !isDataNotCollected(value)) {
       const renderedValue = renderValue(value);
       if (typeof renderedValue === 'string') {
         return (

@@ -104,7 +104,6 @@ export const hasMeaningfulValue = (value: any): boolean => {
   if (Array.isArray(value) && value.length == 0) return false;
   if (isNil(value)) return false;
   if (value === '') return false;
-  if (isDataNotCollected(value)) return false;
   if (value == HIDDEN_VALUE) return false;
   return true;
 };
@@ -1075,7 +1074,9 @@ export const transformSubmitValues = ({
       // If key is already in result and has a value, skip.
       // This can occur if there are multiple questions tied to the same field,
       // with one of them hidden (eg W5 Subsidy Information)
-      if (hasMeaningfulValue(result[key])) return;
+      if (hasMeaningfulValue(result[key]) && !isDataNotCollected(result[key])) {
+        return;
+      }
 
       if (item.linkId in values) {
         // Transform into gql value, for example Date -> YYYY-MM-DD string
@@ -1119,12 +1120,12 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
     const recordType = HmisEnums.RelatedRecordType[mapping.recordType];
     if (recordType !== record.__typename) {
       relatedRecordAttribute = lowerFirst(recordType);
-      if (!record.hasOwnProperty(relatedRecordAttribute)) {
-        console.error(
-          `Expected record to have ${relatedRecordAttribute}`,
-          mapping
-        );
-      }
+      // if (!record.hasOwnProperty(relatedRecordAttribute)) {
+      //   console.debug(
+      //     `Expected record to have ${relatedRecordAttribute}. FieldMapping:`,
+      //     JSON.stringify(mapping)
+      //   );
+      // }
     }
   }
 
@@ -1141,7 +1142,6 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
 
 /**
  * Create initial form values based on a record.
- * This is only used for forms that edit a record directly, like the Client, Project, and Organization edit screens.
  *
  * @param itemMap Map of linkId -> Item
  * @param record  GQL HMIS record, like Project or Organization
@@ -1150,7 +1150,7 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
  */
 export const createInitialValuesFromRecord = (
   itemMap: ItemMap,
-  record: any // could be assmt
+  record: any // could be an assessment
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
@@ -1268,7 +1268,7 @@ export const debugFormValues = (
 
 type GetDependentItemsDisabledStatus = {
   changedLinkIds: string[];
-  localValues: any;
+  localValues: FormValues;
   enabledDependencyMap: LinkIdMap;
   itemMap: ItemMap;
   localConstants: LocalConstants;
@@ -1308,11 +1308,18 @@ export const getDependentItemsDisabledStatus = ({
           // if the disabled field is hidden, nullify its value (so that related enableWhens dont consider it present).
           // this needs to happen here, rather than in the caller, because subsequent iterations of this loop
           // may depend on the presence of this item.
+          const disabledItem = itemMap[dependentLinkId];
           if (
-            itemMap[dependentLinkId].disabledDisplay !==
-            DisabledDisplay.ProtectedWithValue
+            disabledItem.disabledDisplay !== DisabledDisplay.ProtectedWithValue
           ) {
             localValues[dependentLinkId] = null;
+            // All its children should get emptied too
+            if (disabledItem.item) {
+              const childrenLinkIds = getAllChildLinkIds(disabledItem);
+              childrenLinkIds.forEach((hiddenChildId) => {
+                localValues[hiddenChildId] = null;
+              });
+            }
           }
         }
       });

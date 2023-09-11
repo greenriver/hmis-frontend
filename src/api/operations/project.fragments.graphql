@@ -10,6 +10,11 @@ fragment ProjectOperatingPeriod on Project {
   operatingStartDate
 }
 
+fragment ProjectCocCount on Project {
+  projectCocs {
+    nodesCount
+  }
+}
 fragment ProjectAllFields on Project {
   id
   hudId
@@ -39,6 +44,7 @@ fragment ProjectAllFields on Project {
   dataCollectionFeatures {
     ...DataCollectionFeatureFields
   }
+  ...ProjectCocCount
 }
 
 fragment DataCollectionFeatureFields on DataCollectionFeature {

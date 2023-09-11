@@ -6,7 +6,7 @@ const useLocalStorage = <T>(key: string, initialValue?: T) => {
   const idRef = useRef<string>(String((counter += 1)));
   const [storedValue, setStoredValue] = useState<T | undefined>(() => {
     try {
-      const item = localStorage.getItem(key);
+      const item = sessionStorage.getItem(key);
       return item ? (JSON.parse(item) as T) : initialValue;
     } catch (error) {
       console.error(error);
@@ -20,7 +20,7 @@ const useLocalStorage = <T>(key: string, initialValue?: T) => {
         setStoredValue((storedValue) => {
           const valueToStore =
             value instanceof Function ? value(storedValue) : value;
-          localStorage.setItem(key, JSON.stringify(valueToStore));
+          sessionStorage.setItem(key, JSON.stringify(valueToStore));
           return valueToStore;
         });
         window.dispatchEvent(
@@ -36,7 +36,7 @@ const useLocalStorage = <T>(key: string, initialValue?: T) => {
   );
 
   const handleStorage = useCallback(() => {
-    const item: string | null = localStorage.getItem(key);
+    const item: string | null = sessionStorage.getItem(key);
     const value = item ? JSON.parse(item) : initialValue;
     setStoredValue(value);
   }, [setStoredValue, key, initialValue]);
