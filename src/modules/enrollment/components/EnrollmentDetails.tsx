@@ -7,6 +7,7 @@ import OccurrencePointValue, {
   parseOccurrencePointFormDefinition,
 } from './OccurrencePointValue';
 import Loading from '@/components/elements/Loading';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { occurrencePointCollectedForEnrollment } from '@/modules/hmis/hmisUtil';
@@ -71,6 +72,13 @@ const EnrollmentDetails = ({
           />
         );
       });
+
+    // CoC Code. Only show if project operates in multiple CoCs.
+    if (enrollment.project.projectCocs.nodesCount > 1) {
+      content['Enrollment CoC'] = enrollment.enrollmentCoc || (
+        <NotCollectedText />
+      );
+    }
 
     return Object.entries(content).map(([id, value], index) => ({
       id: String(index),

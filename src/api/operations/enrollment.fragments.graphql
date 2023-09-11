@@ -53,6 +53,7 @@ fragment AllEnrollmentDetails on Enrollment {
   }
   project {
     ...ProjectNameAndType
+    ...ProjectCocCount
     hasUnits
     dataCollectionFeatures {
       ...DataCollectionFeatureFields
