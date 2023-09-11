@@ -27,6 +27,9 @@ type Args = {
   enrollmentId: string;
   assessmentId?: string;
   onSuccessfulSubmit?: (assessment: AssessmentFieldsFragment) => void;
+  onCompleted?: (
+    data: SubmitAssessmentMutation | SaveAssessmentMutation
+  ) => any;
 };
 
 export const createValuesForSubmit = (
@@ -45,11 +48,24 @@ export const createHudValuesForSubmit = (
     includeMissingKeys: 'AS_HIDDEN',
   });
 
+export const getErrorsFromMutationResult = (
+  data: SubmitAssessmentMutation | SaveAssessmentMutation
+) => {
+  let errs;
+  if (data.hasOwnProperty('saveAssessment')) {
+    errs = (data as SaveAssessmentMutation).saveAssessment?.errors || [];
+  } else {
+    errs = (data as SubmitAssessmentMutation).submitAssessment?.errors || [];
+  }
+  return errs;
+};
+
 export function useAssessmentHandlers({
   definition,
   enrollmentId,
   assessmentId,
   onSuccessfulSubmit = () => null,
+  onCompleted: onCompletedProp,
 }: Args) {
   const formDefinitionId = definition.id;
 
@@ -57,13 +73,9 @@ export function useAssessmentHandlers({
 
   const onCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
-      let errs;
-      if (data.hasOwnProperty('saveAssessment')) {
-        errs = (data as SaveAssessmentMutation).saveAssessment?.errors || [];
-      } else {
-        errs =
-          (data as SubmitAssessmentMutation).submitAssessment?.errors || [];
-      }
+      if (onCompletedProp) onCompletedProp(data);
+
+      const errs = getErrorsFromMutationResult(data);
 
       if (errs.length > 0) {
         window.scrollTo(0, 0);
@@ -72,7 +84,7 @@ export function useAssessmentHandlers({
       }
       setErrors(emptyErrorState);
     },
-    [setErrors]
+    [setErrors, onCompletedProp]
   );
 
   const onError = useCallback((apolloError: ApolloError) => {

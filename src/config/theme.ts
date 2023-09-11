@@ -1,4 +1,5 @@
 import { Theme } from '@mui/material';
+import { deepPurple, orange, red } from '@mui/material/colors';
 import {
   createTheme,
   ThemeOptions,
@@ -25,15 +26,42 @@ declare module '@mui/material/styles' {
   //   body3?: React.CSSProperties;
   // }
 
+  interface StepperPaletteOptions {
+    color: string;
+    background: string;
+  }
+
   interface Palette {
     borders: PaletteColor;
     alerts: Record<string, string>;
     links: string;
+    stepper: {
+      empty: StepperPaletteOptions;
+      complete: StepperPaletteOptions;
+      changed: StepperPaletteOptions;
+      warning: StepperPaletteOptions;
+      error: StepperPaletteOptions;
+      // empty: {
+      //   color: '#0000003B',
+      //   background: '#FFF'
+      // },
+      // complete: {
+      //   color: '#000000DE',
+      //   background: '#FFF',
+      // }
+    };
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: { lightWarningBackground?: string };
     links: string;
+    stepper: {
+      empty: StepperPaletteOptions;
+      complete: StepperPaletteOptions;
+      changed: StepperPaletteOptions;
+      warning: StepperPaletteOptions;
+      error: StepperPaletteOptions;
+    };
   }
 }
 
@@ -65,6 +93,28 @@ export const baseThemeDef: ThemeOptions = {
       lightWarningBackground: '#fffde0',
     },
     links: '#1976D2',
+    stepper: {
+      empty: {
+        color: '#0000003B',
+        background: '#FFF',
+      },
+      complete: {
+        color: '#000000DE',
+        background: '#FFF',
+      },
+      changed: {
+        color: '#75559F', // Not a MUI color
+        background: deepPurple[50],
+      },
+      warning: {
+        color: orange[700],
+        background: orange[50],
+      },
+      error: {
+        color: red.A700,
+        background: red[50],
+      },
+    },
   },
 };
 

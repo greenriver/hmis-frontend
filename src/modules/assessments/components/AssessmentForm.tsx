@@ -4,6 +4,7 @@ import {
   ReactNode,
   Ref,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -35,6 +36,9 @@ import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 
+import FormStepperContextProvider, {
+  FormStepperDispatchContext,
+} from '@/modules/form/hooks/useFormStepperContext';
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation } from '@/modules/form/types';
 import {
@@ -83,6 +87,8 @@ const AssessmentForm = ({
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const formStepperDispatch = useContext(FormStepperDispatchContext);
+
   // Whether assessment is locked. By default, submitted assessments are locked.
   const canEdit = enrollment?.access.canEditEnrollments;
   const [locked, setLocked] = useState(
@@ -121,7 +127,14 @@ const AssessmentForm = ({
       onSuccessfulSubmit: (assmt) => {
         if (!assmt.inProgress) setLocked(true);
       },
+      onCompleted: () => {
+        formStepperDispatch({ type: 'saveForm' });
+      },
     });
+
+  useEffect(() => {
+    formStepperDispatch({ type: 'updateErrors', errors });
+  }, [errors, formStepperDispatch]);
 
   const itemMap = useMemo(
     () => getItemMap(definition.definition),
@@ -238,7 +251,7 @@ const AssessmentForm = ({
           />
         </Paper>
         <Stack gap={2} sx={{ mt: 2 }}>
-          {!assessment && canEdit && (
+          {!assessment && (
             <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
               <Button
                 variant='outlined'
@@ -357,4 +370,14 @@ const AssessmentForm = ({
   );
 };
 
-export default AssessmentForm;
+const WrappedAssessmentForm = (props: Props) => {
+  const { definition } = props;
+
+  return (
+    <FormStepperContextProvider definition={definition.definition}>
+      <AssessmentForm {...props} />
+    </FormStepperContextProvider>
+  );
+};
+
+export default WrappedAssessmentForm;

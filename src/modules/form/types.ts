@@ -21,16 +21,19 @@ export enum ChangeType {
   System,
 }
 
-export type ItemChangedFn = (input: {
+export type ItemChangedFnInput = {
   linkId: string;
   value: any;
   type: ChangeType;
-}) => void;
+};
 
-export type SeveralItemsChangedFn = (input: {
+export type ItemChangedFn = (input: ItemChangedFnInput) => void;
+
+export type SeveralItemsChangedFnInput = {
   values: FormValues;
   type: ChangeType;
-}) => void;
+};
+export type SeveralItemsChangedFn = (input: SeveralItemsChangedFnInput) => void;
 
 export type SubmitFormAllowedTypes = NonNullable<
   NonNullable<SubmitFormMutation['submitForm']>['record']

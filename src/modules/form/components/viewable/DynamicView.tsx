@@ -1,6 +1,8 @@
 import { Grid, GridProps } from '@mui/material';
+import { useContext, useEffect } from 'react';
 
 import useDynamicFields from '../../hooks/useDynamicFields';
+import { FormStepperDispatchContext } from '../../hooks/useFormStepperContext';
 import { LocalConstants, PickListArgs } from '../../types';
 
 import { FormDefinitionJson } from '@/types/gqlTypes';
@@ -24,12 +26,19 @@ const DynamicView = ({
   localConstants,
   GridProps,
 }: DynamicViewProps): JSX.Element => {
-  const { renderFields } = useDynamicFields({
+  const { renderFields, getCleanedValues } = useDynamicFields({
     definition,
     initialValues: values,
     viewOnly: true,
     localConstants,
   });
+
+  const formStepperDispatch = useContext(FormStepperDispatchContext);
+
+  // Initialize the form stepper with the initial values
+  useEffect(() => {
+    formStepperDispatch({ type: 'updateValues', values: getCleanedValues() });
+  }, [formStepperDispatch, getCleanedValues]);
 
   return (
     <Grid

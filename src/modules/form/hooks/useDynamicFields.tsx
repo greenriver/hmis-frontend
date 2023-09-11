@@ -6,11 +6,12 @@ import DynamicFormFields, {
 } from '../components/DynamicFormFields';
 import DynamicViewFields from '../components/viewable/DynamicViewFields';
 import {
-  ChangeType,
   FormValues,
   ItemChangedFn,
+  ItemChangedFnInput,
   LocalConstants,
   SeveralItemsChangedFn,
+  SeveralItemsChangedFnInput,
 } from '../types';
 import {
   addDescendants,
@@ -37,7 +38,9 @@ const useDynamicFields = ({
   bulk?: boolean;
   viewOnly?: boolean;
   localConstants?: LocalConstants;
-  onFieldChange?: (type: ChangeType) => void;
+  onFieldChange?: (
+    input: ItemChangedFnInput | SeveralItemsChangedFnInput
+  ) => void;
 }) => {
   const [values, setValues] = useState<FormValues>(
     Object.assign({}, initialValues)
@@ -133,7 +136,7 @@ const useDynamicFields = ({
 
   const itemChanged: ItemChangedFn = useCallback(
     (input) => {
-      if (onFieldChange) onFieldChange(input.type);
+      if (onFieldChange) onFieldChange(input);
       const { linkId, value } = input;
       setValues((currentValues) => {
         const newValues = { ...currentValues };
@@ -151,7 +154,7 @@ const useDynamicFields = ({
 
   const severalItemsChanged: SeveralItemsChangedFn = useCallback(
     (input) => {
-      if (onFieldChange) onFieldChange(input.type);
+      if (onFieldChange) onFieldChange(input);
       setValues((currentValues) => {
         const newValues = { ...currentValues, ...input.values };
         // Update dependent autofill questions (modifies newValues in-place)
