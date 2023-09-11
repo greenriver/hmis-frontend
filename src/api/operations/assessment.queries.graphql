@@ -111,8 +111,7 @@ mutation SubmitAssessment($input: SubmitAssessmentInput!) {
 mutation SubmitHouseholdAssessments($input: SubmitHouseholdAssessmentsInput!) {
   submitHouseholdAssessments(input: $input) {
     assessments {
-      id
-      inProgress
+      ...AssessmentWithRecords
     }
     errors {
       ...ValidationErrorFields
