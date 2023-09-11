@@ -103,7 +103,11 @@ const FormCard = ({
 
             <Stack direction='row' spacing={2}>
               {debug && import.meta.env.MODE === 'development' && (
-                <Button {...buttonProps} onClick={() => debug(childLinkIds)}>
+                <Button
+                  {...buttonProps}
+                  onClick={() => debug(childLinkIds)}
+                  variant='text'
+                >
                   Debug
                 </Button>
               )}
