@@ -5000,7 +5000,7 @@
           },
           {
             "name": "BEST_MATCH",
-            "description": "Best Match",
+            "description": "Most Relevant",
             "isDeprecated": false,
             "deprecationReason": null
           },

@@ -696,7 +696,7 @@ export enum ClientSortOption {
   AgeOldestToYoungest = 'AGE_OLDEST_TO_YOUNGEST',
   /** Age: Youngest to Oldest */
   AgeYoungestToOldest = 'AGE_YOUNGEST_TO_OLDEST',
-  /** Best Match */
+  /** Most Relevant */
   BestMatch = 'BEST_MATCH',
   /** First Name: A-Z */
   FirstNameAToZ = 'FIRST_NAME_A_TO_Z',

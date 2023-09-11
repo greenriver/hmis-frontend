@@ -102,7 +102,7 @@ export const HmisEnums = {
     usual: 'Usual',
   },
   ClientSortOption: {
-    BEST_MATCH: 'Best Match',
+    BEST_MATCH: 'Most Relevant',
     RECENTLY_ADDED: 'Recently Added',
     FIRST_NAME_A_TO_Z: 'First Name: A-Z',
     FIRST_NAME_Z_TO_A: 'First Name: Z-A',
