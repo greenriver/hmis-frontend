@@ -258,10 +258,11 @@ const AssessmentForm = ({
     </Grid>
   );
 
+  const showNavigation = !isPrintView;
   return (
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-      {!isPrintView && navigation}
-      <Grid item xs sx={{ pt: '0 !important' }}>
+      {showNavigation && navigation}
+      <Grid item xs={showNavigation ? 9.5 : 12} sx={{ pt: '0 !important' }}>
         {assessmentTitle}
         {!embeddedInWorkflow &&
           !isPrintView &&

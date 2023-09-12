@@ -25,7 +25,7 @@ const TabLabel: React.FC<Props> = ({
         },
       })}
     >
-      <Typography component='div'>
+      <Typography component='div' fontWeight='inherit'>
         <HohIndicator
           relationshipToHoh={relationshipToHoH}
           sx={{ display: 'inline', pr: 0.5 }}
