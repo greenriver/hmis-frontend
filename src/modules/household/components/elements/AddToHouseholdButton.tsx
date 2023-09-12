@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
   FormRole,
   SubmittedEnrollmentResultFieldsFragment,
@@ -28,6 +29,7 @@ const AddToHouseholdButton = ({
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
+  const cocCount = useProjectCocsCountFromCache(projectId);
 
   useEffect(() => {
     // If client was previously added but has since been removed
@@ -49,10 +51,11 @@ const AddToHouseholdButton = ({
       },
       inputVariables: { projectId, clientId },
       pickListArgs: { projectId, householdId },
-      localConstants: { householdId },
+      localConstants: { householdId, projectCocCount: cocCount },
     }),
-    [clientId, householdId, onSuccess, projectId]
+    [projectId, clientId, householdId, cocCount, onSuccess]
   );
+
   const { openFormDialog, renderFormDialog } =
     useFormDialog<SubmittedEnrollmentResultFieldsFragment>(memoedArgs);
 

@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { Stack } from '@mui/system';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAddToHouseholdColumns from '../hooks/useAddToHouseholdColumns';
 import { useRecentHouseholdMembers } from '../hooks/useRecentHouseholdMembers';
@@ -8,13 +8,15 @@ import { useRecentHouseholdMembers } from '../hooks/useRecentHouseholdMembers';
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
 import AddNewClientButton from './elements/AddNewClientButton';
 import { CommonCard } from '@/components/elements/CommonCard';
+import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import AssociatedHouseholdMembers, {
   householdMemberColumns,
 } from '@/modules/household/components/AssociatedHouseholdMembers';
@@ -26,6 +28,7 @@ import {
   ClientSearchInput,
   ClientSortOption,
   EnrollmentFieldsFragment,
+  ExternalIdentifierType,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
@@ -42,9 +45,10 @@ const ManageHousehold = ({
   projectId,
   BackButton,
 }: Props) => {
-  // This may or may not be in a Client Dashboard. If it is, we need to treat the dashboard client differently.
-  const { client } = useClientDashboardContext();
-  const currentDashboardClientId = client?.id;
+  const { globalFeatureFlags } = useHmisAppSettings();
+  // This may be rendered either on the Project Dashboard or the Enrollment Dashboard. If on the Enrollment Dash, we need to treat the "current" client differently.
+  const enrollmentContext = useEnrollmentDashboardContext();
+  const currentDashboardClientId = enrollmentContext?.client?.id;
 
   const {
     addToEnrollmentColumns,
@@ -79,10 +83,17 @@ const ManageHousehold = ({
 
   useScrollToHash(loading || recentMembersLoading);
 
-  const columns: ColumnDef<ClientFieldsFragment | RecentHouseholdMember>[] = [
-    ...householdMemberColumns,
-    ...addToEnrollmentColumns,
-  ];
+  const columns: ColumnDef<ClientFieldsFragment | RecentHouseholdMember>[] =
+    useMemo(() => {
+      const defaults = [...householdMemberColumns, ...addToEnrollmentColumns];
+      if (globalFeatureFlags?.mciId) {
+        return [
+          externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
+          ...defaults,
+        ];
+      }
+      return defaults;
+    }, [addToEnrollmentColumns, globalFeatureFlags?.mciId]);
 
   const handleNewClientAdded = useCallback(
     (data: EnrollmentFieldsFragment) => {

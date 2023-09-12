@@ -38,6 +38,7 @@ import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
+  createInitialValuesFromRecord,
   getInitialValues,
   getItemMap,
   initialValuesFromAssessment,
@@ -147,6 +148,7 @@ const AssessmentForm = ({
 
     // Set initial values based solely on FormDefinition
     const init = getInitialValues(definition.definition, localConstants);
+
     if (source) {
       // Overlay with values from Assessment
       const initFromAssessment = initialValuesFromAssessment(itemMap, source);
@@ -159,6 +161,12 @@ const AssessmentForm = ({
         InitialBehavior.Overwrite
       );
       assign(init, initialsToOverwrite);
+    } else {
+      // If this is a completely new assessment, set initials from Enrollment
+      const initialsFromEnrollment = createInitialValuesFromRecord(itemMap, {
+        enrollment,
+      });
+      assign(init, initialsFromEnrollment);
     }
 
     // console.debug(
