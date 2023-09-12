@@ -55,7 +55,7 @@ const AssessmentStatusIndicator: React.FC<Props> = ({
         <Display
           icon={InProgressIcon}
           color='warning'
-          caption='Ready to Submit'
+          caption='In Progress'
           size={size}
         />
       );

@@ -271,6 +271,10 @@ const HouseholdAssessments = ({
               pr: 6,
               display: 'flex',
               alignItems: 'flex-end',
+              // Dont show icon color for not-currently-active tabs
+              '.MuiTab-root[aria-selected="false"] svg': {
+                color: 'text.disabled',
+              },
             }}
           >
             <Tabs
