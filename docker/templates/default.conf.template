@@ -51,8 +51,8 @@ server {
       proxy_set_header Host ${HMIS_BACKEND};
     }
 
-    # Long-lived caching for versioned URLs
     location /assets {
+      # Long-lived caching for fingerprinted file names (CSS and JS)
       add_header Cache-Control "public, max-age=31536000";
     }
 
@@ -65,6 +65,9 @@ server {
 
       # add location specific headers
       proxy_set_header Host ${HMIS_BACKEND};
+
+      # Long-lived caching for fingerprinted file names (logo image assets)
+      add_header Cache-Control "public, max-age=31536000";
     }
 
     #error_page  404              /404.html;
