@@ -12,9 +12,7 @@ import {
 
 import { useAssessmentHandlers } from '../hooks/useAssessmentHandlers';
 
-import LockedAssessmentAlert from './alerts/LockedAssessmentAlert';
-import UnsavedAssessmentAlert from './alerts/UnsavedAssessmentAlert';
-import WipAssessmentAlert from './alerts/WipAssessmentAlert';
+import AssessmentAlert from './alerts/AssessmentAlert';
 
 import FormContainer from '@/components/layout/FormContainer';
 import {
@@ -259,23 +257,20 @@ const AssessmentForm = ({
   );
 
   const showNavigation = !isPrintView;
+
   return (
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
       {showNavigation && navigation}
       <Grid item xs={showNavigation ? 9.5 : 12} sx={{ pt: '0 !important' }}>
         {assessmentTitle}
-        {!embeddedInWorkflow &&
-          !isPrintView &&
-          assessment &&
-          !assessment.inProgress &&
-          locked && (
-            <LockedAssessmentAlert
-              allowUnlock={canEdit}
-              onUnlock={handleUnlock}
-            />
-          )}
-        {assessment && assessment.inProgress && <WipAssessmentAlert />}
-        {embeddedInWorkflow && !assessment && <UnsavedAssessmentAlert />}
+        {!isPrintView && (
+          <AssessmentAlert
+            assessment={assessment}
+            locked={locked}
+            allowUnlock={canEdit && !embeddedInWorkflow}
+            onUnlock={handleUnlock}
+          />
+        )}
         {locked && assessment ? (
           <FormContainer
             actions={
