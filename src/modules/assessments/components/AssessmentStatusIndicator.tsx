@@ -17,8 +17,8 @@ interface DisplayProps {
 const Display: React.FC<DisplayProps> = ({ icon, caption, color, size }) => {
   const Icon = icon;
   return (
-    <Stack direction='row' spacing={0.5} alignItems='center'>
-      <Icon color={color} sx={{ fontSize: size == 'small' ? 16 : undefined }} />
+    <Stack direction='row' spacing={1} alignItems='center'>
+      <Icon color={color} sx={{ fontSize: size == 'small' ? 16 : 20 }} />
       <Typography
         component='div'
         variant={size == 'default' ? 'body1' : 'caption'}

@@ -1,4 +1,4 @@
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 
 import { HouseholdAssesmentRole, TabDefinition } from './util';
@@ -43,7 +43,6 @@ const isSubmittable = (row: TabDefinition) =>
 const HouseholdSummaryTable = ({
   tabs,
   role,
-  setCurrentTab,
   setAssessmentsToSubmit,
 }: Props) => {
   const columns: ColumnDef<TabDefinition>[] = useMemo(() => {
@@ -60,11 +59,7 @@ const HouseholdSummaryTable = ({
         header: 'Name',
         key: 'name',
         linkTreatment: true,
-        render: ({ clientName, id }) => (
-          <Link onClick={() => setCurrentTab(id)}>
-            <Typography>{clientName}</Typography>
-          </Link>
-        ),
+        render: ({ clientName }) => <Typography>{clientName}</Typography>,
       },
       {
         header: statusHeader,
@@ -130,7 +125,7 @@ const HouseholdSummaryTable = ({
       //     ]
       //   : []),
     ];
-  }, [role, setCurrentTab]);
+  }, [role]);
 
   const handleSetSelected = useCallback(
     (rowIds: readonly string[]) => {
