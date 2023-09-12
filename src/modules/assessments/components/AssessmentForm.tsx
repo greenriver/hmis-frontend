@@ -221,13 +221,12 @@ const AssessmentForm = ({
           id: 'unlock',
           label: 'Unlock Assessment',
           centerAlign: embeddedInWorkflow,
-          // danger! button props is untyped :(
           buttonProps: {
             onClick: handleUnlock,
             startIcon: <UnlockIcon />,
             size: 'large',
             color: 'inherit',
-          },
+          } as const,
         };
       })
       .filter((item) => item.action !== FormActionTypes.Discard);

@@ -37,7 +37,7 @@ const LockedAssessmentAlert = ({
             color='inherit'
             sx={{ fontWeight: 600 }}
           >
-            Unlock to make changes
+            Unlock Assessment
           </Button>
         )}
       </Stack>

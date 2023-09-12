@@ -89,7 +89,7 @@ const AssessmentPage = () => {
             id: 'submit',
             label: 'Submit',
             action: FormActionTypes.Submit,
-            buttonProps: { variant: 'contained' },
+            buttonProps: { variant: 'contained' } as const,
             onSuccess,
           },
           ...(assessment && !assessment.inProgress
@@ -99,7 +99,7 @@ const AssessmentPage = () => {
                   id: 'saveDraft',
                   label: 'Save and finish later',
                   action: FormActionTypes.Save,
-                  buttonProps: { variant: 'outlined' },
+                  buttonProps: { variant: 'outlined' } as const,
                   onSuccess,
                 },
               ]),
@@ -107,7 +107,7 @@ const AssessmentPage = () => {
             id: 'discard',
             label: 'Cancel',
             action: FormActionTypes.Discard,
-            buttonProps: { variant: 'gray' },
+            buttonProps: { variant: 'gray' } as const,
           },
         ],
       })}

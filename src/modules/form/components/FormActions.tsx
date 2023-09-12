@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { ButtonProps, Stack } from '@mui/material';
 import { findIndex, findLastIndex } from 'lodash-es';
 import { MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ type ButtonConfig = {
   action: FormActionTypes;
   onSuccess?: VoidFunction;
   centerAlign?: boolean;
-  buttonProps?: any; //Omit<LoadingButtonProps, 'onClick'>;
+  buttonProps?: Omit<ButtonProps, 'ref'>;
 };
 
 export interface FormActionProps {
