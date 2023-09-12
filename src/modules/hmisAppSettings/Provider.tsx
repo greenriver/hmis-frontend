@@ -1,9 +1,13 @@
 import { Typography } from '@mui/material';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
-import { fetchCurrentUser, HmisUser } from '@/modules/auth/api/sessions';
+import {
+  fetchCurrentUser,
+  HmisUser,
+  logout,
+} from '@/modules/auth/api/sessions';
 import * as storage from '@/modules/auth/api/storage';
 import { HmisAuthContext, HmisAuthState } from '@/modules/auth/AuthContext';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
@@ -35,13 +39,26 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   const [error, setError] = useState<Error>();
   const [loading, setLoading] = useState(true);
 
+  const logoutUser = useCallback(() => {
+    setLoading(true);
+    return logout()
+      .then(() => {
+        reloadWindow();
+      })
+      .catch((e) => {
+        setLoading(false);
+        setError(e);
+      });
+  }, []);
+
   // auth state for global context
   const authState = useMemo<HmisAuthState>(
     () => ({
       user: user,
       setUser,
+      logoutUser,
     }),
-    [user]
+    [user, logoutUser]
   );
 
   // tracking needs to be in place before we start making API calls
