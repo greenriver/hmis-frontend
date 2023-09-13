@@ -97,7 +97,7 @@ const FormCard = ({
         {/* Card title */}
         {item.text && (
           <Stack justifyContent='space-between' direction='row'>
-            <Typography variant='h5' sx={{ mb: 2 }}>
+            <Typography variant='cardTitle' sx={{ mb: 2 }}>
               {item.text}
             </Typography>
 
