@@ -1,3 +1,4 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Alert, AlertTitle, Box, Grid, Typography } from '@mui/material';
 import { keyBy, mapValues, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
@@ -9,7 +10,6 @@ import {
   useMemo,
   useState,
 } from 'react';
-
 import { assessmentPrefix } from '../../util';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
@@ -20,9 +20,12 @@ import {
   tabPanelA11yProps,
 } from './util';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
-import RouterLink from '@/components/elements/RouterLink';
 import TitleCard from '@/components/elements/TitleCard';
+import useSafeParams from '@/hooks/useSafeParams';
+import HouseholdSummaryExitHelpCard from '@/modules/assessments/components/household/HouseholdSummaryExitHelpCard';
+import HouseholdSummaryIntakeHelpCard from '@/modules/assessments/components/household/HouseholdSummaryIntakeHelpCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
@@ -62,11 +65,15 @@ const HouseholdSummaryTabPanel = memo(
     setCurrentTab,
   }: HouseholdSummaryTabPanelProps) => {
     const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
-    const [submitMutation, { loading }] = useSubmitHouseholdAssessmentsMutation(
-      {
+    const [submitMutation, { loading, data: submitResponseData }] =
+      useSubmitHouseholdAssessmentsMutation({
         onError: (apolloError) =>
           setErrors({ ...emptyErrorState, apolloError }),
-      }
+      });
+
+    const allSubmitted = useMemo(
+      () => !tabs.find((t) => !t.assessmentSubmitted),
+      [tabs]
     );
 
     const [assessmentsToSubmit, setAssessmentsToSubmit] = useState<string[]>(
@@ -117,10 +124,17 @@ const HouseholdSummaryTabPanel = memo(
 
     const { renderValidationDialog } = useValidationDialog({ errorState });
 
-    const [hohClientId, hohEnrollmentId] = useMemo(() => {
-      const tab = tabs.find(({ isHoh }) => isHoh);
-      return [tab?.clientId, tab?.enrollmentId];
-    }, [tabs]);
+    const { clientId, enrollmentId } = useSafeParams() as {
+      clientId: string;
+      enrollmentId: string;
+    };
+    const enrollmentPath = generateSafePath(
+      EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+      {
+        clientId,
+        enrollmentId,
+      }
+    );
 
     return (
       <AlwaysMountedTabPanel
@@ -135,31 +149,17 @@ const HouseholdSummaryTabPanel = memo(
           sx={{ py: 2 }}
         >
           <Grid item xs={12} md={10} lg={8}>
-            <Typography variant='h4' sx={{ mb: 3 }}>
+            <Typography variant='h4' sx={{ mb: 2 }}>
               Complete {assessmentPrefix(role)} {projectName}
             </Typography>
-            {role === AssessmentRole.Exit && hohEnrollmentId && hohClientId && (
-              <Typography sx={{ mb: 3 }}>
-                Select members to exit. The Head of Household cannot be exited
-                before other members. In order to exit the HoH, you must either
-                exit all members or{' '}
-                <RouterLink
-                  to={generateSafePath(
-                    EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
-                    {
-                      clientId: hohClientId,
-                      enrollmentId: hohEnrollmentId,
-                    }
-                  )}
-                  variant='body1'
-                >
-                  change the Head of Household
-                </RouterLink>
-                .
-              </Typography>
+            {role == AssessmentRole.Exit && (
+              <HouseholdSummaryExitHelpCard tabs={tabs} />
+            )}
+            {role == AssessmentRole.Intake && (
+              <HouseholdSummaryIntakeHelpCard tabs={tabs} />
             )}
             {errorState.apolloError && (
-              <Box sx={{ mb: 3 }}>
+              <Box sx={{ my: 3 }}>
                 <ApolloErrorAlert error={errorState.apolloError} />
               </Box>
             )}
@@ -195,6 +195,16 @@ const HouseholdSummaryTabPanel = memo(
                 </LoadingButton>
               </Box>
             </TitleCard>
+            {(submitResponseData || allSubmitted) && (
+              <ButtonLink
+                startIcon={<ArrowBackIcon />}
+                variant='contained'
+                sx={{ my: 4, px: 4 }}
+                to={enrollmentPath}
+              >
+                Back to Enrollment
+              </ButtonLink>
+            )}
           </Grid>
         </Grid>
         {renderValidationDialog({

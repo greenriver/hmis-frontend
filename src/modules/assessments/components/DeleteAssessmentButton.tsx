@@ -83,9 +83,9 @@ const DeleteAssessmentButton = ({
           : undefined
       }
       confirmationDialogContent={
-        <Stack gap={2}>
+        <Stack gap={1}>
           <Typography>
-            Are you sure you want to delete this intake assessment?
+            Are you sure you want to delete this assessment?
           </Typography>
           {assessment.role === AssessmentRole.Intake && (
             <>
@@ -110,6 +110,9 @@ const DeleteAssessmentButton = ({
                 before taking this action.
               </Typography>
             </>
+          )}
+          {assessment.role === AssessmentRole.Exit && (
+            <Typography>The client enrollment will be re-opened.</Typography>
           )}
         </Stack>
       }

@@ -16,7 +16,7 @@ const HohIndicator = ({
     <Typography
       variant='subtitle2'
       color='text.disabled'
-      {...props}
+      {...{ component: 'div', ...props }}
       sx={{
         fontWeight: 600,
         pl: 1,

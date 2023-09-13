@@ -14,6 +14,7 @@ import {
 
 import usePrevious from '@/hooks/usePrevious';
 import { DynamicFormRef } from '@/modules/form/components/DynamicForm';
+import { FormActionProps } from '@/modules/form/components/FormActions';
 import { FormActionTypes } from '@/modules/form/types';
 import { AssessmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
@@ -25,6 +26,7 @@ interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   previousTab?: string;
   navigateToTab: (t: string) => void;
   updateTabStatus: (status: AssessmentStatus, tabId: string) => void;
+  assessmentStatus: AssessmentStatus;
 }
 
 // Memoized to only re-render when props change (shallow compare)
@@ -44,6 +46,7 @@ const HouseholdAssessmentTabPanel = memo(
     refetch,
     updateTabStatus,
     assessmentSubmitted,
+    assessmentStatus,
   }: HouseholdAssessmentTabPanelProps) => {
     // console.debug('Rendering assessment panel for', clientName);
 
@@ -75,11 +78,11 @@ const HouseholdAssessmentTabPanel = memo(
 
     const getFormActionProps = useCallback(
       (assessment?: AssessmentFieldsFragment) => {
-        const config = [];
+        const config: NonNullable<FormActionProps['config']> = [];
         const nextPreviousProps = {
           variant: 'text',
           sx: { height: '50px', alignSelf: 'center' },
-        };
+        } as const;
 
         config.push({
           id: 'prev',
@@ -89,7 +92,7 @@ const HouseholdAssessmentTabPanel = memo(
             disabled: !previousTab,
             startIcon: <ArrowBackIcon fontSize='small' />,
             ...nextPreviousProps,
-          },
+          } as const,
           onSuccess: () => {
             if (previousTab) navigateToTab(previousTab);
           },
@@ -101,7 +104,7 @@ const HouseholdAssessmentTabPanel = memo(
             label: 'Save & Submit',
             centerAlign: true,
             action: FormActionTypes.Submit,
-            buttonProps: { variant: 'outlined' },
+            buttonProps: { variant: 'outlined' } as const,
             onSuccess: () => {
               updateTabStatus(AssessmentStatus.Submitted, id);
               refetch();
@@ -113,7 +116,7 @@ const HouseholdAssessmentTabPanel = memo(
             label: 'Save Assessment',
             centerAlign: true,
             action: FormActionTypes.Save,
-            buttonProps: { variant: 'contained', size: 'large' },
+            buttonProps: { variant: 'contained', size: 'large' } as const,
             onSuccess: () => {
               if (!assessment) updateTabStatus(AssessmentStatus.Started, id);
               refetch();
@@ -129,7 +132,7 @@ const HouseholdAssessmentTabPanel = memo(
             disabled: !nextTab,
             endIcon: <ArrowForwardIcon fontSize='small' />,
             ...nextPreviousProps,
-          },
+          } as const,
           onSuccess: () => {
             if (nextTab) navigateToTab(nextTab);
           },
@@ -153,6 +156,7 @@ const HouseholdAssessmentTabPanel = memo(
           embeddedInWorkflow
           enrollmentId={enrollmentId}
           assessmentId={assessmentId}
+          assessmentStatus={assessmentStatus}
           formRole={role as unknown as FormRole}
           getFormActionProps={getFormActionProps}
           visible={active}
