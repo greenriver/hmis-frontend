@@ -4999,6 +4999,12 @@
             "deprecationReason": null
           },
           {
+            "name": "BEST_MATCH",
+            "description": "Most Relevant",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "FIRST_NAME_A_TO_Z",
             "description": "First Name: A-Z",
             "isDeprecated": false,
