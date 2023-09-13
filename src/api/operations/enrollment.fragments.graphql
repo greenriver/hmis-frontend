@@ -1,5 +1,6 @@
 fragment EnrollmentFields on Enrollment {
   id
+  version
   entryDate
   exitDate
   exitDestination
@@ -71,6 +72,7 @@ fragment AllEnrollmentDetails on Enrollment {
 # (as opposed to values that are only needed for assessments, which is the whole EnrollmentValues fragment)
 fragment EnrollmentOccurrencePointFields on Enrollment {
   id
+  version
   entryDate
   exitDate
   dateOfEngagement
@@ -89,6 +91,7 @@ fragment EnrollmentOccurrencePointFields on Enrollment {
 # for assessments
 fragment EnrollmentValues on Enrollment {
   id
+  version
   entryDate
   exitDate
   dateOfEngagement

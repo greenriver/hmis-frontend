@@ -563,6 +563,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'version',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'veteranStatus',
         type: {
           kind: 'NON_NULL',
@@ -2007,6 +2015,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'vamcStation',
         type: { kind: 'ENUM', name: 'VamcStationNumber', ofType: null },
+      },
+      {
+        name: 'version',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
       },
     ],
   },
@@ -3907,6 +3923,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'targetPopulation',
         type: { kind: 'ENUM', name: 'TargetPopulation', ofType: null },
       },
+      {
+        name: 'version',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -5344,6 +5368,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'DeleteClientInput',
     args: [
       {
+        name: 'clientVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
         name: 'confirmed',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
@@ -6238,6 +6266,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
+      },
+      {
+        name: 'enrollmentVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
       {
         name: 'relationshipToHoH',

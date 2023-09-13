@@ -21,6 +21,7 @@ import generateSafePath from '@/utils/generateSafePath';
 
 export interface DeleteClientButtonProps extends ButtonProps {
   clientId: string;
+  clientVersion: number;
   onSuccess?: (data: DeleteClientMutation) => any;
 }
 
@@ -37,6 +38,7 @@ interface DeleteClientWarningData {
 
 const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
   clientId,
+  clientVersion,
   onSuccess,
   ...props
 }) => {
@@ -47,7 +49,9 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
   const handleDelete = useCallback(
     (confirmed?: boolean) => {
       deleteClient({
-        variables: { input: { id: clientId, confirmed } },
+        variables: {
+          input: { id: clientId, confirmed, clientVersion: clientVersion },
+        },
         onCompleted: (data) => {
           const errors = data.deleteClient?.errors || [];
 
@@ -66,7 +70,7 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
           setErrors({ ...emptyErrorState, apolloError }),
       });
     },
-    [deleteClient, clientId, onSuccess]
+    [deleteClient, clientId, clientVersion, onSuccess]
   );
 
   const { renderValidationDialog } = useValidationDialog({

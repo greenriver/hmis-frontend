@@ -17,6 +17,7 @@ fragment ProjectCocCount on Project {
 }
 fragment ProjectAllFields on Project {
   id
+  version
   hudId
   ...ProjectNameAndType
   ...ProjectOperatingPeriod

@@ -33,6 +33,7 @@ fragment HouseholdClientFields on HouseholdClient {
   }
   enrollment {
     id
+    version
     entryDate
     exitDate
     inProgress

@@ -418,6 +418,7 @@ export type Client = {
   ssn?: Maybe<Scalars['String']['output']>;
   ssnDataQuality: SsnDataQuality;
   user?: Maybe<User>;
+  version: Scalars['Int']['output'];
   veteranStatus: NoYesReasonsForMissingData;
   vietnamWar?: Maybe<NoYesReasonsForMissingData>;
   worldWarIi?: Maybe<NoYesReasonsForMissingData>;
@@ -1174,6 +1175,7 @@ export type DeleteClientImagePayload = {
 export type DeleteClientInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  clientVersion?: InputMaybe<Scalars['Int']['input']>;
   /** Whether warnings have been confirmed */
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   id: Scalars['ID']['input'];
@@ -1759,6 +1761,7 @@ export type Enrollment = {
   unemploymentFam?: Maybe<NoYesMissing>;
   user?: Maybe<User>;
   vamcStation?: Maybe<VamcStationNumber>;
+  version: Scalars['Int']['output'];
   youthEducationStatuses: YouthEducationStatusesPaginated;
 };
 
@@ -4220,6 +4223,7 @@ export type Project = {
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   user?: Maybe<User>;
+  version: Scalars['Int']['output'];
 };
 
 export type ProjectCeParticipationsArgs = {
@@ -5758,6 +5762,7 @@ export type UpdateRelationshipToHoHInput = {
   /** Whether user has confirmed the action */
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   enrollmentId: Scalars['ID']['input'];
+  enrollmentVersion?: InputMaybe<Scalars['Int']['input']>;
   relationshipToHoH: RelationshipToHoH;
 };
 
@@ -6388,6 +6393,7 @@ export type AssessmentWithRecordsFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
+    version: number;
     entryDate: string;
     exitDate?: string | null;
     dateOfEngagement?: string | null;
@@ -6821,6 +6827,7 @@ export type FullAssessmentFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
+    version: number;
     entryDate: string;
     exitDate?: string | null;
     dateOfEngagement?: string | null;
@@ -7709,6 +7716,7 @@ export type GetAssessmentQuery = {
     enrollment: {
       __typename?: 'Enrollment';
       id: string;
+      version: number;
       entryDate: string;
       exitDate?: string | null;
       dateOfEngagement?: string | null;
@@ -8226,6 +8234,7 @@ export type GetHouseholdAssessmentsQuery = {
     enrollment: {
       __typename?: 'Enrollment';
       id: string;
+      version: number;
       entryDate: string;
       exitDate?: string | null;
       dateOfEngagement?: string | null;
@@ -8691,6 +8700,7 @@ export type SubmitAssessmentMutation = {
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
+        version: number;
         entryDate: string;
         exitDate?: string | null;
         dateOfEngagement?: string | null;
@@ -9126,6 +9136,7 @@ export type SubmitHouseholdAssessmentsMutation = {
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
+        version: number;
         entryDate: string;
         exitDate?: string | null;
         dateOfEngagement?: string | null;
@@ -9572,6 +9583,7 @@ export type GetAssessmentsForPopulationQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          version: number;
           dateOfEngagement?: string | null;
           moveInDate?: string | null;
           livingSituation?: PriorLivingSituation | null;
@@ -10007,6 +10019,7 @@ export type DeleteAssessmentMutation = {
 export type EnrollmentFieldsFromAssessmentFragment = {
   __typename?: 'Enrollment';
   id: string;
+  version: number;
   entryDate: string;
   exitDate?: string | null;
   dateOfEngagement?: string | null;
@@ -10445,6 +10458,7 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
         __typename?: 'Enrollment';
         lastBedNightDate?: string | null;
         id: string;
+        version: number;
         entryDate: string;
         exitDate?: string | null;
         exitDestination?: Destination | null;
@@ -10457,6 +10471,7 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
         client: {
           __typename?: 'Client';
           id: string;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -10542,6 +10557,7 @@ export type ClientSearchResultFieldsFragment = {
   dateDeleted?: string | null;
   dateUpdated: string;
   id: string;
+  version: number;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -10592,6 +10608,7 @@ export type ClientFieldsFragment = {
   dateDeleted?: string | null;
   dateUpdated: string;
   id: string;
+  version: number;
   dob?: string | null;
   age?: number | null;
   ssn?: string | null;
@@ -10728,6 +10745,7 @@ export type ClientFieldsFragment = {
 export type ClientNameFragment = {
   __typename?: 'Client';
   id: string;
+  version: number;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -10739,6 +10757,7 @@ export type ClientNameDobVetFragment = {
   dob?: string | null;
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
+  version: number;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -10802,6 +10821,7 @@ export type ClientImageFragment = {
 export type ClientIdentificationFieldsFragment = {
   __typename?: 'Client';
   id: string;
+  version: number;
   dob?: string | null;
   age?: number | null;
   ssn?: string | null;
@@ -10853,6 +10873,7 @@ export type ClientOmniSearchFieldsFragment = {
   age?: number | null;
   gender: Array<Gender>;
   personalId: string;
+  version: number;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -10891,6 +10912,7 @@ export type SearchClientsQuery = {
       dateDeleted?: string | null;
       dateUpdated: string;
       id: string;
+      version: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -10949,6 +10971,7 @@ export type GetClientQuery = {
     dateDeleted?: string | null;
     dateUpdated: string;
     id: string;
+    version: number;
     dob?: string | null;
     age?: number | null;
     ssn?: string | null;
@@ -11092,6 +11115,7 @@ export type GetClientNameQuery = {
   client?: {
     __typename?: 'Client';
     id: string;
+    version: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -11166,6 +11190,7 @@ export type GetClientEnrollmentsQuery = {
       nodes: Array<{
         __typename?: 'Enrollment';
         id: string;
+        version: number;
         entryDate: string;
         exitDate?: string | null;
         exitDestination?: Destination | null;
@@ -11186,6 +11211,7 @@ export type GetClientEnrollmentsQuery = {
           dob?: string | null;
           veteranStatus: NoYesReasonsForMissingData;
           id: string;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -11272,6 +11298,7 @@ export type GetClientServicesQuery = {
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
+          version: number;
           entryDate: string;
           exitDate?: string | null;
           exitDestination?: Destination | null;
@@ -11292,6 +11319,7 @@ export type GetClientServicesQuery = {
             dob?: string | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
+            version: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -11380,6 +11408,7 @@ export type GetNonWipEnrollmentsQuery = {
       nodes: Array<{
         __typename?: 'Enrollment';
         id: string;
+        version: number;
         entryDate: string;
         exitDate?: string | null;
         dateOfEngagement?: string | null;
@@ -11624,6 +11653,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
   client?: {
     __typename?: 'Client';
     id: string;
+    version: number;
     enrollments: {
       __typename?: 'EnrollmentsPaginated';
       offset: number;
@@ -11648,6 +11678,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               __typename?: 'Client';
               id: string;
               veteranStatus: NoYesReasonsForMissingData;
+              version: number;
               firstName?: string | null;
               middleName?: string | null;
               lastName?: string | null;
@@ -11684,6 +11715,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
             enrollment: {
               __typename?: 'Enrollment';
               id: string;
+              version: number;
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
@@ -11894,6 +11926,7 @@ export type CustomDataElementFieldsFragment = {
 export type EnrollmentFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
+  version: number;
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
@@ -11914,6 +11947,7 @@ export type EnrollmentFieldsFragment = {
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
+    version: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -11931,6 +11965,7 @@ export type EnrollmentFieldsFragment = {
 export type AllEnrollmentDetailsFragment = {
   __typename?: 'Enrollment';
   id: string;
+  version: number;
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
@@ -11993,6 +12028,7 @@ export type AllEnrollmentDetailsFragment = {
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
+    version: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -12582,6 +12618,7 @@ export type AllEnrollmentDetailsFragment = {
 export type EnrollmentOccurrencePointFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
+  version: number;
   entryDate: string;
   exitDate?: string | null;
   dateOfEngagement?: string | null;
@@ -12600,6 +12637,7 @@ export type EnrollmentOccurrencePointFieldsFragment = {
 export type EnrollmentValuesFragment = {
   __typename?: 'Enrollment';
   id: string;
+  version: number;
   entryDate: string;
   exitDate?: string | null;
   dateOfEngagement?: string | null;
@@ -12666,6 +12704,7 @@ export type EnrollmentValuesFragment = {
 export type SubmittedEnrollmentResultFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
+  version: number;
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
@@ -12732,6 +12771,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
+    version: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -12749,6 +12789,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
 export type EnrollmentWithHouseholdFragmentFragment = {
   __typename?: 'Enrollment';
   id: string;
+  version: number;
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
@@ -12770,6 +12811,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
         __typename?: 'Client';
         id: string;
         veteranStatus: NoYesReasonsForMissingData;
+        version: number;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -12806,6 +12848,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
+        version: number;
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
@@ -12824,6 +12867,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
+    version: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -12889,6 +12933,7 @@ export type GetEnrollmentQuery = {
   enrollment?: {
     __typename?: 'Enrollment';
     id: string;
+    version: number;
     entryDate: string;
     exitDate?: string | null;
     exitDestination?: Destination | null;
@@ -12909,6 +12954,7 @@ export type GetEnrollmentQuery = {
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
+      version: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -12933,6 +12979,7 @@ export type GetEnrollmentDetailsQuery = {
   enrollment?: {
     __typename?: 'Enrollment';
     id: string;
+    version: number;
     entryDate: string;
     exitDate?: string | null;
     exitDestination?: Destination | null;
@@ -12995,6 +13042,7 @@ export type GetEnrollmentDetailsQuery = {
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
+      version: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -13591,6 +13639,7 @@ export type GetEnrollmentWithHouseholdQuery = {
   enrollment?: {
     __typename?: 'Enrollment';
     id: string;
+    version: number;
     entryDate: string;
     exitDate?: string | null;
     exitDestination?: Destination | null;
@@ -13612,6 +13661,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           __typename?: 'Client';
           id: string;
           veteranStatus: NoYesReasonsForMissingData;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -13648,6 +13698,7 @@ export type GetEnrollmentWithHouseholdQuery = {
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
+          version: number;
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
@@ -13670,6 +13721,7 @@ export type GetEnrollmentWithHouseholdQuery = {
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
+      version: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -13778,6 +13830,7 @@ export type GetEnrollmentRemindersQuery = {
         id: string;
         dob?: string | null;
         veteranStatus: NoYesReasonsForMissingData;
+        version: number;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -16019,6 +16072,7 @@ export type SubmitFormMutation = {
           dateDeleted?: string | null;
           dateUpdated: string;
           id: string;
+          version: number;
           dob?: string | null;
           age?: number | null;
           ssn?: string | null;
@@ -16170,6 +16224,7 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'Enrollment';
           id: string;
+          version: number;
           entryDate: string;
           exitDate?: string | null;
           exitDestination?: Destination | null;
@@ -16236,6 +16291,7 @@ export type SubmitFormMutation = {
             dob?: string | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
+            version: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -16421,6 +16477,7 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'Project';
           id: string;
+          version: number;
           hudId: string;
           description?: string | null;
           HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
@@ -16636,6 +16693,7 @@ export type HouseholdFieldsFragment = {
       __typename?: 'Client';
       id: string;
       veteranStatus: NoYesReasonsForMissingData;
+      version: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -16672,6 +16730,7 @@ export type HouseholdFieldsFragment = {
     enrollment: {
       __typename?: 'Enrollment';
       id: string;
+      version: number;
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
@@ -16692,6 +16751,7 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
     client: {
       __typename?: 'Client';
       id: string;
+      version: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -16724,6 +16784,7 @@ export type HouseholdClientFieldsFragment = {
     __typename?: 'Client';
     id: string;
     veteranStatus: NoYesReasonsForMissingData;
+    version: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -16760,6 +16821,7 @@ export type HouseholdClientFieldsFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
+    version: number;
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
@@ -16774,6 +16836,7 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
+    version: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -16816,6 +16879,7 @@ export type GetHouseholdQuery = {
         __typename?: 'Client';
         id: string;
         veteranStatus: NoYesReasonsForMissingData;
+        version: number;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -16852,6 +16916,7 @@ export type GetHouseholdQuery = {
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
+        version: number;
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
@@ -16873,6 +16938,7 @@ export type UpdateRelationshipToHoHMutation = {
     enrollment?: {
       __typename?: 'Enrollment';
       id: string;
+      version: number;
       entryDate: string;
       exitDate?: string | null;
       exitDestination?: Destination | null;
@@ -16894,6 +16960,7 @@ export type UpdateRelationshipToHoHMutation = {
             __typename?: 'Client';
             id: string;
             veteranStatus: NoYesReasonsForMissingData;
+            version: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -16930,6 +16997,7 @@ export type UpdateRelationshipToHoHMutation = {
           enrollment: {
             __typename?: 'Enrollment';
             id: string;
+            version: number;
             entryDate: string;
             exitDate?: string | null;
             inProgress: boolean;
@@ -16952,6 +17020,7 @@ export type UpdateRelationshipToHoHMutation = {
         dob?: string | null;
         veteranStatus: NoYesReasonsForMissingData;
         id: string;
+        version: number;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -17117,6 +17186,7 @@ export type OmniSearchClientsQuery = {
       age?: number | null;
       gender: Array<Gender>;
       personalId: string;
+      version: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -17160,6 +17230,7 @@ export type GetRecentItemsQuery = {
           age?: number | null;
           gender: Array<Gender>;
           personalId: string;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -17193,6 +17264,7 @@ export type AddRecentItemMutation = {
           age?: number | null;
           gender: Array<Gender>;
           personalId: string;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -17223,6 +17295,7 @@ export type ClearRecentItemsMutation = {
           age?: number | null;
           gender: Array<Gender>;
           personalId: string;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -17503,6 +17576,7 @@ export type ProjectCocCountFragment = {
 export type ProjectAllFieldsFragment = {
   __typename?: 'Project';
   id: string;
+  version: number;
   hudId: string;
   description?: string | null;
   HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
@@ -18143,6 +18217,7 @@ export type GetProjectQuery = {
   project?: {
     __typename?: 'Project';
     id: string;
+    version: number;
     hudId: string;
     description?: string | null;
     HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
@@ -18280,6 +18355,7 @@ export type GetProjectEnrollmentsQuery = {
       nodes: Array<{
         __typename?: 'Enrollment';
         id: string;
+        version: number;
         entryDate: string;
         exitDate?: string | null;
         exitDestination?: Destination | null;
@@ -18292,6 +18368,7 @@ export type GetProjectEnrollmentsQuery = {
         client: {
           __typename?: 'Client';
           id: string;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -18355,6 +18432,7 @@ export type GetProjectHouseholdsQuery = {
           client: {
             __typename?: 'Client';
             id: string;
+            version: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -18424,6 +18502,7 @@ export type GetProjectServicesQuery = {
             dob?: string | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
+            version: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -19076,6 +19155,7 @@ export type GetReferralPostingQuery = {
         id: string;
         veteranStatus: NoYesReasonsForMissingData;
         gender: Array<Gender>;
+        version: number;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -19187,6 +19267,7 @@ export type UpdateReferralPostingMutation = {
           id: string;
           veteranStatus: NoYesReasonsForMissingData;
           gender: Array<Gender>;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -19312,6 +19393,7 @@ export type CreateOutgoingReferralPostingMutation = {
           id: string;
           veteranStatus: NoYesReasonsForMissingData;
           gender: Array<Gender>;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -19495,6 +19577,7 @@ export type ReferralPostingDetailFieldsFragment = {
       id: string;
       veteranStatus: NoYesReasonsForMissingData;
       gender: Array<Gender>;
+      version: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -19567,6 +19650,7 @@ export type ReminderFieldsFragment = {
     id: string;
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
+    version: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -20160,6 +20244,7 @@ export type UnitFieldsFragment = {
     client: {
       __typename?: 'Client';
       id: string;
+      version: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -20205,6 +20290,7 @@ export type GetUnitsQuery = {
           client: {
             __typename?: 'Client';
             id: string;
+            version: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -20264,6 +20350,7 @@ export type CreateUnitsMutation = {
         client: {
           __typename?: 'Client';
           id: string;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -20344,6 +20431,7 @@ export type UpdateUnitsMutation = {
         client: {
           __typename?: 'Client';
           id: string;
+          version: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -20461,6 +20549,7 @@ export const AssessmentFieldsFragmentDoc = gql`
 export const EnrollmentValuesFragmentDoc = gql`
   fragment EnrollmentValues on Enrollment {
     id
+    version
     entryDate
     exitDate
     dateOfEngagement
@@ -20899,6 +20988,7 @@ export const HealthAndDvFieldsFragmentDoc = gql`
 export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
     id
+    version
     firstName
     middleName
     lastName
@@ -20908,6 +20998,7 @@ export const ClientNameFragmentDoc = gql`
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
+    version
     dob
     age
     ssn
@@ -21157,6 +21248,7 @@ export const EnrollmentAccessFieldsFragmentDoc = gql`
 export const EnrollmentFieldsFragmentDoc = gql`
   fragment EnrollmentFields on Enrollment {
     id
+    version
     entryDate
     exitDate
     exitDestination
@@ -21187,6 +21279,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
 export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
   fragment EnrollmentOccurrencePointFields on Enrollment {
     id
+    version
     entryDate
     exitDate
     dateOfEngagement
@@ -21463,6 +21556,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
     }
     enrollment {
       id
+      version
       entryDate
       exitDate
       inProgress
@@ -21708,6 +21802,7 @@ export const ProjectOperatingPeriodFragmentDoc = gql`
 export const ProjectAllFieldsFragmentDoc = gql`
   fragment ProjectAllFields on Project {
     id
+    version
     hudId
     ...ProjectNameAndType
     ...ProjectOperatingPeriod
@@ -23783,6 +23878,7 @@ export const GetClientHouseholdMemberCandidatesDocument = gql`
   ) {
     client(id: $id) {
       id
+      version
       enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
         offset
         limit

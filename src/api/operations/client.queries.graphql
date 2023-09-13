@@ -189,6 +189,7 @@ query GetClientHouseholdMemberCandidates(
 ) {
   client(id: $id) {
     id
+    version
     enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
       offset
       limit
