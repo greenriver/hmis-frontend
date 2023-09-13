@@ -295,7 +295,11 @@ const ClientSearch = () => {
             showFilters
             recordType='Client'
             filterInputType='ClientFilterOptions'
-            defaultSortOption={ClientSortOption.LastNameAToZ}
+            defaultSortOption={
+              searchType == 'broad'
+                ? ClientSortOption.BestMatch
+                : ClientSortOption.LastNameAToZ
+            }
             tableDisplayOptionButtons={
               <ClientDisplayTypeToggle
                 value={displayType}
