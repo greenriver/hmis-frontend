@@ -1,8 +1,15 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Alert, AlertTitle, Box, Grid, Typography } from '@mui/material';
 import { keyBy, mapValues, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
-import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react';
-
+import {
+  Dispatch,
+  memo,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import { assessmentPrefix } from '../../util';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
@@ -13,8 +20,10 @@ import {
   tabPanelA11yProps,
 } from './util';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
+import useSafeParams from '@/hooks/useSafeParams';
 import HouseholdSummaryExitHelpCard from '@/modules/assessments/components/household/HouseholdSummaryExitHelpCard';
 import HouseholdSummaryIntakeHelpCard from '@/modules/assessments/components/household/HouseholdSummaryIntakeHelpCard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -26,11 +35,13 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { cache } from '@/providers/apolloClient';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   SubmitHouseholdAssessmentsMutation,
   useSubmitHouseholdAssessmentsMutation,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface HouseholdSummaryTabPanelProps {
   active: boolean;
@@ -54,11 +65,15 @@ const HouseholdSummaryTabPanel = memo(
     setCurrentTab,
   }: HouseholdSummaryTabPanelProps) => {
     const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
-    const [submitMutation, { loading }] = useSubmitHouseholdAssessmentsMutation(
-      {
+    const [submitMutation, { loading, data: submitResponseData }] =
+      useSubmitHouseholdAssessmentsMutation({
         onError: (apolloError) =>
           setErrors({ ...emptyErrorState, apolloError }),
-      }
+      });
+
+    const allSubmitted = useMemo(
+      () => !tabs.find((t) => !t.assessmentSubmitted),
+      [tabs]
     );
 
     const [assessmentsToSubmit, setAssessmentsToSubmit] = useState<string[]>(
@@ -108,6 +123,18 @@ const HouseholdSummaryTabPanel = memo(
     );
 
     const { renderValidationDialog } = useValidationDialog({ errorState });
+
+    const { clientId, enrollmentId } = useSafeParams() as {
+      clientId: string;
+      enrollmentId: string;
+    };
+    const enrollmentPath = generateSafePath(
+      EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+      {
+        clientId,
+        enrollmentId,
+      }
+    );
 
     return (
       <AlwaysMountedTabPanel
@@ -168,6 +195,16 @@ const HouseholdSummaryTabPanel = memo(
                 </LoadingButton>
               </Box>
             </TitleCard>
+            {(submitResponseData || allSubmitted) && (
+              <ButtonLink
+                startIcon={<ArrowBackIcon />}
+                variant='contained'
+                sx={{ my: 4, px: 4 }}
+                to={enrollmentPath}
+              >
+                Back to Enrollment
+              </ButtonLink>
+            )}
           </Grid>
         </Grid>
         {renderValidationDialog({

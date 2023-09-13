@@ -75,9 +75,10 @@ const HouseholdSummaryTable = ({
             row.entryOrExitCompleted &&
             (!row.assessmentId || row.assessmentInProgress)
           ) {
-            const warningMessage = AssessmentRole.Intake
-              ? 'Client is already entered. Please submit assessment.'
-              : 'Client is already exited. Please submit assessment.';
+            const warningMessage =
+              role === AssessmentRole.Intake
+                ? 'Client is already entered. Please submit assessment.'
+                : 'Client is already exited. Please submit assessment.';
             return (
               <Stack gap={1} sx={{ my: 1 }}>
                 <AssessmentStatusIndicator status={row.status} />

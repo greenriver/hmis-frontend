@@ -115,8 +115,8 @@ const AssessmentFormSideBar: React.FC<Props> = ({
             onSuccess={navigateToEnrollment}
           />
         )}
-        {assessment && (
-          <Typography color='text.secondary' variant='body2' sx={{ mt: 1 }}>
+        {assessment && import.meta.env.MODE === 'development' && (
+          <Typography variant='body2'>
             <b>Assessment ID:</b> {assessment.id}
           </Typography>
         )}

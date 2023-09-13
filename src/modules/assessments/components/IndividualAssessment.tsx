@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { Ref, useEffect, useMemo } from 'react';
 
 import { assessmentDate } from '../util';
@@ -146,29 +146,19 @@ const IndividualAssessment = ({
 
   const navigationTitle = (
     <Box>
-      <Typography
-        variant='h5'
-        sx={({ typography }) => ({
-          mb: 1,
-          fontWeight: typography.fontWeightBold,
-        })}
-      >
+      <Typography variant='h5' sx={{ mb: 2 }}>
         {clientName}
       </Typography>
-      <Typography variant='h6' component='div' sx={{ lineHeight: 1.25 }}>
-        <Box
-          component='span'
-          sx={({ typography }) => ({ fontWeight: typography.fontWeightBold })}
-        >
-          {`${definition.title}: `}
-        </Box>
-        {enrollment.project.projectName}
-        <AssessmentStatusIndicator status={assessmentStatus} size='small' />
-      </Typography>
+      <Stack gap={1}>
+        <Typography variant='body2' component='div'>
+          <b>{`${definition.title}: `}</b>
+          {enrollment.project.projectName}
+        </Typography>
+        <AssessmentStatusIndicator status={assessmentStatus} />
+      </Stack>
     </Box>
   );
 
-  // const navigationTitle=<> </>
   return (
     <AssessmentForm
       assessmentTitle={title}

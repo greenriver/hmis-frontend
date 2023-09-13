@@ -141,7 +141,7 @@ const createThemeOptions = (theme: Theme) => ({
     MuiTableCell: {
       styleOverrides: {
         sizeMedium: theme.unstable_sx({
-          py: '8px',
+          py: '14px',
         }),
       },
     },
@@ -263,10 +263,6 @@ const createThemeOptions = (theme: Theme) => ({
         outlined: {
           // override default transparent bg
           backgroundColor: '#fff',
-        },
-        message: {
-          // margin for alignment with alerticon
-          marginTop: '4px',
         },
       },
     },

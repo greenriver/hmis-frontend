@@ -1,4 +1,5 @@
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import { Stack } from '@mui/system';
 import { ReactNode } from 'react';
 
 export interface AssessmentTitleProps {
@@ -14,22 +15,16 @@ const AssessmentTitle = ({
 }: AssessmentTitleProps) => {
   if (clientName) {
     return (
-      <Box sx={{ mb: 1 }}>
+      <Stack sx={{ mb: 1 }} gap={1}>
         <Typography variant='h4'>{clientName}</Typography>
-        <Typography variant='h5'>
-          <Box
-            component='span'
-            sx={({ typography, palette }) => ({
-              fontWeight: typography.fontWeightBold,
-              color: palette.grey[700],
-            })}
-          >
+        <Typography variant='body1'>
+          <b>
             {assessmentTitle}
             {': '}
-          </Box>
+          </b>
           {projectName}
         </Typography>
-      </Box>
+      </Stack>
     );
   }
   return (

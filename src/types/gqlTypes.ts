@@ -696,6 +696,8 @@ export enum ClientSortOption {
   AgeOldestToYoungest = 'AGE_OLDEST_TO_YOUNGEST',
   /** Age: Youngest to Oldest */
   AgeYoungestToOldest = 'AGE_YOUNGEST_TO_OLDEST',
+  /** Most Relevant */
+  BestMatch = 'BEST_MATCH',
   /** First Name: A-Z */
   FirstNameAToZ = 'FIRST_NAME_A_TO_Z',
   /** First Name: Z-A */
@@ -14184,6 +14186,8 @@ export type GetEnrollmentRemindersQuery = {
         __typename?: 'Enrollment';
         id: string;
         relationshipToHoH: RelationshipToHoH;
+        intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
+        exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
       };
       client: {
         __typename?: 'Client';
@@ -19973,6 +19977,8 @@ export type ReminderFieldsFragment = {
     __typename?: 'Enrollment';
     id: string;
     relationshipToHoH: RelationshipToHoH;
+    intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
+    exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
   };
   client: {
     __typename?: 'Client';
@@ -22336,6 +22342,12 @@ export const ReminderFieldsFragmentDoc = gql`
     enrollment {
       id
       relationshipToHoH
+      intakeAssessment {
+        id
+      }
+      exitAssessment {
+        id
+      }
     }
     client {
       id
