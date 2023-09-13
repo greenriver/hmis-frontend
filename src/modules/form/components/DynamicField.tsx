@@ -407,6 +407,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <Typography sx={{ pb: 2 }}>{item.text}</Typography>
         ) : undefined,
       };
+      // TODO: pass to name input and render each alongside the appropriate field.
       if (item.component == Component.Name) {
         return <MultiNameInput {...objProps} />;
       }

@@ -49,7 +49,10 @@ export interface DynamicFieldProps {
   nestingLevel?: number;
   value: any;
   disabled?: boolean;
+  // Errors for this field
   errors?: ValidationError[];
+  // Errors for the entire form
+  formErrors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
   horizontal?: boolean;
   pickListArgs?: PickListArgs;

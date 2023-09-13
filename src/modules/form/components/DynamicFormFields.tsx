@@ -138,6 +138,7 @@ const DynamicFormFields: React.FC<Props> = ({
         }
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
+        formErrors={errors}
         horizontal={horizontal}
         pickListArgs={pickListArgs}
         warnIfEmpty={warnIfEmpty}
