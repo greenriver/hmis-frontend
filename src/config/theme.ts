@@ -80,29 +80,47 @@ const createThemeOptions = (theme: Theme) => ({
   typography: {
     h1: {
       fontFamily: "'Montserrat', sans-serif",
-      fontSize: 20,
-      fontWeight: 600,
+      fontSize: 40,
+      fontWeight: 300,
+      lineHeight: '43px',
     },
     h2: {
       fontFamily: "'Montserrat', sans-serif",
+      fontSize: 32,
+      fontWeight: 400,
+      lineHeight: '36px',
     },
     h3: {
       fontFamily: "'Montserrat', sans-serif",
       fontSize: 24,
+      fontWeight: 400,
     },
     h4: {
       fontFamily: "'Montserrat', sans-serif",
       fontSize: 20,
-      fontWeight: 600,
+      fontWeight: 500,
+      letterSpacing: '0.25px',
     },
     h5: {
-      fontFamily: "'Montserrat', sans-serif",
+      fontFamily: '"Open Sans", sans-serif',
       fontSize: 18,
+      fontWeight: 600,
     },
     h6: {
       fontFamily: "'Montserrat', sans-serif",
       fontSize: 14,
-      // color: '#10182899',
+    },
+    body1: {
+      fontFamily: '"Open Sans", sans-serif',
+      fontSize: 16,
+      fontWeight: 400,
+      lineHeight: '24px',
+    },
+    body2: {
+      fontFamily: '"Open Sans", sans-serif',
+      fontSize: 14,
+      fontWeight: 400,
+      lineHeight: '22px',
     },
     body3: {
       // bold body1
@@ -111,19 +129,9 @@ const createThemeOptions = (theme: Theme) => ({
     button: {
       textTransform: 'none',
     },
-    // fontSize: 14,
-    // htmlFontSize: 18,
   },
 
   components: {
-    MuiTypography: {
-      styleOverrides: {
-        h4: {
-          // marginBottom: 16,
-          // color: 'red',
-        },
-      },
-    },
     MuiPaper: {
       defaultProps: {
         elevation: 0,

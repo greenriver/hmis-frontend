@@ -21,7 +21,7 @@ const Display: React.FC<DisplayProps> = ({ icon, caption, color, size }) => {
       <Icon color={color} sx={{ fontSize: size == 'small' ? 16 : 20 }} />
       <Typography
         component='div'
-        variant={size == 'default' ? 'body1' : 'caption'}
+        variant={size == 'default' ? 'body2' : 'caption'}
       >
         {caption}
       </Typography>

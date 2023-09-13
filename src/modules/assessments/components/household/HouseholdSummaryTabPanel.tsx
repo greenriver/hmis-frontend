@@ -122,7 +122,7 @@ const HouseholdSummaryTabPanel = memo(
           sx={{ py: 2 }}
         >
           <Grid item xs={12} md={10} lg={8}>
-            <Typography variant='h5' sx={{ mb: 2 }}>
+            <Typography variant='h4' sx={{ mb: 2 }}>
               Complete {assessmentPrefix(role)} {projectName}
             </Typography>
             {role == AssessmentRole.Exit && (

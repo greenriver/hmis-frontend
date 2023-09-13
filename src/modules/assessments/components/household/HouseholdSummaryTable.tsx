@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 
 import { HouseholdAssesmentRole, TabDefinition } from './util';
@@ -59,34 +59,34 @@ const HouseholdSummaryTable = ({
         header: 'Name',
         key: 'name',
         linkTreatment: true,
-        render: ({ clientName }) => <Typography>{clientName}</Typography>,
+        render: ({ clientName }) => (
+          <Typography variant='body2'>{clientName}</Typography>
+        ),
       },
       {
         header: statusHeader,
         key: 'status',
         render: (row) => {
-          // Unclear if additional info about if the enrollment status is needed here
-          //if (row.entryOrExitCompleted) {
-          //  // Enrollment is fully Entered/Exited, but the assessment itself is missing.
-          //  const assessmentMissing = !row.assessmentId;
-          //  // Enrollment is fully Entered/Exited, but the assessment is still in WIP status.
-          //  const assessmentWip = row.assessmentId && row.assessmentInProgress;
-          //  return (
-          //    <>
-          //      <Typography>{completedText}</Typography>
-          //      {assessmentWip && (
-          //        <Typography color='error' fontStyle='italic'>
-          //          {assessmentWip && 'Assessment Not Submitted'}
-          //        </Typography>
-          //      )}
-          //      {assessmentMissing && (
-          //        <Link onClick={() => setCurrentTab(row.id)}>
-          //          <Typography>{NOT_STARTED}</Typography>
-          //        </Link>
-          //      )}
-          //    </>
-          //  );
-          //}
+          // Display info about 2 bad states:
+          //  (1) the enrollment is non-WIP but for whatever reason there is no submitted intake assessment
+          //  (2) the enrollment is exited but for whatever reason there is no submitted exit assessment
+          if (
+            [AssessmentRole.Intake, AssessmentRole.Exit].includes(role) &&
+            row.entryOrExitCompleted &&
+            (!row.assessmentId || row.assessmentInProgress)
+          ) {
+            const warningMessage = AssessmentRole.Intake
+              ? 'Client is already entered. Please submit assessment.'
+              : 'Client is already exited. Please submit assessment.';
+            return (
+              <Stack gap={1} sx={{ my: 1 }}>
+                <AssessmentStatusIndicator status={row.status} />
+                <Typography variant='body2' color='error'>
+                  {warningMessage}
+                </Typography>
+              </Stack>
+            );
+          }
 
           return <AssessmentStatusIndicator status={row.status} />;
         },
@@ -108,22 +108,13 @@ const HouseholdSummaryTable = ({
 
           if (!dateString) return null;
 
-          return <Typography>{parseAndFormatDate(dateString)}</Typography>;
+          return (
+            <Typography variant='body2'>
+              {parseAndFormatDate(dateString)}
+            </Typography>
+          );
         },
       },
-      // TODO pull out Destination from WIP assmt
-      // ...(role === AssessmentRole.Exit
-      //   ? [
-      //       {
-      //         header: `Destination`,
-      //         key: 'destination',
-      //         width: '10%',
-      //         render: (row) => {
-      //           return 'destination';
-      //         },
-      //       },
-      //     ]
-      //   : []),
     ];
   }, [role]);
 
@@ -147,9 +138,6 @@ const HouseholdSummaryTable = ({
         backgroundColor: isSubmittable(row)
           ? undefined
           : (theme) => theme.palette.grey[50],
-        '.MuiTypography-root': {
-          color: row.assessmentSubmitted ? 'text.secondary' : undefined,
-        },
       })}
       setSelectedRowIds={handleSetSelected}
     />

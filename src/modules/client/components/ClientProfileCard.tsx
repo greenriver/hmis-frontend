@@ -112,16 +112,21 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
         }}
         items={[
           {
-            key: 'IDs',
+            key: 'Client IDs',
             content: (
               <ClientProfileCardTextTable
-                content={client.externalIds.map((externalId) => {
+                content={client.externalIds.map((externalId, idx) => {
+                  const repeated =
+                    idx > 0 &&
+                    client.externalIds[idx - 1].type == externalId.type;
                   return [
-                    <HmisEnum
-                      enumMap={HmisEnums.ExternalIdentifierType}
-                      value={externalId.type}
-                      fontWeight={600}
-                    />,
+                    repeated ? null : (
+                      <HmisEnum
+                        enumMap={HmisEnums.ExternalIdentifierType}
+                        value={externalId.type}
+                        fontWeight={600}
+                      />
+                    ),
                     <ExternalIdDisplay value={externalId} />,
                   ] as const;
                 })}
@@ -131,7 +136,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
           ...(hasContactInformation
             ? [
                 {
-                  key: 'Client Contact Information',
+                  key: 'Contact Information',
                   content: (
                     <ClientProfileCardTextTable
                       content={[
