@@ -1,9 +1,9 @@
 import { Theme } from '@mui/material';
 import {
-  createTheme,
-  ThemeOptions,
   PaletteColor,
   SimplePaletteColorOptions,
+  ThemeOptions,
+  createTheme,
 } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 
@@ -18,11 +18,13 @@ declare module '@mui/material/Button' {
 declare module '@mui/material/styles' {
   interface TypographyVariants {
     body3: React.CSSProperties;
+    cardTitle?: React.CSSProperties;
   }
 
   // allow configuration using `createTheme`
   interface TypographyVariantsOptions {
     body3?: React.CSSProperties;
+    cardTitle?: React.CSSProperties;
   }
 
   interface Palette {
@@ -40,6 +42,7 @@ declare module '@mui/material/styles' {
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     body3: true;
+    cardTitle: true;
   }
 }
 
@@ -128,6 +131,12 @@ const createThemeOptions = (theme: Theme) => ({
     },
     button: {
       textTransform: 'none',
+    },
+    cardTitle: {
+      // non-bold version of h5
+      fontFamily: '"Open Sans", sans-serif',
+      fontSize: 18,
+      fontWeight: 400,
     },
   },
 

@@ -13,7 +13,7 @@ interface Props extends PaperProps {
   children: ReactNode;
   actions?: ReactNode;
   headerVariant?: 'border';
-  headerTypographyVariant?: TypographyVariant;
+  headerTypographyVariant?: TypographyVariant | 'cardTitle';
   'data-testid'?: string;
   headerSx?: SxProps;
 }
@@ -21,7 +21,7 @@ const TitleCard: React.FC<Props> = ({
   title,
   children,
   actions,
-  headerTypographyVariant = 'h5',
+  headerTypographyVariant = 'cardTitle',
   headerVariant,
   headerSx,
   ...props
