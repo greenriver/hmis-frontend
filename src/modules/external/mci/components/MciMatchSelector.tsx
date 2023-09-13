@@ -196,6 +196,7 @@ const MciMatchSelector = ({
                     inputProps={{ 'aria-label': 'controlled' }}
                     checked={value == NEW_MCI_STRING}
                     onChange={handleChange(NEW_MCI_STRING)}
+                    disabled={matches.length === 0}
                   />
                 </TableCell>
                 <TableCell colSpan={2} sx={{ py: 3 }}>

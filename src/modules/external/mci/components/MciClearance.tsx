@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ClearanceState, ClearanceStatus } from '../types';
 
+import { NEW_MCI_STRING } from '../util';
 import {
   getClearanceAlertText,
   MciFieldsChangedAlert,
@@ -117,8 +118,13 @@ const MciClearance = ({
         }
 
         setState({ status, candidates: matches });
+        // If auto-cleared, automatically select the match
         if (status == 'auto_cleared') {
           onChange(matches[0].mciId);
+        }
+        // If no matches, automatically select "new mci id"
+        if (status == 'no_matches') {
+          onChange(NEW_MCI_STRING);
         }
         setErrorState(emptyErrorState);
       }
