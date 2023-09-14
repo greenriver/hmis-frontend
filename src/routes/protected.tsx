@@ -40,6 +40,7 @@ import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
+import EnrollmentCustomCaseNotesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCustomCaseNotesPage';
 import EnrollmentEsgFundingReport from '@/modules/enrollment/components/dashboardPages/EnrollmentEsgFundingReport';
 import EnrollmentEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentEventsPage';
 import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/EnrollmentOverview';
@@ -374,6 +375,11 @@ export const protectedRoutes: RouteNode[] = [
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
             // No perm needed because it only requires enrollment visibility
             element: <EnrollmentCeAssessmentsPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
+            // No perm needed because it only requires enrollment visibility
+            element: <EnrollmentCustomCaseNotesPage />,
           },
           {
             path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,

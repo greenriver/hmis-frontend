@@ -997,6 +997,30 @@ export enum CurrentSchoolAttended {
   NotCurrentlyEnrolledInAnySchoolOrEducationalCourse = 'NOT_CURRENTLY_ENROLLED_IN_ANY_SCHOOL_OR_EDUCATIONAL_COURSE',
 }
 
+/** Case Note */
+export type CustomCaseNote = {
+  __typename?: 'CustomCaseNote';
+  client: Client;
+  content: Scalars['String']['output'];
+  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  enrollment: Enrollment;
+  id: Scalars['ID']['output'];
+  user?: Maybe<User>;
+};
+
+export type CustomCaseNotesPaginated = {
+  __typename?: 'CustomCaseNotesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CustomCaseNote>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
 export type CustomDataElement = {
   __typename?: 'CustomDataElement';
   fieldType: CustomDataElementType;
@@ -1072,6 +1096,7 @@ export enum DataCollectionFeatureRole {
   CeAssessment = 'CE_ASSESSMENT',
   CeEvent = 'CE_EVENT',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  CustomCaseNote = 'CUSTOM_CASE_NOTE',
   ReferralRequest = 'REFERRAL_REQUEST',
   Service = 'SERVICE',
 }
@@ -1682,6 +1707,7 @@ export type Enrollment = {
   currentLivingSituations: CurrentLivingSituationsPaginated;
   currentPregnant?: Maybe<NoYesMissing>;
   currentUnit?: Maybe<Unit>;
+  customCaseNotes: CustomCaseNotesPaginated;
   customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -1782,6 +1808,12 @@ export type EnrollmentCeAssessmentsArgs = {
 
 /** HUD Enrollment */
 export type EnrollmentCurrentLivingSituationsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** HUD Enrollment */
+export type EnrollmentCustomCaseNotesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -2271,6 +2303,7 @@ export enum FormRole {
   Client = 'CLIENT',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   CustomAssessment = 'CUSTOM_ASSESSMENT',
+  CustomCaseNote = 'CUSTOM_CASE_NOTE',
   Enrollment = 'ENROLLMENT',
   Exit = 'EXIT',
   File = 'FILE',
@@ -12253,6 +12286,46 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
   } | null;
 };
 
+export type CustomCaseNoteFieldsFragment = {
+  __typename?: 'CustomCaseNote';
+  id: string;
+  content: string;
+  dateUpdated: string;
+  dateCreated: string;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
+export type GetEnrollmentCustomCaseNotesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  inProgress?: InputMaybe<Scalars['Boolean']['input']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
+}>;
+
+export type GetEnrollmentCustomCaseNotesQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    customCaseNotes: {
+      __typename?: 'CustomCaseNotesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CustomCaseNote';
+        id: string;
+        content: string;
+        dateUpdated: string;
+        dateCreated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }>;
+    };
+  } | null;
+};
+
 export type CustomDataElementValueFieldsFragment = {
   __typename?: 'CustomDataElementValue';
   id: string;
@@ -21568,6 +21641,18 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
+export const CustomCaseNoteFieldsFragmentDoc = gql`
+  fragment CustomCaseNoteFields on CustomCaseNote {
+    id
+    content
+    dateUpdated
+    dateCreated
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const ClientNameDobVetFragmentDoc = gql`
   fragment ClientNameDobVet on Client {
     ...ClientName
@@ -24478,6 +24563,85 @@ export type GetEnrollmentCurrentLivingSituationsQueryResult =
     GetEnrollmentCurrentLivingSituationsQuery,
     GetEnrollmentCurrentLivingSituationsQueryVariables
   >;
+export const GetEnrollmentCustomCaseNotesDocument = gql`
+  query GetEnrollmentCustomCaseNotes(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $inProgress: Boolean
+    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+    $filters: AssessmentFilterOptions
+  ) {
+    enrollment(id: $id) {
+      id
+      customCaseNotes(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CustomCaseNoteFields
+        }
+      }
+    }
+  }
+  ${CustomCaseNoteFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentCustomCaseNotesQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentCustomCaseNotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentCustomCaseNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentCustomCaseNotesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      inProgress: // value for 'inProgress'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetEnrollmentCustomCaseNotesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentCustomCaseNotesQuery,
+    GetEnrollmentCustomCaseNotesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentCustomCaseNotesQuery,
+    GetEnrollmentCustomCaseNotesQueryVariables
+  >(GetEnrollmentCustomCaseNotesDocument, options);
+}
+export function useGetEnrollmentCustomCaseNotesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentCustomCaseNotesQuery,
+    GetEnrollmentCustomCaseNotesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentCustomCaseNotesQuery,
+    GetEnrollmentCustomCaseNotesQueryVariables
+  >(GetEnrollmentCustomCaseNotesDocument, options);
+}
+export type GetEnrollmentCustomCaseNotesQueryHookResult = ReturnType<
+  typeof useGetEnrollmentCustomCaseNotesQuery
+>;
+export type GetEnrollmentCustomCaseNotesLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentCustomCaseNotesLazyQuery
+>;
+export type GetEnrollmentCustomCaseNotesQueryResult = Apollo.QueryResult<
+  GetEnrollmentCustomCaseNotesQuery,
+  GetEnrollmentCustomCaseNotesQueryVariables
+>;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
     enrollment(id: $id) {

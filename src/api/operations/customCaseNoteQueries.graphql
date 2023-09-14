@@ -1,0 +1,20 @@
+query GetEnrollmentCustomCaseNotes(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $inProgress: Boolean
+  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+  $filters: AssessmentFilterOptions
+) {
+  enrollment(id: $id) {
+    id
+    customCaseNotes(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CustomCaseNoteFields
+      }
+    }
+  }
+}
