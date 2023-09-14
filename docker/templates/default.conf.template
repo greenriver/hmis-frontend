@@ -51,10 +51,11 @@ server {
       proxy_set_header Host ${HMIS_BACKEND};
     }
 
-    location /assets {
-      # Long-lived caching for fingerprinted file names (CSS and JS)
-      add_header Cache-Control "public, max-age=31536000";
-    }
+    # FIXME: how to add cache policy only for these files?
+    # location /assets {
+    #  # Long-lived caching for fingerprinted file names (CSS and JS)
+    #  add_header Cache-Control "public, max-age=31536000";
+    #}
 
     location /assets/theme {
       # proxy destination
