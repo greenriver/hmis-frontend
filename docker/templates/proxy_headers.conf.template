@@ -14,6 +14,7 @@ proxy_set_header X-Forwarded-Host $host;
 # proxy_send_timeout          30;
 # proxy_read_timeout          30;
 
-# Some things to try
-# proxy_set_header Connection "";
-# proxy_set_header Connection "keep-alive";
+# enable upstream caching
+proxy_http_version 1.1;
+proxy_set_header Connection "";
+
