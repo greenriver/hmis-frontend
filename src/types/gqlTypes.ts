@@ -16692,7 +16692,14 @@ export type SubmitFormMutation = {
           dateCreated: string;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }
-      | { __typename?: 'CustomCaseNote' }
+      | {
+          __typename?: 'CustomCaseNote';
+          id: string;
+          content: string;
+          dateUpdated: string;
+          dateCreated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }
       | {
           __typename?: 'Enrollment';
           id: string;
@@ -25589,6 +25596,9 @@ export const SubmitFormDocument = gql`
         ... on CeAssessment {
           ...CeAssessmentFields
         }
+        ... on CustomCaseNote {
+          ...CustomCaseNoteFields
+        }
         ... on Event {
           ...EventFields
         }
@@ -25610,6 +25620,7 @@ export const SubmitFormDocument = gql`
   ${SubmittedEnrollmentResultFieldsFragmentDoc}
   ${CurrentLivingSituationFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
+  ${CustomCaseNoteFieldsFragmentDoc}
   ${EventFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
