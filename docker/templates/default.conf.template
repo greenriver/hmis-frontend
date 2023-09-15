@@ -4,6 +4,8 @@ server {
 
     server_tokens off;
 
+    resolver ${NGINX_RESOLVER} valid=10s;
+
     location /nginx_status {
         stub_status;
         allow 127.0.0.1;  # Only allow requests from localhost
@@ -33,36 +35,36 @@ server {
     }
 
     location /hmis {
-      # proxy destination
-      proxy_pass https://${HMIS_BACKEND};
+      set $backend_server ${HMIS_BACKEND};
+      proxy_pass https://$backend_server;
 
       # include default proxy headers
       include /etc/nginx/conf.d/proxy_headers.conf;
 
       # add location specific headers
-      proxy_set_header Host ${HMIS_BACKEND};
+      proxy_set_header Host $backend_server;
     }
 
     location /rails/active_storage/blob {
-      # proxy destination
-      proxy_pass https://${HMIS_BACKEND};
+      set $backend_server ${HMIS_BACKEND};
+      proxy_pass https://$backend_server;
 
       # include default proxy headers
       include /etc/nginx/conf.d/proxy_headers.conf;
 
       # add location specific headers
-      proxy_set_header Host ${HMIS_BACKEND};
+      proxy_set_header Host $backend_server;
     }
 
     location /assets/theme {
-      # proxy destination
-      proxy_pass https://${HMIS_BACKEND};
+      set $backend_server ${HMIS_BACKEND};
+      proxy_pass https://$backend_server;
 
       # include default proxy headers
       include /etc/nginx/conf.d/proxy_headers.conf;
 
       # add location specific headers
-      proxy_set_header Host ${HMIS_BACKEND};
+      proxy_set_header Host $backend_server;
 
       # Long-lived caching for fingerprinted file names (logo image assets)
       add_header Cache-Control "public, max-age=31536000";
