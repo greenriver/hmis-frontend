@@ -379,6 +379,7 @@ export type Client = {
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
+  customCaseNotes: CustomCaseNotesPaginated;
   customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -443,6 +444,12 @@ export type ClientAuditHistoryArgs = {
 
 /** HUD Client */
 export type ClientCurrentLivingSituationsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** HUD Client */
+export type ClientCustomCaseNotesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
