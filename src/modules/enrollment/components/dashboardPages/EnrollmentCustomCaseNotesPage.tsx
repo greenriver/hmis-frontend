@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useCallback, useState } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
@@ -10,49 +10,34 @@ import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutati
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import useViewDialog from '@/modules/form/hooks/useViewDialog';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
-  CeAssessmentFieldsFragment,
-  DeleteCeAssessmentDocument,
-  DeleteCeAssessmentMutation,
-  DeleteCeAssessmentMutationVariables,
+  CustomCaseNoteFieldsFragment,
+  DeleteCustomCaseNoteDocument,
+  DeleteCustomCaseNoteMutation,
+  DeleteCustomCaseNoteMutationVariables,
   FormRole,
-  GetEnrollmentCeAssessmentsDocument,
-  GetEnrollmentCeAssessmentsQuery,
-  GetEnrollmentCeAssessmentsQueryVariables,
+  GetEnrollmentCustomCaseNotesDocument,
+  GetEnrollmentCustomCaseNotesQuery,
+  GetEnrollmentCustomCaseNotesQueryVariables,
 } from '@/types/gqlTypes';
 
-const columns: ColumnDef<CeAssessmentFieldsFragment>[] = [
+const columns: ColumnDef<CustomCaseNoteFieldsFragment>[] = [
   {
-    header: 'Date',
-    render: (a) => parseAndFormatDate(a.assessmentDate),
-  },
-  {
-    header: 'Level',
-    render: (a) => (
-      <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
+    header: 'Content',
+    render: ({ content }) => (
+      <Box sx={{ whiteSpace: 'pre-wrap' }}>{content}</Box>
     ),
   },
   {
-    header: 'Type',
-    render: (a) => (
-      <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
-    ),
-  },
-  {
-    header: 'Location',
-    render: (a) => a.assessmentLocation,
-  },
-  {
-    header: 'Prioritization Status',
-    render: (a) => (
-      <HmisEnum
-        value={a.prioritizationStatus}
-        enumMap={HmisEnums.PrioritizationStatus}
-      />
+    header: 'Created by',
+    width: '300px',
+    render: ({ dateCreated, user }) => (
+      <>
+        {user ? <div>{user?.name}</div> : undefined}
+        {parseAndFormatDateTime(dateCreated)}
+      </>
     ),
   },
 ];
@@ -63,24 +48,25 @@ const EnrollmentCustomCaseNotesPage = () => {
   const clientId = enrollment?.client.id;
 
   const [viewingRecord, setViewingRecord] = useState<
-    CeAssessmentFieldsFragment | undefined
+    CustomCaseNoteFieldsFragment | undefined
   >();
 
   const { openViewDialog, renderViewDialog, closeViewDialog } =
-    useViewDialog<CeAssessmentFieldsFragment>({
+    useViewDialog<CustomCaseNoteFieldsFragment>({
       record: viewingRecord,
       onClose: () => setViewingRecord(undefined),
-      formRole: FormRole.CeAssessment,
+      formRole: FormRole.CustomCaseNote,
     });
 
   const { openFormDialog, renderFormDialog, closeDialog } =
-    useFormDialog<CeAssessmentFieldsFragment>({
-      formRole: FormRole.CeAssessment,
+    useFormDialog<CustomCaseNoteFieldsFragment>({
+      formRole: FormRole.CustomCaseNote,
       onCompleted: () => {
         cache.evict({
           id: `Enrollment:${enrollmentId}`,
-          fieldName: 'ceAssessments',
+          fieldName: 'customCaseNotes',
         });
+        setViewingRecord(undefined);
         closeViewDialog();
       },
       inputVariables: { enrollmentId },
@@ -90,7 +76,7 @@ const EnrollmentCustomCaseNotesPage = () => {
   const onSuccessfulDelete = useCallback(() => {
     cache.evict({
       id: `Enrollment:${enrollmentId}`,
-      fieldName: 'ceAssessments',
+      fieldName: 'customCaseNotes',
     });
     closeDialog();
     closeViewDialog();
@@ -98,35 +84,35 @@ const EnrollmentCustomCaseNotesPage = () => {
   }, [closeDialog, closeViewDialog, enrollmentId]);
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
-  const canEditCeAssessments = enrollment.access.canEditEnrollments;
+  const canEdit = enrollment.access.canEditEnrollments;
 
   return (
     <>
       <TitleCard
-        title='Coordinated Entry Assessments'
+        title='Case Notes'
         headerVariant='border'
         actions={
-          canEditCeAssessments ? (
+          canEdit ? (
             <Button
               onClick={openFormDialog}
               variant='outlined'
               startIcon={<AddIcon fontSize='small' />}
             >
-              Add Coordinated Entry Assessment
+              Add Case Note
             </Button>
           ) : null
         }
       >
         <GenericTableWithData<
-          GetEnrollmentCeAssessmentsQuery,
-          GetEnrollmentCeAssessmentsQueryVariables,
-          CeAssessmentFieldsFragment
+          GetEnrollmentCustomCaseNotesQuery,
+          GetEnrollmentCustomCaseNotesQueryVariables,
+          CustomCaseNoteFieldsFragment
         >
           queryVariables={{ id: enrollmentId }}
-          queryDocument={GetEnrollmentCeAssessmentsDocument}
+          queryDocument={GetEnrollmentCustomCaseNotesDocument}
           columns={columns}
-          pagePath='enrollment.ceAssessments'
-          noData='No CE assessments'
+          pagePath='enrollment.customCaseNotes'
+          noData='No case notes'
           headerCellSx={() => ({ color: 'text.secondary' })}
           handleRowClick={(record) => {
             setViewingRecord(record);
@@ -135,23 +121,23 @@ const EnrollmentCustomCaseNotesPage = () => {
         />
       </TitleCard>
       {renderViewDialog({
-        title: 'View Coordinated Entry Event',
-        maxWidth: 'md',
+        title: 'View Case Note',
+        maxWidth: 'sm',
         actions: (
           <>
-            {viewingRecord && canEditCeAssessments && (
+            {viewingRecord && canEdit && (
               <>
                 <Button variant='outlined' onClick={openFormDialog}>
                   Edit
                 </Button>
                 <DeleteMutationButton<
-                  DeleteCeAssessmentMutation,
-                  DeleteCeAssessmentMutationVariables
+                  DeleteCustomCaseNoteMutation,
+                  DeleteCustomCaseNoteMutationVariables
                 >
-                  queryDocument={DeleteCeAssessmentDocument}
+                  queryDocument={DeleteCustomCaseNoteDocument}
                   variables={{ id: viewingRecord.id }}
-                  idPath={'deleteCeAssessment.ceAssessment.id'}
-                  recordName='Coordinated Entry Assessment'
+                  idPath={'deleteCustomCaeNote.customCaseNote.id'}
+                  recordName='Case Note'
                   onSuccess={onSuccessfulDelete}
                 >
                   Delete
@@ -162,11 +148,8 @@ const EnrollmentCustomCaseNotesPage = () => {
         ),
       })}
       {renderFormDialog({
-        title: viewingRecord
-          ? 'Edit Coordinated Entry Assessment'
-          : 'Add Coordinated Entry Assessment',
-        //md to accomodate radio buttons
-        DialogProps: { maxWidth: 'md' },
+        title: viewingRecord ? 'Edit Case Note' : 'Add Case Note',
+        DialogProps: { maxWidth: 'sm' },
       })}
     </>
   );

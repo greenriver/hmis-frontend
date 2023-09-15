@@ -2,9 +2,6 @@ query GetEnrollmentCustomCaseNotes(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
-  $inProgress: Boolean
-  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-  $filters: AssessmentFilterOptions
 ) {
   enrollment(id: $id) {
     id
@@ -15,6 +12,17 @@ query GetEnrollmentCustomCaseNotes(
       nodes {
         ...CustomCaseNoteFields
       }
+    }
+  }
+}
+
+mutation DeleteCustomCaseNote($id: ID!) {
+  deleteCustomCaseNote(id: $id) {
+    customCaseNote {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
     }
   }
 }
