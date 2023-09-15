@@ -6,6 +6,12 @@ fragment ReminderFields on Reminder {
   enrollment {
     id
     relationshipToHoH
+    intakeAssessment {
+      id
+    }
+    exitAssessment {
+      id
+    }
   }
   client {
     id

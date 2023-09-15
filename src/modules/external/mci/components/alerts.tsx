@@ -18,15 +18,13 @@ export const getClearanceAlertText = (state: ClearanceState) => {
     case 'no_matches':
       return {
         title: 'No Matches Found',
-        subtitle: 'You can create a new MCI ID, or leave the client uncleared.',
-        // buttonText: 'Search Again',
+        subtitle: 'A new MCI ID will be created for this client.',
         rightAlignButton: true,
       };
     case 'auto_cleared':
       return {
         title: 'MCI ID Found',
         subtitle: 'An exact match was found.',
-        // buttonText: 'Search again',
         rightAlignButton: true,
       };
     case 'one_match':
@@ -52,7 +50,7 @@ export const MciUnavailableAlert = () => (
       border: 'none',
     }}
   >
-    <AlertTitle>Not enough information.</AlertTitle>
+    <AlertTitle>Not enough information to clear MCI.</AlertTitle>
     <p>
       <b>First Name</b>, <b>Last Name</b>, and <b>Date of Birth</b> are required
       to clear MCI.

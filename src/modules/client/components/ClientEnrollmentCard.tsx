@@ -1,7 +1,8 @@
-import { Box, Card, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { useMemo } from 'react';
 
 import GenericTable from '@/components/elements/table/GenericTable';
+import TitleCard from '@/components/elements/TitleCard';
 import { enrollmentName, isRecentEnrollment } from '@/modules/hmis/hmisUtil';
 import { ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -101,17 +102,13 @@ interface Props {
 
 const ClientEnrollmentCard: React.FC<Props> = ({ client }) => {
   return (
-    <Card>
-      <Box
-        sx={(theme) => ({
-          p: 2,
-          borderBottom: `1px solid ${theme.palette.divider}`,
-        })}
-      >
-        <Typography>Recent Enrollments</Typography>
-      </Box>
+    <TitleCard
+      title='Recent Enrollments'
+      headerVariant='border'
+      headerTypographyVariant='body1'
+    >
       <RecentEnrollments clientId={client.id} />
-    </Card>
+    </TitleCard>
   );
 };
 

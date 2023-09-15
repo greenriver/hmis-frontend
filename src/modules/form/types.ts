@@ -131,6 +131,7 @@ export enum FormActionTypes {
   Validate,
   Discard,
   Navigate,
+  Unlock,
 }
 
 export type FormValues = Record<string, any | null | undefined>;

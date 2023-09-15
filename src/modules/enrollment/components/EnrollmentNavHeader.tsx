@@ -21,9 +21,9 @@ const EnrollmentNavHeader = ({
     projectId: enrollment.project.id,
   });
   return (
-    <Stack gap={2}>
+    <Stack gap={1.5}>
       <Stack direction={'row'}>
-        <Typography variant='h4'>
+        <Typography variant='h5'>
           {clientBriefName(enrollment.client)}
         </Typography>
       </Stack>

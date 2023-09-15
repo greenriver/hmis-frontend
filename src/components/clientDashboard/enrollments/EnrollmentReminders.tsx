@@ -148,12 +148,14 @@ const rowLinkTo = ({
         clientId: client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Intake,
+        assessmentId: enrollment.intakeAssessment?.id,
       });
     case ReminderTopic.ExitIncomplete:
       return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
         clientId: client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Exit,
+        assessmentId: enrollment.exitAssessment?.id,
       });
     case ReminderTopic.CurrentLivingSituation:
       return generateSafePath(
@@ -260,7 +262,7 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
           ? 'Household Tasks'
           : `Household Tasks (${displayReminders.length})`
       }
-      headerSx={{ '.MuiTypography-root': { fontWeight: 800 } }}
+      headerTypographyVariant='h5'
     >
       {loading && !data ? (
         <Loading />
