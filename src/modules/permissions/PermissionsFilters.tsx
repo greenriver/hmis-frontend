@@ -8,7 +8,7 @@ import {
   ClientAccessFieldsFragmentDoc,
   OrganizationAccess,
   ProjectAccess,
-  QueryAccess,
+  RootPermissionsFragment,
   useGetClientPermissionsQuery,
   useGetOrganizationQuery,
   useGetProjectPermissionsQuery,
@@ -104,7 +104,7 @@ export type RootPermissionsFilterProps<T> = Omit<
 >;
 
 export const RootPermissionsFilter: React.FC<
-  RootPermissionsFilterProps<QueryAccess>
+  RootPermissionsFilterProps<RootPermissionsFragment>
 > = (props) => {
   const { data, loading } = useGetRootPermissionsQuery();
   const access = data?.access;
