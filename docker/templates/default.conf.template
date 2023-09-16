@@ -4,6 +4,8 @@ server {
 
     server_tokens off;
 
+    resolver ${NGINX_RESOLVER} valid=10s;
+
     location /nginx_status {
         stub_status;
         allow 127.0.0.1;  # Only allow requests from localhost
@@ -18,53 +20,51 @@ server {
         # Always revalidate index.html before use
         add_header Cache-Control "no-cache";
 
-        # use INLINE_RUNTIME_CHECK=false yarn build and nonce / hash to apply a CSP
-        # Use add_header Content-Security-Policy "......." always;
-        add_header Content-Security-Policy "default-src 'none'; connect-src 'self' *.sentry.io *.s3.amazonaws.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' fonts.googleapis.com 'unsafe-inline'; img-src 'self' data: blob: *.s3.amazonaws.com; font-src 'self' fonts.gstatic.com; object-src 'none';" always;
-
-        add_header Referrer-Policy "strict-origin-when-cross-origin";
-        add_header X-Frame-Options "SAMEORIGIN" always;
-        add_header X-XSS-Protection "1; mode=block" always;
-        add_header X-Content-Type-Options "nosniff" always;
-        add_header Feature-Policy "geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none'; usb 'none';";
-    }
-
-    location /hmis {
-      # proxy destination
-      proxy_pass https://${HMIS_BACKEND};
-
-      # include default proxy headers
-      include /etc/nginx/conf.d/proxy_headers.conf;
-
-      # add location specific headers
-      proxy_set_header Host ${HMIS_BACKEND};
-    }
-
-    location /rails/active_storage/blob {
-      # proxy destination
-      proxy_pass https://${HMIS_BACKEND};
-
-      # include default proxy headers
-      include /etc/nginx/conf.d/proxy_headers.conf;
-
-      # add location specific headers
-      proxy_set_header Host ${HMIS_BACKEND};
+        # Include default headers
+        include /etc/nginx/conf.d/non_proxy_headers.conf;
     }
 
     location /assets {
-      # Long-lived caching for fingerprinted file names (CSS and JS)
-      add_header Cache-Control "public, max-age=31536000";
+        root   /usr/share/nginx/html;
+
+        # Long-lived caching for assets, because they are fingerprinted
+        add_header Cache-Control "public, max-age=31536000";
+
+        # Include default headers
+        include /etc/nginx/conf.d/non_proxy_headers.conf;
     }
 
-    location /assets/theme {
-      # proxy destination
-      proxy_pass https://${HMIS_BACKEND};
+    location /hmis {
+      set $backend_server ${HMIS_BACKEND};
+      proxy_pass https://$backend_server;
 
       # include default proxy headers
       include /etc/nginx/conf.d/proxy_headers.conf;
 
       # add location specific headers
-      proxy_set_header Host ${HMIS_BACKEND};
+      proxy_set_header Host $backend_server;
+    }
+
+    location /rails/active_storage/blob {
+      set $backend_server ${HMIS_BACKEND};
+      proxy_pass https://$backend_server;
+
+      # include default proxy headers
+      include /etc/nginx/conf.d/proxy_headers.conf;
+
+      # add location specific headers
+      proxy_set_header Host $backend_server;
+    }
+
+    location /assets/theme {
+      set $backend_server ${HMIS_BACKEND};
+      proxy_pass https://$backend_server;
+
+      # include default proxy headers
+      include /etc/nginx/conf.d/proxy_headers.conf;
+
+      # add location specific headers
+      proxy_set_header Host $backend_server;
 
       # Long-lived caching for fingerprinted file names (logo image assets)
       add_header Cache-Control "public, max-age=31536000";
