@@ -193,7 +193,7 @@ const EditHouseholdMemberTable = ({
         render: (hc: HouseholdClientFieldsFragment) => (
           <RelationshipToHoHInput
             enrollmentId={hc.enrollment.id}
-            enrollmentVersion={hc.enrollment.version}
+            enrollmentLockVersion={hc.enrollment.lockVersion}
             relationshipToHoH={hc.relationshipToHoH}
             onClose={() =>
               setHighlight((old) => old.filter((id) => id !== hc.client.id))

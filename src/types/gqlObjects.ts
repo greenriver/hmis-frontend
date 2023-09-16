@@ -148,6 +148,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'lockVersion',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'role',
         type: {
           kind: 'NON_NULL',
@@ -486,6 +494,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'lockVersion',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'middleName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -560,14 +576,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'SSNDataQuality', ofType: null },
-        },
-      },
-      {
-        name: 'version',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
         },
       },
       {
@@ -1877,6 +1885,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'PriorLivingSituation', ofType: null },
       },
       {
+        name: 'lockVersion',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'losUnderThreshold',
         type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
@@ -2015,14 +2031,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'vamcStation',
         type: { kind: 'ENUM', name: 'VamcStationNumber', ofType: null },
-      },
-      {
-        name: 'version',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
-        },
       },
     ],
   },
@@ -3923,14 +3931,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'targetPopulation',
         type: { kind: 'ENUM', name: 'TargetPopulation', ofType: null },
       },
-      {
-        name: 'version',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
-        },
-      },
     ],
   },
   {
@@ -5303,6 +5303,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'DeleteAssessmentInput',
     args: [
       {
+        name: 'assessmentLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -5368,7 +5372,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'DeleteClientInput',
     args: [
       {
-        name: 'clientVersion',
+        name: 'clientLockVersion',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
       {
@@ -5895,6 +5899,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'SaveAssessmentInput',
     args: [
       {
+        name: 'assessmentLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
         name: 'input',
         type: {
           kind: 'NON_NULL',
@@ -6076,6 +6084,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'SubmitAssessmentInput',
     args: [
       {
+        name: 'assessmentLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
         name: 'input',
         type: {
           kind: 'NON_NULL',
@@ -6099,6 +6111,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           name: null,
           ofType: { kind: 'INPUT_OBJECT', name: 'FormInput', ofType: null },
         },
+      },
+      {
+        name: 'recordLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
     ],
   },
@@ -6268,7 +6284,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'enrollmentVersion',
+        name: 'enrollmentLockVersion',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
       {

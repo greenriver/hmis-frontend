@@ -22,6 +22,19 @@ import {
   useSubmitFormMutation,
 } from '@/types/gqlTypes';
 
+// TODO: we may want to use optimistic locking on additional record types in the future
+const recordLockVersion = (
+  record: SubmitFormAllowedTypes | null | undefined
+) => {
+  if (!record) return undefined;
+  switch (record.__typename) {
+    case 'Client':
+    case 'Enrollment':
+      return record.lockVersion;
+  }
+  return undefined;
+};
+
 type SubmitFormInputVariables = Omit<
   FormInput,
   'confirmed' | 'formDefinitionId' | 'values' | 'hudValues' | 'recordId'
@@ -99,7 +112,11 @@ export function useDynamicFormHandlersForRecord<
       };
 
       setErrors(emptyErrorState);
-      void submitForm({ variables: { input: { input } } });
+      void submitForm({
+        variables: {
+          input: { input, recordLockVersion: recordLockVersion(record) },
+        },
+      });
     },
     [formDefinition, inputVariables, submitForm, record]
   );

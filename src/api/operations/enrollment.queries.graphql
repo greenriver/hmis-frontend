@@ -26,6 +26,7 @@ query GetEnrollmentWithHousehold($id: ID!) {
 query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   enrollment(id: $id) {
     id
+    lockVersion
     events(limit: $limit, offset: $offset) {
       offset
       limit
