@@ -10423,6 +10423,7 @@ export type GetAssessmentsForPopulationQuery = {
 
 export type DeleteAssessmentMutationVariables = Exact<{
   id: Scalars['ID']['input'];
+  assessmentLockVersion?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 export type DeleteAssessmentMutation = {
@@ -23189,8 +23190,10 @@ export type GetAssessmentsForPopulationQueryResult = Apollo.QueryResult<
   GetAssessmentsForPopulationQueryVariables
 >;
 export const DeleteAssessmentDocument = gql`
-  mutation DeleteAssessment($id: ID!) {
-    deleteAssessment(input: { id: $id }) {
+  mutation DeleteAssessment($id: ID!, $assessmentLockVersion: Int) {
+    deleteAssessment(
+      input: { id: $id, assessmentLockVersion: $assessmentLockVersion }
+    ) {
       clientMutationId
       assessmentId
       errors {
@@ -23219,6 +23222,7 @@ export type DeleteAssessmentMutationFn = Apollo.MutationFunction<
  * const [deleteAssessmentMutation, { data, loading, error }] = useDeleteAssessmentMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      assessmentLockVersion: // value for 'assessmentLockVersion'
  *   },
  * });
  */

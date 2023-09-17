@@ -52,7 +52,10 @@ const DeleteAssessmentButton = ({
       DeleteAssessmentMutationVariables
     >
       queryDocument={DeleteAssessmentDocument}
-      variables={{ id: assessment.id }}
+      variables={{
+        id: assessment.id,
+        assessmentLockVersion: assessment.lockVersion,
+      }}
       idPath={'deleteAssessment.assessmentId'}
       ButtonProps={{ fullWidth: true }}
       recordName='assessment'
