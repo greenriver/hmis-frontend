@@ -8573,6 +8573,7 @@ export type GetClientAssessmentsQuery = {
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
+          lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
@@ -17204,6 +17205,7 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
     enrollment: {
       __typename?: 'Enrollment';
       id: string;
+      lockVersion: number;
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
@@ -17289,6 +17291,7 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
+    lockVersion: number;
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
@@ -18883,6 +18886,7 @@ export type GetProjectHouseholdsQuery = {
           enrollment: {
             __typename?: 'Enrollment';
             id: string;
+            lockVersion: number;
             entryDate: string;
             exitDate?: string | null;
             inProgress: boolean;
@@ -22138,6 +22142,7 @@ export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
     }
     enrollment {
       id
+      lockVersion
       entryDate
       exitDate
       inProgress
@@ -22702,6 +22707,7 @@ export const GetClientAssessmentsDocument = gql`
           ...AssessmentFields
           enrollment {
             id
+            lockVersion
             entryDate
             exitDate
             inProgress

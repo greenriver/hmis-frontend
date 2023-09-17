@@ -29,6 +29,7 @@ query GetClientAssessments(
         ...AssessmentFields
         enrollment {
           id
+          lockVersion
           entryDate
           exitDate
           inProgress
