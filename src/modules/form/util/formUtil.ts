@@ -959,6 +959,7 @@ export const addDescendants = (
 };
 
 export type ClientNameDobVeteranFields = {
+  id: string;
   dob?: string | null;
   veteranStatus: NoYesReasonsForMissingData;
 };

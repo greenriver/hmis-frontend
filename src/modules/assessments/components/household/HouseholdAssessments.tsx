@@ -116,6 +116,7 @@ const HouseholdAssessments = ({
             assessmentSubmitted: !!assessmentId && !assessmentInProgress,
             clientId: client.id,
             client: {
+              id: client.id,
               dob: client.dob,
               veteranStatus: client.veteranStatus,
             },
