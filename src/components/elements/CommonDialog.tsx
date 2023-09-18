@@ -15,6 +15,16 @@ const CommonDialog = ({ children, ...props }: DialogProps) => {
         <IconButton
           aria-label='close'
           onClick={(e) => props.onClose && props.onClose(e, 'backdropClick')}
+          onKeyDown={(event) => {
+            // Hack: don't close dialog on keydown for Enter, because it will re-open
+            // the selected row onKeyUp if this dialog is coming from a row click.
+            // The Dialog can be closed with 'esc' or with hitting space while the exit icon is selected
+            // FIXME: fix this in a better way
+            if (event.key === 'Enter') {
+              event.stopPropagation();
+              event.preventDefault();
+            }
+          }}
           sx={{
             position: 'absolute',
             right: 8,
