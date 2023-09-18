@@ -26,13 +26,23 @@ import {
 const columns: ColumnDef<CustomCaseNoteFieldsFragment>[] = [
   {
     header: 'Note',
-    width: '500px',
     render: ({ content }) => (
-      <Box sx={{ whiteSpace: 'pre-wrap' }}>{content}</Box>
+      <Box
+        sx={{
+          whiteSpace: 'pre-wrap',
+          display: '-webkit-box',
+          '-webkit-box-orient': 'vertical',
+          '-webkit-line-clamp': '6',
+          overflow: 'hidden',
+        }}
+      >
+        {content}
+      </Box>
     ),
   },
   {
     header: 'Created by',
+    minWidth: '200px',
     render: ({ dateCreated, user }) => (
       <>
         {user ? <div>{user?.name}</div> : undefined}
