@@ -25,14 +25,14 @@ import {
 
 const columns: ColumnDef<CustomCaseNoteFieldsFragment>[] = [
   {
-    header: 'Content',
+    header: 'Note',
+    width: '500px',
     render: ({ content }) => (
       <Box sx={{ whiteSpace: 'pre-wrap' }}>{content}</Box>
     ),
   },
   {
     header: 'Created by',
-    width: '300px',
     render: ({ dateCreated, user }) => (
       <>
         {user ? <div>{user?.name}</div> : undefined}
