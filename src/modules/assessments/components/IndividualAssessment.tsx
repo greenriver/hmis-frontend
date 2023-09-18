@@ -162,6 +162,7 @@ const IndividualAssessment = ({
   return (
     <AssessmentForm
       assessmentTitle={title}
+      clientId={client.id}
       navigationTitle={navigationTitle}
       key={assessment?.id}
       formRole={formRole}
