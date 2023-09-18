@@ -1100,10 +1100,10 @@ export type DataCollectionFeature = {
 };
 
 export enum DataCollectionFeatureRole {
+  CaseNote = 'CASE_NOTE',
   CeAssessment = 'CE_ASSESSMENT',
   CeEvent = 'CE_EVENT',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
-  CustomCaseNote = 'CUSTOM_CASE_NOTE',
   ReferralRequest = 'REFERRAL_REQUEST',
   Service = 'SERVICE',
 }
@@ -2311,13 +2311,13 @@ export type FormItem = {
 
 export enum FormRole {
   Annual = 'ANNUAL',
+  CaseNote = 'CASE_NOTE',
   Ce = 'CE',
   CeAssessment = 'CE_ASSESSMENT',
   CeEvent = 'CE_EVENT',
   Client = 'CLIENT',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   CustomAssessment = 'CUSTOM_ASSESSMENT',
-  CustomCaseNote = 'CUSTOM_CASE_NOTE',
   Enrollment = 'ENROLLMENT',
   Exit = 'EXIT',
   File = 'FILE',
@@ -4645,7 +4645,6 @@ export type QueryAccess = {
   canAdministerHmis: Scalars['Boolean']['output'];
   canAuditClients: Scalars['Boolean']['output'];
   canDeleteAssessments: Scalars['Boolean']['output'];
-  canDeleteAssignedProjectData: Scalars['Boolean']['output'];
   canDeleteClients: Scalars['Boolean']['output'];
   canDeleteEnrollments: Scalars['Boolean']['output'];
   canDeleteOrganization: Scalars['Boolean']['output'];
@@ -4669,6 +4668,7 @@ export type QueryAccess = {
   canViewFullSsn: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
+  canViewProject: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 

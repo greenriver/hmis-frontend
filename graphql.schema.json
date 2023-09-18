@@ -7231,6 +7231,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "CASE_NOTE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CE_ASSESSMENT",
             "description": null,
             "isDeprecated": false,
@@ -7244,12 +7250,6 @@
           },
           {
             "name": "CURRENT_LIVING_SITUATION",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CUSTOM_CASE_NOTE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -15774,6 +15774,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CASE_NOTE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CE",
             "description": null,
             "isDeprecated": false,
@@ -15805,12 +15811,6 @@
           },
           {
             "name": "CUSTOM_ASSESSMENT",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CUSTOM_CASE_NOTE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -28227,22 +28227,6 @@
             "deprecationReason": null
           },
           {
-            "name": "canDeleteAssignedProjectData",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "canDeleteClients",
             "description": null,
             "args": [],
@@ -28596,6 +28580,22 @@
           },
           {
             "name": "canViewPartialSsn",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewProject",
             "description": null,
             "args": [],
             "type": {

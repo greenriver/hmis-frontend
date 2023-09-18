@@ -65,12 +65,12 @@ const EnrollmentCustomCaseNotesPage = () => {
     useViewDialog<CustomCaseNoteFieldsFragment>({
       record: viewingRecord,
       onClose: () => setViewingRecord(undefined),
-      formRole: FormRole.CustomCaseNote,
+      formRole: FormRole.CaseNote,
     });
 
   const { openFormDialog, renderFormDialog, closeDialog } =
     useFormDialog<CustomCaseNoteFieldsFragment>({
-      formRole: FormRole.CustomCaseNote,
+      formRole: FormRole.CaseNote,
       onCompleted: () => {
         cache.evict({
           id: `Enrollment:${enrollmentId}`,
