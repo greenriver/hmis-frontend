@@ -25,17 +25,21 @@ import RecordPickerDialog from '../RecordPickerDialog';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
-const FormCard = ({
+interface Props extends GroupItemComponentProps {
+  anchor?: string;
+  clientId?: string;
+  debug?: (ids?: string[]) => void;
+}
+
+const FormCard: React.FC<Props> = ({
   item,
+  clientId,
   severalItemsChanged = () => {},
   renderChildItem,
   anchor,
   values,
   locked,
   debug,
-}: GroupItemComponentProps & {
-  anchor?: string;
-  debug?: (ids?: string[]) => void;
 }) => {
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
@@ -162,11 +166,12 @@ const FormCard = ({
         </Grid>
 
         {/* Dialog for selecting autofill record */}
-        {item.prefill && (
+        {item.prefill && clientId && (
           <>
             <RecordPickerDialog
               id={`recordPickerDialog-${item.linkId}`}
               item={item}
+              clientId={clientId}
               open={fillDialogOpen}
               onSelected={onSelectAutofillRecord}
               onCancel={() => setFillDialogOpen(false)}

@@ -29,10 +29,12 @@ export const InfoGroup = ({
   </Box>
 );
 
-const DynamicGroup = ({
-  debug,
-  ...props
-}: GroupItemComponentProps & { debug?: (ids?: string[]) => void }) => {
+interface Props extends GroupItemComponentProps {
+  clientId?: string;
+  debug?: (ids?: string[]) => void;
+}
+
+const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
   // Always render top-level groups as cards
   if (props.nestingLevel === 0 && !props.item.component) {
     return (

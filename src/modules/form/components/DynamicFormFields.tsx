@@ -29,6 +29,7 @@ import {
 } from '@/types/gqlTypes';
 
 export interface Props {
+  clientId?: string;
   definition: FormDefinitionJson;
   errors?: ValidationError[];
   warnings?: ValidationError[];
@@ -47,6 +48,7 @@ export interface Props {
 }
 
 const DynamicFormFields: React.FC<Props> = ({
+  clientId,
   definition,
   errors = [],
   bulk,
@@ -91,6 +93,7 @@ const DynamicFormFields: React.FC<Props> = ({
       return (
         <DynamicGroup
           item={item}
+          clientId={clientId}
           key={item.linkId}
           nestingLevel={nestingLevel}
           renderChildItem={(item, props, fn) =>
