@@ -190,6 +190,7 @@ export function useServiceDialog({
           )}
           {selectedService && formDefinition && serviceType && (
             <DynamicForm
+              clientId={enrollment?.client.id}
               key={service?.id || selectedService.code}
               definition={formDefinition.definition}
               onSubmit={onSubmit}

@@ -94,6 +94,7 @@ const AdminReferralPostingForm: React.FC<Props> = ({
         submitButtonText: 'Save',
         discardButtonText: 'Cancel',
       }}
+      clientId={referralPosting.hohEnrollment?.client.id}
       initialValues={initialValues}
       onSubmit={handleSubmit}
       loading={loading}

@@ -8,6 +8,7 @@ import {
 } from '@/types/gqlTypes';
 
 const client = {
+  id: '1',
   dob: null,
   veteranStatus: NoYesReasonsForMissingData.DataNotCollected,
 };

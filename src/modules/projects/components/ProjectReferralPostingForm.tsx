@@ -93,6 +93,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
         submitButtonText: 'Update Referral',
         discardButtonText: 'Cancel',
       }}
+      clientId={referralPosting?.hohEnrollment?.client?.id}
       initialValues={initialValues}
       onSubmit={handleSubmit}
       loading={loading}

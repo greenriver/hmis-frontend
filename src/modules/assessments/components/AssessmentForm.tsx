@@ -314,6 +314,7 @@ const AssessmentForm = ({
             errors={errors}
             locked={locked}
             visible={visible}
+            clientId={clientId}
             showSavePrompt
             alwaysShowSaveSlide={!!embeddedInWorkflow}
             FormActionProps={FormActionProps}
