@@ -67,6 +67,7 @@ const EnrollmentEventsPage = () => {
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'events',
         });
+        setViewingRecord(undefined);
         closeViewDialog();
       },
       inputVariables: { enrollmentId },
