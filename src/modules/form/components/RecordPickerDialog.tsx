@@ -15,11 +15,11 @@ import AssessmentsForPopulationTable from '@/components/clientDashboard/enrollme
 import CommonDialog from '@/components/elements/CommonDialog';
 import RelativeDate from '@/components/elements/RelativeDate';
 import { ColumnDef } from '@/components/elements/table/types';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import HmisField from '@/modules/hmis/components/HmisField';
 import { FormItem, FormRole } from '@/types/gqlTypes';
 
 interface Props extends Omit<DialogProps, 'children'> {
+  clientId: string;
   open: boolean;
   item?: FormItem;
   description?: ReactNode;
@@ -35,10 +35,9 @@ const RecordPickerDialog = ({
   open,
   role,
   description,
+  clientId,
   ...other
 }: Props) => {
-  const { client } = useClientDashboardContext();
-
   const columns: ColumnDef<AssessmentForPopulation>[] = useMemo(() => {
     // If no item was passed, that means we're pre-filling the entire assessment.
     // Only metadata columns are shown in that case.
@@ -105,7 +104,7 @@ const RecordPickerDialog = ({
       >
         {description}
         <AssessmentsForPopulationTable
-          queryVariables={{ id: client.id }}
+          queryVariables={{ id: clientId }}
           defaultPageSize={5}
           columns={columns}
           nonTablePagination

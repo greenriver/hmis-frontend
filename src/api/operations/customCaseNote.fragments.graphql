@@ -1,0 +1,9 @@
+fragment CustomCaseNoteFields on CustomCaseNote {
+  id
+  content
+  dateUpdated
+  dateCreated
+  user {
+    ...UserFields
+  }
+}

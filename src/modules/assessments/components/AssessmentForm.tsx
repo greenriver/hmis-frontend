@@ -51,6 +51,7 @@ import {
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
+  clientId: string;
   // assessmentTitle: string;
   formRole?: FormRole;
   definition: FormDefinition;
@@ -66,6 +67,7 @@ interface Props {
 
 const AssessmentForm = ({
   assessment,
+  clientId,
   assessmentTitle,
   formRole,
   definition,
@@ -313,6 +315,7 @@ const AssessmentForm = ({
             errors={errors}
             locked={locked}
             visible={visible}
+            clientId={clientId}
             showSavePrompt
             alwaysShowSaveSlide={!!embeddedInWorkflow}
             FormActionProps={FormActionProps}
@@ -327,6 +330,7 @@ const AssessmentForm = ({
       {definition && (
         <RecordPickerDialog
           id='assessmentPickerDialog'
+          clientId={clientId}
           open={dialogOpen}
           role={formRole}
           onSelected={onSelectAutofillRecord}

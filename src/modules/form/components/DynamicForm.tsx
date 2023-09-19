@@ -45,6 +45,7 @@ export interface DynamicFormProps
     FormActionProps,
     'disabled' | 'loading' | 'onSubmit' | 'onSaveDraft'
   > {
+  clientId?: string;
   definition: FormDefinitionJson;
   onSubmit: DynamicFormOnSubmit;
   onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
@@ -78,6 +79,7 @@ export interface DynamicFormRef {
 const DynamicForm = forwardRef(
   (
     {
+      clientId,
       definition,
       onSubmit,
       onSaveDraft,
@@ -236,6 +238,7 @@ const DynamicForm = forwardRef(
             {renderFields({
               itemChanged: handleChangeCallback,
               severalItemsChanged: handleChangeCallback,
+              clientId,
               errors: errorState.errors,
               warnings: errorState.warnings,
               horizontal,
