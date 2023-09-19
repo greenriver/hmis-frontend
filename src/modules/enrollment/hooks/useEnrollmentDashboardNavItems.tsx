@@ -63,6 +63,12 @@ export const useEnrollmentDashboardNavItems = (
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
             featureName: DataCollectionFeatureRole.CeAssessment,
           },
+          {
+            id: 'custom-case-notes',
+            title: 'Case Notes',
+            path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
+            featureName: DataCollectionFeatureRole.CaseNote,
+          },
         ]
           .filter(
             (item) =>

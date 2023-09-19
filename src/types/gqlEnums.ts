@@ -268,6 +268,7 @@ export const HmisEnums = {
     VETERAN_HOH: 'VETERAN_HOH',
   },
   DataCollectionFeatureRole: {
+    CASE_NOTE: 'CASE_NOTE',
     CE_ASSESSMENT: 'CE_ASSESSMENT',
     CE_EVENT: 'CE_EVENT',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
@@ -497,6 +498,7 @@ export const HmisEnums = {
   },
   FormRole: {
     ANNUAL: 'ANNUAL',
+    CASE_NOTE: 'CASE_NOTE',
     CE: 'CE',
     CE_ASSESSMENT: 'CE_ASSESSMENT',
     CE_EVENT: 'CE_EVENT',
