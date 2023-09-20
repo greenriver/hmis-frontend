@@ -26,7 +26,7 @@ import { evictDeletedEnrollment } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EnrollmentOverview = () => {
-  const { enrollment } = useEnrollmentDashboardContext();
+  const { enrollment, enabledFeatures } = useEnrollmentDashboardContext();
   const navigate = useNavigate();
   const { clientId, enrollmentId } = useSafeParams() as {
     enrollmentId: string;
@@ -81,32 +81,34 @@ const EnrollmentOverview = () => {
         <Grid item xs={4}>
           <Stack spacing={4}>
             <EnrollmentReminders enrollmentId={enrollment.id} />
-            <TitleCard title='Quick Actions'>
-              <EnrollmentQuickActions enrollment={enrollment} />
-            </TitleCard>
-            {enrollment.inProgress && (
-              <DeleteMutationButton<
-                DeleteEnrollmentMutation,
-                DeleteEnrollmentMutationVariables
-              >
-                queryDocument={DeleteEnrollmentDocument}
-                variables={{ input: { id: enrollment.id } }}
-                idPath='deleteEnrollment.enrollment.id'
-                recordName='Enrollment'
-                onSuccess={onSuccessfulDelete}
-                ButtonProps={{
-                  sx: {
-                    justifyContent: 'left',
-                    alignSelf: 'flex-end',
-                    width: 'fit-content',
-                  },
-                  size: 'small',
-                }}
-                deleteIcon
-              >
-                Delete Enrollment
-              </DeleteMutationButton>
-            )}
+            <EnrollmentQuickActions
+              enrollment={enrollment}
+              enabledFeatures={enabledFeatures}
+            />
+            {enrollment.inProgress &&
+              enrollment.access.canDeleteEnrollments && (
+                <DeleteMutationButton<
+                  DeleteEnrollmentMutation,
+                  DeleteEnrollmentMutationVariables
+                >
+                  queryDocument={DeleteEnrollmentDocument}
+                  variables={{ input: { id: enrollment.id } }}
+                  idPath='deleteEnrollment.enrollment.id'
+                  recordName='Enrollment'
+                  onSuccess={onSuccessfulDelete}
+                  ButtonProps={{
+                    sx: {
+                      justifyContent: 'left',
+                      alignSelf: 'flex-end',
+                      width: 'fit-content',
+                    },
+                    size: 'small',
+                  }}
+                  deleteIcon
+                >
+                  Delete Enrollment
+                </DeleteMutationButton>
+              )}
           </Stack>
         </Grid>
       </Grid>

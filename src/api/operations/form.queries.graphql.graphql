@@ -67,13 +67,16 @@ mutation SubmitForm($input: SubmitFormInput!) {
         ...FileFields
       }
       ... on Enrollment {
-        ...EnrollmentFields
+        ...SubmittedEnrollmentResultFields
       }
       ... on CurrentLivingSituation {
         ...CurrentLivingSituationFields
       }
       ... on CeAssessment {
         ...CeAssessmentFields
+      }
+      ... on CustomCaseNote {
+        ...CustomCaseNoteFields
       }
       ... on Event {
         ...EventFields

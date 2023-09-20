@@ -9,6 +9,7 @@ import {
   sub,
 } from 'date-fns';
 import {
+  cloneDeep,
   compact,
   get,
   isArray,
@@ -41,8 +42,8 @@ import {
 } from '../types';
 
 import {
-  age,
   customDataElementValueForKey,
+  evaluateDataCollectedAbout,
   formatDateForGql,
   INVALID_ENUM,
   parseHmisDateString,
@@ -53,7 +54,6 @@ import {
   AutofillValue,
   BoundType,
   Component,
-  DataCollectedAbout,
   DisabledDisplay,
   EnableBehavior,
   EnableOperator,
@@ -104,7 +104,6 @@ export const hasMeaningfulValue = (value: any): boolean => {
   if (Array.isArray(value) && value.length == 0) return false;
   if (isNil(value)) return false;
   if (value === '') return false;
-  if (isDataNotCollected(value)) return false;
   if (value == HIDDEN_VALUE) return false;
   return true;
 };
@@ -238,16 +237,35 @@ export const getItemMap = (
 /**
  * Recursively find a question item by linkId
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const findItem = (
+export const findItem = (
   items: FormItem[] | null | undefined,
   linkId: string
 ): FormItem | undefined => {
   if (!items || items.length === 0) return undefined;
   const found = items.find((i) => i.linkId === linkId);
   if (found) return found;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   return items.find((item) => findItem(item.item, linkId));
+};
+
+/**
+ * Recursively modify a form definition. Returns a deep copy.
+ */
+export const modifyFormDefinition = (
+  definition: FormDefinitionJson,
+  operation: (item: FormItem) => void
+): FormDefinitionJson => {
+  const copy = cloneDeep(definition);
+
+  function recur(items: FormItem[]) {
+    items.forEach((item: FormItem) => {
+      operation(item);
+      if (Array.isArray(item.item)) recur(item.item);
+    });
+  }
+
+  recur(copy.item);
+  return copy;
 };
 
 /**
@@ -366,14 +384,16 @@ const evaluateEnableWhen = ({
       if (Array.isArray(comparisonValue)) {
         result = !!comparisonValue.find((val) => val === currentValue);
       } else {
-        console.warn("Can't use INCLUDES operator without array value");
+        console.warn("Can't use IN operator without array value");
       }
       break;
     case EnableOperator.Includes:
       if (Array.isArray(currentValue)) {
         result = !!currentValue.find((v) => v === comparisonValue);
       } else {
-        console.warn("Can't use IN operator without array comparison value");
+        console.warn(
+          "Can't use INCLUDES operator without array comparison value"
+        );
       }
       break;
     default:
@@ -939,56 +959,42 @@ export const addDescendants = (
 };
 
 export type ClientNameDobVeteranFields = {
+  id: string;
   dob?: string | null;
   veteranStatus: NoYesReasonsForMissingData;
 };
 
 /**
- * Apply "data collected about" filters.
+ * Recursively filters out any items where "data collected about" does not apply.
  * Returns a modified copy of the definition.
- * Only checks at 2 levels of nesting.
  */
 export const applyDataCollectedAbout = (
   items: FormDefinitionFieldsFragment['definition']['item'],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
-) => {
-  // FIXME do a recursive check
+): FormDefinitionFieldsFragment['definition']['item'] => {
   function isApplicable(item: FormItem) {
     if (!item.dataCollectedAbout) return true;
 
-    switch (item.dataCollectedAbout) {
-      case DataCollectedAbout.AllClients:
-        return true;
-      case DataCollectedAbout.Hoh:
-        return relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold;
-      case DataCollectedAbout.HohAndAdults:
-        const clientAge = age(client);
-        return (
-          relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
-          isNil(client.dob) ||
-          (!isNil(clientAge) && clientAge >= 18)
-        );
-      case DataCollectedAbout.VeteranHoh:
-        return (
-          relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold &&
-          client.veteranStatus === NoYesReasonsForMissingData.Yes
-        );
-      default:
-        return true;
-    }
+    return evaluateDataCollectedAbout(
+      item.dataCollectedAbout,
+      client,
+      relationshipToHoH
+    );
+  }
+
+  function recur(item: (typeof items)[0]) {
+    if (!item.item) return item;
+    const { item: childItems, ...rest } = item;
+    const filteredItems: typeof items = childItems
+      .filter((child) => isApplicable(child))
+      .map((child) => recur(child));
+    return { ...rest, item: filteredItems };
   }
 
   return items
-    .map((item) => {
-      if (!item.item) return item;
-      const { item: childItems, ...rest } = item;
-      return {
-        item: childItems.filter((child) => isApplicable(child)),
-        ...rest,
-      };
-    })
-    .filter((item) => isApplicable(item));
+    .filter((child) => isApplicable(child))
+    .map((child) => recur(child));
 };
 
 /**
@@ -1069,7 +1075,9 @@ export const transformSubmitValues = ({
       // If key is already in result and has a value, skip.
       // This can occur if there are multiple questions tied to the same field,
       // with one of them hidden (eg W5 Subsidy Information)
-      if (hasMeaningfulValue(result[key])) return;
+      if (hasMeaningfulValue(result[key]) && !isDataNotCollected(result[key])) {
+        return;
+      }
 
       if (item.linkId in values) {
         // Transform into gql value, for example Date -> YYYY-MM-DD string
@@ -1113,12 +1121,12 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
     const recordType = HmisEnums.RelatedRecordType[mapping.recordType];
     if (recordType !== record.__typename) {
       relatedRecordAttribute = lowerFirst(recordType);
-      if (!record.hasOwnProperty(relatedRecordAttribute)) {
-        console.error(
-          `Expected record to have ${relatedRecordAttribute}`,
-          mapping
-        );
-      }
+      // if (!record.hasOwnProperty(relatedRecordAttribute)) {
+      //   console.debug(
+      //     `Expected record to have ${relatedRecordAttribute}. FieldMapping:`,
+      //     JSON.stringify(mapping)
+      //   );
+      // }
     }
   }
 
@@ -1135,7 +1143,6 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
 
 /**
  * Create initial form values based on a record.
- * This is only used for forms that edit a record directly, like the Client, Project, and Organization edit screens.
  *
  * @param itemMap Map of linkId -> Item
  * @param record  GQL HMIS record, like Project or Organization
@@ -1144,7 +1151,7 @@ const getMappedValue = (record: any, mapping: FieldMapping) => {
  */
 export const createInitialValuesFromRecord = (
   itemMap: ItemMap,
-  record: any // could be assmt
+  record: any // could be an assessment
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
@@ -1262,7 +1269,7 @@ export const debugFormValues = (
 
 type GetDependentItemsDisabledStatus = {
   changedLinkIds: string[];
-  localValues: any;
+  localValues: FormValues;
   enabledDependencyMap: LinkIdMap;
   itemMap: ItemMap;
   localConstants: LocalConstants;
@@ -1302,11 +1309,18 @@ export const getDependentItemsDisabledStatus = ({
           // if the disabled field is hidden, nullify its value (so that related enableWhens dont consider it present).
           // this needs to happen here, rather than in the caller, because subsequent iterations of this loop
           // may depend on the presence of this item.
+          const disabledItem = itemMap[dependentLinkId];
           if (
-            itemMap[dependentLinkId].disabledDisplay !==
-            DisabledDisplay.ProtectedWithValue
+            disabledItem.disabledDisplay !== DisabledDisplay.ProtectedWithValue
           ) {
             localValues[dependentLinkId] = null;
+            // All its children should get emptied too
+            if (disabledItem.item) {
+              const childrenLinkIds = getAllChildLinkIds(disabledItem);
+              childrenLinkIds.forEach((hiddenChildId) => {
+                localValues[hiddenChildId] = null;
+              });
+            }
           }
         }
       });

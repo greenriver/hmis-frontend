@@ -53,7 +53,7 @@ export interface Props<T> {
   headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
   selectable?: boolean;
   isRowSelectable?: (row: T) => boolean;
-  getSelectedRowIds?: () => string[];
+  setSelectedRowIds?: (ids: readonly string[]) => void;
   EnhancedTableToolbarProps?: Omit<EnhancedTableToolbarProps, 'selectedIds'>;
   filterToolbar?: ReactNode;
   noData?: ReactNode;
@@ -107,6 +107,7 @@ const GenericTable = <T extends { id: string }>({
   headerCellSx,
   selectable = false,
   isRowSelectable,
+  setSelectedRowIds,
   EnhancedTableToolbarProps,
   filterToolbar,
   renderRow,
@@ -149,6 +150,10 @@ const GenericTable = <T extends { id: string }>({
 
   // Clear selection when data changes
   useEffect(() => setSelected([]), [rows]);
+  useEffect(
+    () => setSelectedRowIds && setSelectedRowIds(selected),
+    [selected, setSelectedRowIds]
+  );
 
   if (loading && loadingVariant === 'circular') return <Loading />;
 

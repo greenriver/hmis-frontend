@@ -4,7 +4,6 @@ import { AssessmentRole, FormRole, RelationshipToHoH } from '@/types/gqlTypes';
 export enum AssessmentStatus {
   NotStarted,
   Started,
-  ReadyToSubmit,
   Submitted,
   Warning,
   Error,
@@ -73,36 +72,17 @@ export const householdAssesmentTitle = (role: HouseholdAssesmentRole) => {
   }
 };
 
-const submittedText = {
-  [FormRole.Intake]: 'Submitted',
-  [FormRole.Exit]: 'Exited',
-};
-
-const readyToSubmitText = {
-  [FormRole.Intake]: 'Ready to Submit',
-  [FormRole.Exit]: 'Ready to Exit',
-};
-
-export const labelForStatus = (
-  status: AssessmentStatus,
-  role: FormRole.Intake | FormRole.Exit
-) => {
-  switch (status) {
-    case AssessmentStatus.NotStarted:
-      return 'Not Started';
-    case AssessmentStatus.Started:
-      return 'In Progress';
-
-    case AssessmentStatus.ReadyToSubmit:
-      return readyToSubmitText[role];
-
-    case AssessmentStatus.Submitted:
-      return submittedText[role];
-
-    case AssessmentStatus.Warning:
-      return 'Warning';
-
-    case AssessmentStatus.Error:
-      return 'Error';
-  }
+export const useAssessmentStatus = ({
+  assessmentId,
+  assessmentInProgress,
+}: {
+  assessmentId?: string;
+  assessmentInProgress?: boolean;
+}): AssessmentStatus => {
+  const submitted = !!assessmentId && assessmentInProgress;
+  return submitted
+    ? AssessmentStatus.Submitted
+    : assessmentId
+    ? AssessmentStatus.Started
+    : AssessmentStatus.NotStarted;
 };

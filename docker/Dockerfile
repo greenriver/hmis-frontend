@@ -53,6 +53,8 @@ RUN addgroup --gid ${GROUPID} --system app \
  && chmod -R g+w /etc/nginx \
  && touch /tmp/nginx.pid \
  && chown -R app:app /tmp/nginx.pid \
+ && apk update \
+ && apk upgrade --no-cache \
  && apk add --no-cache dumb-init
 
 # Set entrypoint to handle signals

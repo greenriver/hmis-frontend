@@ -8,6 +8,7 @@ import {
 } from '@/types/gqlTypes';
 
 const client = {
+  id: '1',
   dob: null,
   veteranStatus: NoYesReasonsForMissingData.DataNotCollected,
 };
@@ -96,6 +97,58 @@ describe('applyDataCollectedAbout', () => {
         RelationshipToHoH.OtherRelative
       )
     ).toHaveLength(0);
+  });
+
+  it('works for deeply nested conditions', () => {
+    const items = [
+      {
+        linkId: '1',
+        item: [
+          {
+            linkId: '2',
+            item: [
+              {
+                linkId: '3',
+                item: [
+                  { linkId: '4' },
+                  { linkId: '5', dataCollectedAbout: DataCollectedAbout.Hoh },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    expect(
+      applyDataCollectedAbout(
+        items as FormDefinitionFieldsFragment['definition']['item'],
+        client,
+        RelationshipToHoH.SelfHeadOfHousehold
+      )
+    ).toMatchObject(items);
+
+    expect(
+      applyDataCollectedAbout(
+        items as FormDefinitionFieldsFragment['definition']['item'],
+        client,
+        RelationshipToHoH.OtherRelative
+      )
+    ).toMatchObject([
+      {
+        linkId: '1',
+        item: [
+          {
+            linkId: '2',
+            item: [
+              {
+                linkId: '3',
+                item: [{ linkId: '4' }],
+              },
+            ],
+          },
+        ],
+      },
+    ]);
   });
 
   it('works for VETERAN_HOH', () => {

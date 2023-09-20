@@ -16,7 +16,7 @@ const ClientCardMini = ({ client, hideImage = false }: Props) => {
   const clientPronouns = pronouns(client);
   return (
     <Stack gap={0.5}>
-      <Typography variant='h4'>{clientNameAllParts(client)}</Typography>
+      <Typography variant='h5'>{clientNameAllParts(client)}</Typography>
       <Stack direction='row' gap={1} sx={{ mt: 1 }}>
         {!hideImage && (
           <ClientImage clientId={client.id} width={80} height={80} />

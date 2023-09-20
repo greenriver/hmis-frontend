@@ -154,11 +154,15 @@ const GenericTableWithData = <
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const previousQueryVariables = usePrevious(queryVariables);
   const [filterValues, setFilterValues] = useState(defaultFilters);
-  const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>(
-    defaultSortOptionProp ||
-      (recordType && getDefaultSortOptionForType(recordType)) ||
-      undefined
-  );
+  const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
+
+  const effectiveSortOrder = useMemo<typeof sortOrder>(() => {
+    if (sortOrder) return sortOrder;
+    if (defaultSortOptionProp) return defaultSortOptionProp;
+    return recordType
+      ? getDefaultSortOptionForType(recordType) || undefined
+      : undefined;
+  }, [sortOrder, defaultSortOptionProp, recordType]);
 
   const offset = page * rowsPerPage;
   const limit = rowsPerPage;
@@ -173,7 +177,7 @@ const GenericTableWithData = <
         ...get(queryVariables, 'filters'),
         ...filterValues,
       },
-      sortOrder,
+      sortOrder: effectiveSortOrder,
       ...(!rowsPath && {
         offset,
         limit,
@@ -346,7 +350,7 @@ const GenericTableWithData = <
                         sortOptions
                           ? {
                               sortOptions,
-                              sortOptionValue: sortOrder,
+                              sortOptionValue: effectiveSortOrder,
                               setSortOptionValue: setSortOrder,
                             }
                           : undefined

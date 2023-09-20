@@ -58,6 +58,9 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
               popupState.close();
               props.setFilterValues(val);
             }}
+            onCancel={() => {
+              popupState.close();
+            }}
           ></TableFilterContent>
         </Box>
       </Popover>

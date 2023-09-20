@@ -1,9 +1,9 @@
 import { Theme } from '@mui/material';
 import {
-  createTheme,
-  ThemeOptions,
   PaletteColor,
   SimplePaletteColorOptions,
+  ThemeOptions,
+  createTheme,
 } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 
@@ -16,14 +16,16 @@ declare module '@mui/material/Button' {
 }
 
 declare module '@mui/material/styles' {
-  // interface TypographyVariants {
-  //   body3: React.CSSProperties;
-  // }
+  interface TypographyVariants {
+    body3: React.CSSProperties;
+    cardTitle?: React.CSSProperties;
+  }
 
-  // // allow configuration using `createTheme`
-  // interface TypographyVariantsOptions {
-  //   body3?: React.CSSProperties;
-  // }
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    body3?: React.CSSProperties;
+    cardTitle?: React.CSSProperties;
+  }
 
   interface Palette {
     borders: PaletteColor;
@@ -34,6 +36,13 @@ declare module '@mui/material/styles' {
     borders: SimplePaletteColorOptions;
     alerts: { lightWarningBackground?: string };
     links: string;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    body3: true;
+    cardTitle: true;
   }
 }
 
@@ -74,46 +83,64 @@ const createThemeOptions = (theme: Theme) => ({
   typography: {
     h1: {
       fontFamily: "'Montserrat', sans-serif",
-      fontSize: 20,
-      fontWeight: 600,
+      fontSize: 40,
+      fontWeight: 300,
+      lineHeight: '43px',
     },
     h2: {
       fontFamily: "'Montserrat', sans-serif",
+      fontSize: 32,
+      fontWeight: 400,
+      lineHeight: '36px',
     },
     h3: {
       fontFamily: "'Montserrat', sans-serif",
       fontSize: 24,
+      fontWeight: 400,
     },
     h4: {
       fontFamily: "'Montserrat', sans-serif",
       fontSize: 20,
-      fontWeight: 600,
+      fontWeight: 500,
+      letterSpacing: '0.25px',
     },
     h5: {
-      fontFamily: "'Montserrat', sans-serif",
+      fontFamily: '"Open Sans", sans-serif',
       fontSize: 18,
+      fontWeight: 600,
     },
     h6: {
       fontFamily: "'Montserrat', sans-serif",
       fontSize: 14,
-      // color: '#10182899',
+    },
+    body1: {
+      fontFamily: '"Open Sans", sans-serif',
+      fontSize: 16,
+      fontWeight: 400,
+      lineHeight: '24px',
+    },
+    body2: {
+      fontFamily: '"Open Sans", sans-serif',
+      fontSize: 14,
+      fontWeight: 400,
+      lineHeight: '22px',
+    },
+    body3: {
+      // bold body1
+      fontWeight: 800,
     },
     button: {
       textTransform: 'none',
     },
-    // fontSize: 14,
-    // htmlFontSize: 18,
+    cardTitle: {
+      // non-bold version of h5
+      fontFamily: '"Open Sans", sans-serif',
+      fontSize: 18,
+      fontWeight: 400,
+    },
   },
 
   components: {
-    MuiTypography: {
-      styleOverrides: {
-        h4: {
-          // marginBottom: 16,
-          // color: 'red',
-        },
-      },
-    },
     MuiPaper: {
       defaultProps: {
         elevation: 0,
@@ -123,7 +150,7 @@ const createThemeOptions = (theme: Theme) => ({
     MuiTableCell: {
       styleOverrides: {
         sizeMedium: theme.unstable_sx({
-          py: '8px',
+          py: '14px',
         }),
       },
     },
@@ -238,6 +265,14 @@ const createThemeOptions = (theme: Theme) => ({
     MuiLoadingButton: {
       defaultProps: {
         variant: 'contained',
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        outlined: {
+          // override default transparent bg
+          backgroundColor: '#fff',
+        },
       },
     },
     MuiButton: {

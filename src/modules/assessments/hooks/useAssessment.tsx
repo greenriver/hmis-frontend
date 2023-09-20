@@ -1,3 +1,4 @@
+import { cloneDeep } from '@apollo/client/utilities';
 import { startCase } from 'lodash-es';
 import { useMemo } from 'react';
 
@@ -58,7 +59,8 @@ export function useAssessment({
       formDefinitionData?.getFormDefinition ||
       assessmentData?.assessment?.definition;
     if (!formDef) return;
-    const mutable = { ...formDef, definition: { ...formDef.definition } };
+
+    const mutable = cloneDeep(formDef);
     mutable.definition.item = applyDataCollectedAbout(
       formDef.definition.item,
       client,

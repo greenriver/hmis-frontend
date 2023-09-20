@@ -13,6 +13,7 @@ import Login from '@/modules/auth/components/Login';
 import SessionStatusManager from '@/modules/auth/components/SessionStatusManager';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import useSessionStatus from '@/modules/auth/hooks/useSessionStatus';
+import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 
 export interface RouteLocationState {
   /** Previous pathname, so we can redirect to it when logging back in */
@@ -33,6 +34,10 @@ const PublicRoutes: React.FC = () => {
       ? null
       : { prev: pathname };
     return [
+      {
+        path: '/system_status/:detailType',
+        element: <SystemStatus />,
+      },
       {
         path: '/',
         element: <Login />,

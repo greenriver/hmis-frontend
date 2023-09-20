@@ -1,32 +1,46 @@
-import ReceiptIcon from '@mui/icons-material/Receipt';
+import CompleteIcon from '@mui/icons-material/Send';
 import { Stack, Typography } from '@mui/material';
 
-import TabIndicator from './TabIndicator';
+import AssessmentStatusIndicator from '../AssessmentStatusIndicator';
 import { HouseholdAssesmentRole, TabDefinition } from './util';
 
+import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { AssessmentRole } from '@/types/gqlTypes';
 
-const TabLabel = ({
-  definition: { clientName, isHoh, status },
-  role,
-}: {
+interface Props {
   definition: TabDefinition;
-  role: HouseholdAssesmentRole;
+}
+const TabLabel: React.FC<Props> = ({
+  definition: { clientName, status, relationshipToHoH },
 }) => {
   return (
-    <Stack gap={1} direction='row' display='flex' alignItems='center'>
-      <TabIndicator status={status} role={role} />
-      <Typography variant='inherit'>
-        {isHoh ? `(HoH) ${clientName}` : clientName}
+    <Stack
+      gap={0.5}
+      sx={({ palette, typography }) => ({
+        display: 'flex',
+        alignItems: 'center',
+        '.Mui-selected &': {
+          color: palette.text.primary,
+          fontWeight: typography.fontWeightBold,
+        },
+      })}
+    >
+      <Typography component='div' fontWeight='inherit'>
+        <HohIndicator
+          relationshipToHoh={relationshipToHoH}
+          sx={{ display: 'inline', pr: 0.5 }}
+        />
+        {clientName}
       </Typography>
+      <AssessmentStatusIndicator status={status} size='small' />
     </Stack>
   );
 };
 // add back household button even when all entered
 export const SummaryTabLabel = ({ role }: { role: HouseholdAssesmentRole }) => (
   <Stack gap={0.8} direction='row'>
-    <ReceiptIcon fontSize='small' />
-    <Typography variant='inherit'>
+    <CompleteIcon fontSize='small' />
+    <Typography color='inherit' variant='body3'>
       {role === AssessmentRole.Intake
         ? 'Complete Intake'
         : role === AssessmentRole.Exit

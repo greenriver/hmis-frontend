@@ -112,16 +112,21 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
         }}
         items={[
           {
-            key: 'IDs',
+            key: 'Client IDs',
             content: (
               <ClientProfileCardTextTable
-                content={client.externalIds.map((externalId) => {
+                content={client.externalIds.map((externalId, idx) => {
+                  const repeated =
+                    idx > 0 &&
+                    client.externalIds[idx - 1].type == externalId.type;
                   return [
-                    <HmisEnum
-                      enumMap={HmisEnums.ExternalIdentifierType}
-                      value={externalId.type}
-                      fontWeight={600}
-                    />,
+                    repeated ? null : (
+                      <HmisEnum
+                        enumMap={HmisEnums.ExternalIdentifierType}
+                        value={externalId.type}
+                        fontWeight={600}
+                      />
+                    ),
                     <ExternalIdDisplay value={externalId} />,
                   ] as const;
                 })}
@@ -131,7 +136,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
           ...(hasContactInformation
             ? [
                 {
-                  key: 'Client Contact Information',
+                  key: 'Contact Information',
                   content: (
                     <ClientProfileCardTextTable
                       content={[
@@ -173,10 +178,19 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                     />
                   ),
                   Gender: (
-                    <MultiHmisEnum
-                      values={client.gender}
-                      enumMap={HmisEnums.Gender}
-                    />
+                    <>
+                      <MultiHmisEnum
+                        values={client.gender}
+                        enumMap={HmisEnums.Gender}
+                        oneRowPerValue
+                      >
+                        {client.differentIdentityText && (
+                          <Typography variant='body2'>
+                            {client.differentIdentityText}
+                          </Typography>
+                        )}{' '}
+                      </MultiHmisEnum>
+                    </>
                   ),
                   Pronouns: pronouns(client) || <NotCollectedText />,
                   'Veteran Status': (
@@ -189,18 +203,6 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
               />
             ),
           },
-          // {
-          //   key: 'Case Manager',
-          //   content: 'TK',
-          // },
-          // {
-          //   key: 'Housing Status',
-          //   content: 'TK',
-          // },
-          // {
-          //   key: 'Client Contact Information',
-          //   content: 'TK',
-          // },
         ]}
       />
     </Box>
@@ -405,7 +407,7 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   ...(pronouns(client)
                     ? { Pronouns: pronouns(client) }
                     : undefined),
-                  Age: (
+                  [client.dob ? 'DOB' : 'Age']: (
                     <ClientDobAge
                       client={client}
                       noValue={<NotCollectedText />}

@@ -200,12 +200,6 @@ export function useServiceDialog({
               {...props}
               localConstants={hookArgs?.localConstants}
               hideSubmit
-              loadingElement={
-                <Skeleton variant='rectangular' sx={{ height: 60, pt: 2 }} />
-              }
-              // Override default network-only fetch policy for loading pick lists, because service pick lists are static (at least for now)
-              // If we have issues with stale lists in services, this can be removed.
-              picklistQueryOptions={{ fetchPolicy: 'cache-first' }}
             />
           )}
         </DialogContent>
@@ -215,8 +209,7 @@ export function useServiceDialog({
             justifyContent={'space-between'}
             sx={{ width: '100%' }}
           >
-            <Box></Box>
-            {service && (
+            {service ? (
               <DeleteMutationButton<
                 DeleteServiceMutation,
                 DeleteServiceMutationVariables
@@ -229,6 +222,8 @@ export function useServiceDialog({
               >
                 Delete
               </DeleteMutationButton>
+            ) : (
+              <Box></Box>
             )}
             <Stack gap={3} direction='row'>
               <Button
