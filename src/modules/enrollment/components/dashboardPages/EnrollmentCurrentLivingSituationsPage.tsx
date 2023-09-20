@@ -77,6 +77,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'currentLivingSituations',
         });
+        setViewingRecord(undefined);
         closeViewDialog();
       },
       inputVariables: { enrollmentId },
