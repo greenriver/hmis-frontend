@@ -221,9 +221,9 @@ const DynamicForm = forwardRef(
     );
 
     return (
-      <Box
-        component='form'
-        onSubmit={(e: React.FormEvent<HTMLDivElement>) => e.preventDefault()}
+      <form
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
+        autoComplete='do-not-autofill'
       >
         <Grid container direction='column' spacing={2}>
           {hasErrors(errorState) && (
@@ -270,7 +270,7 @@ const DynamicForm = forwardRef(
             {saveButtons}
           </SaveSlide>
         )}
-      </Box>
+      </form>
     );
   }
 );

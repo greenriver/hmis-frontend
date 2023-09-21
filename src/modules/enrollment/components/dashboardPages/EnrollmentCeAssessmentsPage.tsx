@@ -81,6 +81,7 @@ const EnrollmentCeAssessmentsPage = () => {
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'ceAssessments',
         });
+        setViewingRecord(undefined);
         closeViewDialog();
       },
       inputVariables: { enrollmentId },
