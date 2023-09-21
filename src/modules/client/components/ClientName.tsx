@@ -2,7 +2,11 @@ import { Stack, StackProps, Typography, TypographyProps } from '@mui/material';
 import { forwardRef, useMemo } from 'react';
 
 import RouterLink, { RouterLinkProps } from '@/components/elements/RouterLink';
-import { clientBriefName, clientNameAllParts } from '@/modules/hmis/hmisUtil';
+import {
+  anonymousClientName,
+  clientBriefName,
+  clientNameAllParts,
+} from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes, Routes } from '@/routes/routes';
 import { ClientNameFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -35,6 +39,8 @@ const ClientName = forwardRef<Props, any>(
     ref
   ) => {
     const primaryName = useMemo(() => {
+      if (!client.firstName && client.lastName)
+        return anonymousClientName(client);
       if (nameParts === 'full_name') return clientNameAllParts(client);
       if (nameParts === 'brief_name') return clientBriefName(client);
       if (nameParts === 'first_only') return client.firstName;

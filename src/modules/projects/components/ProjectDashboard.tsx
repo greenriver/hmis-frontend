@@ -96,6 +96,7 @@ const ProjectDashboard: React.FC = () => {
       navHeader={<ProjectNavHeader project={project} />}
       // TODO add back to standardize headers
       // header={header}
+      navLabel='Project'
       sidebar={<SideNavMenu items={navItems} />}
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       {...dashboardState}
