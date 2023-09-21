@@ -199,19 +199,20 @@ export const formatCurrency = (number?: number | null) => {
   return currencyFormatter.format(number);
 };
 
+export const anonymousClientName = (client: ClientNameFragment) =>
+  `Client ${client.id || ''}`;
+
 export const clientNameAllParts = (client: ClientNameFragment) => {
-  return [
-    client.firstName,
-    client.middleName,
-    client.lastName,
-    client.nameSuffix,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  return (
+    [client.firstName, client.middleName, client.lastName, client.nameSuffix]
+      .filter(Boolean)
+      .join(' ') || anonymousClientName(client)
+  );
 };
 
 export const clientBriefName = (client: ClientNameFragment) =>
-  [client.firstName, client.lastName].filter(Boolean).join(' ');
+  [client.firstName, client.lastName].filter(Boolean).join(' ') ||
+  anonymousClientName(client);
 
 export const clientInitials = (client: ClientNameFragment) =>
   [client.firstName, client.lastName]
