@@ -4959,7 +4959,7 @@ export enum ReferralSource {
   Invalid = 'INVALID',
   /** (34) Juvenile Justice */
   JuvenileJustice = 'JUVENILE_JUSTICE',
-  /** (35) Law Enforcement/ Police */
+  /** (35) Law Enforcement/Police */
   LawEnforcementPolice = 'LAW_ENFORCEMENT_POLICE',
   /** (37) Mental Hospital */
   MentalHospital = 'MENTAL_HOSPITAL',
@@ -4967,8 +4967,6 @@ export enum ReferralSource {
   OtherOrganization = 'OTHER_ORGANIZATION',
   /** (7) Outreach Project */
   OutreachProject = 'OUTREACH_PROJECT',
-  /** (10) Outreach project: other */
-  OutreachProjectOther = 'OUTREACH_PROJECT_OTHER',
   /** (18) Residential Project */
   ResidentialProject = 'RESIDENTIAL_PROJECT',
   /** (38) School */
