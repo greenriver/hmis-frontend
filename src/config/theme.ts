@@ -31,6 +31,7 @@ declare module '@mui/material/styles' {
     borders: PaletteColor;
     alerts: Record<string, string>;
     links: string;
+    activeStatus: string;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
