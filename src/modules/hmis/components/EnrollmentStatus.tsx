@@ -11,7 +11,7 @@ import {
 type Colors =
   | 'disabled'
   | 'error'
-  | 'secondary'
+  | 'activeStatus'
   | 'text.secondary'
   | 'text.primary';
 
@@ -19,7 +19,7 @@ const EnrollmentStatus = ({
   enrollment,
   hideIcon = false,
   withActiveRange = false,
-  activeColor = 'secondary',
+  activeColor = 'activeStatus',
   closedColor = 'text.secondary',
 }: {
   enrollment:
@@ -31,18 +31,16 @@ const EnrollmentStatus = ({
   closedColor?: Colors;
 }) => {
   let Icon = TimerIcon;
-  let color: 'disabled' | 'error' | 'secondary' = 'disabled';
+
   let text = 'Exited';
   let textColor = closedColor;
 
   if (enrollment.inProgress) {
     Icon = ErrorOutlineIcon;
-    color = 'error';
     text = 'Incomplete';
-    textColor = color;
+    textColor = 'error';
   } else if (!enrollment.exitDate) {
     Icon = HistoryIcon;
-    color = 'secondary';
     text = 'Open';
     textColor = activeColor;
   }
@@ -55,16 +53,16 @@ const EnrollmentStatus = ({
     if (range) text = range;
   }
   return (
-    <Stack direction='row' alignItems='center' gap={0.8}>
-      {!hideIcon && <Icon color={color} fontSize='small' />}
-      <Typography
-        variant='body2'
-        color={textColor}
-        sx={{ textDecoration: 'none' }}
-      >
+    <Typography
+      variant='body2'
+      color={textColor}
+      sx={{ textDecoration: 'none' }}
+    >
+      <Stack direction='row' alignItems='center' gap={0.8}>
+        {!hideIcon && <Icon fontSize='small' />}
         {text}
-      </Typography>
-    </Stack>
+      </Stack>
+    </Typography>
   );
 };
 
