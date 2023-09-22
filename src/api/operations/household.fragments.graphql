@@ -33,6 +33,7 @@ fragment HouseholdClientFields on HouseholdClient {
   }
   enrollment {
     id
+    lockVersion
     entryDate
     exitDate
     inProgress
@@ -53,6 +54,7 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
   }
   enrollment {
     id
+    lockVersion
     entryDate
     exitDate
     inProgress

@@ -59,6 +59,7 @@ fragment ClientFields on Client {
 
 fragment ClientName on Client {
   id
+  lockVersion
   firstName
   middleName
   lastName
@@ -119,6 +120,7 @@ fragment ClientImage on Client {
 
 fragment ClientIdentificationFields on Client {
   id
+  lockVersion
   dob
   age
   ssn

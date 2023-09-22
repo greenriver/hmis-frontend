@@ -148,6 +148,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'lockVersion',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'role',
         type: {
           kind: 'NON_NULL',
@@ -484,6 +492,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'lastName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'lockVersion',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
       },
       {
         name: 'middleName',
@@ -1896,6 +1912,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'livingSituation',
         type: { kind: 'ENUM', name: 'PriorLivingSituation', ofType: null },
+      },
+      {
+        name: 'lockVersion',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
       },
       {
         name: 'losUnderThreshold',
@@ -5083,7 +5107,11 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'enrollmentId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
       },
       {
         name: 'formDefinitionId',
@@ -5264,6 +5292,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'DeleteAssessmentInput',
     args: [
       {
+        name: 'assessmentLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -5328,6 +5360,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'DeleteClientInput',
     args: [
+      {
+        name: 'clientLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
       {
         name: 'confirmed',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
@@ -5852,6 +5888,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'SaveAssessmentInput',
     args: [
       {
+        name: 'assessmentLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
         name: 'input',
         type: {
           kind: 'NON_NULL',
@@ -6033,6 +6073,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'SubmitAssessmentInput',
     args: [
       {
+        name: 'assessmentLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
         name: 'input',
         type: {
           kind: 'NON_NULL',
@@ -6057,13 +6101,21 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           ofType: { kind: 'INPUT_OBJECT', name: 'FormInput', ofType: null },
         },
       },
+      {
+        name: 'recordLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
     ],
   },
   {
     name: 'SubmitHouseholdAssessmentsInput',
     args: [
       {
-        name: 'assessmentIds',
+        name: 'confirmed',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'submissions',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6073,14 +6125,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: {
               kind: 'NON_NULL',
               name: null,
-              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+              ofType: {
+                kind: 'INPUT_OBJECT',
+                name: 'VersionedRecordInput',
+                ofType: null,
+              },
             },
           },
         },
-      },
-      {
-        name: 'confirmed',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'validateOnly',
@@ -6225,6 +6277,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
+        name: 'enrollmentLockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
         name: 'relationshipToHoH',
         type: {
           kind: 'NON_NULL',
@@ -6261,6 +6317,23 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             },
           },
         },
+      },
+    ],
+  },
+  {
+    name: 'VersionedRecordInput',
+    args: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'lockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
     ],
   },

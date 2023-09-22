@@ -56,6 +56,7 @@ const Profile = () => {
             <RootPermissionsFilter permissions='canDeleteClients'>
               <DeleteClientButton
                 clientId={client.id}
+                clientLockVersion={client.lockVersion}
                 onSuccess={() =>
                   navigate(generateSafePath(Routes.CLIENT_SEARCH))
                 }

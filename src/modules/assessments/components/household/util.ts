@@ -39,6 +39,7 @@ export type TabDefinition = {
   exitDate?: string;
   enrollmentInProgress: boolean;
   assessmentId?: string;
+  assessmentLockVersion?: number;
   assessmentInProgress?: boolean;
   assessmentSubmitted: boolean;
   assessmentDate?: string;

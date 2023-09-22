@@ -14,11 +14,13 @@ import {
 interface Props
   extends Omit<RelationshipToHohSelectProps, 'value' | 'onChange'> {
   enrollmentId: string;
+  enrollmentLockVersion: number;
   relationshipToHoH: RelationshipToHoH;
 }
 
 const RelationshipToHoHInput = ({
   enrollmentId,
+  enrollmentLockVersion,
   relationshipToHoH,
   ...props
 }: Props) => {
@@ -47,6 +49,7 @@ const RelationshipToHoHInput = ({
         variables: {
           input: {
             enrollmentId,
+            enrollmentLockVersion,
             relationshipToHoH: selected
               ? selected.value
               : RelationshipToHoH.DataNotCollected,
@@ -55,7 +58,7 @@ const RelationshipToHoHInput = ({
         },
       });
     },
-    [enrollmentId, updateRelationship, setRelationship]
+    [enrollmentId, enrollmentLockVersion, updateRelationship, setRelationship]
   );
 
   return (

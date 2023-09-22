@@ -118,6 +118,7 @@ const AssessmentForm = ({
       definition,
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
+      assessmentLockVersion: assessment?.lockVersion,
       onSuccessfulSubmit: (assmt) => {
         if (!assmt.inProgress) setLocked(true);
       },

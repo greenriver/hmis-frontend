@@ -14,6 +14,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   AssessmentFieldsFragment,
+  AssessmentInput,
   FormDefinition,
   FormDefinitionJson,
   SaveAssessmentMutation,
@@ -26,6 +27,7 @@ type Args = {
   definition: FormDefinition;
   enrollmentId: string;
   assessmentId?: string;
+  assessmentLockVersion?: number;
   onSuccessfulSubmit?: (assessment: AssessmentFieldsFragment) => void;
 };
 
@@ -49,6 +51,7 @@ export function useAssessmentHandlers({
   definition,
   enrollmentId,
   assessmentId,
+  assessmentLockVersion,
   onSuccessfulSubmit = () => null,
 }: Args) {
   const formDefinitionId = definition.id;
@@ -110,7 +113,7 @@ export function useAssessmentHandlers({
         confirmed,
       };
       void submitAssessmentMutation({
-        variables: { input: { input } },
+        variables: { input: { input, assessmentLockVersion } },
         onCompleted: (data) => {
           onCompleted(data);
           if (data.submitAssessment?.assessment && onSuccess) {
@@ -123,6 +126,7 @@ export function useAssessmentHandlers({
     [
       submitAssessmentMutation,
       assessmentId,
+      assessmentLockVersion,
       definition,
       formDefinitionId,
       enrollmentId,
@@ -135,7 +139,7 @@ export function useAssessmentHandlers({
     (values: FormValues, onSuccessCallback: VoidFunction) => {
       if (!definition) return;
 
-      const input = {
+      const input: AssessmentInput = {
         assessmentId,
         enrollmentId,
         formDefinitionId,
@@ -143,7 +147,7 @@ export function useAssessmentHandlers({
         hudValues: createHudValuesForSubmit(values, definition.definition),
       };
       void saveAssessmentMutation({
-        variables: { input: { input } },
+        variables: { input: { input, assessmentLockVersion } },
         onCompleted: (data) => {
           onCompleted(data);
           if (data.saveAssessment?.assessment && onSuccessCallback) {
@@ -155,6 +159,7 @@ export function useAssessmentHandlers({
     [
       saveAssessmentMutation,
       assessmentId,
+      assessmentLockVersion,
       definition,
       formDefinitionId,
       enrollmentId,
