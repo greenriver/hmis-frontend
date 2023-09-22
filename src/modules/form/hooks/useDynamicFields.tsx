@@ -22,7 +22,11 @@ import {
 
 import useComputedData from './useComputedData';
 
-import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
+import {
+  DisabledDisplay,
+  FormDefinitionJson,
+  FormItem,
+} from '@/types/gqlTypes';
 
 const useDynamicFields = ({
   definition,
@@ -57,11 +61,16 @@ const useDynamicFields = ({
   // Get form state, with "hidden" fields (and their children) removed
   const getCleanedValues = useCallback(() => {
     if (!definition) return values;
-    const excluded = addDescendants(disabledLinkIds, definition);
+
+    // Retain disabled fields that are displayed with a value
+    const hiddenLinkids = disabledLinkIds.filter(
+      (id) => itemMap[id].disabledDisplay != DisabledDisplay.ProtectedWithValue
+    );
+    const excluded = addDescendants(hiddenLinkids, definition);
     // Drop "hidden" fields and their children
     const cleaned = omit(values, excluded);
     return dropUnderscorePrefixedKeys(cleaned);
-  }, [definition, disabledLinkIds, values]);
+  }, [definition, disabledLinkIds, itemMap, values]);
 
   const shouldShowItem = useCallback(
     (item: FormItem) => isShown(item, disabledLinkIds),
