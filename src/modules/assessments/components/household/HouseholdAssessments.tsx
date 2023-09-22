@@ -112,6 +112,7 @@ const HouseholdAssessments = ({
             enrollmentInProgress: enrollment.inProgress,
             entryOrExitCompleted,
             assessmentId,
+            assessmentLockVersion: assessment?.lockVersion,
             assessmentInProgress,
             assessmentSubmitted: !!assessmentId && !assessmentInProgress,
             clientId: client.id,
