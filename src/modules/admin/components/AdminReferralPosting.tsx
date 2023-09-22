@@ -39,7 +39,7 @@ const AdminReferralPosting: React.FC = () => {
       <PageTitle title='Manage Denied Referral' />
       <Grid spacing={4} container>
         <Grid item lg={4} sm={12}>
-          <TitleCard title='Referral Details' sx={{ mb: 2 }} withPadding>
+          <TitleCard title='Referral Details' sx={{ mb: 2 }} padded>
             <AdminReferralPostingDetails referralPosting={referralPosting} />
           </TitleCard>
         </Grid>
@@ -54,7 +54,7 @@ const AdminReferralPosting: React.FC = () => {
                 rows={referralPosting.householdMembers}
               />
             </TitleCard>
-            <TitleCard title='Accept/Reject Denial' withPadding>
+            <TitleCard title='Accept/Reject Denial' padded>
               <Stack spacing={4}>
                 <CommonLabeledTextBlock title='Provider Notes'>
                   {referralPosting.statusNote}

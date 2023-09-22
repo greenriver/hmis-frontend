@@ -17,7 +17,7 @@ interface Props extends PaperProps {
   headerTypographyVariant?: TypographyVariant | 'cardTitle';
   'data-testid'?: string;
   headerSx?: SxProps;
-  withPadding?: boolean;
+  padded?: boolean;
 }
 const TitleCard: React.FC<Props> = ({
   title,
@@ -26,7 +26,7 @@ const TitleCard: React.FC<Props> = ({
   headerTypographyVariant = 'cardTitle',
   headerVariant,
   headerSx,
-  withPadding = false,
+  padded = false,
   ...props
 }) => (
   <Paper data-testid={props['data-testid']} {...props}>
@@ -53,7 +53,7 @@ const TitleCard: React.FC<Props> = ({
       {actions}
     </Stack>
 
-    {withPadding ? <Box sx={{ px: 2, pb: 2 }}>{children}</Box> : children}
+    {padded ? <Box sx={{ px: 2, pb: 2 }}>{children}</Box> : children}
   </Paper>
 );
 

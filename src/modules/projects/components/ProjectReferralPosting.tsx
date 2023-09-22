@@ -49,7 +49,7 @@ const ProjectReferralPosting: React.FC = () => {
       />
       <Grid spacing={4} container>
         <Grid item lg={4} sm={12}>
-          <TitleCard title='Referral Details' sx={{ mb: 2 }} withPadding>
+          <TitleCard title='Referral Details' sx={{ mb: 2 }} padded>
             <ProjectReferralPostingDetails referralPosting={referralPosting} />
           </TitleCard>
           <ButtonLink
@@ -77,7 +77,7 @@ const ProjectReferralPosting: React.FC = () => {
             </TitleCard>
             {(referralPosting.referralNotes ||
               referralPosting.resourceCoordinatorNotes) && (
-              <TitleCard title='Referral Notes' withPadding>
+              <TitleCard title='Referral Notes' padded>
                 <Stack spacing={4}>
                   {referralPosting.referralNotes && (
                     <CommonLabeledTextBlock title='Referral Notes'>
@@ -98,7 +98,7 @@ const ProjectReferralPosting: React.FC = () => {
                   ? 'Update Referral Status'
                   : 'Referral Status'
               }
-              withPadding
+              padded
             >
               <ProjectReferralPostingForm
                 referralPosting={referralPosting}
