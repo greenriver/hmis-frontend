@@ -116,11 +116,7 @@ const HouseholdSummaryTabPanel = memo(
               assessmentId,
               assessmentLockVersion,
             }): VersionedRecordInput | undefined => {
-              if (
-                assessmentId &&
-                assessmentLockVersion &&
-                assessmentsToSubmit.includes(assessmentId)
-              ) {
+              if (assessmentId && assessmentsToSubmit.includes(assessmentId)) {
                 return {
                   id: assessmentId,
                   lockVersion: assessmentLockVersion,
