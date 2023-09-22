@@ -29178,7 +29178,7 @@
           },
           {
             "name": "hohEnrollment",
-            "description": null,
+            "description": "Enrollment for the HoH at the receiving Project (if the referral was accepted)",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -29310,7 +29310,7 @@
           },
           {
             "name": "project",
-            "description": null,
+            "description": "Project that household is being referred to",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -29402,7 +29402,7 @@
           },
           {
             "name": "referredFrom",
-            "description": null,
+            "description": "Name of project or external source that the referral originated from",
             "args": [],
             "type": {
               "kind": "NON_NULL",

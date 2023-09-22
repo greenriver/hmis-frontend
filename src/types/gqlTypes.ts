@@ -4819,6 +4819,7 @@ export type ReferralPosting = {
   chronic?: Maybe<Scalars['Boolean']['output']>;
   denialNote?: Maybe<Scalars['String']['output']>;
   denialReason?: Maybe<ReferralPostingDenialReasonType>;
+  /** Enrollment for the HoH at the receiving Project (if the referral was accepted) */
   hohEnrollment?: Maybe<Enrollment>;
   hohMciId?: Maybe<Scalars['ID']['output']>;
   hohName: Scalars['String']['output'];
@@ -4828,6 +4829,7 @@ export type ReferralPosting = {
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']['output']>;
   organization?: Maybe<Organization>;
   postingIdentifier?: Maybe<Scalars['ID']['output']>;
+  /** Project that household is being referred to */
   project?: Maybe<Project>;
   referralDate: Scalars['ISO8601DateTime']['output'];
   referralIdentifier?: Maybe<Scalars['ID']['output']>;
@@ -4835,6 +4837,7 @@ export type ReferralPosting = {
   referralRequest?: Maybe<ReferralRequest>;
   referralResult?: Maybe<ReferralResult>;
   referredBy: Scalars['String']['output'];
+  /** Name of project or external source that the referral originated from */
   referredFrom: Scalars['String']['output'];
   resourceCoordinatorNotes?: Maybe<Scalars['String']['output']>;
   score?: Maybe<Scalars['Int']['output']>;
@@ -19454,6 +19457,11 @@ export type GetProjectOutgoingReferralPostingsQuery = {
         assignedDate: string;
         statusUpdatedAt?: string | null;
         statusUpdatedBy?: string | null;
+        hohEnrollment?: {
+          __typename?: 'Enrollment';
+          id: string;
+          client: { __typename?: 'Client'; id: string };
+        } | null;
         project?: {
           __typename?: 'Project';
           id: string;
@@ -27476,6 +27484,12 @@ export const GetProjectOutgoingReferralPostingsDocument = gql`
         nodesCount
         nodes {
           ...ReferralPostingFields
+          hohEnrollment {
+            id
+            client {
+              id
+            }
+          }
         }
       }
     }

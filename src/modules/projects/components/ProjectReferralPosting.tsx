@@ -3,7 +3,6 @@ import { Grid, Stack, Typography } from '@mui/material';
 import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
@@ -50,9 +49,9 @@ const ProjectReferralPosting: React.FC = () => {
       />
       <Grid spacing={4} container>
         <Grid item lg={4} sm={12}>
-          <CommonCard title='Referral Details' sx={{ mb: 2 }}>
+          <TitleCard title='Referral Details' sx={{ mb: 2 }} withPadding>
             <ProjectReferralPostingDetails referralPosting={referralPosting} />
-          </CommonCard>
+          </TitleCard>
           <ButtonLink
             fullWidth
             variant='outlined'
@@ -78,7 +77,7 @@ const ProjectReferralPosting: React.FC = () => {
             </TitleCard>
             {(referralPosting.referralNotes ||
               referralPosting.resourceCoordinatorNotes) && (
-              <CommonCard title='Referral Notes'>
+              <TitleCard title='Referral Notes' withPadding>
                 <Stack spacing={4}>
                   {referralPosting.referralNotes && (
                     <CommonLabeledTextBlock title='Referral Notes'>
@@ -91,14 +90,15 @@ const ProjectReferralPosting: React.FC = () => {
                     </CommonLabeledTextBlock>
                   )}
                 </Stack>
-              </CommonCard>
+              </TitleCard>
             )}
-            <CommonCard
+            <TitleCard
               title={
                 referralPosting.status === ReferralPostingStatus.AssignedStatus
                   ? 'Update Referral Status'
                   : 'Referral Status'
               }
+              withPadding
             >
               <ProjectReferralPostingForm
                 referralPosting={referralPosting}
@@ -109,7 +109,7 @@ const ProjectReferralPosting: React.FC = () => {
                     ReferralPostingStatus.AcceptedPendingStatus
                 }
               />
-            </CommonCard>
+            </TitleCard>
           </Stack>
         </Grid>
       </Grid>

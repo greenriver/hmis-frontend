@@ -4,34 +4,43 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { ProjectDashboardRoutes } from '@/routes/routes';
+import {
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+} from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectOutgoingReferralPostingsDocument,
   GetProjectOutgoingReferralPostingsQuery,
   GetProjectOutgoingReferralPostingsQueryVariables,
-  ReferralPostingFieldsFragment,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
+type OutgoingReferral = NonNullable<
+  GetProjectOutgoingReferralPostingsQuery['project']
+>['outgoingReferralPostings']['nodes'][0];
+
+const columns: ColumnDef<OutgoingReferral>[] = [
   {
     header: 'Referral Date',
-    render: (row: ReferralPostingFieldsFragment) =>
-      parseAndFormatDate(row.referralDate),
+    render: (row: OutgoingReferral) => parseAndFormatDate(row.referralDate),
   },
   {
     header: 'Project Referred To',
     linkTreatment: true,
-    render: ({ id, project }: ReferralPostingFieldsFragment) =>
-      project ? (
+    render: ({ id, project }: OutgoingReferral) => {
+      if (!project) return null;
+
+      const projectPath = generateSafePath(
+        ProjectDashboardRoutes.REFERRAL_POSTING,
+        {
+          projectId: project.id,
+          referralPostingId: id,
+        }
+      );
+      return (
         <>
-          <RouterLink
-            to={generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
-              projectId: project.id,
-              referralPostingId: id,
-            })}
-          >
+          <RouterLink to={projectPath} openInNew>
             {project.projectName}
           </RouterLink>
           <HmisEnum
@@ -39,7 +48,8 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
             enumMap={HmisEnums.ProjectType}
           />
         </>
-      ) : null,
+      );
+    },
   },
   {
     header: 'Referred By',
@@ -47,13 +57,31 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   },
   {
     header: 'Status',
-    render: (row: ReferralPostingFieldsFragment) => (
-      <ReferralPostingStatusDisplay status={row.status} />
+    render: ({ status }: OutgoingReferral) => (
+      <ReferralPostingStatusDisplay status={status} />
     ),
   },
   {
     header: 'HoH',
-    render: 'hohName',
+    render: ({ hohName, hohEnrollment }: OutgoingReferral) => {
+      if (!hohEnrollment) return hohName;
+
+      // If we have a hohEnrollment, link to it.
+      // NOTE: its possible that "hohName" and the actual person on "hohEnrollment" don't actually match up,
+      // if the Hoh was changed over time. Thats probably OK, the user can at least get to the right household.
+      const enrollmentPath = generateSafePath(
+        EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+        {
+          clientId: hohEnrollment.client.id,
+          enrollmentId: hohEnrollment.id,
+        }
+      );
+      return (
+        <RouterLink to={enrollmentPath} openInNew>
+          {hohName}
+        </RouterLink>
+      );
+    },
   },
   {
     header: 'Household Size',
@@ -72,7 +100,7 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
     <GenericTableWithData<
       GetProjectOutgoingReferralPostingsQuery,
       GetProjectOutgoingReferralPostingsQueryVariables,
-      ReferralPostingFieldsFragment
+      OutgoingReferral
     >
       queryVariables={{ id: projectId }}
       queryDocument={GetProjectOutgoingReferralPostingsDocument}
