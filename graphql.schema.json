@@ -30245,7 +30245,7 @@
           },
           {
             "name": "LAW_ENFORCEMENT_POLICE",
-            "description": "(35) Law Enforcement/Police",
+            "description": "(35) Law Enforcement/ Police",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -30264,6 +30264,12 @@
           {
             "name": "OUTREACH_PROJECT",
             "description": "(7) Outreach Project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OUTREACH_PROJECT_OTHER",
+            "description": "(10) Outreach project: other",
             "isDeprecated": false,
             "deprecationReason": null
           },
