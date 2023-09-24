@@ -8,6 +8,7 @@ import OccurrencePointValue, {
 } from './OccurrencePointValue';
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { occurrencePointCollectedForEnrollment } from '@/modules/hmis/hmisUtil';
@@ -77,6 +78,12 @@ const EnrollmentDetails = ({
     if (enrollment.project.projectCocs.nodesCount > 1) {
       content['Enrollment CoC'] = enrollment.enrollmentCoc || (
         <NotCollectedText />
+      );
+    }
+
+    if (enrollment.client.hudChronic !== null) {
+      content['HUD Chronic'] = (
+        <YesNoDisplay booleanValue={enrollment.client.hudChronic} />
       );
     }
 

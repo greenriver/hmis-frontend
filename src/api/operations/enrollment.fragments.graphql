@@ -41,6 +41,7 @@ fragment AllEnrollmentDetails on Enrollment {
   }
   # Need to resolve CDEs on Client too, so they can be shown on enrollment dash.
   client {
+    hudChronic
     ...ClientNameDobVet
     customDataElements {
       ...CustomDataElementFields

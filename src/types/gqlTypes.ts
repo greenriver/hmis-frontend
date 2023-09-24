@@ -399,6 +399,7 @@ export type Client = {
   firstName?: Maybe<Scalars['String']['output']>;
   gender: Array<Gender>;
   healthAndDvs: HealthAndDvsPaginated;
+  hudChronic: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   image?: Maybe<ClientImage>;
   incomeBenefits: IncomeBenefitsPaginated;
@@ -4671,6 +4672,7 @@ export type QueryAccess = {
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
+  canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
   canViewProject: Scalars['Boolean']['output'];
@@ -4819,6 +4821,7 @@ export type ReferralPosting = {
   chronic?: Maybe<Scalars['Boolean']['output']>;
   denialNote?: Maybe<Scalars['String']['output']>;
   denialReason?: Maybe<ReferralPostingDenialReasonType>;
+  hohClient: Client;
   hohEnrollment?: Maybe<Enrollment>;
   hohMciId?: Maybe<Scalars['ID']['output']>;
   hohName: Scalars['String']['output'];
@@ -4964,7 +4967,7 @@ export enum ReferralSource {
   Invalid = 'INVALID',
   /** (34) Juvenile Justice */
   JuvenileJustice = 'JUVENILE_JUSTICE',
-  /** (35) Law Enforcement/ Police */
+  /** (35) Law Enforcement/Police */
   LawEnforcementPolice = 'LAW_ENFORCEMENT_POLICE',
   /** (37) Mental Hospital */
   MentalHospital = 'MENTAL_HOSPITAL',
@@ -4972,8 +4975,6 @@ export enum ReferralSource {
   OtherOrganization = 'OTHER_ORGANIZATION',
   /** (7) Outreach Project */
   OutreachProject = 'OUTREACH_PROJECT',
-  /** (10) Outreach project: other */
-  OutreachProjectOther = 'OUTREACH_PROJECT_OTHER',
   /** (18) Residential Project */
   ResidentialProject = 'RESIDENTIAL_PROJECT',
   /** (38) School */
@@ -12578,6 +12579,7 @@ export type AllEnrollmentDetailsFragment = {
   }>;
   client: {
     __typename?: 'Client';
+    hudChronic: boolean;
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
@@ -13592,6 +13594,7 @@ export type GetEnrollmentDetailsQuery = {
     }>;
     client: {
       __typename?: 'Client';
+      hudChronic: boolean;
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
@@ -19697,7 +19700,7 @@ export type GetReferralPostingQuery = {
     hohEnrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      client: { __typename?: 'Client'; id: string };
+      client: { __typename?: 'Client'; id: string; hudChronic: boolean };
     } | null;
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
@@ -19809,7 +19812,7 @@ export type UpdateReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: { __typename?: 'Client'; id: string };
+        client: { __typename?: 'Client'; id: string; hudChronic: boolean };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -19935,7 +19938,7 @@ export type CreateOutgoingReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: { __typename?: 'Client'; id: string };
+        client: { __typename?: 'Client'; id: string; hudChronic: boolean };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -20119,7 +20122,7 @@ export type ReferralPostingDetailFieldsFragment = {
   hohEnrollment?: {
     __typename?: 'Enrollment';
     id: string;
-    client: { __typename?: 'Client'; id: string };
+    client: { __typename?: 'Client'; id: string; hudChronic: boolean };
   } | null;
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
@@ -22077,6 +22080,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       ...CustomDataElementFields
     }
     client {
+      hudChronic
       ...ClientNameDobVet
       customDataElements {
         ...CustomDataElementFields
@@ -22534,6 +22538,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
       id
       client {
         id
+        hudChronic
       }
     }
     householdMembers {
