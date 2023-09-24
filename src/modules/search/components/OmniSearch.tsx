@@ -1,25 +1,26 @@
 import SearchIcon from '@mui/icons-material/Search';
 import {
-  useAutocomplete,
-  Popper,
-  Box,
-  Paper,
-  Grid,
-  Typography,
   AutocompleteGroupedOption,
-  MenuItem,
+  Box,
   CircularProgress,
-  List,
   Divider,
+  Grid,
   Link,
+  List,
+  MenuItem,
+  Paper,
+  Popper,
+  Typography,
+  useAutocomplete,
 } from '@mui/material';
 import { flatten, isEmpty } from 'lodash-es';
-import React, { useMemo, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useCallback, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import ClientName from '@/modules/client/components/ClientName';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { Routes } from '@/routes/routes';
 import {
   AddRecentItemMutationVariables,
@@ -45,14 +46,17 @@ const OmniSearch: React.FC = () => {
     string | undefined
   >(undefined, 300);
 
-  const { data: clientsData, loading: clientsLoading } =
-    useOmniSearchClientsQuery({
-      variables: {
-        textSearch: debouncedSearch || '',
-        limit: MAX_CLIENT_RESULTS,
-      },
-      skip: !debouncedSearch,
-    });
+  const {
+    data: clientsData,
+    loading: clientsLoading,
+    error,
+  } = useOmniSearchClientsQuery({
+    variables: {
+      textSearch: debouncedSearch || '',
+      limit: MAX_CLIENT_RESULTS,
+    },
+    skip: !debouncedSearch,
+  });
   const { data: projectsData, loading: projectsLoading } =
     useOmniSearchProjectsQuery({
       variables: {
@@ -216,7 +220,7 @@ const OmniSearch: React.FC = () => {
     clearOnBlur: false,
   });
 
-  return (
+  const content = (
     <Box {...values.getRootProps()}>
       <TextInput
         name='Client and Project search'
@@ -380,6 +384,14 @@ const OmniSearch: React.FC = () => {
         </Paper>
       </Popper>
     </Box>
+  );
+  return (
+    <>
+      <ApolloErrorAlert error={error} />
+      <Box sx={{ mx: 2, height: '44px', div: { height: '100%' } }}>
+        {content}
+      </Box>
+    </>
   );
 };
 

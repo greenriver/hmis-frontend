@@ -39,8 +39,9 @@ export const alertErrorFallback: FallbackRender = ({
     return (
       <ApolloErrorAlert
         error={error}
-        AlertProps={{ sx: { height: '100%' } }}
+        alertProps={{ sx: { height: '100%' } }}
         retry={() => resetError()}
+        inline
       />
     );
   }

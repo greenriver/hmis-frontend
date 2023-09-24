@@ -31,7 +31,7 @@ const ProjectReferralPosting: React.FC = () => {
     return <Loading />;
   }
   if (error) {
-    return <ApolloErrorAlert error={error} />;
+    return <ApolloErrorAlert error={error} inline />;
   }
   if (!referralPosting) {
     return <NotFound />;
