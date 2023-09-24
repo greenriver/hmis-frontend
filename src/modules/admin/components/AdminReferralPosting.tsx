@@ -3,7 +3,6 @@ import { Grid, Stack } from '@mui/material';
 import AdminReferralPostingDetails from './AdminReferralPostingDetails';
 import AdminReferralPostingForm from './AdminReferralPostingForm';
 
-import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
@@ -40,9 +39,9 @@ const AdminReferralPosting: React.FC = () => {
       <PageTitle title='Manage Denied Referral' />
       <Grid spacing={4} container>
         <Grid item lg={4} sm={12}>
-          <CommonCard title='Referral Details' sx={{ mb: 2 }}>
+          <TitleCard title='Referral Details' sx={{ mb: 2 }} padded>
             <AdminReferralPostingDetails referralPosting={referralPosting} />
-          </CommonCard>
+          </TitleCard>
         </Grid>
         <Grid item lg={8} sm={12}>
           <Stack spacing={4}>
@@ -55,7 +54,7 @@ const AdminReferralPosting: React.FC = () => {
                 rows={referralPosting.householdMembers}
               />
             </TitleCard>
-            <CommonCard title='Accept/Reject Denial'>
+            <TitleCard title='Accept/Reject Denial' padded>
               <Stack spacing={4}>
                 <CommonLabeledTextBlock title='Provider Notes'>
                   {referralPosting.statusNote}
@@ -68,7 +67,7 @@ const AdminReferralPosting: React.FC = () => {
                   }
                 />
               </Stack>
-            </CommonCard>
+            </TitleCard>
           </Stack>
         </Grid>
       </Grid>
