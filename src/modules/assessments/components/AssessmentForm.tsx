@@ -1,5 +1,5 @@
 import UnlockIcon from '@mui/icons-material/Lock';
-import { Box, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
   ReactNode,
@@ -236,26 +236,19 @@ const AssessmentForm = ({
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
-      <Box
-        sx={{
-          position: 'sticky',
-          top: top + 16,
-        }}
-      >
-        <AssessmentFormSideBar
-          enrollment={enrollment}
-          definition={definition}
-          assessment={assessment}
-          title={navigationTitle}
-          formRole={formRole}
-          isPrintView={isPrintView}
-          locked={locked}
-          embeddedInWorkflow={embeddedInWorkflow}
-          onAutofill={() => setDialogOpen(true)}
-          canEdit={canEdit}
-          top={top}
-        />
-      </Box>
+      <AssessmentFormSideBar
+        enrollment={enrollment}
+        definition={definition}
+        assessment={assessment}
+        title={navigationTitle}
+        formRole={formRole}
+        isPrintView={isPrintView}
+        locked={locked}
+        embeddedInWorkflow={embeddedInWorkflow}
+        onAutofill={() => setDialogOpen(true)}
+        canEdit={canEdit}
+        top={top}
+      />
     </Grid>
   );
 
