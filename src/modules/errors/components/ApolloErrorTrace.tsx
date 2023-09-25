@@ -1,5 +1,6 @@
-import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { GraphQLError } from 'graphql';
+import { CommonUnstyledList } from '@/components/CommonUnstyledList';
 
 const ApolloErrorTrace = ({
   graphqlErrors,
@@ -10,23 +11,27 @@ const ApolloErrorTrace = ({
   if (graphqlErrors.length === 0) return null;
 
   return (
-    <>
+    <Box
+      sx={{
+        fontFamily: 'Monospace',
+        display: 'block',
+        p: 2,
+        background: '#fff',
+        color: '#555',
+        overflowY: 'auto',
+        maxHeight: 'calc(100vh - 200px)',
+      }}
+    >
       {graphqlErrors.map((e) => (
-        <>
+        <CommonUnstyledList key={e.toString()}>
           {((e as GraphQLError & { backtrace: string[] })?.backtrace || []).map(
             (line) => (
-              <Typography
-                key={line}
-                variant='caption'
-                sx={{ fontFamily: 'Monospace', display: 'block' }}
-              >
-                {line}
-              </Typography>
+              <li>{line}</li>
             )
           )}
-        </>
+        </CommonUnstyledList>
       ))}
-    </>
+    </Box>
   );
 };
 

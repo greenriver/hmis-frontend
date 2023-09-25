@@ -157,9 +157,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
               Admin
             </ButtonLink>
           </RootPermissionsFilter>
-          <Box sx={{ mx: 2, height: '44px', div: { height: '100%' } }}>
-            <OmniSearch />
-          </Box>
+          <OmniSearch />
           <UserMenu />
         </Toolbar>
       </AppBar>

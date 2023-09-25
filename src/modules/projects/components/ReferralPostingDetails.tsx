@@ -1,7 +1,7 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { CommonUntyledList } from '@/components/CommonUnstyledList';
+import { CommonUnstyledList } from '@/components/CommonUnstyledList';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
@@ -71,7 +71,7 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
     <Grid container columnSpacing={6} rowSpacing={2}>
       {[col1, col2].map((list) => (
         <Grid item key={list[0][0]}>
-          <Stack spacing={2} component={CommonUntyledList} sx={{ columns: 2 }}>
+          <Stack spacing={2} component={CommonUnstyledList} sx={{ columns: 2 }}>
             {list
               .filter((labelValue) => hasMeaningfulValue(labelValue[1]))
               .map(([label, value]) => (

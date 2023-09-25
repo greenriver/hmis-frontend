@@ -176,11 +176,7 @@ const HouseholdSummaryTabPanel = memo(
             {role == AssessmentRole.Intake && (
               <HouseholdSummaryIntakeHelpCard tabs={tabs} />
             )}
-            {errorState.apolloError && (
-              <Box sx={{ my: 3 }}>
-                <ApolloErrorAlert error={errorState.apolloError} />
-              </Box>
-            )}
+            <ApolloErrorAlert error={errorState.apolloError} />
             {errorState.errors.length > 0 && (
               <Grid item>
                 <Alert
