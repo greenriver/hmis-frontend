@@ -31,9 +31,11 @@ const TableFilterContent = <T,>({
             filter={filter as FilterType<T>}
             keyName={key}
             value={intermediateValues[key as keyof T]}
-            onChange={(value) =>
-              setIntermediateValues((prev) => ({ ...prev, [key]: value }))
-            }
+            onChange={(value) => {
+              // resize so that as pick list content changes, popper will reflow allowing scroll
+              window.dispatchEvent(new CustomEvent('resize'));
+              setIntermediateValues((prev) => ({ ...prev, [key]: value }));
+            }}
           />
         ))}
       </Stack>
