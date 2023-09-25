@@ -41,6 +41,7 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
       scroll='paper'
       fullWidth
       onClose={onClose}
+      enableBackdropClick
       {...props}
     >
       <DialogTitle>
