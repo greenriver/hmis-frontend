@@ -57,6 +57,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   localDefinition,
   pickListArgs,
 }: Args<T>) {
+  const errorRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const openFormDialog = useCallback(() => setDialogOpen(true), []);
 
@@ -83,6 +84,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       localConstants,
       inputVariables,
       formDefinition,
+      errorRef,
       onCompleted: (data: T) => {
         setDialogOpen(false);
         if (onCompleted) onCompleted(data);
@@ -162,6 +164,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                     }}
                     hideSubmit
                     {...props}
+                    errorRef={errorRef}
                   />
                 </Grid>
               </Grid>

@@ -84,6 +84,7 @@ export function useServiceDialog({
   service?: ServiceFieldsFragment;
   onClose?: VoidFunction;
 }) {
+  const errorRef = useRef<HTMLDivElement>(null);
   const projectId = enrollment?.project?.id || '';
   const enrollmentId = enrollment?.id || '';
 
@@ -110,6 +111,7 @@ export function useServiceDialog({
 
   const hookArgs = useMemo(() => {
     const localConstants = {
+      errorRef,
       hudRecordType: serviceType?.hudRecordType,
       hudTypeProvided: serviceType?.hudTypeProvided,
       entryDate: enrollment?.entryDate,
@@ -200,6 +202,7 @@ export function useServiceDialog({
               {...props}
               localConstants={hookArgs?.localConstants}
               hideSubmit
+              errorRef={errorRef}
             />
           )}
         </DialogContent>
