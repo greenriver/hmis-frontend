@@ -245,7 +245,7 @@ const HouseholdAssessments = ({
               pb: 2,
             })}
           >
-            <Stack gap={0.2}>
+            <Stack gap={0.2} sx={{ overflow: 'hidden' }}>
               <Typography variant='body2' fontWeight={600}>
                 {householdAssesmentTitle(role)}
               </Typography>
