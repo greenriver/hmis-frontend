@@ -235,154 +235,157 @@ const OmniSearch: React.FC = () => {
           ref: values.setAnchorEl,
         }}
       />
-      <Popper
-        open={values.popupOpen}
-        anchorEl={values.anchorEl}
-        placement='bottom-end'
-        sx={{ zIndex: (theme) => theme.zIndex.modal, minWidth: '350px' }}
-      >
-        <Paper
-          sx={{
-            p: 2,
-            minWidth: values.anchorEl?.getBoundingClientRect()?.width,
-          }}
+      {!error && (
+        <Popper
+          open={values.popupOpen}
+          anchorEl={values.anchorEl}
+          placement='bottom-end'
+          sx={{ zIndex: (theme) => theme.zIndex.modal, minWidth: '350px' }}
         >
-          {loading ? (
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                py: 2,
-                color: 'text.disabled',
-              }}
-            >
-              <CircularProgress color='inherit' />
-            </Box>
-          ) : (
-            <Grid
-              container
-              component={List} // getListBoxProps expects to attach to a <ul>, and List is a ul with no default styling
-              spacing={2}
-              {...values.getListboxProps()}
-            >
-              {isEmpty(options) ? (
-                <Grid item xs={12}>
-                  <Typography color='text.disabled'>
-                    {value
-                      ? 'No Results found'
-                      : 'Search for clients or projects'}
-                  </Typography>
-                </Grid>
-              ) : (
-                <>
-                  {[
-                    ['RecentItem', 'Recent Items'],
-                    ['Client', 'Clients'],
-                    ['Project', 'Projects'],
-                  ].map(([key, label]) => {
-                    const optionGroup = flatten(
-                      (
-                        values.groupedOptions as AutocompleteGroupedOption<
-                          NonNullable<typeof options>[number]
-                        >[]
-                      )
-                        .filter(
-                          (opt) =>
-                            opt.group === key ||
-                            (key === 'Client' && opt.group === 'SeeMore')
+          <Paper
+            sx={{
+              p: 2,
+              minWidth: values.anchorEl?.getBoundingClientRect()?.width,
+            }}
+          >
+            {loading ? (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  py: 2,
+                  color: 'text.disabled',
+                }}
+              >
+                <CircularProgress color='inherit' />
+              </Box>
+            ) : (
+              <Grid
+                container
+                component={List} // getListBoxProps expects to attach to a <ul>, and List is a ul with no default styling
+                spacing={2}
+                {...values.getListboxProps()}
+              >
+                {isEmpty(options) ? (
+                  <Grid item xs={12}>
+                    <Typography color='text.disabled'>
+                      {value
+                        ? 'No Results found'
+                        : 'Search for clients or projects'}
+                    </Typography>
+                  </Grid>
+                ) : (
+                  <>
+                    {[
+                      ['RecentItem', 'Recent Items'],
+                      ['Client', 'Clients'],
+                      ['Project', 'Projects'],
+                    ].map(([key, label]) => {
+                      const optionGroup = flatten(
+                        (
+                          values.groupedOptions as AutocompleteGroupedOption<
+                            NonNullable<typeof options>[number]
+                          >[]
                         )
-                        .reduce(
-                          (acc, g) => [...acc, ...g.options],
-                          [] as NonNullable<typeof options>
-                        )
-                    );
+                          .filter(
+                            (opt) =>
+                              opt.group === key ||
+                              (key === 'Client' && opt.group === 'SeeMore')
+                          )
+                          .reduce(
+                            (acc, g) => [...acc, ...g.options],
+                            [] as NonNullable<typeof options>
+                          )
+                      );
 
-                    if (isEmpty(optionGroup)) return null;
+                      if (isEmpty(optionGroup)) return null;
 
-                    return (
-                      <Grid item xs={12} key={key}>
-                        <Box sx={{ mx: 2, mb: 0.5 }}>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'baseline',
-                              justifyContent: 'space-between',
-                              gap: 4,
-                            }}
-                          >
-                            <Typography
+                      return (
+                        <Grid item xs={12} key={key}>
+                          <Box sx={{ mx: 2, mb: 0.5 }}>
+                            <Box
                               sx={{
-                                fontWeight: 700,
-                                fontSize: 12,
-                                color: (theme) => theme.palette.secondary.main,
-                                textTransform: 'uppercase',
-                                mb: 1,
+                                display: 'flex',
+                                alignItems: 'baseline',
+                                justifyContent: 'space-between',
+                                gap: 4,
                               }}
                             >
-                              {label}
-                            </Typography>
-                            {key === 'RecentItem' && (
-                              <Box
+                              <Typography
                                 sx={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
+                                  fontWeight: 700,
+                                  fontSize: 12,
+                                  color: (theme) =>
+                                    theme.palette.secondary.main,
+                                  textTransform: 'uppercase',
+                                  mb: 1,
                                 }}
                               >
-                                <>
-                                  <CircularProgress
-                                    size={14}
-                                    sx={{
-                                      transition: 'opacity 0.2s',
-                                      opacity: clearingRecentItems ? 1 : 0,
-                                    }}
-                                  />
-                                  &nbsp;
-                                </>
-                                <Link
-                                  component='button'
-                                  variant='body2'
-                                  onClick={() => clearRecentItems()}
+                                {label}
+                              </Typography>
+                              {key === 'RecentItem' && (
+                                <Box
+                                  sx={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                  }}
                                 >
-                                  Clear Recents
-                                </Link>
-                              </Box>
-                            )}
+                                  <>
+                                    <CircularProgress
+                                      size={14}
+                                      sx={{
+                                        transition: 'opacity 0.2s',
+                                        opacity: clearingRecentItems ? 1 : 0,
+                                      }}
+                                    />
+                                    &nbsp;
+                                  </>
+                                  <Link
+                                    component='button'
+                                    variant='body2'
+                                    onClick={() => clearRecentItems()}
+                                  >
+                                    Clear Recents
+                                  </Link>
+                                </Box>
+                              )}
+                            </Box>
+                            <Divider />
                           </Box>
-                          <Divider />
-                        </Box>
-                        {optionGroup.map((option) => {
-                          return (
-                            <MenuItem
-                              key={`${option.__typename}:${option.id}`}
-                              selected={
-                                option.__typename !== 'SeeMore' &&
-                                getOptionTargetPath(option) ===
-                                  location.pathname
-                              }
-                              {...values.getOptionProps({
-                                option,
-                                index: options.findIndex((e) => {
-                                  return (
-                                    getKeyForOption(e) ===
-                                    getKeyForOption(option)
-                                  );
-                                }),
-                              })}
-                            >
-                              {getOptionLabel(option)}
-                            </MenuItem>
-                          );
-                        })}
-                      </Grid>
-                    );
-                  })}
-                </>
-              )}
-            </Grid>
-          )}
-        </Paper>
-      </Popper>
+                          {optionGroup.map((option) => {
+                            return (
+                              <MenuItem
+                                key={`${option.__typename}:${option.id}`}
+                                selected={
+                                  option.__typename !== 'SeeMore' &&
+                                  getOptionTargetPath(option) ===
+                                    location.pathname
+                                }
+                                {...values.getOptionProps({
+                                  option,
+                                  index: options.findIndex((e) => {
+                                    return (
+                                      getKeyForOption(e) ===
+                                      getKeyForOption(option)
+                                    );
+                                  }),
+                                })}
+                              >
+                                {getOptionLabel(option)}
+                              </MenuItem>
+                            );
+                          })}
+                        </Grid>
+                      );
+                    })}
+                  </>
+                )}
+              </Grid>
+            )}
+          </Paper>
+        </Popper>
+      )}
     </Box>
   );
   return (
