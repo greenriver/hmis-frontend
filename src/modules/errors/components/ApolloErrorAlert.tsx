@@ -13,6 +13,8 @@ import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { isServerError, UNKNOWN_ERROR_HEADING } from '../util';
 import ApolloErrorTrace from './ApolloErrorTrace';
 
+const showDeveloperInfo = import.meta.env.MODE === 'development';
+
 interface BaseAlertProps {
   errors: Error[];
   isNetworkError: boolean;
@@ -34,7 +36,7 @@ const BaseAlert = forwardRef<HTMLDivElement, BaseAlertProps>(
         <AlertTitle sx={{ mb: 0 }}>{errorMessage}</AlertTitle>
         <ApolloErrorTrace errors={errors} />
         <Box sx={{ mt: 2 }}>
-          {import.meta.env.MODE === 'development' && retry && (
+          {showDeveloperInfo && retry && (
             <Button
               size='small'
               sx={{ ml: 2 }}
@@ -93,6 +95,7 @@ interface Props {
   retry?: VoidFunction;
   inline?: boolean;
 }
+
 const ApolloErrorAlert: React.FC<Props> = ({
   error,
   inline = false,
@@ -100,10 +103,19 @@ const ApolloErrorAlert: React.FC<Props> = ({
 }) => {
   const errors = useMemo<Error[]>(() => {
     if (!error) return [];
-    if (error.graphQLErrors?.length == 0 && isServerError(error.networkError)) {
-      return error.networkError?.result?.errors || [];
+    if (isServerError(error.networkError)) {
+      // looks like this maybe an array sometimes. Maybe related to batching
+      const result = error.networkError?.result;
+      if (Array.isArray(result)) {
+        return result[0]?.errors || [];
+      }
+      return result?.errors || [];
     }
-    return [error.graphQLErrors];
+    // don't show graphql errors to user in prod
+    if (showDeveloperInfo) {
+      return error.graphQLErrors;
+    }
+    return [];
   }, [error]);
 
   const isNetworkError = error
