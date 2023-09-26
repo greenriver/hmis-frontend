@@ -101,9 +101,9 @@ const ApolloErrorAlert: React.FC<Props> = ({
   const errors = useMemo<Error[]>(() => {
     if (!error) return [];
     if (error.graphQLErrors?.length == 0 && isServerError(error.networkError)) {
-      return error.networkError?.result?.errors || [];
+      return error.networkError?.result[0]?.errors || [];
     }
-    return [error.graphQLErrors];
+    return error.graphQLErrors;
   }, [error]);
 
   const isNetworkError = error
