@@ -101,7 +101,7 @@ const ApolloErrorAlert: React.FC<Props> = ({
   inline = false,
   ...props
 }) => {
-  const errors = useMemo<Error[]>(() => {
+  const displayErrors = useMemo<Error[]>(() => {
     if (!error) return [];
     if (isServerError(error.networkError)) {
       // looks like this maybe an array sometimes. Maybe related to batching
@@ -127,7 +127,7 @@ const ApolloErrorAlert: React.FC<Props> = ({
     return (
       <BaseAlert
         {...props}
-        errors={errors || []}
+        errors={displayErrors || []}
         isNetworkError={isNetworkError}
       />
     );
@@ -135,7 +135,7 @@ const ApolloErrorAlert: React.FC<Props> = ({
   return (
     <SnackbarAlert
       {...props}
-      errors={errors || []}
+      errors={displayErrors || []}
       isNetworkError={isNetworkError}
     />
   );
