@@ -2,6 +2,7 @@ import { Box, Grid, Stack } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, {
   Ref,
+  RefObject,
   forwardRef,
   useCallback,
   useEffect,
@@ -69,6 +70,7 @@ export interface DynamicFormProps
   >;
   hideSubmit?: boolean;
   localConstants?: LocalConstants;
+  errorRef?: RefObject<HTMLDivElement>;
 }
 export interface DynamicFormRef {
   SaveIfDirty: (callback: VoidFunction) => void;
@@ -97,6 +99,7 @@ const DynamicForm = forwardRef(
       ValidationDialogProps = {},
       hideSubmit = false,
       localConstants,
+      errorRef,
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
@@ -226,6 +229,7 @@ const DynamicForm = forwardRef(
         autoComplete='do-not-autofill'
       >
         <Grid container direction='column' spacing={2}>
+          <div ref={errorRef} />
           {hasErrors(errorState) && (
             <Grid item>
               <Stack gap={2}>

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { RefObject, useCallback, useMemo, useState } from 'react';
 
 import { DynamicFormOnSubmit } from '../components/DynamicForm';
 import { LocalConstants, SubmitFormAllowedTypes } from '../types';
@@ -46,6 +46,7 @@ export interface DynamicFormHandlerArgs<T> {
   onCompleted?: (data: T) => void;
   localConstants?: LocalConstants;
   inputVariables?: SubmitFormInputVariables;
+  errorRef?: RefObject<HTMLDivElement>;
 }
 
 export function useDynamicFormHandlersForRecord<
@@ -56,6 +57,7 @@ export function useDynamicFormHandlersForRecord<
   onCompleted,
   inputVariables,
   localConstants,
+  errorRef,
 }: DynamicFormHandlerArgs<T>) {
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
@@ -66,7 +68,11 @@ export function useDynamicFormHandlersForRecord<
   const [submitForm, { loading: submitLoading }] = useSubmitFormMutation({
     onCompleted: (data) => {
       const errors = data.submitForm?.errors || [];
-      window.scrollTo(0, 0);
+      if (errorRef) {
+        errorRef.current?.scrollIntoView();
+      } else {
+        window.scrollTo(0, 0);
+      }
       if (errors.length > 0) {
         setErrors(partitionValidations(errors));
       } else {
@@ -76,7 +82,11 @@ export function useDynamicFormHandlersForRecord<
     },
     onError: (apolloError) => {
       setErrors({ ...emptyErrorState, apolloError });
-      window.scrollTo(0, 0);
+      if (errorRef) {
+        errorRef.current?.scrollIntoView();
+      } else {
+        window.scrollTo(0, 0);
+      }
     },
   });
 
