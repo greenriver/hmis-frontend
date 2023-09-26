@@ -185,9 +185,9 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
     header: 'Last Updated',
     render: (e) =>
-      `${parseAndFormatDateTime(e.dateUpdated)} by ${
-        e.user?.name || 'Unknown User'
-      }`,
+      `${
+        e.dateUpdated ? parseAndFormatDateTime(e.dateUpdated) : 'Unknown Date'
+      } by ${e.user?.name || 'Unknown User'}`,
   },
 ];
 
