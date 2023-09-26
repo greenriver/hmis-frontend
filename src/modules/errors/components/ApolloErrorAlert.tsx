@@ -13,24 +13,20 @@ import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { isServerError, UNKNOWN_ERROR_HEADING } from '../util';
 import ApolloErrorTrace from './ApolloErrorTrace';
 
-interface Props2 {
+interface BaseAlertProps {
   errors: Error[];
   isNetworkError: boolean;
   alertProps?: AlertProps;
   retry?: VoidFunction;
 }
 
-const BaseAlert = forwardRef<Props2, any>(
+const BaseAlert = forwardRef<HTMLDivElement, BaseAlertProps>(
   ({ alertProps, retry, errors, isNetworkError }, ref) => {
     let errorMessage = '';
     if (isNetworkError) {
       errorMessage = `There was a problem connecting to the network. Please reload the page and try again.`;
     } else {
-      errorMessage = errors[0]?.message;
-      // replace terse unknown error message with something more helpful
-      if (!errorMessage || errorMessage == UNKNOWN_ERROR_HEADING) {
-        errorMessage = `An error occurred on this page. The error has been reported and will be investigated by our support team. Please reload the page and try again. Contact support if the problem persists.`;
-      }
+      errorMessage = errors[0]?.message || UNKNOWN_ERROR_HEADING;
     }
 
     return (
@@ -61,7 +57,7 @@ const BaseAlert = forwardRef<Props2, any>(
   }
 );
 
-const SnackbarAlert: React.FC<Props2> = ({
+const SnackbarAlert: React.FC<BaseAlertProps> = ({
   errors,
   alertProps = {},
   ...props
@@ -119,7 +115,7 @@ const ApolloErrorAlert: React.FC<Props> = ({
     return (
       <BaseAlert
         {...props}
-        graphqlErrors={errors || []}
+        errors={errors || []}
         isNetworkError={isNetworkError}
       />
     );
