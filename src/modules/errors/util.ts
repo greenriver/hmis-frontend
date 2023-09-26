@@ -4,7 +4,8 @@ import { partition } from 'lodash-es';
 import { ValidationError, ValidationSeverity } from '@/types/gqlTypes';
 
 export const FIXABLE_ERROR_HEADING = 'Please fix outstanding errors';
-export const UNKNOWN_ERROR_HEADING = 'An error occurred';
+export const UNKNOWN_ERROR_HEADING =
+  'An error occurred on this page. The error has been reported and will be investigated by our support team. Please reload the page and try again. Contact your administrator if the problem persists.';
 
 export const isApolloError = (err: Error | ApolloError): err is ApolloError => {
   return !!(err instanceof Error && err.hasOwnProperty('graphQLErrors'));

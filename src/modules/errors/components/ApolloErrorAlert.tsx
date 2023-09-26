@@ -8,40 +8,57 @@ import {
   Snackbar,
 } from '@mui/material';
 
-import { GraphQLError } from 'graphql';
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 
 import { isServerError, UNKNOWN_ERROR_HEADING } from '../util';
 import ApolloErrorTrace from './ApolloErrorTrace';
 
-interface Props2 {
-  graphqlErrors: GraphQLError[];
+interface BaseAlertProps {
+  errors: Error[];
+  isNetworkError: boolean;
   alertProps?: AlertProps;
   retry?: VoidFunction;
 }
 
-const BaseAlert = forwardRef<Props2, any>(
-  ({ alertProps, retry, graphqlErrors }, ref) => {
+const BaseAlert = forwardRef<HTMLDivElement, BaseAlertProps>(
+  ({ alertProps, retry, errors, isNetworkError }, ref) => {
+    let errorMessage = '';
+    if (isNetworkError) {
+      errorMessage = `There was a problem connecting to the network. Please reload the page and try again.`;
+    } else {
+      errorMessage = errors[0]?.message || UNKNOWN_ERROR_HEADING;
+    }
+
     return (
       <Alert severity='error' {...alertProps} ref={ref}>
-        <AlertTitle sx={{ mb: 0 }}>
-          {graphqlErrors[0]?.message || UNKNOWN_ERROR_HEADING}
-        </AlertTitle>
-        <ApolloErrorTrace graphqlErrors={graphqlErrors} />
-        {import.meta.env.MODE === 'development' && retry && (
-          <Box>
-            <Button size='small' sx={{ my: 2 }} onClick={retry}>
+        <AlertTitle sx={{ mb: 0 }}>{errorMessage}</AlertTitle>
+        <ApolloErrorTrace errors={errors} />
+        <Box sx={{ mt: 2 }}>
+          {import.meta.env.MODE === 'development' && retry && (
+            <Button
+              size='small'
+              sx={{ ml: 2 }}
+              onClick={retry}
+              variant='outlined'
+            >
               Retry
             </Button>
-          </Box>
-        )}
+          )}
+          <Button
+            size='small'
+            variant='outlined'
+            onClick={() => window.location.reload()}
+          >
+            Reload Page
+          </Button>
+        </Box>
       </Alert>
     );
   }
 );
 
-const SnackbarAlert: React.FC<Props2> = ({
-  graphqlErrors,
+const SnackbarAlert: React.FC<BaseAlertProps> = ({
+  errors,
   alertProps = {},
   ...props
 }) => {
@@ -52,7 +69,7 @@ const SnackbarAlert: React.FC<Props2> = ({
 
   useEffect(() => {
     setCounter((c) => c + 1);
-  }, [graphqlErrors]);
+  }, [errors]);
 
   return (
     <Snackbar
@@ -62,7 +79,7 @@ const SnackbarAlert: React.FC<Props2> = ({
       sx={({ shadows }) => ({ boxShadow: shadows[2] })}
     >
       <BaseAlert
-        graphqlErrors={graphqlErrors}
+        errors={errors}
         alertProps={{ ...alertProps, onClose: handleClose, variant: 'filled' }}
         {...props}
       />
@@ -81,20 +98,35 @@ const ApolloErrorAlert: React.FC<Props> = ({
   inline = false,
   ...props
 }) => {
-  const graphqlErrors = useMemo<GraphQLError[]>(() => {
+  const errors = useMemo<Error[]>(() => {
     if (!error) return [];
-    if (error.graphQLErrors.length < 1 && isServerError(error.networkError)) {
+    if (error.graphQLErrors?.length == 0 && isServerError(error.networkError)) {
       return error.networkError?.result?.errors || [];
     }
-    return [...error.graphQLErrors];
+    return [error.graphQLErrors];
   }, [error]);
 
+  const isNetworkError = error
+    ? error.graphQLErrors?.length == 0 && !isServerError(error.networkError)
+    : false;
   if (!error) return;
 
   if (inline) {
-    return <BaseAlert {...props} graphqlErrors={graphqlErrors} />;
+    return (
+      <BaseAlert
+        {...props}
+        errors={errors || []}
+        isNetworkError={isNetworkError}
+      />
+    );
   }
-  return <SnackbarAlert {...props} graphqlErrors={graphqlErrors} />;
+  return (
+    <SnackbarAlert
+      {...props}
+      errors={errors || []}
+      isNetworkError={isNetworkError}
+    />
+  );
 };
 
 export default ApolloErrorAlert;
