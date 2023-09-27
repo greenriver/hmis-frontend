@@ -14,4 +14,7 @@ fragment CurrentLivingSituationFields on CurrentLivingSituation {
   user {
     ...UserFields
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }

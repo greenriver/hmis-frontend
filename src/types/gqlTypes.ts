@@ -904,6 +904,7 @@ export type CurrentLivingSituation = {
   client: Client;
   clsSubsidyType?: Maybe<RentalSubsidyType>;
   currentLivingSituation: CurrentLivingSituationOptions;
+  customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -12326,6 +12327,42 @@ export type CurrentLivingSituationFieldsFragment = {
   dateUpdated?: string | null;
   dateCreated?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
@@ -12359,6 +12396,42 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         dateUpdated?: string | null;
         dateCreated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -16779,6 +16852,42 @@ export type SubmitFormMutation = {
           dateUpdated?: string | null;
           dateCreated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            fieldType: CustomDataElementType;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'CustomCaseNote';
@@ -21812,8 +21921,12 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const CustomCaseNoteFieldsFragmentDoc = gql`
   fragment CustomCaseNoteFields on CustomCaseNote {
