@@ -260,7 +260,9 @@ export const lastUpdated = (
   client: ClientFieldsFragment,
   includeUser = false
 ) => {
-  const str = parseAndFormatDateTime(client.dateUpdated);
+  const str = client.dateUpdated
+    ? parseAndFormatDateTime(client.dateUpdated)
+    : null;
   if (includeUser && client.user) {
     return `${str || 'unknown'} by ${client.user.name}`;
   }
