@@ -35,20 +35,15 @@ const BaseAlert = forwardRef<HTMLDivElement, BaseAlertProps>(
       <Alert severity='error' {...alertProps} ref={ref}>
         <AlertTitle sx={{ mb: 0 }}>{errorMessage}</AlertTitle>
         <ApolloErrorTrace errors={errors} />
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 2 }} textAlign='center'>
           {showDeveloperInfo && retry && (
-            <Button
-              size='small'
-              sx={{ ml: 2 }}
-              onClick={retry}
-              variant='outlined'
-            >
+            <Button size='small' sx={{ mr: 2 }} onClick={retry} variant='text'>
               Retry
             </Button>
           )}
           <Button
             size='small'
-            variant='outlined'
+            variant='text'
             onClick={() => window.location.reload()}
           >
             Reload Page
@@ -78,11 +73,19 @@ const SnackbarAlert: React.FC<BaseAlertProps> = ({
       open={counter > 0}
       onClose={handleClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      sx={({ shadows }) => ({ boxShadow: shadows[2] })}
+      sx={({ shadows }) => ({
+        boxShadow: shadows[4],
+        borderRadius: 2,
+        '.MuiAlertTitle-root': { fontWeight: 600 },
+      })}
     >
       <BaseAlert
         errors={errors}
-        alertProps={{ ...alertProps, onClose: handleClose, variant: 'filled' }}
+        alertProps={{
+          ...alertProps,
+          onClose: handleClose,
+          variant: 'standard',
+        }}
         {...props}
       />
     </Snackbar>
