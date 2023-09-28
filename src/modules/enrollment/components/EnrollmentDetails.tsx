@@ -1,6 +1,6 @@
-import { Box, Grid, Typography } from '@mui/material';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { Box, Grid, Tooltip, Typography } from '@mui/material';
 import { Fragment, ReactNode, useMemo } from 'react';
-
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import EntryExitDatesWithAssessmentLinks from './EntryExitDatesWithAssessmentLinks';
 import OccurrencePointValue, {
@@ -87,9 +87,26 @@ const EnrollmentDetails = ({
       content['HUD Chronic'] = yesNo(enrollment.client.hudChronic);
     }
 
+    const tooltips: Record<string, string> = {
+      'HUD Chronic':
+        'Whether this client is considered chronically homeless, as of today. Follows the HUD definition for Chronic at PIT.',
+    };
+
     return Object.entries(content).map(([id, value], index) => ({
       id: String(index),
-      label: id,
+      label: tooltips[id] ? (
+        <>
+          {id}{' '}
+          <Tooltip title={tooltips[id]}>
+            <HelpOutlineIcon
+              fontSize='small'
+              sx={{ verticalAlign: 'bottom', ml: 1, color: 'text.secondary' }}
+            />
+          </Tooltip>
+        </>
+      ) : (
+        id
+      ),
       value,
     }));
   }, [enrollment]);
