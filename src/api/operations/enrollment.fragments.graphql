@@ -94,6 +94,7 @@ fragment EnrollmentValues on Enrollment {
   lockVersion
   entryDate
   exitDate
+  disablingCondition
   dateOfEngagement
   moveInDate
   livingSituation
