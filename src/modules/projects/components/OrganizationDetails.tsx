@@ -15,6 +15,7 @@ const OrganizationDetails = ({
   const fallback = <NotCollectedText variant='body2' />;
   const hasMaybeLongDetail =
     organization.description || organization.contactInformation;
+
   return (
     <Stack
       columnGap={10}
@@ -36,7 +37,7 @@ const OrganizationDetails = ({
         />
       </CommonLabeledTextBlock>
       <CommonLabeledTextBlock title='Organization ID'>
-        <ClickToCopyId value={organization.id} />
+        <ClickToCopyId value={organization.hudId} />
       </CommonLabeledTextBlock>
     </Stack>
   );
