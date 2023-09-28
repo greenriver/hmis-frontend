@@ -13,6 +13,7 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
+import { fromPairs } from 'lodash-es';
 import { useCallback, useRef, useState } from 'react';
 
 import ClientAddress from './ClientAddress';
@@ -29,6 +30,7 @@ import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import {
   clientNameAllParts,
+  customDataElementValueAsString,
   lastUpdated,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
@@ -95,6 +97,8 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
     client.addresses.length > 0 ||
     client.phoneNumbers.length > 0 ||
     client.emailAddresses.length > 0;
+
+  const hasCustomDataElements = client.customDataElements.length > 0;
   return (
     <Box
       sx={{
@@ -203,6 +207,26 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
               />
             ),
           },
+          ...(hasCustomDataElements
+            ? [
+                {
+                  key: 'Other Attributes',
+                  defaultExpanded: false,
+                  content: (
+                    <ClientProfileCardTextTable
+                      content={fromPairs(
+                        client.customDataElements.map((cde) => [
+                          cde.label,
+                          customDataElementValueAsString(cde) || (
+                            <NotCollectedText />
+                          ),
+                        ])
+                      )}
+                    />
+                  ),
+                },
+              ]
+            : []),
         ]}
       />
     </Box>

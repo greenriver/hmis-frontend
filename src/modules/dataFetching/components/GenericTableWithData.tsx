@@ -49,6 +49,7 @@ export interface Props<
     GenericTableProps<RowDataType>,
     'rows' | 'tablePaginationProps' | 'loading' | 'paginated' | 'noData'
   > {
+  getColumnDefs?: (rows: RowDataType[]) => ColumnDef<RowDataType>[]; // dynamically define column defs based on current data
   filters?:
     | TableFilterType<FilterOptionsType>
     | ((
@@ -129,6 +130,7 @@ const GenericTableWithData = <
   rowsPath,
   defaultPageSize = DEFAULT_ROWS_PER_PAGE,
   columns,
+  getColumnDefs,
   recordType,
   filterInputType: filterInputTypeProp,
   fetchPolicy = 'cache-and-network',
@@ -259,10 +261,11 @@ const GenericTableWithData = <
 
   const columnDefs = useMemo(() => {
     if (columns) return columns;
+    if (getColumnDefs) return getColumnDefs(rows);
     if (recordType) return allFieldColumns(recordType);
     console.warn('No columns specified');
     return [];
-  }, [columns, recordType]);
+  }, [columns, getColumnDefs, recordType, rows]);
 
   const filterDefs = useMemo(() => {
     const filterInputType =
