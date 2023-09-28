@@ -8,10 +8,12 @@ import OccurrencePointValue, {
 } from './OccurrencePointValue';
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { occurrencePointCollectedForEnrollment } from '@/modules/hmis/hmisUtil';
+import {
+  occurrencePointCollectedForEnrollment,
+  yesNo,
+} from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { Destination } from '@/types/gqlTypes';
@@ -82,9 +84,7 @@ const EnrollmentDetails = ({
     }
 
     if (enrollment.client.hudChronic !== null) {
-      content['HUD Chronic'] = (
-        <YesNoDisplay booleanValue={enrollment.client.hudChronic} />
-      );
+      content['HUD Chronic'] = yesNo(enrollment.client.hudChronic);
     }
 
     return Object.entries(content).map(([id, value], index) => ({
