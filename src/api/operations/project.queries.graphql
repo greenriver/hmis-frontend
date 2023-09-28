@@ -212,6 +212,12 @@ query GetProjectOutgoingReferralPostings(
       nodesCount
       nodes {
         ...ReferralPostingFields
+        hohEnrollment {
+          id
+          client {
+            id
+          }
+        }
       }
     }
   }

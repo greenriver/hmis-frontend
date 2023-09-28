@@ -18,7 +18,6 @@ import {
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
-  EnrollmentFilterOptionStatus,
   EnrollmentSortOption,
   EnrollmentsForProjectFilterOptions,
   GetProjectEnrollmentsDocument,
@@ -180,12 +179,6 @@ const ProjectClientEnrollmentsTable = ({
       filters={(f) => omit(f, 'searchTerm', 'bedNightOnDate')}
       filterInputType='EnrollmentsForProjectFilterOptions'
       defaultSortOption={EnrollmentSortOption.MostRecent}
-      defaultFilters={{
-        status: [
-          EnrollmentFilterOptionStatus.Active,
-          EnrollmentFilterOptionStatus.Incomplete,
-        ],
-      }}
     />
   );
 };

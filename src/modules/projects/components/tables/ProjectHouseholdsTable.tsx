@@ -15,7 +15,6 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  EnrollmentFilterOptionStatus,
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
@@ -177,12 +176,6 @@ const ProjectHouseholdsTable = ({
       showFilters
       recordType='Household'
       filters={(filters) => omit(filters, 'searchTerm')}
-      defaultFilters={{
-        status: [
-          EnrollmentFilterOptionStatus.Active,
-          EnrollmentFilterOptionStatus.Incomplete,
-        ],
-      }}
     />
   );
 };

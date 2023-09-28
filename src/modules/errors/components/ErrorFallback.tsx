@@ -1,5 +1,12 @@
 import { ApolloError, isApolloError } from '@apollo/client';
-import { Alert, AlertTitle, Box, Button, Typography } from '@mui/material';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Container,
+  Typography,
+} from '@mui/material';
 import { FallbackRender } from '@sentry/react';
 
 import { NotFoundError, UNKNOWN_ERROR_HEADING } from '../util';
@@ -7,11 +14,7 @@ import { NotFoundError, UNKNOWN_ERROR_HEADING } from '../util';
 import ApolloErrorAlert from './ApolloErrorAlert';
 import SentryErrorTrace from './SentryErrorTrace';
 
-const ErrorFallback = ({
-  text = 'Something went wrong.',
-}: {
-  text?: string;
-}) => (
+const ErrorFallback = ({ text = UNKNOWN_ERROR_HEADING }: { text?: string }) => (
   <Box
     display='flex'
     justifyContent='center'
@@ -39,30 +42,46 @@ export const alertErrorFallback: FallbackRender = ({
     return (
       <ApolloErrorAlert
         error={error}
-        AlertProps={{ sx: { height: '100%' } }}
+        alertProps={{ sx: { height: '100%' } }}
         retry={() => resetError()}
+        inline
       />
     );
   }
 
   return (
-    <Alert severity='error' sx={{ height: '100%' }}>
-      <AlertTitle>
-        {error instanceof NotFoundError
-          ? 'Page not found'
-          : UNKNOWN_ERROR_HEADING}
-      </AlertTitle>
-      {!isApolloError(error) && import.meta.env.MODE === 'development' && (
-        <SentryErrorTrace error={error} componentStack={componentStack} />
-      )}
-      {import.meta.env.MODE === 'development' && (
-        <Box>
-          <Button size='small' sx={{ my: 2 }} onClick={() => resetError()}>
-            Retry
+    <Container>
+      <Alert severity='error' sx={{ my: 2 }}>
+        <AlertTitle sx={{ fontWeight: 400 }}>
+          {error instanceof NotFoundError
+            ? 'Page not found'
+            : UNKNOWN_ERROR_HEADING}
+        </AlertTitle>
+        {!isApolloError(error) && import.meta.env.MODE === 'development' && (
+          <SentryErrorTrace error={error} componentStack={componentStack} />
+        )}
+        <Box sx={{ mt: 2 }}>
+          {import.meta.env.MODE === 'development' && (
+            <Button
+              variant='outlined'
+              size='small'
+              sx={{ mr: 2, background: '#fff' }}
+              onClick={() => resetError()}
+            >
+              Retry
+            </Button>
+          )}
+          <Button
+            variant='outlined'
+            size='small'
+            sx={{ background: '#fff' }}
+            onClick={() => window.location.reload()}
+          >
+            Reload Page
           </Button>
         </Box>
-      )}
-    </Alert>
+      </Alert>
+    </Container>
   );
 };
 

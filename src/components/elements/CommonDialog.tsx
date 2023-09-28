@@ -1,20 +1,43 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogProps, IconButton } from '@mui/material';
+import { useCallback } from 'react';
 
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 
-const CommonDialog = ({ children, ...props }: DialogProps) => {
+interface Props extends DialogProps {
+  enableBackdropClick?: boolean;
+}
+
+const CommonDialog: React.FC<Props> = ({
+  children,
+  onClose,
+  enableBackdropClick = false,
+  ...props
+}) => {
+  const handleClose = useCallback<Required<DialogProps>['onClose']>(
+    (evt, reason) => {
+      if (enableBackdropClick && onClose) {
+        return onClose(evt, reason);
+      }
+      if (reason !== 'backdropClick' && onClose) {
+        onClose(evt, reason);
+      }
+    },
+    [onClose, enableBackdropClick]
+  );
+
   return (
     <Dialog
       data-testid='dialog'
       {...props}
+      onClose={handleClose}
       sx={{ '.MuiDialogTitle-root': { mr: 2 }, ...props.sx }}
     >
       <SentryErrorBoundary>{children}</SentryErrorBoundary>
-      {props.onClose && (
+      {onClose && (
         <IconButton
           aria-label='close'
-          onClick={(e) => props.onClose && props.onClose(e, 'backdropClick')}
+          onClick={onClose ? (e) => onClose(e, 'backdropClick') : undefined}
           onKeyDown={(event) => {
             // Hack: don't close dialog on keydown for Enter, because it will re-open
             // the selected row onKeyUp if this dialog is coming from a row click.

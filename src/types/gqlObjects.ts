@@ -109,11 +109,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -121,11 +117,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'enrollmentCoc',
@@ -280,11 +272,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -292,11 +280,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'id',
@@ -333,11 +317,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -345,11 +325,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'directServices',
@@ -391,11 +367,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       { name: 'age', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -403,11 +375,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'desertStorm',
@@ -459,11 +427,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'hudChronic',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'id',
@@ -755,11 +719,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -767,11 +727,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'district',
@@ -853,11 +809,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -865,11 +817,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'id',
@@ -925,11 +873,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -937,11 +881,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       { name: 'first', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
@@ -997,11 +937,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -1009,11 +945,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'id',
@@ -1090,11 +1022,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -1102,11 +1030,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'id',
@@ -1168,19 +1092,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'id',
@@ -1327,11 +1247,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -1339,11 +1255,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'disabilityResponse',
@@ -1581,11 +1493,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -1593,11 +1501,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'employed',
@@ -1735,11 +1639,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -1763,11 +1663,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dependentUnder6',
@@ -1863,7 +1759,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'hpScreeningScore',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
       {
         name: 'id',
@@ -2039,7 +1935,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'thresholdScore',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
       {
         name: 'timeToHousingLoss',
@@ -2255,11 +2151,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -2267,11 +2159,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'event',
@@ -2392,11 +2280,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -2404,11 +2288,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'destination',
@@ -2612,19 +2492,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'effectiveDate',
@@ -2867,11 +2739,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -2879,11 +2747,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'endDate',
@@ -2940,11 +2804,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -2952,11 +2812,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dentalHealthStatus',
@@ -3013,11 +2869,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -3025,11 +2877,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'hmisParticipationStatusEndDate',
@@ -3160,11 +3008,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -3172,11 +3016,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'earned',
@@ -3510,11 +3350,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -3522,11 +3358,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'esBedType',
@@ -3698,11 +3530,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -3710,11 +3538,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'description',
@@ -3838,11 +3662,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -3850,11 +3670,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'description',
@@ -4081,11 +3897,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -4093,11 +3905,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'geocode',
@@ -4611,11 +4419,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -4627,11 +4431,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'faAmount',
@@ -4684,19 +4484,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'hudRecordType',
@@ -4842,11 +4638,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -4854,11 +4646,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'id',
@@ -5008,11 +4796,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateCreated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'dateDeleted',
@@ -5020,11 +4804,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'dateUpdated',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
         name: 'id',

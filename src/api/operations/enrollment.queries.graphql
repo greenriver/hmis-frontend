@@ -1,6 +1,9 @@
 query GetEnrollment($id: ID!) {
   enrollment(id: $id) {
     ...EnrollmentFields
+    # EnrollmentValues are needed to populate a new assessment
+    # with existing values (like DisablingCondition, LivingSituation)
+    ...EnrollmentValues
   }
 }
 

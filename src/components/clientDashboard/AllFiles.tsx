@@ -111,10 +111,15 @@ const AllFiles = () => {
       },
       {
         header: 'Uploaded At',
-        render: (file) =>
-          `${parseAndFormatDateTime(file.dateCreated)}${
-            file.uploadedBy?.name ? ` by ${file.uploadedBy?.name}` : ''
-          }`,
+        render: (file) => {
+          const uploadedAt = file.dateCreated
+            ? parseAndFormatDateTime(file.dateCreated)
+            : 'Unknown time';
+          const uploadedBy = file.uploadedBy?.name
+            ? `by ${file.uploadedBy?.name}`
+            : 'by unknown user';
+          return `${uploadedAt} ${uploadedBy}`;
+        },
       },
       // {
       //   header: 'Last Updated',
