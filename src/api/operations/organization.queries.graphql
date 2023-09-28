@@ -1,5 +1,5 @@
-query GetAllOrganizations {
-  organizations(limit: 500, sortOrder: NAME) {
+query GetOrganizations {
+  organizations(sortOrder: NAME) {
     nodesCount
     nodes {
       ...OrganizationNameFields
