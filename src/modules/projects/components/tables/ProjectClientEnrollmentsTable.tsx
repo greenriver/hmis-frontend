@@ -17,12 +17,14 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
+  ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
   EnrollmentSortOption,
   EnrollmentsForProjectFilterOptions,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
+  ProjectEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -30,8 +32,29 @@ export type EnrollmentFields = NonNullable<
   GetProjectEnrollmentsQuery['project']
 >['enrollments']['nodes'][number];
 
+export const ENROLLMENT_STATUS_COL: ColumnDef<
+  | EnrollmentFieldsFragment
+  | ProjectEnrollmentFieldsFragment
+  | ClientEnrollmentFieldsFragment
+> = {
+  header: 'Status',
+  render: (e) => <EnrollmentStatus enrollment={e} />,
+};
+
+export const ENROLLMENT_PERIOD_COL: ColumnDef<
+  | EnrollmentFieldsFragment
+  | ProjectEnrollmentFieldsFragment
+  | ClientEnrollmentFieldsFragment
+> = {
+  header: 'Enrollment Period',
+  render: (e) => (
+    <EnrollmentDateRangeWithStatus enrollment={e} treatIncompleteAsActive />
+  ),
+};
 export const ENROLLMENT_COLUMNS: {
-  [key: string]: ColumnDef<EnrollmentFieldsFragment>;
+  [key: string]: ColumnDef<
+    EnrollmentFieldsFragment | ProjectEnrollmentFieldsFragment
+  >;
 } = {
   clientName: {
     header: 'Client',
@@ -72,21 +95,13 @@ export const ENROLLMENT_COLUMNS: {
     ),
     linkTreatment: true,
   },
-  enrollmentStatus: {
-    header: 'Status',
-    render: (e) => <EnrollmentStatus enrollment={e} />,
-  },
+  enrollmentStatus: ENROLLMENT_STATUS_COL,
   entryDate: {
     header: 'Entry Date',
     // should only be used for open enrollments, because it doesnt indicate if closed or not
     render: (e) => <EnrollmentEntryDateWithStatusIndicator enrollment={e} />,
   },
-  enrollmentPeriod: {
-    header: 'Enrollment Period',
-    render: (e) => (
-      <EnrollmentDateRangeWithStatus enrollment={e} treatIncompleteAsActive />
-    ),
-  },
+  enrollmentPeriod: ENROLLMENT_PERIOD_COL,
   householdId: {
     header: 'Household ID',
     render: (e) => (

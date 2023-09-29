@@ -23,6 +23,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   AssessmentFieldsFragment,
+  ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,
   ClientNameFragment,
   CustomDataElementFieldsFragment,
@@ -291,7 +292,7 @@ export const entryExitRange = (
 
 // Open, or closed within the last X days
 export const isRecentEnrollment = (
-  enrollment: EnrollmentFieldsFragment,
+  enrollment: EnrollmentFieldsFragment | ClientEnrollmentFieldsFragment,
   withinDays = 30
 ) => {
   if (!enrollment.exitDate) return true;
