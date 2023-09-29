@@ -52,8 +52,10 @@ const MultiPhoneInput = ({ id, value, onChange, label }: Props) => {
         onChange(copied);
       }}
       title={label}
-      removeText='Delete phone'
-      addText='Add phone'
+      removeText='Delete Phone Number'
+      addText={
+        value.length > 0 ? 'Add Another Phone Number' : 'Add Phone Number'
+      }
       renderMetadata={renderMetadata}
     />
   );

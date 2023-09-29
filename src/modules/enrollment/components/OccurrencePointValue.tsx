@@ -97,6 +97,7 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
     );
     // Apply values from the Enrollment
     const formValues = createInitialValuesFromRecord(itemMap, enrollment);
+
     return assign(initialsIfEmpty, formValues);
   }, [itemMap, definition.definition, enrollment, localConstants]);
 
