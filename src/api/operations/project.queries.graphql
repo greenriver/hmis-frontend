@@ -58,12 +58,7 @@ query GetProjectEnrollments(
       limit
       nodesCount
       nodes {
-        ...EnrollmentFields
-        client {
-          id
-          ...ClientName
-          ...ClientIdentificationFields
-        }
+        ...ProjectEnrollmentFields
       }
     }
   }

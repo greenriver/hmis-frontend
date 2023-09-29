@@ -28,14 +28,7 @@ query GetClientAssessments(
       nodes {
         ...AssessmentFields
         enrollment {
-          id
-          lockVersion
-          entryDate
-          exitDate
-          inProgress
-          project {
-            ...ProjectNameAndType
-          }
+          ...ClientEnrollmentFields
         }
       }
     }

@@ -5,6 +5,7 @@ import { Stack, Typography } from '@mui/material';
 
 import { entryExitRange } from '@/modules/hmis/hmisUtil';
 import {
+  ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
   HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
@@ -24,7 +25,8 @@ const EnrollmentStatus = ({
 }: {
   enrollment:
     | EnrollmentFieldsFragment
-    | HouseholdClientFieldsFragment['enrollment'];
+    | HouseholdClientFieldsFragment['enrollment']
+    | ClientEnrollmentFieldsFragment;
   hideIcon?: boolean;
   withActiveRange?: boolean;
   activeColor?: Colors;
