@@ -70,6 +70,7 @@ fragment EnrollmentFields on Enrollment {
 fragment AllEnrollmentDetails on Enrollment {
   ...EnrollmentFields
   ...EnrollmentOccurrencePointFields
+  numUnitsAssignedToHousehold
   intakeAssessment {
     id
   }

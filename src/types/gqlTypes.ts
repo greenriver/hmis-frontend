@@ -12525,6 +12525,7 @@ export type EnrollmentFieldsFragment = {
 
 export type AllEnrollmentDetailsFragment = {
   __typename?: 'Enrollment';
+  numUnitsAssignedToHousehold: number;
   id: string;
   lockVersion: number;
   entryDate: string;
@@ -13503,6 +13504,7 @@ export type GetEnrollmentDetailsQuery = {
   __typename?: 'Query';
   enrollment?: {
     __typename?: 'Enrollment';
+    numUnitsAssignedToHousehold: number;
     id: string;
     lockVersion: number;
     entryDate: string;
@@ -22026,6 +22028,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   fragment AllEnrollmentDetails on Enrollment {
     ...EnrollmentFields
     ...EnrollmentOccurrencePointFields
+    numUnitsAssignedToHousehold
     intakeAssessment {
       id
     }
