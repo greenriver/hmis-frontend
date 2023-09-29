@@ -23,6 +23,7 @@ import {
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
+  ProjectEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -31,7 +32,9 @@ export type EnrollmentFields = NonNullable<
 >['enrollments']['nodes'][number];
 
 export const ENROLLMENT_COLUMNS: {
-  [key: string]: ColumnDef<EnrollmentFieldsFragment>;
+  [key: string]: ColumnDef<
+    EnrollmentFieldsFragment | ProjectEnrollmentFieldsFragment
+  >;
 } = {
   clientName: {
     header: 'Client',

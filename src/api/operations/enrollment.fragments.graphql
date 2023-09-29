@@ -1,3 +1,23 @@
+# minimal fields when you're resolving Enrollment on a Project
+fragment ProjectEnrollmentFields on Enrollment {
+  id
+  lockVersion
+  entryDate
+  exitDate
+  inProgress
+  relationshipToHoH
+  enrollmentCoc
+  householdId
+  householdShortId
+  householdSize
+  client {
+    id
+    ...ClientNameDobVet
+    ...ClientIdentificationFields
+  }
+}
+
+# minimal fields when you're resolving Enrollment on a Client
 fragment EnrollmentFields on Enrollment {
   id
   lockVersion

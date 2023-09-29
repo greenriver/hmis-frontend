@@ -1778,6 +1778,7 @@ export type Enrollment = {
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  numUnitsAssignedToHousehold: Scalars['Int']['output'];
   openEnrollmentSummary: Array<EnrollmentSummary>;
   percentAmi?: Maybe<PercentAmi>;
   physicalDisabilityFam?: Maybe<NoYesMissing>;
@@ -10964,7 +10965,6 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
         lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
-        exitDestination?: Destination | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
@@ -10974,15 +10974,15 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
         client: {
           __typename?: 'Client';
           id: string;
+          dob?: string | null;
+          veteranStatus: NoYesReasonsForMissingData;
           lockVersion: number;
+          age?: number | null;
+          ssn?: string | null;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
-          dob?: string | null;
-          age?: number | null;
-          ssn?: string | null;
-          veteranStatus: NoYesReasonsForMissingData;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -10990,19 +10990,6 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
             canViewPartialSsn: boolean;
           };
         };
-        project: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        };
-        access: {
-          __typename?: 'EnrollmentAccess';
-          id: string;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-        };
-        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -12560,6 +12547,39 @@ export type CustomDataElementFieldsFragment = {
     dateUpdated?: string | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
   }> | null;
+};
+
+export type ProjectEnrollmentFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  lockVersion: number;
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  client: {
+    __typename?: 'Client';
+    id: string;
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
+    lockVersion: number;
+    age?: number | null;
+    ssn?: string | null;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+    access: {
+      __typename?: 'ClientAccess';
+      id: string;
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
+    };
+  };
 };
 
 export type EnrollmentFieldsFragment = {
@@ -22019,6 +22039,27 @@ export const ClientNameDobVetFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
+export const ProjectEnrollmentFieldsFragmentDoc = gql`
+  fragment ProjectEnrollmentFields on Enrollment {
+    id
+    lockVersion
+    entryDate
+    exitDate
+    inProgress
+    relationshipToHoH
+    enrollmentCoc
+    householdId
+    householdShortId
+    householdSize
+    client {
+      id
+      ...ClientNameDobVet
+      ...ClientIdentificationFields
+    }
+  }
+  ${ClientNameDobVetFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+`;
 export const EnrollmentAccessFieldsFragmentDoc = gql`
   fragment EnrollmentAccessFields on EnrollmentAccess {
     id
@@ -23603,20 +23644,13 @@ export const GetProjectEnrollmentsForBedNightsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...EnrollmentFields
+          ...ProjectEnrollmentFields
           lastBedNightDate
-          client {
-            id
-            ...ClientName
-            ...ClientIdentificationFields
-          }
         }
       }
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
-  ${ClientNameFragmentDoc}
-  ${ClientIdentificationFieldsFragmentDoc}
+  ${ProjectEnrollmentFieldsFragmentDoc}
 `;
 
 /**

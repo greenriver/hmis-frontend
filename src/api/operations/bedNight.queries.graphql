@@ -17,13 +17,8 @@ query GetProjectEnrollmentsForBedNights(
       limit
       nodesCount
       nodes {
-        ...EnrollmentFields
+        ...ProjectEnrollmentFields
         lastBedNightDate
-        client {
-          id
-          ...ClientName
-          ...ClientIdentificationFields
-        }
       }
     }
   }

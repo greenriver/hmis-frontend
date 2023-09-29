@@ -1842,6 +1842,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
+        name: 'numUnitsAssignedToHousehold',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'percentAmi',
         type: { kind: 'ENUM', name: 'PercentAMI', ofType: null },
       },
