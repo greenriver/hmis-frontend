@@ -399,6 +399,7 @@ export type Client = {
   firstName?: Maybe<Scalars['String']['output']>;
   gender: Array<Gender>;
   healthAndDvs: HealthAndDvsPaginated;
+  hudChronic?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   image?: Maybe<ClientImage>;
   incomeBenefits: IncomeBenefitsPaginated;
@@ -4674,6 +4675,7 @@ export type QueryAccess = {
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
+  canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
   canViewProject: Scalars['Boolean']['output'];
@@ -4822,6 +4824,7 @@ export type ReferralPosting = {
   chronic?: Maybe<Scalars['Boolean']['output']>;
   denialNote?: Maybe<Scalars['String']['output']>;
   denialReason?: Maybe<ReferralPostingDenialReasonType>;
+  hohClient?: Maybe<Client>;
   /** Enrollment for the HoH at the receiving Project (if the referral was accepted) */
   hohEnrollment?: Maybe<Enrollment>;
   hohMciId?: Maybe<Scalars['ID']['output']>;
@@ -12587,6 +12590,7 @@ export type AllEnrollmentDetailsFragment = {
   }>;
   client: {
     __typename?: 'Client';
+    hudChronic?: boolean | null;
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
@@ -13566,6 +13570,7 @@ export type GetEnrollmentDetailsQuery = {
     }>;
     client: {
       __typename?: 'Client';
+      hudChronic?: boolean | null;
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
@@ -19614,7 +19619,11 @@ export type GetReferralPostingQuery = {
     hohEnrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      client: { __typename?: 'Client'; id: string };
+      client: {
+        __typename?: 'Client';
+        id: string;
+        hudChronic?: boolean | null;
+      };
     } | null;
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
@@ -19726,7 +19735,11 @@ export type UpdateReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: { __typename?: 'Client'; id: string };
+        client: {
+          __typename?: 'Client';
+          id: string;
+          hudChronic?: boolean | null;
+        };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -19852,7 +19865,11 @@ export type CreateOutgoingReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: { __typename?: 'Client'; id: string };
+        client: {
+          __typename?: 'Client';
+          id: string;
+          hudChronic?: boolean | null;
+        };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -20036,7 +20053,7 @@ export type ReferralPostingDetailFieldsFragment = {
   hohEnrollment?: {
     __typename?: 'Enrollment';
     id: string;
-    client: { __typename?: 'Client'; id: string };
+    client: { __typename?: 'Client'; id: string; hudChronic?: boolean | null };
   } | null;
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
@@ -22039,6 +22056,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       ...CustomDataElementFields
     }
     client {
+      hudChronic
       ...ClientNameDobVet
       customDataElements {
         ...CustomDataElementFields
@@ -22482,6 +22500,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
       id
       client {
         id
+        hudChronic
       }
     }
     householdMembers {

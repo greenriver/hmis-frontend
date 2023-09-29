@@ -1,6 +1,6 @@
-import { Box, Grid, Typography } from '@mui/material';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { Box, Grid, Tooltip, Typography } from '@mui/material';
 import { Fragment, ReactNode, useMemo } from 'react';
-
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import EntryExitDatesWithAssessmentLinks from './EntryExitDatesWithAssessmentLinks';
 import OccurrencePointValue, {
@@ -10,7 +10,10 @@ import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { occurrencePointCollectedForEnrollment } from '@/modules/hmis/hmisUtil';
+import {
+  occurrencePointCollectedForEnrollment,
+  yesNo,
+} from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { Destination } from '@/types/gqlTypes';
@@ -80,9 +83,30 @@ const EnrollmentDetails = ({
       );
     }
 
+    if (enrollment.client.hudChronic !== null) {
+      content['HUD Chronic'] = yesNo(enrollment.client.hudChronic);
+    }
+
+    const tooltips: Record<string, string> = {
+      'HUD Chronic':
+        'Whether this client is considered chronically homeless, as of today. Follows the HUD definition for Chronic at PIT.',
+    };
+
     return Object.entries(content).map(([id, value], index) => ({
       id: String(index),
-      label: id,
+      label: tooltips[id] ? (
+        <>
+          {id}{' '}
+          <Tooltip title={tooltips[id]}>
+            <HelpOutlineIcon
+              fontSize='small'
+              sx={{ verticalAlign: 'bottom', ml: 1, color: 'text.secondary' }}
+            />
+          </Tooltip>
+        </>
+      ) : (
+        id
+      ),
       value,
     }));
   }, [enrollment]);
