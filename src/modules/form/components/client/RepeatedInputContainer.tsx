@@ -43,7 +43,7 @@ const RepeatedInputContainer = <T extends object>({
     <Grid
       item
       sx={{
-        mt: 2,
+        mt: 1,
         '&::after': {
           content: '""',
           height: '1px',
