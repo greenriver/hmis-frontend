@@ -17913,7 +17913,10 @@ export type OrganizationFieldsFragment = {
   }>;
 };
 
-export type GetOrganizationsQueryVariables = Exact<{ [key: string]: never }>;
+export type GetOrganizationsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
 
 export type GetOrganizationsQuery = {
   __typename?: 'Query';
@@ -26183,8 +26186,8 @@ export type ClearRecentItemsMutationOptions = Apollo.BaseMutationOptions<
   ClearRecentItemsMutationVariables
 >;
 export const GetOrganizationsDocument = gql`
-  query GetOrganizations {
-    organizations(sortOrder: NAME) {
+  query GetOrganizations($limit: Int = 10, $offset: Int = 0) {
+    organizations(limit: $limit, offset: $offset, sortOrder: NAME) {
       nodesCount
       nodes {
         ...OrganizationNameFields
@@ -26209,6 +26212,8 @@ export const GetOrganizationsDocument = gql`
  * @example
  * const { data, loading, error } = useGetOrganizationsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
