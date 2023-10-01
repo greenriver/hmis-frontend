@@ -77,6 +77,7 @@ const SnackbarAlert: React.FC<BaseAlertProps> = ({
         boxShadow: shadows[4],
         borderRadius: 2,
         '.MuiAlertTitle-root': { fontWeight: 600 },
+        marginTop: '100px',
       })}
     >
       <BaseAlert
