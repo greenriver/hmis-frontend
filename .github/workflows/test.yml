@@ -51,32 +51,32 @@ jobs:
       run: |
         yarn storybook --smoke-test
 
-    - name: Start mock server
-      if: ${{ false }}
-      run: |
-        cd serverMock
-        yarn install
-        yarn start &
-        sleep 5
+    # - name: Start mock server
+    #   if: ${{ false }}
+    #   run: |
+    #     cd serverMock
+    #     yarn install
+    #     yarn start &
+    #     sleep 5
 
-    - name: Run Cypress tests
-      # FIXME: skipped because vite-mkcert-plugin is hitting
-      # github rate limits when downloading mkcert.
-      # Fix is to (1) download mkcert to the machine in a previous step, so
-      # the plugin doesn't do it; (2) switch from this plugin back to using mkcert directly
-      if: ${{ false }}
-      timeout-minutes: 5
-      uses: cypress-io/github-action@v5.0.0
-      env:
-        HMIS_SERVER_URL: 'http://localhost:4000'
-        HMIS_HOST: 'localhost'
-        CYPRESS_BASE_URL: 'https://127.0.0.1:5173/'
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        DEBUG: 'vite:plugin:mkcert'
-      with:
-        install: false
-        build: yarn build
-        start: yarn preview
-        browser: chrome
-        spec: |
-          cypress/e2e/mocked/*.cy.ts
+    # - name: Run Cypress tests
+    #   # FIXME: skipped because vite-mkcert-plugin is hitting
+    #   # github rate limits when downloading mkcert.
+    #   # Fix is to (1) download mkcert to the machine in a previous step, so
+    #   # the plugin doesn't do it; (2) switch from this plugin back to using mkcert directly
+    #   if: ${{ false }}
+    #   timeout-minutes: 5
+    #   uses: cypress-io/github-action@v5.0.0
+    #   env:
+    #     HMIS_SERVER_URL: 'http://localhost:4000'
+    #     HMIS_HOST: 'localhost'
+    #     CYPRESS_BASE_URL: 'https://127.0.0.1:5173/'
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     DEBUG: 'vite:plugin:mkcert'
+    #   with:
+    #     install: false
+    #     build: yarn build
+    #     start: yarn preview
+    #     browser: chrome
+    #     spec: |
+    #       cypress/e2e/mocked/*.cy.ts

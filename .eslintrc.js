@@ -122,10 +122,5 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: [
-    'jest.config.ts',
-    'gqltypes.ts',
-    'cypress.config.ts',
-    'serverMock',
-  ],
+  ignorePatterns: ['jest.config.ts', 'gqltypes.ts', 'cypress.config.ts'],
 };

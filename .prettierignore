@@ -7,7 +7,6 @@ dist
 docker
 Dockerfile
 docker-compose.yml
-serverMock/forms
 README.md
 *.png
 *.ico
