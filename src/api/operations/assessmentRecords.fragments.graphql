@@ -1,68 +1,3 @@
-fragment EnrollmentValues on Enrollment {
-  id
-  entryDate
-  exitDate
-  dateOfEngagement
-  moveInDate
-  livingSituation
-  lengthOfStay
-  losUnderThreshold
-  previousStreetEssh
-  dateToStreetEssh
-  timesHomelessPastThreeYears
-  monthsHomelessPastThreeYears
-  enrollmentCoc
-  dateOfPathStatus
-  clientEnrolledInPath
-  reasonNotEnrolled
-  percentAmi
-  referralSource
-  countOutreachReferralApproaches
-  dateOfBcpStatus
-  eligibleForRhy
-  reasonNoServices
-  runawayYouth
-  sexualOrientation
-  sexualOrientationOther
-  formerWardChildWelfare
-  childWelfareYears
-  childWelfareMonths
-  formerWardJuvenileJustice
-  juvenileJusticeYears
-  juvenileJusticeMonths
-  unemploymentFam
-  mentalHealthDisorderFam
-  physicalDisabilityFam
-  alcoholDrugUseDisorderFam
-  unemploymentFam
-  mentalHealthDisorderFam
-  physicalDisabilityFam
-  alcoholDrugUseDisorderFam
-  insufficientIncome
-  incarceratedParent
-  targetScreenReqd
-  timeToHousingLoss
-  annualPercentAmi
-  literalHomelessHistory
-  clientLeaseholder
-  hohLeaseholder
-  subsidyAtRisk
-  evictionHistory
-  criminalRecord
-  incarceratedAdult
-  prisonDischarge
-  sexOffender
-  disabledHoh
-  currentPregnant
-  singleParent
-  dependentUnder6
-  hh5Plus
-  cocPrioritized
-  hpScreeningScore
-  thresholdScore
-  vamcStation
-}
-
 fragment EnrollmentFieldsFromAssessment on Enrollment {
   ...EnrollmentValues
   user {
@@ -98,7 +33,6 @@ fragment IncomeBenefitValues on IncomeBenefit {
   employerProvided
   ga
   gaAmount
-  hivaidsAssistance
   id
   incomeFromAnySource
   indianHealthServices
@@ -109,7 +43,6 @@ fragment IncomeBenefitValues on IncomeBenefit {
   noAdapReason
   noCobraReason
   noEmployerProvidedReason
-  noHivaidsAssistanceReason
   noIndianHealthServicesReason
   noMedicaidReason
   noMedicareReason
@@ -117,7 +50,7 @@ fragment IncomeBenefitValues on IncomeBenefit {
   noRyanWhiteReason
   noSchipReason
   noStateHealthInsReason
-  noVaMedReason
+  noVhaReason
   otherBenefitsSource
   otherBenefitsSourceIdentify
   otherIncomeAmount
@@ -152,7 +85,7 @@ fragment IncomeBenefitValues on IncomeBenefit {
   vaDisabilityNonServiceAmount
   vaDisabilityService
   vaDisabilityServiceAmount
-  vaMedicalServices
+  vhaServices
   wic
   workersComp
   workersCompAmount
@@ -213,23 +146,19 @@ fragment DisabilityGroupFields on DisabilityGroup {
 
 fragment HealthAndDvValues on HealthAndDv {
   __typename
-  bounceBack
   currentlyFleeing
   dataCollectionStage
   dateCreated
   dateDeleted
   dateUpdated
   dentalHealthStatus
-  domesticViolenceVictim
+  domesticViolenceSurvivor
   dueDate
-  feelingFrequency
   generalHealthStatus
   id
   informationDate
-  lifeValue
   mentalHealthStatus
   pregnancyStatus
-  supportFromOthers
   whenOccurred
 }
 
@@ -264,6 +193,7 @@ fragment ExitValues on Exit {
   destination
   destinationSafeClient
   destinationSafeWorker
+  destinationSubsidyType
   earlyExitReason
   exchangeForSex
   exchangeForSexPastThreeMonths

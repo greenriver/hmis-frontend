@@ -97,13 +97,17 @@ const FormCard = ({
         {/* Card title */}
         {item.text && (
           <Stack justifyContent='space-between' direction='row'>
-            <Typography variant='h5' sx={{ mb: 2 }}>
+            <Typography variant='cardTitle' sx={{ mb: 2 }}>
               {item.text}
             </Typography>
 
             <Stack direction='row' spacing={2}>
               {debug && import.meta.env.MODE === 'development' && (
-                <Button {...buttonProps} onClick={() => debug(childLinkIds)}>
+                <Button
+                  {...buttonProps}
+                  onClick={() => debug(childLinkIds)}
+                  variant='text'
+                >
                   Debug
                 </Button>
               )}

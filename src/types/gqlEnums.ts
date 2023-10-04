@@ -11,7 +11,7 @@ export const HmisEnums = {
     YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
   },
   AgeRange: {
     Under5: 'Under 5',
@@ -28,7 +28,7 @@ export const HmisEnums = {
   },
   AnnualPercentAMI: {
     INVALID: 'Invalid Value',
-    NUM_0_I_E_NOT_EMPLOYED_NOT_RECEIVING_CASH_BENEFITS_NO_OTHER_CURRENT_INCOME:
+    NUM_0:
       '$0 (i.e., not employed, not receiving cash benefits, no other current income)',
     NUM_1_14_OF_AREA_MEDIAN_INCOME_AMI_FOR_HOUSEHOLD_SIZE:
       '1-14% of Area Median Income (AMI) for household size',
@@ -43,12 +43,13 @@ export const HmisEnums = {
     HOUSING_NEEDS_ASSESSMENT: 'Housing Needs Assessment',
   },
   AssessmentRole: {
-    ANNUAL: 'Annual Assessment',
-    CE: 'Coordinated Entry',
-    EXIT: 'Exit Assessment',
-    INTAKE: 'Intake Assessment',
-    POST_EXIT: 'Post-Exit Assessment',
-    UPDATE: 'Update Assessment',
+    ANNUAL: 'ANNUAL',
+    CE: 'CE',
+    CUSTOM_ASSESSMENT: 'CUSTOM_ASSESSMENT',
+    EXIT: 'EXIT',
+    INTAKE: 'INTAKE',
+    POST_EXIT: 'POST_EXIT',
+    UPDATE: 'UPDATE',
   },
   AssessmentSortOption: {
     ASSESSMENT_DATE: 'Assessment Date: Most Recent First',
@@ -74,6 +75,7 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  BulkActionType: { ADD: 'ADD', REMOVE: 'REMOVE' },
   ClientAddressType: { both: 'Both', physical: 'Physical', postal: 'Postal' },
   ClientAddressUse: {
     home: 'Home',
@@ -100,6 +102,8 @@ export const HmisEnums = {
     usual: 'Usual',
   },
   ClientSortOption: {
+    BEST_MATCH: 'Most Relevant',
+    RECENTLY_ADDED: 'Recently Added',
     FIRST_NAME_A_TO_Z: 'First Name: A-Z',
     FIRST_NAME_Z_TO_A: 'First Name: Z-A',
     LAST_NAME_A_TO_Z: 'Last Name: A-Z',
@@ -163,7 +167,7 @@ export const HmisEnums = {
     NUM_4_7: '4-7',
     NUM_8_11: '8-11',
     NUM_12_OR_MORE: '12 or more',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -176,7 +180,51 @@ export const HmisEnums = {
     PURSUING_GRADUATE_DEGREE: 'Pursuing Graduate Degree',
     PURSUING_OTHER_POST_SECONDARY_CREDENTIAL:
       'Pursuing other post-secondary credential',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  CurrentLivingSituationOptions: {
+    INVALID: 'Invalid Value',
+    OTHER: 'Other',
+    WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
+    EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER:
+      'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter',
+    PLACE_NOT_MEANT_FOR_HABITATION:
+      'Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)',
+    SAFE_HAVEN: 'Safe Haven',
+    PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY:
+      'Psychiatric hospital or other psychiatric facility',
+    SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER:
+      'Substance abuse treatment facility or detox center',
+    HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY:
+      'Hospital or other residential non-psychiatric medical facility',
+    JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY:
+      'Jail, prison or juvenile detention facility',
+    FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME:
+      'Foster care home or foster care group home',
+    LONG_TERM_CARE_FACILITY_OR_NURSING_HOME:
+      'Long-term care facility or nursing home',
+    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS:
+      'Transitional housing for homeless persons (including homeless youth)',
+    HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER:
+      'Hotel or motel paid for without emergency shelter voucher',
+    RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA:
+      'Residential project or halfway house with no homeless criteria',
+    HOST_HOME_NON_CRISIS: 'Host Home (non-crisis)',
+    STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE:
+      'Staying or living in a family member’s room, apartment, or house',
+    STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE:
+      "Staying or living in a friend's room, apartment or house",
+    RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
+      'Rental by client, no ongoing housing subsidy',
+    OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
+      'Owned by client, no ongoing housing subsidy',
+    OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY:
+      'Owned by client, with ongoing housing subsidy',
+    RENTAL_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY:
+      'Rental by client, with ongoing housing subsidy',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -184,11 +232,11 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     NOT_CURRENTLY_ENROLLED_IN_ANY_SCHOOL_OR_EDUCATIONAL_COURSE:
       'Not currently enrolled in any school or educational course',
-    CURRENTLY_ENROLLED_BUT_NOT_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION:
+    CURRENTLY_ENROLLED_BUT_NOT_ATTENDING_REGULARLY:
       'Currently enrolled but NOT attending regularly (when school or the course is in session)',
-    CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION:
+    CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY:
       'Currently enrolled and attending regularly (when school or the course is in session)',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -205,7 +253,7 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     FULL_DOB_REPORTED: 'Full DOB',
     APPROXIMATE_OR_PARTIAL_DOB_REPORTED: 'Partial DOB',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -218,6 +266,13 @@ export const HmisEnums = {
     HOH: 'HOH',
     HOH_AND_ADULTS: 'HOH_AND_ADULTS',
     VETERAN_HOH: 'VETERAN_HOH',
+  },
+  DataCollectionFeatureRole: {
+    CE_ASSESSMENT: 'CE_ASSESSMENT',
+    CE_EVENT: 'CE_EVENT',
+    CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
+    REFERRAL_REQUEST: 'REFERRAL_REQUEST',
+    SERVICE: 'SERVICE',
   },
   DataCollectionStage: {
     INVALID: 'Invalid Value',
@@ -237,12 +292,15 @@ export const HmisEnums = {
   },
   Destination: {
     INVALID: 'Invalid Value',
-    EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER:
-      'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter',
-    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH:
-      'Transitional housing for homeless persons (including homeless youth)',
-    PERMANENT_HOUSING_OTHER_THAN_RRH_FOR_FORMERLY_HOMELESS_PERSONS:
-      'Permanent housing (other than RRH) for formerly homeless persons',
+    OTHER: 'Other',
+    DECEASED: 'Deceased',
+    NO_EXIT_INTERVIEW_COMPLETED: 'No exit interview completed',
+    WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
+    EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER:
+      'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter',
+    PLACE_NOT_MEANT_FOR_HABITATION:
+      'Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)',
+    SAFE_HAVEN: 'Safe Haven',
     PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY:
       'Psychiatric hospital or other psychiatric facility',
     SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER:
@@ -251,52 +309,38 @@ export const HmisEnums = {
       'Hospital or other residential non-psychiatric medical facility',
     JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY:
       'Jail, prison or juvenile detention facility',
+    FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME:
+      'Foster care home or foster care group home',
+    LONG_TERM_CARE_FACILITY_OR_NURSING_HOME:
+      'Long-term care facility or nursing home',
+    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS:
+      'Transitional housing for homeless persons (including homeless youth)',
+    STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE:
+      'Staying or living with family, temporary tenure (e.g. room, apartment or house)',
+    STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE:
+      'Staying or living with friends, temporary tenure (e.g. room apartment or house)',
+    HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER:
+      'Hotel or motel paid for without emergency shelter voucher',
+    MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH:
+      'Moved from one HOPWA funded project to HOPWA TH',
+    RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA:
+      'Residential project or halfway house with no homeless criteria',
+    HOST_HOME_NON_CRISIS: 'Host Home (non-crisis)',
     RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
       'Rental by client, no ongoing housing subsidy',
     OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
       'Owned by client, no ongoing housing subsidy',
-    STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE:
-      'Staying or living with family, temporary tenure (e.g. room, apartment or house)',
-    STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE:
-      'Staying or living with friends, temporary tenure (e.g. room apartment or house)',
-    HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER:
-      'Hotel or motel paid for without emergency shelter voucher',
-    FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME:
-      'Foster care home or foster care group home',
-    PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE:
-      'Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)',
-    OTHER: 'Other',
-    SAFE_HAVEN: 'Safe Haven',
-    RENTAL_BY_CLIENT_WITH_VASH_HOUSING_SUBSIDY:
-      'Rental by client, with VASH housing subsidy',
-    RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY:
-      'Rental by client, with other ongoing housing subsidy',
     OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY:
       'Owned by client, with ongoing housing subsidy',
     STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE:
       'Staying or living with family, permanent tenure',
     STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE:
       'Staying or living with friends, permanent tenure',
-    DECEASED: 'Deceased',
-    LONG_TERM_CARE_FACILITY_OR_NURSING_HOME:
-      'Long-term care facility or nursing home',
     MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH:
       'Moved from one HOPWA funded project to HOPWA PH',
-    MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH:
-      'Moved from one HOPWA funded project to HOPWA TH',
-    RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY:
-      'Rental by client, with GPD TIP housing subsidy',
-    RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA:
-      'Residential project or halfway house with no homeless criteria',
-    NO_EXIT_INTERVIEW_COMPLETED: 'No exit interview completed',
-    RENTAL_BY_CLIENT_WITH_RRH_OR_EQUIVALENT_SUBSIDY:
-      'Rental by client, with RRH or equivalent subsidy',
-    HOST_HOME_NON_CRISIS: 'Host Home (non-crisis)',
-    RENTAL_BY_CLIENT_WITH_HCV_VOUCHER_TENANT_OR_PROJECT_BASED:
-      'Rental by client, with HCV voucher (tenant or project based)',
-    RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT:
-      'Rental by client in a public housing unit',
-    CLIENT_REFUSED: 'Client refused',
+    RENTAL_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY:
+      'Rental by client, with ongoing housing subsidy',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -306,7 +350,7 @@ export const HmisEnums = {
     ALCOHOL_USE_DISORDER: 'Alcohol use disorder',
     DRUG_USE_DISORDER: 'Drug use disorder',
     BOTH_ALCOHOL_AND_DRUG_USE_DISORDERS: 'Both alcohol and drug use disorders',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -333,7 +377,7 @@ export const HmisEnums = {
     UNDER_OTHER_THAN_HONORABLE_CONDITIONS_OTH:
       'Under other than honorable conditions (OTH)',
     UNCHARACTERIZED: 'Uncharacterized',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -341,8 +385,7 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     FULL_TIME: 'Full-time',
     PART_TIME: 'Part-time',
-    SEASONAL_SPORADIC_INCLUDING_DAY_LABOR:
-      'Seasonal / sporadic (including day labor)',
+    SEASONAL_SPORADIC: 'Seasonal / sporadic (including day labor)',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   EnableBehavior: { ALL: 'ALL', ANY: 'ANY' },
@@ -355,6 +398,7 @@ export const HmisEnums = {
     GREATER_THAN: 'GREATER_THAN',
     GREATER_THAN_EQUAL: 'GREATER_THAN_EQUAL',
     IN: 'Whether the value is in the answerCodes array.',
+    INCLUDES: 'Whether the value includes the given item',
     LESS_THAN: 'LESS_THAN',
     LESS_THAN_EQUAL: 'LESS_THAN_EQUAL',
     NOT_EQUAL: 'NOT_EQUAL',
@@ -367,6 +411,12 @@ export const HmisEnums = {
   EnrollmentSortOption: {
     HOUSEHOLD_ID: 'Household ID',
     MOST_RECENT: 'Most Recent',
+    FIRST_NAME_A_TO_Z: 'First Name: A-Z',
+    FIRST_NAME_Z_TO_A: 'First Name: Z-A',
+    LAST_NAME_A_TO_Z: 'Last Name: A-Z',
+    LAST_NAME_Z_TO_A: 'Last Name: Z-A',
+    AGE_OLDEST_TO_YOUNGEST: 'Age: Oldest to Youngest',
+    AGE_YOUNGEST_TO_OLDEST: 'Age: Youngest to Oldest',
   },
   EnrollmentStatus: {
     ACTIVE: 'Active',
@@ -375,14 +425,6 @@ export const HmisEnums = {
     EXITED: 'Exited',
     OWN_ENTRY_INCOMPLETE: 'Entry Incomplete',
     OWN_EXIT_INCOMPLETE: 'Exit Incomplete',
-  },
-  Ethnicity: {
-    INVALID: 'Invalid Value',
-    NON_HISPANIC_NON_LATIN_A_O_X: 'Non-Hispanic/Non-Latin(a)(o)(x)',
-    HISPANIC_LATIN_A_O_X: 'Hispanic/Latin(a)(o)(x)',
-    CLIENT_REFUSED: 'Client refused',
-    CLIENT_DOESN_T_KNOW: "Client doesn't know",
-    DATA_NOT_COLLECTED: 'Data not collected',
   },
   EventSortOption: { EVENT_DATE: 'EVENT_DATE' },
   EventType: {
@@ -449,53 +491,39 @@ export const HmisEnums = {
     PERSONAL_ID: 'Personal ID',
     WAREHOUSE_ID: 'Warehouse ID',
   },
-  FeelingFrequency: {
-    INVALID: 'Invalid Value',
-    NOT_AT_ALL: 'Not at all',
-    ONCE_A_MONTH: 'Once a month',
-    SEVERAL_TIMES_A_MONTH: 'Several times a month',
-    SEVERAL_TIMES_A_WEEK: 'Several times a week',
-    AT_LEAST_EVERY_DAY: 'At least every day',
-    CLIENT_REFUSED: 'Client refused',
-    CLIENT_DOESN_T_KNOW: "Client doesn't know",
-    DATA_NOT_COLLECTED: 'Data not collected',
-  },
   FileSortOption: {
     DATE_CREATED: 'DATE_CREATED',
     DATE_UPDATED: 'DATE_UPDATED',
   },
   FormRole: {
-    ANNUAL: 'Annual Assessment',
-    CE: 'Coordinated Entry',
-    CE_ASSESSMENT: 'CE Assessment',
-    CE_EVENT: 'CE Event',
-    CLIENT: 'Client',
-    CURRENT_LIVING_SITUATION: 'Current Living Situation',
-    CUSTOM: 'Custom Assessment',
-    DATE_OF_ENGAGEMENT: 'Date of Engagement',
-    ENROLLMENT: 'Enrollment',
-    EXIT: 'Exit Assessment',
-    FILE: 'File',
-    FUNDER: 'Funder',
-    INTAKE: 'Intake Assessment',
-    INVENTORY: 'Inventory',
-    MOVE_IN_DATE: 'Move-in Date',
-    NEW_CLIENT_ENROLLMENT: 'New Client Enrollment',
-    ORGANIZATION: 'Organization',
-    PATH_STATUS: 'PATH Status',
-    POST_EXIT: 'Post-Exit Assessment',
-    PROJECT: 'Project',
-    PROJECT_COC: 'Project CoC',
-    REFERRAL_REQUEST: 'Referral Request',
-    SERVICE: 'Service',
-    UNIT_ASSIGNMENT: 'Unit Assignment',
-    UPDATE: 'Update Assessment',
+    ANNUAL: 'ANNUAL',
+    CE: 'CE',
+    CE_ASSESSMENT: 'CE_ASSESSMENT',
+    CE_EVENT: 'CE_EVENT',
+    CLIENT: 'CLIENT',
+    CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
+    CUSTOM_ASSESSMENT: 'CUSTOM_ASSESSMENT',
+    ENROLLMENT: 'ENROLLMENT',
+    EXIT: 'EXIT',
+    FILE: 'FILE',
+    FUNDER: 'FUNDER',
+    INTAKE: 'INTAKE',
+    INVENTORY: 'INVENTORY',
+    NEW_CLIENT_ENROLLMENT: 'NEW_CLIENT_ENROLLMENT',
+    OCCURRENCE_POINT: 'OCCURRENCE_POINT',
+    ORGANIZATION: 'ORGANIZATION',
+    POST_EXIT: 'POST_EXIT',
+    PROJECT: 'PROJECT',
+    PROJECT_COC: 'PROJECT_COC',
+    REFERRAL_REQUEST: 'REFERRAL_REQUEST',
+    SERVICE: 'SERVICE',
+    UPDATE: 'UPDATE',
   },
   FunderSortOption: { START_DATE: 'START_DATE' },
   FundingSource: {
     HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY:
       'HHS: PATH - Street Outreach & Supportive Services Only',
-    HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER:
+    HHS_RHY_BASIC_CENTER_PROGRAM:
       'HHS: RHY - Basic Center Program (prevention and shelter)',
     HHS_RHY_DEMONSTRATION_PROJECT: 'HHS: RHY - Demonstration Project',
     HHS_RHY_MATERNITY_GROUP_HOME_FOR_PREGNANT_AND_PARENTING_YOUTH:
@@ -503,9 +531,10 @@ export const HmisEnums = {
     HHS_RHY_STREET_OUTREACH_PROJECT: 'HHS: RHY - Street Outreach Project',
     HHS_RHY_TRANSITIONAL_LIVING_PROGRAM:
       'HHS: RHY - Transitional Living Program',
-    HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY:
+    HUD_COC_HOMELESSNESS_PREVENTION:
       'HUD: CoC - Homelessness Prevention (High Performing Communities Only)',
-    HUD_COC_JOINT_COMPONENT_RRH_PSH: 'HUD: CoC - Joint Component RRH/PSH',
+    HUD_COC_JOINT_COMPONENT_RRH_PSH_DEPRECATED:
+      'HUD: CoC - Joint Component RRH/PSH [Deprecated]',
     HUD_COC_JOINT_COMPONENT_TH_RRH: 'HUD: CoC - Joint Component TH/RRH',
     HUD_COC_PERMANENT_SUPPORTIVE_HOUSING:
       'HUD: CoC - Permanent Supportive Housing',
@@ -517,7 +546,7 @@ export const HmisEnums = {
     HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP:
       'HUD: CoC - Youth Homeless Demonstration Program (YHDP)',
     HUD_ESG_CV: 'HUD: ESG - CV',
-    HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES:
+    HUD_ESG_EMERGENCY_SHELTER:
       'HUD: ESG - Emergency Shelter (operating and/or essential services)',
     HUD_ESG_HOMELESSNESS_PREVENTION: 'HUD: ESG - Homelessness Prevention',
     HUD_ESG_RAPID_REHOUSING: 'HUD: ESG - Rapid Rehousing',
@@ -528,7 +557,7 @@ export const HmisEnums = {
     HUD_HOPWA_CV: 'HUD: HOPWA - CV',
     HUD_HOPWA_HOTEL_MOTEL_VOUCHERS: 'HUD: HOPWA - Hotel/Motel Vouchers',
     HUD_HOPWA_HOUSING_INFORMATION: 'HUD: HOPWA - Housing Information',
-    HUD_HOPWA_PERMANENT_HOUSING_FACILITY_BASED_OR_TBRA:
+    HUD_HOPWA_PERMANENT_HOUSING:
       'HUD: HOPWA - Permanent Housing (facility based or TBRA)',
     HUD_HOPWA_PERMANENT_HOUSING_PLACEMENT:
       'HUD: HOPWA - Permanent Housing Placement',
@@ -536,15 +565,17 @@ export const HmisEnums = {
       'HUD: HOPWA - Short-Term Rent, Mortgage, Utility assistance',
     HUD_HOPWA_SHORT_TERM_SUPPORTIVE_FACILITY:
       'HUD: HOPWA - Short-Term Supportive Facility',
-    HUD_HOPWA_TRANSITIONAL_HOUSING_FACILITY_BASED_OR_TBRA:
+    HUD_HOPWA_TRANSITIONAL_HOUSING:
       'HUD: HOPWA - Transitional Housing (facility based or TBRA)',
     HUD_HUD_VASH: 'HUD: HUD/VASH',
     HUD_PAY_FOR_SUCCESS: 'HUD: Pay for Success',
-    HUD_PIH_EMERGENCY_HOUSING_VOUCHER: 'HUD: PIH (Emergency Housing Voucher)',
+    HUD_PIH: 'HUD: PIH (Emergency Housing Voucher)',
     HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS:
       'HUD: Public and Indian Housing (PIH) Programs',
-    HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM:
-      'HUD: Rural Housing Stability Assistance Program',
+    HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM_DEPRECATED:
+      'HUD: Rural Housing Stability Assistance Program [Deprecated]',
+    HUD_RURAL_SPECIAL_NOFO: 'HUD: Rural Special NOFO',
+    HUD_UNSHELTERED_SPECIAL_NOFO: 'HUD: Unsheltered Special NOFO',
     VA_COMMUNITY_CONTRACT_SAFE_HAVEN_PROGRAM:
       'VA: Community Contract Safe Haven Program',
     VA_COMPENSATED_WORK_THERAPY_TRANSITIONAL_RESIDENCE:
@@ -570,13 +601,14 @@ export const HmisEnums = {
     N_A: 'N/A',
   },
   Gender: {
-    FEMALE: 'Female',
-    MALE: 'Male',
-    NO_SINGLE_GENDER:
-      'A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
+    MAN: 'Man',
+    WOMAN: 'Woman',
     TRANSGENDER: 'Transgender',
+    NON_BINARY: 'Non-Binary',
     QUESTIONING: 'Questioning',
-    CLIENT_REFUSED: 'Client refused',
+    CULTURALLY_SPECIFIC: 'Culturally Specific Identity (e.g., Two-Spirit)',
+    DIFFERENT_IDENTITY: 'Different Identity',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -586,6 +618,12 @@ export const HmisEnums = {
     SUBURBAN: 'Suburban',
     RURAL: 'Rural',
     DATA_NOT_COLLECTED: 'Unknown / data not collected',
+  },
+  HMISParticipationType: {
+    INVALID: 'Invalid Value',
+    NOT_PARTICIPATING: 'Not Participating',
+    HMIS_PARTICIPATING: 'HMIS Participating',
+    COMPARABLE_DATABASE_PARTICIPATING: 'Comparable Database Participating',
   },
   HOPWAMedAssistedLivingFac: {
     YES: 'Yes',
@@ -600,7 +638,7 @@ export const HmisEnums = {
     GOOD: 'Good',
     FAIR: 'Fair',
     POOR: 'Poor',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -625,9 +663,9 @@ export const HmisEnums = {
       'Moved to a transitional or temporary housing facility or program',
     CLIENT_BECAME_HOMELESS_MOVING_TO_A_SHELTER_OR_OTHER_PLACE_UNFIT_FOR_HUMAN_HABITATION:
       'Client became homeless - moving to a shelter or other place unfit for human habitation',
-    CLIENT_WENT_TO_JAIL_PRISON: 'Client went to jail/prison',
-    CLIENT_DIED: 'Client died',
-    CLIENT_REFUSED: 'Client refused',
+    JAIL_PRISON: 'Jail/prison',
+    DECEASED: 'Deceased',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -697,7 +735,7 @@ export const HmisEnums = {
     BACHELOR_S_DEGREE: "Bachelor's degree",
     GRADUATE_DEGREE: 'Graduate degree',
     VOCATIONAL_CERTIFICATION: 'Vocational certification',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -710,76 +748,6 @@ export const HmisEnums = {
     NONE: 'None',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  LivingSituation: {
-    INVALID: 'Invalid Value',
-    EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER:
-      'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter',
-    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH:
-      'Transitional housing for homeless persons (including homeless youth)',
-    PERMANENT_HOUSING_OTHER_THAN_RRH_FOR_FORMERLY_HOMELESS_PERSONS:
-      'Permanent housing (other than RRH) for formerly homeless persons',
-    PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY:
-      'Psychiatric hospital or other psychiatric facility',
-    SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER:
-      'Substance abuse treatment facility or detox center',
-    HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY:
-      'Hospital or other residential non-psychiatric medical facility',
-    JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY:
-      'Jail, prison or juvenile detention facility',
-    RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
-      'Rental by client, no ongoing housing subsidy',
-    OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
-      'Owned by client, no ongoing housing subsidy',
-    STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE:
-      'Staying or living with family, temporary tenure (e.g. room, apartment or house)',
-    STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE:
-      'Staying or living with friends, temporary tenure (e.g. room apartment or house)',
-    HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER:
-      'Hotel or motel paid for without emergency shelter voucher',
-    FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME:
-      'Foster care home or foster care group home',
-    PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE:
-      'Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)',
-    OTHER: 'Other',
-    SAFE_HAVEN: 'Safe Haven',
-    RENTAL_BY_CLIENT_WITH_VASH_HOUSING_SUBSIDY:
-      'Rental by client, with VASH housing subsidy',
-    RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY:
-      'Rental by client, with other ongoing housing subsidy',
-    OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY:
-      'Owned by client, with ongoing housing subsidy',
-    STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE:
-      'Staying or living with family, permanent tenure',
-    STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE:
-      'Staying or living with friends, permanent tenure',
-    DECEASED: 'Deceased',
-    LONG_TERM_CARE_FACILITY_OR_NURSING_HOME:
-      'Long-term care facility or nursing home',
-    MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH:
-      'Moved from one HOPWA funded project to HOPWA PH',
-    MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_TH:
-      'Moved from one HOPWA funded project to HOPWA TH',
-    RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY:
-      'Rental by client, with GPD TIP housing subsidy',
-    RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA:
-      'Residential project or halfway house with no homeless criteria',
-    NO_EXIT_INTERVIEW_COMPLETED: 'No exit interview completed',
-    RENTAL_BY_CLIENT_WITH_RRH_OR_EQUIVALENT_SUBSIDY:
-      'Rental by client, with RRH or equivalent subsidy',
-    HOST_HOME_NON_CRISIS: 'Host Home (non-crisis)',
-    RENTAL_BY_CLIENT_WITH_HCV_VOUCHER_TENANT_OR_PROJECT_BASED:
-      'Rental by client, with HCV voucher (tenant or project based)',
-    RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT:
-      'Rental by client in a public housing unit',
-    STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE:
-      "Staying or living in a family member's room, apartment or house",
-    STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE:
-      "Staying or living in a friend's room, apartment or house",
-    WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
-    CLIENT_REFUSED: 'Client refused',
-    CLIENT_DOESN_T_KNOW: "Client doesn't know",
-    DATA_NOT_COLLECTED: 'Data not collected',
-  },
   MilitaryBranch: {
     INVALID: 'Invalid Value',
     ARMY: 'Army',
@@ -787,7 +755,8 @@ export const HmisEnums = {
     NAVY: 'Navy',
     MARINES: 'Marines',
     COAST_GUARD: 'Coast Guard',
-    CLIENT_REFUSED: 'Client refused',
+    SPACE_FORCE: 'Space Force',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -806,7 +775,7 @@ export const HmisEnums = {
     NUM_11: '11',
     NUM_12: '12',
     MORE_THAN_12_MONTHS: 'More than 12 months',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -822,7 +791,7 @@ export const HmisEnums = {
     HIGHER_EDUCATION_DROPPED_OUT: 'Higher education: Dropped out',
     HIGHER_EDUCATION_OBTAINED_A_CREDENTIAL_DEGREE:
       'Higher education: Obtained a credential/degree',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -831,7 +800,7 @@ export const HmisEnums = {
     FULL_NAME_REPORTED: 'Full name',
     PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED:
       'Partial, street name, or code name',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -842,10 +811,11 @@ export const HmisEnums = {
     CLIENT_DID_NOT_APPLY: 'Client did not apply',
     INSURANCE_TYPE_NOT_APPLICABLE_FOR_THIS_CLIENT:
       'Insurance type not applicable for this client',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  NoYes: { YES: 'Yes', INVALID: 'Invalid Value', NO: 'No' },
   NoYesMissing: {
     YES: 'Yes',
     INVALID: 'Invalid Value',
@@ -856,7 +826,7 @@ export const HmisEnums = {
     YES: 'Yes',
     INVALID: 'Invalid Value',
     NO: 'No',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -876,9 +846,10 @@ export const HmisEnums = {
   },
   PercentAMI: {
     INVALID: 'Invalid Value',
-    LESS_THAN_30: 'Less than 30%',
-    NUM_30_TO_50: '30% to 50%',
-    GREATER_THAN_50: 'Greater than 50%',
+    NUM_30_OR_LESS: '30% or less',
+    NUM_31_TO_50: '31% to 50%',
+    NUM_51_TO_80: '51% to 80%',
+    NUM_81_OR_GREATER: '81% or greater',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   PickListType: {
@@ -906,10 +877,388 @@ export const HmisEnums = {
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
+    RESIDENTIAL_PROJECTS: 'Residential Projects',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
+  },
+  PreferredLanguage: {
+    INVALID: 'Invalid Value',
+    DIFFERENT_PREFERRED_LANGUAGE: 'Different preferred language',
+    ACHOLI: 'Acholi',
+    AFAR: 'Afar',
+    AFRIKAANS: 'Afrikaans',
+    AHTNA: 'Ahtna',
+    AKAN: 'Akan',
+    AKATEKO: 'Akateko',
+    AKUZIPIGESTUN_ST_LAWRENCE_ISLAND_YUPIK:
+      'Akuzipigestun / St. Lawrence Island Yupik (aka Siberian Yupik)',
+    ALBANIAN: 'Albanian',
+    ALGONQUIAN: 'Algonquian',
+    ALUTIIQ: 'Alutiiq',
+    AMERICAN_SIGN_LANGUAGE: 'American Sign Language',
+    AMHARIC: 'Amharic',
+    ANUAK: 'Anuak',
+    APACHE: 'Apache',
+    ARABIC: 'Arabic',
+    ARMENIAN: 'Armenian',
+    ASSYRIAN: 'Assyrian',
+    ATNAKENAEGE_AHTNA: 'Atnakenaege’ / Ahtna',
+    AYMARA: 'Aymara',
+    AZERBAIJANI: 'Azerbaijani',
+    BAHASA: 'Bahasa',
+    BAHDINI: 'Bahdini',
+    BAJUNI: 'Bajuni',
+    BAMBARA: 'Bambara',
+    BANTU: 'Bantu',
+    BARESE: 'Barese',
+    BASQUE: 'Basque',
+    BASSA: 'Bassa',
+    BELORUSSIAN: 'Belorussian',
+    BEMBA: 'Bemba',
+    BENAADIR: 'Benaadir',
+    BENGALI: 'Bengali',
+    BERBER: 'Berber',
+    BLACK_AMERICAN_SIGN_LANGUAGE: 'Black American Sign Language',
+    BOSNIAN: 'Bosnian',
+    BRAVANESE: 'Bravanese',
+    BULGARIAN: 'Bulgarian',
+    BURMESE: 'Burmese',
+    CAMBODIAN: 'Cambodian',
+    CANTONESE: 'Cantonese',
+    CAPE_VERDEAN_CREOLE: 'Cape Verdean Creole',
+    CATALAN: 'Catalan',
+    CEBUANO: 'Cebuano',
+    CENTRAL_ALASKAN_YUP_IK_YUGTUN: 'Central Alaskan Yup’ik / Yugtun',
+    CHALDEAN: 'Chaldean',
+    CHAMORRO: 'Chamorro',
+    CHAOCHOW: 'Chaochow',
+    CHEROKEE: 'Cherokee',
+    CHINESE: 'Chinese',
+    CHIPEWYAN: 'Chipewyan',
+    CHOCTAW: 'Choctaw',
+    CHUUKESE: 'Chuukese',
+    CREE: 'Cree',
+    CROATIAN: 'Croatian',
+    CZECH: 'Czech',
+    DAKOTA: 'Dakota',
+    DANISH: 'Danish',
+    DARI: 'Dari',
+    DEG_XINAG: 'Deg Xinag',
+    DENA_INAQ_DENA_INA: "Dena'inaq' / Dena'ina",
+    DENAAKK_E_KOYUKON: "Denaakk'e / Koyukon",
+    DEWOIN: 'Dewoin',
+    DINAK_I_UPPER_KUSKOKWIM: "Dinak'i / Upper Kuskokwim",
+    DINJII_ZHUH_K_YAA_GWICH_IN: "Dinjii Zhuh K'yaa / Gwich'in",
+    DINKA: 'Dinka',
+    DOOGH_QINAQ_HOLIKACHUK: 'Doogh Qinaq / Holikachuk',
+    DUALA: 'Duala',
+    DUTCH: 'Dutch',
+    DZONGKHA: 'Dzongkha',
+    EDO: 'Edo',
+    EKEGUSLI: 'Ekegusli',
+    ENGLISH: 'English',
+    ESTONIAN: 'Estonian',
+    EWE: 'Ewe',
+    EYAK: 'Eyak',
+    FARSI: 'Farsi',
+    FIJIAN: 'Fijian',
+    FILIPINO: 'Filipino',
+    FINNISH: 'Finnish',
+    FLEMISH: 'Flemish',
+    FRENCH: 'French',
+    FRENCH_CAJUN: 'French Cajun',
+    FRENCH_CANADIAN: 'French Canadian',
+    FRENCH_CREOLE: 'French Creole',
+    FRENCH_HAITIAN: 'French Haitian',
+    FUKIENESE: 'Fukienese',
+    FULANI: 'Fulani',
+    FUZHOU: 'Fuzhou',
+    GA: 'Ga',
+    GADDANG: 'Gaddang',
+    GAELIC: 'Gaelic',
+    GARRE: 'Garre',
+    GEN: 'Gen',
+    GEORGIAN: 'Georgian',
+    GERMAN: 'German',
+    GHEG: 'Gheg',
+    GOKANA: 'Gokana',
+    GREEK: 'Greek',
+    GUJARATI: 'Gujarati',
+    GULAY: 'Gulay',
+    GULLAH: 'Gullah',
+    GURANI: 'Gurani',
+    GWICH_IN: "Gwich'in",
+    HAIDA: 'Haida',
+    HAITIAN: 'Haitian',
+    HAITIAN_CREOLE: 'Haitian Creole',
+    HAKKA: 'Hakka',
+    H_L_GOLAN_H_N: 'Häl golan / Hän',
+    HASSANIYYA: 'Hassaniyya',
+    HAUSA: 'Hausa',
+    HAWAI_I_SIGN_LANGUAGE: "Hawai'i Sign Language",
+    HAWAIIAN: 'Hawaiian',
+    HEBREW: 'Hebrew',
+    HILIGAYNON: 'Hiligaynon',
+    HINDI: 'Hindi',
+    HINDKO: 'Hindko',
+    HMONG: 'Hmong',
+    HOKKIEN: 'Hokkien',
+    HOLIKACHUK: 'Holikachuk',
+    HOPI: 'Hopi',
+    HUANESE: 'Huanese',
+    HUNGARIAN: 'Hungarian',
+    IBANAG: 'Ibanag',
+    ICELANDIC: 'Icelandic',
+    IGBO: 'Igbo',
+    ILOCANO: 'Ilocano',
+    INDONESIAN: 'Indonesian',
+    INUKTITUT: 'Inuktitut',
+    INUPIATUN_INUPIAQ: 'Inupiatun / Inupiaq',
+    ITALIAN: 'Italian',
+    JAKARTANESE: 'Jakartanese',
+    JAMAICAN_PATOIS: 'Jamaican Patois',
+    JAPANESE: 'Japanese',
+    JARAI: 'Jarai',
+    JAVANESE: 'Javanese',
+    JINGPHO: 'Jingpho',
+    JINYU: 'Jinyu',
+    JUBA_ARABIC: 'Juba Arabic',
+    JULA: 'Jula',
+    KABA: 'Kaba',
+    KAMBA: 'Kamba',
+    KAM_MUANG: 'Kam Muang',
+    KANJOBAL: 'Kanjobal',
+    KANNADA: 'Kannada',
+    KAREN: 'Karen',
+    KASHMIRI: 'Kashmiri',
+    KAYAH: 'Kayah',
+    KAZAKH: 'Kazakh',
+    KERESAN: 'Keresan',
+    KERESAN_SIGN_LANGUAGE: 'Keresan Sign Language',
+    KHAM: 'Kham',
+    KHANA: 'Khana',
+    KHMER: 'Khmer',
+    K_ICHE: "K'iche'",
+    KIKUYU: 'Kikuyu',
+    KIMIIRU: 'Kimiiru',
+    KINYARWANDA: 'Kinyarwanda',
+    KIOWA: 'Kiowa',
+    KOHO: 'Koho',
+    KOREAN: 'Korean',
+    KOYUKON: 'Koyukon',
+    KRAHN: 'Krahn',
+    KRIO: 'Krio',
+    KUNAMA: 'Kunama',
+    KURMANJI: 'Kurmanji',
+    KYRGYZ: 'Kyrgyz',
+    LAKOTA: 'Lakota',
+    LAOTIAN: 'Laotian',
+    LATVIAN: 'Latvian',
+    LIBERIAN_PIDGIN_ENGLISH: 'Liberian Pidgin English',
+    LINGALA: 'Lingala',
+    LING_T_TLINGIT: 'Lingít / Tlingit',
+    LITHUANIAN: 'Lithuanian',
+    LOMBARD: 'Lombard',
+    LUBA_KASAI: 'Luba-Kasai',
+    LUGANDA: 'Luganda',
+    LUO: 'Luo',
+    MAAY: 'Maay',
+    MACEDONIAN: 'Macedonian',
+    MALAY: 'Malay',
+    MALAYALAM: 'Malayalam',
+    MALTESE: 'Maltese',
+    MAM: 'Mam',
+    MANDARIN: 'Mandarin',
+    MANDINKA: 'Mandinka',
+    MANINKA: 'Maninka',
+    MANOBO: 'Manobo',
+    MARATHI: 'Marathi',
+    MARKA: 'Marka',
+    MARSHALLESE: 'Marshallese',
+    MASALIT: 'Masalit',
+    MBAY: 'Mbay',
+    MIEN: 'Mien',
+    MIRPURI: 'Mirpuri',
+    MIXTECO: 'Mixteco',
+    MIZO: 'Mizo',
+    MNONG: 'Mnong',
+    MONGOLIAN: 'Mongolian',
+    MONTENEGRIN: 'Montenegrin',
+    MOROCCAN_ARABIC: 'Moroccan Arabic',
+    MORTLOCKESE: 'Mortlockese',
+    MUSCOGEE: 'Muscogee',
+    NAPOLETANO: 'Napoletano',
+    NAVAJO: 'Navajo',
+    NAVAJO_FAMILY_SIGN: 'Navajo Family Sign',
+    NDEBELE: 'Ndebele',
+    NEAPOLITAN: 'Neapolitan',
+    NEE_AANDEG_TANACROSS: 'Nee’aandeg’ / Tanacross',
+    NEPALI: 'Nepali',
+    NGAMBAY: 'Ngambay',
+    NIGERIAN_PIDGIN: 'Nigerian Pidgin',
+    NORTHERN_SOTHO: 'Northern Sotho',
+    NORWEGIAN: 'Norwegian',
+    NUER: 'Nuer',
+    NUPE: 'Nupe',
+    NYANJA: 'Nyanja',
+    NYORO: 'Nyoro',
+    O_ODHAM: "O'odham",
+    OJIBWE: 'Ojibwe',
+    OROMO: 'Oromo',
+    PAMPANGAN: 'Pampangan',
+    PAPIAMENTO: 'Papiamento',
+    PASHTO: 'Pashto',
+    PENNSYLVANIA_DUTCH: 'Pennsylvania Dutch',
+    PERSIAN: 'Persian',
+    PLAINS_SIGN_LANGUAGE: 'Plains Sign Language',
+    PLATEAU_SIGN_LANGUAGE: 'Plateau Sign Language',
+    PLAUTDIETSCH: 'Plautdietsch',
+    POHNPEIAN: 'Pohnpeian',
+    POLISH: 'Polish',
+    PORTUGUESE: 'Portuguese',
+    PORTUGUESE_BRAZILIAN: 'Portuguese Brazilian',
+    PORTUGUESE_CAPE_VERDEAN: 'Portuguese Cape Verdean',
+    PORTUGUESE_CREOLE: 'Portuguese Creole',
+    PUERTO_RICAN_SIGN_LANGUAGE: 'Puerto Rican Sign Language',
+    PUGLIESE: 'Pugliese',
+    PULAAR: 'Pulaar',
+    PUNJABI: 'Punjabi',
+    PUTIAN: 'Putian',
+    QUECHUA: 'Quechua',
+    QUICHUA: 'Quichua',
+    RADE: 'Rade',
+    RAKHINE: 'Rakhine',
+    ROHINGYA: 'Rohingya',
+    ROMANIAN: 'Romanian',
+    KIRUNDI: 'Kirundi',
+    RUSSIAN: 'Russian',
+    SAMOAN: 'Samoan',
+    SAMOAN_SIGN_LANGUAGE: 'Samoan Sign Language',
+    SANGO: 'Sango',
+    SERAIKI: 'Seraiki',
+    SERBIAN: 'Serbian',
+    SHANGHAINESE: 'Shanghainese',
+    SHONA: 'Shona',
+    SICHUAN_YI: 'Sichuan Yi',
+    SICILIAN: 'Sicilian',
+    SINDHI: 'Sindhi',
+    SINHALESE: 'Sinhalese',
+    SIOUX: 'Sioux',
+    SLOVAK: 'Slovak',
+    SLOVENIAN: 'Slovenian',
+    SM_ALGYAX_COAST_TSIMSHIAN: 'Sm’algyax / (Coast) Tsimshian',
+    SOGA: 'Soga',
+    SOMALI: 'Somali',
+    SONINKE: 'Soninke',
+    SORANI: 'Sorani',
+    SOTHERN_SOTHO: 'Sothern Sotho',
+    SPANISH: 'Spanish',
+    SPANISH_CREOLE: 'Spanish Creole',
+    SUDANESE_ARABIC: 'Sudanese Arabic',
+    SUGPIAQ_ALUTIIQ: 'Sugpiaq / Alutiiq',
+    SUNDA: 'Sunda',
+    SUSU: 'Susu',
+    SWAHILI: 'Swahili',
+    SWATI: 'Swati',
+    SWEDISH: 'Swedish',
+    SYLHETTI: 'Sylhetti',
+    TAGALOG: 'Tagalog',
+    TAIWANESE: 'Taiwanese',
+    TAJIK: 'Tajik',
+    TAMIL: 'Tamil',
+    TANACROSS: 'Tanacross',
+    TANANA: 'Tanana',
+    TELUGU: 'Telugu',
+    THAI: 'Thai',
+    TIBETAN: 'Tibetan',
+    TIGRE: 'Tigre',
+    TIGRIGNA: 'Tigrigna',
+    TLINGIT: 'Tlingit',
+    TOISHANESE: 'Toishanese',
+    TONGAN: 'Tongan',
+    TOORO: 'Tooro',
+    TRIQUE: 'Trique',
+    TSIMSHIAN: 'Tsimshian',
+    TSONGA: 'Tsonga',
+    TSWANA: 'Tswana',
+    TURKISH: 'Turkish',
+    TURKMEN: 'Turkmen',
+    TWI: 'Twi',
+    TZOTZIL: 'Tzotzil',
+    UKRAINIAN: 'Ukrainian',
+    UNANGAM_TUNUU_ALEUTIAN_ALEUT: 'Unangam Tunuu / Aleutian Aleut',
+    UPPER_KUSKOKWIM: 'Upper Kuskokwim',
+    URDU: 'Urdu',
+    UYGHUR: 'Uyghur',
+    UZBEK: 'Uzbek',
+    VENDA: 'Venda',
+    VIETNAMESE: 'Vietnamese',
+    VISAYAN: 'Visayan',
+    WELSH: 'Welsh',
+    WODAABE: 'Wodaabe',
+    WOLOF: 'Wolof',
+    WUZHOU: 'Wuzhou',
+    XAAT_K_L_HAIDA: 'Xaat Kíl / Haida',
+    XHOSA: 'Xhosa',
+    XIANG: 'Xiang',
+    YEMENI_ARABIC: 'Yemeni Arabic',
+    YIDDISH: 'Yiddish',
+    YORUBA: 'Yoruba',
+    YUNNANESE: 'Yunnanese',
+    YUPIK: 'Yupik',
+    ZAPOTECO: 'Zapoteco',
+    ZARMA: 'Zarma',
+    ZO: 'Zo',
+    ZULU: 'Zulu',
+    ZUNI: 'Zuni',
+    ZYPHE: 'Zyphe',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  PriorLivingSituation: {
+    INVALID: 'Invalid Value',
+    EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER:
+      'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter',
+    PLACE_NOT_MEANT_FOR_HABITATION:
+      'Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)',
+    SAFE_HAVEN: 'Safe Haven',
+    PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY:
+      'Psychiatric hospital or other psychiatric facility',
+    SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER:
+      'Substance abuse treatment facility or detox center',
+    HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY:
+      'Hospital or other residential non-psychiatric medical facility',
+    JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY:
+      'Jail, prison or juvenile detention facility',
+    FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME:
+      'Foster care home or foster care group home',
+    LONG_TERM_CARE_FACILITY_OR_NURSING_HOME:
+      'Long-term care facility or nursing home',
+    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS:
+      'Transitional housing for homeless persons (including homeless youth)',
+    HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER:
+      'Hotel or motel paid for without emergency shelter voucher',
+    RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA:
+      'Residential project or halfway house with no homeless criteria',
+    HOST_HOME_NON_CRISIS: 'Host Home (non-crisis)',
+    STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE:
+      'Staying or living in a family member’s room, apartment, or house',
+    STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE:
+      "Staying or living in a friend's room, apartment or house",
+    RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
+      'Rental by client, no ongoing housing subsidy',
+    OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
+      'Owned by client, no ongoing housing subsidy',
+    OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY:
+      'Owned by client, with ongoing housing subsidy',
+    RENTAL_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY:
+      'Rental by client, with ongoing housing subsidy',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   PrioritizationStatus: {
     INVALID: 'Invalid Value',
@@ -919,9 +1268,9 @@ export const HmisEnums = {
   ProjectCompletionStatus: {
     INVALID: 'Invalid Value',
     COMPLETED_PROJECT: 'Completed project',
-    YOUTH_VOLUNTARILY_LEFT_EARLY: 'Youth voluntarily left early',
-    YOUTH_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT:
-      'Youth was expelled or otherwise involuntarily discharged from project',
+    CLIENT_VOLUNTARILY_LEFT_EARLY: 'Client voluntarily left early',
+    CLIENT_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT:
+      'Client was expelled or otherwise involuntarily discharged from project',
   },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
   ProjectSortOption: {
@@ -931,16 +1280,17 @@ export const HmisEnums = {
   ProjectType: {
     CE: 'Coordinated Entry',
     DAY_SHELTER: 'Day Shelter',
-    ES: 'Emergency Shelter',
+    ES_ENTRY_EXIT: 'Emergency Shelter - Entry Exit',
+    ES_NBN: 'Emergency Shelter - Night-by-Night',
+    HP: 'Homelessness Prevention',
     INVALID: 'Invalid Value',
-    OPH: 'Permanent Housing Only',
-    PH: 'Permanent Housing',
-    PREVENTION: 'Homelessness Prevention',
-    PSH: 'Permanent Supportive Housing',
-    RRH: 'Rapid Re-Housing',
-    SERVICES_ONLY: 'Services Only',
+    PH_OPH: 'PH - Housing with Services',
+    PH_PH: 'PH - Housing Only',
+    PH_PSH: 'PH - Permanent Supportive Housing',
+    PH_RRH: 'PH - Rapid Re-Housing',
     SH: 'Safe Haven',
     SO: 'Street Outreach',
+    SSO: 'Services Only',
     TH: 'Transitional Housing',
     OTHER: 'Other',
   },
@@ -951,13 +1301,21 @@ export const HmisEnums = {
     NUM_3_TO_5_OR_MORE_YEARS: '3 to 5 or more years',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  RRHSubType: {
+    INVALID: 'Invalid Value',
+    RRH_SERVICES_ONLY: 'RRH: Services Only',
+    RRH_HOUSING_WITH_OR_WITHOUT_SERVICES:
+      'RRH: Housing with or without services',
+  },
   Race: {
     AM_IND_AK_NATIVE: 'American Indian, Alaska Native, or Indigenous',
     ASIAN: 'Asian or Asian American',
     BLACK_AF_AMERICAN: 'Black, African American, or African',
+    HISPANIC_LATINAEO: 'Hispanic/Latina/e/o',
+    MID_EAST_N_AFRICAN: 'Middle Eastern or North African',
     NATIVE_HI_PACIFIC: 'Native Hawaiian or Pacific Islander',
     WHITE: 'White',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -982,15 +1340,13 @@ export const HmisEnums = {
     APPLIED_CLIENT_NOT_ELIGIBLE: 'Applied; client not eligible',
     CLIENT_DID_NOT_APPLY: 'Client did not apply',
     INSURANCE_TYPE_N_A_FOR_THIS_CLIENT: 'Insurance type N/A for this client',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   RecentItemType: { Client: 'Client', Project: 'Project' },
   RecordType: {
     INVALID: 'Invalid Value',
-    CONTACT_12: 'Contact 12',
-    CONTACT_13: 'Contact 13',
     PATH_SERVICE: 'PATH Service',
     RHY_SERVICE_CONNECTIONS: 'RHY Service Connections',
     HOPWA_SERVICE: 'HOPWA Service',
@@ -998,7 +1354,6 @@ export const HmisEnums = {
     HOPWA_FINANCIAL_ASSISTANCE: 'HOPWA Financial Assistance',
     SSVF_FINANCIAL_ASSISTANCE: 'SSVF Financial Assistance',
     PATH_REFERRAL: 'PATH Referral',
-    RHY_REFERRAL: 'RHY Referral',
     BED_NIGHT: 'Bed Night',
     HUD_VASH_OTH_VOUCHER_TRACKING: 'HUD-VASH OTH Voucher Tracking',
     MOVING_ON_ASSISTANCE: 'Moving On Assistance',
@@ -1049,7 +1404,7 @@ export const HmisEnums = {
     MENTAL_HOSPITAL: 'Mental Hospital',
     SCHOOL: 'School',
     OTHER_ORGANIZATION: 'Other organization',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -1088,8 +1443,7 @@ export const HmisEnums = {
       'Rental by client, with other ongoing housing subsidy',
     GPD_TIP_HOUSING_SUBSIDY: 'GPD TIP housing subsidy',
     RRH_OR_EQUIVALENT_SUBSIDY: 'RRH or equivalent subsidy',
-    HCV_VOUCHER_TENANT_OR_PROJECT_BASED_NOT_DEDICATED:
-      'HCV voucher (tenant or project based) (not dedicated)',
+    HCV_VOUCHER: 'HCV voucher (tenant or project based) (not dedicated)',
     PUBLIC_HOUSING_UNIT: 'Public housing unit',
     EMERGENCY_HOUSING_VOUCHER: 'Emergency Housing Voucher',
     FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP:
@@ -1111,7 +1465,7 @@ export const HmisEnums = {
     NUM_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR:
       '90 days or more but less than one year',
     ONE_YEAR_OR_LONGER: 'One year or longer',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -1119,7 +1473,7 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     FULL_SSN_REPORTED: 'Full SSN',
     APPROXIMATE_OR_PARTIAL_SSN_REPORTED: 'Partial SSN',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -1132,7 +1486,7 @@ export const HmisEnums = {
     DROPPED_OUT: 'Dropped out',
     SUSPENDED: 'Suspended',
     EXPELLED: 'Expelled',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -1214,7 +1568,7 @@ export const HmisEnums = {
     HOPWA_SERVICE__CASE_MANAGEMENT: 'Case management',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_DENIED_BY_PHA:
       'Voucher denied by PHA',
-    MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES:
+    MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON:
       'Financial assistance for Moving On (e.g., security deposit, moving expenses)',
     PATH_REFERRAL__SUBSTANCE_USE_TREATMENT: 'Substance use treatment',
     PATH_SERVICE__SCREENING: 'Screening',
@@ -1226,7 +1580,7 @@ export const HmisEnums = {
     HOPWA_SERVICE__CHILD_CARE: 'Child care',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_ISSUED_BY_PHA:
       'Voucher issued by PHA',
-    MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT:
+    MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON:
       'Non-financial assistance for Moving On (e.g., housing navigation, transition support)',
     PATH_REFERRAL__PRIMARY_HEALTH_DENTAL_CARE: 'Primary health/dental care',
     PATH_SERVICE__HABILITATION_REHABILITATION: 'Habilitation/rehabilitation',
@@ -1276,6 +1630,7 @@ export const HmisEnums = {
       'Residential supportive services',
     RHY_SERVICE_CONNECTIONS__CRIMINAL_JUSTICE_LEGAL_SERVICES:
       'Criminal justice /legal services',
+    SSVF_SERVICE__SHALLOW_SUBSIDY: 'Shallow Subsidy',
     HOPWA_SERVICE__MENTAL_HEALTH_CARE_COUNSELING:
       'Mental health care/counseling',
     HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_FAMILY_MAINTAINED_THE_VOUCHER:
@@ -1291,14 +1646,15 @@ export const HmisEnums = {
       'Veteran exited - prior to ever receiving a voucher',
     PATH_REFERRAL__TEMPORARY_HOUSING: 'Temporary housing',
     PATH_SERVICE__SECURITY_DEPOSITS: 'Security deposits',
-    SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES:
-      'General housing stability assistance - emergency supplies',
-    HOPWA_SERVICE__SUBSTANCE_ABUSE_SERVICES_TREATMENT:
-      'Substance abuse services/treatment',
+    SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES_DEPRECATED:
+      'General housing stability assistance - emergency supplies [Deprecated]',
+    HOPWA_SERVICE__SUBSTANCE_USE_SERVICES_TREATMENT:
+      'Substance use services/treatment',
     HUD_VASH_OTH_VOUCHER_TRACKING__OTHER: 'Other',
     PATH_SERVICE__ONE_TIME_RENT_FOR_EVICTION_PREVENTION:
       'One-time rent for eviction prevention',
-    RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE: 'Post-natal care',
+    RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE_FOR_CLIENT:
+      'Post-natal care for client (person who gave birth)',
     SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE:
       'General housing stability assistance',
     HOPWA_SERVICE__TRANSPORTATION: 'Transportation',
@@ -1308,19 +1664,21 @@ export const HmisEnums = {
     RHY_SERVICE_CONNECTIONS__HEALTH_MEDICAL_CARE: 'Health/medical care',
     SSVF_FINANCIAL_ASSISTANCE__EMERGENCY_HOUSING_ASSISTANCE:
       'Emergency housing assistance',
-    SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY_RENTAL_ASSISTANCE:
-      'Extended Shallow Subsidy - Rental Assistance',
+    SSVF_FINANCIAL_ASSISTANCE__SHALLOW_SUBSIDY_FINANCIAL_ASSISTANCE:
+      'Shallow Subsidy - Financial Assistance',
     SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE: 'Food Assistance',
     RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_TREATMENT:
       'Substance use disorder treatment',
+    SSVF_FINANCIAL_ASSISTANCE__LANDLORD_INCENTIVE: 'Landlord Incentive',
     RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_PREVENTION_SERVICES:
       'Substance use disorder/Prevention Services',
+    SSVF_FINANCIAL_ASSISTANCE__TENANT_INCENTIVE: 'Tenant Incentive',
     RHY_SERVICE_CONNECTIONS__HOME_BASED_SERVICES: 'Home-based Services',
-    RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS:
+    RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE:
       'Post-natal newborn care (wellness exams; immunizations)',
     RHY_SERVICE_CONNECTIONS__STD_TESTING: 'STD Testing',
     RHY_SERVICE_CONNECTIONS__STREET_BASED_SERVICES: 'Street-based Services',
-    BED_NIGHT__BED_NIGHT: 'BedNight',
+    BED_NIGHT__BED_NIGHT: 'Bed Night',
     HOPWA_SERVICE__HEALTH_MEDICAL_CARE: 'Health/medical care',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_CONVERTED_TO_HOUSING_CHOICE_VOUCHER:
       'Voucher was converted to Housing Choice Voucher',
@@ -1329,6 +1687,7 @@ export const HmisEnums = {
     RHY_SERVICE_CONNECTIONS__LIFE_SKILLS_TRAINING: 'Life skills training',
     SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_TOKENS_VOUCHERS:
       'Transportation services: tokens/vouchers',
+    SSVF_SERVICE__RETURNING_HOME: 'Returning Home',
     HOPWA_SERVICE__LIFE_SKILLS_TRAINING: 'Life skills training',
     HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_VOUCHER_WAS_RETURNED:
       'Veteran exited - voucher was returned',
@@ -1336,6 +1695,7 @@ export const HmisEnums = {
     PATH_SERVICE__HOUSING_MOVING_ASSISTANCE: 'Housing moving assistance',
     SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_VEHICLE_REPAIR_MAINTENANCE:
       'Transportation services: vehicle repair/maintenance',
+    SSVF_SERVICE__RAPID_RESOLUTION: 'Rapid Resolution',
   },
   SexualOrientation: {
     INVALID: 'Invalid Value',
@@ -1345,7 +1705,7 @@ export const HmisEnums = {
     BISEXUAL: 'Bisexual',
     QUESTIONING_UNSURE: 'Questioning / unsure',
     OTHER: 'Other',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
@@ -1384,9 +1744,9 @@ export const HmisEnums = {
   },
   TargetPopulation: {
     INVALID: 'Invalid Value',
-    DOMESTIC_VIOLENCE_VICTIMS: 'Domestic violence victims',
-    PERSONS_WITH_HIV_AIDS: 'Persons with HIV/AIDS',
-    NOT_APPLICABLE: 'Not applicable',
+    DV_SURVIVOR_OF_DOMESTIC_VIOLENCE: 'DV: Survivor of Domestic Violence',
+    HIV_PERSONS_WITH_HIV_AIDS: 'HIV: Persons with HIV/AIDS',
+    NA_NOT_APPLICABLE: 'NA: Not applicable',
   },
   TimeToHousingLoss: {
     INVALID: 'Invalid Value',
@@ -1402,14 +1762,9 @@ export const HmisEnums = {
     TWO_TIMES: 'Two times',
     THREE_TIMES: 'Three times',
     FOUR_OR_MORE_TIMES: 'Four or more times',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
-  },
-  TrackingMethod: {
-    INVALID: 'Invalid Value',
-    ENTRY_EXIT_DATE: 'Entry/Exit Date',
-    NIGHT_BY_NIGHT: 'Night-by-Night',
   },
   UnitFilterOptionStatus: { AVAILABLE: 'Available', FILLED: 'Filled' },
   ValidationSeverity: { error: 'error', warning: 'warning' },
@@ -1577,30 +1932,19 @@ export const HmisEnums = {
     NOT_AVAILABLE: 'Not available',
     AVAILABLE: 'Available',
     UNDETECTABLE: 'Undetectable',
-    CLIENT_REFUSED: 'Client refused',
-    CLIENT_DOESN_T_KNOW: "Client doesn't know",
-    DATA_NOT_COLLECTED: 'Data not collected',
-  },
-  WellbeingAgreement: {
-    INVALID: 'Invalid Value',
-    STRONGLY_DISAGREE: 'Strongly disagree',
-    SOMEWHAT_DISAGREE: 'Somewhat disagree',
-    NEITHER_AGREE_NOR_DISAGREE: 'Neither agree nor disagree',
-    SOMEWHAT_AGREE: 'Somewhat agree',
-    STRONGLY_AGREE: 'Strongly agree',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   WhenDVOccurred: {
     INVALID: 'Invalid Value',
     WITHIN_THE_PAST_THREE_MONTHS: 'Within the past three months',
-    THREE_TO_SIX_MONTHS_AGO_EXCLUDING_SIX_MONTHS_EXACTLY:
+    THREE_TO_SIX_MONTHS_AGO:
       'Three to six months ago (excluding six months exactly)',
-    SIX_MONTHS_TO_ONE_YEAR_AGO_EXCLUDING_ONE_YEAR_EXACTLY:
+    SIX_MONTHS_TO_ONE_YEAR_AGO:
       'Six months to one year ago (excluding one year exactly)',
     ONE_YEAR_OR_MORE: 'One year or more',
-    CLIENT_REFUSED: 'Client refused',
+    CLIENT_PREFERS_NOT_TO_ANSWER: 'Client prefers not to answer',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },

@@ -10,20 +10,25 @@ fragment ProjectOperatingPeriod on Project {
   operatingStartDate
 }
 
+fragment ProjectCocCount on Project {
+  projectCocs {
+    nodesCount
+  }
+}
 fragment ProjectAllFields on Project {
   id
   hudId
   ...ProjectNameAndType
   ...ProjectOperatingPeriod
   description
-  HMISParticipatingProject
   HOPWAMedAssistedLivingFac
   contactInformation
   continuumProject
   housingType
   residentialAffiliation
+  residentialAffiliationProjectIds
+  rrhSubType
   targetPopulation
-  trackingMethod
   organization {
     ...OrganizationNameFields
   }
@@ -35,6 +40,25 @@ fragment ProjectAllFields on Project {
   }
   customDataElements {
     ...CustomDataElementFields
+  }
+  dataCollectionFeatures {
+    ...DataCollectionFeatureFields
+  }
+  ...ProjectCocCount
+}
+
+fragment DataCollectionFeatureFields on DataCollectionFeature {
+  id # instance IDs concatenated
+  role # if present, show on Project Dashboard
+  dataCollectedAbout
+  legacy
+}
+
+fragment OccurrencePointFormFields on OccurrencePointForm {
+  id
+  dataCollectedAbout
+  definition {
+    ...FormDefinitionFields
   }
 }
 

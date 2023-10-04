@@ -3,8 +3,8 @@ import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
 import { CommonUntyledList } from '@/components/CommonUnstyledList';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
-import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {

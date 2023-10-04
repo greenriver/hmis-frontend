@@ -12,22 +12,17 @@ const TableFilterButton: React.FC<TableFilterButtonProps> = ({
   return (
     <Button
       size='small'
-      color='secondary'
       variant='text'
       sx={(theme) => ({
-        color: active
-          ? theme.palette.secondary.main
-          : theme.palette.text.secondary,
+        color: active ? theme.palette.links : theme.palette.text.primary,
         fontWeight: 600,
-        backgroundColor: active
-          ? alpha(theme.palette.secondary.main, 0.05)
-          : undefined,
         '&:hover': {
           backgroundColor: active
-            ? alpha(theme.palette.secondary.main, 0.15)
-            : undefined,
+            ? alpha(theme.palette.links, 0.15)
+            : theme.palette.grey[100],
         },
         px: 2,
+        py: 1,
       })}
       {...props}
     />

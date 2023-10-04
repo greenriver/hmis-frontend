@@ -1,21 +1,18 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { omit } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
-import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
-import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import EnrollmentClientNameWithAge from '@/modules/hmis/components/EnrollmentClientNameWithAge';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import {
   formatDateForDisplay,
   formatDateForGql,
-  parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   EnrollmentFilterOptionStatus,
@@ -25,7 +22,6 @@ import {
   HouseholdFilterOptions,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 export type HouseholdFields = NonNullable<
   GetProjectHouseholdsQuery['project']
@@ -66,22 +62,12 @@ export const HOUSEHOLD_COLUMNS: {
     header: 'Clients',
     render: (hh) => (
       <TableCellConatiner>
-        {hh.householdClients.map((c) => (
-          <RouterLink
-            key={c.id}
-            to={generateSafePath(
-              EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-              {
-                clientId: c.client.id,
-                enrollmentId: c.enrollment.id,
-              }
-            )}
-          >
-            <Stack direction='row' gap={0.5} whiteSpace='nowrap'>
-              <ClientName client={c.client} key='name' />
-              <ClientDobAge client={c.client} noDob key='age' />
-            </Stack>
-          </RouterLink>
+        {hh.householdClients.map((hc) => (
+          <EnrollmentClientNameWithAge
+            key={hc.id}
+            enrollmentId={hc.enrollment.id}
+            client={hc.client}
+          />
         ))}
       </TableCellConatiner>
     ),
@@ -122,12 +108,11 @@ export const HOUSEHOLD_COLUMNS: {
     render: (hh) => (
       <TableCellConatiner>
         {hh.householdClients.map((c) => (
-          <Typography key={c.id} variant='body2' whiteSpace='nowrap'>
-            {parseAndFormatDateRange(
-              c.enrollment.entryDate,
-              c.enrollment.exitDate
-            )}
-          </Typography>
+          <EnrollmentDateRangeWithStatus
+            key={c.id}
+            enrollment={c.enrollment}
+            treatIncompleteAsActive
+          />
         ))}
       </TableCellConatiner>
     ),
@@ -135,11 +120,9 @@ export const HOUSEHOLD_COLUMNS: {
   householdId: {
     header: 'Household ID',
     render: (hh) => (
-      <Box height='100%'>
-        <Typography variant='body2' whiteSpace='nowrap'>
-          {hh.shortId} ({hh.householdSize})
-        </Typography>
-      </Box>
+      <Typography variant='body2' whiteSpace='nowrap'>
+        {hh.shortId} ({hh.householdSize})
+      </Typography>
     ),
   },
 };

@@ -50,15 +50,26 @@ const InputGroup = ({
             pl: 1,
             pb: 0.5,
             pr: 0.5,
-            // full width so entire label area is clickable for checkboxes
-            '.MuiFormControl-root': { width: '100%' },
-            '.MuiFormControlLabel-root': {
-              width: '100%',
-              '.MuiTypography-root': {
-                py: 0.3,
-              },
-            },
-            ...(item.type === ItemType.String
+            ...(viewOnly
+              ? {
+                  '.MuiFormLabel-root .MuiTypography-root': {
+                    textWrap: 'wrap',
+                  },
+                  '.MuiTypography-root.HmisForm-notCollectedText': {
+                    textWrap: 'nowrap',
+                  },
+                }
+              : {
+                  // full width so entire label area is clickable for checkboxes
+                  '.MuiFormControl-root': { width: '100%' },
+                  '.MuiFormControlLabel-root': {
+                    width: '100%',
+                    '.MuiTypography-root': {
+                      py: 0.3,
+                    },
+                  },
+                }),
+            ...(item.type === ItemType.String && !viewOnly
               ? {
                   pt: 0.5,
                   label: {
@@ -72,7 +83,7 @@ const InputGroup = ({
           {children}
         </Box>
       ),
-    [rowSx]
+    [rowSx, viewOnly]
   );
 
   const maxWidth = maxWidthAtNestingLevel(nestingLevel + 1) + 80;

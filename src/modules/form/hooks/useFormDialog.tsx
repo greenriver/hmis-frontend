@@ -12,8 +12,9 @@ import DynamicForm, {
   DynamicFormRef,
 } from '../components/DynamicForm';
 import FormDialogActionContent from '../components/FormDialogActionContent';
-import { SubmitFormAllowedTypes } from '../types';
+import { LocalConstants, PickListArgs, SubmitFormAllowedTypes } from '../types';
 
+import { AlwaysPresentLocalConstants } from '../util/formUtil';
 import {
   DynamicFormHandlerArgs,
   useDynamicFormHandlersForRecord,
@@ -24,12 +25,16 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
 import { emptyErrorState } from '@/modules/errors/util';
 
-import { FormRole, ItemType } from '@/types/gqlTypes';
+import {
+  FormDefinitionFieldsFragment,
+  FormRole,
+  ItemType,
+} from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 export type RenderFormDialogProps = PartialPick<
   DynamicFormProps,
-  'onSubmit' | 'definition' | 'errors'
+  'onSubmit' | 'definition' | 'errors' | 'pickListArgs'
 > & {
   title: ReactNode;
   otherActions?: ReactNode;
@@ -38,27 +43,39 @@ export type RenderFormDialogProps = PartialPick<
 
 interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
   formRole: FormRole;
+  pickListArgs?: PickListArgs;
   onClose?: VoidFunction;
+  localDefinition?: FormDefinitionFieldsFragment;
 }
 export function useFormDialog<T extends SubmitFormAllowedTypes>({
   onCompleted,
   formRole,
   onClose,
   record,
-  localConstants,
+  localConstants: localConstantsProp,
   inputVariables,
+  localDefinition,
+  pickListArgs,
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const openFormDialog = useCallback(() => setDialogOpen(true), []);
 
   const formRef = useRef<DynamicFormRef>(null);
 
-  const { formDefinition, loading: definitionLoading } = useFormDefinition({
-    role: formRole,
-    // hack: pull project id from one of the existing args, if it exists.
-    // this project will be used to evaluate and "rules" on the resolved form definition.
-    projectId: localConstants?.projectId || inputVariables?.projectId,
-  });
+  const localConstants: LocalConstants = useMemo(
+    () => ({ ...AlwaysPresentLocalConstants, ...localConstantsProp }),
+    [localConstantsProp]
+  );
+
+  const { formDefinition, loading: definitionLoading } = useFormDefinition(
+    {
+      role: formRole,
+      // hack: pull project id from one of the existing args, if it exists.
+      // this project will be used to evaluate and "rules" on the resolved form definition.
+      projectId: localConstants?.projectId || inputVariables?.projectId,
+    },
+    localDefinition
+  );
 
   const hookArgs = useMemo(
     () => ({
@@ -135,6 +152,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                     loading={submitLoading}
                     errors={errors}
                     localConstants={localConstants}
+                    pickListArgs={pickListArgs}
                     FormActionProps={{
                       onDiscard: () => setDialogOpen(false),
                       ...props.FormActionProps,
@@ -173,6 +191,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       initialValues,
       localConstants,
       onSubmit,
+      pickListArgs,
       submitLoading,
     ]
   );

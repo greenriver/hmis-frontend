@@ -26,6 +26,7 @@ import FormSelect from './FormSelect';
 import InputContainer from './InputContainer';
 import RequiredLabel from './RequiredLabel';
 
+import CheckboxGroupInput from '@/components/elements/input/CheckboxGroupInput';
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
@@ -56,8 +57,24 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
 export const MAX_INPUT_WIDTH = 500;
+const FIXED_WIDTH_MEDIUM = 350;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
+
+const minWidthForType = (item: FormItem) => {
+  if (item.component || item.size) return undefined;
+
+  switch (item.type) {
+    case ItemType.String:
+    case ItemType.Text:
+      return 300;
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+      return FIXED_WIDTH_MEDIUM;
+    default:
+      return undefined;
+  }
+};
 
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
@@ -71,6 +88,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   pickListArgs,
   noLabel = false,
   warnIfEmpty = false,
+  breakpoints,
 }) => {
   const { linkId } = item;
   const onChangeEvent = useCallback(
@@ -90,20 +108,22 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
 
   const label = noLabel ? null : getLabel(item, horizontal);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
-  const minWidth = undefined;
+  const minWidth = minWidthForType(item);
   let width;
 
   if (item.size === InputSize.Small || item.type === ItemType.Date) {
     width = FIXED_WIDTH_SMALL;
   } else if (item.size === InputSize.Xsmall) {
     width = FIXED_WIDTH_X_SMALL;
+  } else if (item.size === InputSize.Medium) {
+    width = FIXED_WIDTH_MEDIUM;
   }
 
   if (item.component === Component.RadioButtons) {
     maxWidth = 600;
   }
 
-  const commonContainerProps = { errors, horizontal };
+  const commonContainerProps = { errors, horizontal, breakpoints };
 
   const isInvalidEnumValue =
     value === INVALID_ENUM || value?.code === INVALID_ENUM;
@@ -312,7 +332,15 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         componentType === Component.RadioButtons ||
         componentType === Component.RadioButtonsVertical
       ) {
-        inputComponent = (
+        inputComponent = item.repeats ? (
+          <CheckboxGroupInput
+            value={currentValue}
+            onChange={onChangeValue}
+            options={options || []}
+            row={componentType === Component.RadioButtons}
+            {...commonInputProps}
+          />
+        ) : (
           <RadioGroupInput
             value={currentValue}
             onChange={onChangeValue}

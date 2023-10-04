@@ -16,7 +16,9 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
-import TableFilters from '@/components/elements/tableFilters/TableFilters';
+import TableFilters, {
+  TableFiltersProps,
+} from '@/components/elements/tableFilters/TableFilters';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
@@ -45,7 +47,7 @@ export interface Props<
   SortOptionsType = Record<string, string>
 > extends Omit<
     GenericTableProps<RowDataType>,
-    'rows' | 'tablePaginationProps' | 'loading' | 'paginated'
+    'rows' | 'tablePaginationProps' | 'loading' | 'paginated' | 'noData'
   > {
   filters?:
     | TableFilterType<FilterOptionsType>
@@ -63,14 +65,21 @@ export interface Props<
   fetchPolicy?: WatchQueryFetchPolicy;
   pagePath?: string; // path to page, if paginated results
   rowsPath?: string; // path to data rows, if non-paginated results
-  noData?: string;
+  noData?: ReactNode | ((filters: Partial<FilterOptionsType>) => ReactNode);
   defaultPageSize?: number;
+  rowsPerPageOptions?: number[];
   recordType?: string; // record type for inferring columns if not provided
   filterInputType?: string; // filter input type type for inferring filters if not provided
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
   header?: ReactNode;
+  toolbars?: ReactNode[];
   fullHeight?: boolean; // used for scrollable table body
+  tableDisplayOptionButtons?: TableFiltersProps<
+    TableFilterType<FilterOptionsType>,
+    SortOptionsType
+  >['tableDisplayOptionButtons'];
+  onCompleted?: (data: Query) => void;
 }
 
 function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
@@ -128,7 +137,11 @@ const GenericTableWithData = <
   noSort,
   noFilter,
   header,
+  toolbars = [],
   noData,
+  rowsPerPageOptions,
+  tableDisplayOptionButtons,
+  onCompleted,
   ...props
 }: Props<
   Query,
@@ -141,11 +154,15 @@ const GenericTableWithData = <
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const previousQueryVariables = usePrevious(queryVariables);
   const [filterValues, setFilterValues] = useState(defaultFilters);
-  const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>(
-    defaultSortOptionProp ||
-      (recordType && getDefaultSortOptionForType(recordType)) ||
-      undefined
-  );
+  const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
+
+  const effectiveSortOrder = useMemo<typeof sortOrder>(() => {
+    if (sortOrder) return sortOrder;
+    if (defaultSortOptionProp) return defaultSortOptionProp;
+    return recordType
+      ? getDefaultSortOptionForType(recordType) || undefined
+      : undefined;
+  }, [sortOrder, defaultSortOptionProp, recordType]);
 
   const offset = page * rowsPerPage;
   const limit = rowsPerPage;
@@ -160,7 +177,7 @@ const GenericTableWithData = <
         ...get(queryVariables, 'filters'),
         ...filterValues,
       },
-      sortOrder,
+      sortOrder: effectiveSortOrder,
       ...(!rowsPath && {
         offset,
         limit,
@@ -171,6 +188,11 @@ const GenericTableWithData = <
   });
 
   const hasRefetched = useHasRefetched(networkStatus);
+
+  // workaround to fire "onCompleted" even if data was fetched from cache
+  useEffect(() => {
+    if (onCompleted && data) onCompleted(data);
+  }, [data, onCompleted]);
 
   useEffect(() => {
     if (!isEqual(previousQueryVariables, queryVariables)) {
@@ -215,6 +237,7 @@ const GenericTableWithData = <
     return {
       rowsPerPage,
       page,
+      rowsPerPageOptions,
       onPageChange: (_: any, newPage: number) => setPage(newPage),
       onRowsPerPageChange: (
         event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -225,7 +248,14 @@ const GenericTableWithData = <
       },
       count: nodesCount,
     };
-  }, [nodesCount, page, rowsPerPage, defaultPageSize, nonTablePagination]);
+  }, [
+    nodesCount,
+    page,
+    rowsPerPage,
+    defaultPageSize,
+    nonTablePagination,
+    rowsPerPageOptions,
+  ]);
 
   const columnDefs = useMemo(() => {
     if (columns) return columns;
@@ -261,6 +291,7 @@ const GenericTableWithData = <
   );
 
   const noDataValue = useMemo(() => {
+    if (typeof noData === 'function') return noData(filterValues);
     if (!showFilters) return noData;
 
     const isFiltered = Object.values(filterValues).some(hasMeaningfulValue);
@@ -300,43 +331,61 @@ const GenericTableWithData = <
           columns={columnDefs}
           noData={noDataValue}
           filterToolbar={
-            showFilters && (
-              <Box
-                px={2}
-                py={1}
-                sx={(theme) => ({
-                  borderBottom: `1px solid ${theme.palette.divider}`,
-                })}
-              >
-                <TableFilters
-                  noSort={noSort}
-                  noFilter={noFilter}
-                  loading={loading && !data}
-                  sorting={
-                    sortOptions
-                      ? {
-                          sortOptions,
-                          sortOptionValue: sortOrder,
-                          setSortOptionValue: setSortOrder,
-                        }
-                      : undefined
-                  }
-                  filters={
-                    !isEmpty(filterDefs)
-                      ? {
-                          filters: filterDefs,
-                          filterValues,
-                          setFilterValues,
-                        }
-                      : undefined
-                  }
-                  pagination={{
-                    limit,
-                    offset,
-                    totalEntries: nodesCount,
-                  }}
-                />
-              </Box>
+            (showFilters || !isEmpty(toolbars)) && (
+              <>
+                {showFilters && (
+                  <Box
+                    px={2}
+                    py={1}
+                    sx={(theme) => ({
+                      borderBottom: `1px solid ${theme.palette.divider}`,
+                    })}
+                  >
+                    <TableFilters
+                      noSort={noSort}
+                      noFilter={noFilter}
+                      loading={loading && !data}
+                      tableDisplayOptionButtons={tableDisplayOptionButtons}
+                      sorting={
+                        sortOptions
+                          ? {
+                              sortOptions,
+                              sortOptionValue: effectiveSortOrder,
+                              setSortOptionValue: setSortOrder,
+                            }
+                          : undefined
+                      }
+                      filters={
+                        !isEmpty(filterDefs)
+                          ? {
+                              filters: filterDefs,
+                              filterValues,
+                              setFilterValues,
+                            }
+                          : undefined
+                      }
+                      pagination={{
+                        limit,
+                        offset,
+                        totalEntries: nodesCount,
+                      }}
+                    />
+                  </Box>
+                )}
+                {!isEmpty(toolbars) &&
+                  toolbars.map((t) => (
+                    <Box
+                      key={String(t)}
+                      px={2}
+                      py={1}
+                      sx={(theme) => ({
+                        borderBottom: `1px solid ${theme.palette.divider}`,
+                      })}
+                    >
+                      {t}
+                    </Box>
+                  ))}
+              </>
             )
           }
           {...props}

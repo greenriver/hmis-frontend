@@ -40,6 +40,8 @@ const LabelWithContent = ({
       sx={{
         color: theme.palette.text.primary,
         fontSize: theme.typography.body2,
+        fontWeight: 600,
+        whiteSpace: 'normal',
         ...LabelProps?.sx,
       }}
     >
@@ -71,6 +73,7 @@ const LabelWithContent = ({
           direction='row'
           justifyContent='space-between'
           alignItems='center'
+          gap={2}
         >
           {labelContent}
           <Box>{inputContent}</Box>

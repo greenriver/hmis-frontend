@@ -31,14 +31,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.4.0
+        uses: actions/checkout@v3
 
       - name: Setup buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Configure AWS credentials
         if: github.event_name != 'pull_request'
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE }}
@@ -79,12 +79,11 @@ jobs:
       - name: Run vulnerability scan for PR
         if: github.event_name == 'pull_request'
         id: vuln_scan
-        uses: aquasecurity/trivy-action@0.6.2
-        continue-on-error: true
+        uses: aquasecurity/trivy-action@0.11.2
         with:
           image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           format: 'table'
-          exit-code: '0'
+          exit-code: '1'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
 
@@ -92,6 +91,8 @@ jobs:
       - name: Login to Amazon ECR
         if: github.event_name != 'pull_request'
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: true
 
       - name: Build container image
         if: github.event_name != 'pull_request'
@@ -112,7 +113,7 @@ jobs:
       - name: Run scan for medium vulnerabilities
         if: github.event_name != 'pull_request'
         id: scan_medium
-        uses: aquasecurity/trivy-action@0.6.2
+        uses: aquasecurity/trivy-action@0.11.2
         continue-on-error: true
         with:
           image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
@@ -125,11 +126,11 @@ jobs:
       - name: Run scan for critical and high vulnerabilities
         if: github.event_name != 'pull_request'
         id: scan_crit
-        uses: aquasecurity/trivy-action@0.6.2
-        continue-on-error: true
+        uses: aquasecurity/trivy-action@0.11.2
         with:
           image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           format: 'table'
+          exit-code: '1'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
 

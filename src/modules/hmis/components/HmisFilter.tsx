@@ -46,6 +46,8 @@ export const getSortOptionForType = (
     return HmisEnums.HouseholdSortOption as Record<string, string>;
   if (recordType === 'Project')
     return HmisEnums.ProjectSortOption as Record<string, string>;
+  if (recordType === 'Client')
+    return HmisEnums.ClientSortOption as Record<string, string>;
 
   return null;
 };

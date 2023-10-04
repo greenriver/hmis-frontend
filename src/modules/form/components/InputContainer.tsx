@@ -1,4 +1,4 @@
-import { Grid, SxProps, Typography } from '@mui/material';
+import { BreakpointOverrides, Grid, SxProps, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { ValidationError, ValidationType } from '@/types/gqlTypes';
@@ -8,13 +8,21 @@ const InputContainer = ({
   errors,
   children,
   horizontal,
+  breakpoints,
 }: {
   sx: SxProps;
   errors?: ValidationError[];
   children: ReactNode;
   horizontal: boolean;
+  breakpoints?: BreakpointOverrides;
 }) => (
-  <Grid item sx={{ ...sx }} data-testid='formField'>
+  <Grid
+    item
+    sx={{ ...sx }}
+    {...breakpoints}
+    data-testid='formField'
+    className='HmisForm-inputContainer'
+  >
     {children}
     {errors &&
       errors

@@ -2,9 +2,9 @@ import { Box, Grid, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { CommonUntyledList } from '@/components/CommonUnstyledList';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
-import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import {
   parseAndFormatDate,

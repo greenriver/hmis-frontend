@@ -27,7 +27,7 @@ export interface Props extends Omit<RadioGroupProps, 'onChange'> {
 }
 export type RadioGroupInputProps = Props & DynamicInputCommonProps;
 
-const InvalidValueCheckbox = ({
+export const InvalidValueCheckbox = ({
   control,
 }: {
   control: React.ReactElement<any, any>;

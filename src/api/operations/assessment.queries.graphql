@@ -31,6 +31,7 @@ query GetClientAssessments(
           id
           entryDate
           exitDate
+          inProgress
           project {
             ...ProjectNameAndType
           }
@@ -77,11 +78,7 @@ query GetHouseholdAssessments(
     assessmentRole: $assessmentRole
     assessmentId: $assessmentId
   ) {
-    ...AssessmentWithValues
-    ...AssessmentWithRecords
-    enrollment {
-      id
-    }
+    ...AssessmentWithValuesAndRecords
   }
 }
 
@@ -110,8 +107,7 @@ mutation SubmitAssessment($input: SubmitAssessmentInput!) {
 mutation SubmitHouseholdAssessments($input: SubmitHouseholdAssessmentsInput!) {
   submitHouseholdAssessments(input: $input) {
     assessments {
-      id
-      inProgress
+      ...AssessmentWithRecords
     }
     errors {
       ...ValidationErrorFields

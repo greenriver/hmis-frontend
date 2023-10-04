@@ -1,47 +1,21 @@
 import { useMemo } from 'react';
 
-import { getClientIdentification, RecentHouseholdMember } from '../types';
+import { RecentHouseholdMember } from '../types';
 
 import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
-import ClientName from '@/modules/client/components/ClientName';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
-import ClientSsn from '@/modules/hmis/components/ClientSsn';
+import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export const householdMemberColumns: ColumnDef<
   ClientFieldsFragment | RecentHouseholdMember
 >[] = [
-  {
-    header: 'Name',
-    width: '20%',
-    key: 'name',
-    render: (client) => (
-      <ClientName
-        client={getClientIdentification(client)}
-        routerLinkProps={{ target: '_blank' }}
-        linkToProfile
-      />
-    ),
-  },
-  {
-    header: 'SSN',
-    key: 'ssn',
-    width: '15%',
-    render: (client) => (
-      <ClientSsn client={getClientIdentification(client)} lastFour />
-    ),
-  },
-  {
-    header: 'DOB / Age',
-    width: '10%',
-    key: 'dob',
-    render: (client) => (
-      <ClientDobAge client={getClientIdentification(client)} reveal />
-    ),
-  },
+  CLIENT_COLUMNS.linkedName,
+  { ...CLIENT_COLUMNS.ssn, width: '150px' },
+  { ...CLIENT_COLUMNS.dobAge, width: '180px' },
 ];
 
 interface Props
@@ -67,11 +41,13 @@ const AssociatedHouseholdMembers = ({
 
   if (recentMembers.length === 0) return null;
   return (
-    <GenericTable<RecentHouseholdMember>
-      rows={recentMembers || []}
-      columns={columns}
-      {...props}
-    />
+    <SsnDobShowContextProvider>
+      <GenericTable<RecentHouseholdMember>
+        rows={recentMembers || []}
+        columns={columns}
+        {...props}
+      />
+    </SsnDobShowContextProvider>
   );
 };
 

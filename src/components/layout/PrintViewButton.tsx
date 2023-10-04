@@ -1,14 +1,12 @@
 import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
 import PrintIcon from '@mui/icons-material/Print';
-import { Button, ButtonProps } from '@mui/material';
-import React, { useMemo } from 'react';
-import { useLocation, Link as RouterLink, To } from 'react-router-dom';
+import { Button } from '@mui/material';
+import React, { useCallback, useMemo } from 'react';
+import { To, useLocation } from 'react-router-dom';
+import ButtonLink, { ButtonLinkProps } from '../elements/ButtonLink';
 
 export interface PrintViewButtonProps
-  extends Omit<
-    ButtonProps<typeof RouterLink, { component?: typeof RouterLink }>,
-    'to'
-  > {
+  extends Omit<ButtonLinkProps, 'to' | 'ref'> {
   exit?: boolean;
   to?: To;
   openInNew?: boolean;
@@ -16,14 +14,14 @@ export interface PrintViewButtonProps
 
 const PrintViewButton: React.FC<PrintViewButtonProps> = ({
   exit = false,
-  children = exit ? 'Exit Print View' : 'Goto Print View',
+  children = exit ? 'Exit Print View' : 'Open Print View',
   to,
   openInNew,
   ...props
 }) => {
   const location = useLocation();
 
-  const backlinkUrl = useMemo(() => {
+  const backlinkUrl: To = useMemo(() => {
     if (to && !exit) return `${to}?print`;
     const params = new URLSearchParams(location.search);
     if (exit) {
@@ -34,17 +32,38 @@ const PrintViewButton: React.FC<PrintViewButtonProps> = ({
     return [location.pathname, params.toString()].join('?');
   }, [location, exit, to]);
 
+  const closeTab = useCallback(() => {
+    window.opener = null;
+    window.open('', '_self');
+    window.close();
+  }, []);
+
+  // If we have no location history, that means the print
+  // view was opened in a fresh tab. In that case, the close
+  // action is closing the window.
+  if (exit && location.key === 'default') {
+    return (
+      <Button
+        onClick={closeTab}
+        startIcon={<CancelPresentationIcon />}
+        variant='outlined'
+        {...props}
+      >
+        {children}
+      </Button>
+    );
+  }
+
   return (
-    <Button
+    <ButtonLink
       startIcon={exit ? <CancelPresentationIcon /> : <PrintIcon />}
       variant='outlined'
       {...props}
-      component={RouterLink}
       to={backlinkUrl}
-      target={openInNew ? '_blank' : undefined}
+      openInNew={openInNew}
     >
       {children}
-    </Button>
+    </ButtonLink>
   );
 };
 

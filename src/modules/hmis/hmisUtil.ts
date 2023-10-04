@@ -6,14 +6,19 @@ import {
   isDate,
   isFuture,
   isToday,
+  isTomorrow,
   isValid,
   isYesterday,
   parseISO,
 } from 'date-fns';
 import { find, isNil, sortBy, startCase } from 'lodash-es';
 
-import { hasMeaningfulValue } from '../form/util/formUtil';
+import {
+  ClientNameDobVeteranFields,
+  hasMeaningfulValue,
+} from '../form/util/formUtil';
 
+import { DashboardEnrollment } from './types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
@@ -22,13 +27,19 @@ import {
   ClientNameFragment,
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
+  DataCollectedAbout,
+  DataCollectionFeatureFieldsFragment,
   EnrollmentFieldsFragment,
+  EnrollmentOccurrencePointFieldsFragment,
   EnrollmentSummaryFieldsFragment,
   EventFieldsFragment,
   GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
   NoYesMissing,
+  NoYesReasonsForMissingData,
+  OccurrencePointFormFieldsFragment,
   ProjectType,
+  RelationshipToHoH,
   ServiceFieldsFragment,
   ServiceTypeFieldsFragment,
 } from '@/types/gqlTypes';
@@ -38,22 +49,19 @@ import {
  */
 
 export const MISSING_DATA_KEYS = [
-  'DATA_NOT_COLLECTED',
-  'CLIENT_REFUSED',
-  'CLIENT_DOESN_T_KNOW',
+  NoYesReasonsForMissingData.DataNotCollected,
+  NoYesReasonsForMissingData.ClientPrefersNotToAnswer,
+  NoYesReasonsForMissingData.ClientDoesnTKnow,
 ];
 
 export const PERMANENT_HOUSING_PROJECT_TYPES = [
-  ProjectType.Psh,
-  ProjectType.Ph,
-  ProjectType.Oph,
-  ProjectType.Rrh,
+  ProjectType.PhPsh,
+  ProjectType.PhPh,
+  ProjectType.PhOph,
+  ProjectType.PhRrh,
 ];
 
-export const STREET_OUTREACH_SERVICES_ONLY = [
-  ProjectType.ServicesOnly,
-  ProjectType.So,
-];
+export const STREET_OUTREACH_SERVICES_ONLY = [ProjectType.Sso, ProjectType.So];
 
 export const INVALID_ENUM = 'INVALID';
 
@@ -76,13 +84,11 @@ export const formatDateForGql = (date: Date) => {
   }
 };
 
-export const formatDateForDisplay = (date: Date) => {
+export const formatDateForDisplay = (date: Date, fmt = DATE_DISPLAY_FORMAT) => {
   try {
-    return format(date, DATE_DISPLAY_FORMAT);
+    return format(date, fmt);
   } catch (RangeError) {
-    console.error(
-      `Failed to format date '${date.toString()}' as ${DATE_DISPLAY_FORMAT}`
-    );
+    console.error(`Failed to format date '${date.toString()}' as ${fmt}`);
     return null;
   }
 };
@@ -95,6 +101,19 @@ export const formatDateTimeForDisplay = (date: Date) => {
       `Failed to format date '${date.toString()}' as ${DATETIME_DISPLAY_FORMAT}`
     );
     return null;
+  }
+};
+
+export const briefProjectType = (projectType: ProjectType) => {
+  switch (projectType) {
+    case ProjectType.DayShelter:
+    case ProjectType.Other:
+    case ProjectType.Invalid:
+      return startCase(projectType.toLowerCase());
+    case ProjectType.EsEntryExit:
+      return 'ES - Entry/Exit';
+    default:
+      return projectType.replace('_', ' - ');
   }
 };
 
@@ -168,8 +187,10 @@ export const formatRelativeDateTime = (date: Date): string => {
 };
 
 export const formatRelativeDate = (date: Date): string => {
+  if (isTomorrow(date)) return 'Tomorrow'; // avoid returning hours diff
   if (isToday(date)) return 'Today';
   if (isYesterday(date)) return 'Yesterday';
+
   return formatRelativeDateTime(date);
 };
 
@@ -285,13 +306,10 @@ export const enrollmentName = (
 ) => {
   const projectName = enrollment.project?.projectName;
   if (!includeType) return projectName;
-
-  let projectType = enrollment.project?.projectType as string | undefined;
+  const projectType = enrollment.project?.projectType;
   if (!projectType) return projectName;
 
-  if (projectType.length > 3)
-    projectType = startCase(projectType.toLowerCase());
-  return `${projectName} (${projectType})`;
+  return `${projectName} (${briefProjectType(projectType)})`;
 };
 
 const dataCollectionStageDisplay = {
@@ -351,13 +369,6 @@ export const getSchemaForType = (type: string) => {
 
 export const getSchemaForInputType = (type: string) => {
   return HmisInputObjectSchemas.find((t: any) => t.name === type);
-};
-
-export const briefProjectType = (projectType: ProjectType) => {
-  if (projectType.length > 3) {
-    return startCase(projectType.toLowerCase());
-  }
-  return projectType;
 };
 
 export const customDataElementValue = (
@@ -446,7 +457,9 @@ export const serviceDetails = (service: ServiceFieldsFragment): string[] => {
   return detailRows;
 };
 
-export const pathStatusString = (enrollment: EnrollmentFieldsFragment) => {
+export const pathStatusString = (
+  enrollment: EnrollmentOccurrencePointFieldsFragment
+) => {
   if (
     !enrollment.clientEnrolledInPath ||
     enrollment.clientEnrolledInPath === NoYesMissing.DataNotCollected
@@ -457,4 +470,56 @@ export const pathStatusString = (enrollment: EnrollmentFieldsFragment) => {
   const date = parseAndFormatDate(enrollment.dateOfPathStatus);
   if (!date) return val;
   return `${val} (${date})`;
+};
+
+export const evaluateDataCollectedAbout = (
+  dataCollectedAbout: DataCollectedAbout,
+  client: ClientNameDobVeteranFields,
+  relationshipToHoH: RelationshipToHoH
+) => {
+  switch (dataCollectedAbout) {
+    case DataCollectedAbout.AllClients:
+      return true;
+    case DataCollectedAbout.Hoh:
+      return relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold;
+    case DataCollectedAbout.HohAndAdults:
+      const clientAge = age(client);
+      return (
+        relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
+        isNil(client.dob) ||
+        (!isNil(clientAge) && clientAge >= 18)
+      );
+    case DataCollectedAbout.VeteranHoh:
+      return (
+        relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold &&
+        client.veteranStatus === NoYesReasonsForMissingData.Yes
+      );
+    default:
+      throw new Error(
+        `Unable to evaluate Data Collected About: ${dataCollectedAbout}`
+      );
+  }
+};
+
+export const occurrencePointCollectedForEnrollment = (
+  occurrencePoint: OccurrencePointFormFieldsFragment,
+  enrollment: DashboardEnrollment
+) => {
+  return evaluateDataCollectedAbout(
+    occurrencePoint.dataCollectedAbout,
+    enrollment.client,
+    enrollment.relationshipToHoH
+  );
+};
+
+export const featureEnabledForEnrollment = (
+  feature: DataCollectionFeatureFieldsFragment,
+  client: ClientNameDobVeteranFields,
+  relationshipToHoH: RelationshipToHoH
+) => {
+  return evaluateDataCollectedAbout(
+    feature.dataCollectedAbout,
+    client,
+    relationshipToHoH
+  );
 };

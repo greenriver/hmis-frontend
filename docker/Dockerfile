@@ -34,7 +34,7 @@ RUN --mount=type=cache,target=/app/node_modules \
 #####################################################################
 # nginx container
 #####################################################################
-FROM nginx:1.23-alpine
+FROM nginx:1.25-alpine
 ARG USERID=${USERID:-10000}
 ARG GROUPID=${GROUPID:-10001}
 
@@ -53,10 +53,16 @@ RUN addgroup --gid ${GROUPID} --system app \
  && chmod -R g+w /etc/nginx \
  && touch /tmp/nginx.pid \
  && chown -R app:app /tmp/nginx.pid \
- && apk add --no-cache tini
+ && apk update \
+ && apk upgrade --no-cache \
+ && apk add --no-cache dumb-init
 
-# set entrypoint to handle signals
-ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
+# Set entrypoint to handle signals
+#   15 = SIGSTOP (what is sent to nicely ask process to stop)
+#   3 =  SIGQUIT (what we should send to nginx to make it actuly stop gracefully)
+#   We remap stop to quit to make nginx act more kindly toward existing
+#   connections and requests
+ENTRYPOINT ["/usr/bin/dumb-init", "--rewrite", "15:3", "--", "/docker-entrypoint.sh"]
 
 # run as a non-root user
 USER app

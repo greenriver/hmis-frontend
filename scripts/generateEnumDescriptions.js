@@ -46,6 +46,10 @@ const DESCRIPTIONS_OVERRIDES = {
   RelationshipToHoH: {
     SELF_HEAD_OF_HOUSEHOLD: 'Self (HoH)',
   },
+  Gender: {
+    MAN: 'Man',
+    WOMAN: 'Woman',
+  },
 };
 
 const POSITION_MAPS = {
@@ -53,6 +57,20 @@ const POSITION_MAPS = {
     (desc) => desc.match(/^First Name/),
     (desc) => desc.match(/^Last Name/),
     (desc) => desc.match(/^Age/),
+  ],
+  EnrollmentSortOption: [
+    (desc) => desc.match(/^First Name/),
+    (desc) => desc.match(/^Last Name/),
+    (desc) => desc.match(/^Age/),
+  ],
+  Gender: [
+    (desc) => desc.match(/Man/),
+    (desc) => desc.match(/Woman/),
+    (desc) => desc.match(/Trans/),
+    (desc) => desc.match(/Non/),
+    (desc) => desc.match(/Question/),
+    (desc) => desc.match(/Culturally/),
+    (desc) => desc.match(/Different/),
   ],
 };
 
@@ -144,12 +162,14 @@ schema.__schema.types.forEach((type) => {
     });
 
     // Always last
-    ['CLIENT_REFUSED', 'CLIENT_DOESN_T_KNOW', 'DATA_NOT_COLLECTED'].forEach(
-      (name) => {
-        const idx = enumValues.findIndex((item) => item.name === name);
-        if (idx !== -1) enumValues.push(enumValues.splice(idx, 1)[0]);
-      }
-    );
+    [
+      'CLIENT_PREFERS_NOT_TO_ANSWER',
+      'CLIENT_DOESN_T_KNOW',
+      'DATA_NOT_COLLECTED',
+    ].forEach((name) => {
+      const idx = enumValues.findIndex((item) => item.name === name);
+      if (idx !== -1) enumValues.push(enumValues.splice(idx, 1)[0]);
+    });
 
     const values = enumValues.map((elem) => {
       let description = elem.description?.replaceAll(/\n/g, ' ') || elem.name;

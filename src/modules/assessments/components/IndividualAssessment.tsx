@@ -16,8 +16,10 @@ import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
+import AssessmentStatusIndicator from '@/modules/assessments/components/AssessmentStatusIndicator';
+import { AssessmentStatus } from '@/modules/assessments/components/household/util';
 import { useAssessment } from '@/modules/assessments/hooks/useAssessment';
-import { useEnrollment } from '@/modules/dataFetching/hooks/useEnrollment';
+import { useBasicEnrollment } from '@/modules/enrollment/hooks/useBasicEnrollment';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import {
   DynamicFormProps,
@@ -25,7 +27,6 @@ import {
 } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
   FormRole,
@@ -40,6 +41,7 @@ export interface IndividualAssessmentProps {
   clientName?: string;
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
+  assessmentStatus?: AssessmentStatus;
   visible?: boolean;
   getFormActionProps?: (
     assessment?: AssessmentFieldsFragment
@@ -56,6 +58,7 @@ export interface IndividualAssessmentProps {
 const IndividualAssessment = ({
   enrollmentId,
   assessmentId,
+  assessmentStatus,
   formRole: formRoleParam,
   embeddedInWorkflow = false,
   clientName,
@@ -69,7 +72,7 @@ const IndividualAssessment = ({
 
   // Fetch the enrollment, which may be different from the current context enrollment if this assessment is part of a workflow.
   const { enrollment, loading: enrollmentLoading } =
-    useEnrollment(enrollmentId);
+    useBasicEnrollment(enrollmentId);
 
   const {
     definition,
@@ -131,54 +134,51 @@ const IndividualAssessment = ({
   if (dataLoading || enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
   if (assessmentId && !assessment) return <NotFound />;
+  if (!definition) return <MissingDefinitionAlert />;
+
+  const title = (
+    <AssessmentTitle
+      assessmentTitle={assessmentTitle}
+      clientName={clientName || undefined}
+      projectName={enrollment.project.projectName}
+    />
+  );
+
+  const navigationTitle = (
+    <Box>
+      <Typography variant='h5' sx={{ mb: 2 }}>
+        {clientName}
+      </Typography>
+      <Stack gap={1}>
+        <Typography variant='body2' component='div'>
+          <b>{`${definition.title}: `}</b>
+          {enrollment.project.projectName}
+        </Typography>
+        <AssessmentStatusIndicator status={assessmentStatus} />
+      </Stack>
+    </Box>
+  );
 
   return (
-    <>
-      {!embeddedInWorkflow && (
-        <AssessmentTitle
-          assessmentTitle={assessmentTitle}
-          clientName={clientName || undefined}
-        />
-      )}
-      {!definition && <MissingDefinitionAlert />}
-      {definition && (
-        <AssessmentForm
-          key={assessment?.id}
-          formRole={formRole}
-          definition={definition}
-          assessment={assessment}
-          enrollment={enrollment}
-          top={topOffsetHeight}
-          embeddedInWorkflow={embeddedInWorkflow}
-          FormActionProps={FormActionProps}
-          visible={visible}
-          formRef={formRef}
-          navigationTitle={
-            embeddedInWorkflow ? (
-              <Stack sx={{ mb: 2 }} gap={1}>
-                <Typography variant='body1' fontWeight={600}>
-                  {clientName}
-                </Typography>
-                {formRole && (
-                  <Typography variant='h6'>
-                    {HmisEnums.FormRole[formRole]}
-                  </Typography>
-                )}
-              </Stack>
-            ) : (
-              <Typography variant='h6' sx={{ mb: 2 }}>
-                {formRole ? HmisEnums.FormRole[formRole] : 'Form Navigation'}
-              </Typography>
-            )
-          }
-        />
-      )}
-    </>
+    <AssessmentForm
+      assessmentTitle={title}
+      navigationTitle={navigationTitle}
+      key={assessment?.id}
+      formRole={formRole}
+      definition={definition}
+      assessment={assessment}
+      enrollment={enrollment}
+      top={topOffsetHeight}
+      embeddedInWorkflow={embeddedInWorkflow}
+      FormActionProps={FormActionProps}
+      visible={visible}
+      formRef={formRef}
+    />
   );
 };
 
 const WrappedAssessment = (props: IndividualAssessmentProps) => (
-  <Box>
+  <Box sx={{ mt: 3 }}>
     <SentryErrorBoundary>
       <IndividualAssessment {...props} />
     </SentryErrorBoundary>

@@ -119,6 +119,8 @@ fragment FormDefinitionJsonFields on FormDefinitionJson {
 fragment FormDefinitionFields on FormDefinition {
   id
   role
+  title
+  cacheKey
   definition {
     ...FormDefinitionJsonFields
   }

@@ -1,6 +1,9 @@
 import { RefObject, useEffect, useMemo, useState } from 'react';
 
-const useElementInView = (ref: RefObject<Element>, rootMargin: string) => {
+const useElementInView = (
+  ref: RefObject<Element | undefined>,
+  rootMargin: string
+) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const observer = useMemo(

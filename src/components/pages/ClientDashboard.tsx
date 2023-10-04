@@ -3,7 +3,6 @@ import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
-import { useEnrollment } from '../../modules/dataFetching/hooks/useEnrollment';
 import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
@@ -26,11 +25,7 @@ import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDa
 import { ClientFieldsFragment, useGetClientQuery } from '@/types/gqlTypes';
 
 const ClientDashboard: React.FC = () => {
-  const params = useSafeParams() as {
-    clientId: string;
-    enrollmentId?: string;
-    formRole?: string;
-  };
+  const params = useSafeParams() as { clientId: string };
   const isPrint = useIsPrintView();
 
   const [breadcrumbOverrides, overrideBreadcrumbTitles] = useState<
@@ -46,24 +41,13 @@ const ClientDashboard: React.FC = () => {
   });
   if (error) throw error;
 
-  const { enrollment, loading: enrollmentLoading } = useEnrollment(
-    params.enrollmentId
-  );
-
   const navItems: NavItem[] = useDashboardNavItems(client || undefined);
 
   const { currentPath, ...dashboardState } = useDashboardState();
 
   const outletContext: ClientDashboardContext | undefined = useMemo(
-    () =>
-      client && !enrollmentLoading
-        ? {
-            client,
-            overrideBreadcrumbTitles,
-            enrollment,
-          }
-        : undefined,
-    [client, enrollment, enrollmentLoading]
+    () => (client ? { client, overrideBreadcrumbTitles } : undefined),
+    [client]
   );
 
   const breadCrumbConfig = useClientBreadcrumbConfig(outletContext);
@@ -72,16 +56,13 @@ const ClientDashboard: React.FC = () => {
     breadcrumbOverrides
   );
 
-  if (loading || enrollmentLoading || !navItems) return <Loading />;
+  if (loading || !navItems) return <Loading />;
   if (!client || !outletContext) return <NotFound />;
-  if (enrollment && enrollment.client.id !== params.clientId) {
-    return <NotFound />;
-  }
 
   if (isPrint) {
     return (
       <>
-        <ClientPrintHeader client={client} enrollment={enrollment} />
+        <ClientPrintHeader client={client} />
         <Outlet context={outletContext} />
       </>
     );
@@ -92,7 +73,7 @@ const ClientDashboard: React.FC = () => {
       navHeader={<ClientCardMini client={client} />}
       sidebar={<SideNavMenu items={navItems} />}
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
-      navLabel='Client Navigation'
+      navLabel='Client'
       {...dashboardState}
     >
       <Container maxWidth='xl' sx={{ pb: 6 }}>

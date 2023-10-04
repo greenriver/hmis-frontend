@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { Chip, Container, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Chip, Grid, Paper } from '@mui/material';
 import { omit } from 'lodash-es';
 import { useCallback } from 'react';
 
@@ -8,6 +8,7 @@ import ButtonLink from '../elements/ButtonLink';
 import Loading from '../elements/Loading';
 import RouterLink from '../elements/RouterLink';
 
+import PageContainer from '../layout/PageContainer';
 import TextInput from '@/components/elements/input/TextInput';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
@@ -87,14 +88,9 @@ const AllProjects = () => {
   if (error) throw error;
 
   return (
-    <Container maxWidth='lg' sx={{ pt: 2, pb: 6 }}>
-      <Stack
-        spacing={2}
-        direction='row'
-        justifyContent={'space-between'}
-        sx={{ mt: 2, mb: 4 }}
-      >
-        <Typography variant='h3'>Projects</Typography>
+    <PageContainer
+      title='Projects'
+      actions={
         <RootPermissionsFilter permissions={['canEditOrganization']}>
           <ButtonLink
             data-testid='addOrganizationButton'
@@ -105,14 +101,14 @@ const AllProjects = () => {
             Add Organization
           </ButtonLink>
         </RootPermissionsFilter>
-      </Stack>
-
+      }
+    >
       <Grid container spacing={4}>
         <Grid item xs={12} md={8} lg={6}>
           <TextInput
             label='Search Projects'
             name='search projects'
-            placeholder='Search projects...'
+            placeholder='Search by Project Name or ID'
             value={search || ''}
             onChange={(e) => setSearch(e.target.value)}
             inputWidth='100%'
@@ -143,7 +139,7 @@ const AllProjects = () => {
           </Paper>
         </Grid>
       </Grid>
-    </Container>
+    </PageContainer>
   );
 };
 export default AllProjects;

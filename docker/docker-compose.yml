@@ -20,10 +20,12 @@ services:
         GITHASH: 12345
         USERID: ${USERID:-10000}
         GROUPID: ${GROUPID:-10001}
+    expose: ["8080"]
     ports: ["8080"]
     environment:
       NGINX_HOST: ${NGINX_HOST:-hmis-frontend.127.0.0.1.nip.io}
       NGINX_PORT: ${NGINX_PORT:-8080}
+      NGINX_RESOLVER: ${NGINX_RESOLVER:-1.1.1.1}
       HMIS_BACKEND: ${HMIS_BACKEND:-qa-hmis-warehouse.openpath.host}
     labels:
       - "traefik.http.routers.hmis-frontend.rule=Host(`hmis-frontend.127.0.0.1.nip.io`)"

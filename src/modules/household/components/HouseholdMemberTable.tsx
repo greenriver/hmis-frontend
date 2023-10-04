@@ -11,23 +11,18 @@ import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 export const nameColumnConfig = (currentClientId: string) => {
   return {
@@ -35,24 +30,10 @@ export const nameColumnConfig = (currentClientId: string) => {
     key: 'name',
     render: (h: HouseholdClientFieldsFragment) => {
       const isCurrentClient = h.client.id === currentClientId;
-      const viewEnrollmentPath = generateSafePath(
-        EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-        {
-          clientId: h.client.id,
-          enrollmentId: h.enrollment.id,
-        }
-      );
-      const routerLinkProps = isCurrentClient
-        ? undefined
-        : {
-            to: viewEnrollmentPath,
-            target: '_blank',
-          };
-
       return (
         <ClientName
           client={h.client}
-          routerLinkProps={routerLinkProps}
+          linkToEnrollmentId={isCurrentClient ? undefined : h.enrollment.id}
           bold={isCurrentClient}
         />
       );
@@ -80,19 +61,14 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     key: 'name',
     render: (h: HouseholdClientFieldsFragment) => {
       const isCurrentClient = h.client.id === currentClientId;
-      const linkTo = linkToProfile
-        ? generateSafePath(ClientDashboardRoutes.PROFILE, {
-            clientId: h.client.id,
-          })
-        : generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-            clientId: h.client.id,
-            enrollmentId: h.enrollment.id,
-          });
 
       return (
         <ClientName
           client={h.client}
-          routerLinkProps={isCurrentClient ? undefined : { to: linkTo }}
+          linkToProfile={!isCurrentClient && linkToProfile}
+          linkToEnrollmentId={
+            !isCurrentClient && !linkToProfile ? h.enrollment.id : undefined
+          }
           bold={isCurrentClient}
         />
       );
@@ -136,13 +112,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
         hc.enrollment.currentUnit?.name,
     };
   },
-  dobAge: {
-    header: 'DOB / Age',
-    key: 'dob',
-    render: (hc: HouseholdClientFieldsFragment) => (
-      <ClientDobAge client={hc.client} reveal />
-    ),
-  },
+  dobAge: CLIENT_COLUMNS.dobAge,
   enrollmentPeriod: {
     header: 'Enrollment Period',
     key: 'status',

@@ -14,10 +14,11 @@ import {
   Link,
 } from '@mui/material';
 import { flatten, isEmpty } from 'lodash-es';
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
+import useDebouncedState from '@/hooks/useDebouncedState';
 import ClientName from '@/modules/client/components/ClientName';
 import { Routes } from '@/routes/routes';
 import {
@@ -37,19 +38,28 @@ const MAX_PROJECT_RESULTS = 6;
 const MIN_CHAR_LENGTH_FOR_SEE_MORE = 3;
 
 const OmniSearch: React.FC = () => {
-  const [value, setValue] = useState<string | null>('');
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [value, setValue, debouncedSearch] = useDebouncedState<
+    string | undefined
+  >(undefined, 300);
+
   const { data: clientsData, loading: clientsLoading } =
     useOmniSearchClientsQuery({
-      variables: { textSearch: value || '', limit: MAX_CLIENT_RESULTS },
-      skip: !value,
+      variables: {
+        textSearch: debouncedSearch || '',
+        limit: MAX_CLIENT_RESULTS,
+      },
+      skip: !debouncedSearch,
     });
   const { data: projectsData, loading: projectsLoading } =
     useOmniSearchProjectsQuery({
-      variables: { searchTerm: value as string, limit: MAX_PROJECT_RESULTS },
-      skip: !value,
+      variables: {
+        searchTerm: debouncedSearch as string,
+        limit: MAX_PROJECT_RESULTS,
+      },
+      skip: !debouncedSearch,
     });
   const { data: recentItemsData, loading: recentItemsLoading } =
     useGetRecentItemsQuery();
@@ -84,14 +94,15 @@ const OmniSearch: React.FC = () => {
   const options = useMemo(() => {
     const { recentItems, clients, seeMoreOptions, projects } = optionsBase;
     return [
-      ...(value ? [] : recentItems),
+      ...(debouncedSearch ? [] : recentItems),
       ...clients,
-      ...(value && value.length >= MIN_CHAR_LENGTH_FOR_SEE_MORE
+      ...(debouncedSearch &&
+      debouncedSearch.length >= MIN_CHAR_LENGTH_FOR_SEE_MORE
         ? seeMoreOptions
         : []),
       ...projects,
     ];
-  }, [optionsBase, value]);
+  }, [optionsBase, debouncedSearch]);
 
   const loading = clientsLoading || projectsLoading || recentItemsLoading;
 
@@ -119,15 +130,15 @@ const OmniSearch: React.FC = () => {
         });
       }
       if (option.__typename === 'SeeMore') {
-        const search = value
-          ? new URLSearchParams({ textSearch: value })
+        const search = debouncedSearch
+          ? new URLSearchParams({ textSearch: debouncedSearch })
           : undefined;
         targetPath =
           generateSafePath(Routes.CLIENT_SEARCH) + (search ? `?${search}` : '');
       }
       return targetPath;
     },
-    [value]
+    [debouncedSearch]
   );
 
   const getOptionLabel = useCallback(
@@ -208,6 +219,7 @@ const OmniSearch: React.FC = () => {
   return (
     <Box {...values.getRootProps()}>
       <TextInput
+        name='Client and Project search'
         inputProps={{
           ...values.getInputProps(),
           value,
@@ -215,7 +227,7 @@ const OmniSearch: React.FC = () => {
         placeholder='Search'
         size='small'
         InputProps={{
-          startAdornment: <SearchIcon color='disabled' />,
+          startAdornment: <SearchIcon sx={{ mr: 0.5 }} color='disabled' />,
           ref: values.setAnchorEl,
         }}
       />

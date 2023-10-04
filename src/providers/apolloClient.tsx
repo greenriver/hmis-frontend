@@ -1,6 +1,7 @@
 import {
   ApolloClient,
   ApolloLink,
+  HttpOptions,
   InMemoryCache,
   ServerError,
   from,
@@ -16,11 +17,25 @@ import {
   HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/api/constants';
 import { sentryUser } from '@/modules/auth/api/sessions';
+import { isServerError } from '@/modules/errors/util';
 import { getCsrfToken } from '@/utils/csrf';
+
+// https://github.com/apollographql/apollo-feature-requests/issues/153#issuecomment-476832408
+const customFetch: HttpOptions['fetch'] = (uri, options) => {
+  return fetch(uri, options).then((response) => {
+    // For anything over 500, replace the response body with just the status.
+    // This gives us cleaner sentry errors because the error will actually say "504" instead of "unable to parse html"
+    // For 500 and under, we expect the response to be JSON.
+    if (response.status > 500) {
+      return Promise.reject(new Error(response.status.toString()));
+    }
+    return response;
+  });
+};
 
 const batchLink = new BatchHttpLink({
   uri: '/hmis/hmis-gql',
-  fetch,
+  fetch: customFetch,
 });
 
 const authLink = setContext(
@@ -78,8 +93,18 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
   }
 
   if (networkError) {
-    console.error('[Network error]', networkError);
-    Sentry.captureException(networkError, { user: sentryUser() });
+    if (isServerError(networkError)) {
+      const { statusCode, result } = networkError;
+      console.error('[Server error]', statusCode, result);
+      Sentry.captureException(statusCode, {
+        user: sentryUser(),
+        extra: { result },
+      });
+    } else {
+      console.error('[Network error]', networkError);
+      Sentry.captureException(networkError, { user: sentryUser() });
+    }
+
     if ((networkError as ServerError).statusCode == 401) {
       // might occur if session was invalidated on the server
       dispatchSessionTrackingEvent(undefined);
@@ -89,11 +114,9 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
 
 export const cache = new InMemoryCache({
   typePolicies: {
-    // FormDefinition: {
-    //   // Singleton types that have no identifying field can use an empty
-    //   // array for their keyFields.
-    //   keyFields: [],
-    // },
+    FormDefinition: {
+      keyFields: ['cacheKey'],
+    },
   },
 });
 

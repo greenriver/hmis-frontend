@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography } from '@mui/material';
+import { Paper } from '@mui/material';
 import { useMemo } from 'react';
 
 import RouterLink from '@/components/elements/RouterLink';
@@ -6,12 +6,9 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  enrollmentName,
-  parseAndFormatDate,
-  parseAndFormatDateRange,
-  serviceDetails,
-} from '@/modules/hmis/hmisUtil';
+import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetClientServicesDocument,
@@ -25,41 +22,6 @@ type ServiceType = NonNullable<
   NonNullable<GetClientServicesQuery['client']>['services']
 >['nodes'][0];
 
-const baseColumns: ColumnDef<ServiceType>[] = [
-  {
-    header: 'Date Provided',
-    linkTreatment: true,
-    render: (e) => parseAndFormatDate(e.dateProvided),
-  },
-  {
-    header: 'Category',
-    render: 'serviceType.category' as keyof ServiceType,
-  },
-  {
-    header: 'Service Type',
-    render: 'serviceType.name' as keyof ServiceType,
-  },
-  {
-    header: 'Details',
-    render: (e) => (
-      <Stack>
-        {serviceDetails(e).map((s, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Typography key={i} variant='body2'>
-            {s}
-          </Typography>
-        ))}
-      </Stack>
-    ),
-  },
-  {
-    key: 'enrollmentPeriod',
-    header: 'Enrollment Period',
-    render: (a) =>
-      parseAndFormatDateRange(a.enrollment.entryDate, a.enrollment.exitDate),
-  },
-];
-
 const ClientServices: React.FC<{
   omitColumns?: string[];
   enrollmentId?: string;
@@ -70,10 +32,10 @@ const ClientServices: React.FC<{
     () =>
       (
         [
-          ...baseColumns,
+          ...SERVICE_COLUMNS.filter((col) => col.header != 'Service Details'),
           {
             key: 'project',
-            header: 'Project',
+            header: 'Project Name',
             render: (row) => (
               <RouterLink
                 to={[
@@ -89,6 +51,13 @@ const ClientServices: React.FC<{
               >
                 {enrollmentName(row.enrollment)}
               </RouterLink>
+            ),
+          },
+          {
+            key: 'en-period',
+            header: 'Enrollment Period',
+            render: (row) => (
+              <EnrollmentDateRangeWithStatus enrollment={row.enrollment} />
             ),
           },
         ] as ColumnDef<ServiceType>[]

@@ -1,6 +1,7 @@
-import { omitBy, isNil } from 'lodash-es';
-
-import { FormDefinitionJson } from '@/types/gqlTypes';
+import { omitBy, isNil, mapKeys } from 'lodash-es';
+import { FormValues } from '../form/types';
+import { SearchFormDefinition } from '@/modules/form/data';
+import { ClientSearchInput, FormDefinitionJson } from '@/types/gqlTypes';
 
 // Construct js object of permitted query terms from search params
 export const searchParamsToVariables = (
@@ -26,28 +27,27 @@ export const searchParamsToVariables = (
 };
 
 // Construct from state from query variables
-// This only works because Project and Organization are the only dropdowns.
-// Need to revisit if search form options are expanded to use PickListOptions.
 export const searchParamsToState = (
-  searchFormDefinition: FormDefinitionJson,
   searchParams: URLSearchParams
-) => {
+): ClientSearchInput => {
   const variables: Record<string, any> = {};
-  const fieldNames: [string, string, boolean][] = searchFormDefinition.item.map(
-    (item) => [item.mapping?.fieldName as string, item.linkId, !!item.repeats]
+  const fieldNames: string[] = SearchFormDefinition.item.map(
+    (item) => item.mapping?.fieldName as string
   );
-  fieldNames.push(['textSearch', 'textSearch', false]);
-  fieldNames.push(['projects', 'projects', true]);
-  fieldNames.forEach(([fieldName, linkId, repeats]) => {
-    if (!searchParams.has(fieldName)) return;
-    if (repeats) {
-      variables[linkId] = searchParams
-        .getAll(fieldName)
-        .map((code: string) => ({ code }));
-    } else {
-      variables[linkId] = searchParams.get(fieldName);
-    }
-  });
 
+  [...fieldNames, 'textSearch'].forEach((fieldName) => {
+    if (!searchParams.has(fieldName)) return;
+    variables[fieldName] = searchParams.get(fieldName);
+  });
   return omitBy(variables, isNil);
+};
+
+export const keySearchParamsByLinkId = (
+  values?: ClientSearchInput
+): FormValues => {
+  if (!values) return {};
+  return mapKeys(values, (_, key) => {
+    return SearchFormDefinition.item.find((i) => i.mapping?.fieldName === key)
+      ?.linkId;
+  });
 };

@@ -1,4 +1,5 @@
-import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import UnlockIcon from '@mui/icons-material/Lock';
+import { Box, Grid, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
   ReactNode,
@@ -8,42 +9,38 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { useAssessmentHandlers } from '../hooks/useAssessmentHandlers';
 
-import LockedAssessmentAlert from './alerts/LockedAssessmentAlert';
-import UnsavedAssessmentAlert from './alerts/UnsavedAssessmentAlert';
-import WipAssessmentAlert from './alerts/WipAssessmentAlert';
-import DeleteAssessmentButton from './DeleteAssessmentButton';
+import AssessmentAlert from './alerts/AssessmentAlert';
 
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import FormContainer from '@/components/layout/FormContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import PrintViewButton from '@/components/layout/PrintViewButton';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
 import { hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import FormStepper from '@/modules/form/components/FormStepper';
+import FormActions from '@/modules/form/components/FormActions';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
-import { AssessmentForPopulation } from '@/modules/form/types';
+import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
+  createInitialValuesFromRecord,
   getInitialValues,
   getItemMap,
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
   FormDefinition,
@@ -51,7 +48,6 @@ import {
   FullAssessmentFragment,
   InitialBehavior,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
@@ -59,6 +55,7 @@ interface Props {
   formRole?: FormRole;
   definition: FormDefinition;
   assessment?: FullAssessmentFragment;
+  assessmentTitle?: ReactNode;
   top?: number;
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
@@ -69,6 +66,7 @@ interface Props {
 
 const AssessmentForm = ({
   assessment,
+  assessmentTitle,
   formRole,
   definition,
   navigationTitle,
@@ -85,8 +83,9 @@ const AssessmentForm = ({
   // Whether assessment is locked. By default, submitted assessments are locked.
   const canEdit = enrollment?.access.canEditEnrollments;
   const [locked, setLocked] = useState(
-    !canEdit || (assessment && !assessment.inProgress)
+    !canEdit || !!(assessment && !assessment.inProgress)
   );
+  const handleUnlock = useCallback(() => setLocked(false), []);
 
   useEffect(() => {
     if (!canEdit) return;
@@ -136,16 +135,18 @@ const AssessmentForm = ({
     }),
     [enrollment]
   );
+
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
-    if (mutationLoading || !definition || !enrollment) return;
+    if (!definition || !enrollment) return;
     if (locked && assessment) return {};
 
     const source = sourceAssessment || assessment;
 
     // Set initial values based solely on FormDefinition
     const init = getInitialValues(definition.definition, localConstants);
+
     if (source) {
       // Overlay with values from Assessment
       const initFromAssessment = initialValuesFromAssessment(itemMap, source);
@@ -158,6 +159,12 @@ const AssessmentForm = ({
         InitialBehavior.Overwrite
       );
       assign(init, initialsToOverwrite);
+    } else {
+      // If this is a completely new assessment, set initials from Enrollment
+      const initialsFromEnrollment = createInitialValuesFromRecord(itemMap, {
+        enrollment,
+      });
+      assign(init, initialsFromEnrollment);
     }
 
     // console.debug(
@@ -173,7 +180,6 @@ const AssessmentForm = ({
   }, [
     assessment,
     definition,
-    mutationLoading,
     enrollment,
     sourceAssessment,
     reloadInitialValues,
@@ -181,18 +187,6 @@ const AssessmentForm = ({
     locked,
     localConstants,
   ]);
-
-  const navigate = useNavigate();
-  const navigateToEnrollment = useMemo(
-    () => () =>
-      navigate(
-        generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
-          clientId: enrollment.client.id,
-          enrollmentId: enrollment.id,
-        })
-      ),
-    [enrollment, navigate]
-  );
 
   useScrollToHash(!enrollment || mutationLoading, top);
 
@@ -205,11 +199,37 @@ const AssessmentForm = ({
   const { loading: pickListsLoading } = usePreloadPicklists({
     definition: definition.definition,
     pickListArgs,
+    skip: !isPrintView,
   });
+
   usePrintTrigger({
     startReady: isPrintView,
     hold: pickListsLoading,
   });
+
+  // the form is locked, replace the submit button with an 'unlock' button
+  const formActionPropsWithLock = useMemo<typeof FormActionProps>(() => {
+    if (!locked || !FormActionProps || !canEdit) return FormActionProps;
+
+    const config = (FormActionProps.config?.slice() || [])
+      .map((item) => {
+        if (item.action != FormActionTypes.Submit) return item;
+        return {
+          action: FormActionTypes.Unlock,
+          id: 'unlock',
+          label: 'Unlock Assessment',
+          centerAlign: embeddedInWorkflow,
+          buttonProps: {
+            onClick: handleUnlock,
+            startIcon: <UnlockIcon />,
+            size: 'large',
+            color: 'inherit',
+          } as const,
+        };
+      })
+      .filter((item) => item.action !== FormActionTypes.Discard);
+    return { ...FormActionProps, config };
+  }, [FormActionProps, locked, canEdit, embeddedInWorkflow, handleUnlock]);
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
@@ -219,83 +239,60 @@ const AssessmentForm = ({
           top: top + 16,
         }}
       >
-        <Paper sx={{ p: 2 }}>
-          {navigationTitle}
-          <FormStepper
-            items={definition.definition.item}
-            scrollOffset={top}
-            useUrlHash={!embeddedInWorkflow}
-          />
-        </Paper>
-        <Stack gap={2} sx={{ mt: 2 }}>
-          {!assessment && (
-            <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
-              <Button
-                variant='outlined'
-                onClick={() => setDialogOpen(true)}
-                sx={{ height: 'fit-content' }}
-                fullWidth
-              >
-                Autofill Assessment
-              </Button>
-            </ButtonTooltipContainer>
-          )}
-          {!isPrintView && locked && assessment && (
-            <PrintViewButton
-              // If embedded in household workflow, we need to link
-              // over to the individual view for the specific assessment in order to print it
-              openInNew={embeddedInWorkflow}
-              to={
-                embeddedInWorkflow
-                  ? generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-                      clientId: assessment.enrollment.client.id,
-                      enrollmentId: assessment.enrollment.id,
-                      assessmentId: assessment.id,
-                      formRole,
-                    })
-                  : undefined
-              }
-            >
-              Print Assessment
-            </PrintViewButton>
-          )}
-          {assessment && (
-            <DeleteAssessmentButton
-              assessment={assessment}
-              clientId={enrollment.client.id}
-              enrollmentId={enrollment.id}
-              onSuccess={navigateToEnrollment}
-            />
-          )}
-          {assessment && (
-            <Typography color='text.secondary' variant='body2' sx={{ mt: 1 }}>
-              <b>Assessment ID:</b> {assessment.id}
-            </Typography>
-          )}
-        </Stack>
+        <AssessmentFormSideBar
+          enrollment={enrollment}
+          definition={definition}
+          assessment={assessment}
+          title={navigationTitle}
+          formRole={formRole}
+          isPrintView={isPrintView}
+          locked={locked}
+          embeddedInWorkflow={embeddedInWorkflow}
+          onAutofill={() => setDialogOpen(true)}
+          canEdit={canEdit}
+          top={top}
+        />
       </Box>
     </Grid>
   );
 
+  const showNavigation = !isPrintView;
+
   return (
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-      {!isPrintView && navigation}
-      <Grid item xs sx={{ pt: '0 !important' }}>
-        {!isPrintView && assessment && !assessment.inProgress && locked && (
-          <LockedAssessmentAlert
-            allowUnlock={canEdit}
-            onUnlock={() => setLocked(false)}
+      {showNavigation && navigation}
+      <Grid item xs={showNavigation ? 9.5 : 12} sx={{ pt: '0 !important' }}>
+        {assessmentTitle}
+        {!isPrintView && (
+          <AssessmentAlert
+            assessment={assessment}
+            locked={locked}
+            allowUnlock={canEdit && !embeddedInWorkflow}
+            onUnlock={handleUnlock}
           />
         )}
-        {assessment && assessment.inProgress && <WipAssessmentAlert />}
-        {embeddedInWorkflow && !assessment && <UnsavedAssessmentAlert />}
         {locked && assessment ? (
-          <DynamicView
-            // dont use `initialValues` because we don't want the OVERWRITE fields
-            values={initialValuesFromAssessment(itemMap, assessment)}
-            definition={definition.definition}
-            pickListArgs={pickListArgs}
-          />
+          <FormContainer
+            actions={
+              canEdit && !isPrintView ? (
+                <FormActions
+                  onSubmit={() => undefined}
+                  onSaveDraft={() => undefined}
+                  disabled={false}
+                  loading={false}
+                  {...formActionPropsWithLock}
+                />
+              ) : undefined
+            }
+            sticky={embeddedInWorkflow ? 'always' : 'auto'}
+          >
+            <DynamicView
+              // dont use `initialValues` because we don't want the OVERWRITE fields
+              values={initialValuesFromAssessment(itemMap, assessment)}
+              definition={definition.definition}
+              pickListArgs={pickListArgs}
+            />
+          </FormContainer>
         ) : (
           <DynamicForm
             // Remount component if a source assessment has been selected

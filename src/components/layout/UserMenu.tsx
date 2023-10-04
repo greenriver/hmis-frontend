@@ -1,6 +1,6 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
 import {
   Button,
   Link,
@@ -14,49 +14,24 @@ import {
   bindTrigger,
   usePopupState,
 } from 'material-ui-popup-state/hooks';
-import React, { useCallback, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
 
-import { logout } from '@/modules/auth/api/sessions';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
-const useLogout = () => {
-  const navigate = useNavigate();
-  const [error, setError] = useState<Error>();
-  const { pathname } = useLocation();
-  const { setUser } = useAuth();
-  const logoutUser = useCallback(() => {
-    return logout()
-      .then(() => {
-        navigate(pathname, {
-          state: { clearPrev: true },
-          replace: true,
-        });
-        setUser(undefined);
-      })
-      .catch((e) => setError(e));
-  }, [navigate, pathname, setUser]);
-
-  return [logoutUser, error] as const;
-};
-
 const UserMenu: React.FC = () => {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
-  const { user } = useAuth();
+  const { user, logoutUser } = useAuth();
   const { manageAccountUrl } = useHmisAppSettings();
-  const [logoutUser, error] = useLogout();
-
-  if (error) throw error;
 
   if (!user) return null;
 
   return (
     <>
       <Button
-        startIcon={<AccountCircleIcon />}
+        startIcon={<PersonPinIcon />}
         variant='text'
-        sx={{ fontSize: '1rem', color: 'text.primary' }}
+        sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
         {...bindTrigger(popupState)}
       >
         {user.name}

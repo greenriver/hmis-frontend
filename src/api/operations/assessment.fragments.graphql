@@ -15,6 +15,14 @@ fragment AssessmentFields on Assessment {
   }
 }
 
+fragment AssessmentWithValuesAndRecords on Assessment {
+  ...AssessmentWithValues
+  ...AssessmentWithRecords
+  enrollment {
+    id
+  }
+}
+
 # contains form values
 fragment AssessmentWithRecords on Assessment {
   ...AssessmentFields

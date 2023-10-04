@@ -1,4 +1,4 @@
-import { SxProps } from '@mui/system';
+import { BreakpointOverrides, SxProps } from '@mui/system';
 import { isNil, isObject } from 'lodash-es';
 import { ReactNode } from 'react';
 
@@ -55,6 +55,7 @@ export interface DynamicFieldProps {
   pickListArgs?: PickListArgs;
   noLabel?: boolean;
   warnIfEmpty?: boolean;
+  breakpoints?: BreakpointOverrides;
 }
 
 export interface DynamicViewFieldProps {
@@ -79,6 +80,7 @@ export interface DynamicInputCommonProps {
   min?: any;
   max?: any;
   placeholder?: string;
+  breakpoints?: BreakpointOverrides;
 }
 
 export interface DynamicViewItemCommonProps {
@@ -129,6 +131,7 @@ export enum FormActionTypes {
   Validate,
   Discard,
   Navigate,
+  Unlock,
 }
 
 export type FormValues = Record<string, any | null | undefined>;

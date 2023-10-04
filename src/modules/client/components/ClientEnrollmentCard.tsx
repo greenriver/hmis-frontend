@@ -1,10 +1,10 @@
-import { Box, Card, CircularProgress, Typography } from '@mui/material';
-import { format } from 'date-fns';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { useMemo } from 'react';
 
 import GenericTable from '@/components/elements/table/GenericTable';
-import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
+import TitleCard from '@/components/elements/TitleCard';
 import { enrollmentName, isRecentEnrollment } from '@/modules/hmis/hmisUtil';
+import { ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -39,7 +39,7 @@ const RecentEnrollments = ({
   );
 
   if (error) throw error;
-  if (loading || !client) {
+  if (loading && !client) {
     return (
       <Box
         sx={{
@@ -54,6 +54,7 @@ const RecentEnrollments = ({
       </Box>
     );
   }
+  if (!client) throw new Error('client not found');
 
   if (recentEnrollments && recentEnrollments.length === 0)
     return (
@@ -73,30 +74,17 @@ const RecentEnrollments = ({
           linkTreatment: true,
           render: (e) => enrollmentName(e),
         },
-        {
-          key: 'status',
-          header: 'Status',
-          render: (e) => <EnrollmentStatus enrollment={e} />,
-        },
+        ENROLLMENT_COLUMNS.enrollmentStatus,
         {
           key: 'members',
           header: 'Members',
           render: (e) => (
-            <Typography color='GrayText' variant='inherit' noWrap>
+            <Typography color='text.secondary' variant='inherit' noWrap>
               {e.householdSize} Member{e.householdSize === 1 ? '' : 's'}
             </Typography>
           ),
         },
-        {
-          key: 'dates',
-          header: 'Dates',
-          render: (e) => (
-            <Typography color='GrayText' variant='inherit'>
-              {format(new Date(e.entryDate), 'M/d/yyyy')} -{' '}
-              {e.exitDate ? format(new Date(e.exitDate), 'M/d/yyyy') : 'Active'}
-            </Typography>
-          ),
-        },
+        ENROLLMENT_COLUMNS.enrollmentPeriod,
       ]}
       rowLinkTo={(row) =>
         generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
@@ -114,17 +102,13 @@ interface Props {
 
 const ClientEnrollmentCard: React.FC<Props> = ({ client }) => {
   return (
-    <Card>
-      <Box
-        sx={(theme) => ({
-          p: 2,
-          borderBottom: `1px solid ${theme.palette.divider}`,
-        })}
-      >
-        <Typography>Recent Enrollments</Typography>
-      </Box>
+    <TitleCard
+      title='Recent Enrollments'
+      headerVariant='border'
+      headerTypographyVariant='body1'
+    >
       <RecentEnrollments clientId={client.id} />
-    </Card>
+    </TitleCard>
   );
 };
 

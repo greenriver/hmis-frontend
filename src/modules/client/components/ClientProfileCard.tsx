@@ -20,7 +20,7 @@ import ClientContactPoint from './ClientContactPoint';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
-import NotSpecified from '@/components/elements/NotSpecified';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
@@ -42,7 +42,6 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
   ClientImageFragment,
-  Gender,
   useGetClientImageQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -113,16 +112,21 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
         }}
         items={[
           {
-            key: 'IDs',
+            key: 'Client IDs',
             content: (
               <ClientProfileCardTextTable
-                content={client.externalIds.map((externalId) => {
+                content={client.externalIds.map((externalId, idx) => {
+                  const repeated =
+                    idx > 0 &&
+                    client.externalIds[idx - 1].type == externalId.type;
                   return [
-                    <HmisEnum
-                      enumMap={HmisEnums.ExternalIdentifierType}
-                      value={externalId.type}
-                      fontWeight={600}
-                    />,
+                    repeated ? null : (
+                      <HmisEnum
+                        enumMap={HmisEnums.ExternalIdentifierType}
+                        value={externalId.type}
+                        fontWeight={600}
+                      />
+                    ),
                     <ExternalIdDisplay value={externalId} />,
                   ] as const;
                 })}
@@ -132,7 +136,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
           ...(hasContactInformation
             ? [
                 {
-                  key: 'Client Contact Information',
+                  key: 'Contact Information',
                   content: (
                     <ClientProfileCardTextTable
                       content={[
@@ -173,22 +177,22 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                       oneRowPerValue
                     />
                   ),
-                  Ethnicity: (
-                    <HmisEnum
-                      value={client.ethnicity}
-                      enumMap={HmisEnums.Ethnicity}
-                    />
-                  ),
                   Gender: (
-                    <MultiHmisEnum
-                      values={client.gender}
-                      enumMap={{
-                        ...HmisEnums.Gender,
-                        [Gender.NoSingleGender]: 'Non-Binary',
-                      }}
-                    />
+                    <>
+                      <MultiHmisEnum
+                        values={client.gender}
+                        enumMap={HmisEnums.Gender}
+                        oneRowPerValue
+                      >
+                        {client.differentIdentityText && (
+                          <Typography variant='body2'>
+                            {client.differentIdentityText}
+                          </Typography>
+                        )}{' '}
+                      </MultiHmisEnum>
+                    </>
                   ),
-                  Pronouns: pronouns(client) || <NotSpecified />,
+                  Pronouns: pronouns(client) || <NotCollectedText />,
                   'Veteran Status': (
                     <HmisEnum
                       value={client.veteranStatus}
@@ -199,18 +203,6 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
               />
             ),
           },
-          // {
-          //   key: 'Case Manager',
-          //   content: 'TK',
-          // },
-          // {
-          //   key: 'Housing Status',
-          //   content: 'TK',
-          // },
-          // {
-          //   key: 'Client Contact Information',
-          //   content: 'TK',
-          // },
         ]}
       />
     </Box>
@@ -415,8 +407,11 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   ...(pronouns(client)
                     ? { Pronouns: pronouns(client) }
                     : undefined),
-                  Age: (
-                    <ClientDobAge client={client} noValue={<NotSpecified />} />
+                  [client.dob ? 'DOB' : 'Age']: (
+                    <ClientDobAge
+                      client={client}
+                      noValue={<NotCollectedText />}
+                    />
                   ),
                   ...(canViewSsn
                     ? {

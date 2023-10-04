@@ -1,28 +1,37 @@
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { Box, Button } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Stack } from '@mui/system';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import useAddToHouseholdColumns from '../hooks/useAddToHouseholdColumns';
 import { useRecentHouseholdMembers } from '../hooks/useRecentHouseholdMembers';
 
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
+import AddNewClientButton from './elements/AddNewClientButton';
 import { CommonCard } from '@/components/elements/CommonCard';
+import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
-import { useNewClientEnrollmentFormDialog } from '@/modules/enrollment/hooks/useNewClientEnrollmentFormDialog';
+import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import AssociatedHouseholdMembers, {
   householdMemberColumns,
 } from '@/modules/household/components/AssociatedHouseholdMembers';
 import { RecentHouseholdMember } from '@/modules/household/types';
-import AddClientPrompt from '@/modules/search/components/AddClientPrompt';
-import ClientSearch from '@/modules/search/components/ClientSearch';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { ClientTextSearchInputForm } from '@/modules/search/components/ClientTextSearchInput';
 import {
   ClientFieldsFragment,
+  ClientSearchInput,
+  ClientSortOption,
   EnrollmentFieldsFragment,
+  ExternalIdentifierType,
+  SearchClientsDocument,
+  SearchClientsQuery,
+  SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -36,9 +45,10 @@ const ManageHousehold = ({
   projectId,
   BackButton,
 }: Props) => {
-  // This may or may not be in a Client Dashboard. If it is, we need to treat the dashboard client differently.
-  const { client } = useClientDashboardContext();
-  const currentDashboardClientId = client?.id;
+  const { globalFeatureFlags } = useHmisAppSettings();
+  // This may be rendered either on the Project Dashboard or the Enrollment Dashboard. If on the Enrollment Dash, we need to treat the "current" client differently.
+  const enrollmentContext = useEnrollmentDashboardContext();
+  const currentDashboardClientId = enrollmentContext?.client?.id;
 
   const {
     addToEnrollmentColumns,
@@ -46,8 +56,7 @@ const ManageHousehold = ({
     household,
     onHouseholdIdChange,
     loading,
-    // refetchLoading,
-    // householdLoading,
+    householdId,
   } = useAddToHouseholdColumns({
     householdId: initialHouseholdId,
     projectId,
@@ -74,29 +83,36 @@ const ManageHousehold = ({
 
   useScrollToHash(loading || recentMembersLoading);
 
-  const columns: ColumnDef<ClientFieldsFragment | RecentHouseholdMember>[] = [
-    ...householdMemberColumns,
-    ...addToEnrollmentColumns,
-  ];
+  const columns: ColumnDef<ClientFieldsFragment | RecentHouseholdMember>[] =
+    useMemo(() => {
+      const defaults = [...householdMemberColumns, ...addToEnrollmentColumns];
+      if (globalFeatureFlags?.mciId) {
+        return [
+          externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
+          ...defaults,
+        ];
+      }
+      return defaults;
+    }, [addToEnrollmentColumns, globalFeatureFlags?.mciId]);
 
-  const {
-    openNewClientEnrollmentFormDialog,
-    renderNewClientEnrollmentFormDialog,
-  } = useNewClientEnrollmentFormDialog({
-    projectId,
-    householdId: household?.id,
-    onCompleted: (data: EnrollmentFieldsFragment) => {
-      if (data.householdId !== household?.id) {
+  const handleNewClientAdded = useCallback(
+    (data: EnrollmentFieldsFragment) => {
+      if (data.householdId !== householdId) {
         onHouseholdIdChange(data.householdId);
       } else {
         refetchHousehold();
       }
     },
-  });
+    [householdId, onHouseholdIdChange, refetchHousehold]
+  );
+
+  const [searchInput, setSearchInput] = useState<ClientSearchInput>();
+  const [hasSearched, setHasSearched] = useState(false);
 
   if (initialHouseholdId && !household && loading) {
     return <Loading />;
   }
+
   return (
     <Stack gap={4}>
       {!household && loading && <Loading />}
@@ -137,38 +153,51 @@ const ManageHousehold = ({
       )}
 
       <CommonCard title='Client Search'>
-        <ClientSearch
-          hideInstructions
-          hideProject
-          hideAdvanced
-          cardsEnabled={false}
-          pageSize={10}
-          wrapperComponent={Box}
-          searchResultsTableProps={{
-            rowLinkTo: undefined,
-            tableProps: { size: 'small' },
-            columns,
-          }}
-          hideAddClient
-          renderActions={(searchPerformed) => {
-            if (!searchPerformed) return null;
-            return (
-              <AddClientPrompt>
-                <Button
-                  onClick={openNewClientEnrollmentFormDialog}
-                  data-testid='addClientButton'
-                  sx={{ px: 3 }}
-                  startIcon={<PersonAddIcon />}
-                  variant='outlined'
-                >
-                  Add Client
-                </Button>
-              </AddClientPrompt>
-            );
-          }}
-        />
+        <Stack gap={6}>
+          <Grid container alignItems={'flex-start'}>
+            <Grid item xs={12} md={9} lg={8}>
+              <ClientTextSearchInputForm
+                onSearch={(text) => setSearchInput({ textSearch: text })}
+                searchAdornment
+                minChars={3}
+              />
+            </Grid>
+            <Grid item xs></Grid>
+            <Grid item xs={12} md={3}>
+              {hasSearched && (
+                <RootPermissionsFilter permissions='canEditClients'>
+                  <AddNewClientButton
+                    projectId={projectId}
+                    householdId={householdId}
+                    onCompleted={handleNewClientAdded}
+                  />
+                </RootPermissionsFilter>
+              )}
+            </Grid>
+          </Grid>
+
+          {searchInput && (
+            <SsnDobShowContextProvider>
+              <GenericTableWithData<
+                SearchClientsQuery,
+                SearchClientsQueryVariables,
+                ClientFieldsFragment
+              >
+                queryVariables={{ input: searchInput }}
+                queryDocument={SearchClientsDocument}
+                columns={columns}
+                pagePath='clientSearch'
+                fetchPolicy='cache-and-network'
+                showFilters
+                recordType='Client'
+                filterInputType='ClientFilterOptions'
+                defaultSortOption={ClientSortOption.LastNameAToZ}
+                onCompleted={() => setHasSearched(true)}
+              />
+            </SsnDobShowContextProvider>
+          )}
+        </Stack>
       </CommonCard>
-      {renderNewClientEnrollmentFormDialog()}
     </Stack>
   );
 };

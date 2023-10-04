@@ -5,14 +5,12 @@ import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectServicesDocument,
   GetProjectServicesQuery,
   GetProjectServicesQueryVariables,
   ServicesForProjectFilterOptions,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 export type ServiceFields = NonNullable<
   GetProjectServicesQuery['project']
@@ -31,21 +29,12 @@ const ProjectServicesTable = ({
       {
         header: 'Client',
         linkTreatment: true,
-        render: (s: ServiceFields) => {
-          const viewEnrollmentPath = generateSafePath(
-            EnrollmentDashboardRoutes.SERVICES,
-            {
-              clientId: s.enrollment.client.id,
-              enrollmentId: s.enrollment.id,
-            }
-          );
-          return (
-            <ClientName
-              client={s.enrollment.client}
-              routerLinkProps={{ to: viewEnrollmentPath }}
-            />
-          );
-        },
+        render: (s: ServiceFields) => (
+          <ClientName
+            client={s.enrollment.client}
+            linkToEnrollmentId={s.enrollment.id}
+          />
+        ),
       },
       ...SERVICE_COLUMNS.map((c) => {
         if (c.header === 'Date Provided') return { ...c, linkTreatment: false };

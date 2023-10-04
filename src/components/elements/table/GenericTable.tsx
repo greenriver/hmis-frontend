@@ -53,10 +53,12 @@ export interface Props<T> {
   headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
   selectable?: boolean;
   isRowSelectable?: (row: T) => boolean;
-  getSelectedRowIds?: () => string[];
+  setSelectedRowIds?: (ids: readonly string[]) => void;
   EnhancedTableToolbarProps?: Omit<EnhancedTableToolbarProps, 'selectedIds'>;
   filterToolbar?: ReactNode;
   noData?: ReactNode;
+  renderRow?: (row: T) => ReactNode;
+  condensed?: boolean;
 }
 
 const clickableRowStyles = {
@@ -105,10 +107,13 @@ const GenericTable = <T extends { id: string }>({
   headerCellSx,
   selectable = false,
   isRowSelectable,
+  setSelectedRowIds,
   EnhancedTableToolbarProps,
   filterToolbar,
+  renderRow,
   noData = 'No data',
   loadingVariant = 'circular',
+  condensed = false,
 }: Props<T>) => {
   const columns = useMemo(
     () => (columnProp || []).filter((c) => !c.hide),
@@ -145,6 +150,10 @@ const GenericTable = <T extends { id: string }>({
 
   // Clear selection when data changes
   useEffect(() => setSelected([]), [rows]);
+  useEffect(
+    () => setSelectedRowIds && setSelectedRowIds(selected),
+    [selected, setSelectedRowIds]
+  );
 
   if (loading && loadingVariant === 'circular') return <Loading />;
 
@@ -209,7 +218,7 @@ const GenericTable = <T extends { id: string }>({
                 textAlign: def.textAlign,
               }}
             >
-              {def.header}
+              <strong>{def.header}</strong>
             </HeaderCell>
           ))}
         </TableRow>
@@ -270,7 +279,7 @@ const GenericTable = <T extends { id: string }>({
                     key={key(def)}
                   >
                     {' '}
-                    {def.header}
+                    <strong>{def.header}</strong>
                   </HeaderCell>
                   {rows.map((row, idx) => (
                     <TableCell key={row.id} sx={{ ...verticalCellSx(idx) }}>
@@ -281,6 +290,9 @@ const GenericTable = <T extends { id: string }>({
               ))}
             {!vertical &&
               rows.map((row) => {
+                // prop to completely take over row rendering
+                if (renderRow) return renderRow(row);
+
                 const isSelectable =
                   selectable && (isRowSelectable ? isRowSelectable(row) : true);
 
@@ -291,9 +303,10 @@ const GenericTable = <T extends { id: string }>({
                   : undefined;
 
                 const rowLink = (rowLinkTo && rowLinkTo(row)) || undefined;
-
                 const isClickable = !!onClickHandler || !!rowLink;
-
+                const firstIndexWithLinkTreatment = columns.findIndex(
+                  (c) => c.linkTreatment
+                );
                 return (
                   <TableRow
                     key={row.id}
@@ -334,9 +347,16 @@ const GenericTable = <T extends { id: string }>({
                         dontLink = false,
                         textAlign,
                       } = def;
-                      const isFirstLinkWithTreatment =
-                        columns.findIndex((c) => c.linkTreatment) === index;
+
                       const isLinked = rowLink && !dontLink;
+
+                      const enableTabIndex =
+                        firstIndexWithLinkTreatment === index ||
+                        // if none have link treatment, we still need tab index. default to first col.
+                        (isLinked &&
+                          firstIndexWithLinkTreatment === -1 &&
+                          index === 0);
+
                       const onClickLinkTreatment =
                         handleRowClick && !dontLink && linkTreatment
                           ? {
@@ -370,7 +390,7 @@ const GenericTable = <T extends { id: string }>({
                                   outlineOffset: '-2px',
                                 },
                               }}
-                              tabIndex={isFirstLinkWithTreatment ? 0 : '-1'}
+                              tabIndex={enableTabIndex ? 0 : '-1'}
                             >
                               <Box
                                 component='span'
@@ -378,9 +398,8 @@ const GenericTable = <T extends { id: string }>({
                                   display: 'flex',
                                   height: '100%',
                                   alignItems: 'center',
-                                  // TODO may want to adjust for small table size
                                   px: 2,
-                                  py: 1,
+                                  py: condensed ? 1 : 2,
                                 }}
                               >
                                 {renderCellContents(row, render)}
@@ -403,7 +422,7 @@ const GenericTable = <T extends { id: string }>({
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  rowsPerPageOptions={[5, 10, 25, 50, 100]}
                   SelectProps={{
                     inputProps: {
                       'aria-label': 'rows per page',

@@ -10,10 +10,11 @@ import {
 import pluralize from 'pluralize';
 import { ReactNode, useMemo } from 'react';
 
-import { NEW_MCI_STRING, UNCLEARED_CLIENT_STRING } from '../util';
+import { NEW_MCI_STRING } from '../util';
 
 import { MciClearanceProps } from './types';
 
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import RouterLink from '@/components/elements/RouterLink';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -130,17 +131,26 @@ const MciMatchSelector = ({
     {
       key: 'toggle',
       width: '10%',
-      render: (m) => (
-        <Switch
-          inputProps={{ 'aria-label': 'controlled' }}
-          checked={value == m.mciId}
-          onChange={handleChange(m.mciId)}
-          disabled={
-            autocleared ||
-            (!!m.existingClientId && !allowSelectingExistingClient)
-          }
-        />
-      ),
+      render: (m) => {
+        const alreadyInHmis =
+          !!m.existingClientId && !allowSelectingExistingClient;
+        return (
+          <ButtonTooltipContainer
+            title={
+              alreadyInHmis
+                ? 'Client is already in HMIS. Click the link to go to their client record.'
+                : null
+            }
+          >
+            <Switch
+              inputProps={{ 'aria-label': 'controlled' }}
+              checked={value == m.mciId}
+              onChange={handleChange(m.mciId)}
+              disabled={autocleared || alreadyInHmis}
+            />
+          </ButtonTooltipContainer>
+        );
+      },
     },
     {
       key: 'score',
@@ -175,10 +185,6 @@ const MciMatchSelector = ({
               borderLeft: '1px solid white',
               borderColor: 'borders.light',
             },
-            'tr:nth-last-child(3) td': {
-              borderBottom: (theme) =>
-                `2px solid ${theme.palette.borders.dark}`,
-            },
           },
         }}
         actionRow={
@@ -190,13 +196,15 @@ const MciMatchSelector = ({
                     inputProps={{ 'aria-label': 'controlled' }}
                     checked={value == NEW_MCI_STRING}
                     onChange={handleChange(NEW_MCI_STRING)}
+                    disabled={value == NEW_MCI_STRING && matches.length === 0}
                   />
                 </TableCell>
                 <TableCell colSpan={2} sx={{ py: 3 }}>
                   New MCI ID
                 </TableCell>
               </TableRow>
-              <TableRow>
+              {/* Sept 2023 - removed ability to intentionally create an uncleared client, per request. Leaving code in case it needs to be added back. */}
+              {/* <TableRow>
                 <TableCell>
                   <Switch
                     inputProps={{ 'aria-label': 'controlled' }}
@@ -216,7 +224,7 @@ const MciMatchSelector = ({
                     </Typography>
                   </Stack>
                 </TableCell>
-              </TableRow>
+              </TableRow> */}
             </>
           )
         }

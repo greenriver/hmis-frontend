@@ -1,5 +1,4 @@
 import { SvgIconComponent } from '@mui/icons-material';
-import PersonIcon from '@mui/icons-material/Person';
 import { merge, startCase } from 'lodash-es';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -73,6 +72,13 @@ export const useProjectBreadcrumbConfig = (
       },
       [ProjectDashboardRoutes.PROJECT_ENROLLMENTS]: {
         title: 'Enrollments',
+      },
+      [ProjectDashboardRoutes.PROJECT_BED_NIGHTS]: {
+        title: 'Bed Night Management',
+      },
+      [ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT]: {
+        title: 'Add Enrollment',
+        parent: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
       },
       [ProjectDashboardRoutes.ADD_HOUSEHOLD]: {
         title: 'Add Enrollment',
@@ -177,12 +183,11 @@ export const useEnrollmentBreadcrumbConfig = (
       : 'Enrollment';
 
     const overrides: CrumbConfig = {
-      [clientRoot]: {
-        title: clientBriefName(context.client),
-        icon: PersonIcon,
-      },
+      [clientRoot]: { title: clientBriefName(context.client) },
       [enrollmentRoot]: { parent: clientRoot, title: enrollmentTitle },
       [EnrollmentDashboardRoutes.EDIT_HOUSEHOLD]: { title: 'Edit Household' },
+      [EnrollmentDashboardRoutes.CE_ASSESSMENTS]: { title: 'CE Assessments' },
+      [EnrollmentDashboardRoutes.EVENTS]: { title: 'CE Events' },
       [EnrollmentDashboardRoutes.ASSESSMENT]: {
         title: 'Assessment',
         parent: EnrollmentDashboardRoutes.ASSESSMENTS,

@@ -4,6 +4,7 @@ import { capitalize, filter, isNil } from 'lodash-es';
 
 import SimpleTable from '../elements/SimpleTable';
 
+import PageTitle from '../layout/PageTitle';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -96,7 +97,7 @@ const columns: ColumnDef<AssessmentType>[] = [
             },
           }}
           TableRowProps={{
-            sx: { '.MuiTableCell-root:first-child': { width: '180px' } },
+            sx: { '.MuiTableCell-root:first-of-type': { width: '180px' } },
           }}
           rows={Object.values(e.objectChanges as ChangesType)
             .filter((r) => filter(r.values, hasMeaningfulValue).length > 0)
@@ -147,14 +148,7 @@ const AuditHistory = () => {
 
   return (
     <>
-      <Stack
-        gap={3}
-        direction='row'
-        justifyContent={'space-between'}
-        sx={{ mb: 2, pr: 1, alignItems: 'center' }}
-      >
-        <Typography variant='h4'>Client Audit History</Typography>
-      </Stack>
+      <PageTitle title='Client Audit History' />
       <Paper>
         <GenericTableWithData<
           GetClientAuditEventsQuery,
