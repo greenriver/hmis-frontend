@@ -1,5 +1,6 @@
 import { Box, Button, Divider, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { isDate, isValid } from 'date-fns';
+import { useCallback, useState } from 'react';
 
 import TableFilterItem from './FilterItem';
 
@@ -20,6 +21,19 @@ const TableFilterContent = <T,>({
 }: TableFilterContentProps<T>): JSX.Element => {
   const [intermediateValues, setIntermediateValues] =
     useState<Partial<T>>(filterValues);
+
+  const cleanedValues = useCallback((values: Partial<T>) => {
+    const cleaned: typeof values = {};
+    Object.keys(values).forEach((key) => {
+      const val = values[key as keyof T];
+      if (val && isDate(val) && !isValid(val)) {
+        // skip invalid dates
+      } else {
+        cleaned[key as keyof T] = val;
+      }
+    });
+    return cleaned;
+  }, []);
 
   return (
     <>
@@ -68,7 +82,7 @@ const TableFilterContent = <T,>({
         </Button>
         <Button
           size='small'
-          onClick={() => setFilterValues(intermediateValues)}
+          onClick={() => setFilterValues(cleanedValues(intermediateValues))}
         >
           <strong>Apply Filters</strong>
         </Button>
