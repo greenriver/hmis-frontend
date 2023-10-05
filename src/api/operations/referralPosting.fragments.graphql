@@ -63,7 +63,6 @@ fragment ReferralPostingDetailFields on ReferralPosting {
     id
     client {
       id
-      hudChronic
     }
   }
   householdMembers {
@@ -76,6 +75,7 @@ fragment ReferralPostingDetailFields on ReferralPosting {
       id
       ...ClientName
       ...ClientIdentificationFields
+      hudChronic
       veteranStatus
       gender
       access {

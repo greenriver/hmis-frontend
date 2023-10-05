@@ -19622,11 +19622,7 @@ export type GetReferralPostingQuery = {
     hohEnrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        hudChronic?: boolean | null;
-      };
+      client: { __typename?: 'Client'; id: string };
     } | null;
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
@@ -19646,6 +19642,7 @@ export type GetReferralPostingQuery = {
       client: {
         __typename?: 'Client';
         id: string;
+        hudChronic?: boolean | null;
         veteranStatus: NoYesReasonsForMissingData;
         gender: Array<Gender>;
         lockVersion: number;
@@ -19738,11 +19735,7 @@ export type UpdateReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          hudChronic?: boolean | null;
-        };
+        client: { __typename?: 'Client'; id: string };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -19762,6 +19755,7 @@ export type UpdateReferralPostingMutation = {
         client: {
           __typename?: 'Client';
           id: string;
+          hudChronic?: boolean | null;
           veteranStatus: NoYesReasonsForMissingData;
           gender: Array<Gender>;
           lockVersion: number;
@@ -19868,11 +19862,7 @@ export type CreateOutgoingReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          hudChronic?: boolean | null;
-        };
+        client: { __typename?: 'Client'; id: string };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -19892,6 +19882,7 @@ export type CreateOutgoingReferralPostingMutation = {
         client: {
           __typename?: 'Client';
           id: string;
+          hudChronic?: boolean | null;
           veteranStatus: NoYesReasonsForMissingData;
           gender: Array<Gender>;
           lockVersion: number;
@@ -20056,7 +20047,7 @@ export type ReferralPostingDetailFieldsFragment = {
   hohEnrollment?: {
     __typename?: 'Enrollment';
     id: string;
-    client: { __typename?: 'Client'; id: string; hudChronic?: boolean | null };
+    client: { __typename?: 'Client'; id: string };
   } | null;
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
@@ -20076,6 +20067,7 @@ export type ReferralPostingDetailFieldsFragment = {
     client: {
       __typename?: 'Client';
       id: string;
+      hudChronic?: boolean | null;
       veteranStatus: NoYesReasonsForMissingData;
       gender: Array<Gender>;
       lockVersion: number;
@@ -22503,7 +22495,6 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
       id
       client {
         id
-        hudChronic
       }
     }
     householdMembers {
@@ -22516,6 +22507,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
         id
         ...ClientName
         ...ClientIdentificationFields
+        hudChronic
         veteranStatus
         gender
         access {
