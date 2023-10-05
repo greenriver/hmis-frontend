@@ -2,8 +2,6 @@ import { createMask } from 'imask';
 import React from 'react';
 
 import { phoneMaskOptions } from '@/components/elements/input/PhoneInput';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientContactPointSystem,
   ClientContactPoint as GqlClientContactPoint,
@@ -35,31 +33,14 @@ export const formatPhone = (num: any) => {
 };
 
 const ClientContactPoint: React.FC<Props> = ({
-  contactPoint: { value, system, use, notes },
+  contactPoint: { value, system, notes },
 }) => {
   let formattedValue = value;
   if (system === ClientContactPointSystem.Phone) {
     formattedValue = formatPhone(value);
   }
 
-  return (
-    <>
-      {compactJoinNodes(
-        [
-          formattedValue,
-          use ? (
-            <HmisEnum
-              value={use}
-              enumMap={HmisEnums.ClientContactPointUse}
-              sx={{ display: 'inline' }}
-            />
-          ) : undefined,
-          notes,
-        ],
-        <br />
-      )}
-    </>
-  );
+  return <>{compactJoinNodes([formattedValue, notes], <br />)}</>;
 };
 
 export default ClientContactPoint;

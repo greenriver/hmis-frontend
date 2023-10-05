@@ -566,6 +566,8 @@ export enum ClientAddressUse {
   Mail = 'mail',
   /** Old */
   Old = 'old',
+  /** School */
+  School = 'school',
   /** Temp */
   Temp = 'temp',
   /** Work */
@@ -627,6 +629,8 @@ export enum ClientContactPointUse {
   Mobile = 'mobile',
   /** Old */
   Old = 'old',
+  /** School */
+  School = 'school',
   /** Temp */
   Temp = 'temp',
   /** Work */

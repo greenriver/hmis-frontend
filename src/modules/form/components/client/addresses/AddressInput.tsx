@@ -12,10 +12,10 @@ import {
   itemDefaults,
   localResolvePickList,
 } from '@/modules/form/util/formUtil';
-import { ClientAddressType, ItemType } from '@/types/gqlTypes';
+import { ClientAddressUse, ItemType } from '@/types/gqlTypes';
 
-const addressTypePicklist = localResolvePickList('ClientAddressType') || [];
-
+// const addressTypePicklist = localResolvePickList('ClientAddressType') || [];
+const addressUsePicklist = localResolvePickList('ClientAddressUse') || [];
 const fakeStateItem = {
   ...itemDefaults,
   linkId: 'fake',
@@ -32,7 +32,7 @@ const AddressInput = ({
 }) => {
   const { pickList: stateList, loading } = usePickList({ item: fakeStateItem });
   const typeValue = useMemo(
-    () => addressTypePicklist.find((o) => o.code == value.addressType) || null,
+    () => addressUsePicklist.find((o) => o.code == value.use) || null,
     [value]
   );
   const stateValue = useMemo(
@@ -100,12 +100,12 @@ const AddressInput = ({
             </Stack>
             <FormSelect
               value={typeValue}
-              options={addressTypePicklist}
+              options={addressUsePicklist}
               onChange={(e, val) =>
                 onChange({
                   ...value,
-                  addressType: isPickListOption(val)
-                    ? (val.code as ClientAddressType)
+                  use: isPickListOption(val)
+                    ? (val.code as ClientAddressUse)
                     : null,
                 })
               }
