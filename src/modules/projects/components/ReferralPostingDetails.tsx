@@ -13,10 +13,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import {
-  ReferralPostingDetailFieldsFragment,
-  RelationshipToHoH,
-} from '@/types/gqlTypes';
+import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
@@ -25,11 +22,6 @@ interface Props {
 const ProjectReferralPostingDetails: React.FC<Props> = ({
   referralPosting,
 }) => {
-  // HoH household member on the referral. Not necessarily the actual HoH if this referral has been accepted and enrolled
-  const hohMemberClient = referralPosting.householdMembers.find(
-    (hhm) => hhm.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-  )?.client;
-
   const col1: Array<[string, ReactNode]> = [
     [
       'Referral Status',
@@ -70,8 +62,8 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
     ],
     [
       'HUD Chronically Homeless' as string,
-      !isNil(hohMemberClient?.hudChronic) ? (
-        <YesNoDisplay booleanValue={hohMemberClient?.hudChronic} />
+      !isNil(referralPosting.hudChronic) ? (
+        <YesNoDisplay booleanValue={referralPosting.hudChronic} />
       ) : (
         (undefined as ReactNode)
       ),

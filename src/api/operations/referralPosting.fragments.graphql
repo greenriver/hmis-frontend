@@ -25,6 +25,7 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   id
   assignedDate
   chronic
+  hudChronic
   denialNote
   denialReason
   needsWheelchairAccessibleUnit
@@ -75,7 +76,6 @@ fragment ReferralPostingDetailFields on ReferralPosting {
       id
       ...ClientName
       ...ClientIdentificationFields
-      hudChronic
       veteranStatus
       gender
       access {

@@ -4831,6 +4831,7 @@ export type ReferralPosting = {
   hohName: Scalars['String']['output'];
   householdMembers: Array<ReferralHouseholdMember>;
   householdSize: Scalars['Int']['output'];
+  hudChronic?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']['output']>;
   organization?: Maybe<Organization>;
@@ -19584,6 +19585,7 @@ export type GetReferralPostingQuery = {
     id: string;
     assignedDate: string;
     chronic?: boolean | null;
+    hudChronic?: boolean | null;
     denialNote?: string | null;
     denialReason?: ReferralPostingDenialReasonType | null;
     needsWheelchairAccessibleUnit?: boolean | null;
@@ -19642,7 +19644,6 @@ export type GetReferralPostingQuery = {
       client: {
         __typename?: 'Client';
         id: string;
-        hudChronic?: boolean | null;
         veteranStatus: NoYesReasonsForMissingData;
         gender: Array<Gender>;
         lockVersion: number;
@@ -19697,6 +19698,7 @@ export type UpdateReferralPostingMutation = {
       id: string;
       assignedDate: string;
       chronic?: boolean | null;
+      hudChronic?: boolean | null;
       denialNote?: string | null;
       denialReason?: ReferralPostingDenialReasonType | null;
       needsWheelchairAccessibleUnit?: boolean | null;
@@ -19755,7 +19757,6 @@ export type UpdateReferralPostingMutation = {
         client: {
           __typename?: 'Client';
           id: string;
-          hudChronic?: boolean | null;
           veteranStatus: NoYesReasonsForMissingData;
           gender: Array<Gender>;
           lockVersion: number;
@@ -19824,6 +19825,7 @@ export type CreateOutgoingReferralPostingMutation = {
       id: string;
       assignedDate: string;
       chronic?: boolean | null;
+      hudChronic?: boolean | null;
       denialNote?: string | null;
       denialReason?: ReferralPostingDenialReasonType | null;
       needsWheelchairAccessibleUnit?: boolean | null;
@@ -19882,7 +19884,6 @@ export type CreateOutgoingReferralPostingMutation = {
         client: {
           __typename?: 'Client';
           id: string;
-          hudChronic?: boolean | null;
           veteranStatus: NoYesReasonsForMissingData;
           gender: Array<Gender>;
           lockVersion: number;
@@ -20009,6 +20010,7 @@ export type ReferralPostingDetailFieldsFragment = {
   id: string;
   assignedDate: string;
   chronic?: boolean | null;
+  hudChronic?: boolean | null;
   denialNote?: string | null;
   denialReason?: ReferralPostingDenialReasonType | null;
   needsWheelchairAccessibleUnit?: boolean | null;
@@ -20067,7 +20069,6 @@ export type ReferralPostingDetailFieldsFragment = {
     client: {
       __typename?: 'Client';
       id: string;
-      hudChronic?: boolean | null;
       veteranStatus: NoYesReasonsForMissingData;
       gender: Array<Gender>;
       lockVersion: number;
@@ -22457,6 +22458,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     id
     assignedDate
     chronic
+    hudChronic
     denialNote
     denialReason
     needsWheelchairAccessibleUnit
@@ -22507,7 +22509,6 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
         id
         ...ClientName
         ...ClientIdentificationFields
-        hudChronic
         veteranStatus
         gender
         access {
