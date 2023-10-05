@@ -3,7 +3,6 @@ import { isEmpty } from 'lodash-es';
 
 import ClientEnrollmentCard from '@/modules/client/components/ClientEnrollmentCard';
 import ClientProfileCard from '@/modules/client/components/ClientProfileCard';
-import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export interface Props {
@@ -16,6 +15,7 @@ export interface Props {
 }
 
 const ProfileLayout: React.FC<Props> = ({ client, notices = [] }) => {
+  const canViewEnrollments = client.access.canViewEnrollmentDetails;
   return (
     <Box data-testid='clientProfile'>
       <Grid container spacing={2}>
@@ -33,20 +33,17 @@ const ProfileLayout: React.FC<Props> = ({ client, notices = [] }) => {
             </Grid>
           </Grid>
         )}
-        <Grid item md={12} lg={6}>
+        <Grid item md={12} lg={canViewEnrollments ? 6 : 8}>
           <ClientProfileCard client={client} />
         </Grid>
-        <Grid item md={12} lg={6}>
-          {/* disabled because the only action was Enroll in Project, which
-          we are disabling for now #185750557 */}
-          {/* <ClientActionsCard client={client} /> */}
-          <ClientPermissionsFilter
-            permissions={['canViewEnrollmentDetails']}
-            id={client.id}
-          >
+        {canViewEnrollments && (
+          <Grid item md={12} lg={6}>
             <ClientEnrollmentCard client={client} />
-          </ClientPermissionsFilter>
-        </Grid>
+          </Grid>
+        )}
+        {/* disabled "quick actions" card because the only action was Enroll in Project, which
+          we are disabling for now #185750557 */}
+        {/* <ClientActionsCard client={client} /> */}
       </Grid>
     </Box>
   );
