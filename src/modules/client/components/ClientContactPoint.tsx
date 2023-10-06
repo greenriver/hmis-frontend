@@ -20,6 +20,8 @@ const minExpectedMaskedPhoneLength = Math.min(
 );
 
 export const formatPhone = (num: any) => {
+  if (!num) return null;
+
   const mask = createMask(phoneMaskOptions);
   mask.value = num;
 
