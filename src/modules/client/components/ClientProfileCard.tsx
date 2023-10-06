@@ -68,12 +68,12 @@ export const ClientProfileCardTextTable = ({
           pt: 0,
           pb: condensed ? 1 : 2,
           px: 1,
+          verticalAlign: 'baseline',
           '&:first-of-type': {
             pl: 0,
             pr: 2,
             width: '1px',
             whiteSpace: 'nowrap',
-            verticalAlign: 'baseline',
           },
         },
       }}
