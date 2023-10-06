@@ -2,6 +2,12 @@
 
 set -eo pipefail
 
+if [[ "$1" = "" ]]
+then
+  echo you need to specify an image as the only parameter
+  exit 1
+fi
+
 docker run -d --name=tester \
   -e NGINX_PORT=8080 \
   -e NGINX_HOST=example.com \
@@ -9,7 +15,7 @@ docker run -d --name=tester \
   -e HMIS_BACKEND=nowhere.com \
   --expose 8080 \
   -p 8080:8080 \
-  $image
+  $1
 
 sleep 3
 

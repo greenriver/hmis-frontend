@@ -141,7 +141,7 @@ jobs:
           image: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
         shell: bash
         run: |
-          ./bin/test-container
+          ./bin/test-container $image
 
       - name: Set Docker remote
         if: ${{ github.event_name != 'pull_request' }}
