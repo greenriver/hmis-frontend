@@ -9,11 +9,13 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
 import AssessmentLastUpdated from '@/modules/hmis/components/AssessmentLastUpdated';
 
+type RecordIdCallback = (recordId: string) => void;
+
 type ButtonConfig = {
   id: string;
   label: string;
   action: FormActionTypes;
-  onSuccess?: VoidFunction;
+  onSuccess?: RecordIdCallback;
   centerAlign?: boolean;
   buttonProps?: Omit<ButtonProps, 'ref'>;
 };
@@ -22,9 +24,9 @@ export interface FormActionProps {
   config?: ButtonConfig[];
   onSubmit: (
     e: React.MouseEvent<HTMLButtonElement>,
-    onSuccess?: VoidFunction
+    onSuccess?: RecordIdCallback
   ) => void;
-  onSaveDraft?: (onSuccess?: VoidFunction) => void;
+  onSaveDraft?: (onSuccess?: RecordIdCallback) => void;
   onDiscard?: MouseEventHandler | string;
   submitButtonText?: string;
   discardButtonText?: string;

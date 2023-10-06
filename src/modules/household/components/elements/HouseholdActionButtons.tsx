@@ -59,6 +59,7 @@ const HouseholdActionButtons = ({
     return [true, message, 'error'];
   }, [householdMembers]);
 
+  // FIXME: Manage button Household show up even if you can't edit
   return (
     <Stack direction='row' gap={3} sx={{ mt: 4, mb: 4 }}>
       <ButtonLink

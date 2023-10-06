@@ -35,9 +35,11 @@ interface DynamicFormSubmitInput {
   values: FormValues;
   confirmed?: boolean;
   event?: React.MouseEvent<HTMLButtonElement>;
-  onSuccess?: VoidFunction;
+  onSuccess?: (recordId: string) => void;
   onError?: VoidFunction;
 }
+
+type RecordIdCallback = (recordId: string) => void;
 
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 
@@ -49,7 +51,7 @@ export interface DynamicFormProps
   clientId?: string;
   definition: FormDefinitionJson;
   onSubmit: DynamicFormOnSubmit;
-  onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
+  onSaveDraft?: (values: FormValues, onSuccess?: RecordIdCallback) => void;
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors: ErrorState;
@@ -73,8 +75,8 @@ export interface DynamicFormProps
   errorRef?: RefObject<HTMLDivElement>;
 }
 export interface DynamicFormRef {
-  SaveIfDirty: (callback: VoidFunction) => void;
-  SubmitIfDirty: (ignoreWarnings: boolean, callback: VoidFunction) => void;
+  SaveIfDirty: (callback: RecordIdCallback) => void;
+  SubmitIfDirty: (ignoreWarnings: boolean, callback: RecordIdCallback) => void;
   SubmitForm: VoidFunction;
 }
 
@@ -135,9 +137,9 @@ const DynamicForm = forwardRef(
         },
         SaveIfDirty: (onSuccessCallback) => {
           if (!onSaveDraft || !dirty || locked) return;
-          onSaveDraft(getCleanedValues(), () => {
+          onSaveDraft(getCleanedValues(), (id) => {
             setDirty(false);
-            onSuccessCallback();
+            onSuccessCallback(id);
           });
         },
         SubmitIfDirty: (ignoreWarnings: boolean, onSuccessCallback) => {
@@ -145,9 +147,9 @@ const DynamicForm = forwardRef(
           onSubmit({
             values: getCleanedValues(),
             confirmed: ignoreWarnings,
-            onSuccess: () => {
+            onSuccess: (id) => {
               setDirty(false);
-              onSuccessCallback();
+              onSuccessCallback(id);
             },
           });
         },
@@ -163,7 +165,7 @@ const DynamicForm = forwardRef(
     const handleSubmit = useCallback(
       (
         event: React.MouseEvent<HTMLButtonElement>,
-        onSuccess?: VoidFunction
+        onSuccess?: RecordIdCallback
       ) => {
         onSubmit({
           values: getCleanedValues(),
@@ -196,7 +198,7 @@ const DynamicForm = forwardRef(
     const { renderValidationDialog, validationDialogVisible } =
       useValidationDialog({ errorState });
     const handleSaveDraft = useCallback(
-      (onSuccess?: VoidFunction) => {
+      (onSuccess?: RecordIdCallback) => {
         if (!onSaveDraft) return;
         onSaveDraft(getCleanedValues(), onSuccess);
       },

@@ -50,7 +50,7 @@ const AssessmentStatusIndicator: React.FC<Props> = ({
           size={size}
         />
       );
-    case AssessmentStatus.Started:
+    case AssessmentStatus.InProgress:
       return (
         <Display
           icon={InProgressIcon}

@@ -50,7 +50,7 @@ interface HouseholdSummaryTabPanelProps {
   tabs: TabDefinition[];
   id: string;
   projectName: string;
-  refetch: () => Promise<any>;
+  onSaveOrSubmit: (assessmentId: string) => void;
   setCurrentTab: Dispatch<SetStateAction<string | undefined>>;
 }
 
@@ -62,7 +62,7 @@ const HouseholdSummaryTabPanel = memo(
     id,
     tabs,
     projectName,
-    refetch,
+    onSaveOrSubmit,
     setCurrentTab,
   }: HouseholdSummaryTabPanelProps) => {
     const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
@@ -89,7 +89,7 @@ const HouseholdSummaryTabPanel = memo(
           window.scrollTo(0, 0);
         } else if (submitHouseholdAssessments.assessments) {
           setErrors(emptyErrorState);
-          refetch();
+          onSaveOrSubmit(submitHouseholdAssessments.assessments[0].id);
 
           tabs.forEach(({ clientId, enrollmentId }) => {
             // Make it so the "Assessments" table on the Enrollment page gets refetched next time
@@ -105,7 +105,7 @@ const HouseholdSummaryTabPanel = memo(
           });
         }
       },
-      [refetch, tabs]
+      [onSaveOrSubmit, tabs]
     );
 
     const handleSubmit = useCallback(

@@ -62,11 +62,9 @@ const FinishIntakeButton = ({
 const NewAssessmentMenu = ({
   enrollmentId,
   clientId,
-  individual,
 }: {
   enrollmentId: string;
   clientId: string;
-  individual: boolean;
 }) => {
   const { enrollment } = useEnrollmentDashboardContext();
   const { data: assessmentData } = useGetEnrollmentAssessmentsQuery({
@@ -87,50 +85,39 @@ const NewAssessmentMenu = ({
     const hasIntake = !!assessments?.find(
       (a) => a.role === AssessmentRole.Intake
     );
-    const hasExit = !!assessments?.find((a) => a.role === AssessmentRole.Exit);
+
+    const isExited = !!enrollment?.exitDate;
     const hasCompletedExit = !!assessments?.find(
       (a) => a.role === AssessmentRole.Exit && !a.inProgress
     );
-    const pluralAssmt = individual ? 'Assessment' : 'Assessments';
 
-    // only action is to finish the intake in both cases, so show no options in the menu
+    // If client is WIP, show no options in the menu. Only action they can take is to complete intake.
     if (!hasIntake) return [];
     if (enrollment?.inProgress) return [];
 
-    const topItems: NavMenuItem[] = [];
-    const bottomItems: NavMenuItem[] = [];
+    // If client is exited and the exit assessment is present, no options. They can only edit existing assmts.
+    if (isExited && hasCompletedExit) return [];
 
-    if (!hasExit) {
-      topItems.push({
+    const menuItems: NavMenuItem[] = [
+      {
+        key: 'update',
+        to: getPath(AssessmentRole.Update),
+        title: 'HUD Update Assessment',
+      },
+      {
+        key: 'annual',
+        to: getPath(AssessmentRole.Annual),
+        title: `HUD Annual Assessment`,
+      },
+      {
         key: 'exit',
         to: getPath(AssessmentRole.Exit),
-        title: `Exit ${pluralAssmt}`,
-      });
-    }
-
-    if (!hasCompletedExit) {
-      bottomItems.push(
-        {
-          key: 'update',
-          to: getPath(AssessmentRole.Update),
-          title: 'New Update Assessment',
-        },
-        {
-          key: 'annual',
-          to: getPath(AssessmentRole.Annual),
-          title: `New Annual ${pluralAssmt}`,
-        }
-      );
-    }
-
-    return [
-      ...topItems,
-      ...(!isEmpty(topItems) && !isEmpty(bottomItems)
-        ? [{ key: 'd1', divider: true }]
-        : []),
-      ...bottomItems,
+        title: 'HUD Exit Assessment',
+      },
     ];
-  }, [enrollment, getPath, assessmentData, individual]);
+
+    return menuItems;
+  }, [enrollment, getPath, assessmentData]);
 
   if (isEmpty(items)) return null;
 

@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { findIndex } from 'lodash-es';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { useHouseholdAssessments } from '../../hooks/useHouseholdAssessments';
@@ -55,7 +55,7 @@ const calculateAssessmentStatus = (
     return AssessmentStatus.NotStarted;
   }
   if (assessment.inProgress) {
-    return AssessmentStatus.Started;
+    return AssessmentStatus.InProgress;
   } else {
     return AssessmentStatus.Submitted;
   }
@@ -64,11 +64,13 @@ const calculateAssessmentStatus = (
 const HouseholdAssessments = ({
   role,
   enrollment,
-  assessmentId,
+  assessmentId: initialAssessmentId,
 }: HouseholdAssessmentsProps) => {
   const [householdMembers, fetchMembersStatus] = useHouseholdMembers(
     enrollment.id
   );
+
+  const [assessmentId, setAssesmentId] = useState(initialAssessmentId);
 
   const { assessmentByEnrollmentId, refetch, ...fetchAssessmentsStatus } =
     useHouseholdAssessments({
@@ -76,6 +78,7 @@ const HouseholdAssessments = ({
       householdId: enrollment.householdId,
       assessmentId,
     });
+
   const [currentTab, setCurrentTab] = useState<string | undefined>('1');
 
   const [tabs, setTabs] = useState<TabDefinition[]>([]);
@@ -142,6 +145,31 @@ const HouseholdAssessments = ({
     });
   }, [householdMembers, assessmentByEnrollmentId, role]);
 
+  const localConstants = useMemo(() => {
+    if (!householdMembers || !assessmentByEnrollmentId) return;
+    if (role !== AssessmentRole.Annual) return;
+    const hoh = householdMembers.find(
+      (h) => h.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+    );
+
+    // if there is no hoh assessment, but there is some other assessment, use that as the hohAssessmentDate
+    let sourceAssessmentForDate;
+    if (hoh) {
+      sourceAssessmentForDate = assessmentByEnrollmentId[hoh.enrollment.id];
+    }
+    const assessments = Object.values(assessmentByEnrollmentId);
+    if (!sourceAssessmentForDate) {
+      sourceAssessmentForDate = assessments.find((a) => a && !a.inProgress);
+    }
+    if (!sourceAssessmentForDate) {
+      sourceAssessmentForDate = assessments.find((a) => !!a);
+    }
+    if (!sourceAssessmentForDate) return;
+    return {
+      hohAssessmentDate: sourceAssessmentForDate.assessmentDate,
+    };
+  }, [assessmentByEnrollmentId, householdMembers, role]);
+
   const { hash } = useLocation();
 
   useEffect(() => {
@@ -189,6 +217,20 @@ const HouseholdAssessments = ({
       });
     },
     []
+  );
+
+  const handleSavedOrSubmitted = useCallback(
+    (recordId: string) => {
+      if (recordId && !assessmentId) {
+        // first assessment saved out of the whole group. set the assessment id so all further fetches are based on this one
+        setAssesmentId(recordId);
+        refetch({ assessmentId: recordId });
+      } else {
+        // refetch all assessments in household
+        refetch();
+      }
+    },
+    [assessmentId, refetch]
   );
 
   if (
@@ -339,17 +381,20 @@ const HouseholdAssessments = ({
             <HouseholdAssessmentTabPanel
               key={tabDefinition.id}
               active={tabDefinition.id === currentTab}
-              refetch={refetch}
+              onSaveOrSubmit={handleSavedOrSubmitted}
               navigateToTab={navigateToTab}
               nextTab={tabs[index + 1]?.id || SUMMARY_TAB_ID}
               previousTab={tabs[index - 1]?.id}
               role={role}
               updateTabStatus={updateTabStatus}
               assessmentStatus={tabDefinition.status}
+              localConstants={localConstants}
               {...tabDefinition}
             />
           ))}
-          {tabs.length === 0 ? (
+          {tabs.length === 0 &&
+          !fetchAssessmentsStatus.loading &&
+          !fetchMembersStatus.loading ? (
             <Alert severity='info'>
               {role === AssessmentRole.Intake ? (
                 <>No household members can be entered at this time</>
@@ -367,8 +412,8 @@ const HouseholdAssessments = ({
               active={SUMMARY_TAB_ID === currentTab}
               role={role}
               projectName={enrollmentName(enrollment)}
-              refetch={refetch}
               setCurrentTab={setCurrentTab}
+              onSaveOrSubmit={handleSavedOrSubmitted}
             />
           )}
         </Grid>

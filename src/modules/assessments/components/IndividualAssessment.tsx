@@ -25,6 +25,7 @@ import {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
+import { LocalConstants } from '@/modules/form/types';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
@@ -47,6 +48,7 @@ export interface IndividualAssessmentProps {
     assessment?: AssessmentFieldsFragment
   ) => DynamicFormProps['FormActionProps'];
   formRef?: Ref<DynamicFormRef>;
+  localConstants?: LocalConstants;
 }
 
 /**
@@ -67,6 +69,7 @@ const IndividualAssessment = ({
   getFormActionProps,
   visible,
   formRef,
+  localConstants,
 }: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useClientDashboardContext();
 
@@ -174,6 +177,7 @@ const IndividualAssessment = ({
       FormActionProps={FormActionProps}
       visible={visible}
       formRef={formRef}
+      localConstants={localConstants}
     />
   );
 };

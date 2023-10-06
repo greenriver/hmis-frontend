@@ -2,9 +2,9 @@ import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { AssessmentRole, FormRole, RelationshipToHoH } from '@/types/gqlTypes';
 
 export enum AssessmentStatus {
-  NotStarted,
-  Started,
-  Submitted,
+  NotStarted, // assessment has not been saved yet
+  InProgress, // assessment has been saved but not submitted
+  Submitted, // assessment has been submitted
   Warning,
   Error,
 }
@@ -84,6 +84,6 @@ export const useAssessmentStatus = ({
   return submitted
     ? AssessmentStatus.Submitted
     : assessmentId
-    ? AssessmentStatus.Started
+    ? AssessmentStatus.InProgress
     : AssessmentStatus.NotStarted;
 };

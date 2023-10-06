@@ -33,7 +33,11 @@ import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
-import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
+import {
+  AssessmentForPopulation,
+  FormActionTypes,
+  LocalConstants,
+} from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
   createInitialValuesFromRecord,
@@ -63,6 +67,7 @@ interface Props {
   FormActionProps?: DynamicFormProps['FormActionProps'];
   visible?: boolean;
   formRef?: Ref<DynamicFormRef>;
+  localConstants?: LocalConstants;
 }
 
 const AssessmentForm = ({
@@ -76,6 +81,7 @@ const AssessmentForm = ({
   embeddedInWorkflow,
   FormActionProps,
   formRef,
+  localConstants: localConstantsProp,
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
 }: Props) => {
@@ -134,9 +140,11 @@ const AssessmentForm = ({
     () => ({
       entryDate: enrollment.entryDate,
       exitDate: enrollment.exitDate,
+      // HoH Assessment Date
+      ...localConstantsProp,
       ...AlwaysPresentLocalConstants,
     }),
-    [enrollment]
+    [enrollment, localConstantsProp]
   );
 
   // Set initial values for the assessment. This happens on initial load,

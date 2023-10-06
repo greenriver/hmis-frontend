@@ -117,7 +117,7 @@ export function useAssessmentHandlers({
         onCompleted: (data) => {
           onCompleted(data);
           if (data.submitAssessment?.assessment && onSuccess) {
-            onSuccess();
+            onSuccess(data.submitAssessment?.assessment?.id);
             onSuccessfulSubmit(data.submitAssessment?.assessment);
           }
         },
