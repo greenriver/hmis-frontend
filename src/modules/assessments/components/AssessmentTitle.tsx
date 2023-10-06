@@ -42,48 +42,37 @@ const AssessmentTitle = ({
 
   let subtitle = null;
   if (assessmentInfo && assessmentInfo.length > 0 && !alertHidden) {
-    const otherMembers = assessmentInfo.filter(
-      (m) => m.enrollmentId !== enrollmentId
+    subtitle = (
+      <Alert
+        severity='info'
+        sx={{ my: 1 }}
+        onClose={() => setAlertHidden(true)}
+        icon={false}
+      >
+        <AlertTitle>Related annual assessments in this household:</AlertTitle>
+        <Stack gap={0.5}>
+          {assessmentInfo.map(
+            ({ enrollmentId, clientName, firstName, assessmentDate, path }) => (
+              <Stack direction={'row'} gap={1} key={enrollmentId}>
+                <Typography variant='body2'>
+                  {clientName}
+                  {':'}
+                </Typography>
+                <RouterLink to={path} openInNew>
+                  {assessmentDate
+                    ? parseAndFormatDate(assessmentDate)
+                    : 'Start new '}{' '}
+                  Annual Assessment for {firstName}
+                </RouterLink>
+              </Stack>
+            )
+          )}
+        </Stack>
+      </Alert>
     );
-    if (otherMembers.length > 0) {
-      subtitle = (
-        <Alert
-          severity='info'
-          sx={{ my: 1 }}
-          onClose={() => setAlertHidden(true)}
-          icon={false}
-        >
-          <AlertTitle>Other household member's annual assessments:</AlertTitle>
-          <Stack gap={0.5}>
-            {otherMembers.map(
-              ({
-                enrollmentId,
-                clientName,
-                firstName,
-                assessmentDate,
-                path,
-              }) => (
-                <Stack direction={'row'} gap={1} key={enrollmentId}>
-                  <Typography variant='body2'>
-                    {clientName}
-                    {':'}
-                  </Typography>
-                  <RouterLink to={path} openInNew>
-                    {assessmentDate
-                      ? parseAndFormatDate(assessmentDate)
-                      : 'Start new '}{' '}
-                    Annual Assessment for {firstName}
-                  </RouterLink>
-                </Stack>
-              )
-            )}
-          </Stack>
-        </Alert>
-      );
-    }
   }
 
-  if (!assessmentInfo && loading && !subtitle) {
+  if (!assessmentInfo && loading && !subtitle && !alertHidden) {
     subtitle = <Skeleton variant='rectangular' width='100%' height={50} />;
   }
 

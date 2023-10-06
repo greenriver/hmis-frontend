@@ -540,5 +540,7 @@ export const relationshipToHohForDisplay = (
     return '';
   }
 
+  if (relationship === RelationshipToHoH.SelfHeadOfHousehold) return 'HoH';
+
   return HmisEnums.RelationshipToHoH[relationship];
 };

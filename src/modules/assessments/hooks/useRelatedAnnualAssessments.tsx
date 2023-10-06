@@ -1,8 +1,10 @@
+import { isAfter } from 'date-fns';
 import { useMemo } from 'react';
 
 import { To } from 'react-router-dom';
 import {
   clientBriefName,
+  parseHmisDateString,
   relationshipToHohForDisplay,
 } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
@@ -59,9 +61,14 @@ export function useRelatedAnnualAssessments({
     if (!householdAssessments || !householdMembers) return;
 
     const annualInfo: HouseholdMemberAnnualInfo[] = [];
+    let targetAnnualDate: Date | null = null;
 
+    // First, add all household members who have Annual Assessments within range of the "target" date (either the current assessment date or today if new)
     householdAssessments.forEach(({ enrollment, client, ...assessment }) => {
-      if (enrollment.id === enrollmentId) return; // skip current member
+      if (enrollment.id === enrollmentId) {
+        targetAnnualDate = parseHmisDateString(assessment.assessmentDate);
+        return; // skip current member
+      }
 
       annualInfo.push({
         clientName: `${clientBriefName(client)}${relationshipSuffix(
@@ -80,12 +87,25 @@ export function useRelatedAnnualAssessments({
       });
     });
 
+    // Next, add all other members that DON'T have Annuals within that target range
     householdMembers.forEach(({ client, enrollment, ...hhm }) => {
-      if (enrollment.id === enrollmentId) return; // skip current member
-      const hasAssessment = !!householdAssessments.find(
-        (ha) => ha.enrollment.id === enrollment.id
-      );
-      if (hasAssessment) return; // skip if already included because they have an assessment
+      // skip current member
+      if (enrollment.id === enrollmentId) return;
+
+      // skip if already included
+      if (!!annualInfo.find((info) => info.enrollmentId === enrollment.id)) {
+        return;
+      }
+
+      // skip hh member if they enrolled after the target annual date
+      const entryDate = parseHmisDateString(enrollment.entryDate);
+      if (
+        entryDate &&
+        targetAnnualDate &&
+        isAfter(entryDate, targetAnnualDate)
+      ) {
+        return;
+      }
 
       annualInfo.push({
         clientName: `${clientBriefName(client)}${relationshipSuffix(
