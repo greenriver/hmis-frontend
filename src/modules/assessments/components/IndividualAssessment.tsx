@@ -147,6 +147,7 @@ const IndividualAssessment = ({
       assessmentRole={formRole as unknown as AssessmentRole}
       embeddedInWorkflow={embeddedInWorkflow}
       assessmentId={assessmentId}
+      householdSize={enrollment.householdSize}
     />
   );
 

@@ -15,6 +15,7 @@ import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/Assessm
 import {
   formRoleDisplay,
   parseAndFormatDateTime,
+  clientBriefName,
 } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -207,7 +208,9 @@ const AssessmentsTable = () => {
 
   return (
     <TitleCard
-      title='Assessments'
+      title={`${
+        enrollment.householdSize > 1 ? clientBriefName(enrollment.client) : ''
+      } Assessments`}
       actions={
         enrollment.access.canEditEnrollments && (
           <AssessmentActionButtons
