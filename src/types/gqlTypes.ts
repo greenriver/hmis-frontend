@@ -4835,6 +4835,7 @@ export type ReferralPosting = {
   hohName: Scalars['String']['output'];
   householdMembers: Array<ReferralHouseholdMember>;
   householdSize: Scalars['Int']['output'];
+  hudChronic?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']['output']>;
   organization?: Maybe<Organization>;
@@ -19616,6 +19617,7 @@ export type GetReferralPostingQuery = {
     id: string;
     assignedDate: string;
     chronic?: boolean | null;
+    hudChronic?: boolean | null;
     denialNote?: string | null;
     denialReason?: ReferralPostingDenialReasonType | null;
     needsWheelchairAccessibleUnit?: boolean | null;
@@ -19654,11 +19656,7 @@ export type GetReferralPostingQuery = {
     hohEnrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        hudChronic?: boolean | null;
-      };
+      client: { __typename?: 'Client'; id: string };
     } | null;
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
@@ -19732,6 +19730,7 @@ export type UpdateReferralPostingMutation = {
       id: string;
       assignedDate: string;
       chronic?: boolean | null;
+      hudChronic?: boolean | null;
       denialNote?: string | null;
       denialReason?: ReferralPostingDenialReasonType | null;
       needsWheelchairAccessibleUnit?: boolean | null;
@@ -19770,11 +19769,7 @@ export type UpdateReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          hudChronic?: boolean | null;
-        };
+        client: { __typename?: 'Client'; id: string };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -19862,6 +19857,7 @@ export type CreateOutgoingReferralPostingMutation = {
       id: string;
       assignedDate: string;
       chronic?: boolean | null;
+      hudChronic?: boolean | null;
       denialNote?: string | null;
       denialReason?: ReferralPostingDenialReasonType | null;
       needsWheelchairAccessibleUnit?: boolean | null;
@@ -19900,11 +19896,7 @@ export type CreateOutgoingReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          hudChronic?: boolean | null;
-        };
+        client: { __typename?: 'Client'; id: string };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -20050,6 +20042,7 @@ export type ReferralPostingDetailFieldsFragment = {
   id: string;
   assignedDate: string;
   chronic?: boolean | null;
+  hudChronic?: boolean | null;
   denialNote?: string | null;
   denialReason?: ReferralPostingDenialReasonType | null;
   needsWheelchairAccessibleUnit?: boolean | null;
@@ -20088,7 +20081,7 @@ export type ReferralPostingDetailFieldsFragment = {
   hohEnrollment?: {
     __typename?: 'Enrollment';
     id: string;
-    client: { __typename?: 'Client'; id: string; hudChronic?: boolean | null };
+    client: { __typename?: 'Client'; id: string };
   } | null;
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
@@ -22497,6 +22490,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     id
     assignedDate
     chronic
+    hudChronic
     denialNote
     denialReason
     needsWheelchairAccessibleUnit
@@ -22535,7 +22529,6 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
       id
       client {
         id
-        hudChronic
       }
     }
     householdMembers {

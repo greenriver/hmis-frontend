@@ -1,4 +1,5 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
@@ -61,11 +62,8 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
     ],
     [
       'HUD Chronically Homeless' as string,
-      referralPosting.hohEnrollment?.client.hudChronic !== null ? (
-        <YesNoDisplay
-          booleanValue={referralPosting.hohEnrollment?.client.hudChronic}
-          fallback={<NotCollectedText variant='body2' />}
-        />
+      !isNil(referralPosting.hudChronic) ? (
+        <YesNoDisplay booleanValue={referralPosting.hudChronic} />
       ) : (
         (undefined as ReactNode)
       ),
