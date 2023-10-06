@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { HouseholdAssesmentRole } from '../components/household/util';
 
 import {
-  AssessmentWithValuesAndRecordsFragment,
+  GetHouseholdAssessmentsQuery,
   useGetHouseholdAssessmentsQuery,
 } from '@/types/gqlTypes';
 
@@ -12,12 +12,18 @@ interface Args {
   householdId: string;
   role: HouseholdAssesmentRole;
   assessmentId?: string;
+  skip?: boolean;
 }
+
+type AssessmentResultType = NonNullable<
+  NonNullable<GetHouseholdAssessmentsQuery['householdAssessments']>
+>[0];
 
 export function useHouseholdAssessments({
   role,
   householdId,
   assessmentId,
+  skip,
 }: Args) {
   const { data: { householdAssessments } = {}, ...status } =
     useGetHouseholdAssessmentsQuery({
@@ -26,6 +32,7 @@ export function useHouseholdAssessments({
         assessmentRole: role,
         assessmentId,
       },
+      skip,
       fetchPolicy: 'cache-and-network',
     });
 
@@ -35,10 +42,8 @@ export function useHouseholdAssessments({
       enrollment.id,
       assessment,
     ]);
-    return fromPairs(pairs) as Record<
-      string,
-      AssessmentWithValuesAndRecordsFragment | undefined
-    >;
+    return fromPairs(pairs) as Record<string, AssessmentResultType | undefined>;
   }, [householdAssessments]);
+
   return { householdAssessments, assessmentByEnrollmentId, ...status } as const;
 }
