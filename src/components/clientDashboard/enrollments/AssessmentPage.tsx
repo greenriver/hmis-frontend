@@ -71,7 +71,13 @@ const AssessmentPage = () => {
     showAssessmentInHousehold(enrollment, formRole) &&
     !isPrintView
   ) {
-    return <HouseholdAssessments role={formRole} enrollment={enrollment} />;
+    return (
+      <HouseholdAssessments
+        role={formRole}
+        enrollment={enrollment}
+        assessmentId={assessmentId}
+      />
+    );
   }
 
   return (
