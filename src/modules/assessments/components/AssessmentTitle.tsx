@@ -31,12 +31,12 @@ const AssessmentTitle = ({
 }: AssessmentTitleProps) => {
   // const hhAssessments = useHouseholdAssessments(role, householdId, assessmentId)
   const isAnnual = assessmentRole == AssessmentRole.Annual;
+  const skipQuery = !isAnnual || householdSize === 1 || embeddedInWorkflow;
   const { assessmentInfo, loading } = useRelatedAnnualAssessments({
     householdId: householdId || '',
     enrollmentId,
     assessmentId,
-    skip:
-      !isAnnual || householdSize === 1 || embeddedInWorkflow || !householdId,
+    skip: skipQuery,
   });
   const [alertHidden, setAlertHidden] = useState(false);
 
@@ -72,7 +72,7 @@ const AssessmentTitle = ({
     );
   }
 
-  if (!assessmentInfo && loading && !subtitle && !alertHidden) {
+  if (!skipQuery && !assessmentInfo && loading && !subtitle && !alertHidden) {
     subtitle = <Skeleton variant='rectangular' width='100%' height={50} />;
   }
 
