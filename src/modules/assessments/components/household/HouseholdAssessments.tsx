@@ -349,7 +349,9 @@ const HouseholdAssessments = ({
               {...tabDefinition}
             />
           ))}
-          {tabs.length === 0 ? (
+          {tabs.length === 0 &&
+          !fetchAssessmentsStatus.loading &&
+          !fetchMembersStatus.loading ? (
             <Alert severity='info'>
               {role === AssessmentRole.Intake ? (
                 <>No household members can be entered at this time</>

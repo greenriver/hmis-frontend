@@ -19,7 +19,7 @@ type AppProviderProps = {
 const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <React.Suspense fallback={<Loading />}>
-      <SentryErrorBoundary fullpage>
+      <SentryErrorBoundary>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <ApolloProvider client={apolloClient}>
             <BrowserRouter>

@@ -62,11 +62,9 @@ const FinishIntakeButton = ({
 const NewAssessmentMenu = ({
   enrollmentId,
   clientId,
-  individual,
 }: {
   enrollmentId: string;
   clientId: string;
-  individual: boolean;
 }) => {
   const { enrollment } = useEnrollmentDashboardContext();
   const { data: assessmentData } = useGetEnrollmentAssessmentsQuery({
@@ -83,42 +81,44 @@ const NewAssessmentMenu = ({
   );
 
   const items: NavMenuItem[] = useMemo(() => {
-    const assessments = assessmentData?.enrollment?.assessments?.nodes;
-    const hasIntake = !!assessments?.find(
+    if (!enrollment) return [];
+    const assessments = assessmentData?.enrollment?.assessments?.nodes || [];
+    const hasIntake = !!assessments.find(
       (a) => a.role === AssessmentRole.Intake
     );
-    const hasExit = !!assessments?.find((a) => a.role === AssessmentRole.Exit);
-    const hasCompletedExit = !!assessments?.find(
-      (a) => a.role === AssessmentRole.Exit && !a.inProgress
-    );
-    const pluralAssmt = individual ? 'Assessment' : 'Assessments';
 
-    // only action is to finish the intake in both cases, so show no options in the menu
-    if (!hasIntake) return [];
-    if (enrollment?.inProgress) return [];
+    // If enrollment IS WIP, the action is to finish the intake assessment.s
+    if (enrollment.inProgress) return [];
 
     const topItems: NavMenuItem[] = [];
     const bottomItems: NavMenuItem[] = [];
 
-    if (!hasExit) {
+    // Edge case: show "intake" item if the client is entered but does not have an intake
+    if (!hasIntake) {
       topItems.push({
-        key: 'exit',
-        to: getPath(AssessmentRole.Exit),
-        title: `Exit ${pluralAssmt}`,
+        key: 'intake',
+        to: getPath(AssessmentRole.Intake),
+        title: 'HUD Intake Assessment',
       });
     }
 
-    if (!hasCompletedExit) {
+    // Exit/Update/Annual can only be added to open enrollment
+    if (!enrollment.exitDate) {
+      topItems.push({
+        key: 'exit',
+        to: getPath(AssessmentRole.Exit),
+        title: 'HUD Exit Assessment',
+      });
       bottomItems.push(
         {
           key: 'update',
           to: getPath(AssessmentRole.Update),
-          title: 'New Update Assessment',
+          title: 'New HUD Update Assessment',
         },
         {
           key: 'annual',
           to: getPath(AssessmentRole.Annual),
-          title: `New Annual ${pluralAssmt}`,
+          title: 'New HUD Annual Assessment',
         }
       );
     }
@@ -130,7 +130,7 @@ const NewAssessmentMenu = ({
         : []),
       ...bottomItems,
     ];
-  }, [enrollment, getPath, assessmentData, individual]);
+  }, [enrollment, getPath, assessmentData]);
 
   if (isEmpty(items)) return null;
 
@@ -152,6 +152,7 @@ const AssessmentActionButtons = ({
   const intakeAssessment = assessments?.find(
     (a) => a.role === AssessmentRole.Intake
   );
+
   return (
     <Stack direction='row' gap={2}>
       {householdMembers && (
@@ -162,11 +163,7 @@ const AssessmentActionButtons = ({
           assessmentId={intakeAssessment?.id}
         />
       )}
-      <NewAssessmentMenu
-        enrollmentId={enrollmentId}
-        clientId={clientId}
-        individual={householdMembers ? householdMembers.length === 1 : true}
-      />
+      <NewAssessmentMenu enrollmentId={enrollmentId} clientId={clientId} />
     </Stack>
   );
 };
