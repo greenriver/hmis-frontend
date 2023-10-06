@@ -527,3 +527,20 @@ export const featureEnabledForEnrollment = (
     relationshipToHoH
   );
 };
+
+export const relationshipToHohForDisplay = (
+  relationship: RelationshipToHoH,
+  hideDataNotCollectedAndInvalid: boolean
+) => {
+  if (
+    hideDataNotCollectedAndInvalid &&
+    (relationship === RelationshipToHoH.DataNotCollected ||
+      relationship === RelationshipToHoH.Invalid)
+  ) {
+    return '';
+  }
+
+  if (relationship === RelationshipToHoH.SelfHeadOfHousehold) return 'HoH';
+
+  return HmisEnums.RelationshipToHoH[relationship];
+};

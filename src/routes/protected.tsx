@@ -74,7 +74,7 @@ const App = () => {
   return (
     <MainLayout>
       <Suspense fallback={<Loading />}>
-        <SentryErrorBoundary fullpage>
+        <SentryErrorBoundary>
           <Outlet />
         </SentryErrorBoundary>
       </Suspense>
