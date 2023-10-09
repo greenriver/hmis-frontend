@@ -21,7 +21,6 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
-import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -39,7 +38,6 @@ interface Props {
 
 const EditHouseholdMemberTable = ({
   household,
-  projectId,
   refetchHousehold,
   currentDashboardClientId,
   loading,
@@ -210,18 +208,14 @@ const EditHouseholdMemberTable = ({
         key: 'action',
         width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <ProjectPermissionsFilter
-            id={projectId}
-            // TODO: this should be canEditEnrollments, but wait until backend updated
-            permissions={['canDeleteEnrollments']}
-          >
-            <RemoveFromHouseholdButton
-              currentDashboardClientId={currentDashboardClientId}
-              householdClient={hc}
-              onSuccess={refetchHousehold}
-              householdSize={currentMembers.length}
-            />
-          </ProjectPermissionsFilter>
+          // No extra perm check is required, because this button only allows removing WIP Enrollments,
+          // which only requires Can Edit Enrollments, which is already required for this page
+          <RemoveFromHouseholdButton
+            currentDashboardClientId={currentDashboardClientId}
+            householdClient={hc}
+            onSuccess={refetchHousehold}
+            householdSize={currentMembers.length}
+          />
         ),
       },
     ];
@@ -233,7 +227,6 @@ const EditHouseholdMemberTable = ({
     proposedHoH,
     onChangeHoH,
     highlight,
-    projectId,
     refetchHousehold,
   ]);
 
