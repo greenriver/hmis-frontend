@@ -31,7 +31,7 @@ import {
 interface Props {
   household: HouseholdFieldsFragment;
   projectId: string;
-  currentDashboardClientId?: string;
+  currentDashboardEnrollmentId?: string;
   refetchHousehold: any;
   loading?: boolean;
 }
@@ -39,7 +39,7 @@ interface Props {
 const EditHouseholdMemberTable = ({
   household,
   refetchHousehold,
-  currentDashboardClientId,
+  currentDashboardEnrollmentId,
   loading,
 }: Props) => {
   const [proposedHoH, setProposedHoH] =
@@ -48,11 +48,12 @@ const EditHouseholdMemberTable = ({
 
   const currentMembers = useMemo(
     () =>
+      //xxx
       sortHouseholdMembers(
         household.householdClients,
-        currentDashboardClientId
+        currentDashboardEnrollmentId
       ),
-    [household, currentDashboardClientId]
+    [household, currentDashboardEnrollmentId]
   );
 
   const [hoh, setHoH] = useState<HouseholdClientFieldsFragment | null>(
@@ -149,8 +150,8 @@ const EditHouseholdMemberTable = ({
     return [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
       HOUSEHOLD_MEMBER_COLUMNS.clientName({
-        currentClientId: currentDashboardClientId,
-        linkToProfile: !!currentDashboardClientId,
+        currentEnrollmentId: currentDashboardEnrollmentId,
+        linkToProfile: !!currentDashboardEnrollmentId,
       }),
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
       HOUSEHOLD_MEMBER_COLUMNS.dobAge,
@@ -211,7 +212,7 @@ const EditHouseholdMemberTable = ({
           // No extra perm check is required, because this button only allows removing WIP Enrollments,
           // which only requires Can Edit Enrollments, which is already required for this page
           <RemoveFromHouseholdButton
-            currentDashboardClientId={currentDashboardClientId}
+            currentDashboardEnrollmentId={currentDashboardEnrollmentId}
             householdClient={hc}
             onSuccess={refetchHousehold}
             householdSize={currentMembers.length}
@@ -220,7 +221,7 @@ const EditHouseholdMemberTable = ({
       },
     ];
   }, [
-    currentDashboardClientId,
+    currentDashboardEnrollmentId,
     currentMembers,
     hoh?.client?.id,
     hohChangeLoading,
