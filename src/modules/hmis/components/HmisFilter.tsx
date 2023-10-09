@@ -101,7 +101,6 @@ const getFilterForType = (
   if (inputType === 'ISO8601Date') filter = { ...baseFields, type: 'date' };
   if (inputType === 'String') filter = { ...baseFields, type: 'text' };
 
-  console.log(recordType, fieldName, type, inputType, HmisEnums[inputType]);
   if (isPicklistType(fieldName)) {
     filter = {
       ...baseFields,
