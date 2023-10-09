@@ -53,16 +53,16 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     ),
   },
   clientName: ({
-    currentClientId,
+    currentEnrollmentId,
     linkToProfile = false,
   }: {
-    currentClientId?: string;
+    currentEnrollmentId?: string;
     linkToProfile?: boolean;
   }) => ({
     header: 'Name',
     key: 'name',
     render: (h: HouseholdClientFieldsFragment) => {
-      const isCurrentClient = h.client.id === currentClientId;
+      const isCurrentClient = h.enrollment.id === currentEnrollmentId;
 
       return (
         <ClientName
@@ -170,7 +170,9 @@ const HouseholdMemberTable = ({
     if (columnProp) return columnProp;
     const cols = [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
-      HOUSEHOLD_MEMBER_COLUMNS.clientName({ currentClientId: clientId }),
+      HOUSEHOLD_MEMBER_COLUMNS.clientName({
+        currentEnrollmentId: enrollmentId,
+      }),
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
       HOUSEHOLD_MEMBER_COLUMNS.dobAge,
       HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
@@ -183,7 +185,7 @@ const HouseholdMemberTable = ({
       ];
     }
     return cols;
-  }, [clientId, columnProp, globalFeatureFlags?.mciId, householdMembers]);
+  }, [enrollmentId, columnProp, globalFeatureFlags?.mciId, householdMembers]);
 
   if (error) throw error;
   if (householdMembersLoading && !householdMembers) return <Loading />;

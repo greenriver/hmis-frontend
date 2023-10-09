@@ -36,11 +36,13 @@ const EnrollmentOverview = () => {
   const householdColumns = useMemo(
     () => [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
-      HOUSEHOLD_MEMBER_COLUMNS.clientName({ currentClientId: clientId }),
+      HOUSEHOLD_MEMBER_COLUMNS.clientName({
+        currentEnrollmentId: enrollmentId,
+      }),
       HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentStatus,
     ],
-    [clientId]
+    [enrollmentId]
   );
 
   const onSuccessfulDelete = useCallback(() => {
