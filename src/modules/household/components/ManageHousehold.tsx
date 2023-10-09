@@ -134,6 +134,7 @@ const ManageHousehold = ({
             currentDashboardClientId={currentDashboardClientId}
             refetchHousehold={refetchHousehold}
             loading={loading}
+            projectId={projectId}
           />
         </TitleCard>
       )}
@@ -191,7 +192,7 @@ const ManageHousehold = ({
                 showFilters
                 recordType='Client'
                 filterInputType='ClientFilterOptions'
-                defaultSortOption={ClientSortOption.LastNameAToZ}
+                defaultSortOption={ClientSortOption.BestMatch}
                 onCompleted={() => setHasSearched(true)}
               />
             </SsnDobShowContextProvider>

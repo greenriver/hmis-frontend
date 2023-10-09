@@ -38,7 +38,12 @@ export default function useAddToHouseholdColumns({
   }, [data]);
 
   const currentMembersMap = useMemo(() => {
-    const hc = data?.household?.householdClients || [];
+    // filter out exited members, because they can be re-added
+    const hc =
+      data?.household?.householdClients?.filter(
+        (hc) => !hc.enrollment.exitDate
+      ) || [];
+
     return new Set(hc.map((c) => c.client.id));
   }, [data]);
 
