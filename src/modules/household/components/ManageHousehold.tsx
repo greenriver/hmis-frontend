@@ -49,6 +49,7 @@ const ManageHousehold = ({
   // This may be rendered either on the Project Dashboard or the Enrollment Dashboard. If on the Enrollment Dash, we need to treat the "current" client differently.
   const enrollmentContext = useEnrollmentDashboardContext();
   const currentDashboardClientId = enrollmentContext?.client?.id;
+  const currentDashboardEnrollmentId = enrollmentContext?.enrollment?.id;
 
   const {
     addToEnrollmentColumns,
@@ -131,7 +132,7 @@ const ManageHousehold = ({
         >
           <EditHouseholdMemberTable
             household={household}
-            currentDashboardClientId={currentDashboardClientId}
+            currentDashboardEnrollmentId={currentDashboardEnrollmentId}
             refetchHousehold={refetchHousehold}
             loading={loading}
             projectId={projectId}

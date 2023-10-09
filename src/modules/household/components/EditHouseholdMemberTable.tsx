@@ -32,7 +32,7 @@ import {
 interface Props {
   household: HouseholdFieldsFragment;
   projectId: string;
-  currentDashboardClientId?: string;
+  currentDashboardEnrollmentId?: string;
   refetchHousehold: any;
   loading?: boolean;
 }
@@ -41,7 +41,7 @@ const EditHouseholdMemberTable = ({
   household,
   projectId,
   refetchHousehold,
-  currentDashboardClientId,
+  currentDashboardEnrollmentId,
   loading,
 }: Props) => {
   const [proposedHoH, setProposedHoH] =
@@ -50,11 +50,12 @@ const EditHouseholdMemberTable = ({
 
   const currentMembers = useMemo(
     () =>
+      //xxx
       sortHouseholdMembers(
         household.householdClients,
-        currentDashboardClientId
+        currentDashboardEnrollmentId
       ),
-    [household, currentDashboardClientId]
+    [household, currentDashboardEnrollmentId]
   );
 
   const [hoh, setHoH] = useState<HouseholdClientFieldsFragment | null>(
@@ -151,8 +152,8 @@ const EditHouseholdMemberTable = ({
     return [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
       HOUSEHOLD_MEMBER_COLUMNS.clientName({
-        currentClientId: currentDashboardClientId,
-        linkToProfile: !!currentDashboardClientId,
+        currentEnrollmentId: currentDashboardEnrollmentId,
+        linkToProfile: !!currentDashboardEnrollmentId,
       }),
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
       HOUSEHOLD_MEMBER_COLUMNS.dobAge,
@@ -216,7 +217,7 @@ const EditHouseholdMemberTable = ({
             permissions={['canDeleteEnrollments']}
           >
             <RemoveFromHouseholdButton
-              currentDashboardClientId={currentDashboardClientId}
+              currentDashboardEnrollmentId={currentDashboardEnrollmentId}
               householdClient={hc}
               onSuccess={refetchHousehold}
               householdSize={currentMembers.length}
@@ -226,7 +227,7 @@ const EditHouseholdMemberTable = ({
       },
     ];
   }, [
-    currentDashboardClientId,
+    currentDashboardEnrollmentId,
     currentMembers,
     hoh?.client?.id,
     hohChangeLoading,
