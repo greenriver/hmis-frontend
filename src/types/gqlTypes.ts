@@ -192,12 +192,15 @@ export enum AssessmentLevel {
 }
 
 export enum AssessmentRole {
+  /** Annual */
   Annual = 'ANNUAL',
-  Ce = 'CE',
-  CustomAssessment = 'CUSTOM_ASSESSMENT',
+  /** Exit */
   Exit = 'EXIT',
+  /** Intake */
   Intake = 'INTAKE',
+  /** Post exit */
   PostExit = 'POST_EXIT',
+  /** Update */
   Update = 'UPDATE',
 }
 
@@ -1109,11 +1112,17 @@ export type DataCollectionFeature = {
 };
 
 export enum DataCollectionFeatureRole {
+  /** Case note */
   CaseNote = 'CASE_NOTE',
+  /** Ce assessment */
   CeAssessment = 'CE_ASSESSMENT',
+  /** Ce event */
   CeEvent = 'CE_EVENT',
+  /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Referral request */
   ReferralRequest = 'REFERRAL_REQUEST',
+  /** Service */
   Service = 'SERVICE',
 }
 
@@ -2323,28 +2332,51 @@ export type FormItem = {
 };
 
 export enum FormRole {
+  /** Annual */
   Annual = 'ANNUAL',
+  /** Case note */
   CaseNote = 'CASE_NOTE',
+  /** Ce */
   Ce = 'CE',
+  /** Ce assessment */
   CeAssessment = 'CE_ASSESSMENT',
+  /** Ce event */
   CeEvent = 'CE_EVENT',
+  /** Client */
   Client = 'CLIENT',
+  /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Custom assessment */
   CustomAssessment = 'CUSTOM_ASSESSMENT',
+  /** Enrollment */
   Enrollment = 'ENROLLMENT',
+  /** Exit */
   Exit = 'EXIT',
+  /** File */
   File = 'FILE',
+  /** Funder */
   Funder = 'FUNDER',
+  /** Intake */
   Intake = 'INTAKE',
+  /** Inventory */
   Inventory = 'INVENTORY',
+  /** New client enrollment */
   NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
+  /** Occurrence point */
   OccurrencePoint = 'OCCURRENCE_POINT',
+  /** Organization */
   Organization = 'ORGANIZATION',
+  /** Post exit */
   PostExit = 'POST_EXIT',
+  /** Project */
   Project = 'PROJECT',
+  /** Project CoC */
   ProjectCoc = 'PROJECT_COC',
+  /** Referral request */
   ReferralRequest = 'REFERRAL_REQUEST',
+  /** Service */
   Service = 'SERVICE',
+  /** Update */
   Update = 'UPDATE',
 }
 
