@@ -21,7 +21,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
-import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -31,6 +31,7 @@ import {
 
 interface Props {
   household: HouseholdFieldsFragment;
+  projectId: string;
   currentDashboardClientId?: string;
   refetchHousehold: any;
   loading?: boolean;
@@ -38,6 +39,7 @@ interface Props {
 
 const EditHouseholdMemberTable = ({
   household,
+  projectId,
   refetchHousehold,
   currentDashboardClientId,
   loading,
@@ -208,8 +210,9 @@ const EditHouseholdMemberTable = ({
         key: 'action',
         width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <ClientPermissionsFilter
-            id={hc.client.id}
+          <ProjectPermissionsFilter
+            id={projectId}
+            // TODO: this should be canEditEnrollments, but wait until backend updated
             permissions={['canDeleteEnrollments']}
           >
             <RemoveFromHouseholdButton
@@ -218,20 +221,20 @@ const EditHouseholdMemberTable = ({
               onSuccess={refetchHousehold}
               householdSize={currentMembers.length}
             />
-          </ClientPermissionsFilter>
+          </ProjectPermissionsFilter>
         ),
       },
     ];
   }, [
     currentDashboardClientId,
-    hoh,
-    refetchHousehold,
-    onChangeHoH,
-    setHighlight,
+    currentMembers,
+    hoh?.client?.id,
     hohChangeLoading,
     proposedHoH,
+    onChangeHoH,
     highlight,
-    currentMembers,
+    projectId,
+    refetchHousehold,
   ]);
 
   return (
