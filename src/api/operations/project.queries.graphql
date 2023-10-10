@@ -246,6 +246,38 @@ query GetProjectFunders($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
+query GetProjectCeParticipations($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    ceParticipations(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CeParticipationFields
+      }
+    }
+  }
+}
+
+query GetProjectHmisParticipations(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    hmisParticipations(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...HmisParticipationFields
+      }
+    }
+  }
+}
+
 mutation DeleteInventory($input: DeleteInventoryInput!) {
   deleteInventory(input: $input) {
     clientMutationId
@@ -274,6 +306,28 @@ mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
   deleteProjectCoc(input: $input) {
     clientMutationId
     projectCoc {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteHmisParticipation($input: DeleteHmisParticipationInput!) {
+  deleteHmisParticipation(input: $input) {
+    hmisParticipation {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteCeParticipation($input: DeleteCeParticipationInput!) {
+  deleteCeParticipation(input: $input) {
+    ceParticipation {
       id
     }
     errors {

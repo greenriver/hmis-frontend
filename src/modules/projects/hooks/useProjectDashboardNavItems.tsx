@@ -104,6 +104,16 @@ export const useProjectDashboardNavItems = (
             title: 'CoCs',
             path: ProjectDashboardRoutes.COCS,
           },
+          {
+            id: 'hmis-participation',
+            title: 'HMIS Participation',
+            path: ProjectDashboardRoutes.HMIS_PARTICIPATION,
+          },
+          {
+            id: 'ce-participation',
+            title: 'CE Participation',
+            path: ProjectDashboardRoutes.CE_PARTICIPATION,
+          },
         ]
           .filter((item) => !item.condition || item.condition())
           .map(({ path, ...rest }) => ({

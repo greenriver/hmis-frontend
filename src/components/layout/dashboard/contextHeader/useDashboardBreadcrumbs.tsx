@@ -127,6 +127,12 @@ export const useProjectBreadcrumbConfig = (
         title: 'Update Inventory',
         parent: ProjectDashboardRoutes.INVENTORY,
       },
+      [ProjectDashboardRoutes.HMIS_PARTICIPATION]: {
+        title: 'HMIS Participation',
+      },
+      [ProjectDashboardRoutes.CE_PARTICIPATION]: {
+        title: 'CE Participation',
+      },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;
     return buildDefaultCrumbs(ProjectDashboardRoutes, projectRoot, overrides);
