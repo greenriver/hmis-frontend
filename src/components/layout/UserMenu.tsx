@@ -22,7 +22,8 @@ import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings
 const UserMenu: React.FC = () => {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
   const { user, logoutUser } = useAuth();
-  const { manageAccountUrl } = useHmisAppSettings();
+  const { manageAccountUrl, warehouseUrl, warehouseName } =
+    useHmisAppSettings();
 
   if (!user) return null;
 
@@ -38,21 +39,30 @@ const UserMenu: React.FC = () => {
       </Button>
       <Menu
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: 48,
           horizontal: 'right',
         }}
         transformOrigin={{
           vertical: 'top',
           horizontal: 'right',
         }}
+        PaperProps={{ sx: { borderTopLeftRadius: 0, borderTopRightRadius: 0 } }}
         {...bindMenu(popupState)}
       >
         {manageAccountUrl && (
           <MenuItem component={Link} href={manageAccountUrl} target='_blank'>
             <ListItemIcon>
-              <OpenInNewIcon fontSize='small' />
+              <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
             </ListItemIcon>
             <ListItemText>Manage Account</ListItemText>
+          </MenuItem>
+        )}
+        {warehouseUrl && warehouseName && (
+          <MenuItem component={Link} href={warehouseUrl} target='_blank'>
+            <ListItemIcon>
+              <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
+            </ListItemIcon>
+            <ListItemText>{warehouseName}</ListItemText>
           </MenuItem>
         )}
         <MenuItem onClick={logoutUser}>
