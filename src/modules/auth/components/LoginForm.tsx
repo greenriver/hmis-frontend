@@ -26,7 +26,7 @@ import { reloadWindow } from '@/utils/location';
 const errorMessage = (error: Error) => {
   if (isHmisResponseError(error)) {
     return error.type === 'unauthenticated'
-      ? 'Bad login/password'
+      ? 'Incorrect email or password.'
       : error.message;
   }
   return 'Something went wrong, please try again later.';
@@ -34,6 +34,8 @@ const errorMessage = (error: Error) => {
 
 const LoginForm = () => {
   const [error, setError] = useState<Error>();
+  const [requiredFieldsError, setRequiredFieldsError] =
+    useState<boolean>(false);
   const [prompt2fa, setPrompt2fa] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { setUser } = useAuth();
@@ -55,6 +57,12 @@ const LoginForm = () => {
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
       event.preventDefault();
+      if (!email || !password) {
+        setRequiredFieldsError(true);
+        return;
+      }
+      setRequiredFieldsError(false);
+      setError(undefined);
       setLoading(true);
 
       const sendLogin = () => {
@@ -133,6 +141,9 @@ const LoginForm = () => {
         onChange={(e) => setEmail(e.target.value)}
         placeholder='ex. name@email.com'
         sx={{ '.MuiFormLabel-asterisk': { display: 'none' } }}
+        {...(requiredFieldsError && !email
+          ? { error: true, helperText: 'Please enter email' }
+          : undefined)}
       />
       <TextInput
         margin='normal'
@@ -147,6 +158,9 @@ const LoginForm = () => {
         onKeyDown={onKeyDown}
         onChange={(e) => setPassword(e.target.value)}
         sx={{ '.MuiFormLabel-asterisk': { display: 'none' } }}
+        {...(requiredFieldsError && !password
+          ? { error: true, helperText: 'Please enter password' }
+          : undefined)}
       />
 
       <LoadingButton
