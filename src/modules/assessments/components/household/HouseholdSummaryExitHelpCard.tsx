@@ -14,6 +14,7 @@ import { CommonOrderedList } from '@/components/CommonOrderedList';
 import { CommonCard } from '@/components/elements/CommonCard';
 import ExpandInfoButton from '@/components/elements/ExpandInfoButton';
 import RouterLink from '@/components/elements/RouterLink';
+import useSafeParams from '@/hooks/useSafeParams';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -23,10 +24,19 @@ interface Props {
 }
 
 const HouseholdSummaryExitHelpCard: React.FC<Props> = ({ tabs }) => {
+  const { clientId, enrollmentId } = useSafeParams() as {
+    clientId: string;
+    enrollmentId: string;
+  };
+
+  // Find HoH, so we always link to the HoH for household mamagement and intake.
+  // If there is no HoH, just use the current user client ID and enrollment ID
   const [hohClientId, hohEnrollmentId] = useMemo(() => {
-    const tab = tabs.find(({ isHoh }) => isHoh);
-    return [tab?.clientId, tab?.enrollmentId];
-  }, [tabs]);
+    const hohTab = tabs.find(({ isHoh }) => isHoh);
+    if (!hohTab) return [clientId, enrollmentId];
+    return [hohTab.clientId, hohTab.enrollmentId];
+  }, [clientId, enrollmentId, tabs]);
+
   const anyIncomplete = useMemo(
     () => !!tabs.find((t) => t.enrollmentInProgress),
     [tabs]
