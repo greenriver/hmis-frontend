@@ -13,7 +13,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { parseAndFormatDateRange, yesNo } from '@/modules/hmis/hmisUtil';
-import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import {
   CeParticipationFieldsFragment,
@@ -130,10 +129,7 @@ const CeParticipations = () => {
       <PageTitle
         title='CE Participation Records'
         actions={
-          <ProjectPermissionsFilter
-            id={project.id}
-            permissions='canEditProjectDetails'
-          >
+          project.access.canEditProjectDetails && (
             <Button
               onClick={openFormDialog}
               variant='outlined'
@@ -141,44 +137,46 @@ const CeParticipations = () => {
             >
               Add CE Participation
             </Button>
-          </ProjectPermissionsFilter>
+          )
         }
       />
       <Paper data-testid='ceParticipationsCard'>
-        <>
-          <GenericTableWithData
-            queryVariables={{ id: project.id }}
-            queryDocument={GetProjectCeParticipationsDocument}
-            columns={columns}
-            pagePath='project.ceParticipations'
-            noData='No CE Participation records'
-            recordType='CeParticipation'
-            handleRowClick={(record) => {
-              setViewingRecord(record);
-              openFormDialog();
-            }}
-          />
-
-          {renderFormDialog({
-            title: `${viewingRecord ? 'Update' : 'Add'} CE Participation`,
-
-            otherActions: viewingRecord ? (
-              <DeleteMutationButton<
-                DeleteCeParticipationMutation,
-                DeleteCeParticipationMutationVariables
-              >
-                queryDocument={DeleteCeParticipationDocument}
-                variables={{ input: { id: viewingRecord.id } }}
-                idPath={'deleteCeParticipation.ceParticipation.id'}
-                recordName='CE Participation Record'
-                onSuccess={onSuccessfulDelete}
-              >
-                Delete
-              </DeleteMutationButton>
-            ) : null,
-          })}
-        </>
+        <GenericTableWithData
+          queryVariables={{ id: project.id }}
+          queryDocument={GetProjectCeParticipationsDocument}
+          columns={columns}
+          pagePath='project.ceParticipations'
+          noData='No CE Participation records'
+          recordType='CeParticipation'
+          handleRowClick={
+            project.access.canEditProjectDetails
+              ? (record) => {
+                  setViewingRecord(record);
+                  openFormDialog();
+                }
+              : undefined
+          }
+        />
       </Paper>
+      {project.access.canEditProjectDetails &&
+        renderFormDialog({
+          title: `${viewingRecord ? 'Update' : 'Add'} CE Participation`,
+
+          otherActions: viewingRecord ? (
+            <DeleteMutationButton<
+              DeleteCeParticipationMutation,
+              DeleteCeParticipationMutationVariables
+            >
+              queryDocument={DeleteCeParticipationDocument}
+              variables={{ input: { id: viewingRecord.id } }}
+              idPath={'deleteCeParticipation.ceParticipation.id'}
+              recordName='CE Participation Record'
+              onSuccess={onSuccessfulDelete}
+            >
+              Delete
+            </DeleteMutationButton>
+          ) : null,
+        })}
     </>
   );
 };

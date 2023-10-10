@@ -13,7 +13,6 @@ import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
-import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -94,10 +93,7 @@ const HmisParticipations = () => {
       <PageTitle
         title='HMIS Participation Records'
         actions={
-          <ProjectPermissionsFilter
-            id={project.id}
-            permissions='canEditProjectDetails'
-          >
+          project.access.canEditProjectDetails && (
             <Button
               onClick={openFormDialog}
               variant='outlined'
@@ -105,44 +101,46 @@ const HmisParticipations = () => {
             >
               Add HMIS Participation
             </Button>
-          </ProjectPermissionsFilter>
+          )
         }
       />
       <Paper data-testid='hmisParticipationsCard'>
-        <>
-          <GenericTableWithData
-            queryVariables={{ id: project.id }}
-            queryDocument={GetProjectHmisParticipationsDocument}
-            columns={columns}
-            pagePath='project.hmisParticipations'
-            noData='No HMIS Participation records'
-            recordType='HmisParticipation'
-            handleRowClick={(record) => {
-              setViewingRecord(record);
-              openFormDialog();
-            }}
-          />
-
-          {renderFormDialog({
-            title: `${viewingRecord ? 'Update' : 'Add'} HMIS Participation`,
-
-            otherActions: viewingRecord ? (
-              <DeleteMutationButton<
-                DeleteHmisParticipationMutation,
-                DeleteHmisParticipationMutationVariables
-              >
-                queryDocument={DeleteHmisParticipationDocument}
-                variables={{ input: { id: viewingRecord.id } }}
-                idPath={'deleteHmisParticipation.hmisParticipation.id'}
-                recordName='HMIS Participation Record'
-                onSuccess={onSuccessfulDelete}
-              >
-                Delete
-              </DeleteMutationButton>
-            ) : null,
-          })}
-        </>
+        <GenericTableWithData
+          queryVariables={{ id: project.id }}
+          queryDocument={GetProjectHmisParticipationsDocument}
+          columns={columns}
+          pagePath='project.hmisParticipations'
+          noData='No HMIS Participation records'
+          recordType='HmisParticipation'
+          handleRowClick={
+            project.access.canEditProjectDetails
+              ? (record) => {
+                  setViewingRecord(record);
+                  openFormDialog();
+                }
+              : undefined
+          }
+        />
       </Paper>
+      {project.access.canEditProjectDetails &&
+        renderFormDialog({
+          title: `${viewingRecord ? 'Update' : 'Add'} HMIS Participation`,
+
+          otherActions: viewingRecord ? (
+            <DeleteMutationButton<
+              DeleteHmisParticipationMutation,
+              DeleteHmisParticipationMutationVariables
+            >
+              queryDocument={DeleteHmisParticipationDocument}
+              variables={{ input: { id: viewingRecord.id } }}
+              idPath={'deleteHmisParticipation.hmisParticipation.id'}
+              recordName='HMIS Participation Record'
+              onSuccess={onSuccessfulDelete}
+            >
+              Delete
+            </DeleteMutationButton>
+          ) : null,
+        })}
     </>
   );
 };
