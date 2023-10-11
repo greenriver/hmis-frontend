@@ -9,7 +9,7 @@ import PageTitle from '../layout/PageTitle';
 
 import NotFound from './NotFound';
 
-import OrganizationLayout from '@/components/layout/OrganizationLayout';
+import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import useSafeParams from '@/hooks/useSafeParams';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
@@ -32,7 +32,7 @@ const Organization = () => {
   if (!crumbs || !organization) return <NotFound />;
 
   return (
-    <OrganizationLayout crumbs={crumbs}>
+    <BasicBreadcrumbPageLayout crumbs={crumbs}>
       <PageTitle
         title={organizationName}
         actions={
@@ -81,7 +81,7 @@ const Organization = () => {
           <OrganizationProjectsTable organizationId={organizationId} />
         </TitleCard>
       </Stack>
-    </OrganizationLayout>
+    </BasicBreadcrumbPageLayout>
   );
 };
 export default Organization;
