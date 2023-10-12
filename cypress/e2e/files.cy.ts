@@ -20,7 +20,7 @@ it(
     cy.createClient(firstName, lastName);
 
     // Got to files tab and create new file
-    cy.get('#side-nav-files').click();
+    cy.testId('desktopNav-files').click();
     cy.testId('addClientFileButton').click();
     cy.choose('file-tags', '1', 'firstTag');
     cy.exitModal();
@@ -71,7 +71,7 @@ it(
     cy.get('body').contains('None found').should('exist');
 
     // Delete the client
-    cy.testId('sideNav-overview').click();
+    cy.testId('desktopNav-overview').click();
     cy.testId('editClientButton').click();
     cy.testId('deleteClientButton').click();
     cy.confirmDialog();

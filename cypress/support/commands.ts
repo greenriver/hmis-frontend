@@ -16,8 +16,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('navItem', (id) => {
-  // first because the mobile one is hidden
-  return cy.get(`[data-testid="sideNav-${id}"]`).first();
+  return cy.get(`[data-testid="desktopNav-${id}"]`);
 });
 
 Cypress.Commands.add('login', () => {
@@ -43,8 +42,8 @@ Cypress.Commands.add('login', () => {
 
 Cypress.Commands.add('createClient', (firstName, lastName) => {
   cy.visit('/client/new');
-  cy.testId('first-name').find('input').safeType(firstName);
-  cy.testId('last-name').find('input').safeType(lastName);
+  cy.testId('first-name').find('input').type(firstName);
+  cy.testId('last-name').find('input').type(lastName);
   cy.get('button[type="submit"]').click();
   cy.testId('clientProfile').should('be.visible');
 });
