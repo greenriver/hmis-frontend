@@ -2,7 +2,6 @@ import { LoadingButton } from '@mui/lab';
 import { ButtonProps, Stack } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { useBedNightsOnDate } from '../hooks/useBedNightsOnDate';
-import { onCompletedBedNightAssignment } from './AssignBedNightButton';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import {
   formatDateForDisplay,
@@ -14,20 +13,22 @@ interface Props {
   selectedEnrollmentIds: string[];
   bedNightDate: Date;
   projectId: string;
+  onCompleted: VoidFunction;
 }
 
 const BedNightBulkActionButtons: React.FC<Props> = ({
   selectedEnrollmentIds,
   bedNightDate,
   projectId,
+  onCompleted,
 }) => {
-  const { enrollmentIdsWithBedNights, refetchLoading, refetch } =
-    useBedNightsOnDate(projectId, bedNightDate);
+  const { enrollmentIdsWithBedNights, refetchLoading } = useBedNightsOnDate(
+    projectId,
+    bedNightDate
+  );
 
   const [updateBedNights, { loading: mutationLoading }] =
-    useUpdateBedNightsMutation({
-      onCompleted: onCompletedBedNightAssignment(refetch),
-    });
+    useUpdateBedNightsMutation({ onCompleted });
   const [lastAction, setLastAction] = useState<BulkActionType | null>(null);
 
   const onClickRemove = useCallback<NonNullable<ButtonProps['onClick']>>(

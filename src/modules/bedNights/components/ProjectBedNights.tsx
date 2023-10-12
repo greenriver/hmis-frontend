@@ -1,3 +1,4 @@
+import { ObservableQuery } from '@apollo/client';
 import AddIcon from '@mui/icons-material/Add';
 import { Grid, Paper, Stack } from '@mui/material';
 
@@ -18,8 +19,32 @@ import useSafeParams from '@/hooks/useSafeParams';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ClientTextSearchInputForm } from '@/modules/search/components/ClientTextSearchInput';
+import apolloClient from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
+import {
+  GetBedNightsOnDateQuery,
+  GetBedNightsOnDateQueryVariables,
+} from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
+
+const onCompletedBedNightAssignment =
+  (
+    refetch: ObservableQuery<
+      GetBedNightsOnDateQuery,
+      GetBedNightsOnDateQueryVariables
+    >['refetch']
+  ) =>
+  () => {
+    // refetch bed nights for currently selected Bed Night Date, so button state updates.
+    refetch().then(() => {
+      // refetch bed night query, so that "Last Bed Night" column updates.
+      // do after refetch so that they're not batched, because UI waits
+      // for first refetch to stop loading. this one will take longer, so dont batch it.
+      apolloClient.refetchQueries({
+        include: ['GetProjectEnrollmentsForBedNights'],
+      });
+    });
+  };
 
 const ProjectBedNights = () => {
   const { project } = useProjectDashboardContext();
@@ -31,9 +56,16 @@ const ProjectBedNights = () => {
   const [searchTerm, setSearchTerm] = useState<string | undefined>();
 
   // do initial fetch so its cached for buttons
-  const { enrollmentIdsWithBedNights } = useBedNightsOnDate(projectId, date);
+  const { enrollmentIdsWithBedNights, refetch } = useBedNightsOnDate(
+    projectId,
+    date
+  );
 
   const canEdit = project.access.canEditEnrollments;
+  const onCompletedCallback = useMemo(
+    () => onCompletedBedNightAssignment(refetch),
+    [refetch]
+  );
 
   const additionalColumns = useMemo(() => {
     return [
@@ -50,12 +82,13 @@ const ProjectBedNights = () => {
               bedNightDate={date}
               editable={canEdit}
               projectId={projectId}
+              onCompleted={onCompletedCallback}
             />
           );
         },
       },
     ];
-  }, [date, canEdit, projectId]);
+  }, [date, canEdit, projectId, onCompletedCallback]);
 
   const renderBulkAction = useCallback(
     (selectedEnrollmentIds: readonly string[]) => {
@@ -65,10 +98,11 @@ const ProjectBedNights = () => {
           selectedEnrollmentIds={selectedEnrollmentIds as string[]}
           bedNightDate={date}
           projectId={projectId}
+          onCompleted={onCompletedCallback}
         />
       );
     },
-    [enrollmentIdsWithBedNights, date, projectId]
+    [enrollmentIdsWithBedNights, date, projectId, onCompletedCallback]
   );
 
   return (

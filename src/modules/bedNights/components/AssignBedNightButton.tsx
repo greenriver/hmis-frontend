@@ -1,55 +1,33 @@
-import { ObservableQuery } from '@apollo/client';
 import CheckIcon from '@mui/icons-material/Check';
 import { LoadingButton } from '@mui/lab';
 import { ButtonProps } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useBedNightsOnDate } from '../hooks/useBedNightsOnDate';
 import { formatDateForGql } from '@/modules/hmis/hmisUtil';
-import apolloClient from '@/providers/apolloClient';
-import {
-  BulkActionType,
-  GetBedNightsOnDateQuery,
-  useUpdateBedNightsMutation,
-  GetBedNightsOnDateQueryVariables,
-} from '@/types/gqlTypes';
+import { BulkActionType, useUpdateBedNightsMutation } from '@/types/gqlTypes';
 interface Props {
   enrollmentId: string;
   bedNightDate: Date;
   editable: boolean;
   projectId: string;
+  onCompleted: VoidFunction;
 }
-
-export const onCompletedBedNightAssignment =
-  (
-    refetch: ObservableQuery<
-      GetBedNightsOnDateQuery,
-      GetBedNightsOnDateQueryVariables
-    >['refetch']
-  ) =>
-  () => {
-    // refetch bed nights for currently selected Bed Night Date, so button state updates.
-    refetch().then(() => {
-      // refetch bed night query, so that "Last Bed Night" column updates.
-      // do after refetch so that they're not batched, because UI waits
-      // for first refetch to stop loading. this one will take longer, so dont batch it.
-      apolloClient.refetchQueries({
-        include: ['GetProjectEnrollmentsForBedNights'],
-      });
-    });
-  };
 
 const AssignBedNightButton: React.FC<Props> = ({
   enrollmentId,
   bedNightDate,
   editable,
   projectId,
+  onCompleted,
 }) => {
-  const { enrollmentIdsWithBedNights, refetchLoading, refetch } =
-    useBedNightsOnDate(projectId, bedNightDate);
+  const { enrollmentIdsWithBedNights, refetchLoading } = useBedNightsOnDate(
+    projectId,
+    bedNightDate
+  );
 
   const [updateBedNights, { loading: mutationLoading }] =
     useUpdateBedNightsMutation({
-      onCompleted: onCompletedBedNightAssignment(refetch),
+      onCompleted,
     });
 
   const isAssignedOnDate = useMemo(
