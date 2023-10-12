@@ -37,8 +37,6 @@ it(
     // Ensure file exists
     cy.get('table tbody').find('tr').first().as('fileRow');
     cy.get('@fileRow').contains('example.json').should('exist');
-    cy.get('@fileRow').contains('Edit').should('exist');
-    cy.get('@fileRow').contains('Delete').should('exist');
 
     // Check file modal
     cy.get('@fileRow').contains('example.json').click();
@@ -51,7 +49,8 @@ it(
     cy.exitModal();
 
     // Edit file
-    cy.get('@fileRow').contains('Edit').click();
+    cy.get('@fileRow').click();
+    cy.get('.MuiDialog-container').contains('Edit').click();
     cy.get('#file-blob-id').should('not.exist');
     cy.choose('file-tags', '2', 'secondTag');
     cy.exitModal();
@@ -63,12 +62,10 @@ it(
     cy.get('@fileRow').get('#tag-2').should('exist');
 
     // Delete the file
-    cy.get('@fileRow').contains('Delete').click();
-    cy.get('.MuiDialog-container').as('deleteDialog');
-    cy.get('@deleteDialog').contains('Delete File').should('exist');
-    cy.get('@deleteDialog').contains('Confirm').click();
-    cy.get('table tbody').should('not.exist');
-    cy.get('body').contains('None found').should('exist');
+    cy.get('@fileRow').click();
+    cy.get('.MuiDialog-container').contains('Delete').click();
+    cy.confirmDialog();
+    cy.get('table').contains('No files').should('exist');
 
     // Delete the client
     cy.navItem('overview').click();
