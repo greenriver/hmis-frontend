@@ -26,12 +26,12 @@ it(
     cy.exitModal();
     // cy.inputId('effectiveDate').clear().type('01012020');
     // cy.inputId('expirationDate').clear().type('01012020');
-    cy.checkOption('file-confidential', 'false');
-    cy.get('#fileBlobId').selectFile('cypress/fixtures/example.json', {
+    // cy.checkOption('file-confidential', 'true');
+    cy.get('#file-blob-id').selectFile('cypress/fixtures/example.json', {
       action: 'drag-drop',
     });
-    cy.get('#fileBlobId').contains('Uploading').should('not.exist');
-    cy.get('#fileBlobId').contains('example.json').should('exist');
+    cy.get('#file-blob-id').contains('Uploading').should('not.exist');
+    cy.get('#file-blob-id').contains('example.json').should('exist');
     cy.get('button[type="submit"]').click();
 
     // Ensure file exists
@@ -52,7 +52,7 @@ it(
 
     // Edit file
     cy.get('@fileRow').contains('Edit').click();
-    cy.get('#fileBlobId').should('not.exist');
+    cy.get('#file-blob-id').should('not.exist');
     cy.choose('file-tags', '2', 'secondTag');
     cy.exitModal();
     cy.get('button[type="submit"]').click();
