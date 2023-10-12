@@ -6,7 +6,7 @@
 Cypress.session.clearAllSavedSessions();
 
 beforeEach(() => {
-  cy.login(Cypress.env('EMAIL'), Cypress.env('PASSWORD'));
+  cy.login();
   cy.visit('/');
 });
 
