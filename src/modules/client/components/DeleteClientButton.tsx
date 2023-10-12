@@ -84,6 +84,7 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
         color='error'
         fullWidth
         onClick={() => setDeleting(true)}
+        data-testid='deleteClientButton'
         {...props}
       >
         Delete Client

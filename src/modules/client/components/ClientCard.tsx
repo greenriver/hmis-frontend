@@ -137,7 +137,7 @@ const ClientCard: React.FC<Props> = ({
   }
 
   return (
-    <Grid container sx={{ p: 1 }}>
+    <Grid container sx={{ p: 1 }} data-testid='clientSearchResultCard'>
       <Grid item xs={5} lg={4}>
         <Stack spacing={1}>
           <RouterLink

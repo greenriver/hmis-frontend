@@ -6,7 +6,7 @@ import Loading from '../elements/Loading';
 
 import NotFound from './NotFound';
 
-import OrganizationLayout from '@/components/layout/OrganizationLayout';
+import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -50,7 +50,7 @@ const EditOrganization = () => {
 
   const organizationId = organization.id;
   return (
-    <OrganizationLayout crumbs={crumbs}>
+    <BasicBreadcrumbPageLayout crumbs={crumbs}>
       {loading && <Loading />}
       {organization && (
         <EditRecord<OrganizationFieldsFragment>
@@ -93,7 +93,7 @@ const EditOrganization = () => {
           }
         />
       )}
-    </OrganizationLayout>
+    </BasicBreadcrumbPageLayout>
   );
 };
 export default EditOrganization;

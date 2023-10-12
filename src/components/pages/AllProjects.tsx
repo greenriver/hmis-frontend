@@ -99,10 +99,18 @@ const ProjectOrgToggle: React.FC<ProjectOrgToggleProps> = ({
         },
       }}
     >
-      <ToggleButton value='projects' aria-label='view projects'>
+      <ToggleButton
+        value='projects'
+        aria-label='view projects'
+        data-testid='viewProjectsButton'
+      >
         View Projects
       </ToggleButton>
-      <ToggleButton value='organizations' aria-label='view organizations'>
+      <ToggleButton
+        value='organizations'
+        aria-label='view organizations'
+        data-testid='viewOrganizationsButton'
+      >
         View Organizations
       </ToggleButton>
     </ToggleButtonGroup>

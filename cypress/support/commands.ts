@@ -16,11 +16,12 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('navItem', (id) => {
-  // first because the mobile one is hidden
   return cy.get(`[data-testid="sideNav-${id}"]`).first();
 });
 
-Cypress.Commands.add('login', (email, password) => {
+Cypress.Commands.add('login', () => {
+  const email = Cypress.env('EMAIL') || 'e2e@example.com';
+  const password = Cypress.env('PASSWORD') || 'e2e-test-user';
   cy.session(
     email,
     () => {
@@ -44,6 +45,7 @@ Cypress.Commands.add('createClient', (firstName, lastName) => {
   cy.testId('first-name').find('input').type(firstName);
   cy.testId('last-name').find('input').type(lastName);
   cy.get('button[type="submit"]').click();
+  cy.testId('clientProfile').should('be.visible');
 });
 
 Cypress.Commands.add('getById', (id) => {
@@ -181,7 +183,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       // Actions
-      login(email: string, password: string): Chainable<JQuery<Element>>;
+      login(): Chainable<JQuery<Element>>;
       choose(
         id: string,
         optionCode: string,

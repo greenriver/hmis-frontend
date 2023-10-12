@@ -76,8 +76,8 @@ SCHEMA_PATH=<path to schema.graphql> yarn graphql:codegen
 
 These tests run against a real warehouse backend. Make sure you have the backend running at `https://hmis-warehouse.dev.test`.
 
-1. Set environment variables `CYPRESS_EMAIL` and `CYPRESS_PASSWORD` to valid local credentials for logging into the warehouse.
-2. `yarn cypress open`
+1. Run `rails driver:hmis:seed_e2e` in the warehouse repo
+2. Run `yarn cypress open` in the frontend repo
 
 
 ## Backend configuration

@@ -1,8 +1,8 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Breadcrumbs from '../elements/Breadcrumbs';
+import BasicBreadcrumbPageLayout from '../layout/BasicBreadcrumbPageLayout';
 import { STICKY_BAR_HEIGHT } from '../layout/layoutConstants';
 
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
@@ -26,7 +26,7 @@ const CreateClient: React.FC = () => {
 
   const crumbs = [
     // { label: state?.prevPathName || 'Search', to: state?.prevPath || '/' },
-    { label: 'Search', to: '/' },
+    { label: 'Client Search', to: '/' },
     {
       label: 'New Client',
       to: '',
@@ -34,7 +34,7 @@ const CreateClient: React.FC = () => {
   ];
 
   return (
-    <Container maxWidth='xl' sx={{ pt: 3, pb: 20 }}>
+    <BasicBreadcrumbPageLayout crumbs={crumbs} maxWidth='xl'>
       <EditRecord<ClientFieldsFragment>
         formRole={FormRole.Client}
         onCompleted={onCompleted}
@@ -43,16 +43,13 @@ const CreateClient: React.FC = () => {
         localConstants={localConstants}
         title={
           <>
-            <Box sx={{ mb: 2 }}>
-              <Breadcrumbs crumbs={crumbs} />
-            </Box>
-            <Typography variant='h3' sx={{ pt: 0, pb: 3 }}>
+            <Typography variant='h3' sx={{ mt: 2, mb: 3 }}>
               Add New Client
             </Typography>
           </>
         }
       />
-    </Container>
+    </BasicBreadcrumbPageLayout>
   );
 };
 

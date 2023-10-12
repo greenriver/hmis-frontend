@@ -172,6 +172,7 @@ const AllFiles = () => {
           columns={columns}
           pagePath='client.files'
           handleRowClick={(file) => !file.redacted && setViewingFile(file)}
+          noData='No files'
         />
       </Paper>
       {viewingFile && (
