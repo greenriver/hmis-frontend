@@ -347,6 +347,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'preventionAssessment',
         type: { kind: 'ENUM', name: 'NoYes', ofType: null },
       },
+      {
+        name: 'receivesReferrals',
+        type: { kind: 'ENUM', name: 'NoYes', ofType: null },
+      },
     ],
   },
   {
@@ -5140,6 +5144,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'DeleteCeParticipationInput',
+    args: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'DeleteClientFileInput',
     args: [
       {
@@ -5214,6 +5231,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   },
   {
     name: 'DeleteFunderInput',
+    args: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'DeleteHmisParticipationInput',
     args: [
       {
         name: 'id',

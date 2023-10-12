@@ -94,3 +94,32 @@ fragment FunderFields on Funder {
     ...UserFields
   }
 }
+
+fragment CeParticipationFields on CeParticipation {
+  id
+  accessPoint
+  ceParticipationStatusStartDate
+  ceParticipationStatusEndDate
+  crisisAssessment
+  directServices
+  housingAssessment
+  preventionAssessment
+  receivesReferrals
+  dateCreated
+  dateUpdated
+  user {
+    ...UserFields
+  }
+}
+
+fragment HmisParticipationFields on HmisParticipation {
+  id
+  hmisParticipationType
+  hmisParticipationStatusStartDate
+  hmisParticipationStatusEndDate
+  dateCreated
+  dateUpdated
+  user {
+    ...UserFields
+  }
+}

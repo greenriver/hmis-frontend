@@ -50,10 +50,12 @@ import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import CeParticipations from '@/modules/projects/components/CeParticipations';
 import Cocs from '@/modules/projects/components/Cocs';
 import EditProject from '@/modules/projects/components/EditProject';
 import Funder from '@/modules/projects/components/Funder';
 import Funders from '@/modules/projects/components/Funders';
+import HmisParticipations from '@/modules/projects/components/HmisParticipations';
 import Inventories from '@/modules/projects/components/Inventories';
 import Inventory from '@/modules/projects/components/Inventory';
 import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferral';
@@ -203,6 +205,14 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.INVENTORY,
             element: <Inventories />,
+          },
+          {
+            path: ProjectDashboardRoutes.HMIS_PARTICIPATION,
+            element: <HmisParticipations />,
+          },
+          {
+            path: ProjectDashboardRoutes.CE_PARTICIPATION,
+            element: <CeParticipations />,
           },
           {
             path: ProjectDashboardRoutes.UNITS,
