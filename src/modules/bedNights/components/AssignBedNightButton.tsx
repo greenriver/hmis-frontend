@@ -4,13 +4,13 @@ import { ButtonProps } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useBedNightsOnDate } from '../hooks/useBedNightsOnDate';
 import { formatDateForGql } from '@/modules/hmis/hmisUtil';
+import apolloClient from '@/providers/apolloClient';
 import { BulkActionType, useUpdateBedNightsMutation } from '@/types/gqlTypes';
 interface Props {
   enrollmentId: string;
   bedNightDate: Date;
   editable: boolean;
   projectId: string;
-  onCompleted: VoidFunction;
 }
 
 const AssignBedNightButton: React.FC<Props> = ({
@@ -18,16 +18,20 @@ const AssignBedNightButton: React.FC<Props> = ({
   bedNightDate,
   editable,
   projectId,
-  onCompleted,
 }) => {
-  const { enrollmentIdsWithBedNights, refetchLoading } = useBedNightsOnDate(
-    projectId,
-    bedNightDate
-  );
+  const { enrollmentIdsWithBedNights, refetchLoading, refetch } =
+    useBedNightsOnDate(projectId, bedNightDate);
 
   const [updateBedNights, { loading: mutationLoading }] =
     useUpdateBedNightsMutation({
-      onCompleted,
+      onCompleted: () => {
+        // refetch bed nights for currently selected Bed Night Date, so button state updates.
+        refetch();
+        // refetch bed night (table) query, so that "Last Bed Night" column updates.
+        apolloClient.refetchQueries({
+          include: ['GetProjectEnrollmentsForBedNights'],
+        });
+      },
     });
 
   const isAssignedOnDate = useMemo(
