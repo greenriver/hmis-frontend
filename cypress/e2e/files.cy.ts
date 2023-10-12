@@ -1,13 +1,7 @@
-// This only works when running against the real backend.
-// Must set the following env vars with real username/pw from local environment:
-
-// export CYPRESS_EMAIL=
-// export CYPRESS_PASSWORD=
-
 Cypress.session.clearAllSavedSessions();
 
 beforeEach(() => {
-  cy.login(Cypress.env('EMAIL'), Cypress.env('PASSWORD'));
+  cy.login();
   cy.visit('/');
 });
 
@@ -19,16 +13,20 @@ it(
   },
   () => {
     // Set up new client
-    cy.createClient('Cy First', 'Cy Last');
+    const uuid = () => Cypress._.random(0, 1e6);
+    const id = uuid();
+    const firstName = `First ${id}`;
+    const lastName = `Last ${id}`;
+    cy.createClient(firstName, lastName);
 
     // Got to files tab and create new file
     cy.get('#side-nav-files').click();
     cy.testId('addClientFileButton').click();
-    cy.choose('tags', '1', 'firstTag');
+    cy.choose('file-tags', '1', 'firstTag');
     cy.exitModal();
-    cy.inputId('effectiveDate').clear().type('01012020');
-    cy.inputId('expirationDate').clear().type('01012020');
-    cy.checkOption('confidential', 'true');
+    // cy.inputId('effectiveDate').clear().type('01012020');
+    // cy.inputId('expirationDate').clear().type('01012020');
+    cy.checkOption('file-confidential', 'false');
     cy.get('#fileBlobId').selectFile('cypress/fixtures/example.json', {
       action: 'drag-drop',
     });
@@ -55,7 +53,7 @@ it(
     // Edit file
     cy.get('@fileRow').contains('Edit').click();
     cy.get('#fileBlobId').should('not.exist');
-    cy.choose('tags', '2', 'secondTag');
+    cy.choose('file-tags', '2', 'secondTag');
     cy.exitModal();
     cy.get('button[type="submit"]').click();
 
@@ -71,5 +69,11 @@ it(
     cy.get('@deleteDialog').contains('Confirm').click();
     cy.get('table tbody').should('not.exist');
     cy.get('body').contains('None found').should('exist');
+
+    // Delete the client
+    cy.testId('sideNav-overview').click();
+    cy.testId('editClientButton').click();
+    cy.testId('deleteClientButton').click();
+    cy.confirmDialog();
   }
 );

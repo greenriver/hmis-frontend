@@ -43,9 +43,10 @@ Cypress.Commands.add('login', () => {
 
 Cypress.Commands.add('createClient', (firstName, lastName) => {
   cy.visit('/client/new');
-  cy.testId('first-name').find('input').type(firstName);
-  cy.testId('last-name').find('input').type(lastName);
+  cy.testId('first-name').find('input').safeType(firstName);
+  cy.testId('last-name').find('input').safeType(lastName);
   cy.get('button[type="submit"]').click();
+  cy.testId('clientProfile').should('be.visible');
 });
 
 Cypress.Commands.add('getById', (id) => {
