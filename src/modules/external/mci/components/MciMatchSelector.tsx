@@ -86,7 +86,7 @@ const MciDemographicInfo = ({ match }: { match: MciMatchFieldsFragment }) => {
   return (
     <Stack gap={1}>
       <Typography variant='inherit'>
-        {clientNameAllParts(match as ClientNameFragment)}
+        {clientNameAllParts(match as any as ClientNameFragment)}
       </Typography>
       <LabeledText label='Age' value={`${match.age}`} />
       <LabeledText label='DOB' value={parseAndFormatDate(match.dob)} />

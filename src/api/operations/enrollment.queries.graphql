@@ -1,6 +1,9 @@
 query GetEnrollment($id: ID!) {
   enrollment(id: $id) {
     ...EnrollmentFields
+    # EnrollmentValues are needed to populate a new assessment
+    # with existing values (like DisablingCondition, LivingSituation)
+    ...EnrollmentValues
   }
 }
 
@@ -26,6 +29,7 @@ query GetEnrollmentWithHousehold($id: ID!) {
 query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   enrollment(id: $id) {
     id
+    lockVersion
     events(limit: $limit, offset: $offset) {
       offset
       limit

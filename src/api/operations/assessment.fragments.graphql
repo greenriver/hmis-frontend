@@ -1,5 +1,6 @@
 fragment AssessmentFields on Assessment {
   id
+  lockVersion
   inProgress
   assessmentDate
   dataCollectionStage

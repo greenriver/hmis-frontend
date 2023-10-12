@@ -134,6 +134,15 @@ jobs:
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
 
+      - name: Test container
+        if: github.event_name != 'pull_request'
+        id: test
+        env:
+          image: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
+        shell: bash
+        run: |
+          ./bin/test-container $image
+
       - name: Set Docker remote
         if: ${{ github.event_name != 'pull_request' }}
         id: metadata

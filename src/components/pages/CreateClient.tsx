@@ -34,7 +34,7 @@ const CreateClient: React.FC = () => {
   ];
 
   return (
-    <Container maxWidth='lg' sx={{ pt: 3, pb: 20 }}>
+    <Container maxWidth='xl' sx={{ pt: 3, pb: 20 }}>
       <EditRecord<ClientFieldsFragment>
         formRole={FormRole.Client}
         onCompleted={onCompleted}

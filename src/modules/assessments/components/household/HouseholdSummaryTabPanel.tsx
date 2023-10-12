@@ -40,6 +40,7 @@ import {
   AssessmentRole,
   SubmitHouseholdAssessmentsMutation,
   useSubmitHouseholdAssessmentsMutation,
+  VersionedRecordInput,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -109,17 +110,34 @@ const HouseholdSummaryTabPanel = memo(
 
     const handleSubmit = useCallback(
       (confirmed: boolean) => {
+        const submissions = tabs
+          .map(
+            ({
+              assessmentId,
+              assessmentLockVersion,
+            }): VersionedRecordInput | undefined => {
+              if (assessmentId && assessmentsToSubmit.includes(assessmentId)) {
+                return {
+                  id: assessmentId,
+                  lockVersion: assessmentLockVersion,
+                };
+              }
+              return undefined;
+            }
+          )
+          .filter((i): i is VersionedRecordInput => !!i);
+
         submitMutation({
           variables: {
             input: {
-              assessmentIds: assessmentsToSubmit as string[],
+              submissions,
               confirmed,
             },
           },
           onCompleted,
         });
       },
-      [submitMutation, onCompleted, assessmentsToSubmit]
+      [submitMutation, onCompleted, assessmentsToSubmit, tabs]
     );
 
     const { renderValidationDialog } = useValidationDialog({ errorState });
@@ -158,11 +176,7 @@ const HouseholdSummaryTabPanel = memo(
             {role == AssessmentRole.Intake && (
               <HouseholdSummaryIntakeHelpCard tabs={tabs} />
             )}
-            {errorState.apolloError && (
-              <Box sx={{ my: 3 }}>
-                <ApolloErrorAlert error={errorState.apolloError} />
-              </Box>
-            )}
+            <ApolloErrorAlert error={errorState.apolloError} />
             {errorState.errors.length > 0 && (
               <Grid item>
                 <Alert

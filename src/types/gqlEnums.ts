@@ -268,6 +268,7 @@ export const HmisEnums = {
     VETERAN_HOH: 'VETERAN_HOH',
   },
   DataCollectionFeatureRole: {
+    CASE_NOTE: 'CASE_NOTE',
     CE_ASSESSMENT: 'CE_ASSESSMENT',
     CE_EVENT: 'CE_EVENT',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
@@ -497,6 +498,7 @@ export const HmisEnums = {
   },
   FormRole: {
     ANNUAL: 'ANNUAL',
+    CASE_NOTE: 'CASE_NOTE',
     CE: 'CE',
     CE_ASSESSMENT: 'CE_ASSESSMENT',
     CE_EVENT: 'CE_EVENT',
@@ -1394,13 +1396,12 @@ export const HmisEnums = {
     INDIVIDUAL_PARENT_GUARDIAN_RELATIVE_FRIEND_FOSTER_PARENT_OTHER_INDIVIDUAL:
       'Individual: Parent/Guardian/Relative/Friend/Foster Parent/Other Individual',
     OUTREACH_PROJECT: 'Outreach Project',
-    OUTREACH_PROJECT_OTHER: 'Outreach project: other',
     TEMPORARY_SHELTER: 'Temporary Shelter',
     RESIDENTIAL_PROJECT: 'Residential Project',
     HOTLINE: 'Hotline',
     CHILD_WELFARE_CPS: 'Child Welfare/CPS',
     JUVENILE_JUSTICE: 'Juvenile Justice',
-    LAW_ENFORCEMENT_POLICE: 'Law Enforcement/ Police',
+    LAW_ENFORCEMENT_POLICE: 'Law Enforcement/Police',
     MENTAL_HOSPITAL: 'Mental Hospital',
     SCHOOL: 'School',
     OTHER_ORGANIZATION: 'Other organization',

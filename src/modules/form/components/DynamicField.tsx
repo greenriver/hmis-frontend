@@ -404,7 +404,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         value,
         onChange: onChangeValue,
         label: item.text ? (
-          <Typography sx={{ pb: 2 }}>{item.text}</Typography>
+          <Typography variant='h4' sx={{ pb: 2, fontSize: 18 }}>
+            {item.text}
+          </Typography>
         ) : undefined,
       };
       if (item.component == Component.Name) {

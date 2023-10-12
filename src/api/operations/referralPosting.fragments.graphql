@@ -63,6 +63,7 @@ fragment ReferralPostingDetailFields on ReferralPosting {
     id
     client {
       id
+      hudChronic
     }
   }
   householdMembers {

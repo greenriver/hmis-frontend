@@ -28,12 +28,7 @@ const columns: ColumnDef<Row>[] = [
   },
   {
     header: 'Name',
-    render: ({ client }: Row) => (
-      <ClientName
-        client={client}
-        linkToProfile={client.access.canViewEnrollmentDetails}
-      />
-    ),
+    render: ({ client }: Row) => <ClientName client={client} linkToProfile />,
   },
   {
     header: 'MCI ID',

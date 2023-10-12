@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { RefObject, useCallback, useMemo, useState } from 'react';
 
 import { DynamicFormOnSubmit } from '../components/DynamicForm';
 import { LocalConstants, SubmitFormAllowedTypes } from '../types';
@@ -22,6 +22,19 @@ import {
   useSubmitFormMutation,
 } from '@/types/gqlTypes';
 
+// TODO: we may want to use optimistic locking on additional record types in the future
+const recordLockVersion = (
+  record: SubmitFormAllowedTypes | null | undefined
+) => {
+  if (!record) return undefined;
+  switch (record.__typename) {
+    case 'Client':
+    case 'Enrollment':
+      return record.lockVersion;
+  }
+  return undefined;
+};
+
 type SubmitFormInputVariables = Omit<
   FormInput,
   'confirmed' | 'formDefinitionId' | 'values' | 'hudValues' | 'recordId'
@@ -33,6 +46,7 @@ export interface DynamicFormHandlerArgs<T> {
   onCompleted?: (data: T) => void;
   localConstants?: LocalConstants;
   inputVariables?: SubmitFormInputVariables;
+  errorRef?: RefObject<HTMLDivElement>;
 }
 
 export function useDynamicFormHandlersForRecord<
@@ -43,6 +57,7 @@ export function useDynamicFormHandlersForRecord<
   onCompleted,
   inputVariables,
   localConstants,
+  errorRef,
 }: DynamicFormHandlerArgs<T>) {
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
@@ -53,7 +68,11 @@ export function useDynamicFormHandlersForRecord<
   const [submitForm, { loading: submitLoading }] = useSubmitFormMutation({
     onCompleted: (data) => {
       const errors = data.submitForm?.errors || [];
-      window.scrollTo(0, 0);
+      if (errorRef) {
+        errorRef.current?.scrollIntoView();
+      } else {
+        window.scrollTo(0, 0);
+      }
       if (errors.length > 0) {
         setErrors(partitionValidations(errors));
       } else {
@@ -63,7 +82,11 @@ export function useDynamicFormHandlersForRecord<
     },
     onError: (apolloError) => {
       setErrors({ ...emptyErrorState, apolloError });
-      window.scrollTo(0, 0);
+      if (errorRef) {
+        errorRef.current?.scrollIntoView();
+      } else {
+        window.scrollTo(0, 0);
+      }
     },
   });
 
@@ -99,7 +122,11 @@ export function useDynamicFormHandlersForRecord<
       };
 
       setErrors(emptyErrorState);
-      void submitForm({ variables: { input: { input } } });
+      void submitForm({
+        variables: {
+          input: { input, recordLockVersion: recordLockVersion(record) },
+        },
+      });
     },
     [formDefinition, inputVariables, submitForm, record]
   );

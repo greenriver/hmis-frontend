@@ -28,13 +28,7 @@ query GetClientAssessments(
       nodes {
         ...AssessmentFields
         enrollment {
-          id
-          entryDate
-          exitDate
-          inProgress
-          project {
-            ...ProjectNameAndType
-          }
+          ...ClientEnrollmentFields
         }
       }
     }
@@ -148,8 +142,10 @@ query GetAssessmentsForPopulation(
   }
 }
 
-mutation DeleteAssessment($id: ID!) {
-  deleteAssessment(input: { id: $id }) {
+mutation DeleteAssessment($id: ID!, $assessmentLockVersion: Int) {
+  deleteAssessment(
+    input: { id: $id, assessmentLockVersion: $assessmentLockVersion }
+  ) {
     clientMutationId
     assessmentId
     errors {

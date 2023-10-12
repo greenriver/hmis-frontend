@@ -58,12 +58,7 @@ query GetProjectEnrollments(
       limit
       nodesCount
       nodes {
-        ...EnrollmentFields
-        client {
-          id
-          ...ClientName
-          ...ClientIdentificationFields
-        }
+        ...ProjectEnrollmentFields
       }
     }
   }
@@ -212,6 +207,12 @@ query GetProjectOutgoingReferralPostings(
       nodesCount
       nodes {
         ...ReferralPostingFields
+        hohEnrollment {
+          id
+          client {
+            id
+          }
+        }
       }
     }
   }

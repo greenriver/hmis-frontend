@@ -62,7 +62,15 @@ const AssessmentFormSideBar: React.FC<Props> = ({
   );
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper
+      sx={{
+        p: 2,
+        position: 'sticky',
+        top: top + 16,
+        maxHeight: `calc(100vh - ${top}px)`,
+        overflowY: 'auto',
+      }}
+    >
       {title && (
         <Box>
           {title}

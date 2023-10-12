@@ -10,7 +10,10 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import useViewDialog from '@/modules/form/hooks/useViewDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  customDataElementValueAsString,
+  parseAndFormatDate,
+} from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -27,10 +30,12 @@ import {
 const baseColumns: ColumnDef<CurrentLivingSituationFieldsFragment>[] = [
   {
     header: 'Information Date',
+    width: '180px',
     render: (e) => parseAndFormatDate(e.informationDate),
   },
   {
     header: 'Living Situation',
+    width: '400px',
     render: (e) => (
       <HmisEnum
         value={e.currentLivingSituation}
@@ -40,7 +45,6 @@ const baseColumns: ColumnDef<CurrentLivingSituationFieldsFragment>[] = [
   },
   {
     header: 'Location Details',
-    width: '40%',
     render: (e) => e.locationDetails,
   },
 ];
@@ -77,6 +81,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'currentLivingSituations',
         });
+        setViewingRecord(undefined);
         closeViewDialog();
       },
       inputVariables: { enrollmentId },
@@ -93,6 +98,28 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     closeViewDialog();
     setViewingRecord(undefined);
   }, [closeDialog, closeViewDialog, enrollmentId]);
+
+  const getColumnDefs = useCallback(
+    (rows: CurrentLivingSituationFieldsFragment[]) => {
+      // if the CLS has custom data elements, add them as columns in the table
+      if (rows.length > 0 && rows[0].customDataElements.length > 0) {
+        const cdes = rows[0].customDataElements.map((cde) => ({
+          header: cde.label,
+          key: cde.key,
+          render: (row: CurrentLivingSituationFieldsFragment) => {
+            const thisCde = row.customDataElements.find(
+              (elem) => elem.key == cde.key
+            );
+            if (!thisCde) return null;
+            return customDataElementValueAsString(thisCde);
+          },
+        }));
+        return [...baseColumns, ...cdes];
+      }
+      return baseColumns;
+    },
+    []
+  );
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
   const canEditCls = enrollment.access.canEditEnrollments;
@@ -121,7 +148,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
         >
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCurrentLivingSituationsDocument}
-          columns={baseColumns}
+          getColumnDefs={getColumnDefs}
           pagePath='enrollment.currentLivingSituations'
           noData='No current living situations'
           recordType='CurrentLivingSituation'

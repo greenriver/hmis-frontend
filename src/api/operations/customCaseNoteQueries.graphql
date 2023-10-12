@@ -1,0 +1,28 @@
+query GetEnrollmentCustomCaseNotes(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  enrollment(id: $id) {
+    id
+    customCaseNotes(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CustomCaseNoteFields
+      }
+    }
+  }
+}
+
+mutation DeleteCustomCaseNote($id: ID!) {
+  deleteCustomCaseNote(id: $id) {
+    customCaseNote {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

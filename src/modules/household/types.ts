@@ -5,6 +5,7 @@ import {
   ClientIdentificationFieldsFragment,
   EnrollmentFieldsFragment,
   HouseholdClientFieldsFragment,
+  ProjectEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
 
 export type RecentHouseholdMember = HouseholdClientFieldsFragment & {
@@ -16,6 +17,7 @@ export function isHouseholdClient(
     | ClientFieldsFragment
     | HouseholdClientFieldsFragment
     | EnrollmentFieldsFragment
+    | ProjectEnrollmentFieldsFragment
 ): value is HouseholdClientFieldsFragment {
   return (
     !isNil(value) &&
@@ -30,7 +32,8 @@ export function isEnrollment(
     | ClientFieldsFragment
     | HouseholdClientFieldsFragment
     | EnrollmentFieldsFragment
-): value is EnrollmentFieldsFragment {
+    | ProjectEnrollmentFieldsFragment
+): value is EnrollmentFieldsFragment | ProjectEnrollmentFieldsFragment {
   return (
     !isNil(value) &&
     typeof value === 'object' &&

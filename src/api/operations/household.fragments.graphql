@@ -7,15 +7,6 @@ fragment HouseholdFields on Household {
   }
 }
 
-fragment ProjectEnrollmentsHouseholdFields on Household {
-  id
-  householdSize
-  shortId
-  householdClients {
-    ...ProjectEnrollmentsHouseholdClientFields
-  }
-}
-
 fragment HouseholdClientFields on HouseholdClient {
   id
   relationshipToHoH
@@ -33,6 +24,7 @@ fragment HouseholdClientFields on HouseholdClient {
   }
   enrollment {
     id
+    lockVersion
     entryDate
     exitDate
     inProgress
@@ -40,6 +32,15 @@ fragment HouseholdClientFields on HouseholdClient {
       id
       name
     }
+  }
+}
+
+fragment ProjectEnrollmentsHouseholdFields on Household {
+  id
+  householdSize
+  shortId
+  householdClients {
+    ...ProjectEnrollmentsHouseholdClientFields
   }
 }
 
@@ -53,6 +54,7 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
   }
   enrollment {
     id
+    lockVersion
     entryDate
     exitDate
     inProgress

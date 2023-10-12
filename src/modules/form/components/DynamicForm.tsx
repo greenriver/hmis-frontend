@@ -2,6 +2,7 @@ import { Box, Grid, Stack } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, {
   Ref,
+  RefObject,
   forwardRef,
   useCallback,
   useEffect,
@@ -45,6 +46,7 @@ export interface DynamicFormProps
     FormActionProps,
     'disabled' | 'loading' | 'onSubmit' | 'onSaveDraft'
   > {
+  clientId?: string;
   definition: FormDefinitionJson;
   onSubmit: DynamicFormOnSubmit;
   onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
@@ -68,6 +70,7 @@ export interface DynamicFormProps
   >;
   hideSubmit?: boolean;
   localConstants?: LocalConstants;
+  errorRef?: RefObject<HTMLDivElement>;
 }
 export interface DynamicFormRef {
   SaveIfDirty: (callback: VoidFunction) => void;
@@ -78,6 +81,7 @@ export interface DynamicFormRef {
 const DynamicForm = forwardRef(
   (
     {
+      clientId,
       definition,
       onSubmit,
       onSaveDraft,
@@ -95,6 +99,7 @@ const DynamicForm = forwardRef(
       ValidationDialogProps = {},
       hideSubmit = false,
       localConstants,
+      errorRef,
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
@@ -219,11 +224,12 @@ const DynamicForm = forwardRef(
     );
 
     return (
-      <Box
-        component='form'
-        onSubmit={(e: React.FormEvent<HTMLDivElement>) => e.preventDefault()}
+      <form
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
+        autoComplete='do-not-autofill'
       >
         <Grid container direction='column' spacing={2}>
+          <div ref={errorRef} />
           {hasErrors(errorState) && (
             <Grid item>
               <Stack gap={2}>
@@ -236,6 +242,7 @@ const DynamicForm = forwardRef(
             {renderFields({
               itemChanged: handleChangeCallback,
               severalItemsChanged: handleChangeCallback,
+              clientId,
               errors: errorState.errors,
               warnings: errorState.warnings,
               horizontal,
@@ -267,7 +274,7 @@ const DynamicForm = forwardRef(
             {saveButtons}
           </SaveSlide>
         )}
-      </Box>
+      </form>
     );
   }
 );

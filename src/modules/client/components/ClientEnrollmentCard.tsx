@@ -4,11 +4,14 @@ import { useMemo } from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import TitleCard from '@/components/elements/TitleCard';
 import { enrollmentName, isRecentEnrollment } from '@/modules/hmis/hmisUtil';
-import { ENROLLMENT_COLUMNS } from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
+import {
+  ENROLLMENT_PERIOD_COL,
+  ENROLLMENT_STATUS_COL,
+} from '@/modules/projects/components/tables/ProjectClientEnrollmentsTable';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
+  ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,
-  EnrollmentFieldsFragment,
   useGetClientEnrollmentsQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -64,7 +67,7 @@ const RecentEnrollments = ({
     );
 
   return (
-    <GenericTable<EnrollmentFieldsFragment>
+    <GenericTable<ClientEnrollmentFieldsFragment>
       noHead
       rows={recentEnrollments}
       columns={[
@@ -74,7 +77,7 @@ const RecentEnrollments = ({
           linkTreatment: true,
           render: (e) => enrollmentName(e),
         },
-        ENROLLMENT_COLUMNS.enrollmentStatus,
+        ENROLLMENT_STATUS_COL,
         {
           key: 'members',
           header: 'Members',
@@ -84,7 +87,7 @@ const RecentEnrollments = ({
             </Typography>
           ),
         },
-        ENROLLMENT_COLUMNS.enrollmentPeriod,
+        ENROLLMENT_PERIOD_COL,
       ]}
       rowLinkTo={(row) =>
         generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {

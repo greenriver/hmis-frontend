@@ -130,9 +130,9 @@ export type Assessment = {
   client: Client;
   customDataElements: Array<CustomDataElement>;
   dataCollectionStage?: Maybe<DataCollectionStage>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   definition: FormDefinition;
   disabilityGroup?: Maybe<DisabilityGroup>;
   employmentEducation?: Maybe<EmploymentEducation>;
@@ -143,6 +143,7 @@ export type Assessment = {
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
   incomeBenefit?: Maybe<IncomeBenefit>;
+  lockVersion: Scalars['Int']['output'];
   role: AssessmentRole;
   user?: Maybe<User>;
   wipValues?: Maybe<Scalars['JsonObject']['output']>;
@@ -169,7 +170,7 @@ export type AssessmentInput = {
   /** Whether warnings have been confirmed */
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   /** Required if saving a new assessment */
-  enrollmentId?: InputMaybe<Scalars['ID']['input']>;
+  enrollmentId: Scalars['ID']['input'];
   /** Form Definition that was used to perform this assessment */
   formDefinitionId: Scalars['ID']['input'];
   /** Transformed HUD values as JSON */
@@ -298,9 +299,9 @@ export type CeAssessment = {
   assessmentLocation: Scalars['String']['output'];
   assessmentType?: Maybe<AssessmentType>;
   client: Client;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
   prioritizationStatus?: Maybe<PrioritizationStatus>;
@@ -324,9 +325,9 @@ export type CeParticipation = {
   ceParticipationStatusEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   ceParticipationStatusStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   crisisAssessment?: Maybe<NoYes>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   directServices?: Maybe<NoYes>;
   housingAssessment?: Maybe<NoYes>;
   id: Scalars['ID']['output'];
@@ -379,10 +380,11 @@ export type Client = {
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
+  customCaseNotes: CustomCaseNotesPaginated;
   customDataElements: Array<CustomDataElement>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   desertStorm?: Maybe<NoYesReasonsForMissingData>;
   differentIdentityText?: Maybe<Scalars['String']['output']>;
   disabilities: DisabilitiesPaginated;
@@ -397,6 +399,7 @@ export type Client = {
   firstName?: Maybe<Scalars['String']['output']>;
   gender: Array<Gender>;
   healthAndDvs: HealthAndDvsPaginated;
+  hudChronic?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   image?: Maybe<ClientImage>;
   incomeBenefits: IncomeBenefitsPaginated;
@@ -404,6 +407,7 @@ export type Client = {
   iraqOnd?: Maybe<NoYesReasonsForMissingData>;
   koreanWar?: Maybe<NoYesReasonsForMissingData>;
   lastName?: Maybe<Scalars['String']['output']>;
+  lockVersion: Scalars['Int']['output'];
   middleName?: Maybe<Scalars['String']['output']>;
   militaryBranch?: Maybe<MilitaryBranch>;
   nameDataQuality: NameDataQuality;
@@ -443,6 +447,12 @@ export type ClientAuditHistoryArgs = {
 
 /** HUD Client */
 export type ClientCurrentLivingSituationsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** HUD Client */
+export type ClientCustomCaseNotesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -524,9 +534,9 @@ export type ClientAddress = {
   city?: Maybe<Scalars['String']['output']>;
   client: Client;
   country?: Maybe<Scalars['String']['output']>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   district?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   line1?: Maybe<Scalars['String']['output']>;
@@ -588,9 +598,9 @@ export type ClientAuditEventsPaginated = {
 export type ClientContactPoint = {
   __typename?: 'ClientContactPoint';
   client: Client;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   system?: Maybe<ClientContactPointSystem>;
@@ -639,9 +649,9 @@ export type ClientImage = {
 export type ClientName = {
   __typename?: 'ClientName';
   client: Client;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   first?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   last?: Maybe<Scalars['String']['output']>;
@@ -895,12 +905,13 @@ export type CurrentLivingSituation = {
   client: Client;
   clsSubsidyType?: Maybe<RentalSubsidyType>;
   currentLivingSituation: CurrentLivingSituationOptions;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  customDataElements: Array<CustomDataElement>;
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
-  informationDate: Scalars['ISO8601Date']['output'];
+  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   leaseOwn60Day?: Maybe<NoYesReasonsForMissingData>;
   leaveSituation14Days?: Maybe<NoYesReasonsForMissingData>;
   locationDetails?: Maybe<Scalars['String']['output']>;
@@ -997,6 +1008,30 @@ export enum CurrentSchoolAttended {
   NotCurrentlyEnrolledInAnySchoolOrEducationalCourse = 'NOT_CURRENTLY_ENROLLED_IN_ANY_SCHOOL_OR_EDUCATIONAL_COURSE',
 }
 
+/** Case Note */
+export type CustomCaseNote = {
+  __typename?: 'CustomCaseNote';
+  client: Client;
+  content: Scalars['String']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  enrollment: Enrollment;
+  id: Scalars['ID']['output'];
+  user?: Maybe<User>;
+};
+
+export type CustomCaseNotesPaginated = {
+  __typename?: 'CustomCaseNotesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<CustomCaseNote>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
 export type CustomDataElement = {
   __typename?: 'CustomDataElement';
   fieldType: CustomDataElementType;
@@ -1021,8 +1056,9 @@ export enum CustomDataElementType {
 
 export type CustomDataElementValue = {
   __typename?: 'CustomDataElementValue';
-  dateCreated: Scalars['ISO8601DateTime']['output'];
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
   user?: Maybe<User>;
   valueBoolean?: Maybe<Scalars['Boolean']['output']>;
@@ -1069,6 +1105,7 @@ export type DataCollectionFeature = {
 };
 
 export enum DataCollectionFeatureRole {
+  CaseNote = 'CASE_NOTE',
   CeAssessment = 'CE_ASSESSMENT',
   CeEvent = 'CE_EVENT',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
@@ -1094,6 +1131,7 @@ export enum DataCollectionStage {
 
 /** Autogenerated input type of DeleteAssessment */
 export type DeleteAssessmentInput = {
+  assessmentLockVersion?: InputMaybe<Scalars['Int']['input']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
@@ -1174,6 +1212,7 @@ export type DeleteClientImagePayload = {
 
 /** Autogenerated input type of DeleteClient */
 export type DeleteClientInput = {
+  clientLockVersion?: InputMaybe<Scalars['Int']['input']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** Whether warnings have been confirmed */
@@ -1203,6 +1242,13 @@ export type DeleteCurrentLivingSituationPayload = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   currentLivingSituation?: Maybe<CurrentLivingSituation>;
+  errors: Array<ValidationError>;
+};
+
+/** Autogenerated return type of DeleteCustomCaseNote. */
+export type DeleteCustomCaseNotePayload = {
+  __typename?: 'DeleteCustomCaseNotePayload';
+  customCaseNote?: Maybe<CustomCaseNote>;
   errors: Array<ValidationError>;
 };
 
@@ -1459,15 +1505,15 @@ export type Disability = {
   antiRetroviral?: Maybe<NoYesReasonsForMissingData>;
   client: Client;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   disabilityResponse: DisabilityResponse;
   disabilityType: DisabilityType;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
   indefiniteAndImpairs?: Maybe<Scalars['Int']['output']>;
-  informationDate: Scalars['ISO8601Date']['output'];
+  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   tCellCount?: Maybe<Scalars['Int']['output']>;
   tCellCountAvailable?: Maybe<NoYesReasonsForMissingData>;
   tCellSource?: Maybe<TCellSourceViralLoadSource>;
@@ -1580,14 +1626,14 @@ export type EmploymentEducation = {
   __typename?: 'EmploymentEducation';
   client: Client;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   employed?: Maybe<NoYesReasonsForMissingData>;
   employmentType?: Maybe<EmploymentType>;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
-  informationDate: Scalars['ISO8601Date']['output'];
+  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   lastGradeCompleted?: Maybe<LastGradeCompleted>;
   notEmployedReason?: Maybe<NotEmployedReason>;
   schoolStatus?: Maybe<SchoolStatus>;
@@ -1682,14 +1728,15 @@ export type Enrollment = {
   currentLivingSituations: CurrentLivingSituationsPaginated;
   currentPregnant?: Maybe<NoYesMissing>;
   currentUnit?: Maybe<Unit>;
+  customCaseNotes: CustomCaseNotesPaginated;
   customDataElements: Array<CustomDataElement>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateOfBcpStatus?: Maybe<Scalars['ISO8601Date']['output']>;
   dateOfEngagement?: Maybe<Scalars['ISO8601Date']['output']>;
   dateOfPathStatus?: Maybe<Scalars['ISO8601Date']['output']>;
   dateToStreetEssh?: Maybe<Scalars['ISO8601Date']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dependentUnder6?: Maybe<DependentUnder6>;
   disabilities: DisabilitiesPaginated;
   disabledHoh?: Maybe<NoYesMissing>;
@@ -1713,7 +1760,7 @@ export type Enrollment = {
   householdId: Scalars['ID']['output'];
   householdShortId: Scalars['ID']['output'];
   householdSize: Scalars['Int']['output'];
-  hpScreeningScore?: Maybe<NoYesMissing>;
+  hpScreeningScore?: Maybe<Scalars['Int']['output']>;
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
   incarceratedAdult?: Maybe<IncarceratedAdult>;
@@ -1727,10 +1774,12 @@ export type Enrollment = {
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   literalHomelessHistory?: Maybe<LiteralHomelessHistory>;
   livingSituation?: Maybe<PriorLivingSituation>;
+  lockVersion: Scalars['Int']['output'];
   losUnderThreshold?: Maybe<NoYesMissing>;
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  numUnitsAssignedToHousehold: Scalars['Int']['output'];
   openEnrollmentSummary: Array<EnrollmentSummary>;
   percentAmi?: Maybe<PercentAmi>;
   physicalDisabilityFam?: Maybe<NoYesMissing>;
@@ -1754,7 +1803,7 @@ export type Enrollment = {
   status: EnrollmentStatus;
   subsidyAtRisk?: Maybe<NoYesMissing>;
   targetScreenReqd?: Maybe<NoYesMissing>;
-  thresholdScore?: Maybe<NoYesMissing>;
+  thresholdScore?: Maybe<Scalars['Int']['output']>;
   timeToHousingLoss?: Maybe<TimeToHousingLoss>;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
   translationNeeded?: Maybe<NoYesReasonsForMissingData>;
@@ -1782,6 +1831,12 @@ export type EnrollmentCeAssessmentsArgs = {
 
 /** HUD Enrollment */
 export type EnrollmentCurrentLivingSituationsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** HUD Enrollment */
+export type EnrollmentCustomCaseNotesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1950,9 +2005,9 @@ export type EsgFundingService = {
 export type Event = {
   __typename?: 'Event';
   client: Client;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   event: EventType;
   eventDate: Scalars['ISO8601DateTime']['output'];
@@ -2051,9 +2106,9 @@ export type Exit = {
   counselingReceived?: Maybe<NoYesMissing>;
   countOfExchangeForSex?: Maybe<CountExchangeForSex>;
   customDataElements: Array<CustomDataElement>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   destination: Destination;
   destinationSafeClient?: Maybe<NoYesReasonsForMissingData>;
   destinationSafeWorker?: Maybe<WorkerResponse>;
@@ -2139,8 +2194,8 @@ export type File = {
   __typename?: 'File';
   confidential?: Maybe<Scalars['Boolean']['output']>;
   contentType?: Maybe<Scalars['String']['output']>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   effectiveDate?: Maybe<Scalars['ISO8601Date']['output']>;
   enrollment?: Maybe<Enrollment>;
   enrollmentId?: Maybe<Scalars['ID']['output']>;
@@ -2265,6 +2320,7 @@ export type FormItem = {
 
 export enum FormRole {
   Annual = 'ANNUAL',
+  CaseNote = 'CASE_NOTE',
   Ce = 'CE',
   CeAssessment = 'CE_ASSESSMENT',
   CeEvent = 'CE_EVENT',
@@ -2292,15 +2348,15 @@ export type Funder = {
   __typename?: 'Funder';
   active: Scalars['Boolean']['output'];
   customDataElements: Array<CustomDataElement>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   endDate?: Maybe<Scalars['ISO8601Date']['output']>;
   funder: FundingSource;
-  grantId: Scalars['String']['output'];
+  grantId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   otherFunder?: Maybe<Scalars['String']['output']>;
-  startDate: Scalars['ISO8601Date']['output'];
+  startDate?: Maybe<Scalars['ISO8601Date']['output']>;
   user?: Maybe<User>;
 };
 
@@ -2497,16 +2553,16 @@ export type HealthAndDv = {
   client: Client;
   currentlyFleeing?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dentalHealthStatus?: Maybe<HealthStatus>;
   domesticViolenceSurvivor?: Maybe<NoYesReasonsForMissingData>;
   dueDate?: Maybe<Scalars['ISO8601Date']['output']>;
   enrollment: Enrollment;
   generalHealthStatus?: Maybe<HealthStatus>;
   id: Scalars['ID']['output'];
-  informationDate: Scalars['ISO8601Date']['output'];
+  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   mentalHealthStatus?: Maybe<HealthStatus>;
   pregnancyStatus?: Maybe<NoYesReasonsForMissingData>;
   user?: Maybe<User>;
@@ -2548,9 +2604,9 @@ export enum HealthStatus {
 
 export type HmisParticipation = {
   __typename?: 'HmisParticipation';
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   hmisParticipationStatusEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   hmisParticipationStatusStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   hmisParticipationType?: Maybe<HmisParticipationType>;
@@ -2690,9 +2746,9 @@ export type IncomeBenefit = {
   connectionWithSoar?: Maybe<NoYesReasonsForMissingData>;
   customDataElements: Array<CustomDataElement>;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   earned?: Maybe<NoYesMissing>;
   earnedAmount?: Maybe<Scalars['Float']['output']>;
   employerProvided?: Maybe<NoYesMissing>;
@@ -2702,7 +2758,7 @@ export type IncomeBenefit = {
   id: Scalars['ID']['output'];
   incomeFromAnySource?: Maybe<NoYesReasonsForMissingData>;
   indianHealthServices?: Maybe<NoYesMissing>;
-  informationDate: Scalars['ISO8601Date']['output'];
+  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   insuranceFromAnySource?: Maybe<NoYesReasonsForMissingData>;
   medicaid?: Maybe<NoYesMissing>;
   medicare?: Maybe<NoYesMissing>;
@@ -2816,16 +2872,16 @@ export type Inventory = {
   chBedInventory?: Maybe<Scalars['Int']['output']>;
   chVetBedInventory?: Maybe<Scalars['Int']['output']>;
   chYouthBedInventory?: Maybe<Scalars['Int']['output']>;
-  cocCode: Scalars['String']['output'];
+  cocCode?: Maybe<Scalars['String']['output']>;
   customDataElements: Array<CustomDataElement>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   esBedType?: Maybe<BedType>;
-  householdType: HouseholdType;
+  householdType?: Maybe<HouseholdType>;
   id: Scalars['ID']['output'];
   inventoryEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
-  inventoryStartDate: Scalars['ISO8601Date']['output'];
+  inventoryStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   otherBedInventory?: Maybe<Scalars['Int']['output']>;
   unitInventory: Scalars['Int']['output'];
   user?: Maybe<User>;
@@ -3056,6 +3112,7 @@ export type Mutation = {
   deleteClientFile?: Maybe<DeleteClientFilePayload>;
   deleteClientImage?: Maybe<DeleteClientImagePayload>;
   deleteCurrentLivingSituation?: Maybe<DeleteCurrentLivingSituationPayload>;
+  deleteCustomCaseNote?: Maybe<DeleteCustomCaseNotePayload>;
   deleteEnrollment?: Maybe<DeleteEnrollmentPayload>;
   deleteFunder?: Maybe<DeleteFunderPayload>;
   deleteInventory?: Maybe<DeleteInventoryPayload>;
@@ -3136,6 +3193,10 @@ export type MutationDeleteClientImageArgs = {
 
 export type MutationDeleteCurrentLivingSituationArgs = {
   input: DeleteCurrentLivingSituationInput;
+};
+
+export type MutationDeleteCustomCaseNoteArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type MutationDeleteEnrollmentArgs = {
@@ -3314,9 +3375,9 @@ export type Organization = {
   access: OrganizationAccess;
   contactInformation?: Maybe<Scalars['String']['output']>;
   customDataElements: Array<CustomDataElement>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   hudId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
@@ -4189,9 +4250,9 @@ export type Project = {
   customDataElements: Array<CustomDataElement>;
   /** Occurrence Point data collection features that are enabled for this Project (e.g. Current Living Situations, Events) */
   dataCollectionFeatures: Array<DataCollectionFeature>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   enrollments: EnrollmentsPaginated;
   funders: FundersPaginated;
@@ -4206,7 +4267,7 @@ export type Project = {
   /** Forms for individual data elements that are collected at occurrence for this Project (e.g. Move-In Date) */
   occurrencePointForms: Array<OccurrencePointForm>;
   operatingEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
-  operatingStartDate: Scalars['ISO8601Date']['output'];
+  operatingStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   organization: Organization;
   outgoingReferralPostings: ReferralPostingsPaginated;
   projectCocs: ProjectCocsPaginated;
@@ -4317,10 +4378,10 @@ export type ProjectCoc = {
   address1?: Maybe<Scalars['String']['output']>;
   address2?: Maybe<Scalars['String']['output']>;
   city?: Maybe<Scalars['String']['output']>;
-  cocCode: Scalars['String']['output'];
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  cocCode?: Maybe<Scalars['String']['output']>;
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   geocode: Scalars['String']['output'];
   geographyType?: Maybe<GeographyType>;
   id: Scalars['ID']['output'];
@@ -4593,7 +4654,6 @@ export type QueryAccess = {
   canAdministerHmis: Scalars['Boolean']['output'];
   canAuditClients: Scalars['Boolean']['output'];
   canDeleteAssessments: Scalars['Boolean']['output'];
-  canDeleteAssignedProjectData: Scalars['Boolean']['output'];
   canDeleteClients: Scalars['Boolean']['output'];
   canDeleteEnrollments: Scalars['Boolean']['output'];
   canDeleteOrganization: Scalars['Boolean']['output'];
@@ -4615,8 +4675,10 @@ export type QueryAccess = {
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
+  canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
+  canViewProject: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -4762,6 +4824,8 @@ export type ReferralPosting = {
   chronic?: Maybe<Scalars['Boolean']['output']>;
   denialNote?: Maybe<Scalars['String']['output']>;
   denialReason?: Maybe<ReferralPostingDenialReasonType>;
+  hohClient?: Maybe<Client>;
+  /** Enrollment for the HoH at the receiving Project (if the referral was accepted) */
   hohEnrollment?: Maybe<Enrollment>;
   hohMciId?: Maybe<Scalars['ID']['output']>;
   hohName: Scalars['String']['output'];
@@ -4771,6 +4835,7 @@ export type ReferralPosting = {
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']['output']>;
   organization?: Maybe<Organization>;
   postingIdentifier?: Maybe<Scalars['ID']['output']>;
+  /** Project that household is being referred to */
   project?: Maybe<Project>;
   referralDate: Scalars['ISO8601DateTime']['output'];
   referralIdentifier?: Maybe<Scalars['ID']['output']>;
@@ -4778,6 +4843,7 @@ export type ReferralPosting = {
   referralRequest?: Maybe<ReferralRequest>;
   referralResult?: Maybe<ReferralResult>;
   referredBy: Scalars['String']['output'];
+  /** Name of project or external source that the referral originated from */
   referredFrom: Scalars['String']['output'];
   resourceCoordinatorNotes?: Maybe<Scalars['String']['output']>;
   score?: Maybe<Scalars['Int']['output']>;
@@ -4907,7 +4973,7 @@ export enum ReferralSource {
   Invalid = 'INVALID',
   /** (34) Juvenile Justice */
   JuvenileJustice = 'JUVENILE_JUSTICE',
-  /** (35) Law Enforcement/ Police */
+  /** (35) Law Enforcement/Police */
   LawEnforcementPolice = 'LAW_ENFORCEMENT_POLICE',
   /** (37) Mental Hospital */
   MentalHospital = 'MENTAL_HOSPITAL',
@@ -4915,8 +4981,6 @@ export enum ReferralSource {
   OtherOrganization = 'OTHER_ORGANIZATION',
   /** (7) Outreach Project */
   OutreachProject = 'OUTREACH_PROJECT',
-  /** (10) Outreach project: other */
-  OutreachProjectOther = 'OUTREACH_PROJECT_OTHER',
   /** (18) Residential Project */
   ResidentialProject = 'RESIDENTIAL_PROJECT',
   /** (38) School */
@@ -5057,6 +5121,7 @@ export enum SsnDataQuality {
 
 /** Autogenerated input type of SaveAssessment */
 export type SaveAssessmentInput = {
+  assessmentLockVersion?: InputMaybe<Scalars['Int']['input']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   input: AssessmentInput;
@@ -5102,10 +5167,10 @@ export type Service = {
   __typename?: 'Service';
   client: Client;
   customDataElements: Array<CustomDataElement>;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateProvided: Scalars['ISO8601Date']['output'];
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateProvided?: Maybe<Scalars['ISO8601Date']['output']>;
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   faAmount?: Maybe<Scalars['Float']['output']>;
   faEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
@@ -5215,8 +5280,9 @@ export enum ServiceSubTypeProvided {
 export type ServiceType = {
   __typename?: 'ServiceType';
   category: Scalars['String']['output'];
-  dateCreated: Scalars['ISO8601DateTime']['output'];
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   hudRecordType?: Maybe<RecordType>;
   hudTypeProvided?: Maybe<ServiceTypeProvided>;
   id: Scalars['ID']['output'];
@@ -5479,6 +5545,7 @@ export enum SexualOrientation {
 
 /** Autogenerated input type of SubmitAssessment */
 export type SubmitAssessmentInput = {
+  assessmentLockVersion?: InputMaybe<Scalars['Int']['input']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   input: AssessmentInput;
@@ -5498,6 +5565,7 @@ export type SubmitFormInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   input: FormInput;
+  recordLockVersion?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** Autogenerated return type of SubmitForm. */
@@ -5514,6 +5582,7 @@ export type SubmitFormResult =
   | CeAssessment
   | Client
   | CurrentLivingSituation
+  | CustomCaseNote
   | Enrollment
   | Event
   | File
@@ -5527,11 +5596,11 @@ export type SubmitFormResult =
 
 /** Autogenerated input type of SubmitHouseholdAssessments */
 export type SubmitHouseholdAssessmentsInput = {
-  assessmentIds: Array<Scalars['ID']['input']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** Whether warnings have been confirmed */
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  submissions: Array<VersionedRecordInput>;
   /** Validate assessments but don't submit them */
   validateOnly?: InputMaybe<Scalars['Boolean']['input']>;
 };
@@ -5760,6 +5829,7 @@ export type UpdateRelationshipToHoHInput = {
   /** Whether user has confirmed the action */
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   enrollmentId: Scalars['ID']['input'];
+  enrollmentLockVersion?: InputMaybe<Scalars['Int']['input']>;
   relationshipToHoH: RelationshipToHoH;
 };
 
@@ -5793,9 +5863,9 @@ export type UpdateUnitsPayload = {
 /** HUD User */
 export type User = {
   __typename?: 'User';
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
 };
@@ -6144,6 +6214,11 @@ export enum VamcStationNumber {
   Num_757ColumbusOh = 'NUM_757_COLUMBUS_OH',
 }
 
+export type VersionedRecordInput = {
+  id: Scalars['ID']['input'];
+  lockVersion?: InputMaybe<Scalars['Int']['input']>;
+};
+
 /** W4.3 */
 export enum ViralLoadAvailable {
   /** (1) Available */
@@ -6208,12 +6283,12 @@ export type YouthEducationStatus = {
   currentEdStatus?: Maybe<CurrentEdStatus>;
   currentSchoolAttend?: Maybe<CurrentSchoolAttended>;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
-  informationDate: Scalars['ISO8601Date']['output'];
+  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   mostRecentEdStatus?: Maybe<MostRecentEdStatus>;
   user?: Maybe<User>;
 };
@@ -6242,7 +6317,6 @@ export type RootPermissionsFragment = {
   canViewDob: boolean;
   canViewFullSsn: boolean;
   canDeleteProject: boolean;
-  canDeleteAssignedProjectData: boolean;
   canViewPartialSsn: boolean;
   canEnrollClients: boolean;
   canEditEnrollments: boolean;
@@ -6337,7 +6411,6 @@ export type GetRootPermissionsQuery = {
     canViewDob: boolean;
     canViewFullSsn: boolean;
     canDeleteProject: boolean;
-    canDeleteAssignedProjectData: boolean;
     canViewPartialSsn: boolean;
     canEnrollClients: boolean;
     canEditEnrollments: boolean;
@@ -6360,11 +6433,12 @@ export type GetRootPermissionsQuery = {
 export type AssessmentFieldsFragment = {
   __typename?: 'Assessment';
   id: string;
+  lockVersion: number;
   inProgress: boolean;
   assessmentDate: string;
   dataCollectionStage?: DataCollectionStage | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   role: AssessmentRole;
   user?: { __typename: 'User'; id: string; name: string } | null;
@@ -6381,18 +6455,21 @@ export type AssessmentWithValuesAndRecordsFragment = {
   __typename?: 'Assessment';
   wipValues?: any | null;
   id: string;
+  lockVersion: number;
   inProgress: boolean;
   assessmentDate: string;
   dataCollectionStage?: DataCollectionStage | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   role: AssessmentRole;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
+    lockVersion: number;
     entryDate: string;
     exitDate?: string | null;
+    disablingCondition?: NoYesReasonsForMissingData | null;
     dateOfEngagement?: string | null;
     moveInDate?: string | null;
     livingSituation?: PriorLivingSituation | null;
@@ -6446,8 +6523,8 @@ export type AssessmentWithValuesAndRecordsFragment = {
     dependentUnder6?: DependentUnder6 | null;
     hh5Plus?: NoYesMissing | null;
     cocPrioritized?: NoYesMissing | null;
-    hpScreeningScore?: NoYesMissing | null;
-    thresholdScore?: NoYesMissing | null;
+    hpScreeningScore?: number | null;
+    thresholdScore?: number | null;
     vamcStation?: VamcStationNumber | null;
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
@@ -6469,8 +6546,8 @@ export type AssessmentWithValuesAndRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -6483,8 +6560,8 @@ export type AssessmentWithValuesAndRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -6501,9 +6578,9 @@ export type AssessmentWithValuesAndRecordsFragment = {
     cobra?: NoYesMissing | null;
     connectionWithSoar?: NoYesReasonsForMissingData | null;
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     earned?: NoYesMissing | null;
     earnedAmount?: number | null;
     employerProvided?: NoYesMissing | null;
@@ -6512,7 +6589,7 @@ export type AssessmentWithValuesAndRecordsFragment = {
     id: string;
     incomeFromAnySource?: NoYesReasonsForMissingData | null;
     indianHealthServices?: NoYesMissing | null;
-    informationDate: string;
+    informationDate?: string | null;
     insuranceFromAnySource?: NoYesReasonsForMissingData | null;
     medicaid?: NoYesMissing | null;
     medicare?: NoYesMissing | null;
@@ -6582,8 +6659,8 @@ export type AssessmentWithValuesAndRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -6596,8 +6673,8 @@ export type AssessmentWithValuesAndRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -6631,15 +6708,15 @@ export type AssessmentWithValuesAndRecordsFragment = {
     __typename: 'HealthAndDv';
     currentlyFleeing?: NoYesReasonsForMissingData | null;
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     dentalHealthStatus?: HealthStatus | null;
     domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
     dueDate?: string | null;
     generalHealthStatus?: HealthStatus | null;
     id: string;
-    informationDate: string;
+    informationDate?: string | null;
     mentalHealthStatus?: HealthStatus | null;
     pregnancyStatus?: NoYesReasonsForMissingData | null;
     whenOccurred?: WhenDvOccurred | null;
@@ -6657,9 +6734,9 @@ export type AssessmentWithValuesAndRecordsFragment = {
     counselingReceived?: NoYesMissing | null;
     counselingMethods?: Array<CounselingMethod> | null;
     countOfExchangeForSex?: CountExchangeForSex | null;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     destination: Destination;
     destinationSafeClient?: NoYesReasonsForMissingData | null;
     destinationSafeWorker?: WorkerResponse | null;
@@ -6698,8 +6775,8 @@ export type AssessmentWithValuesAndRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -6712,8 +6789,8 @@ export type AssessmentWithValuesAndRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -6723,22 +6800,22 @@ export type AssessmentWithValuesAndRecordsFragment = {
     currentEdStatus?: CurrentEdStatus | null;
     currentSchoolAttend?: CurrentSchoolAttended | null;
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     id: string;
-    informationDate: string;
+    informationDate?: string | null;
     mostRecentEdStatus?: MostRecentEdStatus | null;
   } | null;
   employmentEducation?: {
     __typename?: 'EmploymentEducation';
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
     employed?: NoYesReasonsForMissingData | null;
     employmentType?: EmploymentType | null;
     id: string;
-    informationDate: string;
+    informationDate?: string | null;
     lastGradeCompleted?: LastGradeCompleted | null;
     notEmployedReason?: NotEmployedReason | null;
     schoolStatus?: SchoolStatus | null;
@@ -6760,8 +6837,8 @@ export type AssessmentWithValuesAndRecordsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -6774,8 +6851,8 @@ export type AssessmentWithValuesAndRecordsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -6792,18 +6869,21 @@ export type AssessmentWithValuesAndRecordsFragment = {
 export type AssessmentWithRecordsFragment = {
   __typename?: 'Assessment';
   id: string;
+  lockVersion: number;
   inProgress: boolean;
   assessmentDate: string;
   dataCollectionStage?: DataCollectionStage | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   role: AssessmentRole;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
+    lockVersion: number;
     entryDate: string;
     exitDate?: string | null;
+    disablingCondition?: NoYesReasonsForMissingData | null;
     dateOfEngagement?: string | null;
     moveInDate?: string | null;
     livingSituation?: PriorLivingSituation | null;
@@ -6857,8 +6937,8 @@ export type AssessmentWithRecordsFragment = {
     dependentUnder6?: DependentUnder6 | null;
     hh5Plus?: NoYesMissing | null;
     cocPrioritized?: NoYesMissing | null;
-    hpScreeningScore?: NoYesMissing | null;
-    thresholdScore?: NoYesMissing | null;
+    hpScreeningScore?: number | null;
+    thresholdScore?: number | null;
     vamcStation?: VamcStationNumber | null;
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
@@ -6880,8 +6960,8 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -6894,8 +6974,8 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -6912,9 +6992,9 @@ export type AssessmentWithRecordsFragment = {
     cobra?: NoYesMissing | null;
     connectionWithSoar?: NoYesReasonsForMissingData | null;
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     earned?: NoYesMissing | null;
     earnedAmount?: number | null;
     employerProvided?: NoYesMissing | null;
@@ -6923,7 +7003,7 @@ export type AssessmentWithRecordsFragment = {
     id: string;
     incomeFromAnySource?: NoYesReasonsForMissingData | null;
     indianHealthServices?: NoYesMissing | null;
-    informationDate: string;
+    informationDate?: string | null;
     insuranceFromAnySource?: NoYesReasonsForMissingData | null;
     medicaid?: NoYesMissing | null;
     medicare?: NoYesMissing | null;
@@ -6993,8 +7073,8 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -7007,8 +7087,8 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -7042,15 +7122,15 @@ export type AssessmentWithRecordsFragment = {
     __typename: 'HealthAndDv';
     currentlyFleeing?: NoYesReasonsForMissingData | null;
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     dentalHealthStatus?: HealthStatus | null;
     domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
     dueDate?: string | null;
     generalHealthStatus?: HealthStatus | null;
     id: string;
-    informationDate: string;
+    informationDate?: string | null;
     mentalHealthStatus?: HealthStatus | null;
     pregnancyStatus?: NoYesReasonsForMissingData | null;
     whenOccurred?: WhenDvOccurred | null;
@@ -7068,9 +7148,9 @@ export type AssessmentWithRecordsFragment = {
     counselingReceived?: NoYesMissing | null;
     counselingMethods?: Array<CounselingMethod> | null;
     countOfExchangeForSex?: CountExchangeForSex | null;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     destination: Destination;
     destinationSafeClient?: NoYesReasonsForMissingData | null;
     destinationSafeWorker?: WorkerResponse | null;
@@ -7109,8 +7189,8 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -7123,8 +7203,8 @@ export type AssessmentWithRecordsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -7134,22 +7214,22 @@ export type AssessmentWithRecordsFragment = {
     currentEdStatus?: CurrentEdStatus | null;
     currentSchoolAttend?: CurrentSchoolAttended | null;
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     id: string;
-    informationDate: string;
+    informationDate?: string | null;
     mostRecentEdStatus?: MostRecentEdStatus | null;
   } | null;
   employmentEducation?: {
     __typename?: 'EmploymentEducation';
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
     employed?: NoYesReasonsForMissingData | null;
     employmentType?: EmploymentType | null;
     id: string;
-    informationDate: string;
+    informationDate?: string | null;
     lastGradeCompleted?: LastGradeCompleted | null;
     notEmployedReason?: NotEmployedReason | null;
     schoolStatus?: SchoolStatus | null;
@@ -7171,8 +7251,8 @@ export type AssessmentWithRecordsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -7185,8 +7265,8 @@ export type AssessmentWithRecordsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -7204,11 +7284,12 @@ export type AssessmentWithValuesFragment = {
   __typename?: 'Assessment';
   wipValues?: any | null;
   id: string;
+  lockVersion: number;
   inProgress: boolean;
   assessmentDate: string;
   dataCollectionStage?: DataCollectionStage | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   role: AssessmentRole;
   user?: { __typename: 'User'; id: string; name: string } | null;
@@ -7225,18 +7306,21 @@ export type FullAssessmentFragment = {
   __typename?: 'Assessment';
   wipValues?: any | null;
   id: string;
+  lockVersion: number;
   inProgress: boolean;
   assessmentDate: string;
   dataCollectionStage?: DataCollectionStage | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   role: AssessmentRole;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
+    lockVersion: number;
     entryDate: string;
     exitDate?: string | null;
+    disablingCondition?: NoYesReasonsForMissingData | null;
     dateOfEngagement?: string | null;
     moveInDate?: string | null;
     livingSituation?: PriorLivingSituation | null;
@@ -7290,8 +7374,8 @@ export type FullAssessmentFragment = {
     dependentUnder6?: DependentUnder6 | null;
     hh5Plus?: NoYesMissing | null;
     cocPrioritized?: NoYesMissing | null;
-    hpScreeningScore?: NoYesMissing | null;
-    thresholdScore?: NoYesMissing | null;
+    hpScreeningScore?: number | null;
+    thresholdScore?: number | null;
     vamcStation?: VamcStationNumber | null;
     translationNeeded?: NoYesReasonsForMissingData | null;
     preferredLanguage?: PreferredLanguage | null;
@@ -7313,8 +7397,8 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -7327,8 +7411,8 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -7345,9 +7429,9 @@ export type FullAssessmentFragment = {
     cobra?: NoYesMissing | null;
     connectionWithSoar?: NoYesReasonsForMissingData | null;
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     earned?: NoYesMissing | null;
     earnedAmount?: number | null;
     employerProvided?: NoYesMissing | null;
@@ -7356,7 +7440,7 @@ export type FullAssessmentFragment = {
     id: string;
     incomeFromAnySource?: NoYesReasonsForMissingData | null;
     indianHealthServices?: NoYesMissing | null;
-    informationDate: string;
+    informationDate?: string | null;
     insuranceFromAnySource?: NoYesReasonsForMissingData | null;
     medicaid?: NoYesMissing | null;
     medicare?: NoYesMissing | null;
@@ -7426,8 +7510,8 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -7440,8 +7524,8 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -7475,15 +7559,15 @@ export type FullAssessmentFragment = {
     __typename: 'HealthAndDv';
     currentlyFleeing?: NoYesReasonsForMissingData | null;
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     dentalHealthStatus?: HealthStatus | null;
     domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
     dueDate?: string | null;
     generalHealthStatus?: HealthStatus | null;
     id: string;
-    informationDate: string;
+    informationDate?: string | null;
     mentalHealthStatus?: HealthStatus | null;
     pregnancyStatus?: NoYesReasonsForMissingData | null;
     whenOccurred?: WhenDvOccurred | null;
@@ -7501,9 +7585,9 @@ export type FullAssessmentFragment = {
     counselingReceived?: NoYesMissing | null;
     counselingMethods?: Array<CounselingMethod> | null;
     countOfExchangeForSex?: CountExchangeForSex | null;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     destination: Destination;
     destinationSafeClient?: NoYesReasonsForMissingData | null;
     destinationSafeWorker?: WorkerResponse | null;
@@ -7542,8 +7626,8 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -7556,8 +7640,8 @@ export type FullAssessmentFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -7567,22 +7651,22 @@ export type FullAssessmentFragment = {
     currentEdStatus?: CurrentEdStatus | null;
     currentSchoolAttend?: CurrentSchoolAttended | null;
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     id: string;
-    informationDate: string;
+    informationDate?: string | null;
     mostRecentEdStatus?: MostRecentEdStatus | null;
   } | null;
   employmentEducation?: {
     __typename?: 'EmploymentEducation';
     dataCollectionStage: DataCollectionStage;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
     employed?: NoYesReasonsForMissingData | null;
     employmentType?: EmploymentType | null;
     id: string;
-    informationDate: string;
+    informationDate?: string | null;
     lastGradeCompleted?: LastGradeCompleted | null;
     notEmployedReason?: NotEmployedReason | null;
     schoolStatus?: SchoolStatus | null;
@@ -7604,8 +7688,8 @@ export type FullAssessmentFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -7618,8 +7702,8 @@ export type FullAssessmentFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -7643,11 +7727,12 @@ export type GetAssessmentQuery = {
     __typename?: 'Assessment';
     wipValues?: any | null;
     id: string;
+    lockVersion: number;
     inProgress: boolean;
     assessmentDate: string;
     dataCollectionStage?: DataCollectionStage | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
     dateDeleted?: string | null;
     role: AssessmentRole;
     definition: {
@@ -8123,8 +8208,10 @@ export type GetAssessmentQuery = {
     enrollment: {
       __typename?: 'Enrollment';
       id: string;
+      lockVersion: number;
       entryDate: string;
       exitDate?: string | null;
+      disablingCondition?: NoYesReasonsForMissingData | null;
       dateOfEngagement?: string | null;
       moveInDate?: string | null;
       livingSituation?: PriorLivingSituation | null;
@@ -8178,8 +8265,8 @@ export type GetAssessmentQuery = {
       dependentUnder6?: DependentUnder6 | null;
       hh5Plus?: NoYesMissing | null;
       cocPrioritized?: NoYesMissing | null;
-      hpScreeningScore?: NoYesMissing | null;
-      thresholdScore?: NoYesMissing | null;
+      hpScreeningScore?: number | null;
+      thresholdScore?: number | null;
       vamcStation?: VamcStationNumber | null;
       translationNeeded?: NoYesReasonsForMissingData | null;
       preferredLanguage?: PreferredLanguage | null;
@@ -8201,8 +8288,8 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -8215,8 +8302,8 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -8233,9 +8320,9 @@ export type GetAssessmentQuery = {
       cobra?: NoYesMissing | null;
       connectionWithSoar?: NoYesReasonsForMissingData | null;
       dataCollectionStage: DataCollectionStage;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
-      dateUpdated: string;
+      dateUpdated?: string | null;
       earned?: NoYesMissing | null;
       earnedAmount?: number | null;
       employerProvided?: NoYesMissing | null;
@@ -8244,7 +8331,7 @@ export type GetAssessmentQuery = {
       id: string;
       incomeFromAnySource?: NoYesReasonsForMissingData | null;
       indianHealthServices?: NoYesMissing | null;
-      informationDate: string;
+      informationDate?: string | null;
       insuranceFromAnySource?: NoYesReasonsForMissingData | null;
       medicaid?: NoYesMissing | null;
       medicare?: NoYesMissing | null;
@@ -8314,8 +8401,8 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -8328,8 +8415,8 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -8363,15 +8450,15 @@ export type GetAssessmentQuery = {
       __typename: 'HealthAndDv';
       currentlyFleeing?: NoYesReasonsForMissingData | null;
       dataCollectionStage: DataCollectionStage;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
-      dateUpdated: string;
+      dateUpdated?: string | null;
       dentalHealthStatus?: HealthStatus | null;
       domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
       dueDate?: string | null;
       generalHealthStatus?: HealthStatus | null;
       id: string;
-      informationDate: string;
+      informationDate?: string | null;
       mentalHealthStatus?: HealthStatus | null;
       pregnancyStatus?: NoYesReasonsForMissingData | null;
       whenOccurred?: WhenDvOccurred | null;
@@ -8389,9 +8476,9 @@ export type GetAssessmentQuery = {
       counselingReceived?: NoYesMissing | null;
       counselingMethods?: Array<CounselingMethod> | null;
       countOfExchangeForSex?: CountExchangeForSex | null;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
-      dateUpdated: string;
+      dateUpdated?: string | null;
       destination: Destination;
       destinationSafeClient?: NoYesReasonsForMissingData | null;
       destinationSafeWorker?: WorkerResponse | null;
@@ -8430,8 +8517,8 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -8444,8 +8531,8 @@ export type GetAssessmentQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -8455,22 +8542,22 @@ export type GetAssessmentQuery = {
       currentEdStatus?: CurrentEdStatus | null;
       currentSchoolAttend?: CurrentSchoolAttended | null;
       dataCollectionStage: DataCollectionStage;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
-      dateUpdated: string;
+      dateUpdated?: string | null;
       id: string;
-      informationDate: string;
+      informationDate?: string | null;
       mostRecentEdStatus?: MostRecentEdStatus | null;
     } | null;
     employmentEducation?: {
       __typename?: 'EmploymentEducation';
       dataCollectionStage: DataCollectionStage;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
       employed?: NoYesReasonsForMissingData | null;
       employmentType?: EmploymentType | null;
       id: string;
-      informationDate: string;
+      informationDate?: string | null;
       lastGradeCompleted?: LastGradeCompleted | null;
       notEmployedReason?: NotEmployedReason | null;
       schoolStatus?: SchoolStatus | null;
@@ -8492,8 +8579,8 @@ export type GetAssessmentQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -8506,8 +8593,8 @@ export type GetAssessmentQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -8543,19 +8630,26 @@ export type GetClientAssessmentsQuery = {
       nodes: Array<{
         __typename?: 'Assessment';
         id: string;
+        lockVersion: number;
         inProgress: boolean;
         assessmentDate: string;
         dataCollectionStage?: DataCollectionStage | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         dateDeleted?: string | null;
         role: AssessmentRole;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
+          lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          enrollmentCoc?: string | null;
+          householdId: string;
+          householdShortId: string;
+          householdSize: number;
           project: {
             __typename?: 'Project';
             id: string;
@@ -8598,11 +8692,12 @@ export type GetEnrollmentAssessmentsQuery = {
       nodes: Array<{
         __typename?: 'Assessment';
         id: string;
+        lockVersion: number;
         inProgress: boolean;
         assessmentDate: string;
         dataCollectionStage?: DataCollectionStage | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         dateDeleted?: string | null;
         role: AssessmentRole;
         user?: { __typename: 'User'; id: string; name: string } | null;
@@ -8630,18 +8725,21 @@ export type GetHouseholdAssessmentsQuery = {
     __typename?: 'Assessment';
     wipValues?: any | null;
     id: string;
+    lockVersion: number;
     inProgress: boolean;
     assessmentDate: string;
     dataCollectionStage?: DataCollectionStage | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
     dateDeleted?: string | null;
     role: AssessmentRole;
     enrollment: {
       __typename?: 'Enrollment';
       id: string;
+      lockVersion: number;
       entryDate: string;
       exitDate?: string | null;
+      disablingCondition?: NoYesReasonsForMissingData | null;
       dateOfEngagement?: string | null;
       moveInDate?: string | null;
       livingSituation?: PriorLivingSituation | null;
@@ -8695,8 +8793,8 @@ export type GetHouseholdAssessmentsQuery = {
       dependentUnder6?: DependentUnder6 | null;
       hh5Plus?: NoYesMissing | null;
       cocPrioritized?: NoYesMissing | null;
-      hpScreeningScore?: NoYesMissing | null;
-      thresholdScore?: NoYesMissing | null;
+      hpScreeningScore?: number | null;
+      thresholdScore?: number | null;
       vamcStation?: VamcStationNumber | null;
       translationNeeded?: NoYesReasonsForMissingData | null;
       preferredLanguage?: PreferredLanguage | null;
@@ -8718,8 +8816,8 @@ export type GetHouseholdAssessmentsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -8732,8 +8830,8 @@ export type GetHouseholdAssessmentsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -8750,9 +8848,9 @@ export type GetHouseholdAssessmentsQuery = {
       cobra?: NoYesMissing | null;
       connectionWithSoar?: NoYesReasonsForMissingData | null;
       dataCollectionStage: DataCollectionStage;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
-      dateUpdated: string;
+      dateUpdated?: string | null;
       earned?: NoYesMissing | null;
       earnedAmount?: number | null;
       employerProvided?: NoYesMissing | null;
@@ -8761,7 +8859,7 @@ export type GetHouseholdAssessmentsQuery = {
       id: string;
       incomeFromAnySource?: NoYesReasonsForMissingData | null;
       indianHealthServices?: NoYesMissing | null;
-      informationDate: string;
+      informationDate?: string | null;
       insuranceFromAnySource?: NoYesReasonsForMissingData | null;
       medicaid?: NoYesMissing | null;
       medicare?: NoYesMissing | null;
@@ -8831,8 +8929,8 @@ export type GetHouseholdAssessmentsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -8845,8 +8943,8 @@ export type GetHouseholdAssessmentsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -8880,15 +8978,15 @@ export type GetHouseholdAssessmentsQuery = {
       __typename: 'HealthAndDv';
       currentlyFleeing?: NoYesReasonsForMissingData | null;
       dataCollectionStage: DataCollectionStage;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
-      dateUpdated: string;
+      dateUpdated?: string | null;
       dentalHealthStatus?: HealthStatus | null;
       domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
       dueDate?: string | null;
       generalHealthStatus?: HealthStatus | null;
       id: string;
-      informationDate: string;
+      informationDate?: string | null;
       mentalHealthStatus?: HealthStatus | null;
       pregnancyStatus?: NoYesReasonsForMissingData | null;
       whenOccurred?: WhenDvOccurred | null;
@@ -8906,9 +9004,9 @@ export type GetHouseholdAssessmentsQuery = {
       counselingReceived?: NoYesMissing | null;
       counselingMethods?: Array<CounselingMethod> | null;
       countOfExchangeForSex?: CountExchangeForSex | null;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
-      dateUpdated: string;
+      dateUpdated?: string | null;
       destination: Destination;
       destinationSafeClient?: NoYesReasonsForMissingData | null;
       destinationSafeWorker?: WorkerResponse | null;
@@ -8947,8 +9045,8 @@ export type GetHouseholdAssessmentsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -8961,8 +9059,8 @@ export type GetHouseholdAssessmentsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -8972,22 +9070,22 @@ export type GetHouseholdAssessmentsQuery = {
       currentEdStatus?: CurrentEdStatus | null;
       currentSchoolAttend?: CurrentSchoolAttended | null;
       dataCollectionStage: DataCollectionStage;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
-      dateUpdated: string;
+      dateUpdated?: string | null;
       id: string;
-      informationDate: string;
+      informationDate?: string | null;
       mostRecentEdStatus?: MostRecentEdStatus | null;
     } | null;
     employmentEducation?: {
       __typename?: 'EmploymentEducation';
       dataCollectionStage: DataCollectionStage;
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
       employed?: NoYesReasonsForMissingData | null;
       employmentType?: EmploymentType | null;
       id: string;
-      informationDate: string;
+      informationDate?: string | null;
       lastGradeCompleted?: LastGradeCompleted | null;
       notEmployedReason?: NotEmployedReason | null;
       schoolStatus?: SchoolStatus | null;
@@ -9009,8 +9107,8 @@ export type GetHouseholdAssessmentsQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -9023,8 +9121,8 @@ export type GetHouseholdAssessmentsQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -9051,11 +9149,12 @@ export type SaveAssessmentMutation = {
       __typename?: 'Assessment';
       wipValues?: any | null;
       id: string;
+      lockVersion: number;
       inProgress: boolean;
       assessmentDate: string;
       dataCollectionStage?: DataCollectionStage | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       dateDeleted?: string | null;
       role: AssessmentRole;
       user?: { __typename: 'User'; id: string; name: string } | null;
@@ -9095,18 +9194,21 @@ export type SubmitAssessmentMutation = {
     assessment?: {
       __typename?: 'Assessment';
       id: string;
+      lockVersion: number;
       inProgress: boolean;
       assessmentDate: string;
       dataCollectionStage?: DataCollectionStage | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       dateDeleted?: string | null;
       role: AssessmentRole;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
+        lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
+        disablingCondition?: NoYesReasonsForMissingData | null;
         dateOfEngagement?: string | null;
         moveInDate?: string | null;
         livingSituation?: PriorLivingSituation | null;
@@ -9160,8 +9262,8 @@ export type SubmitAssessmentMutation = {
         dependentUnder6?: DependentUnder6 | null;
         hh5Plus?: NoYesMissing | null;
         cocPrioritized?: NoYesMissing | null;
-        hpScreeningScore?: NoYesMissing | null;
-        thresholdScore?: NoYesMissing | null;
+        hpScreeningScore?: number | null;
+        thresholdScore?: number | null;
         vamcStation?: VamcStationNumber | null;
         translationNeeded?: NoYesReasonsForMissingData | null;
         preferredLanguage?: PreferredLanguage | null;
@@ -9183,8 +9285,8 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -9197,8 +9299,8 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -9215,9 +9317,9 @@ export type SubmitAssessmentMutation = {
         cobra?: NoYesMissing | null;
         connectionWithSoar?: NoYesReasonsForMissingData | null;
         dataCollectionStage: DataCollectionStage;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         earned?: NoYesMissing | null;
         earnedAmount?: number | null;
         employerProvided?: NoYesMissing | null;
@@ -9226,7 +9328,7 @@ export type SubmitAssessmentMutation = {
         id: string;
         incomeFromAnySource?: NoYesReasonsForMissingData | null;
         indianHealthServices?: NoYesMissing | null;
-        informationDate: string;
+        informationDate?: string | null;
         insuranceFromAnySource?: NoYesReasonsForMissingData | null;
         medicaid?: NoYesMissing | null;
         medicare?: NoYesMissing | null;
@@ -9296,8 +9398,8 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -9310,8 +9412,8 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -9345,15 +9447,15 @@ export type SubmitAssessmentMutation = {
         __typename: 'HealthAndDv';
         currentlyFleeing?: NoYesReasonsForMissingData | null;
         dataCollectionStage: DataCollectionStage;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         dentalHealthStatus?: HealthStatus | null;
         domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
         dueDate?: string | null;
         generalHealthStatus?: HealthStatus | null;
         id: string;
-        informationDate: string;
+        informationDate?: string | null;
         mentalHealthStatus?: HealthStatus | null;
         pregnancyStatus?: NoYesReasonsForMissingData | null;
         whenOccurred?: WhenDvOccurred | null;
@@ -9371,9 +9473,9 @@ export type SubmitAssessmentMutation = {
         counselingReceived?: NoYesMissing | null;
         counselingMethods?: Array<CounselingMethod> | null;
         countOfExchangeForSex?: CountExchangeForSex | null;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         destination: Destination;
         destinationSafeClient?: NoYesReasonsForMissingData | null;
         destinationSafeWorker?: WorkerResponse | null;
@@ -9412,8 +9514,8 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -9426,8 +9528,8 @@ export type SubmitAssessmentMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -9437,22 +9539,22 @@ export type SubmitAssessmentMutation = {
         currentEdStatus?: CurrentEdStatus | null;
         currentSchoolAttend?: CurrentSchoolAttended | null;
         dataCollectionStage: DataCollectionStage;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         id: string;
-        informationDate: string;
+        informationDate?: string | null;
         mostRecentEdStatus?: MostRecentEdStatus | null;
       } | null;
       employmentEducation?: {
         __typename?: 'EmploymentEducation';
         dataCollectionStage: DataCollectionStage;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
         employed?: NoYesReasonsForMissingData | null;
         employmentType?: EmploymentType | null;
         id: string;
-        informationDate: string;
+        informationDate?: string | null;
         lastGradeCompleted?: LastGradeCompleted | null;
         notEmployedReason?: NotEmployedReason | null;
         schoolStatus?: SchoolStatus | null;
@@ -9474,8 +9576,8 @@ export type SubmitAssessmentMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -9488,8 +9590,8 @@ export type SubmitAssessmentMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -9530,18 +9632,21 @@ export type SubmitHouseholdAssessmentsMutation = {
     assessments?: Array<{
       __typename?: 'Assessment';
       id: string;
+      lockVersion: number;
       inProgress: boolean;
       assessmentDate: string;
       dataCollectionStage?: DataCollectionStage | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       dateDeleted?: string | null;
       role: AssessmentRole;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
+        lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
+        disablingCondition?: NoYesReasonsForMissingData | null;
         dateOfEngagement?: string | null;
         moveInDate?: string | null;
         livingSituation?: PriorLivingSituation | null;
@@ -9595,8 +9700,8 @@ export type SubmitHouseholdAssessmentsMutation = {
         dependentUnder6?: DependentUnder6 | null;
         hh5Plus?: NoYesMissing | null;
         cocPrioritized?: NoYesMissing | null;
-        hpScreeningScore?: NoYesMissing | null;
-        thresholdScore?: NoYesMissing | null;
+        hpScreeningScore?: number | null;
+        thresholdScore?: number | null;
         vamcStation?: VamcStationNumber | null;
         translationNeeded?: NoYesReasonsForMissingData | null;
         preferredLanguage?: PreferredLanguage | null;
@@ -9618,8 +9723,8 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -9632,8 +9737,8 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -9650,9 +9755,9 @@ export type SubmitHouseholdAssessmentsMutation = {
         cobra?: NoYesMissing | null;
         connectionWithSoar?: NoYesReasonsForMissingData | null;
         dataCollectionStage: DataCollectionStage;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         earned?: NoYesMissing | null;
         earnedAmount?: number | null;
         employerProvided?: NoYesMissing | null;
@@ -9661,7 +9766,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         id: string;
         incomeFromAnySource?: NoYesReasonsForMissingData | null;
         indianHealthServices?: NoYesMissing | null;
-        informationDate: string;
+        informationDate?: string | null;
         insuranceFromAnySource?: NoYesReasonsForMissingData | null;
         medicaid?: NoYesMissing | null;
         medicare?: NoYesMissing | null;
@@ -9731,8 +9836,8 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -9745,8 +9850,8 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -9780,15 +9885,15 @@ export type SubmitHouseholdAssessmentsMutation = {
         __typename: 'HealthAndDv';
         currentlyFleeing?: NoYesReasonsForMissingData | null;
         dataCollectionStage: DataCollectionStage;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         dentalHealthStatus?: HealthStatus | null;
         domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
         dueDate?: string | null;
         generalHealthStatus?: HealthStatus | null;
         id: string;
-        informationDate: string;
+        informationDate?: string | null;
         mentalHealthStatus?: HealthStatus | null;
         pregnancyStatus?: NoYesReasonsForMissingData | null;
         whenOccurred?: WhenDvOccurred | null;
@@ -9806,9 +9911,9 @@ export type SubmitHouseholdAssessmentsMutation = {
         counselingReceived?: NoYesMissing | null;
         counselingMethods?: Array<CounselingMethod> | null;
         countOfExchangeForSex?: CountExchangeForSex | null;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         destination: Destination;
         destinationSafeClient?: NoYesReasonsForMissingData | null;
         destinationSafeWorker?: WorkerResponse | null;
@@ -9847,8 +9952,8 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -9861,8 +9966,8 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -9872,22 +9977,22 @@ export type SubmitHouseholdAssessmentsMutation = {
         currentEdStatus?: CurrentEdStatus | null;
         currentSchoolAttend?: CurrentSchoolAttended | null;
         dataCollectionStage: DataCollectionStage;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         id: string;
-        informationDate: string;
+        informationDate?: string | null;
         mostRecentEdStatus?: MostRecentEdStatus | null;
       } | null;
       employmentEducation?: {
         __typename?: 'EmploymentEducation';
         dataCollectionStage: DataCollectionStage;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
         employed?: NoYesReasonsForMissingData | null;
         employmentType?: EmploymentType | null;
         id: string;
-        informationDate: string;
+        informationDate?: string | null;
         lastGradeCompleted?: LastGradeCompleted | null;
         notEmployedReason?: NotEmployedReason | null;
         schoolStatus?: SchoolStatus | null;
@@ -9909,8 +10014,8 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -9923,8 +10028,8 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -9974,11 +10079,12 @@ export type GetAssessmentsForPopulationQuery = {
       nodes: Array<{
         __typename?: 'Assessment';
         id: string;
+        lockVersion: number;
         inProgress: boolean;
         assessmentDate: string;
         dataCollectionStage?: DataCollectionStage | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         dateDeleted?: string | null;
         role: AssessmentRole;
         enrollment: {
@@ -9986,6 +10092,8 @@ export type GetAssessmentsForPopulationQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          lockVersion: number;
+          disablingCondition?: NoYesReasonsForMissingData | null;
           dateOfEngagement?: string | null;
           moveInDate?: string | null;
           livingSituation?: PriorLivingSituation | null;
@@ -10039,8 +10147,8 @@ export type GetAssessmentsForPopulationQuery = {
           dependentUnder6?: DependentUnder6 | null;
           hh5Plus?: NoYesMissing | null;
           cocPrioritized?: NoYesMissing | null;
-          hpScreeningScore?: NoYesMissing | null;
-          thresholdScore?: NoYesMissing | null;
+          hpScreeningScore?: number | null;
+          thresholdScore?: number | null;
           vamcStation?: VamcStationNumber | null;
           translationNeeded?: NoYesReasonsForMissingData | null;
           preferredLanguage?: PreferredLanguage | null;
@@ -10068,8 +10176,8 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             } | null;
             values?: Array<{
@@ -10082,8 +10190,8 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
@@ -10100,9 +10208,9 @@ export type GetAssessmentsForPopulationQuery = {
           cobra?: NoYesMissing | null;
           connectionWithSoar?: NoYesReasonsForMissingData | null;
           dataCollectionStage: DataCollectionStage;
-          dateCreated: string;
+          dateCreated?: string | null;
           dateDeleted?: string | null;
-          dateUpdated: string;
+          dateUpdated?: string | null;
           earned?: NoYesMissing | null;
           earnedAmount?: number | null;
           employerProvided?: NoYesMissing | null;
@@ -10111,7 +10219,7 @@ export type GetAssessmentsForPopulationQuery = {
           id: string;
           incomeFromAnySource?: NoYesReasonsForMissingData | null;
           indianHealthServices?: NoYesMissing | null;
-          informationDate: string;
+          informationDate?: string | null;
           insuranceFromAnySource?: NoYesReasonsForMissingData | null;
           medicaid?: NoYesMissing | null;
           medicare?: NoYesMissing | null;
@@ -10181,8 +10289,8 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             } | null;
             values?: Array<{
@@ -10195,8 +10303,8 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
@@ -10230,15 +10338,15 @@ export type GetAssessmentsForPopulationQuery = {
           __typename: 'HealthAndDv';
           currentlyFleeing?: NoYesReasonsForMissingData | null;
           dataCollectionStage: DataCollectionStage;
-          dateCreated: string;
+          dateCreated?: string | null;
           dateDeleted?: string | null;
-          dateUpdated: string;
+          dateUpdated?: string | null;
           dentalHealthStatus?: HealthStatus | null;
           domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
           dueDate?: string | null;
           generalHealthStatus?: HealthStatus | null;
           id: string;
-          informationDate: string;
+          informationDate?: string | null;
           mentalHealthStatus?: HealthStatus | null;
           pregnancyStatus?: NoYesReasonsForMissingData | null;
           whenOccurred?: WhenDvOccurred | null;
@@ -10256,9 +10364,9 @@ export type GetAssessmentsForPopulationQuery = {
           counselingReceived?: NoYesMissing | null;
           counselingMethods?: Array<CounselingMethod> | null;
           countOfExchangeForSex?: CountExchangeForSex | null;
-          dateCreated: string;
+          dateCreated?: string | null;
           dateDeleted?: string | null;
-          dateUpdated: string;
+          dateUpdated?: string | null;
           destination: Destination;
           destinationSafeClient?: NoYesReasonsForMissingData | null;
           destinationSafeWorker?: WorkerResponse | null;
@@ -10297,8 +10405,8 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             } | null;
             values?: Array<{
@@ -10311,8 +10419,8 @@ export type GetAssessmentsForPopulationQuery = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
@@ -10322,22 +10430,22 @@ export type GetAssessmentsForPopulationQuery = {
           currentEdStatus?: CurrentEdStatus | null;
           currentSchoolAttend?: CurrentSchoolAttended | null;
           dataCollectionStage: DataCollectionStage;
-          dateCreated: string;
+          dateCreated?: string | null;
           dateDeleted?: string | null;
-          dateUpdated: string;
+          dateUpdated?: string | null;
           id: string;
-          informationDate: string;
+          informationDate?: string | null;
           mostRecentEdStatus?: MostRecentEdStatus | null;
         } | null;
         employmentEducation?: {
           __typename?: 'EmploymentEducation';
           dataCollectionStage: DataCollectionStage;
-          dateCreated: string;
+          dateCreated?: string | null;
           dateDeleted?: string | null;
           employed?: NoYesReasonsForMissingData | null;
           employmentType?: EmploymentType | null;
           id: string;
-          informationDate: string;
+          informationDate?: string | null;
           lastGradeCompleted?: LastGradeCompleted | null;
           notEmployedReason?: NotEmployedReason | null;
           schoolStatus?: SchoolStatus | null;
@@ -10359,8 +10467,8 @@ export type GetAssessmentsForPopulationQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -10373,8 +10481,8 @@ export type GetAssessmentsForPopulationQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -10393,6 +10501,7 @@ export type GetAssessmentsForPopulationQuery = {
 
 export type DeleteAssessmentMutationVariables = Exact<{
   id: Scalars['ID']['input'];
+  assessmentLockVersion?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 export type DeleteAssessmentMutation = {
@@ -10421,8 +10530,10 @@ export type DeleteAssessmentMutation = {
 export type EnrollmentFieldsFromAssessmentFragment = {
   __typename?: 'Enrollment';
   id: string;
+  lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
+  disablingCondition?: NoYesReasonsForMissingData | null;
   dateOfEngagement?: string | null;
   moveInDate?: string | null;
   livingSituation?: PriorLivingSituation | null;
@@ -10476,8 +10587,8 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   dependentUnder6?: DependentUnder6 | null;
   hh5Plus?: NoYesMissing | null;
   cocPrioritized?: NoYesMissing | null;
-  hpScreeningScore?: NoYesMissing | null;
-  thresholdScore?: NoYesMissing | null;
+  hpScreeningScore?: number | null;
+  thresholdScore?: number | null;
   vamcStation?: VamcStationNumber | null;
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
@@ -10507,9 +10618,9 @@ export type IncomeBenefitValuesFragment = {
   cobra?: NoYesMissing | null;
   connectionWithSoar?: NoYesReasonsForMissingData | null;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   earned?: NoYesMissing | null;
   earnedAmount?: number | null;
   employerProvided?: NoYesMissing | null;
@@ -10518,7 +10629,7 @@ export type IncomeBenefitValuesFragment = {
   id: string;
   incomeFromAnySource?: NoYesReasonsForMissingData | null;
   indianHealthServices?: NoYesMissing | null;
-  informationDate: string;
+  informationDate?: string | null;
   insuranceFromAnySource?: NoYesReasonsForMissingData | null;
   medicaid?: NoYesMissing | null;
   medicare?: NoYesMissing | null;
@@ -10584,9 +10695,9 @@ export type IncomeBenefitFieldsFragment = {
   cobra?: NoYesMissing | null;
   connectionWithSoar?: NoYesReasonsForMissingData | null;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   earned?: NoYesMissing | null;
   earnedAmount?: number | null;
   employerProvided?: NoYesMissing | null;
@@ -10595,7 +10706,7 @@ export type IncomeBenefitFieldsFragment = {
   id: string;
   incomeFromAnySource?: NoYesReasonsForMissingData | null;
   indianHealthServices?: NoYesMissing | null;
-  informationDate: string;
+  informationDate?: string | null;
   insuranceFromAnySource?: NoYesReasonsForMissingData | null;
   medicaid?: NoYesMissing | null;
   medicare?: NoYesMissing | null;
@@ -10728,15 +10839,15 @@ export type HealthAndDvValuesFragment = {
   __typename: 'HealthAndDv';
   currentlyFleeing?: NoYesReasonsForMissingData | null;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   dentalHealthStatus?: HealthStatus | null;
   domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
   dueDate?: string | null;
   generalHealthStatus?: HealthStatus | null;
   id: string;
-  informationDate: string;
+  informationDate?: string | null;
   mentalHealthStatus?: HealthStatus | null;
   pregnancyStatus?: NoYesReasonsForMissingData | null;
   whenOccurred?: WhenDvOccurred | null;
@@ -10746,15 +10857,15 @@ export type HealthAndDvFieldsFragment = {
   __typename: 'HealthAndDv';
   currentlyFleeing?: NoYesReasonsForMissingData | null;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   dentalHealthStatus?: HealthStatus | null;
   domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
   dueDate?: string | null;
   generalHealthStatus?: HealthStatus | null;
   id: string;
-  informationDate: string;
+  informationDate?: string | null;
   mentalHealthStatus?: HealthStatus | null;
   pregnancyStatus?: NoYesReasonsForMissingData | null;
   whenOccurred?: WhenDvOccurred | null;
@@ -10784,9 +10895,9 @@ export type ExitValuesFragment = {
   counselingReceived?: NoYesMissing | null;
   counselingMethods?: Array<CounselingMethod> | null;
   countOfExchangeForSex?: CountExchangeForSex | null;
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   destination: Destination;
   destinationSafeClient?: NoYesReasonsForMissingData | null;
   destinationSafeWorker?: WorkerResponse | null;
@@ -10815,23 +10926,23 @@ export type YouthEducationStatusValuesFragment = {
   currentEdStatus?: CurrentEdStatus | null;
   currentSchoolAttend?: CurrentSchoolAttended | null;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   id: string;
-  informationDate: string;
+  informationDate?: string | null;
   mostRecentEdStatus?: MostRecentEdStatus | null;
 };
 
 export type EmploymentEducationValuesFragment = {
   __typename?: 'EmploymentEducation';
   dataCollectionStage: DataCollectionStage;
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
   employed?: NoYesReasonsForMissingData | null;
   employmentType?: EmploymentType | null;
   id: string;
-  informationDate: string;
+  informationDate?: string | null;
   lastGradeCompleted?: LastGradeCompleted | null;
   notEmployedReason?: NotEmployedReason | null;
   schoolStatus?: SchoolStatus | null;
@@ -10859,9 +10970,9 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
         __typename?: 'Enrollment';
         lastBedNightDate?: string | null;
         id: string;
+        lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
-        exitDestination?: Destination | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
@@ -10871,14 +10982,15 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
         client: {
           __typename?: 'Client';
           id: string;
+          dob?: string | null;
+          veteranStatus: NoYesReasonsForMissingData;
+          lockVersion: number;
+          age?: number | null;
+          ssn?: string | null;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
-          dob?: string | null;
-          age?: number | null;
-          ssn?: string | null;
-          veteranStatus: NoYesReasonsForMissingData;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -10886,19 +10998,6 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
             canViewPartialSsn: boolean;
           };
         };
-        project: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        };
-        access: {
-          __typename?: 'EnrollmentAccess';
-          id: string;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-        };
-        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -10952,10 +11051,11 @@ export type UpdateBedNightsMutation = {
 
 export type ClientSearchResultFieldsFragment = {
   __typename?: 'Client';
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   id: string;
+  lockVersion: number;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -11002,10 +11102,11 @@ export type ClientFieldsFragment = {
   additionalRaceEthnicity?: string | null;
   ssnDataQuality: SsnDataQuality;
   veteranStatus: NoYesReasonsForMissingData;
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   id: string;
+  lockVersion: number;
   dob?: string | null;
   age?: number | null;
   ssn?: string | null;
@@ -11068,8 +11169,8 @@ export type ClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -11082,8 +11183,8 @@ export type ClientFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -11098,8 +11199,8 @@ export type ClientFieldsFragment = {
     use?: ClientNameUse | null;
     notes?: string | null;
     primary?: boolean | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
   }>;
   addresses: Array<{
     __typename?: 'ClientAddress';
@@ -11114,8 +11215,8 @@ export type ClientFieldsFragment = {
     notes?: string | null;
     use?: ClientAddressUse | null;
     addressType?: ClientAddressType | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
   }>;
   phoneNumbers: Array<{
     __typename?: 'ClientContactPoint';
@@ -11124,8 +11225,8 @@ export type ClientFieldsFragment = {
     notes?: string | null;
     use?: ClientContactPointUse | null;
     system?: ClientContactPointSystem | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
   }>;
   emailAddresses: Array<{
     __typename?: 'ClientContactPoint';
@@ -11134,14 +11235,15 @@ export type ClientFieldsFragment = {
     notes?: string | null;
     use?: ClientContactPointUse | null;
     system?: ClientContactPointSystem | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
   }>;
 };
 
 export type ClientNameFragment = {
   __typename?: 'Client';
   id: string;
+  lockVersion: number;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -11153,6 +11255,7 @@ export type ClientNameDobVetFragment = {
   dob?: string | null;
   veteranStatus: NoYesReasonsForMissingData;
   id: string;
+  lockVersion: number;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -11170,8 +11273,8 @@ export type ClientNameObjectFieldsFragment = {
   use?: ClientNameUse | null;
   notes?: string | null;
   primary?: boolean | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
 };
 
 export type ClientAddressFieldsFragment = {
@@ -11187,8 +11290,8 @@ export type ClientAddressFieldsFragment = {
   notes?: string | null;
   use?: ClientAddressUse | null;
   addressType?: ClientAddressType | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
 };
 
 export type ClientContactPointFieldsFragment = {
@@ -11198,8 +11301,8 @@ export type ClientContactPointFieldsFragment = {
   notes?: string | null;
   use?: ClientContactPointUse | null;
   system?: ClientContactPointSystem | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
 };
 
 export type ClientImageFragment = {
@@ -11216,6 +11319,7 @@ export type ClientImageFragment = {
 export type ClientIdentificationFieldsFragment = {
   __typename?: 'Client';
   id: string;
+  lockVersion: number;
   dob?: string | null;
   age?: number | null;
   ssn?: string | null;
@@ -11267,6 +11371,7 @@ export type ClientOmniSearchFieldsFragment = {
   age?: number | null;
   gender: Array<Gender>;
   personalId: string;
+  lockVersion: number;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -11301,10 +11406,11 @@ export type SearchClientsQuery = {
     nodesCount: number;
     nodes: Array<{
       __typename?: 'Client';
-      dateCreated: string;
+      dateCreated?: string | null;
       dateDeleted?: string | null;
-      dateUpdated: string;
+      dateUpdated?: string | null;
       id: string;
+      lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -11359,10 +11465,11 @@ export type GetClientQuery = {
     additionalRaceEthnicity?: string | null;
     ssnDataQuality: SsnDataQuality;
     veteranStatus: NoYesReasonsForMissingData;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     id: string;
+    lockVersion: number;
     dob?: string | null;
     age?: number | null;
     ssn?: string | null;
@@ -11425,8 +11532,8 @@ export type GetClientQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -11439,8 +11546,8 @@ export type GetClientQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -11455,8 +11562,8 @@ export type GetClientQuery = {
       use?: ClientNameUse | null;
       notes?: string | null;
       primary?: boolean | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
     }>;
     addresses: Array<{
       __typename?: 'ClientAddress';
@@ -11471,8 +11578,8 @@ export type GetClientQuery = {
       notes?: string | null;
       use?: ClientAddressUse | null;
       addressType?: ClientAddressType | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
     }>;
     phoneNumbers: Array<{
       __typename?: 'ClientContactPoint';
@@ -11481,8 +11588,8 @@ export type GetClientQuery = {
       notes?: string | null;
       use?: ClientContactPointUse | null;
       system?: ClientContactPointSystem | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
     }>;
     emailAddresses: Array<{
       __typename?: 'ClientContactPoint';
@@ -11491,8 +11598,8 @@ export type GetClientQuery = {
       notes?: string | null;
       use?: ClientContactPointUse | null;
       system?: ClientContactPointSystem | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
     }>;
   } | null;
 };
@@ -11506,6 +11613,7 @@ export type GetClientNameQuery = {
   client?: {
     __typename?: 'Client';
     id: string;
+    lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -11580,9 +11688,9 @@ export type GetClientEnrollmentsQuery = {
       nodes: Array<{
         __typename?: 'Enrollment';
         id: string;
+        lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
-        exitDestination?: Destination | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
@@ -11595,23 +11703,6 @@ export type GetClientEnrollmentsQuery = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        client: {
-          __typename?: 'Client';
-          dob?: string | null;
-          veteranStatus: NoYesReasonsForMissingData;
-          id: string;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        };
-        access: {
-          __typename?: 'EnrollmentAccess';
-          id: string;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-        };
-        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -11672,7 +11763,7 @@ export type GetClientServicesQuery = {
       nodes: Array<{
         __typename?: 'Service';
         id: string;
-        dateProvided: string;
+        dateProvided?: string | null;
         faAmount?: number | null;
         faStartDate?: string | null;
         faEndDate?: string | null;
@@ -11680,15 +11771,15 @@ export type GetClientServicesQuery = {
         referralOutcome?: PathReferralOutcome | null;
         subTypeProvided?: ServiceSubTypeProvided | null;
         otherTypeProvided?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         dateDeleted?: string | null;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
+          lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
-          exitDestination?: Destination | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
           enrollmentCoc?: string | null;
@@ -11701,27 +11792,6 @@ export type GetClientServicesQuery = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          client: {
-            __typename?: 'Client';
-            dob?: string | null;
-            veteranStatus: NoYesReasonsForMissingData;
-            id: string;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          };
-          access: {
-            __typename?: 'EnrollmentAccess';
-            id: string;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-          };
-          currentUnit?: {
-            __typename?: 'Unit';
-            id: string;
-            name: string;
-          } | null;
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
         serviceType: {
@@ -11731,8 +11801,8 @@ export type GetClientServicesQuery = {
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
           category: string;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -11751,8 +11821,8 @@ export type GetClientServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -11765,108 +11835,11 @@ export type GetClientServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
-      }>;
-    };
-  } | null;
-};
-
-export type GetNonWipEnrollmentsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetNonWipEnrollmentsQuery = {
-  __typename?: 'Query';
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    enrollments: {
-      __typename?: 'EnrollmentsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Enrollment';
-        id: string;
-        entryDate: string;
-        exitDate?: string | null;
-        dateOfEngagement?: string | null;
-        moveInDate?: string | null;
-        livingSituation?: PriorLivingSituation | null;
-        rentalSubsidyType?: RentalSubsidyType | null;
-        lengthOfStay?: ResidencePriorLengthOfStay | null;
-        losUnderThreshold?: NoYesMissing | null;
-        previousStreetEssh?: NoYesMissing | null;
-        dateToStreetEssh?: string | null;
-        timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
-        monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-        enrollmentCoc?: string | null;
-        dateOfPathStatus?: string | null;
-        clientEnrolledInPath?: NoYesMissing | null;
-        reasonNotEnrolled?: ReasonNotEnrolled | null;
-        percentAmi?: PercentAmi | null;
-        referralSource?: ReferralSource | null;
-        countOutreachReferralApproaches?: number | null;
-        dateOfBcpStatus?: string | null;
-        eligibleForRhy?: NoYesMissing | null;
-        reasonNoServices?: ReasonNoServices | null;
-        runawayYouth?: NoYesReasonsForMissingData | null;
-        sexualOrientation?: SexualOrientation | null;
-        sexualOrientationOther?: string | null;
-        formerWardChildWelfare?: NoYesReasonsForMissingData | null;
-        childWelfareYears?: RhyNumberofYears | null;
-        childWelfareMonths?: number | null;
-        formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
-        juvenileJusticeYears?: RhyNumberofYears | null;
-        juvenileJusticeMonths?: number | null;
-        unemploymentFam?: NoYesMissing | null;
-        mentalHealthDisorderFam?: NoYesMissing | null;
-        physicalDisabilityFam?: NoYesMissing | null;
-        alcoholDrugUseDisorderFam?: NoYesMissing | null;
-        insufficientIncome?: NoYesMissing | null;
-        incarceratedParent?: NoYesMissing | null;
-        targetScreenReqd?: NoYesMissing | null;
-        timeToHousingLoss?: TimeToHousingLoss | null;
-        annualPercentAmi?: AnnualPercentAmi | null;
-        literalHomelessHistory?: LiteralHomelessHistory | null;
-        clientLeaseholder?: NoYesMissing | null;
-        hohLeaseholder?: NoYesMissing | null;
-        subsidyAtRisk?: NoYesMissing | null;
-        evictionHistory?: EvictionHistory | null;
-        criminalRecord?: NoYesMissing | null;
-        incarceratedAdult?: IncarceratedAdult | null;
-        prisonDischarge?: NoYesMissing | null;
-        sexOffender?: NoYesMissing | null;
-        disabledHoh?: NoYesMissing | null;
-        currentPregnant?: NoYesMissing | null;
-        singleParent?: NoYesMissing | null;
-        dependentUnder6?: DependentUnder6 | null;
-        hh5Plus?: NoYesMissing | null;
-        cocPrioritized?: NoYesMissing | null;
-        hpScreeningScore?: NoYesMissing | null;
-        thresholdScore?: NoYesMissing | null;
-        vamcStation?: VamcStationNumber | null;
-        translationNeeded?: NoYesReasonsForMissingData | null;
-        preferredLanguage?: PreferredLanguage | null;
-        preferredLanguageDifferent?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
-        project: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        };
-        intakeAssessment?: {
-          __typename?: 'Assessment';
-          id: string;
-          user?: { __typename?: 'User'; name: string } | null;
-        } | null;
       }>;
     };
   } | null;
@@ -11968,8 +11941,8 @@ export type DeleteClientFileMutation = {
       ownFile: boolean;
       redacted: boolean;
       enrollmentId?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
       uploadedBy?: {
         __typename?: 'ApplicationUser';
@@ -12038,6 +12011,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
   client?: {
     __typename?: 'Client';
     id: string;
+    lockVersion: number;
     enrollments: {
       __typename?: 'EnrollmentsPaginated';
       offset: number;
@@ -12062,6 +12036,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               __typename?: 'Client';
               id: string;
               veteranStatus: NoYesReasonsForMissingData;
+              lockVersion: number;
               firstName?: string | null;
               middleName?: string | null;
               lastName?: string | null;
@@ -12098,6 +12073,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
             enrollment: {
               __typename?: 'Enrollment';
               id: string;
+              lockVersion: number;
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
@@ -12134,8 +12110,8 @@ export type GetFileQuery = {
     ownFile: boolean;
     redacted: boolean;
     enrollmentId?: string | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
     enrollment?: { __typename?: 'Enrollment'; id: string } | null;
     uploadedBy?: {
       __typename?: 'ApplicationUser';
@@ -12181,9 +12157,27 @@ export type GetClientFilesQuery = {
         ownFile: boolean;
         redacted: boolean;
         enrollmentId?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
-        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        enrollment?: {
+          __typename?: 'Enrollment';
+          id: string;
+          lockVersion: number;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          enrollmentCoc?: string | null;
+          householdId: string;
+          householdShortId: string;
+          householdSize: number;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+        } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -12205,16 +12199,52 @@ export type CurrentLivingSituationFieldsFragment = {
   id: string;
   clsSubsidyType?: RentalSubsidyType | null;
   currentLivingSituation: CurrentLivingSituationOptions;
-  informationDate: string;
+  informationDate?: string | null;
   leaseOwn60Day?: NoYesReasonsForMissingData | null;
   leaveSituation14Days?: NoYesReasonsForMissingData | null;
   locationDetails?: string | null;
   movedTwoOrMore?: NoYesReasonsForMissingData | null;
   resourcesToObtain?: NoYesReasonsForMissingData | null;
   subsequentResidence?: NoYesReasonsForMissingData | null;
-  dateUpdated: string;
-  dateCreated: string;
+  dateUpdated?: string | null;
+  dateCreated?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
@@ -12238,18 +12268,117 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         id: string;
         clsSubsidyType?: RentalSubsidyType | null;
         currentLivingSituation: CurrentLivingSituationOptions;
-        informationDate: string;
+        informationDate?: string | null;
         leaseOwn60Day?: NoYesReasonsForMissingData | null;
         leaveSituation14Days?: NoYesReasonsForMissingData | null;
         locationDetails?: string | null;
         movedTwoOrMore?: NoYesReasonsForMissingData | null;
         resourcesToObtain?: NoYesReasonsForMissingData | null;
         subsequentResidence?: NoYesReasonsForMissingData | null;
-        dateUpdated: string;
-        dateCreated: string;
+        dateUpdated?: string | null;
+        dateCreated?: string | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
+      }>;
+    };
+  } | null;
+};
+
+export type CustomCaseNoteFieldsFragment = {
+  __typename?: 'CustomCaseNote';
+  id: string;
+  content: string;
+  dateUpdated?: string | null;
+  dateCreated?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
+export type GetEnrollmentCustomCaseNotesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetEnrollmentCustomCaseNotesQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    customCaseNotes: {
+      __typename?: 'CustomCaseNotesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CustomCaseNote';
+        id: string;
+        content: string;
+        dateUpdated?: string | null;
+        dateCreated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
+  } | null;
+};
+
+export type DeleteCustomCaseNoteMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteCustomCaseNoteMutation = {
+  __typename?: 'Mutation';
+  deleteCustomCaseNote?: {
+    __typename?: 'DeleteCustomCaseNotePayload';
+    customCaseNote?: { __typename?: 'CustomCaseNote'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
@@ -12263,8 +12392,8 @@ export type CustomDataElementValueFieldsFragment = {
   valueJson?: any | null;
   valueString?: string | null;
   valueText?: string | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
@@ -12285,8 +12414,8 @@ export type CustomDataElementFieldsFragment = {
     valueJson?: any | null;
     valueString?: string | null;
     valueText?: string | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
   values?: Array<{
@@ -12299,15 +12428,69 @@ export type CustomDataElementFieldsFragment = {
     valueJson?: any | null;
     valueString?: string | null;
     valueText?: string | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
   }> | null;
+};
+
+export type ProjectEnrollmentFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  lockVersion: number;
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  client: {
+    __typename?: 'Client';
+    id: string;
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
+    lockVersion: number;
+    age?: number | null;
+    ssn?: string | null;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+    access: {
+      __typename?: 'ClientAccess';
+      id: string;
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
+    };
+  };
+};
+
+export type ClientEnrollmentFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  lockVersion: number;
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  project: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
 };
 
 export type EnrollmentFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
+  lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
@@ -12328,6 +12511,7 @@ export type EnrollmentFieldsFragment = {
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
+    lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -12344,7 +12528,9 @@ export type EnrollmentFieldsFragment = {
 
 export type AllEnrollmentDetailsFragment = {
   __typename?: 'Enrollment';
+  numUnitsAssignedToHousehold: number;
   id: string;
+  lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
@@ -12383,8 +12569,8 @@ export type AllEnrollmentDetailsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -12397,16 +12583,18 @@ export type AllEnrollmentDetailsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
   client: {
     __typename?: 'Client';
+    hudChronic?: boolean | null;
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
+    lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -12428,8 +12616,8 @@ export type AllEnrollmentDetailsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -12442,8 +12630,8 @@ export type AllEnrollmentDetailsFragment = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -12996,6 +13184,7 @@ export type AllEnrollmentDetailsFragment = {
 export type EnrollmentOccurrencePointFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
+  lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
   dateOfEngagement?: string | null;
@@ -13014,8 +13203,10 @@ export type EnrollmentOccurrencePointFieldsFragment = {
 export type EnrollmentValuesFragment = {
   __typename?: 'Enrollment';
   id: string;
+  lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
+  disablingCondition?: NoYesReasonsForMissingData | null;
   dateOfEngagement?: string | null;
   moveInDate?: string | null;
   livingSituation?: PriorLivingSituation | null;
@@ -13069,8 +13260,8 @@ export type EnrollmentValuesFragment = {
   dependentUnder6?: DependentUnder6 | null;
   hh5Plus?: NoYesMissing | null;
   cocPrioritized?: NoYesMissing | null;
-  hpScreeningScore?: NoYesMissing | null;
-  thresholdScore?: NoYesMissing | null;
+  hpScreeningScore?: number | null;
+  thresholdScore?: number | null;
   vamcStation?: VamcStationNumber | null;
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
@@ -13080,6 +13271,7 @@ export type EnrollmentValuesFragment = {
 export type SubmittedEnrollmentResultFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
+  lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
@@ -13116,8 +13308,8 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -13130,8 +13322,8 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -13146,98 +13338,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
-  };
-  access: {
-    __typename?: 'EnrollmentAccess';
-    id: string;
-    canEditEnrollments: boolean;
-    canDeleteEnrollments: boolean;
-  };
-  currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-};
-
-export type EnrollmentWithHouseholdFragmentFragment = {
-  __typename?: 'Enrollment';
-  id: string;
-  entryDate: string;
-  exitDate?: string | null;
-  exitDestination?: Destination | null;
-  inProgress: boolean;
-  relationshipToHoH: RelationshipToHoH;
-  enrollmentCoc?: string | null;
-  householdId: string;
-  householdShortId: string;
-  householdSize: number;
-  household: {
-    __typename?: 'Household';
-    id: string;
-    shortId: string;
-    householdClients: Array<{
-      __typename?: 'HouseholdClient';
-      id: string;
-      relationshipToHoH: RelationshipToHoH;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        veteranStatus: NoYesReasonsForMissingData;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-        dob?: string | null;
-        age?: number | null;
-        ssn?: string | null;
-        access: {
-          __typename?: 'ClientAccess';
-          id: string;
-          canViewFullSsn: boolean;
-          canViewPartialSsn: boolean;
-          canEditClient: boolean;
-          canDeleteClient: boolean;
-          canViewDob: boolean;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-          canViewEnrollmentDetails: boolean;
-          canDeleteAssessments: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canViewAnyConfidentialClientFiles: boolean;
-          canViewAnyNonconfidentialClientFiles: boolean;
-        };
-        externalIds: Array<{
-          __typename?: 'ExternalIdentifier';
-          id: string;
-          identifier?: string | null;
-          url?: string | null;
-          label: string;
-          type: ExternalIdentifierType;
-        }>;
-      };
-      enrollment: {
-        __typename?: 'Enrollment';
-        id: string;
-        entryDate: string;
-        exitDate?: string | null;
-        inProgress: boolean;
-        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-      };
-    }>;
-  };
-  project: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  };
-  client: {
-    __typename?: 'Client';
-    dob?: string | null;
-    veteranStatus: NoYesReasonsForMissingData;
-    id: string;
+    lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -13262,8 +13363,8 @@ export type EventFieldsFragment = {
   referralCaseManageAfter?: NoYesMissing | null;
   referralResult?: ReferralResult | null;
   resultDate?: string | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
@@ -13275,8 +13376,8 @@ export type CeAssessmentFieldsFragment = {
   assessmentLevel?: AssessmentLevel | null;
   assessmentLocation: string;
   assessmentType?: AssessmentType | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   prioritizationStatus?: PrioritizationStatus | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
@@ -13303,6 +13404,7 @@ export type GetEnrollmentQuery = {
   enrollment?: {
     __typename?: 'Enrollment';
     id: string;
+    lockVersion: number;
     entryDate: string;
     exitDate?: string | null;
     exitDestination?: Destination | null;
@@ -13312,6 +13414,65 @@ export type GetEnrollmentQuery = {
     householdId: string;
     householdShortId: string;
     householdSize: number;
+    disablingCondition?: NoYesReasonsForMissingData | null;
+    dateOfEngagement?: string | null;
+    moveInDate?: string | null;
+    livingSituation?: PriorLivingSituation | null;
+    rentalSubsidyType?: RentalSubsidyType | null;
+    lengthOfStay?: ResidencePriorLengthOfStay | null;
+    losUnderThreshold?: NoYesMissing | null;
+    previousStreetEssh?: NoYesMissing | null;
+    dateToStreetEssh?: string | null;
+    timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+    monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+    dateOfPathStatus?: string | null;
+    clientEnrolledInPath?: NoYesMissing | null;
+    reasonNotEnrolled?: ReasonNotEnrolled | null;
+    percentAmi?: PercentAmi | null;
+    referralSource?: ReferralSource | null;
+    countOutreachReferralApproaches?: number | null;
+    dateOfBcpStatus?: string | null;
+    eligibleForRhy?: NoYesMissing | null;
+    reasonNoServices?: ReasonNoServices | null;
+    runawayYouth?: NoYesReasonsForMissingData | null;
+    sexualOrientation?: SexualOrientation | null;
+    sexualOrientationOther?: string | null;
+    formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+    childWelfareYears?: RhyNumberofYears | null;
+    childWelfareMonths?: number | null;
+    formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+    juvenileJusticeYears?: RhyNumberofYears | null;
+    juvenileJusticeMonths?: number | null;
+    unemploymentFam?: NoYesMissing | null;
+    mentalHealthDisorderFam?: NoYesMissing | null;
+    physicalDisabilityFam?: NoYesMissing | null;
+    alcoholDrugUseDisorderFam?: NoYesMissing | null;
+    insufficientIncome?: NoYesMissing | null;
+    incarceratedParent?: NoYesMissing | null;
+    targetScreenReqd?: NoYesMissing | null;
+    timeToHousingLoss?: TimeToHousingLoss | null;
+    annualPercentAmi?: AnnualPercentAmi | null;
+    literalHomelessHistory?: LiteralHomelessHistory | null;
+    clientLeaseholder?: NoYesMissing | null;
+    hohLeaseholder?: NoYesMissing | null;
+    subsidyAtRisk?: NoYesMissing | null;
+    evictionHistory?: EvictionHistory | null;
+    criminalRecord?: NoYesMissing | null;
+    incarceratedAdult?: IncarceratedAdult | null;
+    prisonDischarge?: NoYesMissing | null;
+    sexOffender?: NoYesMissing | null;
+    disabledHoh?: NoYesMissing | null;
+    currentPregnant?: NoYesMissing | null;
+    singleParent?: NoYesMissing | null;
+    dependentUnder6?: DependentUnder6 | null;
+    hh5Plus?: NoYesMissing | null;
+    cocPrioritized?: NoYesMissing | null;
+    hpScreeningScore?: number | null;
+    thresholdScore?: number | null;
+    vamcStation?: VamcStationNumber | null;
+    translationNeeded?: NoYesReasonsForMissingData | null;
+    preferredLanguage?: PreferredLanguage | null;
+    preferredLanguageDifferent?: string | null;
     project: {
       __typename?: 'Project';
       id: string;
@@ -13323,6 +13484,7 @@ export type GetEnrollmentQuery = {
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
+      lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -13346,7 +13508,9 @@ export type GetEnrollmentDetailsQuery = {
   __typename?: 'Query';
   enrollment?: {
     __typename?: 'Enrollment';
+    numUnitsAssignedToHousehold: number;
     id: string;
+    lockVersion: number;
     entryDate: string;
     exitDate?: string | null;
     exitDestination?: Destination | null;
@@ -13385,8 +13549,8 @@ export type GetEnrollmentDetailsQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -13399,16 +13563,18 @@ export type GetEnrollmentDetailsQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
     client: {
       __typename?: 'Client';
+      hudChronic?: boolean | null;
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
+      lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -13430,8 +13596,8 @@ export type GetEnrollmentDetailsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -13444,8 +13610,8 @@ export type GetEnrollmentDetailsQuery = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -14005,6 +14171,7 @@ export type GetEnrollmentWithHouseholdQuery = {
   enrollment?: {
     __typename?: 'Enrollment';
     id: string;
+    lockVersion: number;
     entryDate: string;
     exitDate?: string | null;
     exitDestination?: Destination | null;
@@ -14026,6 +14193,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           __typename?: 'Client';
           id: string;
           veteranStatus: NoYesReasonsForMissingData;
+          lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -14062,6 +14230,7 @@ export type GetEnrollmentWithHouseholdQuery = {
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
+          lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
@@ -14084,6 +14253,7 @@ export type GetEnrollmentWithHouseholdQuery = {
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
+      lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -14110,6 +14280,7 @@ export type GetEnrollmentEventsQuery = {
   enrollment?: {
     __typename?: 'Enrollment';
     id: string;
+    lockVersion: number;
     events: {
       __typename?: 'EventsPaginated';
       offset: number;
@@ -14125,8 +14296,8 @@ export type GetEnrollmentEventsQuery = {
         referralCaseManageAfter?: NoYesMissing | null;
         referralResult?: ReferralResult | null;
         resultDate?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         dateDeleted?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
@@ -14157,8 +14328,8 @@ export type GetEnrollmentCeAssessmentsQuery = {
         assessmentLevel?: AssessmentLevel | null;
         assessmentLocation: string;
         assessmentType?: AssessmentType | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
@@ -14194,6 +14365,7 @@ export type GetEnrollmentRemindersQuery = {
         id: string;
         dob?: string | null;
         veteranStatus: NoYesReasonsForMissingData;
+        lockVersion: number;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -14328,8 +14500,8 @@ export type FileFieldsFragment = {
   ownFile: boolean;
   redacted: boolean;
   enrollmentId?: string | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   enrollment?: { __typename?: 'Enrollment'; id: string } | null;
   uploadedBy?: {
     __typename?: 'ApplicationUser';
@@ -16413,8 +16585,8 @@ export type SubmitFormMutation = {
           assessmentLevel?: AssessmentLevel | null;
           assessmentLocation: string;
           assessmentType?: AssessmentType | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           dateDeleted?: string | null;
           prioritizationStatus?: PrioritizationStatus | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
@@ -16431,10 +16603,11 @@ export type SubmitFormMutation = {
           additionalRaceEthnicity?: string | null;
           ssnDataQuality: SsnDataQuality;
           veteranStatus: NoYesReasonsForMissingData;
-          dateCreated: string;
+          dateCreated?: string | null;
           dateDeleted?: string | null;
-          dateUpdated: string;
+          dateUpdated?: string | null;
           id: string;
+          lockVersion: number;
           dob?: string | null;
           age?: number | null;
           ssn?: string | null;
@@ -16497,8 +16670,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             } | null;
             values?: Array<{
@@ -16511,8 +16684,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
@@ -16527,8 +16700,8 @@ export type SubmitFormMutation = {
             use?: ClientNameUse | null;
             notes?: string | null;
             primary?: boolean | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
           }>;
           addresses: Array<{
             __typename?: 'ClientAddress';
@@ -16543,8 +16716,8 @@ export type SubmitFormMutation = {
             notes?: string | null;
             use?: ClientAddressUse | null;
             addressType?: ClientAddressType | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
           }>;
           phoneNumbers: Array<{
             __typename?: 'ClientContactPoint';
@@ -16553,8 +16726,8 @@ export type SubmitFormMutation = {
             notes?: string | null;
             use?: ClientContactPointUse | null;
             system?: ClientContactPointSystem | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
           }>;
           emailAddresses: Array<{
             __typename?: 'ClientContactPoint';
@@ -16563,8 +16736,8 @@ export type SubmitFormMutation = {
             notes?: string | null;
             use?: ClientContactPointUse | null;
             system?: ClientContactPointSystem | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
           }>;
         }
       | {
@@ -16572,20 +16745,65 @@ export type SubmitFormMutation = {
           id: string;
           clsSubsidyType?: RentalSubsidyType | null;
           currentLivingSituation: CurrentLivingSituationOptions;
-          informationDate: string;
+          informationDate?: string | null;
           leaseOwn60Day?: NoYesReasonsForMissingData | null;
           leaveSituation14Days?: NoYesReasonsForMissingData | null;
           locationDetails?: string | null;
           movedTwoOrMore?: NoYesReasonsForMissingData | null;
           resourcesToObtain?: NoYesReasonsForMissingData | null;
           subsequentResidence?: NoYesReasonsForMissingData | null;
-          dateUpdated: string;
-          dateCreated: string;
+          dateUpdated?: string | null;
+          dateCreated?: string | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            fieldType: CustomDataElementType;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
+        }
+      | {
+          __typename?: 'CustomCaseNote';
+          id: string;
+          content: string;
+          dateUpdated?: string | null;
+          dateCreated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'Enrollment';
           id: string;
+          lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
           exitDestination?: Destination | null;
@@ -16622,8 +16840,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             } | null;
             values?: Array<{
@@ -16636,8 +16854,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
@@ -16652,6 +16870,7 @@ export type SubmitFormMutation = {
             dob?: string | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
+            lockVersion: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -16679,8 +16898,8 @@ export type SubmitFormMutation = {
           referralCaseManageAfter?: NoYesMissing | null;
           referralResult?: ReferralResult | null;
           resultDate?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           dateDeleted?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }
@@ -16698,8 +16917,8 @@ export type SubmitFormMutation = {
           ownFile: boolean;
           redacted: boolean;
           enrollmentId?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -16716,14 +16935,14 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'Funder';
           id: string;
-          dateCreated: string;
+          dateCreated?: string | null;
           dateDeleted?: string | null;
-          dateUpdated: string;
+          dateUpdated?: string | null;
           endDate?: string | null;
           funder: FundingSource;
-          grantId: string;
+          grantId?: string | null;
           otherFunder?: string | null;
-          startDate: string;
+          startDate?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
@@ -16733,15 +16952,15 @@ export type SubmitFormMutation = {
           chBedInventory?: number | null;
           chVetBedInventory?: number | null;
           chYouthBedInventory?: number | null;
-          cocCode: string;
-          dateCreated: string;
+          cocCode?: string | null;
+          dateCreated?: string | null;
           dateDeleted?: string | null;
-          dateUpdated: string;
+          dateUpdated?: string | null;
           esBedType?: BedType | null;
-          householdType: HouseholdType;
+          householdType?: HouseholdType | null;
           id: string;
           inventoryEndDate?: string | null;
-          inventoryStartDate: string;
+          inventoryStartDate?: string | null;
           otherBedInventory?: number | null;
           unitInventory: number;
           vetBedInventory?: number | null;
@@ -16765,8 +16984,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             } | null;
             values?: Array<{
@@ -16779,8 +16998,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
@@ -16793,8 +17012,8 @@ export type SubmitFormMutation = {
           description?: string | null;
           contactInformation?: string | null;
           victimServiceProvider: NoYesMissing;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           dateDeleted?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
           customDataElements: Array<{
@@ -16814,8 +17033,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             } | null;
             values?: Array<{
@@ -16828,8 +17047,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
@@ -16850,7 +17069,7 @@ export type SubmitFormMutation = {
           projectName: string;
           projectType?: ProjectType | null;
           operatingEndDate?: string | null;
-          operatingStartDate: string;
+          operatingStartDate?: string | null;
           organization: {
             __typename?: 'Organization';
             id: string;
@@ -16893,8 +17112,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             } | null;
             values?: Array<{
@@ -16907,8 +17126,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
@@ -16930,10 +17149,10 @@ export type SubmitFormMutation = {
           address1?: string | null;
           address2?: string | null;
           city?: string | null;
-          cocCode: string;
-          dateCreated: string;
+          cocCode?: string | null;
+          dateCreated?: string | null;
           dateDeleted?: string | null;
-          dateUpdated: string;
+          dateUpdated?: string | null;
           geocode: string;
           geographyType?: GeographyType | null;
           state?: string | null;
@@ -16962,7 +17181,7 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'Service';
           id: string;
-          dateProvided: string;
+          dateProvided?: string | null;
           faAmount?: number | null;
           faStartDate?: string | null;
           faEndDate?: string | null;
@@ -16970,8 +17189,8 @@ export type SubmitFormMutation = {
           referralOutcome?: PathReferralOutcome | null;
           subTypeProvided?: ServiceSubTypeProvided | null;
           otherTypeProvided?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           dateDeleted?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
           serviceType: {
@@ -16981,8 +17200,8 @@ export type SubmitFormMutation = {
             hudRecordType?: RecordType | null;
             hudTypeProvided?: ServiceTypeProvided | null;
             category: string;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -17001,8 +17220,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             } | null;
             values?: Array<{
@@ -17015,8 +17234,8 @@ export type SubmitFormMutation = {
               valueJson?: any | null;
               valueString?: string | null;
               valueText?: string | null;
-              dateCreated: string;
-              dateUpdated: string;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
           }>;
@@ -17052,6 +17271,7 @@ export type HouseholdFieldsFragment = {
       __typename?: 'Client';
       id: string;
       veteranStatus: NoYesReasonsForMissingData;
+      lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -17088,46 +17308,11 @@ export type HouseholdFieldsFragment = {
     enrollment: {
       __typename?: 'Enrollment';
       id: string;
+      lockVersion: number;
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
       currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-    };
-  }>;
-};
-
-export type ProjectEnrollmentsHouseholdFieldsFragment = {
-  __typename?: 'Household';
-  id: string;
-  householdSize: number;
-  shortId: string;
-  householdClients: Array<{
-    __typename?: 'HouseholdClient';
-    id: string;
-    relationshipToHoH: RelationshipToHoH;
-    client: {
-      __typename?: 'Client';
-      id: string;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-      dob?: string | null;
-      age?: number | null;
-      ssn?: string | null;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
-      };
-    };
-    enrollment: {
-      __typename?: 'Enrollment';
-      id: string;
-      entryDate: string;
-      exitDate?: string | null;
-      inProgress: boolean;
     };
   }>;
 };
@@ -17140,6 +17325,7 @@ export type HouseholdClientFieldsFragment = {
     __typename?: 'Client';
     id: string;
     veteranStatus: NoYesReasonsForMissingData;
+    lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -17176,11 +17362,50 @@ export type HouseholdClientFieldsFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
+    lockVersion: number;
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   };
+};
+
+export type ProjectEnrollmentsHouseholdFieldsFragment = {
+  __typename?: 'Household';
+  id: string;
+  householdSize: number;
+  shortId: string;
+  householdClients: Array<{
+    __typename?: 'HouseholdClient';
+    id: string;
+    relationshipToHoH: RelationshipToHoH;
+    client: {
+      __typename?: 'Client';
+      id: string;
+      lockVersion: number;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      dob?: string | null;
+      age?: number | null;
+      ssn?: string | null;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
+    };
+    enrollment: {
+      __typename?: 'Enrollment';
+      id: string;
+      lockVersion: number;
+      entryDate: string;
+      exitDate?: string | null;
+      inProgress: boolean;
+    };
+  }>;
 };
 
 export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
@@ -17190,6 +17415,7 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
+    lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -17207,6 +17433,7 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
+    lockVersion: number;
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
@@ -17232,6 +17459,7 @@ export type GetHouseholdQuery = {
         __typename?: 'Client';
         id: string;
         veteranStatus: NoYesReasonsForMissingData;
+        lockVersion: number;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -17268,6 +17496,7 @@ export type GetHouseholdQuery = {
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
+        lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
@@ -17289,97 +17518,17 @@ export type UpdateRelationshipToHoHMutation = {
     enrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      entryDate: string;
-      exitDate?: string | null;
-      exitDestination?: Destination | null;
-      inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
-      enrollmentCoc?: string | null;
-      householdId: string;
-      householdShortId: string;
-      householdSize: number;
       household: {
         __typename?: 'Household';
         id: string;
-        shortId: string;
         householdClients: Array<{
           __typename?: 'HouseholdClient';
           id: string;
           relationshipToHoH: RelationshipToHoH;
-          client: {
-            __typename?: 'Client';
-            id: string;
-            veteranStatus: NoYesReasonsForMissingData;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-            dob?: string | null;
-            age?: number | null;
-            ssn?: string | null;
-            access: {
-              __typename?: 'ClientAccess';
-              id: string;
-              canViewFullSsn: boolean;
-              canViewPartialSsn: boolean;
-              canEditClient: boolean;
-              canDeleteClient: boolean;
-              canViewDob: boolean;
-              canEditEnrollments: boolean;
-              canDeleteEnrollments: boolean;
-              canViewEnrollmentDetails: boolean;
-              canDeleteAssessments: boolean;
-              canManageAnyClientFiles: boolean;
-              canManageOwnClientFiles: boolean;
-              canViewAnyConfidentialClientFiles: boolean;
-              canViewAnyNonconfidentialClientFiles: boolean;
-            };
-            externalIds: Array<{
-              __typename?: 'ExternalIdentifier';
-              id: string;
-              identifier?: string | null;
-              url?: string | null;
-              label: string;
-              type: ExternalIdentifierType;
-            }>;
-          };
-          enrollment: {
-            __typename?: 'Enrollment';
-            id: string;
-            entryDate: string;
-            exitDate?: string | null;
-            inProgress: boolean;
-            currentUnit?: {
-              __typename?: 'Unit';
-              id: string;
-              name: string;
-            } | null;
-          };
+          client: { __typename?: 'Client'; id: string };
         }>;
       };
-      project: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      };
-      client: {
-        __typename?: 'Client';
-        dob?: string | null;
-        veteranStatus: NoYesReasonsForMissingData;
-        id: string;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      };
-      access: {
-        __typename?: 'EnrollmentAccess';
-        id: string;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
-      };
-      currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -17405,15 +17554,15 @@ export type InventoryFieldsFragment = {
   chBedInventory?: number | null;
   chVetBedInventory?: number | null;
   chYouthBedInventory?: number | null;
-  cocCode: string;
-  dateCreated: string;
+  cocCode?: string | null;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   esBedType?: BedType | null;
-  householdType: HouseholdType;
+  householdType?: HouseholdType | null;
   id: string;
   inventoryEndDate?: string | null;
-  inventoryStartDate: string;
+  inventoryStartDate?: string | null;
   otherBedInventory?: number | null;
   unitInventory: number;
   vetBedInventory?: number | null;
@@ -17437,8 +17586,8 @@ export type InventoryFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -17451,8 +17600,8 @@ export type InventoryFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -17533,6 +17682,7 @@ export type OmniSearchClientsQuery = {
       age?: number | null;
       gender: Array<Gender>;
       personalId: string;
+      lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -17576,6 +17726,7 @@ export type GetRecentItemsQuery = {
           age?: number | null;
           gender: Array<Gender>;
           personalId: string;
+          lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -17609,6 +17760,7 @@ export type AddRecentItemMutation = {
           age?: number | null;
           gender: Array<Gender>;
           personalId: string;
+          lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -17639,6 +17791,7 @@ export type ClearRecentItemsMutation = {
           age?: number | null;
           gender: Array<Gender>;
           personalId: string;
+          lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -17668,8 +17821,8 @@ export type OrganizationDetailFieldsFragment = {
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider: NoYesMissing;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
   customDataElements: Array<{
@@ -17689,8 +17842,8 @@ export type OrganizationDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -17703,8 +17856,8 @@ export type OrganizationDetailFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -17718,8 +17871,8 @@ export type OrganizationFieldsFragment = {
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider: NoYesMissing;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
   customDataElements: Array<{
@@ -17739,8 +17892,8 @@ export type OrganizationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -17753,16 +17906,19 @@ export type OrganizationFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
 };
 
-export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never }>;
+export type GetOrganizationsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
 
-export type GetAllOrganizationsQuery = {
+export type GetOrganizationsQuery = {
   __typename?: 'Query';
   organizations: {
     __typename?: 'OrganizationsPaginated';
@@ -17791,8 +17947,8 @@ export type GetOrganizationQuery = {
     description?: string | null;
     contactInformation?: string | null;
     victimServiceProvider: NoYesMissing;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
     dateDeleted?: string | null;
     access: {
       __typename?: 'OrganizationAccess';
@@ -17818,8 +17974,8 @@ export type GetOrganizationQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -17832,8 +17988,8 @@ export type GetOrganizationQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -17864,7 +18020,7 @@ export type GetOrganizationProjectsQuery = {
         projectName: string;
         projectType?: ProjectType | null;
         operatingEndDate?: string | null;
-        operatingStartDate: string;
+        operatingStartDate?: string | null;
       }>;
     };
   } | null;
@@ -17908,7 +18064,7 @@ export type ProjectOperatingPeriodFragment = {
   __typename?: 'Project';
   id: string;
   operatingEndDate?: string | null;
-  operatingStartDate: string;
+  operatingStartDate?: string | null;
 };
 
 export type ProjectCocCountFragment = {
@@ -17932,7 +18088,7 @@ export type ProjectAllFieldsFragment = {
   projectName: string;
   projectType?: ProjectType | null;
   operatingEndDate?: string | null;
-  operatingStartDate: string;
+  operatingStartDate?: string | null;
   organization: {
     __typename?: 'Organization';
     id: string;
@@ -17975,8 +18131,8 @@ export type ProjectAllFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -17989,8 +18145,8 @@ export type ProjectAllFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -18494,10 +18650,10 @@ export type ProjectCocFieldsFragment = {
   address1?: string | null;
   address2?: string | null;
   city?: string | null;
-  cocCode: string;
-  dateCreated: string;
+  cocCode?: string | null;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   geocode: string;
   geographyType?: GeographyType | null;
   state?: string | null;
@@ -18508,14 +18664,14 @@ export type ProjectCocFieldsFragment = {
 export type FunderFieldsFragment = {
   __typename?: 'Funder';
   id: string;
-  dateCreated: string;
+  dateCreated?: string | null;
   dateDeleted?: string | null;
-  dateUpdated: string;
+  dateUpdated?: string | null;
   endDate?: string | null;
   funder: FundingSource;
-  grantId: string;
+  grantId?: string | null;
   otherFunder?: string | null;
-  startDate: string;
+  startDate?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
@@ -18539,7 +18695,7 @@ export type GetProjectsQuery = {
       projectName: string;
       projectType?: ProjectType | null;
       operatingEndDate?: string | null;
-      operatingStartDate: string;
+      operatingStartDate?: string | null;
       organization: {
         __typename?: 'Organization';
         id: string;
@@ -18572,7 +18728,7 @@ export type GetProjectQuery = {
     projectName: string;
     projectType?: ProjectType | null;
     operatingEndDate?: string | null;
-    operatingStartDate: string;
+    operatingStartDate?: string | null;
     organization: {
       __typename?: 'Organization';
       id: string;
@@ -18615,8 +18771,8 @@ export type GetProjectQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -18629,8 +18785,8 @@ export type GetProjectQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -18696,9 +18852,9 @@ export type GetProjectEnrollmentsQuery = {
       nodes: Array<{
         __typename?: 'Enrollment';
         id: string;
+        lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
-        exitDestination?: Destination | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
@@ -18708,14 +18864,15 @@ export type GetProjectEnrollmentsQuery = {
         client: {
           __typename?: 'Client';
           id: string;
+          dob?: string | null;
+          veteranStatus: NoYesReasonsForMissingData;
+          lockVersion: number;
+          age?: number | null;
+          ssn?: string | null;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
-          dob?: string | null;
-          age?: number | null;
-          ssn?: string | null;
-          veteranStatus: NoYesReasonsForMissingData;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -18723,19 +18880,6 @@ export type GetProjectEnrollmentsQuery = {
             canViewPartialSsn: boolean;
           };
         };
-        project: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        };
-        access: {
-          __typename?: 'EnrollmentAccess';
-          id: string;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-        };
-        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -18771,6 +18915,7 @@ export type GetProjectHouseholdsQuery = {
           client: {
             __typename?: 'Client';
             id: string;
+            lockVersion: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -18788,6 +18933,7 @@ export type GetProjectHouseholdsQuery = {
           enrollment: {
             __typename?: 'Enrollment';
             id: string;
+            lockVersion: number;
             entryDate: string;
             exitDate?: string | null;
             inProgress: boolean;
@@ -18819,7 +18965,7 @@ export type GetProjectServicesQuery = {
       nodes: Array<{
         __typename?: 'Service';
         id: string;
-        dateProvided: string;
+        dateProvided?: string | null;
         faAmount?: number | null;
         faStartDate?: string | null;
         faEndDate?: string | null;
@@ -18827,8 +18973,8 @@ export type GetProjectServicesQuery = {
         referralOutcome?: PathReferralOutcome | null;
         subTypeProvided?: ServiceSubTypeProvided | null;
         otherTypeProvided?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         dateDeleted?: string | null;
         enrollment: {
           __typename?: 'Enrollment';
@@ -18840,6 +18986,7 @@ export type GetProjectServicesQuery = {
             dob?: string | null;
             veteranStatus: NoYesReasonsForMissingData;
             id: string;
+            lockVersion: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -18854,8 +19001,8 @@ export type GetProjectServicesQuery = {
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
           category: string;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -18874,8 +19021,8 @@ export type GetProjectServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -18888,8 +19035,8 @@ export type GetProjectServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -18934,14 +19081,14 @@ export type GetFunderQuery = {
   funder?: {
     __typename?: 'Funder';
     id: string;
-    dateCreated: string;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     endDate?: string | null;
     funder: FundingSource;
-    grantId: string;
+    grantId?: string | null;
     otherFunder?: string | null;
-    startDate: string;
+    startDate?: string | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
 };
@@ -18959,15 +19106,15 @@ export type GetInventoryQuery = {
     chBedInventory?: number | null;
     chVetBedInventory?: number | null;
     chYouthBedInventory?: number | null;
-    cocCode: string;
-    dateCreated: string;
+    cocCode?: string | null;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     esBedType?: BedType | null;
-    householdType: HouseholdType;
+    householdType?: HouseholdType | null;
     id: string;
     inventoryEndDate?: string | null;
-    inventoryStartDate: string;
+    inventoryStartDate?: string | null;
     otherBedInventory?: number | null;
     unitInventory: number;
     vetBedInventory?: number | null;
@@ -18991,8 +19138,8 @@ export type GetInventoryQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -19005,8 +19152,8 @@ export type GetInventoryQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -19025,10 +19172,10 @@ export type GetProjectCocQuery = {
     address1?: string | null;
     address2?: string | null;
     city?: string | null;
-    cocCode: string;
-    dateCreated: string;
+    cocCode?: string | null;
+    dateCreated?: string | null;
     dateDeleted?: string | null;
-    dateUpdated: string;
+    dateUpdated?: string | null;
     geocode: string;
     geographyType?: GeographyType | null;
     state?: string | null;
@@ -19060,15 +19207,15 @@ export type GetProjectInventoriesQuery = {
         chBedInventory?: number | null;
         chVetBedInventory?: number | null;
         chYouthBedInventory?: number | null;
-        cocCode: string;
-        dateCreated: string;
+        cocCode?: string | null;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         esBedType?: BedType | null;
-        householdType: HouseholdType;
+        householdType?: HouseholdType | null;
         id: string;
         inventoryEndDate?: string | null;
-        inventoryStartDate: string;
+        inventoryStartDate?: string | null;
         otherBedInventory?: number | null;
         unitInventory: number;
         vetBedInventory?: number | null;
@@ -19092,8 +19239,8 @@ export type GetProjectInventoriesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -19106,8 +19253,8 @@ export type GetProjectInventoriesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -19229,6 +19376,11 @@ export type GetProjectOutgoingReferralPostingsQuery = {
         assignedDate: string;
         statusUpdatedAt?: string | null;
         statusUpdatedBy?: string | null;
+        hohEnrollment?: {
+          __typename?: 'Enrollment';
+          id: string;
+          client: { __typename?: 'Client'; id: string };
+        } | null;
         project?: {
           __typename?: 'Project';
           id: string;
@@ -19267,10 +19419,10 @@ export type GetProjectProjectCocsQuery = {
         address1?: string | null;
         address2?: string | null;
         city?: string | null;
-        cocCode: string;
-        dateCreated: string;
+        cocCode?: string | null;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         geocode: string;
         geographyType?: GeographyType | null;
         state?: string | null;
@@ -19300,14 +19452,14 @@ export type GetProjectFundersQuery = {
       nodes: Array<{
         __typename?: 'Funder';
         id: string;
-        dateCreated: string;
+        dateCreated?: string | null;
         dateDeleted?: string | null;
-        dateUpdated: string;
+        dateUpdated?: string | null;
         endDate?: string | null;
         funder: FundingSource;
-        grantId: string;
+        grantId?: string | null;
         otherFunder?: string | null;
-        startDate: string;
+        startDate?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
@@ -19470,7 +19622,11 @@ export type GetReferralPostingQuery = {
     hohEnrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      client: { __typename?: 'Client'; id: string };
+      client: {
+        __typename?: 'Client';
+        id: string;
+        hudChronic?: boolean | null;
+      };
     } | null;
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
@@ -19492,6 +19648,7 @@ export type GetReferralPostingQuery = {
         id: string;
         veteranStatus: NoYesReasonsForMissingData;
         gender: Array<Gender>;
+        lockVersion: number;
         firstName?: string | null;
         middleName?: string | null;
         lastName?: string | null;
@@ -19581,7 +19738,11 @@ export type UpdateReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: { __typename?: 'Client'; id: string };
+        client: {
+          __typename?: 'Client';
+          id: string;
+          hudChronic?: boolean | null;
+        };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -19603,6 +19764,7 @@ export type UpdateReferralPostingMutation = {
           id: string;
           veteranStatus: NoYesReasonsForMissingData;
           gender: Array<Gender>;
+          lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -19706,7 +19868,11 @@ export type CreateOutgoingReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: { __typename?: 'Client'; id: string };
+        client: {
+          __typename?: 'Client';
+          id: string;
+          hudChronic?: boolean | null;
+        };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -19728,6 +19894,7 @@ export type CreateOutgoingReferralPostingMutation = {
           id: string;
           veteranStatus: NoYesReasonsForMissingData;
           gender: Array<Gender>;
+          lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -19889,7 +20056,7 @@ export type ReferralPostingDetailFieldsFragment = {
   hohEnrollment?: {
     __typename?: 'Enrollment';
     id: string;
-    client: { __typename?: 'Client'; id: string };
+    client: { __typename?: 'Client'; id: string; hudChronic?: boolean | null };
   } | null;
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
@@ -19911,6 +20078,7 @@ export type ReferralPostingDetailFieldsFragment = {
       id: string;
       veteranStatus: NoYesReasonsForMissingData;
       gender: Array<Gender>;
+      lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -19985,6 +20153,7 @@ export type ReminderFieldsFragment = {
     id: string;
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
+    lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -20031,8 +20200,8 @@ export type EsgFundingServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -20045,8 +20214,8 @@ export type EsgFundingServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -20097,8 +20266,8 @@ export type GetEsgFundingReportQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -20111,8 +20280,8 @@ export type GetEsgFundingReportQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -20126,14 +20295,14 @@ export type ServiceTypeFieldsFragment = {
   hudRecordType?: RecordType | null;
   hudTypeProvided?: ServiceTypeProvided | null;
   category: string;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
 };
 
 export type ServiceFieldsFragment = {
   __typename?: 'Service';
   id: string;
-  dateProvided: string;
+  dateProvided?: string | null;
   faAmount?: number | null;
   faStartDate?: string | null;
   faEndDate?: string | null;
@@ -20141,8 +20310,8 @@ export type ServiceFieldsFragment = {
   referralOutcome?: PathReferralOutcome | null;
   subTypeProvided?: ServiceSubTypeProvided | null;
   otherTypeProvided?: string | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   dateDeleted?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
   serviceType: {
@@ -20152,8 +20321,8 @@ export type ServiceFieldsFragment = {
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
     category: string;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -20172,8 +20341,8 @@ export type ServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
@@ -20186,8 +20355,8 @@ export type ServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
@@ -20202,7 +20371,7 @@ export type GetServiceQuery = {
   service?: {
     __typename?: 'Service';
     id: string;
-    dateProvided: string;
+    dateProvided?: string | null;
     faAmount?: number | null;
     faStartDate?: string | null;
     faEndDate?: string | null;
@@ -20210,8 +20379,8 @@ export type GetServiceQuery = {
     referralOutcome?: PathReferralOutcome | null;
     subTypeProvided?: ServiceSubTypeProvided | null;
     otherTypeProvided?: string | null;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
     dateDeleted?: string | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
     serviceType: {
@@ -20221,8 +20390,8 @@ export type GetServiceQuery = {
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
       category: string;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -20241,8 +20410,8 @@ export type GetServiceQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       } | null;
       values?: Array<{
@@ -20255,8 +20424,8 @@ export type GetServiceQuery = {
         valueJson?: any | null;
         valueString?: string | null;
         valueText?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
@@ -20276,8 +20445,8 @@ export type GetServiceTypeQuery = {
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
     category: string;
-    dateCreated: string;
-    dateUpdated: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
   } | null;
 };
 
@@ -20293,7 +20462,7 @@ export type AddServiceToEnrollmentMutation = {
     service?: {
       __typename?: 'Service';
       id: string;
-      dateProvided: string;
+      dateProvided?: string | null;
       faAmount?: number | null;
       faStartDate?: string | null;
       faEndDate?: string | null;
@@ -20301,8 +20470,8 @@ export type AddServiceToEnrollmentMutation = {
       referralOutcome?: PathReferralOutcome | null;
       subTypeProvided?: ServiceSubTypeProvided | null;
       otherTypeProvided?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       dateDeleted?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
       serviceType: {
@@ -20312,8 +20481,8 @@ export type AddServiceToEnrollmentMutation = {
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
         category: string;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -20332,8 +20501,8 @@ export type AddServiceToEnrollmentMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -20346,8 +20515,8 @@ export type AddServiceToEnrollmentMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -20381,7 +20550,7 @@ export type DeleteServiceMutation = {
     service?: {
       __typename?: 'Service';
       id: string;
-      dateProvided: string;
+      dateProvided?: string | null;
       faAmount?: number | null;
       faStartDate?: string | null;
       faEndDate?: string | null;
@@ -20389,8 +20558,8 @@ export type DeleteServiceMutation = {
       referralOutcome?: PathReferralOutcome | null;
       subTypeProvided?: ServiceSubTypeProvided | null;
       otherTypeProvided?: string | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       dateDeleted?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
       serviceType: {
@@ -20400,8 +20569,8 @@ export type DeleteServiceMutation = {
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
         category: string;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -20420,8 +20589,8 @@ export type DeleteServiceMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         } | null;
         values?: Array<{
@@ -20434,8 +20603,8 @@ export type DeleteServiceMutation = {
           valueJson?: any | null;
           valueString?: string | null;
           valueText?: string | null;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
@@ -20477,7 +20646,7 @@ export type GetEnrollmentServicesQuery = {
       nodes: Array<{
         __typename?: 'Service';
         id: string;
-        dateProvided: string;
+        dateProvided?: string | null;
         faAmount?: number | null;
         faStartDate?: string | null;
         faEndDate?: string | null;
@@ -20485,8 +20654,8 @@ export type GetEnrollmentServicesQuery = {
         referralOutcome?: PathReferralOutcome | null;
         subTypeProvided?: ServiceSubTypeProvided | null;
         otherTypeProvided?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
         dateDeleted?: string | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
         serviceType: {
@@ -20496,8 +20665,8 @@ export type GetEnrollmentServicesQuery = {
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
           category: string;
-          dateCreated: string;
-          dateUpdated: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -20516,8 +20685,8 @@ export type GetEnrollmentServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           } | null;
           values?: Array<{
@@ -20530,8 +20699,8 @@ export type GetEnrollmentServicesQuery = {
             valueJson?: any | null;
             valueString?: string | null;
             valueText?: string | null;
-            dateCreated: string;
-            dateUpdated: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
             user?: { __typename: 'User'; id: string; name: string } | null;
           }> | null;
         }>;
@@ -20578,6 +20747,7 @@ export type UnitFieldsFragment = {
     client: {
       __typename?: 'Client';
       id: string;
+      lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -20623,6 +20793,7 @@ export type GetUnitsQuery = {
           client: {
             __typename?: 'Client';
             id: string;
+            lockVersion: number;
             firstName?: string | null;
             middleName?: string | null;
             lastName?: string | null;
@@ -20682,6 +20853,7 @@ export type CreateUnitsMutation = {
         client: {
           __typename?: 'Client';
           id: string;
+          lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -20762,6 +20934,7 @@ export type UpdateUnitsMutation = {
         client: {
           __typename?: 'Client';
           id: string;
+          lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -20815,7 +20988,6 @@ export const RootPermissionsFragmentDoc = gql`
     canViewDob
     canViewFullSsn
     canDeleteProject
-    canDeleteAssignedProjectData
     canViewPartialSsn
     canEnrollClients
     canEditEnrollments
@@ -20859,6 +21031,7 @@ export const AssessmentAccessFieldsFragmentDoc = gql`
 export const AssessmentFieldsFragmentDoc = gql`
   fragment AssessmentFields on Assessment {
     id
+    lockVersion
     inProgress
     assessmentDate
     dataCollectionStage
@@ -20886,8 +21059,10 @@ export const AssessmentWithValuesFragmentDoc = gql`
 export const EnrollmentValuesFragmentDoc = gql`
   fragment EnrollmentValues on Enrollment {
     id
+    lockVersion
     entryDate
     exitDate
+    disablingCondition
     dateOfEngagement
     moveInDate
     livingSituation
@@ -21328,6 +21503,7 @@ export const HealthAndDvFieldsFragmentDoc = gql`
 export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
     id
+    lockVersion
     firstName
     middleName
     lastName
@@ -21337,6 +21513,7 @@ export const ClientNameFragmentDoc = gql`
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
+    lockVersion
     dob
     age
     ssn
@@ -21565,6 +21742,22 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
+`;
+export const CustomCaseNoteFieldsFragmentDoc = gql`
+  fragment CustomCaseNoteFields on CustomCaseNote {
+    id
+    content
+    dateUpdated
+    dateCreated
+    user {
+      ...UserFields
+    }
   }
   ${UserFieldsFragmentDoc}
 `;
@@ -21576,6 +21769,45 @@ export const ClientNameDobVetFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
+export const ProjectEnrollmentFieldsFragmentDoc = gql`
+  fragment ProjectEnrollmentFields on Enrollment {
+    id
+    lockVersion
+    entryDate
+    exitDate
+    inProgress
+    relationshipToHoH
+    enrollmentCoc
+    householdId
+    householdShortId
+    householdSize
+    client {
+      id
+      ...ClientNameDobVet
+      ...ClientIdentificationFields
+    }
+  }
+  ${ClientNameDobVetFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+`;
+export const ClientEnrollmentFieldsFragmentDoc = gql`
+  fragment ClientEnrollmentFields on Enrollment {
+    id
+    lockVersion
+    entryDate
+    exitDate
+    project {
+      ...ProjectNameAndType
+    }
+    inProgress
+    relationshipToHoH
+    enrollmentCoc
+    householdId
+    householdShortId
+    householdSize
+  }
+  ${ProjectNameAndTypeFragmentDoc}
+`;
 export const EnrollmentAccessFieldsFragmentDoc = gql`
   fragment EnrollmentAccessFields on EnrollmentAccess {
     id
@@ -21586,6 +21818,7 @@ export const EnrollmentAccessFieldsFragmentDoc = gql`
 export const EnrollmentFieldsFragmentDoc = gql`
   fragment EnrollmentFields on Enrollment {
     id
+    lockVersion
     entryDate
     exitDate
     exitDestination
@@ -21616,6 +21849,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
 export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
   fragment EnrollmentOccurrencePointFields on Enrollment {
     id
+    lockVersion
     entryDate
     exitDate
     dateOfEngagement
@@ -21814,6 +22048,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   fragment AllEnrollmentDetails on Enrollment {
     ...EnrollmentFields
     ...EnrollmentOccurrencePointFields
+    numUnitsAssignedToHousehold
     intakeAssessment {
       id
     }
@@ -21824,6 +22059,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       ...CustomDataElementFields
     }
     client {
+      hudChronic
       ...ClientNameDobVet
       customDataElements {
         ...CustomDataElementFields
@@ -21873,52 +22109,6 @@ export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   ${EnrollmentFieldsFragmentDoc}
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-`;
-export const HouseholdClientFieldsFragmentDoc = gql`
-  fragment HouseholdClientFields on HouseholdClient {
-    id
-    relationshipToHoH
-    client {
-      id
-      ...ClientName
-      ...ClientIdentificationFields
-      veteranStatus
-      access {
-        ...ClientAccessFields
-      }
-      externalIds {
-        ...ClientIdentifierFields
-      }
-    }
-    enrollment {
-      id
-      entryDate
-      exitDate
-      inProgress
-      currentUnit {
-        id
-        name
-      }
-    }
-  }
-  ${ClientNameFragmentDoc}
-  ${ClientIdentificationFieldsFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
-  ${ClientIdentifierFieldsFragmentDoc}
-`;
-export const EnrollmentWithHouseholdFragmentFragmentDoc = gql`
-  fragment EnrollmentWithHouseholdFragment on Enrollment {
-    ...EnrollmentFields
-    household {
-      id
-      shortId
-      householdClients {
-        ...HouseholdClientFields
-      }
-    }
-  }
-  ${EnrollmentFieldsFragmentDoc}
-  ${HouseholdClientFieldsFragmentDoc}
 `;
 export const EventFieldsFragmentDoc = gql`
   fragment EventFields on Event {
@@ -22004,6 +22194,39 @@ export const ValidationErrorFieldsFragmentDoc = gql`
     data
   }
 `;
+export const HouseholdClientFieldsFragmentDoc = gql`
+  fragment HouseholdClientFields on HouseholdClient {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+      ...ClientIdentificationFields
+      veteranStatus
+      access {
+        ...ClientAccessFields
+      }
+      externalIds {
+        ...ClientIdentifierFields
+      }
+    }
+    enrollment {
+      id
+      lockVersion
+      entryDate
+      exitDate
+      inProgress
+      currentUnit {
+        id
+        name
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
+`;
 export const HouseholdFieldsFragmentDoc = gql`
   fragment HouseholdFields on Household {
     id
@@ -22026,6 +22249,7 @@ export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
     }
     enrollment {
       id
+      lockVersion
       entryDate
       exitDate
       inProgress
@@ -22279,6 +22503,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
       id
       client {
         id
+        hudChronic
       }
     }
     householdMembers {
@@ -22589,20 +22814,14 @@ export const GetClientAssessmentsDocument = gql`
         nodes {
           ...AssessmentFields
           enrollment {
-            id
-            entryDate
-            exitDate
-            inProgress
-            project {
-              ...ProjectNameAndType
-            }
+            ...ClientEnrollmentFields
           }
         }
       }
     }
   }
   ${AssessmentFieldsFragmentDoc}
-  ${ProjectNameAndTypeFragmentDoc}
+  ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -23078,8 +23297,10 @@ export type GetAssessmentsForPopulationQueryResult = Apollo.QueryResult<
   GetAssessmentsForPopulationQueryVariables
 >;
 export const DeleteAssessmentDocument = gql`
-  mutation DeleteAssessment($id: ID!) {
-    deleteAssessment(input: { id: $id }) {
+  mutation DeleteAssessment($id: ID!, $assessmentLockVersion: Int) {
+    deleteAssessment(
+      input: { id: $id, assessmentLockVersion: $assessmentLockVersion }
+    ) {
       clientMutationId
       assessmentId
       errors {
@@ -23108,6 +23329,7 @@ export type DeleteAssessmentMutationFn = Apollo.MutationFunction<
  * const [deleteAssessmentMutation, { data, loading, error }] = useDeleteAssessmentMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      assessmentLockVersion: // value for 'assessmentLockVersion'
  *   },
  * });
  */
@@ -23152,20 +23374,13 @@ export const GetProjectEnrollmentsForBedNightsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...EnrollmentFields
+          ...ProjectEnrollmentFields
           lastBedNightDate
-          client {
-            id
-            ...ClientName
-            ...ClientIdentificationFields
-          }
         }
       }
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
-  ${ClientNameFragmentDoc}
-  ${ClientIdentificationFieldsFragmentDoc}
+  ${ProjectEnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -23681,12 +23896,12 @@ export const GetClientEnrollmentsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...EnrollmentFields
+          ...ClientEnrollmentFields
         }
       }
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
+  ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -23833,14 +24048,14 @@ export const GetClientServicesDocument = gql`
         nodes {
           ...ServiceFields
           enrollment {
-            ...EnrollmentFields
+            ...ClientEnrollmentFields
           }
         }
       }
     }
   }
   ${ServiceFieldsFragmentDoc}
-  ${EnrollmentFieldsFragmentDoc}
+  ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -23896,80 +24111,6 @@ export type GetClientServicesLazyQueryHookResult = ReturnType<
 export type GetClientServicesQueryResult = Apollo.QueryResult<
   GetClientServicesQuery,
   GetClientServicesQueryVariables
->;
-export const GetNonWipEnrollmentsDocument = gql`
-  query GetNonWipEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-    client(id: $id) {
-      id
-      enrollments(
-        limit: $limit
-        offset: $offset
-        sortOrder: MOST_RECENT
-        filters: { status: [ACTIVE, EXITED] }
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...EnrollmentFieldsFromAssessment
-        }
-      }
-    }
-  }
-  ${EnrollmentFieldsFromAssessmentFragmentDoc}
-`;
-
-/**
- * __useGetNonWipEnrollmentsQuery__
- *
- * To run a query within a React component, call `useGetNonWipEnrollmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetNonWipEnrollmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetNonWipEnrollmentsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetNonWipEnrollmentsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetNonWipEnrollmentsQuery,
-    GetNonWipEnrollmentsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetNonWipEnrollmentsQuery,
-    GetNonWipEnrollmentsQueryVariables
-  >(GetNonWipEnrollmentsDocument, options);
-}
-export function useGetNonWipEnrollmentsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetNonWipEnrollmentsQuery,
-    GetNonWipEnrollmentsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetNonWipEnrollmentsQuery,
-    GetNonWipEnrollmentsQueryVariables
-  >(GetNonWipEnrollmentsDocument, options);
-}
-export type GetNonWipEnrollmentsQueryHookResult = ReturnType<
-  typeof useGetNonWipEnrollmentsQuery
->;
-export type GetNonWipEnrollmentsLazyQueryHookResult = ReturnType<
-  typeof useGetNonWipEnrollmentsLazyQuery
->;
-export type GetNonWipEnrollmentsQueryResult = Apollo.QueryResult<
-  GetNonWipEnrollmentsQuery,
-  GetNonWipEnrollmentsQueryVariables
 >;
 export const UpdateClientImageDocument = gql`
   mutation UpdateClientImage($clientId: ID!, $imageBlobId: ID!) {
@@ -24213,6 +24354,7 @@ export const GetClientHouseholdMemberCandidatesDocument = gql`
   ) {
     client(id: $id) {
       id
+      lockVersion
       enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
         offset
         limit
@@ -24346,11 +24488,15 @@ export const GetClientFilesDocument = gql`
         nodesCount
         nodes {
           ...FileFields
+          enrollment {
+            ...ClientEnrollmentFields
+          }
         }
       }
     }
   }
   ${FileFieldsFragmentDoc}
+  ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -24478,13 +24624,144 @@ export type GetEnrollmentCurrentLivingSituationsQueryResult =
     GetEnrollmentCurrentLivingSituationsQuery,
     GetEnrollmentCurrentLivingSituationsQueryVariables
   >;
+export const GetEnrollmentCustomCaseNotesDocument = gql`
+  query GetEnrollmentCustomCaseNotes(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    enrollment(id: $id) {
+      id
+      customCaseNotes(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CustomCaseNoteFields
+        }
+      }
+    }
+  }
+  ${CustomCaseNoteFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentCustomCaseNotesQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentCustomCaseNotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentCustomCaseNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentCustomCaseNotesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentCustomCaseNotesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentCustomCaseNotesQuery,
+    GetEnrollmentCustomCaseNotesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentCustomCaseNotesQuery,
+    GetEnrollmentCustomCaseNotesQueryVariables
+  >(GetEnrollmentCustomCaseNotesDocument, options);
+}
+export function useGetEnrollmentCustomCaseNotesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentCustomCaseNotesQuery,
+    GetEnrollmentCustomCaseNotesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentCustomCaseNotesQuery,
+    GetEnrollmentCustomCaseNotesQueryVariables
+  >(GetEnrollmentCustomCaseNotesDocument, options);
+}
+export type GetEnrollmentCustomCaseNotesQueryHookResult = ReturnType<
+  typeof useGetEnrollmentCustomCaseNotesQuery
+>;
+export type GetEnrollmentCustomCaseNotesLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentCustomCaseNotesLazyQuery
+>;
+export type GetEnrollmentCustomCaseNotesQueryResult = Apollo.QueryResult<
+  GetEnrollmentCustomCaseNotesQuery,
+  GetEnrollmentCustomCaseNotesQueryVariables
+>;
+export const DeleteCustomCaseNoteDocument = gql`
+  mutation DeleteCustomCaseNote($id: ID!) {
+    deleteCustomCaseNote(id: $id) {
+      customCaseNote {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteCustomCaseNoteMutationFn = Apollo.MutationFunction<
+  DeleteCustomCaseNoteMutation,
+  DeleteCustomCaseNoteMutationVariables
+>;
+
+/**
+ * __useDeleteCustomCaseNoteMutation__
+ *
+ * To run a mutation, you first call `useDeleteCustomCaseNoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCustomCaseNoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCustomCaseNoteMutation, { data, loading, error }] = useDeleteCustomCaseNoteMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCustomCaseNoteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteCustomCaseNoteMutation,
+    DeleteCustomCaseNoteMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteCustomCaseNoteMutation,
+    DeleteCustomCaseNoteMutationVariables
+  >(DeleteCustomCaseNoteDocument, options);
+}
+export type DeleteCustomCaseNoteMutationHookResult = ReturnType<
+  typeof useDeleteCustomCaseNoteMutation
+>;
+export type DeleteCustomCaseNoteMutationResult =
+  Apollo.MutationResult<DeleteCustomCaseNoteMutation>;
+export type DeleteCustomCaseNoteMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCustomCaseNoteMutation,
+  DeleteCustomCaseNoteMutationVariables
+>;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
     enrollment(id: $id) {
       ...EnrollmentFields
+      ...EnrollmentValues
     }
   }
   ${EnrollmentFieldsFragmentDoc}
+  ${EnrollmentValuesFragmentDoc}
 `;
 
 /**
@@ -24667,6 +24944,7 @@ export const GetEnrollmentEventsDocument = gql`
   query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     enrollment(id: $id) {
       id
+      lockVersion
       events(limit: $limit, offset: $offset) {
         offset
         limit
@@ -25338,6 +25616,9 @@ export const SubmitFormDocument = gql`
         ... on CeAssessment {
           ...CeAssessmentFields
         }
+        ... on CustomCaseNote {
+          ...CustomCaseNoteFields
+        }
         ... on Event {
           ...EventFields
         }
@@ -25359,6 +25640,7 @@ export const SubmitFormDocument = gql`
   ${SubmittedEnrollmentResultFieldsFragmentDoc}
   ${CurrentLivingSituationFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
+  ${CustomCaseNoteFieldsFragmentDoc}
   ${EventFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
@@ -25469,14 +25751,24 @@ export const UpdateRelationshipToHoHDocument = gql`
     updateRelationshipToHoH(input: $input) {
       clientMutationId
       enrollment {
-        ...EnrollmentWithHouseholdFragment
+        id
+        relationshipToHoH
+        household {
+          id
+          householdClients {
+            id
+            relationshipToHoH
+            client {
+              id
+            }
+          }
+        }
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${EnrollmentWithHouseholdFragmentFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateRelationshipToHoHMutationFn = Apollo.MutationFunction<
@@ -25893,9 +26185,9 @@ export type ClearRecentItemsMutationOptions = Apollo.BaseMutationOptions<
   ClearRecentItemsMutation,
   ClearRecentItemsMutationVariables
 >;
-export const GetAllOrganizationsDocument = gql`
-  query GetAllOrganizations {
-    organizations(limit: 500, sortOrder: NAME) {
+export const GetOrganizationsDocument = gql`
+  query GetOrganizations($limit: Int = 10, $offset: Int = 0) {
+    organizations(limit: $limit, offset: $offset, sortOrder: NAME) {
       nodesCount
       nodes {
         ...OrganizationNameFields
@@ -25909,53 +26201,55 @@ export const GetAllOrganizationsDocument = gql`
 `;
 
 /**
- * __useGetAllOrganizationsQuery__
+ * __useGetOrganizationsQuery__
  *
- * To run a query within a React component, call `useGetAllOrganizationsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetOrganizationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllOrganizationsQuery({
+ * const { data, loading, error } = useGetOrganizationsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
-export function useGetAllOrganizationsQuery(
+export function useGetOrganizationsQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetAllOrganizationsQuery,
-    GetAllOrganizationsQueryVariables
+    GetOrganizationsQuery,
+    GetOrganizationsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetAllOrganizationsQuery,
-    GetAllOrganizationsQueryVariables
-  >(GetAllOrganizationsDocument, options);
+  return Apollo.useQuery<GetOrganizationsQuery, GetOrganizationsQueryVariables>(
+    GetOrganizationsDocument,
+    options
+  );
 }
-export function useGetAllOrganizationsLazyQuery(
+export function useGetOrganizationsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAllOrganizationsQuery,
-    GetAllOrganizationsQueryVariables
+    GetOrganizationsQuery,
+    GetOrganizationsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetAllOrganizationsQuery,
-    GetAllOrganizationsQueryVariables
-  >(GetAllOrganizationsDocument, options);
+    GetOrganizationsQuery,
+    GetOrganizationsQueryVariables
+  >(GetOrganizationsDocument, options);
 }
-export type GetAllOrganizationsQueryHookResult = ReturnType<
-  typeof useGetAllOrganizationsQuery
+export type GetOrganizationsQueryHookResult = ReturnType<
+  typeof useGetOrganizationsQuery
 >;
-export type GetAllOrganizationsLazyQueryHookResult = ReturnType<
-  typeof useGetAllOrganizationsLazyQuery
+export type GetOrganizationsLazyQueryHookResult = ReturnType<
+  typeof useGetOrganizationsLazyQuery
 >;
-export type GetAllOrganizationsQueryResult = Apollo.QueryResult<
-  GetAllOrganizationsQuery,
-  GetAllOrganizationsQueryVariables
+export type GetOrganizationsQueryResult = Apollo.QueryResult<
+  GetOrganizationsQuery,
+  GetOrganizationsQueryVariables
 >;
 export const GetOrganizationDocument = gql`
   query GetOrganization($id: ID!) {
@@ -26384,19 +26678,12 @@ export const GetProjectEnrollmentsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...EnrollmentFields
-          client {
-            id
-            ...ClientName
-            ...ClientIdentificationFields
-          }
+          ...ProjectEnrollmentFields
         }
       }
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
-  ${ClientNameFragmentDoc}
-  ${ClientIdentificationFieldsFragmentDoc}
+  ${ProjectEnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -27084,6 +27371,12 @@ export const GetProjectOutgoingReferralPostingsDocument = gql`
         nodesCount
         nodes {
           ...ReferralPostingFields
+          hohEnrollment {
+            id
+            client {
+              id
+            }
+          }
         }
       }
     }

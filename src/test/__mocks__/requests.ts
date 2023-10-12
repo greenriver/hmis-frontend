@@ -39,6 +39,7 @@ const CLIENT_ACCESS_MOCK = {
 export const RITA_ACKROYD = {
   __typename: 'Client',
   id: '9999',
+  lockVersion: 1,
   personalId: '9999',
   ssn: '0001',
   firstName: 'Rita',

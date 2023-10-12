@@ -39,9 +39,11 @@ import generateSafePath from '@/utils/generateSafePath';
 const MAX_RECENT_ENROLLMENTS = 5;
 
 const RecentEnrollments = ({
+  clientId,
   recentEnrollments,
   linkTargetBlank,
 }: {
+  clientId: string;
   recentEnrollments?: NonNullable<
     GetClientEnrollmentsQuery['client']
   >['enrollments']['nodes'];
@@ -64,7 +66,7 @@ const RecentEnrollments = ({
                 to={generateSafePath(
                   EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
                   {
-                    clientId: enrollment.client.id,
+                    clientId,
                     enrollmentId: enrollment.id,
                   }
                 )}
@@ -207,6 +209,7 @@ const ClientCard: React.FC<Props> = ({
           <RecentEnrollments
             recentEnrollments={recentEnrollments}
             linkTargetBlank={linkTargetBlank}
+            clientId={client.id}
           />
         </Grid>
       </ClientPermissionsFilter>

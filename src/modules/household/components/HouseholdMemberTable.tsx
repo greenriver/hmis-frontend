@@ -11,6 +11,8 @@ import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
+import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
@@ -117,13 +119,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     header: 'Enrollment Period',
     key: 'status',
     render: (hc: HouseholdClientFieldsFragment) => (
-      <EnrollmentStatus
-        enrollment={hc.enrollment}
-        activeColor='text.primary'
-        closedColor='text.primary'
-        hideIcon
-        withActiveRange
-      />
+      <EnrollmentDateRangeWithStatus enrollment={hc.enrollment} />
     ),
   },
   mciIds: externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
@@ -174,9 +170,8 @@ const HouseholdMemberTable = ({
     const cols = [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
       HOUSEHOLD_MEMBER_COLUMNS.clientName({ currentClientId: clientId }),
-      HOUSEHOLD_MEMBER_COLUMNS.enrollmentStatus,
-      HOUSEHOLD_MEMBER_COLUMNS.entryDate,
-      HOUSEHOLD_MEMBER_COLUMNS.exitDate(householdMembers),
+      HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
+      HOUSEHOLD_MEMBER_COLUMNS.dobAge,
       HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
       HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(householdMembers),
     ];
@@ -194,17 +189,19 @@ const HouseholdMemberTable = ({
 
   return (
     <>
-      <GenericTable<HouseholdClientFieldsFragment>
-        rows={householdMembers || []}
-        columns={columns}
-        rowSx={() => ({
-          td: condensed ? { py: 1, border: 'unset' } : { py: 2 },
-          '&:nth-last-of-type(1) td': { pb: 2 },
-          '&:first-of-type td': { pt: 2 },
-          // HoH indicator column
-          'td:nth-of-type(1)': { pl: 1, pr: 0 },
-        })}
-      />
+      <SsnDobShowContextProvider>
+        <GenericTable<HouseholdClientFieldsFragment>
+          rows={householdMembers || []}
+          columns={columns}
+          rowSx={() => ({
+            td: condensed ? { py: 1, border: 'unset' } : { py: 2 },
+            '&:nth-last-of-type(1) td': { pb: 2 },
+            '&:first-of-type td': { pt: 2 },
+            // HoH indicator column
+            'td:nth-of-type(1)': { pl: 1, pr: 0 },
+          })}
+        />
+      </SsnDobShowContextProvider>
       {!hideActions && (
         <ClientPermissionsFilter
           id={clientId}

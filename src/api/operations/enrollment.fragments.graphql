@@ -1,5 +1,45 @@
+# fields for resolving Enrollments on a Project
+fragment ProjectEnrollmentFields on Enrollment {
+  id
+  lockVersion
+  entryDate
+  exitDate
+  inProgress
+  relationshipToHoH
+  enrollmentCoc
+  householdId
+  householdShortId
+  householdSize
+  client {
+    id
+    # name, dob, veteran status
+    ...ClientNameDobVet
+    # SSN and DOB, access info for whether you can see them
+    ...ClientIdentificationFields
+  }
+}
+
+# fields for resolving Enrollments on a Project
+fragment ClientEnrollmentFields on Enrollment {
+  id
+  lockVersion
+  entryDate
+  exitDate
+  project {
+    ...ProjectNameAndType
+  }
+  inProgress
+  relationshipToHoH
+  enrollmentCoc
+  householdId
+  householdShortId
+  householdSize
+}
+
+# fields for resolving individual Enrollment, or household members
 fragment EnrollmentFields on Enrollment {
   id
+  lockVersion
   entryDate
   exitDate
   exitDestination
@@ -24,11 +64,13 @@ fragment EnrollmentFields on Enrollment {
   }
 }
 
+# Fields when you're resolving an individual Enrollment and all its details
 # FIXME: stop resolving client/project access objects. Instead, put what we need to know
 # inside of the Enrollment access obj
 fragment AllEnrollmentDetails on Enrollment {
   ...EnrollmentFields
   ...EnrollmentOccurrencePointFields
+  numUnitsAssignedToHousehold
   intakeAssessment {
     id
   }
@@ -40,6 +82,7 @@ fragment AllEnrollmentDetails on Enrollment {
   }
   # Need to resolve CDEs on Client too, so they can be shown on enrollment dash.
   client {
+    hudChronic
     ...ClientNameDobVet
     customDataElements {
       ...CustomDataElementFields
@@ -71,6 +114,7 @@ fragment AllEnrollmentDetails on Enrollment {
 # (as opposed to values that are only needed for assessments, which is the whole EnrollmentValues fragment)
 fragment EnrollmentOccurrencePointFields on Enrollment {
   id
+  lockVersion
   entryDate
   exitDate
   dateOfEngagement
@@ -89,8 +133,10 @@ fragment EnrollmentOccurrencePointFields on Enrollment {
 # for assessments
 fragment EnrollmentValues on Enrollment {
   id
+  lockVersion
   entryDate
   exitDate
+  disablingCondition
   dateOfEngagement
   moveInDate
   livingSituation
@@ -163,17 +209,6 @@ fragment SubmittedEnrollmentResultFields on Enrollment {
   ...EnrollmentOccurrencePointFields
   customDataElements {
     ...CustomDataElementFields
-  }
-}
-
-fragment EnrollmentWithHouseholdFragment on Enrollment {
-  ...EnrollmentFields
-  household {
-    id
-    shortId
-    householdClients {
-      ...HouseholdClientFields
-    }
   }
 }
 

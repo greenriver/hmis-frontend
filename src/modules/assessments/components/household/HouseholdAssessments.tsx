@@ -112,10 +112,12 @@ const HouseholdAssessments = ({
             enrollmentInProgress: enrollment.inProgress,
             entryOrExitCompleted,
             assessmentId,
+            assessmentLockVersion: assessment?.lockVersion,
             assessmentInProgress,
             assessmentSubmitted: !!assessmentId && !assessmentInProgress,
             clientId: client.id,
             client: {
+              id: client.id,
               dob: client.dob,
               veteranStatus: client.veteranStatus,
             },
@@ -243,7 +245,7 @@ const HouseholdAssessments = ({
               pb: 2,
             })}
           >
-            <Stack gap={0.2}>
+            <Stack gap={0.2} sx={{ overflow: 'hidden' }}>
               <Typography variant='body2' fontWeight={600}>
                 {householdAssesmentTitle(role)}
               </Typography>

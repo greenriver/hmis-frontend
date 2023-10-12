@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
-import { CommonUntyledList } from '@/components/CommonUnstyledList';
+import { CommonUnstyledList } from '@/components/CommonUnstyledList';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
@@ -88,7 +88,7 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
   }, [referralPosting, verb]);
 
   return (
-    <Stack spacing={2} component={CommonUntyledList} sx={{ columns: 2 }}>
+    <Stack spacing={2} component={CommonUnstyledList} sx={{ columns: 2 }}>
       {attributeList
         .filter((labelValue) => hasMeaningfulValue(labelValue[1]))
         .map(([label, value]) => (

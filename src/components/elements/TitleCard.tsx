@@ -1,4 +1,5 @@
 import {
+  Box,
   Paper,
   PaperProps,
   Stack,
@@ -16,6 +17,7 @@ interface Props extends PaperProps {
   headerTypographyVariant?: TypographyVariant | 'cardTitle';
   'data-testid'?: string;
   headerSx?: SxProps;
+  padded?: boolean;
 }
 const TitleCard: React.FC<Props> = ({
   title,
@@ -24,6 +26,7 @@ const TitleCard: React.FC<Props> = ({
   headerTypographyVariant = 'cardTitle',
   headerVariant,
   headerSx,
+  padded = false,
   ...props
 }) => (
   <Paper data-testid={props['data-testid']} {...props}>
@@ -50,7 +53,7 @@ const TitleCard: React.FC<Props> = ({
       {actions}
     </Stack>
 
-    {children}
+    {padded ? <Box sx={{ px: 2, pb: 2 }}>{children}</Box> : children}
   </Paper>
 );
 

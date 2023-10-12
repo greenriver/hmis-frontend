@@ -1,6 +1,5 @@
 # dependencies
 /node_modules
-/serverMock/node_modules
 .yarn/*
 !.yarn/packages-cache
 !.yarn/releases

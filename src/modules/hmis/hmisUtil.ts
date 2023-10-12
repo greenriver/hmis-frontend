@@ -23,6 +23,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   AssessmentFieldsFragment,
+  ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,
   ClientNameFragment,
   CustomDataElementFieldsFragment,
@@ -199,19 +200,20 @@ export const formatCurrency = (number?: number | null) => {
   return currencyFormatter.format(number);
 };
 
+export const anonymousClientName = (client: ClientNameFragment) =>
+  `Client ${client.id || ''}`;
+
 export const clientNameAllParts = (client: ClientNameFragment) => {
-  return [
-    client.firstName,
-    client.middleName,
-    client.lastName,
-    client.nameSuffix,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  return (
+    [client.firstName, client.middleName, client.lastName, client.nameSuffix]
+      .filter(Boolean)
+      .join(' ') || anonymousClientName(client)
+  );
 };
 
 export const clientBriefName = (client: ClientNameFragment) =>
-  [client.firstName, client.lastName].filter(Boolean).join(' ');
+  [client.firstName, client.lastName].filter(Boolean).join(' ') ||
+  anonymousClientName(client);
 
 export const clientInitials = (client: ClientNameFragment) =>
   [client.firstName, client.lastName]
@@ -259,7 +261,9 @@ export const lastUpdated = (
   client: ClientFieldsFragment,
   includeUser = false
 ) => {
-  const str = parseAndFormatDateTime(client.dateUpdated);
+  const str = client.dateUpdated
+    ? parseAndFormatDateTime(client.dateUpdated)
+    : null;
   if (includeUser && client.user) {
     return `${str || 'unknown'} by ${client.user.name}`;
   }
@@ -288,7 +292,7 @@ export const entryExitRange = (
 
 // Open, or closed within the last X days
 export const isRecentEnrollment = (
-  enrollment: EnrollmentFieldsFragment,
+  enrollment: EnrollmentFieldsFragment | ClientEnrollmentFieldsFragment,
   withinDays = 30
 ) => {
   if (!enrollment.exitDate) return true;

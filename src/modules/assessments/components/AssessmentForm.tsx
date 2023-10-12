@@ -1,5 +1,5 @@
 import UnlockIcon from '@mui/icons-material/Lock';
-import { Box, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
   ReactNode,
@@ -51,6 +51,7 @@ import {
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
+  clientId: string;
   // assessmentTitle: string;
   formRole?: FormRole;
   definition: FormDefinition;
@@ -66,6 +67,7 @@ interface Props {
 
 const AssessmentForm = ({
   assessment,
+  clientId,
   assessmentTitle,
   formRole,
   definition,
@@ -116,6 +118,7 @@ const AssessmentForm = ({
       definition,
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
+      assessmentLockVersion: assessment?.lockVersion,
       onSuccessfulSubmit: (assmt) => {
         if (!assmt.inProgress) setLocked(true);
       },
@@ -233,26 +236,19 @@ const AssessmentForm = ({
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
-      <Box
-        sx={{
-          position: 'sticky',
-          top: top + 16,
-        }}
-      >
-        <AssessmentFormSideBar
-          enrollment={enrollment}
-          definition={definition}
-          assessment={assessment}
-          title={navigationTitle}
-          formRole={formRole}
-          isPrintView={isPrintView}
-          locked={locked}
-          embeddedInWorkflow={embeddedInWorkflow}
-          onAutofill={() => setDialogOpen(true)}
-          canEdit={canEdit}
-          top={top}
-        />
-      </Box>
+      <AssessmentFormSideBar
+        enrollment={enrollment}
+        definition={definition}
+        assessment={assessment}
+        title={navigationTitle}
+        formRole={formRole}
+        isPrintView={isPrintView}
+        locked={locked}
+        embeddedInWorkflow={embeddedInWorkflow}
+        onAutofill={() => setDialogOpen(true)}
+        canEdit={canEdit}
+        top={top}
+      />
     </Grid>
   );
 
@@ -312,6 +308,7 @@ const AssessmentForm = ({
             errors={errors}
             locked={locked}
             visible={visible}
+            clientId={clientId}
             showSavePrompt
             alwaysShowSaveSlide={!!embeddedInWorkflow}
             FormActionProps={FormActionProps}
@@ -326,6 +323,7 @@ const AssessmentForm = ({
       {definition && (
         <RecordPickerDialog
           id='assessmentPickerDialog'
+          clientId={clientId}
           open={dialogOpen}
           role={formRole}
           onSelected={onSelectAutofillRecord}

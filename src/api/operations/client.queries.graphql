@@ -67,7 +67,7 @@ query GetClientEnrollments(
       limit
       nodesCount
       nodes {
-        ...EnrollmentFields
+        ...ClientEnrollmentFields
       }
     }
   }
@@ -108,27 +108,8 @@ query GetClientServices(
       nodes {
         ...ServiceFields
         enrollment {
-          ...EnrollmentFields
+          ...ClientEnrollmentFields
         }
-      }
-    }
-  }
-}
-
-query GetNonWipEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-  client(id: $id) {
-    id
-    enrollments(
-      limit: $limit
-      offset: $offset
-      sortOrder: MOST_RECENT
-      filters: { status: [ACTIVE, EXITED] }
-    ) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...EnrollmentFieldsFromAssessment
       }
     }
   }
@@ -189,6 +170,7 @@ query GetClientHouseholdMemberCandidates(
 ) {
   client(id: $id) {
     id
+    lockVersion
     enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
       offset
       limit
@@ -223,6 +205,9 @@ query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       nodesCount
       nodes {
         ...FileFields
+        enrollment {
+          ...ClientEnrollmentFields
+        }
       }
     }
   }

@@ -35,14 +35,16 @@ const MultiAddressInput = ({ id, value, onChange, label }: Props) => {
       valueKey={(addrValue) => addrValue._key || addrValue.id || ''}
       renderChild={(addrValue, idx) => {
         return (
-          <AddressInput
-            value={addrValue}
-            onChange={(val) => {
-              const copied = [...value];
-              copied[idx] = val;
-              onChange(copied);
-            }}
-          />
+          <>
+            <AddressInput
+              value={addrValue}
+              onChange={(val) => {
+                const copied = [...value];
+                copied[idx] = val;
+                onChange(copied);
+              }}
+            />
+          </>
         );
       }}
       onClickAdd={handleAddName}
@@ -52,8 +54,8 @@ const MultiAddressInput = ({ id, value, onChange, label }: Props) => {
         onChange(copied);
       }}
       title={label}
-      removeText='Delete address'
-      addText='Add address'
+      removeText='Delete Address'
+      addText={value.length > 0 ? 'Add Another Address' : 'Add Address'}
       renderMetadata={renderMetadata}
     />
   );

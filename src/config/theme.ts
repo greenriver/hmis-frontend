@@ -31,11 +31,13 @@ declare module '@mui/material/styles' {
     borders: PaletteColor;
     alerts: Record<string, string>;
     links: string;
+    activeStatus: string;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: { lightWarningBackground?: string };
     links: string;
+    activeStatus: string;
   }
 }
 
@@ -74,6 +76,7 @@ export const baseThemeDef: ThemeOptions = {
       lightWarningBackground: '#fffde0',
     },
     links: '#1976D2',
+    activeStatus: '#75559F',
   },
 };
 

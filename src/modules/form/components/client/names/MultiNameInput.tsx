@@ -80,8 +80,8 @@ const MultiNameInput = ({ id, value, onChange, label }: Props) => {
             }
       }
       title={label}
-      removeText='Delete name'
-      addText='Add Name'
+      removeText='Delete Name'
+      addText={value.length > 0 ? 'Add Another Name' : 'Add Name'}
       renderMetadata={renderMetadata}
     />
   );

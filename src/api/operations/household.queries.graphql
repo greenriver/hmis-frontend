@@ -8,7 +8,18 @@ mutation UpdateRelationshipToHoH($input: UpdateRelationshipToHoHInput!) {
   updateRelationshipToHoH(input: $input) {
     clientMutationId
     enrollment {
-      ...EnrollmentWithHouseholdFragment
+      id
+      relationshipToHoH
+      household {
+        id
+        householdClients {
+          id
+          relationshipToHoH
+          client {
+            id
+          }
+        }
+      }
     }
     errors {
       ...ValidationErrorFields

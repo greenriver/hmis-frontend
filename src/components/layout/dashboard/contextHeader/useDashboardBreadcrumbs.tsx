@@ -188,6 +188,7 @@ export const useEnrollmentBreadcrumbConfig = (
       [EnrollmentDashboardRoutes.EDIT_HOUSEHOLD]: { title: 'Edit Household' },
       [EnrollmentDashboardRoutes.CE_ASSESSMENTS]: { title: 'CE Assessments' },
       [EnrollmentDashboardRoutes.EVENTS]: { title: 'CE Events' },
+      [EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES]: { title: 'Case Notes' },
       [EnrollmentDashboardRoutes.ASSESSMENT]: {
         title: 'Assessment',
         parent: EnrollmentDashboardRoutes.ASSESSMENTS,
