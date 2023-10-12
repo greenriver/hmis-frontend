@@ -65,7 +65,6 @@ const ItemBase = ({
     },
   };
 
-  const key = isMobile ? 'mobileNav' : 'desktopNav';
   return (
     <Box ref={itemRef} id={htmlId}>
       <Box
@@ -98,7 +97,7 @@ const ItemBase = ({
           >
             {item.href ? (
               <Link
-                id={`${key}-${item.id}`}
+                id={`side-nav-${item.id}`}
                 variant='body1'
                 href={item.href || '#'}
                 aria-label={item.title as string}
@@ -108,8 +107,8 @@ const ItemBase = ({
               </Link>
             ) : item.path ? (
               <RouterLink
-                id={`${key}-${item.id}`}
-                data-testid={`${key}-${item.id}`}
+                id={`side-nav-${item.id}`}
+                data-testid={`sideNav-${item.id}`}
                 aria-label={item.title}
                 variant='body1'
                 to={item.path}

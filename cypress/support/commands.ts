@@ -16,7 +16,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('navItem', (id) => {
-  return cy.get(`[data-testid="desktopNav-${id}"]`);
+  return cy.get(`[data-testid="sideNav-${id}"]`).first();
 });
 
 Cypress.Commands.add('login', () => {

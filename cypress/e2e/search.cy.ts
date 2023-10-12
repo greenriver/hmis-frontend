@@ -30,7 +30,7 @@ it('should create client, and be able to see it in search results', () => {
   cy.testId('table-linkedCell').contains(firstName).click();
 
   // Delete the client
-  cy.testId('desktopNav-overview').click();
+  cy.navItem('overview').click();
   cy.testId('editClientButton').click();
   cy.testId('deleteClientButton').click();
   cy.confirmDialog();
