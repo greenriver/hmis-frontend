@@ -4,7 +4,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { Routes } from '@/routes/routes';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetDeniedPendingReferralPostingsDocument,
   GetDeniedPendingReferralPostingsQuery,
@@ -14,7 +14,7 @@ import {
 import generateSafePath from '@/utils/generateSafePath';
 
 const rowLinkTo = (row: ReferralPostingFieldsFragment): string => {
-  return generateSafePath(Routes.ADMIN_REFERRAL_DENIAL, {
+  return generateSafePath(AdminDashboardRoutes.AC_DENIAL_DETAILS, {
     referralPostingId: row.id,
   });
 };

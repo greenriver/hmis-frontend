@@ -130,7 +130,7 @@ const UnitManagementTable = ({
       columns={columns}
       pagePath='project.units'
       noData='No units'
-      selectable={allowDeleteUnits}
+      selectable={allowDeleteUnits ? 'row' : undefined}
       isRowSelectable={(row) => row.occupants.length === 0}
       showFilters
       recordType='Unit'

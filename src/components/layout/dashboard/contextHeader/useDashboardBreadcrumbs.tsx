@@ -9,6 +9,7 @@ import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
+  AdminDashboardRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -44,7 +45,8 @@ const buildDefaultCrumbs = (
   routes:
     | typeof EnrollmentDashboardRoutes
     | typeof ClientDashboardRoutes
-    | typeof ProjectDashboardRoutes,
+    | typeof ProjectDashboardRoutes
+    | typeof AdminDashboardRoutes,
   defaultParent: string,
   overrides: CrumbConfig
 ) => {
@@ -209,22 +211,25 @@ export const useEnrollmentBreadcrumbConfig = (
 };
 
 export const useAdminBreadcrumbConfig = (): CrumbConfig => {
-  return useMemo(
-    () => ({
-      [Routes.ADMIN_REFERRAL_DENIAL]: {
+  return useMemo(() => {
+    const root = Routes.ADMIN;
+    const overrides = {
+      [AdminDashboardRoutes.AC_DENIAL_DETAILS]: {
         title: 'Manage Denial',
-        parent: Routes.ADMIN_REFERRAL_DENIALS,
+        parent: AdminDashboardRoutes.AC_DENIALS,
       },
-      [Routes.ADMIN_REFERRAL_DENIALS]: {
+      [AdminDashboardRoutes.AC_DENIALS]: {
         title: 'Denials',
-        parent: Routes.ADMIN,
+      },
+      [AdminDashboardRoutes.CLIENT_MERGES]: {
+        title: 'Merge Clients',
       },
       [Routes.ADMIN]: {
         title: 'Admin',
       },
-    }),
-    []
-  );
+    };
+    return buildDefaultCrumbs(AdminDashboardRoutes, root, overrides);
+  }, []);
 };
 
 export const useDashboardBreadcrumbs = (

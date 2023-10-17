@@ -133,7 +133,7 @@ const HouseholdSummaryTable = ({
     <GenericTable<TabDefinition>
       rows={tabs}
       columns={columns}
-      selectable
+      selectable='row'
       isRowSelectable={isSubmittable}
       rowSx={(row) => ({
         backgroundColor: isSubmittable(row)

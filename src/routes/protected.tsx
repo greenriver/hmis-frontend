@@ -2,6 +2,7 @@ import { ReactNode, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import {
+  AdminDashboardRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -37,6 +38,7 @@ import AdminDashboard from '@/modules/admin/components/AdminDashboard';
 import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
+import AdminClientMerge from '@/modules/clientDeduplication/components/AdminClientMerge';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
@@ -528,10 +530,18 @@ export const protectedRoutes: RouteNode[] = [
         children: [
           {
             path: '',
-            element: <Navigate to={Routes.ADMIN_REFERRAL_DENIALS} replace />,
+            element: <Navigate to={AdminDashboardRoutes.AC_DENIALS} replace />,
           },
           {
-            path: Routes.ADMIN_REFERRAL_DENIALS,
+            path: AdminDashboardRoutes.CLIENT_MERGES,
+            element: (
+              // <RootPermissionsFilter permissions='canManageDeniedReferrals'>
+              <AdminClientMerge />
+              // </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.AC_DENIALS,
             element: (
               <RootPermissionsFilter permissions='canManageDeniedReferrals'>
                 <AdminReferralDenials />
@@ -539,7 +549,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: Routes.ADMIN_REFERRAL_DENIAL,
+            path: AdminDashboardRoutes.AC_DENIAL_DETAILS,
             element: (
               <RootPermissionsFilter permissions='canManageDeniedReferrals'>
                 <AdminReferralPosting />
