@@ -34,6 +34,7 @@ const CLIENT_ACCESS_MOCK = {
   canManageOwnClientFiles: true,
   canViewAnyConfidentialClientFiles: true,
   canViewAnyNonconfidentialClientFiles: true,
+  canAuditClients: true,
 };
 
 export const RITA_ACKROYD = {

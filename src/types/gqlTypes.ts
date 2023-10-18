@@ -137,7 +137,6 @@ export type Assessment = {
   disabilityGroup?: Maybe<DisabilityGroup>;
   employmentEducation?: Maybe<EmploymentEducation>;
   enrollment: Enrollment;
-  enrollmentCoc?: Maybe<Scalars['String']['output']>;
   exit?: Maybe<Exit>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID']['output'];
@@ -516,6 +515,7 @@ export type ClientYouthEducationStatusesArgs = {
 
 export type ClientAccess = {
   __typename?: 'ClientAccess';
+  canAuditClients: Scalars['Boolean']['output'];
   canDeleteAssessments: Scalars['Boolean']['output'];
   canDeleteClient: Scalars['Boolean']['output'];
   canDeleteEnrollments: Scalars['Boolean']['output'];
@@ -1943,6 +1943,7 @@ export type EnrollmentAccess = {
   __typename?: 'EnrollmentAccess';
   canDeleteEnrollments: Scalars['Boolean']['output'];
   canEditEnrollments: Scalars['Boolean']['output'];
+  canSplitHouseholds: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -4752,6 +4753,9 @@ export type QueryAccess = {
   canManageInventory: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
   canManageOwnClientFiles: Scalars['Boolean']['output'];
+  canMergeClients: Scalars['Boolean']['output'];
+  canSplitHouseholds: Scalars['Boolean']['output'];
+  canTransferEnrollments: Scalars['Boolean']['output'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
@@ -6397,7 +6401,6 @@ export type RootPermissionsFragment = {
   canEditClients: boolean;
   canViewClients: boolean;
   canDeleteClients: boolean;
-  canAuditClients: boolean;
   canEditOrganization: boolean;
   canDeleteOrganization: boolean;
   canViewDob: boolean;
@@ -6419,6 +6422,9 @@ export type RootPermissionsFragment = {
   canManageDeniedReferrals: boolean;
   canManageIncomingReferrals: boolean;
   canManageOutgoingReferrals: boolean;
+  canMergeClients: boolean;
+  canTransferEnrollments: boolean;
+  canSplitHouseholds: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -6437,6 +6443,7 @@ export type ClientAccessFieldsFragment = {
   canManageOwnClientFiles: boolean;
   canViewAnyConfidentialClientFiles: boolean;
   canViewAnyNonconfidentialClientFiles: boolean;
+  canAuditClients: boolean;
 };
 
 export type EnrollmentAccessFieldsFragment = {
@@ -6491,7 +6498,6 @@ export type GetRootPermissionsQuery = {
     canEditClients: boolean;
     canViewClients: boolean;
     canDeleteClients: boolean;
-    canAuditClients: boolean;
     canEditOrganization: boolean;
     canDeleteOrganization: boolean;
     canViewDob: boolean;
@@ -6513,6 +6519,9 @@ export type GetRootPermissionsQuery = {
     canManageDeniedReferrals: boolean;
     canManageIncomingReferrals: boolean;
     canManageOutgoingReferrals: boolean;
+    canMergeClients: boolean;
+    canTransferEnrollments: boolean;
+    canSplitHouseholds: boolean;
   };
 };
 
@@ -11201,6 +11210,7 @@ export type ClientSearchResultFieldsFragment = {
     canManageOwnClientFiles: boolean;
     canViewAnyConfidentialClientFiles: boolean;
     canViewAnyNonconfidentialClientFiles: boolean;
+    canAuditClients: boolean;
   };
 };
 
@@ -11265,6 +11275,7 @@ export type ClientFieldsFragment = {
     canManageOwnClientFiles: boolean;
     canViewAnyConfidentialClientFiles: boolean;
     canViewAnyNonconfidentialClientFiles: boolean;
+    canAuditClients: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -11556,6 +11567,7 @@ export type SearchClientsQuery = {
         canManageOwnClientFiles: boolean;
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
+        canAuditClients: boolean;
       };
     }>;
   };
@@ -11628,6 +11640,7 @@ export type GetClientQuery = {
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
+      canAuditClients: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -11760,6 +11773,7 @@ export type GetClientPermissionsQuery = {
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
+      canAuditClients: boolean;
     };
   } | null;
 };
@@ -12174,6 +12188,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canManageOwnClientFiles: boolean;
                 canViewAnyConfidentialClientFiles: boolean;
                 canViewAnyNonconfidentialClientFiles: boolean;
+                canAuditClients: boolean;
               };
               externalIds: Array<{
                 __typename?: 'ExternalIdentifier';
@@ -12765,6 +12780,7 @@ export type AllEnrollmentDetailsFragment = {
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
+      canAuditClients: boolean;
     };
   };
   openEnrollmentSummary: Array<{
@@ -13745,6 +13761,7 @@ export type GetEnrollmentDetailsQuery = {
         canManageOwnClientFiles: boolean;
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
+        canAuditClients: boolean;
       };
     };
     openEnrollmentSummary: Array<{
@@ -14331,6 +14348,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
+            canAuditClients: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -16781,6 +16799,7 @@ export type SubmitFormMutation = {
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
+            canAuditClients: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -17434,6 +17453,7 @@ export type HouseholdFieldsFragment = {
         canManageOwnClientFiles: boolean;
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
+        canAuditClients: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -17488,6 +17508,7 @@ export type HouseholdClientFieldsFragment = {
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
+      canAuditClients: boolean;
     };
     externalIds: Array<{
       __typename?: 'ExternalIdentifier';
@@ -17622,6 +17643,7 @@ export type GetHouseholdQuery = {
           canManageOwnClientFiles: boolean;
           canViewAnyConfidentialClientFiles: boolean;
           canViewAnyNonconfidentialClientFiles: boolean;
+          canAuditClients: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -19952,6 +19974,7 @@ export type GetReferralPostingQuery = {
           canManageOwnClientFiles: boolean;
           canViewAnyConfidentialClientFiles: boolean;
           canViewAnyNonconfidentialClientFiles: boolean;
+          canAuditClients: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -20065,6 +20088,7 @@ export type UpdateReferralPostingMutation = {
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
+            canAuditClients: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -20192,6 +20216,7 @@ export type CreateOutgoingReferralPostingMutation = {
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
+            canAuditClients: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -20377,6 +20402,7 @@ export type ReferralPostingDetailFieldsFragment = {
         canManageOwnClientFiles: boolean;
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
+        canAuditClients: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -21257,7 +21283,6 @@ export const RootPermissionsFragmentDoc = gql`
     canEditClients
     canViewClients
     canDeleteClients
-    canAuditClients
     canEditOrganization
     canDeleteOrganization
     canViewDob
@@ -21279,6 +21304,9 @@ export const RootPermissionsFragmentDoc = gql`
     canManageDeniedReferrals
     canManageIncomingReferrals
     canManageOutgoingReferrals
+    canMergeClients
+    canTransferEnrollments
+    canSplitHouseholds
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`
@@ -21824,6 +21852,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canManageOwnClientFiles
     canViewAnyConfidentialClientFiles
     canViewAnyNonconfidentialClientFiles
+    canAuditClients
   }
 `;
 export const ClientSearchResultFieldsFragmentDoc = gql`

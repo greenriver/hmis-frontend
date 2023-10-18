@@ -475,12 +475,12 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ClientDashboardRoutes.AUDIT_HISTORY,
             element: (
-              <RootPermissionsFilter
+              <ClientRoute
                 permissions='canAuditClients'
-                otherwise={<Navigate to='profile' replace />}
+                redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <AuditHistory />
-              </RootPermissionsFilter>
+              </ClientRoute>
             ),
           },
 
