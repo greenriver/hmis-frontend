@@ -19,11 +19,17 @@ mutation MergeClients($input: MergeClientsInput!) {
     client {
       id
     }
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }
 
 mutation BulkMergeClients($input: BulkMergeClientsInput!) {
   bulkMergeClients(input: $input) {
     success
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }

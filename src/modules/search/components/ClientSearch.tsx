@@ -73,13 +73,7 @@ export const CLIENT_COLUMNS: {
   linkedName: {
     header: 'Name',
     key: 'name',
-    render: (client) => (
-      <ClientName
-        client={asClient(client)}
-        routerLinkProps={{ target: '_blank' }}
-        linkToProfile
-      />
-    ),
+    render: (client) => <ClientName client={asClient(client)} linkToProfile />,
   },
   first: {
     header: 'First Name',

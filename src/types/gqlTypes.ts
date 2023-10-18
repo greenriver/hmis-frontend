@@ -1982,6 +1982,7 @@ export type EnrollmentAccess = {
   __typename?: 'EnrollmentAccess';
   canDeleteEnrollments: Scalars['Boolean']['output'];
   canEditEnrollments: Scalars['Boolean']['output'];
+  canSplitHouseholds: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -12440,6 +12441,20 @@ export type MergeClientsMutation = {
   mergeClients?: {
     __typename?: 'MergeClientsPayload';
     client?: { __typename?: 'Client'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
@@ -12452,6 +12467,20 @@ export type BulkMergeClientsMutation = {
   bulkMergeClients?: {
     __typename?: 'BulkMergeClientsPayload';
     success?: boolean | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
@@ -25169,8 +25198,12 @@ export const MergeClientsDocument = gql`
       client {
         id
       }
+      errors {
+        ...ValidationErrorFields
+      }
     }
   }
+  ${ValidationErrorFieldsFragmentDoc}
 `;
 export type MergeClientsMutationFn = Apollo.MutationFunction<
   MergeClientsMutation,
@@ -25219,8 +25252,12 @@ export const BulkMergeClientsDocument = gql`
   mutation BulkMergeClients($input: BulkMergeClientsInput!) {
     bulkMergeClients(input: $input) {
       success
+      errors {
+        ...ValidationErrorFields
+      }
     }
   }
+  ${ValidationErrorFieldsFragmentDoc}
 `;
 export type BulkMergeClientsMutationFn = Apollo.MutationFunction<
   BulkMergeClientsMutation,
