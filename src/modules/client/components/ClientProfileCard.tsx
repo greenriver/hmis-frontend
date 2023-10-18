@@ -32,10 +32,7 @@ import {
   lastUpdated,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
-import {
-  ClientPermissionsFilter,
-  RootPermissionsFilter,
-} from '@/modules/permissions/PermissionsFilters';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -505,7 +502,10 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                 </ClientPermissionsFilter>
                 <Typography variant='body2' sx={{ fontStyle: 'italic', mt: 1 }}>
                   Last Updated on {lastUpdated(client, true)}.{' '}
-                  <RootPermissionsFilter permissions='canAuditClients'>
+                  <ClientPermissionsFilter
+                    id={client.id}
+                    permissions='canAuditClients'
+                  >
                     <RouterLink
                       to={generateSafePath(
                         ClientDashboardRoutes.AUDIT_HISTORY,
@@ -516,7 +516,7 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     >
                       View client audit history
                     </RouterLink>
-                  </RootPermissionsFilter>
+                  </ClientPermissionsFilter>
                 </Typography>
               </Stack>
             </Box>

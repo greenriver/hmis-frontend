@@ -120,10 +120,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
-        name: 'enrollmentCoc',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -595,6 +591,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'ClientAccess',
     fields: [
+      {
+        name: 'canAuditClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
       {
         name: 'canDeleteAssessments',
         type: {
@@ -1992,6 +1996,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canEditEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canSplitHouseholds',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -4084,6 +4096,30 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageOwnClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canMergeClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canSplitHouseholds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canTransferEnrollments',
         type: {
           kind: 'NON_NULL',
           name: null,
