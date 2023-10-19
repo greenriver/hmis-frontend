@@ -137,27 +137,27 @@ const ClientMergeCandidatesTable: React.FC = () => {
             ),
           }}
         />
-        <ConfirmationDialog
-          id='confirmMerges'
-          open={mergesToApply.length > 0}
-          title='Are you sure?'
-          onConfirm={handleConfirm}
-          onCancel={() => setMergesToApply([])}
-          loading={loading}
-          maxWidth='sm'
-          fullWidth
-        >
-          Source records for the following clients will be merged:
-          <ul>
-            {mergesToApply.map(({ id, clients }) => (
-              <li key={id}>
-                <b>{clientBriefName(clients[0])}</b>
-                {` (${clients.length} records)`}
-              </li>
-            ))}
-          </ul>
-        </ConfirmationDialog>
       </SsnDobShowContextProvider>
+      <ConfirmationDialog
+        id='confirmMerges'
+        open={mergesToApply.length > 0}
+        title='Are you sure?'
+        onConfirm={handleConfirm}
+        onCancel={() => setMergesToApply([])}
+        loading={loading}
+        maxWidth='sm'
+        fullWidth
+      >
+        Source records for the following clients will be merged:
+        <ul>
+          {mergesToApply.map(({ id, clients }) => (
+            <li key={id}>
+              <b>{clientBriefName(clients[0])}</b>
+              {` (${clients.length} records)`}
+            </li>
+          ))}
+        </ul>
+      </ConfirmationDialog>
     </>
   );
 };

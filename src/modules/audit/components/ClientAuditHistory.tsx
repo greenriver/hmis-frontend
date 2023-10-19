@@ -79,6 +79,8 @@ const columns: ColumnDef<AuditHistoryType>[] = [
   {
     header: 'Fields Changed',
     render: (e) => {
+      if (!e.objectChanges) return null;
+
       return (
         <SimpleTable
           TableCellProps={{
