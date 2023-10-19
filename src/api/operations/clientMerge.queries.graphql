@@ -17,7 +17,7 @@ query GetMergeCandidates($limit: Int, $offset: Int) {
 mutation MergeClients($input: MergeClientsInput!) {
   mergeClients(input: $input) {
     client {
-      id
+      ...ClientFields
     }
     errors {
       ...ValidationErrorFields

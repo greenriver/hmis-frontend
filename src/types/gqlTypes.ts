@@ -12440,7 +12440,156 @@ export type MergeClientsMutation = {
   __typename?: 'Mutation';
   mergeClients?: {
     __typename?: 'MergeClientsPayload';
-    client?: { __typename?: 'Client'; id: string } | null;
+    client?: {
+      __typename?: 'Client';
+      dobDataQuality: DobDataQuality;
+      gender: Array<Gender>;
+      differentIdentityText?: string | null;
+      pronouns: Array<string>;
+      nameDataQuality: NameDataQuality;
+      personalId: string;
+      race: Array<Race>;
+      additionalRaceEthnicity?: string | null;
+      ssnDataQuality: SsnDataQuality;
+      veteranStatus: NoYesReasonsForMissingData;
+      dateCreated?: string | null;
+      dateDeleted?: string | null;
+      dateUpdated?: string | null;
+      id: string;
+      lockVersion: number;
+      dob?: string | null;
+      age?: number | null;
+      ssn?: string | null;
+      yearEnteredService?: number | null;
+      yearSeparated?: number | null;
+      worldWarIi?: NoYesReasonsForMissingData | null;
+      koreanWar?: NoYesReasonsForMissingData | null;
+      vietnamWar?: NoYesReasonsForMissingData | null;
+      desertStorm?: NoYesReasonsForMissingData | null;
+      afghanistanOef?: NoYesReasonsForMissingData | null;
+      iraqOif?: NoYesReasonsForMissingData | null;
+      iraqOnd?: NoYesReasonsForMissingData | null;
+      otherTheater?: NoYesReasonsForMissingData | null;
+      militaryBranch?: MilitaryBranch | null;
+      dischargeStatus?: DischargeStatus | null;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      externalIds: Array<{
+        __typename?: 'ExternalIdentifier';
+        id: string;
+        identifier?: string | null;
+        url?: string | null;
+        label: string;
+        type: ExternalIdentifierType;
+      }>;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+        canEditClient: boolean;
+        canDeleteClient: boolean;
+        canViewDob: boolean;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+        canViewEnrollmentDetails: boolean;
+        canDeleteAssessments: boolean;
+        canManageAnyClientFiles: boolean;
+        canManageOwnClientFiles: boolean;
+        canViewAnyConfidentialClientFiles: boolean;
+        canViewAnyNonconfidentialClientFiles: boolean;
+        canAuditClients: boolean;
+      };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
+      names: Array<{
+        __typename?: 'ClientName';
+        id: string;
+        first?: string | null;
+        middle?: string | null;
+        last?: string | null;
+        suffix?: string | null;
+        nameDataQuality?: NameDataQuality | null;
+        use?: ClientNameUse | null;
+        notes?: string | null;
+        primary?: boolean | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+      }>;
+      addresses: Array<{
+        __typename?: 'ClientAddress';
+        id: string;
+        line1?: string | null;
+        line2?: string | null;
+        city?: string | null;
+        state?: string | null;
+        district?: string | null;
+        country?: string | null;
+        postalCode?: string | null;
+        notes?: string | null;
+        use?: ClientAddressUse | null;
+        addressType?: ClientAddressType | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+      }>;
+      phoneNumbers: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+      }>;
+      emailAddresses: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+      }>;
+    } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -25196,13 +25345,14 @@ export const MergeClientsDocument = gql`
   mutation MergeClients($input: MergeClientsInput!) {
     mergeClients(input: $input) {
       client {
-        id
+        ...ClientFields
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
+  ${ClientFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type MergeClientsMutationFn = Apollo.MutationFunction<
