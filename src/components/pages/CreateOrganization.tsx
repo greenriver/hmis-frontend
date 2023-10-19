@@ -28,7 +28,6 @@ const CreateOrganization = () => {
   const onCompleted = useCallback(
     (data: OrganizationFieldsFragment) => {
       evictPickList(PickListType.Project);
-      // FIXME check
       evictQuery('organizations');
       navigate(
         generateSafePath(Routes.ORGANIZATION, { organizationId: data.id })

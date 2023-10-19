@@ -27,16 +27,10 @@ const clientDashboardRoutes = {
   CLIENT_ENROLLMENTS: 'enrollments',
   AUDIT_HISTORY: 'history',
   ASSESSMENTS: 'assessments',
-  NOTES: 'notes', // remove?
   FILES: 'files',
   NEW_FILE: 'files/new',
   EDIT_FILE: 'files/:fileId/edit',
-  CONTACT: 'contact', // remove?
-  LOCATIONS: 'locations', // remove?
-  REFERRALS: 'referrals', // remove?
-  CLIENT_MERGES: 'merges', // remove?
-  // TODO: merge
-  // TODO: merge history
+  CLIENT_MERGES: 'merges',
 };
 
 // Routes within the enrollment dashboard
@@ -52,8 +46,6 @@ const enrollmentDashboardRoutes = {
   CUSTOM_CASE_NOTES: 'case-notes',
   ASSESSMENT: 'assessments/:formRole/:assessmentId?',
   ESG_FUNDING_REPORT: 'esg-funding-report',
-  // TODO: merge/split household
-  // TODO: transfer to another project (or is this a bulk action?)
 };
 
 // Routes within the project dashboard
