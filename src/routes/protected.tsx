@@ -494,7 +494,6 @@ export const protectedRoutes: RouteNode[] = [
               </RootPermissionsFilter>
             ),
           },
-          { path: ClientDashboardRoutes.NOTES, element: null },
           {
             path: ClientDashboardRoutes.FILES,
             element: (
@@ -526,9 +525,6 @@ export const protectedRoutes: RouteNode[] = [
               </FileEditRoute>
             ),
           },
-          { path: ClientDashboardRoutes.CONTACT, element: null },
-          { path: ClientDashboardRoutes.LOCATIONS, element: null },
-          { path: ClientDashboardRoutes.REFERRALS, element: null },
           { path: '*', element: <Navigate to='profile' replace /> },
         ],
       },

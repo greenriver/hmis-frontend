@@ -499,9 +499,14 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     Update Client Details
                   </ButtonLink>
                 </ClientPermissionsFilter>
-                <Typography variant='body2' sx={{ fontStyle: 'italic', mt: 1 }}>
-                  Last Updated on {lastUpdated(client, true)}.
-                </Typography>
+                {client.dateUpdated && (
+                  <Typography
+                    variant='body2'
+                    sx={{ fontStyle: 'italic', mt: 1 }}
+                  >
+                    Last Updated on {lastUpdated(client, true)}.
+                  </Typography>
+                )}
               </Stack>
             </Box>
           </Grid>
