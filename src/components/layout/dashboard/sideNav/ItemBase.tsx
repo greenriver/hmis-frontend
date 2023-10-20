@@ -27,11 +27,12 @@ const ItemBase = ({
   renderChild,
 }: ItemBaseProps) => {
   const htmlId = useId();
-  const { isSelected, hasItems } = useItemSelectionStatus({ item });
+  const { isSelected, childItems, hasChildItems } = useItemSelectionStatus({
+    item,
+  });
 
   const [open, setOpen] = useState<boolean>(
-    (isSelected && hasItems) || false
-    // isActive || (isSelected && hasItems) || false
+    (isSelected && hasChildItems) || false
   );
 
   const handleToggle = useCallback(
@@ -49,7 +50,7 @@ const ItemBase = ({
     }
   }, [isSelected, isMobile]);
 
-  const isClickable = collapsible || !hasItems;
+  const isClickable = collapsible || !hasChildItems;
   const itemSx = {
     py: 1,
     px: 3,
@@ -68,8 +69,8 @@ const ItemBase = ({
   return (
     <Box ref={itemRef} id={htmlId}>
       <Box
-        onClick={collapsible && hasItems ? handleToggle : undefined}
-        role={collapsible && hasItems ? 'button' : undefined}
+        onClick={collapsible && hasChildItems ? handleToggle : undefined}
+        role={collapsible && hasChildItems ? 'button' : undefined}
         sx={{
           display: 'flex',
           cursor: isClickable ? 'pointer' : undefined,
@@ -122,7 +123,7 @@ const ItemBase = ({
             )}
           </Box>
         )}
-        {collapsible && hasItems && (
+        {collapsible && hasChildItems && (
           <Box
             sx={{
               transition: 'transform 0.1s',
@@ -144,11 +145,11 @@ const ItemBase = ({
           </Box>
         )}
       </Box>
-      {collapsible && hasItems && (
+      {collapsible && hasChildItems && (
         <Collapse in={open}>
           <Box sx={{ ml: itemIndent + 2 }}>
             {renderChild &&
-              item.items?.map((item) => (
+              childItems.map((item) => (
                 <React.Fragment key={item.id}>
                   {renderChild(item)}
                 </React.Fragment>
@@ -156,10 +157,10 @@ const ItemBase = ({
           </Box>
         </Collapse>
       )}
-      {!collapsible && hasItems && (
+      {!collapsible && hasChildItems && (
         <Box sx={{ ml: itemIndent }}>
           {renderChild &&
-            item.items?.map((item) => (
+            childItems.map((item) => (
               <React.Fragment key={item.id}>{renderChild(item)}</React.Fragment>
             ))}
         </Box>

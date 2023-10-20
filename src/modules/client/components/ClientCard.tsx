@@ -193,9 +193,11 @@ const ClientCard: React.FC<Props> = ({
               )}
             </Stack>
           </Stack>
-          <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-            Last Updated on {lastUpdated(client)}
-          </Typography>
+          {client.dateUpdated && (
+            <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
+              Last Updated on {lastUpdated(client)}
+            </Typography>
+          )}
         </Stack>
       </Grid>
       <ClientPermissionsFilter

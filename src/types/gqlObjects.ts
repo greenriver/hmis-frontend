@@ -877,6 +877,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ClientMergeCandidate',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'warehouseUrl',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'ClientName',
     fields: [
       {
@@ -4992,6 +5013,31 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'BulkMergeClientsInput',
+    args: [
+      {
+        name: 'input',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'INPUT_OBJECT',
+                name: 'ClientMergeInput',
+                ofType: null,
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'ClearMciInput',
     args: [
       {
@@ -5033,6 +5079,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ClientMergeInput',
+    args: [
+      {
+        name: 'clientIds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
           },
         },
       },
@@ -5601,6 +5668,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
+    name: 'MergeClientsInput',
+    args: [
+      {
+        name: 'clientIds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
+          },
+        },
+      },
     ],
   },
   {

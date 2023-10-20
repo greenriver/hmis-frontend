@@ -2,10 +2,9 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Paper, Stack, Tooltip, Typography } from '@mui/material';
 import { capitalize, filter, isNil } from 'lodash-es';
 
-import SimpleTable from '../elements/SimpleTable';
-
-import PageTitle from '../layout/PageTitle';
+import SimpleTable from '@/components/elements/SimpleTable';
 import { ColumnDef } from '@/components/elements/table/types';
+import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
@@ -17,7 +16,7 @@ import {
   GetClientAuditEventsQueryVariables,
 } from '@/types/gqlTypes';
 
-type AssessmentType = NonNullable<
+type AuditHistoryType = NonNullable<
   NonNullable<GetClientAuditEventsQuery['client']>['auditHistory']
 >['nodes'][0];
 
@@ -48,7 +47,7 @@ type ChangesType = {
   };
 };
 
-const columns: ColumnDef<AssessmentType>[] = [
+const columns: ColumnDef<AuditHistoryType>[] = [
   {
     header: 'Timestamp',
     width: '1%',
@@ -145,7 +144,7 @@ const columns: ColumnDef<AssessmentType>[] = [
   },
 ];
 
-const AuditHistory = () => {
+const ClientAuditHistory = () => {
   const { clientId } = useSafeParams() as { clientId: string };
 
   return (
@@ -155,7 +154,7 @@ const AuditHistory = () => {
         <GenericTableWithData<
           GetClientAuditEventsQuery,
           GetClientAuditEventsQueryVariables,
-          AssessmentType
+          AuditHistoryType
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAuditEventsDocument}
@@ -170,4 +169,4 @@ const AuditHistory = () => {
   );
 };
 
-export default AuditHistory;
+export default ClientAuditHistory;

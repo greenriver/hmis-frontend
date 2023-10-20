@@ -41,7 +41,7 @@ const ProjectEnrollmentsTableForBedNights = ({
   editable?: boolean;
   openOnDate: Date;
   additionalColumns?: ColumnDef<EnrollmentFields>[];
-  renderBulkAction?: EnhancedTableToolbarProps['renderBulkAction'];
+  renderBulkAction?: EnhancedTableToolbarProps<EnrollmentFields>['renderBulkAction'];
 }) => {
   const queryVariables = useMemo(
     () => ({
@@ -132,7 +132,7 @@ const ProjectEnrollmentsTableForBedNights = ({
           ],
         }}
         noData={noResultsDisplay}
-        selectable={editable}
+        selectable={editable ? 'row' : undefined}
         defaultPageSize={25}
         rowsPerPageOptions={[25, 50, 100, 150, 200]}
         EnhancedTableToolbarProps={{

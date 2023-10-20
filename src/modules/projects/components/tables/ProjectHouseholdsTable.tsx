@@ -26,7 +26,7 @@ export type HouseholdFields = NonNullable<
   GetProjectHouseholdsQuery['project']
 >['households']['nodes'][number];
 
-const TableCellConatiner = ({ children }: { children: ReactNode }) => (
+const TableCellContainer = ({ children }: { children: ReactNode }) => (
   <Stack direction='column' gap={1} sx={{ py: 1 }}>
     {children}
   </Stack>
@@ -40,7 +40,7 @@ export const HOUSEHOLD_COLUMNS: {
     width: '0%',
     key: 'hoh-indicator',
     render: (hh) => (
-      <TableCellConatiner>
+      <TableCellContainer>
         {hh.householdClients.map((c) =>
           RelationshipToHoH.SelfHeadOfHousehold === c.relationshipToHoH ? (
             <HohIndicator
@@ -54,13 +54,13 @@ export const HOUSEHOLD_COLUMNS: {
             </Typography>
           )
         )}
-      </TableCellConatiner>
+      </TableCellContainer>
     ),
   },
   clients: {
     header: 'Clients',
     render: (hh) => (
-      <TableCellConatiner>
+      <TableCellContainer>
         {hh.householdClients.map((hc) => (
           <EnrollmentClientNameWithAge
             key={hc.id}
@@ -68,13 +68,13 @@ export const HOUSEHOLD_COLUMNS: {
             client={hc.client}
           />
         ))}
-      </TableCellConatiner>
+      </TableCellContainer>
     ),
   },
   relationshipToHoH: {
     header: 'Relationship to HoH',
     render: (hh) => (
-      <TableCellConatiner>
+      <TableCellContainer>
         {hh.householdClients.map((c) =>
           c.relationshipToHoH === RelationshipToHoH.DataNotCollected ? (
             <Typography variant='body2' key={c.id}>
@@ -89,23 +89,23 @@ export const HOUSEHOLD_COLUMNS: {
             />
           )
         )}
-      </TableCellConatiner>
+      </TableCellContainer>
     ),
   },
   status: {
     header: 'Status',
     render: (hh) => (
-      <TableCellConatiner>
+      <TableCellContainer>
         {hh.householdClients.map((c) => (
           <EnrollmentStatus key={c.id} enrollment={c.enrollment} />
         ))}
-      </TableCellConatiner>
+      </TableCellContainer>
     ),
   },
   enrollmentPeriod: {
     header: 'Enrollment Period',
     render: (hh) => (
-      <TableCellConatiner>
+      <TableCellContainer>
         {hh.householdClients.map((c) => (
           <EnrollmentDateRangeWithStatus
             key={c.id}
@@ -113,7 +113,7 @@ export const HOUSEHOLD_COLUMNS: {
             treatIncompleteAsActive
           />
         ))}
-      </TableCellConatiner>
+      </TableCellContainer>
     ),
   },
   householdId: {
