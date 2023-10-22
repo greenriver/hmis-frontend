@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -eo pipefail
+
+if [[ "$1" = "" ]]
+then
+  echo you need to specify an image as the only parameter
+  exit 1
+fi
+
+docker run -d --name=tester \
+  -e NGINX_PORT=8080 \
+  -e NGINX_HOST=example.com \
+  -e NGINX_RESOLVER=1.1.1.1 \
+  -e HMIS_BACKEND=nowhere.com \
+  --expose 8080 \
+  -p 8080:8080 \
+  $1
+
+sleep 3
+
+echo Checking for success
+curl -I -H 'Host: example.com' http://127.0.0.1:8080 | tee output.log
+
+grep '200 OK' output.log
+
+# docker container ls
+# docker logs tester
+
+docker stop tester
+docker container prune -f
