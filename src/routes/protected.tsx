@@ -33,9 +33,12 @@ import File from '@/components/pages/File';
 import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
 import Dashboard from '@/components/pages/UserDashboard';
-import AdminDashboard from '@/modules/admin/components/AdminDashboard';
-import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenials';
-import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
+import AdminDashboard, {
+  AdminLandingPage,
+} from '@/modules/admin/components/AdminDashboard';
+
+import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
+import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
@@ -534,7 +537,7 @@ export const protectedRoutes: RouteNode[] = [
         children: [
           {
             path: '',
-            element: <Navigate to={AdminDashboardRoutes.AC_DENIALS} replace />,
+            element: <AdminLandingPage />,
           },
           {
             path: AdminDashboardRoutes.CLIENT_MERGES,
