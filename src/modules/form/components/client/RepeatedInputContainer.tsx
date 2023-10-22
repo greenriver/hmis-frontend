@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Grid, lighten, Stack } from '@mui/material';
+import { Box, Button, Divider, Grid, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface Props<T> {
@@ -31,77 +31,70 @@ const RepeatedInputContainer = <T extends object>({
     <Button
       onClick={onClickAdd}
       color='secondary'
-      variant='outlined'
-      sx={{ width: 'fit-content', px: 4 }}
+      variant='text'
+      sx={{ width: 'fit-content', color: 'links' }}
       startIcon={<AddIcon />}
     >
       {addText || 'Add'}
     </Button>
   );
-  if (values.length === 0) return <Box sx={{ mt: 1 }}>{addButton}</Box>;
 
   return (
     <Grid
       item
       sx={{
+        mt: 1,
         '&::after': {
           content: '""',
           height: '1px',
-          backgroundColor: 'borders.light',
-          mt: 4,
-          mb: 2,
+          backgroundColor: 'borders.dark',
+          mt: 3,
           display: 'block',
+          width: 'calc(100% + 40px)',
+          ml: '-20px',
         },
       }}
     >
       {title}
-      <Stack id={id} gap={4} sx={{ pb: 2 }}>
-        {values.map((val, idx) => {
-          return (
-            <Box
-              key={valueKey(val)}
-              sx={{
-                py: 2,
-                px: 3,
-                backgroundColor: lighten('#D7D7D7', 0.95),
-                borderRadius: 1,
-                borderColor: 'borders.light',
-                borderStyle: 'solid',
-                borderWidth: 1,
-              }}
-            >
-              {renderChild(val, idx)}
-              <Stack
-                justifyContent={'space-between'}
-                direction='row'
-                sx={{ mt: 3, fontSize: '.825rem' }}
-              >
-                {renderMetadata ? (
-                  renderMetadata(val) || <Box></Box>
-                ) : (
-                  <Box></Box>
-                )}
-                <Button
-                  onClick={removeAt(val, idx)}
-                  color='error'
-                  variant='text'
-                  disabled={!removeAt(val, idx)}
-                  sx={{
-                    color: 'error.dark',
-                    width: 'fit-content',
-                    textDecoration: 'underline',
-                    py: 0,
-                    ml: -1,
-                    fontSize: 'inherit',
-                  }}
+      {values.length > 0 && (
+        <Stack id={id} gap={2} sx={{ pb: 2 }}>
+          {values.map((val, idx) => {
+            return (
+              <Box key={valueKey(val)} sx={{ py: 1 }}>
+                {renderChild(val, idx)}
+                <Stack
+                  justifyContent={'space-between'}
+                  direction='row'
+                  sx={{ mt: 3, fontSize: '.825rem' }}
                 >
-                  {removeText || 'Remove'}
-                </Button>
-              </Stack>
-            </Box>
-          );
-        })}
-      </Stack>
+                  {renderMetadata ? (
+                    renderMetadata(val) || <Box></Box>
+                  ) : (
+                    <Box></Box>
+                  )}
+                  <Button
+                    onClick={removeAt(val, idx)}
+                    color='error'
+                    variant='text'
+                    disabled={!removeAt(val, idx)}
+                    sx={{
+                      color: 'error.dark',
+                      width: 'fit-content',
+                      textDecoration: 'underline',
+                      py: 0,
+                      ml: -1,
+                      fontSize: 'inherit',
+                    }}
+                  >
+                    {removeText || 'Remove'}
+                  </Button>
+                </Stack>
+                {idx < values.length - 1 && <Divider sx={{ mt: 4 }} />}
+              </Box>
+            );
+          })}
+        </Stack>
+      )}
       {addButton}
     </Grid>
   );

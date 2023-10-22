@@ -75,6 +75,7 @@ const DashboardContentNav: React.FC<Props> = ({
       sx={{ display: 'flex', top: headerHeight, position: 'sticky', height }}
     >
       <Drawer
+        data-testid='mobileNav'
         container={container}
         variant='temporary'
         open={mobileNavIsOpen}
@@ -91,6 +92,7 @@ const DashboardContentNav: React.FC<Props> = ({
         <Box>{children}</Box>
       </Drawer>
       <Drawer
+        data-testid='desktopNav'
         anchor='left'
         open={desktopNavIsOpen}
         onClose={handleCloseDesktopMenu}

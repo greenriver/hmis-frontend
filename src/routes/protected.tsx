@@ -2,6 +2,7 @@ import { ReactNode, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import {
+  AdminDashboardRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -14,7 +15,6 @@ import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import AllFiles from '@/components/clientDashboard/AllFiles';
-import AuditHistory from '@/components/clientDashboard/AuditHistory';
 import EditClient from '@/components/clientDashboard/EditClient';
 import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
@@ -36,7 +36,10 @@ import Dashboard from '@/components/pages/UserDashboard';
 import AdminDashboard from '@/modules/admin/components/AdminDashboard';
 import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
+import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
+import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
+import ClientMerge from '@/modules/clientMerge/components/ClientMerge';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
@@ -50,10 +53,12 @@ import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import CeParticipations from '@/modules/projects/components/CeParticipations';
 import Cocs from '@/modules/projects/components/Cocs';
 import EditProject from '@/modules/projects/components/EditProject';
 import Funder from '@/modules/projects/components/Funder';
 import Funders from '@/modules/projects/components/Funders';
+import HmisParticipations from '@/modules/projects/components/HmisParticipations';
 import Inventories from '@/modules/projects/components/Inventories';
 import Inventory from '@/modules/projects/components/Inventory';
 import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferral';
@@ -74,7 +79,7 @@ const App = () => {
   return (
     <MainLayout>
       <Suspense fallback={<Loading />}>
-        <SentryErrorBoundary fullpage>
+        <SentryErrorBoundary>
           <Outlet />
         </SentryErrorBoundary>
       </Suspense>
@@ -203,6 +208,14 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.INVENTORY,
             element: <Inventories />,
+          },
+          {
+            path: ProjectDashboardRoutes.HMIS_PARTICIPATION,
+            element: <HmisParticipations />,
+          },
+          {
+            path: ProjectDashboardRoutes.CE_PARTICIPATION,
+            element: <CeParticipations />,
           },
           {
             path: ProjectDashboardRoutes.UNITS,
@@ -465,16 +478,22 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ClientDashboardRoutes.AUDIT_HISTORY,
             element: (
-              <RootPermissionsFilter
+              <ClientRoute
                 permissions='canAuditClients'
-                otherwise={<Navigate to='profile' replace />}
+                redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <AuditHistory />
+                <ClientAuditHistory />
+              </ClientRoute>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.CLIENT_MERGES,
+            element: (
+              <RootPermissionsFilter permissions='canMergeClients'>
+                <ClientMerge />
               </RootPermissionsFilter>
             ),
           },
-
-          { path: ClientDashboardRoutes.NOTES, element: null },
           {
             path: ClientDashboardRoutes.FILES,
             element: (
@@ -506,9 +525,6 @@ export const protectedRoutes: RouteNode[] = [
               </FileEditRoute>
             ),
           },
-          { path: ClientDashboardRoutes.CONTACT, element: null },
-          { path: ClientDashboardRoutes.LOCATIONS, element: null },
-          { path: ClientDashboardRoutes.REFERRALS, element: null },
           { path: '*', element: <Navigate to='profile' replace /> },
         ],
       },
@@ -518,10 +534,18 @@ export const protectedRoutes: RouteNode[] = [
         children: [
           {
             path: '',
-            element: <Navigate to={Routes.ADMIN_REFERRAL_DENIALS} replace />,
+            element: <Navigate to={AdminDashboardRoutes.AC_DENIALS} replace />,
           },
           {
-            path: Routes.ADMIN_REFERRAL_DENIALS,
+            path: AdminDashboardRoutes.CLIENT_MERGES,
+            element: (
+              <RootPermissionsFilter permissions='canMergeClients'>
+                <AdminClientMerge />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.AC_DENIALS,
             element: (
               <RootPermissionsFilter permissions='canManageDeniedReferrals'>
                 <AdminReferralDenials />
@@ -529,7 +553,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: Routes.ADMIN_REFERRAL_DENIAL,
+            path: AdminDashboardRoutes.AC_DENIAL_DETAILS,
             element: (
               <RootPermissionsFilter permissions='canManageDeniedReferrals'>
                 <AdminReferralPosting />

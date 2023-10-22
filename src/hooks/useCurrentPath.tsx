@@ -2,6 +2,7 @@ import { flatMap } from 'lodash-es';
 import { matchRoutes, useLocation } from 'react-router-dom';
 
 import {
+  AdminDashboardRoutes,
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -14,6 +15,7 @@ const allRoutes = flatMap(
     ClientDashboardRoutes,
     EnrollmentDashboardRoutes,
     ProjectDashboardRoutes,
+    AdminDashboardRoutes,
   ],
   (obj) => Object.values(obj)
 ).map((s) => ({

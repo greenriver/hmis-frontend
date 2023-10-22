@@ -1,4 +1,5 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
@@ -60,13 +61,21 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
       />,
     ],
     [
+      'HUD Chronically Homeless' as string,
+      !isNil(referralPosting.hudChronic) ? (
+        <YesNoDisplay booleanValue={referralPosting.hudChronic} />
+      ) : (
+        (undefined as ReactNode)
+      ),
+    ] as const,
+    [
       'Needs Wheelchair Accessible Unit',
       <YesNoDisplay
         booleanValue={referralPosting.needsWheelchairAccessibleUnit}
         fallback={<NotCollectedText variant='body2' />}
       />,
     ],
-  ];
+  ].filter((ary): ary is [string, ReactNode] => !!ary[1]);
   return (
     <Grid container columnSpacing={6} rowSpacing={2}>
       {[col1, col2].map((list) => (

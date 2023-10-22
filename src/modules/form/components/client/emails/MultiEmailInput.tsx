@@ -52,8 +52,8 @@ const MultiEmailInput = ({ id, value, onChange, label }: Props) => {
         onChange(copied);
       }}
       title={label}
-      removeText='Delete email'
-      addText='Add email'
+      removeText='Delete Email'
+      addText={value.length > 0 ? 'Add Another Email' : 'Add Email'}
       renderMetadata={renderMetadata}
     />
   );

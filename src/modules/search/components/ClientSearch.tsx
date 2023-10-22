@@ -15,7 +15,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import { EnrollmentFields } from '@/modules/bedNights/components/ProjectEnrollmentsTableForBedNights';
+
 import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';
 import {
@@ -40,6 +40,7 @@ import {
   ClientSortOption,
   ExternalIdentifierType,
   HouseholdClientFieldsFragment,
+  ProjectEnrollmentFieldsFragment,
   SearchClientsDocument,
   SearchClientsQuery,
   SearchClientsQueryVariables,
@@ -50,7 +51,7 @@ function asClient(
   record:
     | ClientFieldsFragment
     | HouseholdClientFieldsFragment
-    | EnrollmentFields
+    | ProjectEnrollmentFieldsFragment
 ) {
   if (isHouseholdClient(record)) return record.client;
   if (isEnrollment(record)) return record.client;
@@ -58,7 +59,9 @@ function asClient(
 }
 export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<
-    ClientFieldsFragment | HouseholdClientFieldsFragment | EnrollmentFields
+    | ClientFieldsFragment
+    | HouseholdClientFieldsFragment
+    | ProjectEnrollmentFieldsFragment
   >;
 } = {
   id: { header: 'HMIS ID', render: 'id' },
@@ -70,13 +73,7 @@ export const CLIENT_COLUMNS: {
   linkedName: {
     header: 'Name',
     key: 'name',
-    render: (client) => (
-      <ClientName
-        client={asClient(client)}
-        routerLinkProps={{ target: '_blank' }}
-        linkToProfile
-      />
-    ),
+    render: (client) => <ClientName client={asClient(client)} linkToProfile />,
   },
   first: {
     header: 'First Name',

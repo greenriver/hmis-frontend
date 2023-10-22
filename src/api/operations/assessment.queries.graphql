@@ -28,14 +28,7 @@ query GetClientAssessments(
       nodes {
         ...AssessmentFields
         enrollment {
-          id
-          lockVersion
-          entryDate
-          exitDate
-          inProgress
-          project {
-            ...ProjectNameAndType
-          }
+          ...ClientEnrollmentFields
         }
       }
     }
@@ -80,6 +73,24 @@ query GetHouseholdAssessments(
     assessmentId: $assessmentId
   ) {
     ...AssessmentWithValuesAndRecords
+  }
+}
+
+query GetRelatedAnnuals($householdId: ID!, $assessmentId: ID) {
+  householdAssessments(
+    householdId: $householdId
+    assessmentRole: ANNUAL
+    assessmentId: $assessmentId
+  ) {
+    id
+    assessmentDate
+    enrollment {
+      id
+      relationshipToHoH
+    }
+    client {
+      ...ClientName
+    }
   }
 }
 

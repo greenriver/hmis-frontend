@@ -1,0 +1,35 @@
+query GetMergeCandidates($limit: Int, $offset: Int) {
+  mergeCandidates(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      id
+      warehouseUrl
+      clients {
+        ...ClientName
+        ...ClientIdentificationFields
+      }
+    }
+  }
+}
+
+mutation MergeClients($input: MergeClientsInput!) {
+  mergeClients(input: $input) {
+    client {
+      ...ClientFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation BulkMergeClients($input: BulkMergeClientsInput!) {
+  bulkMergeClients(input: $input) {
+    success
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

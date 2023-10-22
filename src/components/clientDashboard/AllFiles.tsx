@@ -1,7 +1,8 @@
 import UploadIcon from '@mui/icons-material/Upload';
-import { Box, Chip, Link, Paper, Typography } from '@mui/material';
+import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 
+import NotCollectedText from '../elements/NotCollectedText';
 import PageTitle from '../layout/PageTitle';
 
 import FileDialog from './files/FileModal';
@@ -11,14 +12,17 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import {
+  enrollmentName,
+  parseAndFormatDateTime,
+} from '@/modules/hmis/hmisUtil';
 import {
   useClientPermissions,
   useHasClientPermissions,
 } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
-  FileFieldsFragment,
   GetClientFilesDocument,
   GetClientFilesQuery,
   GetClientFilesQueryVariables,
@@ -27,10 +31,14 @@ import {
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
+type ClientFileType = NonNullable<
+  NonNullable<GetClientFilesQuery['client']>['files']
+>['nodes'][0];
+
 const FileActions: React.FC<{
   clientId: string;
-  file: FileFieldsFragment;
-  onDone?: (file: FileFieldsFragment) => any;
+  file: ClientFileType;
+  onDone?: (file: ClientFileType) => any;
   noDownload?: boolean;
 }> = ({ clientId, file, onDone = () => {}, noDownload }) => {
   const { getActionsForFile } = useFileActions({
@@ -58,9 +66,7 @@ const FileActions: React.FC<{
 
 const AllFiles = () => {
   const { clientId } = useSafeParams() as { clientId: string };
-  const [viewingFile, setViewingFile] = useState<
-    FileFieldsFragment | undefined
-  >();
+  const [viewingFile, setViewingFile] = useState<ClientFileType | undefined>();
 
   const [canEdit] = useHasClientPermissions(clientId, [
     'canManageAnyClientFiles',
@@ -70,10 +76,10 @@ const AllFiles = () => {
     variables: { pickListType: PickListType.AvailableFileTypes },
   });
 
-  const columns: ColumnDef<FileFieldsFragment>[] = useMemo(() => {
+  const columns: ColumnDef<ClientFileType>[] = useMemo(() => {
     return [
       {
-        header: 'Name',
+        header: 'File Name',
         render: (file) =>
           file.redacted ? (
             <Typography variant='inherit'>{file.name}</Typography>
@@ -89,7 +95,7 @@ const AllFiles = () => {
           ),
       },
       {
-        header: 'Tags',
+        header: 'File Tags',
         render: (file) =>
           pickListData ? (
             <Box sx={{ display: 'flex', gap: 0.5 }}>
@@ -110,19 +116,30 @@ const AllFiles = () => {
           ) : null,
       },
       {
-        header: 'Uploaded At',
-        render: (file) =>
-          `${parseAndFormatDateTime(file.dateCreated)}${
-            file.uploadedBy?.name ? ` by ${file.uploadedBy?.name}` : ''
-          }`,
+        header: 'Enrollment',
+        render: ({ enrollment }) => {
+          if (!enrollment) return <NotCollectedText>N/A</NotCollectedText>;
+
+          return (
+            <Stack gap={1}>
+              {enrollmentName(enrollment)}
+              <EnrollmentDateRangeWithStatus enrollment={enrollment} />
+            </Stack>
+          );
+        },
       },
-      // {
-      //   header: 'Last Updated',
-      //   render: (file) =>
-      //     `${parseAndFormatDateTime(file.updatedAt)}${
-      //       file.updatedBy?.name ? ` by ${file.updatedBy?.name}` : ''
-      //     }`,
-      // },
+      {
+        header: 'Uploaded At',
+        render: (file) => {
+          const uploadedAt = file.dateCreated
+            ? parseAndFormatDateTime(file.dateCreated)
+            : 'Unknown time';
+          const uploadedBy = file.uploadedBy?.name
+            ? `by ${file.uploadedBy?.name}`
+            : 'by unknown user';
+          return `${uploadedAt} ${uploadedBy}`;
+        },
+      },
     ];
   }, [pickListData]);
 
@@ -148,13 +165,14 @@ const AllFiles = () => {
         <GenericTableWithData<
           GetClientFilesQuery,
           GetClientFilesQueryVariables,
-          FileFieldsFragment
+          ClientFileType
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientFilesDocument}
           columns={columns}
           pagePath='client.files'
           handleRowClick={(file) => !file.redacted && setViewingFile(file)}
+          noData='No files'
         />
       </Paper>
       {viewingFile && (

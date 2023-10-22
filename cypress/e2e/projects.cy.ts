@@ -1,11 +1,3 @@
-// This only works when running against the real backend.
-// Must set the following env vars with real username/pw from local environment:
-
-// export CYPRESS_EMAIL=
-// export CYPRESS_PASSWORD=
-
-Cypress.session.clearAllSavedSessions();
-
 import { EmptyProjectCoc, HIDDEN } from 'support/assessmentConstants';
 import { HmisEnums } from '../../src/types/gqlEnums';
 import {
@@ -13,30 +5,23 @@ import {
   GeographyType,
   HouseholdType,
   NoYes,
-  NoYesMissing,
   ProjectType,
 } from '../../src/types/gqlTypes';
 
+Cypress.session.clearAllSavedSessions();
+
 beforeEach(() => {
-  cy.login(Cypress.env('EMAIL'), Cypress.env('PASSWORD'));
+  cy.login();
   cy.visit('/');
 });
 
-it('should create and update Organization, Project, Funder, Project CoC, and Inventory', () => {
-  /*** Organization ***/
-
-  // Create organization
+it('should create new Project, Funder, Project CoC, and Inventory', () => {
+  // Go to organization
   cy.testId('navToProjects').click();
-  cy.testId('addOrganizationButton').click();
-  cy.inputId('name').safeType('X Test Organization');
-  cy.getById('description').type('Description{enter}line two{enter}line three');
-  cy.getById('contact').type('Contact{enter}line two{enter}line three');
-  cy.checkOption('victimServiceProvider', NoYesMissing.No);
-  cy.testId('formButton-submit').click();
-  cy.testId('organizationDetailsCard').contains('line two');
+  cy.testId('viewOrganizationsButton').click();
+  cy.tableRows('allProjectsTable').first().click(); // go to first org, it should be the E2E test org since this user only has access to 1
 
-  /*** Project ***/
-
+  // Add a new project
   const projectName = 'X Test Project';
   const projectType = '2.02.6';
   cy.testId('addProjectButton').click();
@@ -50,6 +35,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Set project type
   cy.choose(projectType, ProjectType.DayShelter);
+
   // Set continuum project
   cy.checkOption('2.02.5', NoYes.Yes);
 
@@ -60,7 +46,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Fix and resubmit
   cy.inputId('2.02.4').clear(); // clear end date
   const expectedFormValues = {
-    projectName: 'X Test Project',
+    projectName,
     description: 'Project Description',
     contactInformation: 'Project Contact',
     operatingStartDate: '2022-01-01',
@@ -77,13 +63,9 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Navigate to Organization page
   cy.testId('organizationLink').click();
 
-  // Assert project shows up in table
-  cy.testId('loading').should('not.exist');
-  cy.tableRows('projectsCard').should('have.length', 1);
-  cy.tableRows('projectsCard').contains(projectName).should('exist');
-
   // Navigate back to project page
-  cy.tableRows('projectsCard').first().click();
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('projectsCard').contains(projectName).click();
 
   // Re-open project, assert details are the same
   cy.testId('updateProjectButton').click();
@@ -101,13 +83,10 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Navigate to Organization page, ensure change to project type is reflected there too
   cy.testId('organizationLink').click();
-  cy.tableRows('projectsCard').should('have.length', 1);
-  cy.tableRows('projectsCard')
-    .contains(HmisEnums.ProjectType.SH)
-    .should('exist');
+  cy.tableRows('projectsCard').contains('SH').should('exist');
 
   // Navigate back to project page
-  cy.tableRows('projectsCard').first().click();
+  cy.tableRows('projectsCard').contains(newProjectName).click();
 
   /*** Funder ***/
 
@@ -278,8 +257,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.expectHudValuesToDeepEqual({
     cocCode: 'MA-505',
     householdType: HouseholdType.HouseholdsWithOnlyChildren,
-    availability: null,
-    esBedType: null,
+    availability: HIDDEN,
+    esBedType: HIDDEN,
     inventoryStartDate: '2022-01-01',
     inventoryEndDate: '2023-01-01',
     unitInventory: 0,
@@ -346,11 +325,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('formButton-submit').click();
   cy.confirmDialog();
 
-  /*** Delete project and organization ***/
+  /*** Delete project ***/
   cy.testId('updateProjectButton').click();
   cy.testId('deleteRecordButton-project').click();
-  cy.confirmDialog();
-
-  cy.testId('deleteRecordButton-organization').click();
   cy.confirmDialog();
 });

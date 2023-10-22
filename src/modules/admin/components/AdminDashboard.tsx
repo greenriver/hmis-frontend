@@ -11,7 +11,8 @@ import DashboardContentContainer from '@/components/layout/dashboard/DashboardCo
 import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import { useDashboardState } from '@/hooks/useDashboardState';
-import { Routes } from '@/routes/routes';
+import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const ProjectNavHeader: React.FC = () => {
@@ -26,6 +27,8 @@ const ProjectNavHeader: React.FC = () => {
 };
 
 const AdminDashboard: React.FC = () => {
+  const [access] = useRootPermissions();
+
   const navItems: NavItem[] = useMemo(() => {
     return [
       {
@@ -35,12 +38,19 @@ const AdminDashboard: React.FC = () => {
           {
             id: 'denials',
             title: 'Denials',
-            path: generateSafePath(Routes.ADMIN_REFERRAL_DENIALS),
+            path: generateSafePath(AdminDashboardRoutes.AC_DENIALS),
+            hide: !access?.canManageDeniedReferrals,
+          },
+          {
+            id: 'client-deduplication',
+            title: 'Merge Clients',
+            path: generateSafePath(AdminDashboardRoutes.CLIENT_MERGES),
+            hide: !access?.canMergeClients,
           },
         ],
       },
     ];
-  }, []);
+  }, [access?.canManageDeniedReferrals, access?.canMergeClients]);
 
   const dashboardState = useDashboardState();
 

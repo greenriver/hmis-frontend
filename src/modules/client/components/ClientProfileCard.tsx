@@ -21,7 +21,6 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import RouterLink from '@/components/elements/RouterLink';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
@@ -32,10 +31,7 @@ import {
   lastUpdated,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
-import {
-  ClientPermissionsFilter,
-  RootPermissionsFilter,
-} from '@/modules/permissions/PermissionsFilters';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -53,24 +49,27 @@ interface Props {
 
 export const ClientProfileCardTextTable = ({
   content,
+  condensed = true,
 }: {
   content:
     | Record<string, React.ReactNode>
     | Readonly<[React.ReactNode, React.ReactNode]>[];
+  condensed?: boolean;
 }) => {
   return (
     <SimpleTable
       TableCellProps={{
         sx: {
           borderBottom: 0,
-          py: 0.5,
+          pt: 0,
+          pb: condensed ? 1 : 2,
           px: 1,
+          verticalAlign: 'baseline',
           '&:first-of-type': {
             pl: 0,
             pr: 2,
             width: '1px',
             whiteSpace: 'nowrap',
-            verticalAlign: 'baseline',
           },
         },
       }}
@@ -90,11 +89,35 @@ export const ClientProfileCardTextTable = ({
   );
 };
 
+const LabelWithSubtitle = ({
+  label,
+  subtitle,
+}: {
+  label: string;
+  subtitle?: string;
+}) => (
+  <Stack>
+    <span>{label}</span>
+    {subtitle && (
+      <Box
+        component='span'
+        fontWeight={400}
+        fontStyle='italic'
+        color='text.secondary'
+      >
+        {subtitle}
+      </Box>
+    )}
+  </Stack>
+);
+
 export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
   const hasContactInformation =
     client.addresses.length > 0 ||
     client.phoneNumbers.length > 0 ||
     client.emailAddresses.length > 0;
+
+  // const hasCustomDataElements = client.customDataElements.length > 0;
   return (
     <Box
       sx={{
@@ -139,16 +162,33 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                   key: 'Contact Information',
                   content: (
                     <ClientProfileCardTextTable
+                      condensed={false}
                       content={[
                         ...client.addresses.map((address) => {
                           return [
-                            <>Address</>,
+                            <LabelWithSubtitle
+                              label='Address'
+                              subtitle={
+                                address.use
+                                  ? HmisEnums.ClientAddressUse[address.use]
+                                  : undefined
+                              }
+                            />,
                             <ClientAddress address={address} />,
                           ] as const;
                         }),
                         ...client.phoneNumbers.map((phoneNumber) => {
                           return [
-                            <>Phone Number</>,
+                            <LabelWithSubtitle
+                              label='Phone Number'
+                              subtitle={
+                                phoneNumber.use
+                                  ? HmisEnums.ClientContactPointUse[
+                                      phoneNumber.use
+                                    ]
+                                  : undefined
+                              }
+                            />,
                             <ClientContactPoint contactPoint={phoneNumber} />,
                           ] as const;
                         }),
@@ -203,6 +243,27 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
               />
             ),
           },
+          // NOTE: disabling for now because we may need to apply a permission
+          // ...(hasCustomDataElements
+          //   ? [
+          //       {
+          //         key: 'Other Attributes',
+          //         defaultExpanded: false,
+          //         content: (
+          //           <ClientProfileCardTextTable
+          //             content={fromPairs(
+          //               client.customDataElements.map((cde) => [
+          //                 cde.label,
+          //                 customDataElementValueAsString(cde) || (
+          //                   <NotCollectedText />
+          //                 ),
+          //               ])
+          //             )}
+          //           />
+          //         ),
+          //       },
+          //     ]
+          //   : []),
         ]}
       />
     </Box>
@@ -438,21 +499,14 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     Update Client Details
                   </ButtonLink>
                 </ClientPermissionsFilter>
-                <Typography variant='body2' sx={{ fontStyle: 'italic', mt: 1 }}>
-                  Last Updated on {lastUpdated(client, true)}.{' '}
-                  <RootPermissionsFilter permissions='canAuditClients'>
-                    <RouterLink
-                      to={generateSafePath(
-                        ClientDashboardRoutes.AUDIT_HISTORY,
-                        {
-                          clientId: client.id,
-                        }
-                      )}
-                    >
-                      View client audit history
-                    </RouterLink>
-                  </RootPermissionsFilter>
-                </Typography>
+                {client.dateUpdated && (
+                  <Typography
+                    variant='body2'
+                    sx={{ fontStyle: 'italic', mt: 1 }}
+                  >
+                    Last Updated on {lastUpdated(client, true)}.
+                  </Typography>
+                )}
               </Stack>
             </Box>
           </Grid>

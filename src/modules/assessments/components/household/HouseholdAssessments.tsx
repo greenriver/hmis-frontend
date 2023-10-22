@@ -349,7 +349,9 @@ const HouseholdAssessments = ({
               {...tabDefinition}
             />
           ))}
-          {tabs.length === 0 ? (
+          {tabs.length === 0 &&
+          !fetchAssessmentsStatus.loading &&
+          !fetchMembersStatus.loading ? (
             <Alert severity='info'>
               {role === AssessmentRole.Intake ? (
                 <>No household members can be entered at this time</>
@@ -360,16 +362,18 @@ const HouseholdAssessments = ({
               )}
             </Alert>
           ) : (
-            <HouseholdSummaryTabPanel
-              key={SUMMARY_TAB_ID}
-              id={SUMMARY_TAB_ID}
-              tabs={tabs}
-              active={SUMMARY_TAB_ID === currentTab}
-              role={role}
-              projectName={enrollmentName(enrollment)}
-              refetch={refetch}
-              setCurrentTab={setCurrentTab}
-            />
+            tabs.length > 0 && (
+              <HouseholdSummaryTabPanel
+                key={SUMMARY_TAB_ID}
+                id={SUMMARY_TAB_ID}
+                tabs={tabs}
+                active={SUMMARY_TAB_ID === currentTab}
+                role={role}
+                projectName={enrollmentName(enrollment)}
+                refetch={refetch}
+                setCurrentTab={setCurrentTab}
+              />
+            )
           )}
         </Grid>
       </Grid>

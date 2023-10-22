@@ -1,4 +1,5 @@
 import { NetworkStatus } from '@apollo/client';
+import { isValid } from 'date-fns';
 import { useMemo } from 'react';
 import { formatDateForGql } from '@/modules/hmis/hmisUtil';
 import { useGetBedNightsOnDateQuery } from '@/types/gqlTypes';
@@ -10,7 +11,7 @@ export function useBedNightsOnDate(projectId: string, date?: Date | null) {
         projectId,
         bedNightOnDate: date ? formatDateForGql(date) || '' : '',
       },
-      skip: !date,
+      skip: !date || !isValid(date),
       notifyOnNetworkStatusChange: true,
     });
 

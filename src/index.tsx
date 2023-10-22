@@ -7,9 +7,16 @@ import './index.css';
 import App from './App';
 
 if (import.meta.env.PUBLIC_SENTRY_DSN) {
+  const hostname = window.location.hostname;
+  const environment = /\b(qa|training|staging)\b/.test(hostname)
+    ? 'staging'
+    : 'production';
   Sentry.init({
     dsn: import.meta.env.PUBLIC_SENTRY_DSN,
-    environment: window.location.hostname,
+    environment,
+    initialScope: {
+      tags: { hostname: hostname },
+    },
   });
 }
 

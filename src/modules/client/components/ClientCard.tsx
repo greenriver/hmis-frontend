@@ -39,9 +39,11 @@ import generateSafePath from '@/utils/generateSafePath';
 const MAX_RECENT_ENROLLMENTS = 5;
 
 const RecentEnrollments = ({
+  clientId,
   recentEnrollments,
   linkTargetBlank,
 }: {
+  clientId: string;
   recentEnrollments?: NonNullable<
     GetClientEnrollmentsQuery['client']
   >['enrollments']['nodes'];
@@ -64,7 +66,7 @@ const RecentEnrollments = ({
                 to={generateSafePath(
                   EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
                   {
-                    clientId: enrollment.client.id,
+                    clientId,
                     enrollmentId: enrollment.id,
                   }
                 )}
@@ -135,7 +137,7 @@ const ClientCard: React.FC<Props> = ({
   }
 
   return (
-    <Grid container sx={{ p: 1 }}>
+    <Grid container sx={{ p: 1 }} data-testid='clientSearchResultCard'>
       <Grid item xs={5} lg={4}>
         <Stack spacing={1}>
           <RouterLink
@@ -191,9 +193,11 @@ const ClientCard: React.FC<Props> = ({
               )}
             </Stack>
           </Stack>
-          <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-            Last Updated on {lastUpdated(client)}
-          </Typography>
+          {client.dateUpdated && (
+            <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
+              Last Updated on {lastUpdated(client)}
+            </Typography>
+          )}
         </Stack>
       </Grid>
       <ClientPermissionsFilter
@@ -207,6 +211,7 @@ const ClientCard: React.FC<Props> = ({
           <RecentEnrollments
             recentEnrollments={recentEnrollments}
             linkTargetBlank={linkTargetBlank}
+            clientId={client.id}
           />
         </Grid>
       </ClientPermissionsFilter>

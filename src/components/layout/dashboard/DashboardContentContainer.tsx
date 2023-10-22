@@ -8,6 +8,7 @@ import ContextHeader from './contextHeader/ContextHeader';
 import DashboardContentNav from './DashboardContentNav';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
+import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 
 interface Props {
   children: ReactNode;
@@ -121,7 +122,7 @@ const DashboardContentContainer: React.FC<Props> = ({
             }}
           >
             <Box key='content' component='main'>
-              {children}
+              <SentryErrorBoundary>{children}</SentryErrorBoundary>
             </Box>
           </Box>
         </Box>

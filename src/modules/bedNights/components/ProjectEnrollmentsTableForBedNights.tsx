@@ -1,6 +1,6 @@
 import { isDate } from 'date-fns';
 import { omit } from 'lodash-es';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { ENROLLMENT_COLUMNS } from '../../projects/components/tables/ProjectClientEnrollmentsTable';
 import NotCollectedText from '@/components/elements/NotCollectedText';
@@ -41,8 +41,7 @@ const ProjectEnrollmentsTableForBedNights = ({
   editable?: boolean;
   openOnDate: Date;
   additionalColumns?: ColumnDef<EnrollmentFields>[];
-  renderBulkAction?: EnhancedTableToolbarProps['renderBulkAction'];
-  hideDOB?: boolean;
+  renderBulkAction?: EnhancedTableToolbarProps<EnrollmentFields>['renderBulkAction'];
 }) => {
   const queryVariables = useMemo(
     () => ({
@@ -86,6 +85,29 @@ const ProjectEnrollmentsTableForBedNights = ({
     return [...defaultColumns, ...additionalColumns];
   }, [additionalColumns]);
 
+  const noResultsDisplay = useCallback(
+    (filters: EnrollmentsForProjectFilterOptions) => {
+      const dateDisplay =
+        filters.bedNightOnDate && isDate(filters.bedNightOnDate)
+          ? formatDateForDisplay(filters.bedNightOnDate as unknown as Date)
+          : null;
+
+      const enrolledDate = formatDateForDisplay(openOnDate);
+      if (!dateDisplay)
+        return (
+          <>{`No clients enrolled on ${formatDateForDisplay(openOnDate)}`}</>
+        );
+      return (
+        <>
+          {enrolledDate === dateDisplay
+            ? `No clients with bed nights on ${dateDisplay}`
+            : `No clients enrolled on ${enrolledDate} with bed nights on ${dateDisplay}`}
+        </>
+      );
+    },
+    [openOnDate]
+  );
+
   return (
     <SsnDobShowContextProvider>
       <GenericTableWithData<
@@ -109,28 +131,8 @@ const ProjectEnrollmentsTableForBedNights = ({
             EnrollmentFilterOptionStatus.Incomplete,
           ],
         }}
-        noData={(filters) => {
-          const dateDisplay =
-            filters.bedNightOnDate && isDate(filters.bedNightOnDate)
-              ? formatDateForDisplay(filters.bedNightOnDate as unknown as Date)
-              : null;
-
-          const enrolledDate = formatDateForDisplay(openOnDate);
-          if (!dateDisplay)
-            return (
-              <>{`No clients enrolled on ${formatDateForDisplay(
-                openOnDate
-              )}`}</>
-            );
-          return (
-            <>
-              {enrolledDate === dateDisplay
-                ? `No clients with bed nights on ${dateDisplay}`
-                : `No clients enrolled on ${enrolledDate} with bed nights on ${dateDisplay}`}
-            </>
-          );
-        }}
-        selectable={editable}
+        noData={noResultsDisplay}
+        selectable={editable ? 'row' : undefined}
         defaultPageSize={25}
         rowsPerPageOptions={[25, 50, 100, 150, 200]}
         EnhancedTableToolbarProps={{
