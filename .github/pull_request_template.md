@@ -2,6 +2,9 @@
 
 Include a summary of the changes and a link to the related issue. List any dependencies that are required for this change.
 
+[//]: # 'remove if not applicable'
+Depends on hmis-warehouse PR:
+
 ## Type of change
 [//]: # 'remove options that are not relevant'
 - [ ] Bug fix
