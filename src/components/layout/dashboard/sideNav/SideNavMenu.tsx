@@ -9,7 +9,7 @@ interface SideNavMenuProps {
 
 const SideNavMenu = ({ items }: SideNavMenuProps) => {
   return (
-    <Box>
+    <Box sx={{ pt: 2 }}>
       {items.map((item, index) => (
         <ItemCategory key={item.id} item={item} first={index === 0} />
       ))}

@@ -39,7 +39,7 @@ const adminPages: AdminPageConfig[] = [
     permission: 'canManageDeniedReferrals',
   },
   {
-    id: 'client-deduplication',
+    id: 'merge-clients',
     title: 'Merge Clients',
     path: AdminDashboardRoutes.CLIENT_MERGES,
     permission: 'canMergeClients',
