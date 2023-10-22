@@ -5,7 +5,7 @@ import PageTitle from '@/components/layout/PageTitle';
 const AdminClientMerge: React.FC = () => {
   return (
     <>
-      <PageTitle title='Client Deduplication' />
+      <PageTitle title='Merge Clients' />
       <Paper>
         <ClientMergeCandidatesTable />
       </Paper>

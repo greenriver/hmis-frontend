@@ -63,10 +63,9 @@ export const useClientDashboardNavItems = (client?: ClientFieldsFragment) => {
           ...rest,
         })),
       },
-
       {
         id: 'admin',
-        title: 'Administrative',
+        title: 'Admin',
         type: 'category',
         items: [
           {
