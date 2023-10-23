@@ -56,6 +56,7 @@ const EnrollmentStatus = ({
   }
   return (
     <Typography
+      component='div'
       variant='body2'
       color={textColor}
       sx={{ textDecoration: 'none' }}
