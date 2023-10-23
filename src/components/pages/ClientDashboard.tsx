@@ -3,12 +3,12 @@ import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
+import { useClientDashboardNavItems } from '../../modules/client/hooks/useClientDashboardNavItems';
 import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
 import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '../layout/dashboard/sideNav/types';
-import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
 import NotFound from './NotFound';
 
@@ -41,7 +41,7 @@ const ClientDashboard: React.FC = () => {
   });
   if (error) throw error;
 
-  const navItems: NavItem[] = useDashboardNavItems(client || undefined);
+  const navItems: NavItem[] = useClientDashboardNavItems(client || undefined);
 
   const { currentPath, ...dashboardState } = useDashboardState();
 

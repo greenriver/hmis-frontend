@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-import Category from './ItemCategory';
+import ItemCategory from './ItemCategory';
 import { NavItem } from './types';
 
 interface SideNavMenuProps {
@@ -9,9 +9,9 @@ interface SideNavMenuProps {
 
 const SideNavMenu = ({ items }: SideNavMenuProps) => {
   return (
-    <Box>
+    <Box sx={{ pt: 2 }}>
       {items.map((item, index) => (
-        <Category key={item.id} item={item} first={index === 0} />
+        <ItemCategory key={item.id} item={item} first={index === 0} />
       ))}
     </Box>
   );

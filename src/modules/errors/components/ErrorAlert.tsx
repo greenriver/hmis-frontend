@@ -4,7 +4,7 @@ import { find, reject } from 'lodash-es';
 import {
   ErrorRenderFn,
   FIXABLE_ERROR_HEADING,
-  UNKNOWN_ERROR_HEADING,
+  UNKNOWN_VALIDATION_ERROR_HEADING,
 } from '../util';
 
 import ValidationErrorList from './ValidationErrorList';
@@ -25,11 +25,13 @@ const ErrorAlert = ({
   const filtered = reject(errors, ['severity', 'warning']);
   if (filtered.length === 0) return null;
 
-  let title = fixable ? FIXABLE_ERROR_HEADING : UNKNOWN_ERROR_HEADING;
+  let title = fixable
+    ? FIXABLE_ERROR_HEADING
+    : UNKNOWN_VALIDATION_ERROR_HEADING;
 
   // If error list contains a server_error, dont show the 'Please fix..' title
   if (find(errors, { type: ValidationType.ServerError })) {
-    title = UNKNOWN_ERROR_HEADING;
+    title = UNKNOWN_VALIDATION_ERROR_HEADING;
   }
   return (
     <Alert

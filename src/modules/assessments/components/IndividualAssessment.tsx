@@ -29,6 +29,7 @@ import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
+  AssessmentRole,
   FormRole,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
@@ -38,7 +39,7 @@ export interface IndividualAssessmentProps {
   assessmentId?: string;
   formRole?: FormRole;
   embeddedInWorkflow?: boolean;
-  clientName?: string;
+  clientName: string;
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
   assessmentStatus?: AssessmentStatus;
@@ -141,6 +142,12 @@ const IndividualAssessment = ({
       assessmentTitle={assessmentTitle}
       clientName={clientName || undefined}
       projectName={enrollment.project.projectName}
+      enrollmentId={enrollment.id}
+      householdId={enrollment.householdId}
+      assessmentRole={formRole as unknown as AssessmentRole}
+      embeddedInWorkflow={embeddedInWorkflow}
+      assessmentId={assessmentId}
+      householdSize={enrollment.householdSize}
     />
   );
 

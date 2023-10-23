@@ -147,7 +147,12 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           >
             Projects
           </ButtonLink>
-          <RootPermissionsFilter permissions={'canManageDeniedReferrals'}>
+          <RootPermissionsFilter
+            // FIXME: add a root admin permission on the graphql root access object, so
+            // we dont need to update this every time a new pane is added to the admin screen
+            permissions={['canManageDeniedReferrals', 'canMergeClients']}
+            mode='any'
+          >
             <ButtonLink
               variant='text'
               to={Routes.ADMIN}
@@ -157,9 +162,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
               Admin
             </ButtonLink>
           </RootPermissionsFilter>
-          <Box sx={{ mx: 2, height: '44px', div: { height: '100%' } }}>
-            <OmniSearch />
-          </Box>
+          <OmniSearch />
           <UserMenu />
         </Toolbar>
       </AppBar>

@@ -23,6 +23,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   AssessmentFieldsFragment,
+  ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,
   ClientNameFragment,
   CustomDataElementFieldsFragment,
@@ -35,6 +36,7 @@ import {
   EventFieldsFragment,
   GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
+  NoYes,
   NoYesMissing,
   NoYesReasonsForMissingData,
   OccurrencePointFormFieldsFragment,
@@ -117,9 +119,23 @@ export const briefProjectType = (projectType: ProjectType) => {
   }
 };
 
-export const yesNo = (bool: boolean | null | undefined) => {
-  if (isNil(bool)) return null;
-  return bool ? 'Yes' : 'No';
+export const yesNo = (
+  bool: boolean | NoYes | null | undefined,
+  fallback?: string
+) => {
+  if (isNil(bool)) return fallback || null;
+  switch (bool) {
+    case NoYes.Yes:
+    case true:
+      return 'Yes';
+    case NoYes.No:
+    case false:
+      return 'No';
+    case NoYes.Invalid:
+      return 'Invalid Value';
+    default:
+      return fallback || null;
+  }
 };
 
 export const parseHmisDateString = (
@@ -260,7 +276,9 @@ export const lastUpdated = (
   client: ClientFieldsFragment,
   includeUser = false
 ) => {
-  const str = parseAndFormatDateTime(client.dateUpdated);
+  const str = client.dateUpdated
+    ? parseAndFormatDateTime(client.dateUpdated)
+    : null;
   if (includeUser && client.user) {
     return `${str || 'unknown'} by ${client.user.name}`;
   }
@@ -289,7 +307,7 @@ export const entryExitRange = (
 
 // Open, or closed within the last X days
 export const isRecentEnrollment = (
-  enrollment: EnrollmentFieldsFragment,
+  enrollment: EnrollmentFieldsFragment | ClientEnrollmentFieldsFragment,
   withinDays = 30
 ) => {
   if (!enrollment.exitDate) return true;
@@ -354,10 +372,10 @@ export const eventReferralResult = (e: EventFieldsFragment) => {
 
 export const sortHouseholdMembers = (
   members?: HouseholdClientFieldsFragment[],
-  activeClientId?: string
+  activeEnrollmentId?: string
 ) => {
   const sorted = sortBy(members || [], [
-    (c) => (c.client.id === activeClientId ? -1 : 1),
+    (c) => (c.enrollment.id === activeEnrollmentId ? -1 : 1),
     (c) => c.client.lastName,
     (c) => c.client.id,
   ]);
@@ -523,4 +541,21 @@ export const featureEnabledForEnrollment = (
     client,
     relationshipToHoH
   );
+};
+
+export const relationshipToHohForDisplay = (
+  relationship: RelationshipToHoH,
+  hideDataNotCollectedAndInvalid: boolean
+) => {
+  if (
+    hideDataNotCollectedAndInvalid &&
+    (relationship === RelationshipToHoH.DataNotCollected ||
+      relationship === RelationshipToHoH.Invalid)
+  ) {
+    return '';
+  }
+
+  if (relationship === RelationshipToHoH.SelfHeadOfHousehold) return 'HoH';
+
+  return HmisEnums.RelationshipToHoH[relationship];
 };

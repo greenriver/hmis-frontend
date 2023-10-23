@@ -5,14 +5,18 @@ export const Routes = {
   ENROLLMENT_DASHBOARD: '/client/:clientId/enrollments/:enrollmentId',
   ALL_PROJECTS: '/projects',
   ADMIN: '/admin',
-  ADMIN_REFERRAL_DENIALS: '/admin/referral-denials',
-  ADMIN_REFERRAL_DENIAL: '/admin/referral-denials/:referralPostingId',
   PROJECT: '/projects/:projectId',
   ORGANIZATION: '/organizations/:organizationId',
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
   CREATE_PROJECT: '/organizations/:organizationId/new-project',
   CREATE_ORGANIZATION: '/projects/new-organization',
 } as const;
+
+const adminDashboardRoutes = {
+  CLIENT_MERGES: 'merge-clients',
+  AC_DENIALS: 'referral-denials',
+  AC_DENIAL_DETAILS: 'referral-denials/:referralPostingId',
+};
 
 // Routes within the client dashboard
 const clientDashboardRoutes = {
@@ -23,15 +27,13 @@ const clientDashboardRoutes = {
   CLIENT_ENROLLMENTS: 'enrollments',
   AUDIT_HISTORY: 'history',
   ASSESSMENTS: 'assessments',
-  NOTES: 'notes',
   FILES: 'files',
   NEW_FILE: 'files/new',
   EDIT_FILE: 'files/:fileId/edit',
-  CONTACT: 'contact',
-  LOCATIONS: 'locations',
-  REFERRALS: 'referrals',
+  CLIENT_MERGES: 'merges',
 };
 
+// Routes within the enrollment dashboard
 const enrollmentDashboardRoutes = {
   ENROLLMENT_OVERVIEW: 'overview',
   HOUSEHOLD: 'household',
@@ -75,6 +77,8 @@ const projectDashboardRoutes = {
   INVENTORY: 'inventory',
   NEW_INVENTORY: 'inventory/new',
   EDIT_INVENTORY: 'inventory/:inventoryId/edit',
+  HMIS_PARTICIPATION: 'hmis-participation',
+  CE_PARTICIPATION: 'ce-participation',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`
@@ -101,6 +105,12 @@ for (key3 in projectDashboardRoutes) {
   ] = `${Routes.PROJECT}/${projectDashboardRoutes[key3]}`;
 }
 
+type AdminSubRoutesType = keyof typeof adminDashboardRoutes;
+let key4: AdminSubRoutesType;
+for (key4 in adminDashboardRoutes) {
+  adminDashboardRoutes[key4] = `${Routes.ADMIN}/${adminDashboardRoutes[key4]}`;
+}
+
 export const ClientDashboardRoutes: { [k in ClientSubRoutesType]: string } =
   clientDashboardRoutes;
 
@@ -111,6 +121,10 @@ export const EnrollmentDashboardRoutes: {
 export const ProjectDashboardRoutes: {
   [k in ProjectSubRoutesType]: string;
 } = projectDashboardRoutes;
+
+export const AdminDashboardRoutes: {
+  [k in AdminSubRoutesType]: string;
+} = adminDashboardRoutes;
 
 export const HIDE_NAV_ROUTES = [EnrollmentDashboardRoutes.ASSESSMENT];
 

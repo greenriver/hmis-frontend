@@ -48,7 +48,7 @@ const EsgFundingReportContent: React.FC<{
     return <Loading />;
   }
   if (error || reportError) {
-    return <ApolloErrorAlert error={error || reportError} />;
+    return <ApolloErrorAlert error={error || reportError} inline />;
   }
   if (!report) {
     return <NotFound />;

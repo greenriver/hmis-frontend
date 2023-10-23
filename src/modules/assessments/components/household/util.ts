@@ -23,7 +23,8 @@ export function isHouseholdAssesmentRole(
 ): keyInput is HouseholdAssesmentRole {
   return [
     AssessmentRole.Intake,
-    AssessmentRole.Annual,
+    // Turned off Annual grouping because of bugs. #186185565
+    // AssessmentRole.Annual,
     AssessmentRole.Exit,
   ].includes(keyInput as AssessmentRole);
 }

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import NotFound from './NotFound';
 
-import OrganizationLayout from '@/components/layout/OrganizationLayout';
+import BasicBreadcrumbPageLayout from '@/components/layout/BasicBreadcrumbPageLayout';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
@@ -36,19 +36,19 @@ const CreateProject = () => {
   if (!crumbs) return <NotFound />;
 
   return (
-    <OrganizationLayout crumbs={crumbs}>
+    <BasicBreadcrumbPageLayout crumbs={crumbs}>
       <EditRecord<ProjectAllFieldsFragment>
         formRole={FormRole.Project}
         onCompleted={onCompleted}
         inputVariables={{ organizationId }}
         FormActionProps={{ submitButtonText: 'Create Project' }}
         title={
-          <Typography variant='h3' sx={{ pt: 0, mt: 0, pb: 4 }}>
+          <Typography variant='h3' sx={{ mt: 1, mb: 3 }}>
             Add a new Project to {organizationName}
           </Typography>
         }
       />
-    </OrganizationLayout>
+    </BasicBreadcrumbPageLayout>
   );
 };
 export default CreateProject;

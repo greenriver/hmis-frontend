@@ -1,17 +1,24 @@
-import { ApolloError, isApolloError } from '@apollo/client';
-import { Alert, AlertTitle, Box, Button, Typography } from '@mui/material';
+import { isApolloError } from '@apollo/client';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Container,
+  Typography,
+} from '@mui/material';
 import { FallbackRender } from '@sentry/react';
 
+import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { NotFoundError, UNKNOWN_ERROR_HEADING } from '../util';
 
 import ApolloErrorAlert from './ApolloErrorAlert';
 import SentryErrorTrace from './SentryErrorTrace';
 
-const ErrorFallback = ({
-  text = 'Something went wrong.',
-}: {
+export const FullPageError: React.FC<{
   text?: string;
-}) => (
+}> = ({ text = UNKNOWN_ERROR_HEADING }) => (
   <Box
     display='flex'
     justifyContent='center'
@@ -25,52 +32,64 @@ const ErrorFallback = ({
   </Box>
 );
 
-export const alertErrorFallback: FallbackRender = ({
+export const AlertErrorFallback: React.FC<Parameters<FallbackRender>[0]> = ({
   error,
   componentStack,
   resetError,
-}: {
-  error: Error | ApolloError;
-  componentStack: string | null;
-  eventId: string | null;
-  resetError(): void;
 }) => {
+  const { pathname } = useLocation();
+  const originalPathname = useRef(pathname);
+
+  // Reset error boundary when navigated awawy
+  useEffect(() => {
+    if (pathname !== originalPathname.current) {
+      resetError();
+    }
+  }, [pathname, resetError]);
+
   if (isApolloError(error)) {
     return (
       <ApolloErrorAlert
         error={error}
-        AlertProps={{ sx: { height: '100%' } }}
+        alertProps={{ sx: { height: '100%' } }}
         retry={() => resetError()}
+        inline
       />
     );
   }
 
   return (
-    <Alert severity='error' sx={{ height: '100%' }}>
-      <AlertTitle>
-        {error instanceof NotFoundError
-          ? 'Page not found'
-          : UNKNOWN_ERROR_HEADING}
-      </AlertTitle>
-      {!isApolloError(error) && import.meta.env.MODE === 'development' && (
-        <SentryErrorTrace error={error} componentStack={componentStack} />
-      )}
-      {import.meta.env.MODE === 'development' && (
-        <Box>
-          <Button size='small' sx={{ my: 2 }} onClick={() => resetError()}>
-            Retry
+    <Container>
+      <Alert severity='error' sx={{ my: 2 }}>
+        <AlertTitle sx={{ fontWeight: 400 }}>
+          {error instanceof NotFoundError
+            ? 'Page not found'
+            : UNKNOWN_ERROR_HEADING}
+        </AlertTitle>
+        {!isApolloError(error) && import.meta.env.MODE === 'development' && (
+          <SentryErrorTrace error={error} componentStack={componentStack} />
+        )}
+        <Box sx={{ mt: 2 }}>
+          {import.meta.env.MODE === 'development' && (
+            <Button
+              variant='outlined'
+              size='small'
+              sx={{ mr: 2, background: '#fff' }}
+              onClick={() => resetError()}
+            >
+              Retry
+            </Button>
+          )}
+          <Button
+            variant='outlined'
+            size='small'
+            sx={{ background: '#fff' }}
+            onClick={() => window.location.reload()}
+          >
+            Reload Page
           </Button>
         </Box>
-      )}
-    </Alert>
+      </Alert>
+    </Container>
   );
 };
-
-export const fullPageErrorFallback: FallbackRender = (args) => {
-  if (import.meta.env.MODE !== 'development') {
-    return <ErrorFallback />;
-  }
-  return alertErrorFallback(args);
-};
-
-export default ErrorFallback;

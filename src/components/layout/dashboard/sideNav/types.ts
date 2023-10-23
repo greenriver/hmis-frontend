@@ -6,4 +6,5 @@ export interface NavItem {
   href?: string;
   path?: string;
   type?: 'topic' | 'category' | 'section';
+  hide?: boolean;
 }

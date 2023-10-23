@@ -18,7 +18,11 @@ const ItemCategory = ({ item, first }: Props) => {
       renderTitle={(title) => (
         // <Box sx={{ width: '100%' }}>
         //   {!first && <Divider />}
-        <Typography variant='h6' sx={{ pt: first ? 0 : 2, px: 2 }}>
+        <Typography
+          variant='body2'
+          color='text.secondary'
+          sx={{ pt: first ? 0 : 2, px: 2, textTransform: 'uppercase' }}
+        >
           {title}
         </Typography>
         // </Box>

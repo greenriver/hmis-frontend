@@ -28,7 +28,8 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   },
   {
     header: 'HoH',
-    render: 'hohName',
+    render: ({ hohName }: ReferralPostingFieldsFragment) =>
+      hohName || 'Unnamed Client',
     linkTreatment: true,
   },
   {

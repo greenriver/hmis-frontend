@@ -2,6 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Grid, Paper, Stack } from '@mui/material';
 
 import { Box } from '@mui/system';
+import { startOfToday } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
 import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 import { useBedNightsOnDate } from '../hooks/useBedNightsOnDate';
@@ -26,7 +27,7 @@ const ProjectBedNights = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date | null>(startOfToday());
 
   const [searchTerm, setSearchTerm] = useState<string | undefined>();
 
@@ -136,7 +137,7 @@ const ProjectBedNights = () => {
             projectId={projectId}
             editable={canEdit}
             searchTerm={searchTerm}
-            openOnDate={date || new Date()}
+            openOnDate={date || startOfToday()}
             additionalColumns={additionalColumns}
             renderBulkAction={canEdit ? renderBulkAction : undefined}
           />

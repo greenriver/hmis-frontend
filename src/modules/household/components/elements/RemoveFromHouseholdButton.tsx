@@ -10,13 +10,13 @@ import {
 
 const RemoveFromHouseholdButton = ({
   householdClient,
-  currentDashboardClientId,
+  currentDashboardEnrollmentId,
   onSuccess,
   disabled,
   householdSize,
 }: {
   householdClient: HouseholdClientFieldsFragment;
-  currentDashboardClientId?: string;
+  currentDashboardEnrollmentId?: string;
   onSuccess: () => void;
   disabled?: boolean;
   householdSize: number;
@@ -31,7 +31,7 @@ const RemoveFromHouseholdButton = ({
 
   const disabledReason = useMemo(() => {
     // If household is being created in the project context, any enrollment can be removed
-    if (!currentDashboardClientId) {
+    if (!currentDashboardEnrollmentId) {
       if (
         householdClient.relationshipToHoH ===
           RelationshipToHoH.SelfHeadOfHousehold &&
@@ -49,10 +49,10 @@ const RemoveFromHouseholdButton = ({
       RelationshipToHoH.SelfHeadOfHousehold
     ) {
       return 'Head of Household cannot be removed.';
-    } else if (householdClient.client.id === currentDashboardClientId) {
+    } else if (householdClient.enrollment.id === currentDashboardEnrollmentId) {
       return "Currently active client cannot be removed. Go to another member's profile to remove them.";
     }
-  }, [householdClient, householdSize, currentDashboardClientId]);
+  }, [householdClient, householdSize, currentDashboardEnrollmentId]);
 
   const onClick = useMemo(
     () => () => {

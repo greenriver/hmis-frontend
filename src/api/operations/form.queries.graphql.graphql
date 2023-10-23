@@ -81,6 +81,12 @@ mutation SubmitForm($input: SubmitFormInput!) {
       ... on Event {
         ...EventFields
       }
+      ... on CeParticipation {
+        ...CeParticipationFields
+      }
+      ... on HmisParticipation {
+        ...HmisParticipationFields
+      }
     }
     errors {
       ...ValidationErrorFields

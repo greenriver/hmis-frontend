@@ -167,11 +167,11 @@ const MciClearance = ({
     <LoadingButton
       startIcon={<SearchIcon />}
       variant='outlined'
-      sx={{ backgroundColor: 'transparent' }}
+      sx={{ backgroundColor: 'transparent', my: 2, ml: 1 }}
       loading={loading}
       type='button'
       onClick={handleSearch}
-      size={rightAlignButton ? 'small' : undefined}
+      size={rightAlignButton ? 'small' : 'large'}
     >
       {buttonText}
     </LoadingButton>

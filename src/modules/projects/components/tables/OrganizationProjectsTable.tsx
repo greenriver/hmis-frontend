@@ -5,10 +5,9 @@ import TextInput from '@/components/elements/input/TextInput';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetOrganizationProjectsDocument,
   GetOrganizationProjectsQuery,
@@ -28,7 +27,7 @@ const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
     header: 'Project Type',
     render: (project: ProjectAllFieldsFragment) => (
-      <HmisEnum value={project.projectType} enumMap={HmisEnums.ProjectType} />
+      <ProjectTypeChip projectType={project.projectType} />
     ),
   },
   {

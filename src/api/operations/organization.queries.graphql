@@ -1,5 +1,5 @@
-query GetAllOrganizations {
-  organizations(limit: 500, sortOrder: NAME) {
+query GetOrganizations($limit: Int = 10, $offset: Int = 0) {
+  organizations(limit: $limit, offset: $offset, sortOrder: NAME) {
     nodesCount
     nodes {
       ...OrganizationNameFields

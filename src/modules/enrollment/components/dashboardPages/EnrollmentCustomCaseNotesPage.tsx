@@ -45,8 +45,8 @@ const columns: ColumnDef<CustomCaseNoteFieldsFragment>[] = [
     minWidth: '200px',
     render: ({ dateCreated, user }) => (
       <>
-        {user ? <div>{user?.name}</div> : undefined}
-        {parseAndFormatDateTime(dateCreated)}
+        {user ? <div>{user?.name}</div> : null}
+        {dateCreated ? parseAndFormatDateTime(dateCreated) : null}
       </>
     ),
   },
