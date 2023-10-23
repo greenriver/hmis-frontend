@@ -165,6 +165,10 @@ export const useClientBreadcrumbConfig = (
       [ClientDashboardRoutes.AUDIT_HISTORY]: {
         title: 'Client Audit History',
       },
+      [ClientDashboardRoutes.NEW_MERGE]: {
+        title: 'New Merge',
+        parent: ClientDashboardRoutes.CLIENT_MERGES,
+      },
       [ClientDashboardRoutes.NEW_FILE]: {
         title: 'Upload',
         parent: ClientDashboardRoutes.FILES,

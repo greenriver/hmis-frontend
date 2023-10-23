@@ -31,6 +31,7 @@ const clientDashboardRoutes = {
   NEW_FILE: 'files/new',
   EDIT_FILE: 'files/:fileId/edit',
   CLIENT_MERGES: 'merges',
+  NEW_MERGE: 'merges/new',
 };
 
 // Routes within the enrollment dashboard

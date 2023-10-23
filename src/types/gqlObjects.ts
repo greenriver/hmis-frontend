@@ -3546,6 +3546,51 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'MergeAuditEvent',
+    fields: [
+      {
+        name: 'clientIdsMerged',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
+          },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'mergedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'preMergeState',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'OccurrencePointForm',
     fields: [
       {

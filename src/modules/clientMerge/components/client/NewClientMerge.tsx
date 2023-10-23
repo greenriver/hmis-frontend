@@ -1,9 +1,10 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button, Grid, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
-import ClientMergeDetailsTable from './ClientMergeDetailsTable';
+import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
+import ButtonLink from '@/components/elements/ButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import RouterLink from '@/components/elements/RouterLink';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -49,7 +50,7 @@ const clientColumns: ColumnDef<ClientFieldsFragment>[] = [
   HudRecordMetadataHistoryColumn,
 ];
 
-const ClientMerge = () => {
+const NewClientMerge = () => {
   const { client } = useClientDashboardContext();
   const [searchInput, setSearchInput] = useState<ClientSearchInput>();
   const [candidate, setCandidate] = useState<
@@ -114,6 +115,18 @@ const ClientMerge = () => {
           </SsnDobShowContextProvider>
         </TitleCard>
 
+        <ButtonLink
+          startIcon={<ArrowBackIcon />}
+          variant='gray'
+          size='small'
+          sx={{ width: 'fit-content' }}
+          to={generateSafePath(ClientDashboardRoutes.CLIENT_MERGES, {
+            clientId: client.id,
+          })}
+        >
+          Back to Merge History
+        </ButtonLink>
+
         <TitleCard title='Merge Client Records'>
           <Stack gap={6}>
             <Grid container alignItems={'flex-start'}>
@@ -170,4 +183,4 @@ const ClientMerge = () => {
   );
 };
 
-export default ClientMerge;
+export default NewClientMerge;
