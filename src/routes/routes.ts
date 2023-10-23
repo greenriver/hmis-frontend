@@ -16,6 +16,7 @@ const adminDashboardRoutes = {
   CLIENT_MERGES: 'merge-clients',
   AC_DENIALS: 'referral-denials',
   AC_DENIAL_DETAILS: 'referral-denials/:referralPostingId',
+  USERS: 'users',
 };
 
 // Routes within the client dashboard

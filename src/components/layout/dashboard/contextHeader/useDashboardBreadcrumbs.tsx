@@ -224,6 +224,9 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
       [AdminDashboardRoutes.CLIENT_MERGES]: {
         title: 'Merge Clients',
       },
+      [AdminDashboardRoutes.USERS]: {
+        title: 'Users',
+      },
       [Routes.ADMIN]: {
         title: 'Admin',
       },

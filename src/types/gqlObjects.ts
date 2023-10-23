@@ -4076,6 +4076,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canImpersonateUsers',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageAnyClientFiles',
         type: {
           kind: 'NON_NULL',
@@ -4721,6 +4729,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'dateUpdated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
+      { name: 'hmisId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'id',
         type: {
@@ -6279,6 +6288,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             },
           },
         },
+      },
+    ],
+  },
+  {
+    name: 'UserFilterOptions',
+    args: [
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

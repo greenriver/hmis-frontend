@@ -4682,6 +4682,7 @@ export type Query = {
   service?: Maybe<Service>;
   /** Service type lookup */
   serviceType?: Maybe<ServiceType>;
+  users: UsersPaginated;
 };
 
 export type QueryAssessmentArgs = {
@@ -4804,6 +4805,12 @@ export type QueryServiceTypeArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type QueryUsersArgs = {
+  filters?: InputMaybe<UserFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean']['output'];
@@ -4818,6 +4825,7 @@ export type QueryAccess = {
   canEditOrganization: Scalars['Boolean']['output'];
   canEditProjectDetails: Scalars['Boolean']['output'];
   canEnrollClients: Scalars['Boolean']['output'];
+  canImpersonateUsers: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
@@ -6027,8 +6035,24 @@ export type User = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  hmisId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+};
+
+export type UserFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UsersPaginated = {
+  __typename?: 'UsersPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<User>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type ValidationError = {
@@ -6469,6 +6493,7 @@ export type RootPermissionsFragment = {
   __typename?: 'QueryAccess';
   id: string;
   canAdministerHmis: boolean;
+  canImpersonateUsers: boolean;
   canEditClients: boolean;
   canViewClients: boolean;
   canDeleteClients: boolean;
@@ -6566,6 +6591,7 @@ export type GetRootPermissionsQuery = {
     __typename?: 'QueryAccess';
     id: string;
     canAdministerHmis: boolean;
+    canImpersonateUsers: boolean;
     canEditClients: boolean;
     canViewClients: boolean;
     canDeleteClients: boolean;
@@ -16024,12 +16050,6 @@ export type FormDefinitionFieldsFragment = {
   };
 };
 
-export type UserFieldsFragment = {
-  __typename: 'User';
-  id: string;
-  name: string;
-};
-
 export type GetPickListQueryVariables = Exact<{
   pickListType: PickListType;
   projectId?: InputMaybe<Scalars['ID']['input']>;
@@ -21586,10 +21606,46 @@ export type CreateDirectUploadMutationMutation = {
   } | null;
 };
 
+export type UserFieldsFragment = {
+  __typename: 'User';
+  id: string;
+  name: string;
+};
+
+export type UserFieldsForAdminFragment = {
+  __typename: 'User';
+  id: string;
+  name: string;
+  hmisId?: string | null;
+};
+
+export type GetUsersQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<UserFilterOptions>;
+}>;
+
+export type GetUsersQuery = {
+  __typename?: 'Query';
+  users: {
+    __typename?: 'UsersPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename: 'User';
+      name: string;
+      id: string;
+      hmisId?: string | null;
+    }>;
+  };
+};
+
 export const RootPermissionsFragmentDoc = gql`
   fragment RootPermissions on QueryAccess {
     id
     canAdministerHmis
+    canImpersonateUsers
     canEditClients
     canViewClients
     canDeleteClients
@@ -23317,6 +23373,14 @@ export const UnitFieldsFragmentDoc = gql`
   }
   ${UnitTypeFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
+`;
+export const UserFieldsForAdminFragmentDoc = gql`
+  fragment UserFieldsForAdmin on User {
+    __typename
+    id
+    name
+    hmisId
+  }
 `;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
@@ -29934,3 +29998,69 @@ export type CreateDirectUploadMutationMutationOptions =
     CreateDirectUploadMutationMutation,
     CreateDirectUploadMutationMutationVariables
   >;
+export const GetUsersDocument = gql`
+  query GetUsers(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: UserFilterOptions = null
+  ) {
+    users(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        name
+        ...UserFieldsForAdmin
+      }
+    }
+  }
+  ${UserFieldsForAdminFragmentDoc}
+`;
+
+/**
+ * __useGetUsersQuery__
+ *
+ * To run a query within a React component, call `useGetUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUsersQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetUsersQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetUsersQuery, GetUsersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetUsersQuery, GetUsersQueryVariables>(
+    GetUsersDocument,
+    options
+  );
+}
+export function useGetUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUsersQuery,
+    GetUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(
+    GetUsersDocument,
+    options
+  );
+}
+export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
+export type GetUsersLazyQueryHookResult = ReturnType<
+  typeof useGetUsersLazyQuery
+>;
+export type GetUsersQueryResult = Apollo.QueryResult<
+  GetUsersQuery,
+  GetUsersQueryVariables
+>;
