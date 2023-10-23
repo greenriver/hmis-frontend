@@ -54,10 +54,10 @@ const TextInput = ({
       id={htmlId}
       fullWidth={fullWidth}
       label={hiddenLabel || horizontal ? undefined : label}
-      onKeyPress={(e) =>
+      onKeyDown={(e) =>
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
-      autoComplete='do-not-autofill'
+      autoComplete='off'
       {...props}
       sx={sx}
       inputProps={{

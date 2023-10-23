@@ -70,7 +70,9 @@ const ClientSearchTypeToggle: React.FC<ClientSearchTypeToggleProps> = ({
             aria-label='broad search'
           >
             <SearchIcon />
-            <Box sx={{ pl: 1 }}>Broad Search</Box>
+            <Box component='span' sx={{ pl: 1 }}>
+              Broad Search
+            </Box>
           </ToggleButton>
           <ToggleButton
             value='specific'
@@ -78,7 +80,9 @@ const ClientSearchTypeToggle: React.FC<ClientSearchTypeToggleProps> = ({
             aria-label='specific search'
           >
             <LocationSearchingIcon />
-            <Box sx={{ pl: 1 }}>Specific Search</Box>
+            <Box component='span' sx={{ pl: 1 }}>
+              Specific Search
+            </Box>
           </ToggleButton>
         </ToggleButtonGroup>
       )}
