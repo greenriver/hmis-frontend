@@ -40,18 +40,8 @@ const OktaLoginForm: React.FC<Props> = ({ path }) => {
   return (
     <form method='post' action={path}>
       {messageId && <ErrorMessage id={messageId} />}
-      <input
-        type='hidden'
-        name='authenticity_token'
-        value={csrf}
-        autoComplete='off'
-      />
-      <input
-        type='hidden'
-        name='user_type'
-        value='hmis_user'
-        autoComplete='off'
-      />
+      <input type='hidden' name='authenticity_token' value={csrf} />
+      <input type='hidden' name='user_type' value='hmis_user' />
       <Button type='submit' fullWidth>
         Sign In with Okta
       </Button>
