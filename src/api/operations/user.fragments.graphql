@@ -3,10 +3,3 @@ fragment UserFields on User {
   id
   name
 }
-
-fragment UserFieldsForAdmin on User {
-  __typename
-  id
-  name
-  hmisId
-}

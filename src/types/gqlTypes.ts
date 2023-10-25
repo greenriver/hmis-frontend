@@ -117,9 +117,25 @@ export type ApplicationUser = {
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
+  email?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   recentItems: Array<OmnisearchResult>;
+};
+
+export type ApplicationUserFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ApplicationUsersPaginated = {
+  __typename?: 'ApplicationUsersPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ApplicationUser>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 /** Custom Assessment */
@@ -4640,6 +4656,7 @@ export type ProjectsPaginated = {
 export type Query = {
   __typename?: 'Query';
   access: QueryAccess;
+  applicationUsers: ApplicationUsersPaginated;
   /** Assessment lookup */
   assessment?: Maybe<Assessment>;
   /** Client lookup */
@@ -4682,7 +4699,12 @@ export type Query = {
   service?: Maybe<Service>;
   /** Service type lookup */
   serviceType?: Maybe<ServiceType>;
-  users: UsersPaginated;
+};
+
+export type QueryApplicationUsersArgs = {
+  filters?: InputMaybe<ApplicationUserFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryAssessmentArgs = {
@@ -4803,12 +4825,6 @@ export type QueryServiceArgs = {
 
 export type QueryServiceTypeArgs = {
   id: Scalars['ID']['input'];
-};
-
-export type QueryUsersArgs = {
-  filters?: InputMaybe<UserFilterOptions>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryAccess = {
@@ -6035,24 +6051,8 @@ export type User = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  hmisId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-};
-
-export type UserFilterOptions = {
-  searchTerm?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UsersPaginated = {
-  __typename?: 'UsersPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<User>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
 };
 
 export type ValidationError = {
@@ -6619,6 +6619,35 @@ export type GetRootPermissionsQuery = {
     canMergeClients: boolean;
     canTransferEnrollments: boolean;
     canSplitHouseholds: boolean;
+  };
+};
+
+export type ApplicationUserFieldsFragment = {
+  __typename: 'ApplicationUser';
+  id: string;
+  name: string;
+  email?: string | null;
+};
+
+export type GetApplicationUsersQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ApplicationUserFilterOptions>;
+}>;
+
+export type GetApplicationUsersQuery = {
+  __typename?: 'Query';
+  applicationUsers: {
+    __typename?: 'ApplicationUsersPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename: 'ApplicationUser';
+      name: string;
+      id: string;
+      email?: string | null;
+    }>;
   };
 };
 
@@ -21612,35 +21641,6 @@ export type UserFieldsFragment = {
   name: string;
 };
 
-export type UserFieldsForAdminFragment = {
-  __typename: 'User';
-  id: string;
-  name: string;
-  hmisId?: string | null;
-};
-
-export type GetUsersQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<UserFilterOptions>;
-}>;
-
-export type GetUsersQuery = {
-  __typename?: 'Query';
-  users: {
-    __typename?: 'UsersPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename: 'User';
-      name: string;
-      id: string;
-      hmisId?: string | null;
-    }>;
-  };
-};
-
 export const RootPermissionsFragmentDoc = gql`
   fragment RootPermissions on QueryAccess {
     id
@@ -21680,6 +21680,14 @@ export const OrganizationAccessFieldsFragmentDoc = gql`
     id
     canEditOrganization
     canDeleteOrganization
+  }
+`;
+export const ApplicationUserFieldsFragmentDoc = gql`
+  fragment ApplicationUserFields on ApplicationUser {
+    __typename
+    id
+    name
+    email
   }
 `;
 export const UserFieldsFragmentDoc = gql`
@@ -23374,14 +23382,6 @@ export const UnitFieldsFragmentDoc = gql`
   ${UnitTypeFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
 `;
-export const UserFieldsForAdminFragmentDoc = gql`
-  fragment UserFieldsForAdmin on User {
-    __typename
-    id
-    name
-    hmisId
-  }
-`;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
     access {
@@ -23439,6 +23439,77 @@ export type GetRootPermissionsLazyQueryHookResult = ReturnType<
 export type GetRootPermissionsQueryResult = Apollo.QueryResult<
   GetRootPermissionsQuery,
   GetRootPermissionsQueryVariables
+>;
+export const GetApplicationUsersDocument = gql`
+  query GetApplicationUsers(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ApplicationUserFilterOptions = null
+  ) {
+    applicationUsers(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        name
+        ...ApplicationUserFields
+      }
+    }
+  }
+  ${ApplicationUserFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetApplicationUsersQuery__
+ *
+ * To run a query within a React component, call `useGetApplicationUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetApplicationUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetApplicationUsersQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetApplicationUsersQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetApplicationUsersQuery,
+    GetApplicationUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetApplicationUsersQuery,
+    GetApplicationUsersQueryVariables
+  >(GetApplicationUsersDocument, options);
+}
+export function useGetApplicationUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetApplicationUsersQuery,
+    GetApplicationUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetApplicationUsersQuery,
+    GetApplicationUsersQueryVariables
+  >(GetApplicationUsersDocument, options);
+}
+export type GetApplicationUsersQueryHookResult = ReturnType<
+  typeof useGetApplicationUsersQuery
+>;
+export type GetApplicationUsersLazyQueryHookResult = ReturnType<
+  typeof useGetApplicationUsersLazyQuery
+>;
+export type GetApplicationUsersQueryResult = Apollo.QueryResult<
+  GetApplicationUsersQuery,
+  GetApplicationUsersQueryVariables
 >;
 export const GetAssessmentDocument = gql`
   query GetAssessment($id: ID!) {
@@ -29998,69 +30069,3 @@ export type CreateDirectUploadMutationMutationOptions =
     CreateDirectUploadMutationMutation,
     CreateDirectUploadMutationMutationVariables
   >;
-export const GetUsersDocument = gql`
-  query GetUsers(
-    $limit: Int = 10
-    $offset: Int = 0
-    $filters: UserFilterOptions = null
-  ) {
-    users(limit: $limit, offset: $offset, filters: $filters) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        name
-        ...UserFieldsForAdmin
-      }
-    }
-  }
-  ${UserFieldsForAdminFragmentDoc}
-`;
-
-/**
- * __useGetUsersQuery__
- *
- * To run a query within a React component, call `useGetUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUsersQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *      filters: // value for 'filters'
- *   },
- * });
- */
-export function useGetUsersQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetUsersQuery, GetUsersQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetUsersQuery, GetUsersQueryVariables>(
-    GetUsersDocument,
-    options
-  );
-}
-export function useGetUsersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetUsersQuery,
-    GetUsersQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(
-    GetUsersDocument,
-    options
-  );
-}
-export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
-export type GetUsersLazyQueryHookResult = ReturnType<
-  typeof useGetUsersLazyQuery
->;
-export type GetUsersQueryResult = Apollo.QueryResult<
-  GetUsersQuery,
-  GetUsersQueryVariables
->;

@@ -58,6 +58,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
+      { name: 'email', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'id',
         type: {
@@ -4729,7 +4730,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'dateUpdated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
-      { name: 'hmisId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'id',
         type: {
@@ -4928,6 +4928,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           name: null,
           ofType: { kind: 'ENUM', name: 'RecentItemType', ofType: null },
         },
+      },
+    ],
+  },
+  {
+    name: 'ApplicationUserFilterOptions',
+    args: [
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
@@ -6288,15 +6297,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             },
           },
         },
-      },
-    ],
-  },
-  {
-    name: 'UserFilterOptions',
-    args: [
-      {
-        name: 'searchTerm',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

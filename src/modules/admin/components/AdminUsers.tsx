@@ -6,25 +6,27 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import ConfirmImpersonation from '@/modules/admin/components/ConfirmImpersonation';
+import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
-  GetUsersDocument,
-  GetUsersQuery,
-  GetUsersQueryVariables,
-  UserFieldsForAdminFragment,
+  ApplicationUserFieldsFragment,
+  GetApplicationUsersDocument,
+  GetApplicationUsersQuery,
+  GetApplicationUsersQueryVariables,
 } from '@/types/gqlTypes';
 
 const AdminUsers = () => {
+  const { user: currentUser } = useAuth();
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
   >(undefined);
 
-  const [chosenUser, setChosenUser] = useState<UserFieldsForAdminFragment>();
+  const [chosenUser, setChosenUser] = useState<ApplicationUserFieldsFragment>();
   const handleCancel = () => {
     setChosenUser(undefined);
   };
 
-  const columns = useMemo<ColumnDef<UserFieldsForAdminFragment>[]>(
+  const columns = useMemo<ColumnDef<ApplicationUserFieldsFragment>[]>(
     () => [
       {
         header: 'User ID',
@@ -36,19 +38,23 @@ const AdminUsers = () => {
         render: ({ name }) => name,
       },
       {
+        header: 'Email Address',
+        render: ({ email }) => email,
+      },
+      {
         width: '100px',
         render: (user) => (
           <Button
             size='small'
             onClick={() => setChosenUser(user)}
-            disabled={!user.hmisId}
+            disabled={user.id == currentUser?.id || currentUser?.impersonating}
           >
             Impersonate
           </Button>
         ),
       },
     ],
-    []
+    [currentUser]
   );
 
   return (
@@ -59,9 +65,9 @@ const AdminUsers = () => {
       )}
       <Paper>
         <GenericTableWithData<
-          GetUsersQuery,
-          GetUsersQueryVariables,
-          UserFieldsForAdminFragment
+          GetApplicationUsersQuery,
+          GetApplicationUsersQueryVariables,
+          ApplicationUserFieldsFragment
         >
           header={
             <TextInput
@@ -76,10 +82,10 @@ const AdminUsers = () => {
           queryVariables={{
             filters: { searchTerm: debouncedSearch },
           }}
-          queryDocument={GetUsersDocument}
+          queryDocument={GetApplicationUsersDocument}
           columns={columns}
           noData='No users'
-          pagePath='users'
+          pagePath='applicationUsers'
           defaultPageSize={25}
         />
       </Paper>
