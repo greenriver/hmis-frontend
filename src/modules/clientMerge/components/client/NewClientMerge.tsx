@@ -90,7 +90,11 @@ const NewClientMerge = () => {
         key: 'mergeAction',
         render: (record: ClientFieldsFragment) =>
           record.id === client.id ? (
-            <Typography textAlign='center' color='text.disabled'>
+            <Typography
+              textAlign='center'
+              color='text.disabled'
+              variant='body2'
+            >
               Current Client
             </Typography>
           ) : (
