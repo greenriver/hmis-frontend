@@ -14,15 +14,29 @@ query GetMergeCandidates($limit: Int, $offset: Int) {
   }
 }
 
-query GetMergeHistory($clientId: ID!) {
+query ClientMergeHistory($clientId: ID!, $limit: Int, $offset: Int) {
   client(id: $clientId) {
     id
-    mergeAuditHistory {
+    mergeAuditHistory(limit: $limit, offset: $offset) {
       offset
       limit
       nodesCount
       nodes {
         ...MergeAuditEventFields
+      }
+    }
+  }
+}
+
+query GlobalClientMergeHistory($limit: Int, $offset: Int) {
+  mergeAuditHistory(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...MergeAuditEventFields
+      client {
+        ...ClientName
       }
     }
   }

@@ -3126,6 +3126,7 @@ export type MciClearanceMatch = {
 
 export type MergeAuditEvent = {
   __typename?: 'MergeAuditEvent';
+  client?: Maybe<Client>;
   clientIdsMerged: Array<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   mergedAt: Scalars['ISO8601DateTime']['output'];
@@ -4693,6 +4694,7 @@ export type Query = {
   householdAssessments?: Maybe<Array<Assessment>>;
   /** Inventory lookup */
   inventory?: Maybe<Inventory>;
+  mergeAuditHistory: MergeAuditEventsPaginated;
   mergeCandidates: ClientMergeCandidatesPaginated;
   /** Organization lookup */
   organization?: Maybe<Organization>;
@@ -4779,6 +4781,11 @@ export type QueryHouseholdAssessmentsArgs = {
 
 export type QueryInventoryArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryMergeAuditHistoryArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryMergeCandidatesArgs = {
@@ -12467,11 +12474,13 @@ export type GetMergeCandidatesQuery = {
   };
 };
 
-export type GetMergeHistoryQueryVariables = Exact<{
+export type ClientMergeHistoryQueryVariables = Exact<{
   clientId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
-export type GetMergeHistoryQuery = {
+export type ClientMergeHistoryQuery = {
   __typename?: 'Query';
   client?: {
     __typename?: 'Client';
@@ -12490,6 +12499,37 @@ export type GetMergeHistoryQuery = {
       }>;
     };
   } | null;
+};
+
+export type GlobalClientMergeHistoryQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GlobalClientMergeHistoryQuery = {
+  __typename?: 'Query';
+  mergeAuditHistory: {
+    __typename?: 'MergeAuditEventsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'MergeAuditEvent';
+      id: string;
+      mergedAt: string;
+      clientIdsMerged: Array<string>;
+      client?: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      } | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }>;
+  };
 };
 
 export type MergeClientsMutationVariables = Exact<{
@@ -25412,11 +25452,11 @@ export type GetMergeCandidatesQueryResult = Apollo.QueryResult<
   GetMergeCandidatesQuery,
   GetMergeCandidatesQueryVariables
 >;
-export const GetMergeHistoryDocument = gql`
-  query GetMergeHistory($clientId: ID!) {
+export const ClientMergeHistoryDocument = gql`
+  query ClientMergeHistory($clientId: ID!, $limit: Int, $offset: Int) {
     client(id: $clientId) {
       id
-      mergeAuditHistory {
+      mergeAuditHistory(limit: $limit, offset: $offset) {
         offset
         limit
         nodesCount
@@ -25430,54 +25470,125 @@ export const GetMergeHistoryDocument = gql`
 `;
 
 /**
- * __useGetMergeHistoryQuery__
+ * __useClientMergeHistoryQuery__
  *
- * To run a query within a React component, call `useGetMergeHistoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMergeHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useClientMergeHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClientMergeHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetMergeHistoryQuery({
+ * const { data, loading, error } = useClientMergeHistoryQuery({
  *   variables: {
  *      clientId: // value for 'clientId'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
-export function useGetMergeHistoryQuery(
+export function useClientMergeHistoryQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetMergeHistoryQuery,
-    GetMergeHistoryQueryVariables
+    ClientMergeHistoryQuery,
+    ClientMergeHistoryQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetMergeHistoryQuery, GetMergeHistoryQueryVariables>(
-    GetMergeHistoryDocument,
-    options
-  );
+  return Apollo.useQuery<
+    ClientMergeHistoryQuery,
+    ClientMergeHistoryQueryVariables
+  >(ClientMergeHistoryDocument, options);
 }
-export function useGetMergeHistoryLazyQuery(
+export function useClientMergeHistoryLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetMergeHistoryQuery,
-    GetMergeHistoryQueryVariables
+    ClientMergeHistoryQuery,
+    ClientMergeHistoryQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetMergeHistoryQuery,
-    GetMergeHistoryQueryVariables
-  >(GetMergeHistoryDocument, options);
+    ClientMergeHistoryQuery,
+    ClientMergeHistoryQueryVariables
+  >(ClientMergeHistoryDocument, options);
 }
-export type GetMergeHistoryQueryHookResult = ReturnType<
-  typeof useGetMergeHistoryQuery
+export type ClientMergeHistoryQueryHookResult = ReturnType<
+  typeof useClientMergeHistoryQuery
 >;
-export type GetMergeHistoryLazyQueryHookResult = ReturnType<
-  typeof useGetMergeHistoryLazyQuery
+export type ClientMergeHistoryLazyQueryHookResult = ReturnType<
+  typeof useClientMergeHistoryLazyQuery
 >;
-export type GetMergeHistoryQueryResult = Apollo.QueryResult<
-  GetMergeHistoryQuery,
-  GetMergeHistoryQueryVariables
+export type ClientMergeHistoryQueryResult = Apollo.QueryResult<
+  ClientMergeHistoryQuery,
+  ClientMergeHistoryQueryVariables
+>;
+export const GlobalClientMergeHistoryDocument = gql`
+  query GlobalClientMergeHistory($limit: Int, $offset: Int) {
+    mergeAuditHistory(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...MergeAuditEventFields
+        client {
+          ...ClientName
+        }
+      }
+    }
+  }
+  ${MergeAuditEventFieldsFragmentDoc}
+  ${ClientNameFragmentDoc}
+`;
+
+/**
+ * __useGlobalClientMergeHistoryQuery__
+ *
+ * To run a query within a React component, call `useGlobalClientMergeHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGlobalClientMergeHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGlobalClientMergeHistoryQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGlobalClientMergeHistoryQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GlobalClientMergeHistoryQuery,
+    GlobalClientMergeHistoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GlobalClientMergeHistoryQuery,
+    GlobalClientMergeHistoryQueryVariables
+  >(GlobalClientMergeHistoryDocument, options);
+}
+export function useGlobalClientMergeHistoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GlobalClientMergeHistoryQuery,
+    GlobalClientMergeHistoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GlobalClientMergeHistoryQuery,
+    GlobalClientMergeHistoryQueryVariables
+  >(GlobalClientMergeHistoryDocument, options);
+}
+export type GlobalClientMergeHistoryQueryHookResult = ReturnType<
+  typeof useGlobalClientMergeHistoryQuery
+>;
+export type GlobalClientMergeHistoryLazyQueryHookResult = ReturnType<
+  typeof useGlobalClientMergeHistoryLazyQuery
+>;
+export type GlobalClientMergeHistoryQueryResult = Apollo.QueryResult<
+  GlobalClientMergeHistoryQuery,
+  GlobalClientMergeHistoryQueryVariables
 >;
 export const MergeClientsDocument = gql`
   mutation MergeClients($input: MergeClientsInput!) {

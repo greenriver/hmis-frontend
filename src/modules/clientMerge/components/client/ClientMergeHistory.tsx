@@ -7,32 +7,33 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
-  GetMergeHistoryDocument,
-  GetMergeHistoryQuery,
-  GetMergeHistoryQueryVariables,
+  ClientMergeHistoryDocument,
+  ClientMergeHistoryQuery,
+  ClientMergeHistoryQueryVariables,
   MergeAuditEventFieldsFragment,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const columns: ColumnDef<MergeAuditEventFieldsFragment>[] = [
-  {
-    header: 'Merged Client IDs',
-    render: ({ clientIdsMerged }) => clientIdsMerged.join(', '),
-  },
-  {
-    header: 'Merged By',
-    render: ({ user }) => user?.name || 'Unknown',
-  },
-  {
-    header: 'Merged At',
-    render: ({ mergedAt }) => parseAndFormatDateTime(mergedAt),
-  },
-  // TODO: click-to-show pre merge state?
-  // {
-  //   header: 'Details',
-  //   render: ({ preMergeState }) => JSON.stringify(preMergeState),
-  // },
-];
+export const ClientMergeAuditColumns: ColumnDef<MergeAuditEventFieldsFragment>[] =
+  [
+    {
+      header: 'Merged Client IDs',
+      render: ({ clientIdsMerged }) => clientIdsMerged.join(', '),
+    },
+    {
+      header: 'Merged By',
+      render: ({ user }) => user?.name || 'Unknown',
+    },
+    {
+      header: 'Merged At',
+      render: ({ mergedAt }) => parseAndFormatDateTime(mergedAt),
+    },
+    // TODO: click-to-show pre merge state?
+    // {
+    //   header: 'Details',
+    //   render: ({ preMergeState }) => JSON.stringify(preMergeState),
+    // },
+  ];
 
 const ClientMergeHistory = () => {
   const { clientId } = useSafeParams() as { clientId: string };
@@ -49,13 +50,13 @@ const ClientMergeHistory = () => {
       />
       <Paper>
         <GenericTableWithData<
-          GetMergeHistoryQuery,
-          GetMergeHistoryQueryVariables,
+          ClientMergeHistoryQuery,
+          ClientMergeHistoryQueryVariables,
           MergeAuditEventFieldsFragment
         >
           queryVariables={{ clientId }}
-          queryDocument={GetMergeHistoryDocument}
-          columns={columns}
+          queryDocument={ClientMergeHistoryDocument}
+          columns={ClientMergeAuditColumns}
           pagePath='client.mergeAuditHistory'
           noData='No merge history'
         />

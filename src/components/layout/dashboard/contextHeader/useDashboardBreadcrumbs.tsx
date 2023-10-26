@@ -225,8 +225,9 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
       [AdminDashboardRoutes.AC_DENIALS]: {
         title: 'Denials',
       },
-      [AdminDashboardRoutes.CLIENT_MERGES]: {
+      [AdminDashboardRoutes.PERFORM_CLIENT_MERGES]: {
         title: 'Merge Clients',
+        parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
       },
       [Routes.ADMIN]: {
         title: 'Admin',

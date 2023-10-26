@@ -13,7 +13,8 @@ export const Routes = {
 } as const;
 
 const adminDashboardRoutes = {
-  CLIENT_MERGES: 'merge-clients',
+  CLIENT_MERGE_HISTORY: 'client-merge-history',
+  PERFORM_CLIENT_MERGES: 'client-merge-history/candidates',
   AC_DENIALS: 'referral-denials',
   AC_DENIAL_DETAILS: 'referral-denials/:referralPostingId',
 };
