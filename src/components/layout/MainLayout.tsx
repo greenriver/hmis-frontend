@@ -114,7 +114,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         }}
       >
         {/* fixme: make responsive */}
-        <Toolbar sx={{ flexWrap: 'none', overflow: 'hidden', gap: 1 }}>
+        <Toolbar sx={{ flexWrap: 'noWrap', overflow: 'hidden', gap: 1 }}>
           <RouterLink
             variant='h1'
             noWrap

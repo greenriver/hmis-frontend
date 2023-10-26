@@ -406,7 +406,6 @@ const GenericTable = <T extends { id: string }>({
                               tabIndex={enableTabIndex ? 0 : '-1'}
                             >
                               <Box
-                                component='span'
                                 sx={{
                                   display: 'flex',
                                   height: '100%',
@@ -443,6 +442,7 @@ const GenericTable = <T extends { id: string }>({
                     native: true,
                   }}
                   sx={{ borderBottom: 'none' }}
+                  colSpan={fullColSpan}
                   {...tablePaginationProps}
                 />
               </TableRow>

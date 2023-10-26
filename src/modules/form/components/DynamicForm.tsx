@@ -226,7 +226,7 @@ const DynamicForm = forwardRef(
     return (
       <form
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
-        autoComplete='do-not-autofill'
+        autoComplete='off'
       >
         <Grid container direction='column' spacing={2}>
           <div ref={errorRef} />

@@ -10,12 +10,12 @@ const RequiredLabel = ({
   TypographyProps?: TypographyProps;
 }) => {
   return (
-    <Stack direction='row' spacing={1}>
-      <Typography variant='body2' {...TypographyProps}>
+    <Stack direction='row' spacing={1} component='span'>
+      <Typography variant='body2' {...TypographyProps} component='span'>
         {text}
       </Typography>
       {required && (
-        <Typography variant='body2' color='error'>
+        <Typography variant='body2' color='error' component='span'>
           (Required)
         </Typography>
       )}
