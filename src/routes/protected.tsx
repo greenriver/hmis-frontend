@@ -42,7 +42,9 @@ import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferr
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
-import ClientMerge from '@/modules/clientMerge/components/ClientMerge';
+import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
+import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
+import NewClientMerge from '@/modules/clientMerge/components/client/NewClientMerge';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
@@ -493,7 +495,15 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.CLIENT_MERGES,
             element: (
               <RootPermissionsFilter permissions='canMergeClients'>
-                <ClientMerge />
+                <ClientMergeHistory />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.NEW_MERGE,
+            element: (
+              <RootPermissionsFilter permissions='canMergeClients'>
+                <NewClientMerge />
               </RootPermissionsFilter>
             ),
           },
@@ -540,7 +550,15 @@ export const protectedRoutes: RouteNode[] = [
             element: <AdminLandingPage />,
           },
           {
-            path: AdminDashboardRoutes.CLIENT_MERGES,
+            path: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
+            element: (
+              <RootPermissionsFilter permissions='canMergeClients'>
+                <GlobalClientMergeHistory />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.PERFORM_CLIENT_MERGES,
             element: (
               <RootPermissionsFilter permissions='canMergeClients'>
                 <AdminClientMerge />

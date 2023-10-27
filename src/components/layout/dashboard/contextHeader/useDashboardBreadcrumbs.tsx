@@ -165,6 +165,10 @@ export const useClientBreadcrumbConfig = (
       [ClientDashboardRoutes.AUDIT_HISTORY]: {
         title: 'Client Audit History',
       },
+      [ClientDashboardRoutes.NEW_MERGE]: {
+        title: 'New Merge',
+        parent: ClientDashboardRoutes.CLIENT_MERGES,
+      },
       [ClientDashboardRoutes.NEW_FILE]: {
         title: 'Upload',
         parent: ClientDashboardRoutes.FILES,
@@ -221,8 +225,9 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
       [AdminDashboardRoutes.AC_DENIALS]: {
         title: 'Denials',
       },
-      [AdminDashboardRoutes.CLIENT_MERGES]: {
+      [AdminDashboardRoutes.PERFORM_CLIENT_MERGES]: {
         title: 'Merge Clients',
+        parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
       },
       [Routes.ADMIN]: {
         title: 'Admin',
