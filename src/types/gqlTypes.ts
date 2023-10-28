@@ -579,6 +579,8 @@ export type ClientAddress = {
 export enum ClientAddressType {
   /** Both */
   Both = 'both',
+  /** Move in */
+  MoveIn = 'move_in',
   /** Physical */
   Physical = 'physical',
   /** Postal */
@@ -1805,6 +1807,7 @@ export type EnableWhen = {
 export type Enrollment = {
   __typename?: 'Enrollment';
   access: EnrollmentAccess;
+  addresses: Array<ClientAddress>;
   alcoholDrugUseDisorderFam?: Maybe<NoYesMissing>;
   annualPercentAmi?: Maybe<AnnualPercentAmi>;
   assessments: AssessmentsPaginated;
@@ -13063,6 +13066,22 @@ export type EnrollmentFieldsFragment = {
     canDeleteEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  addresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    addressType?: ClientAddressType | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  }>;
 };
 
 export type AllEnrollmentDetailsFragment = {
@@ -13719,6 +13738,22 @@ export type AllEnrollmentDetailsFragment = {
     canDeleteEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  addresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    addressType?: ClientAddressType | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  }>;
 };
 
 export type EnrollmentOccurrencePointFieldsFragment = {
@@ -13891,6 +13926,22 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     canDeleteEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  addresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    addressType?: ClientAddressType | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  }>;
 };
 
 export type EventFieldsFragment = {
@@ -14037,6 +14088,22 @@ export type GetEnrollmentQuery = {
       canDeleteEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    addresses: Array<{
+      __typename?: 'ClientAddress';
+      id: string;
+      line1?: string | null;
+      line2?: string | null;
+      city?: string | null;
+      state?: string | null;
+      district?: string | null;
+      country?: string | null;
+      postalCode?: string | null;
+      notes?: string | null;
+      use?: ClientAddressUse | null;
+      addressType?: ClientAddressType | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+    }>;
   } | null;
 };
 
@@ -14700,6 +14767,22 @@ export type GetEnrollmentDetailsQuery = {
       canDeleteEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    addresses: Array<{
+      __typename?: 'ClientAddress';
+      id: string;
+      line1?: string | null;
+      line2?: string | null;
+      city?: string | null;
+      state?: string | null;
+      district?: string | null;
+      country?: string | null;
+      postalCode?: string | null;
+      notes?: string | null;
+      use?: ClientAddressUse | null;
+      addressType?: ClientAddressType | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+    }>;
   } | null;
 };
 
@@ -14808,6 +14891,22 @@ export type GetEnrollmentWithHouseholdQuery = {
       canDeleteEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    addresses: Array<{
+      __typename?: 'ClientAddress';
+      id: string;
+      line1?: string | null;
+      line2?: string | null;
+      city?: string | null;
+      state?: string | null;
+      district?: string | null;
+      country?: string | null;
+      postalCode?: string | null;
+      notes?: string | null;
+      use?: ClientAddressUse | null;
+      addressType?: ClientAddressType | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+    }>;
   } | null;
 };
 
@@ -17445,6 +17544,22 @@ export type SubmitFormMutation = {
             id: string;
             name: string;
           } | null;
+          addresses: Array<{
+            __typename?: 'ClientAddress';
+            id: string;
+            line1?: string | null;
+            line2?: string | null;
+            city?: string | null;
+            state?: string | null;
+            district?: string | null;
+            country?: string | null;
+            postalCode?: string | null;
+            notes?: string | null;
+            use?: ClientAddressUse | null;
+            addressType?: ClientAddressType | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+          }>;
         }
       | {
           __typename?: 'Event';
@@ -22566,10 +22681,14 @@ export const EnrollmentFieldsFragmentDoc = gql`
       id
       name
     }
+    addresses {
+      ...ClientAddressFields
+    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
   ${EnrollmentAccessFieldsFragmentDoc}
+  ${ClientAddressFieldsFragmentDoc}
 `;
 export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
   fragment EnrollmentOccurrencePointFields on Enrollment {

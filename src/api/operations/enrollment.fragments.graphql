@@ -62,6 +62,9 @@ fragment EnrollmentFields on Enrollment {
     id
     name
   }
+  addresses {
+    ...ClientAddressFields
+  }
 }
 
 # Fields when you're resolving an individual Enrollment and all its details
