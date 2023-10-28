@@ -29,6 +29,7 @@ import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ValidationDialogProps } from '@/modules/errors/components/ValidationDialog';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import { ErrorState, hasErrors } from '@/modules/errors/util';
+import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
@@ -226,7 +227,7 @@ const DynamicForm = forwardRef(
     return (
       <form
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
-        autoComplete='off'
+        autoComplete={formAutoCompleteOff}
       >
         <Grid container direction='column' spacing={2}>
           <div ref={errorRef} />
