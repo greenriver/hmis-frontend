@@ -18,10 +18,8 @@ const SingleInputContainer = <T extends object>({
   valueKey,
   title,
 }: Props<T>) => {
-  // FIXME: style crimes
   return (
     <Box pl={2} my={4}>
-      {' '}
       {title}
       <Stack id={id} gap={2} divider={<Divider />}>
         {values.map((val, idx) => {
