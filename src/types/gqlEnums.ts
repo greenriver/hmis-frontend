@@ -74,12 +74,7 @@ export const HmisEnums = {
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
   BulkActionType: { ADD: 'ADD', REMOVE: 'REMOVE' },
-  ClientAddressType: {
-    both: 'Both',
-    move_in: 'Move in',
-    physical: 'Physical',
-    postal: 'Postal',
-  },
+  ClientAddressType: { both: 'Both', physical: 'Physical', postal: 'Postal' },
   ClientAddressUse: {
     home: 'Home',
     mail: 'Mail',

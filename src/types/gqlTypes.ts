@@ -579,8 +579,6 @@ export type ClientAddress = {
 export enum ClientAddressType {
   /** Both */
   Both = 'both',
-  /** Move in */
-  MoveIn = 'move_in',
   /** Physical */
   Physical = 'physical',
   /** Postal */
@@ -1807,7 +1805,6 @@ export type EnableWhen = {
 export type Enrollment = {
   __typename?: 'Enrollment';
   access: EnrollmentAccess;
-  addresses: Array<ClientAddress>;
   alcoholDrugUseDisorderFam?: Maybe<NoYesMissing>;
   annualPercentAmi?: Maybe<AnnualPercentAmi>;
   assessments: AssessmentsPaginated;
@@ -1873,6 +1870,7 @@ export type Enrollment = {
   losUnderThreshold?: Maybe<NoYesMissing>;
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
+  moveInAddresses: Array<ClientAddress>;
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
   numUnitsAssignedToHousehold: Scalars['Int']['output'];
   openEnrollmentSummary: Array<EnrollmentSummary>;
@@ -13066,7 +13064,7 @@ export type EnrollmentFieldsFragment = {
     canDeleteEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-  addresses: Array<{
+  moveInAddresses: Array<{
     __typename?: 'ClientAddress';
     id: string;
     line1?: string | null;
@@ -13738,7 +13736,7 @@ export type AllEnrollmentDetailsFragment = {
     canDeleteEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-  addresses: Array<{
+  moveInAddresses: Array<{
     __typename?: 'ClientAddress';
     id: string;
     line1?: string | null;
@@ -13926,7 +13924,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     canDeleteEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-  addresses: Array<{
+  moveInAddresses: Array<{
     __typename?: 'ClientAddress';
     id: string;
     line1?: string | null;
@@ -14088,7 +14086,7 @@ export type GetEnrollmentQuery = {
       canDeleteEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-    addresses: Array<{
+    moveInAddresses: Array<{
       __typename?: 'ClientAddress';
       id: string;
       line1?: string | null;
@@ -14767,7 +14765,7 @@ export type GetEnrollmentDetailsQuery = {
       canDeleteEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-    addresses: Array<{
+    moveInAddresses: Array<{
       __typename?: 'ClientAddress';
       id: string;
       line1?: string | null;
@@ -14891,7 +14889,7 @@ export type GetEnrollmentWithHouseholdQuery = {
       canDeleteEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-    addresses: Array<{
+    moveInAddresses: Array<{
       __typename?: 'ClientAddress';
       id: string;
       line1?: string | null;
@@ -17544,7 +17542,7 @@ export type SubmitFormMutation = {
             id: string;
             name: string;
           } | null;
-          addresses: Array<{
+          moveInAddresses: Array<{
             __typename?: 'ClientAddress';
             id: string;
             line1?: string | null;
@@ -22681,7 +22679,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
       id
       name
     }
-    addresses {
+    moveInAddresses {
       ...ClientAddressFields
     }
   }

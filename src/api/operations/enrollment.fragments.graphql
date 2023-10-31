@@ -62,7 +62,7 @@ fragment EnrollmentFields on Enrollment {
     id
     name
   }
-  addresses {
+  moveInAddresses {
     ...ClientAddressFields
   }
 }
