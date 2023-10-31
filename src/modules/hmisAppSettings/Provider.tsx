@@ -56,7 +56,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     setLoading(true);
     return logout()
       .then(() => {
-        reloadWindow();
+        window.location.assign('/');
       })
       .catch((e) => {
         setLoading(false);
