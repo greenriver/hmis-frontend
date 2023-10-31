@@ -8,7 +8,6 @@ import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetClientServicesDocument,
@@ -49,7 +48,7 @@ const ClientServices: React.FC<{
                   'services',
                 ].join('#')}
               >
-                {enrollmentName(row.enrollment)}
+                {row.enrollment.projectName}
               </RouterLink>
             ),
           },

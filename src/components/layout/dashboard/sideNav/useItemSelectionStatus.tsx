@@ -25,8 +25,8 @@ export const useItemSelectionStatus = ({ item }: Options) => {
     () => ({
       isSelected: !!isSelected,
       childItems,
-      hasChildItems: !!item.items,
+      hasChildItems: childItems.length > 0,
     }),
-    [childItems, item.items, isSelected]
+    [childItems, isSelected]
   );
 };
