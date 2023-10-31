@@ -15,6 +15,7 @@ import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
 import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
 import { reloadWindow } from '@/utils/location';
+import { getCurrentSessionId } from '@/utils/sessionId';
 import { currentTimeInSeconds } from '@/utils/time';
 
 // cached user if the session has not expired
@@ -38,6 +39,18 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState<HmisUser>();
   const [error, setError] = useState<Error>();
   const [loading, setLoading] = useState(true);
+
+  // clear stale localStorage if session has changed
+  useEffect(() => {
+    const currentSessionId = getCurrentSessionId();
+    const lastSessionId = storage.getLastSessionId();
+    if (currentSessionId !== lastSessionId) {
+      storage.setLastSessionId(currentSessionId);
+      storage.clearUser();
+      storage.clearAppSettings();
+      storage.clearSessionTacking();
+    }
+  }, []);
 
   const logoutUser = useCallback(() => {
     setLoading(true);
