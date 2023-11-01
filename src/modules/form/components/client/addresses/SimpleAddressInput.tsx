@@ -2,21 +2,22 @@ import { useEffect } from 'react';
 
 import { DynamicInputCommonProps } from '../../../types';
 import { AddressInputType } from '../types';
-import { useRenderLastUpdated } from '../useRenderLastUpdated';
 import { createInitialValue } from '../util';
 
 import AddressInput from './AddressInput';
 
-import SingleInputContainer from '@/modules/form/components/client/SingleInputContainer';
-import { ClientAddressFieldsFragmentDoc } from '@/types/gqlTypes';
+import SimpleInputContainer from '@/modules/form/components/client/SimpleInputContainer';
+
+const initialValue: AddressInputType[] = [];
 
 interface Props extends DynamicInputCommonProps {
   value?: AddressInputType[];
   onChange: (value: AddressInputType[]) => void;
 }
 
-const initialValue: AddressInputType[] = [];
-const SingleAddressInput: React.FC<Props> = ({
+// similar to MultiAddressInput, we expect value to have only one member so we skip add/del item. If no member exists,
+// we create new object via onChange
+const SimpleAddressInput: React.FC<Props> = ({
   id,
   value,
   onChange,
@@ -30,20 +31,15 @@ const SingleAddressInput: React.FC<Props> = ({
     }
   }, [values, onChange]);
 
-  const { renderMetadata } = useRenderLastUpdated(
-    'ClientAddress',
-    ClientAddressFieldsFragmentDoc,
-    'ClientAddressFields'
-  );
-
   return (
-    <SingleInputContainer
+    <SimpleInputContainer
       id={id}
       values={values}
       valueKey={(addrValue) => addrValue._key || addrValue.id || ''}
       renderChild={(addrValue, idx) => {
         return (
           <AddressInput
+            variant='minimal'
             value={addrValue}
             onChange={(val) => {
               const copied = [...values];
@@ -54,9 +50,8 @@ const SingleAddressInput: React.FC<Props> = ({
         );
       }}
       title={label}
-      renderMetadata={renderMetadata}
     />
   );
 };
 
-export default SingleAddressInput;
+export default SimpleAddressInput;

@@ -10,7 +10,7 @@ interface Props<T> {
   title?: ReactNode;
 }
 
-const SingleInputContainer = <T extends object>({
+const SimpleInputContainer = <T extends object>({
   values,
   renderChild,
   id,
@@ -19,20 +19,20 @@ const SingleInputContainer = <T extends object>({
   title,
 }: Props<T>) => {
   return (
-    <Box pl={2} my={4}>
+    <Box pl={2} mt={4} mb={2}>
       {title}
       <Stack id={id} gap={2} divider={<Divider />}>
         {values.map((val, idx) => {
           const metadata = renderMetadata ? renderMetadata(val) : undefined;
           return (
-            <Box key={valueKey(val)} sx={{ py: 1 }}>
+            <div key={valueKey(val)}>
               {renderChild(val, idx)}
               {metadata && (
                 <Typography variant='body2' mt={2}>
                   {metadata}
                 </Typography>
               )}
-            </Box>
+            </div>
           );
         })}
       </Stack>
@@ -40,4 +40,4 @@ const SingleInputContainer = <T extends object>({
   );
 };
 
-export default SingleInputContainer;
+export default SimpleInputContainer;

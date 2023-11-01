@@ -37,7 +37,7 @@ import TextInput from '@/components/elements/input/TextInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
-import SingleAddressInput from '@/modules/form/components/client/addresses/SingleAddressInput';
+import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
@@ -417,7 +417,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         return item.repeats ? (
           <MultiAddressInput {...objProps} />
         ) : (
-          <SingleAddressInput {...objProps} />
+          <SimpleAddressInput {...objProps} />
         );
       }
       if (item.component == Component.Phone) {
