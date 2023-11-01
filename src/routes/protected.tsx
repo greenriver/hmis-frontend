@@ -14,11 +14,11 @@ import EnrollmentProjectRoute from '@/components/accessWrappers/EnrollmentProjec
 import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
-import AllFiles from '@/components/clientDashboard/AllFiles';
+import ClientFiles from '@/components/clientDashboard/ClientFiles';
 import EditClient from '@/components/clientDashboard/EditClient';
-import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
-import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
 import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
+import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
+import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
@@ -454,7 +454,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <AllEnrollments />
+                <ClientEnrollments />
               </ClientRoute>
             ),
           },
@@ -465,7 +465,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <AllAssessments />
+                <ClientAssessments />
               </ClientRoute>
             ),
           },
@@ -518,7 +518,7 @@ export const protectedRoutes: RouteNode[] = [
                 ]}
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <AllFiles />
+                <ClientFiles />
               </ClientRoute>
             ),
           },

@@ -1873,6 +1873,7 @@ export type Enrollment = {
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
   numUnitsAssignedToHousehold: Scalars['Int']['output'];
   openEnrollmentSummary: Array<EnrollmentSummary>;
+  organizationName: Scalars['String']['output'];
   percentAmi?: Maybe<PercentAmi>;
   physicalDisabilityFam?: Maybe<NoYesMissing>;
   preferredLanguage?: Maybe<PreferredLanguage>;
@@ -1880,6 +1881,8 @@ export type Enrollment = {
   previousStreetEssh?: Maybe<NoYesMissing>;
   prisonDischarge?: Maybe<NoYesMissing>;
   project: Project;
+  projectName: Scalars['String']['output'];
+  projectType?: Maybe<ProjectType>;
   reasonNoServices?: Maybe<ReasonNoServices>;
   reasonNotEnrolled?: Maybe<ReasonNotEnrolled>;
   referralSource?: Maybe<ReferralSource>;
@@ -1990,6 +1993,7 @@ export type EnrollmentAccess = {
   canDeleteEnrollments: Scalars['Boolean']['output'];
   canEditEnrollments: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
+  canViewEnrollmentDetails: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
 
@@ -4868,6 +4872,7 @@ export type QueryAccess = {
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
   canViewHudChronicStatus: Scalars['Boolean']['output'];
+  canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
   canViewProject: Scalars['Boolean']['output'];
@@ -8844,17 +8849,17 @@ export type GetClientAssessmentsQuery = {
           lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
+          moveInDate?: string | null;
+          lastBedNightDate?: string | null;
+          projectName: string;
+          organizationName: string;
+          projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
-          enrollmentCoc?: string | null;
-          householdId: string;
-          householdShortId: string;
-          householdSize: number;
-          project: {
-            __typename?: 'Project';
+          access: {
+            __typename?: 'EnrollmentAccess';
             id: string;
-            projectName: string;
-            projectType?: ProjectType | null;
+            canViewEnrollmentDetails: boolean;
           };
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
@@ -11924,17 +11929,17 @@ export type GetClientEnrollmentsQuery = {
         lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
+        moveInDate?: string | null;
+        lastBedNightDate?: string | null;
+        projectName: string;
+        organizationName: string;
+        projectType?: ProjectType | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
-        enrollmentCoc?: string | null;
-        householdId: string;
-        householdShortId: string;
-        householdSize: number;
-        project: {
-          __typename?: 'Project';
+        access: {
+          __typename?: 'EnrollmentAccess';
           id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
+          canViewEnrollmentDetails: boolean;
         };
       }>;
     };
@@ -12013,17 +12018,17 @@ export type GetClientServicesQuery = {
           lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
+          moveInDate?: string | null;
+          lastBedNightDate?: string | null;
+          projectName: string;
+          organizationName: string;
+          projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
-          enrollmentCoc?: string | null;
-          householdId: string;
-          householdShortId: string;
-          householdSize: number;
-          project: {
-            __typename?: 'Project';
+          access: {
+            __typename?: 'EnrollmentAccess';
             id: string;
-            projectName: string;
-            projectType?: ProjectType | null;
+            canViewEnrollmentDetails: boolean;
           };
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
@@ -12399,17 +12404,17 @@ export type GetClientFilesQuery = {
           lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
+          moveInDate?: string | null;
+          lastBedNightDate?: string | null;
+          projectName: string;
+          organizationName: string;
+          projectType?: ProjectType | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
-          enrollmentCoc?: string | null;
-          householdId: string;
-          householdShortId: string;
-          householdSize: number;
-          project: {
-            __typename?: 'Project';
+          access: {
+            __typename?: 'EnrollmentAccess';
             id: string;
-            projectName: string;
-            projectType?: ProjectType | null;
+            canViewEnrollmentDetails: boolean;
           };
         } | null;
         uploadedBy?: {
@@ -13012,17 +13017,17 @@ export type ClientEnrollmentFieldsFragment = {
   lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
+  moveInDate?: string | null;
+  lastBedNightDate?: string | null;
+  projectName: string;
+  organizationName: string;
+  projectType?: ProjectType | null;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
-  enrollmentCoc?: string | null;
-  householdId: string;
-  householdShortId: string;
-  householdSize: number;
-  project: {
-    __typename?: 'Project';
+  access: {
+    __typename?: 'EnrollmentAccess';
     id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
+    canViewEnrollmentDetails: boolean;
   };
 };
 
@@ -22521,17 +22526,18 @@ export const ClientEnrollmentFieldsFragmentDoc = gql`
     lockVersion
     entryDate
     exitDate
-    project {
-      ...ProjectNameAndType
-    }
+    moveInDate
+    lastBedNightDate
+    projectName
+    organizationName
+    projectType
     inProgress
     relationshipToHoH
-    enrollmentCoc
-    householdId
-    householdShortId
-    householdSize
+    access {
+      id
+      canViewEnrollmentDetails
+    }
   }
-  ${ProjectNameAndTypeFragmentDoc}
 `;
 export const EnrollmentAccessFieldsFragmentDoc = gql`
   fragment EnrollmentAccessFields on EnrollmentAccess {

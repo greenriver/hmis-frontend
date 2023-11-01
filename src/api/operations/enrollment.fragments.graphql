@@ -19,21 +19,24 @@ fragment ProjectEnrollmentFields on Enrollment {
   }
 }
 
-# fields for resolving Enrollments on a Project
+# fields for resolving Enrollments on a Client
+# Note: user might only have limited access to some Enrollments
 fragment ClientEnrollmentFields on Enrollment {
   id
   lockVersion
   entryDate
   exitDate
-  project {
-    ...ProjectNameAndType
-  }
+  moveInDate
+  lastBedNightDate
+  projectName
+  organizationName
+  projectType
   inProgress
   relationshipToHoH
-  enrollmentCoc
-  householdId
-  householdShortId
-  householdSize
+  access {
+    id
+    canViewEnrollmentDetails
+  }
 }
 
 # fields for resolving individual Enrollment, or household members
