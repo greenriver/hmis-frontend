@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import OneTimePassword from './OneTimePassword';
 
@@ -20,7 +20,6 @@ import {
 } from '@/modules/auth/api/sessions';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { RouteLocationState } from '@/routes/AppRoutes';
 import { reloadWindow } from '@/utils/location';
 
 const errorMessage = (error: Error) => {
@@ -43,14 +42,13 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { state } = useLocation();
 
   const handleSuccess = useCallback(
     (user: HmisUser) => {
       setUser(user);
-      navigate((state as RouteLocationState)?.prev || '/');
+      navigate('/');
     },
-    [navigate, state, setUser]
+    [navigate, setUser]
   );
 
   const retryCsrf = useRef(true);
