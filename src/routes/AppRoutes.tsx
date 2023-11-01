@@ -18,22 +18,10 @@ import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 
 const REQUESTED_PATH_KEY = 'hmis_requested_path';
 
-// allow-list for urls that can be redirected to after sign-in
+// deny-list for urls that can be redirected to after sign-in
 function pathForRedirect(arg: string): string | undefined {
   const path = arg.trim();
-  const idPattern = '[a-zA-Z0-9=]+';
-  const patterns = [
-    `^/client/${idPattern}/.*`,
-    `^/projects/${idPattern}/.*`,
-    `^/projects`,
-    `^/admin/.*`,
-  ];
-  let match: RegExpMatchArray | null = null;
-  for (const pattern of patterns) {
-    match = path.match(new RegExp(pattern));
-    if (match) break;
-  }
-  if (match) return match[0];
+  return path === '/' ? undefined : path;
 }
 
 const PublicRoutes: React.FC = () => {
