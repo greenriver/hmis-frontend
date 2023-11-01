@@ -62,9 +62,6 @@ fragment EnrollmentFields on Enrollment {
     id
     name
   }
-  moveInAddresses {
-    ...ClientAddressFields
-  }
 }
 
 # Fields when you're resolving an individual Enrollment and all its details
@@ -131,6 +128,9 @@ fragment EnrollmentOccurrencePointFields on Enrollment {
   translationNeeded
   preferredLanguage
   preferredLanguageDifferent
+  moveInAddresses {
+    ...ClientAddressFields
+  }
 }
 
 # for assessments

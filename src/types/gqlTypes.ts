@@ -13064,22 +13064,6 @@ export type EnrollmentFieldsFragment = {
     canDeleteEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-  moveInAddresses: Array<{
-    __typename?: 'ClientAddress';
-    id: string;
-    line1?: string | null;
-    line2?: string | null;
-    city?: string | null;
-    state?: string | null;
-    district?: string | null;
-    country?: string | null;
-    postalCode?: string | null;
-    notes?: string | null;
-    use?: ClientAddressUse | null;
-    addressType?: ClientAddressType | null;
-    dateCreated?: string | null;
-    dateUpdated?: string | null;
-  }>;
 };
 
 export type AllEnrollmentDetailsFragment = {
@@ -13771,6 +13755,22 @@ export type EnrollmentOccurrencePointFieldsFragment = {
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
   preferredLanguageDifferent?: string | null;
+  moveInAddresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    addressType?: ClientAddressType | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  }>;
 };
 
 export type EnrollmentValuesFragment = {
@@ -14086,22 +14086,6 @@ export type GetEnrollmentQuery = {
       canDeleteEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-    moveInAddresses: Array<{
-      __typename?: 'ClientAddress';
-      id: string;
-      line1?: string | null;
-      line2?: string | null;
-      city?: string | null;
-      state?: string | null;
-      district?: string | null;
-      country?: string | null;
-      postalCode?: string | null;
-      notes?: string | null;
-      use?: ClientAddressUse | null;
-      addressType?: ClientAddressType | null;
-      dateCreated?: string | null;
-      dateUpdated?: string | null;
-    }>;
   } | null;
 };
 
@@ -14889,22 +14873,6 @@ export type GetEnrollmentWithHouseholdQuery = {
       canDeleteEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-    moveInAddresses: Array<{
-      __typename?: 'ClientAddress';
-      id: string;
-      line1?: string | null;
-      line2?: string | null;
-      city?: string | null;
-      state?: string | null;
-      district?: string | null;
-      country?: string | null;
-      postalCode?: string | null;
-      notes?: string | null;
-      use?: ClientAddressUse | null;
-      addressType?: ClientAddressType | null;
-      dateCreated?: string | null;
-      dateUpdated?: string | null;
-    }>;
   } | null;
 };
 
@@ -22679,14 +22647,10 @@ export const EnrollmentFieldsFragmentDoc = gql`
       id
       name
     }
-    moveInAddresses {
-      ...ClientAddressFields
-    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
   ${EnrollmentAccessFieldsFragmentDoc}
-  ${ClientAddressFieldsFragmentDoc}
 `;
 export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
   fragment EnrollmentOccurrencePointFields on Enrollment {
@@ -22705,7 +22669,11 @@ export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
     translationNeeded
     preferredLanguage
     preferredLanguageDifferent
+    moveInAddresses {
+      ...ClientAddressFields
+    }
   }
+  ${ClientAddressFieldsFragmentDoc}
 `;
 export const EnrollmentSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentSummaryFields on EnrollmentSummary {
