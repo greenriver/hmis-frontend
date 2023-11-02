@@ -70,9 +70,7 @@ Use the `graphql:codegen` script to update generated types.
 SCHEMA_PATH=<path to schema.graphql> yarn graphql:codegen
 ```
 
-### Cypress tests
-
-#### Cypress E2E Tests
+### Cypress E2E tests
 
 These tests run against a real warehouse backend. Make sure you have the backend running at `https://hmis-warehouse.dev.test`.
 
@@ -82,5 +80,61 @@ These tests run against a real warehouse backend. Make sure you have the backend
 
 ## Backend configuration
 
-The frontend communicates with with a [OpenPath warehouse](https://github.com/greenriver/hmis-warehouse) which must be
-[configured separately](docs/warehouse.md).
+The frontend communicates with the [OpenPath warehouse](https://github.com/greenriver/hmis-warehouse).
+Once you have the warehouse development environment up, follow the steps below to configure it for HMIS.
+
+# Open Path Warehouse Setup for HMIS
+
+Set these variables in `hmis-warehouse/.env.local` to enable the HMIS GraphQL endpoints:
+
+```sh
+ENABLE_HMIS_API=true
+HMIS_HOSTNAME=hmis.dev.test
+```
+
+Next, run the db seed to set up the HMIS Data Source and an HMIS Administrator user.
+
+```sh
+rails db:seed
+```
+
+You should see the HMIS data source here: https://hmis-warehouse.dev.test/data_sources
+
+## HMIS Admin
+
+The above will enable the warehouse API and grant a user access to
+[HMIS Admin](https://hmis-warehouse.dev.test/hmis_admin/roles) in the
+right-rail of the warehouse UI, and the remaining configuration is done via the UI.
+
+Use this tool to grant yourself further access by enabling additional permissions on the "HMIS Administrator" role.
+
+## Tips & Tricks
+
+#### Assessment Forms Configuration
+
+The HMIS asesssment form definitions are created with the command
+
+```sh
+rails driver:hmis:seed_definitions
+```
+
+This must be run once to populate the database, and re-run any time the
+form definitions are changed.
+
+#### Custom Services Seed
+
+Run this to setup custom services:
+
+```sh
+rails driver:hmis:seed_service_types
+```
+
+#### Changing the GraphQL Schema
+
+After making any change to the GraphQL schema, run this:
+
+```sh
+rails driver:hmis:dump_graphql_schema
+```
+
+To pick up the local schema changes on the frontend, run the `graphql:codegen` script (see above).
