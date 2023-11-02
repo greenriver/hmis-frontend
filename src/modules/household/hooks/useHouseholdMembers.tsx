@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import useSafeParams from '@/hooks/useSafeParams';
 import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import {
   HouseholdClientFieldsFragment,
@@ -8,8 +7,6 @@ import {
 } from '@/types/gqlTypes';
 
 export function useHouseholdMembers(enrollmentId: string) {
-  const { clientId } = useSafeParams();
-
   const { data: { enrollment: enrollment } = {}, ...status } =
     useGetEnrollmentWithHouseholdQuery({
       variables: { id: enrollmentId },
@@ -21,9 +18,9 @@ export function useHouseholdMembers(enrollmentId: string) {
       if (!enrollment) return;
       return sortHouseholdMembers(
         enrollment.household.householdClients,
-        clientId
+        enrollmentId
       );
-    }, [enrollment, clientId]);
+    }, [enrollment, enrollmentId]);
 
   if (status.error) throw status.error;
 

@@ -76,6 +76,24 @@ query GetHouseholdAssessments(
   }
 }
 
+query GetRelatedAnnuals($householdId: ID!, $assessmentId: ID) {
+  householdAssessments(
+    householdId: $householdId
+    assessmentRole: ANNUAL
+    assessmentId: $assessmentId
+  ) {
+    id
+    assessmentDate
+    enrollment {
+      id
+      relationshipToHoH
+    }
+    client {
+      ...ClientName
+    }
+  }
+}
+
 mutation SaveAssessment($input: SaveAssessmentInput!) {
   saveAssessment(input: $input) {
     assessment {

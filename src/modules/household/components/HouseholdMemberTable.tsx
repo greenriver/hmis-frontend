@@ -10,6 +10,7 @@ import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import ClientName from '@/modules/client/components/ClientName';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
@@ -18,7 +19,6 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -53,16 +53,16 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
     ),
   },
   clientName: ({
-    currentClientId,
+    currentEnrollmentId,
     linkToProfile = false,
   }: {
-    currentClientId?: string;
+    currentEnrollmentId?: string;
     linkToProfile?: boolean;
   }) => ({
     header: 'Name',
     key: 'name',
     render: (h: HouseholdClientFieldsFragment) => {
-      const isCurrentClient = h.client.id === currentClientId;
+      const isCurrentClient = h.enrollment.id === currentEnrollmentId;
 
       return (
         <ClientName
@@ -160,6 +160,7 @@ const HouseholdMemberTable = ({
   columns?: ColumnDef<HouseholdClientFieldsFragment>[];
   condensed?: boolean;
 }) => {
+  const { enrollment } = useEnrollmentDashboardContext();
   const { globalFeatureFlags } = useHmisAppSettings();
   const [householdMembers, { loading: householdMembersLoading, error }] =
     useHouseholdMembers(enrollmentId);
@@ -169,7 +170,9 @@ const HouseholdMemberTable = ({
     if (columnProp) return columnProp;
     const cols = [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
-      HOUSEHOLD_MEMBER_COLUMNS.clientName({ currentClientId: clientId }),
+      HOUSEHOLD_MEMBER_COLUMNS.clientName({
+        currentEnrollmentId: enrollmentId,
+      }),
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
       HOUSEHOLD_MEMBER_COLUMNS.dobAge,
       HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
@@ -182,7 +185,7 @@ const HouseholdMemberTable = ({
       ];
     }
     return cols;
-  }, [clientId, columnProp, globalFeatureFlags?.mciId, householdMembers]);
+  }, [enrollmentId, columnProp, globalFeatureFlags?.mciId, householdMembers]);
 
   if (error) throw error;
   if (householdMembersLoading && !householdMembers) return <Loading />;
@@ -202,19 +205,14 @@ const HouseholdMemberTable = ({
           })}
         />
       </SsnDobShowContextProvider>
-      {!hideActions && (
-        <ClientPermissionsFilter
-          id={clientId}
-          permissions={['canEditEnrollments']}
-        >
-          <Box sx={{ px: 3 }}>
-            <HouseholdActionButtons
-              householdMembers={householdMembers || []}
-              clientId={clientId}
-              enrollmentId={enrollmentId}
-            />
-          </Box>
-        </ClientPermissionsFilter>
+      {!hideActions && enrollment?.access?.canEditEnrollments && (
+        <Box sx={{ px: 3 }}>
+          <HouseholdActionButtons
+            householdMembers={householdMembers || []}
+            clientId={clientId}
+            enrollmentId={enrollmentId}
+          />
+        </Box>
       )}
     </>
   );

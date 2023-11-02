@@ -53,24 +53,27 @@ interface Props {
 
 export const ClientProfileCardTextTable = ({
   content,
+  condensed = true,
 }: {
   content:
     | Record<string, React.ReactNode>
     | Readonly<[React.ReactNode, React.ReactNode]>[];
+  condensed?: boolean;
 }) => {
   return (
     <SimpleTable
       TableCellProps={{
         sx: {
           borderBottom: 0,
-          py: 0.5,
+          pt: 0,
+          pb: condensed ? 1 : 2,
           px: 1,
+          verticalAlign: 'baseline',
           '&:first-of-type': {
             pl: 0,
             pr: 2,
             width: '1px',
             whiteSpace: 'nowrap',
-            verticalAlign: 'baseline',
           },
         },
       }}
@@ -89,6 +92,28 @@ export const ClientProfileCardTextTable = ({
     />
   );
 };
+
+const LabelWithSubtitle = ({
+  label,
+  subtitle,
+}: {
+  label: string;
+  subtitle?: string;
+}) => (
+  <Stack>
+    <span>{label}</span>
+    {subtitle && (
+      <Box
+        component='span'
+        fontWeight={400}
+        fontStyle='italic'
+        color='text.secondary'
+      >
+        {subtitle}
+      </Box>
+    )}
+  </Stack>
+);
 
 export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
   const hasContactInformation =
@@ -141,16 +166,33 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                   key: 'Contact Information',
                   content: (
                     <ClientProfileCardTextTable
+                      condensed={false}
                       content={[
                         ...client.addresses.map((address) => {
                           return [
-                            <>Address</>,
+                            <LabelWithSubtitle
+                              label='Address'
+                              subtitle={
+                                address.use
+                                  ? HmisEnums.ClientAddressUse[address.use]
+                                  : undefined
+                              }
+                            />,
                             <ClientAddress address={address} />,
                           ] as const;
                         }),
                         ...client.phoneNumbers.map((phoneNumber) => {
                           return [
-                            <>Phone Number</>,
+                            <LabelWithSubtitle
+                              label='Phone Number'
+                              subtitle={
+                                phoneNumber.use
+                                  ? HmisEnums.ClientContactPointUse[
+                                      phoneNumber.use
+                                    ]
+                                  : undefined
+                              }
+                            />,
                             <ClientContactPoint contactPoint={phoneNumber} />,
                           ] as const;
                         }),

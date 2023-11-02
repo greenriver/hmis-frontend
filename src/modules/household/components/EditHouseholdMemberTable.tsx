@@ -21,7 +21,6 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
-import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -31,7 +30,8 @@ import {
 
 interface Props {
   household: HouseholdFieldsFragment;
-  currentDashboardClientId?: string;
+  projectId: string;
+  currentDashboardEnrollmentId?: string;
   refetchHousehold: any;
   loading?: boolean;
 }
@@ -39,7 +39,7 @@ interface Props {
 const EditHouseholdMemberTable = ({
   household,
   refetchHousehold,
-  currentDashboardClientId,
+  currentDashboardEnrollmentId,
   loading,
 }: Props) => {
   const [proposedHoH, setProposedHoH] =
@@ -48,11 +48,12 @@ const EditHouseholdMemberTable = ({
 
   const currentMembers = useMemo(
     () =>
+      //xxx
       sortHouseholdMembers(
         household.householdClients,
-        currentDashboardClientId
+        currentDashboardEnrollmentId
       ),
-    [household, currentDashboardClientId]
+    [household, currentDashboardEnrollmentId]
   );
 
   const [hoh, setHoH] = useState<HouseholdClientFieldsFragment | null>(
@@ -149,8 +150,8 @@ const EditHouseholdMemberTable = ({
     return [
       HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
       HOUSEHOLD_MEMBER_COLUMNS.clientName({
-        currentClientId: currentDashboardClientId,
-        linkToProfile: !!currentDashboardClientId,
+        currentEnrollmentId: currentDashboardEnrollmentId,
+        linkToProfile: !!currentDashboardEnrollmentId,
       }),
       HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
       HOUSEHOLD_MEMBER_COLUMNS.dobAge,
@@ -208,30 +209,26 @@ const EditHouseholdMemberTable = ({
         key: 'action',
         width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <ClientPermissionsFilter
-            id={hc.client.id}
-            permissions={['canDeleteEnrollments']}
-          >
-            <RemoveFromHouseholdButton
-              currentDashboardClientId={currentDashboardClientId}
-              householdClient={hc}
-              onSuccess={refetchHousehold}
-              householdSize={currentMembers.length}
-            />
-          </ClientPermissionsFilter>
+          // No extra perm check is required, because this button only allows removing WIP Enrollments,
+          // which only requires Can Edit Enrollments, which is already required for this page
+          <RemoveFromHouseholdButton
+            currentDashboardEnrollmentId={currentDashboardEnrollmentId}
+            householdClient={hc}
+            onSuccess={refetchHousehold}
+            householdSize={currentMembers.length}
+          />
         ),
       },
     ];
   }, [
-    currentDashboardClientId,
-    hoh,
-    refetchHousehold,
-    onChangeHoH,
-    setHighlight,
+    currentDashboardEnrollmentId,
+    currentMembers,
+    hoh?.client?.id,
     hohChangeLoading,
     proposedHoH,
+    onChangeHoH,
     highlight,
-    currentMembers,
+    refetchHousehold,
   ]);
 
   return (

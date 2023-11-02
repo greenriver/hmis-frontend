@@ -205,6 +205,7 @@ const GenericTable = <T extends { id: string }>({
                   selectableRowIds.length > 0 &&
                   selected.length === selectableRowIds.length
                 }
+                disabled={selectableRowIds.length === 0}
                 onChange={handleSelectAllClick}
                 inputProps={{ 'aria-label': 'select all' }}
               />

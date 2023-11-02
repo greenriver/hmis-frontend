@@ -357,10 +357,10 @@ export const eventReferralResult = (e: EventFieldsFragment) => {
 
 export const sortHouseholdMembers = (
   members?: HouseholdClientFieldsFragment[],
-  activeClientId?: string
+  activeEnrollmentId?: string
 ) => {
   const sorted = sortBy(members || [], [
-    (c) => (c.client.id === activeClientId ? -1 : 1),
+    (c) => (c.enrollment.id === activeEnrollmentId ? -1 : 1),
     (c) => c.client.lastName,
     (c) => c.client.id,
   ]);
@@ -526,4 +526,21 @@ export const featureEnabledForEnrollment = (
     client,
     relationshipToHoH
   );
+};
+
+export const relationshipToHohForDisplay = (
+  relationship: RelationshipToHoH,
+  hideDataNotCollectedAndInvalid: boolean
+) => {
+  if (
+    hideDataNotCollectedAndInvalid &&
+    (relationship === RelationshipToHoH.DataNotCollected ||
+      relationship === RelationshipToHoH.Invalid)
+  ) {
+    return '';
+  }
+
+  if (relationship === RelationshipToHoH.SelfHeadOfHousehold) return 'HoH';
+
+  return HmisEnums.RelationshipToHoH[relationship];
 };

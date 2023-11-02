@@ -999,43 +999,31 @@
         "enumValues": [
           {
             "name": "ANNUAL",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CUSTOM_ASSESSMENT",
-            "description": null,
+            "description": "Annual",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "EXIT",
-            "description": null,
+            "description": "Exit",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INTAKE",
-            "description": null,
+            "description": "Intake",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "POST_EXIT",
-            "description": null,
+            "description": "Post exit",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "UPDATE",
-            "description": null,
+            "description": "Update",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -4045,6 +4033,12 @@
             "deprecationReason": null
           },
           {
+            "name": "school",
+            "description": "School",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "temp",
             "description": "Temp",
             "isDeprecated": false,
@@ -4496,6 +4490,12 @@
           {
             "name": "old",
             "description": "Old",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "school",
+            "description": "School",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -7232,37 +7232,37 @@
         "enumValues": [
           {
             "name": "CASE_NOTE",
-            "description": null,
+            "description": "Case note",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_ASSESSMENT",
-            "description": null,
+            "description": "Ce assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_EVENT",
-            "description": null,
+            "description": "Ce event",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CURRENT_LIVING_SITUATION",
-            "description": null,
+            "description": "Current living situation",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "REFERRAL_REQUEST",
-            "description": null,
+            "description": "Referral request",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SERVICE",
-            "description": null,
+            "description": "Service",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -15769,139 +15769,139 @@
         "enumValues": [
           {
             "name": "ANNUAL",
-            "description": null,
+            "description": "Annual",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CASE_NOTE",
-            "description": null,
+            "description": "Case note",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE",
-            "description": null,
+            "description": "Ce",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_ASSESSMENT",
-            "description": null,
+            "description": "Ce assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_EVENT",
-            "description": null,
+            "description": "Ce event",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CLIENT",
-            "description": null,
+            "description": "Client",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CURRENT_LIVING_SITUATION",
-            "description": null,
+            "description": "Current living situation",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CUSTOM_ASSESSMENT",
-            "description": null,
+            "description": "Custom assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ENROLLMENT",
-            "description": null,
+            "description": "Enrollment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "EXIT",
-            "description": null,
+            "description": "Exit",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FILE",
-            "description": null,
+            "description": "File",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FUNDER",
-            "description": null,
+            "description": "Funder",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INTAKE",
-            "description": null,
+            "description": "Intake",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INVENTORY",
-            "description": null,
+            "description": "Inventory",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "NEW_CLIENT_ENROLLMENT",
-            "description": null,
+            "description": "New client enrollment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "OCCURRENCE_POINT",
-            "description": null,
+            "description": "Occurrence point",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ORGANIZATION",
-            "description": null,
+            "description": "Organization",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "POST_EXIT",
-            "description": null,
+            "description": "Post exit",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PROJECT",
-            "description": null,
+            "description": "Project",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PROJECT_COC",
-            "description": null,
+            "description": "Project CoC",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "REFERRAL_REQUEST",
-            "description": null,
+            "description": "Referral request",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SERVICE",
-            "description": null,
+            "description": "Service",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "UPDATE",
-            "description": null,
+            "description": "Update",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -29152,6 +29152,18 @@
                 "name": "Int",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hudChronic",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

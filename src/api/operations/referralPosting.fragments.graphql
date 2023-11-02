@@ -25,6 +25,7 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   id
   assignedDate
   chronic
+  hudChronic
   denialNote
   denialReason
   needsWheelchairAccessibleUnit
@@ -63,7 +64,6 @@ fragment ReferralPostingDetailFields on ReferralPosting {
     id
     client {
       id
-      hudChronic
     }
   }
   householdMembers {

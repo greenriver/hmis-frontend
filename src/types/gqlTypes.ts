@@ -192,12 +192,15 @@ export enum AssessmentLevel {
 }
 
 export enum AssessmentRole {
+  /** Annual */
   Annual = 'ANNUAL',
-  Ce = 'CE',
-  CustomAssessment = 'CUSTOM_ASSESSMENT',
+  /** Exit */
   Exit = 'EXIT',
+  /** Intake */
   Intake = 'INTAKE',
+  /** Post exit */
   PostExit = 'POST_EXIT',
+  /** Update */
   Update = 'UPDATE',
 }
 
@@ -566,6 +569,8 @@ export enum ClientAddressUse {
   Mail = 'mail',
   /** Old */
   Old = 'old',
+  /** School */
+  School = 'school',
   /** Temp */
   Temp = 'temp',
   /** Work */
@@ -627,6 +632,8 @@ export enum ClientContactPointUse {
   Mobile = 'mobile',
   /** Old */
   Old = 'old',
+  /** School */
+  School = 'school',
   /** Temp */
   Temp = 'temp',
   /** Work */
@@ -1105,11 +1112,17 @@ export type DataCollectionFeature = {
 };
 
 export enum DataCollectionFeatureRole {
+  /** Case note */
   CaseNote = 'CASE_NOTE',
+  /** Ce assessment */
   CeAssessment = 'CE_ASSESSMENT',
+  /** Ce event */
   CeEvent = 'CE_EVENT',
+  /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Referral request */
   ReferralRequest = 'REFERRAL_REQUEST',
+  /** Service */
   Service = 'SERVICE',
 }
 
@@ -2319,28 +2332,51 @@ export type FormItem = {
 };
 
 export enum FormRole {
+  /** Annual */
   Annual = 'ANNUAL',
+  /** Case note */
   CaseNote = 'CASE_NOTE',
+  /** Ce */
   Ce = 'CE',
+  /** Ce assessment */
   CeAssessment = 'CE_ASSESSMENT',
+  /** Ce event */
   CeEvent = 'CE_EVENT',
+  /** Client */
   Client = 'CLIENT',
+  /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Custom assessment */
   CustomAssessment = 'CUSTOM_ASSESSMENT',
+  /** Enrollment */
   Enrollment = 'ENROLLMENT',
+  /** Exit */
   Exit = 'EXIT',
+  /** File */
   File = 'FILE',
+  /** Funder */
   Funder = 'FUNDER',
+  /** Intake */
   Intake = 'INTAKE',
+  /** Inventory */
   Inventory = 'INVENTORY',
+  /** New client enrollment */
   NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
+  /** Occurrence point */
   OccurrencePoint = 'OCCURRENCE_POINT',
+  /** Organization */
   Organization = 'ORGANIZATION',
+  /** Post exit */
   PostExit = 'POST_EXIT',
+  /** Project */
   Project = 'PROJECT',
+  /** Project CoC */
   ProjectCoc = 'PROJECT_COC',
+  /** Referral request */
   ReferralRequest = 'REFERRAL_REQUEST',
+  /** Service */
   Service = 'SERVICE',
+  /** Update */
   Update = 'UPDATE',
 }
 
@@ -4831,6 +4867,7 @@ export type ReferralPosting = {
   hohName: Scalars['String']['output'];
   householdMembers: Array<ReferralHouseholdMember>;
   householdSize: Scalars['Int']['output'];
+  hudChronic?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']['output']>;
   organization?: Maybe<Organization>;
@@ -9133,6 +9170,34 @@ export type GetHouseholdAssessmentsQuery = {
       canDeleteAssessments: boolean;
       canDeleteEnrollments: boolean;
       canEditEnrollments: boolean;
+    };
+  }> | null;
+};
+
+export type GetRelatedAnnualsQueryVariables = Exact<{
+  householdId: Scalars['ID']['input'];
+  assessmentId?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+export type GetRelatedAnnualsQuery = {
+  __typename?: 'Query';
+  householdAssessments?: Array<{
+    __typename?: 'Assessment';
+    id: string;
+    assessmentDate: string;
+    enrollment: {
+      __typename?: 'Enrollment';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+    };
+    client: {
+      __typename?: 'Client';
+      id: string;
+      lockVersion: number;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
     };
   }> | null;
 };
@@ -19584,6 +19649,7 @@ export type GetReferralPostingQuery = {
     id: string;
     assignedDate: string;
     chronic?: boolean | null;
+    hudChronic?: boolean | null;
     denialNote?: string | null;
     denialReason?: ReferralPostingDenialReasonType | null;
     needsWheelchairAccessibleUnit?: boolean | null;
@@ -19622,11 +19688,7 @@ export type GetReferralPostingQuery = {
     hohEnrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        hudChronic?: boolean | null;
-      };
+      client: { __typename?: 'Client'; id: string };
     } | null;
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
@@ -19700,6 +19762,7 @@ export type UpdateReferralPostingMutation = {
       id: string;
       assignedDate: string;
       chronic?: boolean | null;
+      hudChronic?: boolean | null;
       denialNote?: string | null;
       denialReason?: ReferralPostingDenialReasonType | null;
       needsWheelchairAccessibleUnit?: boolean | null;
@@ -19738,11 +19801,7 @@ export type UpdateReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          hudChronic?: boolean | null;
-        };
+        client: { __typename?: 'Client'; id: string };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -19830,6 +19889,7 @@ export type CreateOutgoingReferralPostingMutation = {
       id: string;
       assignedDate: string;
       chronic?: boolean | null;
+      hudChronic?: boolean | null;
       denialNote?: string | null;
       denialReason?: ReferralPostingDenialReasonType | null;
       needsWheelchairAccessibleUnit?: boolean | null;
@@ -19868,11 +19928,7 @@ export type CreateOutgoingReferralPostingMutation = {
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          hudChronic?: boolean | null;
-        };
+        client: { __typename?: 'Client'; id: string };
       } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -20018,6 +20074,7 @@ export type ReferralPostingDetailFieldsFragment = {
   id: string;
   assignedDate: string;
   chronic?: boolean | null;
+  hudChronic?: boolean | null;
   denialNote?: string | null;
   denialReason?: ReferralPostingDenialReasonType | null;
   needsWheelchairAccessibleUnit?: boolean | null;
@@ -20056,7 +20113,7 @@ export type ReferralPostingDetailFieldsFragment = {
   hohEnrollment?: {
     __typename?: 'Enrollment';
     id: string;
-    client: { __typename?: 'Client'; id: string; hudChronic?: boolean | null };
+    client: { __typename?: 'Client'; id: string };
   } | null;
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
@@ -22465,6 +22522,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     id
     assignedDate
     chronic
+    hudChronic
     denialNote
     denialReason
     needsWheelchairAccessibleUnit
@@ -22503,7 +22561,6 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
       id
       client {
         id
-        hudChronic
       }
     }
     householdMembers {
@@ -23031,6 +23088,78 @@ export type GetHouseholdAssessmentsLazyQueryHookResult = ReturnType<
 export type GetHouseholdAssessmentsQueryResult = Apollo.QueryResult<
   GetHouseholdAssessmentsQuery,
   GetHouseholdAssessmentsQueryVariables
+>;
+export const GetRelatedAnnualsDocument = gql`
+  query GetRelatedAnnuals($householdId: ID!, $assessmentId: ID) {
+    householdAssessments(
+      householdId: $householdId
+      assessmentRole: ANNUAL
+      assessmentId: $assessmentId
+    ) {
+      id
+      assessmentDate
+      enrollment {
+        id
+        relationshipToHoH
+      }
+      client {
+        ...ClientName
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+`;
+
+/**
+ * __useGetRelatedAnnualsQuery__
+ *
+ * To run a query within a React component, call `useGetRelatedAnnualsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRelatedAnnualsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRelatedAnnualsQuery({
+ *   variables: {
+ *      householdId: // value for 'householdId'
+ *      assessmentId: // value for 'assessmentId'
+ *   },
+ * });
+ */
+export function useGetRelatedAnnualsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetRelatedAnnualsQuery,
+    GetRelatedAnnualsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetRelatedAnnualsQuery,
+    GetRelatedAnnualsQueryVariables
+  >(GetRelatedAnnualsDocument, options);
+}
+export function useGetRelatedAnnualsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRelatedAnnualsQuery,
+    GetRelatedAnnualsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetRelatedAnnualsQuery,
+    GetRelatedAnnualsQueryVariables
+  >(GetRelatedAnnualsDocument, options);
+}
+export type GetRelatedAnnualsQueryHookResult = ReturnType<
+  typeof useGetRelatedAnnualsQuery
+>;
+export type GetRelatedAnnualsLazyQueryHookResult = ReturnType<
+  typeof useGetRelatedAnnualsLazyQuery
+>;
+export type GetRelatedAnnualsQueryResult = Apollo.QueryResult<
+  GetRelatedAnnualsQuery,
+  GetRelatedAnnualsQueryVariables
 >;
 export const SaveAssessmentDocument = gql`
   mutation SaveAssessment($input: SaveAssessmentInput!) {

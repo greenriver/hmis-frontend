@@ -1,4 +1,4 @@
-import { ApolloError, isApolloError } from '@apollo/client';
+import { isApolloError } from '@apollo/client';
 import {
   Alert,
   AlertTitle,
@@ -9,12 +9,16 @@ import {
 } from '@mui/material';
 import { FallbackRender } from '@sentry/react';
 
+import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { NotFoundError, UNKNOWN_ERROR_HEADING } from '../util';
 
 import ApolloErrorAlert from './ApolloErrorAlert';
 import SentryErrorTrace from './SentryErrorTrace';
 
-const ErrorFallback = ({ text = UNKNOWN_ERROR_HEADING }: { text?: string }) => (
+export const FullPageError: React.FC<{
+  text?: string;
+}> = ({ text = UNKNOWN_ERROR_HEADING }) => (
   <Box
     display='flex'
     justifyContent='center'
@@ -28,16 +32,21 @@ const ErrorFallback = ({ text = UNKNOWN_ERROR_HEADING }: { text?: string }) => (
   </Box>
 );
 
-export const alertErrorFallback: FallbackRender = ({
+export const AlertErrorFallback: React.FC<Parameters<FallbackRender>[0]> = ({
   error,
   componentStack,
   resetError,
-}: {
-  error: Error | ApolloError;
-  componentStack: string | null;
-  eventId: string | null;
-  resetError(): void;
 }) => {
+  const { pathname } = useLocation();
+  const originalPathname = useRef(pathname);
+
+  // Reset error boundary when navigated awawy
+  useEffect(() => {
+    if (pathname !== originalPathname.current) {
+      resetError();
+    }
+  }, [pathname, resetError]);
+
   if (isApolloError(error)) {
     return (
       <ApolloErrorAlert
@@ -84,12 +93,3 @@ export const alertErrorFallback: FallbackRender = ({
     </Container>
   );
 };
-
-export const fullPageErrorFallback: FallbackRender = (args) => {
-  if (import.meta.env.MODE !== 'development') {
-    return <ErrorFallback />;
-  }
-  return alertErrorFallback(args);
-};
-
-export default ErrorFallback;
