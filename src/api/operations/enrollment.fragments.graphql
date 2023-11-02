@@ -131,6 +131,9 @@ fragment EnrollmentOccurrencePointFields on Enrollment {
   translationNeeded
   preferredLanguage
   preferredLanguageDifferent
+  moveInAddresses {
+    ...ClientAddressFields
+  }
 }
 
 # for assessments

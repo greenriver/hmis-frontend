@@ -15,11 +15,18 @@ import TextContent from './item/TextContent';
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import RecoverableError from '@/components/elements/RecoverableError';
+import ClientAddress from '@/modules/client/components/ClientAddress';
 import {
   formatDateForDisplay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { DisabledDisplay, FormItem, ItemType } from '@/types/gqlTypes';
+import {
+  Component,
+  DisabledDisplay,
+  FormItem,
+  ItemType,
+} from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -149,9 +156,27 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       return <Image id={value} />;
     case ItemType.File:
       return <File id={value} />;
+    case ItemType.Object:
+      switch (item.component) {
+        case Component.Address:
+          return ensureArray(value).map((address) => (
+            <ClientAddress address={address} key={JSON.stringify(address)} />
+          ));
+        default:
+          return (
+            <RecoverableError
+              error={
+                new Error(`Can't render form component "${item.component}"`)
+              }
+            />
+          );
+      }
     default:
-      console.warn('Unrecognized item type:', item.type);
-      return <></>;
+      return (
+        <RecoverableError
+          error={new Error(`Unrecognized item type "${item.type}"`)}
+        />
+      );
   }
 };
 

@@ -1870,6 +1870,7 @@ export type Enrollment = {
   losUnderThreshold?: Maybe<NoYesMissing>;
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
+  moveInAddresses: Array<ClientAddress>;
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
   numUnitsAssignedToHousehold: Scalars['Int']['output'];
   openEnrollmentSummary: Array<EnrollmentSummary>;
@@ -13724,6 +13725,22 @@ export type AllEnrollmentDetailsFragment = {
     canDeleteEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  moveInAddresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    addressType?: ClientAddressType | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  }>;
 };
 
 export type EnrollmentOccurrencePointFieldsFragment = {
@@ -13743,6 +13760,22 @@ export type EnrollmentOccurrencePointFieldsFragment = {
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
   preferredLanguageDifferent?: string | null;
+  moveInAddresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    addressType?: ClientAddressType | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  }>;
 };
 
 export type EnrollmentValuesFragment = {
@@ -13896,6 +13929,22 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     canDeleteEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  moveInAddresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    addressType?: ClientAddressType | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  }>;
 };
 
 export type EventFieldsFragment = {
@@ -14705,6 +14754,22 @@ export type GetEnrollmentDetailsQuery = {
       canDeleteEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    moveInAddresses: Array<{
+      __typename?: 'ClientAddress';
+      id: string;
+      line1?: string | null;
+      line2?: string | null;
+      city?: string | null;
+      state?: string | null;
+      district?: string | null;
+      country?: string | null;
+      postalCode?: string | null;
+      notes?: string | null;
+      use?: ClientAddressUse | null;
+      addressType?: ClientAddressType | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+    }>;
   } | null;
 };
 
@@ -17450,6 +17515,22 @@ export type SubmitFormMutation = {
             id: string;
             name: string;
           } | null;
+          moveInAddresses: Array<{
+            __typename?: 'ClientAddress';
+            id: string;
+            line1?: string | null;
+            line2?: string | null;
+            city?: string | null;
+            state?: string | null;
+            district?: string | null;
+            country?: string | null;
+            postalCode?: string | null;
+            notes?: string | null;
+            use?: ClientAddressUse | null;
+            addressType?: ClientAddressType | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+          }>;
         }
       | {
           __typename?: 'Event';
@@ -22594,7 +22675,11 @@ export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
     translationNeeded
     preferredLanguage
     preferredLanguageDifferent
+    moveInAddresses {
+      ...ClientAddressFields
+    }
   }
+  ${ClientAddressFieldsFragmentDoc}
 `;
 export const EnrollmentSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentSummaryFields on EnrollmentSummary {
