@@ -9,7 +9,7 @@ import {
   Routes,
 } from '@/routes/routes';
 
-const allRoutes = flatMap(
+export const allRoutes = flatMap(
   [
     Routes,
     ClientDashboardRoutes,

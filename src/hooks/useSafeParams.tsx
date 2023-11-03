@@ -13,11 +13,7 @@ type RouteParams<T> = {
   readonly [key in keyof T]: string | undefined;
 };
 
-const useSafeParams = <T extends Record<string, string | undefined>>(
-  ...args: Parameters<typeof useParams>
-) => {
-  const params = { ...useParams(...args) };
-
+export const decodeParams = (params: Record<string, string | undefined>) => {
   for (const key in params) {
     if (isIdParam(key) && params[key])
       params[key] = IdEncoder.decode(params[key] as string);
@@ -34,7 +30,14 @@ const useSafeParams = <T extends Record<string, string | undefined>>(
     }
   }
 
-  return params as RouteParams<T>;
+  return params;
+};
+
+const useSafeParams = <T extends Record<string, string | undefined>>(
+  ...args: Parameters<typeof useParams>
+) => {
+  const params = { ...useParams(...args) };
+  return decodeParams(params) as RouteParams<T>;
 };
 
 export default useSafeParams;
