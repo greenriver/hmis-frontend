@@ -5568,9 +5568,17 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'householdTasks',
         type: {
-          kind: 'ENUM',
-          name: 'EnrollmentFilterOptionHouseholdTask',
-          ofType: null,
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'EnrollmentFilterOptionHouseholdTask',
+              ofType: null,
+            },
+          },
         },
       },
       {
@@ -5617,9 +5625,17 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'householdTasks',
         type: {
-          kind: 'ENUM',
-          name: 'EnrollmentFilterOptionHouseholdTask',
-          ofType: null,
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'EnrollmentFilterOptionHouseholdTask',
+              ofType: null,
+            },
+          },
         },
       },
       {

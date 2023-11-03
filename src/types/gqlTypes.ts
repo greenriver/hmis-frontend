@@ -2061,7 +2061,7 @@ export type EnrollmentSummary = {
 };
 
 export type EnrollmentsForClientFilterOptions = {
-  householdTasks?: InputMaybe<EnrollmentFilterOptionHouseholdTask>;
+  householdTasks?: InputMaybe<Array<EnrollmentFilterOptionHouseholdTask>>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
   projectType?: InputMaybe<Array<ProjectType>>;
   status?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
@@ -2069,7 +2069,7 @@ export type EnrollmentsForClientFilterOptions = {
 
 export type EnrollmentsForProjectFilterOptions = {
   bedNightOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
-  householdTasks?: InputMaybe<EnrollmentFilterOptionHouseholdTask>;
+  householdTasks?: InputMaybe<Array<EnrollmentFilterOptionHouseholdTask>>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
