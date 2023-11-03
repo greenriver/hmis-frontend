@@ -9,7 +9,7 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ManageHousehold from '@/modules/household/components/ManageHousehold';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const EditHousehold = () => {
   const navigate = useNavigate();

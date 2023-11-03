@@ -9,7 +9,7 @@ import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFor
 import EditRecord from '@/modules/form/components/EditRecord';
 import { Routes } from '@/routes/routes';
 import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const CreateClient: React.FC = () => {
   const navigate = useNavigate();

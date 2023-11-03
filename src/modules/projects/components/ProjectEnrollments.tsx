@@ -8,7 +8,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectEnrollments = () => {
   const { projectId } = useSafeParams() as {

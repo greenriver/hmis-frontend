@@ -42,7 +42,7 @@ import {
   useSubmitHouseholdAssessmentsMutation,
   VersionedRecordInput,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface HouseholdSummaryTabPanelProps {
   active: boolean;

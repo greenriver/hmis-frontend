@@ -21,7 +21,7 @@ import {
   FunderFieldsFragment,
   useGetFunderQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const Funder = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();

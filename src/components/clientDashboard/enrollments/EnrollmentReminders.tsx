@@ -26,7 +26,7 @@ import {
   ReminderTopic,
   useGetEnrollmentRemindersQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const reminderTitle = (reminder: ReminderFieldsFragment): string => {
   switch (reminder.topic) {

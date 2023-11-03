@@ -33,7 +33,7 @@ import {
   useGetClientEnrollmentsQuery,
   useGetClientImageQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const MAX_RECENT_ENROLLMENTS = 5;
 

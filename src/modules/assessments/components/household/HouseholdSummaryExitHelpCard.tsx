@@ -17,7 +17,7 @@ import RouterLink from '@/components/elements/RouterLink';
 import useSafeParams from '@/hooks/useSafeParams';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   tabs: TabDefinition[];

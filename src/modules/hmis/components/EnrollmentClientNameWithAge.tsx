@@ -4,7 +4,7 @@ import RouterLink from '@/components/elements/RouterLink';
 import ClientName from '@/modules/client/components/ClientName';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { ClientNameFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const EnrollmentClientNameWithAge: React.FC<{
   enrollmentId: string;

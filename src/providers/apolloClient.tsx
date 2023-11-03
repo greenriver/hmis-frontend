@@ -13,15 +13,16 @@ import * as Sentry from '@sentry/react';
 import fetch from 'cross-fetch';
 
 import { generatePath, matchRoutes } from 'react-router-dom';
-import { allRoutes } from '@/hooks/useCurrentPath';
-import { decodeParams } from '@/hooks/useSafeParams';
+
 import {
   HMIS_REMOTE_SESSION_UID_EVENT,
   HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/api/constants';
 import { sentryUser } from '@/modules/auth/api/sessions';
 import { isServerError } from '@/modules/errors/util';
+import { allRoutes } from '@/routes/routes';
 import { getCsrfToken } from '@/utils/csrf';
+import { decodeParams } from '@/utils/pathEncoding';
 
 // https://github.com/apollographql/apollo-feature-requests/issues/153#issuecomment-476832408
 const customFetch: HttpOptions['fetch'] = (uri, options) => {

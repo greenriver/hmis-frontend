@@ -24,7 +24,7 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectNavHeader = ({
   project,

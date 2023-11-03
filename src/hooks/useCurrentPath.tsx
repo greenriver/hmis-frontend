@@ -1,26 +1,6 @@
-import { flatMap } from 'lodash-es';
 import { matchRoutes, useLocation } from 'react-router-dom';
 
-import {
-  AdminDashboardRoutes,
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-  ProjectDashboardRoutes,
-  Routes,
-} from '@/routes/routes';
-
-export const allRoutes = flatMap(
-  [
-    Routes,
-    ClientDashboardRoutes,
-    EnrollmentDashboardRoutes,
-    ProjectDashboardRoutes,
-    AdminDashboardRoutes,
-  ],
-  (obj) => Object.values(obj)
-).map((s) => ({
-  path: s,
-}));
+import { allRoutes } from '@/routes/routes';
 
 export default function useCurrentPath() {
   const location = useLocation();

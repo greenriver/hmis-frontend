@@ -15,7 +15,7 @@ import {
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { FormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export const InactiveBanner = ({
   project,

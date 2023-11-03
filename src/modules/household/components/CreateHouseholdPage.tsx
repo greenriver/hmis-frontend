@@ -7,7 +7,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const CreateHouseholdPage = () => {
   const { project } = useProjectDashboardContext();

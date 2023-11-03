@@ -26,7 +26,7 @@ import {
   GetProjectEnrollmentsQueryVariables,
   ProjectEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export type EnrollmentFields = NonNullable<
   GetProjectEnrollmentsQuery['project']
