@@ -5566,6 +5566,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'EnrollmentsForClientFilterOptions',
     args: [
       {
+        name: 'householdTasks',
+        type: {
+          kind: 'ENUM',
+          name: 'EnrollmentFilterOptionHouseholdTask',
+          ofType: null,
+        },
+      },
+      {
         name: 'openOnDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
@@ -5605,6 +5613,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'bedNightOnDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'householdTasks',
+        type: {
+          kind: 'ENUM',
+          name: 'EnrollmentFilterOptionHouseholdTask',
+          ofType: null,
+        },
       },
       {
         name: 'openOnDate',

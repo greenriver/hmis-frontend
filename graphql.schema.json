@@ -13282,6 +13282,23 @@
       },
       {
         "kind": "ENUM",
+        "name": "EnrollmentFilterOptionHouseholdTask",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ANNUAL_DUE",
+            "description": "Annual Due",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "EnrollmentFilterOptionStatus",
         "description": null,
         "fields": null,
@@ -13557,6 +13574,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "householdTasks",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "EnrollmentFilterOptionHouseholdTask",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "openOnDate",
             "description": null,
             "type": {
@@ -13625,6 +13654,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "ISO8601Date",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "householdTasks",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "EnrollmentFilterOptionHouseholdTask",
               "ofType": null
             },
             "defaultValue": null,

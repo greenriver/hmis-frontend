@@ -404,6 +404,7 @@ export const HmisEnums = {
     LESS_THAN_EQUAL: 'LESS_THAN_EQUAL',
     NOT_EQUAL: 'NOT_EQUAL',
   },
+  EnrollmentFilterOptionHouseholdTask: { ANNUAL_DUE: 'Annual Due' },
   EnrollmentFilterOptionStatus: {
     INCOMPLETE: 'Incomplete',
     ACTIVE: 'Active',
