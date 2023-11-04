@@ -33,6 +33,7 @@ const UserMenu: React.FC = () => {
         startIcon={<PersonPinIcon />}
         variant='text'
         sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
+        id='userMenuToggle'
         {...bindTrigger(popupState)}
       >
         {user.name}
