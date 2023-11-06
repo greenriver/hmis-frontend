@@ -89,8 +89,9 @@ export default defineConfig(({ command, mode }) => {
     },
     ...(command !== 'build' && {
       preview: {
-        // cypress expects on 5173
+        // don't try to open a browser
         open: false,
+        // cypress expects on 5173
         port: 5173,
         strictPort: true,
       },
