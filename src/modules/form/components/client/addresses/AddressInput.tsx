@@ -23,12 +23,16 @@ const fakeStateItem = {
   pickListReference: 'STATE',
 };
 
-const AddressInput = ({
-  value,
-  onChange,
-}: {
+interface Props {
   value: AddressInputType;
   onChange: (value: AddressInputType) => void;
+  variant?: 'default' | 'minimal';
+}
+
+const AddressInput: React.FC<Props> = ({
+  value,
+  onChange,
+  variant = 'default',
 }) => {
   const { pickList: stateList, loading } = usePickList({ item: fakeStateItem });
   const typeValue = useMemo(
@@ -45,59 +49,68 @@ const AddressInput = ({
         : null),
     [stateList, value]
   );
+
+  const fields = (
+    <>
+      <TextInput
+        value={value.line1 || ''}
+        onChange={(e) => onChange({ ...value, line1: e.target.value })}
+        label={getRequiredLabel('Address Line 1')}
+      />
+      <TextInput
+        value={value.line2 || ''}
+        onChange={(e) => onChange({ ...value, line2: e.target.value })}
+        label={getRequiredLabel('Address Line 2')}
+      />
+      <TextInput
+        value={value.district || ''}
+        onChange={(e) => onChange({ ...value, district: e.target.value })}
+        label={getRequiredLabel('District (County)')}
+      />
+      <Stack direction='row' columnGap={2}>
+        <TextInput
+          value={value.city || ''}
+          onChange={(e) => onChange({ ...value, city: e.target.value })}
+          label={getRequiredLabel('City')}
+        />
+        <FormSelect
+          value={stateValue || null}
+          options={stateList || []}
+          onChange={(e, val) =>
+            onChange({
+              ...value,
+              state: isPickListOption(val) ? val.code : null,
+            })
+          }
+          label={getRequiredLabel('State')}
+          loading={loading}
+          textInputProps={{
+            name: 'state',
+            sx: { width: '96px' },
+          }}
+          autoHighlight
+        />
+        <TextInput
+          value={value.postalCode || ''}
+          onChange={(e) => onChange({ ...value, postalCode: e.target.value })}
+          label={getRequiredLabel('Zip')}
+          sx={{ maxWidth: '96px' }}
+          max={5}
+        />
+      </Stack>
+    </>
+  );
+
+  if (variant == 'minimal') {
+    return <Stack rowGap={2}>{fields}</Stack>;
+  }
+
   return (
     <Stack direction={'column'} rowGap={0}>
       <Grid container columnSpacing={8} rowSpacing={2}>
         <Grid item xs={7}>
           <Stack rowGap={2}>
-            <TextInput
-              value={value.line1 || ''}
-              onChange={(e) => onChange({ ...value, line1: e.target.value })}
-              label={getRequiredLabel('Address Line 1')}
-            />
-            <TextInput
-              value={value.line2 || ''}
-              onChange={(e) => onChange({ ...value, line2: e.target.value })}
-              label={getRequiredLabel('Address Line 2')}
-            />
-            <TextInput
-              value={value.district || ''}
-              onChange={(e) => onChange({ ...value, district: e.target.value })}
-              label={getRequiredLabel('District (County)')}
-            />
-            <Stack direction='row' columnGap={2}>
-              <TextInput
-                value={value.city || ''}
-                onChange={(e) => onChange({ ...value, city: e.target.value })}
-                label={getRequiredLabel('City')}
-              />
-              <FormSelect
-                value={stateValue || null}
-                options={stateList || []}
-                onChange={(e, val) =>
-                  onChange({
-                    ...value,
-                    state: isPickListOption(val) ? val.code : null,
-                  })
-                }
-                label={getRequiredLabel('State')}
-                loading={loading}
-                textInputProps={{
-                  name: 'state',
-                  sx: { width: '96px' },
-                }}
-                autoHighlight
-              />
-              <TextInput
-                value={value.postalCode || ''}
-                onChange={(e) =>
-                  onChange({ ...value, postalCode: e.target.value })
-                }
-                label={getRequiredLabel('Zip')}
-                sx={{ maxWidth: '96px' }}
-                max={5}
-              />
-            </Stack>
+            {fields}
             <FormSelect
               value={typeValue}
               options={addressUsePicklist}

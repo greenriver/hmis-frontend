@@ -37,11 +37,16 @@ const RelativeDateDisplay = ({
 
   return (
     <Tooltip
-      title={<Typography variant='inherit'>{formattedDate}</Typography>}
+      title={
+        <Typography component='span' variant='inherit'>
+          {formattedDate}
+        </Typography>
+      }
       arrow
       {...TooltipProps}
     >
       <Typography
+        component='span'
         variant='inherit'
         {...TypographyProps}
         sx={{

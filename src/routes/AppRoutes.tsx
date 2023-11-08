@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
   Navigate,
   RouteObject,
   useLocation,
+  useNavigate,
   useRoutes,
 } from 'react-router-dom';
 
@@ -15,24 +16,28 @@ import useAuth from '@/modules/auth/hooks/useAuth';
 import useSessionStatus from '@/modules/auth/hooks/useSessionStatus';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 
-export interface RouteLocationState {
-  /** Previous pathname, so we can redirect to it when logging back in */
-  prev?: string;
-  /** Whether to clear/ignore the previous pathname. For example when someone clicks "Sign Out," the previous location shouldn't be maintained when they log back
-  in.  */
-  clearPrev?: boolean;
+const REQUESTED_PATH_KEY = 'hmis_requested_path';
+
+// deny-list for urls that can be redirected to after sign-in
+function pathForRedirect(arg: string): string | undefined {
+  const path = arg.trim();
+  return path === '/' ? undefined : path;
 }
 
 const PublicRoutes: React.FC = () => {
-  const { pathname, state } = useLocation();
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const normalizedPath = pathForRedirect(pathname);
+    if (normalizedPath) {
+      sessionStorage.setItem(REQUESTED_PATH_KEY, normalizedPath);
+    } else {
+      sessionStorage.removeItem(REQUESTED_PATH_KEY);
+    }
+    // ignore pathname dependency. We only want to run this once, otherwise it will clear stored path
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const publicRoutes = useMemo<RouteObject[]>(() => {
-    // Pass current pathname as "prev" so we can redirect to the previous
-    // page after a successful login.
-    // In some cases we don't want to do that (e.g. after "Sign Out" is clicked), we use the 'clearPrev' flag for that.
-    const navigationState = (state as RouteLocationState)?.clearPrev
-      ? null
-      : { prev: pathname };
     return [
       {
         path: '/system_status/:detailType',
@@ -44,10 +49,10 @@ const PublicRoutes: React.FC = () => {
       },
       {
         path: '*',
-        element: <Navigate to='/' state={navigationState} />,
+        element: <Navigate to='/' />,
       },
     ];
-  }, [state, pathname]);
+  }, []);
   return useRoutes(publicRoutes);
 };
 
@@ -64,6 +69,15 @@ const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
     initialUser: user,
     promptToExtendBefore,
   });
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    const path = sessionStorage.getItem(REQUESTED_PATH_KEY);
+    if (path) {
+      sessionStorage.removeItem(REQUESTED_PATH_KEY);
+      navigate(path);
+    }
+  }, [navigate]);
 
   return (
     <>

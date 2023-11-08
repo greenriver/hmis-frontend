@@ -86,7 +86,6 @@ const DashboardContentContainer: React.FC<Props> = ({
           </DashboardContentNav>
         )}
         <Box
-          component='main'
           sx={
             isMobile
               ? { width: '100%' }

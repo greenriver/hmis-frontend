@@ -33,7 +33,7 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
       sx={{
         '.MuiBreadcrumbs-li': {
           textOverflow: 'ellipsis',
-          whiteSpace: 'no-wrap',
+          whiteSpace: 'nowrap',
         },
         ol: {
           // padding for focus ring

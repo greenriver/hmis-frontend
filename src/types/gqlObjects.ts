@@ -1884,6 +1884,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'organizationName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
         name: 'percentAmi',
         type: { kind: 'ENUM', name: 'PercentAMI', ofType: null },
       },
@@ -1906,6 +1914,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'prisonDischarge',
         type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'projectName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
       },
       {
         name: 'reasonNoServices',
@@ -2026,6 +2046,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canSplitHouseholds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewEnrollmentDetails',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -3547,6 +3575,51 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'MergeAuditEvent',
+    fields: [
+      {
+        name: 'clientIdsMerged',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
+          },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'mergedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'preMergeState',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'OccurrencePointForm',
     fields: [
       {
@@ -4206,6 +4279,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewHudChronicStatus',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewLimitedEnrollmentDetails',
         type: {
           kind: 'NON_NULL',
           name: null,

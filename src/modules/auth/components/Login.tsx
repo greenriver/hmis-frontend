@@ -17,7 +17,7 @@ const Login: React.FC = () => {
         <Box sx={{ pt: 4 }}>
           <Typography variant='h5' fontWeight={600} textAlign='center'>
             OPEN PATH{' '}
-            <Box display='inline' color='text.secondary'>
+            <Box display='inline' color='text.secondary' component='span'>
               HMIS
             </Box>
           </Typography>

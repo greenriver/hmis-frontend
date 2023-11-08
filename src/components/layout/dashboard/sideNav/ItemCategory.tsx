@@ -12,6 +12,10 @@ interface Props extends ItemBaseProps {
  * A menu item that represents a category (like 'Administrative')
  */
 const ItemCategory = ({ item, first }: Props) => {
+  const childItems = (item.items || []).filter((i) => !i.hide);
+
+  // If all children in category are hidden, hide parent
+  if (childItems.length === 0) return null;
   return (
     <ItemBase
       item={item}

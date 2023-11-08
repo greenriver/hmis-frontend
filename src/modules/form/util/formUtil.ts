@@ -74,6 +74,11 @@ import {
   ValueBound,
 } from '@/types/gqlTypes';
 
+// Chrome ignores autocomplete="off" in some cases, such street address fields. We use an
+// invalid value here that the browser doesn't understand to prevent this behavior. This
+// works in current versions of chrome as of 2023 but is not valid HTML.
+export const formAutoCompleteOff = 'do-not-autocomplete';
+
 export const maxWidthAtNestingLevel = (nestingLevel: number) =>
   600 - nestingLevel * 26;
 

@@ -1,0 +1,9 @@
+fragment MergeAuditEventFields on MergeAuditEvent {
+  id
+  mergedAt
+  # preMergeState
+  clientIdsMerged
+  user {
+    ...UserFields
+  }
+}

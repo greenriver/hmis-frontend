@@ -14,11 +14,11 @@ import EnrollmentProjectRoute from '@/components/accessWrappers/EnrollmentProjec
 import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
-import AllFiles from '@/components/clientDashboard/AllFiles';
+import ClientFiles from '@/components/clientDashboard/ClientFiles';
 import EditClient from '@/components/clientDashboard/EditClient';
-import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
-import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
 import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
+import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
+import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
@@ -43,7 +43,9 @@ import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferr
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
-import ClientMerge from '@/modules/clientMerge/components/ClientMerge';
+import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
+import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
+import NewClientMerge from '@/modules/clientMerge/components/client/NewClientMerge';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
@@ -453,7 +455,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <AllEnrollments />
+                <ClientEnrollments />
               </ClientRoute>
             ),
           },
@@ -464,7 +466,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <AllAssessments />
+                <ClientAssessments />
               </ClientRoute>
             ),
           },
@@ -494,7 +496,15 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.CLIENT_MERGES,
             element: (
               <RootPermissionsFilter permissions='canMergeClients'>
-                <ClientMerge />
+                <ClientMergeHistory />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.NEW_MERGE,
+            element: (
+              <RootPermissionsFilter permissions='canMergeClients'>
+                <NewClientMerge />
               </RootPermissionsFilter>
             ),
           },
@@ -509,7 +519,7 @@ export const protectedRoutes: RouteNode[] = [
                 ]}
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <AllFiles />
+                <ClientFiles />
               </ClientRoute>
             ),
           },
@@ -541,7 +551,15 @@ export const protectedRoutes: RouteNode[] = [
             element: <AdminLandingPage />,
           },
           {
-            path: AdminDashboardRoutes.CLIENT_MERGES,
+            path: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
+            element: (
+              <RootPermissionsFilter permissions='canMergeClients'>
+                <GlobalClientMergeHistory />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.PERFORM_CLIENT_MERGES,
             element: (
               <RootPermissionsFilter permissions='canMergeClients'>
                 <AdminClientMerge />

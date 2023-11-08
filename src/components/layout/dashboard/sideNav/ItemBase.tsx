@@ -98,7 +98,7 @@ const ItemBase = ({
           >
             {item.href ? (
               <Link
-                id={`side-nav-${item.id}`}
+                id={`side-nav-${item.id}-${htmlId}`}
                 variant='body1'
                 href={item.href || '#'}
                 aria-label={item.title as string}
@@ -108,8 +108,8 @@ const ItemBase = ({
               </Link>
             ) : item.path ? (
               <RouterLink
-                id={`side-nav-${item.id}`}
-                data-testid={`sideNav-${item.id}`}
+                id={`side-nav-${item.id}-${htmlId}`}
+                data-testid={`sideNav-${item.id}-${htmlId}`}
                 aria-label={item.title}
                 variant='body1'
                 to={item.path}

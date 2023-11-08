@@ -65,7 +65,12 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
           {enrollment.exitDate ? (
             parseAndFormatDate(enrollment.exitDate)
           ) : (
-            <Typography variant='body2' color='success.main' fontWeight={600}>
+            <Typography
+              component='span'
+              variant='body2'
+              color='success.main'
+              fontWeight={600}
+            >
               Active
             </Typography>
           )}

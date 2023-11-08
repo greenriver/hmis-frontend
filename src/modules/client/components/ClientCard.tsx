@@ -15,7 +15,6 @@ import { LabeledExternalIdDisplay } from '@/components/elements/ExternalIdDispla
 import RouterLink from '@/components/elements/RouterLink';
 import {
   clientNameAllParts,
-  enrollmentName,
   entryExitRange,
   isRecentEnrollment,
   lastUpdated,
@@ -41,28 +40,20 @@ const MAX_RECENT_ENROLLMENTS = 5;
 const RecentEnrollments = ({
   clientId,
   recentEnrollments,
-  linkTargetBlank,
 }: {
   clientId: string;
-  recentEnrollments?: NonNullable<
+  recentEnrollments: NonNullable<
     GetClientEnrollmentsQuery['client']
   >['enrollments']['nodes'];
-  linkTargetBlank?: boolean;
 }) => {
-  if (
-    !recentEnrollments ||
-    (recentEnrollments && recentEnrollments.length === 0)
-  )
-    return <Typography>None.</Typography>;
-
   return (
     <Grid container spacing={0.5}>
-      {recentEnrollments &&
-        recentEnrollments.map((enrollment) => (
-          <Fragment key={enrollment.id}>
-            <Grid item xs={6} lg={4}>
+      {recentEnrollments.map((enrollment) => (
+        <Fragment key={enrollment.id}>
+          <Grid item xs={6} lg={4}>
+            {enrollment.access.canViewEnrollmentDetails ? (
               <RouterLink
-                aria-label={enrollmentName(enrollment)}
+                aria-label={enrollment.projectName}
                 to={generateSafePath(
                   EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
                   {
@@ -70,22 +61,20 @@ const RecentEnrollments = ({
                     enrollmentId: enrollment.id,
                   }
                 )}
-                target={linkTargetBlank ? '_blank' : undefined}
-                variant='body2'
               >
-                {enrollmentName(enrollment)}
+                {enrollment.projectName}
               </RouterLink>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography
-                variant='body2'
-                sx={{ ml: 1, color: 'text.secondary' }}
-              >
-                {entryExitRange(enrollment)}
-              </Typography>
-            </Grid>
-          </Fragment>
-        ))}
+            ) : (
+              enrollment.projectName
+            )}
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant='body2' sx={{ ml: 1, color: 'text.secondary' }}>
+              {entryExitRange(enrollment)}
+            </Typography>
+          </Grid>
+        </Fragment>
+      ))}
     </Grid>
   );
 };
@@ -200,21 +189,22 @@ const ClientCard: React.FC<Props> = ({
           )}
         </Stack>
       </Grid>
-      <ClientPermissionsFilter
-        permissions={['canViewEnrollmentDetails']}
-        id={client.id}
-      >
-        <Grid item xs={5} lg={6}>
-          <Typography variant='h6' sx={{ mb: 1 }}>
-            Recent Enrollments
-          </Typography>
-          <RecentEnrollments
-            recentEnrollments={recentEnrollments}
-            linkTargetBlank={linkTargetBlank}
-            clientId={client.id}
-          />
-        </Grid>
-      </ClientPermissionsFilter>
+
+      <Grid item xs={5} lg={6}>
+        {client.access.canViewEnrollmentDetails &&
+          recentEnrollments &&
+          recentEnrollments?.length > 0 && (
+            <>
+              <Typography variant='h6' sx={{ mb: 1 }}>
+                Recent Enrollments
+              </Typography>
+              <RecentEnrollments
+                recentEnrollments={recentEnrollments}
+                clientId={client.id}
+              />
+            </>
+          )}
+      </Grid>
       <Grid item xs={2}>
         <Typography variant='h6' sx={{ mb: 1 }}>
           Actions
