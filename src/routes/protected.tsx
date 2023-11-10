@@ -585,7 +585,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.USERS,
             element: (
-              <RootPermissionsFilter permissions='canManageDeniedReferrals'>
+              <RootPermissionsFilter permissions='canImpersonateUsers'>
                 <AdminUsers />
               </RootPermissionsFilter>
             ),
