@@ -356,7 +356,7 @@ export const assessmentDescription = (
 ) => {
   const prefix = formRoleDisplay(assessment);
   const name = prefix ? `${prefix} assessment` : 'Assessment';
-  return `${name} at ${enrollmentName(assessment.enrollment)} on ${
+  return `${name} at ${assessment.enrollment.projectName} on ${
     parseAndFormatDate(assessment.assessmentDate) || 'unknown date'
   }`;
 };

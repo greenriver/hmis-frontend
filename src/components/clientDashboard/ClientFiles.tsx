@@ -13,10 +13,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import {
-  enrollmentName,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import {
   useClientPermissions,
   useHasClientPermissions,
@@ -64,7 +61,7 @@ const FileActions: React.FC<{
   );
 };
 
-const AllFiles = () => {
+const ClientFiles = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const [viewingFile, setViewingFile] = useState<ClientFileType | undefined>();
 
@@ -122,7 +119,7 @@ const AllFiles = () => {
 
           return (
             <Stack gap={1}>
-              {enrollmentName(enrollment)}
+              {enrollment.projectName}
               <EnrollmentDateRangeWithStatus enrollment={enrollment} />
             </Stack>
           );
@@ -193,4 +190,4 @@ const AllFiles = () => {
   );
 };
 
-export default AllFiles;
+export default ClientFiles;

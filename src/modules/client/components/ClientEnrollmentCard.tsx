@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import GenericTable from '@/components/elements/table/GenericTable';
 import TitleCard from '@/components/elements/TitleCard';
-import { enrollmentName, isRecentEnrollment } from '@/modules/hmis/hmisUtil';
+import { isRecentEnrollment } from '@/modules/hmis/hmisUtil';
 import {
   ENROLLMENT_PERIOD_COL,
   ENROLLMENT_STATUS_COL,
@@ -71,29 +71,22 @@ const RecentEnrollments = ({
       noHead
       rows={recentEnrollments}
       columns={[
+        ENROLLMENT_STATUS_COL,
         {
           key: 'name',
           header: 'Name',
           linkTreatment: true,
-          render: (e) => enrollmentName(e),
-        },
-        ENROLLMENT_STATUS_COL,
-        {
-          key: 'members',
-          header: 'Members',
-          render: (e) => (
-            <Typography color='text.secondary' variant='inherit' noWrap>
-              {e.householdSize} Member{e.householdSize === 1 ? '' : 's'}
-            </Typography>
-          ),
+          render: 'projectName',
         },
         ENROLLMENT_PERIOD_COL,
       ]}
       rowLinkTo={(row) =>
-        generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
-          clientId: client.id,
-          enrollmentId: row.id,
-        })
+        row.access.canViewEnrollmentDetails
+          ? generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+              clientId: client.id,
+              enrollmentId: row.id,
+            })
+          : null
       }
     />
   );

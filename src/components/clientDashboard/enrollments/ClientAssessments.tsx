@@ -9,7 +9,6 @@ import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/Assessm
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import {
   assessmentDescription,
-  enrollmentName,
   formRoleDisplay,
 } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -38,7 +37,7 @@ const columns: ColumnDef<AssessmentType>[] = [
   },
   {
     header: 'Project Name',
-    render: (row) => enrollmentName(row.enrollment),
+    render: (row) => row.enrollment.projectName,
   },
   {
     header: 'Enrollment Period',
@@ -46,7 +45,7 @@ const columns: ColumnDef<AssessmentType>[] = [
   },
 ];
 
-const AllAssessments = () => {
+const ClientAssessments = () => {
   const { clientId } = useSafeParams() as { clientId: string };
 
   const rowLinkTo = useCallback(
@@ -85,4 +84,4 @@ const AllAssessments = () => {
   );
 };
 
-export default AllAssessments;
+export default ClientAssessments;
