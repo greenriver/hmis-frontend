@@ -3,16 +3,11 @@ import {
   incomePerSource,
   incomeSourcesGroup,
 } from 'support/assessmentsCommands';
-// This only works when running against the real backend.
-// Must set the following env vars with real username/pw from local environment:
-
-// export CYPRESS_EMAIL=
-// export CYPRESS_PASSWORD=
 
 Cypress.session.clearAllSavedSessions();
 
 beforeEach(() => {
-  cy.login(Cypress.env('EMAIL'), Cypress.env('PASSWORD'));
+  cy.login();
   cy.visit('/');
 });
 

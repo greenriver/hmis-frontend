@@ -13,6 +13,7 @@ import {
 import { useId } from 'react';
 
 import { DynamicInputCommonProps } from '@/modules/form/types';
+import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 
 interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
@@ -54,10 +55,10 @@ const TextInput = ({
       id={htmlId}
       fullWidth={fullWidth}
       label={hiddenLabel || horizontal ? undefined : label}
-      onKeyPress={(e) =>
+      onKeyDown={(e) =>
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
-      autoComplete='do-not-autofill'
+      autoComplete={formAutoCompleteOff}
       {...props}
       sx={sx}
       inputProps={{

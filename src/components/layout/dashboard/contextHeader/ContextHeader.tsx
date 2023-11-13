@@ -21,6 +21,31 @@ interface Props {
   focusMode?: string;
 }
 
+export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => (
+  <AppBar
+    position='sticky'
+    color='default'
+    elevation={0}
+    sx={{
+      borderTop: 'unset',
+      borderLeft: 'unset',
+      height: CONTEXT_HEADER_HEIGHT,
+      alignItems: 'stretch',
+      justifyContent: 'center',
+      top: STICKY_BAR_HEIGHT,
+      backgroundColor: 'white',
+      borderBottomWidth: '1px',
+      borderBottomColor: 'borders.light',
+      borderBottomStyle: 'solid',
+      py: 0,
+    }}
+  >
+    {children}
+  </AppBar>
+);
+
 const ContextHeader: React.FC<Props> = ({
   children,
   focusMode,
@@ -32,24 +57,7 @@ const ContextHeader: React.FC<Props> = ({
   const { client } = useClientName(params.clientId);
   const navigate = useNavigate();
   return (
-    <AppBar
-      position='sticky'
-      color='default'
-      elevation={0}
-      sx={{
-        borderTop: 'unset',
-        borderLeft: 'unset',
-        height: CONTEXT_HEADER_HEIGHT,
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        top: STICKY_BAR_HEIGHT,
-        backgroundColor: 'white',
-        borderBottomWidth: '1px',
-        borderBottomColor: 'borders.light',
-        borderBottomStyle: 'solid',
-        py: 0,
-      }}
-    >
+    <ContextHeaderAppBar>
       {focusMode ? (
         <Box>
           <Button
@@ -91,7 +99,7 @@ const ContextHeader: React.FC<Props> = ({
           {children}
         </Box>
       )}
-    </AppBar>
+    </ContextHeaderAppBar>
   );
 };
 

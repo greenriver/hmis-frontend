@@ -36,47 +36,37 @@ export const useProjectDashboardNavItems = (
             id: 'enrollments',
             title: 'Enrollments',
             path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
-            requiresEnrollmentAccess: true,
+            hide: !project.access.canViewEnrollmentDetails,
           },
           {
             id: 'services',
             title: 'Services',
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
-            requiresEnrollmentAccess: true,
-            requiredRole: DataCollectionFeatureRole.Service,
+            hide:
+              !project.access.canViewEnrollmentDetails ||
+              !dataCollectionRoles.includes(DataCollectionFeatureRole.Service),
           },
           {
             id: 'bed-nights',
             title: 'Bed Nights',
             path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
-            requiresEnrollmentAccess: true,
-            condition: () => project.projectType === ProjectType.EsNbn,
+            hide:
+              !project.access.canViewEnrollmentDetails ||
+              project.projectType !== ProjectType.EsNbn,
           },
           {
             id: 'referrals',
             title: 'Referrals',
             path: generateSafePath(ProjectDashboardRoutes.REFERRALS, params),
-            condition: () =>
-              globalFeatureFlags?.externalReferrals &&
-              (project.access.canManageIncomingReferrals ||
-                project.access.canManageOutgoingReferrals),
+            hide:
+              !globalFeatureFlags?.externalReferrals ||
+              (!project.access.canManageIncomingReferrals &&
+                !project.access.canManageOutgoingReferrals),
           },
-        ]
-          .filter((item) => !item.condition || item.condition())
-          .filter(
-            (item) =>
-              !item.requiresEnrollmentAccess ||
-              project.access.canViewEnrollmentDetails
-          )
-          .filter(
-            (item) =>
-              !item.requiredRole ||
-              dataCollectionRoles.includes(item.requiredRole)
-          )
-          .map(({ path, ...rest }) => ({
-            path: generateSafePath(path, params),
-            ...rest,
-          })),
+        ].map(({ path, ...rest }) => ({
+          path: generateSafePath(path, params),
+          ...rest,
+        })),
       },
       {
         id: 'setup',
@@ -87,7 +77,7 @@ export const useProjectDashboardNavItems = (
             id: 'units',
             title: 'Units',
             path: ProjectDashboardRoutes.UNITS,
-            condition: () => project.access.canManageInventory,
+            hide: !project.access.canManageInventory,
           },
           {
             id: 'inventory',
@@ -104,12 +94,20 @@ export const useProjectDashboardNavItems = (
             title: 'CoCs',
             path: ProjectDashboardRoutes.COCS,
           },
-        ]
-          .filter((item) => !item.condition || item.condition())
-          .map(({ path, ...rest }) => ({
-            path: generateSafePath(path, params),
-            ...rest,
-          })),
+          {
+            id: 'hmis-participation',
+            title: 'HMIS Participation',
+            path: ProjectDashboardRoutes.HMIS_PARTICIPATION,
+          },
+          {
+            id: 'ce-participation',
+            title: 'CE Participation',
+            path: ProjectDashboardRoutes.CE_PARTICIPATION,
+          },
+        ].map(({ path, ...rest }) => ({
+          path: generateSafePath(path, params),
+          ...rest,
+        })),
       },
     ];
   }, [globalFeatureFlags, project]);

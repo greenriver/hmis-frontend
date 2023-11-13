@@ -70,8 +70,8 @@ const ProjectEnrollmentsTable = ({
                       size='small'
                       sx={{ px: 2 }}
                     >
-                      <PeopleIcon fontSize='small' />
-                      <Box sx={{ pl: 0.5 }}>Households</Box>
+                      <PeopleIcon fontSize='small' sx={{ mr: 0.5 }} />
+                      Households
                     </ToggleButton>
                     <ToggleButton
                       value='clients'
@@ -79,8 +79,8 @@ const ProjectEnrollmentsTable = ({
                       size='small'
                       sx={{ px: 2 }}
                     >
-                      <PersonIcon fontSize='small' />
-                      <Box sx={{ pl: 0.5 }}>Clients</Box>
+                      <PersonIcon fontSize='small' sx={{ mr: 0.5 }} />
+                      Clients
                     </ToggleButton>
                   </ToggleButtonGroup>
                 )}

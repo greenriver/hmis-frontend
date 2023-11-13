@@ -21,7 +21,6 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
 import NotCollectedText from '@/components/elements/NotCollectedText';
-import RouterLink from '@/components/elements/RouterLink';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
@@ -32,10 +31,7 @@ import {
   lastUpdated,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
-import {
-  ClientPermissionsFilter,
-  RootPermissionsFilter,
-} from '@/modules/permissions/PermissionsFilters';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -503,21 +499,14 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     Update Client Details
                   </ButtonLink>
                 </ClientPermissionsFilter>
-                <Typography variant='body2' sx={{ fontStyle: 'italic', mt: 1 }}>
-                  Last Updated on {lastUpdated(client, true)}.{' '}
-                  <RootPermissionsFilter permissions='canAuditClients'>
-                    <RouterLink
-                      to={generateSafePath(
-                        ClientDashboardRoutes.AUDIT_HISTORY,
-                        {
-                          clientId: client.id,
-                        }
-                      )}
-                    >
-                      View client audit history
-                    </RouterLink>
-                  </RootPermissionsFilter>
-                </Typography>
+                {client.dateUpdated && (
+                  <Typography
+                    variant='body2'
+                    sx={{ fontStyle: 'italic', mt: 1 }}
+                  >
+                    Last Updated on {lastUpdated(client, true)}.
+                  </Typography>
+                )}
               </Stack>
             </Box>
           </Grid>

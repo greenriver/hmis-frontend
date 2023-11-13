@@ -43,41 +43,40 @@ export const useEnrollmentDashboardNavItems = (
             id: 'services',
             title: 'Services',
             path: EnrollmentDashboardRoutes.SERVICES,
-            featureName: DataCollectionFeatureRole.Service,
+            hide: !enabledFeatures.includes(DataCollectionFeatureRole.Service),
           },
           {
             id: 'cls',
             title: 'Current Living Situations',
             path: EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
-            featureName: DataCollectionFeatureRole.CurrentLivingSituation,
+            hide: !enabledFeatures.includes(
+              DataCollectionFeatureRole.CurrentLivingSituation
+            ),
           },
           {
             id: 'events',
             title: 'CE Events',
             path: EnrollmentDashboardRoutes.EVENTS,
-            featureName: DataCollectionFeatureRole.CeEvent,
+            hide: !enabledFeatures.includes(DataCollectionFeatureRole.CeEvent),
           },
           {
             id: 'ce-assessments',
             title: 'CE Assessments',
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
-            featureName: DataCollectionFeatureRole.CeAssessment,
+            hide: !enabledFeatures.includes(
+              DataCollectionFeatureRole.CeAssessment
+            ),
           },
           {
             id: 'custom-case-notes',
             title: 'Case Notes',
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
-            featureName: DataCollectionFeatureRole.CaseNote,
+            hide: !enabledFeatures.includes(DataCollectionFeatureRole.CaseNote),
           },
-        ]
-          .filter(
-            (item) =>
-              !item.featureName || enabledFeatures.includes(item.featureName)
-          )
-          .map(({ path, ...rest }) => ({
-            path: generateSafePath(path, params),
-            ...rest,
-          })),
+        ].map(({ path, ...rest }) => ({
+          path: generateSafePath(path, params),
+          ...rest,
+        })),
       },
     ];
   }, [enabledFeatures, enrollment]);

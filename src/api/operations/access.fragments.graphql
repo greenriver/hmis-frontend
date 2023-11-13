@@ -4,7 +4,6 @@ fragment RootPermissions on QueryAccess {
   canEditClients
   canViewClients
   canDeleteClients
-  canAuditClients
   canEditOrganization
   canDeleteOrganization
   canViewDob
@@ -26,6 +25,9 @@ fragment RootPermissions on QueryAccess {
   canManageDeniedReferrals
   canManageIncomingReferrals
   canManageOutgoingReferrals
+  canMergeClients
+  canTransferEnrollments
+  canSplitHouseholds
 }
 
 fragment ClientAccessFields on ClientAccess {
@@ -43,6 +45,7 @@ fragment ClientAccessFields on ClientAccess {
   canManageOwnClientFiles
   canViewAnyConfidentialClientFiles
   canViewAnyNonconfidentialClientFiles
+  canAuditClients
 }
 
 fragment EnrollmentAccessFields on EnrollmentAccess {

@@ -139,6 +139,8 @@ const MciMatchSelector = ({
             title={
               alreadyInHmis
                 ? 'Client is already in HMIS. Click the link to go to their client record.'
+                : autocleared
+                ? 'Client auto-cleared'
                 : null
             }
           >

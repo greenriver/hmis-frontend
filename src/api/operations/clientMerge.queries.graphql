@@ -1,0 +1,63 @@
+query GetMergeCandidates($limit: Int, $offset: Int) {
+  mergeCandidates(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      id
+      warehouseUrl
+      clients {
+        ...ClientName
+        ...ClientIdentificationFields
+      }
+    }
+  }
+}
+
+query ClientMergeHistory($clientId: ID!, $limit: Int, $offset: Int) {
+  client(id: $clientId) {
+    id
+    mergeAuditHistory(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...MergeAuditEventFields
+      }
+    }
+  }
+}
+
+query GlobalClientMergeHistory($limit: Int, $offset: Int) {
+  mergeAuditHistory(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...MergeAuditEventFields
+      client {
+        ...ClientName
+      }
+    }
+  }
+}
+
+mutation MergeClients($input: MergeClientsInput!) {
+  mergeClients(input: $input) {
+    client {
+      ...ClientFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation BulkMergeClients($input: BulkMergeClientsInput!) {
+  bulkMergeClients(input: $input) {
+    success
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

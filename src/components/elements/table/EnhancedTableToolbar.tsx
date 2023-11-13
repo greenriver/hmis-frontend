@@ -1,17 +1,26 @@
 import { alpha, Stack, Toolbar, Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 
-export interface EnhancedTableToolbarProps {
+export interface EnhancedTableToolbarProps<T> {
   title?: string;
   selectedIds?: readonly string[];
-  renderBulkAction?: (selectedIds: readonly string[]) => ReactNode;
+  rows: T[];
+  renderBulkAction?: (
+    selectedIds: readonly string[],
+    selectedRows: T[]
+  ) => ReactNode;
 }
 
-const EnhancedTableToolbar = ({
+const EnhancedTableToolbar = <T extends { id: string }>({
   selectedIds = [],
   title,
   renderBulkAction,
-}: EnhancedTableToolbarProps) => {
+  rows,
+}: EnhancedTableToolbarProps<T>) => {
+  const selectedRows = useMemo(() => {
+    return rows.filter((r) => selectedIds.includes(r.id));
+  }, [rows, selectedIds]);
+
   return (
     <Toolbar
       sx={{
@@ -49,7 +58,7 @@ const EnhancedTableToolbar = ({
         )}
         {selectedIds.length > 0 &&
           renderBulkAction &&
-          renderBulkAction(selectedIds)}
+          renderBulkAction(selectedIds, selectedRows)}
       </Stack>
     </Toolbar>
   );

@@ -36,6 +36,7 @@ import {
   EventFieldsFragment,
   GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
+  NoYes,
   NoYesMissing,
   NoYesReasonsForMissingData,
   OccurrencePointFormFieldsFragment,
@@ -118,9 +119,23 @@ export const briefProjectType = (projectType: ProjectType) => {
   }
 };
 
-export const yesNo = (bool: boolean | null | undefined) => {
-  if (isNil(bool)) return null;
-  return bool ? 'Yes' : 'No';
+export const yesNo = (
+  bool: boolean | NoYes | null | undefined,
+  fallback?: string
+) => {
+  if (isNil(bool)) return fallback || null;
+  switch (bool) {
+    case NoYes.Yes:
+    case true:
+      return 'Yes';
+    case NoYes.No:
+    case false:
+      return 'No';
+    case NoYes.Invalid:
+      return 'Invalid Value';
+    default:
+      return fallback || null;
+  }
 };
 
 export const parseHmisDateString = (

@@ -8,7 +8,6 @@ interface Props {
 }
 
 const ContextHeaderContent: React.FC<Props> = ({ breadcrumbs }) => {
-  // if (breadcrumbs.length < 2) return null;
   return (
     <Box
       display='flex'

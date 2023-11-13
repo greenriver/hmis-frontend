@@ -51,10 +51,13 @@ export interface Props<T> {
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
   headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
-  selectable?: boolean;
+  selectable?: 'row' | 'checkbox'; // selectable by clicking row or by clicking checkbox
   isRowSelectable?: (row: T) => boolean;
   setSelectedRowIds?: (ids: readonly string[]) => void;
-  EnhancedTableToolbarProps?: Omit<EnhancedTableToolbarProps, 'selectedIds'>;
+  EnhancedTableToolbarProps?: Omit<
+    EnhancedTableToolbarProps<T>,
+    'selectedIds' | 'rows'
+  >;
   filterToolbar?: ReactNode;
   noData?: ReactNode;
   renderRow?: (row: T) => ReactNode;
@@ -105,7 +108,7 @@ const GenericTable = <T extends { id: string }>({
   noHead = false,
   rowSx,
   headerCellSx,
-  selectable = false,
+  selectable,
   isRowSelectable,
   setSelectedRowIds,
   EnhancedTableToolbarProps,
@@ -256,8 +259,9 @@ const GenericTable = <T extends { id: string }>({
     <>
       {EnhancedTableToolbarProps && (
         <EnhancedTableToolbar
-          selectedIds={selected}
           {...EnhancedTableToolbarProps}
+          selectedIds={selected}
+          rows={rows}
         />
       )}
       {filterToolbar}
@@ -297,11 +301,12 @@ const GenericTable = <T extends { id: string }>({
                 const isSelectable =
                   selectable && (isRowSelectable ? isRowSelectable(row) : true);
 
-                const onClickHandler = handleRowClick
-                  ? handleRowClick
-                  : selectable
-                  ? isSelectable && handleSelectRow
-                  : undefined;
+                let onClickHandler: undefined | ((row: T) => void) = undefined;
+                if (!!handleRowClick) {
+                  onClickHandler = handleRowClick;
+                } else if (selectable === 'row' && isSelectable) {
+                  onClickHandler = handleSelectRow;
+                }
 
                 const rowLink = (rowLinkTo && rowLinkTo(row)) || undefined;
                 const isClickable = !!onClickHandler || !!rowLink;
@@ -316,10 +321,12 @@ const GenericTable = <T extends { id: string }>({
                       ...(!!rowSx && rowSx(row)),
                     }}
                     hover={isClickable}
-                    onClick={
-                      onClickHandler ? () => onClickHandler(row) : undefined
+                    onClick={() =>
+                      onClickHandler ? onClickHandler(row) : undefined
                     }
-                    selected={includes(selected, row.id)}
+                    selected={
+                      selectable === 'row' && includes(selected, row.id)
+                    }
                     onKeyUp={
                       !!handleRowClick
                         ? (event) =>
@@ -335,6 +342,11 @@ const GenericTable = <T extends { id: string }>({
                           disabled={!isSelectable}
                           checked={includes(selected, row.id)}
                           inputProps={{ 'aria-label': `Select ${row.id} ` }}
+                          onClick={
+                            selectable === 'checkbox' && isSelectable
+                              ? () => handleSelectRow(row)
+                              : undefined
+                          }
                         />
                       </TableCell>
                     )}
@@ -394,7 +406,6 @@ const GenericTable = <T extends { id: string }>({
                               tabIndex={enableTabIndex ? 0 : '-1'}
                             >
                               <Box
-                                component='span'
                                 sx={{
                                   display: 'flex',
                                   height: '100%',
@@ -431,6 +442,7 @@ const GenericTable = <T extends { id: string }>({
                     native: true,
                   }}
                   sx={{ borderBottom: 'none' }}
+                  colSpan={fullColSpan}
                   {...tablePaginationProps}
                 />
               </TableRow>

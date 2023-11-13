@@ -16,11 +16,17 @@ export const useItemSelectionStatus = ({ item }: Options) => {
     return item.path && pathname.startsWith(item.path);
   }, [pathname, item]);
 
+  const childItems = useMemo(() => {
+    if (!item.items) return [];
+    return item.items.filter((i) => !i.hide);
+  }, [item.items]);
+
   return useMemo(
     () => ({
-      hasItems: !!item.items,
       isSelected: !!isSelected,
+      childItems,
+      hasChildItems: !!item.items,
     }),
-    [item, isSelected]
+    [childItems, item.items, isSelected]
   );
 };
