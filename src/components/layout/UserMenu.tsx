@@ -1,8 +1,10 @@
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LogoutIcon from '@mui/icons-material/Logout';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
-import ImpersonatedIcon from '@mui/icons-material/SupervisedUserCircle';
 import {
+  Alert,
+  AlertTitle,
   Button,
   Link,
   ListItemIcon,
@@ -28,12 +30,32 @@ const UserMenu: React.FC = () => {
 
   if (!user) return null;
 
+  if (user.impersonating) {
+    return (
+      <Alert
+        severity='error'
+        icon={false}
+        action={
+          <Button
+            onClick={logoutUser}
+            startIcon={<ExitToAppIcon />}
+            size='small'
+            color='error'
+          >
+            Exit
+          </Button>
+        }
+        sx={{ height: '44px', py: '2px' }}
+      >
+        <AlertTitle sx={{ mb: 0 }}>{`Acting as ${user.name}`}</AlertTitle>
+      </Alert>
+    );
+  }
+
   return (
     <>
       <Button
-        startIcon={
-          user.impersonating ? <ImpersonatedIcon /> : <PersonPinIcon />
-        }
+        startIcon={<PersonPinIcon />}
         variant='text'
         sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
         {...bindTrigger(popupState)}
@@ -68,21 +90,13 @@ const UserMenu: React.FC = () => {
             <ListItemText>{warehouseName}</ListItemText>
           </MenuItem>
         )}
-        {user.impersonating ? (
-          <MenuItem onClick={logoutUser}>
-            <ListItemIcon>
-              <LogoutIcon fontSize='small' />
-            </ListItemIcon>
-            <ListItemText>Stop Impersonating</ListItemText>
-          </MenuItem>
-        ) : (
-          <MenuItem onClick={logoutUser}>
-            <ListItemIcon>
-              <LogoutIcon fontSize='small' />
-            </ListItemIcon>
-            <ListItemText>Sign Out</ListItemText>
-          </MenuItem>
-        )}
+
+        <MenuItem onClick={logoutUser}>
+          <ListItemIcon>
+            <LogoutIcon fontSize='small' />
+          </ListItemIcon>
+          <ListItemText>Sign Out</ListItemText>
+        </MenuItem>
       </Menu>
     </>
   );
