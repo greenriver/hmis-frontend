@@ -6,21 +6,24 @@ const PathHandler = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
   const attempts = useRef(0);
 
-  useEffect(() => {
-    const { pathname, hash, search } = location;
+  const { pathname, hash, search } = location;
+  const match = pathname.match(/^(.*)(%20)+$/);
 
+  useEffect(() => {
     if (attempts.current >= 5) {
       console.error(`Unable to correct route '${pathname}'`);
       return;
     }
 
-    const match = pathname.match(/^(.*)(%20)+$/);
     if (match) {
       const [, corrected] = match;
       attempts.current += 1;
       navigate({ pathname: corrected, hash, search }, { replace: true });
     }
-  }, [location, navigate]);
+  }, [hash, match, pathname, search, navigate]);
+
+  // Prevent mounting the children if still trying to redirect
+  if (match && attempts.current < 5) return null;
 
   return children;
 };
