@@ -492,7 +492,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: ClientDashboardRoutes.CLIENT_MERGES,
+            path: ClientDashboardRoutes.MERGE_HISTORY,
             element: (
               <RootPermissionsFilter permissions='canMergeClients'>
                 <ClientMergeHistory />
