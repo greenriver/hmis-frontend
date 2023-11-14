@@ -1,7 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Button } from '@mui/material';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -13,6 +13,11 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   isOpen: boolean;
@@ -53,24 +58,44 @@ const ContextHeader: React.FC<Props> = ({
   handleOpenMenu,
 }) => {
   const isMobile = useIsMobile();
-  const params = useSafeParams();
-  const { client } = useClientName(params.clientId);
+  const { clientId, enrollmentId } = useSafeParams();
+  const { client } = useClientName(clientId);
   const navigate = useNavigate();
+
+  // Try to guess which path we should link to in the "back" button on the app bar if this is Focus Mode.
+  // Not ideal, it would be better if the content specified exactly where to go back to, but this works for now.
+  const goBackPath = useMemo(() => {
+    if (!focusMode) return;
+    if (clientId && enrollmentId) {
+      return generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+        clientId,
+        enrollmentId,
+      });
+    }
+    if (clientId) {
+      return generateSafePath(ClientDashboardRoutes.PROFILE, { clientId });
+    }
+  }, [clientId, enrollmentId, focusMode]);
+
   return (
     <ContextHeaderAppBar>
       {focusMode ? (
         <Box>
           <Button
             onClick={() => {
-              navigate(-1);
-              handleOpenMenu();
+              if (goBackPath) {
+                navigate(goBackPath);
+              } else {
+                navigate(-1);
+              }
+              handleOpenMenu(); // Expand left nav
             }}
             variant='transparent'
             startIcon={<ArrowBackIcon fontSize='small' />}
             sx={{ height: '32px', fontWeight: 600, ml: 2 }}
             data-testid='headerBackButton'
           >
-            {`Back ${client ? 'to ' + clientBriefName(client) : ''}`}
+            {client ? `Back to ${clientBriefName(client)}` : 'Back'}
           </Button>
         </Box>
       ) : (
