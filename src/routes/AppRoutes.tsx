@@ -9,6 +9,7 @@ import {
 
 import { protectedRoutes } from './protected';
 
+import PathHandler from '@/components/elements/PathHandler';
 import { HmisUser } from '@/modules/auth/api/sessions';
 import Login from '@/modules/auth/components/Login';
 import SessionStatusManager from '@/modules/auth/components/SessionStatusManager';
@@ -49,7 +50,11 @@ const PublicRoutes: React.FC = () => {
       },
       {
         path: '*',
-        element: <Navigate to='/' />,
+        element: (
+          <PathHandler>
+            <Navigate to='/' />
+          </PathHandler>
+        ),
       },
     ];
   }, []);
@@ -59,7 +64,11 @@ const PublicRoutes: React.FC = () => {
 const blankRoutes: RouteObject[] = [
   {
     path: '*',
-    element: <></>,
+    element: (
+      <PathHandler>
+        <></>
+      </PathHandler>
+    ),
   },
 ];
 
