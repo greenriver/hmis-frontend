@@ -18,7 +18,7 @@ const PathHandler = ({ children }: { children: ReactNode }) => {
     if (match) {
       const [, corrected] = match;
       attempts.current += 1;
-      navigate({ pathname: corrected, hash, search });
+      navigate({ pathname: corrected, hash, search }, { replace: true });
     }
   }, [location, navigate]);
 
