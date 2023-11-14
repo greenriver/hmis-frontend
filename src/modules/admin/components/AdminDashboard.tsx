@@ -40,7 +40,7 @@ const adminPages: AdminPageConfig[] = [
   },
   {
     id: 'merge-clients',
-    title: 'Client Merges',
+    title: 'Client Merge History',
     path: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
     permission: 'canMergeClients',
   },
