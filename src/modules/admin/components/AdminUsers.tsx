@@ -61,7 +61,7 @@ const AdminUsers = () => {
       <Stack spacing={2}>
         <TextInput
           label='Search Users'
-          name='search projects'
+          name='search users'
           placeholder='Search by name or email'
           value={search || ''}
           onChange={(e) => setSearch(e.target.value)}
