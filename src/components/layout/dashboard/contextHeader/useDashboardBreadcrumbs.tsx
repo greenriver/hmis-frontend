@@ -167,7 +167,7 @@ export const useClientBreadcrumbConfig = (
       },
       [ClientDashboardRoutes.NEW_MERGE]: {
         title: 'New Merge',
-        parent: ClientDashboardRoutes.CLIENT_MERGES,
+        parent: ClientDashboardRoutes.MERGE_HISTORY,
       },
       [ClientDashboardRoutes.NEW_FILE]: {
         title: 'Upload',
@@ -226,7 +226,7 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Denials',
       },
       [AdminDashboardRoutes.PERFORM_CLIENT_MERGES]: {
-        title: 'Merge Clients',
+        title: 'Potential Duplicates',
         parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
       },
       [AdminDashboardRoutes.USERS]: {

@@ -8,7 +8,7 @@ import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   enrollment: DashboardEnrollment;

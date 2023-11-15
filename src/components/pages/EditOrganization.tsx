@@ -21,7 +21,7 @@ import {
   PickListType,
 } from '@/types/gqlTypes';
 import { evictPickList, evictQuery } from '@/utils/cacheUtil';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const EditOrganization = () => {
   const navigate = useNavigate();

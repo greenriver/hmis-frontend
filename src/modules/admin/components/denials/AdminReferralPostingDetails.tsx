@@ -18,7 +18,7 @@ import {
   ReferralPostingDetailFieldsFragment,
   ReferralPostingStatus,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   referralPosting: ReferralPostingDetailFieldsFragment;

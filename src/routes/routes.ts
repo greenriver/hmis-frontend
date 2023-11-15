@@ -32,7 +32,7 @@ const clientDashboardRoutes = {
   FILES: 'files',
   NEW_FILE: 'files/new',
   EDIT_FILE: 'files/:fileId/edit',
-  CLIENT_MERGES: 'merges',
+  MERGE_HISTORY: 'merges',
   NEW_MERGE: 'merges/new',
 };
 
@@ -147,3 +147,13 @@ export const PRINTABLE_ROUTES = [
   EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];
+
+export const allRoutes = [
+  Routes,
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+  AdminDashboardRoutes,
+]
+  .flatMap((obj) => Object.values(obj))
+  .map((s) => ({ path: s }));

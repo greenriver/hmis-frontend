@@ -19,7 +19,7 @@ import {
   ProjectAllFieldsFragment,
 } from '@/types/gqlTypes';
 import { evictPickList } from '@/utils/cacheUtil';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const EditProject = () => {
   const navigate = useNavigate();

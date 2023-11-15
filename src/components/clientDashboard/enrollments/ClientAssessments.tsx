@@ -18,7 +18,7 @@ import {
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type AssessmentType = NonNullable<
   NonNullable<GetClientAssessmentsQuery['client']>['assessments']

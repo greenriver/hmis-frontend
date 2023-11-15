@@ -9,7 +9,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes, Routes } from '@/routes/routes';
 import { ClientNameFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props extends TypographyProps {
   client: ClientNameFragment;

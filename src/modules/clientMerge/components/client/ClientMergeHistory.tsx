@@ -12,7 +12,7 @@ import {
   ClientMergeHistoryQueryVariables,
   MergeAuditEventFieldsFragment,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export const ClientMergeAuditColumns: ColumnDef<MergeAuditEventFieldsFragment>[] =
   [

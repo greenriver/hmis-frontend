@@ -12,13 +12,17 @@ import { onError } from '@apollo/client/link/error';
 import * as Sentry from '@sentry/react';
 import fetch from 'cross-fetch';
 
+import { generatePath, matchRoutes } from 'react-router-dom';
+
 import {
   HMIS_REMOTE_SESSION_UID_EVENT,
   HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/api/constants';
 import { sentryUser } from '@/modules/auth/api/sessions';
 import { isServerError } from '@/modules/errors/util';
+import { allRoutes } from '@/routes/routes';
 import { getCsrfToken } from '@/utils/csrf';
+import { decodeParams } from '@/utils/pathEncoding';
 
 // https://github.com/apollographql/apollo-feature-requests/issues/153#issuecomment-476832408
 const customFetch: HttpOptions['fetch'] = (uri, options) => {
@@ -49,6 +53,37 @@ const authLink = setContext(
         'X-CSRF-Token': getCsrfToken(),
       },
     };
+  }
+);
+
+// Add headers to provide more information about the route that the request is coming from
+const pathHeaderLink = setContext(
+  (
+    _,
+    { headers }: { headers: { [key: string]: string } }
+  ): { headers: Record<string, string> } => {
+    const modifiedHeaders: typeof headers = {
+      ...headers,
+      'X-Hmis-Path': window.location.pathname,
+    };
+
+    // Find the Route that matches the current location
+    const matches = matchRoutes(allRoutes, window.location);
+    if (!matches || matches.length === 0) return { headers: modifiedHeaders };
+
+    const { params, route } = matches[0];
+    // Decode params
+    const decodedParams = decodeParams(params);
+    // Construct path with decoded params, add it to header
+    const decodedPath = generatePath(route.path, decodedParams);
+    modifiedHeaders['X-Hmis-Path'] = decodedPath; // /client/1/enrollments
+
+    // Add header for applicable params, if present
+    const { clientId, enrollmentId, projectId } = decodedParams;
+    if (clientId) modifiedHeaders['X-Hmis-Client-Id'] = clientId;
+    if (enrollmentId) modifiedHeaders['X-Hmis-Enrollment-Id'] = enrollmentId;
+    if (projectId) modifiedHeaders['X-Hmis-Project-Id'] = projectId;
+    return { headers: modifiedHeaders };
   }
 );
 
@@ -121,7 +156,13 @@ export const cache = new InMemoryCache({
 });
 
 const apolloClient = new ApolloClient({
-  link: from([errorLink, authLink, sessionExpiryLink, batchLink]),
+  link: from([
+    errorLink,
+    authLink,
+    pathHeaderLink,
+    sessionExpiryLink,
+    batchLink,
+  ]),
   cache,
   credentials: 'same-origin',
 });

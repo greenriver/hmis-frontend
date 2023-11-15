@@ -2,6 +2,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LogoutIcon from '@mui/icons-material/Logout';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
+import ImpersonatedIcon from '@mui/icons-material/SupervisedUserCircle';
 import {
   Alert,
   AlertTitle,
@@ -55,7 +56,9 @@ const UserMenu: React.FC = () => {
   return (
     <>
       <Button
-        startIcon={<PersonPinIcon />}
+        startIcon={
+          user.impersonating ? <ImpersonatedIcon /> : <PersonPinIcon />
+        }
         variant='text'
         sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
         {...bindTrigger(popupState)}
