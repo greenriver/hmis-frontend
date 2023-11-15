@@ -33,7 +33,7 @@ const clientDashboardRoutes = {
   FILES: 'files',
   NEW_FILE: 'files/new',
   EDIT_FILE: 'files/:fileId/edit',
-  CLIENT_MERGES: 'merges',
+  MERGE_HISTORY: 'merges',
   NEW_MERGE: 'merges/new',
 };
 

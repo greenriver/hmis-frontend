@@ -76,8 +76,8 @@ export const useClientDashboardNavItems = (client?: ClientFieldsFragment) => {
           },
           {
             id: 'merges',
-            title: 'Merges',
-            path: generateSafePath(ClientDashboardRoutes.CLIENT_MERGES, params),
+            title: 'Merge History',
+            path: generateSafePath(ClientDashboardRoutes.MERGE_HISTORY, params),
             hide: !rootAccess?.canMergeClients,
           },
         ],

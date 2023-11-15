@@ -1,8 +1,4 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Button } from '@mui/material';
-import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import BackButton from '@/components/elements/BackButton';
 import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
@@ -12,24 +8,12 @@ import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const EditHousehold = () => {
-  const navigate = useNavigate();
   const { enrollment } = useEnrollmentDashboardContext();
 
   const { clientId, enrollmentId } = useSafeParams() as {
     clientId: string;
     enrollmentId: string;
   };
-
-  const navigateToEnrollment = useMemo(
-    () => () =>
-      navigate(
-        generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, {
-          clientId,
-          enrollmentId,
-        })
-      ),
-    [clientId, enrollmentId, navigate]
-  );
 
   if (!enrollment) return <NotFound />;
 
@@ -41,15 +25,14 @@ const EditHousehold = () => {
         householdId={enrollment.householdId}
         projectId={enrollment.project.id}
         BackButton={
-          <Button
-            startIcon={<ArrowBackIcon />}
-            variant='gray'
-            size='small'
-            sx={{ width: 'fit-content' }}
-            onClick={navigateToEnrollment}
+          <BackButton
+            to={generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, {
+              clientId,
+              enrollmentId,
+            })}
           >
             Back to Enrollment
-          </Button>
+          </BackButton>
         }
       />
     </>

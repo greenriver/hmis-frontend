@@ -1,10 +1,9 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Button, Grid, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
-import ButtonLink from '@/components/elements/ButtonLink';
+import BackButton from '@/components/elements/BackButton';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import RouterLink from '@/components/elements/RouterLink';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -29,27 +28,6 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const clientColumns: ColumnDef<ClientFieldsFragment>[] = [
-  {
-    header: 'HMIS ID',
-    render: ({ id }: ClientFieldsFragment) => (
-      <RouterLink
-        to={generateSafePath(Routes.CLIENT_DASHBOARD, {
-          clientId: id,
-        })}
-        openInNew
-      >
-        {id}
-      </RouterLink>
-    ),
-  },
-  CLIENT_COLUMNS.first,
-  CLIENT_COLUMNS.last,
-  { ...CLIENT_COLUMNS.ssn, width: '150px' },
-  { ...CLIENT_COLUMNS.dobAge, width: '180px' },
-  HudRecordMetadataHistoryColumn,
-];
-
 const NewClientMerge = () => {
   const { client } = useClientDashboardContext();
   const [searchInput, setSearchInput] = useState<ClientSearchInput>();
@@ -65,7 +43,7 @@ const NewClientMerge = () => {
       const retainedClientId = data.mergeClients?.client?.id;
       if (retainedClientId && retainedClientId !== client.id) {
         navigate(
-          generateSafePath(ClientDashboardRoutes.CLIENT_MERGES, {
+          generateSafePath(ClientDashboardRoutes.MERGE_HISTORY, {
             clientId: retainedClientId,
           })
         );
@@ -82,6 +60,33 @@ const NewClientMerge = () => {
   }, [candidate, client.id, mutation]);
 
   if (error) throw error;
+
+  const clientColumns: ColumnDef<ClientFieldsFragment>[] = useMemo(
+    () => [
+      {
+        header: 'HMIS ID',
+        render: ({ id }: ClientFieldsFragment) =>
+          id === client.id ? (
+            id
+          ) : (
+            <RouterLink
+              to={generateSafePath(Routes.CLIENT_DASHBOARD, {
+                clientId: id,
+              })}
+              openInNew
+            >
+              {id}
+            </RouterLink>
+          ),
+      },
+      CLIENT_COLUMNS.first,
+      CLIENT_COLUMNS.last,
+      { ...CLIENT_COLUMNS.ssn, width: '150px' },
+      { ...CLIENT_COLUMNS.dobAge, width: '180px' },
+      HudRecordMetadataHistoryColumn,
+    ],
+    [client.id]
+  );
 
   const columns = useMemo(() => {
     return [
@@ -104,7 +109,7 @@ const NewClientMerge = () => {
           ),
       },
     ];
-  }, [client.id]);
+  }, [client.id, clientColumns]);
 
   return (
     <>
@@ -118,18 +123,13 @@ const NewClientMerge = () => {
             />
           </SsnDobShowContextProvider>
         </TitleCard>
-
-        <ButtonLink
-          startIcon={<ArrowBackIcon />}
-          variant='gray'
-          size='small'
-          sx={{ width: 'fit-content' }}
-          to={generateSafePath(ClientDashboardRoutes.CLIENT_MERGES, {
+        <BackButton
+          to={generateSafePath(ClientDashboardRoutes.MERGE_HISTORY, {
             clientId: client.id,
           })}
         >
           Back to Merge History
-        </ButtonLink>
+        </BackButton>
 
         <TitleCard title='Merge Client Records'>
           <Stack gap={6}>
