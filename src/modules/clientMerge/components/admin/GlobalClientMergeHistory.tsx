@@ -36,7 +36,7 @@ const GlobalClientMergeHistory = () => {
       <PageTitle
         title='Client Merge History'
         actions={
-          <ButtonLink to={pathToMerge}>Find Duplicate Clients</ButtonLink>
+          <ButtonLink to={pathToMerge}>Review Potential Duplicates</ButtonLink>
         }
       />
       <Paper>
