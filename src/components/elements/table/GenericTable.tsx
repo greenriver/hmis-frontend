@@ -434,7 +434,7 @@ const GenericTable = <T extends { id: string }>({
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                  rowsPerPageOptions={[10, 25, 50, 100]}
                   SelectProps={{
                     inputProps: {
                       'aria-label': 'rows per page',
