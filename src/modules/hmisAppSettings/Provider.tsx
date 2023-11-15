@@ -7,6 +7,8 @@ import {
   fetchCurrentUser,
   HmisUser,
   logout,
+  startImpersonating,
+  stopImpersonating,
 } from '@/modules/auth/api/sessions';
 import * as storage from '@/modules/auth/api/storage';
 import { HmisAuthContext, HmisAuthState } from '@/modules/auth/AuthContext';
@@ -54,7 +56,20 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
 
   const logoutUser = useCallback(() => {
     setLoading(true);
-    return logout()
+    const fn = user?.impersonating ? stopImpersonating : logout;
+    return fn()
+      .then(() => {
+        reloadWindow();
+      })
+      .catch((e) => {
+        setLoading(false);
+        setError(e);
+      });
+  }, [user?.impersonating]);
+
+  const impersonateUser = useCallback((userId: string) => {
+    setLoading(true);
+    return startImpersonating(userId)
       .then(() => {
         window.location.assign('/');
       })
@@ -70,8 +85,9 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       user: user,
       setUser,
       logoutUser,
+      impersonateUser,
     }),
-    [user, logoutUser]
+    [user, logoutUser, impersonateUser]
   );
 
   // tracking needs to be in place before we start making API calls

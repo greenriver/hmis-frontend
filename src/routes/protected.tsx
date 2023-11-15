@@ -37,6 +37,7 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
+import AdminUsers from '@/modules/admin/components/AdminUsers';
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
@@ -578,6 +579,14 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canManageDeniedReferrals'>
                 <AdminReferralPosting />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.USERS,
+            element: (
+              <RootPermissionsFilter permissions='canImpersonateUsers'>
+                <AdminUsers />
               </RootPermissionsFilter>
             ),
           },

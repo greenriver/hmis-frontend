@@ -33,6 +33,12 @@ type AdminPageConfig = NavItem & {
 
 const adminPages: AdminPageConfig[] = [
   {
+    id: 'users',
+    title: 'Users',
+    path: AdminDashboardRoutes.USERS,
+    permission: 'canImpersonateUsers',
+  },
+  {
     id: 'denials',
     title: 'Denials',
     path: AdminDashboardRoutes.AC_DENIALS,

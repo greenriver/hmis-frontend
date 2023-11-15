@@ -229,6 +229,9 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Potential Duplicates',
         parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
       },
+      [AdminDashboardRoutes.USERS]: {
+        title: 'Users',
+      },
       [Routes.ADMIN]: {
         title: 'Admin',
       },
