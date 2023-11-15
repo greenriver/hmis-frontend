@@ -1,4 +1,3 @@
-import { CommonUnstyledList } from '@/components/CommonUnstyledList';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { ApplicationUserFieldsFragment } from '@/types/gqlTypes';
@@ -24,11 +23,7 @@ const ConfirmImpersonation: React.FC<Props> = ({ user, onCancel }) => {
       loading={false}
     >
       <div>
-        <p>Are you sure you impersonate this user?</p>
-        <CommonUnstyledList>
-          <li>User ID: {user.id}</li>
-          <li>User Name: {user.name}</li>
-        </CommonUnstyledList>
+        Are you sure you want to impersonate <b>{user.name}</b>?
       </div>
     </ConfirmationDialog>
   );

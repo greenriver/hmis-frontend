@@ -1,6 +1,7 @@
-import { Button, Paper } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import { useMemo, useState } from 'react';
 
+import UserActionsMenu from './UserActionsMenu';
 import TextInput from '@/components/elements/input/TextInput';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -29,11 +30,6 @@ const AdminUsers = () => {
   const columns = useMemo<ColumnDef<ApplicationUserFieldsFragment>[]>(
     () => [
       {
-        header: 'User ID',
-        width: '100px',
-        render: ({ id }) => id,
-      },
-      {
         header: 'Name',
         render: ({ name }) => name,
       },
@@ -42,15 +38,14 @@ const AdminUsers = () => {
         render: ({ email }) => email,
       },
       {
-        width: '100px',
+        textAlign: 'right',
         render: (user) => (
-          <Button
-            size='small'
-            onClick={() => setChosenUser(user)}
-            disabled={user.id == currentUser?.id || currentUser?.impersonating}
-          >
-            Impersonate
-          </Button>
+          <UserActionsMenu
+            onClickImpersonate={() => setChosenUser(user)}
+            isCurrentUser={
+              !!(user.id == currentUser?.id || currentUser?.impersonating)
+            }
+          />
         ),
       },
     ],
@@ -63,32 +58,33 @@ const AdminUsers = () => {
       {chosenUser && (
         <ConfirmImpersonation onCancel={handleCancel} user={chosenUser} />
       )}
-      <Paper>
-        <GenericTableWithData<
-          GetApplicationUsersQuery,
-          GetApplicationUsersQueryVariables,
-          ApplicationUserFieldsFragment
-        >
-          header={
-            <TextInput
-              label='Search Users'
-              name='search projects'
-              placeholder='Name or email'
-              value={search || ''}
-              onChange={(e) => setSearch(e.target.value)}
-              inputWidth='300px'
-            />
-          }
-          queryVariables={{
-            filters: { searchTerm: debouncedSearch },
-          }}
-          queryDocument={GetApplicationUsersDocument}
-          columns={columns}
-          noData='No users'
-          pagePath='applicationUsers'
-          defaultPageSize={25}
+      <Stack spacing={2}>
+        <TextInput
+          label='Search Users'
+          name='search users'
+          placeholder='Search by name or email'
+          value={search || ''}
+          onChange={(e) => setSearch(e.target.value)}
+          inputWidth='400px'
         />
-      </Paper>
+
+        <Paper>
+          <GenericTableWithData<
+            GetApplicationUsersQuery,
+            GetApplicationUsersQueryVariables,
+            ApplicationUserFieldsFragment
+          >
+            queryVariables={{
+              filters: { searchTerm: debouncedSearch },
+            }}
+            queryDocument={GetApplicationUsersDocument}
+            columns={columns}
+            noData='No users'
+            pagePath='applicationUsers'
+            defaultPageSize={25}
+          />
+        </Paper>
+      </Stack>
     </>
   );
 };
