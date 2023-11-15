@@ -21,6 +21,7 @@ import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAs
 import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
+import PathHandler from '@/components/elements/PathHandler';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
 import ClientDashboard from '@/components/pages/ClientDashboard';
@@ -593,7 +594,14 @@ export const protectedRoutes: RouteNode[] = [
         ],
       },
       { path: '/', element: <Dashboard /> },
-      { path: '*', element: <NotFound /> },
+      {
+        path: '*',
+        element: (
+          <PathHandler>
+            <NotFound />
+          </PathHandler>
+        ),
+      },
     ],
   },
   {
