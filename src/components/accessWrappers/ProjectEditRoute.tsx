@@ -6,7 +6,7 @@ import NotFound from '../pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { ProjectPermissions } from '@/modules/permissions/types';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectEditRoute: React.FC<
   React.PropsWithChildren<{

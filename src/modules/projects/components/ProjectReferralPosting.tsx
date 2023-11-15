@@ -17,7 +17,7 @@ import {
   ReferralPostingStatus,
   useGetReferralPostingQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectReferralPosting: React.FC = () => {
   const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();

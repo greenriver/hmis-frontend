@@ -8,7 +8,7 @@ import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const EnrollmentQuickActions = ({
   enrollment,

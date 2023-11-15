@@ -22,7 +22,7 @@ import {
   InventoryFieldsFragment,
   ProjectType,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const columns: ColumnDef<InventoryFieldsFragment>[] = [
   {

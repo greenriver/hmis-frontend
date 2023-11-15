@@ -8,7 +8,7 @@ import {
 } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useClientDashboardNavItems = (client?: ClientFieldsFragment) => {
   const [rootAccess] = useRootPermissions();

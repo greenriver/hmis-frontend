@@ -14,7 +14,7 @@ import {
   GetProjectOutgoingReferralPostingsQuery,
   GetProjectOutgoingReferralPostingsQueryVariables,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type OutgoingReferral = NonNullable<
   GetProjectOutgoingReferralPostingsQuery['project']

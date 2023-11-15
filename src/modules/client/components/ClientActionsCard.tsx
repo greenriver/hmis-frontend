@@ -7,7 +7,7 @@ import {
 } from '@/modules/permissions/PermissionsFilters';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   client: ClientFieldsFragment;

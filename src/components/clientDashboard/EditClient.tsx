@@ -15,7 +15,7 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const Profile = () => {
   const { client } = useClientDashboardContext();

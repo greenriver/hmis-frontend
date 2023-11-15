@@ -11,7 +11,7 @@ import {
   GlobalClientMergeHistoryQuery,
   GlobalClientMergeHistoryQueryVariables,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type ClientMergeAuditType = NonNullable<
   NonNullable<GlobalClientMergeHistoryQuery['mergeAuditHistory']>

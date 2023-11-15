@@ -13,7 +13,7 @@ import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export const showAssessmentInHousehold = (
   enrollment?: EnrollmentFieldsFragment,

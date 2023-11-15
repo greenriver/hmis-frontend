@@ -7,7 +7,7 @@ import NotFound from '../pages/NotFound';
 import { ProjectPermissions } from '@/modules/permissions/types';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ensureArray } from '@/utils/arrays';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 /**
  * Permission wrapper to be used for routes that rely on permissions grantred through and enrollment's project

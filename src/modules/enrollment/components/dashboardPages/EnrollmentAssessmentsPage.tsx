@@ -19,7 +19,7 @@ import {
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 // FIXME: share configuration with AllAssesments component
 const columns: ColumnDef<AssessmentFieldsFragment>[] = [

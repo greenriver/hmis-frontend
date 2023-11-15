@@ -146,3 +146,13 @@ export const PRINTABLE_ROUTES = [
   EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];
+
+export const allRoutes = [
+  Routes,
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+  AdminDashboardRoutes,
+]
+  .flatMap((obj) => Object.values(obj))
+  .map((s) => ({ path: s }));

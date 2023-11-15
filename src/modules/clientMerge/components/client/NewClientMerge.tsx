@@ -26,7 +26,7 @@ import {
   SearchClientsQueryVariables,
   useMergeClientsMutation,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const NewClientMerge = () => {
   const { client } = useClientDashboardContext();

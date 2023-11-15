@@ -15,7 +15,7 @@ import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { EnrollmentSummaryFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragment>[] = [
   {

@@ -17,7 +17,7 @@ import {
   GetProjectProjectCocsQueryVariables,
   ProjectCocFieldsFragment,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const columns: ColumnDef<ProjectCocFieldsFragment>[] = [
   {
