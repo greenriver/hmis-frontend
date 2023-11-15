@@ -64,11 +64,7 @@ const PublicRoutes: React.FC = () => {
 const blankRoutes: RouteObject[] = [
   {
     path: '*',
-    element: (
-      <PathHandler>
-        <></>
-      </PathHandler>
-    ),
+    element: <></>,
   },
 ];
 

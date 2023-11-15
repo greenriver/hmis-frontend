@@ -1,29 +1,25 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const PathHandler = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const attempts = useRef(0);
 
   const { pathname, hash, search } = location;
   const match = pathname.match(/^(.*)(%20)+$/);
 
   useEffect(() => {
-    if (attempts.current >= 5) {
-      console.error(`Unable to correct route '${pathname}'`);
-      return;
-    }
-
     if (match) {
       const [, corrected] = match;
-      attempts.current += 1;
       navigate({ pathname: corrected, hash, search }, { replace: true });
     }
-  }, [hash, match, pathname, search, navigate]);
+
+    // ignore pathname dependency, we only want to run this once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Prevent mounting the children if still trying to redirect
-  if (match && attempts.current < 5) return null;
+  if (match) return null;
 
   return children;
 };
