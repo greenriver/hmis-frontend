@@ -17,7 +17,7 @@ import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
 } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   isOpen: boolean;
