@@ -67,7 +67,7 @@ const pathHeaderLink = setContext(
       'X-Hmis-Path': window.location.pathname,
     };
 
-    // Find whith Route matches the current location
+    // Find the Route that matches the current location
     const matches = matchRoutes(allRoutes, window.location);
     if (!matches || matches.length === 0) return { headers: modifiedHeaders };
 
@@ -76,7 +76,7 @@ const pathHeaderLink = setContext(
     const decodedParams = decodeParams(params);
     // Construct path with decoded params, add it to header
     const decodedPath = generatePath(route.path, decodedParams);
-    modifiedHeaders['X-Hmis-Path'] = decodedPath;
+    modifiedHeaders['X-Hmis-Path'] = decodedPath; // /client/1/enrollments
 
     // Add header for applicable params, if present
     const { clientId, enrollmentId, projectId } = decodedParams;

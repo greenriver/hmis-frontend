@@ -1,5 +1,3 @@
-import { flatMap } from 'lodash-es';
-
 export const Routes = {
   CLIENT_SEARCH: '/',
   CREATE_CLIENT: '/client/new',
@@ -149,15 +147,12 @@ export const PRINTABLE_ROUTES = [
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];
 
-export const allRoutes = flatMap(
-  [
-    Routes,
-    ClientDashboardRoutes,
-    EnrollmentDashboardRoutes,
-    ProjectDashboardRoutes,
-    AdminDashboardRoutes,
-  ],
-  (obj) => Object.values(obj)
-).map((s) => ({
-  path: s,
-}));
+export const allRoutes = [
+  Routes,
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+  ProjectDashboardRoutes,
+  AdminDashboardRoutes,
+]
+  .flatMap((obj) => Object.values(obj))
+  .map((s) => ({ path: s }));
