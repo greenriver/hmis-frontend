@@ -13,7 +13,7 @@ import {
   FileFieldsFragment,
   useGetFileQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const File = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();

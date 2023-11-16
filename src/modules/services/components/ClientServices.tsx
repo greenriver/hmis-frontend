@@ -15,7 +15,7 @@ import {
   GetClientServicesQueryVariables,
   ServiceSortOption,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type ServiceType = NonNullable<
   NonNullable<GetClientServicesQuery['client']>['services']

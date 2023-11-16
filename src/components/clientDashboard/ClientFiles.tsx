@@ -26,7 +26,7 @@ import {
   PickListType,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type ClientFileType = NonNullable<
   NonNullable<GetClientFilesQuery['client']>['files']

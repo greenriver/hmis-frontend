@@ -13,6 +13,7 @@ export interface HmisUser {
   name: string;
   phone?: string;
   sessionDuration: number;
+  impersonating: boolean;
 }
 interface HmisError {
   type: string;
@@ -57,7 +58,6 @@ const throwMaybeHmisError = (json: any) => {
   if (isHmisErrorResponse(json)) {
     throw new HmisResponseError(json.error);
   } else {
-    console.error(json);
     throw new Error('Unknown error');
   }
 };
@@ -139,11 +139,18 @@ export async function login({
     return response.json().then(throwMaybeHmisError);
   } else {
     // Store the user info (non-sensitive) in the browser
-    return response.json().then((user: HmisUser) => {
-      storage.setUser(user);
-      return user;
-    });
+    const user = (await response.json()) as HmisUser;
+    storage.setUser(user);
+    return user;
   }
+}
+
+export function resetLocalSession() {
+  storage.clearUser();
+  storage.clearAppSettings();
+  storage.clearSessionTacking();
+  // Clear cache without re-fetching any queries
+  apolloClient.clearStore();
 }
 
 export async function logout() {
@@ -151,11 +158,7 @@ export async function logout() {
     method: 'DELETE',
   });
   trackSessionFromResponse(response);
-  storage.clearUser();
-  storage.clearAppSettings();
-  storage.clearSessionTacking();
-  // Clear cache without re-fetching any queries
-  apolloClient.clearStore();
+  resetLocalSession();
   return response;
 }
 
@@ -175,3 +178,38 @@ export const sentryUser = (user?: HmisUser) => {
   }
   return undefined;
 };
+
+export async function startImpersonating(userId: string) {
+  const response = await fetchWithCsrf('/hmis/impersonations', {
+    method: 'POST',
+    body: JSON.stringify({ user_id: userId }),
+  });
+  trackSessionFromResponse(response);
+
+  if (!response.ok) {
+    return response.json().then(throwMaybeHmisError);
+  } else {
+    apolloClient.clearStore();
+    // Store the user info (non-sensitive) in the browser
+    const user = (await response.json()) as HmisUser;
+    storage.setUser(user);
+    return user;
+  }
+}
+
+export async function stopImpersonating() {
+  const response = await fetchWithCsrf('/hmis/impersonations', {
+    method: 'DELETE',
+  });
+  trackSessionFromResponse(response);
+
+  if (!response.ok) {
+    return response.json().then(throwMaybeHmisError);
+  } else {
+    apolloClient.clearStore();
+    // Store the user info (non-sensitive) in the browser
+    const user = (await response.json()) as HmisUser;
+    storage.setUser(user);
+    return user;
+  }
+}

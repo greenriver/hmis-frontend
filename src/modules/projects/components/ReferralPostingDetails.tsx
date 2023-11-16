@@ -14,7 +14,7 @@ import {
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   referralPosting: ReferralPostingDetailFieldsFragment;

@@ -125,9 +125,3 @@ fragment FormDefinitionFields on FormDefinition {
     ...FormDefinitionJsonFields
   }
 }
-
-fragment UserFields on User {
-  __typename
-  id
-  name
-}

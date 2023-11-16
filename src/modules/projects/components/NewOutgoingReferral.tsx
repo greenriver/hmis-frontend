@@ -5,7 +5,7 @@ import ProjectOutgoingReferralForm from './ProjectOutgoingReferralForm';
 
 import { CommonCard } from '@/components/elements/CommonCard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const NewOutgoingReferral: React.FC = () => {
   const { project } = useProjectDashboardContext();

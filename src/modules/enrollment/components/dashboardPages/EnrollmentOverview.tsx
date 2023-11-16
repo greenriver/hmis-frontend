@@ -23,7 +23,7 @@ import {
   DeleteEnrollmentMutationVariables,
 } from '@/types/gqlTypes';
 import { evictDeletedEnrollment } from '@/utils/cacheUtil';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const EnrollmentOverview = () => {
   const { enrollment, enabledFeatures } = useEnrollmentDashboardContext();

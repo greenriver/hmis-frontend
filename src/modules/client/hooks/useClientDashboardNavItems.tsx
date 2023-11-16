@@ -8,7 +8,7 @@ import {
 } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useClientDashboardNavItems = (client?: ClientFieldsFragment) => {
   const [rootAccess] = useRootPermissions();
@@ -76,8 +76,8 @@ export const useClientDashboardNavItems = (client?: ClientFieldsFragment) => {
           },
           {
             id: 'merges',
-            title: 'Merges',
-            path: generateSafePath(ClientDashboardRoutes.CLIENT_MERGES, params),
+            title: 'Merge History',
+            path: generateSafePath(ClientDashboardRoutes.MERGE_HISTORY, params),
             hide: !rootAccess?.canMergeClients,
           },
         ],

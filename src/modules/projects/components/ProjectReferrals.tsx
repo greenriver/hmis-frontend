@@ -10,7 +10,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectReferrals = () => {
   const { project } = useProjectDashboardContext();
