@@ -2014,6 +2014,11 @@ export type EnrollmentAccess = {
   id: Scalars['ID']['output'];
 };
 
+export enum EnrollmentFilterOptionHouseholdTask {
+  /** Annual Due */
+  AnnualDue = 'ANNUAL_DUE',
+}
+
 export enum EnrollmentFilterOptionStatus {
   /** Active */
   Active = 'ACTIVE',
@@ -2072,6 +2077,7 @@ export type EnrollmentSummary = {
 };
 
 export type EnrollmentsForClientFilterOptions = {
+  householdTasks?: InputMaybe<Array<EnrollmentFilterOptionHouseholdTask>>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
   projectType?: InputMaybe<Array<ProjectType>>;
   status?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
@@ -2079,6 +2085,7 @@ export type EnrollmentsForClientFilterOptions = {
 
 export type EnrollmentsForProjectFilterOptions = {
   bedNightOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  householdTasks?: InputMaybe<Array<EnrollmentFilterOptionHouseholdTask>>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
