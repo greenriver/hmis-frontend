@@ -41,7 +41,7 @@ query GetEnrollmentAssessments(
   $offset: Int = 0
   $inProgress: Boolean
   $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-  $filters: AssessmentFilterOptions
+  $filters: AssessmentsForEnrollmentFilterOptions
 ) {
   enrollment(id: $id) {
     id
@@ -72,7 +72,44 @@ query GetHouseholdAssessments(
     assessmentRole: $assessmentRole
     assessmentId: $assessmentId
   ) {
-    ...AssessmentWithValuesAndRecords
+    ...FullAssessment
+    enrollment {
+      id
+    }
+  }
+}
+
+query GetAllHouseholdAssessments(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $inProgress: Boolean
+  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+  $filters: AssessmentsForHouseholdFilterOptions
+) {
+  household(id: $id) {
+    id
+    assessments(
+      limit: $limit
+      offset: $offset
+      inProgress: $inProgress
+      sortOrder: $sortOrder
+      filters: $filters
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...AssessmentFields
+        enrollment {
+          id
+          relationshipToHoH
+          client {
+            ...ClientName
+          }
+        }
+      }
+    }
   }
 }
 

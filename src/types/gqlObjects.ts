@@ -5112,6 +5112,40 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'AssessmentsForEnrollmentFilterOptions',
+    args: [
+      {
+        name: 'type',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'AssessmentsForHouseholdFilterOptions',
+    args: [
+      {
+        name: 'type',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'BulkMergeClientsInput',
     args: [
       {

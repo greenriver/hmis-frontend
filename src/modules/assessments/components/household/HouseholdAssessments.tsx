@@ -37,8 +37,8 @@ import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembe
 import { router } from '@/routes/router';
 import {
   AssessmentRole,
-  AssessmentWithValuesAndRecordsFragment,
   EnrollmentFieldsFragment,
+  GetHouseholdAssessmentsQuery,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
@@ -48,8 +48,12 @@ interface HouseholdAssessmentsProps {
   assessmentId?: string;
 }
 
+type HhmAssessmentType = NonNullable<
+  GetHouseholdAssessmentsQuery['householdAssessments']
+>[0];
+
 const calculateAssessmentStatus = (
-  assessment: AssessmentWithValuesAndRecordsFragment | undefined
+  assessment: HhmAssessmentType | undefined
 ): AssessmentStatus => {
   if (!assessment) {
     return AssessmentStatus.NotStarted;
