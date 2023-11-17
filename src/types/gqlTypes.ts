@@ -8555,430 +8555,6 @@ export type GetEnrollmentAssessmentsQuery = {
 };
 
 export type GetHouseholdAssessmentsQueryVariables = Exact<{
-  householdId: Scalars['ID']['input'];
-  assessmentRole: AssessmentRole;
-  assessmentId?: InputMaybe<Scalars['ID']['input']>;
-}>;
-
-export type GetHouseholdAssessmentsQuery = {
-  __typename?: 'Query';
-  householdAssessments?: Array<{
-    __typename?: 'Assessment';
-    wipValues?: any | null;
-    id: string;
-    lockVersion: number;
-    inProgress: boolean;
-    assessmentDate: string;
-    dataCollectionStage?: DataCollectionStage | null;
-    dateCreated?: string | null;
-    dateUpdated?: string | null;
-    dateDeleted?: string | null;
-    role: AssessmentRole;
-    enrollment: {
-      __typename?: 'Enrollment';
-      id: string;
-      lockVersion: number;
-      entryDate: string;
-      exitDate?: string | null;
-      disablingCondition?: NoYesReasonsForMissingData | null;
-      dateOfEngagement?: string | null;
-      moveInDate?: string | null;
-      livingSituation?: PriorLivingSituation | null;
-      rentalSubsidyType?: RentalSubsidyType | null;
-      lengthOfStay?: ResidencePriorLengthOfStay | null;
-      losUnderThreshold?: NoYesMissing | null;
-      previousStreetEssh?: NoYesMissing | null;
-      dateToStreetEssh?: string | null;
-      timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
-      monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-      enrollmentCoc?: string | null;
-      dateOfPathStatus?: string | null;
-      clientEnrolledInPath?: NoYesMissing | null;
-      reasonNotEnrolled?: ReasonNotEnrolled | null;
-      percentAmi?: PercentAmi | null;
-      referralSource?: ReferralSource | null;
-      countOutreachReferralApproaches?: number | null;
-      dateOfBcpStatus?: string | null;
-      eligibleForRhy?: NoYesMissing | null;
-      reasonNoServices?: ReasonNoServices | null;
-      runawayYouth?: NoYesReasonsForMissingData | null;
-      sexualOrientation?: SexualOrientation | null;
-      sexualOrientationOther?: string | null;
-      formerWardChildWelfare?: NoYesReasonsForMissingData | null;
-      childWelfareYears?: RhyNumberofYears | null;
-      childWelfareMonths?: number | null;
-      formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
-      juvenileJusticeYears?: RhyNumberofYears | null;
-      juvenileJusticeMonths?: number | null;
-      unemploymentFam?: NoYesMissing | null;
-      mentalHealthDisorderFam?: NoYesMissing | null;
-      physicalDisabilityFam?: NoYesMissing | null;
-      alcoholDrugUseDisorderFam?: NoYesMissing | null;
-      insufficientIncome?: NoYesMissing | null;
-      incarceratedParent?: NoYesMissing | null;
-      targetScreenReqd?: NoYesMissing | null;
-      timeToHousingLoss?: TimeToHousingLoss | null;
-      annualPercentAmi?: AnnualPercentAmi | null;
-      literalHomelessHistory?: LiteralHomelessHistory | null;
-      clientLeaseholder?: NoYesMissing | null;
-      hohLeaseholder?: NoYesMissing | null;
-      subsidyAtRisk?: NoYesMissing | null;
-      evictionHistory?: EvictionHistory | null;
-      criminalRecord?: NoYesMissing | null;
-      incarceratedAdult?: IncarceratedAdult | null;
-      prisonDischarge?: NoYesMissing | null;
-      sexOffender?: NoYesMissing | null;
-      disabledHoh?: NoYesMissing | null;
-      currentPregnant?: NoYesMissing | null;
-      singleParent?: NoYesMissing | null;
-      dependentUnder6?: DependentUnder6 | null;
-      hh5Plus?: NoYesMissing | null;
-      cocPrioritized?: NoYesMissing | null;
-      hpScreeningScore?: number | null;
-      thresholdScore?: number | null;
-      vamcStation?: VamcStationNumber | null;
-      translationNeeded?: NoYesReasonsForMissingData | null;
-      preferredLanguage?: PreferredLanguage | null;
-      preferredLanguageDifferent?: string | null;
-      customDataElements: Array<{
-        __typename?: 'CustomDataElement';
-        id: string;
-        key: string;
-        label: string;
-        fieldType: CustomDataElementType;
-        repeats: boolean;
-        value?: {
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        } | null;
-        values?: Array<{
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        }> | null;
-      }>;
-      client: { __typename?: 'Client'; id: string };
-    };
-    incomeBenefit?: {
-      __typename: 'IncomeBenefit';
-      adap?: NoYesReasonsForMissingData | null;
-      alimony?: NoYesMissing | null;
-      alimonyAmount?: number | null;
-      benefitsFromAnySource?: NoYesReasonsForMissingData | null;
-      childSupport?: NoYesMissing | null;
-      childSupportAmount?: number | null;
-      cobra?: NoYesMissing | null;
-      connectionWithSoar?: NoYesReasonsForMissingData | null;
-      dataCollectionStage: DataCollectionStage;
-      dateCreated?: string | null;
-      dateDeleted?: string | null;
-      dateUpdated?: string | null;
-      earned?: NoYesMissing | null;
-      earnedAmount?: number | null;
-      employerProvided?: NoYesMissing | null;
-      ga?: NoYesMissing | null;
-      gaAmount?: number | null;
-      id: string;
-      incomeFromAnySource?: NoYesReasonsForMissingData | null;
-      indianHealthServices?: NoYesMissing | null;
-      informationDate?: string | null;
-      insuranceFromAnySource?: NoYesReasonsForMissingData | null;
-      medicaid?: NoYesMissing | null;
-      medicare?: NoYesMissing | null;
-      noAdapReason?: NoAssistanceReason | null;
-      noCobraReason?: ReasonNotInsured | null;
-      noEmployerProvidedReason?: ReasonNotInsured | null;
-      noIndianHealthServicesReason?: ReasonNotInsured | null;
-      noMedicaidReason?: ReasonNotInsured | null;
-      noMedicareReason?: ReasonNotInsured | null;
-      noPrivatePayReason?: ReasonNotInsured | null;
-      noRyanWhiteReason?: NoAssistanceReason | null;
-      noSchipReason?: ReasonNotInsured | null;
-      noStateHealthInsReason?: ReasonNotInsured | null;
-      noVhaReason?: ReasonNotInsured | null;
-      otherBenefitsSource?: NoYesMissing | null;
-      otherBenefitsSourceIdentify?: string | null;
-      otherIncomeAmount?: number | null;
-      otherIncomeSource?: NoYesMissing | null;
-      otherIncomeSourceIdentify?: string | null;
-      otherInsurance?: NoYesMissing | null;
-      otherInsuranceIdentify?: string | null;
-      otherTanf?: NoYesMissing | null;
-      pension?: NoYesMissing | null;
-      pensionAmount?: number | null;
-      privateDisability?: NoYesMissing | null;
-      privateDisabilityAmount?: number | null;
-      privatePay?: NoYesMissing | null;
-      ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
-      schip?: NoYesMissing | null;
-      snap?: NoYesMissing | null;
-      socSecRetirement?: NoYesMissing | null;
-      socSecRetirementAmount?: number | null;
-      ssdi?: NoYesMissing | null;
-      ssdiAmount?: number | null;
-      ssi?: NoYesMissing | null;
-      ssiAmount?: number | null;
-      stateHealthIns?: NoYesMissing | null;
-      tanf?: NoYesMissing | null;
-      tanfAmount?: number | null;
-      tanfChildCare?: NoYesMissing | null;
-      tanfTransportation?: NoYesMissing | null;
-      totalMonthlyIncome?: string | null;
-      unemployment?: NoYesMissing | null;
-      unemploymentAmount?: number | null;
-      vaDisabilityNonService?: NoYesMissing | null;
-      vaDisabilityNonServiceAmount?: number | null;
-      vaDisabilityService?: NoYesMissing | null;
-      vaDisabilityServiceAmount?: number | null;
-      vhaServices?: NoYesMissing | null;
-      wic?: NoYesMissing | null;
-      workersComp?: NoYesMissing | null;
-      workersCompAmount?: number | null;
-      customDataElements: Array<{
-        __typename?: 'CustomDataElement';
-        id: string;
-        key: string;
-        label: string;
-        fieldType: CustomDataElementType;
-        repeats: boolean;
-        value?: {
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        } | null;
-        values?: Array<{
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        }> | null;
-      }>;
-    } | null;
-    disabilityGroup?: {
-      __typename: 'DisabilityGroup';
-      id: string;
-      dataCollectionStage: DataCollectionStage;
-      informationDate: string;
-      disablingCondition: NoYesReasonsForMissingData;
-      chronicHealthCondition?: NoYesReasonsForMissingData | null;
-      chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-      developmentalDisability?: NoYesReasonsForMissingData | null;
-      hivAids?: NoYesReasonsForMissingData | null;
-      mentalHealthDisorder?: NoYesReasonsForMissingData | null;
-      mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-      physicalDisability?: NoYesReasonsForMissingData | null;
-      physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-      substanceUseDisorder?: DisabilityResponse | null;
-      substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-      dateCreated?: string | null;
-      dateUpdated?: string | null;
-      tCellCountAvailable?: NoYesReasonsForMissingData | null;
-      tCellCount?: number | null;
-      tCellSource?: TCellSourceViralLoadSource | null;
-      viralLoadAvailable?: ViralLoadAvailable | null;
-      viralLoad?: number | null;
-      antiRetroviral?: NoYesReasonsForMissingData | null;
-    } | null;
-    healthAndDv?: {
-      __typename: 'HealthAndDv';
-      currentlyFleeing?: NoYesReasonsForMissingData | null;
-      dataCollectionStage: DataCollectionStage;
-      dateCreated?: string | null;
-      dateDeleted?: string | null;
-      dateUpdated?: string | null;
-      dentalHealthStatus?: HealthStatus | null;
-      domesticViolenceSurvivor?: NoYesReasonsForMissingData | null;
-      dueDate?: string | null;
-      generalHealthStatus?: HealthStatus | null;
-      id: string;
-      informationDate?: string | null;
-      mentalHealthStatus?: HealthStatus | null;
-      pregnancyStatus?: NoYesReasonsForMissingData | null;
-      whenOccurred?: WhenDvOccurred | null;
-    } | null;
-    exit?: {
-      __typename?: 'Exit';
-      id: string;
-      aftercareDate?: string | null;
-      aftercareProvided?: AftercareProvided | null;
-      aftercareMethods?: Array<AftercareMethod> | null;
-      askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
-      askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
-      cmExitReason?: CmExitReason | null;
-      coercedToContinueWork?: NoYesReasonsForMissingData | null;
-      counselingReceived?: NoYesMissing | null;
-      counselingMethods?: Array<CounselingMethod> | null;
-      countOfExchangeForSex?: CountExchangeForSex | null;
-      dateCreated?: string | null;
-      dateDeleted?: string | null;
-      dateUpdated?: string | null;
-      destination: Destination;
-      destinationSafeClient?: NoYesReasonsForMissingData | null;
-      destinationSafeWorker?: WorkerResponse | null;
-      destinationSubsidyType?: RentalSubsidyType | null;
-      earlyExitReason?: ExpelledReason | null;
-      exchangeForSex?: NoYesReasonsForMissingData | null;
-      exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
-      exitDate: string;
-      housingAssessment?: HousingAssessmentAtExit | null;
-      laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
-      otherDestination?: string | null;
-      posAdultConnections?: WorkerResponse | null;
-      posCommunityConnections?: WorkerResponse | null;
-      posPeerConnections?: WorkerResponse | null;
-      postExitCounselingPlan?: NoYesMissing | null;
-      projectCompletionStatus?: ProjectCompletionStatus | null;
-      sessionCountAtExit?: number | null;
-      sessionsInPlan?: number | null;
-      subsidyInformation?: SubsidyInformation | null;
-      workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
-      workplacePromiseDifference?: NoYesReasonsForMissingData | null;
-      customDataElements: Array<{
-        __typename?: 'CustomDataElement';
-        id: string;
-        key: string;
-        label: string;
-        fieldType: CustomDataElementType;
-        repeats: boolean;
-        value?: {
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        } | null;
-        values?: Array<{
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
-        }> | null;
-      }>;
-    } | null;
-    youthEducationStatus?: {
-      __typename?: 'YouthEducationStatus';
-      currentEdStatus?: CurrentEdStatus | null;
-      currentSchoolAttend?: CurrentSchoolAttended | null;
-      dataCollectionStage: DataCollectionStage;
-      dateCreated?: string | null;
-      dateDeleted?: string | null;
-      dateUpdated?: string | null;
-      id: string;
-      informationDate?: string | null;
-      mostRecentEdStatus?: MostRecentEdStatus | null;
-    } | null;
-    employmentEducation?: {
-      __typename?: 'EmploymentEducation';
-      dataCollectionStage: DataCollectionStage;
-      dateCreated?: string | null;
-      dateDeleted?: string | null;
-      employed?: NoYesReasonsForMissingData | null;
-      employmentType?: EmploymentType | null;
-      id: string;
-      informationDate?: string | null;
-      lastGradeCompleted?: LastGradeCompleted | null;
-      notEmployedReason?: NotEmployedReason | null;
-      schoolStatus?: SchoolStatus | null;
-    } | null;
-    customDataElements: Array<{
-      __typename?: 'CustomDataElement';
-      id: string;
-      key: string;
-      label: string;
-      fieldType: CustomDataElementType;
-      repeats: boolean;
-      value?: {
-        __typename?: 'CustomDataElementValue';
-        id: string;
-        valueBoolean?: boolean | null;
-        valueDate?: string | null;
-        valueFloat?: number | null;
-        valueInteger?: number | null;
-        valueJson?: any | null;
-        valueString?: string | null;
-        valueText?: string | null;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
-      } | null;
-      values?: Array<{
-        __typename?: 'CustomDataElementValue';
-        id: string;
-        valueBoolean?: boolean | null;
-        valueDate?: string | null;
-        valueFloat?: number | null;
-        valueInteger?: number | null;
-        valueJson?: any | null;
-        valueString?: string | null;
-        valueText?: string | null;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
-      }> | null;
-    }>;
-    access: {
-      __typename?: 'AssessmentAccess';
-      id: string;
-      canDeleteAssessments: boolean;
-      canDeleteEnrollments: boolean;
-      canEditEnrollments: boolean;
-    };
-    user?: { __typename: 'User'; id: string; name: string } | null;
-  }> | null;
-};
-
-export type GetAllHouseholdAssessmentsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -8987,7 +8563,7 @@ export type GetAllHouseholdAssessmentsQueryVariables = Exact<{
   filters?: InputMaybe<AssessmentsForHouseholdFilterOptions>;
 }>;
 
-export type GetAllHouseholdAssessmentsQuery = {
+export type GetHouseholdAssessmentsQuery = {
   __typename?: 'Query';
   household?: {
     __typename?: 'Household';
@@ -23561,78 +23137,6 @@ export type GetEnrollmentAssessmentsQueryResult = Apollo.QueryResult<
 >;
 export const GetHouseholdAssessmentsDocument = gql`
   query GetHouseholdAssessments(
-    $householdId: ID!
-    $assessmentRole: AssessmentRole!
-    $assessmentId: ID
-  ) {
-    householdAssessments(
-      householdId: $householdId
-      assessmentRole: $assessmentRole
-      assessmentId: $assessmentId
-    ) {
-      ...FullAssessment
-      enrollment {
-        id
-      }
-    }
-  }
-  ${FullAssessmentFragmentDoc}
-`;
-
-/**
- * __useGetHouseholdAssessmentsQuery__
- *
- * To run a query within a React component, call `useGetHouseholdAssessmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetHouseholdAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetHouseholdAssessmentsQuery({
- *   variables: {
- *      householdId: // value for 'householdId'
- *      assessmentRole: // value for 'assessmentRole'
- *      assessmentId: // value for 'assessmentId'
- *   },
- * });
- */
-export function useGetHouseholdAssessmentsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetHouseholdAssessmentsQuery,
-    GetHouseholdAssessmentsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetHouseholdAssessmentsQuery,
-    GetHouseholdAssessmentsQueryVariables
-  >(GetHouseholdAssessmentsDocument, options);
-}
-export function useGetHouseholdAssessmentsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetHouseholdAssessmentsQuery,
-    GetHouseholdAssessmentsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetHouseholdAssessmentsQuery,
-    GetHouseholdAssessmentsQueryVariables
-  >(GetHouseholdAssessmentsDocument, options);
-}
-export type GetHouseholdAssessmentsQueryHookResult = ReturnType<
-  typeof useGetHouseholdAssessmentsQuery
->;
-export type GetHouseholdAssessmentsLazyQueryHookResult = ReturnType<
-  typeof useGetHouseholdAssessmentsLazyQuery
->;
-export type GetHouseholdAssessmentsQueryResult = Apollo.QueryResult<
-  GetHouseholdAssessmentsQuery,
-  GetHouseholdAssessmentsQueryVariables
->;
-export const GetAllHouseholdAssessmentsDocument = gql`
-  query GetAllHouseholdAssessments(
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
@@ -23670,16 +23174,16 @@ export const GetAllHouseholdAssessmentsDocument = gql`
 `;
 
 /**
- * __useGetAllHouseholdAssessmentsQuery__
+ * __useGetHouseholdAssessmentsQuery__
  *
- * To run a query within a React component, call `useGetAllHouseholdAssessmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllHouseholdAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetHouseholdAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHouseholdAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllHouseholdAssessmentsQuery({
+ * const { data, loading, error } = useGetHouseholdAssessmentsQuery({
  *   variables: {
  *      id: // value for 'id'
  *      limit: // value for 'limit'
@@ -23690,39 +23194,39 @@ export const GetAllHouseholdAssessmentsDocument = gql`
  *   },
  * });
  */
-export function useGetAllHouseholdAssessmentsQuery(
+export function useGetHouseholdAssessmentsQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetAllHouseholdAssessmentsQuery,
-    GetAllHouseholdAssessmentsQueryVariables
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetAllHouseholdAssessmentsQuery,
-    GetAllHouseholdAssessmentsQueryVariables
-  >(GetAllHouseholdAssessmentsDocument, options);
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >(GetHouseholdAssessmentsDocument, options);
 }
-export function useGetAllHouseholdAssessmentsLazyQuery(
+export function useGetHouseholdAssessmentsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAllHouseholdAssessmentsQuery,
-    GetAllHouseholdAssessmentsQueryVariables
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetAllHouseholdAssessmentsQuery,
-    GetAllHouseholdAssessmentsQueryVariables
-  >(GetAllHouseholdAssessmentsDocument, options);
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >(GetHouseholdAssessmentsDocument, options);
 }
-export type GetAllHouseholdAssessmentsQueryHookResult = ReturnType<
-  typeof useGetAllHouseholdAssessmentsQuery
+export type GetHouseholdAssessmentsQueryHookResult = ReturnType<
+  typeof useGetHouseholdAssessmentsQuery
 >;
-export type GetAllHouseholdAssessmentsLazyQueryHookResult = ReturnType<
-  typeof useGetAllHouseholdAssessmentsLazyQuery
+export type GetHouseholdAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetHouseholdAssessmentsLazyQuery
 >;
-export type GetAllHouseholdAssessmentsQueryResult = Apollo.QueryResult<
-  GetAllHouseholdAssessmentsQuery,
-  GetAllHouseholdAssessmentsQueryVariables
+export type GetHouseholdAssessmentsQueryResult = Apollo.QueryResult<
+  GetHouseholdAssessmentsQuery,
+  GetHouseholdAssessmentsQueryVariables
 >;
 export const GetRelatedAnnualsDocument = gql`
   query GetRelatedAnnuals($householdId: ID!, $assessmentId: ID) {

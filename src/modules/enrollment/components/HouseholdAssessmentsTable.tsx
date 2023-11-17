@@ -10,14 +10,14 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  GetAllHouseholdAssessmentsDocument,
-  GetAllHouseholdAssessmentsQuery,
-  GetAllHouseholdAssessmentsQueryVariables,
+  GetHouseholdAssessmentsDocument,
+  GetHouseholdAssessmentsQuery,
+  GetHouseholdAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 type HhmAssessmentType = NonNullable<
-  NonNullable<GetAllHouseholdAssessmentsQuery['household']>['assessments']
+  NonNullable<GetHouseholdAssessmentsQuery['household']>['assessments']
 >['nodes'][0];
 
 const columns: ColumnDef<HhmAssessmentType>[] = [
@@ -61,13 +61,13 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({ householdId }) => {
 
   return (
     <GenericTableWithData<
-      GetAllHouseholdAssessmentsQuery,
-      GetAllHouseholdAssessmentsQueryVariables,
+      GetHouseholdAssessmentsQuery,
+      GetHouseholdAssessmentsQueryVariables,
       HhmAssessmentType
     >
       showFilters
       queryVariables={{ id: householdId }}
-      queryDocument={GetAllHouseholdAssessmentsDocument}
+      queryDocument={GetHouseholdAssessmentsDocument}
       rowLinkTo={rowLinkTo}
       columns={columns}
       pagePath='household.assessments'

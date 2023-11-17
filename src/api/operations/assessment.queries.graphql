@@ -63,23 +63,6 @@ query GetEnrollmentAssessments(
 }
 
 query GetHouseholdAssessments(
-  $householdId: ID!
-  $assessmentRole: AssessmentRole!
-  $assessmentId: ID
-) {
-  householdAssessments(
-    householdId: $householdId
-    assessmentRole: $assessmentRole
-    assessmentId: $assessmentId
-  ) {
-    ...FullAssessment
-    enrollment {
-      id
-    }
-  }
-}
-
-query GetAllHouseholdAssessments(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0

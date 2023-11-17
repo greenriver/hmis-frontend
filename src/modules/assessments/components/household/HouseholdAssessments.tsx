@@ -36,9 +36,9 @@ import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { router } from '@/routes/router';
 import {
+  AssessmentFieldsFragment,
   AssessmentRole,
   EnrollmentFieldsFragment,
-  GetHouseholdAssessmentsQuery,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
@@ -48,12 +48,8 @@ interface HouseholdAssessmentsProps {
   assessmentId?: string;
 }
 
-type HhmAssessmentType = NonNullable<
-  GetHouseholdAssessmentsQuery['householdAssessments']
->[0];
-
 const calculateAssessmentStatus = (
-  assessment: HhmAssessmentType | undefined
+  assessment: AssessmentFieldsFragment | undefined
 ): AssessmentStatus => {
   if (!assessment) {
     return AssessmentStatus.NotStarted;
