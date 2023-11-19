@@ -1,7 +1,7 @@
 import { DateType } from '@date-io/type';
 import { SxProps, Theme } from '@mui/material';
 import {
-  DatePicker as MuiDatePicker,
+  DesktopDatePicker as MuiDatePicker,
   DatePickerProps,
 } from '@mui/x-date-pickers';
 import { isAfter, isBefore, isPast } from 'date-fns';
