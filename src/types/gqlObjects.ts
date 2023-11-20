@@ -1212,6 +1212,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'DateRange',
+    fields: [
+      {
+        name: 'endDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'startDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'DirectUpload',
     fields: [
       {

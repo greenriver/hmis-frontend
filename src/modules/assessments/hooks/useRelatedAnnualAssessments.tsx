@@ -12,7 +12,7 @@ import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
   RelationshipToHoH,
-  useGetRelatedAnnualsQuery,
+  useGetHouseholdAnnualsQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -45,47 +45,61 @@ function relationshipSuffix(relationship: RelationshipToHoH) {
 export function useRelatedAnnualAssessments({
   enrollmentId,
   householdId,
-  assessmentId,
   skip,
 }: Args) {
   const [householdMembers, { loading: hhmLoading }] =
     useHouseholdMembers(enrollmentId);
-  const { data: { householdAssessments } = {}, loading: assmtsLoading } =
-    useGetRelatedAnnualsQuery({
-      variables: { householdId, assessmentId },
+  const { data: { household } = {}, loading: assmtsLoading } =
+    useGetHouseholdAnnualsQuery({
+      variables: { id: householdId },
       skip,
       fetchPolicy: 'cache-and-network',
     });
 
   const assessmentInfo = useMemo(() => {
-    if (!householdAssessments || !householdMembers) return;
+    if (!household || !householdMembers) return;
 
     const annualInfo: HouseholdMemberAnnualInfo[] = [];
     let targetAnnualDate: Date | null = null;
 
-    // First, add all household members who have Annual Assessments within range of the "target" date (either the current assessment date or today if new)
-    householdAssessments.forEach(({ enrollment, client, ...assessment }) => {
-      if (enrollment.id === enrollmentId) {
-        targetAnnualDate = parseHmisDateString(assessment.assessmentDate);
-        return; // skip current member
-      }
+    // console.log(household.annualDuePeriods);
 
-      annualInfo.push({
-        clientName: `${clientBriefName(client)}${relationshipSuffix(
-          enrollment.relationshipToHoH
-        )}`,
-        firstName: client.firstName || 'Client',
-        assessmentDate: assessment.assessmentDate,
-        enrollmentId: enrollment.id,
-        relationshipToHoH: enrollment.relationshipToHoH,
-        path: generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-          clientId: client.id,
+    // GIG FIXME NEXT!
+    // identify which due period is applicable to this assessmentId, or choose the last one
+    // "this years annual is due between x and x"
+    // "the 2020 annual is due between x and x"
+
+    // HHM with annuals in the range:
+    // x
+    // y
+    // z
+
+    // First, add all household members who have Annual Assessments within range of the "target" date (either the current assessment date or today if new)
+    household.assessments.nodes.forEach(
+      ({ enrollment, client, ...assessment }) => {
+        if (enrollment.id === enrollmentId) {
+          targetAnnualDate = parseHmisDateString(assessment.assessmentDate);
+          return; // skip current member
+        }
+        // filter out assessments that are outside of the due period
+
+        annualInfo.push({
+          clientName: `${clientBriefName(client)}${relationshipSuffix(
+            enrollment.relationshipToHoH
+          )}`,
+          firstName: client.firstName || 'Client',
+          assessmentDate: assessment.assessmentDate,
           enrollmentId: enrollment.id,
-          assessmentId: assessment.id,
-          formRole: FormRole.Annual,
-        }),
-      });
-    });
+          relationshipToHoH: enrollment.relationshipToHoH,
+          path: generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+            clientId: client.id,
+            enrollmentId: enrollment.id,
+            assessmentId: assessment.id,
+            formRole: FormRole.Annual,
+          }),
+        });
+      }
+    );
 
     // Next, add all other members that DON'T have Annuals within that target range
     householdMembers.forEach(({ client, enrollment, ...hhm }) => {
@@ -107,6 +121,7 @@ export function useRelatedAnnualAssessments({
         return;
       }
 
+      // it should say "no annual in due period" link: go to assessments
       annualInfo.push({
         clientName: `${clientBriefName(client)}${relationshipSuffix(
           hhm.relationshipToHoH
@@ -123,7 +138,7 @@ export function useRelatedAnnualAssessments({
     });
 
     return annualInfo;
-  }, [enrollmentId, householdAssessments, householdMembers]);
+  }, [enrollmentId, household, householdMembers]);
 
   return {
     assessmentInfo,

@@ -72,6 +72,10 @@ query GetHouseholdAssessments(
 ) {
   household(id: $id) {
     id
+    annualDuePeriods {
+      startDate
+      endDate
+    }
     assessments(
       limit: $limit
       offset: $offset
@@ -96,20 +100,29 @@ query GetHouseholdAssessments(
   }
 }
 
-query GetRelatedAnnuals($householdId: ID!, $assessmentId: ID) {
-  householdAssessments(
-    householdId: $householdId
-    assessmentRole: ANNUAL
-    assessmentId: $assessmentId
-  ) {
+query GetHouseholdAnnuals($id: ID!) {
+  household(id: $id) {
     id
-    assessmentDate
-    enrollment {
-      id
-      relationshipToHoH
+    annualDuePeriods {
+      startDate
+      endDate
     }
-    client {
-      ...ClientName
+    assessments(limit: 50, filters: { type: ANNUAL }) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        assessmentDate
+        inProgress
+        enrollment {
+          id
+          relationshipToHoH
+        }
+        client {
+          ...ClientName
+        }
+      }
     }
   }
 }
