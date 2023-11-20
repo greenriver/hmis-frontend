@@ -1,3 +1,4 @@
+# fragment for resolving batch of assessments on a client/enrollment/household
 fragment AssessmentFields on Assessment {
   id
   lockVersion
@@ -10,17 +11,6 @@ fragment AssessmentFields on Assessment {
   role
   user {
     ...UserFields
-  }
-  access {
-    ...AssessmentAccessFields
-  }
-}
-
-fragment AssessmentWithValuesAndRecords on Assessment {
-  ...AssessmentWithValues
-  ...AssessmentWithRecords
-  enrollment {
-    id
   }
 }
 
@@ -63,6 +53,10 @@ fragment AssessmentWithRecords on Assessment {
   customDataElements {
     ...CustomDataElementFields
   }
+  # resolve access so we know if user can delete the assessment
+  access {
+    ...AssessmentAccessFields
+  }
 }
 
 fragment AssessmentWithValues on Assessment {
@@ -70,6 +64,7 @@ fragment AssessmentWithValues on Assessment {
   wipValues
 }
 
+# fragment for resolving a single assessment for viewing/editing (or a group of assessments in a household)
 fragment FullAssessment on Assessment {
   ...AssessmentWithRecords
   ...AssessmentWithValues
