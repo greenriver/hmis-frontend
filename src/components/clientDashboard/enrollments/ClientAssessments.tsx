@@ -18,7 +18,7 @@ import {
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type AssessmentType = NonNullable<
   NonNullable<GetClientAssessmentsQuery['client']>['assessments']
@@ -28,12 +28,12 @@ const columns: ColumnDef<AssessmentType>[] = [
   {
     header: 'Assessment Date',
     render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
+    linkTreatment: true,
+    ariaLabel: (row) => assessmentDescription(row),
   },
   {
     header: 'Assessment Type',
     render: (assessment) => formRoleDisplay(assessment),
-    linkTreatment: true,
-    ariaLabel: (row) => assessmentDescription(row),
   },
   {
     header: 'Project Name',

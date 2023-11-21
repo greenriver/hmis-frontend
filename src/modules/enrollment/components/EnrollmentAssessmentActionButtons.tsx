@@ -10,7 +10,7 @@ import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type FinishIntakeButtonProps = {
   enrollmentId: string;

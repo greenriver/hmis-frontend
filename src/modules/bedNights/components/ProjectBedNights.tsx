@@ -20,7 +20,7 @@ import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ClientTextSearchInputForm } from '@/modules/search/components/ClientTextSearchInput';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectBedNights = () => {
   const { project } = useProjectDashboardContext();

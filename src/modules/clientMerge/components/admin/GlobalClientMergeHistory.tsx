@@ -11,7 +11,7 @@ import {
   GlobalClientMergeHistoryQuery,
   GlobalClientMergeHistoryQueryVariables,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type ClientMergeAuditType = NonNullable<
   NonNullable<GlobalClientMergeHistoryQuery['mergeAuditHistory']>
@@ -36,7 +36,7 @@ const GlobalClientMergeHistory = () => {
       <PageTitle
         title='Client Merge History'
         actions={
-          <ButtonLink to={pathToMerge}>Find Duplicate Clients</ButtonLink>
+          <ButtonLink to={pathToMerge}>Review Potential Duplicates</ButtonLink>
         }
       />
       <Paper>

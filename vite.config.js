@@ -89,6 +89,8 @@ export default defineConfig(({ command, mode }) => {
     },
     ...(command !== 'build' && {
       preview: {
+        // don't try to open a browser
+        open: false,
         // cypress expects on 5173
         port: 5173,
         strictPort: true,
@@ -97,7 +99,8 @@ export default defineConfig(({ command, mode }) => {
         port: 5173,
         open: true,
         host: env.HMIS_HOST || 'hmis.dev.test',
-        https: true,
+        https:
+          env.SERVER_HTTPS == undefined ? true : env.SERVER_HTTPS == 'true',
         proxy: {
           '/hmis': warehouseProxyServer,
           '/assets/theme': warehouseProxyServer,

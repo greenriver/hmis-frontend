@@ -177,6 +177,7 @@ const createThemeOptions = (theme: Theme) => ({
         root: theme.unstable_sx({
           color: theme.palette.links,
           textDecorationColor: theme.palette.links,
+          textUnderlineOffset: '0.2rem',
           cursor: 'pointer',
           '&.Mui-focusVisible': {
             outlineOffset: '4px',

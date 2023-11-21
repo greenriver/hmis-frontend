@@ -33,6 +33,12 @@ type AdminPageConfig = NavItem & {
 
 const adminPages: AdminPageConfig[] = [
   {
+    id: 'users',
+    title: 'Users',
+    path: AdminDashboardRoutes.USERS,
+    permission: 'canImpersonateUsers',
+  },
+  {
     id: 'denials',
     title: 'Denials',
     path: AdminDashboardRoutes.AC_DENIALS,
@@ -40,7 +46,7 @@ const adminPages: AdminPageConfig[] = [
   },
   {
     id: 'merge-clients',
-    title: 'Client Merges',
+    title: 'Client Merge History',
     path: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
     permission: 'canMergeClients',
   },

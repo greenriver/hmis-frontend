@@ -11,30 +11,30 @@ import {
 interface Args {
   householdId: string;
   role: HouseholdAssesmentRole;
-  assessmentId?: string;
   skip?: boolean;
+  assessmentId?: string; // ignored for now, may add back if we do something with annuals here
 }
 
-type AssessmentResultType = NonNullable<
-  NonNullable<GetHouseholdAssessmentsQuery['householdAssessments']>
->[0];
+type HhmAssessmentType = NonNullable<
+  NonNullable<GetHouseholdAssessmentsQuery['household']>['assessments']
+>['nodes'][0];
 
-export function useHouseholdAssessments({
-  role,
-  householdId,
-  assessmentId,
-  skip,
-}: Args) {
-  const { data: { householdAssessments } = {}, ...status } =
+export function useHouseholdAssessments({ role, householdId, skip }: Args) {
+  const { data: { household } = {}, ...status } =
     useGetHouseholdAssessmentsQuery({
       variables: {
-        householdId,
-        assessmentRole: role,
-        assessmentId,
+        id: householdId,
+        filters: { type: [role] },
+        limit: 30,
       },
       skip,
       fetchPolicy: 'cache-and-network',
     });
+
+  const householdAssessments = useMemo(() => {
+    if (!household || !household.assessments) return;
+    return household.assessments.nodes;
+  }, [household]);
 
   const assessmentByEnrollmentId = useMemo(() => {
     if (!householdAssessments) return;
@@ -42,7 +42,7 @@ export function useHouseholdAssessments({
       enrollment.id,
       assessment,
     ]);
-    return fromPairs(pairs) as Record<string, AssessmentResultType | undefined>;
+    return fromPairs(pairs) as Record<string, HhmAssessmentType | undefined>;
   }, [householdAssessments]);
 
   return { householdAssessments, assessmentByEnrollmentId, ...status } as const;

@@ -4,7 +4,7 @@ import RouterLink from '@/components/elements/RouterLink';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { RelationshipToHoH, UnitFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const UnitOccupants = ({ unit }: { unit: UnitFieldsFragment }) => {
   if (unit.occupants.length === 0) return null;

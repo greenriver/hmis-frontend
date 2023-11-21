@@ -25,7 +25,7 @@ import {
   ProjectFilterOptionStatus,
   ProjectSortOption,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 type OrganizationType = NonNullable<
   NonNullable<GetOrganizationsQuery['organizations']>['nodes']

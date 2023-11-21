@@ -22,7 +22,7 @@ import {
   ProjectType,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const CaptionedText: React.FC<{ caption: string; children: ReactNode }> = ({
   caption,

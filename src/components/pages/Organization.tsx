@@ -17,7 +17,7 @@ import OrganizationDetails from '@/modules/projects/components/OrganizationDetai
 import OrganizationProjectsTable from '@/modules/projects/components/tables/OrganizationProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const Organization = () => {
   const { organizationId } = useSafeParams() as {

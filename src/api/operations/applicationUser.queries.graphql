@@ -1,0 +1,15 @@
+query GetApplicationUsers(
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ApplicationUserFilterOptions = null
+) {
+  applicationUsers(limit: $limit, offset: $offset, filters: $filters) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      name
+      ...ApplicationUserFields
+    }
+  }
+}

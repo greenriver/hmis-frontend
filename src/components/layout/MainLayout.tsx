@@ -99,6 +99,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
     color: 'text.primary',
     backgroundColor: enabled ? (theme) => theme.palette.grey[100] : undefined,
   });
+
   return (
     <React.Fragment>
       {SHOW_OP_LINK_BAR && <WarehouseLinkBar />}

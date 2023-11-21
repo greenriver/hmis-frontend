@@ -11,7 +11,7 @@ import {
 import RouterLink from './RouterLink';
 
 import useSafeParams from '@/hooks/useSafeParams';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export interface Breadcrumb {
   label: string;

@@ -21,6 +21,7 @@ import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAs
 import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
+import PathHandler from '@/components/elements/PathHandler';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
 import ClientDashboard from '@/components/pages/ClientDashboard';
@@ -37,6 +38,7 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
+import AdminUsers from '@/modules/admin/components/AdminUsers';
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
@@ -492,7 +494,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: ClientDashboardRoutes.CLIENT_MERGES,
+            path: ClientDashboardRoutes.MERGE_HISTORY,
             element: (
               <RootPermissionsFilter permissions='canMergeClients'>
                 <ClientMergeHistory />
@@ -581,10 +583,25 @@ export const protectedRoutes: RouteNode[] = [
               </RootPermissionsFilter>
             ),
           },
+          {
+            path: AdminDashboardRoutes.USERS,
+            element: (
+              <RootPermissionsFilter permissions='canImpersonateUsers'>
+                <AdminUsers />
+              </RootPermissionsFilter>
+            ),
+          },
         ],
       },
       { path: '/', element: <Dashboard /> },
-      { path: '*', element: <NotFound /> },
+      {
+        path: '*',
+        element: (
+          <PathHandler>
+            <NotFound />
+          </PathHandler>
+        ),
+      },
     ],
   },
   {

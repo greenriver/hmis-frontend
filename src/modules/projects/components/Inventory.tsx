@@ -16,7 +16,7 @@ import {
   InventoryFieldsFragment,
   useGetInventoryQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const Inventory = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();

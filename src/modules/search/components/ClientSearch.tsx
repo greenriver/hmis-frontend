@@ -45,7 +45,7 @@ import {
   SearchClientsQuery,
   SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 function asClient(
   record:
