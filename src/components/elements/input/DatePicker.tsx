@@ -1,14 +1,16 @@
 import { DateType } from '@date-io/type';
 import { SxProps, Theme } from '@mui/material';
 import {
-  DesktopDatePicker as MuiDatePicker,
   DatePickerProps,
+  DesktopDatePicker,
+  MobileDatePicker,
 } from '@mui/x-date-pickers';
 import { isAfter, isBefore, isPast } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { DynamicInputCommonProps, isDate } from '@/modules/form/types';
 import { isValidDate } from '@/modules/form/util/formUtil';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
@@ -39,6 +41,9 @@ const DatePicker = ({
     return undefined;
   }, [max]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const isMobile = useIsMobile();
+  const MuiDatePicker = isMobile ? MobileDatePicker : DesktopDatePicker;
 
   const handleBlur = useCallback(() => {
     let msg = null;
