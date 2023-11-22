@@ -1,8 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { Ref, useEffect, useMemo } from 'react';
 
-import { assessmentDate } from '../util';
-
 import AssessmentTitle from './AssessmentTitle';
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
@@ -26,6 +24,7 @@ import {
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
+import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
@@ -89,11 +88,6 @@ const IndividualAssessment = ({
     relationshipToHoH,
   });
 
-  const informationDate = useMemo(
-    () => assessmentDate(formRole, enrollment),
-    [enrollment, formRole]
-  );
-
   const FormActionProps = useMemo(
     () =>
       !dataLoading && getFormActionProps
@@ -120,7 +114,6 @@ const IndividualAssessment = ({
   }, [
     embeddedInWorkflow,
     assessmentTitle,
-    informationDate,
     assessment,
     overrideBreadcrumbTitles,
   ]);
@@ -148,6 +141,9 @@ const IndividualAssessment = ({
       embeddedInWorkflow={embeddedInWorkflow}
       assessmentId={assessmentId}
       householdSize={enrollment.householdSize}
+      assessmentDate={
+        parseHmisDateString(assessment?.assessmentDate) || undefined
+      }
     />
   );
 

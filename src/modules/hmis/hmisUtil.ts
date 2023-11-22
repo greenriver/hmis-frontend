@@ -167,6 +167,24 @@ export const parseAndFormatDate = (
   return formatDateForDisplay(parsed) || dateString;
 };
 
+export const formatDateRange = (
+  startDate?: Date | null,
+  endDate?: Date | null,
+  startPlaceholder = 'Unknown',
+  endPlaceholder = 'Active'
+): string | null => {
+  if (!startDate && !endDate) return null;
+
+  const startFormatted = startDate
+    ? formatDateForDisplay(startDate)
+    : startDate || startPlaceholder;
+  const endFormatted = endDate
+    ? formatDateForDisplay(endDate)
+    : endDate || endPlaceholder;
+
+  return `${startFormatted} - ${endFormatted}`;
+};
+
 export const parseAndFormatDateRange = (
   startDateString?: string | null,
   endDateString?: string | null,

@@ -1,9 +1,19 @@
-import { isAfter } from 'date-fns';
-import { useMemo } from 'react';
+import { Alert, AlertTitle, Skeleton, Stack, Typography } from '@mui/material';
+import {
+  add,
+  differenceInMonths,
+  getYear,
+  isAfter,
+  isWithinInterval,
+} from 'date-fns';
+import { useCallback, useMemo, useState } from 'react';
 
 import { To } from 'react-router-dom';
+import RouterLink from '@/components/elements/RouterLink';
 import {
   clientBriefName,
+  formatDateRange,
+  parseAndFormatDate,
   parseHmisDateString,
   relationshipToHohForDisplay,
 } from '@/modules/hmis/hmisUtil';
@@ -20,12 +30,9 @@ interface Args {
   householdId: string;
   enrollmentId: string;
   assessmentId?: string;
+  assessmentDate?: Date;
   skip?: boolean;
 }
-
-// type AssessmentResultType = NonNullable<
-//   NonNullable<GetRelatedAnnualsQuery['householdAssessments']>
-// >[0];
 
 type HouseholdMemberAnnualInfo = {
   clientName: string;
@@ -46,9 +53,12 @@ export function useRelatedAnnualAssessments({
   enrollmentId,
   householdId,
   skip,
+  assessmentDate,
 }: Args) {
   const [householdMembers, { loading: hhmLoading }] =
     useHouseholdMembers(enrollmentId);
+
+  // fetch all annuals for this household
   const { data: { household } = {}, loading: assmtsLoading } =
     useGetHouseholdAnnualsQuery({
       variables: { id: householdId },
@@ -56,34 +66,68 @@ export function useRelatedAnnualAssessments({
       fetchPolicy: 'cache-and-network',
     });
 
-  const assessmentInfo = useMemo(() => {
-    if (!household || !householdMembers) return;
+  // Determine the "due period" that's relevant for this Assessment.
+  // If it's a new assessment, choose the last due period.
+  // If it's an existing assessment, choose the due period that most closely matches this assessment
+  const [duePeriodStart, duePeriodEnd, duePeriodAnniversary] = useMemo(() => {
+    if (!household || !householdMembers) return [];
 
-    const annualInfo: HouseholdMemberAnnualInfo[] = [];
-    let targetAnnualDate: Date | null = null;
+    let duePeriod;
+    if (assessmentDate) {
+      duePeriod = household.annualDuePeriods.find(
+        ({ startDate: startDateStr }) => {
+          const startDate = parseHmisDateString(startDateStr);
+          if (!startDate) return false;
 
-    // console.log(household.annualDuePeriods);
-
-    // GIG FIXME NEXT!
-    // identify which due period is applicable to this assessmentId, or choose the last one
-    // "this years annual is due between x and x"
-    // "the 2020 annual is due between x and x"
-
-    // HHM with annuals in the range:
-    // x
-    // y
-    // z
-
-    // First, add all household members who have Annual Assessments within range of the "target" date (either the current assessment date or today if new)
-    household.assessments.nodes.forEach(
-      ({ enrollment, client, ...assessment }) => {
-        if (enrollment.id === enrollmentId) {
-          targetAnnualDate = parseHmisDateString(assessment.assessmentDate);
-          return; // skip current member
+          const anniversaryDate = add(startDate, { days: 30 });
+          return (
+            Math.abs(differenceInMonths(anniversaryDate, assessmentDate)) < 6
+          );
         }
-        // filter out assessments that are outside of the due period
+      );
+    } else {
+      duePeriod =
+        household.annualDuePeriods[household.annualDuePeriods.length - 1];
+    }
 
-        annualInfo.push({
+    // This household has been enrolled <11 months, or this assessment falls so far outside of a due period
+    // that we can't determine which due period is relevant.
+    if (!duePeriod) return [];
+
+    const start = parseHmisDateString(duePeriod.startDate);
+    const end = parseHmisDateString(duePeriod.endDate);
+    const anniversary = start ? add(start, { days: 30 }) : null;
+    return [start, end, anniversary];
+  }, [assessmentDate, household, householdMembers]);
+
+  // Construct annual assessment info for all household members pertaining to this due period
+  const assessmentInfo = useMemo(() => {
+    if (
+      !household ||
+      !householdMembers ||
+      !duePeriodStart ||
+      !duePeriodEnd ||
+      !duePeriodAnniversary
+    )
+      return;
+
+    const annualInfo: HouseholdMemberAnnualInfo[] = household.assessments.nodes
+      // Drop any assessments outside of due period
+      .filter(({ enrollment, assessmentDate }) => {
+        if (enrollment.id === enrollmentId) return false; // skip current member
+
+        const assmtDate = parseHmisDateString(assessmentDate);
+        if (!assmtDate) return false;
+
+        const isWithinDuePeriod = isWithinInterval(assmtDate, {
+          start: duePeriodStart,
+          end: duePeriodEnd,
+        });
+        return isWithinDuePeriod;
+      })
+      // Map to relevant info for display
+      .map(({ enrollment, client, ...assessment }) => {
+        return {
           clientName: `${clientBriefName(client)}${relationshipSuffix(
             enrollment.relationshipToHoH
           )}`,
@@ -97,51 +141,122 @@ export function useRelatedAnnualAssessments({
             assessmentId: assessment.id,
             formRole: FormRole.Annual,
           }),
-        });
-      }
-    );
+        };
+      });
 
     // Next, add all other members that DON'T have Annuals within that target range
-    householdMembers.forEach(({ client, enrollment, ...hhm }) => {
-      // skip current member
-      if (enrollment.id === enrollmentId) return;
+    const remainingHHMs: HouseholdMemberAnnualInfo[] = householdMembers
+      .filter(({ enrollment }) => {
+        // skip current member
+        if (enrollment.id === enrollmentId) return false;
 
-      // skip if already included
-      if (!!annualInfo.find((info) => info.enrollmentId === enrollment.id)) {
-        return;
-      }
+        // skip if already included
+        if (!!annualInfo.find((info) => info.enrollmentId === enrollment.id)) {
+          return false;
+        }
 
-      // skip hh member if they enrolled after the target annual date
-      const entryDate = parseHmisDateString(enrollment.entryDate);
-      if (
-        entryDate &&
-        targetAnnualDate &&
-        isAfter(entryDate, targetAnnualDate)
-      ) {
-        return;
-      }
+        // skip hh member if they enrolled after the due period anniversary
+        const entryDate = parseHmisDateString(enrollment.entryDate);
+        const anniv = add(duePeriodStart, { days: 30 });
+        if (entryDate && isAfter(entryDate, anniv)) {
+          return false;
+        }
 
-      // it should say "no annual in due period" link: go to assessments
-      annualInfo.push({
-        clientName: `${clientBriefName(client)}${relationshipSuffix(
-          hhm.relationshipToHoH
-        )}`,
-        firstName: client.firstName || 'Client',
-        enrollmentId: enrollment.id,
-        relationshipToHoH: hhm.relationshipToHoH,
-        path: generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-          clientId: client.id,
+        return true;
+      })
+      .map(({ client, enrollment, ...hhm }) => {
+        return {
+          clientName: `${clientBriefName(client)}${relationshipSuffix(
+            hhm.relationshipToHoH
+          )}`,
+          firstName: client.firstName || 'Client',
           enrollmentId: enrollment.id,
-          formRole: FormRole.Annual,
-        }),
+          relationshipToHoH: hhm.relationshipToHoH,
+          path: generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
+            clientId: client.id,
+            enrollmentId: enrollment.id,
+          }),
+        };
       });
-    });
 
-    return annualInfo;
-  }, [enrollmentId, household, householdMembers]);
+    return [...annualInfo, ...remainingHHMs];
+  }, [
+    duePeriodAnniversary,
+    duePeriodEnd,
+    duePeriodStart,
+    enrollmentId,
+    household,
+    householdMembers,
+  ]);
+
+  const [alertHidden, setAlertHidden] = useState(false);
+
+  const renderAnnualAlert = useCallback(() => {
+    if (alertHidden) return null;
+    // loading state
+    if (!skip && !assessmentInfo && (hhmLoading || assmtsLoading)) {
+      return <Skeleton variant='rectangular' width='100%' height={50} />;
+    }
+    // no data
+    if (!assessmentInfo || assessmentInfo.length === 0) return null;
+    if (!duePeriodAnniversary || !duePeriodStart || !duePeriodEnd) return null;
+
+    return (
+      <Alert
+        severity='info'
+        sx={{ my: 1 }}
+        onClose={() => setAlertHidden(true)}
+        icon={false}
+      >
+        <AlertTitle>
+          This household's annual assessments for{' '}
+          {getYear(duePeriodAnniversary)} are due between{' '}
+          {formatDateRange(duePeriodStart, duePeriodEnd)}.
+        </AlertTitle>
+
+        <Stack gap={0.5} sx={{ pt: 1 }}>
+          {assessmentInfo.map(
+            ({ enrollmentId, clientName, firstName, assessmentDate, path }) => (
+              <Stack direction={'row'} gap={1} key={enrollmentId}>
+                <Typography variant='body2' fontWeight={600}>
+                  {clientName}
+                  {':'}
+                </Typography>
+                {assessmentDate ? (
+                  <RouterLink to={path} openInNew>
+                    {parseAndFormatDate(assessmentDate)} Annual
+                  </RouterLink>
+                ) : (
+                  <>
+                    {' '}
+                    <Typography variant='body2'>No annual in range.</Typography>
+                    <RouterLink to={path} openInNew>
+                      View {firstName}'s assessments
+                    </RouterLink>
+                  </>
+                )}
+              </Stack>
+            )
+          )}
+        </Stack>
+      </Alert>
+    );
+  }, [
+    alertHidden,
+    assessmentInfo,
+    assmtsLoading,
+    duePeriodAnniversary,
+    duePeriodEnd,
+    duePeriodStart,
+    hhmLoading,
+    skip,
+  ]);
 
   return {
+    renderAnnualAlert,
     assessmentInfo,
     loading: hhmLoading || assmtsLoading,
+    duePeriodStart,
+    duePeriodEnd,
   } as const;
 }
