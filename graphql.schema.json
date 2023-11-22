@@ -9933,12 +9933,6 @@
             "description": "(302) Transitional housing for homeless persons (including homeless youth)",
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "WORKER_UNABLE_TO_DETERMINE",
-            "description": "(37) Worker unable to determine",
-            "isDeprecated": false,
-            "deprecationReason": null
           }
         ],
         "possibleTypes": null
