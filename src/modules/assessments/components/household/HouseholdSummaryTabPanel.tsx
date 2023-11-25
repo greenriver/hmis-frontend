@@ -20,6 +20,7 @@ import {
 } from './util';
 
 import BackButton from '@/components/elements/BackButton';
+import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -51,6 +52,7 @@ interface HouseholdSummaryTabPanelProps {
   projectName: string;
   refetch: () => Promise<any>;
   setCurrentTab: Dispatch<SetStateAction<string | undefined>>;
+  hasInFlight: boolean;
 }
 
 // Memoized to only re-render when props change (shallow compare)
@@ -63,6 +65,7 @@ const HouseholdSummaryTabPanel = memo(
     projectName,
     refetch,
     setCurrentTab,
+    hasInFlight,
   }: HouseholdSummaryTabPanelProps) => {
     const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
     const [submitMutation, { loading, data: submitResponseData }] =
@@ -153,6 +156,18 @@ const HouseholdSummaryTabPanel = memo(
       }
     );
 
+    if (hasInFlight) {
+      return (
+        <AlwaysMountedTabPanel
+          active={active}
+          key='summary'
+          {...tabPanelA11yProps(id)}
+        >
+          <Loading />
+        </AlwaysMountedTabPanel>
+      );
+    }
+
     return (
       <AlwaysMountedTabPanel
         active={active}
@@ -218,7 +233,7 @@ const HouseholdSummaryTabPanel = memo(
         </Grid>
         {renderValidationDialog({
           onConfirm: () => handleSubmit(true),
-          loading,
+          loading: loading,
           sectionLabels: mapValues(keyBy(tabs, 'assessmentId'), 'clientName'),
         })}
       </AlwaysMountedTabPanel>

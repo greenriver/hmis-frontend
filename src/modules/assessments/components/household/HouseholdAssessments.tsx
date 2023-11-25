@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { findIndex } from 'lodash-es';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { useHouseholdAssessments } from '../../hooks/useHouseholdAssessments';
@@ -42,7 +42,7 @@ import {
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
-interface HouseholdAssessmentsProps {
+interface Props {
   enrollment: EnrollmentFieldsFragment;
   role: HouseholdAssesmentRole;
   assessmentId?: string;
@@ -61,11 +61,20 @@ const calculateAssessmentStatus = (
   }
 };
 
-const HouseholdAssessments = ({
+const HouseholdAssessments: React.FC<Props> = ({
   role,
   enrollment,
   assessmentId,
-}: HouseholdAssessmentsProps) => {
+}) => {
+  // inFlights track if there are any outstanding mutations
+  const [inFlights, setInFlights] = useState<Record<string, boolean>>({});
+  const handleInFlight = useCallback((clientId: string, value: boolean) => {
+    setInFlights((c) => ({ ...c, [clientId]: value }));
+  }, []);
+  const anyInFlight = useMemo(() => {
+    return Object.values(inFlights).some((value) => value);
+  }, [inFlights]);
+
   const [householdMembers, fetchMembersStatus] = useHouseholdMembers(
     enrollment.id
   );
@@ -346,6 +355,8 @@ const HouseholdAssessments = ({
               role={role}
               updateTabStatus={updateTabStatus}
               assessmentStatus={tabDefinition.status}
+              onInflight={handleInFlight}
+              hasInflight={anyInFlight}
               {...tabDefinition}
             />
           ))}
@@ -372,6 +383,7 @@ const HouseholdAssessments = ({
                 projectName={enrollmentName(enrollment)}
                 refetch={refetch}
                 setCurrentTab={setCurrentTab}
+                hasInFlight={anyInFlight}
               />
             )
           )}

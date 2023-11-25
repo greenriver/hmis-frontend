@@ -52,7 +52,6 @@ import {
 interface Props {
   enrollment: EnrollmentFieldsFragment;
   clientId: string;
-  // assessmentTitle: string;
   formRole?: FormRole;
   definition: FormDefinition;
   assessment?: FullAssessmentFragment;
@@ -63,9 +62,10 @@ interface Props {
   FormActionProps?: DynamicFormProps['FormActionProps'];
   visible?: boolean;
   formRef?: Ref<DynamicFormRef>;
+  onInflight: (clientId: string, value: boolean) => void;
 }
 
-const AssessmentForm = ({
+const AssessmentForm: React.FC<Props> = ({
   assessment,
   clientId,
   assessmentTitle,
@@ -78,7 +78,8 @@ const AssessmentForm = ({
   formRef,
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
-}: Props) => {
+  onInflight,
+}) => {
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -94,11 +95,11 @@ const AssessmentForm = ({
     if (assessment && !assessment.inProgress) setLocked(true);
   }, [assessment, canEdit]);
 
-  // Most recently selected "source" assesment for autofill
+  // Most recently selected "source" assessment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
     FullAssessmentFragment | undefined
   >();
-  // Trigger for reloading initial values and form if a source assesment is chosen for autofill.
+  // Trigger for reloading initial values and form if a source assessment is chosen for autofill.
   // This is needed to support re-selecting the same assessment (which should clear and reload the form again)
   const [reloadInitialValues, setReloadInitialValues] = useState(false);
 
@@ -123,6 +124,13 @@ const AssessmentForm = ({
         if (!assmt.inProgress) setLocked(true);
       },
     });
+
+  const handleDirty = useCallback(
+    (value: boolean) => {
+      onInflight(clientId, value);
+    },
+    [onInflight, clientId]
+  );
 
   const itemMap = useMemo(
     () => getItemMap(definition.definition),
@@ -283,7 +291,7 @@ const AssessmentForm = ({
             sticky={embeddedInWorkflow ? 'always' : 'auto'}
           >
             <DynamicView
-              // dont use `initialValues` because we don't want the OVERWRITE fields
+              // don't use `initialValues` because we don't want the OVERWRITE fields
               values={initialValuesFromAssessment(itemMap, assessment)}
               definition={definition.definition}
               pickListArgs={pickListArgs}
@@ -312,6 +320,7 @@ const AssessmentForm = ({
             showSavePrompt
             alwaysShowSaveSlide={!!embeddedInWorkflow}
             FormActionProps={FormActionProps}
+            onDirty={handleDirty}
             // Only show "warn if empty" treatments if this is an existing assessment,
             // OR if the user has attempted to submit this (new) assessment
             warnIfEmpty={!!assessment || hasAnyValue(errors)}
