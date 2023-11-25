@@ -271,6 +271,7 @@ const DynamicForm = forwardRef(
             appear
             timeout={300}
             direction='up'
+            loading={loading}
           >
             {saveButtons}
           </SaveSlide>
