@@ -44,7 +44,7 @@ export interface IndividualAssessmentProps {
   client: ClientNameDobVeteranFields;
   assessmentStatus?: AssessmentStatus;
   visible?: boolean;
-  onInflight: (clientId: string, inFlight: boolean) => void;
+  onInflight?: (clientId: string, inFlight: boolean) => void;
   getFormActionProps?: (
     assessment?: AssessmentFieldsFragment
   ) => DynamicFormProps['FormActionProps'];

@@ -62,7 +62,7 @@ interface Props {
   FormActionProps?: DynamicFormProps['FormActionProps'];
   visible?: boolean;
   formRef?: Ref<DynamicFormRef>;
-  onInflight: (clientId: string, value: boolean) => void;
+  onInflight?: (clientId: string, value: boolean) => void;
 }
 
 const AssessmentForm: React.FC<Props> = ({
@@ -127,7 +127,7 @@ const AssessmentForm: React.FC<Props> = ({
 
   const handleDirty = useCallback(
     (value: boolean) => {
-      onInflight(clientId, value);
+      onInflight?.(clientId, value);
     },
     [onInflight, clientId]
   );
