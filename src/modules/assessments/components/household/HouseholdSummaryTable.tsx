@@ -140,7 +140,7 @@ const HouseholdSummaryTable = ({
           ? undefined
           : (theme) => theme.palette.grey[50],
       })}
-      setSelectedRowIds={handleSetSelected}
+      onChangeSelectedRowIds={handleSetSelected}
     />
   );
 };
