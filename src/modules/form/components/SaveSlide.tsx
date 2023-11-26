@@ -8,7 +8,11 @@ const SaveSlide = ({ children, loading = false, ...props }: Props) => (
   <Slide {...props}>
     <div>
       {loading ? (
-        <LinearProgress sx={{ height: 2 }} />
+        <LinearProgress
+          sx={{ height: 2 }}
+          aria-live='polite'
+          aria-busy='true'
+        />
       ) : (
         <Box sx={{ height: 2 }} />
       )}
