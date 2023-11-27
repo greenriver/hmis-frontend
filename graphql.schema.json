@@ -821,7 +821,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2000,7 +2000,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2302,7 +2302,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3789,7 +3789,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4356,7 +4356,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4805,7 +4805,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -5423,7 +5423,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -6713,7 +6713,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7193,7 +7193,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7575,7 +7575,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -9933,12 +9933,6 @@
             "description": "(302) Transitional housing for homeless persons (including homeless youth)",
             "isDeprecated": false,
             "deprecationReason": null
-          },
-          {
-            "name": "WORKER_UNABLE_TO_DETERMINE",
-            "description": "(37) Worker unable to determine",
-            "isDeprecated": false,
-            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -10455,7 +10449,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10774,7 +10768,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11205,7 +11199,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -13352,7 +13346,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -14526,7 +14520,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -15367,7 +15361,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -15864,7 +15858,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -17064,7 +17058,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -17942,7 +17936,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -18261,7 +18255,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -19933,7 +19927,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -20701,7 +20695,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -21459,7 +21453,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -23629,7 +23623,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -27493,7 +27487,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -27907,7 +27901,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -32834,7 +32828,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -33412,7 +33406,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -35262,7 +35256,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -36300,85 +36294,6 @@
                     "ofType": null
                   }
                 }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "User",
-        "description": "HUD User",
-        "fields": [
-          {
-            "name": "dateCreated",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ISO8601DateTime",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "dateDeleted",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ISO8601DateTime",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "dateUpdated",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "ISO8601DateTime",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "name",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -38021,7 +37936,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,

@@ -296,7 +296,6 @@ export const HmisEnums = {
     OTHER: 'Other',
     DECEASED: 'Deceased',
     NO_EXIT_INTERVIEW_COMPLETED: 'No exit interview completed',
-    WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
     EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_HOST_HOME_SHELTER:
       'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or Host Home shelter',
     PLACE_NOT_MEANT_FOR_HABITATION:
