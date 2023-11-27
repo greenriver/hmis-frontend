@@ -1575,8 +1575,6 @@ export enum Destination {
   SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
   /** (302) Transitional housing for homeless persons (including homeless youth) */
   TransitionalHousingForHomelessPersons = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS',
-  /** (37) Worker unable to determine */
-  WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
 }
 
 /** Represents direct upload credentials */
