@@ -62,7 +62,7 @@ interface Props {
   FormActionProps?: DynamicFormProps['FormActionProps'];
   visible?: boolean;
   formRef?: Ref<DynamicFormRef>;
-  onInflight?: (clientId: string, value: boolean) => void;
+  onDirty?: (enrollmentId: string, value: boolean) => void;
 }
 
 const AssessmentForm: React.FC<Props> = ({
@@ -78,7 +78,7 @@ const AssessmentForm: React.FC<Props> = ({
   formRef,
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
-  onInflight,
+  onDirty,
 }) => {
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -127,9 +127,9 @@ const AssessmentForm: React.FC<Props> = ({
 
   const handleDirty = useCallback(
     (value: boolean) => {
-      onInflight?.(clientId, value);
+      onDirty?.(enrollment.id, value);
     },
-    [onInflight, clientId]
+    [onDirty, enrollment.id]
   );
 
   const itemMap = useMemo(

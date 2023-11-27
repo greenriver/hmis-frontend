@@ -44,7 +44,7 @@ export interface IndividualAssessmentProps {
   client: ClientNameDobVeteranFields;
   assessmentStatus?: AssessmentStatus;
   visible?: boolean;
-  onInflight?: (clientId: string, inFlight: boolean) => void;
+  onDirty?: (enrollmentId: string, inFlight: boolean) => void;
   getFormActionProps?: (
     assessment?: AssessmentFieldsFragment
   ) => DynamicFormProps['FormActionProps'];
@@ -69,7 +69,7 @@ const IndividualAssessment = ({
   getFormActionProps,
   visible,
   formRef,
-  onInflight,
+  onDirty,
 }: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useClientDashboardContext();
 
@@ -183,7 +183,7 @@ const IndividualAssessment = ({
       FormActionProps={FormActionProps}
       visible={visible}
       formRef={formRef}
-      onInflight={onInflight}
+      onDirty={onDirty}
     />
   );
 };

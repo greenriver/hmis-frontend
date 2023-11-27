@@ -27,8 +27,7 @@ interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   navigateToTab: (t: string) => void;
   updateTabStatus: (status: AssessmentStatus, tabId: string) => void;
   assessmentStatus: AssessmentStatus;
-  onInflight: (clientId: string, inFlight: boolean) => void;
-  hasInflight: boolean;
+  onDirty: (enrollmentId: string, inFlight: boolean) => void;
 }
 
 // Memoized to only re-render when props change (shallow compare)
@@ -49,7 +48,7 @@ const HouseholdAssessmentTabPanel = memo(
     updateTabStatus,
     assessmentSubmitted,
     assessmentStatus,
-    onInflight,
+    onDirty,
   }: HouseholdAssessmentTabPanelProps) => {
     // console.debug('Rendering assessment panel for', clientName);
 
@@ -164,7 +163,7 @@ const HouseholdAssessmentTabPanel = memo(
           getFormActionProps={getFormActionProps}
           visible={active}
           formRef={formRef}
-          onInflight={onInflight}
+          onDirty={onDirty}
         />
       </AlwaysMountedTabPanel>
     );

@@ -20,8 +20,8 @@ import {
 } from './util';
 
 import BackButton from '@/components/elements/BackButton';
-import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
+import LoadingSkeleton from '@/components/elements/LoadingSkeleton';
 import TitleCard from '@/components/elements/TitleCard';
 import useSafeParams from '@/hooks/useSafeParams';
 import HouseholdSummaryExitHelpCard from '@/modules/assessments/components/household/HouseholdSummaryExitHelpCard';
@@ -52,7 +52,7 @@ interface HouseholdSummaryTabPanelProps {
   projectName: string;
   refetch: () => Promise<any>;
   setCurrentTab: Dispatch<SetStateAction<string | undefined>>;
-  hasInFlight: boolean;
+  blocked: boolean;
 }
 
 // Memoized to only re-render when props change (shallow compare)
@@ -65,7 +65,7 @@ const HouseholdSummaryTabPanel = memo(
     projectName,
     refetch,
     setCurrentTab,
-    hasInFlight,
+    blocked,
   }: HouseholdSummaryTabPanelProps) => {
     const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
     const [submitMutation, { loading, data: submitResponseData }] =
@@ -156,18 +156,6 @@ const HouseholdSummaryTabPanel = memo(
       }
     );
 
-    if (hasInFlight) {
-      return (
-        <AlwaysMountedTabPanel
-          active={active}
-          key='summary'
-          {...tabPanelA11yProps(id)}
-        >
-          <Loading />
-        </AlwaysMountedTabPanel>
-      );
-    }
-
     return (
       <AlwaysMountedTabPanel
         active={active}
@@ -204,17 +192,21 @@ const HouseholdSummaryTabPanel = memo(
               </Grid>
             )}
             <TitleCard title='Select Household Members for Submission'>
-              <HouseholdSummaryTable
-                tabs={tabs}
-                role={role}
-                setAssessmentsToSubmit={setAssessmentsToSubmit}
-                setCurrentTab={setCurrentTab}
-              />
+              {blocked ? (
+                <LoadingSkeleton px={2} count={tabs.length} />
+              ) : (
+                <HouseholdSummaryTable
+                  tabs={tabs}
+                  role={role}
+                  setAssessmentsToSubmit={setAssessmentsToSubmit}
+                  setCurrentTab={setCurrentTab}
+                />
+              )}
               <Box sx={{ px: 2, py: 3 }}>
                 <LoadingButton
                   loading={loading}
                   onClick={() => handleSubmit(false)}
-                  disabled={assessmentsToSubmit.length === 0}
+                  disabled={assessmentsToSubmit.length === 0 || blocked}
                 >
                   {`Submit (${assessmentsToSubmit.length}) ${startCase(
                     role.toLowerCase()

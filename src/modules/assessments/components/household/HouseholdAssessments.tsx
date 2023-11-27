@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { findIndex } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { useHouseholdAssessments } from '../../hooks/useHouseholdAssessments';
@@ -66,14 +66,16 @@ const HouseholdAssessments: React.FC<Props> = ({
   enrollment,
   assessmentId,
 }) => {
-  // inFlights track if there are any outstanding mutations
-  const [inFlights, setInFlights] = useState<Record<string, boolean>>({});
-  const handleInFlight = useCallback((clientId: string, value: boolean) => {
-    setInFlights((c) => ({ ...c, [clientId]: value }));
-  }, []);
-  const anyInFlight = useMemo(() => {
-    return Object.values(inFlights).some((value) => value);
-  }, [inFlights]);
+  // track if there are any dirty assessment forms
+  const [dirtyAssessments, setDirtyAssessments] = useState<
+    Record<string, boolean>
+  >({});
+  const handleDirtyAssessment = useCallback(
+    (enrollmentId: string, value: boolean) => {
+      setDirtyAssessments((c) => ({ ...c, [enrollmentId]: value }));
+    },
+    []
+  );
 
   const [householdMembers, fetchMembersStatus] = useHouseholdMembers(
     enrollment.id
@@ -355,8 +357,7 @@ const HouseholdAssessments: React.FC<Props> = ({
               role={role}
               updateTabStatus={updateTabStatus}
               assessmentStatus={tabDefinition.status}
-              onInflight={handleInFlight}
-              hasInflight={anyInFlight}
+              onDirty={handleDirtyAssessment}
               {...tabDefinition}
             />
           ))}
@@ -383,7 +384,7 @@ const HouseholdAssessments: React.FC<Props> = ({
                 projectName={enrollmentName(enrollment)}
                 refetch={refetch}
                 setCurrentTab={setCurrentTab}
-                hasInFlight={anyInFlight}
+                blocked={Object.values(dirtyAssessments).some((value) => value)}
               />
             )
           )}
