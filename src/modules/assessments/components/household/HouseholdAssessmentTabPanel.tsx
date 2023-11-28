@@ -12,7 +12,6 @@ import {
   tabPanelA11yProps,
 } from './util';
 
-import usePrevious from '@/hooks/usePrevious';
 import { DynamicFormRef } from '@/modules/form/components/DynamicForm';
 import { FormActionProps } from '@/modules/form/components/FormActions';
 import { FormActionTypes } from '@/modules/form/types';
@@ -20,6 +19,7 @@ import { AssessmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   active: boolean;
+  navigatingAway: boolean;
   role: HouseholdAssesmentRole;
   refetch: () => Promise<any>;
   nextTab?: string;
@@ -28,12 +28,15 @@ interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   updateTabStatus: (status: AssessmentStatus, tabId: string) => void;
   assessmentStatus: AssessmentStatus;
   onDirty: (enrollmentId: string, inFlight: boolean) => void;
+  onInflight: (enrollmentId: string, inFlight: boolean) => void;
+  isInflight: boolean;
 }
 
 // Memoized to only re-render when props change (shallow compare)
 const HouseholdAssessmentTabPanel = memo(
   ({
     active,
+    navigatingAway,
     id,
     clientName,
     enrollmentId,
@@ -49,34 +52,47 @@ const HouseholdAssessmentTabPanel = memo(
     assessmentSubmitted,
     assessmentStatus,
     onDirty,
+    onInflight,
+    isInflight,
   }: HouseholdAssessmentTabPanelProps) => {
     // console.debug('Rendering assessment panel for', clientName);
 
-    const wasActive = usePrevious(active);
     const formRef = useRef<DynamicFormRef>(null);
 
     // If we navigated AWAY from this tab, do a background save on the form.
     useEffect(() => {
       if (!formRef.current) return;
-      if (wasActive && !active) {
-        if (assessmentSubmitted) {
-          formRef.current.SubmitIfDirty(true, () => {
-            // TODO: Update tab status to 'error' if error?
-            // console.debug(`Submitted ${clientName}!`);
-          });
-        } else {
-          formRef.current.SaveIfDirty(() => {
-            // TODO: Update tab status to 'error' if error?
-            // console.debug(`Saved ${clientName}!`);
-            if (!assessmentId) {
-              // This was a NEW assessment; we need to re-fetch to get it
-              updateTabStatus(AssessmentStatus.Started, id);
-              refetch();
-            }
-          });
-        }
+      if (!navigatingAway) return;
+      if (isInflight) return;
+      if (assessmentSubmitted) {
+        formRef.current.SubmitIfDirty(true, () => {
+          // TODO: Update tab status to 'error' if error?
+          // console.debug(`Submitted ${clientName}!`);
+          onDirty(enrollmentId, false);
+        });
+      } else {
+        formRef.current.SaveIfDirty(() => {
+          onDirty(enrollmentId, false);
+          // TODO: Update tab status to 'error' if error?
+          // console.debug(`Saved ${clientName}!`);
+          if (!assessmentId) {
+            // This was a NEW assessment; we need to re-fetch to get it
+            updateTabStatus(AssessmentStatus.Started, id);
+            refetch();
+          }
+        });
       }
-    });
+    }, [
+      navigatingAway,
+      isInflight,
+      assessmentId,
+      assessmentSubmitted,
+      enrollmentId,
+      id,
+      onDirty,
+      refetch,
+      updateTabStatus,
+    ]);
 
     const getFormActionProps = useCallback(
       (assessment?: AssessmentFieldsFragment) => {
@@ -164,6 +180,7 @@ const HouseholdAssessmentTabPanel = memo(
           visible={active}
           formRef={formRef}
           onDirty={onDirty}
+          onInflight={onInflight}
         />
       </AlwaysMountedTabPanel>
     );

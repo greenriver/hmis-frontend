@@ -42,6 +42,7 @@ import {
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
 import {
+  AssessmentFieldsFragment,
   EnrollmentFieldsFragment,
   FormDefinition,
   FormRole,
@@ -63,6 +64,7 @@ interface Props {
   visible?: boolean;
   formRef?: Ref<DynamicFormRef>;
   onDirty?: (enrollmentId: string, value: boolean) => void;
+  onInflight?: (enrollmentId: string, value: boolean) => void;
 }
 
 const AssessmentForm: React.FC<Props> = ({
@@ -79,6 +81,7 @@ const AssessmentForm: React.FC<Props> = ({
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   onDirty,
+  onInflight,
 }) => {
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -114,15 +117,25 @@ const AssessmentForm: React.FC<Props> = ({
 
   const isPrintView = useIsPrintView();
 
+  const onSuccessfulSubmit = useCallback(
+    (assmt: AssessmentFieldsFragment) => {
+      if (!assmt.inProgress) setLocked(true);
+      onDirty?.(enrollment.id, false);
+    },
+    [onDirty, enrollment.id]
+  );
+  const onSuccessfulSaveDraft = useCallback(() => {
+    onDirty?.(enrollment.id, false);
+  }, [onDirty, enrollment.id]);
+
   const { submitHandler, saveDraftHandler, mutationLoading, errors } =
     useAssessmentHandlers({
       definition,
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
       assessmentLockVersion: assessment?.lockVersion,
-      onSuccessfulSubmit: (assmt) => {
-        if (!assmt.inProgress) setLocked(true);
-      },
+      onSuccessfulSubmit: onSuccessfulSubmit,
+      onSuccessfulDraftSave: onSuccessfulSaveDraft,
     });
 
   const handleDirty = useCallback(
@@ -131,6 +144,9 @@ const AssessmentForm: React.FC<Props> = ({
     },
     [onDirty, enrollment.id]
   );
+  useEffect(() => {
+    onInflight?.(enrollment.id, mutationLoading);
+  }, [onInflight, mutationLoading, enrollment.id]);
 
   const itemMap = useMemo(
     () => getItemMap(definition.definition),

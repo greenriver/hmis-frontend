@@ -76,6 +76,15 @@ const HouseholdAssessments: React.FC<Props> = ({
     },
     []
   );
+  const hasDirtyAssessments = Object.values(dirtyAssessments).some(
+    (value) => value
+  );
+
+  const [inflights, setInflights] = useState<Record<string, boolean>>({});
+  const handleInflight = useCallback((enrollmentId: string, value: boolean) => {
+    setInflights((c) => ({ ...c, [enrollmentId]: value }));
+  }, []);
+  const hasInflights = Object.values(inflights).some((value) => value);
 
   const [householdMembers, fetchMembersStatus] = useHouseholdMembers(
     enrollment.id
@@ -88,6 +97,7 @@ const HouseholdAssessments: React.FC<Props> = ({
       assessmentId,
     });
   const [currentTab, setCurrentTab] = useState<string | undefined>('1');
+  const [nextTab, setNextTab] = useState<string>();
 
   const [tabs, setTabs] = useState<TabDefinition[]>([]);
 
@@ -172,14 +182,23 @@ const HouseholdAssessments: React.FC<Props> = ({
 
   const { pathname } = useLocation();
 
-  const navigateToTab = useCallback(
-    (newValue: string) => {
-      setCurrentTab(newValue);
-      window.scrollTo(0, 0);
-      router.navigate(`${pathname}#${newValue}`, { replace: true });
-    },
-    [pathname]
-  );
+  const navigateToTab = useCallback((newValue: string) => {
+    setNextTab(newValue);
+  }, []);
+
+  useEffect(() => {
+    if (hasDirtyAssessments) return;
+    if (hasInflights) return;
+    if (!nextTab) return;
+    if (nextTab === currentTab) return;
+    setCurrentTab(nextTab);
+    setNextTab(undefined);
+    window.scrollTo(0, 0);
+    router.navigate(`${pathname}#${nextTab}`, { replace: true });
+    // console.info('navigating')
+  }, [pathname, nextTab, currentTab, hasDirtyAssessments, hasInflights]);
+
+  // console.info({hasDirtyAssessments, hasInflights, nextTab, currentTab});
 
   const handleChangeTab = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
@@ -337,7 +356,7 @@ const HouseholdAssessments: React.FC<Props> = ({
                   pb: 3,
                   alignItems: 'flex-start',
                 }}
-                onClick={() => setCurrentTab('summary')}
+                onClick={() => navigateToTab('summary')}
                 {...tabA11yProps(SUMMARY_TAB_ID)}
               />
             </Tabs>
@@ -350,6 +369,13 @@ const HouseholdAssessments: React.FC<Props> = ({
             <HouseholdAssessmentTabPanel
               key={tabDefinition.id}
               active={tabDefinition.id === currentTab}
+              navigatingAway={
+                !!(
+                  tabDefinition.id === currentTab &&
+                  nextTab &&
+                  nextTab !== currentTab
+                )
+              }
               refetch={refetch}
               navigateToTab={navigateToTab}
               nextTab={tabs[index + 1]?.id || SUMMARY_TAB_ID}
@@ -358,6 +384,8 @@ const HouseholdAssessments: React.FC<Props> = ({
               updateTabStatus={updateTabStatus}
               assessmentStatus={tabDefinition.status}
               onDirty={handleDirtyAssessment}
+              onInflight={handleInflight}
+              isInflight={!!inflights[tabDefinition.enrollmentId]}
               {...tabDefinition}
             />
           ))}
@@ -384,7 +412,7 @@ const HouseholdAssessments: React.FC<Props> = ({
                 projectName={enrollmentName(enrollment)}
                 refetch={refetch}
                 setCurrentTab={setCurrentTab}
-                blocked={Object.values(dirtyAssessments).some((value) => value)}
+                blocked={hasDirtyAssessments}
               />
             )
           )}
