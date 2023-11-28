@@ -1,11 +1,13 @@
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import ViewColumnIcon from '@mui/icons-material/ViewColumn';
 import {
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  Popover,
+  Stack,
   Typography,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
@@ -14,12 +16,12 @@ import {
   bindTrigger,
   bindMenu,
 } from 'material-ui-popup-state/hooks';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 import TableFilterButton from './FilterButton';
 
 export interface TableColumnsMenuProps {
-  columns: { value: string; header: ReactNode }[];
+  columns: { value: string; header: ReactNode; defaultHidden: boolean }[];
   columnsValue: string[];
   setColumnsValue: (value: string[]) => any;
 }
@@ -29,6 +31,8 @@ const TableColumnsMenu = ({
   columnsValue,
   setColumnsValue,
 }: TableColumnsMenuProps): JSX.Element => {
+  const [intermediateValue, setIntermediateValue] =
+    useState<typeof columnsValue>(columnsValue);
   const popupState = usePopupState({
     variant: 'popover',
     popupId: 'sortMenu',
@@ -43,7 +47,7 @@ const TableColumnsMenu = ({
       >
         Columns
       </TableFilterButton>
-      <Menu
+      <Popover
         {...bindMenu(popupState)}
         anchorOrigin={{
           vertical: 'bottom',
@@ -54,33 +58,73 @@ const TableColumnsMenu = ({
           horizontal: 'right',
         }}
       >
-        <Typography variant='overline' px={2} mb={1} component='li'>
-          Show Columns
-        </Typography>
-        {columns.map(({ value, header }) => (
-          <MenuItem
-            key={value}
-            value={value}
-            selected={columnsValue.includes(value)}
-            onClick={() =>
-              setColumnsValue(
-                columnsValue.includes(value)
-                  ? columnsValue.filter((c) => c !== value)
-                  : [...columnsValue, value]
-              )
-            }
-          >
-            <ListItemIcon>
-              {columnsValue.includes(value) ? (
-                <CheckBoxIcon color='primary' />
-              ) : (
-                <CheckBoxOutlineBlankIcon />
-              )}
-            </ListItemIcon>
-            <ListItemText>{header}</ListItemText>
-          </MenuItem>
-        ))}
-      </Menu>
+        <Box p={2}>
+          <Typography variant='overline'>Show Columns</Typography>
+          <FormGroup>
+            {columns.map(({ value, header }) => (
+              <FormControlLabel
+                key={value}
+                control={
+                  <Checkbox checked={intermediateValue.includes(value)} />
+                }
+                onChange={(e, checked) =>
+                  setIntermediateValue(
+                    checked
+                      ? [...intermediateValue, value]
+                      : intermediateValue.filter((v) => v !== value)
+                  )
+                }
+                label={header}
+              />
+            ))}
+          </FormGroup>
+          <Divider sx={{ mt: 3 }} />
+          <Stack direction='row' gap={1} p={2}>
+            <Box flexGrow={1}>
+              <Button
+                variant='text'
+                color='error'
+                size='small'
+                onClick={() => {
+                  setColumnsValue(
+                    columns
+                      .filter((col) => !col.defaultHidden)
+                      .map((col) => col.value)
+                  );
+                  setIntermediateValue(
+                    columns
+                      .filter((col) => !col.defaultHidden)
+                      .map((col) => col.value)
+                  );
+                  popupState.close();
+                }}
+              >
+                <strong>Reset</strong>
+              </Button>
+            </Box>
+            <Button
+              variant='text'
+              size='small'
+              color='inherit'
+              sx={(theme) => ({ color: theme.palette.text.secondary })}
+              onClick={() => {
+                setIntermediateValue(columnsValue);
+                popupState.close();
+              }}
+            >
+              <strong>Cancel</strong>
+            </Button>
+            <Button
+              size='small'
+              onClick={() => {
+                setColumnsValue(intermediateValue);
+              }}
+            >
+              <strong>Apply</strong>
+            </Button>
+          </Stack>
+        </Box>
+      </Popover>
     </>
   );
 };

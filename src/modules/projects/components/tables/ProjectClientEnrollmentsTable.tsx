@@ -109,7 +109,6 @@ export const ENROLLMENT_COLUMNS: {
   householdId: {
     header: 'Household ID',
     key: 'housholdId',
-    optional: true,
     render: (e) => (
       <Stack direction='row' alignItems='baseline'>
         <Tooltip

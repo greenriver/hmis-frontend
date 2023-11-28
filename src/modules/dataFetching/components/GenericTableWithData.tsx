@@ -384,6 +384,7 @@ const GenericTableWithData = <
                               columns: optionalColumns.map((col) => ({
                                 value: col.key || '',
                                 header: col.header,
+                                defaultHidden: !!col.defaultHidden,
                               })),
                               columnsValue: includedOptionalColumns,
                               setColumnsValue: setIncludedOptionalColumns,
