@@ -1,7 +1,8 @@
 import { Box, Skeleton, Stack, Typography } from '@mui/material';
-import { min } from 'lodash-es';
+import { isEmpty, min } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
+import TableColumnsMenu, { TableColumnsMenuProps } from './filters/ColumnsMenu';
 import TableFilterMenu from './filters/FilterMenu';
 import TableSortMenu from './filters/SortMenu';
 
@@ -24,6 +25,7 @@ export interface TableFiltersProps<T, S> {
     sortOptionValue?: keyof S;
     setSortOptionValue?: (value: keyof S) => any;
   };
+  optionalColumns?: TableColumnsMenuProps;
   pagination?: PaginationProps;
   loading?: boolean;
   noSort?: boolean;
@@ -57,6 +59,7 @@ const TableFilters = <T, S extends Record<string, string>>({
   loading,
   noSort = false,
   noFilter = false,
+  optionalColumns,
 }: TableFiltersProps<T, S>) => {
   return (
     <Box display='flex' alignItems='center' gap={1}>
@@ -70,6 +73,11 @@ const TableFilters = <T, S extends Record<string, string>>({
         )}
         {tableDisplayOptionButtons}
       </Stack>
+      {optionalColumns && !isEmpty(optionalColumns.columns) && (
+        <Box>
+          <TableColumnsMenu {...optionalColumns} />
+        </Box>
+      )}
       {filters && !noFilter && (
         <Box>
           <TableFilterMenu {...filters} />

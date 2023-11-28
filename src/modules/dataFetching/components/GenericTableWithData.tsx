@@ -4,7 +4,7 @@ import {
   WatchQueryFetchPolicy,
 } from '@apollo/client';
 import { Box, Stack } from '@mui/material';
-import { get, isEmpty, isEqual, startCase } from 'lodash-es';
+import { compact, get, isEmpty, isEqual, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
@@ -80,6 +80,8 @@ export interface Props<
     TableFilterType<FilterOptionsType>,
     SortOptionsType
   >['tableDisplayOptionButtons'];
+  showOptionalColumns?: boolean;
+  applyOptionalColumns?: (columns: string[]) => Partial<QueryVariables>;
   onCompleted?: (data: Query) => void;
 }
 
@@ -129,13 +131,14 @@ const GenericTableWithData = <
   pagePath,
   rowsPath,
   defaultPageSize = DEFAULT_ROWS_PER_PAGE,
-  columns,
+  columns: columnsProp,
   getColumnDefs,
   recordType,
   filterInputType: filterInputTypeProp,
   fetchPolicy = 'cache-and-network',
   nonTablePagination = false,
   fullHeight = false,
+  showOptionalColumns = false,
   noSort,
   noFilter,
   header,
@@ -143,6 +146,7 @@ const GenericTableWithData = <
   noData,
   rowsPerPageOptions,
   tableDisplayOptionButtons,
+  applyOptionalColumns,
   onCompleted,
   ...props
 }: Props<
@@ -157,6 +161,15 @@ const GenericTableWithData = <
   const previousQueryVariables = usePrevious(queryVariables);
   const [filterValues, setFilterValues] = useState(defaultFilters);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
+  const [includedOptionalColumns, setIncludedOptionalColumns] = useState<
+    string[]
+  >(
+    compact(
+      columnsProp
+        ?.filter((col) => col.optional && !col.defaultHidden)
+        .map((col) => col.key) || []
+    )
+  );
 
   const effectiveSortOrder = useMemo<typeof sortOrder>(() => {
     if (sortOrder) return sortOrder;
@@ -184,6 +197,9 @@ const GenericTableWithData = <
         offset,
         limit,
       }),
+      ...(applyOptionalColumns
+        ? applyOptionalColumns(includedOptionalColumns)
+        : {}),
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy,
@@ -260,12 +276,25 @@ const GenericTableWithData = <
   ]);
 
   const columnDefs = useMemo(() => {
-    if (columns) return columns;
+    if (columnsProp) return columnsProp;
     if (getColumnDefs) return getColumnDefs(rows);
     if (recordType) return allFieldColumns(recordType);
     console.warn('No columns specified');
-    return [];
-  }, [columns, getColumnDefs, recordType, rows]);
+    return [] as ColumnDef<RowDataType>[];
+  }, [columnsProp, getColumnDefs, recordType, rows]);
+
+  const optionalColumns = useMemo(
+    () => (columnDefs || []).filter((col) => col.optional),
+    [columnDefs]
+  );
+
+  const showColumnDefs = useMemo(() => {
+    return columnDefs.filter((col) => {
+      if (col.optional && !includedOptionalColumns.includes(col.key || ''))
+        return false;
+      return true;
+    });
+  }, [columnDefs, includedOptionalColumns]);
 
   const filterDefs = useMemo(() => {
     const filterInputType =
@@ -331,7 +360,7 @@ const GenericTableWithData = <
           tablePaginationProps={
             nonTablePagination ? undefined : tablePaginationProps
           }
-          columns={columnDefs}
+          columns={showColumnDefs}
           noData={noDataValue}
           filterToolbar={
             (showFilters || !isEmpty(toolbars)) && (
@@ -349,6 +378,18 @@ const GenericTableWithData = <
                       noFilter={noFilter}
                       loading={loading && !data}
                       tableDisplayOptionButtons={tableDisplayOptionButtons}
+                      optionalColumns={
+                        showOptionalColumns
+                          ? {
+                              columns: optionalColumns.map((col) => ({
+                                value: col.key || '',
+                                header: col.header,
+                              })),
+                              columnsValue: includedOptionalColumns,
+                              setColumnsValue: setIncludedOptionalColumns,
+                            }
+                          : undefined
+                      }
                       sorting={
                         sortOptions
                           ? {

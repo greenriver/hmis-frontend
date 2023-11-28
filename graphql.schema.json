@@ -12732,6 +12732,18 @@
             "deprecationReason": null
           },
           {
+            "name": "lastCurrentLivingSituation",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CurrentLivingSituation",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "lengthOfStay",
             "description": null,
             "args": [],

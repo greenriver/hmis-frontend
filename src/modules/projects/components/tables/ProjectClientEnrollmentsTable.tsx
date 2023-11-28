@@ -14,6 +14,7 @@ import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import {
   formatDateForDisplay,
   formatDateForGql,
+  parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
@@ -25,6 +26,7 @@ import {
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
   ProjectEnrollmentFieldsFragment,
+  ProjectEnrollmentQueryEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -53,7 +55,9 @@ export const ENROLLMENT_PERIOD_COL: ColumnDef<
 };
 export const ENROLLMENT_COLUMNS: {
   [key: string]: ColumnDef<
-    EnrollmentFieldsFragment | ProjectEnrollmentFieldsFragment
+    | EnrollmentFieldsFragment
+    | ProjectEnrollmentFieldsFragment
+    | ProjectEnrollmentQueryEnrollmentFieldsFragment
   >;
 } = {
   clientName: {
@@ -104,6 +108,8 @@ export const ENROLLMENT_COLUMNS: {
   enrollmentPeriod: ENROLLMENT_PERIOD_COL,
   householdId: {
     header: 'Household ID',
+    key: 'housholdId',
+    optional: true,
     render: (e) => (
       <Stack direction='row' alignItems='baseline'>
         <Tooltip
@@ -125,6 +131,19 @@ export const ENROLLMENT_COLUMNS: {
     key: 'id',
     render: (e) => e.client.id,
   },
+  lastClsDate: {
+    header: 'Last CLS Date',
+    key: 'lastClsDate',
+    optional: true,
+    defaultHidden: true,
+    render: (e) => {
+      if ('lastCurrentLivingSituation' in e) {
+        const cls = e.lastCurrentLivingSituation;
+        return cls ? parseAndFormatDate(cls.informationDate) : null;
+      }
+      return null;
+    },
+  },
 };
 
 const ProjectClientEnrollmentsTable = ({
@@ -135,7 +154,7 @@ const ProjectClientEnrollmentsTable = ({
   searchTerm,
 }: {
   projectId: string;
-  columns?: ColumnDef<EnrollmentFields>[];
+  columns?: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[];
   linkRowToEnrollment?: boolean;
   openOnDate?: Date;
   searchTerm?: string;
@@ -157,14 +176,16 @@ const ProjectClientEnrollmentsTable = ({
     [openOnDate]
   );
 
-  const defaultColumns: ColumnDef<EnrollmentFields>[] = useMemo(() => {
-    return [
-      ENROLLMENT_COLUMNS.clientNameLinkedToEnrollmentWithAge,
-      ENROLLMENT_COLUMNS.enrollmentStatus,
-      ENROLLMENT_COLUMNS.enrollmentPeriod,
-      ENROLLMENT_COLUMNS.householdId,
-    ];
-  }, []);
+  const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
+    useMemo(() => {
+      return [
+        ENROLLMENT_COLUMNS.clientNameLinkedToEnrollmentWithAge,
+        ENROLLMENT_COLUMNS.enrollmentStatus,
+        ENROLLMENT_COLUMNS.enrollmentPeriod,
+        ENROLLMENT_COLUMNS.householdId,
+        ENROLLMENT_COLUMNS.lastClsDate,
+      ];
+    }, []);
 
   return (
     <GenericTableWithData<
@@ -194,6 +215,15 @@ const ProjectClientEnrollmentsTable = ({
       filters={(f) => omit(f, 'searchTerm', 'bedNightOnDate')}
       filterInputType='EnrollmentsForProjectFilterOptions'
       defaultSortOption={EnrollmentSortOption.MostRecent}
+      showOptionalColumns
+      applyOptionalColumns={(cols) => {
+        const result: Partial<GetProjectEnrollmentsQueryVariables> = {};
+
+        if (cols.includes(ENROLLMENT_COLUMNS.lastClsDate.key || ''))
+          result.includeCls = true;
+
+        return result;
+      }}
     />
   );
 };
