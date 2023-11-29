@@ -1,5 +1,7 @@
-import { Paper, Stack, Typography } from '@mui/material';
+import { ListItem, ListItemText, Paper } from '@mui/material';
 import pluralize from 'pluralize';
+import React from 'react';
+import CollapsibleList from '@/components/elements/CollapsibleList';
 import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -26,21 +28,23 @@ const columns: ColumnDef<UserActivityLogFieldsFragment>[] = [
   },
   {
     header: 'Records Accessed',
+    tableCellProps: {
+      sx: { p: 0, backgroundColor: (theme) => theme.palette.grey[100] },
+    },
     render: ({ resolvedRecords }) => {
-      return pluralize('record', resolvedRecords.length, true);
-
-      // TODO: figure out design for showing records, should be collapsible
       return (
-        <Stack>
+        <CollapsibleList
+          title={pluralize('record', resolvedRecords.length, true)}
+        >
           {resolvedRecords.map(({ recordType, recordId }, idx) => {
             return (
               // eslint-disable-next-line react/no-array-index-key
-              <Typography key={idx}>
-                {recordType} {recordId}
-              </Typography>
+              <ListItem key={idx}>
+                <ListItemText primary={`${recordType} ${recordId}`} />
+              </ListItem>
             );
           })}
-        </Stack>
+        </CollapsibleList>
       );
     },
   },

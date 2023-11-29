@@ -359,6 +359,7 @@ const GenericTable = <T extends { id: string }>({
                         ariaLabel,
                         dontLink = false,
                         textAlign,
+                        tableCellProps,
                       } = def;
 
                       const isLinked = rowLink && !dontLink;
@@ -381,12 +382,14 @@ const GenericTable = <T extends { id: string }>({
                       return (
                         <TableCell
                           key={key(def) || index}
+                          {...tableCellProps}
                           sx={{
                             width,
                             minWidth,
                             ...(isLinked ? { p: 0 } : undefined),
                             textAlign,
                             ...onClickLinkTreatment,
+                            ...tableCellProps?.sx,
                           }}
                         >
                           {isLinked ? (
