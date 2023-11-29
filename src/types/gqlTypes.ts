@@ -160,7 +160,7 @@ export type Assessment = {
   incomeBenefit?: Maybe<IncomeBenefit>;
   lockVersion: Scalars['Int']['output'];
   role: AssessmentRole;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   wipValues?: Maybe<Scalars['JsonObject']['output']>;
   youthEducationStatus?: Maybe<YouthEducationStatus>;
 };
@@ -347,7 +347,7 @@ export type CeAssessment = {
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
   prioritizationStatus?: Maybe<PrioritizationStatus>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export type CeAssessmentsPaginated = {
@@ -375,7 +375,7 @@ export type CeParticipation = {
   id: Scalars['ID']['output'];
   preventionAssessment?: Maybe<NoYes>;
   receivesReferrals?: Maybe<NoYes>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export type CeParticipationsPaginated = {
@@ -465,7 +465,7 @@ export type Client = {
   services: ServicesPaginated;
   ssn?: Maybe<Scalars['String']['output']>;
   ssnDataQuality: SsnDataQuality;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   veteranStatus: NoYesReasonsForMissingData;
   vietnamWar?: Maybe<NoYesReasonsForMissingData>;
   worldWarIi?: Maybe<NoYesReasonsForMissingData>;
@@ -596,7 +596,7 @@ export type ClientAddress = {
   postalCode?: Maybe<Scalars['String']['output']>;
   state?: Maybe<Scalars['String']['output']>;
   use?: Maybe<ClientAddressUse>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 /** Allowed values for ClientAddress.type */
@@ -658,7 +658,7 @@ export type ClientContactPoint = {
   notes?: Maybe<Scalars['String']['output']>;
   system?: Maybe<ClientContactPointSystem>;
   use?: Maybe<ClientContactPointUse>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   value?: Maybe<Scalars['String']['output']>;
 };
 
@@ -739,7 +739,7 @@ export type ClientName = {
   primary?: Maybe<Scalars['Boolean']['output']>;
   suffix?: Maybe<Scalars['String']['output']>;
   use?: Maybe<ClientNameUse>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 /** Allowed values for ClientName.use */
@@ -996,7 +996,7 @@ export type CurrentLivingSituation = {
   movedTwoOrMore?: Maybe<NoYesReasonsForMissingData>;
   resourcesToObtain?: Maybe<NoYesReasonsForMissingData>;
   subsequentResidence?: Maybe<NoYesReasonsForMissingData>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   verifiedBy?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1096,7 +1096,7 @@ export type CustomCaseNote = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export type CustomCaseNotesPaginated = {
@@ -1138,7 +1138,7 @@ export type CustomDataElementValue = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   valueBoolean?: Maybe<Scalars['Boolean']['output']>;
   valueDate?: Maybe<Scalars['ISO8601Date']['output']>;
   valueFloat?: Maybe<Scalars['Float']['output']>;
@@ -1631,7 +1631,7 @@ export type Disability = {
   tCellCount?: Maybe<Scalars['Int']['output']>;
   tCellCountAvailable?: Maybe<NoYesReasonsForMissingData>;
   tCellSource?: Maybe<TCellSourceViralLoadSource>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   viralLoad?: Maybe<Scalars['Int']['output']>;
   viralLoadAvailable?: Maybe<ViralLoadAvailable>;
 };
@@ -1662,7 +1662,7 @@ export type DisabilityGroup = {
   tCellCount?: Maybe<Scalars['Int']['output']>;
   tCellCountAvailable?: Maybe<NoYesReasonsForMissingData>;
   tCellSource?: Maybe<TCellSourceViralLoadSource>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   viralLoad?: Maybe<Scalars['Int']['output']>;
   viralLoadAvailable?: Maybe<ViralLoadAvailable>;
 };
@@ -1751,7 +1751,7 @@ export type EmploymentEducation = {
   lastGradeCompleted?: Maybe<LastGradeCompleted>;
   notEmployedReason?: Maybe<NotEmployedReason>;
   schoolStatus?: Maybe<SchoolStatus>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export type EmploymentEducationsPaginated = {
@@ -1926,7 +1926,7 @@ export type Enrollment = {
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
   translationNeeded?: Maybe<NoYesReasonsForMissingData>;
   unemploymentFam?: Maybe<NoYesMissing>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   vamcStation?: Maybe<VamcStationNumber>;
   youthEducationStatuses: YouthEducationStatusesPaginated;
 };
@@ -2144,7 +2144,7 @@ export type Event = {
   referralCaseManageAfter?: Maybe<NoYesMissing>;
   referralResult?: Maybe<ReferralResult>;
   resultDate?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 /** HUD Event Sorting Options */
@@ -2259,7 +2259,7 @@ export type Exit = {
   subsidyInformation?: Maybe<SubsidyInformation>;
   subsidyInformationA?: Maybe<SubsidyInformationA>;
   subsidyInformationB?: Maybe<SubsidyInformationB>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   workPlaceViolenceThreats?: Maybe<NoYesReasonsForMissingData>;
   workplacePromiseDifference?: Maybe<NoYesReasonsForMissingData>;
 };
@@ -2336,7 +2336,7 @@ export type File = {
   updatedBy?: Maybe<ApplicationUser>;
   uploadedBy?: Maybe<ApplicationUser>;
   url?: Maybe<Scalars['String']['output']>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 /** File Sorting Options */
@@ -2511,7 +2511,7 @@ export type Funder = {
   id: Scalars['ID']['output'];
   otherFunder?: Maybe<Scalars['String']['output']>;
   startDate?: Maybe<Scalars['ISO8601Date']['output']>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 /** HUD Funder Sorting Options */
@@ -2719,7 +2719,7 @@ export type HealthAndDv = {
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   mentalHealthStatus?: Maybe<HealthStatus>;
   pregnancyStatus?: Maybe<NoYesReasonsForMissingData>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   whenOccurred?: Maybe<WhenDvOccurred>;
 };
 
@@ -2765,7 +2765,7 @@ export type HmisParticipation = {
   hmisParticipationStatusStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   hmisParticipationType?: Maybe<HmisParticipationType>;
   id: Scalars['ID']['output'];
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export type HmisParticipationsPaginated = {
@@ -2965,7 +2965,7 @@ export type IncomeBenefit = {
   totalMonthlyIncome?: Maybe<Scalars['String']['output']>;
   unemployment?: Maybe<NoYesMissing>;
   unemploymentAmount?: Maybe<Scalars['Float']['output']>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   vaDisabilityNonService?: Maybe<NoYesMissing>;
   vaDisabilityNonServiceAmount?: Maybe<Scalars['Float']['output']>;
   vaDisabilityService?: Maybe<NoYesMissing>;
@@ -3046,7 +3046,7 @@ export type Inventory = {
   inventoryStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
   otherBedInventory?: Maybe<Scalars['Int']['output']>;
   unitInventory: Scalars['Int']['output'];
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   vetBedInventory?: Maybe<Scalars['Int']['output']>;
   youthBedInventory?: Maybe<Scalars['Int']['output']>;
   youthVetBedInventory?: Maybe<Scalars['Int']['output']>;
@@ -3173,7 +3173,7 @@ export type MergeAuditEvent = {
   id: Scalars['ID']['output'];
   mergedAt: Scalars['ISO8601DateTime']['output'];
   preMergeState: Scalars['JsonObject']['output'];
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export type MergeAuditEventsPaginated = {
@@ -3602,7 +3602,7 @@ export type Organization = {
   id: Scalars['ID']['output'];
   organizationName: Scalars['String']['output'];
   projects: ProjectsPaginated;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   victimServiceProvider: NoYesMissing;
 };
 
@@ -4501,7 +4501,7 @@ export type Project = {
   targetPopulation?: Maybe<TargetPopulation>;
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export type ProjectCeParticipationsArgs = {
@@ -4605,7 +4605,7 @@ export type ProjectCoc = {
   geographyType?: Maybe<GeographyType>;
   id: Scalars['ID']['output'];
   state?: Maybe<Scalars['String']['output']>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
   zip?: Maybe<Scalars['String']['output']>;
 };
 
@@ -5425,7 +5425,7 @@ export type Service = {
   referralOutcome?: Maybe<PathReferralOutcome>;
   serviceType: ServiceType;
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export enum ServiceDetailType {
@@ -5531,7 +5531,7 @@ export type ServiceType = {
   hudTypeProvided?: Maybe<ServiceTypeProvided>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 /** HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2) */
@@ -5972,7 +5972,7 @@ export type Unit = {
   project?: Maybe<Project>;
   unitSize?: Maybe<Scalars['Int']['output']>;
   unitType?: Maybe<UnitTypeObject>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export enum UnitFilterOptionStatus {
@@ -6104,16 +6104,6 @@ export type UpdateUnitsPayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
   errors: Array<ValidationError>;
   units: Array<Unit>;
-};
-
-/** HUD User */
-export type User = {
-  __typename?: 'User';
-  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
 };
 
 export type ValidationError = {
@@ -6536,7 +6526,7 @@ export type YouthEducationStatus = {
   id: Scalars['ID']['output'];
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   mostRecentEdStatus?: Maybe<MostRecentEdStatus>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export type YouthEducationStatusesPaginated = {
@@ -6723,7 +6713,7 @@ export type AssessmentFieldsFragment = {
   dateUpdated?: string | null;
   dateDeleted?: string | null;
   role: AssessmentRole;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type AssessmentWithRecordsFragment = {
@@ -6822,7 +6812,11 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -6836,7 +6830,11 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
     client: { __typename?: 'Client'; id: string };
@@ -6935,7 +6933,11 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -6949,7 +6951,11 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
   } | null;
@@ -7051,7 +7057,11 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -7065,7 +7075,11 @@ export type AssessmentWithRecordsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
   } | null;
@@ -7113,7 +7127,7 @@ export type AssessmentWithRecordsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -7127,7 +7141,7 @@ export type AssessmentWithRecordsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
   access: {
@@ -7137,7 +7151,7 @@ export type AssessmentWithRecordsFragment = {
     canDeleteEnrollments: boolean;
     canEditEnrollments: boolean;
   };
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type AssessmentWithValuesFragment = {
@@ -7152,7 +7166,7 @@ export type AssessmentWithValuesFragment = {
   dateUpdated?: string | null;
   dateDeleted?: string | null;
   role: AssessmentRole;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type FullAssessmentFragment = {
@@ -7252,7 +7266,11 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -7266,7 +7284,11 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
     client: { __typename?: 'Client'; id: string };
@@ -7365,7 +7387,11 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -7379,7 +7405,11 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
   } | null;
@@ -7481,7 +7511,11 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -7495,7 +7529,11 @@ export type FullAssessmentFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
   } | null;
@@ -7543,7 +7581,7 @@ export type FullAssessmentFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -7557,7 +7595,7 @@ export type FullAssessmentFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
   access: {
@@ -7567,7 +7605,7 @@ export type FullAssessmentFragment = {
     canDeleteEnrollments: boolean;
     canEditEnrollments: boolean;
   };
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type GetAssessmentQueryVariables = Exact<{
@@ -8143,7 +8181,11 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         values?: Array<{
           __typename?: 'CustomDataElementValue';
@@ -8157,7 +8199,11 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }> | null;
       }>;
       client: { __typename?: 'Client'; id: string };
@@ -8256,7 +8302,11 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         values?: Array<{
           __typename?: 'CustomDataElementValue';
@@ -8270,7 +8320,11 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }> | null;
       }>;
     } | null;
@@ -8372,7 +8426,11 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         values?: Array<{
           __typename?: 'CustomDataElementValue';
@@ -8386,7 +8444,11 @@ export type GetAssessmentQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }> | null;
       }>;
     } | null;
@@ -8434,7 +8496,11 @@ export type GetAssessmentQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -8448,7 +8514,11 @@ export type GetAssessmentQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
     access: {
@@ -8458,7 +8528,7 @@ export type GetAssessmentQuery = {
       canDeleteEnrollments: boolean;
       canEditEnrollments: boolean;
     };
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   } | null;
 };
 
@@ -8510,7 +8580,11 @@ export type GetClientAssessmentsQuery = {
             canViewEnrollmentDetails: boolean;
           };
         };
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -8546,7 +8620,11 @@ export type GetEnrollmentAssessmentsQuery = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         role: AssessmentRole;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -8596,7 +8674,11 @@ export type GetHouseholdAssessmentsQuery = {
             nameSuffix?: string | null;
           };
         };
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -8650,7 +8732,7 @@ export type SaveAssessmentMutation = {
       dateUpdated?: string | null;
       dateDeleted?: string | null;
       role: AssessmentRole;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8773,7 +8855,11 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -8787,7 +8873,11 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
         client: { __typename?: 'Client'; id: string };
@@ -8886,7 +8976,11 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -8900,7 +8994,11 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
       } | null;
@@ -9002,7 +9100,11 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -9016,7 +9118,11 @@ export type SubmitAssessmentMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
       } | null;
@@ -9064,7 +9170,11 @@ export type SubmitAssessmentMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         values?: Array<{
           __typename?: 'CustomDataElementValue';
@@ -9078,7 +9188,11 @@ export type SubmitAssessmentMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }> | null;
       }>;
       access: {
@@ -9088,7 +9202,7 @@ export type SubmitAssessmentMutation = {
         canDeleteEnrollments: boolean;
         canEditEnrollments: boolean;
       };
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -9211,7 +9325,11 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -9225,7 +9343,11 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
         client: { __typename?: 'Client'; id: string };
@@ -9324,7 +9446,11 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -9338,7 +9464,11 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
       } | null;
@@ -9440,7 +9570,11 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -9454,7 +9588,11 @@ export type SubmitHouseholdAssessmentsMutation = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
       } | null;
@@ -9502,7 +9640,11 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         values?: Array<{
           __typename?: 'CustomDataElementValue';
@@ -9516,7 +9658,11 @@ export type SubmitHouseholdAssessmentsMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }> | null;
       }>;
       access: {
@@ -9526,7 +9672,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         canDeleteEnrollments: boolean;
         canEditEnrollments: boolean;
       };
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -9664,7 +9810,11 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -9678,7 +9828,11 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
           client: { __typename?: 'Client'; id: string };
@@ -9777,7 +9931,11 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -9791,7 +9949,11 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
         } | null;
@@ -9893,7 +10055,11 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -9907,7 +10073,11 @@ export type GetAssessmentsForPopulationQuery = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
         } | null;
@@ -9955,7 +10125,11 @@ export type GetAssessmentsForPopulationQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -9969,7 +10143,11 @@ export type GetAssessmentsForPopulationQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
         access: {
@@ -9979,7 +10157,11 @@ export type GetAssessmentsForPopulationQuery = {
           canDeleteEnrollments: boolean;
           canEditEnrollments: boolean;
         };
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -10079,7 +10261,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   translationNeeded?: NoYesReasonsForMissingData | null;
   preferredLanguage?: PreferredLanguage | null;
   preferredLanguageDifferent?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   project: {
     __typename?: 'Project';
     id: string;
@@ -10089,7 +10271,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   intakeAssessment?: {
     __typename?: 'Assessment';
     id: string;
-    user?: { __typename?: 'User'; name: string } | null;
+    user?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -10245,7 +10427,7 @@ export type IncomeBenefitFieldsFragment = {
   wic?: NoYesMissing | null;
   workersComp?: NoYesMissing | null;
   workersCompAmount?: number | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -10308,7 +10490,7 @@ export type DisabilityGroupFieldsFragment = {
   viralLoadAvailable?: ViralLoadAvailable | null;
   viralLoad?: number | null;
   antiRetroviral?: NoYesReasonsForMissingData | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -10355,7 +10537,7 @@ export type HealthAndDvFieldsFragment = {
   mentalHealthStatus?: HealthStatus | null;
   pregnancyStatus?: NoYesReasonsForMissingData | null;
   whenOccurred?: WhenDvOccurred | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -10621,7 +10803,7 @@ export type ClientFieldsFragment = {
     label: string;
     type: ExternalIdentifierType;
   }>;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   access: {
     __typename?: 'ClientAccess';
     id: string;
@@ -10659,7 +10841,7 @@ export type ClientFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -10673,7 +10855,7 @@ export type ClientFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
   names: Array<{
@@ -10986,7 +11168,7 @@ export type GetClientQuery = {
       label: string;
       type: ExternalIdentifierType;
     }>;
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     access: {
       __typename?: 'ClientAccess';
       id: string;
@@ -11024,7 +11206,11 @@ export type GetClientQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -11038,7 +11224,11 @@ export type GetClientQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
     names: Array<{
@@ -11284,7 +11474,11 @@ export type GetClientServicesQuery = {
             canViewEnrollmentDetails: boolean;
           };
         };
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         serviceType: {
           __typename?: 'ServiceType';
           id: string;
@@ -11314,7 +11508,11 @@ export type GetClientServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -11328,7 +11526,11 @@ export type GetClientServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
       }>;
@@ -11445,7 +11647,7 @@ export type DeleteClientFileMutation = {
         id: string;
         name: string;
       } | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -11615,7 +11817,7 @@ export type GetFileQuery = {
       id: string;
       name: string;
     } | null;
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   } | null;
 };
 
@@ -11680,7 +11882,11 @@ export type GetClientFilesQuery = {
           id: string;
           name: string;
         } | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -11691,7 +11897,7 @@ export type MergeAuditEventFieldsFragment = {
   id: string;
   mergedAt: string;
   clientIdsMerged: Array<string>;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type GetMergeCandidatesQueryVariables = Exact<{
@@ -11753,7 +11959,11 @@ export type ClientMergeHistoryQuery = {
         id: string;
         mergedAt: string;
         clientIdsMerged: Array<string>;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -11785,7 +11995,7 @@ export type GlobalClientMergeHistoryQuery = {
         lastName?: string | null;
         nameSuffix?: string | null;
       } | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }>;
   };
 };
@@ -11842,7 +12052,7 @@ export type MergeClientsMutation = {
         label: string;
         type: ExternalIdentifierType;
       }>;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
       access: {
         __typename?: 'ClientAccess';
         id: string;
@@ -11880,7 +12090,11 @@ export type MergeClientsMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         values?: Array<{
           __typename?: 'CustomDataElementValue';
@@ -11894,7 +12108,11 @@ export type MergeClientsMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }> | null;
       }>;
       names: Array<{
@@ -12005,7 +12223,7 @@ export type CurrentLivingSituationFieldsFragment = {
   subsequentResidence?: NoYesReasonsForMissingData | null;
   dateUpdated?: string | null;
   dateCreated?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -12025,7 +12243,7 @@ export type CurrentLivingSituationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -12039,7 +12257,7 @@ export type CurrentLivingSituationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
 };
@@ -12074,7 +12292,11 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         subsequentResidence?: NoYesReasonsForMissingData | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
@@ -12094,7 +12316,11 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -12108,7 +12334,11 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
       }>;
@@ -12122,7 +12352,7 @@ export type CustomCaseNoteFieldsFragment = {
   content: string;
   dateUpdated?: string | null;
   dateCreated?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type GetEnrollmentCustomCaseNotesQueryVariables = Exact<{
@@ -12147,7 +12377,11 @@ export type GetEnrollmentCustomCaseNotesQuery = {
         content: string;
         dateUpdated?: string | null;
         dateCreated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -12191,7 +12425,7 @@ export type CustomDataElementValueFieldsFragment = {
   valueText?: string | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type CustomDataElementFieldsFragment = {
@@ -12213,7 +12447,7 @@ export type CustomDataElementFieldsFragment = {
     valueText?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   } | null;
   values?: Array<{
     __typename?: 'CustomDataElementValue';
@@ -12227,7 +12461,7 @@ export type CustomDataElementFieldsFragment = {
     valueText?: string | null;
     dateCreated?: string | null;
     dateUpdated?: string | null;
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   }> | null;
 };
 
@@ -12368,7 +12602,7 @@ export type AllEnrollmentDetailsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -12382,7 +12616,7 @@ export type AllEnrollmentDetailsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
   client: {
@@ -12415,7 +12649,11 @@ export type AllEnrollmentDetailsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -12429,7 +12667,11 @@ export type AllEnrollmentDetailsFragment = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
     access: {
@@ -13140,7 +13382,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -13154,7 +13396,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
   project: {
@@ -13212,7 +13454,7 @@ export type EventFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type CeAssessmentFieldsFragment = {
@@ -13226,7 +13468,7 @@ export type CeAssessmentFieldsFragment = {
   dateUpdated?: string | null;
   dateDeleted?: string | null;
   prioritizationStatus?: PrioritizationStatus | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type EnrollmentSummaryFieldsFragment = {
@@ -13397,7 +13639,11 @@ export type GetEnrollmentDetailsQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -13411,7 +13657,11 @@ export type GetEnrollmentDetailsQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
     client: {
@@ -13444,7 +13694,11 @@ export type GetEnrollmentDetailsQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         values?: Array<{
           __typename?: 'CustomDataElementValue';
@@ -13458,7 +13712,11 @@ export type GetEnrollmentDetailsQuery = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }> | null;
       }>;
       access: {
@@ -14163,7 +14421,11 @@ export type GetEnrollmentEventsQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -14196,7 +14458,11 @@ export type GetEnrollmentCeAssessmentsQuery = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -14377,7 +14643,7 @@ export type FileFieldsFragment = {
     id: string;
     name: string;
   } | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type ValidationErrorFieldsFragment = {
@@ -16447,7 +16713,11 @@ export type SubmitFormMutation = {
           dateUpdated?: string | null;
           dateDeleted?: string | null;
           prioritizationStatus?: PrioritizationStatus | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }
       | {
           __typename?: 'CeParticipation';
@@ -16462,7 +16732,11 @@ export type SubmitFormMutation = {
           receivesReferrals?: NoYes | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }
       | {
           __typename?: 'Client';
@@ -16508,7 +16782,11 @@ export type SubmitFormMutation = {
             label: string;
             type: ExternalIdentifierType;
           }>;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -16546,7 +16824,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -16560,7 +16842,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
           names: Array<{
@@ -16628,7 +16914,11 @@ export type SubmitFormMutation = {
           subsequentResidence?: NoYesReasonsForMissingData | null;
           dateUpdated?: string | null;
           dateCreated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
             id: string;
@@ -16648,7 +16938,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -16662,7 +16956,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
         }
@@ -16672,7 +16970,11 @@ export type SubmitFormMutation = {
           content: string;
           dateUpdated?: string | null;
           dateCreated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }
       | {
           __typename?: 'Enrollment';
@@ -16716,7 +17018,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -16730,7 +17036,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
           project: {
@@ -16791,7 +17101,11 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           dateDeleted?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }
       | {
           __typename?: 'File';
@@ -16820,7 +17134,11 @@ export type SubmitFormMutation = {
             id: string;
             name: string;
           } | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }
       | {
           __typename?: 'Funder';
@@ -16833,7 +17151,11 @@ export type SubmitFormMutation = {
           grantId?: string | null;
           otherFunder?: string | null;
           startDate?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }
       | {
           __typename?: 'HmisParticipation';
@@ -16843,7 +17165,11 @@ export type SubmitFormMutation = {
           hmisParticipationStatusEndDate?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }
       | {
           __typename?: 'Inventory';
@@ -16866,7 +17192,11 @@ export type SubmitFormMutation = {
           vetBedInventory?: number | null;
           youthBedInventory?: number | null;
           youthVetBedInventory?: number | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
             id: string;
@@ -16886,7 +17216,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -16900,7 +17234,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
         }
@@ -16915,7 +17253,11 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           dateDeleted?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
             id: string;
@@ -16935,7 +17277,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -16949,7 +17295,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
         }
@@ -16994,7 +17344,11 @@ export type SubmitFormMutation = {
             canManageIncomingReferrals: boolean;
             canManageOutgoingReferrals: boolean;
           };
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
             id: string;
@@ -17014,7 +17368,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -17028,7 +17386,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
           dataCollectionFeatures: Array<{
@@ -17057,7 +17419,11 @@ export type SubmitFormMutation = {
           geographyType?: GeographyType | null;
           state?: string | null;
           zip?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }
       | {
           __typename?: 'ReferralRequest';
@@ -17092,7 +17458,11 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           dateDeleted?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
           serviceType: {
             __typename?: 'ServiceType';
             id: string;
@@ -17122,7 +17492,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             } | null;
             values?: Array<{
               __typename?: 'CustomDataElementValue';
@@ -17136,7 +17510,11 @@ export type SubmitFormMutation = {
               valueText?: string | null;
               dateCreated?: string | null;
               dateUpdated?: string | null;
-              user?: { __typename: 'User'; id: string; name: string } | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+              } | null;
             }> | null;
           }>;
         }
@@ -17471,7 +17849,7 @@ export type InventoryFieldsFragment = {
   vetBedInventory?: number | null;
   youthBedInventory?: number | null;
   youthVetBedInventory?: number | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -17491,7 +17869,7 @@ export type InventoryFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -17505,7 +17883,7 @@ export type InventoryFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
 };
@@ -17727,7 +18105,7 @@ export type OrganizationDetailFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -17747,7 +18125,7 @@ export type OrganizationDetailFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -17761,7 +18139,7 @@ export type OrganizationDetailFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
 };
@@ -17777,7 +18155,7 @@ export type OrganizationFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -17797,7 +18175,7 @@ export type OrganizationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -17811,7 +18189,7 @@ export type OrganizationFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
 };
@@ -17859,7 +18237,7 @@ export type GetOrganizationQuery = {
       canEditOrganization: boolean;
       canDeleteOrganization: boolean;
     };
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -17879,7 +18257,11 @@ export type GetOrganizationQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -17893,7 +18275,11 @@ export type GetOrganizationQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
   } | null;
@@ -18016,7 +18402,7 @@ export type ProjectAllFieldsFragment = {
     canManageIncomingReferrals: boolean;
     canManageOutgoingReferrals: boolean;
   };
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -18036,7 +18422,7 @@ export type ProjectAllFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -18050,7 +18436,7 @@ export type ProjectAllFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
   dataCollectionFeatures: Array<{
@@ -18561,7 +18947,7 @@ export type ProjectCocFieldsFragment = {
   geographyType?: GeographyType | null;
   state?: string | null;
   zip?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type FunderFieldsFragment = {
@@ -18575,7 +18961,7 @@ export type FunderFieldsFragment = {
   grantId?: string | null;
   otherFunder?: string | null;
   startDate?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type CeParticipationFieldsFragment = {
@@ -18591,7 +18977,7 @@ export type CeParticipationFieldsFragment = {
   receivesReferrals?: NoYes | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type HmisParticipationFieldsFragment = {
@@ -18602,7 +18988,7 @@ export type HmisParticipationFieldsFragment = {
   hmisParticipationStatusEndDate?: string | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type GetProjectsQueryVariables = Exact<{
@@ -18683,7 +19069,7 @@ export type GetProjectQuery = {
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
     };
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -18703,7 +19089,11 @@ export type GetProjectQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -18717,7 +19107,11 @@ export type GetProjectQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
     dataCollectionFeatures: Array<{
@@ -18923,7 +19317,11 @@ export type GetProjectServicesQuery = {
             nameSuffix?: string | null;
           };
         };
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         serviceType: {
           __typename?: 'ServiceType';
           id: string;
@@ -18953,7 +19351,11 @@ export type GetProjectServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -18967,7 +19369,11 @@ export type GetProjectServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
       }>;
@@ -19019,7 +19425,7 @@ export type GetFunderQuery = {
     grantId?: string | null;
     otherFunder?: string | null;
     startDate?: string | null;
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   } | null;
 };
 
@@ -19050,7 +19456,7 @@ export type GetInventoryQuery = {
     vetBedInventory?: number | null;
     youthBedInventory?: number | null;
     youthVetBedInventory?: number | null;
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -19070,7 +19476,11 @@ export type GetInventoryQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -19084,7 +19494,11 @@ export type GetInventoryQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
   } | null;
@@ -19110,7 +19524,7 @@ export type GetProjectCocQuery = {
     geographyType?: GeographyType | null;
     state?: string | null;
     zip?: string | null;
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   } | null;
 };
 
@@ -19151,7 +19565,11 @@ export type GetProjectInventoriesQuery = {
         vetBedInventory?: number | null;
         youthBedInventory?: number | null;
         youthVetBedInventory?: number | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
@@ -19171,7 +19589,11 @@ export type GetProjectInventoriesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -19185,7 +19607,11 @@ export type GetProjectInventoriesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
       }>;
@@ -19357,7 +19783,11 @@ export type GetProjectProjectCocsQuery = {
         geographyType?: GeographyType | null;
         state?: string | null;
         zip?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -19390,7 +19820,11 @@ export type GetProjectFundersQuery = {
         grantId?: string | null;
         otherFunder?: string | null;
         startDate?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -19425,7 +19859,11 @@ export type GetProjectCeParticipationsQuery = {
         receivesReferrals?: NoYes | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -19455,7 +19893,11 @@ export type GetProjectHmisParticipationsQuery = {
         hmisParticipationStatusEndDate?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
@@ -20245,7 +20687,7 @@ export type EsgFundingServiceFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -20259,7 +20701,7 @@ export type EsgFundingServiceFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
 };
@@ -20311,7 +20753,11 @@ export type GetEsgFundingReportQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -20325,7 +20771,11 @@ export type GetEsgFundingReportQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
   }>;
@@ -20356,7 +20806,7 @@ export type ServiceFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+  user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
   serviceType: {
     __typename?: 'ServiceType';
     id: string;
@@ -20386,7 +20836,7 @@ export type ServiceFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -20400,7 +20850,7 @@ export type ServiceFieldsFragment = {
       valueText?: string | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     }> | null;
   }>;
 };
@@ -20425,7 +20875,7 @@ export type GetServiceQuery = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     dateDeleted?: string | null;
-    user?: { __typename: 'User'; id: string; name: string } | null;
+    user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
     serviceType: {
       __typename?: 'ServiceType';
       id: string;
@@ -20455,7 +20905,11 @@ export type GetServiceQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       } | null;
       values?: Array<{
         __typename?: 'CustomDataElementValue';
@@ -20469,7 +20923,11 @@ export type GetServiceQuery = {
         valueText?: string | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }> | null;
     }>;
   } | null;
@@ -20516,7 +20974,7 @@ export type AddServiceToEnrollmentMutation = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       dateDeleted?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
       serviceType: {
         __typename?: 'ServiceType';
         id: string;
@@ -20546,7 +21004,11 @@ export type AddServiceToEnrollmentMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         values?: Array<{
           __typename?: 'CustomDataElementValue';
@@ -20560,7 +21022,11 @@ export type AddServiceToEnrollmentMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }> | null;
       }>;
     } | null;
@@ -20604,7 +21070,7 @@ export type DeleteServiceMutation = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       dateDeleted?: string | null;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+      user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
       serviceType: {
         __typename?: 'ServiceType';
         id: string;
@@ -20634,7 +21100,11 @@ export type DeleteServiceMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         } | null;
         values?: Array<{
           __typename?: 'CustomDataElementValue';
@@ -20648,7 +21118,11 @@ export type DeleteServiceMutation = {
           valueText?: string | null;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          user?: { __typename: 'User'; id: string; name: string } | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
         }> | null;
       }>;
     } | null;
@@ -20700,7 +21174,11 @@ export type GetEnrollmentServicesQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         serviceType: {
           __typename?: 'ServiceType';
           id: string;
@@ -20730,7 +21208,11 @@ export type GetEnrollmentServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           } | null;
           values?: Array<{
             __typename?: 'CustomDataElementValue';
@@ -20744,7 +21226,11 @@ export type GetEnrollmentServicesQuery = {
             valueText?: string | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+            } | null;
           }> | null;
         }>;
       }>;
@@ -21019,7 +21505,7 @@ export type CreateDirectUploadMutationMutation = {
 };
 
 export type UserFieldsFragment = {
-  __typename: 'User';
+  __typename: 'ApplicationUser';
   id: string;
   name: string;
 };
@@ -21074,7 +21560,7 @@ export const ApplicationUserFieldsFragmentDoc = gql`
   }
 `;
 export const UserFieldsFragmentDoc = gql`
-  fragment UserFields on User {
+  fragment UserFields on ApplicationUser {
     __typename
     id
     name

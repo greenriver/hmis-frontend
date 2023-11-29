@@ -1,4 +1,4 @@
-fragment UserFields on User {
+fragment UserFields on ApplicationUser {
   __typename
   id
   name
