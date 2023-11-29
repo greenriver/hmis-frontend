@@ -81,7 +81,7 @@ const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
               variant='text'
               size='small'
               color='inherit'
-              sx={(theme) => ({ color: theme.palette.text.secondary })}
+              sx={{ color: 'text.secondary' }}
               onClick={() => {
                 onCancel();
                 popupState.close();
