@@ -38,9 +38,11 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
-import AdminUsers from '@/modules/admin/components/AdminUsers';
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
+import AdminUsers from '@/modules/admin/components/users/AdminUsers';
+import UserAccessHistory from '@/modules/admin/components/users/UserAccessHistory';
+import UserEditHistory from '@/modules/admin/components/users/UserEditHistory';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
@@ -586,8 +588,27 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.USERS,
             element: (
-              <RootPermissionsFilter permissions='canImpersonateUsers'>
+              <RootPermissionsFilter
+                permissions={['canImpersonateUsers', 'canAuditUsers']}
+                mode='any'
+              >
                 <AdminUsers />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.USER_ACCESS_HISTORY,
+            element: (
+              <RootPermissionsFilter permissions='canAuditUsers'>
+                <UserAccessHistory />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.USER_EDIT_HISTORY,
+            element: (
+              <RootPermissionsFilter permissions='canAuditUsers'>
+                <UserEditHistory />
               </RootPermissionsFilter>
             ),
           },
