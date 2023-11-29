@@ -109,6 +109,7 @@ export const ENROLLMENT_COLUMNS: {
   householdId: {
     header: 'Household ID',
     key: 'housholdId',
+    optional: true,
     render: (e) => (
       <Stack direction='row' alignItems='baseline'>
         <Tooltip
@@ -131,7 +132,7 @@ export const ENROLLMENT_COLUMNS: {
     render: (e) => e.client.id,
   },
   lastClsDate: {
-    header: 'Last CLS Date',
+    header: 'Last Current Living Situation Date',
     key: 'lastClsDate',
     optional: true,
     defaultHidden: true,
