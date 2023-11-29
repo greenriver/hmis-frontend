@@ -31,6 +31,7 @@ const columns: ColumnDef<UserActivityLogFieldsFragment>[] = [
     tableCellProps: {
       sx: { p: 0, backgroundColor: (theme) => theme.palette.grey[100] },
     },
+    width: '300px',
     render: ({ resolvedRecords }) => {
       return (
         <CollapsibleList
