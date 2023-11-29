@@ -3,3 +3,13 @@ fragment UserFields on ApplicationUser {
   id
   name
 }
+
+fragment UserActivityLogFields on ActivityLog {
+  id
+  ipAddress
+  createdAt
+  resolvedRecords {
+    recordId
+    recordType
+  }
+}

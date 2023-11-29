@@ -1,0 +1,20 @@
+query GetUser($id: ID!) {
+  user(id: $id) {
+    ...UserFields
+  }
+}
+
+query GetUserAccessHistory($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  user(id: $id) {
+    id
+    name
+    activityLogs(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...UserActivityLogFields
+      }
+    }
+  }
+}
