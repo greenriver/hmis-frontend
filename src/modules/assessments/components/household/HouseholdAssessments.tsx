@@ -32,6 +32,12 @@ import {
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
 import useHasRefetched from '@/hooks/useHasRefetched';
+import {
+  HouseholdAssessmentFormAction,
+  HouseholdAssessmentFormState,
+  householdAssessmentFormStateReducer,
+  initialHouseholdAssessmentFormState,
+} from '@/modules/assessments/components/household/formState';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { router } from '@/routes/router';
@@ -42,7 +48,7 @@ import {
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
-interface HouseholdAssessmentsProps {
+interface Props {
   enrollment: EnrollmentFieldsFragment;
   role: HouseholdAssesmentRole;
   assessmentId?: string;
@@ -61,11 +67,32 @@ const calculateAssessmentStatus = (
   }
 };
 
-const HouseholdAssessments = ({
+const HouseholdAssessments: React.FC<Props> = ({
   role,
   enrollment,
   assessmentId,
-}: HouseholdAssessmentsProps) => {
+}) => {
+  // track if there are any dirty assessment forms
+  const [formStates, setFormStates] = useState<
+    Record<string, HouseholdAssessmentFormState>
+  >({});
+  const handleFormStateChange = useCallback(
+    (enrollmentId: string, action: HouseholdAssessmentFormAction) => {
+      setFormStates((cur) => {
+        const state = cur[enrollmentId] || initialHouseholdAssessmentFormState;
+        return {
+          ...cur,
+          [enrollmentId]: householdAssessmentFormStateReducer(state, action),
+        };
+      });
+    },
+    []
+  );
+  const hasDirtyAssessments = Object.values(formStates).some(
+    ({ dirty }) => dirty
+  );
+  const hasInflights = Object.values(formStates).some(({ saving }) => saving);
+
   const [householdMembers, fetchMembersStatus] = useHouseholdMembers(
     enrollment.id
   );
@@ -77,6 +104,7 @@ const HouseholdAssessments = ({
       assessmentId,
     });
   const [currentTab, setCurrentTab] = useState<string | undefined>('1');
+  const [nextTab, setNextTab] = useState<string>();
 
   const [tabs, setTabs] = useState<TabDefinition[]>([]);
 
@@ -161,14 +189,25 @@ const HouseholdAssessments = ({
 
   const { pathname } = useLocation();
 
-  const navigateToTab = useCallback(
-    (newValue: string) => {
-      setCurrentTab(newValue);
-      window.scrollTo(0, 0);
-      router.navigate(`${pathname}#${newValue}`, { replace: true });
-    },
-    [pathname]
-  );
+  const navigateToTab = useCallback((newValue: string) => {
+    setNextTab(newValue);
+  }, []);
+
+  useEffect(() => {
+    if (hasDirtyAssessments) return;
+    if (hasInflights) return;
+    if (!nextTab) return;
+    if (nextTab === currentTab) return;
+    // TODO: cancel navigation if errors
+    setCurrentTab(nextTab);
+    setNextTab(undefined);
+    window.scrollTo(0, 0);
+    router.navigate(`${pathname}#${nextTab}`, { replace: true });
+    // console.info('navigating')
+  }, [pathname, nextTab, currentTab, hasDirtyAssessments, hasInflights]);
+
+  // console.info({hasDirtyAssessments, hasInflights, nextTab, currentTab});
+  // console.info(formStates);
 
   const handleChangeTab = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
@@ -326,7 +365,7 @@ const HouseholdAssessments = ({
                   pb: 3,
                   alignItems: 'flex-start',
                 }}
-                onClick={() => setCurrentTab('summary')}
+                onClick={() => navigateToTab('summary')}
                 {...tabA11yProps(SUMMARY_TAB_ID)}
               />
             </Tabs>
@@ -339,6 +378,13 @@ const HouseholdAssessments = ({
             <HouseholdAssessmentTabPanel
               key={tabDefinition.id}
               active={tabDefinition.id === currentTab}
+              navigatingAway={
+                !!(
+                  tabDefinition.id === currentTab &&
+                  nextTab &&
+                  nextTab !== currentTab
+                )
+              }
               refetch={refetch}
               navigateToTab={navigateToTab}
               nextTab={tabs[index + 1]?.id || SUMMARY_TAB_ID}
@@ -346,6 +392,11 @@ const HouseholdAssessments = ({
               role={role}
               updateTabStatus={updateTabStatus}
               assessmentStatus={tabDefinition.status}
+              onFormStateChange={handleFormStateChange}
+              formState={
+                formStates[tabDefinition.enrollmentId] ||
+                initialHouseholdAssessmentFormState
+              }
               {...tabDefinition}
             />
           ))}
@@ -372,6 +423,7 @@ const HouseholdAssessments = ({
                 projectName={enrollmentName(enrollment)}
                 refetch={refetch}
                 setCurrentTab={setCurrentTab}
+                blocked={hasDirtyAssessments}
               />
             )
           )}

@@ -51,6 +51,7 @@ export interface DynamicFormProps
   definition: FormDefinitionJson;
   onSubmit: DynamicFormOnSubmit;
   onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
+  onDirty?: (value: boolean) => void;
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors: ErrorState;
@@ -101,10 +102,14 @@ const DynamicForm = forwardRef(
       hideSubmit = false,
       localConstants,
       errorRef,
+      onDirty,
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
     const [dirty, setDirty] = useState(false);
+    useEffect(() => {
+      onDirty?.(dirty);
+    }, [dirty, onDirty]);
     const [promptSave, setPromptSave] = useState<boolean | undefined>();
 
     const onFieldChange = useCallback((type: ChangeType) => {
@@ -271,6 +276,7 @@ const DynamicForm = forwardRef(
             appear
             timeout={300}
             direction='up'
+            loading={loading}
           >
             {saveButtons}
           </SaveSlide>

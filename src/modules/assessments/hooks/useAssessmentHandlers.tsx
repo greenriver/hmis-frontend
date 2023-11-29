@@ -28,7 +28,8 @@ type Args = {
   enrollmentId: string;
   assessmentId?: string;
   assessmentLockVersion?: number;
-  onSuccessfulSubmit?: (assessment: AssessmentFieldsFragment) => void;
+  onSuccessfulSubmit: (assessment: AssessmentFieldsFragment) => void;
+  onSuccessfulDraftSave: (assessment: AssessmentFieldsFragment) => void;
 };
 
 export const createValuesForSubmit = (
@@ -53,6 +54,7 @@ export function useAssessmentHandlers({
   assessmentId,
   assessmentLockVersion,
   onSuccessfulSubmit = () => null,
+  onSuccessfulDraftSave = () => null,
 }: Args) {
   const formDefinitionId = definition.id;
 
@@ -152,6 +154,7 @@ export function useAssessmentHandlers({
           onCompleted(data);
           if (data.saveAssessment?.assessment && onSuccessCallback) {
             onSuccessCallback();
+            onSuccessfulDraftSave(data.saveAssessment?.assessment);
           }
         },
       });
@@ -164,6 +167,7 @@ export function useAssessmentHandlers({
       formDefinitionId,
       enrollmentId,
       onCompleted,
+      onSuccessfulDraftSave,
     ]
   );
 

@@ -8,6 +8,8 @@ const Loading = () => (
     height='100%'
     data-testid='loading'
     sx={{ p: 10 }}
+    aria-live='polite'
+    aria-busy='true'
   >
     <CircularProgress size={50} />
   </Box>
