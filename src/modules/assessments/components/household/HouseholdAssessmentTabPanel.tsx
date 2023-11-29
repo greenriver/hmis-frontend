@@ -12,6 +12,10 @@ import {
   tabPanelA11yProps,
 } from './util';
 
+import {
+  HouseholdAssessmentFormAction,
+  HouseholdAssessmentFormState,
+} from '@/modules/assessments/components/household/formState';
 import { DynamicFormRef } from '@/modules/form/components/DynamicForm';
 import { FormActionProps } from '@/modules/form/components/FormActions';
 import { FormActionTypes } from '@/modules/form/types';
@@ -27,9 +31,11 @@ interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   navigateToTab: (t: string) => void;
   updateTabStatus: (status: AssessmentStatus, tabId: string) => void;
   assessmentStatus: AssessmentStatus;
-  onDirty: (enrollmentId: string, inFlight: boolean) => void;
-  onInflight: (enrollmentId: string, inFlight: boolean) => void;
-  isInflight: boolean;
+  onFormStateChange: (
+    enrollmentId: string,
+    action: HouseholdAssessmentFormAction
+  ) => void;
+  formState: HouseholdAssessmentFormState;
 }
 
 // Memoized to only re-render when props change (shallow compare)
@@ -51,9 +57,8 @@ const HouseholdAssessmentTabPanel = memo(
     updateTabStatus,
     assessmentSubmitted,
     assessmentStatus,
-    onDirty,
-    onInflight,
-    isInflight,
+    onFormStateChange,
+    formState,
   }: HouseholdAssessmentTabPanelProps) => {
     // console.debug('Rendering assessment panel for', clientName);
 
@@ -63,16 +68,17 @@ const HouseholdAssessmentTabPanel = memo(
     useEffect(() => {
       if (!formRef.current) return;
       if (!navigatingAway) return;
-      if (isInflight) return;
+      // skip save if it's already happening
+      if (formState.saving) return;
       if (assessmentSubmitted) {
         formRef.current.SubmitIfDirty(true, () => {
           // TODO: Update tab status to 'error' if error?
           // console.debug(`Submitted ${clientName}!`);
-          onDirty(enrollmentId, false);
+          onFormStateChange(enrollmentId, 'saveCompleted');
         });
       } else {
         formRef.current.SaveIfDirty(() => {
-          onDirty(enrollmentId, false);
+          onFormStateChange(enrollmentId, 'saveCompleted');
           // TODO: Update tab status to 'error' if error?
           // console.debug(`Saved ${clientName}!`);
           if (!assessmentId) {
@@ -83,13 +89,13 @@ const HouseholdAssessmentTabPanel = memo(
         });
       }
     }, [
+      onFormStateChange,
+      formState.saving,
       navigatingAway,
-      isInflight,
       assessmentId,
       assessmentSubmitted,
       enrollmentId,
       id,
-      onDirty,
       refetch,
       updateTabStatus,
     ]);
@@ -179,8 +185,7 @@ const HouseholdAssessmentTabPanel = memo(
           getFormActionProps={getFormActionProps}
           visible={active}
           formRef={formRef}
-          onDirty={onDirty}
-          onInflight={onInflight}
+          onFormStateChange={onFormStateChange}
         />
       </AlwaysMountedTabPanel>
     );

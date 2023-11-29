@@ -32,6 +32,12 @@ import {
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
 import useHasRefetched from '@/hooks/useHasRefetched';
+import {
+  HouseholdAssessmentFormAction,
+  HouseholdAssessmentFormState,
+  householdAssessmentFormStateReducer,
+  initialHouseholdAssessmentFormState,
+} from '@/modules/assessments/components/household/formState';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { router } from '@/routes/router';
@@ -67,24 +73,25 @@ const HouseholdAssessments: React.FC<Props> = ({
   assessmentId,
 }) => {
   // track if there are any dirty assessment forms
-  const [dirtyAssessments, setDirtyAssessments] = useState<
-    Record<string, boolean>
+  const [formStates, setFormStates] = useState<
+    Record<string, HouseholdAssessmentFormState>
   >({});
-  const handleDirtyAssessment = useCallback(
-    (enrollmentId: string, value: boolean) => {
-      setDirtyAssessments((c) => ({ ...c, [enrollmentId]: value }));
+  const handleFormStateChange = useCallback(
+    (enrollmentId: string, action: HouseholdAssessmentFormAction) => {
+      setFormStates((cur) => {
+        const state = cur[enrollmentId] || initialHouseholdAssessmentFormState;
+        return {
+          ...cur,
+          [enrollmentId]: householdAssessmentFormStateReducer(state, action),
+        };
+      });
     },
     []
   );
-  const hasDirtyAssessments = Object.values(dirtyAssessments).some(
-    (value) => value
+  const hasDirtyAssessments = Object.values(formStates).some(
+    ({ dirty }) => dirty
   );
-
-  const [inflights, setInflights] = useState<Record<string, boolean>>({});
-  const handleInflight = useCallback((enrollmentId: string, value: boolean) => {
-    setInflights((c) => ({ ...c, [enrollmentId]: value }));
-  }, []);
-  const hasInflights = Object.values(inflights).some((value) => value);
+  const hasInflights = Object.values(formStates).some(({ saving }) => saving);
 
   const [householdMembers, fetchMembersStatus] = useHouseholdMembers(
     enrollment.id
@@ -191,6 +198,7 @@ const HouseholdAssessments: React.FC<Props> = ({
     if (hasInflights) return;
     if (!nextTab) return;
     if (nextTab === currentTab) return;
+    // TODO: cancel navigation if errors
     setCurrentTab(nextTab);
     setNextTab(undefined);
     window.scrollTo(0, 0);
@@ -199,6 +207,7 @@ const HouseholdAssessments: React.FC<Props> = ({
   }, [pathname, nextTab, currentTab, hasDirtyAssessments, hasInflights]);
 
   // console.info({hasDirtyAssessments, hasInflights, nextTab, currentTab});
+  // console.info(formStates);
 
   const handleChangeTab = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
@@ -383,9 +392,11 @@ const HouseholdAssessments: React.FC<Props> = ({
               role={role}
               updateTabStatus={updateTabStatus}
               assessmentStatus={tabDefinition.status}
-              onDirty={handleDirtyAssessment}
-              onInflight={handleInflight}
-              isInflight={!!inflights[tabDefinition.enrollmentId]}
+              onFormStateChange={handleFormStateChange}
+              formState={
+                formStates[tabDefinition.enrollmentId] ||
+                initialHouseholdAssessmentFormState
+              }
               {...tabDefinition}
             />
           ))}

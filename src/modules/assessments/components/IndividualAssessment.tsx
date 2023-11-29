@@ -17,6 +17,7 @@ import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import AssessmentStatusIndicator from '@/modules/assessments/components/AssessmentStatusIndicator';
+import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
 import { AssessmentStatus } from '@/modules/assessments/components/household/util';
 import { useAssessment } from '@/modules/assessments/hooks/useAssessment';
 import { useBasicEnrollment } from '@/modules/enrollment/hooks/useBasicEnrollment';
@@ -48,8 +49,10 @@ export interface IndividualAssessmentProps {
     assessment?: AssessmentFieldsFragment
   ) => DynamicFormProps['FormActionProps'];
   formRef?: Ref<DynamicFormRef>;
-  onDirty?: (enrollmentId: string, inFlight: boolean) => void;
-  onInflight?: (enrollmentId: string, inFlight: boolean) => void;
+  onFormStateChange?: (
+    enrollmentId: string,
+    action: HouseholdAssessmentFormAction
+  ) => void;
 }
 
 /**
@@ -70,8 +73,7 @@ const IndividualAssessment = ({
   getFormActionProps,
   visible,
   formRef,
-  onDirty,
-  onInflight,
+  onFormStateChange,
 }: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useClientDashboardContext();
 
@@ -185,8 +187,7 @@ const IndividualAssessment = ({
       FormActionProps={FormActionProps}
       visible={visible}
       formRef={formRef}
-      onDirty={onDirty}
-      onInflight={onInflight}
+      onFormStateChange={onFormStateChange}
     />
   );
 };

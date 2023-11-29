@@ -23,6 +23,7 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
+import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
 import { hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
@@ -31,7 +32,6 @@ import DynamicForm, {
 import FormActions from '@/modules/form/components/FormActions';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
-
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
 import {
@@ -63,8 +63,10 @@ interface Props {
   FormActionProps?: DynamicFormProps['FormActionProps'];
   visible?: boolean;
   formRef?: Ref<DynamicFormRef>;
-  onDirty?: (enrollmentId: string, value: boolean) => void;
-  onInflight?: (enrollmentId: string, value: boolean) => void;
+  onFormStateChange?: (
+    enrollmentId: string,
+    value: HouseholdAssessmentFormAction
+  ) => void;
 }
 
 const AssessmentForm: React.FC<Props> = ({
@@ -80,8 +82,7 @@ const AssessmentForm: React.FC<Props> = ({
   formRef,
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
-  onDirty,
-  onInflight,
+  onFormStateChange,
 }) => {
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -120,13 +121,13 @@ const AssessmentForm: React.FC<Props> = ({
   const onSuccessfulSubmit = useCallback(
     (assmt: AssessmentFieldsFragment) => {
       if (!assmt.inProgress) setLocked(true);
-      onDirty?.(enrollment.id, false);
+      onFormStateChange?.(enrollment.id, 'saveCompleted');
     },
-    [onDirty, enrollment.id]
+    [onFormStateChange, enrollment.id]
   );
-  const onSuccessfulSaveDraft = useCallback(() => {
-    onDirty?.(enrollment.id, false);
-  }, [onDirty, enrollment.id]);
+  const onSuccessfulDraftSave = useCallback(() => {
+    onFormStateChange?.(enrollment.id, 'saveCompleted');
+  }, [onFormStateChange, enrollment.id]);
 
   const { submitHandler, saveDraftHandler, mutationLoading, errors } =
     useAssessmentHandlers({
@@ -134,19 +135,29 @@ const AssessmentForm: React.FC<Props> = ({
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
       assessmentLockVersion: assessment?.lockVersion,
-      onSuccessfulSubmit: onSuccessfulSubmit,
-      onSuccessfulDraftSave: onSuccessfulSaveDraft,
+      onSuccessfulSubmit,
+      onSuccessfulDraftSave,
     });
 
   const handleDirty = useCallback(
-    (value: boolean) => {
-      onDirty?.(enrollment.id, value);
+    (dirty: boolean) => {
+      // we can only rely on dirty == true
+      if (dirty) onFormStateChange?.(enrollment.id, 'formDirty');
     },
-    [onDirty, enrollment.id]
+    [onFormStateChange, enrollment.id]
   );
   useEffect(() => {
-    onInflight?.(enrollment.id, mutationLoading);
-  }, [onInflight, mutationLoading, enrollment.id]);
+    if (mutationLoading) {
+      onFormStateChange?.(enrollment.id, 'saveStarted');
+    }
+  }, [onFormStateChange, mutationLoading, enrollment.id]);
+
+  // TODO: track error states so we can block navigation
+  // useEffect(() => {
+  //   if (errors?.errors.length || errors?.warnings.length) {
+  //     onFormStateChange?.(enrollment.id, 'saveError');
+  //   }
+  // }, [onFormStateChange, errors, enrollment.id]);
 
   const itemMap = useMemo(
     () => getItemMap(definition.definition),
