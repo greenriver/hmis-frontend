@@ -123,3 +123,11 @@ fragment HmisParticipationFields on HmisParticipation {
     ...UserFields
   }
 }
+
+fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
+  ...ProjectEnrollmentFields
+  lastCurrentLivingSituation @include(if: $includeCls) {
+    id
+    informationDate
+  }
+}

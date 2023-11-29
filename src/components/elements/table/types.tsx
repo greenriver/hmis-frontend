@@ -19,6 +19,8 @@ export interface ColumnDef<T> {
   // aria label, for use with linkTreatment
   ariaLabel?: (row: T) => string;
   textAlign?: 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
+  optional?: boolean;
+  defaultHidden?: boolean;
 }
 
 export function isPrimitive<T>(value: any): value is AttributeName<T> {
