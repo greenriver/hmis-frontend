@@ -1,6 +1,5 @@
 import { Box, Skeleton } from '@mui/material';
 import { BoxProps } from '@mui/system';
-import times from 'lodash-es/times';
 import React from 'react';
 
 interface Props extends BoxProps {
@@ -16,7 +15,7 @@ const LoadingSkeleton: React.FC<Props> = ({
 }) => {
   return (
     <Box aria-live='polite' aria-busy='true' {...props}>
-      {times(count, (i) => (
+      {Array.from({ length: count }, (x, i) => (
         <Skeleton
           animation={animation}
           key={i}
