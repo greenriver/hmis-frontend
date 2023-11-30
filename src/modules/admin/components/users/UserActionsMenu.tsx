@@ -28,9 +28,9 @@ const UserActionsMenu: React.FC<Props> = ({
 
   if (rootAccess.canAuditUsers) {
     items.push({
-      key: 'access-history',
-      title: 'View Access History',
-      to: generateSafePath(AdminDashboardRoutes.USER_ACCESS_HISTORY, {
+      key: 'audit',
+      title: 'Audit User',
+      to: generateSafePath(AdminDashboardRoutes.USER_AUDIT, {
         userId,
       }),
     });

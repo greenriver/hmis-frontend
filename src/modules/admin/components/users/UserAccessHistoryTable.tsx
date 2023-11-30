@@ -1,4 +1,4 @@
-import { ListItem, ListItemText, Paper, Stack } from '@mui/material';
+import { ListItem, ListItemText, Stack } from '@mui/material';
 import pluralize from 'pluralize';
 import React from 'react';
 import {
@@ -6,11 +6,7 @@ import {
   ContextualCollapsibleListsProvider,
   ContextualListExpansionButton,
 } from '@/components/elements/CollapsibleListContext';
-import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
-import PageTitle from '@/components/layout/PageTitle';
-import NotFound from '@/components/pages/NotFound';
-import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import {
@@ -18,7 +14,6 @@ import {
   GetUserAccessHistoryQuery,
   GetUserAccessHistoryQueryVariables,
   UserActivityLogFieldsFragment,
-  useGetUserQuery,
 } from '@/types/gqlTypes';
 
 const columns: ColumnDef<UserActivityLogFieldsFragment>[] = [
@@ -56,35 +51,25 @@ const columns: ColumnDef<UserActivityLogFieldsFragment>[] = [
   },
 ];
 
-const UserAccessHistory: React.FC = () => {
-  const { userId } = useSafeParams() as { userId: string };
-
-  const { data, loading, error } = useGetUserQuery({
-    variables: { id: userId },
-  });
-
-  if (!data && loading) return <Loading />;
-  if (error) throw error;
-  if (!loading && (!data || !data.user)) return <NotFound />;
-
+interface Props {
+  userId: string;
+}
+const UserAccessHistoryTable: React.FC<Props> = ({ userId }) => {
   return (
     <ContextualCollapsibleListsProvider>
-      <PageTitle title={`Access History for ${data?.user?.name}`} />
-      <Paper>
-        <GenericTableWithData<
-          GetUserAccessHistoryQuery,
-          GetUserAccessHistoryQueryVariables,
-          UserActivityLogFieldsFragment
-        >
-          queryVariables={{ id: userId }}
-          queryDocument={GetUserAccessHistoryDocument}
-          columns={columns}
-          pagePath='user.activityLogs'
-          noData='No access history'
-        />
-      </Paper>
+      <GenericTableWithData<
+        GetUserAccessHistoryQuery,
+        GetUserAccessHistoryQueryVariables,
+        UserActivityLogFieldsFragment
+      >
+        queryVariables={{ id: userId }}
+        queryDocument={GetUserAccessHistoryDocument}
+        columns={columns}
+        pagePath='user.activityLogs'
+        noData='No access history'
+      />
     </ContextualCollapsibleListsProvider>
   );
 };
 
-export default UserAccessHistory;
+export default UserAccessHistoryTable;
