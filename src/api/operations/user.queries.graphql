@@ -7,7 +7,6 @@ query GetUser($id: ID!) {
 query GetUserAccessHistory($id: ID!, $limit: Int = 25, $offset: Int = 0) {
   user(id: $id) {
     id
-    name
     activityLogs(limit: $limit, offset: $offset) {
       offset
       limit

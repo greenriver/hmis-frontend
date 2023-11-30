@@ -36,6 +36,8 @@ const UserActionsMenu: React.FC<Props> = ({
     });
   }
 
+  if (items.length === 0) return null;
+
   return (
     <CommonMenuButton title='User Actions' items={items} variant='outlined' />
   );

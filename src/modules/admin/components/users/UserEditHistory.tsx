@@ -1,8 +1,9 @@
-import useSafeParams from '@/hooks/useSafeParams';
+import NotFound from '@/components/pages/NotFound';
 
 const UserEditHistory: React.FC = () => {
-  const { userId } = useSafeParams();
-  return <>{userId}</>;
+  // TODO(#186570782) User edit history (changes the user has made to any records across the system)
+  // const { userId } = useSafeParams();
+  return <NotFound />;
 };
 
 export default UserEditHistory;

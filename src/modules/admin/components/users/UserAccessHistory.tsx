@@ -32,11 +32,7 @@ const columns: ColumnDef<UserActivityLogFieldsFragment>[] = [
   },
   {
     header: (
-      <Stack
-        direction={'row'}
-        justifyContent={'space-between'}
-        alignItems={'center'}
-      >
+      <Stack direction='row' justifyContent='space-between' alignItems='center'>
         <strong>Records Accessed</strong>
         <ContextualListExpansionButton />
       </Stack>
@@ -45,22 +41,18 @@ const columns: ColumnDef<UserActivityLogFieldsFragment>[] = [
       sx: { p: 0, backgroundColor: (theme) => theme.palette.grey[50] },
     },
     width: '300px',
-    render: ({ resolvedRecords }) => {
-      return (
-        <ContextualCollapsibleList
-          title={pluralize('record', resolvedRecords.length, true)}
-        >
-          {resolvedRecords.map(({ recordType, recordId }, idx) => {
-            return (
-              // eslint-disable-next-line react/no-array-index-key
-              <ListItem key={idx}>
-                <ListItemText primary={`${recordType} ${recordId}`} />
-              </ListItem>
-            );
-          })}
-        </ContextualCollapsibleList>
-      );
-    },
+    render: ({ resolvedRecords }) => (
+      <ContextualCollapsibleList
+        title={pluralize('record', resolvedRecords.length, true)}
+      >
+        {resolvedRecords.map(({ recordType, recordId }, idx) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <ListItem key={idx}>
+            <ListItemText primary={`${recordType} ${recordId}`} />
+          </ListItem>
+        ))}
+      </ContextualCollapsibleList>
+    ),
   },
 ];
 
@@ -71,31 +63,27 @@ const UserAccessHistory: React.FC = () => {
     variables: { id: userId },
   });
 
-  if (!data && loading) {
-    return <Loading />;
-  }
+  if (!data && loading) return <Loading />;
   if (error) throw error;
   if (!loading && (!data || !data.user)) return <NotFound />;
 
   return (
-    <>
-      <ContextualCollapsibleListsProvider>
-        <PageTitle title={`Access History for ${data?.user?.name}`} />
-        <Paper>
-          <GenericTableWithData<
-            GetUserAccessHistoryQuery,
-            GetUserAccessHistoryQueryVariables,
-            UserActivityLogFieldsFragment
-          >
-            queryVariables={{ id: userId }}
-            queryDocument={GetUserAccessHistoryDocument}
-            columns={columns}
-            pagePath='user.activityLogs'
-            noData='No access history'
-          />
-        </Paper>
-      </ContextualCollapsibleListsProvider>
-    </>
+    <ContextualCollapsibleListsProvider>
+      <PageTitle title={`Access History for ${data?.user?.name}`} />
+      <Paper>
+        <GenericTableWithData<
+          GetUserAccessHistoryQuery,
+          GetUserAccessHistoryQueryVariables,
+          UserActivityLogFieldsFragment
+        >
+          queryVariables={{ id: userId }}
+          queryDocument={GetUserAccessHistoryDocument}
+          columns={columns}
+          pagePath='user.activityLogs'
+          noData='No access history'
+        />
+      </Paper>
+    </ContextualCollapsibleListsProvider>
   );
 };
 
