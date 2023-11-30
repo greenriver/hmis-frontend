@@ -12,7 +12,7 @@ import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import {
-  ApplicationUserFieldsFragment,
+  UserFieldsFragment,
   GetApplicationUsersDocument,
   GetApplicationUsersQuery,
   GetApplicationUsersQueryVariables,
@@ -25,12 +25,12 @@ const AdminUsers = () => {
     string | undefined
   >(undefined);
 
-  const [chosenUser, setChosenUser] = useState<ApplicationUserFieldsFragment>();
+  const [chosenUser, setChosenUser] = useState<UserFieldsFragment>();
   const handleCancel = () => {
     setChosenUser(undefined);
   };
 
-  const columns = useMemo<ColumnDef<ApplicationUserFieldsFragment>[]>(
+  const columns = useMemo<ColumnDef<UserFieldsFragment>[]>(
     () => [
       {
         header: 'Name',
@@ -80,7 +80,7 @@ const AdminUsers = () => {
           <GenericTableWithData<
             GetApplicationUsersQuery,
             GetApplicationUsersQueryVariables,
-            ApplicationUserFieldsFragment
+            UserFieldsFragment
           >
             queryVariables={{
               filters: { searchTerm: debouncedSearch },
