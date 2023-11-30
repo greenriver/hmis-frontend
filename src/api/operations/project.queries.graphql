@@ -45,6 +45,7 @@ query GetProjectEnrollments(
   $sortOrder: EnrollmentSortOption
   $limit: Int = 10
   $offset: Int = 0
+  $includeCls: Boolean = false
 ) {
   project(id: $id) {
     id
@@ -58,7 +59,7 @@ query GetProjectEnrollments(
       limit
       nodesCount
       nodes {
-        ...ProjectEnrollmentFields
+        ...ProjectEnrollmentQueryEnrollmentFields
       }
     }
   }

@@ -21,6 +21,8 @@ export interface ColumnDef<T> {
   ariaLabel?: (row: T) => string;
   textAlign?: 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
   tableCellProps?: TableCellProps;
+  optional?: boolean;
+  defaultHidden?: boolean;
 }
 
 export function isPrimitive<T>(value: any): value is AttributeName<T> {

@@ -1,8 +1,10 @@
-import { Box, Paper, Slide, SlideProps } from '@mui/material';
+import { Box, LinearProgress, Paper, Slide, SlideProps } from '@mui/material';
 
-type Props = SlideProps;
+interface Props extends SlideProps {
+  loading?: boolean;
+}
 
-const SaveSlide = ({ children, ...props }: Props) => (
+const SaveSlide = ({ children, loading = false, ...props }: Props) => (
   <Slide {...props}>
     <Paper
       elevation={2}
@@ -14,14 +16,23 @@ const SaveSlide = ({ children, ...props }: Props) => (
         alignItems: 'center',
         flexDirection: 'row-reverse',
         backgroundColor: 'white',
-        py: 2,
-        px: 2,
         zIndex: (theme) => theme.zIndex.drawer,
         boxShadow: '0 0 10px rgb(0 0 0 / 25%)',
         clipPath: 'inset(-10px -1px 0px -1px)',
       }}
     >
-      <Box sx={{ width: '100%' }}>{children}</Box>
+      <Box sx={{ width: '100%' }}>
+        {loading ? (
+          <LinearProgress
+            sx={{ height: 2 }}
+            aria-live='polite'
+            aria-busy='true'
+          />
+        ) : (
+          <Box sx={{ height: 2 }} />
+        )}
+        <Box sx={{ p: 2 }}>{children}</Box>
+      </Box>
     </Paper>
   </Slide>
 );

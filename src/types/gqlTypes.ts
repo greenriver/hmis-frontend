@@ -1920,6 +1920,7 @@ export type Enrollment = {
   juvenileJusticeMonths?: Maybe<Scalars['Int']['output']>;
   juvenileJusticeYears?: Maybe<RhyNumberofYears>;
   lastBedNightDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  lastCurrentLivingSituation?: Maybe<CurrentLivingSituation>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   literalHomelessHistory?: Maybe<LiteralHomelessHistory>;
   livingSituation?: Maybe<PriorLivingSituation>;
@@ -19035,6 +19036,44 @@ export type HmisParticipationFieldsFragment = {
   user?: { __typename: 'ApplicationUser'; id: string; name: string } | null;
 };
 
+export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  lockVersion: number;
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  lastCurrentLivingSituation?: {
+    __typename?: 'CurrentLivingSituation';
+    id: string;
+    informationDate?: string | null;
+  } | null;
+  client: {
+    __typename?: 'Client';
+    id: string;
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
+    lockVersion: number;
+    age?: number | null;
+    ssn?: string | null;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+    access: {
+      __typename?: 'ClientAccess';
+      id: string;
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
+    };
+  };
+};
+
 export type GetProjectsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -19205,6 +19244,7 @@ export type GetProjectEnrollmentsQueryVariables = Exact<{
   sortOrder?: InputMaybe<EnrollmentSortOption>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  includeCls?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetProjectEnrollmentsQuery = {
@@ -19229,6 +19269,11 @@ export type GetProjectEnrollmentsQuery = {
         householdId: string;
         householdShortId: string;
         householdSize: number;
+        lastCurrentLivingSituation?: {
+          __typename?: 'CurrentLivingSituation';
+          id: string;
+          informationDate?: string | null;
+        } | null;
         client: {
           __typename?: 'Client';
           id: string;
@@ -22406,35 +22451,6 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
-export const ClientNameDobVetFragmentDoc = gql`
-  fragment ClientNameDobVet on Client {
-    ...ClientName
-    dob
-    veteranStatus
-  }
-  ${ClientNameFragmentDoc}
-`;
-export const ProjectEnrollmentFieldsFragmentDoc = gql`
-  fragment ProjectEnrollmentFields on Enrollment {
-    id
-    lockVersion
-    entryDate
-    exitDate
-    inProgress
-    relationshipToHoH
-    enrollmentCoc
-    householdId
-    householdShortId
-    householdSize
-    client {
-      id
-      ...ClientNameDobVet
-      ...ClientIdentificationFields
-    }
-  }
-  ${ClientNameDobVetFragmentDoc}
-  ${ClientIdentificationFieldsFragmentDoc}
-`;
 export const ClientEnrollmentFieldsFragmentDoc = gql`
   fragment ClientEnrollmentFields on Enrollment {
     id
@@ -22453,6 +22469,14 @@ export const ClientEnrollmentFieldsFragmentDoc = gql`
       canViewEnrollmentDetails
     }
   }
+`;
+export const ClientNameDobVetFragmentDoc = gql`
+  fragment ClientNameDobVet on Client {
+    ...ClientName
+    dob
+    veteranStatus
+  }
+  ${ClientNameFragmentDoc}
 `;
 export const EnrollmentAccessFieldsFragmentDoc = gql`
   fragment EnrollmentAccessFields on EnrollmentAccess {
@@ -23118,6 +23142,37 @@ export const HmisParticipationFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const ProjectEnrollmentFieldsFragmentDoc = gql`
+  fragment ProjectEnrollmentFields on Enrollment {
+    id
+    lockVersion
+    entryDate
+    exitDate
+    inProgress
+    relationshipToHoH
+    enrollmentCoc
+    householdId
+    householdShortId
+    householdSize
+    client {
+      id
+      ...ClientNameDobVet
+      ...ClientIdentificationFields
+    }
+  }
+  ${ClientNameDobVetFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+`;
+export const ProjectEnrollmentQueryEnrollmentFieldsFragmentDoc = gql`
+  fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
+    ...ProjectEnrollmentFields
+    lastCurrentLivingSituation @include(if: $includeCls) {
+      id
+      informationDate
+    }
+  }
+  ${ProjectEnrollmentFieldsFragmentDoc}
 `;
 export const ReferralPostingFieldsFragmentDoc = gql`
   fragment ReferralPostingFields on ReferralPosting {
@@ -27854,6 +27909,7 @@ export const GetProjectEnrollmentsDocument = gql`
     $sortOrder: EnrollmentSortOption
     $limit: Int = 10
     $offset: Int = 0
+    $includeCls: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -27867,12 +27923,12 @@ export const GetProjectEnrollmentsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...ProjectEnrollmentFields
+          ...ProjectEnrollmentQueryEnrollmentFields
         }
       }
     }
   }
-  ${ProjectEnrollmentFieldsFragmentDoc}
+  ${ProjectEnrollmentQueryEnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -27892,6 +27948,7 @@ export const GetProjectEnrollmentsDocument = gql`
  *      sortOrder: // value for 'sortOrder'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      includeCls: // value for 'includeCls'
  *   },
  * });
  */

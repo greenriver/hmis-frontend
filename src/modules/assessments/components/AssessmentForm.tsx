@@ -23,6 +23,7 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
+import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
 import { hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
@@ -31,7 +32,6 @@ import DynamicForm, {
 import FormActions from '@/modules/form/components/FormActions';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
-
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
 import {
@@ -42,6 +42,7 @@ import {
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
 import {
+  AssessmentFieldsFragment,
   EnrollmentFieldsFragment,
   FormDefinition,
   FormRole,
@@ -52,7 +53,6 @@ import {
 interface Props {
   enrollment: EnrollmentFieldsFragment;
   clientId: string;
-  // assessmentTitle: string;
   formRole?: FormRole;
   definition: FormDefinition;
   assessment?: FullAssessmentFragment;
@@ -63,9 +63,13 @@ interface Props {
   FormActionProps?: DynamicFormProps['FormActionProps'];
   visible?: boolean;
   formRef?: Ref<DynamicFormRef>;
+  onFormStateChange?: (
+    enrollmentId: string,
+    value: HouseholdAssessmentFormAction
+  ) => void;
 }
 
-const AssessmentForm = ({
+const AssessmentForm: React.FC<Props> = ({
   assessment,
   clientId,
   assessmentTitle,
@@ -78,7 +82,8 @@ const AssessmentForm = ({
   formRef,
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
-}: Props) => {
+  onFormStateChange,
+}) => {
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -94,11 +99,11 @@ const AssessmentForm = ({
     if (assessment && !assessment.inProgress) setLocked(true);
   }, [assessment, canEdit]);
 
-  // Most recently selected "source" assesment for autofill
+  // Most recently selected "source" assessment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
     FullAssessmentFragment | undefined
   >();
-  // Trigger for reloading initial values and form if a source assesment is chosen for autofill.
+  // Trigger for reloading initial values and form if a source assessment is chosen for autofill.
   // This is needed to support re-selecting the same assessment (which should clear and reload the form again)
   const [reloadInitialValues, setReloadInitialValues] = useState(false);
 
@@ -113,16 +118,46 @@ const AssessmentForm = ({
 
   const isPrintView = useIsPrintView();
 
+  const onSuccessfulSubmit = useCallback(
+    (assmt: AssessmentFieldsFragment) => {
+      if (!assmt.inProgress) setLocked(true);
+      onFormStateChange?.(enrollment.id, 'saveCompleted');
+    },
+    [onFormStateChange, enrollment.id]
+  );
+  const onSuccessfulDraftSave = useCallback(() => {
+    onFormStateChange?.(enrollment.id, 'saveCompleted');
+  }, [onFormStateChange, enrollment.id]);
+
   const { submitHandler, saveDraftHandler, mutationLoading, errors } =
     useAssessmentHandlers({
       definition,
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
       assessmentLockVersion: assessment?.lockVersion,
-      onSuccessfulSubmit: (assmt) => {
-        if (!assmt.inProgress) setLocked(true);
-      },
+      onSuccessfulSubmit,
+      onSuccessfulDraftSave,
     });
+
+  const handleDirty = useCallback(
+    (dirty: boolean) => {
+      // we can only rely on dirty == true
+      if (dirty) onFormStateChange?.(enrollment.id, 'formDirty');
+    },
+    [onFormStateChange, enrollment.id]
+  );
+  useEffect(() => {
+    if (mutationLoading) {
+      onFormStateChange?.(enrollment.id, 'saveStarted');
+    }
+  }, [onFormStateChange, mutationLoading, enrollment.id]);
+
+  // TODO: track error states so we can block navigation
+  // useEffect(() => {
+  //   if (errors?.errors.length || errors?.warnings.length) {
+  //     onFormStateChange?.(enrollment.id, 'saveError');
+  //   }
+  // }, [onFormStateChange, errors, enrollment.id]);
 
   const itemMap = useMemo(
     () => getItemMap(definition.definition),
@@ -283,7 +318,7 @@ const AssessmentForm = ({
             sticky={embeddedInWorkflow ? 'always' : 'auto'}
           >
             <DynamicView
-              // dont use `initialValues` because we don't want the OVERWRITE fields
+              // don't use `initialValues` because we don't want the OVERWRITE fields
               values={initialValuesFromAssessment(itemMap, assessment)}
               definition={definition.definition}
               pickListArgs={pickListArgs}
@@ -312,6 +347,7 @@ const AssessmentForm = ({
             showSavePrompt
             alwaysShowSaveSlide={!!embeddedInWorkflow}
             FormActionProps={FormActionProps}
+            onDirty={handleDirty}
             // Only show "warn if empty" treatments if this is an existing assessment,
             // OR if the user has attempted to submit this (new) assessment
             warnIfEmpty={!!assessment || hasAnyValue(errors)}
