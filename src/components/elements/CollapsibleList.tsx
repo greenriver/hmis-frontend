@@ -1,17 +1,23 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Collapse, List, ListItemButton, ListItemText } from '@mui/material';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
-interface Props {
+export interface CollapsibleListProps {
   title: ReactNode;
   children: ReactNode;
+  open?: boolean;
 }
 
-// collapsible list that can be used in a table cell
-// use for expandable details such as audit history change details
+const CollapsibleList: React.FC<CollapsibleListProps> = ({
+  title,
+  children,
+  open: initialOpen = false,
+}) => {
+  const [open, setOpen] = useState(initialOpen);
 
-const CollapsibleList: React.FC<Props> = ({ title, children }) => {
-  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    setOpen(initialOpen);
+  }, [initialOpen]);
 
   const handleClick = () => {
     setOpen(!open);
@@ -33,7 +39,7 @@ const CollapsibleList: React.FC<Props> = ({ title, children }) => {
         <List
           component='div'
           disablePadding
-          sx={{ '.MuiListItem-root': { pl: 6 } }}
+          sx={{ '.MuiListItem-root': { pl: 6, pb: 1 } }}
           dense
         >
           {children}
