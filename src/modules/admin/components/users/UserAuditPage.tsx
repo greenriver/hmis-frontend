@@ -5,23 +5,19 @@ import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import { useGetUserQuery } from '@/types/gqlTypes';
+import { useUser } from '@/modules/dataFetching/hooks/useUser';
 
 const UserAuditPage: React.FC = () => {
   const { userId } = useSafeParams() as { userId: string };
+  const { user, loading } = useUser(userId);
 
-  const { data, loading, error } = useGetUserQuery({
-    variables: { id: userId },
-  });
-
-  if (!data && loading) return <Loading />;
-  if (error) throw error;
-  if (!loading && (!data || !data.user)) return <NotFound />;
+  if (!user && loading) return <Loading />;
+  if (!user) return <NotFound />;
 
   // TODO: support toggling between Access History and Edit History
   return (
     <>
-      <PageTitle title={`Access History for ${data?.user?.name}`} />
+      <PageTitle title={`Access History for ${user.name}`} />
       <Paper>
         <UserAccessHistoryTable userId={userId} />
       </Paper>
