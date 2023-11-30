@@ -15,6 +15,7 @@ const CollapsibleList: React.FC<CollapsibleListProps> = ({
 }) => {
   const [open, setOpen] = useState(initialOpen);
 
+  // allow prop to change state, needed for ContextualCollapsibleList
   useEffect(() => {
     setOpen(initialOpen);
   }, [initialOpen]);
@@ -31,7 +32,7 @@ const CollapsibleList: React.FC<CollapsibleListProps> = ({
         {open ? <ExpandLess /> : <ExpandMore />}
         <ListItemText
           sx={{ ml: 1 }}
-          primaryTypographyProps={{ fontWeight: 600 }}
+          primaryTypographyProps={{ fontWeight: 600, variant: 'body2' }}
           primary={title}
         />
       </ListItemButton>
@@ -39,7 +40,7 @@ const CollapsibleList: React.FC<CollapsibleListProps> = ({
         <List
           component='div'
           disablePadding
-          sx={{ '.MuiListItem-root': { pl: 6, pb: 1 } }}
+          sx={{ pl: 4, '.MuiListItem-root': { pb: 1 } }}
           dense
         >
           {children}

@@ -1,14 +1,18 @@
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { Paper, Stack, Tooltip, Typography } from '@mui/material';
-import { capitalize, filter, isNil } from 'lodash-es';
-
-import SimpleTable from '@/components/elements/SimpleTable';
+import { Paper, Stack, Typography } from '@mui/material';
+import { capitalize, filter } from 'lodash-es';
+import AuditObjectChangesSummary, {
+  ObjectChangesType,
+} from './AuditObjectChangesSummary';
+import {
+  ContextualCollapsibleList,
+  ContextualCollapsibleListsProvider,
+  ContextualListExpansionButton,
+} from '@/components/elements/CollapsibleListContext';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
-import HmisField from '@/modules/hmis/components/HmisField';
 import { formatDateTimeForDisplay } from '@/modules/hmis/hmisUtil';
 import {
   GetClientAuditEventsDocument,
@@ -20,48 +24,21 @@ type AuditHistoryType = NonNullable<
   NonNullable<GetClientAuditEventsQuery['client']>['auditHistory']
 >['nodes'][0];
 
-const nullText = (
-  <Typography component='span' variant='inherit' color='text.disabled'>
-    Empty
-  </Typography>
-);
-const changedText = (
-  <Typography
-    component='span'
-    variant='inherit'
-    display='inline-flex'
-    alignItems='center'
-  >
-    changed&#160;
-    <Tooltip title='Value changed but is not viewable'>
-      <HelpOutlineIcon fontSize='inherit' />
-    </Tooltip>
-  </Typography>
-);
-
-type ChangesType = {
-  [key: string]: {
-    fieldName: string;
-    displayName: string;
-    values: [any, any] | 'changed';
-  };
-};
-
 const columns: ColumnDef<AuditHistoryType>[] = [
   {
     header: 'Timestamp',
-    width: '1%',
+    width: '180px',
     render: (e) =>
       e.createdAt && formatDateTimeForDisplay(new Date(e.createdAt)),
   },
   {
     header: 'User',
-    width: '1%',
+    width: '180px',
     render: (e) => e.user?.name,
   },
   {
     header: 'Action',
-    width: '10%',
+    width: '220px',
     render: (e) => {
       const action = `${capitalize(e.event)} ${e.recordName}`;
       if (e.recordName === 'Client') return action;
@@ -77,68 +54,31 @@ const columns: ColumnDef<AuditHistoryType>[] = [
     },
   },
   {
-    header: 'Fields Changed',
+    header: (
+      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+        <strong>Fields Changed</strong>
+        <ContextualListExpansionButton />
+      </Stack>
+    ),
+    tableCellProps: {
+      sx: { p: 0, backgroundColor: (theme) => theme.palette.grey[50] },
+    },
     render: (e) => {
       if (!e.objectChanges) return null;
 
+      // This is not helpful, these should not be returned from the API
+      if (Object.keys(e.objectChanges).length === 0) return null;
+
+      const labels = Object.values(e.objectChanges as ObjectChangesType)
+        .filter((r) => filter(r.values, hasMeaningfulValue).length > 0)
+        .map((val) => val.displayName);
+
       return (
-        <SimpleTable
-          TableCellProps={{
-            sx: {
-              pl: 0,
-              py: 2,
-              borderColor: (theme) => theme.palette.grey[200],
-            },
-          }}
-          TableBodyProps={{
-            sx: {
-              '.MuiTableRow-root:last-child .MuiTableCell-root': {
-                border: 'none',
-              },
-            },
-          }}
-          TableRowProps={{
-            sx: { '.MuiTableCell-root:first-of-type': { width: '180px' } },
-          }}
-          rows={Object.values(e.objectChanges as ChangesType)
-            .filter((r) => filter(r.values, hasMeaningfulValue).length > 0)
-            .map((r) => ({
-              ...r,
-              id: r.fieldName,
-            }))}
-          columns={[
-            { name: 'field', render: (row) => <b>{row.displayName}</b> },
-            {
-              name: 'changes',
-              render: ({ values, fieldName }) => {
-                if (values === 'changed') return changedText;
-
-                const [from, to] = values.map((val) =>
-                  isNil(val) ? null : (
-                    <HmisField
-                      key={fieldName}
-                      record={{ ...e.objectChanges, [fieldName]: val }}
-                      fieldName={fieldName}
-                      recordType='Client'
-                    />
-                  )
-                );
-
-                return (
-                  <Stack gap={1} direction='row'>
-                    <Typography variant='body2'>
-                      {isNil(from) ? nullText : from}
-                    </Typography>
-                    <Typography variant='body2'>&rarr;</Typography>
-                    <Typography variant='body2'>
-                      {isNil(to) ? nullText : to}
-                    </Typography>
-                  </Stack>
-                );
-              },
-            },
-          ]}
-        />
+        <ContextualCollapsibleList title={labels.join(', ')}>
+          <AuditObjectChangesSummary
+            objectChanges={e.objectChanges as ObjectChangesType}
+          />
+        </ContextualCollapsibleList>
       );
     },
   },
@@ -148,7 +88,7 @@ const ClientAuditHistory = () => {
   const { clientId } = useSafeParams() as { clientId: string };
 
   return (
-    <>
+    <ContextualCollapsibleListsProvider>
       <PageTitle title='Client Audit History' />
       <Paper>
         <GenericTableWithData<
@@ -163,9 +103,10 @@ const ClientAuditHistory = () => {
           fetchPolicy='cache-and-network'
           noData='No audit history'
           rowSx={() => ({ whiteSpace: 'nowrap' })}
+          tableProps={{ sx: { tableLayout: 'fixed' } }}
         />
       </Paper>
-    </>
+    </ContextualCollapsibleListsProvider>
   );
 };
 

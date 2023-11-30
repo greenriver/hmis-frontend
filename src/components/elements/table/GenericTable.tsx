@@ -225,6 +225,7 @@ const GenericTable = <T extends { id: string }>({
               sx={{
                 ...(headerCellSx ? headerCellSx(def) : undefined),
                 textAlign: def.textAlign,
+                width: def.width,
               }}
             >
               <strong>{def.header}</strong>
@@ -393,6 +394,7 @@ const GenericTable = <T extends { id: string }>({
                             minWidth,
                             ...(isLinked ? { p: 0 } : undefined),
                             textAlign,
+                            whiteSpace: 'initial',
                             ...onClickLinkTreatment,
                             ...tableCellProps?.sx,
                           }}
