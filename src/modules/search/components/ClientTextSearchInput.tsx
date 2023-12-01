@@ -1,17 +1,13 @@
-import ClearIcon from '@mui/icons-material/Clear';
-import SearchIcon from '@mui/icons-material/Search';
-import { Button, ButtonProps } from '@mui/material';
 import { Stack } from '@mui/system';
 import { isNull } from 'lodash-es';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import CommonSearchInput, {
-  CommonSearchInputProps,
-} from '@/components/elements/CommonSearchInput';
+import React, { useMemo } from 'react';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
+import CommonSearchInput, {
+  CommonSearchInputProps,
+} from '@/modules/search/components/CommonSearchInput';
 
-interface Props extends CommonSearchInputProps {
+export interface ClientTextSearchInputProps extends CommonSearchInputProps {
   showSearchTips?: boolean;
   errorMessage?: string;
 }
@@ -46,7 +42,7 @@ const getDefaultPlaceholderAndHelper = (mciEnabled: boolean) => {
   }
 };
 
-const ClientTextSearchInput: React.FC<Props> = ({
+const ClientTextSearchInput: React.FC<ClientTextSearchInputProps> = ({
   showSearchTips = false,
   errorMessage,
   helperText: helperTextProp,
@@ -107,101 +103,6 @@ const ClientTextSearchInput: React.FC<Props> = ({
         },
       }}
     />
-  );
-};
-
-export const ClearSearchButton: React.FC<ButtonProps> = (props) => {
-  return (
-    <Button
-      variant='gray'
-      startIcon={<ClearIcon />}
-      {...props}
-      sx={{ px: 3, ...props.sx }}
-    >
-      {props.children || <>Clear Search</>}
-    </Button>
-  );
-};
-
-export const ClientTextSearchInputForm: React.FC<
-  Omit<Props, 'onChange' | 'value'> & {
-    initialValue?: string;
-    onSearch: (value: string) => void;
-    hideSearchButton?: boolean;
-    minChars?: number;
-    onClearSearch?: VoidFunction;
-    hideClearButton?: boolean;
-  }
-> = ({
-  onSearch,
-  initialValue,
-  hideSearchButton,
-  onClearSearch,
-  hideClearButton,
-  minChars = 3,
-  ...props
-}) => {
-  const { t } = useTranslation();
-  const [value, setValue] = useState<string>(initialValue || '');
-  const [tooShort, setTooShort] = useState(false);
-
-  useEffect(() => {
-    if (initialValue) setValue(initialValue);
-  }, [initialValue]);
-
-  useEffect(() => {
-    if (!minChars || !tooShort) return;
-    if (value && value.length >= minChars) setTooShort(false);
-  }, [minChars, value, tooShort]);
-
-  const handleSearch = useCallback(() => {
-    if (minChars && (value || '').length < minChars) {
-      setTooShort(true);
-    } else {
-      onSearch(value);
-    }
-  }, [minChars, onSearch, value]);
-
-  const handleClear = useCallback(() => {
-    setValue('');
-    if (onClearSearch) onClearSearch();
-  }, [onClearSearch]);
-
-  const buttonSx = { mt: 3, px: 4, height: 'fit-content', top: '2px' };
-  return (
-    <Stack direction={'row'} alignItems='flex-start' gap={2}>
-      <ClientTextSearchInput
-        value={value}
-        onChange={setValue}
-        onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
-        error={tooShort}
-        errorMessage={
-          tooShort ? t<string>('clientSearch.inputTooShort') : undefined
-        }
-        onClearSearch={onClearSearch}
-        {...props}
-      />
-
-      {!hideSearchButton && (
-        <Button
-          startIcon={<SearchIcon />}
-          sx={buttonSx}
-          variant='outlined'
-          onClick={handleSearch}
-        >
-          Search
-        </Button>
-      )}
-      {onClearSearch && !hideClearButton && (
-        <ClearSearchButton
-          onClick={handleClear}
-          sx={buttonSx}
-          disabled={!value}
-        >
-          Clear
-        </ClearSearchButton>
-      )}
-    </Stack>
   );
 };
 

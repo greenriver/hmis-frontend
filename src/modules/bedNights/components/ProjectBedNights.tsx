@@ -18,7 +18,8 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { ClientTextSearchInputForm } from '@/modules/search/components/ClientTextSearchInput';
+
+import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -121,7 +122,7 @@ const ProjectBedNights = () => {
             <Grid item xs={12} lg={10}>
               <Box flexGrow={1} sx={{ mb: 1 }}>
                 <Stack direction={'row'} gap={2} alignItems={'flex-start'}>
-                  <ClientTextSearchInputForm
+                  <ClientTextSearchForm
                     onSearch={(value) => setSearchTerm(value)}
                     onClearSearch={() => setSearchTerm(undefined)}
                   />

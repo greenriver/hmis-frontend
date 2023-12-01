@@ -2,7 +2,9 @@ import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import { ButtonProps, Button, InputAdornment } from '@mui/material';
 import { Dispatch, SetStateAction, useCallback } from 'react';
-import TextInput, { TextInputProps } from './input/TextInput';
+import TextInput, {
+  TextInputProps,
+} from '../../../components/elements/input/TextInput';
 
 export const ClearSearchEndAdornmentButton: React.FC<
   Omit<ButtonProps, 'children'>

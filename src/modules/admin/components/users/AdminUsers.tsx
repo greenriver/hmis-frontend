@@ -2,7 +2,6 @@ import { Paper, Stack } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import UserActionsMenu from './UserActionsMenu';
-import CommonSearchInput from '@/components/elements/CommonSearchInput';
 import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -11,6 +10,7 @@ import ConfirmImpersonation from '@/modules/admin/components/ConfirmImpersonatio
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import {
   GetApplicationUsersDocument,
   GetApplicationUsersQuery,

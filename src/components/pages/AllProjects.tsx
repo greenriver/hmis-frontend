@@ -3,9 +3,9 @@ import { Grid, Paper } from '@mui/material';
 import { omit } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
+import CommonSearchInput from '../../modules/search/components/CommonSearchInput';
 import ButtonLink from '../elements/ButtonLink';
 
-import CommonSearchInput from '../elements/CommonSearchInput';
 import CommonToggle, { ToggleItem } from '../elements/CommonToggle';
 import PageContainer from '../layout/PageContainer';
 import { ColumnDef } from '@/components/elements/table/types';

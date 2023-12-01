@@ -22,7 +22,7 @@ import AssociatedHouseholdMembers, {
 } from '@/modules/household/components/AssociatedHouseholdMembers';
 import { RecentHouseholdMember } from '@/modules/household/types';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { ClientTextSearchInputForm } from '@/modules/search/components/ClientTextSearchInput';
+import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import {
   ClientFieldsFragment,
   ClientSearchInput,
@@ -158,7 +158,7 @@ const ManageHousehold = ({
         <Stack gap={6}>
           <Grid container alignItems={'flex-start'}>
             <Grid item xs={12} md={9} lg={8}>
-              <ClientTextSearchInputForm
+              <ClientTextSearchForm
                 onSearch={(text) => setSearchInput({ textSearch: text })}
                 searchAdornment
                 minChars={3}
