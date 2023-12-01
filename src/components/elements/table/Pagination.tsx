@@ -6,13 +6,14 @@ import {
   GridProps,
   SxProps,
 } from '@mui/material';
+import pluralize from 'pluralize';
 import React from 'react';
 
 export const PaginationSummary = ({
   limit,
   offset,
   totalEntries,
-  itemName,
+  itemName = 'record',
   sx,
 }: {
   limit: number;
@@ -27,7 +28,7 @@ export const PaginationSummary = ({
   const end = Math.min(totalEntries, offset + limit);
   const range = start === end && offset === 0 ? start : `${start}-${end}`;
   const total = totalEntries.toLocaleString('en-US');
-  const text = `${range} of ${total} ${itemName || 'items'}`;
+  const text = `${range} of ${total} ${pluralize(itemName)}`;
   return (
     <Typography variant='body2' sx={sx}>
       {text}

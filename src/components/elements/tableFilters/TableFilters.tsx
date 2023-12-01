@@ -1,5 +1,6 @@
 import { Box, Skeleton, Stack, Typography } from '@mui/material';
 import { isEmpty, min } from 'lodash-es';
+import pluralize from 'pluralize';
 import React, { ReactNode } from 'react';
 
 import TableColumnsMenu, { TableColumnsMenuProps } from './filters/ColumnsMenu';
@@ -12,6 +13,7 @@ export interface PaginationProps {
   totalEntries: number;
   limit: number;
   offset: number;
+  itemName?: string;
 }
 
 export interface TableFiltersProps<T, S> {
@@ -37,6 +39,7 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   totalEntries,
   limit,
   offset,
+  itemName = 'record',
 }): JSX.Element => {
   const rangeEnd = min([totalEntries, offset + limit]);
   const rangeStart = limit < totalEntries ? offset + 1 : rangeEnd;
@@ -46,7 +49,7 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   return (
     <Typography variant='body2'>
       Displaying <strong>{displayRange}</strong> of{' '}
-      <strong>{totalEntries}</strong> records
+      <strong>{totalEntries}</strong> {pluralize(itemName, totalEntries)}
     </Typography>
   );
 };
