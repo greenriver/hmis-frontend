@@ -2,6 +2,7 @@ fragment RootPermissions on QueryAccess {
   id
   canAdministerHmis
   canImpersonateUsers
+  canAuditUsers
   canEditClients
   canViewClients
   canDeleteClients

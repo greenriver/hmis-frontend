@@ -32,7 +32,7 @@ export const SsnDobShowContextProvider: React.FC<
   </DobShowContextProvider>
 );
 
-export const VisibilityToggleButton: React.FC<
+const VisibilityToggleButton: React.FC<
   { on?: boolean | null | undefined; onToggle?: VoidFunction } & ButtonProps
 > = ({ on, onToggle = () => {}, ...props }) => {
   const theme = useTheme();

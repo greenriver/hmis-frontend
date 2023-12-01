@@ -3,31 +3,34 @@ import { useMemo, useState } from 'react';
 
 import UserActionsMenu from './UserActionsMenu';
 import TextInput from '@/components/elements/input/TextInput';
+import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import ConfirmImpersonation from '@/modules/admin/components/ConfirmImpersonation';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import {
-  ApplicationUserFieldsFragment,
+  UserFieldsFragment,
   GetApplicationUsersDocument,
   GetApplicationUsersQuery,
   GetApplicationUsersQueryVariables,
 } from '@/types/gqlTypes';
 
 const AdminUsers = () => {
+  const [access] = useRootPermissions();
   const { user: currentUser } = useAuth();
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
   >(undefined);
 
-  const [chosenUser, setChosenUser] = useState<ApplicationUserFieldsFragment>();
+  const [chosenUser, setChosenUser] = useState<UserFieldsFragment>();
   const handleCancel = () => {
     setChosenUser(undefined);
   };
 
-  const columns = useMemo<ColumnDef<ApplicationUserFieldsFragment>[]>(
+  const columns = useMemo<ColumnDef<UserFieldsFragment>[]>(
     () => [
       {
         header: 'Name',
@@ -39,18 +42,23 @@ const AdminUsers = () => {
       },
       {
         textAlign: 'right',
-        render: (user) => (
-          <UserActionsMenu
-            onClickImpersonate={() => setChosenUser(user)}
-            isCurrentUser={
-              !!(user.id == currentUser?.id || currentUser?.impersonating)
-            }
-          />
-        ),
+        render: (user) =>
+          access && (
+            <UserActionsMenu
+              onClickImpersonate={() => setChosenUser(user)}
+              userId={user.id}
+              isCurrentUser={
+                !!(user.id == currentUser?.id || currentUser?.impersonating)
+              }
+              rootAccess={access}
+            />
+          ),
       },
     ],
-    [currentUser]
+    [access, currentUser?.id, currentUser?.impersonating]
   );
+
+  if (!access) return <Loading />;
 
   return (
     <>
@@ -72,7 +80,7 @@ const AdminUsers = () => {
           <GenericTableWithData<
             GetApplicationUsersQuery,
             GetApplicationUsersQueryVariables,
-            ApplicationUserFieldsFragment
+            UserFieldsFragment
           >
             queryVariables={{
               filters: { searchTerm: debouncedSearch },

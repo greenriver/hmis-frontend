@@ -18,6 +18,7 @@ const adminDashboardRoutes = {
   AC_DENIALS: 'referral-denials',
   AC_DENIAL_DETAILS: 'referral-denials/:referralPostingId',
   USERS: 'users',
+  USER_AUDIT: 'users/:userId/audit',
 };
 
 // Routes within the client dashboard

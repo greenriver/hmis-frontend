@@ -2,4 +2,15 @@ fragment UserFields on ApplicationUser {
   __typename
   id
   name
+  email
+}
+
+fragment UserActivityLogFields on ActivityLog {
+  id
+  ipAddress
+  createdAt
+  resolvedRecords {
+    recordId
+    recordType
+  }
 }

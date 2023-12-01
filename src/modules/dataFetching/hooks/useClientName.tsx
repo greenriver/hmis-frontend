@@ -6,7 +6,7 @@ import {
 } from '@/types/gqlTypes';
 
 export function useClientName(clientId?: string) {
-  // get enrollment from cache if we have it
+  // get client from cache if we have it
   const client = clientId
     ? apolloClient.readFragment({
         id: `Client:${clientId}`,

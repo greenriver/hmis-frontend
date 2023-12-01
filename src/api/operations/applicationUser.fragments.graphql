@@ -1,6 +1,0 @@
-fragment ApplicationUserFields on ApplicationUser {
-  __typename
-  id
-  name
-  email
-}
