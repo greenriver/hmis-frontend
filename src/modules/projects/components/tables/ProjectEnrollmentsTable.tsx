@@ -1,13 +1,14 @@
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
-import { Box, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { Box, Stack } from '@mui/material';
+import { useState } from 'react';
 
 import ProjectClientEnrollmentsTable, {
   EnrollmentFields,
 } from './ProjectClientEnrollmentsTable';
 import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 
+import CommonToggle from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
@@ -38,12 +39,6 @@ const ProjectEnrollmentsTable = ({
 
   const [mode, setMode] = useState<Mode>(modeProp || initialModeProp);
 
-  const onChangeMode = useCallback(
-    (event: React.MouseEvent<HTMLElement>, value: Mode) =>
-      value && setMode(value),
-    []
-  );
-
   return (
     <>
       <Box py={2} px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -54,35 +49,28 @@ const ProjectEnrollmentsTable = ({
                 label='View enrollments by'
                 labelId='results-display-format-label'
                 renderChildren={(labelElement) => (
-                  <ToggleButtonGroup
+                  <CommonToggle
                     value={mode}
-                    exclusive
-                    onChange={onChangeMode}
-                    aria-label='view enrollments by'
+                    onChange={setMode}
+                    variant='gray'
+                    size='small'
                     aria-labelledby={
                       (labelElement && labelElement.getAttribute('id')) ||
                       undefined
                     }
-                  >
-                    <ToggleButton
-                      value='households'
-                      aria-label='Enrollments'
-                      size='small'
-                      sx={{ px: 2 }}
-                    >
-                      <PeopleIcon fontSize='small' sx={{ mr: 0.5 }} />
-                      Households
-                    </ToggleButton>
-                    <ToggleButton
-                      value='clients'
-                      aria-label='Clients'
-                      size='small'
-                      sx={{ px: 2 }}
-                    >
-                      <PersonIcon fontSize='small' sx={{ mr: 0.5 }} />
-                      Clients
-                    </ToggleButton>
-                  </ToggleButtonGroup>
+                    items={[
+                      {
+                        value: 'households',
+                        label: 'Households',
+                        Icon: PeopleIcon,
+                      },
+                      {
+                        value: 'clients',
+                        label: 'Clients',
+                        Icon: PersonIcon,
+                      },
+                    ]}
+                  />
                 )}
               />
             </Box>

@@ -2,7 +2,7 @@ import { Paper, Stack } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import UserActionsMenu from './UserActionsMenu';
-import TextInput from '@/components/elements/input/TextInput';
+import CommonSearchInput from '@/components/elements/CommonSearchInput';
 import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -12,10 +12,10 @@ import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import {
-  UserFieldsFragment,
   GetApplicationUsersDocument,
   GetApplicationUsersQuery,
   GetApplicationUsersQueryVariables,
+  UserFieldsFragment,
 } from '@/types/gqlTypes';
 
 const AdminUsers = () => {
@@ -67,15 +67,15 @@ const AdminUsers = () => {
         <ConfirmImpersonation onCancel={handleCancel} user={chosenUser} />
       )}
       <Stack spacing={2}>
-        <TextInput
+        <CommonSearchInput
           label='Search Users'
           name='search users'
           placeholder='Search by name or email'
-          value={search || ''}
-          onChange={(e) => setSearch(e.target.value)}
-          inputWidth='400px'
+          value={search}
+          onChange={setSearch}
+          fullWidth
+          size='medium'
         />
-
         <Paper>
           <GenericTableWithData<
             GetApplicationUsersQuery,

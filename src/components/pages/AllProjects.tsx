@@ -1,12 +1,13 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Grid, Paper, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import { omit } from 'lodash-es';
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import ButtonLink from '../elements/ButtonLink';
 
+import CommonSearchInput from '../elements/CommonSearchInput';
+import CommonToggle, { ToggleItem } from '../elements/CommonToggle';
 import PageContainer from '../layout/PageContainer';
-import TextInput from '@/components/elements/input/TextInput';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -71,51 +72,18 @@ const ORGANIZATION_COLUMNS: ColumnDef<OrganizationType>[] = [
 ];
 
 export type ViewMode = 'projects' | 'organizations';
-
-interface ProjectOrgToggleProps {
-  value: ViewMode;
-  onChange: Dispatch<SetStateAction<ViewMode>>;
-}
-const ProjectOrgToggle: React.FC<ProjectOrgToggleProps> = ({
-  value,
-  onChange,
-}) => {
-  const handleChange = useCallback(
-    (event: React.MouseEvent<HTMLElement>, val: any) => {
-      if (val) onChange(val as ViewMode);
-    },
-    [onChange]
-  );
-  return (
-    <ToggleButtonGroup
-      value={value}
-      exclusive
-      onChange={handleChange}
-      aria-label='view projects or organizations'
-      size='small'
-      sx={{
-        '& .MuiToggleButtonGroup-grouped': {
-          px: 2,
-        },
-      }}
-    >
-      <ToggleButton
-        value='projects'
-        aria-label='view projects'
-        data-testid='viewProjectsButton'
-      >
-        View Projects
-      </ToggleButton>
-      <ToggleButton
-        value='organizations'
-        aria-label='view organizations'
-        data-testid='viewOrganizationsButton'
-      >
-        View Organizations
-      </ToggleButton>
-    </ToggleButtonGroup>
-  );
-};
+const toggleItemDefinitions: ToggleItem<ViewMode>[] = [
+  {
+    value: 'projects',
+    label: 'View Projects',
+    testId: 'viewProjectsButton',
+  },
+  {
+    value: 'organizations',
+    label: 'View Organizations',
+    testId: 'viewOrganizationsButton',
+  },
+];
 
 const AllProjects = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('projects');
@@ -143,24 +111,31 @@ const AllProjects = () => {
   return (
     <PageContainer
       title={viewMode == 'projects' ? 'Projects' : 'Organizations'}
-      actions={<ProjectOrgToggle value={viewMode} onChange={setViewMode} />}
+      actions={
+        <CommonToggle
+          value={viewMode}
+          onChange={setViewMode}
+          items={toggleItemDefinitions}
+        />
+      }
     >
       <Grid container spacing={2}>
         {viewMode == 'projects' && (
-          <Grid item xs={12} md={8} lg={6}>
-            <TextInput
+          <Grid item xs={12}>
+            <CommonSearchInput
               label='Search Projects'
               name='search projects'
               placeholder='Search by Project Name or ID'
-              value={search || ''}
-              onChange={(e) => setSearch(e.target.value)}
-              inputWidth='100%'
+              value={search}
+              onChange={setSearch}
+              fullWidth
+              size='medium'
             />
           </Grid>
         )}
         {viewMode == 'organizations' && (
           <RootPermissionsFilter permissions={['canEditOrganization']}>
-            <Grid item xs={12} sx={{ textAlign: 'right' }}>
+            <Grid item xs={12}>
               <ButtonLink
                 data-testid='addOrganizationButton'
                 to={generateSafePath(Routes.CREATE_ORGANIZATION)}

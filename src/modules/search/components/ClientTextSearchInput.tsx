@@ -5,6 +5,7 @@ import { Stack } from '@mui/system';
 import { isNull } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ClearSearchEndAdornmentButton } from '@/components/elements/CommonSearchInput';
 import TextInput, {
   TextInputProps,
 } from '@/components/elements/input/TextInput';
@@ -177,16 +178,7 @@ export const ClientTextSearchInputForm: React.FC<
   const InputProps =
     onClearSearch && value && clearButtonLocation === 'inside_input'
       ? {
-          endAdornment: (
-            <Button
-              variant='text'
-              sx={{ color: 'text.disabled', width: '200px' }}
-              startIcon={<ClearIcon />}
-              onClick={handleClear}
-            >
-              Clear Search
-            </Button>
-          ),
+          endAdornment: <ClearSearchEndAdornmentButton onClick={handleClear} />,
           ...props.InputProps,
         }
       : props.InputProps;

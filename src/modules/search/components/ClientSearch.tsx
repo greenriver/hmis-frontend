@@ -266,6 +266,7 @@ const ClientSearch = () => {
             showSearchTips
             minChars={3}
             onClearSearch={onClearSearch}
+            clearButtonLocation='inside_input'
           />
         ) : (
           <ClientSearchAdvancedForm
