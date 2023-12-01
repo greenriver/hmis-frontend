@@ -4,9 +4,9 @@ import { ButtonProps, Button, InputAdornment } from '@mui/material';
 import { Dispatch, SetStateAction, useCallback } from 'react';
 import TextInput, {
   TextInputProps,
-} from '../../../components/elements/input/TextInput';
+} from '@/components/elements/input/TextInput';
 
-export const ClearSearchEndAdornmentButton: React.FC<
+const ClearSearchEndAdornmentButton: React.FC<
   Omit<ButtonProps, 'children'>
 > = ({ onClick, ...props }) => (
   <InputAdornment position='end'>
