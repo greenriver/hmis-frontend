@@ -134,7 +134,7 @@ const NewClientMerge = () => {
         <TitleCard title='Merge Client Records'>
           <Stack gap={6}>
             <Grid container alignItems={'flex-start'}>
-              <Grid item xs={12} md={9} lg={8} sx={{ px: 2, py: 2 }}>
+              <Grid item xs={12} sx={{ px: 2, py: 2 }}>
                 <ClientTextSearchInputForm
                   onSearch={(text) => setSearchInput({ textSearch: text })}
                   searchAdornment

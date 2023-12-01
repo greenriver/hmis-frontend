@@ -88,9 +88,7 @@ const toggleItemDefinitions: ToggleItem<ViewMode>[] = [
 const AllProjects = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('projects');
 
-  const [search, setSearch, debouncedSearch] = useDebouncedState<
-    string | undefined
-  >(undefined);
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   const projectRowLink = useCallback(
     (project: ProjectAllFieldsFragment) =>

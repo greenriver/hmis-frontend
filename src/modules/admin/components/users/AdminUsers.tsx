@@ -21,9 +21,7 @@ import {
 const AdminUsers = () => {
   const [access] = useRootPermissions();
   const { user: currentUser } = useAuth();
-  const [search, setSearch, debouncedSearch] = useDebouncedState<
-    string | undefined
-  >(undefined);
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   const [chosenUser, setChosenUser] = useState<UserFieldsFragment>();
   const handleCancel = () => {

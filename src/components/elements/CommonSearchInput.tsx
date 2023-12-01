@@ -1,46 +1,64 @@
 import ClearIcon from '@mui/icons-material/Clear';
-import { ButtonProps, Button } from '@mui/material';
-import { Dispatch, SetStateAction } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import { ButtonProps, Button, InputAdornment } from '@mui/material';
+import { Dispatch, SetStateAction, useCallback } from 'react';
 import TextInput, { TextInputProps } from './input/TextInput';
 
 export const ClearSearchEndAdornmentButton: React.FC<
   Omit<ButtonProps, 'children'>
 > = ({ onClick, ...props }) => (
-  <Button
-    variant='text'
-    sx={{ color: 'text.disabled', width: '200px' }}
-    startIcon={<ClearIcon />}
-    onClick={onClick}
-    {...props}
-  >
-    Clear Search
-  </Button>
+  <InputAdornment position='end'>
+    <Button
+      variant='text'
+      sx={{ color: 'text.disabled' }}
+      startIcon={<ClearIcon />}
+      onClick={onClick}
+      {...props}
+    >
+      Clear Search
+    </Button>
+  </InputAdornment>
 );
 
 export interface CommonSearchInputProps
   extends Omit<TextInputProps, 'onChange' | 'value'> {
   value?: string;
-  onChange: Dispatch<SetStateAction<string | undefined>>;
+  onChange: Dispatch<SetStateAction<string>>;
   size?: 'small' | 'medium';
-  hideAdornment?: boolean;
+  searchAdornment?: boolean;
+  clearAdornment?: boolean;
+  onClearSearch?: VoidFunction;
 }
 
 const CommonSearchInput: React.FC<CommonSearchInputProps> = ({
-  hideAdornment,
   value,
   onChange,
+  searchAdornment,
+  clearAdornment,
+  onClearSearch,
   ...props
 }) => {
+  const handleClear = useCallback(() => {
+    onChange('');
+    if (onClearSearch) onClearSearch();
+  }, [onChange, onClearSearch]);
+
   return (
     <TextInput
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
-      InputProps={{
-        endAdornment: !hideAdornment && value && (
-          <ClearSearchEndAdornmentButton onClick={() => onChange(undefined)} />
-        ),
-      }}
       {...props}
+      InputProps={{
+        startAdornment: searchAdornment && (
+          <InputAdornment position='start'>
+            <SearchIcon color='disabled' />
+          </InputAdornment>
+        ),
+        endAdornment: clearAdornment && value && (
+          <ClearSearchEndAdornmentButton onClick={handleClear} />
+        ),
+        ...props.InputProps,
+      }}
     />
   );
 };

@@ -261,12 +261,13 @@ const ClientSearch = () => {
             onSearch={(text) => handleSubmitSearch({ textSearch: text })}
             label={null}
             size='medium'
-            searchAdornment
             hideSearchButton
             showSearchTips
             minChars={3}
             onClearSearch={onClearSearch}
-            clearButtonLocation='inside_input'
+            searchAdornment
+            clearAdornment
+            hideClearButton
           />
         ) : (
           <ClientSearchAdvancedForm

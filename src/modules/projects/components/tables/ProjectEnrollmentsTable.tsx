@@ -33,9 +33,7 @@ const ProjectEnrollmentsTable = ({
   openOnDate?: Date;
   searchable?: boolean;
 }) => {
-  const [search, setSearch, debouncedSearch] = useDebouncedState<
-    string | undefined
-  >(undefined);
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   const [mode, setMode] = useState<Mode>(modeProp || initialModeProp);
 
@@ -79,7 +77,7 @@ const ProjectEnrollmentsTable = ({
             {searchable ? (
               <ClientSearchInput
                 value={search || ''}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={setSearch}
                 helperText={null}
               />
             ) : undefined}

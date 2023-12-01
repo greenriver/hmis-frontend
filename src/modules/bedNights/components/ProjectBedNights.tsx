@@ -124,7 +124,6 @@ const ProjectBedNights = () => {
                   <ClientTextSearchInputForm
                     onSearch={(value) => setSearchTerm(value)}
                     onClearSearch={() => setSearchTerm(undefined)}
-                    clearButtonLocation='outside_input'
                   />
                 </Stack>
               </Box>
