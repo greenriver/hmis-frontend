@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
@@ -16,30 +17,42 @@ const UserActionsMenu: React.FC<Props> = ({
   userId,
   rootAccess,
 }) => {
-  const items = [];
-  if (rootAccess.canImpersonateUsers) {
-    items.push({
-      key: 'impersonate',
-      onClick: onClickImpersonate,
-      title: 'Impersonate User',
-      disabled: isCurrentUser,
-    });
-  }
+  const menuItems = useMemo(() => {
+    const items = [];
+    if (rootAccess.canAuditUsers) {
+      items.push({
+        key: 'audit',
+        title: 'Audit User',
+        to: generateSafePath(AdminDashboardRoutes.USER_AUDIT, {
+          userId,
+        }),
+      });
+    }
+    if (rootAccess.canImpersonateUsers) {
+      items.push({
+        key: 'impersonate',
+        onClick: onClickImpersonate,
+        title: 'Impersonate User',
+        disabled: isCurrentUser,
+      });
+    }
+    return items;
+  }, [
+    isCurrentUser,
+    onClickImpersonate,
+    rootAccess.canAuditUsers,
+    rootAccess.canImpersonateUsers,
+    userId,
+  ]);
 
-  if (rootAccess.canAuditUsers) {
-    items.push({
-      key: 'audit',
-      title: 'Audit User',
-      to: generateSafePath(AdminDashboardRoutes.USER_AUDIT, {
-        userId,
-      }),
-    });
-  }
-
-  if (items.length === 0) return null;
+  if (menuItems.length === 0) return null;
 
   return (
-    <CommonMenuButton title='User Actions' items={items} variant='outlined' />
+    <CommonMenuButton
+      title='User Actions'
+      items={menuItems}
+      variant='outlined'
+    />
   );
 };
 
