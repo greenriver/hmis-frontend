@@ -41,6 +41,20 @@ query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
+query GetEnrollmentAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    auditHistory(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentAuditEventFields
+      }
+    }
+  }
+}
+
 query GetEnrollmentCeAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   enrollment(id: $id) {
     id
@@ -108,6 +122,15 @@ mutation DeleteCurrentLivingSituation($id: ID!) {
     }
     errors {
       ...ValidationErrorFields
+    }
+  }
+}
+
+query GetEnrollmentPermissions($id: ID!) {
+  enrollment(id: $id) {
+    id
+    access {
+      ...EnrollmentAccessFields
     }
   }
 }

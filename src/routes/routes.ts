@@ -50,6 +50,7 @@ const enrollmentDashboardRoutes = {
   CUSTOM_CASE_NOTES: 'case-notes',
   ASSESSMENT: 'assessments/:formRole/:assessmentId?',
   ESG_FUNDING_REPORT: 'esg-funding-report',
+  AUDIT_HISTORY: 'history',
 };
 
 // Routes within the project dashboard

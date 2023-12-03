@@ -1865,6 +1865,7 @@ export type Enrollment = {
   alcoholDrugUseDisorderFam?: Maybe<NoYesMissing>;
   annualPercentAmi?: Maybe<AnnualPercentAmi>;
   assessments: AssessmentsPaginated;
+  auditHistory: EnrollmentAuditEventsPaginated;
   ceAssessments: CeAssessmentsPaginated;
   childWelfareMonths?: Maybe<Scalars['Int']['output']>;
   childWelfareYears?: Maybe<RhyNumberofYears>;
@@ -1977,6 +1978,12 @@ export type EnrollmentAssessmentsArgs = {
 };
 
 /** HUD Enrollment */
+export type EnrollmentAuditHistoryArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** HUD Enrollment */
 export type EnrollmentCeAssessmentsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -2049,11 +2056,35 @@ export type EnrollmentYouthEducationStatusesArgs = {
 
 export type EnrollmentAccess = {
   __typename?: 'EnrollmentAccess';
+  canAuditEnrollments: Scalars['Boolean']['output'];
   canDeleteEnrollments: Scalars['Boolean']['output'];
   canEditEnrollments: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+};
+
+export type EnrollmentAuditEvent = {
+  __typename?: 'EnrollmentAuditEvent';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  event: AuditEventType;
+  id: Scalars['ID']['output'];
+  /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
+  objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  recordId: Scalars['ID']['output'];
+  recordName: Scalars['String']['output'];
+  user?: Maybe<ApplicationUser>;
+};
+
+export type EnrollmentAuditEventsPaginated = {
+  __typename?: 'EnrollmentAuditEventsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<EnrollmentAuditEvent>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export enum EnrollmentFilterOptionHouseholdTask {
@@ -4933,6 +4964,7 @@ export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean']['output'];
   canAuditClients: Scalars['Boolean']['output'];
+  canAuditEnrollments: Scalars['Boolean']['output'];
   canAuditUsers: Scalars['Boolean']['output'];
   canDeleteAssessments: Scalars['Boolean']['output'];
   canDeleteClients: Scalars['Boolean']['output'];
@@ -6642,6 +6674,7 @@ export type EnrollmentAccessFieldsFragment = {
   id: string;
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
+  canAuditEnrollments: boolean;
 };
 
 export type AssessmentAccessFieldsFragment = {
@@ -12790,6 +12823,7 @@ export type EnrollmentFieldsFragment = {
     id: string;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
+    canAuditEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
@@ -13466,6 +13500,7 @@ export type AllEnrollmentDetailsFragment = {
     id: string;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
+    canAuditEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   moveInAddresses: Array<{
@@ -13680,6 +13715,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     id: string;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
+    canAuditEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   moveInAddresses: Array<{
@@ -13750,6 +13786,17 @@ export type EnrollmentSummaryFieldsFragment = {
   projectName: string;
   projectType: ProjectType;
   canViewEnrollment: boolean;
+};
+
+export type EnrollmentAuditEventFieldsFragment = {
+  __typename?: 'EnrollmentAuditEvent';
+  id: string;
+  createdAt: string;
+  event: AuditEventType;
+  objectChanges?: any | null;
+  recordName: string;
+  recordId: string;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type GetEnrollmentQueryVariables = Exact<{
@@ -13852,6 +13899,7 @@ export type GetEnrollmentQuery = {
       id: string;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
+      canAuditEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
@@ -14535,6 +14583,7 @@ export type GetEnrollmentDetailsQuery = {
       id: string;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
+      canAuditEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     moveInAddresses: Array<{
@@ -14659,6 +14708,7 @@ export type GetEnrollmentWithHouseholdQuery = {
       id: string;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
+      canAuditEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
@@ -14699,6 +14749,40 @@ export type GetEnrollmentEventsQuery = {
           id: string;
           name: string;
           email: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetEnrollmentAuditEventsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetEnrollmentAuditEventsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    auditHistory: {
+      __typename?: 'EnrollmentAuditEventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'EnrollmentAuditEvent';
+        id: string;
+        createdAt: string;
+        event: AuditEventType;
+        objectChanges?: any | null;
+        recordName: string;
+        recordId: string;
+        user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
         } | null;
       }>;
     };
@@ -17356,6 +17440,7 @@ export type SubmitFormMutation = {
             id: string;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
+            canAuditEnrollments: boolean;
           };
           currentUnit?: {
             __typename?: 'Unit';
@@ -22938,6 +23023,7 @@ export const EnrollmentAccessFieldsFragmentDoc = gql`
     id
     canEditEnrollments
     canDeleteEnrollments
+    canAuditEnrollments
   }
 `;
 export const EnrollmentFieldsFragmentDoc = gql`
@@ -23274,6 +23360,20 @@ export const CeAssessmentFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const EnrollmentAuditEventFieldsFragmentDoc = gql`
+  fragment EnrollmentAuditEventFields on EnrollmentAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    recordName
+    recordId
+    user {
+      id
+      name
+    }
+  }
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -26629,6 +26729,75 @@ export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables
+>;
+export const GetEnrollmentAuditEventsDocument = gql`
+  query GetEnrollmentAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    enrollment(id: $id) {
+      id
+      auditHistory(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentAuditEventFields
+        }
+      }
+    }
+  }
+  ${EnrollmentAuditEventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentAuditEventsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentAuditEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentAuditEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >(GetEnrollmentAuditEventsDocument, options);
+}
+export function useGetEnrollmentAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >(GetEnrollmentAuditEventsDocument, options);
+}
+export type GetEnrollmentAuditEventsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAuditEventsQuery
+>;
+export type GetEnrollmentAuditEventsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAuditEventsLazyQuery
+>;
+export type GetEnrollmentAuditEventsQueryResult = Apollo.QueryResult<
+  GetEnrollmentAuditEventsQuery,
+  GetEnrollmentAuditEventsQueryVariables
 >;
 export const GetEnrollmentCeAssessmentsDocument = gql`
   query GetEnrollmentCeAssessments(

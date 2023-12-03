@@ -19,7 +19,7 @@ export const useEnrollmentDashboardNavItems = (
       enrollmentId: enrollment.id,
     };
 
-    return [
+    const items: NavItem[] = [
       {
         id: 'enrollment-nav',
         type: 'category',
@@ -79,6 +79,24 @@ export const useEnrollmentDashboardNavItems = (
         })),
       },
     ];
+
+    items.push({
+      id: 'admin',
+      title: 'Admin',
+      type: 'category',
+      items: [
+        {
+          id: 'audit-history',
+          title: 'Audit History',
+          path: generateSafePath(
+            EnrollmentDashboardRoutes.AUDIT_HISTORY,
+            params
+          ),
+          hide: !enrollment.access.canAuditEnrollments,
+        },
+      ],
+    });
+    return items;
   }, [enabledFeatures, enrollment]);
 
   return navItems;

@@ -43,6 +43,7 @@ import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferr
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
 import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
+import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
@@ -391,6 +392,17 @@ export const protectedRoutes: RouteNode[] = [
             path: EnrollmentDashboardRoutes.EVENTS,
             // No perm needed because it only requires enrollment visibility
             element: <EnrollmentEventsPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.AUDIT_HISTORY,
+            element: (
+              <EnrollmentRoute
+                permissions='canAuditEnrollments'
+                redirectRoute={EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW}
+              >
+                <EnrollmentAuditHistory />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
