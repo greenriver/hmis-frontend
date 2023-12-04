@@ -18,6 +18,7 @@ const NumberInput = ({
   disableArrowKeys = false,
   value,
   error,
+  ariaLabelledBy,
   ...props
 }: TextInputProps & { currency?: boolean; disableArrowKeys?: boolean }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -91,6 +92,7 @@ const NumberInput = ({
         min,
         max,
         onKeyDown: disableArrowKeys ? onKeyDown : undefined,
+        ariaLabelledBy,
         ...inputProps,
       }}
       onWheel={preventValueChangeOnScroll}
