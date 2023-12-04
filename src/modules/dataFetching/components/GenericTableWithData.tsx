@@ -4,7 +4,14 @@ import {
   WatchQueryFetchPolicy,
 } from '@apollo/client';
 import { Box, Stack } from '@mui/material';
-import { compact, get, isEmpty, isEqual, startCase } from 'lodash-es';
+import {
+  compact,
+  get,
+  isEmpty,
+  isEqual,
+  lowerFirst,
+  startCase,
+} from 'lodash-es';
 import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
@@ -73,6 +80,7 @@ export interface Props<
   filterInputType?: string; // filter input type type for inferring filters if not provided
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
+  paginationItemName?: string;
   header?: ReactNode;
   toolbars?: ReactNode[];
   fullHeight?: boolean; // used for scrollable table body
@@ -148,6 +156,7 @@ const GenericTableWithData = <
   tableDisplayOptionButtons,
   applyOptionalColumns,
   onCompleted,
+  paginationItemName,
   ...props
 }: Props<
   Query,
@@ -245,8 +254,9 @@ const GenericTableWithData = <
       limit: rowsPerPage,
       offset: page * rowsPerPage,
       setOffset: (value: number) => setPage(value / rowsPerPage),
+      itemName: paginationItemName,
     };
-  }, [nodesCount, page, rowsPerPage, nonTablePagination]);
+  }, [nonTablePagination, nodesCount, rowsPerPage, page, paginationItemName]);
 
   const tablePaginationProps = useMemo(() => {
     if (nonTablePagination) return undefined;
@@ -413,6 +423,9 @@ const GenericTableWithData = <
                         limit,
                         offset,
                         totalEntries: nodesCount,
+                        itemName:
+                          paginationItemName ||
+                          (recordType ? lowerFirst(recordType) : undefined),
                       }}
                     />
                   </Box>
