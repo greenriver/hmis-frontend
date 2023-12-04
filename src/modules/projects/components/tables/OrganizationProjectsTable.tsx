@@ -81,7 +81,7 @@ const OrganizationProjectsTable = ({
       }
       queryVariables={{
         id: organizationId,
-        filters: { searchTerm: debouncedSearch },
+        filters: { searchTerm: debouncedSearch || undefined },
       }}
       queryDocument={GetOrganizationProjectsDocument}
       columns={columns}

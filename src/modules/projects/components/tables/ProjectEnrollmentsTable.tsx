@@ -88,14 +88,14 @@ const ProjectEnrollmentsTable = ({
         <ProjectClientEnrollmentsTable
           columns={columns}
           linkRowToEnrollment={linkRowToEnrollment}
-          searchTerm={debouncedSearch}
+          searchTerm={debouncedSearch || undefined}
           projectId={projectId}
           openOnDate={openOnDate}
         />
       )}
       {mode === 'households' && (
         <ProjectHouseholdsTable
-          searchTerm={debouncedSearch}
+          searchTerm={debouncedSearch || undefined}
           projectId={projectId}
           openOnDate={openOnDate}
         />
