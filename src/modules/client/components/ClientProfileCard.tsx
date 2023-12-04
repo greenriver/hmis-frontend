@@ -28,7 +28,7 @@ import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import {
   clientNameAllParts,
-  lastUpdated,
+  lastUpdatedBy,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -504,7 +504,8 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     variant='body2'
                     sx={{ fontStyle: 'italic', mt: 1 }}
                   >
-                    Last Updated on {lastUpdated(client, true)}.
+                    Last Updated on{' '}
+                    {lastUpdatedBy(client.dateUpdated, client.user)}.
                   </Typography>
                 )}
               </Stack>

@@ -80,6 +80,7 @@ const CommonToggle = <T extends SupportedValue>({
     >
       {items.map(({ value: itemValue, label, Icon, testId }) => (
         <ToggleButton
+          key={itemValue}
           value={itemValue}
           data-testid={testId}
           aria-label={label}
