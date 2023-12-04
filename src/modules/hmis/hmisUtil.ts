@@ -44,6 +44,7 @@ import {
   RelationshipToHoH,
   ServiceFieldsFragment,
   ServiceTypeFieldsFragment,
+  UserFieldsFragment,
 } from '@/types/gqlTypes';
 
 /**
@@ -272,17 +273,19 @@ export const maskSSN = (value?: string) => {
   return cleaned.replace(/^(...)(.{2})(.{0,4}).*/, '$1-$2-$3');
 };
 
-export const lastUpdated = (
-  client: ClientFieldsFragment,
-  includeUser = false
+export const lastUpdatedBy = (
+  dateUpdated?: string | null,
+  user?: UserFieldsFragment | null
 ) => {
-  const str = client.dateUpdated
-    ? parseAndFormatDateTime(client.dateUpdated)
-    : null;
-  if (includeUser && client.user) {
-    return `${str || 'unknown'} by ${client.user.name}`;
+  const dateString = dateUpdated
+    ? parseAndFormatDateTime(dateUpdated)
+    : undefined;
+
+  if (user) {
+    return `${dateString || 'Unknown date'} by ${user.name}`;
   }
-  return str;
+
+  return dateString;
 };
 
 export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
