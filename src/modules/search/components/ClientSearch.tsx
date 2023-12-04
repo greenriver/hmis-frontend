@@ -10,7 +10,8 @@ import ClientDisplayTypeToggle, {
   DisplayType,
 } from './ClientDisplayTypeToggle';
 import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
-import { ClientTextSearchInputForm } from './ClientTextSearchInput';
+
+import ClientTextSearchForm from './ClientTextSearchForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -256,16 +257,18 @@ const ClientSearch = () => {
       </Stack>
       <Box mb={5}>
         {searchType === 'broad' ? (
-          <ClientTextSearchInputForm
+          <ClientTextSearchForm
             initialValue={initialValues?.textSearch || ''}
             onSearch={(text) => handleSubmitSearch({ textSearch: text })}
             label={null}
             size='medium'
-            searchAdornment
             hideSearchButton
             showSearchTips
             minChars={3}
             onClearSearch={onClearSearch}
+            searchAdornment
+            clearAdornment
+            hideClearButton
           />
         ) : (
           <ClientSearchAdvancedForm

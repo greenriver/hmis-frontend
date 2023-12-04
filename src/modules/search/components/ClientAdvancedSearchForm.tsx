@@ -3,7 +3,7 @@ import { Stack } from '@mui/system';
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { keySearchParamsByLinkId } from '../searchUtil';
-import { ClearSearchButton } from './ClientTextSearchInput';
+import ClearSearchButton from './ClearSearchButton';
 import DynamicField from '@/modules/form/components/DynamicField';
 import { SearchFormDefinition } from '@/modules/form/data';
 
