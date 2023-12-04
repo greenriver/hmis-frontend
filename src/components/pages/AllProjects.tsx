@@ -154,7 +154,7 @@ const AllProjects = () => {
                 ProjectAllFieldsFragment
               >
                 queryVariables={{
-                  filters: { searchTerm: debouncedSearch },
+                  filters: { searchTerm: debouncedSearch || undefined },
                 }}
                 defaultSortOption={ProjectSortOption.OrganizationAndName}
                 queryDocument={GetProjectsDocument}

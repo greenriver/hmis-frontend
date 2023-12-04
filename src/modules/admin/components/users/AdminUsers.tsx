@@ -81,7 +81,7 @@ const AdminUsers = () => {
             UserFieldsFragment
           >
             queryVariables={{
-              filters: { searchTerm: debouncedSearch },
+              filters: { searchTerm: debouncedSearch || undefined },
             }}
             queryDocument={GetApplicationUsersDocument}
             columns={columns}
