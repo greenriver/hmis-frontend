@@ -1,11 +1,18 @@
 import { ButtonProps, Stack } from '@mui/material';
 import { findIndex, findLastIndex } from 'lodash-es';
-import { MouseEventHandler, useCallback, useMemo, useState } from 'react';
+import {
+  MouseEventHandler,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { FormActionTypes } from '../types';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import LoadingButton from '@/components/elements/LoadingButton';
 import AssessmentLastUpdated from '@/modules/hmis/components/AssessmentLastUpdated';
 
@@ -17,6 +24,7 @@ type ButtonConfig = {
   onClick?: VoidFunction;
   centerAlign?: boolean;
   buttonProps?: Omit<ButtonProps, 'ref'>;
+  tooltip?: ReactNode;
 };
 
 export interface FormActionProps {
@@ -111,7 +119,8 @@ const FormActions = ({
   );
 
   const renderButton = (buttonConfig: ButtonConfig) => {
-    const { id, label, action, loadingLabel, buttonProps } = buttonConfig;
+    const { id, label, action, loadingLabel, tooltip, buttonProps } =
+      buttonConfig;
     const isSubmit =
       action === FormActionTypes.Save || action === FormActionTypes.Submit;
 
@@ -137,18 +146,19 @@ const FormActions = ({
     const isLoading = loading && lastClicked === id;
 
     return (
-      <LoadingButton
-        key={id}
-        data-testid={`formButton-${id}`}
-        type={isSubmit ? 'submit' : undefined}
-        disabled={disabled || loading}
-        onClick={getClickHandler(buttonConfig)}
-        loading={isLoading}
-        loadingPosition={loadingLabel ? 'end' : 'center'}
-        {...buttonProps}
-      >
-        {isLoading && loadingLabel ? loadingLabel : label}
-      </LoadingButton>
+      <ButtonTooltipContainer key={id} title={tooltip}>
+        <LoadingButton
+          data-testid={`formButton-${id}`}
+          type={isSubmit ? 'submit' : undefined}
+          disabled={disabled || loading}
+          onClick={getClickHandler(buttonConfig)}
+          loading={isLoading}
+          loadingPosition={isLoading && loadingLabel ? 'end' : undefined}
+          {...buttonProps}
+        >
+          {isLoading && loadingLabel ? loadingLabel : label}
+        </LoadingButton>
+      </ButtonTooltipContainer>
     );
   };
 

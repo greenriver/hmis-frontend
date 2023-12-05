@@ -157,20 +157,25 @@ const HouseholdAssessmentTabPanel = memo(
 
     const FormActionProps = useMemo(() => {
       const config: NonNullable<FormActionProps['config']> = [];
-      const nextPreviousProps = {
-        variant: 'text',
-        sx: { height: '50px', alignSelf: 'center' },
-      } as const;
+      const navTooltip = formState.errors
+        ? 'Please fix errors and save changes before proceeding.'
+        : undefined;
 
       config.push({
         id: 'prev',
         label: 'Previous Client',
         action: FormActionTypes.Navigate,
         buttonProps: {
-          disabled: !previousTab || disableNavigation,
+          disabled: disableNavigation,
           startIcon: <ArrowBackIcon fontSize='small' />,
-          ...nextPreviousProps,
+          variant: 'text',
+          sx: {
+            display: !previousTab ? 'none' : undefined,
+            height: '50px',
+            alignSelf: 'center',
+          },
         } as const,
+        tooltip: navTooltip,
         onClick: () => {
           if (previousTab) navigateToTab(previousTab);
         },
@@ -203,15 +208,28 @@ const HouseholdAssessmentTabPanel = memo(
         buttonProps: {
           disabled: !nextTab || disableNavigation,
           endIcon: <ArrowForwardIcon fontSize='small' />,
-          ...nextPreviousProps,
+          variant: 'text',
+          sx: {
+            display: !nextTab ? 'none' : undefined,
+            height: '50px',
+            alignSelf: 'center',
+          },
         } as const,
+        tooltip: navTooltip,
         onClick: () => {
           if (nextTab) navigateToTab(nextTab);
         },
       });
 
       return { config };
-    }, [previousTab, disableNavigation, assessment, nextTab, navigateToTab]);
+    }, [
+      previousTab,
+      disableNavigation,
+      assessment,
+      nextTab,
+      formState.errors,
+      navigateToTab,
+    ]);
 
     useEffect(() => {
       if (mutationLoading) {

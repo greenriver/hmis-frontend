@@ -169,7 +169,7 @@ export function useAssessmentHandlers({
   );
 
   const saveDraftHandler = useCallback(
-    (values: FormValues, onSuccessCallback: VoidFunction) => {
+    (values: FormValues, onSuccessCallback?: VoidFunction) => {
       if (!definition || !formDefinitionId) return;
 
       const input: AssessmentInput = {
@@ -205,10 +205,5 @@ export function useAssessmentHandlers({
     saveDraftHandler,
     mutationLoading: saveLoading || submitLoading,
     errors,
-  } as {
-    submitHandler: DynamicFormOnSubmit;
-    saveDraftHandler: (values: FormValues) => void; // wrong
-    mutationLoading: boolean;
-    errors: ErrorState;
-  };
+  } as const;
 }

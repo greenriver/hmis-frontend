@@ -193,14 +193,6 @@ const HouseholdAssessments: React.FC<Props> = ({
     setNextTab(newValue);
   }, []);
 
-  // const hasCurrentError = useMemo(() => {
-  //   if (!currentTab) return false;
-  //   const curr = tabs.find((t) => t.id === currentTab)?.enrollmentId;
-  //   if (!curr) return false;
-  //   const currState = formStates[curr];
-  //   return currState && currState.errors && !currState.dirty;
-  // }, [currentTab, formStates, tabs]);
-
   useEffect(() => {
     if (!nextTab) return;
     if (hasErrorAssessments) {
