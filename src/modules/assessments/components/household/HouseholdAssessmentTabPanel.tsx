@@ -164,7 +164,7 @@ const HouseholdAssessmentTabPanel = memo(
 
       config.push({
         id: 'prev',
-        label: 'Previous',
+        label: 'Previous Client',
         action: FormActionTypes.Navigate,
         buttonProps: {
           disabled: !previousTab || disableNavigation,
@@ -180,14 +180,16 @@ const HouseholdAssessmentTabPanel = memo(
         config.push({
           id: 'submit',
           label: 'Save & Submit',
+          loadingLabel: 'Submitting',
           centerAlign: true,
           action: FormActionTypes.Submit,
-          buttonProps: { variant: 'outlined' } as const,
+          buttonProps: { variant: 'contained', size: 'large' } as const,
         });
       } else {
         config.push({
           id: 'save',
           label: 'Save Assessment',
+          loadingLabel: 'Saving',
           centerAlign: true,
           action: FormActionTypes.Save,
           buttonProps: { variant: 'contained', size: 'large' } as const,
@@ -196,7 +198,7 @@ const HouseholdAssessmentTabPanel = memo(
 
       config.push({
         id: 'next',
-        label: 'Next',
+        label: 'Next Client',
         action: FormActionTypes.Navigate,
         buttonProps: {
           disabled: !nextTab || disableNavigation,

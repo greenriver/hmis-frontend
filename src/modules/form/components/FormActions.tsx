@@ -12,6 +12,7 @@ import AssessmentLastUpdated from '@/modules/hmis/components/AssessmentLastUpdat
 type ButtonConfig = {
   id: string;
   label: string;
+  loadingLabel?: string;
   action: FormActionTypes;
   onClick?: VoidFunction;
   centerAlign?: boolean;
@@ -110,7 +111,7 @@ const FormActions = ({
   );
 
   const renderButton = (buttonConfig: ButtonConfig) => {
-    const { id, label, action, buttonProps } = buttonConfig;
+    const { id, label, action, loadingLabel, buttonProps } = buttonConfig;
     const isSubmit =
       action === FormActionTypes.Save || action === FormActionTypes.Submit;
 
@@ -133,6 +134,8 @@ const FormActions = ({
       );
     }
 
+    const isLoading = loading && lastClicked === id;
+
     return (
       <LoadingButton
         key={id}
@@ -140,10 +143,11 @@ const FormActions = ({
         type={isSubmit ? 'submit' : undefined}
         disabled={disabled || loading}
         onClick={getClickHandler(buttonConfig)}
-        loading={loading && lastClicked === id}
+        loading={isLoading}
+        loadingPosition={loadingLabel ? 'end' : 'center'}
         {...buttonProps}
       >
-        {label}
+        {isLoading && loadingLabel ? loadingLabel : label}
       </LoadingButton>
     );
   };

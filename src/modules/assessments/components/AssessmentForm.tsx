@@ -219,16 +219,24 @@ const AssessmentForm: React.FC<Props> = ({
     hold: pickListsLoading,
   });
 
-  // the form is locked, replace the submit button with an 'unlock' button
-  const formActionPropsWithLock = useMemo<typeof FormActionProps>(() => {
+  const formActionsPropsWithLastUpdated = useMemo<
+    typeof FormActionProps
+  >(() => {
     const formActionProps: typeof FormActionProps = { ...FormActionProps };
-
     // Add last saved / last submitted dates
     if (assessment?.inProgress) {
       formActionProps.lastSaved = assessment?.dateUpdated || undefined;
     } else if (assessment && !assessment.inProgress) {
       formActionProps.lastSubmitted = assessment?.dateUpdated || undefined;
     }
+    return formActionProps;
+  }, [FormActionProps, assessment]);
+
+  // the form is locked, replace the submit button with an 'unlock' button
+  const formActionPropsWithLock = useMemo<typeof FormActionProps>(() => {
+    const formActionProps: typeof FormActionProps = {
+      ...formActionsPropsWithLastUpdated,
+    };
 
     if (!locked || !canEdit) return formActionProps;
 
@@ -252,9 +260,8 @@ const AssessmentForm: React.FC<Props> = ({
       .filter((item) => item.action !== FormActionTypes.Discard);
     return { ...formActionProps, config };
   }, [
-    assessment,
+    formActionsPropsWithLastUpdated,
     locked,
-    FormActionProps,
     canEdit,
     embeddedInWorkflow,
     handleUnlock,
@@ -335,7 +342,7 @@ const AssessmentForm: React.FC<Props> = ({
             clientId={clientId}
             showSavePrompt
             alwaysShowSaveSlide={!!embeddedInWorkflow}
-            FormActionProps={FormActionProps}
+            FormActionProps={formActionsPropsWithLastUpdated}
             onDirty={handleDirty}
             ValidationDialogProps={{ onCancel: onCancelValidations }}
             // Only show "warn if empty" treatments if this is an existing assessment,
