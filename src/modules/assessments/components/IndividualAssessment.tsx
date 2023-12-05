@@ -36,61 +36,39 @@ import {
 } from '@/types/gqlTypes';
 
 export interface IndividualAssessmentProps {
-  /**
-   * FormDefiniton to use for rendering assessment
-   */
+  // FormDefiniton to use for rendering the assessment
   definition: FormDefinition;
-  /**
-   * Assessment to render, if one exists.
-   */
+  // Assessment to render. Omit if starting a new assessment.
   assessment?: FullAssessmentFragment;
-  /**
-   * Assessment Title
-   */
   title: string;
-  /**
-   * ID of related Enrollment
-   */
   enrollmentId: string;
-  /**
-   * Assessment Role (Intake, Exit, etc.)
-   */
+  // Assessment Role (Intake, Exit, etc.)
   formRole?: FormRole;
-  /**
-   * Whether the assessment is embedded in a household workflow
-   */
+  // Whether the assessment is embedded in a household workflow
   embeddedInWorkflow?: boolean;
-  /**
-   * Client information
-   */
   client: ClientNameFragment;
-  /**
-   * Current status of the assessment
-   */
+  // Assessment status to use for indicator
   assessmentStatus?: AssessmentStatus;
-  /**
-   * Whether the form is currently visible on the page.
-   * Used for household workflow when the assessment is on an inactive tab.
-   */
+  // Whether the form is currently visible on the page. Used for household workflow when the assessment is on an inactive tab.
   visible?: boolean;
-  /**
-   * Reference to the form
-   */
+  // Reference to the form element
   formRef?: Ref<DynamicFormRef>;
-  /**
-   * Callback to handle changes to form state
-   */
+  // Callback to handle changes to form state
   onFormStateChange?: (
     enrollmentId: string,
     action: HouseholdAssessmentFormAction
   ) => void;
-
-  // DynamicForm props
+  // Props to pass to the FormActions component to specify button layout and actions
   FormActionProps?: DynamicFormProps['FormActionProps'];
+  // Submit handler
   onSubmit: DynamicFormProps['onSubmit'];
+  // Save handler (unsubmitted assessments only)
   onSaveDraft?: DynamicFormProps['onSaveDraft'];
+  // Error state
   errors: ErrorState;
+  // Whether Submit or Save mutation is loading
   mutationLoading?: boolean;
+  // Callback for clicking "cancel" on warning validation modal
   onCancelValidations?: VoidFunction;
 }
 

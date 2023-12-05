@@ -2,7 +2,10 @@ import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAssessment } from '../hooks/useAssessment';
-import { useAssessmentHandlers } from '../hooks/useAssessmentHandlers';
+import {
+  AssessmentResponseStatus,
+  useAssessmentHandlers,
+} from '../hooks/useAssessmentHandlers';
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
@@ -41,16 +44,20 @@ const IndividualAssessmentPage: React.FC<Props> = ({ client, enrollment }) => {
     [navigate, enrollmentId, clientId]
   );
 
-  const onSuccess = useCallback(() => {
-    // We created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
-    if (!assessmentId) {
-      cache.evict({
-        id: `Enrollment:${enrollmentId}`,
-        fieldName: 'assessments',
-      });
-    }
-    navigateToEnrollment();
-  }, [navigateToEnrollment, assessmentId, enrollmentId]);
+  const onCompletedMutation = useCallback(
+    (status: AssessmentResponseStatus) => {
+      if (!['saved', 'submitted'].includes(status)) return;
+      // We created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
+      if (!assessmentId) {
+        cache.evict({
+          id: `Enrollment:${enrollmentId}`,
+          fieldName: 'assessments',
+        });
+      }
+      navigateToEnrollment();
+    },
+    [navigateToEnrollment, assessmentId, enrollmentId]
+  );
 
   const {
     definition,
@@ -72,6 +79,7 @@ const IndividualAssessmentPage: React.FC<Props> = ({ client, enrollment }) => {
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
       assessmentLockVersion: assessment?.lockVersion,
+      onCompletedMutation,
     });
 
   const FormActionProps = useMemo(() => {
@@ -83,7 +91,6 @@ const IndividualAssessmentPage: React.FC<Props> = ({ client, enrollment }) => {
           label: 'Submit',
           action: FormActionTypes.Submit,
           buttonProps: { variant: 'contained' } as const,
-          onSuccess,
         },
         ...(assessment && !assessment.inProgress
           ? []
@@ -93,7 +100,6 @@ const IndividualAssessmentPage: React.FC<Props> = ({ client, enrollment }) => {
                 label: 'Save and finish later',
                 action: FormActionTypes.Save,
                 buttonProps: { variant: 'outlined' } as const,
-                onSuccess,
               },
             ]),
         {
@@ -104,7 +110,7 @@ const IndividualAssessmentPage: React.FC<Props> = ({ client, enrollment }) => {
         },
       ],
     };
-  }, [assessment, navigateToEnrollment, onSuccess]);
+  }, [assessment, navigateToEnrollment]);
 
   if (!formRole) return <NotFound />;
   if (dataLoading) return <Loading />;
