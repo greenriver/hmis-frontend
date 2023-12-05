@@ -4,7 +4,6 @@ import { Ref, useEffect, useMemo } from 'react';
 import { assessmentDate } from '../util';
 
 import AssessmentTitle from './AssessmentTitle';
-import MissingDefinitionAlert from './MissingDefinitionAlert';
 
 import Loading from '@/components/elements/Loading';
 import {
@@ -19,61 +18,106 @@ import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import AssessmentStatusIndicator from '@/modules/assessments/components/AssessmentStatusIndicator';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
 import { AssessmentStatus } from '@/modules/assessments/components/household/util';
-import { useAssessment } from '@/modules/assessments/hooks/useAssessment';
 import { useBasicEnrollment } from '@/modules/enrollment/hooks/useBasicEnrollment';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+import { ErrorState } from '@/modules/errors/util';
 import {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  AssessmentFieldsFragment,
   AssessmentRole,
+  ClientNameFragment,
+  FormDefinition,
   FormRole,
-  RelationshipToHoH,
+  FullAssessmentFragment,
 } from '@/types/gqlTypes';
 
 export interface IndividualAssessmentProps {
+  /**
+   * FormDefiniton to use for rendering assessment
+   */
+  definition: FormDefinition;
+  /**
+   * Assessment to render, if one exists.
+   */
+  assessment?: FullAssessmentFragment;
+  /**
+   * Assessment Title
+   */
+  title: string;
+  /**
+   * ID of related Enrollment
+   */
   enrollmentId: string;
-  assessmentId?: string;
+  /**
+   * Assessment Role (Intake, Exit, etc.)
+   */
   formRole?: FormRole;
+  /**
+   * Whether the assessment is embedded in a household workflow
+   */
   embeddedInWorkflow?: boolean;
-  clientName: string;
-  relationshipToHoH: RelationshipToHoH;
-  client: ClientNameDobVeteranFields;
+  /**
+   * Client information
+   */
+  client: ClientNameFragment;
+  /**
+   * Current status of the assessment
+   */
   assessmentStatus?: AssessmentStatus;
+  /**
+   * Whether the form is currently visible on the page.
+   * Used for household workflow when the assessment is on an inactive tab.
+   */
   visible?: boolean;
-  getFormActionProps?: (
-    assessment?: AssessmentFieldsFragment
-  ) => DynamicFormProps['FormActionProps'];
+  /**
+   * Reference to the form
+   */
   formRef?: Ref<DynamicFormRef>;
+  /**
+   * Callback to handle changes to form state
+   */
   onFormStateChange?: (
     enrollmentId: string,
     action: HouseholdAssessmentFormAction
   ) => void;
+
+  // DynamicForm props
+  FormActionProps?: DynamicFormProps['FormActionProps'];
+  onSubmit: DynamicFormProps['onSubmit'];
+  onSaveDraft?: DynamicFormProps['onSaveDraft'];
+  errors: ErrorState;
+  mutationLoading?: boolean;
+  onCancelValidations?: VoidFunction;
 }
 
 /**
  * Renders a single assessment form for an individual, including form stepper nav.
  *
- * If assessmentId is provided, we're editing an existing assessment.
+ * If assessment is provided, we're editing an existing assessment.
  * If formRole is provided, we're creating a new assessment.
  */
 const IndividualAssessment = ({
   enrollmentId,
-  assessmentId,
   assessmentStatus,
-  formRole: formRoleParam,
+  definition,
+  title,
+  assessment,
+  formRole,
   embeddedInWorkflow = false,
-  clientName,
   client,
-  relationshipToHoH,
-  getFormActionProps,
+  FormActionProps,
   visible,
   formRef,
   onFormStateChange,
+  onSubmit,
+  onSaveDraft,
+  errors,
+  mutationLoading,
+  onCancelValidations,
 }: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useClientDashboardContext();
 
@@ -81,51 +125,19 @@ const IndividualAssessment = ({
   const { enrollment, loading: enrollmentLoading } =
     useBasicEnrollment(enrollmentId);
 
-  const {
-    definition,
-    assessment,
-    loading: dataLoading,
-    assessmentTitle,
-    formRole,
-  } = useAssessment({
-    enrollmentId,
-    assessmentId,
-    formRoleParam,
-    client,
-    relationshipToHoH,
-  });
-
   const informationDate = useMemo(
     () => assessmentDate(formRole, enrollment),
     [enrollment, formRole]
   );
 
-  const FormActionProps = useMemo(
-    () =>
-      !dataLoading && getFormActionProps
-        ? {
-            lastSaved:
-              assessment && assessment.inProgress
-                ? assessment.dateUpdated
-                : undefined,
-            lastSubmitted:
-              assessment && !assessment.inProgress
-                ? assessment.dateUpdated
-                : undefined,
-            ...getFormActionProps(assessment),
-          }
-        : {},
-    [getFormActionProps, dataLoading, assessment]
-  );
-
   useEffect(() => {
-    if (!assessmentTitle || embeddedInWorkflow) return;
+    if (!title || embeddedInWorkflow) return;
     overrideBreadcrumbTitles({
-      [EnrollmentDashboardRoutes.ASSESSMENT]: assessmentTitle,
+      [EnrollmentDashboardRoutes.ASSESSMENT]: title,
     });
   }, [
     embeddedInWorkflow,
-    assessmentTitle,
+    title,
     informationDate,
     assessment,
     overrideBreadcrumbTitles,
@@ -136,23 +148,22 @@ const IndividualAssessment = ({
     CONTEXT_HEADER_HEIGHT +
     (embeddedInWorkflow ? HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT : 0);
 
-  useScrollToHash(dataLoading || enrollmentLoading, topOffsetHeight);
+  useScrollToHash(enrollmentLoading, topOffsetHeight);
 
-  if (dataLoading || enrollmentLoading) return <Loading />;
+  if (enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
-  if (assessmentId && !assessment) return <NotFound />;
-  if (!definition) return <MissingDefinitionAlert />;
+  if (!formRole && !assessment) return <NotFound />;
 
-  const title = (
+  const titleNode = (
     <AssessmentTitle
-      assessmentTitle={assessmentTitle}
-      clientName={clientName || undefined}
+      assessmentTitle={title}
+      clientName={clientBriefName(client)}
       projectName={enrollment.project.projectName}
       enrollmentId={enrollment.id}
       householdId={enrollment.householdId}
       assessmentRole={formRole as unknown as AssessmentRole}
       embeddedInWorkflow={embeddedInWorkflow}
-      assessmentId={assessmentId}
+      assessmentId={assessment?.id}
       householdSize={enrollment.householdSize}
     />
   );
@@ -160,7 +171,7 @@ const IndividualAssessment = ({
   const navigationTitle = (
     <Box>
       <Typography variant='h5' sx={{ mb: 2 }}>
-        {clientName}
+        {clientBriefName(client)}
       </Typography>
       <Stack gap={1}>
         <Typography variant='body2' component='div'>
@@ -174,7 +185,7 @@ const IndividualAssessment = ({
 
   return (
     <AssessmentForm
-      assessmentTitle={title}
+      assessmentTitle={titleNode}
       clientId={client.id}
       navigationTitle={navigationTitle}
       key={assessment?.id}
@@ -188,6 +199,11 @@ const IndividualAssessment = ({
       visible={visible}
       formRef={formRef}
       onFormStateChange={onFormStateChange}
+      onSubmit={onSubmit}
+      onSaveDraft={onSaveDraft}
+      errors={errors}
+      mutationLoading={mutationLoading}
+      onCancelValidations={onCancelValidations}
     />
   );
 };

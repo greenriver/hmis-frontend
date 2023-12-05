@@ -13,18 +13,15 @@ type ButtonConfig = {
   id: string;
   label: string;
   action: FormActionTypes;
-  onSuccess?: VoidFunction;
+  onClick?: VoidFunction;
   centerAlign?: boolean;
   buttonProps?: Omit<ButtonProps, 'ref'>;
 };
 
 export interface FormActionProps {
   config?: ButtonConfig[];
-  onSubmit: (
-    e: React.MouseEvent<HTMLButtonElement>,
-    onSuccess?: VoidFunction
-  ) => void;
-  onSaveDraft?: (onSuccess?: VoidFunction) => void;
+  onSubmit: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onSaveDraft?: VoidFunction;
   onDiscard?: MouseEventHandler | string;
   submitButtonText?: string;
   discardButtonText?: string;
@@ -84,7 +81,7 @@ const FormActions = ({
   const [lastClicked, setLastClicked] = useState<string>();
 
   const getClickHandler = useCallback(
-    ({ action, onSuccess, id }: ButtonConfig) => {
+    ({ action, onClick, id }: ButtonConfig) => {
       if (action === FormActionTypes.Discard) {
         return (onDiscard as MouseEventHandler) || (() => navigate(-1));
       }
@@ -93,7 +90,7 @@ const FormActions = ({
         return (e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault();
           setLastClicked(id);
-          onSaveDraft(onSuccess);
+          onSaveDraft();
         };
       }
       if (action === FormActionTypes.Submit) {
@@ -101,12 +98,12 @@ const FormActions = ({
         return (e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault();
           setLastClicked(id);
-          onSubmit(e, onSuccess);
+          onSubmit(e);
         };
       }
 
       if (action === FormActionTypes.Navigate) {
-        return onSuccess;
+        return onClick;
       }
     },
     [onDiscard, onSaveDraft, onSubmit, navigate]

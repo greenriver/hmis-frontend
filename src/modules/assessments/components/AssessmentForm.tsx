@@ -10,8 +10,6 @@ import {
   useState,
 } from 'react';
 
-import { useAssessmentHandlers } from '../hooks/useAssessmentHandlers';
-
 import AssessmentAlert from './alerts/AssessmentAlert';
 
 import FormContainer from '@/components/layout/FormContainer';
@@ -24,7 +22,7 @@ import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
-import { hasAnyValue } from '@/modules/errors/util';
+import { ErrorState, hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
@@ -42,7 +40,6 @@ import {
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
 import {
-  AssessmentFieldsFragment,
   EnrollmentFieldsFragment,
   FormDefinition,
   FormRole,
@@ -61,6 +58,11 @@ interface Props {
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
   FormActionProps?: DynamicFormProps['FormActionProps'];
+  onSubmit: DynamicFormProps['onSubmit'];
+  onSaveDraft?: DynamicFormProps['onSaveDraft'];
+  errors: ErrorState;
+  onCancelValidations?: VoidFunction;
+  mutationLoading?: boolean;
   visible?: boolean;
   formRef?: Ref<DynamicFormRef>;
   onFormStateChange?: (
@@ -83,6 +85,11 @@ const AssessmentForm: React.FC<Props> = ({
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   onFormStateChange,
+  onSubmit,
+  onSaveDraft,
+  errors,
+  mutationLoading,
+  onCancelValidations,
 }) => {
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -118,27 +125,6 @@ const AssessmentForm: React.FC<Props> = ({
 
   const isPrintView = useIsPrintView();
 
-  const onSuccessfulSubmit = useCallback(
-    (assmt: AssessmentFieldsFragment) => {
-      if (!assmt.inProgress) setLocked(true);
-      onFormStateChange?.(enrollment.id, 'saveCompleted');
-    },
-    [onFormStateChange, enrollment.id]
-  );
-  const onSuccessfulDraftSave = useCallback(() => {
-    onFormStateChange?.(enrollment.id, 'saveCompleted');
-  }, [onFormStateChange, enrollment.id]);
-
-  const { submitHandler, saveDraftHandler, mutationLoading, errors } =
-    useAssessmentHandlers({
-      definition,
-      enrollmentId: enrollment.id,
-      assessmentId: assessment?.id,
-      assessmentLockVersion: assessment?.lockVersion,
-      onSuccessfulSubmit,
-      onSuccessfulDraftSave,
-    });
-
   const handleDirty = useCallback(
     (dirty: boolean) => {
       // we can only rely on dirty == true
@@ -146,18 +132,6 @@ const AssessmentForm: React.FC<Props> = ({
     },
     [onFormStateChange, enrollment.id]
   );
-  useEffect(() => {
-    if (mutationLoading) {
-      onFormStateChange?.(enrollment.id, 'saveStarted');
-    }
-  }, [onFormStateChange, mutationLoading, enrollment.id]);
-
-  // TODO: track error states so we can block navigation
-  // useEffect(() => {
-  //   if (errors?.errors.length || errors?.warnings.length) {
-  //     onFormStateChange?.(enrollment.id, 'saveError');
-  //   }
-  // }, [onFormStateChange, errors, enrollment.id]);
 
   const itemMap = useMemo(
     () => getItemMap(definition.definition),
@@ -247,9 +221,19 @@ const AssessmentForm: React.FC<Props> = ({
 
   // the form is locked, replace the submit button with an 'unlock' button
   const formActionPropsWithLock = useMemo<typeof FormActionProps>(() => {
-    if (!locked || !FormActionProps || !canEdit) return FormActionProps;
+    const formActionProps: typeof FormActionProps = { ...FormActionProps };
 
-    const config = (FormActionProps.config?.slice() || [])
+    // Add last saved / last submitted dates
+    if (assessment?.inProgress) {
+      formActionProps.lastSaved = assessment?.dateUpdated || undefined;
+    } else if (assessment && !assessment.inProgress) {
+      formActionProps.lastSubmitted = assessment?.dateUpdated || undefined;
+    }
+
+    if (!locked || !canEdit) return formActionProps;
+
+    // Add config option for unlocking assessment
+    const config = (formActionProps.config?.slice() || [])
       .map((item) => {
         if (item.action != FormActionTypes.Submit) return item;
         return {
@@ -266,8 +250,15 @@ const AssessmentForm: React.FC<Props> = ({
         };
       })
       .filter((item) => item.action !== FormActionTypes.Discard);
-    return { ...FormActionProps, config };
-  }, [FormActionProps, locked, canEdit, embeddedInWorkflow, handleUnlock]);
+    return { ...formActionProps, config };
+  }, [
+    assessment,
+    locked,
+    FormActionProps,
+    canEdit,
+    embeddedInWorkflow,
+    handleUnlock,
+  ]);
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
@@ -330,11 +321,9 @@ const AssessmentForm: React.FC<Props> = ({
             key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
             definition={definition.definition}
             ref={formRef}
-            onSubmit={submitHandler}
+            onSubmit={onSubmit}
             onSaveDraft={
-              assessment && !assessment.inProgress
-                ? undefined
-                : saveDraftHandler
+              assessment && !assessment.inProgress ? undefined : onSaveDraft
             }
             localConstants={localConstants}
             initialValues={initialValues || undefined}
@@ -348,6 +337,7 @@ const AssessmentForm: React.FC<Props> = ({
             alwaysShowSaveSlide={!!embeddedInWorkflow}
             FormActionProps={FormActionProps}
             onDirty={handleDirty}
+            ValidationDialogProps={{ onCancel: onCancelValidations }}
             // Only show "warn if empty" treatments if this is an existing assessment,
             // OR if the user has attempted to submit this (new) assessment
             warnIfEmpty={!!assessment || hasAnyValue(errors)}

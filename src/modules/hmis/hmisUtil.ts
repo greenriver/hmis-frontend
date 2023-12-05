@@ -25,6 +25,7 @@ import {
   AssessmentFieldsFragment,
   ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,
+  ClientNameDobVetFragment,
   ClientNameFragment,
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
@@ -227,7 +228,9 @@ export const clientNameAllParts = (client: ClientNameFragment) => {
   );
 };
 
-export const clientBriefName = (client: ClientNameFragment) =>
+export const clientBriefName = (
+  client: ClientNameFragment | ClientNameDobVetFragment
+) =>
   [client.firstName, client.lastName].filter(Boolean).join(' ') ||
   anonymousClientName(client);
 
