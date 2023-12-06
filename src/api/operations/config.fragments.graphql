@@ -1,0 +1,30 @@
+fragment FormRuleFields on FormRule {
+  id
+  active
+  system
+  definitionIdentifier
+  definition {
+    ...FormDefinitionMetadata
+  }
+  dataCollectedAbout
+  funder
+  otherFunder
+  projectType
+  project {
+    ...ProjectNameAndType
+  }
+  organization {
+    ...OrganizationNameFields
+  }
+  serviceCategory {
+    id
+    name
+  }
+  serviceType {
+    id
+    name
+    category
+  }
+  createdAt
+  updatedAt
+}

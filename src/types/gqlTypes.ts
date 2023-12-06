@@ -2534,6 +2534,36 @@ export enum FormRole {
   Update = 'UPDATE',
 }
 
+export type FormRule = {
+  __typename?: 'FormRule';
+  active: Scalars['Boolean']['output'];
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  dataCollectedAbout?: Maybe<DataCollectedAbout>;
+  definition: FormDefinition;
+  definitionIdentifier: Scalars['String']['output'];
+  funder?: Maybe<FundingSource>;
+  id: Scalars['ID']['output'];
+  organization?: Maybe<Organization>;
+  otherFunder?: Maybe<Scalars['String']['output']>;
+  project?: Maybe<Project>;
+  projectType?: Maybe<ProjectType>;
+  serviceCategory?: Maybe<ServiceCategory>;
+  serviceType?: Maybe<ServiceType>;
+  system: Scalars['Boolean']['output'];
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type FormRulesPaginated = {
+  __typename?: 'FormRulesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<FormRule>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
 export type Funder = {
   __typename?: 'Funder';
   active: Scalars['Boolean']['output'];
@@ -4761,6 +4791,7 @@ export type Query = {
   enrollment?: Maybe<Enrollment>;
   esgFundingReport: Array<EsgFundingService>;
   file?: Maybe<File>;
+  formRules: FormRulesPaginated;
   /** Funder lookup */
   funder?: Maybe<Funder>;
   /** Get most relevant/recent form definition for the specified Role and project (optionally) */
@@ -4839,6 +4870,11 @@ export type QueryEsgFundingReportArgs = {
 
 export type QueryFileArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryFormRulesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryFunderArgs = {
@@ -5469,6 +5505,16 @@ export type Service = {
   referralOutcome?: Maybe<PathReferralOutcome>;
   serviceType: ServiceType;
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
+  user?: Maybe<ApplicationUser>;
+};
+
+export type ServiceCategory = {
+  __typename?: 'ServiceCategory';
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
   user?: Maybe<ApplicationUser>;
 };
 
@@ -12410,6 +12456,108 @@ export type BulkMergeClientsMutation = {
   } | null;
 };
 
+export type FormRuleFieldsFragment = {
+  __typename?: 'FormRule';
+  id: string;
+  active: boolean;
+  system: boolean;
+  definitionIdentifier: string;
+  dataCollectedAbout?: DataCollectedAbout | null;
+  funder?: FundingSource | null;
+  otherFunder?: string | null;
+  projectType?: ProjectType | null;
+  createdAt: string;
+  updatedAt: string;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    role: FormRole;
+    title: string;
+    cacheKey: string;
+  };
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  } | null;
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    hudId: string;
+    organizationName: string;
+  } | null;
+  serviceCategory?: {
+    __typename?: 'ServiceCategory';
+    id: string;
+    name: string;
+  } | null;
+  serviceType?: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    category: string;
+  } | null;
+};
+
+export type GetFormRulesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetFormRulesQuery = {
+  __typename?: 'Query';
+  formRules: {
+    __typename?: 'FormRulesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'FormRule';
+      id: string;
+      active: boolean;
+      system: boolean;
+      definitionIdentifier: string;
+      dataCollectedAbout?: DataCollectedAbout | null;
+      funder?: FundingSource | null;
+      otherFunder?: string | null;
+      projectType?: ProjectType | null;
+      createdAt: string;
+      updatedAt: string;
+      definition: {
+        __typename?: 'FormDefinition';
+        id: string;
+        role: FormRole;
+        title: string;
+        cacheKey: string;
+      };
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+      } | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        hudId: string;
+        organizationName: string;
+      } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        category: string;
+      } | null;
+    }>;
+  };
+};
+
 export type CurrentLivingSituationFieldsFragment = {
   __typename?: 'CurrentLivingSituation';
   id: string;
@@ -15522,6 +15670,14 @@ export type FormDefinitionJsonFieldsFragment = {
       }>;
     }> | null;
   }>;
+};
+
+export type FormDefinitionMetadataFragment = {
+  __typename?: 'FormDefinition';
+  id: string;
+  role: FormRole;
+  title: string;
+  cacheKey: string;
 };
 
 export type FormDefinitionFieldsFragment = {
@@ -22874,6 +23030,56 @@ export const MergeAuditEventFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
+export const FormDefinitionMetadataFragmentDoc = gql`
+  fragment FormDefinitionMetadata on FormDefinition {
+    id
+    role
+    title
+    cacheKey
+  }
+`;
+export const OrganizationNameFieldsFragmentDoc = gql`
+  fragment OrganizationNameFields on Organization {
+    id
+    hudId
+    organizationName
+  }
+`;
+export const FormRuleFieldsFragmentDoc = gql`
+  fragment FormRuleFields on FormRule {
+    id
+    active
+    system
+    definitionIdentifier
+    definition {
+      ...FormDefinitionMetadata
+    }
+    dataCollectedAbout
+    funder
+    otherFunder
+    projectType
+    project {
+      ...ProjectNameAndType
+    }
+    organization {
+      ...OrganizationNameFields
+    }
+    serviceCategory {
+      id
+      name
+    }
+    serviceType {
+      id
+      name
+      category
+    }
+    createdAt
+    updatedAt
+  }
+  ${FormDefinitionMetadataFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+  ${OrganizationNameFieldsFragmentDoc}
+`;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
     id
@@ -23138,14 +23344,12 @@ export const FormDefinitionJsonFieldsFragmentDoc = gql`
 `;
 export const FormDefinitionFieldsFragmentDoc = gql`
   fragment FormDefinitionFields on FormDefinition {
-    id
-    role
-    title
-    cacheKey
+    ...FormDefinitionMetadata
     definition {
       ...FormDefinitionJsonFields
     }
   }
+  ${FormDefinitionMetadataFragmentDoc}
   ${FormDefinitionJsonFieldsFragmentDoc}
 `;
 export const OccurrencePointFormFieldsFragmentDoc = gql`
@@ -23447,13 +23651,6 @@ export const MciMatchFieldsFragmentDoc = gql`
     middleName
     nameSuffix
     ssn
-  }
-`;
-export const OrganizationNameFieldsFragmentDoc = gql`
-  fragment OrganizationNameFields on Organization {
-    id
-    hudId
-    organizationName
   }
 `;
 export const OrganizationDetailFieldsFragmentDoc = gql`
@@ -26174,6 +26371,71 @@ export type BulkMergeClientsMutationResult =
 export type BulkMergeClientsMutationOptions = Apollo.BaseMutationOptions<
   BulkMergeClientsMutation,
   BulkMergeClientsMutationVariables
+>;
+export const GetFormRulesDocument = gql`
+  query GetFormRules($limit: Int = 25, $offset: Int = 0) {
+    formRules(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FormRuleFields
+      }
+    }
+  }
+  ${FormRuleFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetFormRulesQuery__
+ *
+ * To run a query within a React component, call `useGetFormRulesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormRulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFormRulesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetFormRulesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetFormRulesQuery,
+    GetFormRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetFormRulesQuery, GetFormRulesQueryVariables>(
+    GetFormRulesDocument,
+    options
+  );
+}
+export function useGetFormRulesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFormRulesQuery,
+    GetFormRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetFormRulesQuery, GetFormRulesQueryVariables>(
+    GetFormRulesDocument,
+    options
+  );
+}
+export type GetFormRulesQueryHookResult = ReturnType<
+  typeof useGetFormRulesQuery
+>;
+export type GetFormRulesLazyQueryHookResult = ReturnType<
+  typeof useGetFormRulesLazyQuery
+>;
+export type GetFormRulesQueryResult = Apollo.QueryResult<
+  GetFormRulesQuery,
+  GetFormRulesQueryVariables
 >;
 export const GetEnrollmentCurrentLivingSituationsDocument = gql`
   query GetEnrollmentCurrentLivingSituations(
