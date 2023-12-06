@@ -12,13 +12,7 @@ import React, {
 
 import useDynamicFields from '../hooks/useDynamicFields';
 import { DynamicFormContext } from '../hooks/useDynamicFormContext';
-import {
-  ChangeType,
-  FormActionTypes,
-  FormValues,
-  LocalConstants,
-  PickListArgs,
-} from '../types';
+import { ChangeType, FormValues, LocalConstants, PickListArgs } from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
@@ -68,15 +62,15 @@ export interface DynamicFormProps
   >;
   ValidationDialogProps?: Omit<
     ValidationDialogProps,
-    'errorState' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
+    'errorState' | 'open' | 'onConfirm' | 'loading'
   >;
   hideSubmit?: boolean;
   localConstants?: LocalConstants;
   errorRef?: RefObject<HTMLDivElement>;
 }
 export interface DynamicFormRef {
-  SaveIfDirty: (callback: VoidFunction) => void;
-  SubmitIfDirty: (ignoreWarnings: boolean, callback: VoidFunction) => void;
+  SaveIfDirty: VoidFunction;
+  SubmitIfDirty: (ignoreWarnings: boolean) => void;
   SubmitForm: VoidFunction;
 }
 
@@ -129,6 +123,23 @@ const DynamicForm = forwardRef(
     const saveButtonsRef = React.createRef<HTMLDivElement>();
     const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
 
+    const handleSaveDraft = useCallback(() => {
+      if (!onSaveDraft) return;
+      onSaveDraft(getCleanedValues(), () => setDirty(false));
+    }, [onSaveDraft, getCleanedValues]);
+
+    const handleSubmit = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        onSubmit({
+          values: getCleanedValues(),
+          confirmed: false,
+          event,
+          onSuccess: () => setDirty(false),
+        });
+      },
+      [onSubmit, getCleanedValues]
+    );
+
     // Expose handle for parent components to initiate a background save (used for household workflow tabs)
     useImperativeHandle(
       ref,
@@ -139,26 +150,20 @@ const DynamicForm = forwardRef(
             confirmed: false,
           });
         },
-        SaveIfDirty: (onSuccessCallback) => {
-          if (!onSaveDraft || !dirty || locked) return;
-          onSaveDraft(getCleanedValues(), () => {
-            setDirty(false);
-            onSuccessCallback();
-          });
+        SaveIfDirty: () => {
+          if (!dirty || locked) return;
+          handleSaveDraft();
         },
-        SubmitIfDirty: (ignoreWarnings: boolean, onSuccessCallback) => {
+        SubmitIfDirty: (ignoreWarnings: boolean) => {
           if (!onSubmit || !dirty || locked) return;
           onSubmit({
             values: getCleanedValues(),
             confirmed: ignoreWarnings,
-            onSuccess: () => {
-              setDirty(false);
-              onSuccessCallback();
-            },
+            onSuccess: () => setDirty(false),
           });
         },
       }),
-      [dirty, getCleanedValues, onSaveDraft, onSubmit, locked]
+      [onSubmit, getCleanedValues, dirty, locked, handleSaveDraft]
     );
 
     useEffect(() => {
@@ -166,48 +171,21 @@ const DynamicForm = forwardRef(
       setPromptSave(!isSaveButtonVisible);
     }, [isSaveButtonVisible, promptSave]);
 
-    const handleSubmit = useCallback(
-      (
-        event: React.MouseEvent<HTMLButtonElement>,
-        onSuccess?: VoidFunction
-      ) => {
+    const handleConfirm = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
         onSubmit({
           values: getCleanedValues(),
-          confirmed: false,
+          confirmed: true,
           event,
-          onSuccess,
+          onSuccess: () => setDirty(false),
         });
       },
       [onSubmit, getCleanedValues]
     );
 
-    const handleConfirm = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        // Hacky why to pull the appropriate onSuccess callback from FormActionProps
-        const onSuccess = (FormActionProps.config || []).find(
-          (b) => b.action === FormActionTypes.Submit
-        )?.onSuccess;
-
-        onSubmit({
-          values: getCleanedValues(),
-          confirmed: true,
-          event,
-          onSuccess,
-        });
-      },
-      [onSubmit, getCleanedValues, FormActionProps]
-    );
-
     const { renderValidationDialog, validationDialogVisible } =
       useValidationDialog({ errorState });
-    const handleSaveDraft = useCallback(
-      (onSuccess?: VoidFunction) => {
-        if (!onSaveDraft) return;
-        onSaveDraft(getCleanedValues(), onSuccess);
-      },
-      [onSaveDraft, getCleanedValues]
-    );
 
     const handleChangeCallback = useCallback(
       ({ type }: { type: ChangeType }) => {
