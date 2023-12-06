@@ -91,6 +91,10 @@ const HouseholdAssessments: React.FC<Props> = ({
   const hasDirtyAssessments = Object.values(formStates).some(
     ({ dirty }) => dirty
   );
+  const hasErrorAssessments = Object.values(formStates).some(
+    ({ errors }) => errors
+  );
+
   const hasInflights = Object.values(formStates).some(({ saving }) => saving);
 
   const [householdMembers, fetchMembersStatus] = useHouseholdMembers(
@@ -144,11 +148,7 @@ const HouseholdAssessments: React.FC<Props> = ({
             assessmentInProgress,
             assessmentSubmitted: !!assessmentId && !assessmentInProgress,
             clientId: client.id,
-            client: {
-              id: client.id,
-              dob: client.dob,
-              veteranStatus: client.veteranStatus,
-            },
+            client,
             relationshipToHoH,
             assessmentDate,
             status: status,
@@ -194,17 +194,27 @@ const HouseholdAssessments: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
+    if (!nextTab) return;
+    if (hasErrorAssessments) {
+      setNextTab(undefined); // clear out "next tab" state if there was an error
+      return;
+    }
     if (hasDirtyAssessments) return;
     if (hasInflights) return;
-    if (!nextTab) return;
     if (nextTab === currentTab) return;
-    // TODO: cancel navigation if errors
+
     setCurrentTab(nextTab);
     setNextTab(undefined);
     window.scrollTo(0, 0);
     router.navigate(`${pathname}#${nextTab}`, { replace: true });
-    // console.info('navigating')
-  }, [pathname, nextTab, currentTab, hasDirtyAssessments, hasInflights]);
+  }, [
+    pathname,
+    nextTab,
+    currentTab,
+    hasDirtyAssessments,
+    hasInflights,
+    hasErrorAssessments,
+  ]);
 
   // console.info({hasDirtyAssessments, hasInflights, nextTab, currentTab});
   // console.info(formStates);
