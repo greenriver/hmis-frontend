@@ -9,6 +9,7 @@ import {
 
 import {
   Maybe,
+  RootPermissionsFragment,
   useGetClientPermissionsQuery,
   useGetProjectPermissionsQuery,
   useGetRootPermissionsQuery,
@@ -113,5 +114,9 @@ export const useHasRootPermissions = (
 export const useRootPermissions = () => {
   const rootData = useGetRootPermissionsQuery();
 
-  return useMemo(() => [rootData?.data?.access, rootData] as const, [rootData]);
+  const access: RootPermissionsFragment | undefined = useMemo(
+    () => rootData?.data?.access,
+    [rootData]
+  );
+  return [access, rootData] as const;
 };

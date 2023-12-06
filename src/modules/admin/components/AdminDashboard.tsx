@@ -9,8 +9,10 @@ import {
   useDashboardBreadcrumbs,
 } from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
 import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
+import { firstNavItemWithAccess } from '@/components/layout/dashboard/sideNav/navUtil';
 import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
+import NotFound from '@/components/pages/NotFound';
 import { useDashboardState } from '@/hooks/useDashboardState';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { AdminDashboardRoutes } from '@/routes/routes';
@@ -27,54 +29,40 @@ const ProjectNavHeader: React.FC = () => {
   );
 };
 
-type RootPermission = keyof Omit<RootPermissionsFragment, 'id' | '__typename'>;
-type AdminPageConfig = NavItem & {
-  permissions: RootPermission[];
-  permissionMode?: 'any' | 'all';
-};
-
-const adminPages: AdminPageConfig[] = [
+const navItems: NavItem<RootPermissionsFragment>[] = [
   {
-    id: 'users',
-    title: 'Users',
-    path: AdminDashboardRoutes.USERS,
-    permissions: ['canImpersonateUsers', 'canAuditUsers'],
-    permissionMode: 'any',
-  },
-  {
-    id: 'denials',
-    title: 'Denials',
-    path: AdminDashboardRoutes.AC_DENIALS,
-    permissions: ['canManageDeniedReferrals'],
-  },
-  {
-    id: 'merge-clients',
-    title: 'Client Merge History',
-    path: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
-    permissions: ['canMergeClients'],
+    id: 'admin-nav',
+    type: 'category',
+    items: [
+      {
+        id: 'users',
+        title: 'Users',
+        path: AdminDashboardRoutes.USERS,
+        permissions: ['canImpersonateUsers', 'canAuditUsers'],
+        permissionMode: 'any',
+      },
+      {
+        id: 'denials',
+        title: 'Denials',
+        path: AdminDashboardRoutes.AC_DENIALS,
+        permissions: ['canManageDeniedReferrals'],
+      },
+      {
+        id: 'merge-clients',
+        title: 'Client Merge History',
+        path: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
+        permissions: ['canMergeClients'],
+      },
+    ],
   },
 ];
-
-function canAccessPage(access: RootPermissionsFragment, page: AdminPageConfig) {
-  if (page.permissions.length === 0) {
-    return true;
-  }
-  if (page.permissionMode === 'any') {
-    return page.permissions.some((perm) => access[perm]);
-  }
-
-  return page.permissions.every((perm) => access[perm]);
-}
 
 // redirect to whichever admin page that the user has access to
 export const AdminLandingPage = () => {
   const [access, { loading, error }] = useRootPermissions();
 
   const pageWithAccess = useMemo(
-    () =>
-      adminPages.find(
-        (page) => access && canAccessPage(access, page) && page.path
-      ),
+    () => (access ? firstNavItemWithAccess(navItems, access) : undefined),
     [access]
   );
 
@@ -92,30 +80,22 @@ export const AdminLandingPage = () => {
 
 const AdminDashboard: React.FC = () => {
   const [access] = useRootPermissions();
-
-  const navItems: NavItem[] = useMemo(() => {
-    return [
-      {
-        id: 'admin-nav',
-        type: 'category',
-        items: adminPages.map((page) => ({
-          ...page,
-          hide: !access || !canAccessPage(access, page),
-        })),
-      },
-    ];
-  }, [access]);
-
   const dashboardState = useDashboardState();
-
   const breadCrumbConfig = useAdminBreadcrumbConfig();
   const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
+
+  if (!access) return <NotFound />;
 
   return (
     <DashboardContentContainer
       navHeader={<ProjectNavHeader />}
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
-      sidebar={<SideNavMenu items={navItems} />}
+      sidebar={
+        <SideNavMenu<RootPermissionsFragment>
+          items={navItems}
+          access={access}
+        />
+      }
       {...dashboardState}
     >
       <Container maxWidth='lg' sx={{ pb: 6 }}>

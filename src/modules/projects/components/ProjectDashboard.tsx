@@ -15,7 +15,6 @@ import {
 } from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
 import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
 import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
-import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import NotFound from '@/components/pages/NotFound';
 import { useDashboardState } from '@/hooks/useDashboardState';
 import useIsPrintView from '@/hooks/useIsPrintView';
@@ -70,7 +69,7 @@ const ProjectDashboard: React.FC = () => {
   const params = useSafeParams() as { projectId: string };
   const { project, loading } = useDetailedProject(params.projectId);
   const isPrint = useIsPrintView();
-  const navItems: NavItem[] = useProjectDashboardNavItems(project);
+  const navItems = useProjectDashboardNavItems(project);
   const dashboardState = useDashboardState();
   const outletContext: ProjectDashboardContext | undefined = useMemo(
     () => (project ? { project } : undefined),
@@ -94,10 +93,14 @@ const ProjectDashboard: React.FC = () => {
   return (
     <DashboardContentContainer
       navHeader={<ProjectNavHeader project={project} />}
-      // TODO add back to standardize headers
-      // header={header}
       navLabel='Project'
-      sidebar={<SideNavMenu items={navItems} />}
+      sidebar={
+        <SideNavMenu
+          items={navItems}
+          access={project.access}
+          pathParams={{ projectId: project.id }}
+        />
+      }
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       {...dashboardState}
     >

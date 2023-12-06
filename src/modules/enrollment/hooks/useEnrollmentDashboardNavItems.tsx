@@ -3,22 +3,14 @@ import { useMemo } from 'react';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  AllEnrollmentDetailsFragment,
   DataCollectionFeatureRole,
+  EnrollmentAccessFieldsFragment,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useEnrollmentDashboardNavItems = (
-  enabledFeatures: DataCollectionFeatureRole[],
-  enrollment?: AllEnrollmentDetailsFragment
+  enabledFeatures: DataCollectionFeatureRole[]
 ) => {
-  const navItems: NavItem[] = useMemo(() => {
-    if (!enrollment) return [];
-    const params = {
-      clientId: enrollment.client.id,
-      enrollmentId: enrollment.id,
-    };
-
+  const navItems: NavItem<EnrollmentAccessFieldsFragment>[] = useMemo(() => {
     return [
       {
         id: 'enrollment-nav',
@@ -73,13 +65,10 @@ export const useEnrollmentDashboardNavItems = (
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
             hide: !enabledFeatures.includes(DataCollectionFeatureRole.CaseNote),
           },
-        ].map(({ path, ...rest }) => ({
-          path: generateSafePath(path, params),
-          ...rest,
-        })),
+        ],
       },
     ];
-  }, [enabledFeatures, enrollment]);
+  }, [enabledFeatures]);
 
   return navItems;
 };
