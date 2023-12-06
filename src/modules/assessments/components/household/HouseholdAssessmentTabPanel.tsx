@@ -150,7 +150,7 @@ const HouseholdAssessmentTabPanel = memo(
       });
 
     // disabling nav buttons while loading, and if there are errors
-    const disableNavigation = mutationLoading || formState.errors 
+    const disableNavigation = mutationLoading || formState.errors;
 
     const FormActionProps = useMemo(() => {
       const config: NonNullable<FormActionProps['config']> = [];
