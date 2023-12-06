@@ -4934,6 +4934,7 @@ export type QueryAccess = {
   canAdministerHmis: Scalars['Boolean']['output'];
   canAuditClients: Scalars['Boolean']['output'];
   canAuditUsers: Scalars['Boolean']['output'];
+  canConfigureDataCollection: Scalars['Boolean']['output'];
   canDeleteAssessments: Scalars['Boolean']['output'];
   canDeleteClients: Scalars['Boolean']['output'];
   canDeleteEnrollments: Scalars['Boolean']['output'];
@@ -6616,6 +6617,7 @@ export type RootPermissionsFragment = {
   canMergeClients: boolean;
   canTransferEnrollments: boolean;
   canSplitHouseholds: boolean;
+  canConfigureDataCollection: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -6715,6 +6717,7 @@ export type GetRootPermissionsQuery = {
     canMergeClients: boolean;
     canTransferEnrollments: boolean;
     canSplitHouseholds: boolean;
+    canConfigureDataCollection: boolean;
   };
 };
 
@@ -22147,6 +22150,7 @@ export const RootPermissionsFragmentDoc = gql`
     canMergeClients
     canTransferEnrollments
     canSplitHouseholds
+    canConfigureDataCollection
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`

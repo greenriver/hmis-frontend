@@ -55,6 +55,25 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
       },
     ],
   },
+  {
+    id: 'admin',
+    title: 'Admin',
+    type: 'category',
+    items: [
+      {
+        id: 'services',
+        title: 'Services',
+        path: AdminDashboardRoutes.CONFIGURE_SERVICES,
+        permissions: ['canConfigureDataCollection'],
+      },
+      {
+        id: 'forms',
+        title: 'Form Rules',
+        path: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
+        permissions: ['canConfigureDataCollection'],
+      },
+    ],
+  },
 ];
 
 // redirect to whichever admin page that the user has access to
