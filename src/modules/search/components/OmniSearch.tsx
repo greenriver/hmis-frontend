@@ -31,7 +31,7 @@ import {
   useOmniSearchClientsQuery,
   useOmniSearchProjectsQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const MAX_RECENT_ITEMS = 6;
 const MAX_CLIENT_RESULTS = 6;

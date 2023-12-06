@@ -35,7 +35,7 @@ import {
   getSchemaForType,
 } from '@/modules/hmis/hmisUtil';
 
-const DEFAULT_ROWS_PER_PAGE = 10;
+const DEFAULT_ROWS_PER_PAGE = 25;
 
 export type TableFilterType<T> = Partial<Record<keyof T, FilterType<T>>>;
 

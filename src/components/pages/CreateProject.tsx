@@ -11,7 +11,7 @@ import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationC
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { FormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const CreateProject = () => {
   const navigate = useNavigate();

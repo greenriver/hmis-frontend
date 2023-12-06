@@ -1,5 +1,5 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Button, Divider, Menu, MenuItem } from '@mui/material';
+import { Button, ButtonProps, Divider, Menu, MenuItem } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { To } from 'react-router-dom';
 
@@ -8,16 +8,19 @@ import RouterLink from './RouterLink';
 export type NavMenuItem = {
   key: string;
   to?: To;
+  onClick?: VoidFunction;
   title?: ReactNode;
   divider?: boolean;
+  disabled?: boolean;
 };
 
 interface Props {
   title: ReactNode;
   items: NavMenuItem[];
+  variant?: ButtonProps['variant'];
 }
 
-const CommonMenuButton = ({ title, items }: Props) => {
+const CommonMenuButton = ({ title, items, variant }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -35,6 +38,7 @@ const CommonMenuButton = ({ title, items }: Props) => {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         endIcon={<ArrowDropDownIcon />}
+        variant={variant}
       >
         {title}
       </Button>
@@ -55,14 +59,18 @@ const CommonMenuButton = ({ title, items }: Props) => {
           horizontal: 'right',
         }}
       >
-        {items.map(({ key, to, title, divider }) =>
+        {items.map(({ key, to, title, divider, onClick, disabled }) =>
           divider ? (
             <Divider key={key} />
-          ) : (
+          ) : to ? (
             <MenuItem key={key}>
-              <RouterLink to={to} plain>
+              <RouterLink to={to} plain disabled={disabled}>
                 {title}
               </RouterLink>
+            </MenuItem>
+          ) : (
+            <MenuItem key={key} onClick={onClick} disabled={disabled}>
+              {title}
             </MenuItem>
           )
         )}

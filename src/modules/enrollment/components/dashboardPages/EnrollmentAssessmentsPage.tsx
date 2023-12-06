@@ -1,91 +1,84 @@
-import { useCallback } from 'react';
-
+import PeopleIcon from '@mui/icons-material/People';
+import PersonIcon from '@mui/icons-material/Person';
+import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { useCallback, useState } from 'react';
 import EnrollmentAssessmentActionButtons from '../EnrollmentAssessmentActionButtons';
-import { ColumnDef } from '@/components/elements/table/types';
+import EnrollmentAssessmentsTable from '../EnrollmentAssessmentsTable';
+import HouseholdAssessmentsTable from '../HouseholdAssessmentsTable';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
-import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
-import {
-  clientBriefName,
-  formRoleDisplay,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import {
-  AssessmentFieldsFragment,
-  GetEnrollmentAssessmentsDocument,
-  GetEnrollmentAssessmentsQuery,
-  GetEnrollmentAssessmentsQueryVariables,
-} from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 
-// FIXME: share configuration with AllAssesments component
-const columns: ColumnDef<AssessmentFieldsFragment>[] = [
-  {
-    header: 'Assessment Date',
-    render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
-  },
-  {
-    header: 'Assessment Type',
-    render: (assessment) => formRoleDisplay(assessment),
-    linkTreatment: true,
-  },
-  {
-    header: 'Last Updated',
-    render: (e) =>
-      `${
-        e.dateUpdated ? parseAndFormatDateTime(e.dateUpdated) : 'Unknown Date'
-      } by ${e.user?.name || 'Unknown User'}`,
-  },
-];
+type Mode = 'current_client' | 'household';
 
 const AssessmentsTable = () => {
   const { enrollment } = useEnrollmentDashboardContext();
+  const [mode, setMode] = useState<Mode>('current_client');
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
-  const rowLinkTo = useCallback(
-    (assessment: AssessmentFieldsFragment) =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-        clientId,
-        enrollmentId,
-        assessmentId: assessment.id,
-        formRole: assessment.role,
-      }),
-    [clientId, enrollmentId]
+  const onChangeMode = useCallback(
+    (event: React.MouseEvent<HTMLElement>, value: Mode) =>
+      value && setMode(value),
+    []
   );
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   return (
     <TitleCard
-      title={`${
-        enrollment.householdSize > 1 ? clientBriefName(enrollment.client) : ''
-      } Assessments`}
+      title={
+        mode === 'current_client'
+          ? `${clientBriefName(enrollment.client)} Assessments`
+          : 'Household Assessments'
+      }
       actions={
-        enrollment.access.canEditEnrollments && (
-          <EnrollmentAssessmentActionButtons enrollment={enrollment} />
-        )
+        <Stack direction='row' gap={4}>
+          {enrollment.householdSize > 1 && (
+            <ToggleButtonGroup
+              value={mode}
+              exclusive
+              onChange={onChangeMode}
+              aria-label='view assessments by'
+            >
+              <ToggleButton
+                value='current_client'
+                aria-label='Assessments for Client'
+                size='small'
+                sx={{ px: 2 }}
+              >
+                <PersonIcon fontSize='small' sx={{ mr: 0.5 }} />
+                Client
+              </ToggleButton>
+              <ToggleButton
+                value='household'
+                aria-label='Assessments for Household'
+                size='small'
+                sx={{ px: 2 }}
+              >
+                <PeopleIcon fontSize='small' sx={{ mr: 0.5 }} />
+                Household
+              </ToggleButton>
+            </ToggleButtonGroup>
+          )}
+
+          {enrollment.access.canEditEnrollments && (
+            <EnrollmentAssessmentActionButtons enrollment={enrollment} />
+          )}
+        </Stack>
       }
       headerVariant='border'
       data-testid='enrollmentAssessmentsCard'
     >
-      <GenericTableWithData<
-        GetEnrollmentAssessmentsQuery,
-        GetEnrollmentAssessmentsQueryVariables,
-        AssessmentFieldsFragment
-      >
-        showFilters
-        queryVariables={{ id: enrollmentId }}
-        queryDocument={GetEnrollmentAssessmentsDocument}
-        rowLinkTo={rowLinkTo}
-        columns={columns}
-        pagePath='enrollment.assessments'
-        noData='No assessments'
-        recordType='Assessment'
-        headerCellSx={() => ({ color: 'text.secondary' })}
-      />
+      {mode === 'current_client' && (
+        <EnrollmentAssessmentsTable
+          enrollmentId={enrollmentId}
+          clientId={clientId}
+        />
+      )}
+      {mode === 'household' && (
+        <HouseholdAssessmentsTable householdId={enrollment.householdId} />
+      )}
     </TitleCard>
   );
 };

@@ -1,4 +1,3 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Alert, AlertTitle, Box, Grid, Typography } from '@mui/material';
 import { keyBy, mapValues, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
@@ -20,7 +19,7 @@ import {
   tabPanelA11yProps,
 } from './util';
 
-import ButtonLink from '@/components/elements/ButtonLink';
+import BackButton from '@/components/elements/BackButton';
 import LoadingButton from '@/components/elements/LoadingButton';
 import TitleCard from '@/components/elements/TitleCard';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -42,7 +41,7 @@ import {
   useSubmitHouseholdAssessmentsMutation,
   VersionedRecordInput,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface HouseholdSummaryTabPanelProps {
   active: boolean;
@@ -209,15 +208,11 @@ const HouseholdSummaryTabPanel = memo(
                 </LoadingButton>
               </Box>
             </TitleCard>
-            {(submitResponseData || allSubmitted) && (
-              <ButtonLink
-                startIcon={<ArrowBackIcon />}
-                variant='contained'
-                sx={{ my: 4, px: 4 }}
-                to={enrollmentPath}
-              >
+            {(submitResponseData?.submitHouseholdAssessments?.assessments ||
+              allSubmitted) && (
+              <BackButton sx={{ my: 4 }} to={enrollmentPath}>
                 Back to Enrollment
-              </ButtonLink>
+              </BackButton>
             )}
           </Grid>
         </Grid>

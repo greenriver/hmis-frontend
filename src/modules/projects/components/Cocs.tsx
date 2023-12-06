@@ -7,7 +7,7 @@ import ProjectCocTable from './tables/ProjectCocTable';
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 const Cocs = () => {
   const { project } = useProjectDashboardContext();
 

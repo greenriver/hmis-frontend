@@ -10,7 +10,7 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { FormRole, ReferralRequestFieldsFragment } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const NewReferralRequest: React.FC = () => {
   const navigate = useNavigate();

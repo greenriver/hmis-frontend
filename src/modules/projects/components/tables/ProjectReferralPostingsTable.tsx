@@ -14,7 +14,7 @@ import {
   GetProjectReferralPostingsQueryVariables,
   ReferralPostingFieldsFragment,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {

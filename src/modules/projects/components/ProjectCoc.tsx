@@ -19,7 +19,7 @@ import {
   ProjectCocFieldsFragment,
   useGetProjectCocQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();

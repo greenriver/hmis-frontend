@@ -1,8 +1,11 @@
-import { Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
-import { sendSessionKeepalive } from '@/modules/auth/api/sessions';
+import {
+  resetLocalSession,
+  sendSessionKeepalive,
+} from '@/modules/auth/api/sessions';
 import { HmisSessionProps } from '@/modules/auth/hooks/useSessionStatus';
 import { reloadWindow } from '@/utils/location';
 
@@ -11,6 +14,12 @@ const SessionStatusManager: React.FC<HmisSessionProps> = ({
   promptToExtend,
 }) => {
   const [loading, setLoading] = useState(false);
+
+  const handleResetSession = useCallback(() => {
+    setLoading(true);
+    resetLocalSession();
+    reloadWindow();
+  }, []);
 
   // user clicks "Keep me signed in"
   const handleKeepAlive = useCallback(() => {
@@ -57,9 +66,19 @@ const SessionStatusManager: React.FC<HmisSessionProps> = ({
           maxWidth='sm'
           fullWidth
         >
-          <Typography>
-            You may have signed out in another window. Click OK to log in again.
-          </Typography>
+          <>
+            <Typography sx={{ mb: 2 }}>
+              You may have signed out in another window. Click OK to log in
+              again.
+            </Typography>
+            <Typography component='div'>
+              Having trouble?
+              <br />
+              <Link component='button' onClick={handleResetSession}>
+                Reset your session
+              </Link>
+            </Typography>
+          </>
         </ConfirmationDialog>
       );
     case 'expired':

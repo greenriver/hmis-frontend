@@ -58,6 +58,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
+      { name: 'email', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'id',
         type: {
@@ -4149,6 +4150,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canImpersonateUsers',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageAnyClientFiles',
         type: {
           kind: 'NON_NULL',
@@ -5004,6 +5013,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ApplicationUserFilterOptions',
+    args: [
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'AssessmentFilterOptions',
     args: [
       {
@@ -5089,6 +5107,40 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'AssessmentsForEnrollmentFilterOptions',
+    args: [
+      {
+        name: 'type',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'AssessmentsForHouseholdFilterOptions',
+    args: [
+      {
+        name: 'type',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+          },
         },
       },
     ],
@@ -5566,6 +5618,22 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'EnrollmentsForClientFilterOptions',
     args: [
       {
+        name: 'householdTasks',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'EnrollmentFilterOptionHouseholdTask',
+              ofType: null,
+            },
+          },
+        },
+      },
+      {
         name: 'openOnDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
@@ -5605,6 +5673,22 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'bedNightOnDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'householdTasks',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'EnrollmentFilterOptionHouseholdTask',
+              ofType: null,
+            },
+          },
+        },
       },
       {
         name: 'openOnDate',

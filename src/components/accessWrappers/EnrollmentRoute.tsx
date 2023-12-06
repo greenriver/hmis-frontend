@@ -5,7 +5,7 @@ import NotFound from '../pages/NotFound';
 
 import { EnrollmentPermissions } from '@/modules/permissions/types';
 import { useHasPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 /**
  * Permission wrapper to be used for outlets of the EnrollmentDashboard

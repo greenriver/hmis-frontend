@@ -11,7 +11,7 @@ import {
   GetDeniedPendingReferralPostingsQueryVariables,
   ReferralPostingFieldsFragment,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const rowLinkTo = (row: ReferralPostingFieldsFragment): string => {
   return generateSafePath(AdminDashboardRoutes.AC_DENIAL_DETAILS, {

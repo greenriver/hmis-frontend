@@ -2,6 +2,7 @@ import { Button, Chip, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import pluralize from 'pluralize';
 import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import ExternalLink from '@/components/elements/ExternalLink';
@@ -17,6 +18,7 @@ import {
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetMergeCandidatesDocument,
   GetMergeCandidatesQuery,
@@ -101,10 +103,13 @@ const ClientMergeCandidatesTable: React.FC = () => {
     []
   );
 
+  const navigate = useNavigate();
+
   const [bulkMergeClients, { error, loading }] = useBulkMergeClientsMutation({
     onCompleted: () => {
       setMergesToApply([]);
       evictQuery('mergeCandidates');
+      navigate(AdminDashboardRoutes.CLIENT_MERGE_HISTORY);
     },
   });
 
@@ -133,7 +138,7 @@ const ClientMergeCandidatesTable: React.FC = () => {
           noData='No potential duplicates found'
           selectable='checkbox'
           EnhancedTableToolbarProps={{
-            title: 'Candidates for Merge',
+            title: 'Candidates for Review',
             renderBulkAction: (_selectedWarehouseIds, selectedRows) => (
               <Button onClick={() => setMergesToApply(selectedRows)}>
                 {`Perform (${selectedRows.length}) Merge${

@@ -9,14 +9,14 @@ import {
   EnrollmentDashboardRoutes,
 } from '@/routes/routes';
 import {
-  AssessmentFieldsFragment,
   AssessmentRole,
   DeleteAssessmentDocument,
   DeleteAssessmentMutation,
   DeleteAssessmentMutationVariables,
+  FullAssessmentFragment,
 } from '@/types/gqlTypes';
 import { evictDeletedEnrollment } from '@/utils/cacheUtil';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const DeleteAssessmentButton = ({
   assessment,
@@ -24,7 +24,7 @@ const DeleteAssessmentButton = ({
   onSuccess,
   enrollmentId,
 }: {
-  assessment: AssessmentFieldsFragment;
+  assessment: FullAssessmentFragment;
   clientId: string;
   enrollmentId: string;
   onSuccess?: VoidFunction;

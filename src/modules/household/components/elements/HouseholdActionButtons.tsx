@@ -11,7 +11,7 @@ import {
   AssessmentRole,
   HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   householdMembers: HouseholdClientFieldsFragment[];

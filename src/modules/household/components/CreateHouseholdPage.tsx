@@ -1,13 +1,11 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
 import { useMemo } from 'react';
 import ManageHousehold from './ManageHousehold';
-import ButtonLink from '@/components/elements/ButtonLink';
+import BackButton from '@/components/elements/BackButton';
 import PageTitle from '@/components/layout/PageTitle';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import generateSafePath from '@/utils/generateSafePath';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const CreateHouseholdPage = () => {
   const { project } = useProjectDashboardContext();
@@ -37,17 +35,7 @@ const CreateHouseholdPage = () => {
       <PageTitle title={`Enroll Household in ${project.projectName}`} />
       <ManageHousehold
         projectId={project.id}
-        BackButton={
-          <ButtonLink
-            startIcon={<ArrowBackIcon />}
-            variant='gray'
-            size='small'
-            sx={{ width: 'fit-content' }}
-            to={buttonPath}
-          >
-            {buttonText}
-          </ButtonLink>
-        }
+        BackButton={<BackButton to={buttonPath}>{buttonText}</BackButton>}
       />
     </>
   );
