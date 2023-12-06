@@ -1,6 +1,13 @@
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Box, Collapse, IconButton, lighten, Link } from '@mui/material';
-import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 
 import { NavItem } from './types';
 import { useItemSelectionStatus } from './useItemSelectionStatus';
@@ -8,24 +15,23 @@ import { useItemSelectionStatus } from './useItemSelectionStatus';
 import RouterLink from '@/components/elements/RouterLink';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
-export type ItemBaseProps = {
-  item: NavItem;
+export type ItemBaseProps<T> = {
+  item: NavItem<T>;
   collapsible?: boolean; // whether children can be collapsed
-  renderTitle?: (title: NavItem['title']) => React.ReactNode;
-  renderChild?: (item: NavItem) => React.ReactNode;
+  renderTitle?: (title: ReactNode) => ReactNode;
+  renderChild?: (item: NavItem<T>) => ReactNode;
   itemIndent?: number;
 };
 
-const defaultRenderTitle: NonNullable<ItemBaseProps['renderTitle']> = (title) =>
-  title;
+const defaultRenderTitle = (title: ReactNode) => title;
 
-const ItemBase = ({
+const ItemBase = <T extends object>({
   item,
   collapsible = false,
   itemIndent = 0,
   renderTitle = defaultRenderTitle,
   renderChild,
-}: ItemBaseProps) => {
+}: ItemBaseProps<T>) => {
   const htmlId = useId();
   const { isSelected, childItems, hasChildItems } = useItemSelectionStatus({
     item,
