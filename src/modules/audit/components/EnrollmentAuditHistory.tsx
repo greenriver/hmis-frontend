@@ -77,6 +77,7 @@ const columns: ColumnDef<AuditHistoryType>[] = [
         <ContextualCollapsibleList title={labels.join(', ')}>
           <AuditObjectChangesSummary
             objectChanges={e.objectChanges as ObjectChangesType}
+            recordType={e.graphqlType}
           />
         </ContextualCollapsibleList>
       );

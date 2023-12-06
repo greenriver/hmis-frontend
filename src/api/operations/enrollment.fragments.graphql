@@ -267,6 +267,7 @@ fragment EnrollmentAuditEventFields on EnrollmentAuditEvent {
   event
   objectChanges
   recordName
+  graphqlType
   recordId
   user {
     id

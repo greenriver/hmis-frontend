@@ -18,6 +18,7 @@ export type ObjectChangesType = {
 
 interface Props {
   objectChanges: ObjectChangesType;
+  recordType: string;
 }
 
 const nullText = (
@@ -43,7 +44,10 @@ const changedText = (
 /**
  * Simple table for displaying "objectChanges" from an Audit Event object
  */
-const AuditObjectChangesSummary: React.FC<Props> = ({ objectChanges }) => {
+const AuditObjectChangesSummary: React.FC<Props> = ({
+  objectChanges,
+  recordType,
+}) => {
   return (
     <SimpleTable
       TableCellProps={{
@@ -78,7 +82,7 @@ const AuditObjectChangesSummary: React.FC<Props> = ({ objectChanges }) => {
                   key={fieldName}
                   record={{ ...objectChanges, [fieldName]: val }}
                   fieldName={fieldName}
-                  recordType='Client'
+                  recordType={recordType}
                 />
               )
             );

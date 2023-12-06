@@ -664,6 +664,7 @@ export type ClientAuditEvent = {
   __typename?: 'ClientAuditEvent';
   createdAt: Scalars['ISO8601DateTime']['output'];
   event: AuditEventType;
+  graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
@@ -2068,6 +2069,7 @@ export type EnrollmentAuditEvent = {
   __typename?: 'EnrollmentAuditEvent';
   createdAt: Scalars['ISO8601DateTime']['output'];
   event: AuditEventType;
+  graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
@@ -11247,6 +11249,7 @@ export type ClientAuditEventFieldsFragment = {
   event: AuditEventType;
   objectChanges?: any | null;
   recordName: string;
+  graphqlType: string;
   recordId: string;
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
 };
@@ -11611,6 +11614,7 @@ export type GetClientAuditEventsQuery = {
         event: AuditEventType;
         objectChanges?: any | null;
         recordName: string;
+        graphqlType: string;
         recordId: string;
         user?: {
           __typename?: 'ApplicationUser';
@@ -13795,6 +13799,7 @@ export type EnrollmentAuditEventFieldsFragment = {
   event: AuditEventType;
   objectChanges?: any | null;
   recordName: string;
+  graphqlType: string;
   recordId: string;
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
 };
@@ -14778,6 +14783,7 @@ export type GetEnrollmentAuditEventsQuery = {
         event: AuditEventType;
         objectChanges?: any | null;
         recordName: string;
+        graphqlType: string;
         recordId: string;
         user?: {
           __typename?: 'ApplicationUser';
@@ -14972,6 +14978,25 @@ export type DeleteCurrentLivingSituationMutation = {
       section?: string | null;
       data?: any | null;
     }>;
+  } | null;
+};
+
+export type GetEnrollmentPermissionsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetEnrollmentPermissionsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+      canAuditEnrollments: boolean;
+    };
   } | null;
 };
 
@@ -22937,6 +22962,7 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
     event
     objectChanges
     recordName
+    graphqlType
     recordId
     user {
       id
@@ -23368,6 +23394,7 @@ export const EnrollmentAuditEventFieldsFragmentDoc = gql`
     event
     objectChanges
     recordName
+    graphqlType
     recordId
     user {
       id
@@ -27163,6 +27190,68 @@ export type DeleteCurrentLivingSituationMutationOptions =
     DeleteCurrentLivingSituationMutation,
     DeleteCurrentLivingSituationMutationVariables
   >;
+export const GetEnrollmentPermissionsDocument = gql`
+  query GetEnrollmentPermissions($id: ID!) {
+    enrollment(id: $id) {
+      id
+      access {
+        ...EnrollmentAccessFields
+      }
+    }
+  }
+  ${EnrollmentAccessFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentPermissionsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentPermissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentPermissionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentPermissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentPermissionsQuery,
+    GetEnrollmentPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentPermissionsQuery,
+    GetEnrollmentPermissionsQueryVariables
+  >(GetEnrollmentPermissionsDocument, options);
+}
+export function useGetEnrollmentPermissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentPermissionsQuery,
+    GetEnrollmentPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentPermissionsQuery,
+    GetEnrollmentPermissionsQueryVariables
+  >(GetEnrollmentPermissionsDocument, options);
+}
+export type GetEnrollmentPermissionsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentPermissionsQuery
+>;
+export type GetEnrollmentPermissionsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentPermissionsLazyQuery
+>;
+export type GetEnrollmentPermissionsQueryResult = Apollo.QueryResult<
+  GetEnrollmentPermissionsQuery,
+  GetEnrollmentPermissionsQueryVariables
+>;
 export const GetPickListDocument = gql`
   query GetPickList(
     $pickListType: PickListType!
