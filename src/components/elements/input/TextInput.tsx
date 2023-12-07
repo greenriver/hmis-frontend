@@ -94,7 +94,7 @@ const TextInput = ({
         sx: {
           transform: 'none',
           color: 'text.primary',
-          typography: 'body2',
+          typography: props.size === 'medium' ? 'body1' : 'body2',
           position: 'relative',
           whiteSpace: 'break-spaces',
           display: 'flex',

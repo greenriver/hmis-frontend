@@ -1,5 +1,9 @@
-import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
-import { AssessmentRole, FormRole, RelationshipToHoH } from '@/types/gqlTypes';
+import {
+  AssessmentRole,
+  ClientNameDobVetFragment,
+  FormRole,
+  RelationshipToHoH,
+} from '@/types/gqlTypes';
 
 export enum AssessmentStatus {
   NotStarted,
@@ -32,7 +36,7 @@ export function isHouseholdAssesmentRole(
 export type TabDefinition = {
   id: string;
   clientName: string;
-  client: ClientNameDobVeteranFields;
+  client: ClientNameDobVetFragment;
   clientId: string;
   enrollmentId: string;
   entryOrExitCompleted?: boolean;

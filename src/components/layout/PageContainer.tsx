@@ -15,8 +15,9 @@ const PageContainer = ({
     <Stack
       spacing={2}
       direction='row'
-      justifyContent={'space-between'}
+      justifyContent='space-between'
       sx={{ mb: 4 }}
+      alignItems='center'
     >
       <Typography variant='h3'>{title}</Typography>
       {actions}

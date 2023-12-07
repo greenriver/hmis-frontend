@@ -129,6 +129,7 @@ const HouseholdSummaryTabPanel = memo(
           )
           .filter((i): i is VersionedRecordInput => !!i);
 
+        setErrors(emptyErrorState);
         submitMutation({
           variables: {
             input: {
