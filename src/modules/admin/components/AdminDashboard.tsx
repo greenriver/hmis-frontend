@@ -35,17 +35,17 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
     type: 'category',
     items: [
       {
+        id: 'denials',
+        title: 'Denials',
+        path: AdminDashboardRoutes.AC_DENIALS,
+        permissions: ['canManageDeniedReferrals'],
+      },
+      {
         id: 'users',
         title: 'Users',
         path: AdminDashboardRoutes.USERS,
         permissions: ['canImpersonateUsers', 'canAuditUsers'],
         permissionMode: 'any',
-      },
-      {
-        id: 'denials',
-        title: 'Denials',
-        path: AdminDashboardRoutes.AC_DENIALS,
-        permissions: ['canManageDeniedReferrals'],
       },
       {
         id: 'merge-clients',
@@ -61,15 +61,15 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
     type: 'category',
     items: [
       {
-        id: 'services',
-        title: 'Services',
-        path: AdminDashboardRoutes.CONFIGURE_SERVICES,
-        permissions: ['canConfigureDataCollection'],
-      },
-      {
         id: 'forms',
         title: 'Form Rules',
         path: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
+        permissions: ['canConfigureDataCollection'],
+      },
+      {
+        id: 'services',
+        title: 'Services',
+        path: AdminDashboardRoutes.CONFIGURE_SERVICES,
         permissions: ['canConfigureDataCollection'],
       },
     ],
