@@ -89,11 +89,11 @@ const AuditObjectChangesSummary: React.FC<Props> = ({
 
             return (
               <Stack gap={1} direction='row' alignItems='center'>
-                <Typography variant='body2'>
+                <Typography variant='body2' component='div'>
                   {isNil(from) ? nullText : from}
                 </Typography>
                 <ArrowForwardIcon fontSize='inherit' />
-                <Typography variant='body2'>
+                <Typography variant='body2' component='div'>
                   {isNil(to) ? nullText : to}
                 </Typography>
               </Stack>

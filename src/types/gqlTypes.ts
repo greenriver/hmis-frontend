@@ -330,6 +330,11 @@ export enum Availability {
   YearRound = 'YEAR_ROUND',
 }
 
+export type BaseAuditEventFilterOptions = {
+  auditEventRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  userId?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 /** 2.07.5 */
 export enum BedType {
   /** (1) Facility-based */
@@ -520,6 +525,7 @@ export type ClientAssessmentsArgs = {
 
 /** HUD Client */
 export type ClientAuditHistoryArgs = {
+  filters?: InputMaybe<BaseAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1980,6 +1986,7 @@ export type EnrollmentAssessmentsArgs = {
 
 /** HUD Enrollment */
 export type EnrollmentAuditHistoryArgs = {
+  filters?: InputMaybe<BaseAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -3761,6 +3768,7 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
+  AuditEventRecordTypes = 'AUDIT_EVENT_RECORD_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Units available for the given household at the given project */
@@ -3793,6 +3801,8 @@ export enum PickListType {
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
+  /** User Accounts */
+  Users = 'USERS',
 }
 
 /** C4.A */
@@ -14764,6 +14774,7 @@ export type GetEnrollmentAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<BaseAuditEventFilterOptions>;
 }>;
 
 export type GetEnrollmentAuditEventsQuery = {
@@ -26758,10 +26769,15 @@ export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentEventsQueryVariables
 >;
 export const GetEnrollmentAuditEventsDocument = gql`
-  query GetEnrollmentAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetEnrollmentAuditEvents(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: BaseAuditEventFilterOptions = null
+  ) {
     enrollment(id: $id) {
       id
-      auditHistory(limit: $limit, offset: $offset) {
+      auditHistory(limit: $limit, offset: $offset, filters: $filters) {
         offset
         limit
         nodesCount
@@ -26789,6 +26805,7 @@ export const GetEnrollmentAuditEventsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

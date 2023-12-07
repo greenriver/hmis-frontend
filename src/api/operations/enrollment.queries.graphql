@@ -41,10 +41,15 @@ query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-query GetEnrollmentAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetEnrollmentAuditEvents(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: BaseAuditEventFilterOptions = null
+) {
   enrollment(id: $id) {
     id
-    auditHistory(limit: $limit, offset: $offset) {
+    auditHistory(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount

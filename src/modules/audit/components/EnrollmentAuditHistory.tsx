@@ -15,6 +15,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { formatDateTimeForDisplay } from '@/modules/hmis/hmisUtil';
 import {
+  BaseAuditEventFilterOptions,
   GetEnrollmentAuditEventsDocument,
   GetEnrollmentAuditEventsQuery,
   GetEnrollmentAuditEventsQueryVariables,
@@ -98,7 +99,8 @@ const EnrollmentAuditHistory = () => {
         <GenericTableWithData<
           GetEnrollmentAuditEventsQuery,
           GetEnrollmentAuditEventsQueryVariables,
-          AuditHistoryType
+          AuditHistoryType,
+          BaseAuditEventFilterOptions
         >
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentAuditEventsDocument}
@@ -108,6 +110,9 @@ const EnrollmentAuditHistory = () => {
           noData='No audit history'
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
+          showFilters
+          recordType='event'
+          filterInputType='BaseAuditEventFilterOptions'
         />
       </Paper>
     </ContextualCollapsibleListsProvider>
