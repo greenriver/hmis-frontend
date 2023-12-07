@@ -71,6 +71,7 @@ export const getInputTypeForRecordType = (
 
 const FILTER_NAME_TO_PICK_LIST = {
   project: PickListType.Project,
+  appliedToProject: PickListType.Project,
   organization: PickListType.Organization,
   serviceType: PickListType.AllServiceTypes,
   serviceCategory: PickListType.AllServiceCategories,

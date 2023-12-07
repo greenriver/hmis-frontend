@@ -1,6 +1,8 @@
+import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/material';
 import ServiceCategoryRuleTable from './ServiceCategoryRuleTable';
 import ServiceTypeTable from './ServiceTypeTable';
+import ButtonLink from '@/components/elements/ButtonLink';
 import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
@@ -21,10 +23,26 @@ const ServiceCategoryDetail = () => {
     <>
       <PageTitle title={data?.serviceCategory?.name} />
       <Stack spacing={4}>
-        <TitleCard title='Applicability Rules' headerVariant='border'>
+        <TitleCard
+          title='Applicability Rules'
+          headerVariant='border'
+          actions={
+            <ButtonLink to='' Icon={AddIcon}>
+              New Rule
+            </ButtonLink>
+          }
+        >
           <ServiceCategoryRuleTable serviceCategoryId={serviceCategoryId} />
         </TitleCard>
-        <TitleCard title='Service Types' headerVariant='border'>
+        <TitleCard
+          title='Service Types'
+          headerVariant='border'
+          actions={
+            <ButtonLink to='' Icon={AddIcon}>
+              New Service Type
+            </ButtonLink>
+          }
+        >
           <ServiceTypeTable serviceCategoryId={serviceCategoryId} />
         </TitleCard>
       </Stack>

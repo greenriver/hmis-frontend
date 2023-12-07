@@ -13,7 +13,6 @@ import {
   ClientDashboardRoutes,
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
-  Routes,
 } from '@/routes/routes';
 
 type CrumbConfig = {
@@ -47,8 +46,8 @@ const buildDefaultCrumbs = (
     | typeof ClientDashboardRoutes
     | typeof ProjectDashboardRoutes
     | typeof AdminDashboardRoutes,
-  defaultParent: string,
-  overrides: CrumbConfig
+  overrides: CrumbConfig,
+  defaultParent?: string
 ) => {
   const defaults: CrumbConfig = {};
   Object.keys(routes).forEach((key) => {
@@ -137,7 +136,7 @@ export const useProjectBreadcrumbConfig = (
       },
     };
     const projectRoot = ProjectDashboardRoutes.OVERVIEW;
-    return buildDefaultCrumbs(ProjectDashboardRoutes, projectRoot, overrides);
+    return buildDefaultCrumbs(ProjectDashboardRoutes, overrides, projectRoot);
   }, [context]);
 };
 
@@ -178,7 +177,7 @@ export const useClientBreadcrumbConfig = (
         parent: ClientDashboardRoutes.FILES,
       },
     };
-    return buildDefaultCrumbs(ClientDashboardRoutes, clientRoot, overrides);
+    return buildDefaultCrumbs(ClientDashboardRoutes, overrides, clientRoot);
   }, [context]);
 };
 
@@ -208,15 +207,15 @@ export const useEnrollmentBreadcrumbConfig = (
     };
     return buildDefaultCrumbs(
       EnrollmentDashboardRoutes,
-      enrollmentRoot,
-      overrides
+      overrides,
+      enrollmentRoot
     );
   }, [context]);
 };
 
 export const useAdminBreadcrumbConfig = (): CrumbConfig => {
   return useMemo(() => {
-    const root = Routes.ADMIN;
+    // const root = Routes.ADMIN;
     const overrides = {
       [AdminDashboardRoutes.AC_DENIAL_DETAILS]: {
         title: 'Manage Denial',
@@ -229,14 +228,22 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Potential Duplicates',
         parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
       },
-      [AdminDashboardRoutes.USERS]: {
-        title: 'Users',
+      [AdminDashboardRoutes.CONFIGURE_SERVICES]: {
+        title: 'Service Categories',
       },
-      [Routes.ADMIN]: {
-        title: 'Admin',
+      [AdminDashboardRoutes.CONFIGURE_SERVICE_CATEGORY]: {
+        parent: AdminDashboardRoutes.CONFIGURE_SERVICES,
+        title: 'View Service Category',
       },
+      [AdminDashboardRoutes.USER_AUDIT]: {
+        parent: AdminDashboardRoutes.USERS,
+        title: 'Audit User',
+      },
+      // [Routes.ADMIN]: {
+      //   title: 'Admin',
+      // },
     };
-    return buildDefaultCrumbs(AdminDashboardRoutes, root, overrides);
+    return buildDefaultCrumbs(AdminDashboardRoutes, overrides);
   }, []);
 };
 

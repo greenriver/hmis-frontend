@@ -25,7 +25,7 @@ const SystemChip = () => (
   />
 );
 
-export const FORM_RULE_COLUMNS: ColumnDef<FormRuleFieldsFragment>[] = [
+const FORM_RULE_COLUMNS: ColumnDef<FormRuleFieldsFragment>[] = [
   {
     header: 'Rule ID',
     render: 'id',
@@ -74,14 +74,6 @@ export const FORM_RULE_COLUMNS: ColumnDef<FormRuleFieldsFragment>[] = [
   },
   // TODO: direct project applicability
   // TODO: direct organization applicability
-  // {
-  //   header: 'Service Applicability',
-  //   render: ({ serviceType, serviceCategory }) => {
-  //     if (serviceCategory) return serviceCategory.name;
-  //     if (serviceType) return `${serviceType.category}: ${serviceType.name}`;
-  //     return 'N/A';
-  //   },
-  // },
 ];
 
 const FormRuleTable = () => {
@@ -99,12 +91,11 @@ const FormRuleTable = () => {
         noData='No form rules'
         showFilters
         recordType='FormRule'
-        // FIXME: fix the project filter for applicability
         filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
         defaultFilters={{
-          activeStatus: ActiveStatus.Active,
-          systemForm: SystemStatus.NonSystem,
+          activeStatus: [ActiveStatus.Active],
+          systemForm: [SystemStatus.NonSystem],
         }}
       />
     </>

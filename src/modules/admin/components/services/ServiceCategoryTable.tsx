@@ -52,18 +52,12 @@ const FormRuleTable = () => {
         noData='No service categories'
         showFilters
         recordType='ServiceCategory'
+        paginationItemName='service category'
         rowLinkTo={(row) =>
           generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_CATEGORY, {
             serviceCategoryId: row.id,
           })
         }
-        // filterInputType='FormRuleFilterOptions'
-        // filters={(filters) => omit(filters, 'forServices', 'serviceCategory')}
-        paginationItemName='service category'
-        // defaultFilters={{
-        //   activeStatus: ActiveStatus.Active,
-        //   systemForm: SystemStatus.NonSystem,
-        // }}
       />
     </>
   );

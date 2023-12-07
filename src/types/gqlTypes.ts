@@ -2570,7 +2570,6 @@ export type FormRuleFilterOptions = {
   appliedToProject?: InputMaybe<Scalars['ID']['input']>;
   formType?: InputMaybe<Array<FormRole>>;
   projectType?: InputMaybe<Array<ProjectType>>;
-  serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
   systemForm?: InputMaybe<Array<SystemStatus>>;
 };
 
@@ -2582,14 +2581,6 @@ export enum FormRuleSortOption {
   /** Form Type */
   FormType = 'FORM_TYPE',
 }
-
-export type FormRulesForServiceCategoryFilterOptions = {
-  activeStatus?: InputMaybe<Array<ActiveStatus>>;
-  appliedToProject?: InputMaybe<Scalars['ID']['input']>;
-  formType?: InputMaybe<Array<FormRole>>;
-  projectType?: InputMaybe<Array<ProjectType>>;
-  systemForm?: InputMaybe<Array<SystemStatus>>;
-};
 
 export type FormRulesPaginated = {
   __typename?: 'FormRulesPaginated';
@@ -5585,7 +5576,7 @@ export type ServiceCategory = {
 };
 
 export type ServiceCategoryFormRulesArgs = {
-  filters?: InputMaybe<FormRulesForServiceCategoryFilterOptions>;
+  filters?: InputMaybe<FormRuleFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<FormRuleSortOption>;
@@ -12722,7 +12713,16 @@ export type GetServiceCategoryTypesQuery = {
       offset: number;
       limit: number;
       nodesCount: number;
-      nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+      nodes: Array<{
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+      }>;
     };
   } | null;
 };
@@ -26823,12 +26823,12 @@ export const GetServiceCategoryTypesDocument = gql`
         limit
         nodesCount
         nodes {
-          id
-          name
+          ...ServiceTypeFields
         }
       }
     }
   }
+  ${ServiceTypeFieldsFragmentDoc}
 `;
 
 /**

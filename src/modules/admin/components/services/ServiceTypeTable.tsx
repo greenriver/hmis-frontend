@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -11,6 +12,15 @@ export const columns: ColumnDef<ServiceTypeFieldsFragment>[] = [
   {
     header: 'Service Type Name',
     render: 'name',
+  },
+  {
+    key: 'actions',
+    textAlign: 'right',
+    render: () => (
+      <Button variant='outlined' size='small'>
+        Edit
+      </Button>
+    ),
   },
 ];
 
@@ -31,10 +41,10 @@ const ServiceTypeTable: React.FC<Props> = ({ serviceCategoryId }) => {
         columns={columns}
         pagePath='serviceCategory.serviceTypes'
         noData='No service types'
-        // showFilters
         recordType='ServiceType'
         paginationItemName='service type'
         defaultPageSize={50} // shouldnt need to paginate
+        // showFilters
         // condensed
         // noFilter
       />

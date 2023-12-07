@@ -56,8 +56,8 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
     ],
   },
   {
-    id: 'admin',
-    title: 'Admin',
+    id: 'config',
+    title: 'Config',
     type: 'category',
     items: [
       {
