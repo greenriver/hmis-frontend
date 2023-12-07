@@ -4808,6 +4808,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
+        name: 'hud',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -4847,6 +4855,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'dateUpdated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'hud',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
       {
         name: 'hudRecordType',
@@ -5919,15 +5935,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     args: [
       {
         name: 'activeStatus',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
+          },
+        },
       },
       {
         name: 'appliedToProject',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
-        name: 'forServices',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'formType',
@@ -5967,7 +5987,72 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'systemForm',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'SystemStatus', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'FormRulesForServiceCategoryFilterOptions',
+    args: [
+      {
+        name: 'activeStatus',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'appliedToProject',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'formType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'systemForm',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'SystemStatus', ofType: null },
+          },
+        },
       },
     ],
   },

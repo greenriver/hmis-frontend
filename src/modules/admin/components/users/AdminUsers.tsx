@@ -73,6 +73,7 @@ const AdminUsers = () => {
           onChange={setSearch}
           fullWidth
           size='medium'
+          searchAdornment
         />
         <Paper>
           <GenericTableWithData<

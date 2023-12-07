@@ -1,6 +1,5 @@
 import DatePicker from '../../input/DatePicker';
 import TextInput from '../../input/TextInput';
-import YesNoInput from '../../input/YesNoInput';
 import LabelWithContent from '../../LabelWithContent';
 
 import TableFilterItemCheckboxes from './items/Checkboxes';
@@ -53,31 +52,26 @@ const TableFilterItem = <T,>({
             />
           );
 
-        if (filter.type === 'boolean') {
-          return (
-            <YesNoInput
-              value={value}
-              onChange={(_event, value) => onChange(value)}
-              size='small'
-            />
-          );
-        }
-
         const placeholder =
           typeof filter.label === 'string'
             ? `Select ${filter.label}...`
             : undefined;
 
-        if (filter.type === 'enum')
+        if (filter.type === 'enum') {
+          const options = localResolvePickList(filter.enumType, true) || [];
+          const variant =
+            filter.variant ||
+            (options.length < 3 && filter.multi ? 'checkboxes' : 'select');
           return (
             <TableFilterItemSelector
-              variant={filter.variant}
-              options={localResolvePickList(filter.enumType, true) || []}
+              variant={variant}
+              options={options}
               value={filter.multi ? value || [] : value}
               onChange={onChange}
               placeholder={placeholder}
             />
           );
+        }
 
         if (filter.type === 'picklist')
           return (

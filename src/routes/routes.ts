@@ -20,6 +20,7 @@ const adminDashboardRoutes = {
   USERS: 'users',
   USER_AUDIT: 'users/:userId/audit',
   CONFIGURE_SERVICES: 'services',
+  CONFIGURE_SERVICE_CATEGORY: 'services/:serviceCategoryId',
   CONFIGURE_FORM_RULES: 'form-rules',
 };
 

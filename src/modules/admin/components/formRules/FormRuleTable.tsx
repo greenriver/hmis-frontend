@@ -1,15 +1,18 @@
 import { Chip } from '@mui/material';
 import { Stack } from '@mui/system';
-import { omit } from 'lodash-es';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  ActiveStatus,
+  DataCollectedAbout,
   FormRuleFieldsFragment,
   GetFormRulesDocument,
   GetFormRulesQuery,
   GetFormRulesQueryVariables,
+  SystemStatus,
 } from '@/types/gqlTypes';
 
 const SystemChip = () => (
@@ -22,19 +25,19 @@ const SystemChip = () => (
   />
 );
 
-const columns: ColumnDef<FormRuleFieldsFragment>[] = [
+export const FORM_RULE_COLUMNS: ColumnDef<FormRuleFieldsFragment>[] = [
   {
     header: 'Rule ID',
     render: 'id',
   },
   {
-    header: 'Form Title',
-    render: 'definitionTitle',
-  },
-  {
     header: 'Form Type',
     render: ({ definitionRole }) =>
       definitionRole && HmisEnums.FormRole[definitionRole],
+  },
+  {
+    header: 'Form Title',
+    render: 'definitionTitle',
   },
   {
     header: 'Active Status',
@@ -51,22 +54,23 @@ const columns: ColumnDef<FormRuleFieldsFragment>[] = [
       projectType ? (
         <ProjectTypeChip projectType={projectType} />
       ) : (
-        'Any Project Type'
+        <NotCollectedText>All Project Types</NotCollectedText>
       ),
   },
   {
-    // TODO: other funder
     header: 'Funder',
-    render: ({ funder }) =>
-      funder ? HmisEnums.FundingSource[funder] : 'Any Funder',
+    render: ({ funder, otherFunder }) => {
+      if (funder) return HmisEnums.FundingSource[funder];
+      if (otherFunder) return otherFunder;
+      return <NotCollectedText>All Funders</NotCollectedText>;
+    },
   },
   {
-    // TODO: readable labels
     header: 'Data Collected About',
     render: ({ dataCollectedAbout }) =>
       dataCollectedAbout
         ? HmisEnums.DataCollectedAbout[dataCollectedAbout]
-        : '-',
+        : HmisEnums.DataCollectedAbout[DataCollectedAbout.AllClients],
   },
   // TODO: direct project applicability
   // TODO: direct organization applicability
@@ -90,15 +94,17 @@ const FormRuleTable = () => {
       >
         queryVariables={{}}
         queryDocument={GetFormRulesDocument}
-        columns={columns}
+        columns={FORM_RULE_COLUMNS}
         pagePath='formRules'
         noData='No form rules'
         showFilters
         recordType='FormRule'
         filterInputType='FormRuleFilterOptions'
-        filters={(filters) => omit(filters, 'forServices', 'serviceCategory')}
-
-        // defaultFilters={{ activeStatus: true, systemForm: false }}
+        paginationItemName='rule'
+        defaultFilters={{
+          activeStatus: ActiveStatus.Active,
+          systemForm: SystemStatus.NonSystem,
+        }}
       />
     </>
   );

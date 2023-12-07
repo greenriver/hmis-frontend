@@ -1,6 +1,7 @@
 // **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
 
 export const HmisEnums = {
+  ActiveStatus: { ACTIVE: 'Active', INACTIVE: 'Inactive' },
   AftercareMethod: {
     IN_PERSON_1_ON_1: 'In person: one-on-one',
     IN_PERSON_GROUP: 'In person: group',
@@ -1742,6 +1743,7 @@ export const HmisEnums = {
     WITH_ON_GOING_SUBSIDY: 'With on-going subsidy',
     WITHOUT_AN_ON_GOING_SUBSIDY: 'Without an on-going subsidy',
   },
+  SystemStatus: { NON_SYSTEM: 'Non-System', SYSTEM: 'System' },
   TCellSourceViralLoadSource: {
     INVALID: 'Invalid Value',
     MEDICAL_REPORT: 'Medical Report',

@@ -28,3 +28,16 @@ fragment FormRuleFields on FormRule {
   createdAt
   updatedAt
 }
+
+fragment ServiceCategoryFields on ServiceCategory {
+  id
+  name
+  hud
+  serviceTypes {
+    nodesCount
+    nodes {
+      id
+      name
+    }
+  }
+}

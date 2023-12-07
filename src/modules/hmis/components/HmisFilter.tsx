@@ -100,7 +100,6 @@ const getFilterForType = (
 
   if (inputType === 'ISO8601Date') filter = { ...baseFields, type: 'date' };
   if (inputType === 'String') filter = { ...baseFields, type: 'text' };
-  if (inputType === 'Boolean') filter = { ...baseFields, type: 'boolean' };
 
   if (isPicklistType(fieldName)) {
     filter = {
@@ -114,10 +113,11 @@ const getFilterForType = (
     filter = {
       ...baseFields,
       enumType: inputType as keyof typeof HmisEnums,
-      variant: 'select',
       type: 'enum',
     };
   }
+
+  if (!filter) console.error(`Failed to create filter for ${fieldName}`);
 
   return filter || null;
 };
