@@ -7,7 +7,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useId, useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useId, useMemo } from 'react';
 
 import {
   ChangeType,
@@ -166,6 +166,7 @@ const DisabilityTable = ({
       >
         {isValidDisabilityGroup(item) &&
           item.item.map((rowItem, index) => {
+            const disabilityTypeLabelId = `${disabilityTypeId}${index}`;
             return (
               <TableRow
                 key={rowItem.linkId}
@@ -174,7 +175,10 @@ const DisabilityTable = ({
                     index & 1 ? undefined : theme.palette.grey[50],
                 }}
               >
-                <TableCell sx={{ width: '250px', py: 3 }} id={disabilityTypeId}>
+                <TableCell
+                  sx={{ width: '250px', py: 3 }}
+                  id={disabilityTypeLabelId}
+                >
                   <Typography variant='body2' fontWeight={600}>
                     {rowItem.text}
                   </Typography>
@@ -202,7 +206,7 @@ const DisabilityTable = ({
                             ? 'Select Status'
                             : 'Select Disabling Condition',
                         // Reads as "Physical Disability Status" or "Physical Disability Disabling Condition"
-                        ariaLabelledBy: `${disabilityTypeId} ${
+                        ariaLabelledBy: `${disabilityTypeLabelId} ${
                           idx === 0 ? statusId : disablingConditionId
                         }`,
                       },

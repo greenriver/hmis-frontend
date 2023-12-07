@@ -92,7 +92,7 @@ const NumberInput = ({
         min,
         max,
         onKeyDown: disableArrowKeys ? onKeyDown : undefined,
-        ariaLabelledBy,
+        'aria-labelledby': ariaLabelledBy,
         ...inputProps,
       }}
       onWheel={preventValueChangeOnScroll}
