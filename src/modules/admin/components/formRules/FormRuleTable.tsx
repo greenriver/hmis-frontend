@@ -99,6 +99,7 @@ const FormRuleTable = () => {
         noData='No form rules'
         showFilters
         recordType='FormRule'
+        // FIXME: fix the project filter for applicability
         filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
         defaultFilters={{
