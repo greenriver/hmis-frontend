@@ -38,17 +38,13 @@ const getType = (
 export const getSortOptionForType = (
   recordType: string
 ): Record<string, string> | null => {
-  if (recordType === 'Assessment')
-    return HmisEnums.AssessmentSortOption as Record<string, string>;
-  if (recordType === 'Enrollment')
-    return HmisEnums.EnrollmentSortOption as Record<string, string>;
-  if (recordType === 'Household')
-    return HmisEnums.HouseholdSortOption as Record<string, string>;
-  if (recordType === 'Project')
-    return HmisEnums.ProjectSortOption as Record<string, string>;
-  if (recordType === 'Client')
-    return HmisEnums.ClientSortOption as Record<string, string>;
+  const expectedName = `${recordType}SortOption`;
+  if (Object.hasOwn(HmisEnums, expectedName)) {
+    const key = expectedName as keyof typeof HmisEnums;
+    return HmisEnums[key];
+  }
 
+  // console.debug('No sort options for', recordType);
   return null;
 };
 

@@ -4849,7 +4849,6 @@ export type Query = {
   /** Service lookup */
   service?: Maybe<Service>;
   serviceCategories: ServiceCategoriesPaginated;
-  /** Service category lookup */
   serviceCategory?: Maybe<ServiceCategory>;
   /** Service type lookup */
   serviceType?: Maybe<ServiceType>;
