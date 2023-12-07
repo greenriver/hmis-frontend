@@ -35,17 +35,17 @@ type AdminPageConfig = NavItem & {
 
 const adminPages: AdminPageConfig[] = [
   {
+    id: 'denials',
+    title: 'Denials',
+    path: AdminDashboardRoutes.AC_DENIALS,
+    permissions: ['canManageDeniedReferrals'],
+  },
+  {
     id: 'users',
     title: 'Users',
     path: AdminDashboardRoutes.USERS,
     permissions: ['canImpersonateUsers', 'canAuditUsers'],
     permissionMode: 'any',
-  },
-  {
-    id: 'denials',
-    title: 'Denials',
-    path: AdminDashboardRoutes.AC_DENIALS,
-    permissions: ['canManageDeniedReferrals'],
   },
   {
     id: 'merge-clients',
