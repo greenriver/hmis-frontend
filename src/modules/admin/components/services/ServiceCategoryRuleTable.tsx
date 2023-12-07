@@ -6,7 +6,6 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  ActiveStatus,
   DataCollectedAbout,
   FormRuleFieldsFragment,
   GetServiceCategoryRulesDocument,
@@ -84,9 +83,6 @@ const ServiceCategoryRuleTable: React.FC<Props> = ({ serviceCategoryId }) => {
         filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
         filters={(filters) => omit(filters, 'formType')}
-        defaultFilters={{
-          activeStatus: [ActiveStatus.Active],
-        }}
       />
     </>
   );

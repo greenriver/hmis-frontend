@@ -16,28 +16,6 @@ fragment FormRuleFields on FormRule {
   organization {
     ...OrganizationNameFields
   }
-  serviceCategory {
-    id
-    name
-  }
-  serviceType {
-    id
-    name
-    category
-  }
   createdAt
   updatedAt
-}
-
-fragment ServiceCategoryFields on ServiceCategory {
-  id
-  name
-  hud
-  serviceTypes {
-    nodesCount
-    nodes {
-      id
-      name
-    }
-  }
 }

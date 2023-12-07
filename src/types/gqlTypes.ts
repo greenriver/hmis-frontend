@@ -12570,29 +12570,6 @@ export type FormRuleFieldsFragment = {
     hudId: string;
     organizationName: string;
   } | null;
-  serviceCategory?: {
-    __typename?: 'ServiceCategory';
-    id: string;
-    name: string;
-  } | null;
-  serviceType?: {
-    __typename?: 'ServiceType';
-    id: string;
-    name: string;
-    category: string;
-  } | null;
-};
-
-export type ServiceCategoryFieldsFragment = {
-  __typename?: 'ServiceCategory';
-  id: string;
-  name: string;
-  hud: boolean;
-  serviceTypes: {
-    __typename?: 'ServiceTypesPaginated';
-    nodesCount: number;
-    nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
-  };
 };
 
 export type GetFormRulesQueryVariables = Exact<{
@@ -12636,100 +12613,16 @@ export type GetFormRulesQuery = {
         hudId: string;
         organizationName: string;
       } | null;
-      serviceCategory?: {
-        __typename?: 'ServiceCategory';
-        id: string;
-        name: string;
-      } | null;
-      serviceType?: {
-        __typename?: 'ServiceType';
-        id: string;
-        name: string;
-        category: string;
-      } | null;
     }>;
   };
-};
-
-export type GetServiceCategoriesQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetServiceCategoriesQuery = {
-  __typename?: 'Query';
-  serviceCategories: {
-    __typename?: 'ServiceCategoriesPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'ServiceCategory';
-      id: string;
-      name: string;
-      hud: boolean;
-      serviceTypes: {
-        __typename?: 'ServiceTypesPaginated';
-        nodesCount: number;
-        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
-      };
-    }>;
-  };
-};
-
-export type GetServiceCategoryQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type GetServiceCategoryQuery = {
-  __typename?: 'Query';
-  serviceCategory?: {
-    __typename?: 'ServiceCategory';
-    id: string;
-    name: string;
-    hud: boolean;
-    serviceTypes: {
-      __typename?: 'ServiceTypesPaginated';
-      nodesCount: number;
-      nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
-    };
-  } | null;
-};
-
-export type GetServiceCategoryTypesQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetServiceCategoryTypesQuery = {
-  __typename?: 'Query';
-  serviceCategory?: {
-    __typename?: 'ServiceCategory';
-    id: string;
-    serviceTypes: {
-      __typename?: 'ServiceTypesPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'ServiceType';
-        id: string;
-        name: string;
-        hudRecordType?: RecordType | null;
-        hudTypeProvided?: ServiceTypeProvided | null;
-        category: string;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-      }>;
-    };
-  } | null;
 };
 
 export type GetServiceCategoryRulesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<FormRuleFilterOptions>;
+  sortOrder?: InputMaybe<FormRuleSortOption>;
 }>;
 
 export type GetServiceCategoryRulesQuery = {
@@ -12768,17 +12661,6 @@ export type GetServiceCategoryRulesQuery = {
           id: string;
           hudId: string;
           organizationName: string;
-        } | null;
-        serviceCategory?: {
-          __typename?: 'ServiceCategory';
-          id: string;
-          name: string;
-        } | null;
-        serviceType?: {
-          __typename?: 'ServiceType';
-          id: string;
-          name: string;
-          category: string;
         } | null;
       }>;
     };
@@ -21741,6 +21623,20 @@ export type ServiceFieldsFragment = {
   }>;
 };
 
+export type ServiceCategoryFieldsFragment = {
+  __typename?: 'ServiceCategory';
+  id: string;
+  name: string;
+  hud: boolean;
+  serviceTypes: {
+    __typename?: 'ServiceTypesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+  };
+};
+
 export type GetServiceQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -22143,6 +22039,85 @@ export type GetEnrollmentServicesQuery = {
             } | null;
           }> | null;
         }>;
+      }>;
+    };
+  } | null;
+};
+
+export type GetServiceCategoriesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetServiceCategoriesQuery = {
+  __typename?: 'Query';
+  serviceCategories: {
+    __typename?: 'ServiceCategoriesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+      hud: boolean;
+      serviceTypes: {
+        __typename?: 'ServiceTypesPaginated';
+        offset: number;
+        limit: number;
+        nodesCount: number;
+        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+      };
+    }>;
+  };
+};
+
+export type GetServiceCategoryQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetServiceCategoryQuery = {
+  __typename?: 'Query';
+  serviceCategory?: {
+    __typename?: 'ServiceCategory';
+    id: string;
+    name: string;
+    hud: boolean;
+    serviceTypes: {
+      __typename?: 'ServiceTypesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+    };
+  } | null;
+};
+
+export type GetServiceCategoryTypesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetServiceCategoryTypesQuery = {
+  __typename?: 'Query';
+  serviceCategory?: {
+    __typename?: 'ServiceCategory';
+    id: string;
+    serviceTypes: {
+      __typename?: 'ServiceTypesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
       }>;
     };
   } | null;
@@ -23283,34 +23258,11 @@ export const FormRuleFieldsFragmentDoc = gql`
     organization {
       ...OrganizationNameFields
     }
-    serviceCategory {
-      id
-      name
-    }
-    serviceType {
-      id
-      name
-      category
-    }
     createdAt
     updatedAt
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
-`;
-export const ServiceCategoryFieldsFragmentDoc = gql`
-  fragment ServiceCategoryFields on ServiceCategory {
-    id
-    name
-    hud
-    serviceTypes {
-      nodesCount
-      nodes {
-        id
-        name
-      }
-    }
-  }
 `;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
@@ -24277,6 +24229,22 @@ export const ServiceFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+`;
+export const ServiceCategoryFieldsFragmentDoc = gql`
+  fragment ServiceCategoryFields on ServiceCategory {
+    id
+    name
+    hud
+    serviceTypes {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        name
+      }
+    }
+  }
 `;
 export const UnitTypeCapacityFieldsFragmentDoc = gql`
   fragment UnitTypeCapacityFields on UnitTypeCapacity {
@@ -26689,204 +26657,22 @@ export type GetFormRulesQueryResult = Apollo.QueryResult<
   GetFormRulesQuery,
   GetFormRulesQueryVariables
 >;
-export const GetServiceCategoriesDocument = gql`
-  query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
-    serviceCategories(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...ServiceCategoryFields
-      }
-    }
-  }
-  ${ServiceCategoryFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceCategoriesQuery__
- *
- * To run a query within a React component, call `useGetServiceCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceCategoriesQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetServiceCategoriesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >(GetServiceCategoriesDocument, options);
-}
-export function useGetServiceCategoriesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >(GetServiceCategoriesDocument, options);
-}
-export type GetServiceCategoriesQueryHookResult = ReturnType<
-  typeof useGetServiceCategoriesQuery
->;
-export type GetServiceCategoriesLazyQueryHookResult = ReturnType<
-  typeof useGetServiceCategoriesLazyQuery
->;
-export type GetServiceCategoriesQueryResult = Apollo.QueryResult<
-  GetServiceCategoriesQuery,
-  GetServiceCategoriesQueryVariables
->;
-export const GetServiceCategoryDocument = gql`
-  query GetServiceCategory($id: ID!) {
-    serviceCategory(id: $id) {
-      ...ServiceCategoryFields
-    }
-  }
-  ${ServiceCategoryFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceCategoryQuery__
- *
- * To run a query within a React component, call `useGetServiceCategoryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceCategoryQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetServiceCategoryQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  >(GetServiceCategoryDocument, options);
-}
-export function useGetServiceCategoryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetServiceCategoryQuery,
-    GetServiceCategoryQueryVariables
-  >(GetServiceCategoryDocument, options);
-}
-export type GetServiceCategoryQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryQuery
->;
-export type GetServiceCategoryLazyQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryLazyQuery
->;
-export type GetServiceCategoryQueryResult = Apollo.QueryResult<
-  GetServiceCategoryQuery,
-  GetServiceCategoryQueryVariables
->;
-export const GetServiceCategoryTypesDocument = gql`
-  query GetServiceCategoryTypes($id: ID!, $limit: Int = 25, $offset: Int = 0) {
-    serviceCategory(id: $id) {
-      id
-      serviceTypes(limit: $limit, offset: $offset) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...ServiceTypeFields
-        }
-      }
-    }
-  }
-  ${ServiceTypeFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceCategoryTypesQuery__
- *
- * To run a query within a React component, call `useGetServiceCategoryTypesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceCategoryTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceCategoryTypesQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetServiceCategoryTypesQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  >(GetServiceCategoryTypesDocument, options);
-}
-export function useGetServiceCategoryTypesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetServiceCategoryTypesQuery,
-    GetServiceCategoryTypesQueryVariables
-  >(GetServiceCategoryTypesDocument, options);
-}
-export type GetServiceCategoryTypesQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryTypesQuery
->;
-export type GetServiceCategoryTypesLazyQueryHookResult = ReturnType<
-  typeof useGetServiceCategoryTypesLazyQuery
->;
-export type GetServiceCategoryTypesQueryResult = Apollo.QueryResult<
-  GetServiceCategoryTypesQuery,
-  GetServiceCategoryTypesQueryVariables
->;
 export const GetServiceCategoryRulesDocument = gql`
-  query GetServiceCategoryRules($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  query GetServiceCategoryRules(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: FormRuleFilterOptions
+    $sortOrder: FormRuleSortOption
+  ) {
     serviceCategory(id: $id) {
       id
-      formRules(limit: $limit, offset: $offset) {
+      formRules(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+        sortOrder: $sortOrder
+      ) {
         offset
         limit
         nodesCount
@@ -26914,6 +26700,8 @@ export const GetServiceCategoryRulesDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */
@@ -31076,6 +30864,199 @@ export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
 export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables
+>;
+export const GetServiceCategoriesDocument = gql`
+  query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
+    serviceCategories(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceCategoryFields
+      }
+    }
+  }
+  ${ServiceCategoryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetServiceCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceCategoriesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetServiceCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >(GetServiceCategoriesDocument, options);
+}
+export function useGetServiceCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >(GetServiceCategoriesDocument, options);
+}
+export type GetServiceCategoriesQueryHookResult = ReturnType<
+  typeof useGetServiceCategoriesQuery
+>;
+export type GetServiceCategoriesLazyQueryHookResult = ReturnType<
+  typeof useGetServiceCategoriesLazyQuery
+>;
+export type GetServiceCategoriesQueryResult = Apollo.QueryResult<
+  GetServiceCategoriesQuery,
+  GetServiceCategoriesQueryVariables
+>;
+export const GetServiceCategoryDocument = gql`
+  query GetServiceCategory($id: ID!) {
+    serviceCategory(id: $id) {
+      ...ServiceCategoryFields
+    }
+  }
+  ${ServiceCategoryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceCategoryQuery__
+ *
+ * To run a query within a React component, call `useGetServiceCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceCategoryQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetServiceCategoryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceCategoryQuery,
+    GetServiceCategoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceCategoryQuery,
+    GetServiceCategoryQueryVariables
+  >(GetServiceCategoryDocument, options);
+}
+export function useGetServiceCategoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceCategoryQuery,
+    GetServiceCategoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceCategoryQuery,
+    GetServiceCategoryQueryVariables
+  >(GetServiceCategoryDocument, options);
+}
+export type GetServiceCategoryQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryQuery
+>;
+export type GetServiceCategoryLazyQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryLazyQuery
+>;
+export type GetServiceCategoryQueryResult = Apollo.QueryResult<
+  GetServiceCategoryQuery,
+  GetServiceCategoryQueryVariables
+>;
+export const GetServiceCategoryTypesDocument = gql`
+  query GetServiceCategoryTypes($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+    serviceCategory(id: $id) {
+      id
+      serviceTypes(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ServiceTypeFields
+        }
+      }
+    }
+  }
+  ${ServiceTypeFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceCategoryTypesQuery__
+ *
+ * To run a query within a React component, call `useGetServiceCategoryTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceCategoryTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceCategoryTypesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetServiceCategoryTypesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceCategoryTypesQuery,
+    GetServiceCategoryTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceCategoryTypesQuery,
+    GetServiceCategoryTypesQueryVariables
+  >(GetServiceCategoryTypesDocument, options);
+}
+export function useGetServiceCategoryTypesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceCategoryTypesQuery,
+    GetServiceCategoryTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceCategoryTypesQuery,
+    GetServiceCategoryTypesQueryVariables
+  >(GetServiceCategoryTypesDocument, options);
+}
+export type GetServiceCategoryTypesQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryTypesQuery
+>;
+export type GetServiceCategoryTypesLazyQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryTypesLazyQuery
+>;
+export type GetServiceCategoryTypesQueryResult = Apollo.QueryResult<
+  GetServiceCategoryTypesQuery,
+  GetServiceCategoryTypesQueryVariables
 >;
 export const GetUnitsDocument = gql`
   query GetUnits(

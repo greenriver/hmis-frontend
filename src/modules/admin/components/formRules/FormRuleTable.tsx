@@ -6,13 +6,11 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  ActiveStatus,
   DataCollectedAbout,
   FormRuleFieldsFragment,
   GetFormRulesDocument,
   GetFormRulesQuery,
   GetFormRulesQueryVariables,
-  SystemStatus,
 } from '@/types/gqlTypes';
 
 const SystemChip = () => (
@@ -93,10 +91,10 @@ const FormRuleTable = () => {
         recordType='FormRule'
         filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
-        defaultFilters={{
-          activeStatus: [ActiveStatus.Active],
-          systemForm: [SystemStatus.NonSystem],
-        }}
+        // defaultFilters={{
+        //   activeStatus: [ActiveStatus.Active],
+        //   systemForm: [SystemStatus.NonSystem],
+        // }}
       />
     </>
   );
