@@ -7,8 +7,8 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { useCallback, useEffect, useId, useMemo } from 'react';
 
-import { useCallback, useEffect, useMemo } from 'react';
 import {
   ChangeType,
   GroupItemComponentProps,
@@ -137,6 +137,11 @@ const DisabilityTable = ({
     ]
   );
 
+  // IDs for accessibility labels
+  const statusId = useId();
+  const disablingConditionId = useId();
+  const disabilityTypeId = useId();
+
   return (
     <Table
       sx={{ border: (theme) => `1px solid ${theme.palette.grey[200]}`, mb: 2 }}
@@ -144,8 +149,8 @@ const DisabilityTable = ({
       <TableHead>
         <TableRow>
           <TableCell></TableCell>
-          <TableCell>Status</TableCell>
-          <TableCell>Disabling Condition</TableCell>
+          <TableCell id={statusId}>Status</TableCell>
+          <TableCell id={disablingConditionId}>Disabling Condition</TableCell>
         </TableRow>
       </TableHead>
       <TableBody
@@ -161,6 +166,7 @@ const DisabilityTable = ({
       >
         {isValidDisabilityGroup(item) &&
           item.item.map((rowItem, index) => {
+            const disabilityTypeLabelId = `${disabilityTypeId}${index}`;
             return (
               <TableRow
                 key={rowItem.linkId}
@@ -169,7 +175,10 @@ const DisabilityTable = ({
                     index & 1 ? undefined : theme.palette.grey[50],
                 }}
               >
-                <TableCell sx={{ width: '250px', py: 3 }}>
+                <TableCell
+                  sx={{ width: '250px', py: 3 }}
+                  id={disabilityTypeLabelId}
+                >
                   <Typography variant='body2' fontWeight={600}>
                     {rowItem.text}
                   </Typography>
@@ -196,6 +205,10 @@ const DisabilityTable = ({
                           idx === 0
                             ? 'Select Status'
                             : 'Select Disabling Condition',
+                        // Reads as "Physical Disability Status" or "Physical Disability Disabling Condition"
+                        ariaLabelledBy: `${disabilityTypeLabelId} ${
+                          idx === 0 ? statusId : disablingConditionId
+                        }`,
                       },
                       disabled:
                         (cellItem.linkId === disablingConditionLinkId &&

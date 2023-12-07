@@ -20,7 +20,7 @@ import {
   ErrorState,
   partitionValidations,
 } from '@/modules/errors/util';
-import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
+import { sortHouseholdMembers, clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -48,7 +48,6 @@ const EditHouseholdMemberTable = ({
 
   const currentMembers = useMemo(
     () =>
-      //xxx
       sortHouseholdMembers(
         household.householdClients,
         currentDashboardEnrollmentId
@@ -173,7 +172,13 @@ const EditHouseholdMemberTable = ({
                     <CircularProgress size={20} />
                   </Box>
                 ) : (
-                  <Radio />
+                  <Radio
+                    inputProps={{
+                      'aria-label': `HoH status for ${clientBriefName(
+                        hc.client
+                      )}`,
+                    }}
+                  />
                 )
               }
               componentsProps={{ typography: { variant: 'body2' } }}
@@ -199,7 +204,14 @@ const EditHouseholdMemberTable = ({
             onClose={() =>
               setHighlight((old) => old.filter((id) => id !== hc.client.id))
             }
-            textInputProps={{ highlight: highlight.includes(hc.client.id) }}
+            textInputProps={{
+              highlight: highlight.includes(hc.client.id),
+              inputProps: {
+                'aria-label': `Relationship to HoH for ${clientBriefName(
+                  hc.client
+                )}`,
+              },
+            }}
           />
         ),
       },
@@ -216,6 +228,7 @@ const EditHouseholdMemberTable = ({
             householdClient={hc}
             onSuccess={refetchHousehold}
             householdSize={currentMembers.length}
+            ariaLabel={`Remove ${clientBriefName(hc.client)}`}
           />
         ),
       },
