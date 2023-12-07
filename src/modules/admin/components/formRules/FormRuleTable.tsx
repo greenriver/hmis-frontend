@@ -1,5 +1,6 @@
 import { Chip } from '@mui/material';
 import { Stack } from '@mui/system';
+import { omit } from 'lodash-es';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
@@ -23,16 +24,17 @@ const SystemChip = () => (
 
 const columns: ColumnDef<FormRuleFieldsFragment>[] = [
   {
-    header: 'ID',
+    header: 'Rule ID',
     render: 'id',
   },
   {
     header: 'Form Title',
-    render: ({ definition }) => definition.title,
+    render: 'definitionTitle',
   },
   {
     header: 'Form Type',
-    render: ({ definition }) => HmisEnums.FormRole[definition.role],
+    render: ({ definitionRole }) =>
+      definitionRole && HmisEnums.FormRole[definitionRole],
   },
   {
     header: 'Active Status',
@@ -64,21 +66,21 @@ const columns: ColumnDef<FormRuleFieldsFragment>[] = [
     render: ({ dataCollectedAbout }) =>
       dataCollectedAbout
         ? HmisEnums.DataCollectedAbout[dataCollectedAbout]
-        : null,
+        : '-',
   },
   // TODO: direct project applicability
   // TODO: direct organization applicability
-  {
-    header: 'Service Applicability',
-    render: ({ serviceType, serviceCategory }) => {
-      if (serviceCategory) return serviceCategory.name;
-      if (serviceType) return `${serviceType.category}: ${serviceType.name}`;
-      return 'N/A';
-    },
-  },
+  // {
+  //   header: 'Service Applicability',
+  //   render: ({ serviceType, serviceCategory }) => {
+  //     if (serviceCategory) return serviceCategory.name;
+  //     if (serviceType) return `${serviceType.category}: ${serviceType.name}`;
+  //     return 'N/A';
+  //   },
+  // },
 ];
 
-const FormRulesTable = () => {
+const FormRuleTable = () => {
   return (
     <>
       <GenericTableWithData<
@@ -91,8 +93,14 @@ const FormRulesTable = () => {
         columns={columns}
         pagePath='formRules'
         noData='No form rules'
+        showFilters
+        recordType='FormRule'
+        filterInputType='FormRuleFilterOptions'
+        filters={(filters) => omit(filters, 'forServices', 'serviceCategory')}
+
+        // defaultFilters={{ activeStatus: true, systemForm: false }}
       />
     </>
   );
 };
-export default FormRulesTable;
+export default FormRuleTable;

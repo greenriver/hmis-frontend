@@ -8066,43 +8066,43 @@
         "enumValues": [
           {
             "name": "ALL_CLIENTS",
-            "description": null,
+            "description": "All Clients",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE",
-            "description": null,
+            "description": "All Clients Receiving SSVF Financial Assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ALL_CLIENTS_RECEIVING_SSVF_SERVICES",
-            "description": null,
+            "description": "All Clients Receiving SSVF Services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ALL_VETERANS",
-            "description": null,
+            "description": "All Veterans",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOH",
-            "description": null,
+            "description": "HoH",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOH_AND_ADULTS",
-            "description": null,
+            "description": "HoH and Adults",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "VETERAN_HOH",
-            "description": null,
+            "description": "Veteran HoH",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -8200,13 +8200,13 @@
           },
           {
             "name": "CE_ASSESSMENT",
-            "description": "Ce assessment",
+            "description": "CE assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_EVENT",
-            "description": "Ce event",
+            "description": "CE event",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17101,26 +17101,20 @@
             "deprecationReason": null
           },
           {
-            "name": "CE",
-            "description": "Ce",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "CE_ASSESSMENT",
-            "description": "Ce assessment",
+            "description": "CE assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_EVENT",
-            "description": "Ce event",
+            "description": "CE event",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "CE_PARTICIPATION",
-            "description": "Ce participation",
+            "description": "CE participation",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17133,12 +17127,6 @@
           {
             "name": "CURRENT_LIVING_SITUATION",
             "description": "Current living situation",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CUSTOM_ASSESSMENT",
-            "description": "Custom assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17168,7 +17156,7 @@
           },
           {
             "name": "HMIS_PARTICIPATION",
-            "description": "Hmis participation",
+            "description": "HMIS participation",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17291,17 +17279,13 @@
             "deprecationReason": null
           },
           {
-            "name": "definition",
+            "name": "definitionId",
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "FormDefinition",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -17318,6 +17302,30 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "definitionRole",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "FormRole",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "definitionTitle",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -17458,6 +17466,154 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "FormRuleFilterOptions",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "activeStatus",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "appliedToProject",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "forServices",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "formType",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FormRole",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectType",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ProjectType",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "serviceCategory",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "systemForm",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "FormRuleSortOption",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATE_UPDATED",
+            "description": "Date Updated",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FORM_TITLE",
+            "description": "Form Title",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FORM_TYPE",
+            "description": "Form Type",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -29714,6 +29870,18 @@
             "description": null,
             "args": [
               {
+                "name": "filters",
+                "description": null,
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "FormRuleFilterOptions",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "limit",
                 "description": null,
                 "type": {
@@ -29731,6 +29899,18 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "sortOrder",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "FormRuleSortOption",
                   "ofType": null
                 },
                 "defaultValue": null,

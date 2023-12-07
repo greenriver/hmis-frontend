@@ -116,7 +116,11 @@ function allFieldFilters<T>(
   schema.args.forEach(({ name }) => {
     const filter = getFilter(recordType, filterInputType, name);
 
-    if (filter) result[name as keyof T] = filter;
+    if (filter) {
+      result[name as keyof T] = filter;
+    } else {
+      console.error(`Unable to create filter for ${name}`);
+    }
   });
 
   return result;

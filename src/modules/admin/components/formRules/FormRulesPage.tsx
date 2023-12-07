@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material';
-import FormRulesTable from './FormRulesTable';
+import FormRuleTable from './FormRuleTable';
 import PageTitle from '@/components/layout/PageTitle';
 
 const FormRulesPage = () => {
@@ -7,7 +7,7 @@ const FormRulesPage = () => {
     <>
       <PageTitle title='Form Rules' />
       <Paper>
-        <FormRulesTable />
+        <FormRuleTable />
       </Paper>
     </>
   );

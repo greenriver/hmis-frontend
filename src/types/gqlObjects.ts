@@ -2885,12 +2885,24 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
       },
       {
+        name: 'definitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'definitionIdentifier',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
+      },
+      {
+        name: 'definitionRole',
+        type: { kind: 'ENUM', name: 'FormRole', ofType: null },
+      },
+      {
+        name: 'definitionTitle',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'funder',
@@ -5899,6 +5911,63 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'values',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'FormRuleFilterOptions',
+    args: [
+      {
+        name: 'activeStatus',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'appliedToProject',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'forServices',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'formType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'serviceCategory',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'systemForm',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
     ],
   },

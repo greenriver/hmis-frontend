@@ -1200,12 +1200,19 @@ export enum DobDataQuality {
 }
 
 export enum DataCollectedAbout {
+  /** All Clients */
   AllClients = 'ALL_CLIENTS',
+  /** All Clients Receiving SSVF Financial Assistance */
   AllClientsReceivingSsvfFinancialAssistance = 'ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE',
+  /** All Clients Receiving SSVF Services */
   AllClientsReceivingSsvfServices = 'ALL_CLIENTS_RECEIVING_SSVF_SERVICES',
+  /** All Veterans */
   AllVeterans = 'ALL_VETERANS',
+  /** HoH */
   Hoh = 'HOH',
+  /** HoH and Adults */
   HohAndAdults = 'HOH_AND_ADULTS',
+  /** Veteran HoH */
   VeteranHoh = 'VETERAN_HOH',
 }
 
@@ -1220,9 +1227,9 @@ export type DataCollectionFeature = {
 export enum DataCollectionFeatureRole {
   /** Case note */
   CaseNote = 'CASE_NOTE',
-  /** Ce assessment */
+  /** CE assessment */
   CeAssessment = 'CE_ASSESSMENT',
-  /** Ce event */
+  /** CE event */
   CeEvent = 'CE_EVENT',
   /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
@@ -2486,20 +2493,16 @@ export enum FormRole {
   Annual = 'ANNUAL',
   /** Case note */
   CaseNote = 'CASE_NOTE',
-  /** Ce */
-  Ce = 'CE',
-  /** Ce assessment */
+  /** CE assessment */
   CeAssessment = 'CE_ASSESSMENT',
-  /** Ce event */
+  /** CE event */
   CeEvent = 'CE_EVENT',
-  /** Ce participation */
+  /** CE participation */
   CeParticipation = 'CE_PARTICIPATION',
   /** Client */
   Client = 'CLIENT',
   /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
-  /** Custom assessment */
-  CustomAssessment = 'CUSTOM_ASSESSMENT',
   /** Enrollment */
   Enrollment = 'ENROLLMENT',
   /** Exit */
@@ -2508,7 +2511,7 @@ export enum FormRole {
   File = 'FILE',
   /** Funder */
   Funder = 'FUNDER',
-  /** Hmis participation */
+  /** HMIS participation */
   HmisParticipation = 'HMIS_PARTICIPATION',
   /** Intake */
   Intake = 'INTAKE',
@@ -2539,8 +2542,10 @@ export type FormRule = {
   active: Scalars['Boolean']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
-  definition: FormDefinition;
+  definitionId?: Maybe<Scalars['ID']['output']>;
   definitionIdentifier: Scalars['String']['output'];
+  definitionRole?: Maybe<FormRole>;
+  definitionTitle?: Maybe<Scalars['String']['output']>;
   funder?: Maybe<FundingSource>;
   id: Scalars['ID']['output'];
   organization?: Maybe<Organization>;
@@ -2552,6 +2557,25 @@ export type FormRule = {
   system: Scalars['Boolean']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
+
+export type FormRuleFilterOptions = {
+  activeStatus?: InputMaybe<Scalars['Boolean']['input']>;
+  appliedToProject?: InputMaybe<Scalars['ID']['input']>;
+  forServices?: InputMaybe<Scalars['Boolean']['input']>;
+  formType?: InputMaybe<Array<FormRole>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
+  systemForm?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export enum FormRuleSortOption {
+  /** Date Updated */
+  DateUpdated = 'DATE_UPDATED',
+  /** Form Title */
+  FormTitle = 'FORM_TITLE',
+  /** Form Type */
+  FormType = 'FORM_TYPE',
+}
 
 export type FormRulesPaginated = {
   __typename?: 'FormRulesPaginated';
@@ -4873,8 +4897,10 @@ export type QueryFileArgs = {
 };
 
 export type QueryFormRulesArgs = {
+  filters?: InputMaybe<FormRuleFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<FormRuleSortOption>;
 };
 
 export type QueryFunderArgs = {
@@ -12462,19 +12488,15 @@ export type FormRuleFieldsFragment = {
   active: boolean;
   system: boolean;
   definitionIdentifier: string;
+  definitionId?: string | null;
+  definitionTitle?: string | null;
+  definitionRole?: FormRole | null;
   dataCollectedAbout?: DataCollectedAbout | null;
   funder?: FundingSource | null;
   otherFunder?: string | null;
   projectType?: ProjectType | null;
   createdAt: string;
   updatedAt: string;
-  definition: {
-    __typename?: 'FormDefinition';
-    id: string;
-    role: FormRole;
-    title: string;
-    cacheKey: string;
-  };
   project?: {
     __typename?: 'Project';
     id: string;
@@ -12503,6 +12525,8 @@ export type FormRuleFieldsFragment = {
 export type GetFormRulesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<FormRuleFilterOptions>;
+  sortOrder?: InputMaybe<FormRuleSortOption>;
 }>;
 
 export type GetFormRulesQuery = {
@@ -12518,19 +12542,15 @@ export type GetFormRulesQuery = {
       active: boolean;
       system: boolean;
       definitionIdentifier: string;
+      definitionId?: string | null;
+      definitionTitle?: string | null;
+      definitionRole?: FormRole | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       funder?: FundingSource | null;
       otherFunder?: string | null;
       projectType?: ProjectType | null;
       createdAt: string;
       updatedAt: string;
-      definition: {
-        __typename?: 'FormDefinition';
-        id: string;
-        role: FormRole;
-        title: string;
-        cacheKey: string;
-      };
       project?: {
         __typename?: 'Project';
         id: string;
@@ -23030,14 +23050,6 @@ export const MergeAuditEventFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
-export const FormDefinitionMetadataFragmentDoc = gql`
-  fragment FormDefinitionMetadata on FormDefinition {
-    id
-    role
-    title
-    cacheKey
-  }
-`;
 export const OrganizationNameFieldsFragmentDoc = gql`
   fragment OrganizationNameFields on Organization {
     id
@@ -23051,9 +23063,9 @@ export const FormRuleFieldsFragmentDoc = gql`
     active
     system
     definitionIdentifier
-    definition {
-      ...FormDefinitionMetadata
-    }
+    definitionId
+    definitionTitle
+    definitionRole
     dataCollectedAbout
     funder
     otherFunder
@@ -23076,7 +23088,6 @@ export const FormRuleFieldsFragmentDoc = gql`
     createdAt
     updatedAt
   }
-  ${FormDefinitionMetadataFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
 `;
@@ -23229,6 +23240,14 @@ export const DataCollectionFeatureFieldsFragmentDoc = gql`
     role
     dataCollectedAbout
     legacy
+  }
+`;
+export const FormDefinitionMetadataFragmentDoc = gql`
+  fragment FormDefinitionMetadata on FormDefinition {
+    id
+    role
+    title
+    cacheKey
   }
 `;
 export const PickListOptionFieldsFragmentDoc = gql`
@@ -26373,8 +26392,18 @@ export type BulkMergeClientsMutationOptions = Apollo.BaseMutationOptions<
   BulkMergeClientsMutationVariables
 >;
 export const GetFormRulesDocument = gql`
-  query GetFormRules($limit: Int = 25, $offset: Int = 0) {
-    formRules(limit: $limit, offset: $offset) {
+  query GetFormRules(
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: FormRuleFilterOptions
+    $sortOrder: FormRuleSortOption
+  ) {
+    formRules(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: $sortOrder
+    ) {
       offset
       limit
       nodesCount
@@ -26400,6 +26429,8 @@ export const GetFormRulesDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */

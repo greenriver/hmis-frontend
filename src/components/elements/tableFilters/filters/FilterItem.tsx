@@ -1,5 +1,6 @@
 import DatePicker from '../../input/DatePicker';
 import TextInput from '../../input/TextInput';
+import YesNoInput from '../../input/YesNoInput';
 import LabelWithContent from '../../LabelWithContent';
 
 import TableFilterItemCheckboxes from './items/Checkboxes';
@@ -51,6 +52,16 @@ const TableFilterItem = <T,>({
               onChange={(val) => onChange(val)}
             />
           );
+
+        if (filter.type === 'boolean') {
+          return (
+            <YesNoInput
+              value={value}
+              onChange={(_event, value) => onChange(value)}
+              size='small'
+            />
+          );
+        }
 
         const placeholder =
           typeof filter.label === 'string'

@@ -3,9 +3,9 @@ fragment FormRuleFields on FormRule {
   active
   system
   definitionIdentifier
-  definition {
-    ...FormDefinitionMetadata
-  }
+  definitionId
+  definitionTitle
+  definitionRole
   dataCollectedAbout
   funder
   otherFunder
