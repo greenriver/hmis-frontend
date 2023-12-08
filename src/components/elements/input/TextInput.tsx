@@ -41,9 +41,12 @@ const TextInput = ({
   inputWidth,
   sx,
   warnIfEmptyTreatment,
+  ariaLabelledBy,
+  id,
   ...props
 }: TextInputProps) => {
-  const htmlId = useId();
+  const generatedId = useId();
+  const htmlId = id || generatedId;
 
   let width = inputWidth;
   if (!width && inputProps.inputMode === 'numeric') {
@@ -62,10 +65,11 @@ const TextInput = ({
       {...props}
       sx={sx}
       inputProps={{
-        ...inputProps,
+        'aria-label': hiddenLabel ? String(label) : undefined,
+        'aria-labelledby': ariaLabelledBy,
         minLength: min,
         maxLength: max,
-        'aria-label': hiddenLabel ? String(label) : undefined,
+        ...inputProps,
       }}
       InputProps={{
         ...(props.InputProps as InputProps),
@@ -125,6 +129,7 @@ const TextInput = ({
               color: theme.palette.text.primary,
               fontSize: theme.typography.body2,
             })}
+            htmlFor={htmlId}
           >
             {label}
           </InputLabel>
