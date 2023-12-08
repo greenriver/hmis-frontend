@@ -260,3 +260,17 @@ fragment EnrollmentSummaryFields on EnrollmentSummary {
   projectType
   canViewEnrollment
 }
+
+fragment EnrollmentAuditEventFields on EnrollmentAuditEvent {
+  id
+  createdAt
+  event
+  objectChanges
+  recordName
+  graphqlType
+  recordId
+  user {
+    id
+    name
+  }
+}

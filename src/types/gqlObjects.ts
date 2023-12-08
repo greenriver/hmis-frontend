@@ -845,6 +845,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'graphqlType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -2094,6 +2102,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'EnrollmentAccess',
     fields: [
       {
+        name: 'canAuditEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
         type: {
           kind: 'NON_NULL',
@@ -2131,6 +2147,63 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentAuditEvent',
+    fields: [
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'event',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'AuditEventType', ofType: null },
+        },
+      },
+      {
+        name: 'graphqlType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'objectChanges',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'recordId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'recordName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
     ],
@@ -4135,6 +4208,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canAuditEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canAuditUsers',
         type: {
           kind: 'NON_NULL',
@@ -5180,6 +5261,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'BaseAuditEventFilterOptions',
+    args: [
+      {
+        name: 'auditEventRecordType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
       },

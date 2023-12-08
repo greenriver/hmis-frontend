@@ -15,13 +15,14 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { formatDateTimeForDisplay } from '@/modules/hmis/hmisUtil';
 import {
-  GetClientAuditEventsDocument,
-  GetClientAuditEventsQuery,
-  GetClientAuditEventsQueryVariables,
+  BaseAuditEventFilterOptions,
+  GetEnrollmentAuditEventsDocument,
+  GetEnrollmentAuditEventsQuery,
+  GetEnrollmentAuditEventsQueryVariables,
 } from '@/types/gqlTypes';
 
 type AuditHistoryType = NonNullable<
-  NonNullable<GetClientAuditEventsQuery['client']>['auditHistory']
+  NonNullable<GetEnrollmentAuditEventsQuery['enrollment']>['auditHistory']
 >['nodes'][0];
 
 const columns: ColumnDef<AuditHistoryType>[] = [
@@ -88,30 +89,34 @@ const columns: ColumnDef<AuditHistoryType>[] = [
   },
 ];
 
-const ClientAuditHistory = () => {
-  const { clientId } = useSafeParams() as { clientId: string };
+const EnrollmentAuditHistory = () => {
+  const { enrollmentId } = useSafeParams() as { enrollmentId: string };
 
   return (
     <ContextualCollapsibleListsProvider>
-      <PageTitle title='Client Audit History' />
+      <PageTitle title='Enrollment Audit History' />
       <Paper>
         <GenericTableWithData<
-          GetClientAuditEventsQuery,
-          GetClientAuditEventsQueryVariables,
-          AuditHistoryType
+          GetEnrollmentAuditEventsQuery,
+          GetEnrollmentAuditEventsQueryVariables,
+          AuditHistoryType,
+          BaseAuditEventFilterOptions
         >
-          queryVariables={{ id: clientId }}
-          queryDocument={GetClientAuditEventsDocument}
+          queryVariables={{ id: enrollmentId }}
+          queryDocument={GetEnrollmentAuditEventsDocument}
           columns={columns}
-          pagePath='client.auditHistory'
+          pagePath='enrollment.auditHistory'
           fetchPolicy='cache-and-network'
           noData='No audit history'
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
+          showFilters
+          recordType='event'
+          filterInputType='BaseAuditEventFilterOptions'
         />
       </Paper>
     </ContextualCollapsibleListsProvider>
   );
 };
 
-export default ClientAuditHistory;
+export default EnrollmentAuditHistory;

@@ -873,6 +873,7 @@ export const HmisEnums = {
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
     ENROLLMENTS_FOR_CLIENT:
       'Enrollments for the client, including WIP and Exited.',
+    ENROLLMENT_AUDIT_EVENT_RECORD_TYPES: 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
     GEOCODE: 'GEOCODE',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     ORGANIZATION: 'All Organizations that the User can see',
@@ -886,6 +887,7 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
+    USERS: 'User Accounts',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',

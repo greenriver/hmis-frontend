@@ -54,6 +54,7 @@ fragment EnrollmentAccessFields on EnrollmentAccess {
   id
   canEditEnrollments
   canDeleteEnrollments
+  canAuditEnrollments
 }
 
 fragment AssessmentAccessFields on AssessmentAccess {

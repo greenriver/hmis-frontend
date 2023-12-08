@@ -10,8 +10,8 @@ import {
 export const useEnrollmentDashboardNavItems = (
   enabledFeatures: DataCollectionFeatureRole[]
 ) => {
-  const navItems: NavItem<EnrollmentAccessFieldsFragment>[] = useMemo(() => {
-    return [
+  const navItems = useMemo(() => {
+    const items: NavItem<EnrollmentAccessFieldsFragment>[] = [
       {
         id: 'enrollment-nav',
         type: 'category',
@@ -68,6 +68,21 @@ export const useEnrollmentDashboardNavItems = (
         ],
       },
     ];
+
+    items.push({
+      id: 'admin',
+      title: 'Admin',
+      type: 'category',
+      items: [
+        {
+          id: 'audit-history',
+          title: 'Audit History',
+          path: EnrollmentDashboardRoutes.AUDIT_HISTORY,
+          permissions: ['canAuditEnrollments'],
+        },
+      ],
+    });
+    return items;
   }, [enabledFeatures]);
 
   return navItems;
