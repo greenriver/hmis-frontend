@@ -56,6 +56,7 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
     case 'Float':
       return formatCurrency(value);
   }
+  // FIXME: attempt date formatting if it looks like a date
   return value;
 };
 

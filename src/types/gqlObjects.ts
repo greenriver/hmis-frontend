@@ -4868,12 +4868,20 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'recordType',
+        type: { kind: 'ENUM', name: 'RecordType', ofType: null },
+      },
+      {
         name: 'referralOutcome',
         type: { kind: 'ENUM', name: 'PATHReferralOutcome', ofType: null },
       },
       {
         name: 'subTypeProvided',
         type: { kind: 'ENUM', name: 'ServiceSubTypeProvided', ofType: null },
+      },
+      {
+        name: 'typeProvided',
+        type: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
       },
     ],
   },

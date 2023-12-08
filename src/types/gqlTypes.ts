@@ -5589,9 +5589,11 @@ export type Service = {
   id: Scalars['ID']['output'];
   movingOnOtherType?: Maybe<Scalars['String']['output']>;
   otherTypeProvided?: Maybe<Scalars['String']['output']>;
+  recordType?: Maybe<RecordType>;
   referralOutcome?: Maybe<PathReferralOutcome>;
   serviceType: ServiceType;
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
+  typeProvided?: Maybe<ServiceTypeProvided>;
   user?: Maybe<ApplicationUser>;
 };
 

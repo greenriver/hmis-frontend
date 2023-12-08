@@ -34292,6 +34292,18 @@
             "deprecationReason": null
           },
           {
+            "name": "recordType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RecordType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "referralOutcome",
             "description": null,
             "args": [],
@@ -34326,6 +34338,18 @@
             "type": {
               "kind": "ENUM",
               "name": "ServiceSubTypeProvided",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "typeProvided",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ServiceTypeProvided",
               "ofType": null
             },
             "isDeprecated": false,

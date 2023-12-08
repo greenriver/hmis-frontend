@@ -6,6 +6,7 @@ import { filter, isNil } from 'lodash-es';
 import SimpleTable from '@/components/elements/SimpleTable';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import HmisField from '@/modules/hmis/components/HmisField';
+import { AuditEventType } from '@/types/gqlTypes';
 
 // expected shape of JSON 'objectChanges' field
 export type ObjectChangesType = {
@@ -19,6 +20,7 @@ export type ObjectChangesType = {
 interface Props {
   objectChanges: ObjectChangesType;
   recordType: string;
+  eventType: AuditEventType;
 }
 
 const nullText = (
@@ -47,6 +49,7 @@ const changedText = (
 const AuditObjectChangesSummary: React.FC<Props> = ({
   objectChanges,
   recordType,
+  eventType,
 }) => {
   return (
     <SimpleTable
@@ -89,13 +92,19 @@ const AuditObjectChangesSummary: React.FC<Props> = ({
 
             return (
               <Stack gap={1} direction='row' alignItems='center'>
-                <Typography variant='body2' component='div'>
-                  {isNil(from) ? nullText : from}
-                </Typography>
-                <ArrowForwardIcon fontSize='inherit' />
-                <Typography variant='body2' component='div'>
-                  {isNil(to) ? nullText : to}
-                </Typography>
+                {['destroy', 'update'].includes(eventType) && (
+                  <Typography variant='body2' component='div'>
+                    {isNil(from) ? nullText : from}
+                  </Typography>
+                )}
+                {eventType === 'update' && (
+                  <ArrowForwardIcon fontSize='inherit' />
+                )}
+                {['update', 'create'].includes(eventType) && (
+                  <Typography variant='body2' component='div'>
+                    {isNil(to) ? nullText : to}
+                  </Typography>
+                )}
               </Stack>
             );
           },

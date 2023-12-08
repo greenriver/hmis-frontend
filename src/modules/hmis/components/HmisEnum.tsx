@@ -11,7 +11,7 @@ const getLabelAndColor = (
   let color: TypographyProps['color'] = 'text.primary';
   let label = enumMap[value];
   if (!label) {
-    label = noValue || 'Not Specified';
+    label = noValue || 'Not Specified'; // fixme handle invalid?
     color = 'text.secondary';
   } else if (value === INVALID_ENUM) {
     color = 'error';
