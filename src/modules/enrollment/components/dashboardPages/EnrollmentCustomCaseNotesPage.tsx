@@ -10,7 +10,10 @@ import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutati
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import useViewDialog from '@/modules/form/hooks/useViewDialog';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDate,
+  parseAndFormatDateTime,
+} from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   CustomCaseNoteFieldsFragment,
@@ -38,6 +41,13 @@ const columns: ColumnDef<CustomCaseNoteFieldsFragment>[] = [
       >
         {content}
       </Box>
+    ),
+  },
+  {
+    header: 'Information Date',
+    minWidth: '200px',
+    render: ({ informationDate }) => (
+      <>{informationDate ? parseAndFormatDate(informationDate) : null}</>
     ),
   },
   {

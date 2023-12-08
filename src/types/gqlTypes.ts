@@ -1138,6 +1138,7 @@ export type CustomCaseNote = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
+  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   user?: Maybe<ApplicationUser>;
 };
 
@@ -12826,6 +12827,7 @@ export type CustomCaseNoteFieldsFragment = {
   __typename?: 'CustomCaseNote';
   id: string;
   content: string;
+  informationDate?: string | null;
   dateUpdated?: string | null;
   dateCreated?: string | null;
   user?: {
@@ -12856,6 +12858,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
         __typename?: 'CustomCaseNote';
         id: string;
         content: string;
+        informationDate?: string | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
         user?: {
@@ -17524,6 +17527,7 @@ export type SubmitFormMutation = {
           __typename?: 'CustomCaseNote';
           id: string;
           content: string;
+          informationDate?: string | null;
           dateUpdated?: string | null;
           dateCreated?: string | null;
           user?: {
@@ -23292,6 +23296,7 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
   fragment CustomCaseNoteFields on CustomCaseNote {
     id
     content
+    informationDate
     dateUpdated
     dateCreated
     user {

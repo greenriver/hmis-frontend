@@ -8,18 +8,21 @@ import {
   useDeleteEnrollmentMutation,
 } from '@/types/gqlTypes';
 
-const RemoveFromHouseholdButton = ({
-  householdClient,
-  currentDashboardEnrollmentId,
-  onSuccess,
-  disabled,
-  householdSize,
-}: {
+interface Props {
   householdClient: HouseholdClientFieldsFragment;
   currentDashboardEnrollmentId?: string;
   onSuccess: () => void;
   disabled?: boolean;
   householdSize: number;
+  ariaLabel?: string;
+}
+const RemoveFromHouseholdButton: React.FC<Props> = ({
+  householdClient,
+  currentDashboardEnrollmentId,
+  onSuccess,
+  disabled,
+  householdSize,
+  ariaLabel,
 }) => {
   const [done, setDone] = useState(false);
   const [deleteEnrollment, { loading, error }] = useDeleteEnrollmentMutation({
@@ -78,6 +81,7 @@ const RemoveFromHouseholdButton = ({
         color='error'
         disabled={isDisabled}
         onClick={disabledReason ? undefined : onClick}
+        aria-label={ariaLabel}
         sx={{
           root: {
             '&.Mui-disabled': {
