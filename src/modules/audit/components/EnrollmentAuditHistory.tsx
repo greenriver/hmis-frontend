@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { capitalize, filter } from 'lodash-es';
+import { filter } from 'lodash-es';
 import AuditObjectChangesSummary, {
   ObjectChangesType,
 } from './AuditObjectChangesSummary';
@@ -13,7 +13,10 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
-import { formatDateTimeForDisplay } from '@/modules/hmis/hmisUtil';
+import {
+  auditActionForDisplay,
+  formatDateTimeForDisplay,
+} from '@/modules/hmis/hmisUtil';
 import {
   BaseAuditEventFilterOptions,
   GetEnrollmentAuditEventsDocument,
@@ -40,11 +43,11 @@ const columns: ColumnDef<AuditHistoryType>[] = [
   {
     header: 'Action',
     width: '100px',
-    render: ({ event }) => capitalize(event),
+    render: ({ event }) => auditActionForDisplay(event),
   },
   {
     header: 'Record Type',
-    width: '150px',
+    width: '180px',
     render: ({ recordName, recordId }) => {
       return (
         <Stack>

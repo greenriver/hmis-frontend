@@ -11,7 +11,7 @@ import {
   isYesterday,
   parseISO,
 } from 'date-fns';
-import { find, isNil, sortBy, startCase } from 'lodash-es';
+import { capitalize, find, isNil, sortBy, startCase } from 'lodash-es';
 
 import {
   ClientNameDobVeteranFields,
@@ -23,6 +23,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   AssessmentFieldsFragment,
+  AuditEventType,
   ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,
   ClientNameDobVetFragment,
@@ -564,4 +565,11 @@ export const relationshipToHohForDisplay = (
   if (relationship === RelationshipToHoH.SelfHeadOfHousehold) return 'HoH';
 
   return HmisEnums.RelationshipToHoH[relationship];
+};
+
+export const auditActionForDisplay = (action: AuditEventType) => {
+  if (action === AuditEventType.Destroy) {
+    return 'Delete';
+  }
+  return capitalize(action);
 };
