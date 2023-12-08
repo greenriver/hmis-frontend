@@ -860,7 +860,6 @@ export const HmisEnums = {
     ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
     ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ALL_UNIT_TYPES: 'All unit types.',
-    AUDIT_EVENT_RECORD_TYPES: 'AUDIT_EVENT_RECORD_TYPES',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
     AVAILABLE_UNITS_FOR_ENROLLMENT:
@@ -874,6 +873,7 @@ export const HmisEnums = {
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
     ENROLLMENTS_FOR_CLIENT:
       'Enrollments for the client, including WIP and Exited.',
+    ENROLLMENT_AUDIT_EVENT_RECORD_TYPES: 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
     GEOCODE: 'GEOCODE',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     ORGANIZATION: 'All Organizations that the User can see',

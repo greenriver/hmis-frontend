@@ -332,7 +332,7 @@ export enum Availability {
 
 export type BaseAuditEventFilterOptions = {
   auditEventRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
-  userId?: InputMaybe<Array<Scalars['ID']['input']>>;
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 /** 2.07.5 */
@@ -3768,7 +3768,6 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
-  AuditEventRecordTypes = 'AUDIT_EVENT_RECORD_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Units available for the given household at the given project */
@@ -3784,6 +3783,7 @@ export enum PickListType {
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
   /** Enrollments for the client, including WIP and Exited. */
   EnrollmentsForClient = 'ENROLLMENTS_FOR_CLIENT',
+  EnrollmentAuditEventRecordTypes = 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
   Geocode = 'GEOCODE',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',

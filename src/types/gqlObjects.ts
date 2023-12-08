@@ -5278,7 +5278,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'userId',
+        name: 'user',
         type: {
           kind: 'LIST',
           name: null,

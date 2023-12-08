@@ -2005,7 +2005,7 @@
             "deprecationReason": null
           },
           {
-            "name": "userId",
+            "name": "user",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -24873,12 +24873,6 @@
             "deprecationReason": null
           },
           {
-            "name": "AUDIT_EVENT_RECORD_TYPES",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "AVAILABLE_FILE_TYPES",
             "description": null,
             "isDeprecated": false,
@@ -24935,6 +24929,12 @@
           {
             "name": "ENROLLMENTS_FOR_CLIENT",
             "description": "Enrollments for the client, including WIP and Exited.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ENROLLMENT_AUDIT_EVENT_RECORD_TYPES",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
