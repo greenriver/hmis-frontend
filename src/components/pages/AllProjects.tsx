@@ -128,6 +128,7 @@ const AllProjects = () => {
               onChange={setSearch}
               fullWidth
               size='medium'
+              searchAdornment
             />
           </Grid>
         )}

@@ -31,3 +31,18 @@ fragment ServiceFields on Service {
     ...CustomDataElementFields
   }
 }
+
+fragment ServiceCategoryFields on ServiceCategory {
+  id
+  name
+  hud
+  serviceTypes {
+    offset
+    limit
+    nodesCount
+    nodes {
+      id
+      name
+    }
+  }
+}

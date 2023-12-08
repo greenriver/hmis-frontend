@@ -30,6 +30,7 @@ fragment RootPermissions on QueryAccess {
   canMergeClients
   canTransferEnrollments
   canSplitHouseholds
+  canConfigureDataCollection
 }
 
 fragment ClientAccessFields on ClientAccess {

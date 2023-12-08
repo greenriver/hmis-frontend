@@ -40,6 +40,9 @@ import AdminDashboard, {
 
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
+import FormRulesPage from '@/modules/admin/components/formRules/FormRulesPage';
+import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
+import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
 import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
@@ -612,6 +615,30 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
                 <UserAuditPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <FormRulesPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CONFIGURE_SERVICES,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <ConfigureServicesPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CONFIGURE_SERVICE_CATEGORY,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <ServiceCategoryDetail />
               </RootPermissionsFilter>
             ),
           },

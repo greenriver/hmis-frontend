@@ -116,11 +116,15 @@ fragment FormDefinitionJsonFields on FormDefinitionJson {
   }
 }
 
-fragment FormDefinitionFields on FormDefinition {
+fragment FormDefinitionMetadata on FormDefinition {
   id
   role
   title
   cacheKey
+}
+
+fragment FormDefinitionFields on FormDefinition {
+  ...FormDefinitionMetadata
   definition {
     ...FormDefinitionJsonFields
   }

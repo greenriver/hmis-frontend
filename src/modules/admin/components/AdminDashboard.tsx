@@ -55,6 +55,25 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
       },
     ],
   },
+  {
+    id: 'config',
+    title: 'Config',
+    type: 'category',
+    items: [
+      {
+        id: 'forms',
+        title: 'Form Rules',
+        path: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
+        permissions: ['canConfigureDataCollection'],
+      },
+      {
+        id: 'services',
+        title: 'Services',
+        path: AdminDashboardRoutes.CONFIGURE_SERVICES,
+        permissions: ['canConfigureDataCollection'],
+      },
+    ],
+  },
 ];
 
 // redirect to whichever admin page that the user has access to
@@ -98,7 +117,7 @@ const AdminDashboard: React.FC = () => {
       }
       {...dashboardState}
     >
-      <Container maxWidth='lg' sx={{ pb: 6 }}>
+      <Container maxWidth='xl' sx={{ pb: 6 }}>
         <Outlet />
       </Container>
     </DashboardContentContainer>
