@@ -103,6 +103,7 @@ export default defineConfig(({ command, mode }) => {
           env.SERVER_HTTPS == undefined ? true : env.SERVER_HTTPS == 'true',
         proxy: {
           '/hmis': warehouseProxyServer,
+          '/ac_hmis': warehouseProxyServer,
           '/assets/theme': warehouseProxyServer,
         },
       },

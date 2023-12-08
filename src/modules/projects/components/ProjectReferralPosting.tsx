@@ -1,5 +1,7 @@
-import { Grid, Stack, Typography } from '@mui/material';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { Button, Grid, Stack, Typography } from '@mui/material';
 
+import { fetchPreventionAssessmentReportUrl } from '../api';
 import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
 
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -52,17 +54,33 @@ const ProjectReferralPosting: React.FC = () => {
           <TitleCard title='Referral Details' sx={{ mb: 2 }} padded>
             <ProjectReferralPostingDetails referralPosting={referralPosting} />
           </TitleCard>
-          <ButtonLink
-            fullWidth
-            variant='outlined'
-            color='secondary'
-            to={generateSafePath(ProjectDashboardRoutes.ESG_FUNDING_REPORT, {
-              projectId: referralPosting.project?.id,
-              referralPostingId,
-            })}
-          >
-            ESG Funding Report
-          </ButtonLink>
+          <Stack gap={2}>
+            <ButtonLink
+              fullWidth
+              variant='outlined'
+              color='secondary'
+              to={generateSafePath(ProjectDashboardRoutes.ESG_FUNDING_REPORT, {
+                projectId: referralPosting.project?.id,
+                referralPostingId,
+              })}
+            >
+              ESG Funding Report
+            </ButtonLink>
+            {referralPosting.referralIdentifier && (
+              <Button
+                fullWidth
+                variant='outlined'
+                color='secondary'
+                target='_blank'
+                href={fetchPreventionAssessmentReportUrl(
+                  referralPosting.referralIdentifier
+                )}
+                endIcon={<OpenInNewIcon />}
+              >
+                LINK Prevention Assessment Report
+              </Button>
+            )}
+          </Stack>
         </Grid>
         <Grid item lg={8} sm={12}>
           <Stack spacing={4}>
