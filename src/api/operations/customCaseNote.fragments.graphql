@@ -1,6 +1,7 @@
 fragment CustomCaseNoteFields on CustomCaseNote {
   id
   content
+  informationDate
   dateUpdated
   dateCreated
   user {

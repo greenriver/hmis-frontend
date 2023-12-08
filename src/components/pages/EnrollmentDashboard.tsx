@@ -61,10 +61,7 @@ const EnrollmentDashboard: React.FC = () => {
     [enrollment]
   );
 
-  const navItems = useEnrollmentDashboardNavItems(
-    enabledFeatures,
-    enrollment || undefined
-  );
+  const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
 
   const { currentPath, ...dashboardState } = useDashboardState();
 
@@ -116,7 +113,16 @@ const EnrollmentDashboard: React.FC = () => {
   return (
     <DashboardContentContainer
       navHeader={<EnrollmentNavHeader enrollment={enrollment} />}
-      sidebar={<SideNavMenu items={navItems} />}
+      sidebar={
+        <SideNavMenu
+          items={navItems}
+          access={enrollment.access}
+          pathParams={{
+            clientId: enrollment.client.id,
+            enrollmentId: enrollment.id,
+          }}
+        />
+      }
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       navLabel='Enrollment'
       {...dashboardState}

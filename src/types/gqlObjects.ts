@@ -1139,6 +1139,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
+      {
+        name: 'informationDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
     ],
   },
   {
