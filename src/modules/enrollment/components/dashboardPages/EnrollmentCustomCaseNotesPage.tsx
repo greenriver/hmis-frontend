@@ -156,7 +156,7 @@ const EnrollmentCustomCaseNotesPage = () => {
                 >
                   queryDocument={DeleteCustomCaseNoteDocument}
                   variables={{ id: viewingRecord.id }}
-                  idPath={'deleteCustomCaeNote.customCaseNote.id'}
+                  idPath={'deleteCustomCaseNote.customCaseNote.id'}
                   recordName='Case Note'
                   onSuccess={onSuccessfulDelete}
                 >
