@@ -1,0 +1,7 @@
+query GetAutoExitConfigs($limit: Int = 10, $offset: Int = 0) {
+  autoExitConfigs(limit: $limit, offset: $offset) {
+    nodes {
+      ...AutoExitConfigFields
+    }
+  }
+}

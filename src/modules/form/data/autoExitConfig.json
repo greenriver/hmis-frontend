@@ -1,0 +1,40 @@
+{
+  "item": [
+    {
+      "type": "INTEGER",
+      "linkId": "lengthOfAbsenceDays",
+      "text": "Length of Absence (Days)",
+      "mapping": { "fieldName": "lengthOfAbsenceDays" }
+    },
+    {
+      "type": "CHOICE",
+      "required": false,
+      "linkId": "projectType",
+      "text": "Project Type",
+      "pickListReference": "ProjectType",
+      "mapping": {
+        "fieldName": "projectType"
+      }
+    },
+    {
+      "type": "CHOICE",
+      "required": false,
+      "linkId": "projectId",
+      "text": "Project",
+      "pickListReference": "PROJECT",
+      "mapping": {
+        "fieldName": "projectId"
+      }
+    },
+    {
+      "type": "CHOICE",
+      "required": false,
+      "linkId": "organizationId",
+      "text": "Organization",
+      "pickListReference": "ORGANIZATION",
+      "mapping": {
+        "fieldName": "organizationId"
+      }
+    }
+  ]
+}

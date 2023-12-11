@@ -1,4 +1,5 @@
 import adminReferralPosting from '@/modules/form/data/adminReferralPosting.json';
+import autoExitConfig from '@/modules/form/data/autoExitConfig.json';
 import referralPosting from '@/modules/form/data/referralPosting.json';
 import search from '@/modules/form/data/search.json';
 import units from '@/modules/form/data/units.json';
@@ -16,3 +17,6 @@ export const ReferralPostingDefinition: FormDefinitionJsonFieldsFragment =
 
 export const AdminReferralPostingDefinition: FormDefinitionJsonFieldsFragment =
   JSON.parse(JSON.stringify(adminReferralPosting));
+
+export const AutoExitConfigDefinition: FormDefinitionJsonFieldsFragment =
+  JSON.parse(JSON.stringify(autoExitConfig));

@@ -1,0 +1,10 @@
+mutation CreateAutoExitConfig($input: AutoExitConfigInput!) {
+  createAutoExitConfig(input: $input) {
+    autoExitConfig {
+      ...AutoExitConfigFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
