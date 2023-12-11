@@ -1,3 +1,3 @@
 export const fetchPreventionAssessmentReportUrl = (
   referralId: string
-): string => `/ac_hmis/prevention_assessment_report/${referralId}`;
+): string => `/hmis/ac/prevention_assessment_report/${referralId}`;
