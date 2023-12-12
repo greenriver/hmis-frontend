@@ -26,6 +26,12 @@ query GetFormDefinition($role: FormRole!, $enrollmentId: ID, $projectId: ID) {
   }
 }
 
+query GetStaticFormDefinition($role: StaticFormRole!) {
+  staticFormDefinition(role: $role) {
+    ...FormDefinitionFields
+  }
+}
+
 query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
   getServiceFormDefinition(
     serviceTypeId: $serviceTypeId

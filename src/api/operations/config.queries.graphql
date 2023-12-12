@@ -44,8 +44,32 @@ query GetServiceCategoryRules(
   }
 }
 
-query GetAdminFormDefinition($role: AdminFormRole!) {
-  adminFormDefinition(role: $role) {
-    ...FormDefinitionFields
+query GetFormRule($id: ID!) {
+  formRule(id: $id) {
+    ...FormRuleFields
+  }
+}
+
+mutation CreateFormRule($input: CreateFormRuleInput!) {
+  createFormRule(input: $input) {
+    clientMutationId
+    formRule {
+      ...FormRuleFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateFormRule($input: UpdateFormRuleInput!) {
+  updateFormRule(input: $input) {
+    clientMutationId
+    formRule {
+      ...FormRuleFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }

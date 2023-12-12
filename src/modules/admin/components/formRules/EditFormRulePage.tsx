@@ -1,76 +1,67 @@
-import { useMemo } from 'react';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { useCallback } from 'react';
 // eslint-disable-next-line no-restricted-imports
-// import { useParams } from 'react-router-dom';
-import DynamicForm from '@/modules/form/components/DynamicForm';
-import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
-import { getItemMap } from '@/modules/form/util/formUtil';
+import { useParams } from 'react-router-dom';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
+import Loading from '@/components/elements/Loading';
+import PageTitle from '@/components/layout/PageTitle';
+import StaticForm from '@/modules/form/components/StaticForm';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
-  AdminFormRole,
-  DataCollectedAbout,
-  ProjectType,
-  useGetAdminFormDefinitionQuery,
+  FormRuleInput,
+  MutationUpdateFormRuleArgs,
+  StaticFormRole,
+  UpdateFormRuleDocument,
+  UpdateFormRulePayload,
+  useGetFormRuleQuery,
 } from '@/types/gqlTypes';
 
-// is it worth using DynamicForm with a custom mutation? yeah, I think so. with these we have lots of side effects and warnings and things, just want to be able to use standard mutations to encapsulate them.
 const EditFormRulePage = () => {
-  // const { formRuleId } = useParams();
+  const { formRuleId } = useParams() as { formRuleId: string };
 
-  const { data } = useGetAdminFormDefinitionQuery({
-    variables: { role: AdminFormRole.FormRule },
+  const { data: { formRule } = {}, error } = useGetFormRuleQuery({
+    variables: { id: formRuleId },
   });
 
-  const itemMap = useMemo(
-    () =>
-      data &&
-      data.adminFormDefinition &&
-      getItemMap(data.adminFormDefinition.definition),
-    [data]
-  );
+  const onCompleted = useCallback((data: UpdateFormRulePayload) => {
+    console.error('TODO', data);
+  }, []);
 
-  // the TYPE here is actually the input type for the mutation. so we basically construct the "defaults" based on what we have
-  const record = {
-    id: '1',
-    projectType: ProjectType.DayShelter,
-    funder: null,
-    otherFunder: null,
-    dataCollectedAbout: DataCollectedAbout.Hoh,
-    // definition ID
-  };
-
-  const initialValues = useInitialFormValues({
-    record,
-    itemMap,
-    definition: data?.adminFormDefinition?.definition,
-    localConstants: {},
-  });
-
-  // console.log(initialValues);
-  // similar hook but we don't want the submit handler...
-  // const { initialValues, itemMap, errors, onSubmit, submitLoading } =
-  //   useDynamicFormHandlersForRecord({
-  //     inputVariables: {},
-  //     localConstants: {},
-  //     formDefinition: data?.adminFormDefinition,
-  //     record: null,
-  //     // onCompleted,
-  //   });
-
-  if (!data) return <>{'loading...'}</>;
+  if (error) throw error;
+  if (!formRule) return <Loading />;
 
   return (
-    <DynamicForm
-      initialValues={initialValues}
-      definition={data?.adminFormDefinition?.definition}
-      onSubmit={() => {
-        // console.log(args);
-        throw new Error('Function not implemented.');
-      }}
-      errors={{
-        apolloError: undefined,
-        errors: [],
-        warnings: [],
-      }}
-    />
+    <>
+      <PageTitle title='Edit Rule' />
+      <Grid container>
+        <Grid item xs={12} md={12} lg={8}>
+          <Paper sx={{ p: 4 }}>
+            <Stack gap={2} sx={{ mb: 4 }}>
+              <CommonLabeledTextBlock title='Form Definition Title'>
+                {formRule.definitionTitle}
+              </CommonLabeledTextBlock>
+              <CommonLabeledTextBlock title='Form Type'>
+                {formRule.definitionRole &&
+                  HmisEnums.FormRole[formRule.definitionRole]}
+              </CommonLabeledTextBlock>
+            </Stack>
+            <Typography variant='h5' sx={{ mb: 2 }}>
+              Project Applicability Rules
+            </Typography>
+            <StaticForm<UpdateFormRulePayload, MutationUpdateFormRuleArgs>
+              initialValues={formRule}
+              mutationDocument={UpdateFormRuleDocument}
+              getErrors={(d) => d.errors}
+              transformInput={(values) => ({
+                input: { input: values as FormRuleInput, id: formRuleId },
+              })}
+              onCompleted={onCompleted}
+              role={StaticFormRole.FormRule}
+            />
+          </Paper>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 
