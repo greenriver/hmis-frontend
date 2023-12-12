@@ -12,7 +12,6 @@ import {
 } from '@/modules/errors/util';
 import {
   FormDefinitionFieldsFragment,
-  Mutation,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -28,7 +27,7 @@ export interface GenericFormHandlerArgs<TData, TVariables> {
 // Similar to useDynamicFormHandlersForRecord, but instead of assuming
 // usage of SubmitForm, it uses the specified mutation.
 export function useDynamicFormHandlersForCustomMutation<
-  TData extends Mutation[keyof Mutation],
+  TData extends { __typename?: 'Mutation' },
   TVariables extends { input: { [key: string]: any } }
 >({
   mutationDocument,

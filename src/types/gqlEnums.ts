@@ -499,6 +499,7 @@ export const HmisEnums = {
   },
   FormRole: {
     ANNUAL: 'Annual',
+    AUTO_EXIT_CONFIG: 'Auto exit config',
     CASE_NOTE: 'Case note',
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
@@ -508,6 +509,7 @@ export const HmisEnums = {
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
     FILE: 'File',
+    FORM_RULE: 'Form rule',
     FUNDER: 'Funder',
     HMIS_PARTICIPATION: 'HMIS participation',
     INTAKE: 'Intake',
