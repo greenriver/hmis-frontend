@@ -19,19 +19,21 @@ import {
 export interface GenericFormHandlerArgs<TData, TVariables> {
   mutationDocument: TypedDocumentNode<TData, TVariables>;
   getErrors: (data: TData) => ValidationError[];
-  transformInput: (values: FormValues, confirmed?: boolean) => TVariables;
+  getVariables: (values: FormValues, confirmed?: boolean) => TVariables;
   onCompleted: (data: TData) => void;
   formDefinition?: FormDefinitionFieldsFragment;
   errorRef?: RefObject<HTMLDivElement>;
 }
 
+// Similar to useDynamicFormHandlersForRecord, but instead of assuming
+// usage of SubmitForm, it uses the specified mutation.
 export function useDynamicFormHandlersForCustomMutation<
   TData extends Mutation[keyof Mutation],
   TVariables extends { input: { [key: string]: any } }
 >({
   mutationDocument,
   getErrors,
-  transformInput,
+  getVariables,
   onCompleted,
   formDefinition,
   errorRef,
@@ -70,11 +72,11 @@ export function useDynamicFormHandlersForCustomMutation<
       if (!formDefinition) return;
 
       const input = createHudValuesForSubmit(values, formDefinition.definition);
-      const variables = transformInput(input, confirmed);
+      const variables = getVariables(input, confirmed);
       setErrors(emptyErrorState);
       void mutateFunction({ variables });
     },
-    [formDefinition, mutateFunction, transformInput]
+    [formDefinition, mutateFunction, getVariables]
   );
 
   return {

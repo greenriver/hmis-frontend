@@ -1,19 +1,28 @@
-import { SubmitFormAllowedTypes } from '../types';
+import { TypedDocumentNode } from '@apollo/client';
+import { RefObject } from 'react';
+import { FormValues } from '../types';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
-import {
-  GenericFormHandlerArgs,
-  useDynamicFormHandlersForCustomMutation,
-} from '@/modules/form/hooks/useDynamicFormHandlersForCustomMutation';
+import { useDynamicFormHandlersForCustomMutation } from '@/modules/form/hooks/useDynamicFormHandlersForCustomMutation';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import useStaticFormDefinition from '@/modules/form/hooks/useStaticFormDefinition';
-import { Mutation, StaticFormRole } from '@/types/gqlTypes';
+import { Mutation, StaticFormRole, ValidationError } from '@/types/gqlTypes';
 
-interface Props<TData, TVariables>
-  extends Omit<GenericFormHandlerArgs<TData, TVariables>, 'formDefinition'> {
+interface Props<TData, TVariables> {
+  // Static form role
   role: StaticFormRole;
-  id?: string;
+  // Initial values, if editing an existing record
   initialValues?: Record<string, any>;
+  // Mutation document for submission
+  mutationDocument: TypedDocumentNode<TData, TVariables>;
+  // Get mutation variables from form values (keyed by fieldName)
+  getVariables: (values: FormValues, confirmed?: boolean) => TVariables;
+  // Get errors from mutation response
+  getErrors: (data: TData) => ValidationError[];
+  // Mutation completion callback (called regardless of success/error)
+  onCompleted: (data: TData) => void;
+  // Error element ref
+  errorRef?: RefObject<HTMLDivElement>;
 }
 
 const StaticForm = <
@@ -21,14 +30,13 @@ const StaticForm = <
   TVariables extends { input: { [key: string]: any } }
 >({
   role,
-  id,
   initialValues,
-  ...args
+  ...props
 }: Props<TData, TVariables>) => {
   const { formDefinition, itemMap } = useStaticFormDefinition(role);
 
   const initialFormValues = useInitialFormValues({
-    record: initialValues as SubmitFormAllowedTypes, // FIXME
+    record: initialValues,
     itemMap,
     definition: formDefinition?.definition,
     localConstants: {},
@@ -37,7 +45,7 @@ const StaticForm = <
   const { onSubmit, errors, submitLoading } =
     useDynamicFormHandlersForCustomMutation<TData, TVariables>({
       formDefinition,
-      ...args,
+      ...props,
     });
 
   if (!formDefinition) return <Loading />;
