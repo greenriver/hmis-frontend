@@ -6,7 +6,7 @@ import DynamicForm from '@/modules/form/components/DynamicForm';
 import { useDynamicFormHandlersForCustomMutation } from '@/modules/form/hooks/useDynamicFormHandlersForCustomMutation';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import useStaticFormDefinition from '@/modules/form/hooks/useStaticFormDefinition';
-import { Mutation, StaticFormRole, ValidationError } from '@/types/gqlTypes';
+import { StaticFormRole, ValidationError } from '@/types/gqlTypes';
 
 interface Props<TData, TVariables> {
   // Static form role
@@ -26,7 +26,7 @@ interface Props<TData, TVariables> {
 }
 
 const StaticForm = <
-  TData extends Mutation[keyof Mutation],
+  TData extends { __typename?: 'Mutation' },
   TVariables extends { input: { [key: string]: any } }
 >({
   role,

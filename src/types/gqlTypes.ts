@@ -2539,6 +2539,8 @@ export type FormItem = {
 export enum FormRole {
   /** Annual */
   Annual = 'ANNUAL',
+  /** Auto exit config */
+  AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Case note */
   CaseNote = 'CASE_NOTE',
   /** CE assessment */
@@ -2557,6 +2559,8 @@ export enum FormRole {
   Exit = 'EXIT',
   /** File */
   File = 'FILE',
+  /** Form rule */
+  FormRule = 'FORM_RULE',
   /** Funder */
   Funder = 'FUNDER',
   /** HMIS participation */

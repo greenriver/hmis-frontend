@@ -17540,6 +17540,12 @@
             "deprecationReason": null
           },
           {
+            "name": "AUTO_EXIT_CONFIG",
+            "description": "Auto exit config",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CASE_NOTE",
             "description": "Case note",
             "isDeprecated": false,
@@ -17590,6 +17596,12 @@
           {
             "name": "FILE",
             "description": "File",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FORM_RULE",
+            "description": "Form rule",
             "isDeprecated": false,
             "deprecationReason": null
           },
