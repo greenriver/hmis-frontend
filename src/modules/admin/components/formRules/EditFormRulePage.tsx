@@ -12,7 +12,7 @@ import {
   MutationUpdateFormRuleArgs,
   StaticFormRole,
   UpdateFormRuleDocument,
-  UpdateFormRulePayload,
+  UpdateFormRuleMutation,
   useGetFormRuleQuery,
 } from '@/types/gqlTypes';
 
@@ -23,8 +23,11 @@ const EditFormRulePage = () => {
     variables: { id: formRuleId },
   });
 
-  const onCompleted = useCallback((data: UpdateFormRulePayload) => {
-    console.error('TODO', data);
+  const onCompleted = useCallback((data: UpdateFormRuleMutation) => {
+    if (!data.updateFormRule) return;
+    if (data.updateFormRule.errors.length > 0) return;
+
+    console.error('TODO HANDLE', data.updateFormRule.formRule);
   }, []);
 
   if (error) throw error;
@@ -48,10 +51,10 @@ const EditFormRulePage = () => {
             <Typography variant='h5' sx={{ mb: 2 }}>
               Project Applicability Rules
             </Typography>
-            <StaticForm<UpdateFormRulePayload, MutationUpdateFormRuleArgs>
+            <StaticForm<UpdateFormRuleMutation, MutationUpdateFormRuleArgs>
               initialValues={formRule}
               mutationDocument={UpdateFormRuleDocument}
-              getErrors={(d) => d.errors}
+              getErrors={(data) => data.updateFormRule?.errors || []}
               getVariables={(values) => ({
                 input: { input: values as FormRuleInput, id: formRuleId },
               })}
