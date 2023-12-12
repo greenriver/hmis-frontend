@@ -40,7 +40,6 @@ import AdminDashboard, {
 
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
-import EditFormRulePage from '@/modules/admin/components/formRules/EditFormRulePage';
 import FormRulesPage from '@/modules/admin/components/formRules/FormRulesPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
 import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
@@ -624,22 +623,6 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
                 <FormRulesPage />
-              </RootPermissionsFilter>
-            ),
-          },
-          {
-            path: AdminDashboardRoutes.ADD_FORM_RULE,
-            element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <EditFormRulePage />
-              </RootPermissionsFilter>
-            ),
-          },
-          {
-            path: AdminDashboardRoutes.EDIT_FORM_RULE,
-            element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <EditFormRulePage />
               </RootPermissionsFilter>
             ),
           },
