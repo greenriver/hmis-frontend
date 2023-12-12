@@ -52,7 +52,7 @@ const EditFormRulePage = () => {
               initialValues={formRule}
               mutationDocument={UpdateFormRuleDocument}
               getErrors={(d) => d.errors}
-              transformInput={(values) => ({
+              getVariables={(values) => ({
                 input: { input: values as FormRuleInput, id: formRuleId },
               })}
               onCompleted={onCompleted}
