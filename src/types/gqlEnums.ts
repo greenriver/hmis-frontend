@@ -2,6 +2,10 @@
 
 export const HmisEnums = {
   ActiveStatus: { ACTIVE: 'Active', INACTIVE: 'Inactive' },
+  AdminFormRole: {
+    AUTO_EXIT_CONFIG: 'Auto exit config',
+    FORM_RULE: 'Form rule',
+  },
   AftercareMethod: {
     IN_PERSON_1_ON_1: 'In person: one-on-one',
     IN_PERSON_GROUP: 'In person: group',
@@ -499,6 +503,7 @@ export const HmisEnums = {
   },
   FormRole: {
     ANNUAL: 'Annual',
+    AUTO_EXIT_CONFIG: 'Auto exit config',
     CASE_NOTE: 'Case note',
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
@@ -508,6 +513,7 @@ export const HmisEnums = {
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
     FILE: 'File',
+    FORM_RULE: 'Form rule',
     FUNDER: 'Funder',
     HMIS_PARTICIPATION: 'HMIS participation',
     INTAKE: 'Intake',

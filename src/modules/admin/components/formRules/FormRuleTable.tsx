@@ -1,5 +1,6 @@
 import { Chip } from '@mui/material';
 import { Stack } from '@mui/system';
+import React from 'react';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -27,6 +28,7 @@ const FORM_RULE_COLUMNS: ColumnDef<FormRuleFieldsFragment>[] = [
   {
     header: 'Rule ID',
     render: 'id',
+    linkTreatment: true,
   },
   {
     header: 'Form Type',
@@ -74,7 +76,11 @@ const FORM_RULE_COLUMNS: ColumnDef<FormRuleFieldsFragment>[] = [
   // TODO: direct organization applicability
 ];
 
-const FormRuleTable = () => {
+interface Props {
+  onRowClick: (row: FormRuleFieldsFragment) => void;
+}
+
+const FormRuleTable: React.FC<Props> = ({ onRowClick }) => {
   return (
     <>
       <GenericTableWithData<
@@ -91,6 +97,7 @@ const FormRuleTable = () => {
         recordType='FormRule'
         filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
+        handleRowClick={onRowClick}
         // defaultFilters={{
         //   activeStatus: [ActiveStatus.Active],
         //   systemForm: [SystemStatus.NonSystem],

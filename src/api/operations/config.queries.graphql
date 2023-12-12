@@ -43,3 +43,9 @@ query GetServiceCategoryRules(
     }
   }
 }
+
+query GetAdminFormDefinition($role: AdminFormRole!) {
+  adminFormDefinition(role: $role) {
+    ...FormDefinitionFields
+  }
+}
