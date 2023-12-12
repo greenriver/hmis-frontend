@@ -1,19 +1,25 @@
+import { Box } from '@mui/material';
 import { useMatch, useNavigate } from 'react-router-dom';
 
 import AutoExitDialog from './AutoExitDialog';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { AdminDashboardRoutes, Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AutoExitConfigFieldsFragment,
+  DeleteAutoExitConfigDocument,
+  DeleteAutoExitConfigMutation,
+  DeleteAutoExitConfigMutationVariables,
   GetAutoExitConfigsDocument,
   GetAutoExitConfigsQuery,
   GetAutoExitConfigsQueryVariables,
 } from '@/types/gqlTypes';
+import { evictAutoExitConfigs } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const columns: ColumnDef<AutoExitConfigFieldsFragment>[] = [
@@ -71,7 +77,33 @@ const AutoExitTable = () => {
       >
         queryVariables={{}}
         queryDocument={GetAutoExitConfigsDocument}
-        columns={columns}
+        columns={[
+          ...columns,
+          {
+            header: '',
+            render: ({ id }) => (
+              <Box
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+              >
+                <DeleteMutationButton<
+                  DeleteAutoExitConfigMutation,
+                  DeleteAutoExitConfigMutationVariables
+                >
+                  queryDocument={DeleteAutoExitConfigDocument}
+                  variables={{ id }}
+                  idPath={'deleteAutoExitConfig.autoExitConfig.id'}
+                  recordName='Auto Exit Config'
+                  onSuccess={() => evictAutoExitConfigs()}
+                >
+                  Delete
+                </DeleteMutationButton>
+              </Box>
+            ),
+          },
+        ]}
         pagePath='autoExitConfigs'
         noData='No auto exit configs'
         showFilters
