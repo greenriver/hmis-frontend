@@ -235,16 +235,9 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         parent: AdminDashboardRoutes.CONFIGURE_SERVICES,
         title: 'View Service Category',
       },
-      [AdminDashboardRoutes.CONFIGURE_FORM_RULES]: {
-        title: 'Form Rules',
-      },
-      [AdminDashboardRoutes.EDIT_FORM_RULE]: {
-        parent: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
-        title: 'Edit Rule',
-      },
-      [AdminDashboardRoutes.ADD_FORM_RULE]: {
-        parent: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
-        title: 'New Rule',
+      [AdminDashboardRoutes.VIEW_FORM]: {
+        parent: AdminDashboardRoutes.FORMS,
+        title: 'View Form Details',
       },
       [AdminDashboardRoutes.USER_AUDIT]: {
         parent: AdminDashboardRoutes.USERS,

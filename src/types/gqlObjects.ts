@@ -5610,6 +5610,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'CreateFormRuleInput',
     args: [
       {
+        name: 'definitionId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
         name: 'input',
         type: {
           kind: 'NON_NULL',
@@ -6082,6 +6090,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'appliedToProject',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'definition',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {

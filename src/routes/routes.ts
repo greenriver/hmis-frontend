@@ -21,9 +21,8 @@ const adminDashboardRoutes = {
   USER_AUDIT: 'users/:userId/audit',
   CONFIGURE_SERVICES: 'services',
   CONFIGURE_SERVICE_CATEGORY: 'services/:serviceCategoryId',
-  CONFIGURE_FORM_RULES: 'form-rules',
-  ADD_FORM_RULE: 'form-rules/new',
-  EDIT_FORM_RULE: 'form-rules/:formRuleId',
+  FORMS: 'forms',
+  VIEW_FORM: 'forms/:formId',
 };
 
 // Routes within the client dashboard

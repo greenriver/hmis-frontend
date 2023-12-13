@@ -30,14 +30,14 @@ import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   ClientNameFragment,
-  FormDefinition,
+  FormDefinitionFieldsFragment,
   FormRole,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
 
 export interface IndividualAssessmentProps {
   // FormDefiniton to use for rendering the assessment
-  definition: FormDefinition;
+  definition: FormDefinitionFieldsFragment;
   // Assessment to render. Omit if starting a new assessment.
   assessment?: FullAssessmentFragment;
   title: string;

@@ -41,6 +41,26 @@ query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
   }
 }
 
+query GetFormDefinitionById($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFields
+  }
+}
+
+query GetFormDefinitions($limit: Int = 25, $offset: Int = 0) {
+  formDefinitions(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...FormDefinitionMetadata
+      formRules(limit: 1) {
+        nodesCount
+      }
+    }
+  }
+}
+
 mutation SubmitForm($input: SubmitFormInput!) {
   submitForm(input: $input) {
     clientMutationId

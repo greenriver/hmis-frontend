@@ -40,8 +40,8 @@ import AdminDashboard, {
 
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
-import EditFormRulePage from '@/modules/admin/components/formRules/EditFormRulePage';
-import FormRulesPage from '@/modules/admin/components/formRules/FormRulesPage';
+import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
+import ViewFormDefinitionPage from '@/modules/admin/components/forms/ViewFormDefinitionPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
 import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
@@ -620,26 +620,18 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
+            path: AdminDashboardRoutes.FORMS,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <FormRulesPage />
+                <FormDefinitionsPage />
               </RootPermissionsFilter>
             ),
           },
           {
-            path: AdminDashboardRoutes.ADD_FORM_RULE,
+            path: AdminDashboardRoutes.VIEW_FORM,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <EditFormRulePage />
-              </RootPermissionsFilter>
-            ),
-          },
-          {
-            path: AdminDashboardRoutes.EDIT_FORM_RULE,
-            element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <EditFormRulePage />
+                <ViewFormDefinitionPage />
               </RootPermissionsFilter>
             ),
           },
