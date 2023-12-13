@@ -17540,6 +17540,12 @@
             "deprecationReason": null
           },
           {
+            "name": "AUTO_EXIT_CONFIG",
+            "description": "Auto exit config",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CASE_NOTE",
             "description": "Case note",
             "isDeprecated": false,
@@ -17590,6 +17596,12 @@
           {
             "name": "FILE",
             "description": "File",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FORM_RULE",
+            "description": "Form rule",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -31155,6 +31167,39 @@
             "deprecationReason": null
           },
           {
+            "name": "staticFormDefinition",
+            "description": null,
+            "args": [
+              {
+                "name": "role",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "StaticFormRole",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "FormDefinition",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "user",
             "description": "User lookup",
             "args": [
@@ -36381,6 +36426,29 @@
           {
             "name": "QUESTIONING_UNSURE",
             "description": "(5) Questioning / unsure",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "StaticFormRole",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "AUTO_EXIT_CONFIG",
+            "description": "Auto exit config",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FORM_RULE",
+            "description": "Form rule",
             "isDeprecated": false,
             "deprecationReason": null
           }
