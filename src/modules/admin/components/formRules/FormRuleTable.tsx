@@ -1,17 +1,23 @@
 import { Chip } from '@mui/material';
 import { Stack } from '@mui/system';
-import React from 'react';
+import React, { useState } from 'react';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { HmisEnums } from '@/types/gqlEnums';
+
 import {
-  DataCollectedAbout,
   FormRuleFieldsFragment,
+  FormRuleInput,
   GetFormRulesDocument,
   GetFormRulesQuery,
   GetFormRulesQueryVariables,
+  MutationUpdateFormRuleArgs,
+  StaticFormRole,
+  UpdateFormRuleDocument,
+  UpdateFormRuleMutation,
 } from '@/types/gqlTypes';
 
 const SystemChip = () => (
@@ -24,7 +30,8 @@ const SystemChip = () => (
   />
 );
 
-const FORM_RULE_COLUMNS: ColumnDef<FormRuleFieldsFragment>[] = [
+type RowType = FormRuleFieldsFragment;
+const FORM_RULE_COLUMNS: ColumnDef<RowType>[] = [
   {
     header: 'Rule ID',
     render: 'id',
@@ -68,27 +75,48 @@ const FORM_RULE_COLUMNS: ColumnDef<FormRuleFieldsFragment>[] = [
   {
     header: 'Data Collected About',
     render: ({ dataCollectedAbout }) =>
-      dataCollectedAbout
-        ? HmisEnums.DataCollectedAbout[dataCollectedAbout]
-        : HmisEnums.DataCollectedAbout[DataCollectedAbout.AllClients],
+      dataCollectedAbout ? (
+        HmisEnums.DataCollectedAbout[dataCollectedAbout]
+      ) : (
+        <NotCollectedText>Not Specified</NotCollectedText>
+      ),
   },
   // TODO: direct project applicability
   // TODO: direct organization applicability
 ];
 
 interface Props {
-  onRowClick: (row: FormRuleFieldsFragment) => void;
+  queryVariables?: GetFormRulesQueryVariables;
 }
 
-const FormRuleTable: React.FC<Props> = ({ onRowClick }) => {
+const FormRuleTable: React.FC<Props> = ({ queryVariables }) => {
+  // Currently selected rule for editing
+  const [selectedRule, setSelectedRule] = useState<RowType | undefined>();
+
+  // Form dialog for editing rules
+  const { openFormDialog, renderFormDialog } = useStaticFormDialog<
+    UpdateFormRuleMutation,
+    MutationUpdateFormRuleArgs
+  >({
+    formRole: StaticFormRole.FormRule,
+    initialValues: selectedRule,
+    mutationDocument: UpdateFormRuleDocument,
+    getErrors: (data) => data.updateFormRule?.errors || [],
+    getVariables: (values) => ({
+      input: { input: values as FormRuleInput, id: selectedRule?.id || '' },
+    }),
+    onCompleted: () => {},
+    onClose: () => setSelectedRule(undefined),
+  });
+
   return (
     <>
       <GenericTableWithData<
         GetFormRulesQuery,
         GetFormRulesQueryVariables,
-        FormRuleFieldsFragment
+        RowType
       >
-        queryVariables={{}}
+        queryVariables={queryVariables || {}}
         queryDocument={GetFormRulesDocument}
         columns={FORM_RULE_COLUMNS}
         pagePath='formRules'
@@ -97,12 +125,15 @@ const FormRuleTable: React.FC<Props> = ({ onRowClick }) => {
         recordType='FormRule'
         filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
-        handleRowClick={onRowClick}
-        // defaultFilters={{
-        //   activeStatus: [ActiveStatus.Active],
-        //   systemForm: [SystemStatus.NonSystem],
-        // }}
+        handleRowClick={(row) => {
+          setSelectedRule(row);
+          openFormDialog();
+        }}
       />
+      {renderFormDialog({
+        title: 'Edit Rule',
+        DialogProps: { maxWidth: 'sm' },
+      })}
     </>
   );
 };

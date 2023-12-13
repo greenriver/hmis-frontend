@@ -3,7 +3,7 @@ import { RefObject, useCallback, useState } from 'react';
 
 import { DynamicFormOnSubmit } from '../components/DynamicForm';
 import { FormValues } from '../types';
-import { createHudValuesForSubmit } from '../util/formUtil';
+import { transformSubmitValues } from '../util/formUtil';
 
 import {
   emptyErrorState,
@@ -70,7 +70,11 @@ export function useDynamicFormHandlersForCustomMutation<
     ({ values, confirmed = false }) => {
       if (!formDefinition) return;
 
-      const input = createHudValuesForSubmit(values, formDefinition.definition);
+      const input = transformSubmitValues({
+        values,
+        definition: formDefinition.definition,
+        keyByFieldName: true,
+      });
       const variables = getVariables(input, confirmed);
       setErrors(emptyErrorState);
       void mutateFunction({ variables });
