@@ -1,27 +1,37 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Paper } from '@mui/material';
-import AutoExitTable from './AutoExitTable';
-import ButtonLink from '@/components/elements/ButtonLink';
-import PageTitle from '@/components/layout/PageTitle';
-import { AdminDashboardRoutes } from '@/routes/routes';
+import { Button, Paper } from '@mui/material';
+import { useState } from 'react';
 
-const ConfigureAutoExitPage = () => (
-  <>
-    <PageTitle
-      title='Auto Exit Configs'
-      actions={
-        <ButtonLink
-          to={AdminDashboardRoutes.CONFIGURE_AUTO_EXIT_CREATE}
-          Icon={AddIcon}
-        >
-          New Auto Exit Config
-        </ButtonLink>
-      }
-    />
-    <Paper>
-      <AutoExitTable />
-    </Paper>
-  </>
-);
+import AutoExitDialog from './AutoExitDialog';
+import AutoExitTable from './AutoExitTable';
+import PageTitle from '@/components/layout/PageTitle';
+
+const ConfigureAutoExitPage = () => {
+  const [selected, setSelected] = useState<string | null>(null);
+  return (
+    <>
+      <PageTitle
+        title='Auto Exit Configs'
+        actions={
+          <Button
+            onClick={() => setSelected('new')}
+            startIcon={<AddIcon />}
+            variant='outlined'
+          >
+            New Auto Exit Config
+          </Button>
+        }
+      />
+      <Paper>
+        <AutoExitTable selectedId={selected} setSelectedId={setSelected} />
+      </Paper>
+      <AutoExitDialog
+        open={!!selected}
+        autoExitId={selected || ''}
+        onClose={() => setSelected(null)}
+      />
+    </>
+  );
+};
 
 export default ConfigureAutoExitPage;

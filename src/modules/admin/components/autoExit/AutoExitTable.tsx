@@ -1,7 +1,5 @@
 import { Box } from '@mui/material';
-import { useState } from 'react';
 
-import AutoExitDialog from './AutoExitDialog';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -66,9 +64,12 @@ const columns: ColumnDef<AutoExitConfigFieldsFragment>[] = [
   },
 ];
 
-const AutoExitTable = () => {
-  const [selected, setSelected] = useState<string | null>(null);
-
+const AutoExitTable = ({
+  setSelectedId,
+}: {
+  selectedId?: string | null;
+  setSelectedId: (id: string | null) => any;
+}) => {
   return (
     <>
       <GenericTableWithData<
@@ -110,12 +111,7 @@ const AutoExitTable = () => {
         showFilters
         recordType='AutoExitConfig'
         paginationItemName='auto exit config'
-        handleRowClick={(row) => setSelected(row.id)}
-      />
-      <AutoExitDialog
-        open={!!selected}
-        autoExitId={selected || ''}
-        onClose={() => setSelected(null)}
+        handleRowClick={(row) => setSelectedId(row.id)}
       />
     </>
   );
