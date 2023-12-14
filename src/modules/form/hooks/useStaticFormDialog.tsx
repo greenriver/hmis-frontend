@@ -124,9 +124,7 @@ export function useStaticFormDialog<
               onDiscard={closeDialog}
               discardButtonText={props.discardButtonText}
               submitButtonText={props.submitButtonText}
-              // FIXME....
               submitLoading={loading}
-              // disabled={definitionLoading}
               otherActions={otherActions}
             />
           </DialogActions>

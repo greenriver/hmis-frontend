@@ -54,6 +54,7 @@ query GetFormDefinitions($limit: Int = 25, $offset: Int = 0) {
     nodesCount
     nodes {
       ...FormDefinitionMetadata
+      system
       formRules(limit: 1) {
         nodesCount
       }

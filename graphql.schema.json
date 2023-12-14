@@ -8643,18 +8643,6 @@
             "deprecationReason": null
           },
           {
-            "name": "ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE",
-            "description": "All Clients Receiving SSVF Financial Assistance",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ALL_CLIENTS_RECEIVING_SSVF_SERVICES",
-            "description": "All Clients Receiving SSVF Services",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "ALL_VETERANS",
             "description": "All Veterans",
             "isDeprecated": false,
@@ -17469,6 +17457,22 @@
             "deprecationReason": null
           },
           {
+            "name": "system",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "title",
             "description": null,
             "args": [],
@@ -18409,6 +18413,22 @@
             "deprecationReason": null
           },
           {
+            "name": "activeStatus",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ActiveStatus",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "createdAt",
             "description": null,
             "args": [],
@@ -18529,6 +18549,18 @@
             "deprecationReason": null
           },
           {
+            "name": "organizationId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "otherFunder",
             "description": null,
             "args": [],
@@ -18547,6 +18579,18 @@
             "type": {
               "kind": "OBJECT",
               "name": "Project",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
               "ofType": null
             },
             "isDeprecated": false,
@@ -18747,6 +18791,18 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "activeStatus",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "ActiveStatus",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "dataCollectedAbout",
             "description": null,

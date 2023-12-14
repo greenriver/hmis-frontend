@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 // eslint-disable-next-line no-restricted-imports
 import { useParams } from 'react-router-dom';
 import FormRuleTable from '../formRules/FormRuleTable';
+import FormTypeChip from './FormTypeChip';
 import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
@@ -15,6 +16,7 @@ import {
   StaticFormRole,
   useGetFormDefinitionByIdQuery,
 } from '@/types/gqlTypes';
+import { evictQuery } from '@/utils/cacheUtil';
 
 const ViewFormDefinitionPage = () => {
   const { formId } = useParams() as { formId: string };
@@ -36,9 +38,7 @@ const ViewFormDefinitionPage = () => {
     getVariables: (values) => ({
       input: { input: values as FormRuleInput, definitionId: formId },
     }),
-    onCompleted: () => {
-      // TODO: clear cache
-    },
+    onCompleted: () => evictQuery('formRules'),
   });
 
   if (error) throw error;
@@ -46,7 +46,10 @@ const ViewFormDefinitionPage = () => {
 
   return (
     <>
-      <PageTitle title={formDefinition?.title} />
+      <PageTitle
+        title={formDefinition?.title}
+        actions={<FormTypeChip role={formDefinition.role} />}
+      />
 
       <TitleCard
         title='Form Rules'
@@ -62,8 +65,9 @@ const ViewFormDefinitionPage = () => {
         }
       >
         <FormRuleTable
-          queryVariables={{ filters: { definition: formId } }}
           //TODO: specify columns (can hide definition name+title, and DCA if appropriate)
+          //TODO: hide "form type" filter which is not applicable
+          queryVariables={{ filters: { definition: formId } }}
         />
       </TitleCard>
       {renderFormDialog({

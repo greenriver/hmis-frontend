@@ -1,6 +1,7 @@
-import { Chip } from '@mui/material';
+import { Button, Chip } from '@mui/material';
 import { Stack } from '@mui/system';
-import React, { useState } from 'react';
+import { omit } from 'lodash-es';
+import React, { useMemo, useState } from 'react';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -20,7 +21,7 @@ import {
   UpdateFormRuleMutation,
 } from '@/types/gqlTypes';
 
-const SystemChip = () => (
+export const SystemChip = () => (
   <Chip
     label='System'
     size='small'
@@ -36,27 +37,19 @@ const FORM_RULE_COLUMNS: ColumnDef<RowType>[] = [
     header: 'Rule ID',
     render: 'id',
     linkTreatment: true,
+    width: '80px',
   },
+  // {
+  //   header: 'Form Type',
+  //   render: ({ definitionRole }) =>
+  //     definitionRole && HmisEnums.FormRole[definitionRole],
+  // },
+  // {
+  //   header: 'Form Title',
+  //   render: 'definitionTitle',
+  // },
   {
-    header: 'Form Type',
-    render: ({ definitionRole }) =>
-      definitionRole && HmisEnums.FormRole[definitionRole],
-  },
-  {
-    header: 'Form Title',
-    render: 'definitionTitle',
-  },
-  {
-    header: 'Active Status',
-    render: ({ system, active }) => (
-      <Stack direction={'row'} gap={1}>
-        {active ? 'Active' : 'Inactive'}
-        {system && <SystemChip />}
-      </Stack>
-    ),
-  },
-  {
-    header: 'Project Applicability',
+    header: 'Project Type',
     render: ({ projectType }) =>
       projectType ? (
         <ProjectTypeChip projectType={projectType} />
@@ -67,9 +60,24 @@ const FORM_RULE_COLUMNS: ColumnDef<RowType>[] = [
   {
     header: 'Funder',
     render: ({ funder, otherFunder }) => {
-      if (funder) return HmisEnums.FundingSource[funder];
-      if (otherFunder) return otherFunder;
+      if (otherFunder && !funder) return otherFunder;
+      if (funder)
+        return (
+          <Stack>
+            <span>{HmisEnums.FundingSource[funder]}</span>
+            <span>{otherFunder}</span>
+          </Stack>
+        );
       return <NotCollectedText>All Funders</NotCollectedText>;
+    },
+  },
+  {
+    // Direct Project/Org applicability rule
+    header: 'Entity',
+    render: ({ project, organization }) => {
+      if (project) return project.projectName;
+      if (organization) return organization.organizationName;
+      return <NotCollectedText>None</NotCollectedText>;
     },
   },
   {
@@ -81,8 +89,15 @@ const FORM_RULE_COLUMNS: ColumnDef<RowType>[] = [
         <NotCollectedText>Not Specified</NotCollectedText>
       ),
   },
-  // TODO: direct project applicability
-  // TODO: direct organization applicability
+  {
+    header: 'Active Status',
+    render: ({ system, active }) => (
+      <Stack direction={'row'} gap={1}>
+        {active ? 'Active' : 'Inactive'}
+        {system && <SystemChip />}
+      </Stack>
+    ),
+  },
 ];
 
 interface Props {
@@ -109,6 +124,33 @@ const FormRuleTable: React.FC<Props> = ({ queryVariables }) => {
     onClose: () => setSelectedRule(undefined),
   });
 
+  const columnsWithAction: typeof FORM_RULE_COLUMNS = useMemo(() => {
+    return [
+      ...FORM_RULE_COLUMNS,
+      {
+        key: 'action',
+        textAlign: 'right',
+        render: (row) => {
+          // system rules cannot be changed
+          if (row.system) return null;
+
+          return (
+            <Button
+              onClick={() => {
+                setSelectedRule(row);
+                openFormDialog();
+              }}
+              size='small'
+              variant='outlined'
+            >
+              Edit
+            </Button>
+          );
+        },
+      },
+    ];
+  }, [openFormDialog]);
+
   return (
     <>
       <GenericTableWithData<
@@ -118,17 +160,15 @@ const FormRuleTable: React.FC<Props> = ({ queryVariables }) => {
       >
         queryVariables={queryVariables || {}}
         queryDocument={GetFormRulesDocument}
-        columns={FORM_RULE_COLUMNS}
+        columns={columnsWithAction}
         pagePath='formRules'
         noData='No form rules'
         showFilters
         recordType='FormRule'
         filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
-        handleRowClick={(row) => {
-          setSelectedRule(row);
-          openFormDialog();
-        }}
+        filters={(filters) => omit(filters, 'definition', 'formType')}
+        // tableProps={{ sx: { tableLayout: 'fixed' } }}
       />
       {renderFormDialog({
         title: 'Edit Rule',

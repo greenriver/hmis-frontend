@@ -2835,6 +2835,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'system',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'title',
         type: {
           kind: 'NON_NULL',
@@ -2980,6 +2988,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'activeStatus',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
+        },
+      },
+      {
         name: 'createdAt',
         type: {
           kind: 'NON_NULL',
@@ -3024,9 +3040,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'otherFunder',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
@@ -6185,6 +6206,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'FormRuleInput',
     args: [
+      {
+        name: 'activeStatus',
+        type: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
+      },
       {
         name: 'dataCollectedAbout',
         type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },

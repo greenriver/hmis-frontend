@@ -1272,10 +1272,6 @@ export enum DobDataQuality {
 export enum DataCollectedAbout {
   /** All Clients */
   AllClients = 'ALL_CLIENTS',
-  /** All Clients Receiving SSVF Financial Assistance */
-  AllClientsReceivingSsvfFinancialAssistance = 'ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE',
-  /** All Clients Receiving SSVF Services */
-  AllClientsReceivingSsvfServices = 'ALL_CLIENTS_RECEIVING_SSVF_SERVICES',
   /** All Veterans */
   AllVeterans = 'ALL_VETERANS',
   /** HoH */
@@ -2517,6 +2513,7 @@ export type FormDefinition = {
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
   role: FormRole;
+  system: Scalars['Boolean']['output'];
   title: Scalars['String']['output'];
 };
 
@@ -2674,6 +2671,7 @@ export enum FormRole {
 export type FormRule = {
   __typename?: 'FormRule';
   active: Scalars['Boolean']['output'];
+  activeStatus: ActiveStatus;
   createdAt: Scalars['ISO8601DateTime']['output'];
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   definitionId?: Maybe<Scalars['ID']['output']>;
@@ -2683,8 +2681,10 @@ export type FormRule = {
   funder?: Maybe<FundingSource>;
   id: Scalars['ID']['output'];
   organization?: Maybe<Organization>;
+  organizationId?: Maybe<Scalars['ID']['output']>;
   otherFunder?: Maybe<Scalars['String']['output']>;
   project?: Maybe<Project>;
+  projectId?: Maybe<Scalars['ID']['output']>;
   projectType?: Maybe<ProjectType>;
   serviceCategory?: Maybe<ServiceCategory>;
   serviceType?: Maybe<ServiceType>;
@@ -2702,6 +2702,7 @@ export type FormRuleFilterOptions = {
 };
 
 export type FormRuleInput = {
+  activeStatus?: InputMaybe<ActiveStatus>;
   dataCollectedAbout?: InputMaybe<DataCollectedAbout>;
   funder?: InputMaybe<FundingSource>;
   organizationId?: InputMaybe<Scalars['ID']['input']>;
@@ -12955,6 +12956,7 @@ export type FormRuleFieldsFragment = {
   __typename?: 'FormRule';
   id: string;
   active: boolean;
+  activeStatus: ActiveStatus;
   system: boolean;
   definitionIdentifier: string;
   definitionId?: string | null;
@@ -12964,6 +12966,8 @@ export type FormRuleFieldsFragment = {
   funder?: FundingSource | null;
   otherFunder?: string | null;
   projectType?: ProjectType | null;
+  projectId?: string | null;
+  organizationId?: string | null;
   createdAt: string;
   updatedAt: string;
   project?: {
@@ -12998,6 +13002,7 @@ export type GetFormRulesQuery = {
       __typename?: 'FormRule';
       id: string;
       active: boolean;
+      activeStatus: ActiveStatus;
       system: boolean;
       definitionIdentifier: string;
       definitionId?: string | null;
@@ -13007,6 +13012,8 @@ export type GetFormRulesQuery = {
       funder?: FundingSource | null;
       otherFunder?: string | null;
       projectType?: ProjectType | null;
+      projectId?: string | null;
+      organizationId?: string | null;
       createdAt: string;
       updatedAt: string;
       project?: {
@@ -13047,6 +13054,7 @@ export type GetServiceCategoryRulesQuery = {
         __typename?: 'FormRule';
         id: string;
         active: boolean;
+        activeStatus: ActiveStatus;
         system: boolean;
         definitionIdentifier: string;
         definitionId?: string | null;
@@ -13056,6 +13064,8 @@ export type GetServiceCategoryRulesQuery = {
         funder?: FundingSource | null;
         otherFunder?: string | null;
         projectType?: ProjectType | null;
+        projectId?: string | null;
+        organizationId?: string | null;
         createdAt: string;
         updatedAt: string;
         project?: {
@@ -13085,6 +13095,7 @@ export type GetFormRuleQuery = {
     __typename?: 'FormRule';
     id: string;
     active: boolean;
+    activeStatus: ActiveStatus;
     system: boolean;
     definitionIdentifier: string;
     definitionId?: string | null;
@@ -13094,6 +13105,8 @@ export type GetFormRuleQuery = {
     funder?: FundingSource | null;
     otherFunder?: string | null;
     projectType?: ProjectType | null;
+    projectId?: string | null;
+    organizationId?: string | null;
     createdAt: string;
     updatedAt: string;
     project?: {
@@ -13124,6 +13137,7 @@ export type CreateFormRuleMutation = {
       __typename?: 'FormRule';
       id: string;
       active: boolean;
+      activeStatus: ActiveStatus;
       system: boolean;
       definitionIdentifier: string;
       definitionId?: string | null;
@@ -13133,6 +13147,8 @@ export type CreateFormRuleMutation = {
       funder?: FundingSource | null;
       otherFunder?: string | null;
       projectType?: ProjectType | null;
+      projectId?: string | null;
+      organizationId?: string | null;
       createdAt: string;
       updatedAt: string;
       project?: {
@@ -13178,6 +13194,7 @@ export type UpdateFormRuleMutation = {
       __typename?: 'FormRule';
       id: string;
       active: boolean;
+      activeStatus: ActiveStatus;
       system: boolean;
       definitionIdentifier: string;
       definitionId?: string | null;
@@ -13187,6 +13204,8 @@ export type UpdateFormRuleMutation = {
       funder?: FundingSource | null;
       otherFunder?: string | null;
       projectType?: ProjectType | null;
+      projectId?: string | null;
+      organizationId?: string | null;
       createdAt: string;
       updatedAt: string;
       project?: {
@@ -18837,6 +18856,7 @@ export type GetFormDefinitionsQuery = {
     nodesCount: number;
     nodes: Array<{
       __typename?: 'FormDefinition';
+      system: boolean;
       id: string;
       role: FormRole;
       title: string;
@@ -24869,6 +24889,7 @@ export const FormRuleFieldsFragmentDoc = gql`
   fragment FormRuleFields on FormRule {
     id
     active
+    activeStatus
     system
     definitionIdentifier
     definitionId
@@ -24878,9 +24899,11 @@ export const FormRuleFieldsFragmentDoc = gql`
     funder
     otherFunder
     projectType
+    projectId
     project {
       ...ProjectNameAndType
     }
+    organizationId
     organization {
       ...OrganizationNameFields
     }
@@ -30079,6 +30102,7 @@ export const GetFormDefinitionsDocument = gql`
       nodesCount
       nodes {
         ...FormDefinitionMetadata
+        system
         formRules(limit: 1) {
           nodesCount
         }
