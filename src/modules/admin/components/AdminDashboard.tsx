@@ -72,6 +72,12 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
         path: AdminDashboardRoutes.CONFIGURE_SERVICES,
         permissions: ['canConfigureDataCollection'],
       },
+      {
+        id: 'auto-exit',
+        title: 'Auto-Exit',
+        path: AdminDashboardRoutes.CONFIGURE_AUTO_EXIT,
+        permissions: ['canConfigureDataCollection'],
+      },
     ],
   },
 ];
