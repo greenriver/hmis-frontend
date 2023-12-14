@@ -22,6 +22,7 @@ const adminDashboardRoutes = {
   CONFIGURE_SERVICES: 'services',
   CONFIGURE_SERVICE_CATEGORY: 'services/:serviceCategoryId',
   CONFIGURE_FORM_RULES: 'form-rules',
+  CONFIGURE_AUTO_EXIT: 'auto-exit',
 };
 
 // Routes within the client dashboard

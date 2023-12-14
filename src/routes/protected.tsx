@@ -38,6 +38,7 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
+import ConfigureAutoExitPage from '@/modules/admin/components/autoExit/ConfigureAutoExitPage';
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import FormRulesPage from '@/modules/admin/components/formRules/FormRulesPage';
@@ -639,6 +640,14 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
                 <ServiceCategoryDetail />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CONFIGURE_AUTO_EXIT,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <ConfigureAutoExitPage />
               </RootPermissionsFilter>
             ),
           },
