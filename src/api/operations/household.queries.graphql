@@ -18,6 +18,10 @@ mutation UpdateRelationshipToHoH($input: UpdateRelationshipToHoHInput!) {
           client {
             id
           }
+          enrollment {
+            id
+            lockVersion
+          }
         }
       }
     }
