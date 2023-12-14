@@ -644,8 +644,7 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: `${AdminDashboardRoutes.CONFIGURE_AUTO_EXIT}/*`,
-
+            path: AdminDashboardRoutes.CONFIGURE_AUTO_EXIT,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
                 <ConfigureAutoExitPage />

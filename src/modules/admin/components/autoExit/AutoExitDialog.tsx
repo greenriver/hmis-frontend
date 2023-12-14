@@ -60,7 +60,6 @@ const AutoExitDialog: React.FC<AutoExitDialogProps> = ({
               CreateAutoExitConfigMutationVariables
             >
               role={StaticFormRole.AutoExitConfig}
-              initialValues={{ lengthOfAbsenceDays: 30 }}
               mutationDocument={CreateAutoExitConfigDocument}
               getVariables={(values) => ({ input: values })}
               getErrors={(data) => data.createAutoExitConfig?.errors || []}

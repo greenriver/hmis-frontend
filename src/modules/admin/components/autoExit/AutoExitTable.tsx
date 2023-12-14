@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 import AutoExitDialog from './AutoExitDialog';
 import NotCollectedText from '@/components/elements/NotCollectedText';
@@ -8,7 +8,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { AdminDashboardRoutes, Routes } from '@/routes/routes';
+import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AutoExitConfigFieldsFragment,
@@ -29,9 +29,12 @@ const columns: ColumnDef<AutoExitConfigFieldsFragment>[] = [
   },
   {
     header: 'Project Type',
-    render: ({ projectType }) => (
-      <HmisEnum enumMap={HmisEnums.ProjectType} value={projectType} />
-    ),
+    render: ({ projectType }) =>
+      projectType ? (
+        <HmisEnum enumMap={HmisEnums.ProjectType} value={projectType} />
+      ) : (
+        <NotCollectedText>Any Project Type</NotCollectedText>
+      ),
   },
   {
     header: 'Project',
@@ -43,7 +46,7 @@ const columns: ColumnDef<AutoExitConfigFieldsFragment>[] = [
           {project.projectName}
         </RouterLink>
       ) : (
-        <NotCollectedText variant='body2'>No Project</NotCollectedText>
+        <NotCollectedText variant='body2'>Any Project</NotCollectedText>
       ),
   },
   {
@@ -58,15 +61,13 @@ const columns: ColumnDef<AutoExitConfigFieldsFragment>[] = [
           {organization.organizationName}
         </RouterLink>
       ) : (
-        <NotCollectedText variant='body2'>No Organization</NotCollectedText>
+        <NotCollectedText variant='body2'>Any Organization</NotCollectedText>
       ),
   },
 ];
 
 const AutoExitTable = () => {
-  const editMatch = useMatch(AdminDashboardRoutes.CONFIGURE_AUTO_EXIT_EDIT);
-  const newMatch = useMatch(AdminDashboardRoutes.CONFIGURE_AUTO_EXIT_CREATE);
-  const navigate = useNavigate();
+  const [selected, setSelected] = useState<string | null>(null);
 
   return (
     <>
@@ -109,16 +110,12 @@ const AutoExitTable = () => {
         showFilters
         recordType='AutoExitConfig'
         paginationItemName='auto exit config'
-        rowLinkTo={({ id }) =>
-          generateSafePath(AdminDashboardRoutes.CONFIGURE_AUTO_EXIT_EDIT, {
-            autoExitId: id,
-          })
-        }
+        handleRowClick={(row) => setSelected(row.id)}
       />
       <AutoExitDialog
-        open={!!(editMatch || newMatch)}
-        autoExitId={editMatch?.params?.autoExitId}
-        onClose={() => navigate(AdminDashboardRoutes.CONFIGURE_AUTO_EXIT)}
+        open={!!selected}
+        autoExitId={selected || ''}
+        onClose={() => setSelected(null)}
       />
     </>
   );
