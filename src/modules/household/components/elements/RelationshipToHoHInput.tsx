@@ -31,9 +31,7 @@ const RelationshipToHoHInput = ({
   const [completed, setCompleted] = useState(false);
   const [updateRelationship, { loading, error: updateError }] =
     useUpdateRelationshipToHoHMutation({
-      onCompleted: () => {
-        setCompleted(true);
-      },
+      onCompleted: () => setCompleted(true),
     });
 
   // If relationshipToHoH prop changes (as it would if setHoH is called), update the relationship in state
@@ -71,6 +69,7 @@ const RelationshipToHoHInput = ({
         value={relationship || null}
         onChange={onChange}
         showDataNotCollected
+        disabled={loading}
         {...props}
       />
     </InputIndicatorContainer>

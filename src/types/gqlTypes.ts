@@ -19257,6 +19257,11 @@ export type UpdateRelationshipToHoHMutation = {
           id: string;
           relationshipToHoH: RelationshipToHoH;
           client: { __typename?: 'Client'; id: string };
+          enrollment: {
+            __typename?: 'Enrollment';
+            id: string;
+            lockVersion: number;
+          };
         }>;
       };
     } | null;
@@ -29297,6 +29302,10 @@ export const UpdateRelationshipToHoHDocument = gql`
             relationshipToHoH
             client {
               id
+            }
+            enrollment {
+              id
+              lockVersion
             }
           }
         }
