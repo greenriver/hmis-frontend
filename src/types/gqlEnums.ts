@@ -260,9 +260,6 @@ export const HmisEnums = {
   },
   DataCollectedAbout: {
     ALL_CLIENTS: 'All Clients',
-    ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE:
-      'All Clients Receiving SSVF Financial Assistance',
-    ALL_CLIENTS_RECEIVING_SSVF_SERVICES: 'All Clients Receiving SSVF Services',
     ALL_VETERANS: 'All Veterans',
     HOH: 'HoH',
     HOH_AND_ADULTS: 'HoH and Adults',
