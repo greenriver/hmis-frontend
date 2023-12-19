@@ -62,8 +62,8 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
     items: [
       {
         id: 'forms',
-        title: 'Form Rules',
-        path: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
+        title: 'Forms',
+        path: AdminDashboardRoutes.FORMS,
         permissions: ['canConfigureDataCollection'],
       },
       {

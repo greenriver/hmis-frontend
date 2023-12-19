@@ -15,7 +15,7 @@ import FormStepper from '@/modules/form/components/FormStepper';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
-  FormDefinition,
+  FormDefinitionFieldsFragment,
   FormRole,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
@@ -23,7 +23,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
-  definition: FormDefinition;
+  definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
   title: ReactNode;
   embeddedInWorkflow?: boolean;

@@ -41,7 +41,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   EnrollmentFieldsFragment,
-  FormDefinition,
+  FormDefinitionFieldsFragment,
   FormRole,
   FullAssessmentFragment,
   InitialBehavior,
@@ -51,7 +51,7 @@ interface Props {
   enrollment: EnrollmentFieldsFragment;
   clientId: string;
   formRole?: FormRole;
-  definition: FormDefinition;
+  definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
   assessmentTitle?: ReactNode;
   top?: number;

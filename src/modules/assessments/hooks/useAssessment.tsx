@@ -7,6 +7,7 @@ import {
   ClientNameDobVeteranFields,
 } from '@/modules/form/util/formUtil';
 import {
+  FormDefinitionFieldsFragment,
   FormRole,
   RelationshipToHoH,
   useGetAssessmentQuery,
@@ -54,7 +55,7 @@ export function useAssessment({
 
   // Apply "Data Collected About" conditionals to form definition based on client details.
   // I.E. drop irrelevant item groups for children, non-HOH, non-Veterans, etc
-  const definition = useMemo(() => {
+  const definition: FormDefinitionFieldsFragment | undefined = useMemo(() => {
     const formDef =
       formDefinitionData?.getFormDefinition ||
       assessmentData?.assessment?.definition;
