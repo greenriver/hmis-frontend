@@ -1,15 +1,12 @@
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { Box, Popover } from '@mui/material';
+import { Stack } from '@mui/material';
+import { isDate, isValid } from 'date-fns';
 import { isEmpty, isNil } from 'lodash-es';
-import {
-  usePopupState,
-  bindTrigger,
-  bindPopover,
-} from 'material-ui-popup-state/hooks';
+import { useCallback } from 'react';
 
-import TableFilterButton from './FilterButton';
-import TableFilterContent from './FilterContent';
-
+import TableFilterItem from './FilterItem';
+import TableControlPopover from './TableControlPopover';
+import useIntermediateState from '@/hooks/useIntermediateState';
 import { FilterType } from '@/modules/dataFetching/types';
 
 export interface TableFilterMenuProps<T> {
@@ -19,10 +16,11 @@ export interface TableFilterMenuProps<T> {
 }
 
 const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
-  const popupState = usePopupState({
-    variant: 'popover',
-    popupId: 'filterMenu',
-  });
+  const defaultValue = {};
+  const { state, setState, reset, cancel } = useIntermediateState(
+    props.filterValues,
+    defaultValue as typeof props.filterValues
+  );
 
   // Count # of filters that have values applied
   const filterCount = Object.entries(props.filterValues)
@@ -30,41 +28,49 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
     .filter(([k]) => props.filters.hasOwnProperty(k))
     .filter(([, v]) => (Array.isArray(v) ? !isEmpty(v) : !isNil(v))).length;
 
+  const cleanedValues = useCallback((values: Partial<T>) => {
+    const cleaned: typeof values = {};
+    Object.keys(values).forEach((key) => {
+      const val = values[key as keyof T];
+      if (val && isDate(val) && !isValid(val)) {
+        // skip invalid dates
+      } else {
+        cleaned[key as keyof T] = val;
+      }
+    });
+    return cleaned;
+  }, []);
+
   return (
-    <>
-      <TableFilterButton
-        startIcon={<FilterListIcon />}
-        active={filterCount > 0}
-        {...bindTrigger(popupState)}
-      >
-        Filters
-        {filterCount > 0 && <> ({filterCount})</>}
-      </TableFilterButton>
-      <Popover
-        {...bindPopover(popupState)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <Box p={2} width={320}>
-          <TableFilterContent
-            {...props}
-            setFilterValues={(val) => {
-              popupState.close();
-              props.setFilterValues(val);
+    <TableControlPopover
+      label='Filters'
+      icon={<FilterListIcon />}
+      header='Filter By'
+      applyLabel='Apply Filters'
+      filterCount={filterCount}
+      onCancel={cancel}
+      onApply={() => props.setFilterValues(cleanedValues(state))}
+      onReset={() => {
+        props.setFilterValues(cleanedValues(defaultValue));
+        reset();
+      }}
+    >
+      <Stack gap={2}>
+        {Object.entries(props.filters).map(([key, filter]) => (
+          <TableFilterItem
+            key={key}
+            filter={filter as FilterType<T>}
+            keyName={key}
+            value={state[key as keyof T]}
+            onChange={(value) => {
+              // resize so that as pick list content changes, popper will reflow allowing scroll
+              window.dispatchEvent(new CustomEvent('resize'));
+              setState((prev) => ({ ...prev, [key]: value }));
             }}
-            onCancel={() => {
-              popupState.close();
-            }}
-          ></TableFilterContent>
-        </Box>
-      </Popover>
-    </>
+          />
+        ))}
+      </Stack>
+    </TableControlPopover>
   );
 };
 

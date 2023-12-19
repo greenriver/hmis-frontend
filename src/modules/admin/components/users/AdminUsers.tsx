@@ -2,32 +2,33 @@ import { Paper, Stack } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import UserActionsMenu from './UserActionsMenu';
-import TextInput from '@/components/elements/input/TextInput';
+import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import ConfirmImpersonation from '@/modules/admin/components/ConfirmImpersonation';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import {
-  ApplicationUserFieldsFragment,
   GetApplicationUsersDocument,
   GetApplicationUsersQuery,
   GetApplicationUsersQueryVariables,
+  UserFieldsFragment,
 } from '@/types/gqlTypes';
 
 const AdminUsers = () => {
+  const [access] = useRootPermissions();
   const { user: currentUser } = useAuth();
-  const [search, setSearch, debouncedSearch] = useDebouncedState<
-    string | undefined
-  >(undefined);
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
-  const [chosenUser, setChosenUser] = useState<ApplicationUserFieldsFragment>();
+  const [chosenUser, setChosenUser] = useState<UserFieldsFragment>();
   const handleCancel = () => {
     setChosenUser(undefined);
   };
 
-  const columns = useMemo<ColumnDef<ApplicationUserFieldsFragment>[]>(
+  const columns = useMemo<ColumnDef<UserFieldsFragment>[]>(
     () => [
       {
         header: 'Name',
@@ -39,18 +40,23 @@ const AdminUsers = () => {
       },
       {
         textAlign: 'right',
-        render: (user) => (
-          <UserActionsMenu
-            onClickImpersonate={() => setChosenUser(user)}
-            isCurrentUser={
-              !!(user.id == currentUser?.id || currentUser?.impersonating)
-            }
-          />
-        ),
+        render: (user) =>
+          access && (
+            <UserActionsMenu
+              onClickImpersonate={() => setChosenUser(user)}
+              userId={user.id}
+              isCurrentUser={
+                !!(user.id == currentUser?.id || currentUser?.impersonating)
+              }
+              rootAccess={access}
+            />
+          ),
       },
     ],
-    [currentUser]
+    [access, currentUser?.id, currentUser?.impersonating]
   );
+
+  if (!access) return <Loading />;
 
   return (
     <>
@@ -59,23 +65,23 @@ const AdminUsers = () => {
         <ConfirmImpersonation onCancel={handleCancel} user={chosenUser} />
       )}
       <Stack spacing={2}>
-        <TextInput
+        <CommonSearchInput
           label='Search Users'
           name='search users'
           placeholder='Search by name or email'
-          value={search || ''}
-          onChange={(e) => setSearch(e.target.value)}
-          inputWidth='400px'
+          value={search}
+          onChange={setSearch}
+          fullWidth
+          size='medium'
         />
-
         <Paper>
           <GenericTableWithData<
             GetApplicationUsersQuery,
             GetApplicationUsersQueryVariables,
-            ApplicationUserFieldsFragment
+            UserFieldsFragment
           >
             queryVariables={{
-              filters: { searchTerm: debouncedSearch },
+              filters: { searchTerm: debouncedSearch || undefined },
             }}
             queryDocument={GetApplicationUsersDocument}
             columns={columns}

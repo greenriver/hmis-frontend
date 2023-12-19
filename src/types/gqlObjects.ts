@@ -36,6 +36,52 @@ export interface GqlInputObjectSchema {
 // Partial schema introspection for object types. Includes non-object fields only.
 export const HmisObjectSchemas: GqlSchema[] = [
   {
+    name: 'ActivityLog',
+    fields: [
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'ipAddress',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ActivityLogRecord',
+    fields: [
+      {
+        name: 'recordId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'recordType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'ApplicationUser',
     fields: [
       {
@@ -58,7 +104,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
-      { name: 'email', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'email',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'firstName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       {
         name: 'id',
         type: {
@@ -66,6 +123,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
+      },
+      {
+        name: 'lastName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'name',
@@ -4070,6 +4131,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canAuditUsers',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteAssessments',
         type: {
           kind: 'NON_NULL',
@@ -4794,39 +4863,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       { name: 'unitSize', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
-    ],
-  },
-  {
-    name: 'User',
-    fields: [
-      {
-        name: 'dateCreated',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-      },
-      {
-        name: 'dateDeleted',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-      },
-      {
-        name: 'dateUpdated',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
-      },
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'name',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
     ],
   },
   {

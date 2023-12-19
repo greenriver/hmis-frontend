@@ -53,7 +53,7 @@ export interface Props<T> {
   headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
   selectable?: 'row' | 'checkbox'; // selectable by clicking row or by clicking checkbox
   isRowSelectable?: (row: T) => boolean;
-  setSelectedRowIds?: (ids: readonly string[]) => void;
+  onChangeSelectedRowIds?: (ids: readonly string[]) => void;
   EnhancedTableToolbarProps?: Omit<
     EnhancedTableToolbarProps<T>,
     'selectedIds' | 'rows'
@@ -110,7 +110,7 @@ const GenericTable = <T extends { id: string }>({
   headerCellSx,
   selectable,
   isRowSelectable,
-  setSelectedRowIds,
+  onChangeSelectedRowIds,
   EnhancedTableToolbarProps,
   filterToolbar,
   renderRow,
@@ -124,7 +124,8 @@ const GenericTable = <T extends { id: string }>({
   );
   const hasHeaders = columns.find((c) => !!c.header);
 
-  const [selected, setSelected] = useState<readonly string[]>([]);
+  // initially undefined so we can early return and avoid state flicker
+  const [selected, setSelected] = useState<string[]>();
 
   const selectableRowIds = useMemo(() => {
     if (!selectable) return [];
@@ -145,18 +146,22 @@ const GenericTable = <T extends { id: string }>({
 
   const handleSelectRow = useCallback(
     (row: T) =>
-      setSelected((old) =>
-        old.includes(row.id) ? without(old, row.id) : [...old, row.id]
-      ),
+      setSelected((old) => {
+        if (!old) return undefined;
+        return old.includes(row.id) ? without(old, row.id) : [...old, row.id];
+      }),
     []
   );
 
   // Clear selection when data changes
   useEffect(() => setSelected([]), [rows]);
-  useEffect(
-    () => setSelectedRowIds && setSelectedRowIds(selected),
-    [selected, setSelectedRowIds]
-  );
+
+  useEffect(() => {
+    if (selected) onChangeSelectedRowIds?.(selected);
+  }, [selected, onChangeSelectedRowIds]);
+
+  // avoid state flicker due to state reset
+  if (!selected) return <Loading />;
 
   if (loading && loadingVariant === 'circular') return <Loading />;
 
@@ -220,6 +225,7 @@ const GenericTable = <T extends { id: string }>({
               sx={{
                 ...(headerCellSx ? headerCellSx(def) : undefined),
                 textAlign: def.textAlign,
+                width: def.width,
               }}
             >
               <strong>{def.header}</strong>
@@ -359,6 +365,7 @@ const GenericTable = <T extends { id: string }>({
                         ariaLabel,
                         dontLink = false,
                         textAlign,
+                        tableCellProps,
                       } = def;
 
                       const isLinked = rowLink && !dontLink;
@@ -381,12 +388,15 @@ const GenericTable = <T extends { id: string }>({
                       return (
                         <TableCell
                           key={key(def) || index}
+                          {...tableCellProps}
                           sx={{
                             width,
                             minWidth,
                             ...(isLinked ? { p: 0 } : undefined),
                             textAlign,
+                            whiteSpace: 'initial',
                             ...onClickLinkTreatment,
+                            ...tableCellProps?.sx,
                           }}
                         >
                           {isLinked ? (

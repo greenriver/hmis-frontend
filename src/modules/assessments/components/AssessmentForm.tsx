@@ -10,8 +10,6 @@ import {
   useState,
 } from 'react';
 
-import { useAssessmentHandlers } from '../hooks/useAssessmentHandlers';
-
 import AssessmentAlert from './alerts/AssessmentAlert';
 
 import FormContainer from '@/components/layout/FormContainer';
@@ -23,7 +21,8 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
-import { hasAnyValue } from '@/modules/errors/util';
+import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
+import { ErrorState, hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
@@ -31,7 +30,6 @@ import DynamicForm, {
 import FormActions from '@/modules/form/components/FormActions';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
-
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
 import {
@@ -52,7 +50,6 @@ import {
 interface Props {
   enrollment: EnrollmentFieldsFragment;
   clientId: string;
-  // assessmentTitle: string;
   formRole?: FormRole;
   definition: FormDefinition;
   assessment?: FullAssessmentFragment;
@@ -61,11 +58,20 @@ interface Props {
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
   FormActionProps?: DynamicFormProps['FormActionProps'];
+  onSubmit: DynamicFormProps['onSubmit'];
+  onSaveDraft?: DynamicFormProps['onSaveDraft'];
+  errors: ErrorState;
+  onCancelValidations?: VoidFunction;
+  mutationLoading?: boolean;
   visible?: boolean;
   formRef?: Ref<DynamicFormRef>;
+  onFormStateChange?: (
+    enrollmentId: string,
+    value: HouseholdAssessmentFormAction
+  ) => void;
 }
 
-const AssessmentForm = ({
+const AssessmentForm: React.FC<Props> = ({
   assessment,
   clientId,
   assessmentTitle,
@@ -78,7 +84,13 @@ const AssessmentForm = ({
   formRef,
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
-}: Props) => {
+  onFormStateChange,
+  onSubmit,
+  onSaveDraft,
+  errors,
+  mutationLoading,
+  onCancelValidations,
+}) => {
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -94,11 +106,11 @@ const AssessmentForm = ({
     if (assessment && !assessment.inProgress) setLocked(true);
   }, [assessment, canEdit]);
 
-  // Most recently selected "source" assesment for autofill
+  // Most recently selected "source" assessment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
     FullAssessmentFragment | undefined
   >();
-  // Trigger for reloading initial values and form if a source assesment is chosen for autofill.
+  // Trigger for reloading initial values and form if a source assessment is chosen for autofill.
   // This is needed to support re-selecting the same assessment (which should clear and reload the form again)
   const [reloadInitialValues, setReloadInitialValues] = useState(false);
 
@@ -113,16 +125,13 @@ const AssessmentForm = ({
 
   const isPrintView = useIsPrintView();
 
-  const { submitHandler, saveDraftHandler, mutationLoading, errors } =
-    useAssessmentHandlers({
-      definition,
-      enrollmentId: enrollment.id,
-      assessmentId: assessment?.id,
-      assessmentLockVersion: assessment?.lockVersion,
-      onSuccessfulSubmit: (assmt) => {
-        if (!assmt.inProgress) setLocked(true);
-      },
-    });
+  const handleDirty = useCallback(
+    (dirty: boolean) => {
+      // we can only rely on dirty == true
+      if (dirty) onFormStateChange?.(enrollment.id, 'formDirty');
+    },
+    [onFormStateChange, enrollment.id]
+  );
 
   const itemMap = useMemo(
     () => getItemMap(definition.definition),
@@ -210,11 +219,29 @@ const AssessmentForm = ({
     hold: pickListsLoading,
   });
 
+  const formActionsPropsWithLastUpdated = useMemo<
+    typeof FormActionProps
+  >(() => {
+    const formActionProps: typeof FormActionProps = { ...FormActionProps };
+    // Add last saved / last submitted dates
+    if (assessment?.inProgress) {
+      formActionProps.lastSaved = assessment?.dateUpdated || undefined;
+    } else if (assessment && !assessment.inProgress) {
+      formActionProps.lastSubmitted = assessment?.dateUpdated || undefined;
+    }
+    return formActionProps;
+  }, [FormActionProps, assessment]);
+
   // the form is locked, replace the submit button with an 'unlock' button
   const formActionPropsWithLock = useMemo<typeof FormActionProps>(() => {
-    if (!locked || !FormActionProps || !canEdit) return FormActionProps;
+    const formActionProps: typeof FormActionProps = {
+      ...formActionsPropsWithLastUpdated,
+    };
 
-    const config = (FormActionProps.config?.slice() || [])
+    if (!locked || !canEdit) return formActionProps;
+
+    // Add config option for unlocking assessment
+    const config = (formActionProps.config?.slice() || [])
       .map((item) => {
         if (item.action != FormActionTypes.Submit) return item;
         return {
@@ -231,8 +258,14 @@ const AssessmentForm = ({
         };
       })
       .filter((item) => item.action !== FormActionTypes.Discard);
-    return { ...FormActionProps, config };
-  }, [FormActionProps, locked, canEdit, embeddedInWorkflow, handleUnlock]);
+    return { ...formActionProps, config };
+  }, [
+    formActionsPropsWithLastUpdated,
+    locked,
+    canEdit,
+    embeddedInWorkflow,
+    handleUnlock,
+  ]);
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
@@ -283,7 +316,7 @@ const AssessmentForm = ({
             sticky={embeddedInWorkflow ? 'always' : 'auto'}
           >
             <DynamicView
-              // dont use `initialValues` because we don't want the OVERWRITE fields
+              // don't use `initialValues` because we don't want the OVERWRITE fields
               values={initialValuesFromAssessment(itemMap, assessment)}
               definition={definition.definition}
               pickListArgs={pickListArgs}
@@ -295,11 +328,9 @@ const AssessmentForm = ({
             key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
             definition={definition.definition}
             ref={formRef}
-            onSubmit={submitHandler}
+            onSubmit={onSubmit}
             onSaveDraft={
-              assessment && !assessment.inProgress
-                ? undefined
-                : saveDraftHandler
+              assessment && !assessment.inProgress ? undefined : onSaveDraft
             }
             localConstants={localConstants}
             initialValues={initialValues || undefined}
@@ -311,7 +342,9 @@ const AssessmentForm = ({
             clientId={clientId}
             showSavePrompt
             alwaysShowSaveSlide={!!embeddedInWorkflow}
-            FormActionProps={FormActionProps}
+            FormActionProps={formActionsPropsWithLastUpdated}
+            onDirty={handleDirty}
+            ValidationDialogProps={{ onCancel: onCancelValidations }}
             // Only show "warn if empty" treatments if this is an existing assessment,
             // OR if the user has attempted to submit this (new) assessment
             warnIfEmpty={!!assessment || hasAnyValue(errors)}

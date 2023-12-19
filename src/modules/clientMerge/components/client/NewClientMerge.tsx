@@ -15,7 +15,7 @@ import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnD
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { ClientTextSearchInputForm } from '@/modules/search/components/ClientTextSearchInput';
+import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -134,8 +134,8 @@ const NewClientMerge = () => {
         <TitleCard title='Merge Client Records'>
           <Stack gap={6}>
             <Grid container alignItems={'flex-start'}>
-              <Grid item xs={12} md={9} lg={8} sx={{ px: 2, py: 2 }}>
-                <ClientTextSearchInputForm
+              <Grid item xs={12} sx={{ px: 2, py: 2 }}>
+                <ClientTextSearchForm
                   onSearch={(text) => setSearchInput({ textSearch: text })}
                   searchAdornment
                   minChars={3}

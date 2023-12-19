@@ -21,6 +21,7 @@ import {
 
 import BackButton from '@/components/elements/BackButton';
 import LoadingButton from '@/components/elements/LoadingButton';
+import LoadingSkeleton from '@/components/elements/LoadingSkeleton';
 import TitleCard from '@/components/elements/TitleCard';
 import useSafeParams from '@/hooks/useSafeParams';
 import HouseholdSummaryExitHelpCard from '@/modules/assessments/components/household/HouseholdSummaryExitHelpCard';
@@ -51,6 +52,7 @@ interface HouseholdSummaryTabPanelProps {
   projectName: string;
   refetch: () => Promise<any>;
   setCurrentTab: Dispatch<SetStateAction<string | undefined>>;
+  blocked: boolean;
 }
 
 // Memoized to only re-render when props change (shallow compare)
@@ -63,6 +65,7 @@ const HouseholdSummaryTabPanel = memo(
     projectName,
     refetch,
     setCurrentTab,
+    blocked,
   }: HouseholdSummaryTabPanelProps) => {
     const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
     const [submitMutation, { loading, data: submitResponseData }] =
@@ -126,6 +129,7 @@ const HouseholdSummaryTabPanel = memo(
           )
           .filter((i): i is VersionedRecordInput => !!i);
 
+        setErrors(emptyErrorState);
         submitMutation({
           variables: {
             input: {
@@ -189,17 +193,21 @@ const HouseholdSummaryTabPanel = memo(
               </Grid>
             )}
             <TitleCard title='Select Household Members for Submission'>
-              <HouseholdSummaryTable
-                tabs={tabs}
-                role={role}
-                setAssessmentsToSubmit={setAssessmentsToSubmit}
-                setCurrentTab={setCurrentTab}
-              />
+              {blocked ? (
+                <LoadingSkeleton px={2} count={tabs.length} />
+              ) : (
+                <HouseholdSummaryTable
+                  tabs={tabs}
+                  role={role}
+                  setAssessmentsToSubmit={setAssessmentsToSubmit}
+                  setCurrentTab={setCurrentTab}
+                />
+              )}
               <Box sx={{ px: 2, py: 3 }}>
                 <LoadingButton
                   loading={loading}
                   onClick={() => handleSubmit(false)}
-                  disabled={assessmentsToSubmit.length === 0}
+                  disabled={assessmentsToSubmit.length === 0 || blocked}
                 >
                   {`Submit (${assessmentsToSubmit.length}) ${startCase(
                     role.toLowerCase()
@@ -218,7 +226,7 @@ const HouseholdSummaryTabPanel = memo(
         </Grid>
         {renderValidationDialog({
           onConfirm: () => handleSubmit(true),
-          loading,
+          loading: loading,
           sectionLabels: mapValues(keyBy(tabs, 'assessmentId'), 'clientName'),
         })}
       </AlwaysMountedTabPanel>

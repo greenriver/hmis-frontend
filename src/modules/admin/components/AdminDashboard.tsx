@@ -27,30 +27,44 @@ const ProjectNavHeader: React.FC = () => {
   );
 };
 
+type RootPermission = keyof Omit<RootPermissionsFragment, 'id' | '__typename'>;
 type AdminPageConfig = NavItem & {
-  permission: keyof Omit<RootPermissionsFragment, 'id' | '__typename'>;
+  permissions: RootPermission[];
+  permissionMode?: 'any' | 'all';
 };
 
 const adminPages: AdminPageConfig[] = [
   {
-    id: 'users',
-    title: 'Users',
-    path: AdminDashboardRoutes.USERS,
-    permission: 'canImpersonateUsers',
-  },
-  {
     id: 'denials',
     title: 'Denials',
     path: AdminDashboardRoutes.AC_DENIALS,
-    permission: 'canManageDeniedReferrals',
+    permissions: ['canManageDeniedReferrals'],
+  },
+  {
+    id: 'users',
+    title: 'Users',
+    path: AdminDashboardRoutes.USERS,
+    permissions: ['canImpersonateUsers', 'canAuditUsers'],
+    permissionMode: 'any',
   },
   {
     id: 'merge-clients',
     title: 'Client Merge History',
     path: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
-    permission: 'canMergeClients',
+    permissions: ['canMergeClients'],
   },
 ];
+
+function canAccessPage(access: RootPermissionsFragment, page: AdminPageConfig) {
+  if (page.permissions.length === 0) {
+    return true;
+  }
+  if (page.permissionMode === 'any') {
+    return page.permissions.some((perm) => access[perm]);
+  }
+
+  return page.permissions.every((perm) => access[perm]);
+}
 
 // redirect to whichever admin page that the user has access to
 export const AdminLandingPage = () => {
@@ -58,7 +72,9 @@ export const AdminLandingPage = () => {
 
   const pageWithAccess = useMemo(
     () =>
-      adminPages.find((page) => access && access[page.permission] && page.path),
+      adminPages.find(
+        (page) => access && canAccessPage(access, page) && page.path
+      ),
     [access]
   );
 
@@ -82,9 +98,9 @@ const AdminDashboard: React.FC = () => {
       {
         id: 'admin-nav',
         type: 'category',
-        items: adminPages.map(({ permission, ...rest }) => ({
-          ...rest,
-          hide: !access || !access[permission],
+        items: adminPages.map((page) => ({
+          ...page,
+          hide: !access || !canAccessPage(access, page),
         })),
       },
     ];

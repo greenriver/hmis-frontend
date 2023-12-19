@@ -3,10 +3,7 @@ import { useCallback } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
-import {
-  formRoleDisplay,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
+import { formRoleDisplay, lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
@@ -28,10 +25,7 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   },
   {
     header: 'Last Updated',
-    render: (e) =>
-      `${
-        e.dateUpdated ? parseAndFormatDateTime(e.dateUpdated) : 'Unknown Date'
-      } by ${e.user?.name || 'Unknown User'}`,
+    render: (e) => lastUpdatedBy(e.dateUpdated, e.user),
   },
 ];
 

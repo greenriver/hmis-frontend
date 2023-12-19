@@ -6,7 +6,7 @@ import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/Assessm
 import {
   clientBriefName,
   formRoleDisplay,
-  parseAndFormatDateTime,
+  lastUpdatedBy,
 } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
@@ -36,10 +36,7 @@ const columns: ColumnDef<HhmAssessmentType>[] = [
   },
   {
     header: 'Last Updated',
-    render: (e) =>
-      `${
-        e.dateUpdated ? parseAndFormatDateTime(e.dateUpdated) : 'Unknown Date'
-      } by ${e.user?.name || 'Unknown User'}`,
+    render: (e) => lastUpdatedBy(e.dateUpdated, e.user),
   },
 ];
 

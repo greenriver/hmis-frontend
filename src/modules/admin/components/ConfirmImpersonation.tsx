@@ -1,9 +1,9 @@
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import useAuth from '@/modules/auth/hooks/useAuth';
-import { ApplicationUserFieldsFragment } from '@/types/gqlTypes';
+import { UserFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
-  user: ApplicationUserFieldsFragment;
+  user: UserFieldsFragment;
   onCancel: VoidFunction;
 }
 const ConfirmImpersonation: React.FC<Props> = ({ user, onCancel }) => {

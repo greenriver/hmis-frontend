@@ -4,6 +4,9 @@ import { useCallback, useState } from 'react';
 import {
   emptyErrorState,
   ErrorState,
+  hasAnyValue,
+  hasErrors,
+  hasOnlyWarnings,
   partitionValidations,
 } from '@/modules/errors/util';
 import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
@@ -13,7 +16,6 @@ import {
   transformSubmitValues,
 } from '@/modules/form/util/formUtil';
 import {
-  AssessmentFieldsFragment,
   AssessmentInput,
   FormDefinition,
   FormDefinitionJson,
@@ -23,13 +25,28 @@ import {
   useSubmitAssessmentMutation,
 } from '@/types/gqlTypes';
 
+export type AssessmentResponseStatus =
+  | 'saved'
+  | 'submitted'
+  | 'error'
+  | 'warning';
+
 type Args = {
-  definition: FormDefinition;
+  definition?: FormDefinition;
   enrollmentId: string;
   assessmentId?: string;
   assessmentLockVersion?: number;
-  onSuccessfulSubmit?: (assessment: AssessmentFieldsFragment) => void;
+  onCompletedMutation?: (
+    status: AssessmentResponseStatus,
+    data?: SubmitAssessmentMutation | SaveAssessmentMutation
+  ) => void;
 };
+
+function isSaveMutation(
+  data: SubmitAssessmentMutation | SaveAssessmentMutation
+): data is SaveAssessmentMutation {
+  return data && data.hasOwnProperty('saveAssessment');
+}
 
 export const createValuesForSubmit = (
   values: FormValues,
@@ -52,36 +69,54 @@ export function useAssessmentHandlers({
   enrollmentId,
   assessmentId,
   assessmentLockVersion,
-  onSuccessfulSubmit = () => null,
+  onCompletedMutation = () => null,
 }: Args) {
-  const formDefinitionId = definition.id;
+  const formDefinitionId = definition?.id;
 
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const onCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
       let errs;
-      if (data.hasOwnProperty('saveAssessment')) {
-        errs = (data as SaveAssessmentMutation).saveAssessment?.errors || [];
+      if (isSaveMutation(data)) {
+        errs = data.saveAssessment?.errors || [];
       } else {
-        errs =
-          (data as SubmitAssessmentMutation).submitAssessment?.errors || [];
+        errs = data.submitAssessment?.errors || [];
+      }
+      const errorState = partitionValidations(errs || []);
+
+      let status: AssessmentResponseStatus;
+      if (hasErrors(errorState)) {
+        status = 'error';
+      } else if (hasOnlyWarnings(errorState)) {
+        status = 'warning';
+      } else if (isSaveMutation(data)) {
+        status = 'saved';
+      } else {
+        status = 'submitted';
       }
 
-      if (errs.length > 0) {
-        window.scrollTo(0, 0);
-        setErrors(partitionValidations(errs));
-        return;
+      if (hasAnyValue(errorState)) {
+        window.scrollTo(0, 0); // scroll to top to view errors
+        setErrors(errorState); // update error state
+        onCompletedMutation(status, data); // callback
+      } else {
+        setErrors(emptyErrorState); // clear error state
+        onCompletedMutation(status, data); // callback
       }
-      setErrors(emptyErrorState);
     },
-    [setErrors]
+    [onCompletedMutation]
   );
 
-  const onError = useCallback((apolloError: ApolloError) => {
-    window.scrollTo(0, 0);
-    setErrors({ ...emptyErrorState, apolloError });
-  }, []);
+  // Handle server error
+  const onError = useCallback(
+    (apolloError: ApolloError) => {
+      window.scrollTo(0, 0);
+      setErrors({ ...emptyErrorState, apolloError });
+      onCompletedMutation('error');
+    },
+    [onCompletedMutation]
+  );
 
   const [saveAssessmentMutation, { loading: saveLoading }] =
     useSaveAssessmentMutation({ onError });
@@ -91,7 +126,7 @@ export function useAssessmentHandlers({
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
     ({ event, values, confirmed = false, onSuccess }) => {
-      if (!definition) return;
+      if (!definition || !formDefinitionId) return;
       if (
         event &&
         debugFormValues(
@@ -118,7 +153,6 @@ export function useAssessmentHandlers({
           onCompleted(data);
           if (data.submitAssessment?.assessment && onSuccess) {
             onSuccess();
-            onSuccessfulSubmit(data.submitAssessment?.assessment);
           }
         },
       });
@@ -131,13 +165,12 @@ export function useAssessmentHandlers({
       formDefinitionId,
       enrollmentId,
       onCompleted,
-      onSuccessfulSubmit,
     ]
   );
 
   const saveDraftHandler = useCallback(
-    (values: FormValues, onSuccessCallback: VoidFunction) => {
-      if (!definition) return;
+    (values: FormValues, onSuccessCallback?: VoidFunction) => {
+      if (!definition || !formDefinitionId) return;
 
       const input: AssessmentInput = {
         assessmentId,
@@ -172,10 +205,5 @@ export function useAssessmentHandlers({
     saveDraftHandler,
     mutationLoading: saveLoading || submitLoading,
     errors,
-  } as {
-    submitHandler: DynamicFormOnSubmit;
-    saveDraftHandler: (values: FormValues) => void;
-    mutationLoading: boolean;
-    errors: ErrorState;
-  };
+  } as const;
 }

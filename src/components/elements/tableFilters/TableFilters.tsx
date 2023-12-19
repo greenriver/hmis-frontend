@@ -1,7 +1,9 @@
 import { Box, Skeleton, Stack, Typography } from '@mui/material';
-import { min } from 'lodash-es';
+import { isEmpty, min } from 'lodash-es';
+import pluralize from 'pluralize';
 import React, { ReactNode } from 'react';
 
+import TableColumnsMenu, { TableColumnsMenuProps } from './filters/ColumnsMenu';
 import TableFilterMenu from './filters/FilterMenu';
 import TableSortMenu from './filters/SortMenu';
 
@@ -11,6 +13,7 @@ export interface PaginationProps {
   totalEntries: number;
   limit: number;
   offset: number;
+  itemName?: string;
 }
 
 export interface TableFiltersProps<T, S> {
@@ -24,6 +27,7 @@ export interface TableFiltersProps<T, S> {
     sortOptionValue?: keyof S;
     setSortOptionValue?: (value: keyof S) => any;
   };
+  optionalColumns?: TableColumnsMenuProps;
   pagination?: PaginationProps;
   loading?: boolean;
   noSort?: boolean;
@@ -35,6 +39,7 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   totalEntries,
   limit,
   offset,
+  itemName = 'record',
 }): JSX.Element => {
   const rangeEnd = min([totalEntries, offset + limit]);
   const rangeStart = limit < totalEntries ? offset + 1 : rangeEnd;
@@ -44,7 +49,7 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   return (
     <Typography variant='body2'>
       Displaying <strong>{displayRange}</strong> of{' '}
-      <strong>{totalEntries}</strong> records
+      <strong>{totalEntries}</strong> {pluralize(itemName, totalEntries)}
     </Typography>
   );
 };
@@ -57,6 +62,7 @@ const TableFilters = <T, S extends Record<string, string>>({
   loading,
   noSort = false,
   noFilter = false,
+  optionalColumns,
 }: TableFiltersProps<T, S>) => {
   return (
     <Box display='flex' alignItems='center' gap={1}>
@@ -70,6 +76,11 @@ const TableFilters = <T, S extends Record<string, string>>({
         )}
         {tableDisplayOptionButtons}
       </Stack>
+      {optionalColumns && !isEmpty(optionalColumns.columns) && (
+        <Box>
+          <TableColumnsMenu {...optionalColumns} />
+        </Box>
+      )}
       {filters && !noFilter && (
         <Box>
           <TableFilterMenu {...filters} />

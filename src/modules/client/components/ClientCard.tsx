@@ -17,7 +17,7 @@ import {
   clientNameAllParts,
   entryExitRange,
   isRecentEnrollment,
-  lastUpdated,
+  lastUpdatedBy,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
@@ -184,7 +184,7 @@ const ClientCard: React.FC<Props> = ({
           </Stack>
           {client.dateUpdated && (
             <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-              Last Updated on {lastUpdated(client)}
+              Last Updated on {lastUpdatedBy(client.dateUpdated, client.user)}
             </Typography>
           )}
         </Stack>
