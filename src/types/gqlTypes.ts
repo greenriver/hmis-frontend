@@ -14450,6 +14450,11 @@ export type EnrollmentAuditEventFieldsFragment = {
   graphqlType: string;
   recordId: string;
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+  trueUser?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
 };
 
 export type GetEnrollmentQueryVariables = Exact<{
@@ -15435,6 +15440,11 @@ export type GetEnrollmentAuditEventsQuery = {
         graphqlType: string;
         recordId: string;
         user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        trueUser?: {
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
@@ -24692,6 +24702,10 @@ export const EnrollmentAuditEventFieldsFragmentDoc = gql`
     graphqlType
     recordId
     user {
+      id
+      name
+    }
+    trueUser {
       id
       name
     }

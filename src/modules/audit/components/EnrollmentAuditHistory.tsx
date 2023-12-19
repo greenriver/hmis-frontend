@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { filter } from 'lodash-es';
+import { compact, filter } from 'lodash-es';
 import AuditObjectChangesSummary, {
   ObjectChangesType,
 } from './AuditObjectChangesSummary';
@@ -38,7 +38,8 @@ const columns: ColumnDef<AuditHistoryType>[] = [
   {
     header: 'User',
     width: '180px',
-    render: (e) => e.user?.name,
+    render: ({ user, trueUser }) =>
+      compact([trueUser?.name, user?.name]).join(' acting as '),
   },
   {
     header: 'Action',
