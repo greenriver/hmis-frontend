@@ -1,5 +1,7 @@
 import MOCK_IMAGE from '@/components/elements/upload/MOCK_IMAGE';
+import { HmisObjectSchemas } from '@/types/gqlObjects';
 import {
+  ClientAccess,
   CreateDirectUploadMutationDocument,
   DobDataQuality,
   Gender,
@@ -20,22 +22,13 @@ import {
 } from '@/types/gqlTypes';
 
 const CLIENT_ACCESS_MOCK = {
+  ...Object.fromEntries(
+    HmisObjectSchemas.find((obj) => obj.name === 'ClientAccess')?.fields.map(
+      (f) => [f.name, true]
+    ) || []
+  ),
   id: '9999:1',
-  canEditClient: true,
-  canDeleteClient: true,
-  canViewDob: true,
-  canViewFullSsn: true,
-  canViewPartialSsn: true,
-  canEditEnrollments: true,
-  canDeleteEnrollments: true,
-  canViewEnrollmentDetails: true,
-  canDeleteAssessments: true,
-  canManageAnyClientFiles: true,
-  canManageOwnClientFiles: true,
-  canViewAnyConfidentialClientFiles: true,
-  canViewAnyNonconfidentialClientFiles: true,
-  canAuditClients: true,
-};
+} as ClientAccess;
 
 export const RITA_ACKROYD = {
   __typename: 'Client',
