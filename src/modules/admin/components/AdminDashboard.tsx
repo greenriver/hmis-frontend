@@ -82,6 +82,10 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
   },
 ];
 
+export const PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS = navItems
+  .flatMap((group) => group.items)
+  .flatMap((item) => item?.permissions || []);
+
 // redirect to whichever admin page that the user has access to
 export const AdminLandingPage = () => {
   const [access, { loading, error }] = useRootPermissions();

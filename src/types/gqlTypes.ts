@@ -6999,6 +6999,8 @@ export type ClientAccessFieldsFragment = {
   canManageOwnClientFiles: boolean;
   canViewAnyConfidentialClientFiles: boolean;
   canViewAnyNonconfidentialClientFiles: boolean;
+  canUploadClientFiles: boolean;
+  canViewAnyFiles: boolean;
   canAuditClients: boolean;
 };
 
@@ -11444,6 +11446,8 @@ export type ClientSearchResultFieldsFragment = {
     canManageOwnClientFiles: boolean;
     canViewAnyConfidentialClientFiles: boolean;
     canViewAnyNonconfidentialClientFiles: boolean;
+    canUploadClientFiles: boolean;
+    canViewAnyFiles: boolean;
     canAuditClients: boolean;
   };
 };
@@ -11514,6 +11518,8 @@ export type ClientFieldsFragment = {
     canManageOwnClientFiles: boolean;
     canViewAnyConfidentialClientFiles: boolean;
     canViewAnyNonconfidentialClientFiles: boolean;
+    canUploadClientFiles: boolean;
+    canViewAnyFiles: boolean;
     canAuditClients: boolean;
   };
   customDataElements: Array<{
@@ -11817,6 +11823,8 @@ export type SearchClientsQuery = {
         canManageOwnClientFiles: boolean;
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
+        canUploadClientFiles: boolean;
+        canViewAnyFiles: boolean;
         canAuditClients: boolean;
       };
     }>;
@@ -11895,6 +11903,8 @@ export type GetClientQuery = {
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
+      canUploadClientFiles: boolean;
+      canViewAnyFiles: boolean;
       canAuditClients: boolean;
     };
     customDataElements: Array<{
@@ -12038,6 +12048,8 @@ export type GetClientPermissionsQuery = {
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
+      canUploadClientFiles: boolean;
+      canViewAnyFiles: boolean;
       canAuditClients: boolean;
     };
   } | null;
@@ -12474,6 +12486,8 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canManageOwnClientFiles: boolean;
                 canViewAnyConfidentialClientFiles: boolean;
                 canViewAnyNonconfidentialClientFiles: boolean;
+                canUploadClientFiles: boolean;
+                canViewAnyFiles: boolean;
                 canAuditClients: boolean;
               };
               externalIds: Array<{
@@ -12812,6 +12826,8 @@ export type MergeClientsMutation = {
         canManageOwnClientFiles: boolean;
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
+        canUploadClientFiles: boolean;
+        canViewAnyFiles: boolean;
         canAuditClients: boolean;
       };
       customDataElements: Array<{
@@ -13775,6 +13791,8 @@ export type AllEnrollmentDetailsFragment = {
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
+      canUploadClientFiles: boolean;
+      canViewAnyFiles: boolean;
       canAuditClients: boolean;
     };
   };
@@ -14859,6 +14877,8 @@ export type GetEnrollmentDetailsQuery = {
         canManageOwnClientFiles: boolean;
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
+        canUploadClientFiles: boolean;
+        canViewAnyFiles: boolean;
         canAuditClients: boolean;
       };
     };
@@ -15463,6 +15483,8 @@ export type GetEnrollmentWithHouseholdQuery = {
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
+            canUploadClientFiles: boolean;
+            canViewAnyFiles: boolean;
             canAuditClients: boolean;
           };
           externalIds: Array<{
@@ -18982,6 +19004,8 @@ export type SubmitFormMutation = {
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
+            canUploadClientFiles: boolean;
+            canViewAnyFiles: boolean;
             canAuditClients: boolean;
           };
           customDataElements: Array<{
@@ -19779,6 +19803,8 @@ export type HouseholdFieldsFragment = {
         canManageOwnClientFiles: boolean;
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
+        canUploadClientFiles: boolean;
+        canViewAnyFiles: boolean;
         canAuditClients: boolean;
       };
       externalIds: Array<{
@@ -19834,6 +19860,8 @@ export type HouseholdClientFieldsFragment = {
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
+      canUploadClientFiles: boolean;
+      canViewAnyFiles: boolean;
       canAuditClients: boolean;
     };
     externalIds: Array<{
@@ -19969,6 +19997,8 @@ export type GetHouseholdQuery = {
           canManageOwnClientFiles: boolean;
           canViewAnyConfidentialClientFiles: boolean;
           canViewAnyNonconfidentialClientFiles: boolean;
+          canUploadClientFiles: boolean;
+          canViewAnyFiles: boolean;
           canAuditClients: boolean;
         };
         externalIds: Array<{
@@ -22534,6 +22564,8 @@ export type GetReferralPostingQuery = {
           canManageOwnClientFiles: boolean;
           canViewAnyConfidentialClientFiles: boolean;
           canViewAnyNonconfidentialClientFiles: boolean;
+          canUploadClientFiles: boolean;
+          canViewAnyFiles: boolean;
           canAuditClients: boolean;
         };
         externalIds: Array<{
@@ -22648,6 +22680,8 @@ export type UpdateReferralPostingMutation = {
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
+            canUploadClientFiles: boolean;
+            canViewAnyFiles: boolean;
             canAuditClients: boolean;
           };
           externalIds: Array<{
@@ -22776,6 +22810,8 @@ export type CreateOutgoingReferralPostingMutation = {
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
+            canUploadClientFiles: boolean;
+            canViewAnyFiles: boolean;
             canAuditClients: boolean;
           };
           externalIds: Array<{
@@ -22962,6 +22998,8 @@ export type ReferralPostingDetailFieldsFragment = {
         canManageOwnClientFiles: boolean;
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
+        canUploadClientFiles: boolean;
+        canViewAnyFiles: boolean;
         canAuditClients: boolean;
       };
       externalIds: Array<{
@@ -24696,6 +24734,8 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canManageOwnClientFiles
     canViewAnyConfidentialClientFiles
     canViewAnyNonconfidentialClientFiles
+    canUploadClientFiles
+    canViewAnyFiles
     canAuditClients
   }
 `;
