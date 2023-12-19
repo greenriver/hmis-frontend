@@ -4,7 +4,10 @@ import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
-import { OrganizationDetailFieldsFragment } from '@/types/gqlTypes';
+import {
+  NoYesMissing,
+  OrganizationDetailFieldsFragment,
+} from '@/types/gqlTypes';
 
 const OrganizationDetails = ({
   organization,
@@ -37,7 +40,9 @@ const OrganizationDetails = ({
       </CommonLabeledTextBlock>
       <CommonLabeledTextBlock title='Victim Service Provider'>
         <HmisEnum
-          value={organization?.victimServiceProvider}
+          value={
+            organization?.victimServiceProvider || NoYesMissing.DataNotCollected
+          }
           enumMap={HmisEnums.NoYesMissing}
         />
       </CommonLabeledTextBlock>

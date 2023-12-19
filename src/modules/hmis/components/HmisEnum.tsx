@@ -1,18 +1,14 @@
 import { Stack, Typography, TypographyProps } from '@mui/material';
 
+import { ReactNode } from 'react';
 import { isDataNotCollected } from '@/modules/form/util/formUtil';
 import { INVALID_ENUM, MISSING_DATA_KEYS } from '@/modules/hmis/hmisUtil';
 
-const getLabelAndColor = (
-  enumMap: Record<string, string>,
-  value?: any,
-  noValue?: string
-) => {
+const getLabelAndColor = (enumMap: Record<string, string>, value?: any) => {
   let color: TypographyProps['color'] = 'text.primary';
-  let label = enumMap[value];
+  const label = enumMap[value];
   if (!label) {
-    label = noValue || 'Not Specified';
-    color = 'text.secondary';
+    color = 'text.disabled';
   } else if (value === INVALID_ENUM) {
     color = 'error';
   } else if (isDataNotCollected(value) || MISSING_DATA_KEYS.includes(value)) {
@@ -20,20 +16,21 @@ const getLabelAndColor = (
   }
   return [label, color];
 };
+
 interface Props extends TypographyProps {
-  value?: any;
-  enumMap: Record<string, string>;
-  noValue?: string;
+  value?: any; // enum value
+  enumMap: Record<string, string>; // HmisEnum enum map
+  noData?: ReactNode; // what to display if there is no value
 }
 
 /**
  * Render a single Enum value
  */
-const HmisEnum = ({ value, enumMap, noValue, ...props }: Props) => {
-  const [label, color] = getLabelAndColor(enumMap, value, noValue);
+const HmisEnum = ({ value, enumMap, noData, ...props }: Props) => {
+  const [label, color] = getLabelAndColor(enumMap, value);
   return (
     <Typography variant='body2' color={color} {...props}>
-      {label}
+      {label || noData}
     </Typography>
   );
 };
@@ -44,7 +41,7 @@ const HmisEnum = ({ value, enumMap, noValue, ...props }: Props) => {
 export const MultiHmisEnum = ({
   values,
   enumMap,
-  noValue,
+  noData,
   oneRowPerValue = false,
   children,
   ...props
@@ -53,7 +50,7 @@ export const MultiHmisEnum = ({
     return (
       <Stack rowGap={0.5}>
         {values.map((val) => (
-          <HmisEnum key={val} value={val} enumMap={enumMap} noValue={noValue} />
+          <HmisEnum key={val} value={val} enumMap={enumMap} noData={noData} />
         ))}
         {children}
       </Stack>
@@ -64,7 +61,7 @@ export const MultiHmisEnum = ({
 
   if (values.length <= 1) {
     const value = values[0];
-    const [firstLabel, firstColor] = getLabelAndColor(enumMap, value, noValue);
+    const [firstLabel, firstColor] = getLabelAndColor(enumMap, value);
     label = firstLabel;
     color = firstColor;
   } else {
@@ -76,7 +73,7 @@ export const MultiHmisEnum = ({
 
   return (
     <Typography variant='body2' color={color} {...props}>
-      {label}
+      {label || noData}
     </Typography>
   );
 };
