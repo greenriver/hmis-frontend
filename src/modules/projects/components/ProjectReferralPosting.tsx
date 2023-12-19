@@ -66,14 +66,15 @@ const ProjectReferralPosting: React.FC = () => {
             >
               ESG Funding Report
             </ButtonLink>
-            {referralPosting.referralIdentifier && (
+            {/* Temporary 12/14/23: hide the prevention assessment button */}
+            {referralPosting.referralIdentifier && false && (
               <Button
                 fullWidth
                 variant='outlined'
                 color='secondary'
                 target='_blank'
                 href={fetchPreventionAssessmentReportUrl(
-                  referralPosting.referralIdentifier
+                  referralPosting?.referralIdentifier || ''
                 )}
                 endIcon={<OpenInNewIcon />}
               >
