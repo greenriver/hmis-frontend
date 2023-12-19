@@ -748,7 +748,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canUploadClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewAnyConfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewAnyFiles',
         type: {
           kind: 'NON_NULL',
           name: null,

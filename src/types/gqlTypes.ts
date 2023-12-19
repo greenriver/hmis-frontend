@@ -649,7 +649,9 @@ export type ClientAccess = {
   canEditEnrollments: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageOwnClientFiles: Scalars['Boolean']['output'];
+  canUploadClientFiles: Scalars['Boolean']['output'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
+  canViewAnyFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
