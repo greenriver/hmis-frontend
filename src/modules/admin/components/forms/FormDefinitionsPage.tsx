@@ -5,20 +5,10 @@ import PageTitle from '@/components/layout/PageTitle';
 const FormDefinitionsPage = () => {
   return (
     <>
-      <PageTitle
-        title='Forms'
-        // actions={
-        //   <ButtonLink to={AdminDashboardRoutes.ADD_FORM_RULE} Icon={AddIcon}>
-        //     New Form
-        //   </ButtonLink>
-        // }
-      />
+      <PageTitle title='Forms' />
       <Paper>
         <FormDefinitionTable />
       </Paper>
-      {/* <Paper>
-        <FormRuleTable onRowClick={handleClick} />
-      </Paper> */}
     </>
   );
 };
