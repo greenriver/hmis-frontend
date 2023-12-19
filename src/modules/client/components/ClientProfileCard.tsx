@@ -214,6 +214,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                     <MultiHmisEnum
                       values={client.race}
                       enumMap={HmisEnums.Race}
+                      noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
                       oneRowPerValue
                     />
                   ),
@@ -222,6 +223,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                       <MultiHmisEnum
                         values={client.gender}
                         enumMap={HmisEnums.Gender}
+                        noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
                         oneRowPerValue
                       >
                         {client.differentIdentityText && (
@@ -237,6 +239,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                     <HmisEnum
                       value={client.veteranStatus}
                       enumMap={HmisEnums.NoYesReasonsForMissingData}
+                      noData={HmisEnums.NoYesMissing.DATA_NOT_COLLECTED}
                     />
                   ),
                 }}
