@@ -1,6 +1,7 @@
 fragment FormRuleFields on FormRule {
   id
   active
+  activeStatus
   system
   definitionIdentifier
   definitionId
@@ -10,9 +11,11 @@ fragment FormRuleFields on FormRule {
   funder
   otherFunder
   projectType
+  projectId
   project {
     ...ProjectNameAndType
   }
+  organizationId
   organization {
     ...OrganizationNameFields
   }

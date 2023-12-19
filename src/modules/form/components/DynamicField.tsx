@@ -179,7 +179,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   }
   switch (item.type) {
     case ItemType.Display:
-      return <DynamicDisplay maxWidth={maxWidth + 100} item={item} />;
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <DynamicDisplay maxWidth={maxWidth + 100} item={item} />
+        </InputContainer>
+      );
     case ItemType.Boolean:
       if (item.component === Component.Checkbox) {
         return (
