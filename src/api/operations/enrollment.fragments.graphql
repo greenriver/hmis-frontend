@@ -273,4 +273,8 @@ fragment EnrollmentAuditEventFields on EnrollmentAuditEvent {
     id
     name
   }
+  trueUser {
+    id
+    name
+  }
 }

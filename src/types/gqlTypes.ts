@@ -716,6 +716,7 @@ export type ClientAuditEvent = {
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
+  trueUser?: Maybe<ApplicationUser>;
   user?: Maybe<ApplicationUser>;
 };
 
@@ -2157,6 +2158,7 @@ export type EnrollmentAuditEvent = {
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
+  trueUser?: Maybe<ApplicationUser>;
   user?: Maybe<ApplicationUser>;
 };
 
@@ -11771,6 +11773,11 @@ export type ClientAuditEventFieldsFragment = {
   graphqlType: string;
   recordId: string;
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+  trueUser?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
 };
 
 export type SearchClientsQueryVariables = Exact<{
@@ -12143,6 +12150,11 @@ export type GetClientAuditEventsQuery = {
         graphqlType: string;
         recordId: string;
         user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        trueUser?: {
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
@@ -14625,6 +14637,11 @@ export type EnrollmentAuditEventFieldsFragment = {
   graphqlType: string;
   recordId: string;
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+  trueUser?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
 };
 
 export type GetEnrollmentQueryVariables = Exact<{
@@ -15615,6 +15632,11 @@ export type GetEnrollmentAuditEventsQuery = {
         graphqlType: string;
         recordId: string;
         user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        trueUser?: {
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
@@ -24929,6 +24951,10 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
       id
       name
     }
+    trueUser {
+      id
+      name
+    }
   }
 `;
 export const MergeAuditEventFieldsFragmentDoc = gql`
@@ -25400,6 +25426,10 @@ export const EnrollmentAuditEventFieldsFragmentDoc = gql`
     graphqlType
     recordId
     user {
+      id
+      name
+    }
+    trueUser {
       id
       name
     }

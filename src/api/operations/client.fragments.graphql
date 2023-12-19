@@ -183,4 +183,8 @@ fragment ClientAuditEventFields on ClientAuditEvent {
     id
     name
   }
+  trueUser {
+    id
+    name
+  }
 }
