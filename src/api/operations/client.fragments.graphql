@@ -124,6 +124,7 @@ fragment ClientIdentificationFields on Client {
   dob
   age
   ssn
+  gender
   access {
     id
     canViewFullSsn

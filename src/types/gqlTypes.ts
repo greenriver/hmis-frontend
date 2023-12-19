@@ -11346,6 +11346,7 @@ export type GetProjectEnrollmentsForBedNightsQuery = {
           lockVersion: number;
           age?: number | null;
           ssn?: string | null;
+          gender: Array<Gender>;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -11422,6 +11423,7 @@ export type ClientSearchResultFieldsFragment = {
   dob?: string | null;
   age?: number | null;
   ssn?: string | null;
+  gender: Array<Gender>;
   externalIds: Array<{
     __typename?: 'ExternalIdentifier';
     id: string;
@@ -11703,6 +11705,7 @@ export type ClientIdentificationFieldsFragment = {
   dob?: string | null;
   age?: number | null;
   ssn?: string | null;
+  gender: Array<Gender>;
   access: {
     __typename?: 'ClientAccess';
     id: string;
@@ -11799,6 +11802,7 @@ export type SearchClientsQuery = {
       dob?: string | null;
       age?: number | null;
       ssn?: string | null;
+      gender: Array<Gender>;
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
         id: string;
@@ -12470,6 +12474,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               dob?: string | null;
               age?: number | null;
               ssn?: string | null;
+              gender: Array<Gender>;
               access: {
                 __typename?: 'ClientAccess';
                 id: string;
@@ -12673,6 +12678,7 @@ export type GetMergeCandidatesQuery = {
         dob?: string | null;
         age?: number | null;
         ssn?: string | null;
+        gender: Array<Gender>;
         access: {
           __typename?: 'ClientAccess';
           id: string;
@@ -13573,6 +13579,7 @@ export type ProjectEnrollmentFieldsFragment = {
     lockVersion: number;
     age?: number | null;
     ssn?: string | null;
+    gender: Array<Gender>;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -15467,6 +15474,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           dob?: string | null;
           age?: number | null;
           ssn?: string | null;
+          gender: Array<Gender>;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -19787,6 +19795,7 @@ export type HouseholdFieldsFragment = {
       dob?: string | null;
       age?: number | null;
       ssn?: string | null;
+      gender: Array<Gender>;
       access: {
         __typename?: 'ClientAccess';
         id: string;
@@ -19844,6 +19853,7 @@ export type HouseholdClientFieldsFragment = {
     dob?: string | null;
     age?: number | null;
     ssn?: string | null;
+    gender: Array<Gender>;
     access: {
       __typename?: 'ClientAccess';
       id: string;
@@ -19904,6 +19914,7 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       dob?: string | null;
       age?: number | null;
       ssn?: string | null;
+      gender: Array<Gender>;
       access: {
         __typename?: 'ClientAccess';
         id: string;
@@ -19937,6 +19948,7 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     dob?: string | null;
     age?: number | null;
     ssn?: string | null;
+    gender: Array<Gender>;
     access: {
       __typename?: 'ClientAccess';
       id: string;
@@ -19981,6 +19993,7 @@ export type GetHouseholdQuery = {
         dob?: string | null;
         age?: number | null;
         ssn?: string | null;
+        gender: Array<Gender>;
         access: {
           __typename?: 'ClientAccess';
           id: string;
@@ -21344,6 +21357,7 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
     lockVersion: number;
     age?: number | null;
     ssn?: string | null;
+    gender: Array<Gender>;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -21572,6 +21586,7 @@ export type GetProjectEnrollmentsQuery = {
           lockVersion: number;
           age?: number | null;
           ssn?: string | null;
+          gender: Array<Gender>;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -21626,6 +21641,7 @@ export type GetProjectHouseholdsQuery = {
             dob?: string | null;
             age?: number | null;
             ssn?: string | null;
+            gender: Array<Gender>;
             access: {
               __typename?: 'ClientAccess';
               id: string;
@@ -24702,6 +24718,7 @@ export const ClientIdentificationFieldsFragmentDoc = gql`
     dob
     age
     ssn
+    gender
     access {
       id
       canViewFullSsn
