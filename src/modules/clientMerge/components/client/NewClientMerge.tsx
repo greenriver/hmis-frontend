@@ -13,10 +13,12 @@ import PageTitle from '@/components/layout/PageTitle';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ClientDashboardRoutes, Routes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
   ClientSearchInput,
@@ -83,6 +85,12 @@ const NewClientMerge = () => {
       CLIENT_COLUMNS.last,
       { ...CLIENT_COLUMNS.ssn, width: '150px' },
       { ...CLIENT_COLUMNS.dobAge, width: '180px' },
+      {
+        header: 'Gender',
+        render: (client: ClientFieldsFragment) => (
+          <MultiHmisEnum values={client.gender} enumMap={HmisEnums.Gender} />
+        ),
+      },
       HudRecordMetadataHistoryColumn,
     ],
     [client.id]

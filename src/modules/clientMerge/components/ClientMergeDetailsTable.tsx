@@ -2,6 +2,8 @@ import { Typography } from '@mui/material';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientIdentificationFieldsFragment,
   ClientNameFragment,
@@ -23,6 +25,12 @@ const columns: ColumnDef<ClientType>[] = [
   {
     header: 'DOB',
     render: (client) => <ClientDobAge client={client} alwaysShow />,
+  },
+  {
+    header: 'Gender',
+    render: (client) => (
+      <MultiHmisEnum values={client.gender} enumMap={HmisEnums.Gender} />
+    ),
   },
 ];
 

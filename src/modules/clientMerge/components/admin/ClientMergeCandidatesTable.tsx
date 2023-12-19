@@ -17,8 +17,10 @@ import {
   SsnDobShowContextProvider,
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetMergeCandidatesDocument,
   GetMergeCandidatesQuery,
@@ -80,6 +82,21 @@ const ClientMergeCandidatesTable: React.FC = () => {
         <Stack direction='column' gap={1} sx={{ py: 1 }}>
           {clients.map((client) => (
             <ContextualClientDobAge key={client.id} client={client} />
+          ))}
+        </Stack>
+      ),
+    },
+    {
+      header: 'Gender',
+      key: 'gender',
+      render: ({ clients }) => (
+        <Stack direction='column' gap={1} sx={{ py: 1 }}>
+          {clients.map(({ id, gender }) => (
+            <MultiHmisEnum
+              key={id}
+              values={gender}
+              enumMap={HmisEnums.Gender}
+            />
           ))}
         </Stack>
       ),
