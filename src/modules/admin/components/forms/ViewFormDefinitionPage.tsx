@@ -64,11 +64,7 @@ const ViewFormDefinitionPage = () => {
           </Button>
         }
       >
-        <FormRuleTable
-          //TODO: specify columns (can hide definition name+title, and DCA if appropriate)
-          //TODO: hide "form type" filter which is not applicable
-          queryVariables={{ filters: { definition: formId } }}
-        />
+        <FormRuleTable queryVariables={{ filters: { definition: formId } }} />
       </TitleCard>
       {renderFormDialog({
         title: <span>New Rule for {formDefinition.title}</span>,

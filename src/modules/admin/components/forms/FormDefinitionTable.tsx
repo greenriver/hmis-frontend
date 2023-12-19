@@ -29,10 +29,10 @@ const columns: ColumnDef<Row>[] = [
     render: ({ formRules }) => formRules.nodesCount,
   },
   {
-    header: 'System?',
+    key: 'system',
     render: ({ system }) => system && <SystemChip />,
   },
-  // TODO ADD: # projects active in
+  // TODO ADD: # projects active in (based on all rules)
   // TODO ADD: version
   // TODO ADD: status
   // TODO ADD: last updated
@@ -40,25 +40,24 @@ const columns: ColumnDef<Row>[] = [
 
 const FormDefinitionTable: React.FC = () => {
   return (
-    <>
-      <GenericTableWithData<
-        GetFormDefinitionsQuery,
-        GetFormDefinitionsQueryVariables,
-        Row
-      >
-        queryVariables={{}}
-        queryDocument={GetFormDefinitionsDocument}
-        columns={columns}
-        pagePath='formDefinitions'
-        showFilters
-        recordType='FormDefinition'
-        // filterInputType='FormDefinitionFilterOptions'
-        paginationItemName='form'
-        rowLinkTo={(row) =>
-          generatePath(AdminDashboardRoutes.VIEW_FORM, { formId: row.id })
-        }
-      />
-    </>
+    <GenericTableWithData<
+      GetFormDefinitionsQuery,
+      GetFormDefinitionsQueryVariables,
+      Row
+    >
+      queryVariables={{}}
+      queryDocument={GetFormDefinitionsDocument}
+      columns={columns}
+      pagePath='formDefinitions'
+      showFilters
+      recordType='FormDefinition'
+      // TODO: add filter/sort capabilities
+      // filterInputType='FormDefinitionFilterOptions'
+      paginationItemName='form'
+      rowLinkTo={(row) =>
+        generatePath(AdminDashboardRoutes.VIEW_FORM, { formId: row.id })
+      }
+    />
   );
 };
 export default FormDefinitionTable;

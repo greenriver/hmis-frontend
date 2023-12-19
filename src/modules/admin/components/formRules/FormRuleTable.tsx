@@ -90,7 +90,7 @@ const FORM_RULE_COLUMNS: ColumnDef<RowType>[] = [
       ),
   },
   {
-    header: 'Active Status',
+    header: 'Status',
     render: ({ system, active }) => (
       <Stack direction={'row'} gap={1}>
         {active ? 'Active' : 'Inactive'}
