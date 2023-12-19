@@ -748,7 +748,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canUploadClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewAnyConfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewAnyFiles',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2835,6 +2851,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'system',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'title',
         type: {
           kind: 'NON_NULL',
@@ -2980,6 +3004,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'activeStatus',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
+        },
+      },
+      {
         name: 'createdAt',
         type: {
           kind: 'NON_NULL',
@@ -3024,9 +3056,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'otherFunder',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
@@ -5655,6 +5692,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'CreateFormRuleInput',
+    args: [
+      {
+        name: 'definitionId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'input',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'INPUT_OBJECT', name: 'FormRuleInput', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'CreateServiceInput',
     args: [
       {
@@ -6120,6 +6178,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
+        name: 'definition',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'formType',
         type: {
           kind: 'LIST',
@@ -6154,6 +6216,36 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'ENUM', name: 'SystemStatus', ofType: null },
           },
         },
+      },
+    ],
+  },
+  {
+    name: 'FormRuleInput',
+    args: [
+      {
+        name: 'activeStatus',
+        type: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
+      },
+      {
+        name: 'dataCollectedAbout',
+        type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
+      },
+      {
+        name: 'funder',
+        type: { kind: 'ENUM', name: 'FundingSource', ofType: null },
+      },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'otherFunder',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
       },
     ],
   },
@@ -6785,6 +6877,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'UpdateFormRuleInput',
+    args: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'input',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'INPUT_OBJECT', name: 'FormRuleInput', ofType: null },
         },
       },
     ],
