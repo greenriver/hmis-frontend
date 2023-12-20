@@ -2843,6 +2843,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'rawDefinition',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
+      },
+      {
         name: 'role',
         type: {
           kind: 'NON_NULL',

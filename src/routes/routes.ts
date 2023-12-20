@@ -23,6 +23,7 @@ const adminDashboardRoutes = {
   CONFIGURE_SERVICE_CATEGORY: 'services/:serviceCategoryId',
   FORMS: 'forms',
   VIEW_FORM: 'forms/:formId',
+  EDIT_FORM: 'forms/edit/:formId',
   CONFIGURE_AUTO_EXIT: 'auto-exit',
 };
 

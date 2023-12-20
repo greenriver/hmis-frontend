@@ -62,6 +62,12 @@ query GetFormDefinitions($limit: Int = 25, $offset: Int = 0) {
   }
 }
 
+query GetFormDefinitionForJson($input: String!) {
+  formDefinitionForJson(input: $input) {
+    ...FormDefinitionJsonFields
+  }
+}
+
 mutation SubmitForm($input: SubmitFormInput!) {
   submitForm(input: $input) {
     clientMutationId
