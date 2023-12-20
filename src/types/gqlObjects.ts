@@ -2876,6 +2876,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
+  {
+    name: 'FormDefinitionForJsonResult',
+    fields: [
+      {
+        name: 'errors',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+            },
+          },
+        },
+      },
+    ],
+  },
   { name: 'FormDefinitionJson', fields: [] },
   {
     name: 'FormItem',

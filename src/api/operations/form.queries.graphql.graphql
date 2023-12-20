@@ -64,7 +64,10 @@ query GetFormDefinitions($limit: Int = 25, $offset: Int = 0) {
 
 query GetFormDefinitionForJson($input: String!) {
   formDefinitionForJson(input: $input) {
-    ...FormDefinitionJsonFields
+    definition {
+      ...FormDefinitionJsonFields
+    }
+    errors
   }
 }
 

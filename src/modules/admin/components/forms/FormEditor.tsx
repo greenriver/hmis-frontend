@@ -1,61 +1,104 @@
 import DataObjectIcon from '@mui/icons-material/DataObject';
+import SaveIcon from '@mui/icons-material/Save';
 import {
   Alert,
   Box,
   Button,
+  CircularProgress,
   Collapse,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Drawer,
   Paper,
   Skeleton,
   Stack,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { isEmpty } from 'lodash-es';
+import React, { useEffect, useMemo, useState } from 'react';
 import AceEditor from 'react-ace';
 
 import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/theme-tomorrow';
+import CommonDialog from '@/components/elements/CommonDialog';
+import LoadingButton from '@/components/elements/LoadingButton';
+import usePrevious from '@/hooks/usePrevious';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import {
   AlwaysPresentLocalConstants,
   getInitialValues,
 } from '@/modules/form/util/formUtil';
-import { useGetFormDefinitionForJsonQuery } from '@/types/gqlTypes';
+import {
+  FormDefinitionJson,
+  useGetFormDefinitionForJsonQuery,
+} from '@/types/gqlTypes';
 
 export interface FormEditorProps {
   definition: object;
+  onSave: (defintion: object) => any;
+  saveLoading?: boolean;
 }
 
-const FormEditor: React.FC<FormEditorProps> = ({ definition }) => {
+const FormEditor: React.FC<FormEditorProps> = ({
+  definition,
+  onSave,
+  saveLoading = false,
+}) => {
   const [open, setOpen] = useState(false);
+  const [currentDefinition, setCurrentDefinition] =
+    useState<FormDefinitionJson>();
   const [workingDefinition, setWorkingDefinition] =
     useState<object>(definition);
   const [rawValue, setRawValue] = useState<string>(
     JSON.stringify(definition, null, 2)
   );
+  const [formSubmitResult, setFormSubmitResult] = useState<object>();
   const [localConstants, setLocalConstants] = useState<object>({});
-  const [initialValues, setInitialValues] = useState<object>({
-    '2.02.2': 'Test',
-  });
+  const [initialValues, setInitialValues] = useState<object>({});
   const [extraPanelOpen, setExtraPanelOpen] = useState(true);
   const [extraPanelTab, setExtraPanelTab] = useState('localConstants');
   const [error, setError] = useState<string>();
-  const { data, loading } = useGetFormDefinitionForJsonQuery({
+  const {
+    data,
+    loading,
+    error: gqlError,
+  } = useGetFormDefinitionForJsonQuery({
     variables: { input: JSON.stringify(workingDefinition) },
   });
+
+  useEffect(() => {
+    if (data?.formDefinitionForJson?.definition)
+      setCurrentDefinition(data.formDefinitionForJson.definition);
+  }, [data?.formDefinitionForJson?.definition]);
 
   const effectiveLocalConstants = {
     ...AlwaysPresentLocalConstants,
     ...localConstants,
   };
-  const effectiveInitialValues = data?.formDefinitionForJson
+  const effectiveInitialValues = data?.formDefinitionForJson?.definition
     ? {
         ...getInitialValues(
-          data.formDefinitionForJson,
+          data.formDefinitionForJson.definition,
           effectiveLocalConstants
         ),
         ...initialValues,
       }
     : initialValues;
+
+  const allErrors = useMemo(
+    () =>
+      [
+        ...(data?.formDefinitionForJson?.errors || []),
+        ...(gqlError ? [gqlError.message] : []),
+        ...(error ? [error] : []),
+      ].filter((e) => !e.match(/schema invalid/i)),
+    [data, gqlError, error]
+  );
+  const prevAllErrors = usePrevious(allErrors);
+  useEffect(() => {
+    if (!isEmpty(allErrors) && isEmpty(prevAllErrors))
+      setExtraPanelTab('errors');
+  }, [allErrors, prevAllErrors]);
 
   return (
     <>
@@ -65,6 +108,8 @@ const FormEditor: React.FC<FormEditorProps> = ({ definition }) => {
         zIndex={1000}
         component={Paper}
         p={2}
+        display='flex'
+        justifyContent='space-between'
       >
         <Button
           onClick={() => setOpen(true)}
@@ -73,6 +118,14 @@ const FormEditor: React.FC<FormEditorProps> = ({ definition }) => {
         >
           Open JSON Editor
         </Button>
+        <LoadingButton
+          startIcon={<SaveIcon />}
+          onClick={() => onSave(workingDefinition)}
+          disabled={loading || !isEmpty(allErrors)}
+          loading={saveLoading}
+        >
+          Save Form Definition
+        </LoadingButton>
       </Box>
       <Drawer
         anchor='right'
@@ -92,7 +145,6 @@ const FormEditor: React.FC<FormEditorProps> = ({ definition }) => {
           })}
         >
           <Button onClick={() => setOpen(false)}>Close</Button>
-          {error && <Alert severity='error'>{error}</Alert>}
         </Box>
         <AceEditor
           mode='json'
@@ -146,6 +198,18 @@ const FormEditor: React.FC<FormEditorProps> = ({ definition }) => {
               >
                 Initial Values
               </Button>
+              <Button
+                variant={extraPanelTab === 'errors' ? 'contained' : 'outlined'}
+                onClick={() => setExtraPanelTab('errors')}
+                color={isEmpty(allErrors) ? 'success' : 'error'}
+                startIcon={
+                  loading ? (
+                    <CircularProgress color='inherit' size={15} />
+                  ) : undefined
+                }
+              >
+                Issues ({allErrors.length})
+              </Button>
             </Stack>
             <Stack direction='row' gap={1}>
               <Button
@@ -185,29 +249,69 @@ const FormEditor: React.FC<FormEditorProps> = ({ definition }) => {
                 value={JSON.stringify(initialValues, null, 2)}
               />
             )}
+            {extraPanelTab === 'errors' && (
+              <Stack height='200px' width='50vw' gap={1} p={1}>
+                {allErrors.map((err) => (
+                  <Alert severity='error'>{err}</Alert>
+                ))}
+              </Stack>
+            )}
           </Collapse>
         </Box>
       </Drawer>
       <Box my={2}>
-        {loading ? (
+        {!currentDefinition ? (
           <Skeleton width='100%' height='300px' variant='rounded' />
         ) : (
-          data?.formDefinitionForJson && (
-            <DynamicForm
-              // Using key here will force the form to re-mount when these values change
-              key={JSON.stringify({
-                effectiveInitialValues,
-                effectiveLocalConstants,
-              })}
-              definition={data.formDefinitionForJson}
-              onSubmit={({ values }) => setInitialValues(values)}
-              errors={{ errors: [], warnings: [] }}
-              localConstants={effectiveLocalConstants}
-              initialValues={effectiveInitialValues}
-            />
-          )
+          <DynamicForm
+            // Using key here will force the form to re-mount when these values change
+            key={JSON.stringify({
+              effectiveInitialValues,
+              effectiveLocalConstants,
+            })}
+            definition={currentDefinition}
+            onSubmit={({ values }) => setFormSubmitResult(values)}
+            errors={{ errors: [], warnings: [] }}
+            localConstants={effectiveLocalConstants}
+            initialValues={effectiveInitialValues}
+            FormActionProps={{
+              submitButtonText: 'Test Submit Form',
+              discardButtonText: 'Discard (unused here)',
+              noDiscard: true,
+            }}
+          />
         )}
       </Box>
+      <CommonDialog open={!!formSubmitResult}>
+        <DialogTitle>Submitted Values</DialogTitle>
+        <DialogContent>
+          <Box
+            component='pre'
+            sx={(theme) => ({
+              backgroundColor: theme.palette.grey[100],
+              border: `1px solid ${theme.palette.divider}`,
+              borderRadius: theme.shape.borderRadius,
+              p: 2,
+              fontSize: theme.typography.body2.fontSize,
+            })}
+          >
+            {JSON.stringify(formSubmitResult, null, 2)}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='gray' onClick={() => setFormSubmitResult(undefined)}>
+            Close
+          </Button>
+          <Button
+            onClick={() => {
+              if (formSubmitResult) setInitialValues(formSubmitResult);
+              setFormSubmitResult(undefined);
+            }}
+          >
+            Save to Initial Values
+          </Button>
+        </DialogActions>
+      </CommonDialog>
     </>
   );
 };
