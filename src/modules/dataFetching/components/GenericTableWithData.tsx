@@ -71,8 +71,7 @@ export interface Props<
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   fetchPolicy?: WatchQueryFetchPolicy;
-  pagePath?: string; // path to page, if paginated results
-  rowsPath?: string; // path to data rows, if non-paginated results
+  pagePath: string; // path to pagination object from result data
   noData?: ReactNode | ((filters: Partial<FilterOptionsType>) => ReactNode);
   defaultPageSize?: number;
   rowsPerPageOptions?: number[];
@@ -91,6 +90,7 @@ export interface Props<
   showOptionalColumns?: boolean;
   applyOptionalColumns?: (columns: string[]) => Partial<QueryVariables>;
   onCompleted?: (data: Query) => void;
+  filterRows?: (rows: RowDataType) => boolean; // Client-side row filtering
 }
 
 function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
@@ -141,7 +141,6 @@ const GenericTableWithData = <
   queryVariables,
   queryDocument,
   pagePath,
-  rowsPath,
   defaultPageSize = DEFAULT_ROWS_PER_PAGE,
   columns: columnsProp,
   getColumnDefs,
@@ -161,6 +160,7 @@ const GenericTableWithData = <
   applyOptionalColumns,
   onCompleted,
   paginationItemName,
+  filterRows,
   ...props
 }: Props<
   Query,
@@ -206,10 +206,8 @@ const GenericTableWithData = <
         ...filterValues,
       },
       sortOrder: effectiveSortOrder,
-      ...(!rowsPath && {
-        offset,
-        limit,
-      }),
+      offset,
+      limit,
       ...(applyOptionalColumns
         ? applyOptionalColumns(includedOptionalColumns)
         : {}),
@@ -234,20 +232,14 @@ const GenericTableWithData = <
   if (error) throw error;
 
   const rows = useMemo<RowDataType[]>(() => {
-    if (pagePath) return get(data, `${pagePath}.nodes`) || [];
-    if (rowsPath) {
-      const all = get(data, rowsPath) || [];
-      const startIndex = page * rowsPerPage;
-      return all.slice(startIndex, startIndex + rowsPerPage);
-    }
-    return data;
-  }, [data, pagePath, rowsPath, rowsPerPage, page]);
+    const pageRows = (get(data, `${pagePath}.nodes`) || []) as RowDataType[];
+    if (filterRows) return pageRows.filter(filterRows);
+    return pageRows;
+  }, [data, pagePath, filterRows]);
 
   const nodesCount = useMemo<number>(() => {
-    if (pagePath) return get(data, `${pagePath}.nodesCount`) || 0;
-    if (rowsPath) return (get(data, rowsPath) || []).length;
-    return rows.length;
-  }, [data, pagePath, rowsPath, rows]);
+    return (get(data, `${pagePath}.nodesCount`) || 0) as number;
+  }, [data, pagePath]);
 
   const nonTablePaginationProps = useMemo(() => {
     if (!nonTablePagination) return undefined;
