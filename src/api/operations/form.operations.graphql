@@ -1,0 +1,10 @@
+mutation UpdateFormDefinition($id: ID!, $input: String!) {
+  updateFormDefinition(id: $id, input: $input) {
+    formDefinition {
+      ...FormDefinitionFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

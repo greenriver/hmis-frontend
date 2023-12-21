@@ -13,8 +13,10 @@ import {
   Paper,
   Skeleton,
   Stack,
+  Typography,
 } from '@mui/material';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isEqual } from 'lodash-es';
+import pluralize from 'pluralize';
 import React, { useEffect, useMemo, useState } from 'react';
 import AceEditor from 'react-ace';
 
@@ -52,6 +54,7 @@ const FormEditor: React.FC<FormEditorProps> = ({
   const [rawValue, setRawValue] = useState<string>(
     JSON.stringify(definition, null, 2)
   );
+  const [dirty, setDirty] = useState(false);
   const [formSubmitResult, setFormSubmitResult] = useState<object>();
   const [localConstants, setLocalConstants] = useState<object>({});
   const [initialValues, setInitialValues] = useState<object>({});
@@ -65,6 +68,21 @@ const FormEditor: React.FC<FormEditorProps> = ({
   } = useGetFormDefinitionForJsonQuery({
     variables: { input: JSON.stringify(workingDefinition) },
   });
+
+  useEffect(() => {
+    if (isEqual(definition, workingDefinition)) {
+      setDirty(false);
+    }
+  }, [definition, workingDefinition]);
+
+  useEffect(() => {
+    setWorkingDefinition(definition);
+    setRawValue(JSON.stringify(definition, null, 2));
+  }, [definition]);
+
+  useEffect(() => {
+    if (!dirty && !isEqual(definition, workingDefinition)) setDirty(true);
+  }, [definition, workingDefinition, dirty]);
 
   useEffect(() => {
     if (data?.formDefinitionForJson?.definition)
@@ -111,17 +129,25 @@ const FormEditor: React.FC<FormEditorProps> = ({
         display='flex'
         justifyContent='space-between'
       >
-        <Button
-          onClick={() => setOpen(true)}
-          variant='outlined'
-          startIcon={<DataObjectIcon />}
-        >
-          Open JSON Editor
-        </Button>
+        <Stack direction='row' gap={2} alignItems='center'>
+          <Button
+            onClick={() => setOpen(true)}
+            variant='outlined'
+            startIcon={<DataObjectIcon />}
+          >
+            Open JSON Editor
+          </Button>
+          {!isEmpty(allErrors) && (
+            <Typography color='error'>
+              {allErrors.length} {pluralize('Issue', allErrors.length)} must be
+              resolved
+            </Typography>
+          )}
+        </Stack>
         <LoadingButton
           startIcon={<SaveIcon />}
           onClick={() => onSave(workingDefinition)}
-          disabled={loading || !isEmpty(allErrors)}
+          disabled={!dirty || loading || !isEmpty(allErrors)}
           loading={saveLoading}
         >
           Save Form Definition
