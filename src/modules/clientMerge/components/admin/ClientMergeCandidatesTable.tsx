@@ -1,7 +1,7 @@
 import { Button, Chip, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import pluralize from 'pluralize';
-import { useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
@@ -32,6 +32,12 @@ import { evictQuery } from '@/utils/cacheUtil';
 export type MergeCandidateFragment = NonNullable<
   NonNullable<GetMergeCandidatesQuery>['mergeCandidates']['nodes'][number]
 >;
+
+const TableCellRows = ({ rows }: { rows: ReactNode[] }) => (
+  <Stack direction='column' gap={1} sx={{ py: 1 }}>
+    {rows.map((row) => row || <>&#160;</>)}
+  </Stack>
+);
 
 const ClientMergeCandidatesTable: React.FC = () => {
   const columns: ColumnDef<MergeCandidateFragment>[] = [
@@ -79,26 +85,13 @@ const ClientMergeCandidatesTable: React.FC = () => {
       ),
       key: 'dob',
       render: ({ clients }) => (
-        <Stack direction='column' gap={1} sx={{ py: 1 }}>
-          {clients.map((client) => (
-            <ContextualClientDobAge key={client.id} client={client} />
-          ))}
-        </Stack>
-      ),
-    },
-    {
-      header: 'Gender',
-      key: 'gender',
-      render: ({ clients }) => (
-        <Stack direction='column' gap={1} sx={{ py: 1 }}>
-          {clients.map(({ id, gender }) => (
-            <MultiHmisEnum
-              key={id}
-              values={gender}
-              enumMap={HmisEnums.Gender}
-            />
-          ))}
-        </Stack>
+        <TableCellRows
+          rows={clients.map((client) =>
+            client.dob ? (
+              <ContextualClientDobAge key={client.id} client={client} />
+            ) : null
+          )}
+        />
       ),
     },
     {
@@ -107,11 +100,30 @@ const ClientMergeCandidatesTable: React.FC = () => {
       ),
       key: 'ssn',
       render: ({ clients }) => (
-        <Stack direction='column' gap={1} sx={{ py: 1 }}>
-          {clients.map((client) => (
-            <ContextualClientSsn key={client.id} client={client} />
+        <TableCellRows
+          rows={clients.map((client) =>
+            client.ssn ? (
+              <ContextualClientSsn key={client.id} client={client} />
+            ) : null
+          )}
+        />
+      ),
+    },
+    {
+      header: 'Gender',
+      key: 'gender',
+      render: ({ clients }) => (
+        <TableCellRows
+          rows={clients.map(({ id, gender }) => (
+            <MultiHmisEnum
+              key={id}
+              values={gender}
+              enumMap={HmisEnums.Gender}
+              noData={<>&#160;</>}
+              sx={{ whiteSpace: 'nowrap' }}
+            />
           ))}
-        </Stack>
+        />
       ),
     },
   ];
