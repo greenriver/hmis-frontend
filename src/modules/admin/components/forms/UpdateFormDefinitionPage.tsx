@@ -8,7 +8,7 @@ import {
   useUpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
-const FormEditorPage = () => {
+const UpdateFormDefinitionPage = () => {
   const { formId } = useParams() as { formId: string };
 
   const { data: { formDefinition } = {}, error } =
@@ -30,7 +30,10 @@ const FormEditorPage = () => {
           definition={formDefinition?.rawDefinition}
           onSave={(values) => {
             updateFormDefinition({
-              variables: { id: formId, input: JSON.stringify(values) },
+              variables: {
+                id: formId,
+                input: { definition: JSON.stringify(values) },
+              },
             });
           }}
           saveLoading={loading}
@@ -40,4 +43,4 @@ const FormEditorPage = () => {
   );
 };
 
-export default FormEditorPage;
+export default UpdateFormDefinitionPage;

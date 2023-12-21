@@ -121,6 +121,7 @@ fragment FormDefinitionMetadata on FormDefinition {
   role
   title
   cacheKey
+  identifier
 }
 
 fragment FormDefinitionFields on FormDefinition {

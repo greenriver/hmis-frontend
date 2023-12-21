@@ -2843,6 +2843,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'identifier',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
         name: 'rawDefinition',
         type: {
           kind: 'NON_NULL',
@@ -6145,6 +6153,21 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           },
         },
       },
+    ],
+  },
+  {
+    name: 'FormDefinitionInput',
+    args: [
+      {
+        name: 'definition',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'identifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'role', type: { kind: 'ENUM', name: 'FormRole', ofType: null } },
+      { name: 'title', type: { kind: 'SCALAR', name: 'String', ofType: null } },
     ],
   },
   {

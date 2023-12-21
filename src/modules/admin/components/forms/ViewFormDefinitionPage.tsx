@@ -4,7 +4,6 @@ import { Button, Stack } from '@mui/material';
 // eslint-disable-next-line no-restricted-imports
 import { useParams } from 'react-router-dom';
 import FormRuleTable from '../formRules/FormRuleTable';
-import FormTypeChip from './FormTypeChip';
 import ButtonLink from '@/components/elements/ButtonLink';
 import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
@@ -52,7 +51,15 @@ const ViewFormDefinitionPage = () => {
     <>
       <PageTitle
         title={formDefinition?.title}
-        actions={<FormTypeChip role={formDefinition.role} />}
+        actions={
+          <ButtonLink
+            to={generateSafePath(AdminDashboardRoutes.EDIT_FORM, { formId })}
+            startIcon={<EditIcon />}
+            variant='outlined'
+          >
+            Edit Definition
+          </ButtonLink>
+        }
       />
 
       <TitleCard
@@ -67,13 +74,6 @@ const ViewFormDefinitionPage = () => {
             >
               New Rule
             </Button>
-            <ButtonLink
-              to={generateSafePath(AdminDashboardRoutes.EDIT_FORM, { formId })}
-              startIcon={<EditIcon />}
-              variant='outlined'
-            >
-              Edit Definition
-            </ButtonLink>
           </Stack>
         }
       >

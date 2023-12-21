@@ -42,7 +42,7 @@ import ConfigureAutoExitPage from '@/modules/admin/components/autoExit/Configure
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
-import FormEditorPage from '@/modules/admin/components/forms/FormEditorPage';
+import FormEditorPage from '@/modules/admin/components/forms/UpdateFormDefinitionPage';
 import ViewFormDefinitionPage from '@/modules/admin/components/forms/ViewFormDefinitionPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
 import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
