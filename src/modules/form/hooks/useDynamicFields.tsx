@@ -88,11 +88,12 @@ const useDynamicFields = ({
             values: localValues,
             itemMap,
             localConstants: localConstants || {},
+            viewOnly,
           });
         });
       });
     },
-    [itemMap, autofillDependencyMap, localConstants]
+    [itemMap, autofillDependencyMap, viewOnly, localConstants]
   );
 
   /**
@@ -134,11 +135,12 @@ const useDynamicFields = ({
           values: newValues,
           itemMap,
           localConstants: localConstants || {},
+          viewOnly,
         });
       });
       return newValues;
     });
-  }, [itemMap, localConstants]);
+  }, [itemMap, localConstants, viewOnly]);
 
   const itemChanged: ItemChangedFn = useCallback(
     (input) => {
