@@ -19,3 +19,14 @@ mutation CreateFormDefinition($input: FormDefinitionInput!) {
     }
   }
 }
+
+mutation DeleteFormDefinition($id: ID!) {
+  deleteFormDefinition(id: $id) {
+    formDefinition {
+      ...FormDefinitionFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
