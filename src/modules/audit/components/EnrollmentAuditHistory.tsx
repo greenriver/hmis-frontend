@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { compact, filter } from 'lodash-es';
+import { compact, filter, omit } from 'lodash-es';
 import AuditObjectChangesSummary, {
   ObjectChangesType,
 } from './AuditObjectChangesSummary';
@@ -72,10 +72,9 @@ const columns: ColumnDef<AuditHistoryType>[] = [
       sx: { p: 0, backgroundColor: (theme) => theme.palette.grey[50] },
     },
     render: (e) => {
-      if (!e.objectChanges) return null;
-
-      // This is not helpful, these should not be returned from the API
-      if (Object.keys(e.objectChanges).length === 0) return null;
+      if (!e.objectChanges || Object.keys(e.objectChanges).length === 0) {
+        return null;
+      }
 
       const labels = Object.values(e.objectChanges as ObjectChangesType)
         .filter((r) => filter(r.values, hasMeaningfulValue).length > 0)
@@ -107,17 +106,24 @@ const EnrollmentAuditHistory = () => {
           AuditHistoryType,
           BaseAuditEventFilterOptions
         >
-          queryVariables={{ id: enrollmentId }}
-          queryDocument={GetEnrollmentAuditEventsDocument}
           columns={columns}
-          pagePath='enrollment.auditHistory'
           fetchPolicy='cache-and-network'
+          // Hide rows that don't have any changes. It would be better if we can do this on the backend, the pagination counts are off
+          filterRows={(row) =>
+            row.objectChanges && Object.keys(row.objectChanges).length > 0
+          }
           noData='No audit history'
+          pagePath='enrollment.auditHistory'
+          paginationItemName='event'
+          queryDocument={GetEnrollmentAuditEventsDocument}
+          queryVariables={{ id: enrollmentId }}
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
-          showFilters
-          recordType='event'
+          // FIXME: Record dropdown is non specific to Enrollments
+          filters={(filters) => omit(filters, 'auditEventRecordType')}
+          recordType='EnrollmentAuditEvent'
           filterInputType='BaseAuditEventFilterOptions'
+          showFilters
         />
       </Paper>
     </ContextualCollapsibleListsProvider>

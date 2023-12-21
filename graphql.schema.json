@@ -11377,8 +11377,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Int",
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
               "ofType": null
             },
             "isDeprecated": false,
