@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { compact, filter } from 'lodash-es';
+import { compact, filter, omit } from 'lodash-es';
 import AuditObjectChangesSummary, {
   ObjectChangesType,
 } from './AuditObjectChangesSummary';
@@ -18,6 +18,7 @@ import {
   formatDateTimeForDisplay,
 } from '@/modules/hmis/hmisUtil';
 import {
+  BaseAuditEventFilterOptions,
   GetClientAuditEventsDocument,
   GetClientAuditEventsQuery,
   GetClientAuditEventsQueryVariables,
@@ -38,7 +39,8 @@ const columns: ColumnDef<AuditHistoryType>[] = [
     header: 'User',
     width: '180px',
     render: ({ user, trueUser }) =>
-      compact([trueUser?.name, user?.name]).join(' acting as '),
+      compact([trueUser?.name, user?.name]).join(' acting as ') ||
+      'System User',
   },
   {
     header: 'Action',
@@ -71,10 +73,9 @@ const columns: ColumnDef<AuditHistoryType>[] = [
       sx: { p: 0, backgroundColor: (theme) => theme.palette.grey[50] },
     },
     render: (e) => {
-      if (!e.objectChanges) return null;
-
-      // This is not helpful, these should not be returned from the API
-      if (Object.keys(e.objectChanges).length === 0) return null;
+      if (!e.objectChanges || Object.keys(e.objectChanges).length === 0) {
+        return null;
+      }
 
       const labels = Object.values(e.objectChanges as ObjectChangesType)
         .filter((r) => filter(r.values, hasMeaningfulValue).length > 0)
@@ -103,16 +104,27 @@ const ClientAuditHistory = () => {
         <GenericTableWithData<
           GetClientAuditEventsQuery,
           GetClientAuditEventsQueryVariables,
-          AuditHistoryType
+          AuditHistoryType,
+          BaseAuditEventFilterOptions
         >
-          queryVariables={{ id: clientId }}
-          queryDocument={GetClientAuditEventsDocument}
           columns={columns}
-          pagePath='client.auditHistory'
           fetchPolicy='cache-and-network'
+          // Hide rows that don't have any changes. It would be better if we can do this on the backend, the pagination counts are off
+          filterRows={(row) =>
+            row.objectChanges && Object.keys(row.objectChanges).length > 0
+          }
           noData='No audit history'
+          pagePath='client.auditHistory'
+          paginationItemName='event'
+          queryDocument={GetClientAuditEventsDocument}
+          queryVariables={{ id: clientId }}
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
+          // FIXME: Record dropdown is non specific to Clients
+          filters={(filters) => omit(filters, 'auditEventRecordType')}
+          recordType='ClientAuditEvent'
+          filterInputType='BaseAuditEventFilterOptions'
+          showFilters
         />
       </Paper>
     </ContextualCollapsibleListsProvider>
