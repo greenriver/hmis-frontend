@@ -1,0 +1,37 @@
+query GetClientAuditEvents(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: BaseAuditEventFilterOptions = null
+) {
+  client(id: $id) {
+    id
+    auditHistory(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ClientAuditEventFields
+      }
+    }
+  }
+}
+
+query GetEnrollmentAuditEvents(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: BaseAuditEventFilterOptions = null
+) {
+  enrollment(id: $id) {
+    id
+    auditHistory(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentAuditEventFields
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+fragment ClientAuditEventFields on ClientAuditEvent {
+  id
+  createdAt
+  event
+  objectChanges
+  recordName
+  graphqlType
+  recordId
+  user {
+    id
+    name
+  }
+  trueUser {
+    id
+    name
+  }
+}
+
+fragment EnrollmentAuditEventFields on EnrollmentAuditEvent {
+  id
+  createdAt
+  event
+  objectChanges
+  recordName
+  graphqlType
+  recordId
+  user {
+    id
+    name
+  }
+  trueUser {
+    id
+    name
+  }
+}
