@@ -609,10 +609,18 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.USER_AUDIT,
+            path: AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY,
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
-                <UserAuditPage />
+                <UserAuditPage entityType='clients' />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY,
+            element: (
+              <RootPermissionsFilter permissions='canAuditUsers'>
+                <UserAuditPage entityType='enrollments' />
               </RootPermissionsFilter>
             ),
           },

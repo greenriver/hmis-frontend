@@ -14,3 +14,25 @@ fragment UserActivityLogFields on ActivityLog {
     recordType
   }
 }
+
+fragment ClientAccessSummaryFields on ClientAccessSummary {
+  id
+  lastAccessedAt
+  client {
+    ...ClientName
+  }
+}
+
+fragment EnrollmentAccessSummaryFields on EnrollmentAccessSummary {
+  id
+  lastAccessedAt
+  enrollment {
+    id
+    client {
+      ...ClientName
+    }
+    project {
+      ...ProjectNameAndType
+    }
+  }
+}
