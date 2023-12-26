@@ -716,6 +716,7 @@ export type ClientAuditEvent = {
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
+  trueUser?: Maybe<ApplicationUser>;
   user?: Maybe<ApplicationUser>;
 };
 
@@ -1757,7 +1758,7 @@ export type Disability = {
   disabilityType: DisabilityType;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
-  indefiniteAndImpairs?: Maybe<Scalars['Int']['output']>;
+  indefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   tCellCount?: Maybe<Scalars['Int']['output']>;
   tCellCountAvailable?: Maybe<NoYesReasonsForMissingData>;
@@ -2171,6 +2172,7 @@ export type EnrollmentAuditEvent = {
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
+  trueUser?: Maybe<ApplicationUser>;
   user?: Maybe<ApplicationUser>;
 };
 
@@ -11191,6 +11193,122 @@ export type EmploymentEducationValuesFragment = {
   schoolStatus?: SchoolStatus | null;
 };
 
+export type ClientAuditEventFieldsFragment = {
+  __typename?: 'ClientAuditEvent';
+  id: string;
+  createdAt: string;
+  event: AuditEventType;
+  objectChanges?: any | null;
+  recordName: string;
+  graphqlType: string;
+  recordId: string;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+  trueUser?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+};
+
+export type EnrollmentAuditEventFieldsFragment = {
+  __typename?: 'EnrollmentAuditEvent';
+  id: string;
+  createdAt: string;
+  event: AuditEventType;
+  objectChanges?: any | null;
+  recordName: string;
+  graphqlType: string;
+  recordId: string;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+  trueUser?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+};
+
+export type GetClientAuditEventsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+}>;
+
+export type GetClientAuditEventsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    auditHistory: {
+      __typename?: 'ClientAuditEventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ClientAuditEvent';
+        id: string;
+        createdAt: string;
+        event: AuditEventType;
+        objectChanges?: any | null;
+        recordName: string;
+        graphqlType: string;
+        recordId: string;
+        user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetEnrollmentAuditEventsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+}>;
+
+export type GetEnrollmentAuditEventsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    auditHistory: {
+      __typename?: 'EnrollmentAuditEventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'EnrollmentAuditEvent';
+        id: string;
+        createdAt: string;
+        event: AuditEventType;
+        objectChanges?: any | null;
+        recordName: string;
+        graphqlType: string;
+        recordId: string;
+        user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
 export type AutoExitConfigFieldsFragment = {
   __typename?: 'AutoExitConfig';
   id: string;
@@ -11823,18 +11941,6 @@ export type ClientOmniSearchFieldsFragment = {
   nameSuffix?: string | null;
 };
 
-export type ClientAuditEventFieldsFragment = {
-  __typename?: 'ClientAuditEvent';
-  id: string;
-  createdAt: string;
-  event: AuditEventType;
-  objectChanges?: any | null;
-  recordName: string;
-  graphqlType: string;
-  recordId: string;
-  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
-};
-
 export type SearchClientsQueryVariables = Exact<{
   filters?: InputMaybe<ClientFilterOptions>;
   input: ClientSearchInput;
@@ -12174,41 +12280,6 @@ export type GetClientEnrollmentsQuery = {
           id: string;
           canViewEnrollmentDetails: boolean;
         };
-      }>;
-    };
-  } | null;
-};
-
-export type GetClientAuditEventsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetClientAuditEventsQuery = {
-  __typename?: 'Query';
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    auditHistory: {
-      __typename?: 'ClientAuditEventsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'ClientAuditEvent';
-        id: string;
-        createdAt: string;
-        event: AuditEventType;
-        objectChanges?: any | null;
-        recordName: string;
-        graphqlType: string;
-        recordId: string;
-        user?: {
-          __typename?: 'ApplicationUser';
-          id: string;
-          name: string;
-        } | null;
       }>;
     };
   } | null;
@@ -14678,18 +14749,6 @@ export type EnrollmentSummaryFieldsFragment = {
   canViewEnrollment: boolean;
 };
 
-export type EnrollmentAuditEventFieldsFragment = {
-  __typename?: 'EnrollmentAuditEvent';
-  id: string;
-  createdAt: string;
-  event: AuditEventType;
-  objectChanges?: any | null;
-  recordName: string;
-  graphqlType: string;
-  recordId: string;
-  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
-};
-
 export type GetEnrollmentQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -15646,42 +15705,6 @@ export type GetEnrollmentEventsQuery = {
           id: string;
           name: string;
           email: string;
-        } | null;
-      }>;
-    };
-  } | null;
-};
-
-export type GetEnrollmentAuditEventsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<BaseAuditEventFilterOptions>;
-}>;
-
-export type GetEnrollmentAuditEventsQuery = {
-  __typename?: 'Query';
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    auditHistory: {
-      __typename?: 'EnrollmentAuditEventsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'EnrollmentAuditEvent';
-        id: string;
-        createdAt: string;
-        event: AuditEventType;
-        objectChanges?: any | null;
-        recordName: string;
-        graphqlType: string;
-        recordId: string;
-        user?: {
-          __typename?: 'ApplicationUser';
-          id: string;
-          name: string;
         } | null;
       }>;
     };
@@ -27676,6 +27699,44 @@ export const HealthAndDvFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
+export const ClientAuditEventFieldsFragmentDoc = gql`
+  fragment ClientAuditEventFields on ClientAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    recordName
+    graphqlType
+    recordId
+    user {
+      id
+      name
+    }
+    trueUser {
+      id
+      name
+    }
+  }
+`;
+export const EnrollmentAuditEventFieldsFragmentDoc = gql`
+  fragment EnrollmentAuditEventFields on EnrollmentAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    recordName
+    graphqlType
+    recordId
+    user {
+      id
+      name
+    }
+    trueUser {
+      id
+      name
+    }
+  }
+`;
 export const AutoExitConfigFieldsFragmentDoc = gql`
   fragment AutoExitConfigFields on AutoExitConfig {
     id
@@ -27907,21 +27968,6 @@ export const ClientOmniSearchFieldsFragmentDoc = gql`
     ...ClientName
   }
   ${ClientNameFragmentDoc}
-`;
-export const ClientAuditEventFieldsFragmentDoc = gql`
-  fragment ClientAuditEventFields on ClientAuditEvent {
-    id
-    createdAt
-    event
-    objectChanges
-    recordName
-    graphqlType
-    recordId
-    user {
-      id
-      name
-    }
-  }
 `;
 export const MergeAuditEventFieldsFragmentDoc = gql`
   fragment MergeAuditEventFields on MergeAuditEvent {
@@ -28382,21 +28428,6 @@ export const CeAssessmentFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
-`;
-export const EnrollmentAuditEventFieldsFragmentDoc = gql`
-  fragment EnrollmentAuditEventFields on EnrollmentAuditEvent {
-    id
-    createdAt
-    event
-    objectChanges
-    recordName
-    graphqlType
-    recordId
-    user {
-      id
-      name
-    }
-  }
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -29793,6 +29824,156 @@ export type DeleteAssessmentMutationOptions = Apollo.BaseMutationOptions<
   DeleteAssessmentMutation,
   DeleteAssessmentMutationVariables
 >;
+export const GetClientAuditEventsDocument = gql`
+  query GetClientAuditEvents(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: BaseAuditEventFilterOptions = null
+  ) {
+    client(id: $id) {
+      id
+      auditHistory(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ClientAuditEventFields
+        }
+      }
+    }
+  }
+  ${ClientAuditEventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientAuditEventsQuery__
+ *
+ * To run a query within a React component, call `useGetClientAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientAuditEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetClientAuditEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientAuditEventsQuery,
+    GetClientAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientAuditEventsQuery,
+    GetClientAuditEventsQueryVariables
+  >(GetClientAuditEventsDocument, options);
+}
+export function useGetClientAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientAuditEventsQuery,
+    GetClientAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientAuditEventsQuery,
+    GetClientAuditEventsQueryVariables
+  >(GetClientAuditEventsDocument, options);
+}
+export type GetClientAuditEventsQueryHookResult = ReturnType<
+  typeof useGetClientAuditEventsQuery
+>;
+export type GetClientAuditEventsLazyQueryHookResult = ReturnType<
+  typeof useGetClientAuditEventsLazyQuery
+>;
+export type GetClientAuditEventsQueryResult = Apollo.QueryResult<
+  GetClientAuditEventsQuery,
+  GetClientAuditEventsQueryVariables
+>;
+export const GetEnrollmentAuditEventsDocument = gql`
+  query GetEnrollmentAuditEvents(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: BaseAuditEventFilterOptions = null
+  ) {
+    enrollment(id: $id) {
+      id
+      auditHistory(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentAuditEventFields
+        }
+      }
+    }
+  }
+  ${EnrollmentAuditEventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentAuditEventsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentAuditEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetEnrollmentAuditEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >(GetEnrollmentAuditEventsDocument, options);
+}
+export function useGetEnrollmentAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >(GetEnrollmentAuditEventsDocument, options);
+}
+export type GetEnrollmentAuditEventsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAuditEventsQuery
+>;
+export type GetEnrollmentAuditEventsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAuditEventsLazyQuery
+>;
+export type GetEnrollmentAuditEventsQueryResult = Apollo.QueryResult<
+  GetEnrollmentAuditEventsQuery,
+  GetEnrollmentAuditEventsQueryVariables
+>;
 export const CreateAutoExitConfigDocument = gql`
   mutation CreateAutoExitConfig($input: AutoExitConfigInput!) {
     createAutoExitConfig(input: $input) {
@@ -30632,75 +30813,6 @@ export type GetClientEnrollmentsLazyQueryHookResult = ReturnType<
 export type GetClientEnrollmentsQueryResult = Apollo.QueryResult<
   GetClientEnrollmentsQuery,
   GetClientEnrollmentsQueryVariables
->;
-export const GetClientAuditEventsDocument = gql`
-  query GetClientAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-    client(id: $id) {
-      id
-      auditHistory(limit: $limit, offset: $offset) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...ClientAuditEventFields
-        }
-      }
-    }
-  }
-  ${ClientAuditEventFieldsFragmentDoc}
-`;
-
-/**
- * __useGetClientAuditEventsQuery__
- *
- * To run a query within a React component, call `useGetClientAuditEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetClientAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetClientAuditEventsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetClientAuditEventsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetClientAuditEventsQuery,
-    GetClientAuditEventsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetClientAuditEventsQuery,
-    GetClientAuditEventsQueryVariables
-  >(GetClientAuditEventsDocument, options);
-}
-export function useGetClientAuditEventsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetClientAuditEventsQuery,
-    GetClientAuditEventsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetClientAuditEventsQuery,
-    GetClientAuditEventsQueryVariables
-  >(GetClientAuditEventsDocument, options);
-}
-export type GetClientAuditEventsQueryHookResult = ReturnType<
-  typeof useGetClientAuditEventsQuery
->;
-export type GetClientAuditEventsLazyQueryHookResult = ReturnType<
-  typeof useGetClientAuditEventsLazyQuery
->;
-export type GetClientAuditEventsQueryResult = Apollo.QueryResult<
-  GetClientAuditEventsQuery,
-  GetClientAuditEventsQueryVariables
 >;
 export const GetClientServicesDocument = gql`
   query GetClientServices(
@@ -32337,81 +32449,6 @@ export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables
->;
-export const GetEnrollmentAuditEventsDocument = gql`
-  query GetEnrollmentAuditEvents(
-    $id: ID!
-    $limit: Int = 10
-    $offset: Int = 0
-    $filters: BaseAuditEventFilterOptions = null
-  ) {
-    enrollment(id: $id) {
-      id
-      auditHistory(limit: $limit, offset: $offset, filters: $filters) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...EnrollmentAuditEventFields
-        }
-      }
-    }
-  }
-  ${EnrollmentAuditEventFieldsFragmentDoc}
-`;
-
-/**
- * __useGetEnrollmentAuditEventsQuery__
- *
- * To run a query within a React component, call `useGetEnrollmentAuditEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEnrollmentAuditEventsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *      filters: // value for 'filters'
- *   },
- * });
- */
-export function useGetEnrollmentAuditEventsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentAuditEventsQuery,
-    GetEnrollmentAuditEventsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetEnrollmentAuditEventsQuery,
-    GetEnrollmentAuditEventsQueryVariables
-  >(GetEnrollmentAuditEventsDocument, options);
-}
-export function useGetEnrollmentAuditEventsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentAuditEventsQuery,
-    GetEnrollmentAuditEventsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetEnrollmentAuditEventsQuery,
-    GetEnrollmentAuditEventsQueryVariables
-  >(GetEnrollmentAuditEventsDocument, options);
-}
-export type GetEnrollmentAuditEventsQueryHookResult = ReturnType<
-  typeof useGetEnrollmentAuditEventsQuery
->;
-export type GetEnrollmentAuditEventsLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentAuditEventsLazyQuery
->;
-export type GetEnrollmentAuditEventsQueryResult = Apollo.QueryResult<
-  GetEnrollmentAuditEventsQuery,
-  GetEnrollmentAuditEventsQueryVariables
 >;
 export const GetEnrollmentCeAssessmentsDocument = gql`
   query GetEnrollmentCeAssessments(

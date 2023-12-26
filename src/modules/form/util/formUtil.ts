@@ -488,17 +488,22 @@ type AutofillValuesArgs = {
   values: FormValues;
   itemMap: ItemMap;
   localConstants: LocalConstants;
+  viewOnly: boolean;
 };
 export const autofillValues = ({
   item,
   values,
   itemMap,
   localConstants,
+  viewOnly,
 }: AutofillValuesArgs): boolean => {
   if (!item.autofillValues) return false;
 
   // use `some` to stop iterating when true is returned
   return item.autofillValues.some((av) => {
+    // Skip autofills that should not run on read-only views
+    if (viewOnly && !av.autofillReadonly) return false;
+
     // Evaluate all enableWhen conditions
     const booleans = av.autofillWhen.map((en) =>
       evaluateEnableWhen({

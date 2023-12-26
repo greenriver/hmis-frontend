@@ -1432,7 +1432,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'indefiniteAndImpairs',
-        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'informationDate',

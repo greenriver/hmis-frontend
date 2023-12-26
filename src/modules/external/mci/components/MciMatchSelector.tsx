@@ -98,6 +98,7 @@ const MciDemographicInfo = ({ match }: { match: MciMatchFieldsFragment }) => {
             <MultiHmisEnum
               values={match.gender}
               enumMap={HmisEnums.Gender}
+              noData={HmisEnums.Gender.DATA_NOT_COLLECTED}
               display='inline'
             />
           }

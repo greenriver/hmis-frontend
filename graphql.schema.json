@@ -5307,6 +5307,18 @@
             "deprecationReason": null
           },
           {
+            "name": "trueUser",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ApplicationUser",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "user",
             "description": null,
             "args": [],
@@ -11459,8 +11471,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Int",
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
               "ofType": null
             },
             "isDeprecated": false,
@@ -14763,6 +14775,18 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "trueUser",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ApplicationUser",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
