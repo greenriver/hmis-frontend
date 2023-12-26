@@ -50,6 +50,10 @@ const GlobalClientMergeHistory = () => {
           columns={columns}
           pagePath='mergeAuditHistory'
           noData='No merge history'
+          showFilters
+          recordType='MergeAuditEvent'
+          filterInputType='MergeAuditEventFilterOptions'
+          noSort
         />
       </Paper>
     </>
