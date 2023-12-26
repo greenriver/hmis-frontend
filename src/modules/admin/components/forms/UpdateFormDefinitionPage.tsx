@@ -4,7 +4,7 @@ import FormEditor from './FormEditor';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import {
-  useGetFormDefinitionByIdQuery,
+  useGetFormDefinitionForEditorQuery,
   useUpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
@@ -12,7 +12,7 @@ const UpdateFormDefinitionPage = () => {
   const { formId } = useParams() as { formId: string };
 
   const { data: { formDefinition } = {}, error } =
-    useGetFormDefinitionByIdQuery({
+    useGetFormDefinitionForEditorQuery({
       variables: { id: formId },
     });
 

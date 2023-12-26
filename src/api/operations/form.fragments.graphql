@@ -126,8 +126,12 @@ fragment FormDefinitionMetadata on FormDefinition {
 
 fragment FormDefinitionFields on FormDefinition {
   ...FormDefinitionMetadata
-  rawDefinition
   definition {
     ...FormDefinitionJsonFields
   }
+}
+
+fragment FormDefinitionFieldsForEditor on FormDefinition {
+  ...FormDefinitionFields
+  rawDefinition
 }

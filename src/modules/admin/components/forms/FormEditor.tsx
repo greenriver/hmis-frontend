@@ -32,7 +32,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   FormDefinitionJson,
-  useGetFormDefinitionForJsonQuery,
+  useGetParsedFormDefinitionQuery,
 } from '@/types/gqlTypes';
 
 export interface FormEditorProps {
@@ -65,7 +65,7 @@ const FormEditor: React.FC<FormEditorProps> = ({
     data,
     loading,
     error: gqlError,
-  } = useGetFormDefinitionForJsonQuery({
+  } = useGetParsedFormDefinitionQuery({
     variables: { input: JSON.stringify(workingDefinition) },
   });
 
@@ -85,18 +85,18 @@ const FormEditor: React.FC<FormEditorProps> = ({
   }, [definition, workingDefinition, dirty]);
 
   useEffect(() => {
-    if (data?.formDefinitionForJson?.definition)
-      setCurrentDefinition(data.formDefinitionForJson.definition);
-  }, [data?.formDefinitionForJson?.definition]);
+    if (data?.parsedFormDefinition?.definition)
+      setCurrentDefinition(data.parsedFormDefinition.definition);
+  }, [data?.parsedFormDefinition?.definition]);
 
   const effectiveLocalConstants = {
     ...AlwaysPresentLocalConstants,
     ...localConstants,
   };
-  const effectiveInitialValues = data?.formDefinitionForJson?.definition
+  const effectiveInitialValues = data?.parsedFormDefinition?.definition
     ? {
         ...getInitialValues(
-          data.formDefinitionForJson.definition,
+          data.parsedFormDefinition.definition,
           effectiveLocalConstants
         ),
         ...initialValues,
@@ -106,7 +106,7 @@ const FormEditor: React.FC<FormEditorProps> = ({
   const allErrors = useMemo(
     () =>
       [
-        ...(data?.formDefinitionForJson?.errors || []),
+        ...(data?.parsedFormDefinition?.errors || []),
         ...(gqlError ? [gqlError.message] : []),
         ...(error ? [error] : []),
       ].filter((e) => !e.match(/schema invalid/i)),

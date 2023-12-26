@@ -1,7 +1,7 @@
 mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
   updateFormDefinition(id: $id, input: $input) {
     formDefinition {
-      ...FormDefinitionFields
+      ...FormDefinitionFieldsForEditor
     }
     errors {
       ...ValidationErrorFields
@@ -12,7 +12,7 @@ mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
 mutation CreateFormDefinition($input: FormDefinitionInput!) {
   createFormDefinition(input: $input) {
     formDefinition {
-      ...FormDefinitionFields
+      ...FormDefinitionFieldsForEditor
     }
     errors {
       ...ValidationErrorFields
@@ -23,7 +23,7 @@ mutation CreateFormDefinition($input: FormDefinitionInput!) {
 mutation DeleteFormDefinition($id: ID!) {
   deleteFormDefinition(id: $id) {
     formDefinition {
-      ...FormDefinitionFields
+      ...FormDefinitionFieldsForEditor
     }
     errors {
       ...ValidationErrorFields

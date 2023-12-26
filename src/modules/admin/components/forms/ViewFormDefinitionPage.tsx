@@ -21,7 +21,7 @@ import {
   FormRuleInput,
   MutationCreateFormRuleArgs,
   StaticFormRole,
-  useGetFormDefinitionByIdQuery,
+  useGetFormDefinitionForEditorQuery,
 } from '@/types/gqlTypes';
 import { evictQuery } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -31,7 +31,7 @@ const ViewFormDefinitionPage = () => {
   const navigate = useNavigate();
 
   const { data: { formDefinition } = {}, error } =
-    useGetFormDefinitionByIdQuery({
+    useGetFormDefinitionForEditorQuery({
       variables: { id: formId },
     });
 
