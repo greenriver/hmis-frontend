@@ -110,9 +110,7 @@ const ManageHousehold = ({
   const [searchInput, setSearchInput] = useState<ClientSearchInput>();
   const [hasSearched, setHasSearched] = useState(false);
 
-  if (initialHouseholdId && !household && loading) {
-    return <Loading />;
-  }
+  if (initialHouseholdId && !household) return <Loading />;
 
   return (
     <Stack gap={4}>
