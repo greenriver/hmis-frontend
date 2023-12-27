@@ -53,6 +53,7 @@ const GlobalClientMergeHistory = () => {
           showFilters
           recordType='MergeAuditEvent'
           filterInputType='MergeAuditEventFilterOptions'
+          paginationItemName='merge event'
           noSort
         />
       </Paper>
