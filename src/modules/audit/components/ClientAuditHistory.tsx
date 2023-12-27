@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { capitalize, filter } from 'lodash-es';
+import { filter } from 'lodash-es';
 import AuditObjectChangesSummary, {
   ObjectChangesType,
 } from './AuditObjectChangesSummary';
@@ -13,7 +13,10 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
-import { formatDateTimeForDisplay } from '@/modules/hmis/hmisUtil';
+import {
+  auditActionForDisplay,
+  formatDateTimeForDisplay,
+} from '@/modules/hmis/hmisUtil';
 import {
   GetClientAuditEventsDocument,
   GetClientAuditEventsQuery,
@@ -38,17 +41,20 @@ const columns: ColumnDef<AuditHistoryType>[] = [
   },
   {
     header: 'Action',
-    width: '220px',
-    render: (e) => {
-      const action = `${capitalize(e.event)} ${e.recordName}`;
-      if (e.recordName === 'Client') return action;
+    width: '100px',
+    render: ({ event }) => auditActionForDisplay(event),
+  },
+  {
+    header: 'Record Type',
+    width: '150px',
+    render: ({ recordName, recordId }) => {
       return (
         <Stack>
-          <Typography variant='inherit'>{action}</Typography>
+          <Typography variant='inherit'>{recordName}</Typography>
           <Typography
             color='text.secondary'
             variant='inherit'
-          >{`ID: ${e.recordId}`}</Typography>
+          >{`ID: ${recordId}`}</Typography>
         </Stack>
       );
     },
@@ -77,6 +83,8 @@ const columns: ColumnDef<AuditHistoryType>[] = [
         <ContextualCollapsibleList title={labels.join(', ')}>
           <AuditObjectChangesSummary
             objectChanges={e.objectChanges as ObjectChangesType}
+            recordType={e.graphqlType}
+            eventType={e.event}
           />
         </ContextualCollapsibleList>
       );

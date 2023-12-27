@@ -6,6 +6,7 @@ import {
   getSchemaForType,
   parseAndFormatDate,
   parseAndFormatDateTime,
+  safeParseDateOrString,
 } from '../hmisUtil';
 
 import { hasCustomDataElements } from '../types';
@@ -45,6 +46,7 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
       <HmisEnum value={value} enumMap={enumMap} />
     );
   }
+
   switch (type) {
     case 'Boolean':
       if (!isNil(value)) return <YesNoDisplay booleanValue={value} />;
@@ -56,6 +58,12 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
     case 'Float':
       return formatCurrency(value);
   }
+
+  // Attempt date formatting if it is a date
+  if (safeParseDateOrString(value)) {
+    return parseAndFormatDate(value);
+  }
+
   return value;
 };
 

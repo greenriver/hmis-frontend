@@ -1,0 +1,45 @@
+query GetFormRules(
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: FormRuleFilterOptions
+  $sortOrder: FormRuleSortOption
+) {
+  formRules(
+    limit: $limit
+    offset: $offset
+    filters: $filters
+    sortOrder: $sortOrder
+  ) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...FormRuleFields
+    }
+  }
+}
+
+query GetServiceCategoryRules(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: FormRuleFilterOptions
+  $sortOrder: FormRuleSortOption
+) {
+  serviceCategory(id: $id) {
+    id
+    formRules(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: $sortOrder
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FormRuleFields
+      }
+    }
+  }
+}

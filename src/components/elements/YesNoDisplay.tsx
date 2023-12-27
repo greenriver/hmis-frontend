@@ -18,6 +18,7 @@ interface Props extends TypographyProps {
     | DisabilityResponse
     | null;
   fallback?: ReactElement;
+  showIcon?: boolean;
 }
 
 const YES_VALUES: string[] = [
@@ -36,6 +37,7 @@ const YesNoDisplay: React.FC<Props> = ({
   booleanValue,
   enumValue,
   fallback,
+  showIcon = false,
   ...props
 }) => {
   let Icon;
@@ -64,8 +66,14 @@ const YesNoDisplay: React.FC<Props> = ({
 
   return (
     <Stack direction='row' gap={0.8}>
-      {Icon && <Icon fontSize='small' sx={{ alignSelf: 'center' }} />}
-      <Typography variant='body2' color='text.secondary' {...props}>
+      {showIcon && Icon && (
+        <Icon fontSize='small' sx={{ alignSelf: 'center' }} />
+      )}
+      <Typography
+        variant='body2'
+        color={showIcon && Icon ? 'text.secondary' : 'text.primary'}
+        {...props}
+      >
         {text}
       </Typography>
     </Stack>

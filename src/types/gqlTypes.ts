@@ -38,6 +38,13 @@ export type Scalars = {
   JsonObject: { input: any; output: any };
 };
 
+export enum ActiveStatus {
+  /** Active */
+  Active = 'ACTIVE',
+  /** Inactive */
+  Inactive = 'INACTIVE',
+}
+
 export type ActivityLog = {
   __typename?: 'ActivityLog';
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -330,6 +337,11 @@ export enum Availability {
   YearRound = 'YEAR_ROUND',
 }
 
+export type BaseAuditEventFilterOptions = {
+  auditEventRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 /** 2.07.5 */
 export enum BedType {
   /** (1) Facility-based */
@@ -520,6 +532,7 @@ export type ClientAssessmentsArgs = {
 
 /** HUD Client */
 export type ClientAuditHistoryArgs = {
+  filters?: InputMaybe<BaseAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -664,6 +677,7 @@ export type ClientAuditEvent = {
   __typename?: 'ClientAuditEvent';
   createdAt: Scalars['ISO8601DateTime']['output'];
   event: AuditEventType;
+  graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
@@ -1131,6 +1145,7 @@ export type CustomCaseNote = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
+  informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   user?: Maybe<ApplicationUser>;
 };
 
@@ -1200,12 +1215,19 @@ export enum DobDataQuality {
 }
 
 export enum DataCollectedAbout {
+  /** All Clients */
   AllClients = 'ALL_CLIENTS',
+  /** All Clients Receiving SSVF Financial Assistance */
   AllClientsReceivingSsvfFinancialAssistance = 'ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE',
+  /** All Clients Receiving SSVF Services */
   AllClientsReceivingSsvfServices = 'ALL_CLIENTS_RECEIVING_SSVF_SERVICES',
+  /** All Veterans */
   AllVeterans = 'ALL_VETERANS',
+  /** HoH */
   Hoh = 'HOH',
+  /** HoH and Adults */
   HohAndAdults = 'HOH_AND_ADULTS',
+  /** Veteran HoH */
   VeteranHoh = 'VETERAN_HOH',
 }
 
@@ -1220,9 +1242,9 @@ export type DataCollectionFeature = {
 export enum DataCollectionFeatureRole {
   /** Case note */
   CaseNote = 'CASE_NOTE',
-  /** Ce assessment */
+  /** CE assessment */
   CeAssessment = 'CE_ASSESSMENT',
-  /** Ce event */
+  /** CE event */
   CeEvent = 'CE_EVENT',
   /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
@@ -1865,6 +1887,7 @@ export type Enrollment = {
   alcoholDrugUseDisorderFam?: Maybe<NoYesMissing>;
   annualPercentAmi?: Maybe<AnnualPercentAmi>;
   assessments: AssessmentsPaginated;
+  auditHistory: EnrollmentAuditEventsPaginated;
   ceAssessments: CeAssessmentsPaginated;
   childWelfareMonths?: Maybe<Scalars['Int']['output']>;
   childWelfareYears?: Maybe<RhyNumberofYears>;
@@ -1977,6 +2000,13 @@ export type EnrollmentAssessmentsArgs = {
 };
 
 /** HUD Enrollment */
+export type EnrollmentAuditHistoryArgs = {
+  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** HUD Enrollment */
 export type EnrollmentCeAssessmentsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -2049,11 +2079,36 @@ export type EnrollmentYouthEducationStatusesArgs = {
 
 export type EnrollmentAccess = {
   __typename?: 'EnrollmentAccess';
+  canAuditEnrollments: Scalars['Boolean']['output'];
   canDeleteEnrollments: Scalars['Boolean']['output'];
   canEditEnrollments: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+};
+
+export type EnrollmentAuditEvent = {
+  __typename?: 'EnrollmentAuditEvent';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  event: AuditEventType;
+  graphqlType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
+  objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  recordId: Scalars['ID']['output'];
+  recordName: Scalars['String']['output'];
+  user?: Maybe<ApplicationUser>;
+};
+
+export type EnrollmentAuditEventsPaginated = {
+  __typename?: 'EnrollmentAuditEventsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<EnrollmentAuditEvent>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export enum EnrollmentFilterOptionHouseholdTask {
@@ -2486,20 +2541,16 @@ export enum FormRole {
   Annual = 'ANNUAL',
   /** Case note */
   CaseNote = 'CASE_NOTE',
-  /** Ce */
-  Ce = 'CE',
-  /** Ce assessment */
+  /** CE assessment */
   CeAssessment = 'CE_ASSESSMENT',
-  /** Ce event */
+  /** CE event */
   CeEvent = 'CE_EVENT',
-  /** Ce participation */
+  /** CE participation */
   CeParticipation = 'CE_PARTICIPATION',
   /** Client */
   Client = 'CLIENT',
   /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
-  /** Custom assessment */
-  CustomAssessment = 'CUSTOM_ASSESSMENT',
   /** Enrollment */
   Enrollment = 'ENROLLMENT',
   /** Exit */
@@ -2508,7 +2559,7 @@ export enum FormRole {
   File = 'FILE',
   /** Funder */
   Funder = 'FUNDER',
-  /** Hmis participation */
+  /** HMIS participation */
   HmisParticipation = 'HMIS_PARTICIPATION',
   /** Intake */
   Intake = 'INTAKE',
@@ -2533,6 +2584,55 @@ export enum FormRole {
   /** Update */
   Update = 'UPDATE',
 }
+
+export type FormRule = {
+  __typename?: 'FormRule';
+  active: Scalars['Boolean']['output'];
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  dataCollectedAbout?: Maybe<DataCollectedAbout>;
+  definitionId?: Maybe<Scalars['ID']['output']>;
+  definitionIdentifier: Scalars['String']['output'];
+  definitionRole?: Maybe<FormRole>;
+  definitionTitle?: Maybe<Scalars['String']['output']>;
+  funder?: Maybe<FundingSource>;
+  id: Scalars['ID']['output'];
+  organization?: Maybe<Organization>;
+  otherFunder?: Maybe<Scalars['String']['output']>;
+  project?: Maybe<Project>;
+  projectType?: Maybe<ProjectType>;
+  serviceCategory?: Maybe<ServiceCategory>;
+  serviceType?: Maybe<ServiceType>;
+  system: Scalars['Boolean']['output'];
+  updatedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type FormRuleFilterOptions = {
+  activeStatus?: InputMaybe<Array<ActiveStatus>>;
+  appliedToProject?: InputMaybe<Scalars['ID']['input']>;
+  formType?: InputMaybe<Array<FormRole>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  systemForm?: InputMaybe<Array<SystemStatus>>;
+};
+
+export enum FormRuleSortOption {
+  /** Date Updated */
+  DateUpdated = 'DATE_UPDATED',
+  /** Form Title */
+  FormTitle = 'FORM_TITLE',
+  /** Form Type */
+  FormType = 'FORM_TYPE',
+}
+
+export type FormRulesPaginated = {
+  __typename?: 'FormRulesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<FormRule>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
 
 export type Funder = {
   __typename?: 'Funder';
@@ -3743,6 +3843,7 @@ export enum PickListType {
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
   /** Enrollments for the client, including WIP and Exited. */
   EnrollmentsForClient = 'ENROLLMENTS_FOR_CLIENT',
+  EnrollmentAuditEventRecordTypes = 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
   Geocode = 'GEOCODE',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
@@ -3760,6 +3861,8 @@ export enum PickListType {
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
+  /** User Accounts */
+  Users = 'USERS',
 }
 
 /** C4.A */
@@ -4761,6 +4864,7 @@ export type Query = {
   enrollment?: Maybe<Enrollment>;
   esgFundingReport: Array<EsgFundingService>;
   file?: Maybe<File>;
+  formRules: FormRulesPaginated;
   /** Funder lookup */
   funder?: Maybe<Funder>;
   /** Get most relevant/recent form definition for the specified Role and project (optionally) */
@@ -4788,6 +4892,8 @@ export type Query = {
   referralPosting?: Maybe<ReferralPosting>;
   /** Service lookup */
   service?: Maybe<Service>;
+  serviceCategories: ServiceCategoriesPaginated;
+  serviceCategory?: Maybe<ServiceCategory>;
   /** Service type lookup */
   serviceType?: Maybe<ServiceType>;
   /** User lookup */
@@ -4839,6 +4945,13 @@ export type QueryEsgFundingReportArgs = {
 
 export type QueryFileArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryFormRulesArgs = {
+  filters?: InputMaybe<FormRuleFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<FormRuleSortOption>;
 };
 
 export type QueryFunderArgs = {
@@ -4921,6 +5034,15 @@ export type QueryServiceArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type QueryServiceCategoriesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type QueryServiceCategoryArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type QueryServiceTypeArgs = {
   id: Scalars['ID']['input'];
 };
@@ -4933,7 +5055,9 @@ export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean']['output'];
   canAuditClients: Scalars['Boolean']['output'];
+  canAuditEnrollments: Scalars['Boolean']['output'];
   canAuditUsers: Scalars['Boolean']['output'];
+  canConfigureDataCollection: Scalars['Boolean']['output'];
   canDeleteAssessments: Scalars['Boolean']['output'];
   canDeleteClients: Scalars['Boolean']['output'];
   canDeleteEnrollments: Scalars['Boolean']['output'];
@@ -5465,10 +5589,48 @@ export type Service = {
   id: Scalars['ID']['output'];
   movingOnOtherType?: Maybe<Scalars['String']['output']>;
   otherTypeProvided?: Maybe<Scalars['String']['output']>;
+  recordType?: Maybe<RecordType>;
   referralOutcome?: Maybe<PathReferralOutcome>;
   serviceType: ServiceType;
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
+  typeProvided?: Maybe<ServiceTypeProvided>;
   user?: Maybe<ApplicationUser>;
+};
+
+export type ServiceCategoriesPaginated = {
+  __typename?: 'ServiceCategoriesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ServiceCategory>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
+export type ServiceCategory = {
+  __typename?: 'ServiceCategory';
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  formRules: FormRulesPaginated;
+  hud: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  serviceTypes: ServiceTypesPaginated;
+  user?: Maybe<ApplicationUser>;
+};
+
+export type ServiceCategoryFormRulesArgs = {
+  filters?: InputMaybe<FormRuleFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<FormRuleSortOption>;
+};
+
+export type ServiceCategoryServiceTypesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export enum ServiceDetailType {
@@ -5570,6 +5732,7 @@ export type ServiceType = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  hud: Scalars['Boolean']['output'];
   hudRecordType?: Maybe<RecordType>;
   hudTypeProvided?: Maybe<ServiceTypeProvided>;
   id: Scalars['ID']['output'];
@@ -5783,6 +5946,17 @@ export enum ServiceTypeProvided {
   SsvfServiceShallowSubsidy = 'SSVF_SERVICE__SHALLOW_SUBSIDY',
 }
 
+export type ServiceTypesPaginated = {
+  __typename?: 'ServiceTypesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ServiceType>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
 export type ServicesForEnrollmentFilterOptions = {
   dateProvided?: InputMaybe<Scalars['ISO8601Date']['input']>;
   serviceCategory?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -5943,6 +6117,13 @@ export enum SubsidyInformationB {
   WithoutAnOnGoingSubsidy = 'WITHOUT_AN_ON_GOING_SUBSIDY',
   /** (11) With on-going subsidy */
   WithOnGoingSubsidy = 'WITH_ON_GOING_SUBSIDY',
+}
+
+export enum SystemStatus {
+  /** Non-System */
+  NonSystem = 'NON_SYSTEM',
+  /** System */
+  System = 'SYSTEM',
 }
 
 /** W4.B */
@@ -6616,6 +6797,7 @@ export type RootPermissionsFragment = {
   canMergeClients: boolean;
   canTransferEnrollments: boolean;
   canSplitHouseholds: boolean;
+  canConfigureDataCollection: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -6642,6 +6824,7 @@ export type EnrollmentAccessFieldsFragment = {
   id: string;
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
+  canAuditEnrollments: boolean;
 };
 
 export type AssessmentAccessFieldsFragment = {
@@ -6715,6 +6898,7 @@ export type GetRootPermissionsQuery = {
     canMergeClients: boolean;
     canTransferEnrollments: boolean;
     canSplitHouseholds: boolean;
+    canConfigureDataCollection: boolean;
   };
 };
 
@@ -11214,6 +11398,7 @@ export type ClientAuditEventFieldsFragment = {
   event: AuditEventType;
   objectChanges?: any | null;
   recordName: string;
+  graphqlType: string;
   recordId: string;
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
 };
@@ -11578,6 +11763,7 @@ export type GetClientAuditEventsQuery = {
         event: AuditEventType;
         objectChanges?: any | null;
         recordName: string;
+        graphqlType: string;
         recordId: string;
         user?: {
           __typename?: 'ApplicationUser';
@@ -12407,6 +12593,130 @@ export type BulkMergeClientsMutation = {
   } | null;
 };
 
+export type FormRuleFieldsFragment = {
+  __typename?: 'FormRule';
+  id: string;
+  active: boolean;
+  system: boolean;
+  definitionIdentifier: string;
+  definitionId?: string | null;
+  definitionTitle?: string | null;
+  definitionRole?: FormRole | null;
+  dataCollectedAbout?: DataCollectedAbout | null;
+  funder?: FundingSource | null;
+  otherFunder?: string | null;
+  projectType?: ProjectType | null;
+  createdAt: string;
+  updatedAt: string;
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  } | null;
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    hudId: string;
+    organizationName: string;
+  } | null;
+};
+
+export type GetFormRulesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<FormRuleFilterOptions>;
+  sortOrder?: InputMaybe<FormRuleSortOption>;
+}>;
+
+export type GetFormRulesQuery = {
+  __typename?: 'Query';
+  formRules: {
+    __typename?: 'FormRulesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'FormRule';
+      id: string;
+      active: boolean;
+      system: boolean;
+      definitionIdentifier: string;
+      definitionId?: string | null;
+      definitionTitle?: string | null;
+      definitionRole?: FormRole | null;
+      dataCollectedAbout?: DataCollectedAbout | null;
+      funder?: FundingSource | null;
+      otherFunder?: string | null;
+      projectType?: ProjectType | null;
+      createdAt: string;
+      updatedAt: string;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+      } | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        hudId: string;
+        organizationName: string;
+      } | null;
+    }>;
+  };
+};
+
+export type GetServiceCategoryRulesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<FormRuleFilterOptions>;
+  sortOrder?: InputMaybe<FormRuleSortOption>;
+}>;
+
+export type GetServiceCategoryRulesQuery = {
+  __typename?: 'Query';
+  serviceCategory?: {
+    __typename?: 'ServiceCategory';
+    id: string;
+    formRules: {
+      __typename?: 'FormRulesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'FormRule';
+        id: string;
+        active: boolean;
+        system: boolean;
+        definitionIdentifier: string;
+        definitionId?: string | null;
+        definitionTitle?: string | null;
+        definitionRole?: FormRole | null;
+        dataCollectedAbout?: DataCollectedAbout | null;
+        funder?: FundingSource | null;
+        otherFunder?: string | null;
+        projectType?: ProjectType | null;
+        createdAt: string;
+        updatedAt: string;
+        project?: {
+          __typename?: 'Project';
+          id: string;
+          projectName: string;
+          projectType?: ProjectType | null;
+        } | null;
+        organization?: {
+          __typename?: 'Organization';
+          id: string;
+          hudId: string;
+          organizationName: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
 export type CurrentLivingSituationFieldsFragment = {
   __typename?: 'CurrentLivingSituation';
   id: string;
@@ -12566,6 +12876,7 @@ export type CustomCaseNoteFieldsFragment = {
   __typename?: 'CustomCaseNote';
   id: string;
   content: string;
+  informationDate?: string | null;
   dateUpdated?: string | null;
   dateCreated?: string | null;
   user?: {
@@ -12596,6 +12907,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
         __typename?: 'CustomCaseNote';
         id: string;
         content: string;
+        informationDate?: string | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
         user?: {
@@ -12790,6 +13102,7 @@ export type EnrollmentFieldsFragment = {
     id: string;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
+    canAuditEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
@@ -13466,6 +13779,7 @@ export type AllEnrollmentDetailsFragment = {
     id: string;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
+    canAuditEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   moveInAddresses: Array<{
@@ -13680,6 +13994,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     id: string;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
+    canAuditEnrollments: boolean;
   };
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   moveInAddresses: Array<{
@@ -13750,6 +14065,18 @@ export type EnrollmentSummaryFieldsFragment = {
   projectName: string;
   projectType: ProjectType;
   canViewEnrollment: boolean;
+};
+
+export type EnrollmentAuditEventFieldsFragment = {
+  __typename?: 'EnrollmentAuditEvent';
+  id: string;
+  createdAt: string;
+  event: AuditEventType;
+  objectChanges?: any | null;
+  recordName: string;
+  graphqlType: string;
+  recordId: string;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type GetEnrollmentQueryVariables = Exact<{
@@ -13852,6 +14179,7 @@ export type GetEnrollmentQuery = {
       id: string;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
+      canAuditEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
@@ -14535,6 +14863,7 @@ export type GetEnrollmentDetailsQuery = {
       id: string;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
+      canAuditEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     moveInAddresses: Array<{
@@ -14659,6 +14988,7 @@ export type GetEnrollmentWithHouseholdQuery = {
       id: string;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
+      canAuditEnrollments: boolean;
     };
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   } | null;
@@ -14699,6 +15029,42 @@ export type GetEnrollmentEventsQuery = {
           id: string;
           name: string;
           email: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetEnrollmentAuditEventsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+}>;
+
+export type GetEnrollmentAuditEventsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    auditHistory: {
+      __typename?: 'EnrollmentAuditEventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'EnrollmentAuditEvent';
+        id: string;
+        createdAt: string;
+        event: AuditEventType;
+        objectChanges?: any | null;
+        recordName: string;
+        graphqlType: string;
+        recordId: string;
+        user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
         } | null;
       }>;
     };
@@ -14888,6 +15254,25 @@ export type DeleteCurrentLivingSituationMutation = {
       section?: string | null;
       data?: any | null;
     }>;
+  } | null;
+};
+
+export type GetEnrollmentPermissionsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetEnrollmentPermissionsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+      canAuditEnrollments: boolean;
+    };
   } | null;
 };
 
@@ -15519,6 +15904,14 @@ export type FormDefinitionJsonFieldsFragment = {
       }>;
     }> | null;
   }>;
+};
+
+export type FormDefinitionMetadataFragment = {
+  __typename?: 'FormDefinition';
+  id: string;
+  role: FormRole;
+  title: string;
+  cacheKey: string;
 };
 
 export type FormDefinitionFieldsFragment = {
@@ -17256,6 +17649,7 @@ export type SubmitFormMutation = {
           __typename?: 'CustomCaseNote';
           id: string;
           content: string;
+          informationDate?: string | null;
           dateUpdated?: string | null;
           dateCreated?: string | null;
           user?: {
@@ -17356,6 +17750,7 @@ export type SubmitFormMutation = {
             id: string;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
+            canAuditEnrollments: boolean;
           };
           currentUnit?: {
             __typename?: 'Unit';
@@ -21355,6 +21750,20 @@ export type ServiceFieldsFragment = {
   }>;
 };
 
+export type ServiceCategoryFieldsFragment = {
+  __typename?: 'ServiceCategory';
+  id: string;
+  name: string;
+  hud: boolean;
+  serviceTypes: {
+    __typename?: 'ServiceTypesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+  };
+};
+
 export type GetServiceQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -21762,6 +22171,85 @@ export type GetEnrollmentServicesQuery = {
   } | null;
 };
 
+export type GetServiceCategoriesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetServiceCategoriesQuery = {
+  __typename?: 'Query';
+  serviceCategories: {
+    __typename?: 'ServiceCategoriesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+      hud: boolean;
+      serviceTypes: {
+        __typename?: 'ServiceTypesPaginated';
+        offset: number;
+        limit: number;
+        nodesCount: number;
+        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+      };
+    }>;
+  };
+};
+
+export type GetServiceCategoryQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetServiceCategoryQuery = {
+  __typename?: 'Query';
+  serviceCategory?: {
+    __typename?: 'ServiceCategory';
+    id: string;
+    name: string;
+    hud: boolean;
+    serviceTypes: {
+      __typename?: 'ServiceTypesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+    };
+  } | null;
+};
+
+export type GetServiceCategoryTypesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetServiceCategoryTypesQuery = {
+  __typename?: 'Query';
+  serviceCategory?: {
+    __typename?: 'ServiceCategory';
+    id: string;
+    serviceTypes: {
+      __typename?: 'ServiceTypesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+      }>;
+    };
+  } | null;
+};
+
 export type UnitTypeCapacityFieldsFragment = {
   __typename?: 'UnitTypeCapacity';
   id: string;
@@ -22147,6 +22635,7 @@ export const RootPermissionsFragmentDoc = gql`
     canMergeClients
     canTransferEnrollments
     canSplitHouseholds
+    canConfigureDataCollection
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`
@@ -22852,6 +23341,7 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
     event
     objectChanges
     recordName
+    graphqlType
     recordId
     user {
       id
@@ -22869,6 +23359,38 @@ export const MergeAuditEventFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const OrganizationNameFieldsFragmentDoc = gql`
+  fragment OrganizationNameFields on Organization {
+    id
+    hudId
+    organizationName
+  }
+`;
+export const FormRuleFieldsFragmentDoc = gql`
+  fragment FormRuleFields on FormRule {
+    id
+    active
+    system
+    definitionIdentifier
+    definitionId
+    definitionTitle
+    definitionRole
+    dataCollectedAbout
+    funder
+    otherFunder
+    projectType
+    project {
+      ...ProjectNameAndType
+    }
+    organization {
+      ...OrganizationNameFields
+    }
+    createdAt
+    updatedAt
+  }
+  ${ProjectNameAndTypeFragmentDoc}
+  ${OrganizationNameFieldsFragmentDoc}
 `;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
@@ -22898,6 +23420,7 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
   fragment CustomCaseNoteFields on CustomCaseNote {
     id
     content
+    informationDate
     dateUpdated
     dateCreated
     user {
@@ -22938,6 +23461,7 @@ export const EnrollmentAccessFieldsFragmentDoc = gql`
     id
     canEditEnrollments
     canDeleteEnrollments
+    canAuditEnrollments
   }
 `;
 export const EnrollmentFieldsFragmentDoc = gql`
@@ -23019,6 +23543,14 @@ export const DataCollectionFeatureFieldsFragmentDoc = gql`
     role
     dataCollectedAbout
     legacy
+  }
+`;
+export const FormDefinitionMetadataFragmentDoc = gql`
+  fragment FormDefinitionMetadata on FormDefinition {
+    id
+    role
+    title
+    cacheKey
   }
 `;
 export const PickListOptionFieldsFragmentDoc = gql`
@@ -23134,14 +23666,12 @@ export const FormDefinitionJsonFieldsFragmentDoc = gql`
 `;
 export const FormDefinitionFieldsFragmentDoc = gql`
   fragment FormDefinitionFields on FormDefinition {
-    id
-    role
-    title
-    cacheKey
+    ...FormDefinitionMetadata
     definition {
       ...FormDefinitionJsonFields
     }
   }
+  ${FormDefinitionMetadataFragmentDoc}
   ${FormDefinitionJsonFieldsFragmentDoc}
 `;
 export const OccurrencePointFormFieldsFragmentDoc = gql`
@@ -23274,6 +23804,21 @@ export const CeAssessmentFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const EnrollmentAuditEventFieldsFragmentDoc = gql`
+  fragment EnrollmentAuditEventFields on EnrollmentAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    recordName
+    graphqlType
+    recordId
+    user {
+      id
+      name
+    }
+  }
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -23443,13 +23988,6 @@ export const MciMatchFieldsFragmentDoc = gql`
     middleName
     nameSuffix
     ssn
-  }
-`;
-export const OrganizationNameFieldsFragmentDoc = gql`
-  fragment OrganizationNameFields on Organization {
-    id
-    hudId
-    organizationName
   }
 `;
 export const OrganizationDetailFieldsFragmentDoc = gql`
@@ -23836,6 +24374,22 @@ export const ServiceFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+`;
+export const ServiceCategoryFieldsFragmentDoc = gql`
+  fragment ServiceCategoryFields on ServiceCategory {
+    id
+    name
+    hud
+    serviceTypes {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        name
+      }
+    }
+  }
 `;
 export const UnitTypeCapacityFieldsFragmentDoc = gql`
   fragment UnitTypeCapacityFields on UnitTypeCapacity {
@@ -26171,6 +26725,165 @@ export type BulkMergeClientsMutationOptions = Apollo.BaseMutationOptions<
   BulkMergeClientsMutation,
   BulkMergeClientsMutationVariables
 >;
+export const GetFormRulesDocument = gql`
+  query GetFormRules(
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: FormRuleFilterOptions
+    $sortOrder: FormRuleSortOption
+  ) {
+    formRules(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: $sortOrder
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FormRuleFields
+      }
+    }
+  }
+  ${FormRuleFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetFormRulesQuery__
+ *
+ * To run a query within a React component, call `useGetFormRulesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormRulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFormRulesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useGetFormRulesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetFormRulesQuery,
+    GetFormRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetFormRulesQuery, GetFormRulesQueryVariables>(
+    GetFormRulesDocument,
+    options
+  );
+}
+export function useGetFormRulesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFormRulesQuery,
+    GetFormRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetFormRulesQuery, GetFormRulesQueryVariables>(
+    GetFormRulesDocument,
+    options
+  );
+}
+export type GetFormRulesQueryHookResult = ReturnType<
+  typeof useGetFormRulesQuery
+>;
+export type GetFormRulesLazyQueryHookResult = ReturnType<
+  typeof useGetFormRulesLazyQuery
+>;
+export type GetFormRulesQueryResult = Apollo.QueryResult<
+  GetFormRulesQuery,
+  GetFormRulesQueryVariables
+>;
+export const GetServiceCategoryRulesDocument = gql`
+  query GetServiceCategoryRules(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: FormRuleFilterOptions
+    $sortOrder: FormRuleSortOption
+  ) {
+    serviceCategory(id: $id) {
+      id
+      formRules(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+        sortOrder: $sortOrder
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...FormRuleFields
+        }
+      }
+    }
+  }
+  ${FormRuleFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceCategoryRulesQuery__
+ *
+ * To run a query within a React component, call `useGetServiceCategoryRulesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceCategoryRulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceCategoryRulesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useGetServiceCategoryRulesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceCategoryRulesQuery,
+    GetServiceCategoryRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceCategoryRulesQuery,
+    GetServiceCategoryRulesQueryVariables
+  >(GetServiceCategoryRulesDocument, options);
+}
+export function useGetServiceCategoryRulesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceCategoryRulesQuery,
+    GetServiceCategoryRulesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceCategoryRulesQuery,
+    GetServiceCategoryRulesQueryVariables
+  >(GetServiceCategoryRulesDocument, options);
+}
+export type GetServiceCategoryRulesQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryRulesQuery
+>;
+export type GetServiceCategoryRulesLazyQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryRulesLazyQuery
+>;
+export type GetServiceCategoryRulesQueryResult = Apollo.QueryResult<
+  GetServiceCategoryRulesQuery,
+  GetServiceCategoryRulesQueryVariables
+>;
 export const GetEnrollmentCurrentLivingSituationsDocument = gql`
   query GetEnrollmentCurrentLivingSituations(
     $id: ID!
@@ -26630,6 +27343,81 @@ export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables
 >;
+export const GetEnrollmentAuditEventsDocument = gql`
+  query GetEnrollmentAuditEvents(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: BaseAuditEventFilterOptions = null
+  ) {
+    enrollment(id: $id) {
+      id
+      auditHistory(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentAuditEventFields
+        }
+      }
+    }
+  }
+  ${EnrollmentAuditEventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentAuditEventsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentAuditEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetEnrollmentAuditEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >(GetEnrollmentAuditEventsDocument, options);
+}
+export function useGetEnrollmentAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentAuditEventsQuery,
+    GetEnrollmentAuditEventsQueryVariables
+  >(GetEnrollmentAuditEventsDocument, options);
+}
+export type GetEnrollmentAuditEventsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAuditEventsQuery
+>;
+export type GetEnrollmentAuditEventsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAuditEventsLazyQuery
+>;
+export type GetEnrollmentAuditEventsQueryResult = Apollo.QueryResult<
+  GetEnrollmentAuditEventsQuery,
+  GetEnrollmentAuditEventsQueryVariables
+>;
 export const GetEnrollmentCeAssessmentsDocument = gql`
   query GetEnrollmentCeAssessments(
     $id: ID!
@@ -26994,6 +27782,68 @@ export type DeleteCurrentLivingSituationMutationOptions =
     DeleteCurrentLivingSituationMutation,
     DeleteCurrentLivingSituationMutationVariables
   >;
+export const GetEnrollmentPermissionsDocument = gql`
+  query GetEnrollmentPermissions($id: ID!) {
+    enrollment(id: $id) {
+      id
+      access {
+        ...EnrollmentAccessFields
+      }
+    }
+  }
+  ${EnrollmentAccessFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentPermissionsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentPermissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentPermissionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentPermissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentPermissionsQuery,
+    GetEnrollmentPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentPermissionsQuery,
+    GetEnrollmentPermissionsQueryVariables
+  >(GetEnrollmentPermissionsDocument, options);
+}
+export function useGetEnrollmentPermissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentPermissionsQuery,
+    GetEnrollmentPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentPermissionsQuery,
+    GetEnrollmentPermissionsQueryVariables
+  >(GetEnrollmentPermissionsDocument, options);
+}
+export type GetEnrollmentPermissionsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentPermissionsQuery
+>;
+export type GetEnrollmentPermissionsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentPermissionsLazyQuery
+>;
+export type GetEnrollmentPermissionsQueryResult = Apollo.QueryResult<
+  GetEnrollmentPermissionsQuery,
+  GetEnrollmentPermissionsQueryVariables
+>;
 export const GetPickListDocument = gql`
   query GetPickList(
     $pickListType: PickListType!
@@ -30296,6 +31146,199 @@ export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
 export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables
+>;
+export const GetServiceCategoriesDocument = gql`
+  query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
+    serviceCategories(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceCategoryFields
+      }
+    }
+  }
+  ${ServiceCategoryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetServiceCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceCategoriesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetServiceCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >(GetServiceCategoriesDocument, options);
+}
+export function useGetServiceCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >(GetServiceCategoriesDocument, options);
+}
+export type GetServiceCategoriesQueryHookResult = ReturnType<
+  typeof useGetServiceCategoriesQuery
+>;
+export type GetServiceCategoriesLazyQueryHookResult = ReturnType<
+  typeof useGetServiceCategoriesLazyQuery
+>;
+export type GetServiceCategoriesQueryResult = Apollo.QueryResult<
+  GetServiceCategoriesQuery,
+  GetServiceCategoriesQueryVariables
+>;
+export const GetServiceCategoryDocument = gql`
+  query GetServiceCategory($id: ID!) {
+    serviceCategory(id: $id) {
+      ...ServiceCategoryFields
+    }
+  }
+  ${ServiceCategoryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceCategoryQuery__
+ *
+ * To run a query within a React component, call `useGetServiceCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceCategoryQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetServiceCategoryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceCategoryQuery,
+    GetServiceCategoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceCategoryQuery,
+    GetServiceCategoryQueryVariables
+  >(GetServiceCategoryDocument, options);
+}
+export function useGetServiceCategoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceCategoryQuery,
+    GetServiceCategoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceCategoryQuery,
+    GetServiceCategoryQueryVariables
+  >(GetServiceCategoryDocument, options);
+}
+export type GetServiceCategoryQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryQuery
+>;
+export type GetServiceCategoryLazyQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryLazyQuery
+>;
+export type GetServiceCategoryQueryResult = Apollo.QueryResult<
+  GetServiceCategoryQuery,
+  GetServiceCategoryQueryVariables
+>;
+export const GetServiceCategoryTypesDocument = gql`
+  query GetServiceCategoryTypes($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+    serviceCategory(id: $id) {
+      id
+      serviceTypes(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ServiceTypeFields
+        }
+      }
+    }
+  }
+  ${ServiceTypeFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceCategoryTypesQuery__
+ *
+ * To run a query within a React component, call `useGetServiceCategoryTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceCategoryTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceCategoryTypesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetServiceCategoryTypesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceCategoryTypesQuery,
+    GetServiceCategoryTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceCategoryTypesQuery,
+    GetServiceCategoryTypesQueryVariables
+  >(GetServiceCategoryTypesDocument, options);
+}
+export function useGetServiceCategoryTypesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceCategoryTypesQuery,
+    GetServiceCategoryTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceCategoryTypesQuery,
+    GetServiceCategoryTypesQueryVariables
+  >(GetServiceCategoryTypesDocument, options);
+}
+export type GetServiceCategoryTypesQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryTypesQuery
+>;
+export type GetServiceCategoryTypesLazyQueryHookResult = ReturnType<
+  typeof useGetServiceCategoryTypesLazyQuery
+>;
+export type GetServiceCategoryTypesQueryResult = Apollo.QueryResult<
+  GetServiceCategoryTypesQuery,
+  GetServiceCategoryTypesQueryVariables
 >;
 export const GetUnitsDocument = gql`
   query GetUnits(

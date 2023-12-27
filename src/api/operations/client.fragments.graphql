@@ -176,6 +176,7 @@ fragment ClientAuditEventFields on ClientAuditEvent {
   event
   objectChanges
   recordName
+  graphqlType
   recordId
   user {
     id

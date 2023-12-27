@@ -1,6 +1,7 @@
 // **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
 
 export const HmisEnums = {
+  ActiveStatus: { ACTIVE: 'Active', INACTIVE: 'Inactive' },
   AftercareMethod: {
     IN_PERSON_1_ON_1: 'In person: one-on-one',
     IN_PERSON_GROUP: 'In person: group',
@@ -258,19 +259,19 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   DataCollectedAbout: {
-    ALL_CLIENTS: 'ALL_CLIENTS',
+    ALL_CLIENTS: 'All Clients',
     ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE:
-      'ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE',
-    ALL_CLIENTS_RECEIVING_SSVF_SERVICES: 'ALL_CLIENTS_RECEIVING_SSVF_SERVICES',
-    ALL_VETERANS: 'ALL_VETERANS',
-    HOH: 'HOH',
-    HOH_AND_ADULTS: 'HOH_AND_ADULTS',
-    VETERAN_HOH: 'VETERAN_HOH',
+      'All Clients Receiving SSVF Financial Assistance',
+    ALL_CLIENTS_RECEIVING_SSVF_SERVICES: 'All Clients Receiving SSVF Services',
+    ALL_VETERANS: 'All Veterans',
+    HOH: 'HoH',
+    HOH_AND_ADULTS: 'HoH and Adults',
+    VETERAN_HOH: 'Veteran HoH',
   },
   DataCollectionFeatureRole: {
     CASE_NOTE: 'Case note',
-    CE_ASSESSMENT: 'Ce assessment',
-    CE_EVENT: 'Ce event',
+    CE_ASSESSMENT: 'CE assessment',
+    CE_EVENT: 'CE event',
     CURRENT_LIVING_SITUATION: 'Current living situation',
     REFERRAL_REQUEST: 'Referral request',
     SERVICE: 'Service',
@@ -499,18 +500,16 @@ export const HmisEnums = {
   FormRole: {
     ANNUAL: 'Annual',
     CASE_NOTE: 'Case note',
-    CE: 'Ce',
-    CE_ASSESSMENT: 'Ce assessment',
-    CE_EVENT: 'Ce event',
-    CE_PARTICIPATION: 'Ce participation',
+    CE_ASSESSMENT: 'CE assessment',
+    CE_EVENT: 'CE event',
+    CE_PARTICIPATION: 'CE participation',
     CLIENT: 'Client',
     CURRENT_LIVING_SITUATION: 'Current living situation',
-    CUSTOM_ASSESSMENT: 'Custom assessment',
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
     FILE: 'File',
     FUNDER: 'Funder',
-    HMIS_PARTICIPATION: 'Hmis participation',
+    HMIS_PARTICIPATION: 'HMIS participation',
     INTAKE: 'Intake',
     INVENTORY: 'Inventory',
     NEW_CLIENT_ENROLLMENT: 'New client enrollment',
@@ -522,6 +521,11 @@ export const HmisEnums = {
     REFERRAL_REQUEST: 'Referral request',
     SERVICE: 'Service',
     UPDATE: 'Update',
+  },
+  FormRuleSortOption: {
+    DATE_UPDATED: 'Date Updated',
+    FORM_TITLE: 'Form Title',
+    FORM_TYPE: 'Form Type',
   },
   FunderSortOption: { START_DATE: 'START_DATE' },
   FundingSource: {
@@ -873,6 +877,7 @@ export const HmisEnums = {
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
     ENROLLMENTS_FOR_CLIENT:
       'Enrollments for the client, including WIP and Exited.',
+    ENROLLMENT_AUDIT_EVENT_RECORD_TYPES: 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
     GEOCODE: 'GEOCODE',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     ORGANIZATION: 'All Organizations that the User can see',
@@ -886,6 +891,7 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
+    USERS: 'User Accounts',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',
@@ -1739,6 +1745,7 @@ export const HmisEnums = {
     WITH_ON_GOING_SUBSIDY: 'With on-going subsidy',
     WITHOUT_AN_ON_GOING_SUBSIDY: 'Without an on-going subsidy',
   },
+  SystemStatus: { NON_SYSTEM: 'Non-System', SYSTEM: 'System' },
   TCellSourceViralLoadSource: {
     INVALID: 'Invalid Value',
     MEDICAL_REPORT: 'Medical Report',

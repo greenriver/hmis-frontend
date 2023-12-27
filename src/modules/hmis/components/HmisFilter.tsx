@@ -38,17 +38,13 @@ const getType = (
 export const getSortOptionForType = (
   recordType: string
 ): Record<string, string> | null => {
-  if (recordType === 'Assessment')
-    return HmisEnums.AssessmentSortOption as Record<string, string>;
-  if (recordType === 'Enrollment')
-    return HmisEnums.EnrollmentSortOption as Record<string, string>;
-  if (recordType === 'Household')
-    return HmisEnums.HouseholdSortOption as Record<string, string>;
-  if (recordType === 'Project')
-    return HmisEnums.ProjectSortOption as Record<string, string>;
-  if (recordType === 'Client')
-    return HmisEnums.ClientSortOption as Record<string, string>;
+  const expectedName = `${recordType}SortOption`;
+  if (Object.hasOwn(HmisEnums, expectedName)) {
+    const key = expectedName as keyof typeof HmisEnums;
+    return HmisEnums[key];
+  }
 
+  // console.debug('No sort options for', recordType);
   return null;
 };
 
@@ -71,9 +67,11 @@ export const getInputTypeForRecordType = (
 
 const FILTER_NAME_TO_PICK_LIST = {
   project: PickListType.Project,
+  appliedToProject: PickListType.Project,
   organization: PickListType.Organization,
   serviceType: PickListType.AllServiceTypes,
-  serviceCategory: PickListType.AllServiceCategories,
+  auditEventRecordType: PickListType.EnrollmentAuditEventRecordTypes,
+  user: PickListType.Users,
 };
 
 function isPicklistType(
@@ -113,10 +111,11 @@ const getFilterForType = (
     filter = {
       ...baseFields,
       enumType: inputType as keyof typeof HmisEnums,
-      variant: 'select',
       type: 'enum',
     };
   }
+
+  if (!filter) console.error(`Failed to create filter for ${fieldName}`);
 
   return filter || null;
 };

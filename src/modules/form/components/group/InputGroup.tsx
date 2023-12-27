@@ -1,6 +1,6 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
-import { ReactNode, useCallback, useMemo } from 'react';
+import { ReactNode, useCallback, useId, useMemo } from 'react';
 
 import { GroupItemComponentProps } from '../../types';
 import { maxWidthAtNestingLevel } from '../../util/formUtil';
@@ -88,6 +88,8 @@ const InputGroup = ({
 
   const maxWidth = maxWidthAtNestingLevel(nestingLevel + 1) + 80;
 
+  const groupLabelId = useId();
+
   const wrappedChildren = useMemo(() => {
     return (
       <Grid
@@ -101,6 +103,8 @@ const InputGroup = ({
           border: (theme) => `1px solid ${theme.palette.grey[200]}`,
           maxWidth,
         }}
+        role='group'
+        aria-labelledby={groupLabelId}
       >
         {renderChildItem &&
           childItems &&
@@ -126,7 +130,14 @@ const InputGroup = ({
             )}
       </Grid>
     );
-  }, [childItems, maxWidth, renderChildItem, childProps, childRenderFunc]);
+  }, [
+    maxWidth,
+    groupLabelId,
+    renderChildItem,
+    childItems,
+    childProps,
+    childRenderFunc,
+  ]);
 
   let label = item.text;
   if (viewOnly && !isNil(item.readonlyText)) label = item.readonlyText;
@@ -134,6 +145,7 @@ const InputGroup = ({
     <Box id={item.linkId} sx={{ mb: 2 }}>
       {label && (
         <Typography
+          id={groupLabelId}
           sx={{ mt: 1, mb: 2 }}
           variant={viewOnly ? 'body2' : undefined}
           fontWeight={viewOnly ? 600 : undefined}

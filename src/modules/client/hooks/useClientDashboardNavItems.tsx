@@ -7,22 +7,19 @@ import {
   useRootPermissions,
 } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
-import { ClientFieldsFragment } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
+import { ClientAccessFieldsFragment } from '@/types/gqlTypes';
 
-export const useClientDashboardNavItems = (client?: ClientFieldsFragment) => {
+export const useClientDashboardNavItems = (clientId: string) => {
   const [rootAccess] = useRootPermissions();
-  const [clientAccess] = useClientPermissions(client?.id || '');
+  const [clientAccess] = useClientPermissions(clientId);
 
-  const canViewEnrollments = !!clientAccess?.canViewEnrollmentDetails;
+  // TODO: move this logic to the backend and resolve it on ClientAccess
   const canViewFiles =
     clientAccess?.canViewAnyConfidentialClientFiles ||
     clientAccess?.canViewAnyNonconfidentialClientFiles ||
     clientAccess?.canManageOwnClientFiles;
 
-  const navItems: NavItem[] = useMemo(() => {
-    if (!client) return [];
-    const params = { clientId: client.id };
+  const navItems: NavItem<ClientAccessFieldsFragment>[] = useMemo(() => {
     return [
       {
         id: 'client-nav',
@@ -37,19 +34,19 @@ export const useClientDashboardNavItems = (client?: ClientFieldsFragment) => {
             id: 'enrollments',
             title: 'Enrollments',
             path: ClientDashboardRoutes.CLIENT_ENROLLMENTS,
-            hide: !canViewEnrollments,
+            permissions: ['canViewEnrollmentDetails'],
           },
           {
             id: 'assessments',
             title: 'Assessments',
             path: ClientDashboardRoutes.ASSESSMENTS,
-            hide: !canViewEnrollments,
+            permissions: ['canViewEnrollmentDetails'],
           },
           {
             id: 'services',
             title: 'Services',
             path: ClientDashboardRoutes.SERVICES,
-            hide: !canViewEnrollments,
+            permissions: ['canViewEnrollmentDetails'],
           },
 
           {
@@ -58,10 +55,7 @@ export const useClientDashboardNavItems = (client?: ClientFieldsFragment) => {
             path: ClientDashboardRoutes.FILES,
             hide: !canViewFiles,
           },
-        ].map(({ path, ...rest }) => ({
-          path: generateSafePath(path, params),
-          ...rest,
-        })),
+        ],
       },
       {
         id: 'admin',
@@ -71,19 +65,20 @@ export const useClientDashboardNavItems = (client?: ClientFieldsFragment) => {
           {
             id: 'audit-history',
             title: 'Audit History',
-            path: generateSafePath(ClientDashboardRoutes.AUDIT_HISTORY, params),
-            hide: !clientAccess?.canAuditClients,
+            path: ClientDashboardRoutes.AUDIT_HISTORY,
+            permissions: ['canAuditClients'],
           },
           {
             id: 'merges',
             title: 'Merge History',
-            path: generateSafePath(ClientDashboardRoutes.MERGE_HISTORY, params),
+            path: ClientDashboardRoutes.MERGE_HISTORY,
+            // TODO: resolve this on ClientAccess
             hide: !rootAccess?.canMergeClients,
           },
         ],
       },
     ];
-  }, [client, canViewEnrollments, canViewFiles, clientAccess, rootAccess]);
+  }, [canViewFiles, rootAccess]);
 
   return navItems;
 };

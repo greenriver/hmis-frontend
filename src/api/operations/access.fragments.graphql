@@ -30,6 +30,7 @@ fragment RootPermissions on QueryAccess {
   canMergeClients
   canTransferEnrollments
   canSplitHouseholds
+  canConfigureDataCollection
 }
 
 fragment ClientAccessFields on ClientAccess {
@@ -54,6 +55,7 @@ fragment EnrollmentAccessFields on EnrollmentAccess {
   id
   canEditEnrollments
   canDeleteEnrollments
+  canAuditEnrollments
 }
 
 fragment AssessmentAccessFields on AssessmentAccess {

@@ -3,12 +3,10 @@ import { isEmpty } from 'lodash-es';
 
 import ItemBase, { ItemBaseProps } from './ItemBase';
 
-type Props = ItemBaseProps;
-
 /**
  * A menu item with collapsible children items
  */
-const ItemTopic = ({ item }: Props) => {
+const ItemTopic = <T extends object>({ item }: ItemBaseProps<T>) => {
   return (
     <ItemBase
       item={item}

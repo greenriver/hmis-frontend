@@ -3,23 +3,15 @@ import { useMemo } from 'react';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  AllEnrollmentDetailsFragment,
   DataCollectionFeatureRole,
+  EnrollmentAccessFieldsFragment,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useEnrollmentDashboardNavItems = (
-  enabledFeatures: DataCollectionFeatureRole[],
-  enrollment?: AllEnrollmentDetailsFragment
+  enabledFeatures: DataCollectionFeatureRole[]
 ) => {
-  const navItems: NavItem[] = useMemo(() => {
-    if (!enrollment) return [];
-    const params = {
-      clientId: enrollment.client.id,
-      enrollmentId: enrollment.id,
-    };
-
-    return [
+  const navItems = useMemo(() => {
+    const items: NavItem<EnrollmentAccessFieldsFragment>[] = [
       {
         id: 'enrollment-nav',
         type: 'category',
@@ -73,13 +65,25 @@ export const useEnrollmentDashboardNavItems = (
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
             hide: !enabledFeatures.includes(DataCollectionFeatureRole.CaseNote),
           },
-        ].map(({ path, ...rest }) => ({
-          path: generateSafePath(path, params),
-          ...rest,
-        })),
+        ],
       },
     ];
-  }, [enabledFeatures, enrollment]);
+
+    items.push({
+      id: 'admin',
+      title: 'Admin',
+      type: 'category',
+      items: [
+        {
+          id: 'audit-history',
+          title: 'Audit History',
+          path: EnrollmentDashboardRoutes.AUDIT_HISTORY,
+          permissions: ['canAuditEnrollments'],
+        },
+      ],
+    });
+    return items;
+  }, [enabledFeatures]);
 
   return navItems;
 };

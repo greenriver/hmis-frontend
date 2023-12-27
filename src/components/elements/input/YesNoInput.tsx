@@ -52,6 +52,7 @@ const YesNoInput = ({
 
   const buttonSx = {
     width: 100,
+    py: 0.5,
     border: error
       ? (theme: Theme) => `1px solid ${theme.palette.error.main}`
       : undefined,
@@ -74,11 +75,7 @@ const YesNoInput = ({
         <ToggleButtonGroup
           exclusive
           aria-labelledby={htmlId}
-          sx={{
-            pt: 0.5,
-            mt: 0.5,
-            backgroundColor: horizontal ? 'white' : undefined,
-          }}
+          sx={{ backgroundColor: horizontal ? 'white' : undefined }}
           size='small'
           onChange={handleChange}
           value={
@@ -91,7 +88,7 @@ const YesNoInput = ({
           <ToggleButton
             value={true}
             aria-label={trueLabel}
-            color='secondary'
+            color='primary'
             sx={buttonSx}
           >
             {trueLabel}
@@ -99,7 +96,7 @@ const YesNoInput = ({
           <ToggleButton
             value={false}
             aria-label={falseLabel}
-            color='secondary'
+            color='primary'
             sx={buttonSx}
           >
             {falseLabel}
@@ -108,7 +105,7 @@ const YesNoInput = ({
             <ToggleButton
               value={-1}
               aria-label={nullOptionLabel}
-              color='secondary'
+              color='primary'
               sx={buttonSx}
             >
               {nullOptionLabel}

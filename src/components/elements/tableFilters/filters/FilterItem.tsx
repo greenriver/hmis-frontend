@@ -57,16 +57,21 @@ const TableFilterItem = <T,>({
             ? `Select ${filter.label}...`
             : undefined;
 
-        if (filter.type === 'enum')
+        if (filter.type === 'enum') {
+          const options = localResolvePickList(filter.enumType, true) || [];
+          const variant =
+            filter.variant ||
+            (options.length < 3 && filter.multi ? 'checkboxes' : 'select');
           return (
             <TableFilterItemSelector
-              variant={filter.variant}
-              options={localResolvePickList(filter.enumType, true) || []}
+              variant={variant}
+              options={options}
               value={filter.multi ? value || [] : value}
               onChange={onChange}
               placeholder={placeholder}
             />
           );
+        }
 
         if (filter.type === 'picklist')
           return (
