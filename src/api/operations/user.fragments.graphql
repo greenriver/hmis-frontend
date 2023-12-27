@@ -18,21 +18,16 @@ fragment UserActivityLogFields on ActivityLog {
 fragment ClientAccessSummaryFields on ClientAccessSummary {
   id
   lastAccessedAt
-  client {
-    ...ClientName
-  }
+  clientId
+  clientName
 }
 
 fragment EnrollmentAccessSummaryFields on EnrollmentAccessSummary {
   id
   lastAccessedAt
-  enrollment {
-    id
-    client {
-      ...ClientName
-    }
-    project {
-      ...ProjectNameAndType
-    }
-  }
+  enrollmentId
+  clientId
+  clientName
+  projectId
+  projectName
 }

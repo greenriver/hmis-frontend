@@ -2,10 +2,7 @@ import React from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  clientNameAllParts,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import {
   ClientAccessSummaryFieldsFragment,
   GetUserClientSummariesDocument,
@@ -16,22 +13,23 @@ import {
 const columns: ColumnDef<ClientAccessSummaryFieldsFragment>[] = [
   {
     header: 'Client Name',
-    render: ({ client }) => (client ? clientNameAllParts(client) : undefined),
+    render: 'clientName',
+  },
+  {
+    header: 'Client ID',
+    render: 'clientId',
   },
   {
     header: 'Last Accessed',
     render: ({ lastAccessedAt }) => parseAndFormatDateTime(lastAccessedAt),
   },
-  {
-    header: 'Client ID',
-    render: ({ client }) => client?.id,
-  },
 ];
 
 interface Props {
   userId: string;
+  startDate: string;
 }
-const ClientAccessSummaryTable: React.FC<Props> = ({ userId }) => {
+const ClientAccessSummaryTable: React.FC<Props> = ({ userId, startDate }) => {
   return (
     <GenericTableWithData<
       GetUserClientSummariesQuery,
@@ -40,9 +38,13 @@ const ClientAccessSummaryTable: React.FC<Props> = ({ userId }) => {
     >
       queryVariables={{ id: userId }}
       queryDocument={GetUserClientSummariesDocument}
+      defaultFilters={{ onOrAfter: startDate }}
       columns={columns}
       pagePath='user.clientAccessSummaries'
       noData='No access history'
+      filterInputType='ClientAccessSummaryFilterOptions'
+      recordType='access events'
+      showFilters
     />
   );
 };

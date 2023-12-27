@@ -169,12 +169,14 @@ export type ApplicationUserActivityLogsArgs = {
 
 /** User account for a user of the system */
 export type ApplicationUserClientAccessSummariesArgs = {
+  filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** User account for a user of the system */
 export type ApplicationUserEnrollmentAccessSummariesArgs = {
+  filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -687,9 +689,15 @@ export type ClientAccessSummariesPaginated = {
 
 export type ClientAccessSummary = {
   __typename?: 'ClientAccessSummary';
-  client?: Maybe<Client>;
+  clientId: Scalars['ID']['output'];
+  clientName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastAccessedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type ClientAccessSummaryFilterOptions = {
+  onOrAfter?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ClientAddress = {
@@ -2193,9 +2201,18 @@ export type EnrollmentAccessSummariesPaginated = {
 
 export type EnrollmentAccessSummary = {
   __typename?: 'EnrollmentAccessSummary';
-  enrollment?: Maybe<Enrollment>;
+  clientId?: Maybe<Scalars['ID']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
+  enrollmentId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
   lastAccessedAt: Scalars['ISO8601DateTime']['output'];
+  projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
+};
+
+export type EnrollmentAccessSummaryFilterOptions = {
+  onOrAfter?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EnrollmentAuditEvent = {
@@ -24174,40 +24191,19 @@ export type ClientAccessSummaryFieldsFragment = {
   __typename?: 'ClientAccessSummary';
   id: string;
   lastAccessedAt: string;
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    lockVersion: number;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
-  } | null;
+  clientId: string;
+  clientName?: string | null;
 };
 
 export type EnrollmentAccessSummaryFieldsFragment = {
   __typename?: 'EnrollmentAccessSummary';
   id: string;
   lastAccessedAt: string;
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    client: {
-      __typename?: 'Client';
-      id: string;
-      lockVersion: number;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    };
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    };
-  } | null;
+  enrollmentId: string;
+  clientId?: string | null;
+  clientName?: string | null;
+  projectId?: string | null;
+  projectName?: string | null;
 };
 
 export type GetApplicationUsersQueryVariables = Exact<{
@@ -24281,6 +24277,7 @@ export type GetUserClientSummariesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
 }>;
 
 export type GetUserClientSummariesQuery = {
@@ -24297,15 +24294,8 @@ export type GetUserClientSummariesQuery = {
         __typename?: 'ClientAccessSummary';
         id: string;
         lastAccessedAt: string;
-        client?: {
-          __typename?: 'Client';
-          id: string;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-        } | null;
+        clientId: string;
+        clientName?: string | null;
       }>;
     };
   } | null;
@@ -24315,6 +24305,7 @@ export type GetUserEnrollmentSummariesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
 }>;
 
 export type GetUserEnrollmentSummariesQuery = {
@@ -24331,25 +24322,11 @@ export type GetUserEnrollmentSummariesQuery = {
         __typename?: 'EnrollmentAccessSummary';
         id: string;
         lastAccessedAt: string;
-        enrollment?: {
-          __typename?: 'Enrollment';
-          id: string;
-          client: {
-            __typename?: 'Client';
-            id: string;
-            lockVersion: number;
-            firstName?: string | null;
-            middleName?: string | null;
-            lastName?: string | null;
-            nameSuffix?: string | null;
-          };
-          project: {
-            __typename?: 'Project';
-            id: string;
-            projectName: string;
-            projectType?: ProjectType | null;
-          };
-        } | null;
+        enrollmentId: string;
+        clientId?: string | null;
+        clientName?: string | null;
+        projectId?: string | null;
+        projectName?: string | null;
       }>;
     };
   } | null;
@@ -26217,28 +26194,20 @@ export const ClientAccessSummaryFieldsFragmentDoc = gql`
   fragment ClientAccessSummaryFields on ClientAccessSummary {
     id
     lastAccessedAt
-    client {
-      ...ClientName
-    }
+    clientId
+    clientName
   }
-  ${ClientNameFragmentDoc}
 `;
 export const EnrollmentAccessSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentAccessSummaryFields on EnrollmentAccessSummary {
     id
     lastAccessedAt
-    enrollment {
-      id
-      client {
-        ...ClientName
-      }
-      project {
-        ...ProjectNameAndType
-      }
-    }
+    enrollmentId
+    clientId
+    clientName
+    projectId
+    projectName
   }
-  ${ClientNameFragmentDoc}
-  ${ProjectNameAndTypeFragmentDoc}
 `;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
@@ -34305,10 +34274,15 @@ export type GetUserAccessHistoryQueryResult = Apollo.QueryResult<
   GetUserAccessHistoryQueryVariables
 >;
 export const GetUserClientSummariesDocument = gql`
-  query GetUserClientSummaries($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  query GetUserClientSummaries(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: ClientAccessSummaryFilterOptions
+  ) {
     user(id: $id) {
       id
-      clientAccessSummaries(limit: $limit, offset: $offset) {
+      clientAccessSummaries(limit: $limit, offset: $offset, filters: $filters) {
         offset
         limit
         nodesCount
@@ -34336,6 +34310,7 @@ export const GetUserClientSummariesDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -34378,10 +34353,15 @@ export const GetUserEnrollmentSummariesDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
+    $filters: EnrollmentAccessSummaryFilterOptions
   ) {
     user(id: $id) {
       id
-      enrollmentAccessSummaries(limit: $limit, offset: $offset) {
+      enrollmentAccessSummaries(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -34409,6 +34389,7 @@ export const GetUserEnrollmentSummariesDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

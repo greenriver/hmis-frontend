@@ -825,6 +825,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ClientAccessSummary',
     fields: [
       {
+        name: 'clientId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -2225,6 +2237,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'EnrollmentAccessSummary',
     fields: [
+      { name: 'clientId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'enrollmentId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
       {
         name: 'id',
         type: {
@@ -2240,6 +2265,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
@@ -5616,6 +5646,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   },
   { name: 'ClearRecentItemsInput', args: [] },
   {
+    name: 'ClientAccessSummaryFilterOptions',
+    args: [
+      {
+        name: 'onOrAfter',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ClientFilterOptions',
     args: [
       {
@@ -6059,6 +6102,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentAccessSummaryFilterOptions',
+    args: [
+      {
+        name: 'onOrAfter',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

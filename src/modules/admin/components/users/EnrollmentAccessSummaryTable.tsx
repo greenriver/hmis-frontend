@@ -2,10 +2,7 @@ import React from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  clientNameAllParts,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import {
   EnrollmentAccessSummaryFieldsFragment,
   GetUserEnrollmentSummariesDocument,
@@ -15,32 +12,35 @@ import {
 
 const columns: ColumnDef<EnrollmentAccessSummaryFieldsFragment>[] = [
   {
+    header: 'Project Name',
+    render: 'projectName',
+  },
+  {
     header: 'Client Name',
-    render: ({ enrollment }) =>
-      enrollment?.client ? clientNameAllParts(enrollment?.client) : undefined,
+    render: 'clientName',
+  },
+  {
+    header: 'Enrollment ID',
+    render: 'enrollmentId',
+  },
+  {
+    header: 'Client ID',
+    render: 'clientId',
   },
   {
     header: 'Last Accessed',
     render: ({ lastAccessedAt }) => parseAndFormatDateTime(lastAccessedAt),
   },
-  {
-    header: 'Client ID',
-    render: ({ enrollment }) => enrollment?.client?.id,
-  },
-  {
-    header: 'Project ID',
-    render: ({ enrollment }) => enrollment?.project?.id,
-  },
-  {
-    header: 'Project Name',
-    render: ({ enrollment }) => enrollment?.project?.projectName,
-  },
 ];
 
 interface Props {
   userId: string;
+  startDate: string;
 }
-const EnrollmentAccessSummaryTable: React.FC<Props> = ({ userId }) => {
+const EnrollmentAccessSummaryTable: React.FC<Props> = ({
+  userId,
+  startDate,
+}) => {
   return (
     <GenericTableWithData<
       GetUserEnrollmentSummariesQuery,
@@ -48,10 +48,14 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({ userId }) => {
       EnrollmentAccessSummaryFieldsFragment
     >
       queryVariables={{ id: userId }}
+      defaultFilters={{ onOrAfter: startDate }}
       queryDocument={GetUserEnrollmentSummariesDocument}
       columns={columns}
       pagePath='user.enrollmentAccessSummaries'
       noData='No access history'
+      filterInputType='EnrollmentAccessSummaryFilterOptions'
+      recordType='access events'
+      showFilters
     />
   );
 };
