@@ -596,6 +596,7 @@ export type ClientEmploymentEducationsArgs = {
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
   filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
+  includeEnrollmentsWithLimitedAccess?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
@@ -12532,6 +12533,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
       nodesCount: number;
       nodes: Array<{
         __typename?: 'Enrollment';
+        id: string;
         project: {
           __typename?: 'Project';
           id: string;
@@ -27761,6 +27763,7 @@ export const GetClientEnrollmentsDocument = gql`
         offset: $offset
         sortOrder: MOST_RECENT
         filters: $filters
+        includeEnrollmentsWithLimitedAccess: true
       ) {
         offset
         limit
@@ -28161,6 +28164,7 @@ export const GetClientHouseholdMemberCandidatesDocument = gql`
         limit
         nodesCount
         nodes {
+          id
           project {
             ...ProjectNameAndType
           }
