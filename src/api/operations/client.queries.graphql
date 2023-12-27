@@ -62,6 +62,7 @@ query GetClientEnrollments(
       offset: $offset
       sortOrder: MOST_RECENT
       filters: $filters
+      includeEnrollmentsWithLimitedAccess: true
     ) {
       offset
       limit
@@ -162,6 +163,7 @@ query GetClientHouseholdMemberCandidates(
       limit
       nodesCount
       nodes {
+        id
         project {
           ...ProjectNameAndType
         }

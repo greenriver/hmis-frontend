@@ -130,6 +130,9 @@ const EnrollmentCustomCaseNotesPage = () => {
             setViewingRecord(record);
             openViewDialog();
           }}
+          recordType='CustomCaseNote'
+          showFilters
+          noFilter
         />
       </TitleCard>
       {renderViewDialog({

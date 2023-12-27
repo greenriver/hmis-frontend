@@ -578,6 +578,7 @@ export type ClientCurrentLivingSituationsArgs = {
 export type ClientCustomCaseNotesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CustomCaseNoteSortOption>;
 };
 
 /** HUD Client */
@@ -595,6 +596,7 @@ export type ClientEmploymentEducationsArgs = {
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
   filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
+  includeEnrollmentsWithLimitedAccess?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
@@ -1206,6 +1208,16 @@ export type CustomCaseNote = {
   informationDate?: Maybe<Scalars['ISO8601Date']['output']>;
   user?: Maybe<ApplicationUser>;
 };
+
+/** HUD Custom Case Note Sorting Options */
+export enum CustomCaseNoteSortOption {
+  /** Date Created */
+  DateCreated = 'DATE_CREATED',
+  /** Date Updated */
+  DateUpdated = 'DATE_UPDATED',
+  /** Information Date */
+  InformationDate = 'INFORMATION_DATE',
+}
 
 export type CustomCaseNotesPaginated = {
   __typename?: 'CustomCaseNotesPaginated';
@@ -2084,6 +2096,7 @@ export type EnrollmentCurrentLivingSituationsArgs = {
 export type EnrollmentCustomCaseNotesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CustomCaseNoteSortOption>;
 };
 
 /** HUD Enrollment */
@@ -12525,6 +12538,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
       nodesCount: number;
       nodes: Array<{
         __typename?: 'Enrollment';
+        id: string;
         project: {
           __typename?: 'Project';
           id: string;
@@ -13513,6 +13527,7 @@ export type GetEnrollmentCustomCaseNotesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CustomCaseNoteSortOption>;
 }>;
 
 export type GetEnrollmentCustomCaseNotesQuery = {
@@ -27754,6 +27769,7 @@ export const GetClientEnrollmentsDocument = gql`
         offset: $offset
         sortOrder: MOST_RECENT
         filters: $filters
+        includeEnrollmentsWithLimitedAccess: true
       ) {
         offset
         limit
@@ -28154,6 +28170,7 @@ export const GetClientHouseholdMemberCandidatesDocument = gql`
         limit
         nodesCount
         nodes {
+          id
           project {
             ...ProjectNameAndType
           }
@@ -29080,10 +29097,11 @@ export const GetEnrollmentCustomCaseNotesDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
+    $sortOrder: CustomCaseNoteSortOption
   ) {
     enrollment(id: $id) {
       id
-      customCaseNotes(limit: $limit, offset: $offset) {
+      customCaseNotes(limit: $limit, offset: $offset, sortOrder: $sortOrder) {
         offset
         limit
         nodesCount
@@ -29111,6 +29129,7 @@ export const GetEnrollmentCustomCaseNotesDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */
