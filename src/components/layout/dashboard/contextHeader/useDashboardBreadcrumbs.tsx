@@ -243,6 +243,10 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         parent: AdminDashboardRoutes.USERS,
         title: 'Audit User',
       },
+      [AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY]: {
+        parent: AdminDashboardRoutes.USERS,
+        title: 'Audit User',
+      },
       // [Routes.ADMIN]: {
       //   title: 'Admin',
       // },

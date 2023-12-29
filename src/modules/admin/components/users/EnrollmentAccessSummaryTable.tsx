@@ -1,4 +1,4 @@
-import React from 'react';
+import { omit } from 'lodash-es';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -35,11 +35,13 @@ const columns: ColumnDef<EnrollmentAccessSummaryFieldsFragment>[] = [
 
 interface Props {
   userId: string;
-  startDate: string;
+  startDate?: string;
+  searchTerm?: string;
 }
 const EnrollmentAccessSummaryTable: React.FC<Props> = ({
   userId,
   startDate,
+  searchTerm,
 }) => {
   return (
     <GenericTableWithData<
@@ -47,7 +49,10 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
       GetUserEnrollmentSummariesQueryVariables,
       EnrollmentAccessSummaryFieldsFragment
     >
-      queryVariables={{ id: userId }}
+      queryVariables={{
+        id: userId,
+        filters: { searchTerm },
+      }}
       defaultFilters={{ onOrAfter: startDate }}
       queryDocument={GetUserEnrollmentSummariesDocument}
       columns={columns}
@@ -55,6 +60,7 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
       noData='No access history'
       filterInputType='EnrollmentAccessSummaryFilterOptions'
       recordType='access events'
+      filters={(filters) => omit(filters, 'searchTerm')}
       showFilters
     />
   );

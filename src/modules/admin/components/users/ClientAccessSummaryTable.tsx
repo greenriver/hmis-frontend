@@ -1,3 +1,4 @@
+import { omit } from 'lodash-es';
 import React from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
@@ -27,23 +28,34 @@ const columns: ColumnDef<ClientAccessSummaryFieldsFragment>[] = [
 
 interface Props {
   userId: string;
-  startDate: string;
+  startDate?: string;
+  searchTerm?: string;
 }
-const ClientAccessSummaryTable: React.FC<Props> = ({ userId, startDate }) => {
+const ClientAccessSummaryTable: React.FC<Props> = ({
+  userId,
+  startDate,
+  searchTerm,
+}) => {
   return (
     <GenericTableWithData<
       GetUserClientSummariesQuery,
       GetUserClientSummariesQueryVariables,
       ClientAccessSummaryFieldsFragment
     >
-      queryVariables={{ id: userId }}
+      queryVariables={{
+        id: userId,
+        filters: { searchTerm },
+      }}
       queryDocument={GetUserClientSummariesDocument}
-      defaultFilters={{ onOrAfter: startDate }}
+      defaultFilters={{
+        onOrAfter: startDate,
+      }}
       columns={columns}
       pagePath='user.clientAccessSummaries'
       noData='No access history'
       filterInputType='ClientAccessSummaryFilterOptions'
       recordType='access events'
+      filters={(filters) => omit(filters, 'searchTerm')}
       showFilters
     />
   );

@@ -1,6 +1,5 @@
 import { Box, Paper, Typography } from '@mui/material';
-import { formatISO, subWeeks } from 'date-fns';
-import React, { useMemo } from 'react';
+// import { formatISO, subWeeks } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
@@ -11,10 +10,12 @@ import {
 } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
+import useDebouncedState from '@/hooks/useDebouncedState';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientAccessSummaryTable from '@/modules/admin/components/users/ClientAccessSummaryTable';
 import EnrollmentAccessSummaryTable from '@/modules/admin/components/users/EnrollmentAccessSummaryTable';
 import { useUser } from '@/modules/dataFetching/hooks/useUser';
+import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -39,12 +40,13 @@ interface Props {
 const UserAuditPage: React.FC<Props> = ({ entityType }) => {
   const { userId } = useSafeParams() as { userId: string };
   const { user, loading } = useUser(userId);
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
   const navigate = useNavigate();
-  const defaultStartDate = useMemo<string>(() => {
-    const today = new Date();
-    const twoWeeksAgo = subWeeks(today, 2);
-    return formatISO(twoWeeksAgo);
-  }, []);
+  //const defaultStartDate = useMemo<string>(() => {
+  //  const today = new Date();
+  //  const twoWeeksAgo = subWeeks(today, 2);
+  //  return formatISO(twoWeeksAgo);
+  //}, []);
 
   if (!user && loading) return <Loading />;
   if (!user) return <NotFound />;
@@ -74,25 +76,57 @@ const UserAuditPage: React.FC<Props> = ({ entityType }) => {
       <PageTitle title={`Access History for ${user.name}`} />
       <Paper>
         <Box mt={2} px={2}>
-          <Typography variant='subtitle1'>View user access by</Typography>
+          <Typography variant='subtitle1' sx={{ mb: 2 }}>
+            {`Data on this page may be delayed by up to an hour. Recent user activity may not be immediately visible.`}
+          </Typography>
+          <Typography sx={{ fontWeight: 600, mb: 0.5 }}>
+            View user access by
+          </Typography>
           <CommonToggle
-            sx={{ my: 2 }}
+            sx={{ mb: 3 }}
             value={entityType}
             onChange={handleTabChange}
             items={toggleItems}
             size='small'
             variant='gray'
           />
+          {entityType == 'clients' && (
+            <CommonSearchInput
+              label='Search client access'
+              name='searchClients'
+              placeholder='Search by client name/ID'
+              value={search}
+              onChange={setSearch}
+              fullWidth
+              size='medium'
+              searchAdornment
+            />
+          )}
+          {entityType == 'enrollments' && (
+            <CommonSearchInput
+              label='Search enrollment access'
+              name='searchEnrollments'
+              placeholder='Search by enrollment name/ID, client name/ID'
+              value={search}
+              onChange={setSearch}
+              fullWidth
+              size='medium'
+              searchAdornment
+            />
+          )}
         </Box>
-        {entityType == 'clients' ? (
+        {entityType == 'clients' && (
           <ClientAccessSummaryTable
             userId={userId}
-            startDate={defaultStartDate}
+            // startDate={defaultStartDate}
+            searchTerm={debouncedSearch}
           />
-        ) : (
+        )}
+        {entityType == 'enrollments' && (
           <EnrollmentAccessSummaryTable
             userId={userId}
-            startDate={defaultStartDate}
+            // startDate={defaultStartDate}
+            searchTerm={debouncedSearch}
           />
         )}
       </Paper>
