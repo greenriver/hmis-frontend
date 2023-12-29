@@ -1,0 +1,32 @@
+mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
+  updateFormDefinition(id: $id, input: $input) {
+    formDefinition {
+      ...FormDefinitionFieldsForEditor
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateFormDefinition($input: FormDefinitionInput!) {
+  createFormDefinition(input: $input) {
+    formDefinition {
+      ...FormDefinitionFieldsForEditor
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteFormDefinition($id: ID!) {
+  deleteFormDefinition(id: $id) {
+    formDefinition {
+      ...FormDefinitionFieldsForEditor
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

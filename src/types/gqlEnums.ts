@@ -511,6 +511,7 @@ export const HmisEnums = {
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
     FILE: 'File',
+    FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
     FUNDER: 'Funder',
     HMIS_PARTICIPATION: 'HMIS participation',
@@ -1724,6 +1725,7 @@ export const HmisEnums = {
   },
   StaticFormRole: {
     AUTO_EXIT_CONFIG: 'Auto exit config',
+    FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
   },
   SubsidyInformation: {
