@@ -1,0 +1,137 @@
+query GetPickList(
+  $pickListType: PickListType!
+  $projectId: ID
+  $clientId: ID
+  $householdId: ID
+  $enrollmentId: ID
+) {
+  pickList(
+    pickListType: $pickListType
+    projectId: $projectId
+    clientId: $clientId
+    householdId: $householdId
+    enrollmentId: $enrollmentId
+  ) {
+    ...PickListOptionFields
+  }
+}
+
+query GetFormDefinition($role: FormRole!, $enrollmentId: ID, $projectId: ID) {
+  getFormDefinition(
+    role: $role
+    enrollmentId: $enrollmentId
+    projectId: $projectId
+  ) {
+    ...FormDefinitionFields
+  }
+}
+
+query GetStaticFormDefinition($role: StaticFormRole!) {
+  staticFormDefinition(role: $role) {
+    ...FormDefinitionFields
+  }
+}
+
+query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
+  getServiceFormDefinition(
+    serviceTypeId: $serviceTypeId
+    projectId: $projectId
+  ) {
+    ...FormDefinitionFields
+  }
+}
+
+query GetFormDefinitionById($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFields
+  }
+}
+
+query GetFormDefinitionForEditor($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFieldsForEditor
+  }
+}
+
+query GetFormDefinitions($limit: Int = 25, $offset: Int = 0) {
+  formDefinitions(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...FormDefinitionMetadata
+      system
+      formRules(limit: 1) {
+        nodesCount
+      }
+    }
+  }
+}
+
+query GetParsedFormDefinition($input: String!) {
+  parsedFormDefinition(input: $input) {
+    definition {
+      ...FormDefinitionJsonFields
+    }
+    errors
+  }
+}
+
+mutation SubmitForm($input: SubmitFormInput!) {
+  submitForm(input: $input) {
+    clientMutationId
+    record {
+      ... on Client {
+        ...ClientFields
+      }
+      ... on Organization {
+        ...OrganizationFields
+      }
+      ... on Project {
+        ...ProjectAllFields
+      }
+      ... on Funder {
+        ...FunderFields
+      }
+      ... on ProjectCoc {
+        ...ProjectCocFields
+      }
+      ... on Inventory {
+        ...InventoryFields
+      }
+      ... on ReferralRequest {
+        ...ReferralRequestFields
+      }
+      ... on Service {
+        ...ServiceFields
+      }
+      ... on File {
+        ...FileFields
+      }
+      ... on Enrollment {
+        ...SubmittedEnrollmentResultFields
+      }
+      ... on CurrentLivingSituation {
+        ...CurrentLivingSituationFields
+      }
+      ... on CeAssessment {
+        ...CeAssessmentFields
+      }
+      ... on CustomCaseNote {
+        ...CustomCaseNoteFields
+      }
+      ... on Event {
+        ...EventFields
+      }
+      ... on CeParticipation {
+        ...CeParticipationFields
+      }
+      ... on HmisParticipation {
+        ...HmisParticipationFields
+      }
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

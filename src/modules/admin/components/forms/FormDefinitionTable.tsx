@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { SystemChip } from '../formRules/FormRuleTable';
@@ -11,7 +12,9 @@ import {
   GetFormDefinitionsQueryVariables,
 } from '@/types/gqlTypes';
 
-type Row = NonNullable<GetFormDefinitionsQuery['formDefinitions']>['nodes'][0];
+export type Row = NonNullable<
+  GetFormDefinitionsQuery['formDefinitions']
+>['nodes'][0];
 
 const columns: ColumnDef<Row>[] = [
   {
@@ -38,7 +41,9 @@ const columns: ColumnDef<Row>[] = [
   // TODO ADD: last updated
 ];
 
-const FormDefinitionTable: React.FC = () => {
+const FormDefinitionTable: React.FC<{ onSelect?: (row: Row) => any }> = ({
+  onSelect,
+}) => {
   return (
     <GenericTableWithData<
       GetFormDefinitionsQuery,
@@ -47,7 +52,32 @@ const FormDefinitionTable: React.FC = () => {
     >
       queryVariables={{}}
       queryDocument={GetFormDefinitionsDocument}
-      columns={columns}
+      columns={[
+        ...columns,
+        ...(onSelect
+          ? ([
+              {
+                key: 'actions',
+                textAlign: 'right',
+                render: (row) => {
+                  return (
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onSelect(row);
+                      }}
+                      size='small'
+                      variant='outlined'
+                    >
+                      Edit
+                    </Button>
+                  );
+                },
+              },
+            ] as ColumnDef<Row>[])
+          : []),
+      ]}
       pagePath='formDefinitions'
       showFilters
       recordType='FormDefinition'

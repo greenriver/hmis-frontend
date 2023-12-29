@@ -38,6 +38,7 @@ export interface FormActionProps {
   disabled?: boolean;
   lastSaved?: string;
   lastSubmitted?: string;
+  noDiscard?: boolean;
 }
 
 const FormActions = ({
@@ -51,6 +52,7 @@ const FormActions = ({
   loading,
   lastSaved,
   lastSubmitted,
+  noDiscard = false,
 }: FormActionProps) => {
   const navigate = useNavigate();
 
@@ -75,17 +77,21 @@ const FormActions = ({
           action: FormActionTypes.Submit,
           buttonProps: { variant: 'contained' },
         },
-        {
-          id: 'discard',
-          label: discardButtonText || 'Discard',
-          action: FormActionTypes.Discard,
-          buttonProps: { variant: 'gray' },
-        },
+        ...(noDiscard
+          ? []
+          : [
+              {
+                id: 'discard',
+                label: discardButtonText || 'Discard',
+                action: FormActionTypes.Discard,
+                buttonProps: { variant: 'gray' },
+              },
+            ]),
       ] as ButtonConfig[],
       [],
       [],
     ];
-  }, [config, submitButtonText, discardButtonText]);
+  }, [config, submitButtonText, discardButtonText, noDiscard]);
 
   const [lastClicked, setLastClicked] = useState<string>();
 

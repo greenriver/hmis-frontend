@@ -19,7 +19,7 @@ export default function useAddToHouseholdColumns({
   projectId,
 }: Args) {
   const [householdId, setHouseholdId] = useState(initialHouseholdId);
-  const [getHousehold, { data, loading }] = useGetHouseholdLazyQuery({
+  const [getHousehold, { data, loading, error }] = useGetHouseholdLazyQuery({
     fetchPolicy: 'network-only',
   });
 
@@ -85,6 +85,8 @@ export default function useAddToHouseholdColumns({
       },
     ];
   }, [currentMembersMap, householdId, projectId, onSuccess]);
+
+  if (error) throw error;
 
   return {
     addToEnrollmentColumns,

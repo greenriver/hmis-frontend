@@ -241,6 +241,11 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  CustomCaseNoteSortOption: {
+    DATE_CREATED: 'Date Created',
+    DATE_UPDATED: 'Date Updated',
+    INFORMATION_DATE: 'Information Date',
+  },
   CustomDataElementType: {
     boolean: 'boolean',
     date: 'date',
@@ -506,6 +511,7 @@ export const HmisEnums = {
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
     FILE: 'File',
+    FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
     FUNDER: 'Funder',
     HMIS_PARTICIPATION: 'HMIS participation',
@@ -1719,6 +1725,7 @@ export const HmisEnums = {
   },
   StaticFormRole: {
     AUTO_EXIT_CONFIG: 'Auto exit config',
+    FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
   },
   SubsidyInformation: {

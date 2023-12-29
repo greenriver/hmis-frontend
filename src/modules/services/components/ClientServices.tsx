@@ -85,8 +85,8 @@ const ClientServices: React.FC<{
           fetchPolicy='cache-and-network'
           noData='No services'
           recordType='Service'
-          noSort
           defaultSortOption={ServiceSortOption.DateProvided}
+          noSort
         />
       </Paper>
     </>
