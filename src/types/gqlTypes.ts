@@ -2239,6 +2239,7 @@ export type EnrollmentAccessSummary = {
 
 export type EnrollmentAccessSummaryFilterOptions = {
   onOrAfter?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  project?: InputMaybe<Scalars['ID']['input']>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 

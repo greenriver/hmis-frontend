@@ -6149,6 +6149,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'onOrAfter',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
+      { name: 'project', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
