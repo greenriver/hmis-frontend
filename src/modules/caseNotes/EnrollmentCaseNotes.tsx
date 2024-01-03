@@ -77,7 +77,7 @@ const columns: ColumnDef<CustomCaseNoteFieldsFragment>[] = [
   CASE_NOTE_COLUMNS.LastUpdated,
 ];
 
-const EnrollmentCaseNotesPage = () => {
+const EnrollmentCaseNotes = () => {
   const { enrollment } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
@@ -146,4 +146,4 @@ const EnrollmentCaseNotesPage = () => {
   );
 };
 
-export default EnrollmentCaseNotesPage;
+export default EnrollmentCaseNotes;

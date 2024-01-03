@@ -2,7 +2,7 @@ import { Paper } from '@mui/material';
 
 import { useViewEditRecordDialogs } from '../form/hooks/useViewEditRecordDialogs';
 import EnrollmentDateRangeWithStatus from '../hmis/components/EnrollmentDateRangeWithStatus';
-import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotesPage';
+import { CASE_NOTE_COLUMNS } from './EnrollmentCaseNotes';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';

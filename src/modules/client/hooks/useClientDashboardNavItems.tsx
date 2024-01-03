@@ -56,11 +56,11 @@ export const useClientDashboardNavItems = (clientId: string) => {
             hide: !canViewFiles,
           },
           // TODO: only show if Case Notes feature is enabled for any project globally
-          {
-            id: 'case-notes',
-            title: 'Case Notes',
-            path: ClientDashboardRoutes.CASE_NOTES,
-          },
+          // {
+          //   id: 'case-notes',
+          //   title: 'Case Notes',
+          //   path: ClientDashboardRoutes.CASE_NOTES,
+          // },
         ],
       },
       {

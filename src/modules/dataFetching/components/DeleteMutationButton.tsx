@@ -13,7 +13,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 
-export interface DeleteMutationButtonProps<MutationVariables> {
+interface DeleteMutationButtonProps<MutationVariables> {
   ButtonProps?: ButtonProps;
   ConfirmationDialogProps?: Omit<
     ConfirmationDialogProps,

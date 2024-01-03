@@ -52,7 +52,7 @@ import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
-import EnrollmentCaseNotesPage from '@/modules/caseNotes/EnrollmentCaseNotesPage';
+import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
 import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
@@ -419,7 +419,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
             // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCaseNotesPage />,
+            element: <EnrollmentCaseNotes />,
           },
           {
             path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
