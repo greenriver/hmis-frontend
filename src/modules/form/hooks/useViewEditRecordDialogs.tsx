@@ -48,7 +48,8 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
   const { openFormDialog, renderFormDialog, closeDialog } = useFormDialog<T>({
     formRole,
     onCompleted: () => {
-      evictCache(); // only if new record though, right?
+      // only gets called on success
+      if (!viewingRecord) evictCache(); // clear cache if new record was created
       setViewingRecord(undefined);
       closeViewDialog();
     },
