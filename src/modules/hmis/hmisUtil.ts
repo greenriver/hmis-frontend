@@ -369,6 +369,24 @@ export const assessmentDescription = (
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {
+  if (e.probSolDivRrResult) {
+    if (e.probSolDivRrResult == NoYesMissing.Yes) {
+      return 'Client housed/re-housed in a safe alternative';
+    }
+    if (e.probSolDivRrResult == NoYesMissing.No) {
+      return 'Client not housed/re-housed';
+    }
+  }
+
+  if (e.referralCaseManageAfter) {
+    if (e.referralCaseManageAfter == NoYesMissing.Yes) {
+      return 'Client enrolled in aftercare project';
+    }
+    if (e.referralCaseManageAfter == NoYesMissing.No) {
+      return 'Client not enrolled in aftercare project';
+    }
+  }
+
   if (!e.referralResult) return null;
   const result = HmisEnums.ReferralResult[e.referralResult];
   if (e.resultDate) {

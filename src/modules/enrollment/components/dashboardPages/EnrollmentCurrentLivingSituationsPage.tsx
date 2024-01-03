@@ -1,14 +1,12 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
-import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import useViewDialog from '@/modules/form/hooks/useViewDialog';
+import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
   customDataElementValueAsString,
@@ -19,8 +17,6 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   CurrentLivingSituationFieldsFragment,
   DeleteCurrentLivingSituationDocument,
-  DeleteCurrentLivingSituationMutation,
-  DeleteCurrentLivingSituationMutationVariables,
   FormRole,
   GetEnrollmentCurrentLivingSituationsDocument,
   GetEnrollmentCurrentLivingSituationsQuery,
@@ -32,6 +28,7 @@ const baseColumns: ColumnDef<CurrentLivingSituationFieldsFragment>[] = [
     header: 'Information Date',
     width: '180px',
     render: (e) => parseAndFormatDate(e.informationDate),
+    linkTreatment: true,
   },
   {
     header: 'Living Situation',
@@ -54,16 +51,14 @@ const EnrollmentCurrentLivingSituationsPage = () => {
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
-  const [viewingRecord, setViewingRecord] = useState<
-    CurrentLivingSituationFieldsFragment | undefined
-  >();
-
-  const { openViewDialog, renderViewDialog, closeViewDialog } =
-    useViewDialog<CurrentLivingSituationFieldsFragment>({
-      record: viewingRecord,
-      onClose: () => setViewingRecord(undefined),
-      formRole: FormRole.CurrentLivingSituation,
+  const evictCache = useCallback(() => {
+    cache.evict({
+      id: `Enrollment:${enrollmentId}`,
+      fieldName: 'currentLivingSituations',
     });
+  }, [enrollmentId]);
+
+  const canEditCls = enrollment?.access?.canEditEnrollments || false;
 
   const localConstants = useMemo(
     () => ({
@@ -73,31 +68,18 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     [enrollment]
   );
 
-  const { openFormDialog, renderFormDialog, closeDialog } =
-    useFormDialog<CurrentLivingSituationFieldsFragment>({
-      formRole: FormRole.CurrentLivingSituation,
-      onCompleted: () => {
-        cache.evict({
-          id: `Enrollment:${enrollmentId}`,
-          fieldName: 'currentLivingSituations',
-        });
-        setViewingRecord(undefined);
-        closeViewDialog();
-      },
+  const { onSelectRecord, viewRecordDialog, editRecordDialog, openFormDialog } =
+    useViewEditRecordDialogs({
+      variant: canEditCls ? 'view_and_edit' : 'view_only',
       inputVariables: { enrollmentId },
-      record: viewingRecord,
+      formRole: FormRole.CurrentLivingSituation,
+      recordName: 'Current Living Situation',
+      evictCache,
+      deleteRecordDocument: DeleteCurrentLivingSituationDocument,
+      deleteRecordIdPath:
+        'deleteCurrentLivingSituation.currentLivingSituation.id',
       localConstants,
     });
-
-  const onSuccessfulDelete = useCallback(() => {
-    cache.evict({
-      id: `Enrollment:${enrollmentId}`,
-      fieldName: 'currentLivingSituations',
-    });
-    closeDialog();
-    closeViewDialog();
-    setViewingRecord(undefined);
-  }, [closeDialog, closeViewDialog, enrollmentId]);
 
   const getColumnDefs = useCallback(
     (rows: CurrentLivingSituationFieldsFragment[]) => {
@@ -122,7 +104,6 @@ const EnrollmentCurrentLivingSituationsPage = () => {
   );
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
-  const canEditCls = enrollment.access.canEditEnrollments;
 
   return (
     <>
@@ -153,46 +134,11 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           noData='No current living situations'
           recordType='CurrentLivingSituation'
           headerCellSx={() => ({ color: 'text.secondary' })}
-          handleRowClick={(record) => {
-            setViewingRecord(record);
-            openViewDialog();
-          }}
+          handleRowClick={onSelectRecord}
         />
       </TitleCard>
-      {renderViewDialog({
-        title: 'View Current Living Situation',
-        maxWidth: 'md',
-        actions: (
-          <>
-            {viewingRecord && canEditCls && (
-              <>
-                <Button variant='outlined' onClick={openFormDialog}>
-                  Edit
-                </Button>
-                <DeleteMutationButton<
-                  DeleteCurrentLivingSituationMutation,
-                  DeleteCurrentLivingSituationMutationVariables
-                >
-                  queryDocument={DeleteCurrentLivingSituationDocument}
-                  variables={{ id: viewingRecord.id }}
-                  idPath={
-                    'deleteCurrentLivingSituation.currentLivingSituation.id'
-                  }
-                  recordName='Current Living Situation'
-                  onSuccess={onSuccessfulDelete}
-                >
-                  Delete
-                </DeleteMutationButton>
-              </>
-            )}
-          </>
-        ),
-      })}
-      {renderFormDialog({
-        title: `${viewingRecord ? 'Update' : 'Add'} Current Living Situation`,
-        //md to accomodate radio buttons
-        DialogProps: { maxWidth: 'md' },
-      })}
+      {viewRecordDialog()}
+      {editRecordDialog()}
     </>
   );
 };

@@ -1,15 +1,14 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Paper } from '@mui/material';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
-import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
@@ -17,8 +16,6 @@ import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteHmisParticipationDocument,
-  DeleteHmisParticipationMutation,
-  DeleteHmisParticipationMutationVariables,
   FormRole,
   GetProjectHmisParticipationsDocument,
   HmisParticipationFieldsFragment,
@@ -50,9 +47,6 @@ const columns: ColumnDef<HmisParticipationFieldsFragment>[] = [
 
 const HmisParticipations = () => {
   const { project } = useProjectDashboardContext();
-  const [viewingRecord, setViewingRecord] = useState<
-    HmisParticipationFieldsFragment | undefined
-  >();
 
   const localConstants = useMemo(
     () => ({
@@ -62,31 +56,25 @@ const HmisParticipations = () => {
     [project]
   );
 
-  const { openFormDialog, renderFormDialog, closeDialog } =
-    useFormDialog<HmisParticipationFieldsFragment>({
-      formRole: FormRole.HmisParticipation,
-      onCompleted: () => {
-        cache.evict({
-          id: `Project:${project.id}`,
-          fieldName: 'hmisParticipations',
-        });
-        setViewingRecord(undefined);
-      },
-      onClose: () => setViewingRecord(undefined),
-      inputVariables: { projectId: project.id },
-      record: viewingRecord,
-      localConstants,
-    });
-
-  const onSuccessfulDelete = useCallback(() => {
+  const evictCache = useCallback(() => {
     cache.evict({
       id: `Project:${project.id}`,
       fieldName: 'hmisParticipations',
     });
-    setViewingRecord(undefined);
-    closeDialog();
-    setViewingRecord(undefined);
-  }, [closeDialog, project]);
+  }, [project.id]);
+
+  const { onSelectRecord, editRecordDialog, openFormDialog } =
+    useViewEditRecordDialogs({
+      variant: project.access.canEditProjectDetails ? 'edit_only' : 'view_only',
+      inputVariables: { projectId: project.id },
+      formRole: FormRole.HmisParticipation,
+      recordName: 'HMIS Participation',
+      evictCache,
+      deleteRecordDocument: DeleteHmisParticipationDocument,
+      deleteRecordIdPath: 'deleteHmisParticipation.hmisParticipation.id',
+      maxWidth: 'sm',
+      localConstants,
+    });
 
   return (
     <>
@@ -113,34 +101,11 @@ const HmisParticipations = () => {
           noData='No HMIS Participation records'
           recordType='HmisParticipation'
           handleRowClick={
-            project.access.canEditProjectDetails
-              ? (record) => {
-                  setViewingRecord(record);
-                  openFormDialog();
-                }
-              : undefined
+            project.access.canEditProjectDetails ? onSelectRecord : undefined
           }
         />
       </Paper>
-      {project.access.canEditProjectDetails &&
-        renderFormDialog({
-          title: `${viewingRecord ? 'Update' : 'Add'} HMIS Participation`,
-
-          otherActions: viewingRecord ? (
-            <DeleteMutationButton<
-              DeleteHmisParticipationMutation,
-              DeleteHmisParticipationMutationVariables
-            >
-              queryDocument={DeleteHmisParticipationDocument}
-              variables={{ input: { id: viewingRecord.id } }}
-              idPath={'deleteHmisParticipation.hmisParticipation.id'}
-              recordName='HMIS Participation Record'
-              onSuccess={onSuccessfulDelete}
-            >
-              Delete
-            </DeleteMutationButton>
-          ) : null,
-        })}
+      {editRecordDialog()}
     </>
   );
 };

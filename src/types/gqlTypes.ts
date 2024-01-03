@@ -3457,6 +3457,10 @@ export type MergeAuditEvent = {
   user?: Maybe<ApplicationUser>;
 };
 
+export type MergeAuditEventFilterOptions = {
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 export type MergeAuditEventsPaginated = {
   __typename?: 'MergeAuditEventsPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -5195,6 +5199,7 @@ export type QueryInventoryArgs = {
 };
 
 export type QueryMergeAuditHistoryArgs = {
+  filters?: InputMaybe<MergeAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -13637,6 +13642,51 @@ export type DeleteCustomCaseNoteMutation = {
       section?: string | null;
       data?: any | null;
     }>;
+  } | null;
+};
+
+export type GetClientCaseNotesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CustomCaseNoteSortOption>;
+}>;
+
+export type GetClientCaseNotesQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    customCaseNotes: {
+      __typename?: 'CustomCaseNotesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CustomCaseNote';
+        id: string;
+        content: string;
+        informationDate?: string | null;
+        dateUpdated?: string | null;
+        dateCreated?: string | null;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          lockVersion: number;
+          projectName: string;
+          projectType?: ProjectType | null;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+        };
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }>;
+    };
   } | null;
 };
 
@@ -25437,7 +25487,7 @@ export type DeleteProjectCocMutation = {
 };
 
 export type DeleteHmisParticipationMutationVariables = Exact<{
-  input: DeleteHmisParticipationInput;
+  id: Scalars['ID']['input'];
 }>;
 
 export type DeleteHmisParticipationMutation = {
@@ -25463,7 +25513,7 @@ export type DeleteHmisParticipationMutation = {
 };
 
 export type DeleteCeParticipationMutationVariables = Exact<{
-  input: DeleteCeParticipationInput;
+  id: Scalars['ID']['input'];
 }>;
 
 export type DeleteCeParticipationMutation = {
@@ -32212,6 +32262,90 @@ export type DeleteCustomCaseNoteMutationOptions = Apollo.BaseMutationOptions<
   DeleteCustomCaseNoteMutation,
   DeleteCustomCaseNoteMutationVariables
 >;
+export const GetClientCaseNotesDocument = gql`
+  query GetClientCaseNotes(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $sortOrder: CustomCaseNoteSortOption
+  ) {
+    client(id: $id) {
+      id
+      customCaseNotes(limit: $limit, offset: $offset, sortOrder: $sortOrder) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CustomCaseNoteFields
+          enrollment {
+            id
+            lockVersion
+            projectName
+            projectType
+            entryDate
+            exitDate
+            inProgress
+          }
+        }
+      }
+    }
+  }
+  ${CustomCaseNoteFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientCaseNotesQuery__
+ *
+ * To run a query within a React component, call `useGetClientCaseNotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientCaseNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientCaseNotesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useGetClientCaseNotesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientCaseNotesQuery,
+    GetClientCaseNotesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientCaseNotesQuery,
+    GetClientCaseNotesQueryVariables
+  >(GetClientCaseNotesDocument, options);
+}
+export function useGetClientCaseNotesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientCaseNotesQuery,
+    GetClientCaseNotesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientCaseNotesQuery,
+    GetClientCaseNotesQueryVariables
+  >(GetClientCaseNotesDocument, options);
+}
+export type GetClientCaseNotesQueryHookResult = ReturnType<
+  typeof useGetClientCaseNotesQuery
+>;
+export type GetClientCaseNotesLazyQueryHookResult = ReturnType<
+  typeof useGetClientCaseNotesLazyQuery
+>;
+export type GetClientCaseNotesQueryResult = Apollo.QueryResult<
+  GetClientCaseNotesQuery,
+  GetClientCaseNotesQueryVariables
+>;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
     enrollment(id: $id) {
@@ -35907,8 +36041,8 @@ export type DeleteProjectCocMutationOptions = Apollo.BaseMutationOptions<
   DeleteProjectCocMutationVariables
 >;
 export const DeleteHmisParticipationDocument = gql`
-  mutation DeleteHmisParticipation($input: DeleteHmisParticipationInput!) {
-    deleteHmisParticipation(input: $input) {
+  mutation DeleteHmisParticipation($id: ID!) {
+    deleteHmisParticipation(input: { id: $id }) {
       hmisParticipation {
         id
       }
@@ -35937,7 +36071,7 @@ export type DeleteHmisParticipationMutationFn = Apollo.MutationFunction<
  * @example
  * const [deleteHmisParticipationMutation, { data, loading, error }] = useDeleteHmisParticipationMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -35963,8 +36097,8 @@ export type DeleteHmisParticipationMutationOptions = Apollo.BaseMutationOptions<
   DeleteHmisParticipationMutationVariables
 >;
 export const DeleteCeParticipationDocument = gql`
-  mutation DeleteCeParticipation($input: DeleteCeParticipationInput!) {
-    deleteCeParticipation(input: $input) {
+  mutation DeleteCeParticipation($id: ID!) {
+    deleteCeParticipation(input: { id: $id }) {
       ceParticipation {
         id
       }
@@ -35993,7 +36127,7 @@ export type DeleteCeParticipationMutationFn = Apollo.MutationFunction<
  * @example
  * const [deleteCeParticipationMutation, { data, loading, error }] = useDeleteCeParticipationMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      id: // value for 'id'
  *   },
  * });
  */

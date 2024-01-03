@@ -51,16 +51,17 @@ import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
+import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
+import EnrollmentCaseNotesPage from '@/modules/caseNotes/EnrollmentCaseNotesPage';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
 import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
 import NewClientMerge from '@/modules/clientMerge/components/client/NewClientMerge';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
+import EnrollmentCeEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeEventsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
-import EnrollmentCustomCaseNotesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCustomCaseNotesPage';
 import EnrollmentEsgFundingReport from '@/modules/enrollment/components/dashboardPages/EnrollmentEsgFundingReport';
-import EnrollmentEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentEventsPage';
 import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/EnrollmentOverview';
 import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
@@ -397,7 +398,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: EnrollmentDashboardRoutes.EVENTS,
             // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentEventsPage />,
+            element: <EnrollmentCeEventsPage />,
           },
           {
             path: EnrollmentDashboardRoutes.AUDIT_HISTORY,
@@ -418,7 +419,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
             // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCustomCaseNotesPage />,
+            element: <EnrollmentCaseNotesPage />,
           },
           {
             path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
@@ -476,6 +477,17 @@ export const protectedRoutes: RouteNode[] = [
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientEnrollments />
+              </ClientRoute>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.CASE_NOTES,
+            element: (
+              <ClientRoute
+                permissions='canViewEnrollmentDetails'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <ClientCaseNotes />
               </ClientRoute>
             ),
           },
