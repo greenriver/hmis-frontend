@@ -3457,6 +3457,10 @@ export type MergeAuditEvent = {
   user?: Maybe<ApplicationUser>;
 };
 
+export type MergeAuditEventFilterOptions = {
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 export type MergeAuditEventsPaginated = {
   __typename?: 'MergeAuditEventsPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -5195,6 +5199,7 @@ export type QueryInventoryArgs = {
 };
 
 export type QueryMergeAuditHistoryArgs = {
+  filters?: InputMaybe<MergeAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
