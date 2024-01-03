@@ -3457,6 +3457,10 @@ export type MergeAuditEvent = {
   user?: Maybe<ApplicationUser>;
 };
 
+export type MergeAuditEventFilterOptions = {
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 export type MergeAuditEventsPaginated = {
   __typename?: 'MergeAuditEventsPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -5195,6 +5199,7 @@ export type QueryInventoryArgs = {
 };
 
 export type QueryMergeAuditHistoryArgs = {
+  filters?: InputMaybe<MergeAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -12872,6 +12877,7 @@ export type ClientMergeHistoryQuery = {
 export type GlobalClientMergeHistoryQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<MergeAuditEventFilterOptions>;
 }>;
 
 export type GlobalClientMergeHistoryQuery = {
@@ -31497,8 +31503,12 @@ export type ClientMergeHistoryQueryResult = Apollo.QueryResult<
   ClientMergeHistoryQueryVariables
 >;
 export const GlobalClientMergeHistoryDocument = gql`
-  query GlobalClientMergeHistory($limit: Int, $offset: Int) {
-    mergeAuditHistory(limit: $limit, offset: $offset) {
+  query GlobalClientMergeHistory(
+    $limit: Int
+    $offset: Int
+    $filters: MergeAuditEventFilterOptions
+  ) {
+    mergeAuditHistory(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount
@@ -31528,6 +31538,7 @@ export const GlobalClientMergeHistoryDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
