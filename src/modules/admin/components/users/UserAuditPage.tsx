@@ -3,6 +3,7 @@ import { Box, Paper, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
+import LabelWithContent from '@/components/elements/LabelWithContent';
 import Loading from '@/components/elements/Loading';
 import {
   ClientIcon,
@@ -15,6 +16,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import ClientAccessSummaryTable from '@/modules/admin/components/users/ClientAccessSummaryTable';
 import EnrollmentAccessSummaryTable from '@/modules/admin/components/users/EnrollmentAccessSummaryTable';
 import { useUser } from '@/modules/dataFetching/hooks/useUser';
+import ClientTextSearchInput from '@/modules/search/components/ClientTextSearchInput';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -75,30 +77,33 @@ const UserAuditPage: React.FC<Props> = ({ entityType }) => {
     <>
       <PageTitle title={`Access History for ${user.name}`} />
       <Paper>
-        <Box mt={2} px={2}>
+        <Box my={2} px={2}>
           <Typography variant='subtitle1' sx={{ mb: 2 }}>
             {`Data on this page may be delayed by up to an hour. Recent user activity may not be immediately visible.`}
           </Typography>
-          <Typography sx={{ fontWeight: 600, mb: 0.5 }}>
-            View user access by
-          </Typography>
-          <CommonToggle
-            sx={{ mb: 3 }}
-            value={entityType}
-            onChange={handleTabChange}
-            items={toggleItems}
-            size='small'
-            variant='gray'
+          <LabelWithContent
+            label='View access by'
+            labelId='access-type-label'
+            renderChildren={(labelElement) => (
+              <CommonToggle
+                sx={{ mb: 3 }}
+                value={entityType}
+                onChange={handleTabChange}
+                items={toggleItems}
+                size='small'
+                variant='gray'
+                aria-labelledby={
+                  (labelElement && labelElement.getAttribute('id')) || undefined
+                }
+              />
+            )}
           />
           {entityType == 'clients' && (
-            <CommonSearchInput
+            <ClientTextSearchInput
               label='Search client access'
-              name='searchClients'
-              placeholder='Search by client name/ID'
               value={search}
               onChange={setSearch}
-              fullWidth
-              size='medium'
+              helperText={null}
               searchAdornment
             />
           )}
@@ -106,11 +111,10 @@ const UserAuditPage: React.FC<Props> = ({ entityType }) => {
             <CommonSearchInput
               label='Search enrollment access'
               name='searchEnrollments'
-              placeholder='Search by enrollment name/ID, client name/ID'
+              placeholder='Search by name, DOB, SSN, Personal ID, MCI ID, or Enrollment ID'
               value={search}
               onChange={setSearch}
               fullWidth
-              size='medium'
               searchAdornment
             />
           )}
