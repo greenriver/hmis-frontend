@@ -28,8 +28,12 @@ query ClientMergeHistory($clientId: ID!, $limit: Int, $offset: Int) {
   }
 }
 
-query GlobalClientMergeHistory($limit: Int, $offset: Int) {
-  mergeAuditHistory(limit: $limit, offset: $offset) {
+query GlobalClientMergeHistory(
+  $limit: Int
+  $offset: Int
+  $filters: MergeAuditEventFilterOptions
+) {
+  mergeAuditHistory(limit: $limit, offset: $offset, filters: $filters) {
     offset
     limit
     nodesCount
