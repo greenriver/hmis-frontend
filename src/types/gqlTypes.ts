@@ -926,6 +926,27 @@ export enum CmExitReason {
   VeteranTooIllToParticipateAtThisTime = 'VETERAN_TOO_ILL_TO_PARTICIPATE_AT_THIS_TIME',
 }
 
+export enum CompleteDisabilityResponse {
+  /** Alcohol use disorder */
+  AlcoholUseDisorder = 'ALCOHOL_USE_DISORDER',
+  /** Both alcohol and drug use disorders */
+  BothAlcoholAndDrugUseDisorders = 'BOTH_ALCOHOL_AND_DRUG_USE_DISORDERS',
+  /** Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
+  /** Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Drug use disorder */
+  DrugUseDisorder = 'DRUG_USE_DISORDER',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** No */
+  No = 'NO',
+  /** Yes */
+  Yes = 'YES',
+}
+
 export enum Component {
   /** Client Address input */
   Address = 'ADDRESS',
@@ -1766,7 +1787,7 @@ export type Disability = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  disabilityResponse: DisabilityResponse;
+  disabilityResponse: CompleteDisabilityResponse;
   disabilityType: DisabilityType;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
