@@ -6484,6 +6484,23 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'MergeAuditEventFilterOptions',
+    args: [
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'MergeClientsInput',
     args: [
       {
