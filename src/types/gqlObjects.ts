@@ -1411,7 +1411,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'ENUM', name: 'DisabilityResponse', ofType: null },
+          ofType: {
+            kind: 'ENUM',
+            name: 'CompleteDisabilityResponse',
+            ofType: null,
+          },
         },
       },
       {
@@ -6382,6 +6386,23 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
+    name: 'MergeAuditEventFilterOptions',
+    args: [
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
     ],
   },
   {
