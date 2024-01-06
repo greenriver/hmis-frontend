@@ -48,6 +48,17 @@ query GetClientImage($id: ID!) {
     ...ClientImage
   }
 }
+query GetClientAssessmentEligibilities($clientId: ID!, $enrollmentId: ID!) {
+  client(id: $clientId) {
+    id
+    assessmentEligibilities(enrollmentId: $enrollmentId) {
+      id
+      title
+      formDefinitionId
+      role
+    }
+  }
+}
 
 query GetClientEnrollments(
   $id: ID!

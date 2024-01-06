@@ -215,6 +215,14 @@ export type AssessmentAccess = {
   id: Scalars['ID']['output'];
 };
 
+export type AssessmentEligibility = {
+  __typename?: 'AssessmentEligibility';
+  formDefinitionId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  role: AssessmentRole;
+  title: Scalars['String']['output'];
+};
+
 export type AssessmentFilterOptions = {
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
@@ -497,6 +505,7 @@ export type Client = {
   addresses: Array<ClientAddress>;
   afghanistanOef?: Maybe<NoYesReasonsForMissingData>;
   age?: Maybe<Scalars['Int']['output']>;
+  assessmentEligibilities: Array<AssessmentEligibility>;
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
@@ -550,6 +559,11 @@ export type Client = {
   yearEnteredService?: Maybe<Scalars['Int']['output']>;
   yearSeparated?: Maybe<Scalars['Int']['output']>;
   youthEducationStatuses: YouthEducationStatusesPaginated;
+};
+
+/** HUD Client */
+export type ClientAssessmentEligibilitiesArgs = {
+  enrollmentId: Scalars['ID']['input'];
 };
 
 /** HUD Client */
@@ -12281,6 +12295,26 @@ export type GetClientImageQuery = {
       contentType: string;
       base64: string;
     } | null;
+  } | null;
+};
+
+export type GetClientAssessmentEligibilitiesQueryVariables = Exact<{
+  clientId: Scalars['ID']['input'];
+  enrollmentId: Scalars['ID']['input'];
+}>;
+
+export type GetClientAssessmentEligibilitiesQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    assessmentEligibilities: Array<{
+      __typename?: 'AssessmentEligibility';
+      id: string;
+      title: string;
+      formDefinitionId: string;
+      role: AssessmentRole;
+    }>;
   } | null;
 };
 
@@ -30775,6 +30809,71 @@ export type GetClientImageLazyQueryHookResult = ReturnType<
 export type GetClientImageQueryResult = Apollo.QueryResult<
   GetClientImageQuery,
   GetClientImageQueryVariables
+>;
+export const GetClientAssessmentEligibilitiesDocument = gql`
+  query GetClientAssessmentEligibilities($clientId: ID!, $enrollmentId: ID!) {
+    client(id: $clientId) {
+      id
+      assessmentEligibilities(enrollmentId: $enrollmentId) {
+        id
+        title
+        formDefinitionId
+        role
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetClientAssessmentEligibilitiesQuery__
+ *
+ * To run a query within a React component, call `useGetClientAssessmentEligibilitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientAssessmentEligibilitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientAssessmentEligibilitiesQuery({
+ *   variables: {
+ *      clientId: // value for 'clientId'
+ *      enrollmentId: // value for 'enrollmentId'
+ *   },
+ * });
+ */
+export function useGetClientAssessmentEligibilitiesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientAssessmentEligibilitiesQuery,
+    GetClientAssessmentEligibilitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientAssessmentEligibilitiesQuery,
+    GetClientAssessmentEligibilitiesQueryVariables
+  >(GetClientAssessmentEligibilitiesDocument, options);
+}
+export function useGetClientAssessmentEligibilitiesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientAssessmentEligibilitiesQuery,
+    GetClientAssessmentEligibilitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientAssessmentEligibilitiesQuery,
+    GetClientAssessmentEligibilitiesQueryVariables
+  >(GetClientAssessmentEligibilitiesDocument, options);
+}
+export type GetClientAssessmentEligibilitiesQueryHookResult = ReturnType<
+  typeof useGetClientAssessmentEligibilitiesQuery
+>;
+export type GetClientAssessmentEligibilitiesLazyQueryHookResult = ReturnType<
+  typeof useGetClientAssessmentEligibilitiesLazyQuery
+>;
+export type GetClientAssessmentEligibilitiesQueryResult = Apollo.QueryResult<
+  GetClientAssessmentEligibilitiesQuery,
+  GetClientAssessmentEligibilitiesQueryVariables
 >;
 export const GetClientEnrollmentsDocument = gql`
   query GetClientEnrollments(
