@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { compact, filter, omit } from 'lodash-es';
+import { compact, filter } from 'lodash-es';
 import AuditObjectChangesSummary, {
   ObjectChangesType,
 } from './AuditObjectChangesSummary';
@@ -18,7 +18,7 @@ import {
   formatDateTimeForDisplay,
 } from '@/modules/hmis/hmisUtil';
 import {
-  BaseAuditEventFilterOptions,
+  ClientAuditEventFilterOptions,
   GetClientAuditEventsDocument,
   GetClientAuditEventsQuery,
   GetClientAuditEventsQueryVariables,
@@ -105,7 +105,7 @@ const ClientAuditHistory = () => {
           GetClientAuditEventsQuery,
           GetClientAuditEventsQueryVariables,
           AuditHistoryType,
-          BaseAuditEventFilterOptions
+          ClientAuditEventFilterOptions
         >
           columns={columns}
           fetchPolicy='cache-and-network'
@@ -121,9 +121,8 @@ const ClientAuditHistory = () => {
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
           // FIXME: Record dropdown is non specific to Clients
-          filters={(filters) => omit(filters, 'auditEventRecordType')}
           recordType='ClientAuditEvent'
-          filterInputType='BaseAuditEventFilterOptions'
+          filterInputType='ClientAuditEventFilterOptions'
           showFilters
         />
       </Paper>
