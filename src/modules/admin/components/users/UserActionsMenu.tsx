@@ -23,7 +23,7 @@ const UserActionsMenu: React.FC<Props> = ({
       items.push({
         key: 'audit',
         title: 'Audit User',
-        to: generateSafePath(AdminDashboardRoutes.USER_AUDIT, {
+        to: generateSafePath(AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY, {
           userId,
         }),
       });

@@ -8,7 +8,7 @@ import {
   ToggleButtonGroupProps,
 } from '@mui/material';
 
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { useCallback } from 'react';
 
 type SupportedValue = string;
 
@@ -24,7 +24,7 @@ export interface ToggleItem<T> {
 export interface CommonToggleProps<T>
   extends Omit<ToggleButtonGroupProps, 'onChange' | 'value'> {
   value: T;
-  onChange: Dispatch<SetStateAction<T>>;
+  onChange: (value: T) => void;
   items: ToggleItem<T>[];
   variant?: CommonToggleVariant;
   label?: string;
