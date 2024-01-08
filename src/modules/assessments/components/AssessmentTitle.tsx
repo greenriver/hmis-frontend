@@ -30,7 +30,7 @@ const AssessmentTitle = ({
   householdSize,
 }: AssessmentTitleProps) => {
   // const hhAssessments = useHouseholdAssessments(role, householdId, assessmentId)
-  const isAnnual = assessmentRole == AssessmentRole.Annual;
+  const isAnnual = assessmentRole === AssessmentRole.Annual;
   const skipQuery = !isAnnual || householdSize === 1 || embeddedInWorkflow;
   const { assessmentInfo, loading } = useRelatedAnnualAssessments({
     householdId: householdId || '',

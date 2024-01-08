@@ -21,7 +21,7 @@ const PhoneInputGroup = ({
   onChange: (value: PhoneInputType) => void;
 }) => {
   const typeValue = useMemo(
-    () => contactUsePicklist.find((o) => o.code == value.use) || null,
+    () => contactUsePicklist.find((o) => o.code === value.use) || null,
     [value]
   );
 

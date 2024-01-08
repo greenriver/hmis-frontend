@@ -108,7 +108,7 @@ const AllProjects = () => {
 
   return (
     <PageContainer
-      title={viewMode == 'projects' ? 'Projects' : 'Organizations'}
+      title={viewMode === 'projects' ? 'Projects' : 'Organizations'}
       actions={
         <CommonToggle
           value={viewMode}
@@ -118,7 +118,7 @@ const AllProjects = () => {
       }
     >
       <Grid container spacing={2}>
-        {viewMode == 'projects' && (
+        {viewMode === 'projects' && (
           <Grid item xs={12}>
             <CommonSearchInput
               label='Search Projects'
@@ -132,7 +132,7 @@ const AllProjects = () => {
             />
           </Grid>
         )}
-        {viewMode == 'organizations' && (
+        {viewMode === 'organizations' && (
           <RootPermissionsFilter permissions={['canEditOrganization']}>
             <Grid item xs={12}>
               <ButtonLink
@@ -148,7 +148,7 @@ const AllProjects = () => {
         )}
         <Grid item xs={12}>
           <Paper data-testid='allProjectsTable'>
-            {viewMode == 'projects' ? (
+            {viewMode === 'projects' ? (
               <GenericTableWithData<
                 GetProjectsQuery,
                 GetProjectsQueryVariables,

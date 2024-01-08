@@ -147,7 +147,7 @@ const MciMatchSelector = ({
           >
             <Switch
               inputProps={{ 'aria-label': 'controlled' }}
-              checked={value == m.mciId}
+              checked={value === m.mciId}
               onChange={handleChange(m.mciId)}
               disabled={autocleared || alreadyInHmis}
             />
@@ -197,9 +197,9 @@ const MciMatchSelector = ({
                 <TableCell>
                   <Switch
                     inputProps={{ 'aria-label': 'controlled' }}
-                    checked={value == NEW_MCI_STRING}
+                    checked={value === NEW_MCI_STRING}
                     onChange={handleChange(NEW_MCI_STRING)}
-                    disabled={value == NEW_MCI_STRING && matches.length === 0}
+                    disabled={value === NEW_MCI_STRING && matches.length === 0}
                   />
                 </TableCell>
                 <TableCell colSpan={2} sx={{ py: 3 }}>
@@ -211,7 +211,7 @@ const MciMatchSelector = ({
                 <TableCell>
                   <Switch
                     inputProps={{ 'aria-label': 'controlled' }}
-                    checked={value == UNCLEARED_CLIENT_STRING}
+                    checked={value === UNCLEARED_CLIENT_STRING}
                     onChange={handleChange(UNCLEARED_CLIENT_STRING)}
                   />
                 </TableCell>

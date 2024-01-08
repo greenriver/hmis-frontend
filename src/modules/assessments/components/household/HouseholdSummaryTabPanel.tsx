@@ -173,10 +173,10 @@ const HouseholdSummaryTabPanel = memo(
             <Typography variant='h4' sx={{ mb: 2 }}>
               Complete {assessmentPrefix(role)} {projectName}
             </Typography>
-            {role == AssessmentRole.Exit && (
+            {role === AssessmentRole.Exit && (
               <HouseholdSummaryExitHelpCard tabs={tabs} />
             )}
-            {role == AssessmentRole.Intake && (
+            {role === AssessmentRole.Intake && (
               <HouseholdSummaryIntakeHelpCard tabs={tabs} />
             )}
             <ApolloErrorAlert error={errorState.apolloError} />

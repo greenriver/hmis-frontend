@@ -44,18 +44,6 @@ const columns: ColumnDef<FunderFieldsFragment>[] = [
   HudRecordMetadataHistoryColumn,
 ];
 
-// interface Props
-//   extends Omit<
-//     GenericTableWithDataProps<
-//       GetProjectFundersQuery,
-//       GetProjectFundersQueryVariables,
-//       FunderFieldsFragment
-//     >,
-//     'queryVariables' | 'queryDocument' | 'pagePath'
-//   > {
-//   projectId: string;
-// }
-
 const FunderTable = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;

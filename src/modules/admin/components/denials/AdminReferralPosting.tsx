@@ -62,7 +62,7 @@ const AdminReferralPosting: React.FC = () => {
                 <AdminReferralPostingForm
                   referralPosting={referralPosting}
                   readOnly={
-                    referralPosting.status !=
+                    referralPosting.status !==
                     ReferralPostingStatus.DeniedPendingStatus
                   }
                 />

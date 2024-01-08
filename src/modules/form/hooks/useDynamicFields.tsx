@@ -64,7 +64,7 @@ const useDynamicFields = ({
 
     // Retain disabled fields that are displayed with a value
     const hiddenLinkids = disabledLinkIds.filter(
-      (id) => itemMap[id].disabledDisplay != DisabledDisplay.ProtectedWithValue
+      (id) => itemMap[id].disabledDisplay !== DisabledDisplay.ProtectedWithValue
     );
     const excluded = addDescendants(hiddenLinkids, definition);
     // Drop "hidden" fields and their children
