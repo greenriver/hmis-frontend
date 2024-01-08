@@ -107,7 +107,7 @@ const MciClearance = ({
         const matches = data.clearMci?.matches || [];
 
         let status: ClearanceStatus;
-        if (matches.length == 0) {
+        if (matches.length === 0) {
           status = 'no_matches';
         } else if (matches[0].score >= 97) {
           status = 'auto_cleared';
@@ -119,11 +119,11 @@ const MciClearance = ({
 
         setState({ status, candidates: matches });
         // If auto-cleared, automatically select the match
-        if (status == 'auto_cleared') {
+        if (status === 'auto_cleared') {
           onChange(matches[0].mciId);
         }
         // If no matches, automatically select "new mci id"
-        if (status == 'no_matches') {
+        if (status === 'no_matches') {
           onChange(NEW_MCI_STRING);
         }
         setErrorState(emptyErrorState);
@@ -218,7 +218,7 @@ const MciClearance = ({
           value={value}
           onChange={onChange}
           matches={candidates}
-          autocleared={status == 'auto_cleared'}
+          autocleared={status === 'auto_cleared'}
           // Only allow them to link a duplicate if this client has already been saved.
           allowSelectingExistingClient={existingClient}
         />

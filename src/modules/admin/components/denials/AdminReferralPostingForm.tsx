@@ -29,7 +29,7 @@ const AdminReferralPostingForm: React.FC<Props> = ({
     // the status is denied pending status but we don't allow this option in the form. Set it to null instead
     return {
       ...record,
-      status: record.status == 'denied_pending_status' ? null : record.status,
+      status: record.status === 'denied_pending_status' ? null : record.status,
     };
   }, [props.referralPosting]);
 

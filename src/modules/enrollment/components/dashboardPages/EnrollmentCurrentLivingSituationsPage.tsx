@@ -90,7 +90,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           key: cde.key,
           render: (row: CurrentLivingSituationFieldsFragment) => {
             const thisCde = row.customDataElements.find(
-              (elem) => elem.key == cde.key
+              (elem) => elem.key === cde.key
             );
             if (!thisCde) return null;
             return customDataElementValueAsString(thisCde);

@@ -22,7 +22,7 @@ const NameInput = ({
   radioElement?: ReactNode;
 }) => {
   const dqValue = useMemo(
-    () => nameDqPickList.find((o) => o.code == value.nameDataQuality) || null,
+    () => nameDqPickList.find((o) => o.code === value.nameDataQuality) || null,
     [value]
   );
 
