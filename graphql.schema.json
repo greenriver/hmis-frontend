@@ -31824,6 +31824,30 @@
             "deprecationReason": null
           },
           {
+            "name": "enabledFeatures",
+            "description": "Data collection features that are enabled for ANY project (e.g. Current Living Situations, Events, Case Notes)",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "DataCollectionFeatureRole",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "enrollment",
             "description": "Enrollment lookup",
             "args": [

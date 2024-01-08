@@ -2,16 +2,22 @@ import { useMemo } from 'react';
 
 import { NavItem } from '../../../components/layout/dashboard/sideNav/types';
 
+import { useGlobalFeatureList } from '@/modules/dataFetching/hooks/useGlobalFeatureList';
 import {
   useClientPermissions,
   useRootPermissions,
 } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
-import { ClientAccessFieldsFragment } from '@/types/gqlTypes';
+import {
+  ClientAccessFieldsFragment,
+  DataCollectionFeatureRole,
+} from '@/types/gqlTypes';
 
 export const useClientDashboardNavItems = (clientId: string) => {
   const [rootAccess] = useRootPermissions();
   const [clientAccess] = useClientPermissions(clientId);
+
+  const { enabledFeatures } = useGlobalFeatureList();
 
   // TODO: move this logic to the backend and resolve it on ClientAccess
   const canViewFiles =
@@ -55,12 +61,13 @@ export const useClientDashboardNavItems = (clientId: string) => {
             path: ClientDashboardRoutes.FILES,
             hide: !canViewFiles,
           },
-          // TODO: only show if Case Notes feature is enabled for any project globally
-          // {
-          //   id: 'case-notes',
-          //   title: 'Case Notes',
-          //   path: ClientDashboardRoutes.CASE_NOTES,
-          // },
+          {
+            id: 'case-notes',
+            title: 'Case Notes',
+            path: ClientDashboardRoutes.CASE_NOTES,
+            // Only show if the Case Notes feature is enabled for any project globally
+            hide: !enabledFeatures.includes(DataCollectionFeatureRole.CaseNote),
+          },
         ],
       },
       {
