@@ -48,6 +48,8 @@ fragment ClientAccessFields on ClientAccess {
   canManageOwnClientFiles
   canViewAnyConfidentialClientFiles
   canViewAnyNonconfidentialClientFiles
+  canUploadClientFiles
+  canViewAnyFiles
   canAuditClients
 }
 

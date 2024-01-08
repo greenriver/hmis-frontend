@@ -124,6 +124,7 @@ fragment ClientIdentificationFields on Client {
   dob
   age
   ssn
+  gender
   access {
     id
     canViewFullSsn
@@ -168,18 +169,4 @@ fragment ClientOmniSearchFields on Client {
   gender
   personalId
   ...ClientName
-}
-
-fragment ClientAuditEventFields on ClientAuditEvent {
-  id
-  createdAt
-  event
-  objectChanges
-  recordName
-  graphqlType
-  recordId
-  user {
-    id
-    name
-  }
 }

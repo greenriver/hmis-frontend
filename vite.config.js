@@ -3,12 +3,14 @@ import { resolve } from 'path';
 
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react';
-// import { visualizer } from 'rollup-plugin-visualizer';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
+
 import mkcert from 'vite-plugin-mkcert';
 
 dns.setDefaultResultOrder('ipv4first');
 
+const VISUALIZER = false; // enable to generate bundle visualization on build
 const DEFAULT_WAREHOUSE_SERVER = 'https://hmis-warehouse.dev.test';
 
 // https://github.com/vitejs/vite/issues/2433#issuecomment-1487472995
@@ -81,11 +83,18 @@ export default defineConfig(({ command, mode }) => {
     build: {
       rollupOptions: {
         plugins: [
-          // visualizer({ filename: 'bundle_analysis.html' })
+          VISUALIZER && visualizer({ filename: 'bundle_analysis.html' }),
         ],
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+          },
+        },
       },
       sourcemap: true,
-      minify: mode === 'development' ? false : true,
+      minify: mode === 'development' ? false : 'esbuild',
     },
     ...(command !== 'build' && {
       preview: {

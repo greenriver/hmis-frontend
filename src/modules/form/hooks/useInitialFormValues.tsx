@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { ItemMap, LocalConstants, SubmitFormAllowedTypes } from '../types';
+import { ItemMap, LocalConstants } from '../types';
 import {
   AlwaysPresentLocalConstants,
   createInitialValuesFromRecord,
@@ -11,7 +11,7 @@ import {
 import { FormDefinitionJsonFieldsFragment } from '@/types/gqlTypes';
 
 interface Args {
-  record?: SubmitFormAllowedTypes | null;
+  record?: Record<string, any> | null;
   itemMap?: ItemMap;
   definition?: FormDefinitionJsonFieldsFragment;
   localConstants?: LocalConstants;

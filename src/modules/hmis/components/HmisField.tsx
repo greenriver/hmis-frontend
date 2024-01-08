@@ -29,17 +29,10 @@ const getType = (type: GqlSchemaType): GqlSchemaType['name'] => {
 
 const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
   if (!type) return value;
+
   if (isHmisEnum(type)) {
     const enumMap = HmisEnums[type];
-    if (
-      [
-        'NoYesMissing',
-        'NoYesReasonsForMissingData',
-        'DisabilityResponse',
-      ].includes(type)
-    ) {
-      return <YesNoDisplay enumValue={value} />;
-    }
+
     return Array.isArray(value) ? (
       <MultiHmisEnum values={value} enumMap={enumMap} />
     ) : (

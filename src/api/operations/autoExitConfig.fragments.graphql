@@ -1,0 +1,15 @@
+fragment AutoExitConfigFields on AutoExitConfig {
+  id
+  lengthOfAbsenceDays
+  organizationId
+  organization {
+    id
+    organizationName
+  }
+  projectId
+  project {
+    id
+    projectName
+  }
+  projectType
+}

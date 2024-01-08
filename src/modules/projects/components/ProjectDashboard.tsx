@@ -40,6 +40,7 @@ const ProjectNavHeader = ({
           <HmisEnum
             value={project.projectType}
             enumMap={HmisEnums.ProjectType}
+            noData='N/A'
           />
         </CommonLabeledTextBlock>
         <CommonLabeledTextBlock title='Organization'>

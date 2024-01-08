@@ -62,8 +62,8 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
     items: [
       {
         id: 'forms',
-        title: 'Form Rules',
-        path: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
+        title: 'Forms',
+        path: AdminDashboardRoutes.FORMS,
         permissions: ['canConfigureDataCollection'],
       },
       {
@@ -72,9 +72,19 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
         path: AdminDashboardRoutes.CONFIGURE_SERVICES,
         permissions: ['canConfigureDataCollection'],
       },
+      {
+        id: 'auto-exit',
+        title: 'Auto-Exit',
+        path: AdminDashboardRoutes.CONFIGURE_AUTO_EXIT,
+        permissions: ['canConfigureDataCollection'],
+      },
     ],
   },
 ];
+
+export const PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS = navItems
+  .flatMap((group) => group.items)
+  .flatMap((item) => item?.permissions || []);
 
 // redirect to whichever admin page that the user has access to
 export const AdminLandingPage = () => {

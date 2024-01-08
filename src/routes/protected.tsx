@@ -38,9 +38,11 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
+import ConfigureAutoExitPage from '@/modules/admin/components/autoExit/ConfigureAutoExitPage';
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
-import FormRulesPage from '@/modules/admin/components/formRules/FormRulesPage';
+import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
+import ViewFormDefinitionPage from '@/modules/admin/components/forms/ViewFormDefinitionPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
 import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
@@ -529,11 +531,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.FILES,
             element: (
               <ClientRoute
-                permissions={[
-                  'canViewAnyConfidentialClientFiles',
-                  'canViewAnyNonconfidentialClientFiles',
-                  'canManageOwnClientFiles',
-                ]}
+                permissions='canViewAnyFiles'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientFiles />
@@ -619,10 +617,18 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.CONFIGURE_FORM_RULES,
+            path: AdminDashboardRoutes.FORMS,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <FormRulesPage />
+                <FormDefinitionsPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.VIEW_FORM,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <ViewFormDefinitionPage />
               </RootPermissionsFilter>
             ),
           },
@@ -639,6 +645,14 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
                 <ServiceCategoryDetail />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CONFIGURE_AUTO_EXIT,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <ConfigureAutoExitPage />
               </RootPermissionsFilter>
             ),
           },
