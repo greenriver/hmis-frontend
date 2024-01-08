@@ -121,6 +121,7 @@ fragment FormDefinitionMetadata on FormDefinition {
   role
   title
   cacheKey
+  identifier
 }
 
 fragment FormDefinitionFields on FormDefinition {
@@ -128,4 +129,9 @@ fragment FormDefinitionFields on FormDefinition {
   definition {
     ...FormDefinitionJsonFields
   }
+}
+
+fragment FormDefinitionFieldsForEditor on FormDefinition {
+  ...FormDefinitionFields
+  rawDefinition
 }
