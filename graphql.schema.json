@@ -3839,6 +3839,30 @@
             "deprecationReason": null
           },
           {
+            "name": "enabledFeatures",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "ClientDashboardFeature",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "enrollments",
             "description": null,
             "args": [
@@ -5700,6 +5724,29 @@
           {
             "name": "work",
             "description": "Work",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ClientDashboardFeature",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CASE_NOTE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FILE",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -31818,30 +31865,6 @@
                 "kind": "OBJECT",
                 "name": "ReferralPostingsPaginated",
                 "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "enabledFeatures",
-            "description": "Data collection features that are enabled for ANY project (e.g. Current Living Situations, Events, Case Notes)",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "DataCollectionFeatureRole",
-                    "ofType": null
-                  }
-                }
               }
             },
             "isDeprecated": false,

@@ -514,6 +514,7 @@ export type Client = {
   dobDataQuality: DobDataQuality;
   emailAddresses: Array<ClientContactPoint>;
   employmentEducations: EmploymentEducationsPaginated;
+  enabledFeatures: Array<ClientDashboardFeature>;
   enrollments: EnrollmentsPaginated;
   externalIds: Array<ExternalIdentifier>;
   files: FilesPaginated;
@@ -771,6 +772,11 @@ export enum ClientContactPointUse {
   Temp = 'temp',
   /** Work */
   Work = 'work',
+}
+
+export enum ClientDashboardFeature {
+  CaseNote = 'CASE_NOTE',
+  File = 'FILE',
 }
 
 export type ClientFilterOptions = {
@@ -5073,8 +5079,6 @@ export type Query = {
   clientSearch: ClientsPaginated;
   currentUser?: Maybe<ApplicationUser>;
   deniedPendingReferralPostings: ReferralPostingsPaginated;
-  /** Data collection features that are enabled for ANY project (e.g. Current Living Situations, Events, Case Notes) */
-  enabledFeatures: Array<DataCollectionFeatureRole>;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
   esgFundingReport: Array<EsgFundingService>;
@@ -11690,6 +11694,7 @@ export type ClientFieldsFragment = {
   dateCreated?: string | null;
   dateDeleted?: string | null;
   dateUpdated?: string | null;
+  enabledFeatures: Array<ClientDashboardFeature>;
   id: string;
   lockVersion: number;
   dob?: string | null;
@@ -12065,6 +12070,7 @@ export type GetClientQuery = {
     dateCreated?: string | null;
     dateDeleted?: string | null;
     dateUpdated?: string | null;
+    enabledFeatures: Array<ClientDashboardFeature>;
     id: string;
     lockVersion: number;
     dob?: string | null;
@@ -12957,6 +12963,7 @@ export type MergeClientsMutation = {
       dateCreated?: string | null;
       dateDeleted?: string | null;
       dateUpdated?: string | null;
+      enabledFeatures: Array<ClientDashboardFeature>;
       id: string;
       lockVersion: number;
       dob?: string | null;
@@ -16003,13 +16010,6 @@ export type GetEnrollmentPermissionsQuery = {
       canAuditEnrollments: boolean;
     };
   } | null;
-};
-
-export type GetGlobalFeaturesQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetGlobalFeaturesQuery = {
-  __typename?: 'Query';
-  enabledFeatures: Array<DataCollectionFeatureRole>;
 };
 
 export type FileFieldsFragment = {
@@ -22071,6 +22071,7 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateDeleted?: string | null;
           dateUpdated?: string | null;
+          enabledFeatures: Array<ClientDashboardFeature>;
           id: string;
           lockVersion: number;
           dob?: string | null;
@@ -28026,6 +28027,7 @@ export const ClientFieldsFragmentDoc = gql`
     emailAddresses {
       ...ClientContactPointFields
     }
+    enabledFeatures
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientVeteranInfoFieldsFragmentDoc}
@@ -33064,61 +33066,6 @@ export type GetEnrollmentPermissionsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentPermissionsQueryResult = Apollo.QueryResult<
   GetEnrollmentPermissionsQuery,
   GetEnrollmentPermissionsQueryVariables
->;
-export const GetGlobalFeaturesDocument = gql`
-  query GetGlobalFeatures {
-    enabledFeatures
-  }
-`;
-
-/**
- * __useGetGlobalFeaturesQuery__
- *
- * To run a query within a React component, call `useGetGlobalFeaturesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetGlobalFeaturesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetGlobalFeaturesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetGlobalFeaturesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetGlobalFeaturesQuery,
-    GetGlobalFeaturesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetGlobalFeaturesQuery,
-    GetGlobalFeaturesQueryVariables
-  >(GetGlobalFeaturesDocument, options);
-}
-export function useGetGlobalFeaturesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetGlobalFeaturesQuery,
-    GetGlobalFeaturesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetGlobalFeaturesQuery,
-    GetGlobalFeaturesQueryVariables
-  >(GetGlobalFeaturesDocument, options);
-}
-export type GetGlobalFeaturesQueryHookResult = ReturnType<
-  typeof useGetGlobalFeaturesQuery
->;
-export type GetGlobalFeaturesLazyQueryHookResult = ReturnType<
-  typeof useGetGlobalFeaturesLazyQuery
->;
-export type GetGlobalFeaturesQueryResult = Apollo.QueryResult<
-  GetGlobalFeaturesQuery,
-  GetGlobalFeaturesQueryVariables
 >;
 export const UpdateFormDefinitionDocument = gql`
   mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
