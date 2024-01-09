@@ -60,7 +60,7 @@ export const useEnrollmentDashboardNavItems = (
             ),
           },
           {
-            id: 'custom-case-notes',
+            id: 'case-notes',
             title: 'Case Notes',
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
             hide: !enabledFeatures.includes(DataCollectionFeatureRole.CaseNote),

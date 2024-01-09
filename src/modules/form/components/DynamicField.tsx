@@ -414,20 +414,20 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           </Typography>
         ) : undefined,
       };
-      if (item.component == Component.Name) {
+      if (item.component === Component.Name) {
         return <MultiNameInput {...objProps} />;
       }
-      if (item.component == Component.Address) {
+      if (item.component === Component.Address) {
         return item.repeats ? (
           <MultiAddressInput {...objProps} />
         ) : (
           <SimpleAddressInput {...objProps} />
         );
       }
-      if (item.component == Component.Phone) {
+      if (item.component === Component.Phone) {
         return <MultiPhoneInput {...objProps} />;
       }
-      if (item.component == Component.Email) {
+      if (item.component === Component.Email) {
         return <MultiEmailInput {...objProps} />;
       }
       console.warn(

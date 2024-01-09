@@ -126,7 +126,7 @@ export const getFilter = (
   fieldName: string
 ) => {
   const fieldSchema = (getSchemaForInputType(inputType)?.args || []).find(
-    (f) => f.name == fieldName
+    (f) => f.name === fieldName
   );
   if (!fieldSchema) return null;
 

@@ -97,7 +97,7 @@ const ClientFiles = () => {
             <Box sx={{ display: 'flex', gap: 0.5 }}>
               {file.tags.map((tag) => {
                 const item = pickListData.pickList.find(
-                  (type) => type.code == tag
+                  (type) => type.code === tag
                 );
                 return (
                   <Chip

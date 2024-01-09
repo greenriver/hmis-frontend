@@ -148,10 +148,12 @@ export enum AnnualPercentAmi {
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
   activityLogs: ActivityLogsPaginated;
+  clientAccessSummaries: ClientAccessSummariesPaginated;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   email: Scalars['String']['output'];
+  enrollmentAccessSummaries: EnrollmentAccessSummariesPaginated;
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
@@ -161,6 +163,20 @@ export type ApplicationUser = {
 
 /** User account for a user of the system */
 export type ApplicationUserActivityLogsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
+export type ApplicationUserClientAccessSummariesArgs = {
+  filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
+export type ApplicationUserEnrollmentAccessSummariesArgs = {
+  filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -662,6 +678,30 @@ export type ClientAccess = {
   id: Scalars['ID']['output'];
 };
 
+export type ClientAccessSummariesPaginated = {
+  __typename?: 'ClientAccessSummariesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ClientAccessSummary>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
+export type ClientAccessSummary = {
+  __typename?: 'ClientAccessSummary';
+  clientId: Scalars['ID']['output'];
+  clientName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastAccessedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type ClientAccessSummaryFilterOptions = {
+  onOrAfter?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type ClientAddress = {
   __typename?: 'ClientAddress';
   addressType?: Maybe<ClientAddressType>;
@@ -924,6 +964,27 @@ export enum CmExitReason {
   VeteranIsIncarcerated = 'VETERAN_IS_INCARCERATED',
   /** (10) Veteran too ill to participate at this time */
   VeteranTooIllToParticipateAtThisTime = 'VETERAN_TOO_ILL_TO_PARTICIPATE_AT_THIS_TIME',
+}
+
+export enum CompleteDisabilityResponse {
+  /** Alcohol use disorder */
+  AlcoholUseDisorder = 'ALCOHOL_USE_DISORDER',
+  /** Both alcohol and drug use disorders */
+  BothAlcoholAndDrugUseDisorders = 'BOTH_ALCOHOL_AND_DRUG_USE_DISORDERS',
+  /** Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** Client prefers not to answer */
+  ClientPrefersNotToAnswer = 'CLIENT_PREFERS_NOT_TO_ANSWER',
+  /** Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Drug use disorder */
+  DrugUseDisorder = 'DRUG_USE_DISORDER',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** No */
+  No = 'NO',
+  /** Yes */
+  Yes = 'YES',
 }
 
 export enum Component {
@@ -1766,7 +1827,7 @@ export type Disability = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  disabilityResponse: DisabilityResponse;
+  disabilityResponse: CompleteDisabilityResponse;
   disabilityType: DisabilityType;
   enrollment: Enrollment;
   id: Scalars['ID']['output'];
@@ -2173,6 +2234,34 @@ export type EnrollmentAccess = {
   canSplitHouseholds: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
+};
+
+export type EnrollmentAccessSummariesPaginated = {
+  __typename?: 'EnrollmentAccessSummariesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<EnrollmentAccessSummary>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
+export type EnrollmentAccessSummary = {
+  __typename?: 'EnrollmentAccessSummary';
+  clientId?: Maybe<Scalars['ID']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
+  enrollmentId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  lastAccessedAt: Scalars['ISO8601DateTime']['output'];
+  projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
+};
+
+export type EnrollmentAccessSummaryFilterOptions = {
+  onOrAfter?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  project?: InputMaybe<Scalars['ID']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EnrollmentAuditEvent = {
@@ -3455,6 +3544,10 @@ export type MergeAuditEvent = {
   mergedAt: Scalars['ISO8601DateTime']['output'];
   preMergeState: Scalars['JsonObject']['output'];
   user?: Maybe<ApplicationUser>;
+};
+
+export type MergeAuditEventFilterOptions = {
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type MergeAuditEventsPaginated = {
@@ -5195,6 +5288,7 @@ export type QueryInventoryArgs = {
 };
 
 export type QueryMergeAuditHistoryArgs = {
+  filters?: InputMaybe<MergeAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -12872,6 +12966,7 @@ export type ClientMergeHistoryQuery = {
 export type GlobalClientMergeHistoryQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<MergeAuditEventFilterOptions>;
 }>;
 
 export type GlobalClientMergeHistoryQuery = {
@@ -13637,6 +13732,51 @@ export type DeleteCustomCaseNoteMutation = {
       section?: string | null;
       data?: any | null;
     }>;
+  } | null;
+};
+
+export type GetClientCaseNotesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<CustomCaseNoteSortOption>;
+}>;
+
+export type GetClientCaseNotesQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    customCaseNotes: {
+      __typename?: 'CustomCaseNotesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CustomCaseNote';
+        id: string;
+        content: string;
+        informationDate?: string | null;
+        dateUpdated?: string | null;
+        dateCreated?: string | null;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          lockVersion: number;
+          projectName: string;
+          projectType?: ProjectType | null;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+        };
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }>;
+    };
   } | null;
 };
 
@@ -25437,7 +25577,7 @@ export type DeleteProjectCocMutation = {
 };
 
 export type DeleteHmisParticipationMutationVariables = Exact<{
-  input: DeleteHmisParticipationInput;
+  id: Scalars['ID']['input'];
 }>;
 
 export type DeleteHmisParticipationMutation = {
@@ -25463,7 +25603,7 @@ export type DeleteHmisParticipationMutation = {
 };
 
 export type DeleteCeParticipationMutationVariables = Exact<{
-  input: DeleteCeParticipationInput;
+  id: Scalars['ID']['input'];
 }>;
 
 export type DeleteCeParticipationMutation = {
@@ -27127,6 +27267,25 @@ export type UserActivityLogFieldsFragment = {
   }>;
 };
 
+export type ClientAccessSummaryFieldsFragment = {
+  __typename?: 'ClientAccessSummary';
+  id: string;
+  lastAccessedAt: string;
+  clientId: string;
+  clientName?: string | null;
+};
+
+export type EnrollmentAccessSummaryFieldsFragment = {
+  __typename?: 'EnrollmentAccessSummary';
+  id: string;
+  lastAccessedAt: string;
+  enrollmentId: string;
+  clientId?: string | null;
+  clientName?: string | null;
+  projectId?: string | null;
+  projectName?: string | null;
+};
+
 export type GetApplicationUsersQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -27189,6 +27348,65 @@ export type GetUserAccessHistoryQuery = {
           recordId: string;
           recordType: string;
         }>;
+      }>;
+    };
+  } | null;
+};
+
+export type GetUserClientSummariesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
+}>;
+
+export type GetUserClientSummariesQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    clientAccessSummaries: {
+      __typename?: 'ClientAccessSummariesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ClientAccessSummary';
+        id: string;
+        lastAccessedAt: string;
+        clientId: string;
+        clientName?: string | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetUserEnrollmentSummariesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
+}>;
+
+export type GetUserEnrollmentSummariesQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    enrollmentAccessSummaries: {
+      __typename?: 'EnrollmentAccessSummariesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'EnrollmentAccessSummary';
+        id: string;
+        lastAccessedAt: string;
+        enrollmentId: string;
+        clientId?: string | null;
+        clientName?: string | null;
+        projectId?: string | null;
+        projectName?: string | null;
       }>;
     };
   } | null;
@@ -29058,6 +29276,25 @@ export const UserActivityLogFieldsFragmentDoc = gql`
       recordId
       recordType
     }
+  }
+`;
+export const ClientAccessSummaryFieldsFragmentDoc = gql`
+  fragment ClientAccessSummaryFields on ClientAccessSummary {
+    id
+    lastAccessedAt
+    clientId
+    clientName
+  }
+`;
+export const EnrollmentAccessSummaryFieldsFragmentDoc = gql`
+  fragment EnrollmentAccessSummaryFields on EnrollmentAccessSummary {
+    id
+    lastAccessedAt
+    enrollmentId
+    clientId
+    clientName
+    projectId
+    projectName
   }
 `;
 export const GetRootPermissionsDocument = gql`
@@ -31497,8 +31734,12 @@ export type ClientMergeHistoryQueryResult = Apollo.QueryResult<
   ClientMergeHistoryQueryVariables
 >;
 export const GlobalClientMergeHistoryDocument = gql`
-  query GlobalClientMergeHistory($limit: Int, $offset: Int) {
-    mergeAuditHistory(limit: $limit, offset: $offset) {
+  query GlobalClientMergeHistory(
+    $limit: Int
+    $offset: Int
+    $filters: MergeAuditEventFilterOptions
+  ) {
+    mergeAuditHistory(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount
@@ -31528,6 +31769,7 @@ export const GlobalClientMergeHistoryDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -32211,6 +32453,90 @@ export type DeleteCustomCaseNoteMutationResult =
 export type DeleteCustomCaseNoteMutationOptions = Apollo.BaseMutationOptions<
   DeleteCustomCaseNoteMutation,
   DeleteCustomCaseNoteMutationVariables
+>;
+export const GetClientCaseNotesDocument = gql`
+  query GetClientCaseNotes(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $sortOrder: CustomCaseNoteSortOption
+  ) {
+    client(id: $id) {
+      id
+      customCaseNotes(limit: $limit, offset: $offset, sortOrder: $sortOrder) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CustomCaseNoteFields
+          enrollment {
+            id
+            lockVersion
+            projectName
+            projectType
+            entryDate
+            exitDate
+            inProgress
+          }
+        }
+      }
+    }
+  }
+  ${CustomCaseNoteFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientCaseNotesQuery__
+ *
+ * To run a query within a React component, call `useGetClientCaseNotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientCaseNotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientCaseNotesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useGetClientCaseNotesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientCaseNotesQuery,
+    GetClientCaseNotesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientCaseNotesQuery,
+    GetClientCaseNotesQueryVariables
+  >(GetClientCaseNotesDocument, options);
+}
+export function useGetClientCaseNotesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientCaseNotesQuery,
+    GetClientCaseNotesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientCaseNotesQuery,
+    GetClientCaseNotesQueryVariables
+  >(GetClientCaseNotesDocument, options);
+}
+export type GetClientCaseNotesQueryHookResult = ReturnType<
+  typeof useGetClientCaseNotesQuery
+>;
+export type GetClientCaseNotesLazyQueryHookResult = ReturnType<
+  typeof useGetClientCaseNotesLazyQuery
+>;
+export type GetClientCaseNotesQueryResult = Apollo.QueryResult<
+  GetClientCaseNotesQuery,
+  GetClientCaseNotesQueryVariables
 >;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
@@ -35907,8 +36233,8 @@ export type DeleteProjectCocMutationOptions = Apollo.BaseMutationOptions<
   DeleteProjectCocMutationVariables
 >;
 export const DeleteHmisParticipationDocument = gql`
-  mutation DeleteHmisParticipation($input: DeleteHmisParticipationInput!) {
-    deleteHmisParticipation(input: $input) {
+  mutation DeleteHmisParticipation($id: ID!) {
+    deleteHmisParticipation(input: { id: $id }) {
       hmisParticipation {
         id
       }
@@ -35937,7 +36263,7 @@ export type DeleteHmisParticipationMutationFn = Apollo.MutationFunction<
  * @example
  * const [deleteHmisParticipationMutation, { data, loading, error }] = useDeleteHmisParticipationMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -35963,8 +36289,8 @@ export type DeleteHmisParticipationMutationOptions = Apollo.BaseMutationOptions<
   DeleteHmisParticipationMutationVariables
 >;
 export const DeleteCeParticipationDocument = gql`
-  mutation DeleteCeParticipation($input: DeleteCeParticipationInput!) {
-    deleteCeParticipation(input: $input) {
+  mutation DeleteCeParticipation($id: ID!) {
+    deleteCeParticipation(input: { id: $id }) {
       ceParticipation {
         id
       }
@@ -35993,7 +36319,7 @@ export type DeleteCeParticipationMutationFn = Apollo.MutationFunction<
  * @example
  * const [deleteCeParticipationMutation, { data, loading, error }] = useDeleteCeParticipationMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -37420,4 +37746,158 @@ export type GetUserAccessHistoryLazyQueryHookResult = ReturnType<
 export type GetUserAccessHistoryQueryResult = Apollo.QueryResult<
   GetUserAccessHistoryQuery,
   GetUserAccessHistoryQueryVariables
+>;
+export const GetUserClientSummariesDocument = gql`
+  query GetUserClientSummaries(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: ClientAccessSummaryFilterOptions
+  ) {
+    user(id: $id) {
+      id
+      clientAccessSummaries(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ClientAccessSummaryFields
+        }
+      }
+    }
+  }
+  ${ClientAccessSummaryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserClientSummariesQuery__
+ *
+ * To run a query within a React component, call `useGetUserClientSummariesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserClientSummariesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserClientSummariesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetUserClientSummariesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserClientSummariesQuery,
+    GetUserClientSummariesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserClientSummariesQuery,
+    GetUserClientSummariesQueryVariables
+  >(GetUserClientSummariesDocument, options);
+}
+export function useGetUserClientSummariesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserClientSummariesQuery,
+    GetUserClientSummariesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserClientSummariesQuery,
+    GetUserClientSummariesQueryVariables
+  >(GetUserClientSummariesDocument, options);
+}
+export type GetUserClientSummariesQueryHookResult = ReturnType<
+  typeof useGetUserClientSummariesQuery
+>;
+export type GetUserClientSummariesLazyQueryHookResult = ReturnType<
+  typeof useGetUserClientSummariesLazyQuery
+>;
+export type GetUserClientSummariesQueryResult = Apollo.QueryResult<
+  GetUserClientSummariesQuery,
+  GetUserClientSummariesQueryVariables
+>;
+export const GetUserEnrollmentSummariesDocument = gql`
+  query GetUserEnrollmentSummaries(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: EnrollmentAccessSummaryFilterOptions
+  ) {
+    user(id: $id) {
+      id
+      enrollmentAccessSummaries(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentAccessSummaryFields
+        }
+      }
+    }
+  }
+  ${EnrollmentAccessSummaryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserEnrollmentSummariesQuery__
+ *
+ * To run a query within a React component, call `useGetUserEnrollmentSummariesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserEnrollmentSummariesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserEnrollmentSummariesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetUserEnrollmentSummariesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserEnrollmentSummariesQuery,
+    GetUserEnrollmentSummariesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserEnrollmentSummariesQuery,
+    GetUserEnrollmentSummariesQueryVariables
+  >(GetUserEnrollmentSummariesDocument, options);
+}
+export function useGetUserEnrollmentSummariesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserEnrollmentSummariesQuery,
+    GetUserEnrollmentSummariesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserEnrollmentSummariesQuery,
+    GetUserEnrollmentSummariesQueryVariables
+  >(GetUserEnrollmentSummariesDocument, options);
+}
+export type GetUserEnrollmentSummariesQueryHookResult = ReturnType<
+  typeof useGetUserEnrollmentSummariesQuery
+>;
+export type GetUserEnrollmentSummariesLazyQueryHookResult = ReturnType<
+  typeof useGetUserEnrollmentSummariesLazyQuery
+>;
+export type GetUserEnrollmentSummariesQueryResult = Apollo.QueryResult<
+  GetUserEnrollmentSummariesQuery,
+  GetUserEnrollmentSummariesQueryVariables
 >;

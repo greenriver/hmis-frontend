@@ -18,10 +18,10 @@ const Display: React.FC<DisplayProps> = ({ icon, caption, color, size }) => {
   const Icon = icon;
   return (
     <Stack direction='row' spacing={1} alignItems='center'>
-      <Icon color={color} sx={{ fontSize: size == 'small' ? 16 : 20 }} />
+      <Icon color={color} sx={{ fontSize: size === 'small' ? 16 : 20 }} />
       <Typography
         component='div'
-        variant={size == 'default' ? 'body2' : 'caption'}
+        variant={size === 'default' ? 'body2' : 'caption'}
       >
         {caption}
       </Typography>
