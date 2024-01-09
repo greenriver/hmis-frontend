@@ -120,7 +120,6 @@ const ClientAuditHistory = () => {
           queryVariables={{ id: clientId }}
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
-          // FIXME: Record dropdown is non specific to Clients
           recordType='ClientAuditEvent'
           filterInputType='ClientAuditEventFilterOptions'
           showFilters
