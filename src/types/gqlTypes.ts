@@ -530,6 +530,7 @@ export type Client = {
   dobDataQuality: DobDataQuality;
   emailAddresses: Array<ClientContactPoint>;
   employmentEducations: EmploymentEducationsPaginated;
+  enabledFeatures: Array<ClientDashboardFeature>;
   enrollments: EnrollmentsPaginated;
   externalIds: Array<ExternalIdentifier>;
   files: FilesPaginated;
@@ -811,6 +812,11 @@ export enum ClientContactPointUse {
   Temp = 'temp',
   /** Work */
   Work = 'work',
+}
+
+export enum ClientDashboardFeature {
+  CaseNote = 'CASE_NOTE',
+  File = 'FILE',
 }
 
 export type ClientFilterOptions = {
@@ -11756,6 +11762,7 @@ export type ClientFieldsFragment = {
   dateCreated?: string | null;
   dateDeleted?: string | null;
   dateUpdated?: string | null;
+  enabledFeatures: Array<ClientDashboardFeature>;
   id: string;
   lockVersion: number;
   dob?: string | null;
@@ -12131,6 +12138,7 @@ export type GetClientQuery = {
     dateCreated?: string | null;
     dateDeleted?: string | null;
     dateUpdated?: string | null;
+    enabledFeatures: Array<ClientDashboardFeature>;
     id: string;
     lockVersion: number;
     dob?: string | null;
@@ -13023,6 +13031,7 @@ export type MergeClientsMutation = {
       dateCreated?: string | null;
       dateDeleted?: string | null;
       dateUpdated?: string | null;
+      enabledFeatures: Array<ClientDashboardFeature>;
       id: string;
       lockVersion: number;
       dob?: string | null;
@@ -22130,6 +22139,7 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateDeleted?: string | null;
           dateUpdated?: string | null;
+          enabledFeatures: Array<ClientDashboardFeature>;
           id: string;
           lockVersion: number;
           dob?: string | null;
@@ -28163,6 +28173,7 @@ export const ClientFieldsFragmentDoc = gql`
     emailAddresses {
       ...ClientContactPointFields
     }
+    enabledFeatures
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientVeteranInfoFieldsFragmentDoc}
