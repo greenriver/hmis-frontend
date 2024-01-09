@@ -1,4 +1,5 @@
 import MOCK_IMAGE from '@/components/elements/upload/MOCK_IMAGE';
+import { HmisEnums } from '@/types/gqlEnums';
 import { HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   ClientAccess,
@@ -57,6 +58,7 @@ export const RITA_ACKROYD = {
   dateUpdated: '2022-07-27T15:14:29.062',
   dateCreated: '2022-07-27T15:14:29.062',
   pronouns: ['she/hers'],
+  enabledFeatures: Object.keys(HmisEnums.ClientDashboardFeature),
   externalIds: [
     {
       id: 'client_id:999',

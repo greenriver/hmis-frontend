@@ -498,6 +498,26 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'enabledFeatures',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'ENUM',
+                name: 'ClientDashboardFeature',
+                ofType: null,
+              },
+            },
+          },
+        },
+      },
+      {
         name: 'firstName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },

@@ -93,6 +93,7 @@ export const HmisEnums = {
     temp: 'Temp',
     work: 'Work',
   },
+  ClientDashboardFeature: { CASE_NOTE: 'CASE_NOTE', FILE: 'FILE' },
   ClientNameUse: {
     anonymous: 'Anonymous',
     maiden: 'Maiden',
