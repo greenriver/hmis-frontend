@@ -141,7 +141,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                 content={client.externalIds.map((externalId, idx) => {
                   const repeated =
                     idx > 0 &&
-                    client.externalIds[idx - 1].type == externalId.type;
+                    client.externalIds[idx - 1].type === externalId.type;
                   return [
                     repeated ? null : (
                       <HmisEnum

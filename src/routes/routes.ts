@@ -18,7 +18,8 @@ const adminDashboardRoutes = {
   AC_DENIALS: 'referral-denials',
   AC_DENIAL_DETAILS: 'referral-denials/:referralPostingId',
   USERS: 'users',
-  USER_AUDIT: 'users/:userId/audit',
+  USER_CLIENT_ACCESS_HISTORY: 'users/:userId/clientAccessHistory',
+  USER_ENROLLMENT_ACCESS_HISTORY: 'users/:userId/enrollmentAccessHistory',
   CONFIGURE_SERVICES: 'services',
   CONFIGURE_SERVICE_CATEGORY: 'services/:serviceCategoryId',
   FORMS: 'forms',
@@ -39,6 +40,7 @@ const clientDashboardRoutes = {
   FILES: 'files',
   NEW_FILE: 'files/new',
   EDIT_FILE: 'files/:fileId/edit',
+  CASE_NOTES: 'case-notes',
   MERGE_HISTORY: 'merges',
   NEW_MERGE: 'merges/new',
 };

@@ -36,12 +36,12 @@ const AddressInput: React.FC<Props> = ({
 }) => {
   const { pickList: stateList, loading } = usePickList({ item: fakeStateItem });
   const typeValue = useMemo(
-    () => addressUsePicklist.find((o) => o.code == value.use) || null,
+    () => addressUsePicklist.find((o) => o.code === value.use) || null,
     [value]
   );
   const stateValue = useMemo(
     () =>
-      (stateList || []).find((o) => o.code == value.state) ||
+      (stateList || []).find((o) => o.code === value.state) ||
       (value.state
         ? {
             code: value.state,
@@ -101,7 +101,7 @@ const AddressInput: React.FC<Props> = ({
     </>
   );
 
-  if (variant == 'minimal') {
+  if (variant === 'minimal') {
     return <Stack rowGap={2}>{fields}</Stack>;
   }
 

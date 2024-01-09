@@ -140,7 +140,7 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
       Sentry.captureException(networkError, { user: sentryUser() });
     }
 
-    if ((networkError as ServerError).statusCode == 401) {
+    if ((networkError as ServerError).statusCode === 401) {
       // might occur if session was invalidated on the server
       dispatchSessionTrackingEvent(undefined);
     }

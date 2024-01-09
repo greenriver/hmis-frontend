@@ -2,34 +2,26 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button, Paper } from '@mui/material';
 
 import { Stack } from '@mui/system';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
-import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { parseAndFormatDateRange, yesNo } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   CeParticipationFieldsFragment,
   DeleteCeParticipationDocument,
-  DeleteCeParticipationMutation,
-  DeleteCeParticipationMutationVariables,
   FormRole,
   GetProjectCeParticipationsDocument,
   NoYes,
 } from '@/types/gqlTypes';
 
 const columns: ColumnDef<CeParticipationFieldsFragment>[] = [
-  {
-    header: 'Access Point',
-    render: ({ accessPoint }: CeParticipationFieldsFragment) =>
-      yesNo(accessPoint),
-  },
   {
     header: 'Active Period',
     render: ({
@@ -40,6 +32,11 @@ const columns: ColumnDef<CeParticipationFieldsFragment>[] = [
         ceParticipationStatusStartDate,
         ceParticipationStatusEndDate
       ),
+  },
+  {
+    header: 'Access Point',
+    render: ({ accessPoint }: CeParticipationFieldsFragment) =>
+      yesNo(accessPoint),
   },
   {
     header: 'Assessments',
@@ -86,9 +83,6 @@ const columns: ColumnDef<CeParticipationFieldsFragment>[] = [
 
 const CeParticipations = () => {
   const { project } = useProjectDashboardContext();
-  const [viewingRecord, setViewingRecord] = useState<
-    CeParticipationFieldsFragment | undefined
-  >();
 
   const localConstants = useMemo(
     () => ({
@@ -98,31 +92,25 @@ const CeParticipations = () => {
     [project]
   );
 
-  const { openFormDialog, renderFormDialog, closeDialog } =
-    useFormDialog<CeParticipationFieldsFragment>({
-      formRole: FormRole.CeParticipation,
-      onCompleted: () => {
-        cache.evict({
-          id: `Project:${project.id}`,
-          fieldName: 'ceParticipations',
-        });
-        setViewingRecord(undefined);
-      },
-      onClose: () => setViewingRecord(undefined),
-      inputVariables: { projectId: project.id },
-      record: viewingRecord,
-      localConstants,
-    });
-
-  const onSuccessfulDelete = useCallback(() => {
+  const evictCache = useCallback(() => {
     cache.evict({
       id: `Project:${project.id}`,
       fieldName: 'ceParticipations',
     });
-    setViewingRecord(undefined);
-    closeDialog();
-    setViewingRecord(undefined);
-  }, [closeDialog, project]);
+  }, [project.id]);
+
+  const { onSelectRecord, editRecordDialog, openFormDialog } =
+    useViewEditRecordDialogs({
+      variant: project.access.canEditProjectDetails ? 'edit_only' : 'view_only',
+      inputVariables: { projectId: project.id },
+      formRole: FormRole.CeParticipation,
+      recordName: 'CE Participation',
+      evictCache,
+      deleteRecordDocument: DeleteCeParticipationDocument,
+      deleteRecordIdPath: 'deleteCeParticipation.ceParticipation.id',
+      maxWidth: 'sm',
+      localConstants,
+    });
 
   return (
     <>
@@ -149,34 +137,11 @@ const CeParticipations = () => {
           noData='No CE Participation records'
           recordType='CeParticipation'
           handleRowClick={
-            project.access.canEditProjectDetails
-              ? (record) => {
-                  setViewingRecord(record);
-                  openFormDialog();
-                }
-              : undefined
+            project.access.canEditProjectDetails ? onSelectRecord : undefined
           }
         />
       </Paper>
-      {project.access.canEditProjectDetails &&
-        renderFormDialog({
-          title: `${viewingRecord ? 'Update' : 'Add'} CE Participation`,
-
-          otherActions: viewingRecord ? (
-            <DeleteMutationButton<
-              DeleteCeParticipationMutation,
-              DeleteCeParticipationMutationVariables
-            >
-              queryDocument={DeleteCeParticipationDocument}
-              variables={{ input: { id: viewingRecord.id } }}
-              idPath={'deleteCeParticipation.ceParticipation.id'}
-              recordName='CE Participation Record'
-              onSuccess={onSuccessfulDelete}
-            >
-              Delete
-            </DeleteMutationButton>
-          ) : null,
-        })}
+      {editRecordDialog()}
     </>
   );
 };

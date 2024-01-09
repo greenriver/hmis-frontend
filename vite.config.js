@@ -109,7 +109,7 @@ export default defineConfig(({ command, mode }) => {
         open: true,
         host: env.HMIS_HOST || 'hmis.dev.test',
         https:
-          env.SERVER_HTTPS == undefined ? true : env.SERVER_HTTPS == 'true',
+          env.SERVER_HTTPS === undefined ? true : env.SERVER_HTTPS === 'true',
         proxy: {
           '/hmis': warehouseProxyServer,
           '/assets/theme': warehouseProxyServer,

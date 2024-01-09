@@ -32,3 +32,45 @@ query GetUserAccessHistory($id: ID!, $limit: Int = 25, $offset: Int = 0) {
     }
   }
 }
+
+query GetUserClientSummaries(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: ClientAccessSummaryFilterOptions
+) {
+  user(id: $id) {
+    id
+    clientAccessSummaries(limit: $limit, offset: $offset, filters: $filters) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ClientAccessSummaryFields
+      }
+    }
+  }
+}
+
+query GetUserEnrollmentSummaries(
+  $id: ID!
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: EnrollmentAccessSummaryFilterOptions
+) {
+  user(id: $id) {
+    id
+    enrollmentAccessSummaries(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentAccessSummaryFields
+      }
+    }
+  }
+}

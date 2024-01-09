@@ -58,7 +58,7 @@ const MultiNameInput = ({ id, value, onChange, label }: Props) => {
                 onChange={() =>
                   onChange(
                     value.map((val, i) =>
-                      i == idx
+                      i === idx
                         ? { ...val, primary: true }
                         : { ...val, primary: false }
                     )
