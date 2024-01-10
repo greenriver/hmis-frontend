@@ -1,6 +1,7 @@
-import { Alert, AlertProps, AlertTitle, Box, Grid } from '@mui/material';
+import { Alert, AlertProps, AlertTitle, Box, Grid, Stack } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 
+import ClientCustomDataElementsCard from '@/modules/client/components/ClientCustomDataElementsCard';
 import ClientEnrollmentCard from '@/modules/client/components/ClientEnrollmentCard';
 import ClientProfileCard from '@/modules/client/components/ClientProfileCard';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
@@ -34,7 +35,12 @@ const ProfileLayout: React.FC<Props> = ({ client, notices = [] }) => {
           </Grid>
         )}
         <Grid item md={12} lg={canViewEnrollments ? 6 : 8}>
-          <ClientProfileCard client={client} />
+          <Stack gap={2}>
+            <Box>
+              <ClientProfileCard client={client} />
+            </Box>
+            <ClientCustomDataElementsCard client={client} />
+          </Stack>
         </Grid>
         {canViewEnrollments && (
           <Grid item md={12} lg={6}>
