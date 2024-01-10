@@ -98,7 +98,7 @@ const UserAuditPage: React.FC<Props> = ({ entityType }) => {
               />
             )}
           />
-          {entityType == 'clients' && (
+          {entityType === 'clients' && (
             <ClientTextSearchInput
               label='Search client access'
               value={search}
@@ -107,7 +107,7 @@ const UserAuditPage: React.FC<Props> = ({ entityType }) => {
               searchAdornment
             />
           )}
-          {entityType == 'enrollments' && (
+          {entityType === 'enrollments' && (
             <CommonSearchInput
               label='Search enrollment access'
               name='searchEnrollments'
@@ -119,14 +119,14 @@ const UserAuditPage: React.FC<Props> = ({ entityType }) => {
             />
           )}
         </Box>
-        {entityType == 'clients' && (
+        {entityType === 'clients' && (
           <ClientAccessSummaryTable
             userId={userId}
             // startDate={defaultStartDate}
             searchTerm={debouncedSearch}
           />
         )}
-        {entityType == 'enrollments' && (
+        {entityType === 'enrollments' && (
           <EnrollmentAccessSummaryTable
             userId={userId}
             // startDate={defaultStartDate}
