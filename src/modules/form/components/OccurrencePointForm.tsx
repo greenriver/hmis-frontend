@@ -8,7 +8,11 @@ import IconButtonContainer from '@/modules/enrollment/components/IconButtonConta
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { SubmitFormInputVariables } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { LocalConstants, PickListArgs } from '@/modules/form/types';
+import {
+  LocalConstants,
+  PickListArgs,
+  SubmitFormAllowedTypes,
+} from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
   createInitialValuesFromRecord,
@@ -16,9 +20,7 @@ import {
   getInitialValues,
   getItemMap,
 } from '@/modules/form/util/formUtil';
-import { DashboardEnrollment } from '@/modules/hmis/types';
 import {
-  ClientFieldsFragment,
   FormDefinitionFieldsFragment,
   FormDefinitionJson,
   FormRole,
@@ -26,7 +28,7 @@ import {
 } from '@/types/gqlTypes';
 
 export interface OccurrencePointFormProps {
-  record: DashboardEnrollment | ClientFieldsFragment; // coudl be anything
+  record: SubmitFormAllowedTypes;
   definition: FormDefinitionFieldsFragment;
   submitFormInputVariables?: SubmitFormInputVariables;
   readOnlyDefinition: FormDefinitionJson;
@@ -36,6 +38,15 @@ export interface OccurrencePointFormProps {
   pickListArgs?: PickListArgs;
 }
 
+/**
+ * This component renders the values from the `record` into the `definition` and displays
+ * it as a read-only view. If any of the `definition` items are not read-only, it shows
+ * a pencil icon button. When clicked, it brings up a modal that renders a form according to
+ * the `definition`, and submits changes using SubmitForm.
+ *
+ * This is currently primarily used for viewing/editing Custom Data Elements that are associated with
+ * a Client or an Enrollment, on the Client Dashboard and Enrollment Dashboard respectively.
+ */
 const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
   record,
   localConstants: localConstantsProp,
