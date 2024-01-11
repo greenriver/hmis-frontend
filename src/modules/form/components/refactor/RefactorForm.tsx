@@ -1,26 +1,22 @@
-import { Box, Grid, Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import React, {
   BaseSyntheticEvent,
-  Ref,
   RefObject,
   forwardRef,
   useCallback,
-  useImperativeHandle,
 } from 'react';
-import { useFormState } from 'react-hook-form';
 
 import { DynamicFormContext } from '../../hooks/useDynamicFormContext';
 import { FormValues, LocalConstants, PickListArgs } from '../../types';
 
-import FormActions, { FormActionProps } from '../FormActions';
-import SaveSlide from '../SaveSlide';
+import { FormActionProps } from '../FormActions';
 
-import useDynamicForm from './useDynamicForm';
-import useElementInView from '@/hooks/useElementInView';
+import RefactorFormFields from './RefactorFormFields';
+import DynamicFormSaveButtons from './RefactorFormSaveButtons';
+import useFormDefinitionHandlers from './useFormDefinitionHandlers';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ValidationDialogProps } from '@/modules/errors/components/ValidationDialog';
-import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import { ErrorState, hasErrors } from '@/modules/errors/util';
 import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
@@ -74,109 +70,37 @@ export interface DynamicFormRef {
 }
 
 const DynamicForm = forwardRef(
-  (
-    {
-      clientId,
-      definition,
-      onSubmit,
-      onSaveDraft,
-      loading,
-      initialValues,
-      errors: errorState,
-      showSavePrompt = false,
-      alwaysShowSaveSlide = false,
-      horizontal = false,
-      warnIfEmpty = false,
-      locked = false,
-      visible = true,
-      pickListArgs,
-      FormActionProps = {},
-      ValidationDialogProps = {},
-      hideSubmit = false,
-      localConstants,
-      errorRef,
-    }: DynamicFormProps,
-    ref: Ref<DynamicFormRef>
-  ) => {
-    const { methods, renderFormFields, getCleanedValues } = useDynamicForm({
+  ({
+    definition,
+    onSubmit,
+    onSaveDraft,
+    loading,
+    initialValues,
+    errors: errorState,
+    showSavePrompt = false,
+    alwaysShowSaveSlide = false,
+    locked = false,
+    pickListArgs,
+    FormActionProps = {},
+    ValidationDialogProps = {},
+    hideSubmit = false,
+    localConstants,
+    errorRef,
+    ...props
+  }: DynamicFormProps) => {
+    const handlers = useFormDefinitionHandlers({
       definition,
       initialValues,
       localConstants,
       onSubmit: (...args) => console.log({ args }),
     });
 
-    const saveButtonsRef = React.createRef<HTMLDivElement>();
-    const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
-
-    const formState = useFormState(methods);
-    const dirty = formState.isDirty;
-    const promptSave = formState.isDirty;
+    const { getCleanedValues } = handlers;
 
     const handleSaveDraft = useCallback(() => {
       if (!onSaveDraft) return;
       onSaveDraft(getCleanedValues());
     }, [onSaveDraft, getCleanedValues]);
-
-    const handleSubmit = useCallback(
-      methods.handleSubmit((values, event) => {
-        onSubmit({
-          values: getCleanedValues(),
-          confirmed: false,
-          event,
-        });
-      }),
-      [onSubmit, getCleanedValues]
-    );
-
-    // Expose handle for parent components to initiate a background save (used for household workflow tabs)
-    useImperativeHandle(
-      ref,
-      () => ({
-        SubmitForm: () => {
-          onSubmit({
-            values: getCleanedValues(),
-            confirmed: false,
-          });
-        },
-        SaveIfDirty: () => {
-          if (!dirty || locked) return;
-          handleSaveDraft();
-        },
-        SubmitIfDirty: (ignoreWarnings: boolean) => {
-          if (!onSubmit || !dirty || locked) return;
-          onSubmit({
-            values: getCleanedValues(),
-            confirmed: ignoreWarnings,
-          });
-        },
-      }),
-      [onSubmit, getCleanedValues, dirty, locked, handleSaveDraft]
-    );
-
-    const handleConfirm = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        onSubmit({
-          values: getCleanedValues(),
-          confirmed: true,
-          event,
-        });
-      },
-      [onSubmit, getCleanedValues]
-    );
-
-    const { renderValidationDialog, validationDialogVisible } =
-      useValidationDialog({ errorState });
-
-    const saveButtons = (
-      <FormActions
-        onSubmit={handleSubmit}
-        onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-        disabled={locked || !!loading || validationDialogVisible}
-        loading={loading}
-        {...FormActionProps}
-      />
-    );
 
     return (
       <form
@@ -194,41 +118,22 @@ const DynamicForm = forwardRef(
             </Grid>
           )}
           <DynamicFormContext.Provider value={{ getCleanedValues, definition }}>
-            {renderFormFields({
-              clientId,
-              errors: errorState.errors,
-              warnings: errorState.warnings,
-              horizontal,
-              pickListArgs,
-              warnIfEmpty,
-              locked,
-              visible,
-            })}
+            <RefactorFormFields handlers={handlers} {...props} />
           </DynamicFormContext.Provider>
         </Grid>
-        {!alwaysShowSaveSlide && !hideSubmit && (
-          <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
-            {saveButtons}
-          </Box>
-        )}
-        {renderValidationDialog({
-          onConfirm: handleConfirm,
-          loading: loading || false,
-          confirmText: FormActionProps?.submitButtonText || 'Confirm',
-          ...ValidationDialogProps,
-        })}
-        {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
-          <SaveSlide
-            in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}
-            appear
-            padBody
-            timeout={300}
-            direction='up'
-            loading={loading}
-          >
-            {saveButtons}
-          </SaveSlide>
-        )}
+        <DynamicFormSaveButtons
+          handlers={handlers}
+          onSubmit={(e) => console.log(e)}
+          onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
+          disabled={locked || !!loading}
+          loading={loading}
+          errors={errorState}
+          showSavePrompt={showSavePrompt}
+          alwaysShowSaveSlide={alwaysShowSaveSlide}
+          hideSubmit={hideSubmit}
+          ValidationDialogProps={ValidationDialogProps}
+          {...FormActionProps}
+        />
       </form>
     );
   }

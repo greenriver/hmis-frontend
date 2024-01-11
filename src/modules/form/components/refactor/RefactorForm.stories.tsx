@@ -1,14 +1,15 @@
 import { Box } from '@mui/material';
 import { Meta, StoryFn } from '@storybook/react';
 
+import { AnnualAssessmentPostingDefinition } from '../../data';
 import RefactorForm from './RefactorForm';
 // import { Default as ViewStory } from './viewable/DynamicView.stories';
 
 import { emptyErrorState } from '@/modules/errors/util';
-import formData from '@/modules/form/data/mock.json';
 import { FormDefinitionJson } from '@/types/gqlTypes';
+
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
+const formDefinition: FormDefinitionJson = AnnualAssessmentPostingDefinition;
 
 export default {
   title: 'RefactorForm',

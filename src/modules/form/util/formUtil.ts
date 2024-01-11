@@ -79,6 +79,15 @@ import {
 // works in current versions of chrome as of 2023 but is not valid HTML.
 export const formAutoCompleteOff = 'do-not-autocomplete';
 
+export const invertDependencyMap = (depMap: LinkIdMap): LinkIdMap =>
+  Object.entries(depMap).reduce((acc, [linkId, childLinkIds]) => {
+    const result = { ...acc };
+    childLinkIds.forEach((childLinkId) => {
+      result[childLinkId] = [...(result[childLinkId] || []), linkId];
+    });
+    return result;
+  }, {} as LinkIdMap);
+
 export const maxWidthAtNestingLevel = (nestingLevel: number) =>
   600 - nestingLevel * 26;
 
@@ -1278,7 +1287,7 @@ export const debugFormValues = (
 };
 
 type GetDependentItemsDisabledStatus = {
-  changedLinkIds: string[];
+  changedLinkIds?: string[];
   localValues: FormValues;
   enabledDependencyMap: LinkIdMap;
   itemMap: ItemMap;
@@ -1294,11 +1303,12 @@ export const getDependentItemsDisabledStatus = ({
 }: GetDependentItemsDisabledStatus) => {
   const enabledLinkIds: string[] = [];
   const disabledLinkIds: string[] = [];
+  const linkIds = changedLinkIds || Object.keys(itemMap);
   // If none of these are dependencies, return immediately
-  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id]))
+  if (!linkIds.find((id) => !!enabledDependencyMap[id]))
     return { enabledLinkIds, disabledLinkIds };
 
-  changedLinkIds.forEach((changedLinkId) => {
+  linkIds.forEach((changedLinkId) => {
     if (!enabledDependencyMap[changedLinkId]) return;
 
     // iterate through all items that are dependent on this item,
