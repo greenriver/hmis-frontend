@@ -118,7 +118,7 @@ const EnrollmentDetails = ({
   if (!enrollment || !rows) return <Loading />;
 
   return (
-    <CommonDetailGridContainer ariaLabel='Enrollment Details'>
+    <CommonDetailGridContainer>
       {rows.map(({ id, label, value }) => (
         <CommonDetailGridItem label={label} key={id}>
           {value}
