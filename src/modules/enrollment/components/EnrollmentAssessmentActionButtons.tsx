@@ -1,7 +1,7 @@
 import { LoadingButton } from '@mui/lab';
 import { Stack } from '@mui/system';
 import { isEmpty } from 'lodash-es';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import CommonMenuButton, {
@@ -12,7 +12,7 @@ import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembe
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
-  useGetClientAssessmentEligibilitiesQuery,
+  useGetClientAssessmentEligibilitiesLazyQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -45,9 +45,15 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
   const enrollmentId = enrollment.id;
   const clientId = enrollment.client.id;
 
-  const { data, error, loading } = useGetClientAssessmentEligibilitiesQuery({
-    variables: { clientId, enrollmentId },
-  });
+  const [getEligability, { data, error, loading }] =
+    useGetClientAssessmentEligibilitiesLazyQuery({
+      fetchPolicy: 'cache-and-network',
+    });
+
+  useEffect(() => {
+    getEligability({ variables: { clientId, enrollmentId } });
+  }, [enrollment.client.lockVersion, clientId, enrollmentId, getEligability]);
+
   if (error) throw error;
 
   const getPath = useCallback(
