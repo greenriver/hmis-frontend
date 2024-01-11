@@ -7,8 +7,8 @@ import {
   ContextualClientDobAge,
   ContextualClientSsn,
 } from '../providers/ClientSsnDobVisibility';
-import { ClientCardImageElement } from './ClientProfileCard';
 
+import ClientCardImageElement from './ClientCardImageElement';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { LabeledExternalIdDisplay } from '@/components/elements/ExternalIdDisplay';
@@ -85,7 +85,7 @@ interface Props {
   hideImage?: boolean;
 }
 
-const ClientCard: React.FC<Props> = ({
+const ClientSearchResultCard: React.FC<Props> = ({
   client,
   linkTargetBlank = false,
   hideImage = false,
@@ -251,4 +251,4 @@ const ClientCard: React.FC<Props> = ({
   );
 };
 
-export default ClientCard;
+export default ClientSearchResultCard;

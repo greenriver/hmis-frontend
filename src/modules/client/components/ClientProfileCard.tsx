@@ -3,7 +3,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import {
   Box,
-  BoxProps,
   Card,
   Chip,
   Grid,
@@ -16,6 +15,7 @@ import {
 import { useCallback, useRef, useState } from 'react';
 
 import ClientAddress from './ClientAddress';
+import ClientCardImageElement from './ClientCardImageElement';
 import ClientContactPoint from './ClientContactPoint';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
@@ -44,10 +44,9 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   client: ClientFieldsFragment;
-  onlyCard?: boolean;
 }
 
-export const ClientProfileCardTextTable = ({
+const ClientProfileCardTextTable = ({
   content,
   condensed = true,
 }: {
@@ -111,7 +110,7 @@ const LabelWithSubtitle = ({
   </Stack>
 );
 
-export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
+const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
   const hasContactInformation =
     client.addresses.length > 0 ||
     client.phoneNumbers.length > 0 ||
@@ -130,7 +129,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
         renderHeader={(header) => <Typography>{header}</Typography>}
         renderContent={(content) => content}
         AccordionProps={{
-          sx: { '&.MuiAccordion-root': { my: 0 } },
+          sx: { '&.MuiAccordion-root': { mb: 0, mt: '-1px' } },
         }}
         items={[
           {
@@ -251,62 +250,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
   );
 };
 
-export const ClientCardImageElement = ({
-  client,
-  base64,
-  url,
-  size = 150,
-  ...props
-}: {
-  client?: ClientImageFragment;
-  base64?: string;
-  url?: string;
-  size?: number;
-} & BoxProps<'img'>) => {
-  // let src = 'https://dummyimage.com/150x150/e8e8e8/aaa';
-  let src;
-
-  if (client?.image?.base64)
-    src = `data:image/jpeg;base64,${client.image.base64}`;
-  if (base64) src = `data:image/jpeg;base64,${base64}`;
-  if (url) src = url;
-
-  return (
-    <Box
-      alt='client'
-      src={src}
-      {...props}
-      sx={{
-        height: size,
-        width: size,
-        backgroundColor: (theme) => theme.palette.grey[100],
-        borderRadius: (theme) => `${theme.shape.borderRadius}px`,
-        ...props.sx,
-      }}
-      component={src ? 'img' : undefined}
-    >
-      {src ? undefined : (
-        <Typography
-          sx={{
-            color: (theme) => theme.palette.text.disabled,
-            borderBottom: 0,
-            display: 'flex',
-            flexGrow: 1,
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          variant='body2'
-          component='span'
-        >
-          No Client Photo
-        </Typography>
-      )}
-    </Box>
-  );
-};
-
-export const ClientCardImage = ({
+const ClientCardImage = ({
   client,
   size = 150,
 }: {
@@ -395,7 +339,14 @@ export const ClientCardImage = ({
   );
 };
 
-const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
+/**
+ * Profile card displayed on the Client Dashboard Overview, with:
+ * - Image
+ * - Client Name
+ * - Action to Edit
+ * - Accordions with IDs, Demographics, and Contact Information
+ */
+const ClientProfileCard: React.FC<Props> = ({ client }) => {
   const {
     data: { client: clientImageData } = {},
     loading: imageLoading = false,
@@ -409,13 +360,12 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
   ]);
 
   return (
-    <>
+    <Box>
       <Card
         sx={{
           p: 2,
-          ...(!onlyCard
-            ? { borderBottomRightRadius: 0, borderBottomLeftRadius: 0 }
-            : {}),
+          borderBottomRightRadius: 0,
+          borderBottomLeftRadius: 0,
         }}
       >
         <Grid container spacing={2}>
@@ -494,16 +444,10 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
           </Grid>
         </Grid>
       </Card>
-      {!onlyCard && (
-        <Box
-          sx={{
-            mt: '-1px',
-          }}
-        >
-          <ClientProfileCardAccordion client={client} />
-        </Box>
-      )}
-    </>
+      <Box sx={{ mt: '-1px' }}>
+        <ClientProfileCardAccordion client={client} />
+      </Box>
+    </Box>
   );
 };
 

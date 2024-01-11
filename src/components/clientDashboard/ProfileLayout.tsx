@@ -36,9 +36,7 @@ const ProfileLayout: React.FC<Props> = ({ client, notices = [] }) => {
         )}
         <Grid item md={12} lg={canViewEnrollments ? 6 : 8}>
           <Stack gap={2}>
-            <Box>
-              <ClientProfileCard client={client} />
-            </Box>
+            <ClientProfileCard client={client} />
             <ClientCustomDataElementsCard client={client} />
           </Stack>
         </Grid>
