@@ -123,7 +123,7 @@ const ApolloErrorAlert: React.FC<Props> = ({
   }, [error]);
 
   const isNetworkError = error
-    ? error.graphQLErrors?.length == 0 && !isServerError(error.networkError)
+    ? error.graphQLErrors?.length === 0 && !isServerError(error.networkError)
     : false;
   if (!error) return;
 

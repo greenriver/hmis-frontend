@@ -88,7 +88,7 @@ const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
     <>
       <SessionStatusManager {...sessionStatus} />
       {useRoutes(
-        sessionStatus.status == 'valid' ? protectedRoutes : blankRoutes
+        sessionStatus.status === 'valid' ? protectedRoutes : blankRoutes
       )}
     </>
   );

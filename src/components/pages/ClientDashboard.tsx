@@ -40,7 +40,10 @@ const ClientDashboard: React.FC = () => {
   });
   if (error) throw error;
 
-  const navItems = useClientDashboardNavItems(params.clientId);
+  const navItems = useClientDashboardNavItems(
+    params.clientId,
+    client?.enabledFeatures || []
+  );
 
   const { currentPath, ...dashboardState } = useDashboardState();
 

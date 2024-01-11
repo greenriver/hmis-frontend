@@ -296,7 +296,7 @@ const ClientSearch = () => {
             recordType='Client'
             filterInputType='ClientFilterOptions'
             defaultSortOption={
-              searchType == 'broad'
+              searchType === 'broad'
                 ? ClientSortOption.BestMatch
                 : ClientSortOption.LastNameAToZ
             }

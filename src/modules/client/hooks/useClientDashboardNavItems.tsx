@@ -7,9 +7,15 @@ import {
   useRootPermissions,
 } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
-import { ClientAccessFieldsFragment } from '@/types/gqlTypes';
+import {
+  ClientAccessFieldsFragment,
+  ClientDashboardFeature,
+} from '@/types/gqlTypes';
 
-export const useClientDashboardNavItems = (clientId: string) => {
+export const useClientDashboardNavItems = (
+  clientId: string,
+  enabledFeatures: ClientDashboardFeature[]
+) => {
   const [rootAccess] = useRootPermissions();
   const [clientAccess] = useClientPermissions(clientId);
 
@@ -53,7 +59,15 @@ export const useClientDashboardNavItems = (clientId: string) => {
             id: 'files',
             title: 'Files',
             path: ClientDashboardRoutes.FILES,
-            hide: !canViewFiles,
+            hide:
+              !canViewFiles ||
+              !enabledFeatures.includes(ClientDashboardFeature.File),
+          },
+          {
+            id: 'case-notes',
+            title: 'Case Notes',
+            path: ClientDashboardRoutes.CASE_NOTES,
+            hide: !enabledFeatures.includes(ClientDashboardFeature.CaseNote),
           },
         ],
       },
@@ -78,7 +92,7 @@ export const useClientDashboardNavItems = (clientId: string) => {
         ],
       },
     ];
-  }, [canViewFiles, rootAccess]);
+  }, [canViewFiles, enabledFeatures, rootAccess?.canMergeClients]);
 
   return navItems;
 };

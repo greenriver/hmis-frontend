@@ -315,8 +315,8 @@ mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
   }
 }
 
-mutation DeleteHmisParticipation($input: DeleteHmisParticipationInput!) {
-  deleteHmisParticipation(input: $input) {
+mutation DeleteHmisParticipation($id: ID!) {
+  deleteHmisParticipation(input: { id: $id }) {
     hmisParticipation {
       id
     }
@@ -326,8 +326,8 @@ mutation DeleteHmisParticipation($input: DeleteHmisParticipationInput!) {
   }
 }
 
-mutation DeleteCeParticipation($input: DeleteCeParticipationInput!) {
-  deleteCeParticipation(input: $input) {
+mutation DeleteCeParticipation($id: ID!) {
+  deleteCeParticipation(input: { id: $id }) {
     ceParticipation {
       id
     }

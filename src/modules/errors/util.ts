@@ -41,7 +41,7 @@ export const hasErrors = (state: ErrorState): boolean =>
   !!state.apolloError || state.errors.length > 0;
 
 export const hasOnlyWarnings = (state: ErrorState): boolean =>
-  !state.apolloError && state.errors.length == 0 && state.warnings.length > 0;
+  !state.apolloError && state.errors.length === 0 && state.warnings.length > 0;
 
 export const emptyErrorState: ErrorState = {
   apolloError: undefined,
