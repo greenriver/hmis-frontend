@@ -48,7 +48,7 @@ const ClientCustomDataElementsCard: React.FC<Props> = ({ client }) => {
       headerVariant='border'
       headerTypographyVariant='body1'
     >
-      <CommonDetailGridContainer>
+      <CommonDetailGridContainer ariaLabel='Custom Client Fields'>
         {rows.map(({ id, label, value }) => (
           <CommonDetailGridItem label={label} key={id}>
             {value}

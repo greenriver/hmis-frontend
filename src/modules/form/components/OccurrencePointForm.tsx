@@ -127,7 +127,11 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
 
   return (
     <>
-      <IconButtonContainer onClick={openFormDialog} Icon={EditIcon}>
+      <IconButtonContainer
+        onClick={openFormDialog}
+        Icon={EditIcon}
+        ButtonProps={{ 'aria-label': `Edit ${dialogTitle}` }}
+      >
         {dynamicView}
       </IconButtonContainer>
       {renderFormDialog({
