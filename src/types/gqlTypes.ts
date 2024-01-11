@@ -384,11 +384,6 @@ export enum Availability {
   YearRound = 'YEAR_ROUND',
 }
 
-export type BaseAuditEventFilterOptions = {
-  auditEventRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
-  user?: InputMaybe<Array<Scalars['ID']['input']>>;
-};
-
 /** 2.07.5 */
 export enum BedType {
   /** (1) Facility-based */
@@ -580,7 +575,7 @@ export type ClientAssessmentsArgs = {
 
 /** HUD Client */
 export type ClientAuditHistoryArgs = {
-  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+  filters?: InputMaybe<ClientAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -761,6 +756,11 @@ export type ClientAuditEvent = {
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
   user?: Maybe<ApplicationUser>;
+};
+
+export type ClientAuditEventFilterOptions = {
+  clientRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type ClientAuditEventsPaginated = {
@@ -2155,7 +2155,7 @@ export type EnrollmentAssessmentsArgs = {
 
 /** HUD Enrollment */
 export type EnrollmentAuditHistoryArgs = {
-  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+  filters?: InputMaybe<EnrollmentAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -2282,6 +2282,11 @@ export type EnrollmentAuditEvent = {
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
   user?: Maybe<ApplicationUser>;
+};
+
+export type EnrollmentAuditEventFilterOptions = {
+  enrollmentRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type EnrollmentAuditEventsPaginated = {
@@ -4124,6 +4129,7 @@ export enum PickListType {
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
   /** Grouped HUD CE Event types */
   CeEvents = 'CE_EVENTS',
+  ClientAuditEventRecordTypes = 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   Destination = 'DESTINATION',
@@ -11348,7 +11354,7 @@ export type GetClientAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+  filters?: InputMaybe<ClientAuditEventFilterOptions>;
 }>;
 
 export type GetClientAuditEventsQuery = {
@@ -11389,7 +11395,7 @@ export type GetEnrollmentAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+  filters?: InputMaybe<EnrollmentAuditEventFilterOptions>;
 }>;
 
 export type GetEnrollmentAuditEventsQuery = {
@@ -30578,7 +30584,7 @@ export const GetClientAuditEventsDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
-    $filters: BaseAuditEventFilterOptions = null
+    $filters: ClientAuditEventFilterOptions = null
   ) {
     client(id: $id) {
       id
@@ -30653,7 +30659,7 @@ export const GetEnrollmentAuditEventsDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
-    $filters: BaseAuditEventFilterOptions = null
+    $filters: EnrollmentAuditEventFilterOptions = null
   ) {
     enrollment(id: $id) {
       id

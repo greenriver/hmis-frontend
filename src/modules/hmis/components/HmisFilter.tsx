@@ -70,8 +70,9 @@ const FILTER_NAME_TO_PICK_LIST = {
   appliedToProject: PickListType.Project,
   organization: PickListType.Organization,
   serviceType: PickListType.AllServiceTypes,
-  auditEventRecordType: PickListType.EnrollmentAuditEventRecordTypes,
   user: PickListType.Users,
+  clientRecordType: PickListType.ClientAuditEventRecordTypes,
+  enrollmentRecordType: PickListType.EnrollmentAuditEventRecordTypes,
 };
 
 function isPicklistType(

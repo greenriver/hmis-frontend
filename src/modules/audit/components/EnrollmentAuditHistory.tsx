@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { compact, filter, omit } from 'lodash-es';
+import { compact, filter } from 'lodash-es';
 import AuditObjectChangesSummary, {
   ObjectChangesType,
 } from './AuditObjectChangesSummary';
@@ -18,7 +18,7 @@ import {
   formatDateTimeForDisplay,
 } from '@/modules/hmis/hmisUtil';
 import {
-  BaseAuditEventFilterOptions,
+  EnrollmentAuditEventFilterOptions,
   GetEnrollmentAuditEventsDocument,
   GetEnrollmentAuditEventsQuery,
   GetEnrollmentAuditEventsQueryVariables,
@@ -104,7 +104,7 @@ const EnrollmentAuditHistory = () => {
           GetEnrollmentAuditEventsQuery,
           GetEnrollmentAuditEventsQueryVariables,
           AuditHistoryType,
-          BaseAuditEventFilterOptions
+          EnrollmentAuditEventFilterOptions
         >
           columns={columns}
           fetchPolicy='cache-and-network'
@@ -119,10 +119,8 @@ const EnrollmentAuditHistory = () => {
           queryVariables={{ id: enrollmentId }}
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
-          // FIXME: Record dropdown is non specific to Enrollments
-          filters={(filters) => omit(filters, 'auditEventRecordType')}
           recordType='EnrollmentAuditEvent'
-          filterInputType='BaseAuditEventFilterOptions'
+          filterInputType='EnrollmentAuditEventFilterOptions'
           showFilters
         />
       </Paper>
