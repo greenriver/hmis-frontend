@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Paper } from '@mui/material';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import FormDefinitionTable, { Row } from './FormDefinitionTable';
 import PageTitle from '@/components/layout/PageTitle';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
@@ -17,7 +17,6 @@ import {
   UpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 import { evictQuery } from '@/utils/cacheUtil';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 const FormDefinitionsPage = () => {
   const [selected, setSelected] = useState<Row>();
@@ -55,9 +54,7 @@ const FormDefinitionsPage = () => {
       const id = data?.createFormDefinition?.formDefinition?.id;
       evictQuery('formDefinitions');
       if (id)
-        navigate(
-          generateSafePath(AdminDashboardRoutes.VIEW_FORM, { formId: id })
-        );
+        navigate(generatePath(AdminDashboardRoutes.VIEW_FORM, { formId: id }));
     },
     onClose: () => setSelected(undefined),
   });
