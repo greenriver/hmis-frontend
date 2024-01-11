@@ -519,6 +519,7 @@ export const HmisEnums = {
     CE_EVENT: 'CE event',
     CE_PARTICIPATION: 'CE participation',
     CLIENT: 'Client',
+    CLIENT_DETAIL: 'Client detail',
     CURRENT_LIVING_SITUATION: 'Current living situation',
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',

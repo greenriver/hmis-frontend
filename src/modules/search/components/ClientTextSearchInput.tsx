@@ -10,7 +10,7 @@ import CommonSearchInput, {
 export interface ClientTextSearchInputProps extends CommonSearchInputProps {
   showSearchTips?: boolean;
   errorMessage?: string;
-  label?: string;
+  label?: string | null;
 }
 
 // NOTE: we should use translations for variations (like adding MCI ID) but its not set up yet for multiple envs
@@ -88,7 +88,9 @@ const ClientTextSearchInput: React.FC<ClientTextSearchInputProps> = ({
   return (
     <CommonSearchInput
       label={
-        <RequiredLabel text={label} TypographyProps={{ fontWeight: 600 }} />
+        label && (
+          <RequiredLabel text={label} TypographyProps={{ fontWeight: 600 }} />
+        )
       }
       name='search client'
       placeholder={placeholder}

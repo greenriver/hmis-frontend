@@ -1,75 +1,61 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Box } from '@mui/material';
 import { assign, isEmpty, isNil, omit } from 'lodash-es';
-import { useMemo } from 'react';
-import IconButtonContainer from './IconButtonContainer';
+import React, { useMemo } from 'react';
+
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import IconButtonContainer from '@/modules/enrollment/components/IconButtonContainer';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
+import { SubmitFormInputVariables } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { FormValues, isQuestionItem } from '@/modules/form/types';
+import {
+  LocalConstants,
+  PickListArgs,
+  SubmitFormAllowedTypes,
+} from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
   createInitialValuesFromRecord,
-  getItemMap,
-  getInitialValues,
-  modifyFormDefinition,
   getDisabledLinkIds,
+  getInitialValues,
+  getItemMap,
 } from '@/modules/form/util/formUtil';
-import { DashboardEnrollment } from '@/modules/hmis/types';
 import {
   FormDefinitionFieldsFragment,
   FormDefinitionJson,
-  FormItem,
   FormRole,
   InitialBehavior,
 } from '@/types/gqlTypes';
 
-function matchesTitle(item: FormItem, title: string) {
-  return !![item.text, item.readonlyText].find(
-    (s) => s && s.toLowerCase() === title.toLowerCase()
-  );
-}
-
-export const parseOccurrencePointFormDefinition = (
-  definition: FormDefinitionFieldsFragment
-) => {
-  let displayTitle = definition.title;
-  let isEditable = false;
-  const readOnlyDefinition = modifyFormDefinition(
-    definition.definition,
-    (item) => {
-      if (definition.title && matchesTitle(item, definition.title)) {
-        displayTitle = item.readonlyText || item.text || displayTitle;
-        delete item.text;
-        delete item.readonlyText;
-      }
-      if (isQuestionItem(item) && !item.readOnly) {
-        isEditable = true;
-      }
-    }
-  );
-
-  return { displayTitle, isEditable, readOnlyDefinition };
-};
-
-function hasAnyValues(object: FormValues) {
-  return !!Object.keys(object).find((k) => !isNil(object[k]));
-}
-
-interface OccurrencePointValueProps {
-  enrollment: DashboardEnrollment;
+export interface OccurrencePointFormProps {
+  record: SubmitFormAllowedTypes;
   definition: FormDefinitionFieldsFragment;
+  submitFormInputVariables?: SubmitFormInputVariables;
   readOnlyDefinition: FormDefinitionJson;
   editable?: boolean;
   dialogTitle?: string;
+  localConstants?: LocalConstants;
+  pickListArgs?: PickListArgs;
 }
 
-const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
-  enrollment,
+/**
+ * This component renders the values from the `record` into the `definition` and displays
+ * it as a read-only view. If any of the `definition` items are not read-only, it shows
+ * a pencil icon button. When clicked, it brings up a modal that renders a form according to
+ * the `definition`, and submits changes using SubmitForm.
+ *
+ * This is currently primarily used for viewing/editing Custom Data Elements that are associated with
+ * a Client or an Enrollment, on the Client Dashboard and Enrollment Dashboard respectively.
+ */
+const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
+  record,
+  localConstants: localConstantsProp,
   definition,
   editable,
   readOnlyDefinition,
   dialogTitle,
+  pickListArgs,
+  submitFormInputVariables,
 }) => {
   const itemMap = useMemo(
     () => getItemMap(definition.definition, false),
@@ -78,12 +64,10 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
 
   const localConstants = useMemo(
     () => ({
-      entryDate: enrollment.entryDate,
-      exitDate: enrollment.exitDate,
-      projectType: enrollment.project.projectType,
+      ...localConstantsProp,
       ...AlwaysPresentLocalConstants,
     }),
-    [enrollment.entryDate, enrollment.exitDate, enrollment.project.projectType]
+    [localConstantsProp]
   );
 
   // Build values for DynamicView
@@ -96,12 +80,15 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
       InitialBehavior.IfEmpty
     );
     // Apply values from the Enrollment
-    const formValues = createInitialValuesFromRecord(itemMap, enrollment);
+    const formValues = createInitialValuesFromRecord(itemMap, record);
 
     return assign(initialsIfEmpty, formValues);
-  }, [itemMap, definition.definition, enrollment, localConstants]);
+  }, [itemMap, definition.definition, record, localConstants]);
 
-  const hasAnyContent = useMemo(() => hasAnyValues(values), [values]);
+  const hasAnyContent = useMemo(
+    () => !!Object.keys(values).find((k) => !isNil(values[k])),
+    [values]
+  );
 
   const hasAnyEditableContent = useMemo(() => {
     if (!editable) return false;
@@ -113,24 +100,12 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
     return !isEmpty(omit(values, initiallyDisabledLinkIds));
   }, [itemMap, editable, localConstants, values]);
 
-  // Pick list args for form and display
-  const pickListArgs = useMemo(
-    () => ({
-      projectId: enrollment.project.id,
-      householdId: enrollment.householdId,
-    }),
-    [enrollment]
-  );
-
   // Form dialog for editing
   const { openFormDialog, renderFormDialog } = useFormDialog({
     formRole: FormRole.OccurrencePoint,
     localDefinition: definition,
-    record: enrollment,
-    inputVariables: {
-      clientId: enrollment.client.id,
-      enrollmentId: enrollment.id,
-    },
+    record,
+    inputVariables: submitFormInputVariables,
     localConstants,
   });
 
@@ -152,7 +127,11 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
 
   return (
     <>
-      <IconButtonContainer onClick={openFormDialog} Icon={EditIcon}>
+      <IconButtonContainer
+        onClick={openFormDialog}
+        Icon={EditIcon}
+        ButtonProps={{ 'aria-label': `Edit ${dialogTitle}` }}
+      >
         {dynamicView}
       </IconButtonContainer>
       {renderFormDialog({
@@ -164,4 +143,4 @@ const OccurrencePointValue: React.FC<OccurrencePointValueProps> = ({
   );
 };
 
-export default OccurrencePointValue;
+export default OccurrencePointForm;
