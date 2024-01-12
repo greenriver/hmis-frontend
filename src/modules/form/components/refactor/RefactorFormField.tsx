@@ -105,6 +105,7 @@ const RefactorFormField: React.FC<Props> = ({
             nestingLevel={nestingLevel}
             renderChildItem={(item, props, fn) => (
               <RefactorFormField
+                key={item.linkId}
                 handlers={handlers}
                 item={item}
                 nestingLevel={nestingLevel + 1}
