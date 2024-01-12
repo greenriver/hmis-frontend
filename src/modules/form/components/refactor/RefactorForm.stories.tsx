@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { AnnualAssessmentPostingDefinition } from '../../data';
+import { MockDefinition } from '../../data';
 import RefactorForm from './RefactorForm';
 // import { Default as ViewStory } from './viewable/DynamicView.stories';
 
@@ -9,7 +9,7 @@ import { emptyErrorState } from '@/modules/errors/util';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const formDefinition: FormDefinitionJson = AnnualAssessmentPostingDefinition;
+const formDefinition: FormDefinitionJson = MockDefinition;
 
 export default {
   title: 'RefactorForm',
@@ -30,6 +30,8 @@ const Template: StoryFn<typeof RefactorForm> = (args) => (
     {...args}
     showSavePrompt
     onSubmit={(values) => console.log(values)}
+    onDirty={(dirty) => console.log({ dirty })}
+    initialValues={{ 'string-1': 'x' }}
   />
 );
 

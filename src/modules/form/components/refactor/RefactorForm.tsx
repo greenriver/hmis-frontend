@@ -2,6 +2,7 @@ import { BaseSyntheticEvent, useCallback } from 'react';
 
 import { FormValues, LocalConstants } from '../../types';
 
+import DirtyObserver from './DirtyObserver';
 import RefactorFormBase, { RefactorFormBaseProps } from './RefactorFormBase';
 import useFormDefinitionHandlers from './useFormDefinitionHandlers';
 import { FormDefinitionJson } from '@/types/gqlTypes';
@@ -30,6 +31,7 @@ const DynamicForm = ({
   definition,
   onSubmit,
   onSaveDraft,
+  onDirty,
   initialValues,
   errors: errorState,
   localConstants,
@@ -50,13 +52,16 @@ const DynamicForm = ({
   }, [onSaveDraft, getCleanedValues]);
 
   return (
-    <RefactorFormBase
-      {...props}
-      handlers={handlers}
-      errors={errorState}
-      onSubmit={(e) => console.log('SUBMIT', e)}
-      onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-    />
+    <>
+      {onDirty && <DirtyObserver onDirty={onDirty} handlers={handlers} />}
+      <RefactorFormBase
+        {...props}
+        handlers={handlers}
+        errors={errorState}
+        onSubmit={(e) => console.log('SUBMIT', e)}
+        onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
+      />
+    </>
   );
 };
 
