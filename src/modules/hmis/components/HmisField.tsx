@@ -6,6 +6,7 @@ import {
   getSchemaForType,
   parseAndFormatDate,
   parseAndFormatDateTime,
+  safeParseDateOrString,
 } from '../hmisUtil';
 
 import { hasCustomDataElements } from '../types';
@@ -28,23 +29,17 @@ const getType = (type: GqlSchemaType): GqlSchemaType['name'] => {
 
 const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
   if (!type) return value;
+
   if (isHmisEnum(type)) {
     const enumMap = HmisEnums[type];
-    if (
-      [
-        'NoYesMissing',
-        'NoYesReasonsForMissingData',
-        'DisabilityResponse',
-      ].includes(type)
-    ) {
-      return <YesNoDisplay enumValue={value} />;
-    }
+
     return Array.isArray(value) ? (
       <MultiHmisEnum values={value} enumMap={enumMap} />
     ) : (
       <HmisEnum value={value} enumMap={enumMap} />
     );
   }
+
   switch (type) {
     case 'Boolean':
       if (!isNil(value)) return <YesNoDisplay booleanValue={value} />;
@@ -56,6 +51,12 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
     case 'Float':
       return formatCurrency(value);
   }
+
+  // Attempt date formatting if it is a date
+  if (safeParseDateOrString(value)) {
+    return parseAndFormatDate(value);
+  }
+
   return value;
 };
 
@@ -78,7 +79,7 @@ const HmisField = ({
     const defaultDisplay = <>{`${value}`}</>;
 
     const fieldSchema = (getSchemaForType(recordType)?.fields || []).find(
-      (f) => f.name == fieldName
+      (f) => f.name === fieldName
     );
     if (!fieldSchema) return defaultDisplay;
 

@@ -17,8 +17,8 @@ import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
-import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';
+import ClientSearchResultCard from '@/modules/client/components/ClientSearchResultCard';
 import {
   ContextualClientDobAge,
   ContextualClientSsn,
@@ -296,7 +296,7 @@ const ClientSearch = () => {
             recordType='Client'
             filterInputType='ClientFilterOptions'
             defaultSortOption={
-              searchType == 'broad'
+              searchType === 'broad'
                 ? ClientSortOption.BestMatch
                 : ClientSortOption.LastNameAToZ
             }
@@ -311,7 +311,10 @@ const ClientSearch = () => {
                 ? (client) => (
                     <TableRow key={client.id}>
                       <TableCell colSpan={columns.length} sx={{ py: 2 }}>
-                        <ClientCard key={client.id} client={client} />
+                        <ClientSearchResultCard
+                          key={client.id}
+                          client={client}
+                        />
                       </TableCell>
                     </TableRow>
                   )

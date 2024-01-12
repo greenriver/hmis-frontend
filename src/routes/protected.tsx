@@ -38,22 +38,30 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
+import ConfigureAutoExitPage from '@/modules/admin/components/autoExit/ConfigureAutoExitPage';
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
+import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
+import FormEditorPage from '@/modules/admin/components/forms/UpdateFormDefinitionPage';
+import ViewFormDefinitionPage from '@/modules/admin/components/forms/ViewFormDefinitionPage';
+import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
+import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
 import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
+import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
+import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
+import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
 import GlobalClientMergeHistory from '@/modules/clientMerge/components/admin/GlobalClientMergeHistory';
 import ClientMergeHistory from '@/modules/clientMerge/components/client/ClientMergeHistory';
 import NewClientMerge from '@/modules/clientMerge/components/client/NewClientMerge';
 import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
 import EnrollmentCeAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeAssessmentsPage';
+import EnrollmentCeEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCeEventsPage';
 import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
-import EnrollmentCustomCaseNotesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCustomCaseNotesPage';
 import EnrollmentEsgFundingReport from '@/modules/enrollment/components/dashboardPages/EnrollmentEsgFundingReport';
-import EnrollmentEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentEventsPage';
 import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/EnrollmentOverview';
 import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
@@ -390,7 +398,18 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: EnrollmentDashboardRoutes.EVENTS,
             // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentEventsPage />,
+            element: <EnrollmentCeEventsPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.AUDIT_HISTORY,
+            element: (
+              <EnrollmentRoute
+                permissions='canAuditEnrollments'
+                redirectRoute={EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW}
+              >
+                <EnrollmentAuditHistory />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.CE_ASSESSMENTS,
@@ -400,7 +419,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES,
             // No perm needed because it only requires enrollment visibility
-            element: <EnrollmentCustomCaseNotesPage />,
+            element: <EnrollmentCaseNotes />,
           },
           {
             path: EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
@@ -462,6 +481,17 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            path: ClientDashboardRoutes.CASE_NOTES,
+            element: (
+              <ClientRoute
+                permissions='canViewEnrollmentDetails'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <ClientCaseNotes />
+              </ClientRoute>
+            ),
+          },
+          {
             path: ClientDashboardRoutes.ASSESSMENTS,
             element: (
               <ClientRoute
@@ -514,11 +544,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.FILES,
             element: (
               <ClientRoute
-                permissions={[
-                  'canViewAnyConfidentialClientFiles',
-                  'canViewAnyNonconfidentialClientFiles',
-                  'canManageOwnClientFiles',
-                ]}
+                permissions='canViewAnyFiles'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientFiles />
@@ -596,10 +622,66 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.USER_AUDIT,
+            path: AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY,
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
-                <UserAuditPage />
+                <UserAuditPage entityType='clients' />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY,
+            element: (
+              <RootPermissionsFilter permissions='canAuditUsers'>
+                <UserAuditPage entityType='enrollments' />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.FORMS,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <FormDefinitionsPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.VIEW_FORM,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <ViewFormDefinitionPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.EDIT_FORM,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <FormEditorPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CONFIGURE_SERVICES,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <ConfigureServicesPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CONFIGURE_SERVICE_CATEGORY,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <ServiceCategoryDetail />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.CONFIGURE_AUTO_EXIT,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <ConfigureAutoExitPage />
               </RootPermissionsFilter>
             ),
           },

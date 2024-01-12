@@ -252,6 +252,7 @@ const DynamicForm = forwardRef(
           <SaveSlide
             in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}
             appear
+            padBody
             timeout={300}
             direction='up'
             loading={loading}

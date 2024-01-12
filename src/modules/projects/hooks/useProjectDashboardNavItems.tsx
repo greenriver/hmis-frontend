@@ -5,19 +5,18 @@ import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   DataCollectionFeatureRole,
+  ProjectAccessFieldsFragment,
   ProjectAllFieldsFragment,
   ProjectType,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 export const useProjectDashboardNavItems = (
   project?: ProjectAllFieldsFragment
 ) => {
   const { globalFeatureFlags } = useHmisAppSettings();
 
-  const navItems: NavItem[] = useMemo(() => {
+  const navItems: NavItem<ProjectAccessFieldsFragment>[] = useMemo(() => {
     if (!project) return [];
-    const params = { projectId: project.id };
     const dataCollectionRoles = project.dataCollectionFeatures.map(
       (r) => r.role
     );
@@ -42,31 +41,30 @@ export const useProjectDashboardNavItems = (
             id: 'services',
             title: 'Services',
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
-            hide:
-              !project.access.canViewEnrollmentDetails ||
-              !dataCollectionRoles.includes(DataCollectionFeatureRole.Service),
+            permissions: ['canViewEnrollmentDetails'],
+            hide: !dataCollectionRoles.includes(
+              DataCollectionFeatureRole.Service
+            ),
           },
           {
             id: 'bed-nights',
             title: 'Bed Nights',
             path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
-            hide:
-              !project.access.canViewEnrollmentDetails ||
-              project.projectType !== ProjectType.EsNbn,
+            permissions: ['canViewEnrollmentDetails'],
+            hide: project.projectType !== ProjectType.EsNbn,
           },
           {
             id: 'referrals',
             title: 'Referrals',
-            path: generateSafePath(ProjectDashboardRoutes.REFERRALS, params),
-            hide:
-              !globalFeatureFlags?.externalReferrals ||
-              (!project.access.canManageIncomingReferrals &&
-                !project.access.canManageOutgoingReferrals),
+            path: ProjectDashboardRoutes.REFERRALS,
+            permissions: [
+              'canManageIncomingReferrals',
+              'canManageOutgoingReferrals',
+            ],
+            permissionMode: 'any',
+            hide: !globalFeatureFlags?.externalReferrals,
           },
-        ].map(({ path, ...rest }) => ({
-          path: generateSafePath(path, params),
-          ...rest,
-        })),
+        ],
       },
       {
         id: 'setup',
@@ -77,7 +75,7 @@ export const useProjectDashboardNavItems = (
             id: 'units',
             title: 'Units',
             path: ProjectDashboardRoutes.UNITS,
-            hide: !project.access.canManageInventory,
+            permissions: ['canManageInventory'],
           },
           {
             id: 'inventory',
@@ -104,10 +102,7 @@ export const useProjectDashboardNavItems = (
             title: 'CE Participation',
             path: ProjectDashboardRoutes.CE_PARTICIPATION,
           },
-        ].map(({ path, ...rest }) => ({
-          path: generateSafePath(path, params),
-          ...rest,
-        })),
+        ],
       },
     ];
   }, [globalFeatureFlags, project]);

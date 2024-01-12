@@ -1,0 +1,24 @@
+fragment FormRuleFields on FormRule {
+  id
+  active
+  activeStatus
+  system
+  definitionIdentifier
+  definitionId
+  definitionTitle
+  definitionRole
+  dataCollectedAbout
+  funder
+  otherFunder
+  projectType
+  projectId
+  project {
+    ...ProjectNameAndType
+  }
+  organizationId
+  organization {
+    ...OrganizationNameFields
+  }
+  createdAt
+  updatedAt
+}

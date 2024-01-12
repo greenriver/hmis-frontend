@@ -15,19 +15,19 @@ import DatePicker from '@/components/elements/input/DatePicker';
 import { fetchConsumerSummaryReportUrl } from '@/modules/projects/api';
 
 export interface ConsumerSummaryReportDialogProps extends DialogProps {
-  clientId: string;
+  referralIdentifier: string;
 }
 
 const ConsumerSummaryReportDialog: React.FC<
   ConsumerSummaryReportDialogProps
-> = ({ clientId, ...props }) => {
+> = ({ referralIdentifier, ...props }) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   return (
     <CommonDialog {...props}>
-      <DialogTitle>Consumer Summary Report&emsp;</DialogTitle>
+      <DialogTitle>Consumer Summary Report&emsp;&emsp;</DialogTitle>
       <DialogContent>
-        <Stack gap={2} mt={2}>
+        <Stack gap={2} my={2}>
           <Typography>
             Select date range{' '}
             <Typography
@@ -42,18 +42,22 @@ const ConsumerSummaryReportDialog: React.FC<
             label='Start Date'
             value={startDate}
             onChange={setStartDate}
+            sx={{ width: '200px' }}
           />
-          <DatePicker label='End Date' value={endDate} onChange={setEndDate} />
+          <DatePicker
+            label='End Date'
+            value={endDate}
+            onChange={setEndDate}
+            sx={{ width: '200px' }}
+          />
         </Stack>
       </DialogContent>
       <DialogActions>
         <Button
           fullWidth
-          variant='outlined'
-          color='secondary'
           target='_blank'
           href={fetchConsumerSummaryReportUrl({
-            clientId,
+            referralIdentifier,
             startDate,
             endDate,
           })}

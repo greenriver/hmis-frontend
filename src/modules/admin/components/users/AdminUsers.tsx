@@ -46,7 +46,7 @@ const AdminUsers = () => {
               onClickImpersonate={() => setChosenUser(user)}
               userId={user.id}
               isCurrentUser={
-                !!(user.id == currentUser?.id || currentUser?.impersonating)
+                !!(user.id === currentUser?.id || currentUser?.impersonating)
               }
               rootAccess={access}
             />
@@ -73,6 +73,7 @@ const AdminUsers = () => {
           onChange={setSearch}
           fullWidth
           size='medium'
+          searchAdornment
         />
         <Paper>
           <GenericTableWithData<

@@ -2,10 +2,11 @@ query GetEnrollmentCustomCaseNotes(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
+  $sortOrder: CustomCaseNoteSortOption
 ) {
   enrollment(id: $id) {
     id
-    customCaseNotes(limit: $limit, offset: $offset) {
+    customCaseNotes(limit: $limit, offset: $offset, sortOrder: $sortOrder) {
       offset
       limit
       nodesCount
@@ -23,6 +24,34 @@ mutation DeleteCustomCaseNote($id: ID!) {
     }
     errors {
       ...ValidationErrorFields
+    }
+  }
+}
+
+query GetClientCaseNotes(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $sortOrder: CustomCaseNoteSortOption
+) {
+  client(id: $id) {
+    id
+    customCaseNotes(limit: $limit, offset: $offset, sortOrder: $sortOrder) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CustomCaseNoteFields
+        enrollment {
+          id
+          lockVersion
+          projectName
+          projectType
+          entryDate
+          exitDate
+          inProgress
+        }
+      }
     }
   }
 }

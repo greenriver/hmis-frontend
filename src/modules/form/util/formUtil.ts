@@ -106,10 +106,10 @@ export function areEqualValues(
 }
 
 export const hasMeaningfulValue = (value: any): boolean => {
-  if (Array.isArray(value) && value.length == 0) return false;
+  if (Array.isArray(value) && value.length === 0) return false;
   if (isNil(value)) return false;
   if (value === '') return false;
-  if (value == HIDDEN_VALUE) return false;
+  if (value === HIDDEN_VALUE) return false;
   return true;
 };
 
@@ -488,17 +488,22 @@ type AutofillValuesArgs = {
   values: FormValues;
   itemMap: ItemMap;
   localConstants: LocalConstants;
+  viewOnly: boolean;
 };
 export const autofillValues = ({
   item,
   values,
   itemMap,
   localConstants,
+  viewOnly,
 }: AutofillValuesArgs): boolean => {
   if (!item.autofillValues) return false;
 
   // use `some` to stop iterating when true is returned
   return item.autofillValues.some((av) => {
+    // Skip autofills that should not run on read-only views
+    if (viewOnly && !av.autofillReadonly) return false;
+
     // Evaluate all enableWhen conditions
     const booleans = av.autofillWhen.map((en) =>
       evaluateEnableWhen({
@@ -1414,4 +1419,33 @@ export const itemDefaults = {
   warnIfEmpty: false,
   hidden: false,
   repeats: false,
+};
+
+export const parseOccurrencePointFormDefinition = (
+  definition: FormDefinitionFieldsFragment
+) => {
+  let displayTitle = definition.title;
+  let isEditable = false;
+
+  function matchesTitle(item: FormItem, title: string) {
+    return !![item.text, item.readonlyText].find(
+      (s) => s && s.toLowerCase() === title.toLowerCase()
+    );
+  }
+
+  const readOnlyDefinition = modifyFormDefinition(
+    definition.definition,
+    (item) => {
+      if (definition.title && matchesTitle(item, definition.title)) {
+        displayTitle = item.readonlyText || item.text || displayTitle;
+        delete item.text;
+        delete item.readonlyText;
+      }
+      if (isQuestionItem(item) && !item.readOnly) {
+        isEditable = true;
+      }
+    }
+  );
+
+  return { displayTitle, isEditable, readOnlyDefinition };
 };

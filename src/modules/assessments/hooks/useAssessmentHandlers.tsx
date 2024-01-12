@@ -17,7 +17,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   AssessmentInput,
-  FormDefinition,
+  FormDefinitionFieldsFragment,
   FormDefinitionJson,
   SaveAssessmentMutation,
   SubmitAssessmentMutation,
@@ -32,7 +32,7 @@ export type AssessmentResponseStatus =
   | 'warning';
 
 type Args = {
-  definition?: FormDefinition;
+  definition?: FormDefinitionFieldsFragment;
   enrollmentId: string;
   assessmentId?: string;
   assessmentLockVersion?: number;

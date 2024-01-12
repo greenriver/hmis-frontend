@@ -111,3 +111,12 @@ mutation DeleteCurrentLivingSituation($id: ID!) {
     }
   }
 }
+
+query GetEnrollmentPermissions($id: ID!) {
+  enrollment(id: $id) {
+    id
+    access {
+      ...EnrollmentAccessFields
+    }
+  }
+}

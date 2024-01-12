@@ -1,0 +1,32 @@
+mutation CreateAutoExitConfig($input: AutoExitConfigInput!) {
+  createAutoExitConfig(input: $input) {
+    autoExitConfig {
+      ...AutoExitConfigFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateAutoExitConfig($input: AutoExitConfigInput!, $id: ID!) {
+  updateAutoExitConfig(input: $input, id: $id) {
+    autoExitConfig {
+      ...AutoExitConfigFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteAutoExitConfig($id: ID!) {
+  deleteAutoExitConfig(id: $id) {
+    autoExitConfig {
+      ...AutoExitConfigFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

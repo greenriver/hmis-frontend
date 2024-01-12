@@ -1,13 +1,17 @@
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { Box, Grid, Tooltip, Typography } from '@mui/material';
-import { Fragment, ReactNode, useMemo } from 'react';
+import { Tooltip } from '@mui/material';
+import { ReactNode, useMemo } from 'react';
+import EnrollmentOccurrencePointForm from './EnrollmentOccurrencePointForm';
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import EntryExitDatesWithAssessmentLinks from './EntryExitDatesWithAssessmentLinks';
-import OccurrencePointValue, {
-  parseOccurrencePointFormDefinition,
-} from './OccurrencePointValue';
+import {
+  CommonDetailGridContainer,
+  CommonDetailGridItem,
+} from '@/components/elements/CommonDetailGrid';
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+
+import { parseOccurrencePointFormDefinition } from '@/modules/form/util/formUtil';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
@@ -66,7 +70,7 @@ const EnrollmentDetails = ({
           parseOccurrencePointFormDefinition(definition);
 
         content[displayTitle] = (
-          <OccurrencePointValue
+          <EnrollmentOccurrencePointForm
             enrollment={enrollment}
             definition={definition}
             readOnlyDefinition={readOnlyDefinition}
@@ -113,59 +117,14 @@ const EnrollmentDetails = ({
 
   if (!enrollment || !rows) return <Loading />;
 
-  const itemSx = {
-    py: 1.5,
-    px: 2,
-    display: 'flex',
-    alignItems: 'center',
-  };
-
   return (
-    <Box>
-      <Grid
-        container
-        rowGap={0}
-        sx={{
-          '> .MuiGrid-item': {
-            borderBottomColor: 'borders.light',
-            borderBottomWidth: 1,
-            borderBottomStyle: 'solid',
-          },
-          '> .MuiGrid-item:nth-last-of-type(2)': {
-            border: 'unset',
-          },
-          '> .MuiGrid-item:nth-last-of-type(1)': {
-            border: 'unset',
-          },
-        }}
-      >
-        {rows.map(({ id, label, value }) => (
-          <Fragment key={id + 'label'}>
-            <Grid item xs={12} md={4} lg={5} sx={{ ...itemSx }}>
-              <Typography fontWeight={600} variant='body2'>
-                {label}
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={8}
-              lg={7}
-              sx={{ ...itemSx }}
-              key={id + 'value'}
-            >
-              <Typography
-                variant='body2'
-                component='div'
-                sx={{ width: '100%' }}
-              >
-                {value}
-              </Typography>
-            </Grid>
-          </Fragment>
-        ))}
-      </Grid>
-    </Box>
+    <CommonDetailGridContainer>
+      {rows.map(({ id, label, value }) => (
+        <CommonDetailGridItem label={label} key={id}>
+          {value}
+        </CommonDetailGridItem>
+      ))}
+    </CommonDetailGridContainer>
   );
 };
 

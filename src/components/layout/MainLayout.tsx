@@ -23,6 +23,7 @@ import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
 import useIsPrintView from '@/hooks/useIsPrintView';
+import { PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS } from '@/modules/admin/components/AdminDashboard';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import OmniSearch from '@/modules/search/components/OmniSearch';
@@ -149,9 +150,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             Projects
           </ButtonLink>
           <RootPermissionsFilter
-            // FIXME: add a root admin permission on the graphql root access object, so
-            // we dont need to update this every time a new pane is added to the admin screen
-            permissions={['canManageDeniedReferrals', 'canMergeClients']}
+            permissions={PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS}
             mode='any'
           >
             <ButtonLink

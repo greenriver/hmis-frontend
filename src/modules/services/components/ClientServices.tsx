@@ -31,7 +31,7 @@ const ClientServices: React.FC<{
     () =>
       (
         [
-          ...SERVICE_COLUMNS.filter((col) => col.header != 'Service Details'),
+          ...SERVICE_COLUMNS.filter((col) => col.header !== 'Service Details'),
           {
             key: 'project',
             header: 'Project Name',
@@ -85,8 +85,8 @@ const ClientServices: React.FC<{
           fetchPolicy='cache-and-network'
           noData='No services'
           recordType='Service'
-          noSort
           defaultSortOption={ServiceSortOption.DateProvided}
+          noSort
         />
       </Paper>
     </>

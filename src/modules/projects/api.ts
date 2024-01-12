@@ -1,19 +1,27 @@
+import { formatDateForGql } from '../hmis/hmisUtil';
+
 export const fetchPreventionAssessmentReportUrl = (
   referralId: string
-): string => `/ac_hmis/prevention_assessment_report/${referralId}`;
+): string => `/hmis/ac/prevention_assessment_report/${referralId}`;
 
 export const fetchConsumerSummaryReportUrl = ({
-  clientId,
+  referralIdentifier,
   startDate,
   endDate,
 }: {
-  clientId: string;
+  referralIdentifier: string;
   startDate?: Date | null;
   endDate?: Date | null;
 }): string => {
-  const params = new URLSearchParams({ clientId });
-  if (startDate) params.append('startDate', startDate.toLocaleDateString());
-  if (endDate) params.append('endDate', endDate.toLocaleDateString());
+  const params = new URLSearchParams({ referral_id: referralIdentifier });
+  if (startDate) {
+    const dt = formatDateForGql(startDate);
+    if (dt) params.append('start_date', dt);
+  }
+  if (endDate) {
+    const dt = formatDateForGql(endDate);
+    if (dt) params.append('end_date', dt);
+  }
 
-  return `/ac_hmis/consumer_summary_report?${params.toString()}`;
+  return `/hmis/ac/consumer_summary_report?${params.toString()}`;
 };

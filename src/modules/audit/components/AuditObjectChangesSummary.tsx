@@ -4,8 +4,12 @@ import { Tooltip, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { filter, isNil } from 'lodash-es';
 import SimpleTable from '@/components/elements/SimpleTable';
-import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
+import {
+  hasMeaningfulValue,
+  isDataNotCollected,
+} from '@/modules/form/util/formUtil';
 import HmisField from '@/modules/hmis/components/HmisField';
+import { AuditEventType } from '@/types/gqlTypes';
 
 // expected shape of JSON 'objectChanges' field
 export type ObjectChangesType = {
@@ -18,10 +22,12 @@ export type ObjectChangesType = {
 
 interface Props {
   objectChanges: ObjectChangesType;
+  recordType: string;
+  eventType: AuditEventType;
 }
 
 const nullText = (
-  <Typography component='span' variant='inherit' color='text.secondary'>
+  <Typography component='span' variant='inherit' color='text.disabled'>
     Empty
   </Typography>
 );
@@ -40,10 +46,25 @@ const changedText = (
   </Typography>
 );
 
+const hasValueExcludingDNC = (value: any) =>
+  hasMeaningfulValue(value) && !isDataNotCollected(value);
+
 /**
  * Simple table for displaying "objectChanges" from an Audit Event object
  */
-const AuditObjectChangesSummary: React.FC<Props> = ({ objectChanges }) => {
+const AuditObjectChangesSummary: React.FC<Props> = ({
+  objectChanges,
+  recordType,
+  eventType,
+}) => {
+  const filteredRows = Object.values(objectChanges)
+    // dont show changes like `null => DNC`, they are meaningless
+    .filter((r) => filter(r.values, hasValueExcludingDNC).length > 0)
+    .map((r) => ({
+      ...r,
+      id: r.fieldName,
+    }));
+
   return (
     <SimpleTable
       TableCellProps={{
@@ -59,12 +80,7 @@ const AuditObjectChangesSummary: React.FC<Props> = ({ objectChanges }) => {
       TableRowProps={{
         sx: { '.MuiTableCell-root:first-of-type': { width: '180px' } },
       }}
-      rows={Object.values(objectChanges)
-        .filter((r) => filter(r.values, hasMeaningfulValue).length > 0)
-        .map((r) => ({
-          ...r,
-          id: r.fieldName,
-        }))}
+      rows={filteredRows}
       columns={[
         { name: 'field', render: (row) => <b>{row.displayName}</b> },
         {
@@ -78,20 +94,26 @@ const AuditObjectChangesSummary: React.FC<Props> = ({ objectChanges }) => {
                   key={fieldName}
                   record={{ ...objectChanges, [fieldName]: val }}
                   fieldName={fieldName}
-                  recordType='Client'
+                  recordType={recordType}
                 />
               )
             );
 
             return (
               <Stack gap={1} direction='row' alignItems='center'>
-                <Typography variant='body2'>
-                  {isNil(from) ? nullText : from}
-                </Typography>
-                <ArrowForwardIcon fontSize='inherit' />
-                <Typography variant='body2'>
-                  {isNil(to) ? nullText : to}
-                </Typography>
+                {['destroy', 'update'].includes(eventType) && (
+                  <Typography variant='body2' component='div'>
+                    {isNil(from) ? nullText : from}
+                  </Typography>
+                )}
+                {eventType === 'update' && (
+                  <ArrowForwardIcon fontSize='inherit' />
+                )}
+                {['update', 'create'].includes(eventType) && (
+                  <Typography variant='body2' component='div'>
+                    {isNil(to) ? nullText : to}
+                  </Typography>
+                )}
               </Stack>
             );
           },

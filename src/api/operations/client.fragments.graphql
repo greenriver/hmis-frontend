@@ -14,6 +14,7 @@ fragment ClientSearchResultFields on Client {
   }
 }
 
+# Fragment to resolve many details on an individual client, when rendering the Client Dashboard
 fragment ClientFields on Client {
   ...ClientIdentificationFields
   ...ClientVeteranInfoFields
@@ -55,6 +56,7 @@ fragment ClientFields on Client {
   emailAddresses {
     ...ClientContactPointFields
   }
+  enabledFeatures
 }
 
 fragment ClientName on Client {
@@ -124,6 +126,7 @@ fragment ClientIdentificationFields on Client {
   dob
   age
   ssn
+  gender
   access {
     id
     canViewFullSsn
@@ -168,17 +171,4 @@ fragment ClientOmniSearchFields on Client {
   gender
   personalId
   ...ClientName
-}
-
-fragment ClientAuditEventFields on ClientAuditEvent {
-  id
-  createdAt
-  event
-  objectChanges
-  recordName
-  recordId
-  user {
-    id
-    name
-  }
 }

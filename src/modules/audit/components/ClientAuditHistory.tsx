@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { capitalize, filter } from 'lodash-es';
+import { compact, filter } from 'lodash-es';
 import AuditObjectChangesSummary, {
   ObjectChangesType,
 } from './AuditObjectChangesSummary';
@@ -13,8 +13,12 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
-import { formatDateTimeForDisplay } from '@/modules/hmis/hmisUtil';
 import {
+  auditActionForDisplay,
+  formatDateTimeForDisplay,
+} from '@/modules/hmis/hmisUtil';
+import {
+  ClientAuditEventFilterOptions,
   GetClientAuditEventsDocument,
   GetClientAuditEventsQuery,
   GetClientAuditEventsQueryVariables,
@@ -34,21 +38,26 @@ const columns: ColumnDef<AuditHistoryType>[] = [
   {
     header: 'User',
     width: '180px',
-    render: (e) => e.user?.name,
+    render: ({ user, trueUser }) =>
+      compact([trueUser?.name, user?.name]).join(' acting as ') ||
+      'System User',
   },
   {
     header: 'Action',
-    width: '220px',
-    render: (e) => {
-      const action = `${capitalize(e.event)} ${e.recordName}`;
-      if (e.recordName === 'Client') return action;
+    width: '100px',
+    render: ({ event }) => auditActionForDisplay(event),
+  },
+  {
+    header: 'Record Type',
+    width: '150px',
+    render: ({ recordName, recordId }) => {
       return (
         <Stack>
-          <Typography variant='inherit'>{action}</Typography>
+          <Typography variant='inherit'>{recordName}</Typography>
           <Typography
             color='text.secondary'
             variant='inherit'
-          >{`ID: ${e.recordId}`}</Typography>
+          >{`ID: ${recordId}`}</Typography>
         </Stack>
       );
     },
@@ -64,10 +73,9 @@ const columns: ColumnDef<AuditHistoryType>[] = [
       sx: { p: 0, backgroundColor: (theme) => theme.palette.grey[50] },
     },
     render: (e) => {
-      if (!e.objectChanges) return null;
-
-      // This is not helpful, these should not be returned from the API
-      if (Object.keys(e.objectChanges).length === 0) return null;
+      if (!e.objectChanges || Object.keys(e.objectChanges).length === 0) {
+        return null;
+      }
 
       const labels = Object.values(e.objectChanges as ObjectChangesType)
         .filter((r) => filter(r.values, hasMeaningfulValue).length > 0)
@@ -77,6 +85,8 @@ const columns: ColumnDef<AuditHistoryType>[] = [
         <ContextualCollapsibleList title={labels.join(', ')}>
           <AuditObjectChangesSummary
             objectChanges={e.objectChanges as ObjectChangesType}
+            recordType={e.graphqlType}
+            eventType={e.event}
           />
         </ContextualCollapsibleList>
       );
@@ -94,16 +104,25 @@ const ClientAuditHistory = () => {
         <GenericTableWithData<
           GetClientAuditEventsQuery,
           GetClientAuditEventsQueryVariables,
-          AuditHistoryType
+          AuditHistoryType,
+          ClientAuditEventFilterOptions
         >
-          queryVariables={{ id: clientId }}
-          queryDocument={GetClientAuditEventsDocument}
           columns={columns}
-          pagePath='client.auditHistory'
           fetchPolicy='cache-and-network'
+          // Hide rows that don't have any changes. It would be better if we can do this on the backend, the pagination counts are off
+          filterRows={(row) =>
+            row.objectChanges && Object.keys(row.objectChanges).length > 0
+          }
           noData='No audit history'
+          pagePath='client.auditHistory'
+          paginationItemName='event'
+          queryDocument={GetClientAuditEventsDocument}
+          queryVariables={{ id: clientId }}
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
+          recordType='ClientAuditEvent'
+          filterInputType='ClientAuditEventFilterOptions'
+          showFilters
         />
       </Paper>
     </ContextualCollapsibleListsProvider>

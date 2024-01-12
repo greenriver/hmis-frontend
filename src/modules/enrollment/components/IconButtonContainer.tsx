@@ -1,5 +1,5 @@
 import { SvgIconComponent } from '@mui/icons-material';
-import { IconButton, IconButtonProps, Stack } from '@mui/material';
+import { ButtonProps, IconButton, IconButtonProps, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 
@@ -8,17 +8,20 @@ const IconButtonContainer = ({
   Icon,
   onClick,
   tooltip,
+  ButtonProps,
 }: {
   children?: ReactNode;
   Icon: SvgIconComponent;
   onClick: IconButtonProps['onClick'];
   tooltip?: ReactNode;
+  ButtonProps?: ButtonProps;
 }) => {
   const button = (
     <IconButton
       sx={{ padding: 0.5, color: 'links' }}
       size='small'
       onClick={onClick}
+      {...ButtonProps}
     >
       <Icon fontSize='inherit' />
     </IconButton>

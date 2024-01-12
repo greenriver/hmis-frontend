@@ -11,7 +11,7 @@ import {
   isYesterday,
   parseISO,
 } from 'date-fns';
-import { find, isNil, sortBy, startCase } from 'lodash-es';
+import { capitalize, find, isNil, sortBy, startCase } from 'lodash-es';
 
 import {
   ClientNameDobVeteranFields,
@@ -23,6 +23,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   AssessmentFieldsFragment,
+  AuditEventType,
   ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,
   ClientNameDobVetFragment,
@@ -368,6 +369,24 @@ export const assessmentDescription = (
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {
+  if (e.probSolDivRrResult) {
+    if (e.probSolDivRrResult === NoYesMissing.Yes) {
+      return 'Client housed/re-housed in a safe alternative';
+    }
+    if (e.probSolDivRrResult === NoYesMissing.No) {
+      return 'Client not housed/re-housed';
+    }
+  }
+
+  if (e.referralCaseManageAfter) {
+    if (e.referralCaseManageAfter === NoYesMissing.Yes) {
+      return 'Client enrolled in aftercare project';
+    }
+    if (e.referralCaseManageAfter === NoYesMissing.No) {
+      return 'Client not enrolled in aftercare project';
+    }
+  }
+
   if (!e.referralResult) return null;
   const result = HmisEnums.ReferralResult[e.referralResult];
   if (e.resultDate) {
@@ -438,7 +457,7 @@ export const customDataElementValueForKey = (
 };
 
 export const serviceTypeSummary = (st: ServiceTypeFieldsFragment) => {
-  if (st.category == st.name) return st.name;
+  if (st.category === st.name) return st.name;
   return [st.category, st.name].join(': ');
 };
 
@@ -564,4 +583,11 @@ export const relationshipToHohForDisplay = (
   if (relationship === RelationshipToHoH.SelfHeadOfHousehold) return 'HoH';
 
   return HmisEnums.RelationshipToHoH[relationship];
+};
+
+export const auditActionForDisplay = (action: AuditEventType) => {
+  if (action === AuditEventType.Destroy) {
+    return 'Delete';
+  }
+  return capitalize(action);
 };

@@ -64,7 +64,7 @@ const useDynamicFields = ({
 
     // Retain disabled fields that are displayed with a value
     const hiddenLinkids = disabledLinkIds.filter(
-      (id) => itemMap[id].disabledDisplay != DisabledDisplay.ProtectedWithValue
+      (id) => itemMap[id].disabledDisplay !== DisabledDisplay.ProtectedWithValue
     );
     const excluded = addDescendants(hiddenLinkids, definition);
     // Drop "hidden" fields and their children
@@ -88,11 +88,12 @@ const useDynamicFields = ({
             values: localValues,
             itemMap,
             localConstants: localConstants || {},
+            viewOnly,
           });
         });
       });
     },
-    [itemMap, autofillDependencyMap, localConstants]
+    [itemMap, autofillDependencyMap, viewOnly, localConstants]
   );
 
   /**
@@ -134,11 +135,12 @@ const useDynamicFields = ({
           values: newValues,
           itemMap,
           localConstants: localConstants || {},
+          viewOnly,
         });
       });
       return newValues;
     });
-  }, [itemMap, localConstants]);
+  }, [itemMap, localConstants, viewOnly]);
 
   const itemChanged: ItemChangedFn = useCallback(
     (input) => {

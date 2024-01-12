@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { first, startCase } from 'lodash-es';
+import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
 import ConsumerSummaryReportButton from './ConsumerSummaryReportButton';
@@ -19,7 +19,6 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   ReferralPostingDetailFieldsFragment,
   ReferralPostingStatus,
-  RelationshipToHoH,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -90,16 +89,6 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
     return list;
   }, [referralPosting, verb]);
 
-  const client = useMemo(() => {
-    const hoh = referralPosting.householdMembers.find(
-      (member) =>
-        member.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-    )?.client;
-    if (hoh) return hoh;
-
-    return first(referralPosting.householdMembers)?.client;
-  }, [referralPosting]);
-
   return (
     <Stack gap={2}>
       <TitleCard title='Referral Details' padded>
@@ -121,7 +110,11 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
         </Stack>
       </TitleCard>
       <Stack gap={2}>
-        {client && <ConsumerSummaryReportButton clientId={client.id} />}
+        {referralPosting.referralIdentifier && (
+          <ConsumerSummaryReportButton
+            referralIdentifier={referralPosting.referralIdentifier}
+          />
+        )}
       </Stack>
     </Stack>
   );

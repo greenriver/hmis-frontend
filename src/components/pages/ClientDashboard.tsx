@@ -8,7 +8,6 @@ import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
 import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
-import { NavItem } from '../layout/dashboard/sideNav/types';
 
 import NotFound from './NotFound';
 
@@ -41,7 +40,10 @@ const ClientDashboard: React.FC = () => {
   });
   if (error) throw error;
 
-  const navItems: NavItem[] = useClientDashboardNavItems(client || undefined);
+  const navItems = useClientDashboardNavItems(
+    params.clientId,
+    client?.enabledFeatures || []
+  );
 
   const { currentPath, ...dashboardState } = useDashboardState();
 
@@ -71,7 +73,13 @@ const ClientDashboard: React.FC = () => {
   return (
     <DashboardContentContainer
       navHeader={<ClientCardMini client={client} />}
-      sidebar={<SideNavMenu items={navItems} />}
+      sidebar={
+        <SideNavMenu
+          items={navItems}
+          access={client.access}
+          pathParams={{ clientId: client.id }}
+        />
+      }
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       navLabel='Client'
       {...dashboardState}

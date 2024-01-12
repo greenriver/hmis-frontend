@@ -18,7 +18,14 @@ const adminDashboardRoutes = {
   AC_DENIALS: 'referral-denials',
   AC_DENIAL_DETAILS: 'referral-denials/:referralPostingId',
   USERS: 'users',
-  USER_AUDIT: 'users/:userId/audit',
+  USER_CLIENT_ACCESS_HISTORY: 'users/:userId/clientAccessHistory',
+  USER_ENROLLMENT_ACCESS_HISTORY: 'users/:userId/enrollmentAccessHistory',
+  CONFIGURE_SERVICES: 'services',
+  CONFIGURE_SERVICE_CATEGORY: 'services/:serviceCategoryId',
+  FORMS: 'forms',
+  VIEW_FORM: 'forms/:formId',
+  EDIT_FORM: 'forms/:formId/edit',
+  CONFIGURE_AUTO_EXIT: 'auto-exit',
 };
 
 // Routes within the client dashboard
@@ -33,6 +40,7 @@ const clientDashboardRoutes = {
   FILES: 'files',
   NEW_FILE: 'files/new',
   EDIT_FILE: 'files/:fileId/edit',
+  CASE_NOTES: 'case-notes',
   MERGE_HISTORY: 'merges',
   NEW_MERGE: 'merges/new',
 };
@@ -50,6 +58,7 @@ const enrollmentDashboardRoutes = {
   CUSTOM_CASE_NOTES: 'case-notes',
   ASSESSMENT: 'assessments/:formRole/:assessmentId?',
   ESG_FUNDING_REPORT: 'esg-funding-report',
+  AUDIT_HISTORY: 'history',
 };
 
 // Routes within the project dashboard

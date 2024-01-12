@@ -102,6 +102,7 @@ const EnrollmentServicesPage = () => {
           showFilters
           filterInputType='ServicesForEnrollmentFilterOptions'
           headerCellSx={() => ({ color: 'text.secondary' })}
+          noSort
         />
       </TitleCard>
       {renderServiceDialog()}

@@ -21,7 +21,6 @@ Default.args = {
 
 export const WithFewerDetails = Template.bind({});
 WithFewerDetails.args = {
-  onlyCard: true,
   client: {
     ...RITA_ACKROYD,
     pronouns: [],

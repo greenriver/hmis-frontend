@@ -41,7 +41,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   EnrollmentFieldsFragment,
-  FormDefinition,
+  FormDefinitionFieldsFragment,
   FormRole,
   FullAssessmentFragment,
   InitialBehavior,
@@ -51,7 +51,7 @@ interface Props {
   enrollment: EnrollmentFieldsFragment;
   clientId: string;
   formRole?: FormRole;
-  definition: FormDefinition;
+  definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
   assessmentTitle?: ReactNode;
   top?: number;
@@ -127,7 +127,7 @@ const AssessmentForm: React.FC<Props> = ({
 
   const handleDirty = useCallback(
     (dirty: boolean) => {
-      // we can only rely on dirty == true
+      // we can only rely on dirty === true
       if (dirty) onFormStateChange?.(enrollment.id, 'formDirty');
     },
     [onFormStateChange, enrollment.id]
@@ -243,7 +243,7 @@ const AssessmentForm: React.FC<Props> = ({
     // Add config option for unlocking assessment
     const config = (formActionProps.config?.slice() || [])
       .map((item) => {
-        if (item.action != FormActionTypes.Submit) return item;
+        if (item.action !== FormActionTypes.Submit) return item;
         return {
           action: FormActionTypes.Unlock,
           id: 'unlock',

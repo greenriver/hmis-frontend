@@ -257,6 +257,36 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'AutoExitConfig',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'lengthOfAbsenceDays',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'AutofillValue',
     fields: [
       {
@@ -465,6 +495,26 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'DOBDataQuality', ofType: null },
+        },
+      },
+      {
+        name: 'enabledFeatures',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'ENUM',
+                name: 'ClientDashboardFeature',
+                ofType: null,
+              },
+            },
+          },
         },
       },
       {
@@ -718,7 +768,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canUploadClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewAnyConfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewAnyFiles',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -771,6 +837,39 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ClientAccessSummary',
+    fields: [
+      {
+        name: 'clientId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'lastAccessedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
     ],
@@ -842,6 +941,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'AuditEventType', ofType: null },
+        },
+      },
+      {
+        name: 'graphqlType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
       {
@@ -1131,6 +1238,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
+      {
+        name: 'informationDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
     ],
   },
   {
@@ -1353,7 +1464,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'ENUM', name: 'DisabilityResponse', ofType: null },
+          ofType: {
+            kind: 'ENUM',
+            name: 'CompleteDisabilityResponse',
+            ofType: null,
+          },
         },
       },
       {
@@ -1374,7 +1489,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'indefiniteAndImpairs',
-        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'informationDate',
@@ -2090,6 +2209,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'EnrollmentAccess',
     fields: [
       {
+        name: 'canAuditEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
         type: {
           kind: 'NON_NULL',
@@ -2127,6 +2254,102 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentAccessSummary',
+    fields: [
+      { name: 'clientId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'enrollmentId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'lastAccessedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentAuditEvent',
+    fields: [
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'event',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'AuditEventType', ofType: null },
+        },
+      },
+      {
+        name: 'graphqlType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'objectChanges',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'recordId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'recordName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
     ],
@@ -2720,6 +2943,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'identifier',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'rawDefinition',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
+      },
+      {
         name: 'role',
         type: {
           kind: 'NON_NULL',
@@ -2728,11 +2967,40 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'system',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'title',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'FormDefinitionForJsonResult',
+    fields: [
+      {
+        name: 'errors',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+            },
+          },
         },
       },
     ],
@@ -2857,6 +3125,100 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'FormRule',
+    fields: [
+      {
+        name: 'active',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'activeStatus',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
+        },
+      },
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dataCollectedAbout',
+        type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
+      },
+      {
+        name: 'definitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'definitionIdentifier',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'definitionRole',
+        type: { kind: 'ENUM', name: 'FormRole', ofType: null },
+      },
+      {
+        name: 'definitionTitle',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'funder',
+        type: { kind: 'ENUM', name: 'FundingSource', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'otherFunder',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+      {
+        name: 'system',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'updatedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
     ],
@@ -4131,7 +4493,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canAuditEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canAuditUsers',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canConfigureDataCollection',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -4694,12 +5072,61 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'recordType',
+        type: { kind: 'ENUM', name: 'RecordType', ofType: null },
+      },
+      {
         name: 'referralOutcome',
         type: { kind: 'ENUM', name: 'PATHReferralOutcome', ofType: null },
       },
       {
         name: 'subTypeProvided',
         type: { kind: 'ENUM', name: 'ServiceSubTypeProvided', ofType: null },
+      },
+      {
+        name: 'typeProvided',
+        type: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ServiceCategory',
+    fields: [
+      {
+        name: 'dateCreated',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'hud',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
     ],
   },
@@ -4725,6 +5152,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'dateUpdated',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'hud',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
       {
         name: 'hudRecordType',
@@ -5182,6 +5617,24 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'AutoExitConfigInput',
+    args: [
+      {
+        name: 'lengthOfAbsenceDays',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'BulkMergeClientsInput',
     args: [
       {
@@ -5224,6 +5677,48 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   { name: 'ClearRecentItemsInput', args: [] },
+  {
+    name: 'ClientAccessSummaryFilterOptions',
+    args: [
+      {
+        name: 'onOrAfter',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ClientAuditEventFilterOptions',
+    args: [
+      {
+        name: 'clientRecordType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+    ],
+  },
   {
     name: 'ClientFilterOptions',
     args: [
@@ -5342,6 +5837,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             name: 'DirectUploadInput',
             ofType: null,
           },
+        },
+      },
+    ],
+  },
+  {
+    name: 'CreateFormRuleInput',
+    args: [
+      {
+        name: 'definitionId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'input',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'INPUT_OBJECT', name: 'FormRuleInput', ofType: null },
         },
       },
     ],
@@ -5651,6 +6167,60 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'EnrollmentAccessSummaryFilterOptions',
+    args: [
+      {
+        name: 'onOrAfter',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentAuditEventFilterOptions',
+    args: [
+      {
+        name: 'enrollmentRecordType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'EnrollmentsForClientFilterOptions',
     args: [
       {
@@ -5753,6 +6323,21 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'FormDefinitionInput',
+    args: [
+      {
+        name: 'definition',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'identifier',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'role', type: { kind: 'ENUM', name: 'FormRole', ofType: null } },
+      { name: 'title', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
     name: 'FormInput',
     args: [
       { name: 'clientId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
@@ -5789,6 +6374,97 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'values',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'FormRuleFilterOptions',
+    args: [
+      {
+        name: 'activeStatus',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'appliedToProject',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'definition',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'formType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'systemForm',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'SystemStatus', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'FormRuleInput',
+    args: [
+      {
+        name: 'activeStatus',
+        type: { kind: 'ENUM', name: 'ActiveStatus', ofType: null },
+      },
+      {
+        name: 'dataCollectedAbout',
+        type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
+      },
+      {
+        name: 'funder',
+        type: { kind: 'ENUM', name: 'FundingSource', ofType: null },
+      },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'otherFunder',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
       },
     ],
   },
@@ -5869,6 +6545,23 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
+    name: 'MergeAuditEventFilterOptions',
+    args: [
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
     ],
   },
   {
@@ -6420,6 +7113,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'UpdateFormRuleInput',
+    args: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'input',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'INPUT_OBJECT', name: 'FormRuleInput', ofType: null },
         },
       },
     ],

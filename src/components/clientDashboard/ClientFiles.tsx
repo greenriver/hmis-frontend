@@ -65,9 +65,8 @@ const ClientFiles = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const [viewingFile, setViewingFile] = useState<ClientFileType | undefined>();
 
-  const [canEdit] = useHasClientPermissions(clientId, [
-    'canManageAnyClientFiles',
-    'canManageOwnClientFiles',
+  const [canUpload] = useHasClientPermissions(clientId, [
+    'canUploadClientFiles',
   ]);
   const { data: pickListData } = useGetPickListQuery({
     variables: { pickListType: PickListType.AvailableFileTypes },
@@ -98,7 +97,7 @@ const ClientFiles = () => {
             <Box sx={{ display: 'flex', gap: 0.5 }}>
               {file.tags.map((tag) => {
                 const item = pickListData.pickList.find(
-                  (type) => type.code == tag
+                  (type) => type.code === tag
                 );
                 return (
                   <Chip
@@ -145,7 +144,7 @@ const ClientFiles = () => {
       <PageTitle
         title='Files'
         actions={
-          canEdit && (
+          canUpload && (
             <ButtonLink
               to={generateSafePath(ClientDashboardRoutes.NEW_FILE, {
                 clientId,

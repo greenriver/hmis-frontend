@@ -4,10 +4,12 @@ import { useState } from 'react';
 import ConsumerSummaryReportDialog from './ConsumerSummaryReportDialog';
 
 interface Props {
-  clientId: string;
+  referralIdentifier: string;
 }
 
-const ConsumerSummaryReportButton: React.FC<Props> = ({ clientId }) => {
+const ConsumerSummaryReportButton: React.FC<Props> = ({
+  referralIdentifier,
+}) => {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -17,10 +19,10 @@ const ConsumerSummaryReportButton: React.FC<Props> = ({ clientId }) => {
         color='secondary'
         onClick={() => setOpen((prev) => !prev)}
       >
-        Consumer Summary Report
+        LINK Consumer Summary Report
       </Button>
       <ConsumerSummaryReportDialog
-        clientId={clientId}
+        referralIdentifier={referralIdentifier}
         open={open}
         onClose={() => setOpen(false)}
       />

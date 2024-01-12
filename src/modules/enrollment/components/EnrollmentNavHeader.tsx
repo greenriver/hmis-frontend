@@ -36,6 +36,7 @@ const EnrollmentNavHeader = ({
         <HmisEnum
           value={enrollment.project.projectType}
           enumMap={HmisEnums.ProjectType}
+          noData='N/A'
         />
       </CommonLabeledTextBlock>
       <CommonLabeledTextBlock title='Enrollment Period'>
