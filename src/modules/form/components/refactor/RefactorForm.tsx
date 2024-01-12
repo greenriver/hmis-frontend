@@ -19,7 +19,7 @@ export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 export interface DynamicFormProps extends RefactorFormBaseProps {
   clientId?: string;
   definition: FormDefinitionJson;
-  onSubmit: DynamicFormOnSubmit;
+  onSubmit: (input: DynamicFormSubmitInput) => void;
   onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
   onDirty?: (value: boolean) => void;
   initialValues?: Record<string, any>;
@@ -54,7 +54,7 @@ const DynamicForm = ({
       {...props}
       handlers={handlers}
       errors={errorState}
-      onSubmit={(e) => console.log(e)}
+      onSubmit={(e) => console.log('SUBMIT', e)}
       onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
     />
   );
