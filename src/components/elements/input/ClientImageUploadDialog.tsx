@@ -17,7 +17,7 @@ import CommonDialog from '../CommonDialog';
 import LoadingButton from '../LoadingButton';
 import Uploader from '../upload/UploaderBase';
 
-import { ClientCardImageElement } from '@/modules/client/components/ClientProfileCard';
+import ClientCardImageElement from '@/modules/client/components/ClientCardImageElement';
 import {
   useDeleteClientImageMutation,
   useGetClientImageQuery,

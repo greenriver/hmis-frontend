@@ -1,17 +1,17 @@
 import { ComponentStory, Meta } from '@storybook/react';
 
-import ClientCard from './ClientCard';
+import ClientSearchResultCard from './ClientSearchResultCard';
 
 import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export default {
-  title: 'ClientCard',
-  component: ClientCard,
-} as Meta<typeof ClientCard>;
+  title: 'ClientSearchResultCard',
+  component: ClientSearchResultCard,
+} as Meta<typeof ClientSearchResultCard>;
 
-const Template: ComponentStory<typeof ClientCard> = (args) => (
-  <ClientCard {...args} />
+const Template: ComponentStory<typeof ClientSearchResultCard> = (args) => (
+  <ClientSearchResultCard {...args} />
 );
 
 export const Default = Template.bind({});

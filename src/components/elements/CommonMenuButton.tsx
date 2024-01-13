@@ -63,10 +63,8 @@ const CommonMenuButton = ({ title, items, variant }: Props) => {
           divider ? (
             <Divider key={key} />
           ) : to ? (
-            <MenuItem key={key}>
-              <RouterLink to={to} plain disabled={disabled} typography='body1'>
-                {title}
-              </RouterLink>
+            <MenuItem key={key} component={RouterLink} to={to}>
+              {title}
             </MenuItem>
           ) : (
             <MenuItem key={key} onClick={onClick} disabled={disabled}>

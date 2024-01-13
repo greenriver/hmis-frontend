@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from '@mui/material';
 // import { formatISO, subWeeks } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
@@ -19,7 +19,6 @@ import { useUser } from '@/modules/dataFetching/hooks/useUser';
 import ClientTextSearchInput from '@/modules/search/components/ClientTextSearchInput';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { AdminDashboardRoutes } from '@/routes/routes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 type EntityType = 'clients' | 'enrollments';
 
@@ -57,17 +56,16 @@ const UserAuditPage: React.FC<Props> = ({ entityType }) => {
     switch (value) {
       case 'clients':
         navigate(
-          generateSafePath(AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY, {
+          generatePath(AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY, {
             userId,
           })
         );
         break;
       case 'enrollments':
         navigate(
-          generateSafePath(
-            AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY,
-            { userId }
-          )
+          generatePath(AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY, {
+            userId,
+          })
         );
         break;
     }

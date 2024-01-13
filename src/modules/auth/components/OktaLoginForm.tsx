@@ -11,6 +11,7 @@ const MESSAGES: Record<string, string> = {
   // * user hasn't been granted access to the HMIS "Chicklet"
   generic: `There was an error signing in to your account. Please contact your administrator for assistance if this problem persists.`,
   inactive: `You can't sign in because your account has not been activated yet. Please contact your administrator for assistance.`,
+  locked: `Your account has been temporarily locked. Please contact your administrator for assistance.`,
 };
 const ErrorMessage: React.FC<{ id: string }> = ({ id }) => {
   return (

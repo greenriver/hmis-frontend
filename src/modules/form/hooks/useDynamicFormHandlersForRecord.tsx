@@ -35,7 +35,7 @@ const recordLockVersion = (
   return undefined;
 };
 
-type SubmitFormInputVariables = Omit<
+export type SubmitFormInputVariables = Omit<
   FormInput,
   'confirmed' | 'formDefinitionId' | 'values' | 'hudValues' | 'recordId'
 >;

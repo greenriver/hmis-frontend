@@ -519,6 +519,7 @@ export const HmisEnums = {
     CE_EVENT: 'CE event',
     CE_PARTICIPATION: 'CE participation',
     CLIENT: 'Client',
+    CLIENT_DETAIL: 'Client detail',
     CURRENT_LIVING_SITUATION: 'Current living situation',
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
@@ -888,6 +889,7 @@ export const HmisEnums = {
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
     CE_EVENTS: 'Grouped HUD CE Event types',
+    CLIENT_AUDIT_EVENT_RECORD_TYPES: 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     DESTINATION: 'DESTINATION',
