@@ -112,6 +112,18 @@ mutation DeleteCurrentLivingSituation($id: ID!) {
   }
 }
 
+query GetEnrollmentAssessmentEligibilities($enrollmentId: ID!) {
+  enrollment(id: $enrollmentId) {
+    id
+    assessmentEligibilities {
+      id
+      title
+      formDefinitionId
+      role
+    }
+  }
+}
+
 query GetEnrollmentPermissions($id: ID!) {
   enrollment(id: $id) {
     id

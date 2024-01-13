@@ -1,9 +1,9 @@
-import { LoadingButton } from '@mui/lab';
+import { Skeleton } from '@mui/material';
 import { Stack } from '@mui/system';
-import { isEmpty } from 'lodash-es';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import CommonMenuButton, {
   NavMenuItem,
 } from '@/components/elements/CommonMenuButton';
@@ -12,7 +12,7 @@ import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembe
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
-  useGetClientAssessmentEligibilitiesLazyQuery,
+  useGetEnrollmentAssessmentEligibilitiesQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -45,14 +45,12 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
   const enrollmentId = enrollment.id;
   const clientId = enrollment.client.id;
 
-  const [getEligability, { data, error, loading }] =
-    useGetClientAssessmentEligibilitiesLazyQuery({
+  const { data, error, loading } = useGetEnrollmentAssessmentEligibilitiesQuery(
+    {
       fetchPolicy: 'cache-and-network',
-    });
-
-  useEffect(() => {
-    getEligability({ variables: { clientId, enrollmentId } });
-  }, [enrollment.client.lockVersion, clientId, enrollmentId, getEligability]);
+      variables: { enrollmentId },
+    }
+  );
 
   if (error) throw error;
 
@@ -67,46 +65,35 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
   );
 
   const items: NavMenuItem[] = useMemo(() => {
-    const topItems: NavMenuItem[] = [];
-    const bottomItems: NavMenuItem[] = [];
+    if (!data?.enrollment) return [];
 
-    if (!data?.client) return [];
-
-    const hudRoleTitles: Partial<Record<AssessmentRole, string>> = {
-      INTAKE: 'HUD Intake Assessment',
-      UPDATE: 'New HUD Update Assessment',
-      EXIT: 'New HUD Exit Assessment',
-      ANNUAL: 'New HUD Annual Assessment',
-      POST_EXIT: 'New HUD Post-Exit Assessment',
-    };
-
-    data.client.assessmentEligibilities.forEach(({ id, role, title }) => {
-      const items =
-        role === 'INTAKE' || role === 'EXIT' ? topItems : bottomItems;
-      items.push({
+    return data.enrollment.assessmentEligibilities.map(
+      ({ id, role, title }) => ({
         key: id,
         to: getPath(role),
-        title: hudRoleTitles[role] || title,
-      });
-    });
-
-    return [
-      ...topItems,
-      ...(!isEmpty(topItems) && !isEmpty(bottomItems)
-        ? [{ key: 'd1', divider: true }]
-        : []),
-      ...bottomItems,
-    ];
+        title: title,
+      })
+    );
   }, [data, getPath]);
 
-  if (items.length === 0)
+  if (loading) {
     return (
-      <LoadingButton loading={loading} disabled={!loading}>
-        Assessments
-      </LoadingButton>
+      <Skeleton variant='rectangular' aria-live='polite' aria-busy='true'>
+        <CommonMenuButton title='New Assessment' items={[]} disabled />
+      </Skeleton>
     );
+  }
+  if (items.length === 0) {
+    return (
+      <ButtonTooltipContainer
+        title={'Cannot perform new assessments for exited enrollment.'}
+      >
+        <CommonMenuButton title='New Assessment' items={[]} disabled />
+      </ButtonTooltipContainer>
+    );
+  }
 
-  return <CommonMenuButton title='Assessments' items={items} />;
+  return <CommonMenuButton title='New Assessment' items={items} />;
 };
 
 const EnrollmentAssessmentActionButtons: React.FC<Props> = ({ enrollment }) => {
