@@ -2044,18 +2044,6 @@
             "deprecationReason": null
           },
           {
-            "name": "organization",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Organization",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "organizationId",
             "description": null,
             "args": [],
@@ -2068,12 +2056,12 @@
             "deprecationReason": null
           },
           {
-            "name": "project",
+            "name": "organizationName",
             "description": null,
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "Project",
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2086,6 +2074,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -16685,13 +16685,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -16717,13 +16713,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -19800,24 +19792,24 @@
             "deprecationReason": null
           },
           {
-            "name": "organization",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Organization",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "organizationId",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "organizationName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -19836,24 +19828,24 @@
             "deprecationReason": null
           },
           {
-            "name": "project",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Project",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "projectId",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -27248,13 +27240,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -27268,7 +27256,7 @@
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "ProjectsForEnrollmentFilterOptions",
+                  "name": "ProjectsForOrganizationFilterOptions",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -32068,7 +32056,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "ProjectsForEnrollmentFilterOptions",
+        "name": "ProjectsForOrganizationFilterOptions",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -35107,12 +35095,24 @@
             "deprecationReason": null
           },
           {
-            "name": "organization",
+            "name": "organizationId",
             "description": null,
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "Organization",
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "organizationName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -35131,12 +35131,36 @@
             "deprecationReason": null
           },
           {
-            "name": "project",
-            "description": "Project that household is being referred to",
+            "name": "projectId",
+            "description": null,
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "Project",
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ProjectType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -39952,18 +39976,6 @@
                   }
                 }
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "project",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Project",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

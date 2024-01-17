@@ -10,15 +10,10 @@ fragment ReferralPostingFields on ReferralPosting {
   assignedDate
   statusUpdatedAt
   statusUpdatedBy
-  project {
-    id
-    projectName
-    projectType
-  }
-  organization {
-    id
-    organizationName
-  }
+  projectId
+  projectName
+  projectType
+  organizationName
 }
 
 fragment ReferralPostingDetailFields on ReferralPosting {
@@ -47,15 +42,10 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   referralRequest {
     id
   }
-  project {
-    id
-    projectType
-    projectName
-  }
-  organization {
-    id
-    organizationName
-  }
+  projectId
+  projectName
+  projectType
+  organizationName
   unitType {
     id
     description

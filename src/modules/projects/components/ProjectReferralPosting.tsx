@@ -55,17 +55,22 @@ const ProjectReferralPosting: React.FC = () => {
             <ProjectReferralPostingDetails referralPosting={referralPosting} />
           </TitleCard>
           <Stack gap={2}>
-            <ButtonLink
-              fullWidth
-              variant='outlined'
-              color='secondary'
-              to={generateSafePath(ProjectDashboardRoutes.ESG_FUNDING_REPORT, {
-                projectId: referralPosting.project?.id,
-                referralPostingId,
-              })}
-            >
-              ESG Funding Report
-            </ButtonLink>
+            {referralPosting.projectId && (
+              <ButtonLink
+                fullWidth
+                variant='outlined'
+                color='secondary'
+                to={generateSafePath(
+                  ProjectDashboardRoutes.ESG_FUNDING_REPORT,
+                  {
+                    projectId: referralPosting.projectId,
+                    referralPostingId,
+                  }
+                )}
+              >
+                ESG Funding Report
+              </ButtonLink>
+            )}
             {/* Temporary 12/14/23: hide the prevention assessment button */}
             {referralPosting.referralIdentifier && false && (
               <Button

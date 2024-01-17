@@ -74,9 +74,9 @@ const FORM_RULE_COLUMNS: ColumnDef<RowType>[] = [
   {
     // Direct Project/Org applicability rule
     header: 'Entity',
-    render: ({ project, organization }) => {
-      if (project) return project.projectName;
-      if (organization) return organization.organizationName;
+    render: ({ projectName, organizationName }) => {
+      if (projectName) return projectName;
+      if (organizationName) return organizationName;
       return <NotCollectedText>None</NotCollectedText>;
     },
   },

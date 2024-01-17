@@ -24,7 +24,7 @@ query GetOrganizationProjects(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
-  $filters: ProjectsForEnrollmentFilterOptions
+  $filters: ProjectsForOrganizationFilterOptions
   $sortOrder: ProjectSortOption
 ) {
   organization(id: $id) {

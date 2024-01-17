@@ -335,10 +335,10 @@ export type AutoExitConfig = {
   __typename?: 'AutoExitConfig';
   id: Scalars['ID']['output'];
   lengthOfAbsenceDays: Scalars['Int']['output'];
-  organization?: Maybe<Organization>;
   organizationId?: Maybe<Scalars['ID']['output']>;
-  project?: Maybe<Project>;
+  organizationName?: Maybe<Scalars['String']['output']>;
   projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   projectType?: Maybe<ProjectType>;
 };
 
@@ -2412,9 +2412,9 @@ export type EsgFundingService = {
   lastName?: Maybe<Scalars['String']['output']>;
   mciIds: Array<ExternalIdentifier>;
   organizationId: Scalars['ID']['output'];
-  organizationName: Scalars['String']['output'];
+  organizationName?: Maybe<Scalars['String']['output']>;
   projectId: Scalars['ID']['output'];
-  projectName: Scalars['String']['output'];
+  projectName?: Maybe<Scalars['String']['output']>;
 };
 
 /** HUD Event */
@@ -2839,11 +2839,11 @@ export type FormRule = {
   definitionTitle?: Maybe<Scalars['String']['output']>;
   funder?: Maybe<FundingSource>;
   id: Scalars['ID']['output'];
-  organization?: Maybe<Organization>;
   organizationId?: Maybe<Scalars['ID']['output']>;
+  organizationName?: Maybe<Scalars['String']['output']>;
   otherFunder?: Maybe<Scalars['String']['output']>;
-  project?: Maybe<Project>;
   projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   projectType?: Maybe<ProjectType>;
   serviceCategory?: Maybe<ServiceCategory>;
   serviceType?: Maybe<ServiceType>;
@@ -4038,14 +4038,14 @@ export type Organization = {
   description?: Maybe<Scalars['String']['output']>;
   hudId: Scalars['ID']['output'];
   id: Scalars['ID']['output'];
-  organizationName: Scalars['String']['output'];
+  organizationName?: Maybe<Scalars['String']['output']>;
   projects: ProjectsPaginated;
   user?: Maybe<ApplicationUser>;
   victimServiceProvider: NoYesMissing;
 };
 
 export type OrganizationProjectsArgs = {
-  filters?: InputMaybe<ProjectsForEnrollmentFilterOptions>;
+  filters?: InputMaybe<ProjectsForOrganizationFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
@@ -5131,7 +5131,7 @@ export enum ProjectType {
   Th = 'TH',
 }
 
-export type ProjectsForEnrollmentFilterOptions = {
+export type ProjectsForOrganizationFilterOptions = {
   funder?: InputMaybe<Array<FundingSource>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;
@@ -5582,10 +5582,12 @@ export type ReferralPosting = {
   hudChronic?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']['output']>;
-  organization?: Maybe<Organization>;
+  organizationId?: Maybe<Scalars['ID']['output']>;
+  organizationName?: Maybe<Scalars['String']['output']>;
   postingIdentifier?: Maybe<Scalars['ID']['output']>;
-  /** Project that household is being referred to */
-  project?: Maybe<Project>;
+  projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
+  projectType?: Maybe<ProjectType>;
   referralDate: Scalars['ISO8601DateTime']['output'];
   referralIdentifier?: Maybe<Scalars['ID']['output']>;
   referralNotes?: Maybe<Scalars['String']['output']>;
@@ -6540,7 +6542,6 @@ export type Unit = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   occupants: Array<Enrollment>;
-  project?: Maybe<Project>;
   unitSize?: Maybe<Scalars['Int']['output']>;
   unitType?: Maybe<UnitTypeObject>;
   user?: Maybe<ApplicationUser>;
@@ -11446,14 +11447,10 @@ export type AutoExitConfigFieldsFragment = {
   id: string;
   lengthOfAbsenceDays: number;
   organizationId?: string | null;
+  organizationName?: string | null;
   projectId?: string | null;
+  projectName?: string | null;
   projectType?: ProjectType | null;
-  organization?: {
-    __typename?: 'Organization';
-    id: string;
-    organizationName: string;
-  } | null;
-  project?: { __typename?: 'Project'; id: string; projectName: string } | null;
 };
 
 export type CreateAutoExitConfigMutationVariables = Exact<{
@@ -11469,18 +11466,10 @@ export type CreateAutoExitConfigMutation = {
       id: string;
       lengthOfAbsenceDays: number;
       organizationId?: string | null;
+      organizationName?: string | null;
       projectId?: string | null;
+      projectName?: string | null;
       projectType?: ProjectType | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -11513,18 +11502,10 @@ export type UpdateAutoExitConfigMutation = {
       id: string;
       lengthOfAbsenceDays: number;
       organizationId?: string | null;
+      organizationName?: string | null;
       projectId?: string | null;
+      projectName?: string | null;
       projectType?: ProjectType | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -11556,18 +11537,10 @@ export type DeleteAutoExitConfigMutation = {
       id: string;
       lengthOfAbsenceDays: number;
       organizationId?: string | null;
+      organizationName?: string | null;
       projectId?: string | null;
+      projectName?: string | null;
       projectType?: ProjectType | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -11603,18 +11576,10 @@ export type GetAutoExitConfigsQuery = {
       id: string;
       lengthOfAbsenceDays: number;
       organizationId?: string | null;
+      organizationName?: string | null;
       projectId?: string | null;
+      projectName?: string | null;
       projectType?: ProjectType | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-      } | null;
     }>;
   };
 };
@@ -13743,21 +13708,11 @@ export type FormRuleFieldsFragment = {
   otherFunder?: string | null;
   projectType?: ProjectType | null;
   projectId?: string | null;
+  projectName?: string | null;
   organizationId?: string | null;
+  organizationName?: string | null;
   createdAt: string;
   updatedAt: string;
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  } | null;
-  organization?: {
-    __typename?: 'Organization';
-    id: string;
-    hudId: string;
-    organizationName: string;
-  } | null;
 };
 
 export type GetFormRulesQueryVariables = Exact<{
@@ -13789,21 +13744,11 @@ export type GetFormRulesQuery = {
       otherFunder?: string | null;
       projectType?: ProjectType | null;
       projectId?: string | null;
+      projectName?: string | null;
       organizationId?: string | null;
+      organizationName?: string | null;
       createdAt: string;
       updatedAt: string;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        hudId: string;
-        organizationName: string;
-      } | null;
     }>;
   };
 };
@@ -13841,21 +13786,11 @@ export type GetServiceCategoryRulesQuery = {
         otherFunder?: string | null;
         projectType?: ProjectType | null;
         projectId?: string | null;
+        projectName?: string | null;
         organizationId?: string | null;
+        organizationName?: string | null;
         createdAt: string;
         updatedAt: string;
-        project?: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        } | null;
-        organization?: {
-          __typename?: 'Organization';
-          id: string;
-          hudId: string;
-          organizationName: string;
-        } | null;
       }>;
     };
   } | null;
@@ -13882,21 +13817,11 @@ export type GetFormRuleQuery = {
     otherFunder?: string | null;
     projectType?: ProjectType | null;
     projectId?: string | null;
+    projectName?: string | null;
     organizationId?: string | null;
+    organizationName?: string | null;
     createdAt: string;
     updatedAt: string;
-    project?: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    } | null;
-    organization?: {
-      __typename?: 'Organization';
-      id: string;
-      hudId: string;
-      organizationName: string;
-    } | null;
   } | null;
 };
 
@@ -13924,21 +13849,11 @@ export type CreateFormRuleMutation = {
       otherFunder?: string | null;
       projectType?: ProjectType | null;
       projectId?: string | null;
+      projectName?: string | null;
       organizationId?: string | null;
+      organizationName?: string | null;
       createdAt: string;
       updatedAt: string;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        hudId: string;
-        organizationName: string;
-      } | null;
     };
     errors: Array<{
       __typename?: 'ValidationError';
@@ -13981,21 +13896,11 @@ export type UpdateFormRuleMutation = {
       otherFunder?: string | null;
       projectType?: ProjectType | null;
       projectId?: string | null;
+      projectName?: string | null;
       organizationId?: string | null;
+      organizationName?: string | null;
       createdAt: string;
       updatedAt: string;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        hudId: string;
-        organizationName: string;
-      } | null;
     };
     errors: Array<{
       __typename?: 'ValidationError';
@@ -23173,7 +23078,7 @@ export type SubmitFormMutation = {
           __typename?: 'Organization';
           id: string;
           hudId: string;
-          organizationName: string;
+          organizationName?: string | null;
           description?: string | null;
           contactInformation?: string | null;
           victimServiceProvider: NoYesMissing;
@@ -23254,7 +23159,7 @@ export type SubmitFormMutation = {
             __typename?: 'Organization';
             id: string;
             hudId: string;
-            organizationName: string;
+            organizationName?: string | null;
           };
           access: {
             __typename?: 'ProjectAccess';
@@ -24060,7 +23965,7 @@ export type OrganizationNameFieldsFragment = {
   __typename?: 'Organization';
   id: string;
   hudId: string;
-  organizationName: string;
+  organizationName?: string | null;
 };
 
 export type OrganizationDetailFieldsFragment = {
@@ -24131,7 +24036,7 @@ export type OrganizationFieldsFragment = {
   __typename?: 'Organization';
   id: string;
   hudId: string;
-  organizationName: string;
+  organizationName?: string | null;
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider: NoYesMissing;
@@ -24206,7 +24111,7 @@ export type GetOrganizationsQuery = {
       __typename?: 'Organization';
       id: string;
       hudId: string;
-      organizationName: string;
+      organizationName?: string | null;
       projects: { __typename?: 'ProjectsPaginated'; nodesCount: number };
     }>;
   };
@@ -24222,7 +24127,7 @@ export type GetOrganizationQuery = {
     __typename?: 'Organization';
     id: string;
     hudId: string;
-    organizationName: string;
+    organizationName?: string | null;
     description?: string | null;
     contactInformation?: string | null;
     victimServiceProvider: NoYesMissing;
@@ -24294,7 +24199,7 @@ export type GetOrganizationProjectsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<ProjectsForEnrollmentFilterOptions>;
+  filters?: InputMaybe<ProjectsForOrganizationFilterOptions>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 }>;
 
@@ -24387,7 +24292,7 @@ export type ProjectAllFieldsFragment = {
     __typename?: 'Organization';
     id: string;
     hudId: string;
-    organizationName: string;
+    organizationName?: string | null;
   };
   access: {
     __typename?: 'ProjectAccess';
@@ -25096,7 +25001,7 @@ export type GetProjectsQuery = {
         __typename?: 'Organization';
         id: string;
         hudId: string;
-        organizationName: string;
+        organizationName?: string | null;
       };
     }>;
   };
@@ -25129,7 +25034,7 @@ export type GetProjectQuery = {
       __typename?: 'Organization';
       id: string;
       hudId: string;
-      organizationName: string;
+      organizationName?: string | null;
     };
     access: {
       __typename?: 'ProjectAccess';
@@ -25805,17 +25710,10 @@ export type GetProjectReferralPostingsQuery = {
         assignedDate: string;
         statusUpdatedAt?: string | null;
         statusUpdatedBy?: string | null;
-        project?: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        } | null;
-        organization?: {
-          __typename?: 'Organization';
-          id: string;
-          organizationName: string;
-        } | null;
+        projectId?: string | null;
+        projectName?: string | null;
+        projectType?: ProjectType | null;
+        organizationName?: string | null;
       }>;
     };
   } | null;
@@ -25850,21 +25748,14 @@ export type GetProjectOutgoingReferralPostingsQuery = {
         assignedDate: string;
         statusUpdatedAt?: string | null;
         statusUpdatedBy?: string | null;
+        projectId?: string | null;
+        projectName?: string | null;
+        projectType?: ProjectType | null;
+        organizationName?: string | null;
         hohEnrollment?: {
           __typename?: 'Enrollment';
           id: string;
           client: { __typename?: 'Client'; id: string };
-        } | null;
-        project?: {
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-        } | null;
-        organization?: {
-          __typename?: 'Organization';
-          id: string;
-          organizationName: string;
         } | null;
       }>;
     };
@@ -26214,18 +26105,11 @@ export type GetReferralPostingQuery = {
     statusNoteUpdatedBy?: string | null;
     statusUpdatedAt?: string | null;
     statusUpdatedBy?: string | null;
+    projectId?: string | null;
+    projectName?: string | null;
+    projectType?: ProjectType | null;
+    organizationName?: string | null;
     referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
-    project?: {
-      __typename?: 'Project';
-      id: string;
-      projectType?: ProjectType | null;
-      projectName: string;
-    } | null;
-    organization?: {
-      __typename?: 'Organization';
-      id: string;
-      organizationName: string;
-    } | null;
     unitType: {
       __typename?: 'UnitTypeObject';
       id: string;
@@ -26330,18 +26214,11 @@ export type UpdateReferralPostingMutation = {
       statusNoteUpdatedBy?: string | null;
       statusUpdatedAt?: string | null;
       statusUpdatedBy?: string | null;
+      projectId?: string | null;
+      projectName?: string | null;
+      projectType?: ProjectType | null;
+      organizationName?: string | null;
       referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectType?: ProjectType | null;
-        projectName: string;
-      } | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
       unitType: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -26460,18 +26337,11 @@ export type CreateOutgoingReferralPostingMutation = {
       statusNoteUpdatedBy?: string | null;
       statusUpdatedAt?: string | null;
       statusUpdatedBy?: string | null;
+      projectId?: string | null;
+      projectName?: string | null;
+      projectType?: ProjectType | null;
+      organizationName?: string | null;
       referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectType?: ProjectType | null;
-        projectName: string;
-      } | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
       unitType: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -26583,17 +26453,10 @@ export type GetDeniedPendingReferralPostingsQuery = {
       assignedDate: string;
       statusUpdatedAt?: string | null;
       statusUpdatedBy?: string | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      } | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
+      projectId?: string | null;
+      projectName?: string | null;
+      projectType?: ProjectType | null;
+      organizationName?: string | null;
     }>;
   };
 };
@@ -26611,17 +26474,10 @@ export type ReferralPostingFieldsFragment = {
   assignedDate: string;
   statusUpdatedAt?: string | null;
   statusUpdatedBy?: string | null;
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  } | null;
-  organization?: {
-    __typename?: 'Organization';
-    id: string;
-    organizationName: string;
-  } | null;
+  projectId?: string | null;
+  projectName?: string | null;
+  projectType?: ProjectType | null;
+  organizationName?: string | null;
 };
 
 export type ReferralPostingDetailFieldsFragment = {
@@ -26648,18 +26504,11 @@ export type ReferralPostingDetailFieldsFragment = {
   statusNoteUpdatedBy?: string | null;
   statusUpdatedAt?: string | null;
   statusUpdatedBy?: string | null;
+  projectId?: string | null;
+  projectName?: string | null;
+  projectType?: ProjectType | null;
+  organizationName?: string | null;
   referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    projectType?: ProjectType | null;
-    projectName: string;
-  } | null;
-  organization?: {
-    __typename?: 'Organization';
-    id: string;
-    organizationName: string;
-  } | null;
   unitType: {
     __typename?: 'UnitTypeObject';
     id: string;
@@ -26784,9 +26633,9 @@ export type EsgFundingServiceFieldsFragment = {
   firstName?: string | null;
   lastName?: string | null;
   projectId: string;
-  projectName: string;
+  projectName?: string | null;
   organizationId: string;
-  organizationName: string;
+  organizationName?: string | null;
   faAmount?: number | null;
   faStartDate?: string | null;
   faEndDate?: string | null;
@@ -26860,9 +26709,9 @@ export type GetEsgFundingReportQuery = {
     firstName?: string | null;
     lastName?: string | null;
     projectId: string;
-    projectName: string;
+    projectName?: string | null;
     organizationId: string;
-    organizationName: string;
+    organizationName?: string | null;
     faAmount?: number | null;
     faStartDate?: string | null;
     faEndDate?: string | null;
@@ -28505,15 +28354,9 @@ export const AutoExitConfigFieldsFragmentDoc = gql`
     id
     lengthOfAbsenceDays
     organizationId
-    organization {
-      id
-      organizationName
-    }
+    organizationName
     projectId
-    project {
-      id
-      projectName
-    }
+    projectName
     projectType
   }
 `;
@@ -28744,13 +28587,6 @@ export const MergeAuditEventFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
-export const OrganizationNameFieldsFragmentDoc = gql`
-  fragment OrganizationNameFields on Organization {
-    id
-    hudId
-    organizationName
-  }
-`;
 export const FormRuleFieldsFragmentDoc = gql`
   fragment FormRuleFields on FormRule {
     id
@@ -28766,18 +28602,12 @@ export const FormRuleFieldsFragmentDoc = gql`
     otherFunder
     projectType
     projectId
-    project {
-      ...ProjectNameAndType
-    }
+    projectName
     organizationId
-    organization {
-      ...OrganizationNameFields
-    }
+    organizationName
     createdAt
     updatedAt
   }
-  ${ProjectNameAndTypeFragmentDoc}
-  ${OrganizationNameFieldsFragmentDoc}
 `;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
@@ -29370,6 +29200,13 @@ export const MciMatchFieldsFragmentDoc = gql`
     ssn
   }
 `;
+export const OrganizationNameFieldsFragmentDoc = gql`
+  fragment OrganizationNameFields on Organization {
+    id
+    hudId
+    organizationName
+  }
+`;
 export const OrganizationDetailFieldsFragmentDoc = gql`
   fragment OrganizationDetailFields on Organization {
     id
@@ -29560,15 +29397,10 @@ export const ReferralPostingFieldsFragmentDoc = gql`
     assignedDate
     statusUpdatedAt
     statusUpdatedBy
-    project {
-      id
-      projectName
-      projectType
-    }
-    organization {
-      id
-      organizationName
-    }
+    projectId
+    projectName
+    projectType
+    organizationName
   }
 `;
 export const ReferralPostingDetailFieldsFragmentDoc = gql`
@@ -29598,15 +29430,10 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     referralRequest {
       id
     }
-    project {
-      id
-      projectType
-      projectName
-    }
-    organization {
-      id
-      organizationName
-    }
+    projectId
+    projectName
+    projectType
+    organizationName
     unitType {
       id
       description
@@ -35312,7 +35139,7 @@ export const GetOrganizationProjectsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $filters: ProjectsForEnrollmentFilterOptions
+    $filters: ProjectsForOrganizationFilterOptions
     $sortOrder: ProjectSortOption
   ) {
     organization(id: $id) {

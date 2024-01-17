@@ -12,13 +12,9 @@ fragment FormRuleFields on FormRule {
   otherFunder
   projectType
   projectId
-  project {
-    ...ProjectNameAndType
-  }
+  projectName
   organizationId
-  organization {
-    ...OrganizationNameFields
-  }
+  organizationName
   createdAt
   updatedAt
 }

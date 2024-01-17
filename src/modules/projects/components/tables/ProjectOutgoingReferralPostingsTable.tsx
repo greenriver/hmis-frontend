@@ -28,25 +28,22 @@ const columns: ColumnDef<OutgoingReferral>[] = [
   {
     header: 'Project Referred To',
     linkTreatment: true,
-    render: ({ id, project }: OutgoingReferral) => {
-      if (!project) return null;
+    render: ({ id, projectId, projectName, projectType }: OutgoingReferral) => {
+      if (!projectId) return null;
 
       const projectPath = generateSafePath(
         ProjectDashboardRoutes.REFERRAL_POSTING,
         {
-          projectId: project.id,
+          projectId,
           referralPostingId: id,
         }
       );
       return (
         <>
           <RouterLink to={projectPath} openInNew>
-            {project.projectName}
+            {projectName || `Project ${projectId}`}
           </RouterLink>
-          <HmisEnum
-            value={project.projectType}
-            enumMap={HmisEnums.ProjectType}
-          />
+          <HmisEnum value={projectType} enumMap={HmisEnums.ProjectType} />
         </>
       );
     },

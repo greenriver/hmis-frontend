@@ -316,7 +316,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'organizationId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
+      {
+        name: 'organizationName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
@@ -2517,11 +2525,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'organizationName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'projectId',
@@ -2533,11 +2537,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'projectName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
@@ -3234,10 +3234,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
+        name: 'organizationName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'otherFunder',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
@@ -4141,11 +4149,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'organizationName',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'victimServiceProvider',
@@ -4893,8 +4897,25 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'organizationName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'postingIdentifier',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
       },
       {
         name: 'referralDate',
@@ -6699,7 +6720,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'ProjectsForEnrollmentFilterOptions',
+    name: 'ProjectsForOrganizationFilterOptions',
     args: [
       {
         name: 'funder',

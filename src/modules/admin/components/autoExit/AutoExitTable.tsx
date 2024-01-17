@@ -36,12 +36,10 @@ const columns: ColumnDef<AutoExitConfigFieldsFragment>[] = [
   },
   {
     header: 'Project',
-    render: ({ project }) =>
-      project ? (
-        <RouterLink
-          to={generateSafePath(Routes.PROJECT, { projectId: project.id })}
-        >
-          {project.projectName}
+    render: ({ projectId, projectName }) =>
+      projectId ? (
+        <RouterLink to={generateSafePath(Routes.PROJECT, { projectId })}>
+          {projectName}
         </RouterLink>
       ) : (
         <NotCollectedText variant='body2'>Any Project</NotCollectedText>
@@ -49,14 +47,12 @@ const columns: ColumnDef<AutoExitConfigFieldsFragment>[] = [
   },
   {
     header: 'Organization',
-    render: ({ organization }) =>
-      organization ? (
+    render: ({ organizationId, organizationName }) =>
+      organizationId ? (
         <RouterLink
-          to={generateSafePath(Routes.ORGANIZATION, {
-            organizationId: organization.id,
-          })}
+          to={generateSafePath(Routes.ORGANIZATION, { organizationId })}
         >
-          {organization.organizationName}
+          {organizationName}
         </RouterLink>
       ) : (
         <NotCollectedText variant='body2'>Any Organization</NotCollectedText>

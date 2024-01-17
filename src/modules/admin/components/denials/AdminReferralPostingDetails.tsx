@@ -42,7 +42,7 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
   }, [referralPosting.status]);
 
   const attributeList = useMemo<Array<[string, ReactNode]>>(() => {
-    const { project } = referralPosting;
+    const { projectId, projectName } = referralPosting;
     const list: Array<[string, ReactNode]> = [
       [
         'Referral Status',
@@ -54,24 +54,22 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
       ['Referral ID', referralPosting.referralIdentifier || 'N/A'],
       ['Referral Date', parseAndFormatDate(referralPosting.referralDate)],
       ['Referred From', referralPosting.referredFrom],
-      ['Organization Name', referralPosting.organization?.organizationName],
+      ['Organization Name', referralPosting.organizationName],
       [
         'Project Name',
-        project ? (
+        projectId ? (
           <RouterLink
-            to={generateSafePath(Routes.PROJECT, {
-              projectId: project.id,
-            })}
+            to={generateSafePath(Routes.PROJECT, { projectId })}
             openInNew
           >
-            {project.projectName}
+            {projectName}
           </RouterLink>
         ) : undefined,
       ],
       [
         'Project Type',
         <HmisEnum
-          value={referralPosting.project?.projectType}
+          value={referralPosting.projectType}
           enumMap={HmisEnums.ProjectType}
         />,
       ],

@@ -2,14 +2,8 @@ fragment AutoExitConfigFields on AutoExitConfig {
   id
   lengthOfAbsenceDays
   organizationId
-  organization {
-    id
-    organizationName
-  }
+  organizationName
   projectId
-  project {
-    id
-    projectName
-  }
+  projectName
   projectType
 }
