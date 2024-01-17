@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useFormState, useWatch } from 'react-hook-form';
+import { useFormState } from 'react-hook-form';
 import { FormDefinitionHandlers } from './useFormDefinitionHandlers';
 import usePrevious from '@/hooks/usePrevious';
 
@@ -16,14 +16,11 @@ const DirtyObserver: React.FC<DirtyObserverProps> = ({
   },
   fields,
 }) => {
-  const { isDirty, dirtyFields, defaultValues } = useFormState({
+  const { isDirty } = useFormState({
     control,
     name: fields,
   });
   const prevDirty = usePrevious(isDirty);
-  const values = useWatch({ control });
-
-  console.log({ isDirty, prevDirty, dirtyFields, defaultValues, values });
 
   useEffect(() => {
     if (isDirty !== prevDirty) onDirty(isDirty);

@@ -6,7 +6,11 @@ import RefactorForm from './RefactorForm';
 // import { Default as ViewStory } from './viewable/DynamicView.stories';
 
 import { emptyErrorState } from '@/modules/errors/util';
-import { FormDefinitionJson } from '@/types/gqlTypes';
+import {
+  FormDefinitionJson,
+  ValidationSeverity,
+  ValidationType,
+} from '@/types/gqlTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const formDefinition: FormDefinitionJson = MockDefinition;
@@ -30,8 +34,20 @@ const Template: StoryFn<typeof RefactorForm> = (args) => (
     {...args}
     showSavePrompt
     onSubmit={(values) => console.log(values)}
-    onDirty={(dirty) => console.log({ dirty })}
     initialValues={{ 'string-1': 'x' }}
+    localConstants={{ showHidden: true }}
+    errors={{
+      warnings: [
+        {
+          attribute: 'test',
+          fullMessage: 'Test',
+          message: 'Test',
+          severity: ValidationSeverity.Warning,
+          type: ValidationType.Invalid,
+        },
+      ],
+      errors: [],
+    }}
   />
 );
 

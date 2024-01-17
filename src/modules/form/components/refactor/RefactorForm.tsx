@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useCallback } from 'react';
+import { forwardRef, useCallback, useImperativeHandle } from 'react';
 
 import { FormValues, LocalConstants } from '../../types';
 
@@ -10,14 +10,15 @@ import { FormDefinitionJson } from '@/types/gqlTypes';
 interface DynamicFormSubmitInput {
   values: FormValues;
   confirmed?: boolean;
-  event?: BaseSyntheticEvent;
+  event?: React.MouseEvent<HTMLButtonElement>;
   onSuccess?: VoidFunction;
   onError?: VoidFunction;
 }
 
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 
-export interface DynamicFormProps extends RefactorFormBaseProps {
+export interface DynamicFormProps
+  extends Omit<RefactorFormBaseProps, 'handlers'> {
   clientId?: string;
   definition: FormDefinitionJson;
   onSubmit: (input: DynamicFormSubmitInput) => void;
@@ -27,42 +28,86 @@ export interface DynamicFormProps extends RefactorFormBaseProps {
   localConstants?: LocalConstants;
 }
 
-const DynamicForm = ({
-  definition,
-  onSubmit,
-  onSaveDraft,
-  onDirty,
-  initialValues,
-  errors: errorState,
-  localConstants,
-  ...props
-}: DynamicFormProps) => {
-  const handlers = useFormDefinitionHandlers({
-    definition,
-    initialValues,
-    localConstants,
-    onSubmit: (...args) => console.log({ args }),
-  });
+export interface DynamicFormRef {
+  SaveIfDirty: VoidFunction;
+  SubmitIfDirty: (ignoreWarnings: boolean) => void;
+  SubmitForm: VoidFunction;
+}
 
-  const { getCleanedValues } = handlers;
+const RefactorForm = forwardRef<DynamicFormRef, DynamicFormProps>(
+  (
+    {
+      definition,
+      onSubmit,
+      onSaveDraft,
+      onDirty,
+      initialValues,
+      errors: errorState,
+      localConstants,
+      ...props
+    },
+    ref
+  ) => {
+    const handlers = useFormDefinitionHandlers({
+      definition,
+      initialValues,
+      localConstants,
+    });
 
-  const handleSaveDraft = useCallback(() => {
-    if (!onSaveDraft) return;
-    onSaveDraft(getCleanedValues());
-  }, [onSaveDraft, getCleanedValues]);
+    const { getCleanedValues } = handlers;
 
-  return (
-    <>
-      {onDirty && <DirtyObserver onDirty={onDirty} handlers={handlers} />}
-      <RefactorFormBase
-        {...props}
-        handlers={handlers}
-        errors={errorState}
-        onSubmit={(e) => console.log('SUBMIT', e)}
-        onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-      />
-    </>
-  );
-};
+    const handleSaveDraft = useCallback(() => {
+      if (!onSaveDraft) return;
+      onSaveDraft(getCleanedValues());
+    }, [onSaveDraft, getCleanedValues]);
 
-export default DynamicForm;
+    const handleSubmit: DynamicFormOnSubmit = useCallback(
+      (input) => {
+        onSubmit(input);
+      },
+      [onSubmit]
+    );
+
+    // Expose handle for parent components to initiate a background save (used for household workflow tabs)
+    useImperativeHandle(
+      ref,
+      () => ({
+        SubmitForm: () => {
+          onSubmit({
+            values: getCleanedValues(),
+            confirmed: false,
+          });
+        },
+        SaveIfDirty: () => {
+          if (!handlers.methods.formState.isDirty || props.locked) return;
+          handleSaveDraft();
+        },
+        SubmitIfDirty: (ignoreWarnings: boolean) => {
+          if (!onSubmit || !handlers.methods.formState.isDirty || props.locked)
+            return;
+          onSubmit({
+            values: getCleanedValues(),
+            confirmed: ignoreWarnings,
+            onSuccess: () => {},
+          });
+        },
+      }),
+      [onSubmit, getCleanedValues, props, handlers, handleSaveDraft]
+    );
+
+    return (
+      <>
+        {onDirty && <DirtyObserver onDirty={onDirty} handlers={handlers} />}
+        <RefactorFormBase
+          {...props}
+          handlers={handlers}
+          errors={errorState}
+          onSubmit={handleSubmit}
+          onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
+        />
+      </>
+    );
+  }
+);
+
+export default RefactorForm;

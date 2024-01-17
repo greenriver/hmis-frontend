@@ -63,7 +63,7 @@ const DynamicFormSaveButtons = ({
       onSubmit({
         values: handlers.getCleanedValues(),
         confirmed: false,
-        event,
+        event: event?.nativeEvent as React.MouseEvent<HTMLButtonElement>,
       });
     }),
     [onSubmit, handlers.getCleanedValues]

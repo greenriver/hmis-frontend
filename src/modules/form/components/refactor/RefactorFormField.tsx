@@ -2,6 +2,7 @@ import { pick } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
 import {
+  ChangeType,
   ItemChangedFn,
   OverrideableDynamicFieldProps,
   PickListArgs,
@@ -69,21 +70,25 @@ const RefactorFormField: React.FC<Props> = ({
 
   // TODO: Push these down to individual fields maybe?
   const itemChanged: ItemChangedFn = useCallback(
-    ({ linkId, value: baseValue }) => {
+    ({ linkId, value: baseValue, type }) => {
       const item = handlers.itemMap[linkId];
       let value = baseValue;
       if (item) {
         if (item.type === ItemType.Integer) value = parseInt(value) || 0;
         if (item.type === ItemType.Currency) value = parseFloat(value) || 0;
       }
-      handlers.methods.setValue(getSafeLinkId(linkId), value);
+      handlers.methods.setValue(getSafeLinkId(linkId), value, {
+        shouldDirty: type === ChangeType.User,
+      });
     },
     [handlers]
   );
   const severalItemsChanged: SeveralItemsChangedFn = useCallback(
-    ({ values }) => {
+    ({ values, type }) => {
       Object.entries(values).forEach(([linkId, value]) =>
-        handlers.methods.setValue(getSafeLinkId(linkId), value)
+        handlers.methods.setValue(getSafeLinkId(linkId), value, {
+          shouldDirty: type === ChangeType.User,
+        })
       );
     },
     [handlers]
@@ -192,6 +197,8 @@ const RefactorFormField: React.FC<Props> = ({
       warnIfEmpty,
     ]
   );
+
+  if (item.hidden) return null;
 
   if (
     disabledDependencyMap[item.linkId] &&

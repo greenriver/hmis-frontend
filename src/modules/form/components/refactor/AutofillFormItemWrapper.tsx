@@ -1,8 +1,7 @@
 import React, { ReactNode, useEffect } from 'react';
-import { useWatch } from 'react-hook-form';
+import { useFormState, useWatch } from 'react-hook-form';
 
 import { FormValues } from '../../types';
-import { hasMeaningfulValue } from '../../util/formUtil';
 import {
   FormDefinitionHandlers,
   getSafeLinkId,
@@ -21,22 +20,28 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
   children,
 }) => {
   const { autofillInvertedDependencyMap, getAutofillValueForField } = handlers;
+  const name = autofillInvertedDependencyMap[item.linkId].map(getSafeLinkId);
 
   // Listen for dependent field value changes
   useWatch({
     control: handlers.methods.control,
-    name: autofillInvertedDependencyMap[item.linkId].map(getSafeLinkId),
+    name,
+  });
+  // Listen to see if this field is changed
+  const { isDirty } = useFormState({
+    control: handlers.methods.control,
+    name: item.linkId,
   });
 
   const autofillValue = getAutofillValueForField(item);
 
   useEffect(() => {
-    const linkId = getSafeLinkId(item.linkId);
-    const currentValue = handlers.methods.getValues()[linkId];
-    if (hasMeaningfulValue(currentValue)) return;
+    // Don't autofill this field if it's been edited (i.e. is dirty)
+    if (isDirty) return;
 
-    handlers.methods.setValue(linkId, autofillValue);
-  }, [autofillValue, item, handlers.methods]);
+    const linkId = getSafeLinkId(item.linkId);
+    handlers.methods.setValue(linkId, autofillValue, { shouldDirty: false });
+  }, [autofillValue, item, handlers.methods, isDirty]);
 
   return <>{children({})}</>;
 };

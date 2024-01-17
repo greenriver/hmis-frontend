@@ -9,6 +9,7 @@ import {
   autofillValues,
   dropUnderscorePrefixedKeys,
   getDependentItemsDisabledStatus,
+  getInitialValues,
   shouldEnableItem,
 } from '../../util/formUtil';
 import {
@@ -23,7 +24,6 @@ export interface UseDynamicFormArgs<T extends FieldValues> {
   initialValues?: T;
   localConstants?: LocalConstants;
   errors?: ValidationError[];
-  onSubmit?: (values: FieldValues) => any;
 }
 
 export const getSafeLinkId = (linkId: string) =>
@@ -36,8 +36,7 @@ const useDynamicForm = <T extends FieldValues>({
   initialValues = {} as T,
   localConstants = {},
   errors,
-}: // onSubmit = () => {},
-UseDynamicFormArgs<T>) => {
+}: UseDynamicFormArgs<T>) => {
   const {
     itemMap,
     autofillDependencyMap,
@@ -48,7 +47,10 @@ UseDynamicFormArgs<T>) => {
 
   const methods = useForm<T>({
     values: (() => {
-      const newValues = cloneDeep(initialValues);
+      const newValues = {
+        ...getInitialValues(definition, localConstants),
+        ...cloneDeep(initialValues),
+      };
       Object.keys(itemMap).forEach((linkId) => {
         autofillValues({
           item: itemMap[linkId],
@@ -70,7 +72,7 @@ UseDynamicFormArgs<T>) => {
         getCleanedLinkId(k)
       );
       if (!autofillInvertedDependencyMap[linkId]) return;
-      autofillValues({
+      const shouldAutofill = autofillValues({
         item,
         values,
         itemMap,
@@ -78,7 +80,11 @@ UseDynamicFormArgs<T>) => {
         viewOnly: item.readOnly, // TODO: Handle this
       });
 
-      return values[linkId];
+      if (!shouldAutofill) return undefined;
+
+      const result = values[linkId];
+
+      return result;
     },
     [itemMap, autofillInvertedDependencyMap, localConstants, methods]
   );
