@@ -6,6 +6,7 @@ import * as storage from '@/modules/auth/api/storage';
 
 import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';
+import { HttpError } from '@/utils/HttpError';
 
 export interface HmisUser {
   id: string;
@@ -88,7 +89,9 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
     storage.clearUser();
     return undefined;
   } else {
-    return Promise.reject(response.status);
+    return Promise.reject(
+      new HttpError('Failed to fetch currentUser', response.status)
+    );
   }
 }
 
@@ -213,3 +216,6 @@ export async function stopImpersonating() {
     return user;
   }
 }
+
+// if we auto-reload due to an error, only do it once
+export const RELOAD_ONCE_SESSION_KEY = 'reload-once';
