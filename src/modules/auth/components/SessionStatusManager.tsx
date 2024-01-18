@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import {
+  RELOAD_ONCE_SESSION_KEY,
   resetLocalSession,
   sendSessionKeepalive,
 } from '@/modules/auth/api/sessions';
@@ -16,6 +17,7 @@ const SessionStatusManager: React.FC<HmisSessionProps> = ({
   const [loading, setLoading] = useState(false);
 
   const handleResetSession = useCallback(() => {
+    sessionStorage.removeItem(RELOAD_ONCE_SESSION_KEY);
     setLoading(true);
     resetLocalSession();
     reloadWindow();
@@ -31,6 +33,7 @@ const SessionStatusManager: React.FC<HmisSessionProps> = ({
 
   // current session has ended, user clicks continue
   const handleReload = useCallback(() => {
+    sessionStorage.removeItem(RELOAD_ONCE_SESSION_KEY);
     setLoading(true);
     reloadWindow();
   }, [setLoading]);
