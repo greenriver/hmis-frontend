@@ -8,7 +8,6 @@ import {
   addDescendants,
   autofillValues,
   dropUnderscorePrefixedKeys,
-  getDependentItemsDisabledStatus,
   getInitialValues,
   shouldEnableItem,
 } from '../../util/formUtil';
@@ -30,6 +29,11 @@ export const getSafeLinkId = (linkId: string) =>
   String(linkId).replace(/\./g, ',');
 export const getCleanedLinkId = (linkId: string) =>
   String(linkId).replace(/,/g, '.');
+
+export const mapKeysToSafe = (values: FieldValues) =>
+  mapKeys(values, (val, key) => getSafeLinkId(key));
+export const mapKeysToClean = (values: FieldValues) =>
+  mapKeys(values, (val, key) => getCleanedLinkId(key));
 
 const useDynamicForm = <T extends FieldValues>({
   definition,
@@ -60,7 +64,7 @@ const useDynamicForm = <T extends FieldValues>({
           viewOnly: false,
         });
       });
-      return newValues;
+      return mapKeysToSafe(newValues) as T;
     })(),
   });
 
@@ -91,28 +95,30 @@ const useDynamicForm = <T extends FieldValues>({
 
   // Get form state, with "hidden" fields (and their children) removed
   const getCleanedValues = useCallback(() => {
-    const values = mapKeys(methods.getValues(), (val, key) =>
-      getCleanedLinkId(key)
-    );
+    const values = mapKeysToClean(methods.getValues());
     if (!definition) return values;
 
-    const { disabledLinkIds } = getDependentItemsDisabledStatus({
-      localValues: values, // NOTE! This gets updated in-place
-      enabledDependencyMap,
-      itemMap,
-      localConstants: localConstants || {},
-    });
-
-    // Retain disabled fields that are displayed with a value
-    const hiddenLinkids = disabledLinkIds.filter(
-      (id) => itemMap[id].disabledDisplay !== DisabledDisplay.ProtectedWithValue
+    const excluded = addDescendants(
+      Object.entries(itemMap)
+        .filter(([, item]) => {
+          const shouldDisable = !shouldEnableItem({
+            item,
+            itemMap,
+            localConstants,
+            values,
+          });
+          if (shouldDisable)
+            return item.disabledDisplay !== DisabledDisplay.ProtectedWithValue;
+          return false;
+        })
+        .map(([linkId]) => linkId),
+      definition
     );
 
-    const excluded = addDescendants(hiddenLinkids, definition);
     // Drop "hidden" fields and their children
     const cleaned = omit(values, excluded);
     return dropUnderscorePrefixedKeys(cleaned);
-  }, [methods, definition, enabledDependencyMap, itemMap, localConstants]);
+  }, [methods, definition, itemMap, localConstants]);
 
   const getFieldErrors = useCallback(
     (item: FormItem) => {
@@ -127,14 +133,15 @@ const useDynamicForm = <T extends FieldValues>({
   );
 
   const isItemDisabled = useCallback(
-    (item: FormItem) =>
-      !shouldEnableItem({
+    (item: FormItem) => {
+      return !shouldEnableItem({
         item,
         itemMap,
         localConstants,
-        values: getCleanedValues(),
-      }),
-    [itemMap, getCleanedValues, localConstants]
+        values: mapKeysToClean(methods.getValues()),
+      });
+    },
+    [itemMap, methods, localConstants]
   );
 
   return useMemo(

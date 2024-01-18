@@ -63,6 +63,7 @@ const RefactorForm = forwardRef<DynamicFormRef, DynamicFormProps>(
 
     const handleSubmit: DynamicFormOnSubmit = useCallback(
       (input) => {
+        // console.log(input, handlers.getCleanedValues())
         onSubmit(input);
       },
       [onSubmit]

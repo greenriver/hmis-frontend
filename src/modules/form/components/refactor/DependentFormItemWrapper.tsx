@@ -1,7 +1,10 @@
 import React, { ReactNode } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { FormDefinitionHandlers } from './useFormDefinitionHandlers';
+import {
+  FormDefinitionHandlers,
+  getSafeLinkId,
+} from './useFormDefinitionHandlers';
 import { FormItem } from '@/types/gqlTypes';
 
 export interface Props {
@@ -20,7 +23,7 @@ const DependentFormItemWrapper: React.FC<Props> = ({
   // Listen for dependent field value changes
   useWatch({
     control: handlers.methods.control,
-    name: disabledDependencyMap[item.linkId],
+    name: disabledDependencyMap[item.linkId].map(getSafeLinkId),
   });
 
   return <>{children(isItemDisabled(item))}</>;

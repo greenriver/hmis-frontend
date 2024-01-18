@@ -40,7 +40,9 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
     if (isDirty) return;
 
     const linkId = getSafeLinkId(item.linkId);
-    handlers.methods.setValue(linkId, autofillValue, { shouldDirty: false });
+    handlers.methods.setValue(getSafeLinkId(linkId), autofillValue, {
+      shouldDirty: false,
+    });
   }, [autofillValue, item, handlers.methods, isDirty]);
 
   return <>{children({})}</>;

@@ -1,4 +1,4 @@
-import { pick } from 'lodash-es';
+import { isEmpty, pick } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
 import {
@@ -200,10 +200,12 @@ const RefactorFormField: React.FC<Props> = ({
 
   if (item.hidden) return null;
 
-  if (
-    disabledDependencyMap[item.linkId] &&
-    autofillInvertedDependencyMap[item.linkId]
-  ) {
+  const hasDependencies =
+    disabledDependencyMap[item.linkId] || !isEmpty(item.enableWhen);
+  const hasAutofill =
+    autofillInvertedDependencyMap[item.linkId] || !isEmpty(item.autofillValues);
+
+  if (hasDependencies && hasAutofill) {
     <DependentFormItemWrapper handlers={handlers} item={item}>
       {(disabled) => (
         <AutofillFormItemWrapper handlers={handlers} item={item}>
@@ -213,7 +215,7 @@ const RefactorFormField: React.FC<Props> = ({
     </DependentFormItemWrapper>;
   }
 
-  if (disabledDependencyMap[item.linkId]) {
+  if (hasDependencies) {
     return (
       <DependentFormItemWrapper handlers={handlers} item={item}>
         {renderChild}
@@ -221,7 +223,7 @@ const RefactorFormField: React.FC<Props> = ({
     );
   }
 
-  if (autofillInvertedDependencyMap[item.linkId]) {
+  if (hasAutofill) {
     return (
       <AutofillFormItemWrapper handlers={handlers} item={item}>
         {() => renderChild()}

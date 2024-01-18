@@ -30,6 +30,10 @@ export interface DynamicFormSaveButtonsProps
     'errorState' | 'open' | 'onConfirm' | 'loading'
   >;
   hideSubmit?: boolean;
+  FormActionProps?: Omit<
+    FormActionProps,
+    'loading' | 'onSubmit' | 'onSaveDraft'
+  >;
 }
 
 const DynamicFormSaveButtons = ({
@@ -43,13 +47,16 @@ const DynamicFormSaveButtons = ({
   locked = false,
   ValidationDialogProps = {},
   hideSubmit = false,
-  ...FormActionProps
+  FormActionProps = {},
+  ...props
 }: DynamicFormSaveButtonsProps) => {
   const saveButtonsRef = React.createRef<HTMLDivElement>();
   const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
 
   const formState = useFormState(handlers.methods);
   const promptSave = formState.isDirty;
+
+  const actionProps = { ...props, ...FormActionProps };
 
   // TODO: Handle save draft
   const handleSaveDraft = useCallback(() => {
@@ -90,7 +97,7 @@ const DynamicFormSaveButtons = ({
       onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
       disabled={locked || !!loading || validationDialogVisible}
       loading={loading}
-      {...FormActionProps}
+      {...actionProps}
     />
   );
 
@@ -104,7 +111,7 @@ const DynamicFormSaveButtons = ({
       {renderValidationDialog({
         onConfirm: handleConfirm,
         loading: loading || false,
-        confirmText: FormActionProps?.submitButtonText || 'Confirm',
+        confirmText: actionProps?.submitButtonText || 'Confirm',
         ...ValidationDialogProps,
       })}
       {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
