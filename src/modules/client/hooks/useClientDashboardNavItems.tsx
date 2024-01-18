@@ -89,6 +89,13 @@ export const useClientDashboardNavItems = (
             // TODO: resolve this on ClientAccess
             hide: !rootAccess?.canMergeClients,
           },
+          {
+            id: 'scan-cards',
+            title: 'Scan Cards',
+            path: ClientDashboardRoutes.SCAN_CARDS,
+            // TODO: perm
+            // permissions: ['canAuditClients'],
+          },
         ],
       },
     ];

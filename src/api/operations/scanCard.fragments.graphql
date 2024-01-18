@@ -1,0 +1,12 @@
+fragment ScanCardFields on ScanCardCode {
+  id
+  code
+  dateCreated
+  dateDeleted
+  createdBy {
+    ...UserFields
+  }
+  deletedBy {
+    ...UserFields
+  }
+}
