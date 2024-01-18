@@ -1,10 +1,15 @@
+import { v4 } from 'uuid';
+
 import { pickListData } from './pickLists';
 import MOCK_IMAGE from '@/components/elements/upload/MOCK_IMAGE';
+import { HmisEnums } from '@/types/gqlEnums';
 import { HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   ClientAccess,
+  ClientDetailFormsDocument,
   CreateDirectUploadMutationDocument,
   DobDataQuality,
+  EnrollmentAccess,
   Gender,
   GetClientDocument,
   GetClientEnrollmentsDocument,
@@ -16,6 +21,7 @@ import {
   NameDataQuality,
   NoYesReasonsForMissingData,
   PickListOption,
+  ProjectType,
   Race,
   RelationshipToHoH,
   SearchClientsDocument,
@@ -30,6 +36,39 @@ const CLIENT_ACCESS_MOCK = {
   ),
   id: '9999:1',
 } as ClientAccess;
+
+const ENROLLMENT_ACCESS_MOCK = {
+  ...Object.fromEntries(
+    HmisObjectSchemas.find(
+      (obj) => obj.name === 'EnrollmentAccess'
+    )?.fields.map((f) => [f.name, true]) || []
+  ),
+  id: '9999:1',
+} as EnrollmentAccess;
+
+const fakeEnrollment = () => {
+  return {
+    __typename: 'Enrollment',
+    id: v4(),
+    relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
+    inProgress: false,
+    entryDate: '2022-06-18',
+    exitDate: null,
+    access: ENROLLMENT_ACCESS_MOCK,
+    householdSize: 1,
+    projectName: 'White Pine',
+    projectType: ProjectType.EsNbn,
+    organizationName: 'Blue Hills Organization',
+    lastBedNightDate: '2022-06-18',
+    moveInDate: null,
+    lockVersion: '1',
+    project: {
+      id: '1',
+      projectName: 'White Pine',
+      projectType: ProjectType.EsNbn,
+    },
+  };
+};
 
 export const RITA_ACKROYD = {
   __typename: 'Client',
@@ -58,6 +97,7 @@ export const RITA_ACKROYD = {
   dateUpdated: '2022-07-27T15:14:29.062',
   dateCreated: '2022-07-27T15:14:29.062',
   pronouns: ['she/hers'],
+  enabledFeatures: Object.keys(HmisEnums.ClientDashboardFeature),
   externalIds: [
     {
       id: 'client_id:999',
@@ -88,44 +128,7 @@ export const RITA_ACKROYD = {
     nodesCount: 5,
     offset: 0,
     limit: 10,
-    nodes: [
-      {
-        __typename: 'Enrollment',
-        id: '5',
-        entryDate: '2022-06-18',
-        exitDate: null,
-        householdSize: 1,
-        project: { projectName: 'White Pine' },
-      },
-      {
-        __typename: 'Enrollment',
-        id: '6',
-        entryDate: '2021-02-10',
-        exitDate: '2021-02-10',
-        project: { projectName: 'Spruce Hill' },
-      },
-      {
-        __typename: 'Enrollment',
-        id: '7',
-        entryDate: '2013-02-10',
-        exitDate: '2013-02-10',
-        project: { projectName: 'White Pine Terrace' },
-      },
-      {
-        __typename: 'Enrollment',
-        id: '8',
-        entryDate: '2013-02-10',
-        exitDate: '2013-02-10',
-        project: { projectName: 'White Pine' },
-      },
-      {
-        __typename: 'Enrollment',
-        id: '9',
-        entryDate: '2013-02-10',
-        exitDate: '2013-02-10',
-        project: { projectName: 'White Pine' },
-      },
-    ],
+    nodes: [fakeEnrollment(), fakeEnrollment(), fakeEnrollment()],
   },
 };
 
@@ -346,18 +349,13 @@ const clientWithoutEnrollmentsMock = {
 const enrollmentWithHoHMock = {
   request: {
     query: GetEnrollmentWithHouseholdDocument,
-    variables: {
-      id: '5',
-    },
+    variables: { id: '5' },
   },
   result: {
     data: {
       enrollment: {
-        __typename: 'Enrollment',
-        id: '5',
-        entryDate: '2022-06-18',
-        exitDate: null,
-        project: { label: 'White Pine' },
+        ...fakeEnrollment(),
+        householdSize: 2,
         household: {
           id: '123',
           __typename: 'Household',
@@ -367,12 +365,7 @@ const enrollmentWithHoHMock = {
               id: RITA_ACKROYD.id,
               relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
               client: RITA_ACKROYD,
-              enrollment: {
-                __typename: 'Enrollment',
-                id: '5',
-                entryDate: '2022-06-18',
-                exitDate: null,
-              },
+              enrollment: { ...fakeEnrollment(), id: '5' },
             },
             {
               __typename: 'HouseholdClient',
@@ -385,12 +378,7 @@ const enrollmentWithHoHMock = {
                 lastName: 'Acker',
                 nameSuffix: null,
               },
-              enrollment: {
-                __typename: 'Enrollment',
-                id: '4',
-                entryDate: '2022-06-15',
-                exitDate: '2022-08-15',
-              },
+              enrollment: fakeEnrollment(),
             },
           ],
         },
@@ -489,12 +477,24 @@ const getClientPermissionMocks = {
   result: {
     data: {
       client: {
+        __typename: 'Client',
         id: RITA_ACKROYD.id,
         access: CLIENT_ACCESS_MOCK,
       },
     },
   },
 };
+
+const clientDetailFormsMock = {
+  request: {
+    query: ClientDetailFormsDocument,
+    variables: {},
+  },
+  result: {
+    data: {},
+  },
+};
+
 const mocks: any[] = [
   projectsForSelectMock,
   clientSearchMock,
@@ -516,6 +516,8 @@ const mocks: any[] = [
   getClientPermissionMocks,
   getClientPermissionMocks,
   ...getPickListMocks,
+  clientDetailFormsMock,
+  clientDetailFormsMock,
 ];
 
 export default mocks;

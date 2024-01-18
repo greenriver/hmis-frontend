@@ -34,7 +34,7 @@ interface Props {
 const ClientAccessSummaryTable: React.FC<Props> = ({
   userId,
   startDate,
-  searchTerm,
+  searchTerm = '',
 }) => {
   return (
     <GenericTableWithData<

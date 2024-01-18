@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
+import { generatePath } from 'react-router-dom';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   onClickImpersonate: VoidFunction;
@@ -23,7 +23,7 @@ const UserActionsMenu: React.FC<Props> = ({
       items.push({
         key: 'audit',
         title: 'Audit User',
-        to: generateSafePath(AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY, {
+        to: generatePath(AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY, {
           userId,
         }),
       });

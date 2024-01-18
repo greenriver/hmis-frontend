@@ -168,6 +168,7 @@ const FormRuleTable: React.FC<Props> = ({ queryVariables }) => {
         filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
         filters={(filters) => omit(filters, 'definition', 'formType')}
+        noSort
         // tableProps={{ sx: { tableLayout: 'fixed' } }}
       />
       {renderFormDialog({

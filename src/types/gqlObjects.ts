@@ -257,6 +257,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'AssessmentEligibility',
+    fields: [
+      {
+        name: 'formDefinitionId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'role',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+        },
+      },
+      {
+        name: 'title',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'AutoExitConfig',
     fields: [
       {
@@ -495,6 +532,26 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'DOBDataQuality', ofType: null },
+        },
+      },
+      {
+        name: 'enabledFeatures',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'ENUM',
+                name: 'ClientDashboardFeature',
+                ofType: null,
+              },
+            },
+          },
         },
       },
       {
@@ -5615,35 +5672,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'BaseAuditEventFilterOptions',
-    args: [
-      {
-        name: 'auditEventRecordType',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'user',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-          },
-        },
-      },
-    ],
-  },
-  {
     name: 'BulkMergeClientsInput',
     args: [
       {
@@ -5696,6 +5724,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ClientAuditEventFilterOptions',
+    args: [
+      {
+        name: 'clientRecordType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
       },
     ],
   },
@@ -6153,10 +6210,50 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'onOrAfter',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
-      { name: 'project', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
       {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentAuditEventFilterOptions',
+    args: [
+      {
+        name: 'enrollmentRecordType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
       },
     ],
   },

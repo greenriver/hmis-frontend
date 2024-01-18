@@ -1430,3 +1430,32 @@ export const itemDefaults = {
   hidden: false,
   repeats: false,
 };
+
+export const parseOccurrencePointFormDefinition = (
+  definition: FormDefinitionFieldsFragment
+) => {
+  let displayTitle = definition.title;
+  let isEditable = false;
+
+  function matchesTitle(item: FormItem, title: string) {
+    return !![item.text, item.readonlyText].find(
+      (s) => s && s.toLowerCase() === title.toLowerCase()
+    );
+  }
+
+  const readOnlyDefinition = modifyFormDefinition(
+    definition.definition,
+    (item) => {
+      if (definition.title && matchesTitle(item, definition.title)) {
+        displayTitle = item.readonlyText || item.text || displayTitle;
+        delete item.text;
+        delete item.readonlyText;
+      }
+      if (isQuestionItem(item) && !item.readOnly) {
+        isEditable = true;
+      }
+    }
+  );
+
+  return { displayTitle, isEditable, readOnlyDefinition };
+};
