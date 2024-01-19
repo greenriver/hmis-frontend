@@ -26,6 +26,9 @@ fragment AssessmentWithRecords on Assessment {
       id
     }
   }
+  ceAssessment {
+    ...CeAssessmentFields
+  }
   incomeBenefit {
     ...IncomeBenefitValues
     customDataElements {

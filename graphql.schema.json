@@ -1039,6 +1039,18 @@
             "deprecationReason": null
           },
           {
+            "name": "ceAssessment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CeAssessment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "client",
             "description": null,
             "args": [],
@@ -1271,13 +1283,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "AssessmentRole",
-                "ofType": null
-              }
+              "kind": "ENUM",
+              "name": "AssessmentRole",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1696,6 +1704,12 @@
           {
             "name": "ANNUAL",
             "description": "Annual",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CUSTOM_ASSESSMENT",
+            "description": "Custom assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -19544,6 +19558,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CUSTOM_ASSESSMENT",
+            "description": "Custom assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ENROLLMENT",
             "description": "Enrollment",
             "isDeprecated": false,
@@ -36124,6 +36144,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "ASSESSMENT",
+            "description": "CeAssessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "CLIENT",
             "description": "Client",
