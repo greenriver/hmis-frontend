@@ -218,7 +218,7 @@ export type Assessment = {
   inProgress: Scalars['Boolean']['output'];
   incomeBenefit?: Maybe<IncomeBenefit>;
   lockVersion: Scalars['Int']['output'];
-  role?: Maybe<AssessmentRole>;
+  role: AssessmentRole;
   user?: Maybe<ApplicationUser>;
   wipValues?: Maybe<Scalars['JsonObject']['output']>;
   youthEducationStatus?: Maybe<YouthEducationStatus>;
@@ -7299,7 +7299,7 @@ export type AssessmentFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
-  role?: AssessmentRole | null;
+  role: AssessmentRole;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -7318,7 +7318,7 @@ export type AssessmentWithRecordsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
-  role?: AssessmentRole | null;
+  role: AssessmentRole;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -7796,7 +7796,7 @@ export type AssessmentWithValuesFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
-  role?: AssessmentRole | null;
+  role: AssessmentRole;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -7816,7 +7816,7 @@ export type FullAssessmentFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   dateDeleted?: string | null;
-  role?: AssessmentRole | null;
+  role: AssessmentRole;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -8300,7 +8300,7 @@ export type GetAssessmentQuery = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     dateDeleted?: string | null;
-    role?: AssessmentRole | null;
+    role: AssessmentRole;
     definition: {
       __typename?: 'FormDefinition';
       id: string;
@@ -9267,7 +9267,7 @@ export type GetClientAssessmentsQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
-        role?: AssessmentRole | null;
+        role: AssessmentRole;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -9327,7 +9327,7 @@ export type GetEnrollmentAssessmentsQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
-        role?: AssessmentRole | null;
+        role: AssessmentRole;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -9368,7 +9368,7 @@ export type GetHouseholdAssessmentsQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
-        role?: AssessmentRole | null;
+        role: AssessmentRole;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -9441,7 +9441,7 @@ export type SaveAssessmentMutation = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       dateDeleted?: string | null;
-      role?: AssessmentRole | null;
+      role: AssessmentRole;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -9484,7 +9484,7 @@ export type SubmitAssessmentMutation = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       dateDeleted?: string | null;
-      role?: AssessmentRole | null;
+      role: AssessmentRole;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
@@ -9985,7 +9985,7 @@ export type SubmitHouseholdAssessmentsMutation = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       dateDeleted?: string | null;
-      role?: AssessmentRole | null;
+      role: AssessmentRole;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
@@ -10495,7 +10495,7 @@ export type GetAssessmentsForPopulationQuery = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         dateDeleted?: string | null;
-        role?: AssessmentRole | null;
+        role: AssessmentRole;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
