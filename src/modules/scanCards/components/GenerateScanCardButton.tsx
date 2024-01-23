@@ -39,7 +39,7 @@ const GenerateScanCardButton: React.FC<{
           id: `Client:${clientId}`,
           fieldName: 'scanCardCodes',
         });
-        setCode(data.createScanCardCode?.scanCardCode?.code);
+        setCode(data.createScanCardCode?.scanCardCode?.value);
       }
     },
   });
