@@ -8,6 +8,7 @@ import {
 } from './ScanCardButtons';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
   GetClientScanCardCodesDocument,
@@ -53,13 +54,14 @@ const columns: ColumnDef<Row>[] = [
 ];
 
 const ClientScanCards = () => {
+  const { client } = useClientDashboardContext();
   const { clientId } = useSafeParams() as { clientId: string };
 
   return (
     <>
       <PageTitle
         title='Scan Cards'
-        actions={<GenerateScanCardButton clientId={clientId} />}
+        actions={<GenerateScanCardButton client={client} />}
       />
       <Paper>
         <GenericTableWithData<

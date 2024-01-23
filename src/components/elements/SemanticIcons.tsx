@@ -1,4 +1,6 @@
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DownloadIcon from '@mui/icons-material/Download';
 import Home from '@mui/icons-material/Home';
 import Person from '@mui/icons-material/Person';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
@@ -9,4 +11,6 @@ export {
   QrCodeScannerIcon as ScanCardIcon,
   DeleteIcon,
   RestoreFromTrashIcon as RestoreDeletedIcon,
+  ContentCopyIcon as CopyIcon,
+  DownloadIcon as DownloadIcon,
 };

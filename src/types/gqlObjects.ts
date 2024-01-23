@@ -805,6 +805,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canManageScanCards',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canMergeClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canUploadClientFiles',
         type: {
           kind: 'NON_NULL',
@@ -4683,6 +4699,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageOwnClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageScanCards',
         type: {
           kind: 'NON_NULL',
           name: null,

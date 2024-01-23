@@ -496,8 +496,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.SCAN_CARDS,
             element: (
               <ClientRoute
-                // perm?
-                permissions='canViewEnrollmentDetails'
+                permissions='canManageScanCards'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientScanCards />

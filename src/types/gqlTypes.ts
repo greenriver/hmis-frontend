@@ -678,6 +678,8 @@ export type ClientAccess = {
   canEditEnrollments: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageOwnClientFiles: Scalars['Boolean']['output'];
+  canManageScanCards: Scalars['Boolean']['output'];
+  canMergeClients: Scalars['Boolean']['output'];
   canUploadClientFiles: Scalars['Boolean']['output'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyFiles: Scalars['Boolean']['output'];
@@ -5449,6 +5451,7 @@ export type QueryAccess = {
   canManageInventory: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
   canManageOwnClientFiles: Scalars['Boolean']['output'];
+  canManageScanCards: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
   canSplitHouseholds: Scalars['Boolean']['output'];
   canTransferEnrollments: Scalars['Boolean']['output'];
@@ -7261,6 +7264,8 @@ export type ClientAccessFieldsFragment = {
   canUploadClientFiles: boolean;
   canViewAnyFiles: boolean;
   canAuditClients: boolean;
+  canManageScanCards: boolean;
+  canMergeClients: boolean;
 };
 
 export type EnrollmentAccessFieldsFragment = {
@@ -11827,6 +11832,8 @@ export type ClientSearchResultFieldsFragment = {
     canUploadClientFiles: boolean;
     canViewAnyFiles: boolean;
     canAuditClients: boolean;
+    canManageScanCards: boolean;
+    canMergeClients: boolean;
   };
 };
 
@@ -11900,6 +11907,8 @@ export type ClientFieldsFragment = {
     canUploadClientFiles: boolean;
     canViewAnyFiles: boolean;
     canAuditClients: boolean;
+    canManageScanCards: boolean;
+    canMergeClients: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -12195,6 +12204,8 @@ export type SearchClientsQuery = {
         canUploadClientFiles: boolean;
         canViewAnyFiles: boolean;
         canAuditClients: boolean;
+        canManageScanCards: boolean;
+        canMergeClients: boolean;
       };
     }>;
   };
@@ -12276,6 +12287,8 @@ export type GetClientQuery = {
       canUploadClientFiles: boolean;
       canViewAnyFiles: boolean;
       canAuditClients: boolean;
+      canManageScanCards: boolean;
+      canMergeClients: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -12421,6 +12434,8 @@ export type GetClientPermissionsQuery = {
       canUploadClientFiles: boolean;
       canViewAnyFiles: boolean;
       canAuditClients: boolean;
+      canManageScanCards: boolean;
+      canMergeClients: boolean;
     };
   } | null;
 };
@@ -12826,6 +12841,8 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canUploadClientFiles: boolean;
                 canViewAnyFiles: boolean;
                 canAuditClients: boolean;
+                canManageScanCards: boolean;
+                canMergeClients: boolean;
               };
               externalIds: Array<{
                 __typename?: 'ExternalIdentifier';
@@ -13651,6 +13668,8 @@ export type MergeClientsMutation = {
         canUploadClientFiles: boolean;
         canViewAnyFiles: boolean;
         canAuditClients: boolean;
+        canManageScanCards: boolean;
+        canMergeClients: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -14663,6 +14682,8 @@ export type AllEnrollmentDetailsFragment = {
       canUploadClientFiles: boolean;
       canViewAnyFiles: boolean;
       canAuditClients: boolean;
+      canManageScanCards: boolean;
+      canMergeClients: boolean;
     };
   };
   openEnrollmentSummary: Array<{
@@ -15738,6 +15759,8 @@ export type GetEnrollmentDetailsQuery = {
         canUploadClientFiles: boolean;
         canViewAnyFiles: boolean;
         canAuditClients: boolean;
+        canManageScanCards: boolean;
+        canMergeClients: boolean;
       };
     };
     openEnrollmentSummary: Array<{
@@ -16346,6 +16369,8 @@ export type GetEnrollmentWithHouseholdQuery = {
             canUploadClientFiles: boolean;
             canViewAnyFiles: boolean;
             canAuditClients: boolean;
+            canManageScanCards: boolean;
+            canMergeClients: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -22778,6 +22803,8 @@ export type SubmitFormMutation = {
             canUploadClientFiles: boolean;
             canViewAnyFiles: boolean;
             canAuditClients: boolean;
+            canManageScanCards: boolean;
+            canMergeClients: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -23578,6 +23605,8 @@ export type HouseholdFieldsFragment = {
         canUploadClientFiles: boolean;
         canViewAnyFiles: boolean;
         canAuditClients: boolean;
+        canManageScanCards: boolean;
+        canMergeClients: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -23636,6 +23665,8 @@ export type HouseholdClientFieldsFragment = {
       canUploadClientFiles: boolean;
       canViewAnyFiles: boolean;
       canAuditClients: boolean;
+      canManageScanCards: boolean;
+      canMergeClients: boolean;
     };
     externalIds: Array<{
       __typename?: 'ExternalIdentifier';
@@ -23776,6 +23807,8 @@ export type GetHouseholdQuery = {
           canUploadClientFiles: boolean;
           canViewAnyFiles: boolean;
           canAuditClients: boolean;
+          canManageScanCards: boolean;
+          canMergeClients: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -26347,6 +26380,8 @@ export type GetReferralPostingQuery = {
           canUploadClientFiles: boolean;
           canViewAnyFiles: boolean;
           canAuditClients: boolean;
+          canManageScanCards: boolean;
+          canMergeClients: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -26463,6 +26498,8 @@ export type UpdateReferralPostingMutation = {
             canUploadClientFiles: boolean;
             canViewAnyFiles: boolean;
             canAuditClients: boolean;
+            canManageScanCards: boolean;
+            canMergeClients: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -26593,6 +26630,8 @@ export type CreateOutgoingReferralPostingMutation = {
             canUploadClientFiles: boolean;
             canViewAnyFiles: boolean;
             canAuditClients: boolean;
+            canManageScanCards: boolean;
+            canMergeClients: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -26781,6 +26820,8 @@ export type ReferralPostingDetailFieldsFragment = {
         canUploadClientFiles: boolean;
         canViewAnyFiles: boolean;
         canAuditClients: boolean;
+        canManageScanCards: boolean;
+        canMergeClients: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -28825,6 +28866,8 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canUploadClientFiles
     canViewAnyFiles
     canAuditClients
+    canManageScanCards
+    canMergeClients
   }
 `;
 export const ClientSearchResultFieldsFragmentDoc = gql`

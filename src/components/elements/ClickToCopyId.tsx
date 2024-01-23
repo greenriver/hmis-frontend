@@ -1,10 +1,17 @@
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { IconButton, Typography, TypographyProps } from '@mui/material';
+import {
+  Chip,
+  ChipProps,
+  IconButton,
+  Typography,
+  TypographyProps,
+} from '@mui/material';
 
 interface Props {
   value: string;
   sx?: TypographyProps['sx'];
   variant?: TypographyProps['variant'];
+  trimLengthAbove?: number | null;
 }
 
 export const ClickToCopyId: React.FC<Props> = ({
@@ -30,5 +37,38 @@ export const ClickToCopyId: React.FC<Props> = ({
         </IconButton>
       )}
     </Typography>
+  );
+};
+
+export const ClickToCopy: React.FC<Props> = ({ value, variant, sx }) => {
+  return (
+    <Typography sx={sx} variant={variant} component='div'>
+      {value}
+      <IconButton
+        aria-label='copy'
+        onClick={() => navigator.clipboard.writeText(value)}
+        sx={{ fontSize: 'inherit' }}
+        size='small'
+      >
+        <ContentCopyIcon fontSize='inherit' />
+      </IconButton>
+    </Typography>
+  );
+};
+
+export const ClickToCopyChip: React.FC<{ value: string } & ChipProps> = ({
+  value,
+  sx,
+  ...props
+}) => {
+  return (
+    <Chip
+      variant='outlined'
+      onClick={() => navigator.clipboard.writeText(value)}
+      icon={<ContentCopyIcon fontSize='inherit' />}
+      label={value}
+      {...props}
+      sx={{ width: 'fit-content', px: 2, ...sx }}
+    />
   );
 };
