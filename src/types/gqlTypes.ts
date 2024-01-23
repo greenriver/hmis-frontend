@@ -7306,6 +7306,12 @@ export type AssessmentFieldsFragment = {
     name: string;
     email: string;
   } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
 };
 
 export type AssessmentWithRecordsFragment = {
@@ -7783,6 +7789,12 @@ export type AssessmentWithRecordsFragment = {
     name: string;
     email: string;
   } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
 };
 
 export type AssessmentWithValuesFragment = {
@@ -7803,6 +7815,12 @@ export type AssessmentWithValuesFragment = {
     name: string;
     email: string;
   } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
 };
 
 export type FullAssessmentFragment = {
@@ -8281,6 +8299,12 @@ export type FullAssessmentFragment = {
     name: string;
     email: string;
   } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
 };
 
 export type GetAssessmentQueryVariables = Exact<{
@@ -8304,9 +8328,9 @@ export type GetAssessmentQuery = {
     definition: {
       __typename?: 'FormDefinition';
       id: string;
-      role: FormRole;
-      title: string;
       cacheKey: string;
+      title: string;
+      role: FormRole;
       identifier: string;
       definition: {
         __typename?: 'FormDefinitionJson';
@@ -9293,6 +9317,12 @@ export type GetClientAssessmentsQuery = {
           name: string;
           email: string;
         } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
       }>;
     };
   } | null;
@@ -9334,6 +9364,12 @@ export type GetEnrollmentAssessmentsQuery = {
           name: string;
           email: string;
         } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
       }>;
     };
   } | null;
@@ -9389,6 +9425,12 @@ export type GetHouseholdAssessmentsQuery = {
           name: string;
           email: string;
         } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
       }>;
     };
   } | null;
@@ -9448,6 +9490,12 @@ export type SaveAssessmentMutation = {
         name: string;
         email: string;
       } | null;
+      definition: {
+        __typename?: 'FormDefinition';
+        id: string;
+        cacheKey: string;
+        title: string;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -9949,6 +9997,12 @@ export type SubmitAssessmentMutation = {
         name: string;
         email: string;
       } | null;
+      definition: {
+        __typename?: 'FormDefinition';
+        id: string;
+        cacheKey: string;
+        title: string;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -10450,6 +10504,12 @@ export type SubmitHouseholdAssessmentsMutation = {
         name: string;
         email: string;
       } | null;
+      definition: {
+        __typename?: 'FormDefinition';
+        id: string;
+        cacheKey: string;
+        title: string;
+      };
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -10966,6 +11026,12 @@ export type GetAssessmentsForPopulationQuery = {
           name: string;
           email: string;
         } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
       }>;
     };
   } | null;
@@ -28121,6 +28187,11 @@ export const AssessmentFieldsFragmentDoc = gql`
     role
     user {
       ...UserFields
+    }
+    definition {
+      id
+      cacheKey
+      title
     }
   }
   ${UserFieldsFragmentDoc}

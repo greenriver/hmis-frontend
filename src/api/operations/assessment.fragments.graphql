@@ -12,6 +12,11 @@ fragment AssessmentFields on Assessment {
   user {
     ...UserFields
   }
+  definition {
+    id
+    cacheKey
+    title
+  }
 }
 
 # contains form values

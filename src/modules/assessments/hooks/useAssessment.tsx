@@ -6,7 +6,9 @@ import {
   applyDataCollectedAbout,
   ClientNameDobVeteranFields,
 } from '@/modules/form/util/formUtil';
+import { formRoleDisplay } from '@/modules/hmis/hmisUtil';
 import {
+  AssessmentRole,
   FormDefinitionFieldsFragment,
   FormRole,
   RelationshipToHoH,
@@ -71,8 +73,15 @@ export function useAssessment({
   }, [formDefinitionData, assessmentData, client, relationshipToHoH]);
 
   const [formRole, assessmentTitle] = useMemo(() => {
-    const arole = assessmentData?.assessment?.role || formRoleParam;
-    return [arole, `${arole ? startCase(arole.toLowerCase()) : ''} Assessment`];
+    const { assessment } = assessmentData || {};
+
+    // a custom assessment, use the definition title
+    if (assessment && assessment.role === AssessmentRole.CustomAssessment) {
+      return [assessment.role, formRoleDisplay(assessment)];
+    }
+    // transform the role into a title
+    const role = assessment?.role || formRoleParam;
+    return [role, `${role ? startCase(role.toLowerCase()) : ''} Assessment`];
   }, [assessmentData, formRoleParam]);
 
   if (formDefinitionError) throw formDefinitionError;
