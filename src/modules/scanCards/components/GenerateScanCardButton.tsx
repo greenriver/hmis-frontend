@@ -12,9 +12,7 @@ import { ClickToCopyChip } from '@/components/elements/ClickToCopyId';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import {
-  DeleteIcon,
   DownloadIcon,
-  RestoreDeletedIcon,
   ScanCardIcon,
 } from '@/components/elements/SemanticIcons';
 import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -22,11 +20,9 @@ import { cache } from '@/providers/apolloClient';
 import {
   ClientFieldsFragment,
   useCreateScanCardMutation,
-  useDeleteScanCardMutation,
-  useRestoreScanCardMutation,
 } from '@/types/gqlTypes';
 
-export const GenerateScanCardButton: React.FC<{
+const GenerateScanCardButton: React.FC<{
   client: ClientFieldsFragment;
 }> = ({ client }) => {
   const clientId = client.id;
@@ -104,48 +100,4 @@ export const GenerateScanCardButton: React.FC<{
   );
 };
 
-export const DeactivateScanCardButton: React.FC<{
-  id: string;
-}> = ({ id }) => {
-  const [mutate, { loading, error }] = useDeleteScanCardMutation({
-    variables: { id },
-  });
-
-  if (error) throw error;
-
-  return (
-    <LoadingButton
-      startIcon={<DeleteIcon />}
-      size='small'
-      variant='outlined'
-      color='error'
-      loading={loading}
-      onClick={() => mutate()}
-    >
-      Deactivate
-    </LoadingButton>
-  );
-};
-
-export const RestoreScanCardButton: React.FC<{
-  id: string;
-}> = ({ id }) => {
-  const [mutate, { loading, error }] = useRestoreScanCardMutation({
-    variables: { id },
-  });
-
-  if (error) throw error;
-
-  return (
-    <LoadingButton
-      startIcon={<RestoreDeletedIcon />}
-      size='small'
-      variant='outlined'
-      color='info'
-      loading={loading}
-      onClick={() => mutate()}
-    >
-      Restore
-    </LoadingButton>
-  );
-};
+export default GenerateScanCardButton;

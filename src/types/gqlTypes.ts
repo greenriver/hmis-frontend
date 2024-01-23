@@ -5933,12 +5933,12 @@ export type SaveAssessmentPayload = {
 
 export type ScanCardCode = {
   __typename?: 'ScanCardCode';
-  code: Scalars['ID']['output'];
   createdBy?: Maybe<ApplicationUser>;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   deletedBy?: Maybe<ApplicationUser>;
   id: Scalars['ID']['output'];
+  value: Scalars['ID']['output'];
 };
 
 export type ScanCardCodesPaginated = {
@@ -27031,7 +27031,7 @@ export type GetEsgFundingReportQuery = {
 export type ScanCardFieldsFragment = {
   __typename?: 'ScanCardCode';
   id: string;
-  code: string;
+  value: string;
   dateCreated: string;
   dateDeleted?: string | null;
   createdBy?: {
@@ -27067,7 +27067,7 @@ export type GetClientScanCardCodesQuery = {
       nodes: Array<{
         __typename?: 'ScanCardCode';
         id: string;
-        code: string;
+        value: string;
         dateCreated: string;
         dateDeleted?: string | null;
         createdBy?: {
@@ -27098,7 +27098,7 @@ export type CreateScanCardMutation = {
     scanCardCode?: {
       __typename?: 'ScanCardCode';
       id: string;
-      code: string;
+      value: string;
       dateCreated: string;
       dateDeleted?: string | null;
       createdBy?: {
@@ -27142,7 +27142,7 @@ export type DeleteScanCardMutation = {
     scanCardCode?: {
       __typename?: 'ScanCardCode';
       id: string;
-      code: string;
+      value: string;
       dateCreated: string;
       dateDeleted?: string | null;
       createdBy?: {
@@ -27186,7 +27186,7 @@ export type RestoreScanCardMutation = {
     scanCardCode?: {
       __typename?: 'ScanCardCode';
       id: string;
-      code: string;
+      value: string;
       dateCreated: string;
       dateDeleted?: string | null;
       createdBy?: {
@@ -30017,7 +30017,7 @@ export const EsgFundingServiceFieldsFragmentDoc = gql`
 export const ScanCardFieldsFragmentDoc = gql`
   fragment ScanCardFields on ScanCardCode {
     id
-    code
+    value
     dateCreated
     dateDeleted
     createdBy {

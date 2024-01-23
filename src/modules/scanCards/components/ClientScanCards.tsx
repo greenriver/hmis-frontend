@@ -1,11 +1,11 @@
 import { Paper, Stack } from '@mui/material';
 import GenericTableWithData from '../../dataFetching/components/GenericTableWithData';
 import { lastUpdatedBy } from '../../hmis/hmisUtil';
+import GenerateScanCardButton from './GenerateScanCardButton';
 import {
   DeactivateScanCardButton,
-  GenerateScanCardButton,
   RestoreScanCardButton,
-} from './ScanCardButtons';
+} from './ManageCardButtons';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
@@ -24,7 +24,7 @@ const columns: ColumnDef<Row>[] = [
   {
     key: 'code',
     header: 'Scan Card ID',
-    render: (row) => row.code,
+    render: (row) => row.value,
   },
   {
     key: 'history',

@@ -1,6 +1,6 @@
 fragment ScanCardFields on ScanCardCode {
   id
-  code
+  value
   dateCreated
   dateDeleted
   createdBy {

@@ -5089,14 +5089,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ScanCardCode',
     fields: [
       {
-        name: 'code',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
         name: 'dateCreated',
         type: {
           kind: 'NON_NULL',
@@ -5110,6 +5102,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'value',
         type: {
           kind: 'NON_NULL',
           name: null,
