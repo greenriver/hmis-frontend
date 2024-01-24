@@ -36,8 +36,12 @@ const EnrollmentCeAssessmentsPage = () => {
   }, [enrollmentId]);
 
   const localConstants = useMemo(
-    () => ({ projectName: enrollment?.project.projectName }),
-    [enrollment?.project.projectName]
+    () => ({
+      projectName: enrollment?.project.projectName,
+      entryDate: enrollment?.entryDate,
+      exitDate: enrollment?.exitDate,
+    }),
+    [enrollment]
   );
 
   const { onSelectRecord, editRecordDialog, openFormDialog, viewRecordDialog } =
