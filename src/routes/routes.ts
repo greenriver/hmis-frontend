@@ -56,7 +56,9 @@ const enrollmentDashboardRoutes = {
   EVENTS: 'events',
   CE_ASSESSMENTS: 'ce-assessments',
   CUSTOM_CASE_NOTES: 'case-notes',
-  ASSESSMENT: 'assessments/:formRole/:assessmentId?',
+  ASSESSMENT: 'assessments/:formRole/:assessmentId?', // Legacy
+  VIEW_ASSESSMENT: 'assessments/:formRole/:assessmentId',
+  NEW_ASSESSMENT: 'assessments/:formRole/new/:formDefinitionId?',
   ESG_FUNDING_REPORT: 'esg-funding-report',
   AUDIT_HISTORY: 'history',
 };
@@ -139,7 +141,11 @@ export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
 } = adminDashboardRoutes;
 
-export const HIDE_NAV_ROUTES = [EnrollmentDashboardRoutes.ASSESSMENT];
+export const HIDE_NAV_ROUTES = [
+  EnrollmentDashboardRoutes.ASSESSMENT,
+  EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
+  EnrollmentDashboardRoutes.NEW_ASSESSMENT,
+];
 
 export const FOCUS_MODE_ROUTES = [
   // {
@@ -154,6 +160,7 @@ export const FOCUS_MODE_ROUTES = [
 
 export const PRINTABLE_ROUTES = [
   EnrollmentDashboardRoutes.ASSESSMENT,
+  EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
   EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];

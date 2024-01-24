@@ -1,8 +1,7 @@
-import { cloneDeep } from '@apollo/client/utilities';
 import { useMemo } from 'react';
 
 import {
-  applyDataCollectedAbout,
+  applyDefinitionRulesForClient,
   ClientNameDobVeteranFields,
 } from '@/modules/form/util/formUtil';
 import {
@@ -60,13 +59,7 @@ export function useAssessment({
       assessmentData?.assessment?.definition;
     if (!formDef) return;
 
-    const mutable = cloneDeep(formDef);
-    mutable.definition.item = applyDataCollectedAbout(
-      formDef.definition.item,
-      client,
-      relationshipToHoH
-    );
-    return mutable;
+    return applyDefinitionRulesForClient(formDef, client, relationshipToHoH);
   }, [formDefinitionData, assessmentData, client, relationshipToHoH]);
 
   if (formDefinitionError) throw formDefinitionError;

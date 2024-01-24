@@ -1,6 +1,6 @@
 import DescriptionIcon from '@mui/icons-material/Description';
 import { Typography } from '@mui/material';
-import { Stack, Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButtonContainer from './IconButtonContainer';
@@ -18,22 +18,34 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
   const navigate = useNavigate();
   const intakePath = useMemo(
     () =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-        clientId: enrollment.client.id,
-        enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Intake,
-        assessmentId: enrollment.intakeAssessment?.id,
-      }),
+      enrollment.intakeAssessment
+        ? generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+            clientId: enrollment.client.id,
+            enrollmentId: enrollment.id,
+            formRole: AssessmentRole.Intake,
+            assessmentId: enrollment.intakeAssessment.id,
+          })
+        : generateSafePath(EnrollmentDashboardRoutes.NEW_ASSESSMENT, {
+            clientId: enrollment.client.id,
+            enrollmentId: enrollment.id,
+            formRole: AssessmentRole.Intake,
+          }),
     [enrollment]
   );
   const exitPath = useMemo(
     () =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-        clientId: enrollment.client.id,
-        enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Exit,
-        assessmentId: enrollment.exitAssessment?.id,
-      }),
+      enrollment.exitAssessment
+        ? generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+            clientId: enrollment.client.id,
+            enrollmentId: enrollment.id,
+            formRole: AssessmentRole.Exit,
+            assessmentId: enrollment.exitAssessment.id,
+          })
+        : generateSafePath(EnrollmentDashboardRoutes.NEW_ASSESSMENT, {
+            clientId: enrollment.client.id,
+            enrollmentId: enrollment.id,
+            formRole: AssessmentRole.Exit,
+          }),
     [enrollment]
   );
 

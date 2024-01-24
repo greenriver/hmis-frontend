@@ -19,6 +19,7 @@ import EditClient from '@/components/clientDashboard/EditClient';
 import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
 import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
 import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
+import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import PathHandler from '@/components/elements/PathHandler';
@@ -384,6 +385,11 @@ export const protectedRoutes: RouteNode[] = [
             path: EnrollmentDashboardRoutes.ASSESSMENT,
             // No perm needed because it only requires enrollment visibility
             element: <AssessmentPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.NEW_ASSESSMENT,
+            // No perm needed because it only requires enrollment visibility
+            element: <NewAssessmentPage />,
           },
           {
             path: EnrollmentDashboardRoutes.SERVICES,

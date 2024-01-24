@@ -24,7 +24,7 @@ import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEn
 import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes, HIDE_NAV_ROUTES } from '@/routes/routes';
 import {
   ClientNameDobVetFragment,
   DataCollectionFeatureRole,
@@ -69,7 +69,8 @@ const EnrollmentDashboard: React.FC = () => {
     if (dashboardState.focusMode) return dashboardState.focusMode;
     // hacky way to set "focus" for household assessments, which depends on the household size
     if (
-      currentPath === EnrollmentDashboardRoutes.ASSESSMENT &&
+      currentPath &&
+      HIDE_NAV_ROUTES.includes(currentPath) &&
       showAssessmentInHousehold(enrollment, params.formRole)
     ) {
       return EnrollmentDashboardRoutes.ASSESSMENTS;

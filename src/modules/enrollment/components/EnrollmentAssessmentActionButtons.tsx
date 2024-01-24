@@ -55,11 +55,12 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
   if (error) throw error;
 
   const getPath = useCallback(
-    (formRole: AssessmentRole) =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+    (formRole: AssessmentRole, formDefinitionId?: string) =>
+      generateSafePath(EnrollmentDashboardRoutes.NEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         formRole,
+        formDefinitionId,
       }),
     [clientId, enrollmentId]
   );
@@ -68,9 +69,9 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
     if (!data?.enrollment) return [];
 
     return data.enrollment.assessmentEligibilities.map(
-      ({ id, role, title }) => ({
+      ({ id, title, role, formDefinitionId }) => ({
         key: id,
-        to: getPath(role),
+        to: getPath(role, formDefinitionId),
         title: title,
       })
     );

@@ -204,6 +204,10 @@ export const useEnrollmentBreadcrumbConfig = (
         title: 'Assessment',
         parent: EnrollmentDashboardRoutes.ASSESSMENTS,
       },
+      [EnrollmentDashboardRoutes.NEW_ASSESSMENT]: {
+        title: 'New Assessment',
+        parent: EnrollmentDashboardRoutes.ASSESSMENTS,
+      },
     };
     return buildDefaultCrumbs(
       EnrollmentDashboardRoutes,

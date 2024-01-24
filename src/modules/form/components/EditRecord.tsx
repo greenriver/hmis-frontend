@@ -71,10 +71,12 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   );
 
   const { formDefinition, loading: definitionLoading } = useFormDefinition({
-    role: formRole,
-    // hack: pull project id from one of the existing args, if it exists.
-    // this project will be used to evaluate and "rules" on the resolved form definition.
-    projectId: localConstants?.projectId || inputVariables?.projectId,
+    queryVariables: {
+      role: formRole,
+      // hack: pull project id from one of the existing args, if it exists.
+      // this project will be used to evaluate and "rules" on the resolved form definition.
+      projectId: localConstants?.projectId || inputVariables?.projectId,
+    },
   });
 
   const { initialValues, itemMap, errors, onSubmit, submitLoading } =

@@ -1,77 +1,61 @@
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAssessment } from '../hooks/useAssessment';
 import {
   AssessmentResponseStatus,
   useAssessmentHandlers,
 } from '../hooks/useAssessmentHandlers';
-import MissingDefinitionAlert from './MissingDefinitionAlert';
-import Loading from '@/components/elements/Loading';
-import NotFound from '@/components/pages/NotFound';
-import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
 import { FormActionTypes } from '@/modules/form/types';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { cache } from '@/providers/apolloClient';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { ClientNameDobVetFragment, FormRole } from '@/types/gqlTypes';
+import {
+  ClientNameDobVetFragment,
+  FormDefinitionFieldsFragment,
+  FullAssessmentFragment,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   enrollment: DashboardEnrollment;
   client: ClientNameDobVetFragment;
+  definition: FormDefinitionFieldsFragment;
+  assessment?: FullAssessmentFragment;
 }
 
-const IndividualAssessmentPage: React.FC<Props> = ({ client, enrollment }) => {
+const IndividualAssessmentPage: React.FC<Props> = ({
+  client,
+  enrollment,
+  definition,
+  assessment,
+}) => {
   const navigate = useNavigate();
-  const { clientId, enrollmentId, assessmentId, formRole } =
-    useSafeParams() as {
-      clientId: string;
-      enrollmentId: string;
-      formRole: FormRole;
-      assessmentId?: string;
-    };
-
   const navigateToEnrollment = useCallback(
     () =>
       navigate(
         generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
-          enrollmentId,
-          clientId,
+          enrollmentId: enrollment.id,
+          clientId: client.id,
         })
       ),
-    [navigate, enrollmentId, clientId]
+    [navigate, enrollment, client]
   );
 
   const onCompletedMutation = useCallback(
     (status: AssessmentResponseStatus) => {
       if (!['saved', 'submitted'].includes(status)) return;
       // We created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
-      if (!assessmentId) {
+      if (!assessment) {
         cache.evict({
-          id: `Enrollment:${enrollmentId}`,
+          id: `Enrollment:${enrollment.id}`,
           fieldName: 'assessments',
         });
       }
       navigateToEnrollment();
     },
-    [navigateToEnrollment, assessmentId, enrollmentId]
+    [navigateToEnrollment, assessment, enrollment]
   );
-
-  const {
-    definition,
-    assessment,
-    loading: dataLoading,
-    assessmentTitle,
-    formRole: role,
-  } = useAssessment({
-    enrollmentId,
-    assessmentId,
-    formRoleParam: formRole,
-    client,
-    relationshipToHoH: enrollment?.relationshipToHoH,
-  });
 
   const { submitHandler, saveDraftHandler, mutationLoading, errors } =
     useAssessmentHandlers({
@@ -112,17 +96,13 @@ const IndividualAssessmentPage: React.FC<Props> = ({ client, enrollment }) => {
     };
   }, [assessment, navigateToEnrollment]);
 
-  if (!formRole) return <NotFound />;
-  if (dataLoading) return <Loading />;
-  if (!definition) return <MissingDefinitionAlert />;
-
   return (
     <IndividualAssessment
       definition={definition}
       assessment={assessment}
-      formRole={role}
-      enrollmentId={enrollmentId}
-      title={assessmentTitle}
+      formRole={definition.role}
+      enrollmentId={enrollment.id}
+      title={definition.title}
       client={client}
       onSubmit={submitHandler}
       onSaveDraft={saveDraftHandler}

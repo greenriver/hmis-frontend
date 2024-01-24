@@ -68,15 +68,15 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
     [localConstantsProp]
   );
 
-  const { formDefinition, loading: definitionLoading } = useFormDefinition(
-    {
+  const { formDefinition, loading: definitionLoading } = useFormDefinition({
+    queryVariables: {
       role: formRole,
       // hack: pull project id from one of the existing args, if it exists.
       // this project will be used to evaluate and "rules" on the resolved form definition.
       projectId: localConstants?.projectId || inputVariables?.projectId,
     },
-    localDefinition
-  );
+    localDefinition,
+  });
 
   const hookArgs = useMemo(
     () => ({
