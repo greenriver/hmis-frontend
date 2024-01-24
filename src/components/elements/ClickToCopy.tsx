@@ -1,4 +1,3 @@
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
   Chip,
   ChipProps,
@@ -6,6 +5,7 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
+import { CopyIcon } from './SemanticIcons';
 
 interface Props {
   value: string;
@@ -14,6 +14,7 @@ interface Props {
   trimLengthAbove?: number | null;
 }
 
+// For displaying trimmed UUIDs
 export const ClickToCopyId: React.FC<Props> = ({
   value,
   variant = 'body2',
@@ -33,25 +34,9 @@ export const ClickToCopyId: React.FC<Props> = ({
           sx={{ fontSize: 'inherit' }}
           size='small'
         >
-          <ContentCopyIcon fontSize='inherit' />
+          <CopyIcon fontSize='inherit' />
         </IconButton>
       )}
-    </Typography>
-  );
-};
-
-export const ClickToCopy: React.FC<Props> = ({ value, variant, sx }) => {
-  return (
-    <Typography sx={sx} variant={variant} component='div'>
-      {value}
-      <IconButton
-        aria-label='copy'
-        onClick={() => navigator.clipboard.writeText(value)}
-        sx={{ fontSize: 'inherit' }}
-        size='small'
-      >
-        <ContentCopyIcon fontSize='inherit' />
-      </IconButton>
     </Typography>
   );
 };
@@ -65,7 +50,7 @@ export const ClickToCopyChip: React.FC<{ value: string } & ChipProps> = ({
     <Chip
       variant='outlined'
       onClick={() => navigator.clipboard.writeText(value)}
-      icon={<ContentCopyIcon fontSize='inherit' />}
+      icon={<CopyIcon fontSize='inherit' />}
       label={value}
       {...props}
       sx={{ width: 'fit-content', px: 2, ...sx }}

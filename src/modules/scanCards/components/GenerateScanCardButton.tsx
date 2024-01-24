@@ -8,13 +8,10 @@ import {
 } from '@mui/material';
 
 import { useCallback, useState } from 'react';
-import { ClickToCopyChip } from '@/components/elements/ClickToCopyId';
+import { ClickToCopyChip } from '@/components/elements/ClickToCopy';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
-import {
-  DownloadIcon,
-  ScanCardIcon,
-} from '@/components/elements/SemanticIcons';
+import { ScanCardIcon } from '@/components/elements/SemanticIcons';
 import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import {
@@ -59,36 +56,28 @@ const GenerateScanCardButton: React.FC<{
       <CommonDialog open={!!code} fullWidth onClose={closeDialog}>
         <DialogTitle>Scan Card Information</DialogTitle>
         {code && (
-          <DialogContent sx={{ my: 2 }}>
-            {/* <Typography sx={{ mb: 2 }}>Click to copy values</Typography> */}
-            <Stack gap={4}>
-              <CommonLabeledTextBlock title='Bar Code ID' variant='body1'>
-                <ClickToCopyChip
-                  value={code}
-                  sx={{ fontSize: (theme) => theme.typography.body1 }}
-                />
+          <DialogContent sx={{ mt: 2 }}>
+            <Stack gap={2}>
+              <CommonLabeledTextBlock title='Bar Code ID'>
+                <ClickToCopyChip value={code} />
               </CommonLabeledTextBlock>
-              <CommonLabeledTextBlock title='Client Name' variant='body1'>
-                <ClickToCopyChip
-                  value={clientBriefName(client)}
-                  sx={{ fontSize: (theme) => theme.typography.body1 }}
-                />
+              <CommonLabeledTextBlock title='Client Name'>
+                <ClickToCopyChip value={clientBriefName(client)} />
               </CommonLabeledTextBlock>
               {parseAndFormatDate(client.dob) && (
-                <CommonLabeledTextBlock title='Date of Birth' variant='body1'>
+                <CommonLabeledTextBlock title='Date of Birth'>
                   <ClickToCopyChip
                     value={parseAndFormatDate(client.dob) || ''}
-                    sx={{ fontSize: (theme) => theme.typography.body1 }}
                   />
                 </CommonLabeledTextBlock>
               )}
-              <Button
+              {/* <Button
                 variant='outlined'
                 sx={{ width: 'fit-content' }}
                 startIcon={<DownloadIcon />}
               >
                 Download Client Photo
-              </Button>
+              </Button> */}
             </Stack>
           </DialogContent>
         )}

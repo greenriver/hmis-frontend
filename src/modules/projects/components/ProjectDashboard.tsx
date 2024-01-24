@@ -4,7 +4,7 @@ import { Outlet, useOutletContext } from 'react-router-dom';
 
 import { useDetailedProject } from '../hooks/useDetailedProject';
 import { useProjectDashboardNavItems } from '../hooks/useProjectDashboardNavItems';
-import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
+import { ClickToCopyId } from '@/components/elements/ClickToCopy';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
 import RouterLink from '@/components/elements/RouterLink';
