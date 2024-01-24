@@ -9,7 +9,6 @@ import {
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
-import useSafeParams from '@/hooks/useSafeParams';
 import {
   GetClientScanCardCodesDocument,
   GetClientScanCardCodesQuery,
@@ -55,7 +54,6 @@ const columns: ColumnDef<Row>[] = [
 
 const ClientScanCards = () => {
   const { client } = useClientDashboardContext();
-  const { clientId } = useSafeParams() as { clientId: string };
 
   return (
     <>
@@ -69,7 +67,7 @@ const ClientScanCards = () => {
           GetClientScanCardCodesQueryVariables,
           Row
         >
-          queryVariables={{ id: clientId }}
+          queryVariables={{ id: client.id }}
           queryDocument={GetClientScanCardCodesDocument}
           columns={columns}
           pagePath='client.scanCardCodes'
