@@ -201,6 +201,7 @@ export type Assessment = {
   __typename?: 'Assessment';
   access: AssessmentAccess;
   assessmentDate: Scalars['ISO8601Date']['output'];
+  ceAssessment?: Maybe<CeAssessment>;
   client: Client;
   customDataElements: Array<CustomDataElement>;
   dataCollectionStage?: Maybe<DataCollectionStage>;
@@ -275,6 +276,8 @@ export enum AssessmentLevel {
 export enum AssessmentRole {
   /** Annual */
   Annual = 'ANNUAL',
+  /** Custom assessment */
+  CustomAssessment = 'CUSTOM_ASSESSMENT',
   /** Exit */
   Exit = 'EXIT',
   /** Intake */
@@ -2812,6 +2815,8 @@ export enum FormRole {
   ClientDetail = 'CLIENT_DETAIL',
   /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Custom assessment */
+  CustomAssessment = 'CUSTOM_ASSESSMENT',
   /** Enrollment */
   Enrollment = 'ENROLLMENT',
   /** Exit */
@@ -5781,6 +5786,8 @@ export enum ReferralSource {
 
 /** Related record type for a group of questions in an assessment */
 export enum RelatedRecordType {
+  /** CeAssessment */
+  Assessment = 'ASSESSMENT',
   /** Client */
   Client = 'CLIENT',
   /** CurrentLivingSituation */
@@ -7368,6 +7375,12 @@ export type AssessmentFieldsFragment = {
     name: string;
     email: string;
   } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
 };
 
 export type AssessmentWithRecordsFragment = {
@@ -7495,6 +7508,24 @@ export type AssessmentWithRecordsFragment = {
     }>;
     client: { __typename?: 'Client'; id: string };
   };
+  ceAssessment?: {
+    __typename?: 'CeAssessment';
+    id: string;
+    assessmentDate: string;
+    assessmentLevel?: AssessmentLevel | null;
+    assessmentLocation: string;
+    assessmentType?: AssessmentType | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
+    prioritizationStatus?: PrioritizationStatus | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
   incomeBenefit?: {
     __typename: 'IncomeBenefit';
     adap?: NoYesReasonsForMissingData | null;
@@ -7827,6 +7858,12 @@ export type AssessmentWithRecordsFragment = {
     name: string;
     email: string;
   } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
 };
 
 export type AssessmentWithValuesFragment = {
@@ -7847,6 +7884,12 @@ export type AssessmentWithValuesFragment = {
     name: string;
     email: string;
   } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
 };
 
 export type FullAssessmentFragment = {
@@ -7975,6 +8018,24 @@ export type FullAssessmentFragment = {
     }>;
     client: { __typename?: 'Client'; id: string };
   };
+  ceAssessment?: {
+    __typename?: 'CeAssessment';
+    id: string;
+    assessmentDate: string;
+    assessmentLevel?: AssessmentLevel | null;
+    assessmentLocation: string;
+    assessmentType?: AssessmentType | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
+    prioritizationStatus?: PrioritizationStatus | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
   incomeBenefit?: {
     __typename: 'IncomeBenefit';
     adap?: NoYesReasonsForMissingData | null;
@@ -8307,6 +8368,12 @@ export type FullAssessmentFragment = {
     name: string;
     email: string;
   } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
 };
 
 export type GetAssessmentQueryVariables = Exact<{
@@ -8330,9 +8397,9 @@ export type GetAssessmentQuery = {
     definition: {
       __typename?: 'FormDefinition';
       id: string;
-      role: FormRole;
-      title: string;
       cacheKey: string;
+      title: string;
+      role: FormRole;
       identifier: string;
       definition: {
         __typename?: 'FormDefinitionJson';
@@ -8912,6 +8979,24 @@ export type GetAssessmentQuery = {
       }>;
       client: { __typename?: 'Client'; id: string };
     };
+    ceAssessment?: {
+      __typename?: 'CeAssessment';
+      id: string;
+      assessmentDate: string;
+      assessmentLevel?: AssessmentLevel | null;
+      assessmentLocation: string;
+      assessmentType?: AssessmentType | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      dateDeleted?: string | null;
+      prioritizationStatus?: PrioritizationStatus | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
     incomeBenefit?: {
       __typename: 'IncomeBenefit';
       adap?: NoYesReasonsForMissingData | null;
@@ -9301,6 +9386,12 @@ export type GetClientAssessmentsQuery = {
           name: string;
           email: string;
         } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
       }>;
     };
   } | null;
@@ -9342,6 +9433,12 @@ export type GetEnrollmentAssessmentsQuery = {
           name: string;
           email: string;
         } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
       }>;
     };
   } | null;
@@ -9397,6 +9494,12 @@ export type GetHouseholdAssessmentsQuery = {
           name: string;
           email: string;
         } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
       }>;
     };
   } | null;
@@ -9456,6 +9559,12 @@ export type SaveAssessmentMutation = {
         name: string;
         email: string;
       } | null;
+      definition: {
+        __typename?: 'FormDefinition';
+        id: string;
+        cacheKey: string;
+        title: string;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -9607,6 +9716,24 @@ export type SubmitAssessmentMutation = {
         }>;
         client: { __typename?: 'Client'; id: string };
       };
+      ceAssessment?: {
+        __typename?: 'CeAssessment';
+        id: string;
+        assessmentDate: string;
+        assessmentLevel?: AssessmentLevel | null;
+        assessmentLocation: string;
+        assessmentType?: AssessmentType | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
+        prioritizationStatus?: PrioritizationStatus | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
       incomeBenefit?: {
         __typename: 'IncomeBenefit';
         adap?: NoYesReasonsForMissingData | null;
@@ -9939,6 +10066,12 @@ export type SubmitAssessmentMutation = {
         name: string;
         email: string;
       } | null;
+      definition: {
+        __typename?: 'FormDefinition';
+        id: string;
+        cacheKey: string;
+        title: string;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -10090,6 +10223,24 @@ export type SubmitHouseholdAssessmentsMutation = {
         }>;
         client: { __typename?: 'Client'; id: string };
       };
+      ceAssessment?: {
+        __typename?: 'CeAssessment';
+        id: string;
+        assessmentDate: string;
+        assessmentLevel?: AssessmentLevel | null;
+        assessmentLocation: string;
+        assessmentType?: AssessmentType | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
+        prioritizationStatus?: PrioritizationStatus | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
       incomeBenefit?: {
         __typename: 'IncomeBenefit';
         adap?: NoYesReasonsForMissingData | null;
@@ -10422,6 +10573,12 @@ export type SubmitHouseholdAssessmentsMutation = {
         name: string;
         email: string;
       } | null;
+      definition: {
+        __typename?: 'FormDefinition';
+        id: string;
+        cacheKey: string;
+        title: string;
+      };
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -10588,6 +10745,24 @@ export type GetAssessmentsForPopulationQuery = {
           }>;
           client: { __typename?: 'Client'; id: string };
         };
+        ceAssessment?: {
+          __typename?: 'CeAssessment';
+          id: string;
+          assessmentDate: string;
+          assessmentLevel?: AssessmentLevel | null;
+          assessmentLocation: string;
+          assessmentType?: AssessmentType | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          dateDeleted?: string | null;
+          prioritizationStatus?: PrioritizationStatus | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        } | null;
         incomeBenefit?: {
           __typename: 'IncomeBenefit';
           adap?: NoYesReasonsForMissingData | null;
@@ -10920,6 +11095,12 @@ export type GetAssessmentsForPopulationQuery = {
           name: string;
           email: string;
         } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
       }>;
     };
   } | null;
@@ -28303,6 +28484,11 @@ export const AssessmentFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    definition {
+      id
+      cacheKey
+      title
+    }
   }
   ${UserFieldsFragmentDoc}
 `;
@@ -28411,6 +28597,23 @@ export const CustomDataElementFieldsFragmentDoc = gql`
     }
   }
   ${CustomDataElementValueFieldsFragmentDoc}
+`;
+export const CeAssessmentFieldsFragmentDoc = gql`
+  fragment CeAssessmentFields on CeAssessment {
+    id
+    assessmentDate
+    assessmentLevel
+    assessmentLocation
+    assessmentType
+    dateCreated
+    dateUpdated
+    dateDeleted
+    prioritizationStatus
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
 `;
 export const IncomeBenefitValuesFragmentDoc = gql`
   fragment IncomeBenefitValues on IncomeBenefit {
@@ -28623,6 +28826,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
         id
       }
     }
+    ceAssessment {
+      ...CeAssessmentFields
+    }
     incomeBenefit {
       ...IncomeBenefitValues
       customDataElements {
@@ -28657,6 +28863,7 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${AssessmentFieldsFragmentDoc}
   ${EnrollmentValuesFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+  ${CeAssessmentFieldsFragmentDoc}
   ${IncomeBenefitValuesFragmentDoc}
   ${DisabilityGroupValuesFragmentDoc}
   ${HealthAndDvValuesFragmentDoc}
@@ -29468,23 +29675,6 @@ export const EventFieldsFragmentDoc = gql`
     dateCreated
     dateUpdated
     dateDeleted
-    user {
-      ...UserFields
-    }
-  }
-  ${UserFieldsFragmentDoc}
-`;
-export const CeAssessmentFieldsFragmentDoc = gql`
-  fragment CeAssessmentFields on CeAssessment {
-    id
-    assessmentDate
-    assessmentLevel
-    assessmentLocation
-    assessmentType
-    dateCreated
-    dateUpdated
-    dateDeleted
-    prioritizationStatus
     user {
       ...UserFields
     }
