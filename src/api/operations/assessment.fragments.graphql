@@ -12,6 +12,11 @@ fragment AssessmentFields on Assessment {
   user {
     ...UserFields
   }
+  definition {
+    id
+    cacheKey
+    title
+  }
 }
 
 # contains form values
@@ -25,6 +30,9 @@ fragment AssessmentWithRecords on Assessment {
     client {
       id
     }
+  }
+  ceAssessment {
+    ...CeAssessmentFields
   }
   incomeBenefit {
     ...IncomeBenefitValues
