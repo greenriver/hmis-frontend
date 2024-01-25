@@ -1,6 +1,8 @@
 import { Box, Grid, Stack } from '@mui/material';
 
-import ClientAlerts from '@/modules/client/components/ClientAlerts';
+import ClientAlerts, {
+  AlertContext,
+} from '@/modules/client/components/ClientAlerts';
 import ClientCustomDataElementsCard from '@/modules/client/components/ClientCustomDataElementsCard';
 import ClientEnrollmentCard from '@/modules/client/components/ClientEnrollmentCard';
 import ClientProfileCard from '@/modules/client/components/ClientProfileCard';
@@ -24,7 +26,12 @@ const ProfileLayout: React.FC<Props> = ({ client }) => {
         </Grid>
         <Grid item md={12} lg={6}>
           <Stack gap={2}>
-            {canViewClientAlerts && <ClientAlerts client={client} />}
+            {canViewClientAlerts && (
+              <ClientAlerts
+                clients={[client]}
+                alertContext={AlertContext.Client}
+              />
+            )}
             {canViewEnrollments && <ClientEnrollmentCard client={client} />}
           </Stack>
         </Grid>

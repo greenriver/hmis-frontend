@@ -11,16 +11,7 @@ fragment HouseholdClientFields on HouseholdClient {
   id
   relationshipToHoH
   client {
-    id
-    ...ClientName
-    ...ClientIdentificationFields
-    veteranStatus
-    access {
-      ...ClientAccessFields
-    }
-    externalIds {
-      ...ClientIdentifierFields
-    }
+    ...HouseholdClientFieldsClient
   }
   enrollment {
     id
@@ -32,6 +23,22 @@ fragment HouseholdClientFields on HouseholdClient {
       id
       name
     }
+  }
+}
+
+fragment HouseholdClientFieldsClient on Client {
+  id
+  ...ClientName
+  ...ClientIdentificationFields
+  veteranStatus
+  access {
+    ...ClientAccessFields
+  }
+  externalIds {
+    ...ClientIdentifierFields
+  }
+  alerts {
+    ...ClientAlertFields
   }
 }
 

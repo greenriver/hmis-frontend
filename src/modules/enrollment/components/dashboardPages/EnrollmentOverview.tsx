@@ -10,12 +10,16 @@ import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import ClientAlerts, {
+  AlertContext,
+} from '@/modules/client/components/ClientAlerts';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable, {
   HOUSEHOLD_MEMBER_COLUMNS,
 } from '@/modules/household/components/HouseholdMemberTable';
+import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   DeleteEnrollmentDocument,
@@ -52,6 +56,10 @@ const EnrollmentOverview = () => {
     );
   }, [navigate, clientId, enrollmentId]);
 
+  const [householdMembers, { loading: householdMembersLoading, error }] =
+    useHouseholdMembers(enrollmentId);
+  if (error) throw error;
+
   if (!enrollment) return <NotFound />;
 
   return (
@@ -62,6 +70,7 @@ const EnrollmentOverview = () => {
           <Stack spacing={4}>
             <TitleCard title='Household' headerVariant='border'>
               <HouseholdMemberTable
+                householdMembers={householdMembers ? householdMembers : []}
                 clientId={clientId}
                 enrollmentId={enrollmentId}
                 hideActions
@@ -82,6 +91,13 @@ const EnrollmentOverview = () => {
         </Grid>
         <Grid item xs={4}>
           <Stack spacing={4}>
+            <ClientAlerts
+              clients={
+                householdMembers ? householdMembers.map((h) => h.client) : []
+              }
+              alertContext={AlertContext.Household}
+              loading={householdMembersLoading}
+            />
             <EnrollmentReminders enrollmentId={enrollment.id} />
             <EnrollmentQuickActions
               enrollment={enrollment}

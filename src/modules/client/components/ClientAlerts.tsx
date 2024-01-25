@@ -1,5 +1,6 @@
 import { Alert, AlertTitle, Box, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import theme from '@/config/theme';
 import {
@@ -9,11 +10,12 @@ import {
 import {
   ClientAlertFieldsFragment,
   ClientFieldsFragment,
+  HouseholdClientFieldsClientFragment,
 } from '@/types/gqlTypes';
 
 interface ClientAlertCardProps {
   alert: ClientAlertFieldsFragment;
-  client: ClientFieldsFragment;
+  client: ClientFieldsFragment | HouseholdClientFieldsClientFragment;
   shouldShowClientName?: boolean;
 }
 
@@ -88,12 +90,38 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
   );
 };
 
-interface ClientAlertsProps {
-  client: ClientFieldsFragment;
+export enum AlertContext {
+  Client = 'Client',
+  Household = 'Household',
 }
 
-const ClientAlerts: React.FC<ClientAlertsProps> = ({ client }) => {
-  const title = `Client Alerts (${client.alerts.length})`;
+interface ClientAlertsProps {
+  clients: ClientFieldsFragment[] | HouseholdClientFieldsClientFragment[];
+  alertContext: AlertContext;
+  loading?: boolean;
+}
+
+const ClientAlerts: React.FC<ClientAlertsProps> = ({
+  clients,
+  alertContext = AlertContext.Client,
+  loading = true,
+}) => {
+  const clientAlerts: ClientAlertCardProps[] = [];
+  if (!clients) return;
+  clients.forEach((c) => {
+    if (c.access.canViewClientAlerts) {
+      c.alerts.forEach((a) => {
+        clientAlerts.push({
+          alert: a,
+          client: c,
+          shouldShowClientName: alertContext === AlertContext.Household,
+        });
+      });
+    }
+  });
+
+  const title = `${alertContext} Alerts (${clientAlerts.length})`;
+  if (loading && clients.length === 0) return <Loading />;
 
   return (
     <TitleCard
@@ -102,10 +130,16 @@ const ClientAlerts: React.FC<ClientAlertsProps> = ({ client }) => {
       headerTypographyVariant='body1'
     >
       <Box sx={{ m: 2 }}>
-        {client.alerts.length === 0 && 'Client has no alerts at this time'}
+        {clientAlerts.length === 0 &&
+          `${alertContext} has no alerts at this time`}
         <Stack gap={2}>
-          {client.alerts.map((a) => (
-            <ClientAlertCard key={a.id} alert={a} client={client} />
+          {clientAlerts.map((ca) => (
+            <ClientAlertCard
+              key={ca.alert.id}
+              alert={ca.alert}
+              client={ca.client}
+              shouldShowClientName={ca.shouldShowClientName}
+            />
           ))}
         </Stack>
       </Box>

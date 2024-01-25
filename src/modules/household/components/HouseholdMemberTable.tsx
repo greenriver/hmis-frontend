@@ -2,8 +2,6 @@
 import { Box } from '@mui/material';
 import { useMemo } from 'react';
 
-import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
-
 import HouseholdActionButtons from './elements/HouseholdActionButtons';
 
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
@@ -148,22 +146,24 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
  * Table showing all members that belong to a given household
  */
 const HouseholdMemberTable = ({
+  householdMembers,
+  householdMembersLoading,
   clientId,
   enrollmentId,
   hideActions = false,
   columns: columnProp,
   condensed,
 }: {
+  householdMembers: HouseholdClientFieldsFragment[];
   clientId: string;
   enrollmentId: string;
+  householdMembersLoading?: boolean;
   hideActions?: boolean;
   columns?: ColumnDef<HouseholdClientFieldsFragment>[];
   condensed?: boolean;
 }) => {
   const { enrollment } = useEnrollmentDashboardContext();
   const { globalFeatureFlags } = useHmisAppSettings();
-  const [householdMembers, { loading: householdMembersLoading, error }] =
-    useHouseholdMembers(enrollmentId);
 
   const columns = useMemo(() => {
     if (!householdMembers) return;
@@ -187,8 +187,8 @@ const HouseholdMemberTable = ({
     return cols;
   }, [enrollmentId, columnProp, globalFeatureFlags?.mciId, householdMembers]);
 
-  if (error) throw error;
-  if (householdMembersLoading && !householdMembers) return <Loading />;
+  if (householdMembersLoading && householdMembers.length === 0)
+    return <Loading />;
 
   return (
     <>
