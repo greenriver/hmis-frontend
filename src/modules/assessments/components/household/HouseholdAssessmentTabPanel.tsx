@@ -11,12 +11,7 @@ import IndividualAssessment from '../IndividualAssessment';
 
 import MissingDefinitionAlert from '../MissingDefinitionAlert';
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
-import {
-  AssessmentStatus,
-  HouseholdAssesmentRole,
-  TabDefinition,
-  tabPanelA11yProps,
-} from './util';
+import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
 
 import Loading from '@/components/elements/Loading';
 import {
@@ -26,12 +21,12 @@ import {
 import { DynamicFormRef } from '@/modules/form/components/DynamicForm';
 import { FormActionProps } from '@/modules/form/components/FormActions';
 import { FormActionTypes } from '@/modules/form/types';
-import { FormRole } from '@/types/gqlTypes';
+import { applyDefinitionRulesForClient } from '@/modules/form/util/formUtil';
+import { FormDefinitionFieldsFragment } from '@/types/gqlTypes';
 
 interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   active: boolean;
   navigatingAway: boolean;
-  role: HouseholdAssesmentRole;
   refetch: () => Promise<any>;
   nextTab?: string;
   previousTab?: string;
@@ -43,6 +38,7 @@ interface HouseholdAssessmentTabPanelProps extends TabDefinition {
     action: HouseholdAssessmentFormAction
   ) => void;
   formState: HouseholdAssessmentFormState;
+  formDefinition: FormDefinitionFieldsFragment;
 }
 
 // Memoized to only re-render when props change (shallow compare)
@@ -56,7 +52,6 @@ const HouseholdAssessmentTabPanel = memo(
     assessmentId,
     client,
     relationshipToHoH,
-    role,
     nextTab,
     previousTab,
     navigateToTab,
@@ -66,6 +61,7 @@ const HouseholdAssessmentTabPanel = memo(
     assessmentStatus,
     onFormStateChange,
     formState,
+    formDefinition,
   }: HouseholdAssessmentTabPanelProps) => {
     // if (active) console.debug(clientName, formState);
 
@@ -99,19 +95,18 @@ const HouseholdAssessmentTabPanel = memo(
       formState.errors,
     ]);
 
-    const {
-      definition,
-      assessment,
-      loading: definitionLoading,
-      assessmentTitle,
-      formRole,
-    } = useAssessment({
-      enrollmentId,
-      assessmentId,
-      formRoleParam: role as unknown as FormRole,
-      client,
-      relationshipToHoH,
-    });
+    // Apply client-specific transformation to FormDefinition. For example,
+    // removing questions that are only for the HoH.
+    const definition = useMemo(() => {
+      return applyDefinitionRulesForClient(
+        formDefinition,
+        client,
+        relationshipToHoH
+      );
+    }, [client, formDefinition, relationshipToHoH]);
+
+    const { assessment, loading: assessmentLoading } =
+      useAssessment(assessmentId);
 
     const onCompletedMutation = useCallback(
       (status: AssessmentResponseStatus) => {
@@ -240,7 +235,7 @@ const HouseholdAssessmentTabPanel = memo(
         key={id}
         {...tabPanelA11yProps(id)}
       >
-        {definitionLoading ? (
+        {assessmentLoading ? (
           <Loading />
         ) : !definition ? (
           <MissingDefinitionAlert />
@@ -252,12 +247,12 @@ const HouseholdAssessmentTabPanel = memo(
             enrollmentId={enrollmentId}
             assessment={assessment}
             assessmentStatus={assessmentStatus}
-            formRole={formRole}
+            formRole={definition.role}
             FormActionProps={FormActionProps}
             visible={active}
             formRef={formRef}
             onFormStateChange={onFormStateChange}
-            title={assessmentTitle}
+            title={definition.title}
             onSubmit={submitHandler}
             onSaveDraft={saveDraftHandler}
             errors={errors}

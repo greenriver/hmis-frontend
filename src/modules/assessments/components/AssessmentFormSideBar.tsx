@@ -103,11 +103,10 @@ const AssessmentFormSideBar: React.FC<Props> = ({
             openInNew={embeddedInWorkflow}
             to={
               embeddedInWorkflow
-                ? generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+                ? generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
                     clientId: assessment.enrollment.client.id,
                     enrollmentId: assessment.enrollment.id,
                     assessmentId: assessment.id,
-                    formRole,
                   })
                 : undefined
             }

@@ -200,7 +200,7 @@ export const useEnrollmentBreadcrumbConfig = (
       [EnrollmentDashboardRoutes.CE_ASSESSMENTS]: { title: 'CE Assessments' },
       [EnrollmentDashboardRoutes.EVENTS]: { title: 'CE Events' },
       [EnrollmentDashboardRoutes.CUSTOM_CASE_NOTES]: { title: 'Case Notes' },
-      [EnrollmentDashboardRoutes.ASSESSMENT]: {
+      [EnrollmentDashboardRoutes.VIEW_ASSESSMENT]: {
         title: 'Assessment',
         parent: EnrollmentDashboardRoutes.ASSESSMENTS,
       },

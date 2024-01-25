@@ -1,23 +1,27 @@
 import { useMemo } from 'react';
 
-import { applyDefinitionRulesForClient, getItemMap } from '../util/formUtil';
-
 import {
+  applyDefinitionRulesForClient,
+  getItemMap,
+} from '../../form/util/formUtil';
+
+import { formatDateForGql } from '@/modules/hmis/hmisUtil';
+import {
+  AssessmentRole,
   ClientNameDobVetFragment,
-  FormDefinitionFieldsFragment,
-  GetFormDefinitionQueryVariables,
   RelationshipToHoH,
-  useGetFormDefinitionByIdQuery,
-  useGetFormDefinitionQuery,
+  useGetAssessmentFormDefinitionQuery,
 } from '@/types/gqlTypes';
 
 interface Args {
+  // Project, for rule filtering
+  projectId: string;
   // ID, if looking up FormDefinition by ID
   formDefinitionId?: string;
-  // Query Variables, if looking up FormDefiniton by Role
-  queryVariables?: GetFormDefinitionQueryVariables;
-  // Local Definition, to bypass queries entirely
-  localDefinition?: FormDefinitionFieldsFragment;
+  // AssessmentRole, if looking up FormDefiniton by Role
+  role?: AssessmentRole;
+  // Assessment date, for rule filtering
+  assessmentDate?: string | null;
   // Skip queries
   skip?: boolean;
   // Optional, to apply "Data Collected About" rules
@@ -38,44 +42,31 @@ interface Args {
  * If Client details are passed, this hook will apply DataCollectedAbout conditions,
  * so irrelevant questions are removed from the resulting definition.
  */
-const useFormDefinition = ({
-  //TODO ADD project_id
+const useAssessmentFormDefinition = ({
+  projectId,
   formDefinitionId,
-  queryVariables,
-  localDefinition,
+  role,
+  assessmentDate,
   skip,
   client,
   relationshipToHoH,
 }: Args) => {
   // Get definition from cache if we have it
 
-  // Query by ID
-  const {
-    data: dataById,
-    loading: byIdLoading,
-    error: byIdError,
-  } = useGetFormDefinitionByIdQuery({
-    variables: { id: formDefinitionId || '' },
-    skip: skip || !formDefinitionId || !!localDefinition,
+  const { data, loading, error } = useGetAssessmentFormDefinitionQuery({
+    variables: {
+      projectId,
+      id: formDefinitionId,
+      role,
+      assessmentDate,
+    },
+    skip,
   });
-
-  // Query by Role
-  const {
-    data: dataByRole,
-    loading: byRoleLoading,
-    error: byRoleError,
-  } = useGetFormDefinitionQuery({
-    variables: queryVariables,
-    skip: skip || !queryVariables || !!formDefinitionId || !!localDefinition,
-  });
+  if (loading) console.log('fetching by', formDefinitionId, role);
 
   const { formDefinition, itemMap } = useMemo(() => {
     // Find the definition that we actually have
-    let formDefinition =
-      localDefinition ||
-      dataById?.formDefinition ||
-      dataByRole?.getFormDefinition;
-
+    let formDefinition = data?.assessmentFormDefinition;
     if (!formDefinition) return {};
 
     // If we have a Client, apply the DataCollectedAbout rules
@@ -92,22 +83,16 @@ const useFormDefinition = ({
       // Generate ItemMap for convenience
       itemMap: getItemMap(formDefinition.definition, false),
     };
-  }, [
-    localDefinition,
-    dataById?.formDefinition,
-    dataByRole?.getFormDefinition,
-    client,
-    relationshipToHoH,
-  ]);
+  }, [data, client, relationshipToHoH]);
 
-  if (byIdError || byRoleError)
+  if (error)
     throw new Error(
-      `Failed to fetch form definition: ${
-        formDefinitionId || queryVariables?.role || ''
-      }`
+      `Failed to fetch form definition: ${formDefinitionId || role || ''}`
     );
 
-  return { formDefinition, itemMap, loading: byRoleLoading || byIdLoading };
+  if (formDefinition)
+    console.log('fetched', formDefinition.cacheKey, 'its in the cache...');
+  return { formDefinition, itemMap, loading };
 };
 
-export default useFormDefinition;
+export default useAssessmentFormDefinition;

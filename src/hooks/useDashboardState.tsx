@@ -9,7 +9,6 @@ export function useDashboardState() {
   const currentPath = useCurrentPath();
   const [desktopNavIsOpen, setDesktopNavState] = useState(true);
   const [mobileNavIsOpen, setMobileNavState] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [focusMode, setFocusMode] = useState<string | undefined>();
 
   useEffect(() => {
@@ -50,6 +49,7 @@ export function useDashboardState() {
   return {
     currentPath,
     focusMode,
+    setFocusMode,
     desktopNavIsOpen,
     mobileNavIsOpen,
     handleCloseMobileMenu,

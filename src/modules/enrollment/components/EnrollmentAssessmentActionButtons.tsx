@@ -26,12 +26,14 @@ const FinishIntakeButton: React.FC<FinishIntakeButtonProps> = ({
   clientId,
   assessmentId,
 }) => {
-  const intakePath = generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-    clientId,
-    enrollmentId,
-    formRole: AssessmentRole.Intake,
-    assessmentId,
-  });
+  const intakePath = generateSafePath(
+    EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
+    {
+      clientId,
+      enrollmentId,
+      assessmentId,
+    }
+  );
   return (
     <ButtonLink color='error' variant='contained' to={intakePath}>
       Finish Intake

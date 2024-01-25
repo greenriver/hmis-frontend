@@ -132,30 +132,26 @@ const rowLinkTo = ({
 }: ReminderFieldsFragment): string => {
   switch (topic) {
     case ReminderTopic.AnnualAssessment:
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+      // FIXME
+      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
         clientId: client.id,
         enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Annual,
       });
     case ReminderTopic.AgedIntoAdulthood:
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+      // FIXME
+      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
         clientId: client.id,
         enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Update,
       });
     case ReminderTopic.IntakeIncomplete:
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+      return generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
         clientId: client.id,
         enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Intake,
-        assessmentId: enrollment.intakeAssessment?.id,
       });
     case ReminderTopic.ExitIncomplete:
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+      return generateSafePath(EnrollmentDashboardRoutes.EXIT, {
         clientId: client.id,
         enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Exit,
-        assessmentId: enrollment.exitAssessment?.id,
       });
     case ReminderTopic.CurrentLivingSituation:
       return generateSafePath(

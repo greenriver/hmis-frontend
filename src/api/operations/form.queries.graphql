@@ -47,6 +47,22 @@ query GetFormDefinitionById($id: ID!) {
   }
 }
 
+query GetAssessmentFormDefinition(
+  $projectId: ID!
+  $id: ID
+  $role: AssessmentRole
+  $assessmentDate: ISO8601Date
+) {
+  assessmentFormDefinition(
+    projectId: $projectId
+    id: $id
+    role: $role
+    assessmentDate: $assessmentDate
+  ) {
+    ...FormDefinitionFields
+  }
+}
+
 query GetFormDefinitionForEditor($id: ID!) {
   formDefinition(id: $id) {
     ...FormDefinitionFieldsForEditor

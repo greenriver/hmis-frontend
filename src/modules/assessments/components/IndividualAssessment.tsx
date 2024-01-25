@@ -111,7 +111,7 @@ const IndividualAssessment = ({
   useEffect(() => {
     if (!title || embeddedInWorkflow) return;
     overrideBreadcrumbTitles({
-      [EnrollmentDashboardRoutes.ASSESSMENT]: title,
+      [EnrollmentDashboardRoutes.VIEW_ASSESSMENT]: title,
       [EnrollmentDashboardRoutes.NEW_ASSESSMENT]: title,
     });
   }, [

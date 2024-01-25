@@ -63,19 +63,15 @@ const EnrollmentDashboard: React.FC = () => {
 
   const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
 
-  const { currentPath, ...dashboardState } = useDashboardState();
+  const { currentPath, setFocusMode, ...dashboardState } = useDashboardState();
 
   const focusMode = useMemo(() => {
     if (dashboardState.focusMode) return dashboardState.focusMode;
-    // hacky way to set "focus" for household assessments, which depends on the household size
-    if (
-      currentPath &&
-      HIDE_NAV_ROUTES.includes(currentPath) &&
-      showAssessmentInHousehold(enrollment, params.formRole)
-    ) {
+    // hacky way to set "focus" for household assessments
+    if (currentPath && HIDE_NAV_ROUTES.includes(currentPath)) {
       return EnrollmentDashboardRoutes.ASSESSMENTS;
     }
-  }, [enrollment, dashboardState.focusMode, currentPath, params.formRole]);
+  }, [dashboardState.focusMode, currentPath]);
 
   const outletContext: EnrollmentDashboardContext | undefined = useMemo(
     () =>
@@ -85,9 +81,10 @@ const EnrollmentDashboard: React.FC = () => {
             overrideBreadcrumbTitles,
             enrollment,
             enabledFeatures,
+            setFocusMode,
           }
         : undefined,
-    [client, enrollment, enabledFeatures]
+    [client, enrollment, enabledFeatures, setFocusMode]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);

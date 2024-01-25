@@ -50,11 +50,10 @@ const ClientAssessments = () => {
 
   const rowLinkTo = useCallback(
     (record: AssessmentType) =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+      generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
         clientId,
         enrollmentId: record.enrollment.id,
         assessmentId: record.id,
-        formRole: record.role,
       }),
     [clientId]
   );

@@ -57,9 +57,10 @@ const enrollmentDashboardRoutes = {
   EVENTS: 'events',
   CE_ASSESSMENTS: 'ce-assessments',
   CUSTOM_CASE_NOTES: 'case-notes',
-  ASSESSMENT: 'assessments/:formRole/:assessmentId?', // Legacy
-  VIEW_ASSESSMENT: 'assessments/:formRole/:assessmentId',
-  NEW_ASSESSMENT: 'assessments/:formRole/new/:formDefinitionId?',
+  INTAKE: 'intake', // go to intake (regardless of hh size or existence)
+  EXIT: 'exit', // go to exit (regardless of hh size or existence)
+  VIEW_ASSESSMENT: 'assessments/:assessmentId', // view existing assmt individually
+  NEW_ASSESSMENT: 'assessments/new/:formDefinitionId', // create individual assessment
   ESG_FUNDING_REPORT: 'esg-funding-report',
   AUDIT_HISTORY: 'history',
 };
@@ -143,9 +144,8 @@ export const AdminDashboardRoutes: {
 } = adminDashboardRoutes;
 
 export const HIDE_NAV_ROUTES = [
-  EnrollmentDashboardRoutes.ASSESSMENT,
-  EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
-  EnrollmentDashboardRoutes.NEW_ASSESSMENT,
+  EnrollmentDashboardRoutes.INTAKE,
+  EnrollmentDashboardRoutes.EXIT,
 ];
 
 export const FOCUS_MODE_ROUTES = [
@@ -160,7 +160,6 @@ export const FOCUS_MODE_ROUTES = [
 ];
 
 export const PRINTABLE_ROUTES = [
-  EnrollmentDashboardRoutes.ASSESSMENT,
   EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
   EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,

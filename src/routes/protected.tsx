@@ -19,6 +19,9 @@ import EditClient from '@/components/clientDashboard/EditClient';
 import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
 import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
 import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
+import ExitAssessmentPage from '@/components/clientDashboard/enrollments/ExitAssessmentPage';
+import HouseholdAssessmentsPage from '@/components/clientDashboard/enrollments/HouseholdAssessmentsPage';
+import IntakeAssessmentPage from '@/components/clientDashboard/enrollments/IntakeAssessmentPage';
 import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
@@ -383,14 +386,29 @@ export const protectedRoutes: RouteNode[] = [
             element: <EnrollmentAssessmentsPage />,
           },
           {
-            path: EnrollmentDashboardRoutes.ASSESSMENT,
-            // No perm needed because it only requires enrollment visibility
+            path: EnrollmentDashboardRoutes.INTAKE,
+            element: <IntakeAssessmentPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.EXIT,
+            element: <ExitAssessmentPage />,
+          },
+          {
+            // view/edit existing individual assessment
+            path: EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
             element: <AssessmentPage />,
           },
           {
+            // create new individual assessment
             path: EnrollmentDashboardRoutes.NEW_ASSESSMENT,
-            // No perm needed because it only requires enrollment visibility
-            element: <NewAssessmentPage />,
+            element: (
+              <EnrollmentRoute
+                permissions='canEditEnrollments'
+                redirectRoute={EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW}
+              >
+                <NewAssessmentPage />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.SERVICES,

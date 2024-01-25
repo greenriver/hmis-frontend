@@ -40,11 +40,10 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
 }) => {
   const rowLinkTo = useCallback(
     (assessment: AssessmentFieldsFragment) =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+      generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         assessmentId: assessment.id,
-        formRole: assessment.role,
       }),
     [clientId, enrollmentId]
   );
