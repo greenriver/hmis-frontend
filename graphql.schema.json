@@ -27752,6 +27752,18 @@
             "deprecationReason": null
           },
           {
+            "name": "help",
+            "description": "Helper text/html",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "initialSelected",
             "description": "Whether option is selected by default",
             "args": [],

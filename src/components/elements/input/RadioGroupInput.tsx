@@ -12,6 +12,7 @@ import {
 import { isNil } from 'lodash-es';
 import { KeyboardEventHandler, useCallback, useId } from 'react';
 
+import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
 import { PickListOption } from '@/types/gqlTypes';
@@ -145,34 +146,41 @@ const RadioGroupInput = ({
           }}
           {...props}
         >
-          {options.map(({ code, label }) => (
-            <FormControlLabel
-              data-testid={`option-${code}`}
-              disabled={props.disabled}
-              value={code}
-              aria-label={label || code}
-              onClick={(e) => onClickOption(e, code)}
-              control={
-                <ControlComponent
-                  disabled={props.disabled}
-                  onKeyDown={onKeyDown}
-                  data-checked={value?.code === code ? true : false}
-                />
-              }
-              checked={value?.code === code ? true : false}
-              key={code}
-              label={label || code}
-              componentsProps={{
-                typography: {
-                  variant: 'body2',
-                  mr: 0.5,
-                  color:
-                    checkbox && value && value?.code !== code
-                      ? 'gray'
-                      : undefined,
-                },
-              }}
-            />
+          {options.map(({ code, label, help }) => (
+            <>
+              <FormControlLabel
+                data-testid={`option-${code}`}
+                disabled={props.disabled}
+                value={code}
+                aria-label={label || code}
+                onClick={(e) => onClickOption(e, code)}
+                control={
+                  <ControlComponent
+                    disabled={props.disabled}
+                    onKeyDown={onKeyDown}
+                    data-checked={value?.code === code ? true : false}
+                  />
+                }
+                checked={value?.code === code ? true : false}
+                key={code}
+                label={label || code}
+                componentsProps={{
+                  typography: {
+                    variant: 'body2',
+                    mr: 0.5,
+                    color:
+                      checkbox && value && value?.code !== code
+                        ? 'gray'
+                        : undefined,
+                  },
+                }}
+              />
+              {help && (
+                <CommonHtmlContent variant='body2' sx={{ ml: 4 }}>
+                  {help}
+                </CommonHtmlContent>
+              )}
+            </>
           ))}
           {value?.code === INVALID_ENUM && (
             <InvalidValueCheckbox control={<ControlComponent data-checked />} />

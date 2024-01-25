@@ -4205,6 +4205,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'groupLabel',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
+      { name: 'help', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'initialSelected',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },

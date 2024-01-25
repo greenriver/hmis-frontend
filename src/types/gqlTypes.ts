@@ -4117,6 +4117,8 @@ export type PickListOption = {
   groupCode?: Maybe<Scalars['String']['output']>;
   /** Label for group that option belongs to, if grouped */
   groupLabel?: Maybe<Scalars['String']['output']>;
+  /** Helper text/html */
+  help?: Maybe<Scalars['String']['output']>;
   /** Whether option is selected by default */
   initialSelected?: Maybe<Scalars['Boolean']['output']>;
   /** Label for the option */
@@ -8407,6 +8409,7 @@ export type GetAssessmentQuery = {
                     groupLabel?: string | null;
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
+                    help?: string | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -8476,6 +8479,7 @@ export type GetAssessmentQuery = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -8545,6 +8549,7 @@ export type GetAssessmentQuery = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -8614,6 +8619,7 @@ export type GetAssessmentQuery = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -8683,6 +8689,7 @@ export type GetAssessmentQuery = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -13063,6 +13070,7 @@ export type ClientDetailFormsQuery = {
                     groupLabel?: string | null;
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
+                    help?: string | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -13132,6 +13140,7 @@ export type ClientDetailFormsQuery = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -13201,6 +13210,7 @@ export type ClientDetailFormsQuery = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -13270,6 +13280,7 @@ export type ClientDetailFormsQuery = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -13339,6 +13350,7 @@ export type ClientDetailFormsQuery = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -14778,6 +14790,7 @@ export type AllEnrollmentDetailsFragment = {
                       groupLabel?: string | null;
                       groupCode?: string | null;
                       initialSelected?: boolean | null;
+                      help?: string | null;
                     }> | null;
                     initial?: Array<{
                       __typename?: 'InitialValue';
@@ -14847,6 +14860,7 @@ export type AllEnrollmentDetailsFragment = {
                     groupLabel?: string | null;
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
+                    help?: string | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -14916,6 +14930,7 @@ export type AllEnrollmentDetailsFragment = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -14985,6 +15000,7 @@ export type AllEnrollmentDetailsFragment = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -15054,6 +15070,7 @@ export type AllEnrollmentDetailsFragment = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -15853,6 +15870,7 @@ export type GetEnrollmentDetailsQuery = {
                         groupLabel?: string | null;
                         groupCode?: string | null;
                         initialSelected?: boolean | null;
+                        help?: string | null;
                       }> | null;
                       initial?: Array<{
                         __typename?: 'InitialValue';
@@ -15922,6 +15940,7 @@ export type GetEnrollmentDetailsQuery = {
                       groupLabel?: string | null;
                       groupCode?: string | null;
                       initialSelected?: boolean | null;
+                      help?: string | null;
                     }> | null;
                     initial?: Array<{
                       __typename?: 'InitialValue';
@@ -15991,6 +16010,7 @@ export type GetEnrollmentDetailsQuery = {
                     groupLabel?: string | null;
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
+                    help?: string | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -16060,6 +16080,7 @@ export type GetEnrollmentDetailsQuery = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -16129,6 +16150,7 @@ export type GetEnrollmentDetailsQuery = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -16658,6 +16680,7 @@ export type PickListOptionFieldsFragment = {
   groupLabel?: string | null;
   groupCode?: string | null;
   initialSelected?: boolean | null;
+  help?: string | null;
 };
 
 export type EnableWhenFieldsFragment = {
@@ -16721,6 +16744,7 @@ export type ItemFieldsFragment = {
     groupLabel?: string | null;
     groupCode?: string | null;
     initialSelected?: boolean | null;
+    help?: string | null;
   }> | null;
   initial?: Array<{
     __typename?: 'InitialValue';
@@ -16908,6 +16932,7 @@ export type FormDefinitionJsonFieldsFragment = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -16977,6 +17002,7 @@ export type FormDefinitionJsonFieldsFragment = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -17046,6 +17072,7 @@ export type FormDefinitionJsonFieldsFragment = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -17115,6 +17142,7 @@ export type FormDefinitionJsonFieldsFragment = {
         groupLabel?: string | null;
         groupCode?: string | null;
         initialSelected?: boolean | null;
+        help?: string | null;
       }> | null;
       initial?: Array<{
         __typename?: 'InitialValue';
@@ -17184,6 +17212,7 @@ export type FormDefinitionJsonFieldsFragment = {
       groupLabel?: string | null;
       groupCode?: string | null;
       initialSelected?: boolean | null;
+      help?: string | null;
     }> | null;
     initial?: Array<{
       __typename?: 'InitialValue';
@@ -17388,6 +17417,7 @@ export type FormDefinitionFieldsFragment = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -17457,6 +17487,7 @@ export type FormDefinitionFieldsFragment = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -17526,6 +17557,7 @@ export type FormDefinitionFieldsFragment = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -17595,6 +17627,7 @@ export type FormDefinitionFieldsFragment = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -17664,6 +17697,7 @@ export type FormDefinitionFieldsFragment = {
         groupLabel?: string | null;
         groupCode?: string | null;
         initialSelected?: boolean | null;
+        help?: string | null;
       }> | null;
       initial?: Array<{
         __typename?: 'InitialValue';
@@ -17861,6 +17895,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -17930,6 +17965,7 @@ export type FormDefinitionFieldsForEditorFragment = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -17999,6 +18035,7 @@ export type FormDefinitionFieldsForEditorFragment = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -18068,6 +18105,7 @@ export type FormDefinitionFieldsForEditorFragment = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -18137,6 +18175,7 @@ export type FormDefinitionFieldsForEditorFragment = {
         groupLabel?: string | null;
         groupCode?: string | null;
         initialSelected?: boolean | null;
+        help?: string | null;
       }> | null;
       initial?: Array<{
         __typename?: 'InitialValue';
@@ -18343,6 +18382,7 @@ export type UpdateFormDefinitionMutation = {
                     groupLabel?: string | null;
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
+                    help?: string | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -18412,6 +18452,7 @@ export type UpdateFormDefinitionMutation = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -18481,6 +18522,7 @@ export type UpdateFormDefinitionMutation = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -18550,6 +18592,7 @@ export type UpdateFormDefinitionMutation = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -18619,6 +18662,7 @@ export type UpdateFormDefinitionMutation = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -18840,6 +18884,7 @@ export type CreateFormDefinitionMutation = {
                     groupLabel?: string | null;
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
+                    help?: string | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -18909,6 +18954,7 @@ export type CreateFormDefinitionMutation = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -18978,6 +19024,7 @@ export type CreateFormDefinitionMutation = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -19047,6 +19094,7 @@ export type CreateFormDefinitionMutation = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -19116,6 +19164,7 @@ export type CreateFormDefinitionMutation = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -19337,6 +19386,7 @@ export type DeleteFormDefinitionMutation = {
                     groupLabel?: string | null;
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
+                    help?: string | null;
                   }> | null;
                   initial?: Array<{
                     __typename?: 'InitialValue';
@@ -19406,6 +19456,7 @@ export type DeleteFormDefinitionMutation = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -19475,6 +19526,7 @@ export type DeleteFormDefinitionMutation = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -19544,6 +19596,7 @@ export type DeleteFormDefinitionMutation = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -19613,6 +19666,7 @@ export type DeleteFormDefinitionMutation = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -19694,6 +19748,7 @@ export type GetPickListQuery = {
     groupLabel?: string | null;
     groupCode?: string | null;
     initialSelected?: boolean | null;
+    help?: string | null;
   }>;
 };
 
@@ -19854,6 +19909,7 @@ export type GetFormDefinitionQuery = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -19923,6 +19979,7 @@ export type GetFormDefinitionQuery = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -19992,6 +20049,7 @@ export type GetFormDefinitionQuery = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -20061,6 +20119,7 @@ export type GetFormDefinitionQuery = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -20130,6 +20189,7 @@ export type GetFormDefinitionQuery = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -20333,6 +20393,7 @@ export type GetStaticFormDefinitionQuery = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -20402,6 +20463,7 @@ export type GetStaticFormDefinitionQuery = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -20471,6 +20533,7 @@ export type GetStaticFormDefinitionQuery = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -20540,6 +20603,7 @@ export type GetStaticFormDefinitionQuery = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -20609,6 +20673,7 @@ export type GetStaticFormDefinitionQuery = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -20813,6 +20878,7 @@ export type GetServiceFormDefinitionQuery = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -20882,6 +20948,7 @@ export type GetServiceFormDefinitionQuery = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -20951,6 +21018,7 @@ export type GetServiceFormDefinitionQuery = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -21020,6 +21088,7 @@ export type GetServiceFormDefinitionQuery = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -21089,6 +21158,7 @@ export type GetServiceFormDefinitionQuery = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -21292,6 +21362,7 @@ export type GetFormDefinitionByIdQuery = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -21361,6 +21432,7 @@ export type GetFormDefinitionByIdQuery = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -21430,6 +21502,7 @@ export type GetFormDefinitionByIdQuery = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -21499,6 +21572,7 @@ export type GetFormDefinitionByIdQuery = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -21568,6 +21642,7 @@ export type GetFormDefinitionByIdQuery = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -21772,6 +21847,7 @@ export type GetFormDefinitionForEditorQuery = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -21841,6 +21917,7 @@ export type GetFormDefinitionForEditorQuery = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -21910,6 +21987,7 @@ export type GetFormDefinitionForEditorQuery = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -21979,6 +22057,7 @@ export type GetFormDefinitionForEditorQuery = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -22048,6 +22127,7 @@ export type GetFormDefinitionForEditorQuery = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -22272,6 +22352,7 @@ export type GetParsedFormDefinitionQuery = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -22341,6 +22422,7 @@ export type GetParsedFormDefinitionQuery = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -22410,6 +22492,7 @@ export type GetParsedFormDefinitionQuery = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -22479,6 +22562,7 @@ export type GetParsedFormDefinitionQuery = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -22548,6 +22632,7 @@ export type GetParsedFormDefinitionQuery = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -24630,6 +24715,7 @@ export type OccurrencePointFormFieldsFragment = {
                   groupLabel?: string | null;
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
+                  help?: string | null;
                 }> | null;
                 initial?: Array<{
                   __typename?: 'InitialValue';
@@ -24699,6 +24785,7 @@ export type OccurrencePointFormFieldsFragment = {
                 groupLabel?: string | null;
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
+                help?: string | null;
               }> | null;
               initial?: Array<{
                 __typename?: 'InitialValue';
@@ -24768,6 +24855,7 @@ export type OccurrencePointFormFieldsFragment = {
               groupLabel?: string | null;
               groupCode?: string | null;
               initialSelected?: boolean | null;
+              help?: string | null;
             }> | null;
             initial?: Array<{
               __typename?: 'InitialValue';
@@ -24837,6 +24925,7 @@ export type OccurrencePointFormFieldsFragment = {
             groupLabel?: string | null;
             groupCode?: string | null;
             initialSelected?: boolean | null;
+            help?: string | null;
           }> | null;
           initial?: Array<{
             __typename?: 'InitialValue';
@@ -24906,6 +24995,7 @@ export type OccurrencePointFormFieldsFragment = {
           groupLabel?: string | null;
           groupCode?: string | null;
           initialSelected?: boolean | null;
+          help?: string | null;
         }> | null;
         initial?: Array<{
           __typename?: 'InitialValue';
@@ -28949,6 +29039,7 @@ export const PickListOptionFieldsFragmentDoc = gql`
     groupLabel
     groupCode
     initialSelected
+    help
   }
 `;
 export const EnableWhenFieldsFragmentDoc = gql`
