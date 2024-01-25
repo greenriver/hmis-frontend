@@ -1,4 +1,4 @@
-import { Box, Grid, lighten } from '@mui/material';
+import { Box, lighten } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { GroupItemComponentProps } from '../../types';
@@ -49,13 +49,6 @@ const RefactorGroup: React.FC<Props> = ({ debug, ...props }) => {
 
   switch (props.item.component) {
     case Component.InputGroup:
-      if (props.nestingLevel === 0) {
-        return (
-          <Grid item>
-            <InputGroup key={props.item.linkId} {...props} />
-          </Grid>
-        );
-      }
       return <InputGroup key={props.item.linkId} {...props} />;
     case Component.DisabilityTable:
       return <DisabilityTable key={props.item.linkId} {...props} />;

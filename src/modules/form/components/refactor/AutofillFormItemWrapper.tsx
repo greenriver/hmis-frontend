@@ -40,6 +40,12 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
     if (isDirty) return;
 
     const linkId = getSafeLinkId(item.linkId);
+    // Dont autofill if this is already the same value
+    if (
+      autofillValue === handlers.methods.getValues()[getSafeLinkId(item.linkId)]
+    )
+      return;
+
     handlers.methods.setValue(getSafeLinkId(linkId), autofillValue, {
       shouldDirty: false,
     });

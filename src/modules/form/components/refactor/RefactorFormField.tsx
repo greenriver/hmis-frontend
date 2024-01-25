@@ -1,4 +1,4 @@
-import { isEmpty, pick } from 'lodash-es';
+import { pick } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
 import {
@@ -13,8 +13,6 @@ import {
   transformSubmitValues,
 } from '../../util/formUtil';
 
-import AutofillFormItemWrapper from './AutofillFormItemWrapper';
-import DependentFormItemWrapper from './DependentFormItemWrapper';
 import RefactorField from './RefactorField';
 import RefactorGroup from './RefactorGroup';
 
@@ -22,12 +20,9 @@ import {
   FormDefinitionHandlers,
   getSafeLinkId,
 } from './useFormDefinitionHandlers';
-import {
-  DisabledDisplay,
-  FormItem,
-  ItemType,
-  ServiceDetailType,
-} from '@/types/gqlTypes';
+import { renderItemWithWrappers } from './utils';
+
+import { FormItem, ItemType, ServiceDetailType } from '@/types/gqlTypes';
 
 export interface Props {
   handlers: FormDefinitionHandlers;
@@ -60,13 +55,7 @@ const RefactorFormField: React.FC<Props> = ({
 }) => {
   // TODO: Remove these once drilled down
   const values = handlers.getCleanedValues();
-  const {
-    definition,
-    localConstants,
-    disabledDependencyMap,
-    autofillInvertedDependencyMap,
-    getFieldErrors,
-  } = handlers;
+  const { definition, localConstants, getFieldErrors } = handlers;
 
   // TODO: Push these down to individual fields maybe?
   const itemChanged: ItemChangedFn = useCallback(
@@ -96,8 +85,6 @@ const RefactorFormField: React.FC<Props> = ({
 
   const renderChild = useCallback(
     (isDisabled?: boolean) => {
-      if (isDisabled && item.disabledDisplay === DisabledDisplay.Hidden)
-        return null;
       if (bulk && item.serviceDetailType === ServiceDetailType.Client)
         return null;
 
@@ -198,40 +185,7 @@ const RefactorFormField: React.FC<Props> = ({
     ]
   );
 
-  if (item.hidden) return null;
-
-  const hasDependencies =
-    disabledDependencyMap[item.linkId] || !isEmpty(item.enableWhen);
-  const hasAutofill =
-    autofillInvertedDependencyMap[item.linkId] || !isEmpty(item.autofillValues);
-
-  if (hasDependencies && hasAutofill) {
-    <DependentFormItemWrapper handlers={handlers} item={item}>
-      {(disabled) => (
-        <AutofillFormItemWrapper handlers={handlers} item={item}>
-          {() => renderChild(disabled)}
-        </AutofillFormItemWrapper>
-      )}
-    </DependentFormItemWrapper>;
-  }
-
-  if (hasDependencies) {
-    return (
-      <DependentFormItemWrapper handlers={handlers} item={item}>
-        {renderChild}
-      </DependentFormItemWrapper>
-    );
-  }
-
-  if (hasAutofill) {
-    return (
-      <AutofillFormItemWrapper handlers={handlers} item={item}>
-        {() => renderChild()}
-      </AutofillFormItemWrapper>
-    );
-  }
-
-  return renderChild();
+  return renderItemWithWrappers(renderChild, item, handlers);
 };
 
 export default RefactorFormField;

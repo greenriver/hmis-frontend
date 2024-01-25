@@ -26,9 +26,9 @@ export interface UseDynamicFormArgs<T extends FieldValues> {
 }
 
 export const getSafeLinkId = (linkId: string) =>
-  String(linkId).replace(/\./g, ',');
+  String(linkId).replace(/\./g, '__');
 export const getCleanedLinkId = (linkId: string) =>
-  String(linkId).replace(/,/g, '.');
+  String(linkId).replace(/__/g, '.');
 
 export const mapKeysToSafe = (values: FieldValues) =>
   mapKeys(values, (val, key) => getSafeLinkId(key));
