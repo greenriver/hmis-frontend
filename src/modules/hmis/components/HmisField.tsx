@@ -79,7 +79,7 @@ const HmisField = ({
     const defaultDisplay = <>{`${value}`}</>;
 
     const fieldSchema = (getSchemaForType(recordType)?.fields || []).find(
-      (f) => f.name == fieldName
+      (f) => f.name === fieldName
     );
     if (!fieldSchema) return defaultDisplay;
 

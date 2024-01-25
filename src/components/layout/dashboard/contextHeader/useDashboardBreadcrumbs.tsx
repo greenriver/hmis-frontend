@@ -64,7 +64,7 @@ export const useProjectBreadcrumbConfig = (
   context: ProjectDashboardContext | undefined
 ): CrumbConfig => {
   return useMemo(() => {
-    if (context == undefined) {
+    if (context === undefined) {
       return {};
     }
     const overrides = {

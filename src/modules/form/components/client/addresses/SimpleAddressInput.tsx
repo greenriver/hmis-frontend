@@ -26,7 +26,7 @@ const SimpleAddressInput: React.FC<Props> = ({
   const values = value ? value : initialValue;
 
   useEffect(() => {
-    if (values.length == 0) {
+    if (values.length === 0) {
       onChange([createInitialValue()]);
     }
   }, [values, onChange]);

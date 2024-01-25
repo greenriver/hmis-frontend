@@ -121,6 +121,7 @@ module.exports = {
         message: 'use useSafeParams',
       },
     ],
+    eqeqeq: 'error',
   },
   ignorePatterns: ['jest.config.ts', 'gqltypes.ts', 'cypress.config.ts'],
 };
