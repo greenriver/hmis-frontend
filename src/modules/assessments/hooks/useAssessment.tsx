@@ -1,14 +1,11 @@
 import { cloneDeep } from '@apollo/client/utilities';
-import { startCase } from 'lodash-es';
 import { useMemo } from 'react';
 
 import {
   applyDataCollectedAbout,
   ClientNameDobVeteranFields,
 } from '@/modules/form/util/formUtil';
-import { formRoleDisplay } from '@/modules/hmis/hmisUtil';
 import {
-  AssessmentRole,
   FormDefinitionFieldsFragment,
   FormRole,
   RelationshipToHoH,
@@ -72,24 +69,12 @@ export function useAssessment({
     return mutable;
   }, [formDefinitionData, assessmentData, client, relationshipToHoH]);
 
-  const [formRole, assessmentTitle] = useMemo(() => {
-    const { assessment } = assessmentData || {};
-
-    // a custom assessment, use the definition title
-    if (assessment && assessment.role === AssessmentRole.CustomAssessment) {
-      return [assessment.role, formRoleDisplay(assessment)];
-    }
-    // transform the role into a title
-    const role = assessment?.role || formRoleParam;
-    return [role, `${role ? startCase(role.toLowerCase()) : ''} Assessment`];
-  }, [assessmentData, formRoleParam]);
-
   if (formDefinitionError) throw formDefinitionError;
   if (assessmentError) throw assessmentError;
 
   return {
-    assessmentTitle,
-    formRole: formRole as FormRole,
+    assessmentTitle: definition?.title || 'Assessment',
+    formRole: (definition?.role || formRoleParam) as FormRole,
     definition,
     assessment: assessmentData?.assessment || undefined,
     loading: formDefinitionLoading || assessmentLoading,
