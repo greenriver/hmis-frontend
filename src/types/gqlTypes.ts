@@ -3815,6 +3815,7 @@ export type MutationCreateOutgoingReferralPostingArgs = {
 
 export type MutationCreateScanCardCodeArgs = {
   clientId: Scalars['ID']['input'];
+  expirationDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
 };
 
 export type MutationCreateServiceArgs = {
@@ -5944,6 +5945,7 @@ export type ScanCardCode = {
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   deletedBy?: Maybe<ApplicationUser>;
+  expirationDate?: Maybe<Scalars['ISO8601DateTime']['output']>;
   id: Scalars['ID']['output'];
   value: Scalars['ID']['output'];
 };
