@@ -35,6 +35,15 @@ const EnrollmentCeAssessmentsPage = () => {
     });
   }, [enrollmentId]);
 
+  const localConstants = useMemo(
+    () => ({
+      projectName: enrollment?.project.projectName,
+      entryDate: enrollment?.entryDate,
+      exitDate: enrollment?.exitDate,
+    }),
+    [enrollment]
+  );
+
   const { onSelectRecord, editRecordDialog, openFormDialog, viewRecordDialog } =
     useViewEditRecordDialogs({
       variant: canEditCeAssessments ? 'edit_only' : 'view_only',
@@ -45,6 +54,7 @@ const EnrollmentCeAssessmentsPage = () => {
       deleteRecordDocument: DeleteCeAssessmentDocument,
       deleteRecordIdPath: 'deleteCeAssessment.ceAssessment.id',
       maxWidth: 'sm',
+      localConstants,
     });
 
   const columns: ColumnDef<CeAssessmentFieldsFragment>[] = useMemo(

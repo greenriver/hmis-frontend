@@ -45,6 +45,7 @@ export const HmisEnums = {
   },
   AssessmentRole: {
     ANNUAL: 'Annual',
+    CUSTOM_ASSESSMENT: 'Custom assessment',
     EXIT: 'Exit',
     INTAKE: 'Intake',
     POST_EXIT: 'Post exit',
@@ -521,6 +522,7 @@ export const HmisEnums = {
     CLIENT: 'Client',
     CLIENT_DETAIL: 'Client detail',
     CURRENT_LIVING_SITUATION: 'Current living situation',
+    CUSTOM_ASSESSMENT: 'Custom assessment',
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
     FILE: 'File',
@@ -1437,6 +1439,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   RelatedRecordType: {
+    ASSESSMENT: 'CeAssessment',
     CLIENT: 'Client',
     CURRENT_LIVING_SITUATION: 'CurrentLivingSituation',
     DISABILITY_GROUP: 'DisabilityGroup',

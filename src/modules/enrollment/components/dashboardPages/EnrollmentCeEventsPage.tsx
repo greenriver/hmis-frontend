@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
@@ -52,6 +52,14 @@ const EnrollmentCeEventsPage = () => {
     });
   }, [enrollmentId]);
 
+  const localConstants = useMemo(
+    () => ({
+      entryDate: enrollment?.entryDate,
+      exitDate: enrollment?.exitDate,
+    }),
+    [enrollment]
+  );
+
   const canEditCeEvents = enrollment?.access?.canEditEnrollments || false;
 
   const { onSelectRecord, viewRecordDialog, editRecordDialog, openFormDialog } =
@@ -64,6 +72,7 @@ const EnrollmentCeEventsPage = () => {
       deleteRecordDocument: DeleteCeEventDocument,
       deleteRecordIdPath: 'deleteCeEvent.ceEvent.id',
       maxWidth: 'sm',
+      localConstants,
     });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;

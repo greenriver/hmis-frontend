@@ -1,5 +1,4 @@
 import { cloneDeep } from '@apollo/client/utilities';
-import { startCase } from 'lodash-es';
 import { useMemo } from 'react';
 
 import {
@@ -70,17 +69,12 @@ export function useAssessment({
     return mutable;
   }, [formDefinitionData, assessmentData, client, relationshipToHoH]);
 
-  const [formRole, assessmentTitle] = useMemo(() => {
-    const arole = assessmentData?.assessment?.role || formRoleParam;
-    return [arole, `${arole ? startCase(arole.toLowerCase()) : ''} Assessment`];
-  }, [assessmentData, formRoleParam]);
-
   if (formDefinitionError) throw formDefinitionError;
   if (assessmentError) throw assessmentError;
 
   return {
-    assessmentTitle,
-    formRole: formRole as FormRole,
+    assessmentTitle: definition?.title || 'Assessment',
+    formRole: (definition?.role || formRoleParam) as FormRole,
     definition,
     assessment: assessmentData?.assessment || undefined,
     loading: formDefinitionLoading || assessmentLoading,
