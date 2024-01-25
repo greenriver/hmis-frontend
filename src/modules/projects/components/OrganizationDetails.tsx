@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 
-import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
+import { ClickToCopyId } from '@/components/elements/ClickToCopy';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';

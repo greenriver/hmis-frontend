@@ -87,6 +87,7 @@ import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
+import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
 import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
@@ -488,6 +489,17 @@ export const protectedRoutes: RouteNode[] = [
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientCaseNotes />
+              </ClientRoute>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.SCAN_CARDS,
+            element: (
+              <ClientRoute
+                permissions='canManageScanCards'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <ClientScanCards />
               </ClientRoute>
             ),
           },
