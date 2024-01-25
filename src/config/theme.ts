@@ -35,7 +35,15 @@ declare module '@mui/material/styles' {
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
-    alerts: { lightWarningBackground?: string };
+    alerts: {
+      lightWarningBackground?: string;
+      highPriorityErrorBackground?: string;
+      mediumPriorityHeaderBackground?: string;
+      mediumPriorityBodyBackground?: string;
+      mediumPriorityBorder?: string;
+      lowPriorityHeaderBackground?: string;
+      lowPriorityBodyBackground?: string;
+    };
     links: string;
     activeStatus: string;
   }
@@ -74,6 +82,12 @@ export const baseThemeDef: ThemeOptions = {
     },
     alerts: {
       lightWarningBackground: '#fffde0',
+      highPriorityErrorBackground: '#FF7575',
+      mediumPriorityHeaderBackground: '#FF9900',
+      mediumPriorityBodyBackground: '#ED6C020A',
+      mediumPriorityBorder: '#ED6C0280',
+      lowPriorityHeaderBackground: '#FFCB52',
+      lowPriorityBodyBackground: '#FCFAF5',
     },
     links: '#1976D2',
     activeStatus: '#75559F',

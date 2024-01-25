@@ -57,6 +57,9 @@ fragment ClientFields on Client {
     ...ClientContactPointFields
   }
   enabledFeatures
+  alerts {
+    ...ClientAlertFields
+  }
 }
 
 fragment ClientName on Client {
@@ -102,7 +105,16 @@ fragment ClientAddressFields on ClientAddress {
   dateCreated
   dateUpdated
 }
-
+fragment ClientAlertFields on ClientAlert {
+  id
+  note
+  expirationDate
+  createdBy {
+    ...UserFields
+  }
+  createdAt
+  severity
+}
 fragment ClientContactPointFields on ClientContactPoint {
   id
   value

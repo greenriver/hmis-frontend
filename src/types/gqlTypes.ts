@@ -519,6 +519,7 @@ export type Client = {
   addresses: Array<ClientAddress>;
   afghanistanOef?: Maybe<NoYesReasonsForMissingData>;
   age?: Maybe<Scalars['Int']['output']>;
+  alerts: Array<ClientAlert>;
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
@@ -680,6 +681,7 @@ export type ClientAccess = {
   canEditClient: Scalars['Boolean']['output'];
   canEditEnrollments: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
+  canManageClientAlerts: Scalars['Boolean']['output'];
   canManageOwnClientFiles: Scalars['Boolean']['output'];
   canManageScanCards: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
@@ -687,6 +689,7 @@ export type ClientAccess = {
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
+  canViewClientAlerts: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
@@ -763,6 +766,17 @@ export enum ClientAddressUse {
   /** Work */
   Work = 'work',
 }
+
+/** Alert */
+export type ClientAlert = {
+  __typename?: 'ClientAlert';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  createdBy?: Maybe<ApplicationUser>;
+  expirationDate?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  note: Scalars['String']['output'];
+  severity?: Maybe<Scalars['String']['output']>;
+};
 
 export type ClientAuditEvent = {
   __typename?: 'ClientAuditEvent';
@@ -5452,6 +5466,7 @@ export type QueryAccess = {
   canEnrollClients: Scalars['Boolean']['output'];
   canImpersonateUsers: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
+  canManageClientAlerts: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
   canManageInventory: Scalars['Boolean']['output'];
@@ -5463,6 +5478,7 @@ export type QueryAccess = {
   canTransferEnrollments: Scalars['Boolean']['output'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
+  canViewClientAlerts: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
@@ -7275,6 +7291,8 @@ export type ClientAccessFieldsFragment = {
   canAuditClients: boolean;
   canManageScanCards: boolean;
   canMergeClients: boolean;
+  canViewClientAlerts: boolean;
+  canManageClientAlerts: boolean;
 };
 
 export type EnrollmentAccessFieldsFragment = {
@@ -12017,6 +12035,8 @@ export type ClientSearchResultFieldsFragment = {
     canAuditClients: boolean;
     canManageScanCards: boolean;
     canMergeClients: boolean;
+    canViewClientAlerts: boolean;
+    canManageClientAlerts: boolean;
   };
 };
 
@@ -12092,6 +12112,8 @@ export type ClientFieldsFragment = {
     canAuditClients: boolean;
     canManageScanCards: boolean;
     canMergeClients: boolean;
+    canViewClientAlerts: boolean;
+    canManageClientAlerts: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -12189,6 +12211,20 @@ export type ClientFieldsFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
   }>;
+  alerts: Array<{
+    __typename?: 'ClientAlert';
+    id: string;
+    note: string;
+    expirationDate?: string | null;
+    createdAt: string;
+    severity?: string | null;
+    createdBy?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  }>;
 };
 
 export type ClientNameFragment = {
@@ -12243,6 +12279,21 @@ export type ClientAddressFieldsFragment = {
   addressType?: ClientAddressType | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+};
+
+export type ClientAlertFieldsFragment = {
+  __typename?: 'ClientAlert';
+  id: string;
+  note: string;
+  expirationDate?: string | null;
+  createdAt: string;
+  severity?: string | null;
+  createdBy?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
+  } | null;
 };
 
 export type ClientContactPointFieldsFragment = {
@@ -12389,6 +12440,8 @@ export type SearchClientsQuery = {
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
       };
     }>;
   };
@@ -12472,6 +12525,8 @@ export type GetClientQuery = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -12569,6 +12624,20 @@ export type GetClientQuery = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
     }>;
+    alerts: Array<{
+      __typename?: 'ClientAlert';
+      id: string;
+      note: string;
+      expirationDate?: string | null;
+      createdAt: string;
+      severity?: string | null;
+      createdBy?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    }>;
   } | null;
 };
 
@@ -12619,6 +12688,8 @@ export type GetClientPermissionsQuery = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
     };
   } | null;
 };
@@ -13026,6 +13097,8 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canAuditClients: boolean;
                 canManageScanCards: boolean;
                 canMergeClients: boolean;
+                canViewClientAlerts: boolean;
+                canManageClientAlerts: boolean;
               };
               externalIds: Array<{
                 __typename?: 'ExternalIdentifier';
@@ -13853,6 +13926,8 @@ export type MergeClientsMutation = {
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -13949,6 +14024,20 @@ export type MergeClientsMutation = {
         system?: ClientContactPointSystem | null;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+      }>;
+      alerts: Array<{
+        __typename?: 'ClientAlert';
+        id: string;
+        note: string;
+        expirationDate?: string | null;
+        createdAt: string;
+        severity?: string | null;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
       }>;
     } | null;
     errors: Array<{
@@ -14867,6 +14956,8 @@ export type AllEnrollmentDetailsFragment = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
     };
   };
   openEnrollmentSummary: Array<{
@@ -15944,6 +16035,8 @@ export type GetEnrollmentDetailsQuery = {
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
       };
     };
     openEnrollmentSummary: Array<{
@@ -16554,6 +16647,8 @@ export type GetEnrollmentWithHouseholdQuery = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -22988,6 +23083,8 @@ export type SubmitFormMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -23084,6 +23181,20 @@ export type SubmitFormMutation = {
             system?: ClientContactPointSystem | null;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+          }>;
+          alerts: Array<{
+            __typename?: 'ClientAlert';
+            id: string;
+            note: string;
+            expirationDate?: string | null;
+            createdAt: string;
+            severity?: string | null;
+            createdBy?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
           }>;
         }
       | {
@@ -23790,6 +23901,8 @@ export type HouseholdFieldsFragment = {
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -23850,6 +23963,8 @@ export type HouseholdClientFieldsFragment = {
       canAuditClients: boolean;
       canManageScanCards: boolean;
       canMergeClients: boolean;
+      canViewClientAlerts: boolean;
+      canManageClientAlerts: boolean;
     };
     externalIds: Array<{
       __typename?: 'ExternalIdentifier';
@@ -23992,6 +24107,8 @@ export type GetHouseholdQuery = {
           canAuditClients: boolean;
           canManageScanCards: boolean;
           canMergeClients: boolean;
+          canViewClientAlerts: boolean;
+          canManageClientAlerts: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -26565,6 +26682,8 @@ export type GetReferralPostingQuery = {
           canAuditClients: boolean;
           canManageScanCards: boolean;
           canMergeClients: boolean;
+          canViewClientAlerts: boolean;
+          canManageClientAlerts: boolean;
         };
         externalIds: Array<{
           __typename?: 'ExternalIdentifier';
@@ -26683,6 +26802,8 @@ export type UpdateReferralPostingMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -26815,6 +26936,8 @@ export type CreateOutgoingReferralPostingMutation = {
             canAuditClients: boolean;
             canManageScanCards: boolean;
             canMergeClients: boolean;
+            canViewClientAlerts: boolean;
+            canManageClientAlerts: boolean;
           };
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
@@ -27005,6 +27128,8 @@ export type ReferralPostingDetailFieldsFragment = {
         canAuditClients: boolean;
         canManageScanCards: boolean;
         canMergeClients: boolean;
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
       };
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
@@ -29077,6 +29202,8 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canAuditClients
     canManageScanCards
     canMergeClients
+    canViewClientAlerts
+    canManageClientAlerts
   }
 `;
 export const ClientSearchResultFieldsFragmentDoc = gql`
@@ -29158,6 +29285,19 @@ export const ClientContactPointFieldsFragmentDoc = gql`
     dateUpdated
   }
 `;
+export const ClientAlertFieldsFragmentDoc = gql`
+  fragment ClientAlertFields on ClientAlert {
+    id
+    note
+    expirationDate
+    createdBy {
+      ...UserFields
+    }
+    createdAt
+    severity
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
@@ -29201,6 +29341,9 @@ export const ClientFieldsFragmentDoc = gql`
       ...ClientContactPointFields
     }
     enabledFeatures
+    alerts {
+      ...ClientAlertFields
+    }
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientVeteranInfoFieldsFragmentDoc}
@@ -29212,6 +29355,7 @@ export const ClientFieldsFragmentDoc = gql`
   ${ClientNameObjectFieldsFragmentDoc}
   ${ClientAddressFieldsFragmentDoc}
   ${ClientContactPointFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
 `;
 export const ClientImageFieldsFragmentDoc = gql`
   fragment ClientImageFields on ClientImage {
