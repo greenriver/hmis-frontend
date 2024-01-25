@@ -1,4 +1,3 @@
-import { replace } from 'lodash-es';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Loading from '@/components/elements/Loading';

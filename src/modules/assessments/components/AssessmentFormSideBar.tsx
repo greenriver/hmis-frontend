@@ -16,7 +16,6 @@ import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
   FormDefinitionFieldsFragment,
-  FormRole,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -29,7 +28,6 @@ interface Props {
   embeddedInWorkflow?: boolean;
   onAutofill: VoidFunction;
   printPath?: string;
-  formRole?: FormRole;
   isPrintView: boolean;
   locked: boolean;
   canEdit: boolean;
@@ -43,7 +41,6 @@ const AssessmentFormSideBar: React.FC<Props> = ({
   title,
   embeddedInWorkflow,
   onAutofill,
-  formRole,
   isPrintView,
   locked,
   canEdit,

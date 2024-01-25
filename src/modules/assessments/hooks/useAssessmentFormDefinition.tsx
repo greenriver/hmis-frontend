@@ -5,7 +5,6 @@ import {
   getItemMap,
 } from '../../form/util/formUtil';
 
-import { formatDateForGql } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentRole,
   ClientNameDobVetFragment,
@@ -22,8 +21,6 @@ interface Args {
   role?: AssessmentRole;
   // Assessment date, for rule filtering
   assessmentDate?: string | null;
-  // Skip queries
-  skip?: boolean;
   // Optional, to apply "Data Collected About" rules
   client?: ClientNameDobVetFragment;
   // Optional, to apply "Data Collected About" rules
@@ -31,27 +28,21 @@ interface Args {
 }
 
 /**
- * There are 2 primary ways to find a Form Definition:
- * 1. Look up by ID. This is used for custom assessments.
- * 2. Look up by "role" context. This is used for most lookups.
- *     It will return the most relevant form for the given role and context.
- *
- * This hook also provides an option for passing a local definition which
- * will bypass all queries.
- *
- * If Client details are passed, this hook will apply DataCollectedAbout conditions,
- * so irrelevant questions are removed from the resulting definition.
+ * Fetch FormDefinition to use for an Assessment.
  */
 const useAssessmentFormDefinition = ({
   projectId,
   formDefinitionId,
   role,
   assessmentDate,
-  skip,
   client,
   relationshipToHoH,
 }: Args) => {
-  // Get definition from cache if we have it
+  // Note: since there are 2 ways of looking up a form definition for an assessment
+  // (by role or by ID), we don't get effective cacheing here. In some cases we will
+  // fetch even though we already have the definition in the cache. That could be
+  // optimized but we may need to read/write directly from the cache based on the `cacheKey`
+  // for the definition, which is a string formatted like: <id|projectId|date>
 
   const { data, loading, error } = useGetAssessmentFormDefinitionQuery({
     variables: {
@@ -60,9 +51,7 @@ const useAssessmentFormDefinition = ({
       role,
       assessmentDate,
     },
-    skip,
   });
-  if (loading) console.log('fetching by', formDefinitionId, role);
 
   const { formDefinition, itemMap } = useMemo(() => {
     // Find the definition that we actually have
@@ -90,8 +79,6 @@ const useAssessmentFormDefinition = ({
       `Failed to fetch form definition: ${formDefinitionId || role || ''}`
     );
 
-  if (formDefinition)
-    console.log('fetched', formDefinition.cacheKey, 'its in the cache...');
   return { formDefinition, itemMap, loading };
 };
 

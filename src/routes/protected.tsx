@@ -20,7 +20,6 @@ import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentP
 import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
 import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
 import ExitAssessmentPage from '@/components/clientDashboard/enrollments/ExitAssessmentPage';
-import HouseholdAssessmentsPage from '@/components/clientDashboard/enrollments/HouseholdAssessmentsPage';
 import IntakeAssessmentPage from '@/components/clientDashboard/enrollments/IntakeAssessmentPage';
 import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
 import Profile from '@/components/clientDashboard/Profile';

@@ -14,7 +14,7 @@ const AssessmentPage = () => {
   const { enrollment, client } = useEnrollmentDashboardContext();
   const { assessmentId } = useSafeParams() as { assessmentId: string };
 
-  // Fetch the Assessment
+  // Fetch the Assessment, and the definition attached to it
   const {
     data: assessmentData,
     loading: assessmentLoading,
@@ -24,6 +24,7 @@ const AssessmentPage = () => {
   // Retrieve the Definition from the Assessment, and apply any "Data Collected About" rules to it
   const definition = useMemo(() => {
     if (!assessmentData?.assessment?.definition || !enrollment) return;
+
     return applyDefinitionRulesForClient(
       assessmentData?.assessment?.definition,
       client,

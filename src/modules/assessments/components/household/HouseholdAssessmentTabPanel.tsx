@@ -61,7 +61,7 @@ const HouseholdAssessmentTabPanel = memo(
     assessmentStatus,
     onFormStateChange,
     formState,
-    formDefinition,
+    formDefinition: mainFormDefinition,
   }: HouseholdAssessmentTabPanelProps) => {
     // if (active) console.debug(clientName, formState);
 
@@ -95,18 +95,32 @@ const HouseholdAssessmentTabPanel = memo(
       formState.errors,
     ]);
 
-    // Apply client-specific transformation to FormDefinition. For example,
-    // removing questions that are only for the HoH.
+    const { assessment, loading: assessmentLoading } =
+      useAssessment(assessmentId);
+
     const definition = useMemo(() => {
+      if (assessmentId && !assessment) return;
+
+      // If we are loading an existing Assessment, always prefer to use
+      // the FormDefinition that was resolved on the Assessment. This could
+      // be important if it's an older WIP assessment that was saved using a certain
+      // form. (It should be re-opened using the same form).
+      const chosenDefinition = assessment?.definition || mainFormDefinition;
+
+      // Apply client-specific transformation to FormDefinition. For example,
+      // removing questions that are only for the HoH.
       return applyDefinitionRulesForClient(
-        formDefinition,
+        chosenDefinition,
         client,
         relationshipToHoH
       );
-    }, [client, formDefinition, relationshipToHoH]);
-
-    const { assessment, loading: assessmentLoading } =
-      useAssessment(assessmentId);
+    }, [
+      assessment,
+      assessmentId,
+      client,
+      mainFormDefinition,
+      relationshipToHoH,
+    ]);
 
     const onCompletedMutation = useCallback(
       (status: AssessmentResponseStatus) => {

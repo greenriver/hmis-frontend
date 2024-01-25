@@ -3,7 +3,6 @@ import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
-import { showAssessmentInHousehold } from '../clientDashboard/enrollments/AssessmentPage';
 import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';

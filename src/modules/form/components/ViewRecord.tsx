@@ -26,7 +26,7 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   pickListArgs,
 }: ViewRecordProps<RecordType>): JSX.Element => {
   const { formDefinition, itemMap, loading } = useFormDefinition({
-    queryVariables: { role: formRole },
+    role: formRole,
   });
 
   // Transform record into "form state" for DynamicView

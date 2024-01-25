@@ -1,11 +1,8 @@
 import { Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import IconButtonContainer from './IconButtonContainer';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import RouterLink from '@/components/elements/RouterLink';
 import { AssessmentIcon } from '@/components/elements/SemanticIcons';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
@@ -17,7 +14,6 @@ interface Props {
 }
 
 const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
-  const navigate = useNavigate();
   const intakePath = useMemo(
     () =>
       generateSafePath(EnrollmentDashboardRoutes.INTAKE, {

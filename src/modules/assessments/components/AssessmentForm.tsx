@@ -275,7 +275,6 @@ const AssessmentForm: React.FC<Props> = ({
         definition={definition}
         assessment={assessment}
         title={navigationTitle}
-        formRole={formRole}
         isPrintView={isPrintView}
         locked={locked}
         embeddedInWorkflow={embeddedInWorkflow}
