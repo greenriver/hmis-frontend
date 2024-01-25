@@ -143,6 +143,7 @@ const AssessmentForm: React.FC<Props> = ({
     () => ({
       entryDate: enrollment.entryDate,
       exitDate: enrollment.exitDate,
+      projectName: enrollment.project.projectName,
       ...AlwaysPresentLocalConstants,
     }),
     [enrollment]

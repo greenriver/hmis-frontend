@@ -51,6 +51,8 @@ fragment ClientAccessFields on ClientAccess {
   canUploadClientFiles
   canViewAnyFiles
   canAuditClients
+  canManageScanCards
+  canMergeClients
 }
 
 fragment EnrollmentAccessFields on EnrollmentAccess {

@@ -1125,6 +1125,7 @@ export const transformSubmitValues = ({
   return result;
 };
 
+// record could be an Assessment
 const getMappedValue = (record: any, mapping: FieldMapping) => {
   let relatedRecordAttribute;
   if (mapping.recordType) {

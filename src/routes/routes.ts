@@ -41,6 +41,7 @@ const clientDashboardRoutes = {
   NEW_FILE: 'files/new',
   EDIT_FILE: 'files/:fileId/edit',
   CASE_NOTES: 'case-notes',
+  SCAN_CARDS: 'scan-cards',
   MERGE_HISTORY: 'merges',
   NEW_MERGE: 'merges/new',
 };
