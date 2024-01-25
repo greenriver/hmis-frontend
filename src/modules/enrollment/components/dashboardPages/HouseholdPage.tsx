@@ -1,4 +1,4 @@
-import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
+import { ClickToCopyId } from '@/components/elements/ClickToCopy';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';

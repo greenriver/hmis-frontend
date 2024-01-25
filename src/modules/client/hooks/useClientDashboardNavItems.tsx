@@ -2,10 +2,6 @@ import { useMemo } from 'react';
 
 import { NavItem } from '../../../components/layout/dashboard/sideNav/types';
 
-import {
-  useClientPermissions,
-  useRootPermissions,
-} from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientAccessFieldsFragment,
@@ -13,18 +9,8 @@ import {
 } from '@/types/gqlTypes';
 
 export const useClientDashboardNavItems = (
-  clientId: string,
   enabledFeatures: ClientDashboardFeature[]
 ) => {
-  const [rootAccess] = useRootPermissions();
-  const [clientAccess] = useClientPermissions(clientId);
-
-  // TODO: move this logic to the backend and resolve it on ClientAccess
-  const canViewFiles =
-    clientAccess?.canViewAnyConfidentialClientFiles ||
-    clientAccess?.canViewAnyNonconfidentialClientFiles ||
-    clientAccess?.canManageOwnClientFiles;
-
   const navItems: NavItem<ClientAccessFieldsFragment>[] = useMemo(() => {
     return [
       {
@@ -59,9 +45,8 @@ export const useClientDashboardNavItems = (
             id: 'files',
             title: 'Files',
             path: ClientDashboardRoutes.FILES,
-            hide:
-              !canViewFiles ||
-              !enabledFeatures.includes(ClientDashboardFeature.File),
+            permissions: ['canViewAnyFiles'],
+            hide: !enabledFeatures.includes(ClientDashboardFeature.File),
           },
           {
             id: 'case-notes',
@@ -86,13 +71,18 @@ export const useClientDashboardNavItems = (
             id: 'merges',
             title: 'Merge History',
             path: ClientDashboardRoutes.MERGE_HISTORY,
-            // TODO: resolve this on ClientAccess
-            hide: !rootAccess?.canMergeClients,
+            permissions: ['canMergeClients'],
+          },
+          {
+            id: 'scan-cards',
+            title: 'Scan Cards',
+            path: ClientDashboardRoutes.SCAN_CARDS,
+            permissions: ['canManageScanCards'],
           },
         ],
       },
     ];
-  }, [canViewFiles, enabledFeatures, rootAccess?.canMergeClients]);
+  }, [enabledFeatures]);
 
   return navItems;
 };
