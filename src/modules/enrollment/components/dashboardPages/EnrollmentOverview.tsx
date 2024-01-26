@@ -60,6 +60,9 @@ const EnrollmentOverview = () => {
     useHouseholdMembers(enrollmentId);
   if (error) throw error;
 
+  const clients = householdMembers ? householdMembers.map((h) => h.client) : [];
+  const canViewClientAlerts = clients.some((c) => c.access.canViewClientAlerts);
+
   if (!enrollment) return <NotFound />;
 
   return (
@@ -92,13 +95,13 @@ const EnrollmentOverview = () => {
         </Grid>
         <Grid item xs={4}>
           <Stack spacing={4}>
-            <ClientAlerts
-              clients={
-                householdMembers ? householdMembers.map((h) => h.client) : []
-              }
-              alertContext={AlertContext.Household}
-              loading={householdMembersLoading}
-            />
+            {canViewClientAlerts && (
+              <ClientAlerts
+                clients={clients}
+                alertContext={AlertContext.Household}
+                loading={householdMembersLoading}
+              />
+            )}
             <EnrollmentReminders enrollmentId={enrollment.id} />
             <EnrollmentQuickActions
               enrollment={enrollment}
