@@ -32,7 +32,8 @@ const ExitAssessmentPage = () => {
           enrollmentId: enrollment.id,
           clientId: client.id,
           assessmentId: enrollment.exitAssessment.id,
-        })
+        }),
+        { replace: true }
       );
     } else {
       // Navigate away for single-member HH with no Exit Assessment
@@ -41,7 +42,8 @@ const ExitAssessmentPage = () => {
           enrollmentId: enrollment.id,
           clientId: client.id,
           formDefinitionId: formDefinition.id,
-        })
+        }),
+        { replace: true }
       );
     }
   }, [client, enrollment, formDefinition, navigate]);
