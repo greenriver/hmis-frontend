@@ -2,13 +2,13 @@ import { Box } from '@mui/material';
 import React, { useCallback } from 'react';
 import { useFormState } from 'react-hook-form';
 
+import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import { FormValues } from '../types';
 
 import { DynamicFormOnSubmit } from './DynamicForm';
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
 
-import { FormDefinitionHandlers } from './useFormDefinitionHandlers';
 import useElementInView from '@/hooks/useElementInView';
 import { ValidationDialogProps } from '@/modules/errors/components/ValidationDialog';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';

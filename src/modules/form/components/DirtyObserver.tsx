@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useFormState } from 'react-hook-form';
-import { FormDefinitionHandlers } from './useFormDefinitionHandlers';
+import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import usePrevious from '@/hooks/usePrevious';
 
 export interface DirtyObserverProps {

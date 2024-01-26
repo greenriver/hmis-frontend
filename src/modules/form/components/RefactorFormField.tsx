@@ -2,6 +2,10 @@ import { pick } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
 import {
+  FormDefinitionHandlers,
+  getSafeLinkId,
+} from '../hooks/useFormDefinitionHandlers';
+import {
   ChangeType,
   ItemChangedFn,
   OverrideableDynamicFieldProps,
@@ -16,12 +20,6 @@ import {
 
 import RefactorField from './DynamicField';
 import RefactorGroup from './RefactorGroup';
-
-import {
-  FormDefinitionHandlers,
-  getSafeLinkId,
-} from './useFormDefinitionHandlers';
-
 import ValueWrapper from './ValueWrapper';
 import { FormItem, ItemType, ServiceDetailType } from '@/types/gqlTypes';
 

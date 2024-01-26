@@ -1,11 +1,11 @@
 import React, { ReactNode, useEffect } from 'react';
 import { useFormState, useWatch } from 'react-hook-form';
 
-import { FormValues } from '../types';
 import {
   FormDefinitionHandlers,
   getSafeLinkId,
-} from './useFormDefinitionHandlers';
+} from '../hooks/useFormDefinitionHandlers';
+import { FormValues } from '../types';
 import { FormItem } from '@/types/gqlTypes';
 
 export interface Props {

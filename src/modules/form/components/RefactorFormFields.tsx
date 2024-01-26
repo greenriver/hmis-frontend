@@ -1,9 +1,9 @@
 import React from 'react';
 
+import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import { PickListArgs } from '../types';
 
 import RefactorFormField from './RefactorFormField';
-import { FormDefinitionHandlers } from './useFormDefinitionHandlers';
 
 export interface Props {
   handlers: FormDefinitionHandlers;

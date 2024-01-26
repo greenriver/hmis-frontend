@@ -2,11 +2,11 @@ import { compact, flattenDeep, isEmpty } from 'lodash-es';
 import React, { ReactNode, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { getAllChildLinkIds } from '../util/formUtil';
 import {
   FormDefinitionHandlers,
   getSafeLinkId,
-} from './useFormDefinitionHandlers';
+} from '../hooks/useFormDefinitionHandlers';
+import { getAllChildLinkIds } from '../util/formUtil';
 import { DisabledDisplay, FormItem } from '@/types/gqlTypes';
 
 export interface Props {

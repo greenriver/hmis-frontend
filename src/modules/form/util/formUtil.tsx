@@ -28,7 +28,7 @@ import { ReactNode } from 'react';
 
 import AutofillFormItemWrapper from '../components/AutofillFormItemWrapper';
 import DependentFormItemWrapper from '../components/DependentFormItemWrapper';
-import { FormDefinitionHandlers } from '../components/useFormDefinitionHandlers';
+import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import {
   AssessmentForPopulation,
   DynamicInputCommonProps,
