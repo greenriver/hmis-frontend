@@ -4,7 +4,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
+import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientMergeHistoryDocument,
@@ -26,7 +26,9 @@ export const ClientMergeAuditColumns: ColumnDef<MergeAuditEventFieldsFragment>[]
     },
     {
       header: 'Merged At',
-      render: ({ mergedAt }) => parseAndFormatDateTime(mergedAt),
+      render: ({ mergedAt }) => (
+        <RelativeDateTableCellContents dateTimeString={mergedAt} horizontal />
+      ),
     },
     // TODO: click-to-show pre merge state?
     // {

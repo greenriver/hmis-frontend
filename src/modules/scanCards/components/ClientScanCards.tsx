@@ -1,6 +1,5 @@
 import { Paper, Stack } from '@mui/material';
 import GenericTableWithData from '../../dataFetching/components/GenericTableWithData';
-import { lastUpdatedBy } from '../../hmis/hmisUtil';
 import GenerateScanCardButton from './GenerateScanCardButton';
 import {
   DeactivateScanCardButton,
@@ -9,6 +8,7 @@ import {
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import RelativeDateDisplay from '@/modules/hmis/components/RelativeDateDisplay';
 import {
   GetClientScanCardCodesDocument,
   GetClientScanCardCodesQuery,
@@ -29,12 +29,20 @@ const columns: ColumnDef<Row>[] = [
     key: 'history',
     header: 'History',
     render: (row) => (
-      <Stack>
-        <span>Created on {lastUpdatedBy(row.dateCreated, row.createdBy)}</span>
+      <Stack sx={{ width: 'fit-content' }}>
+        <RelativeDateDisplay
+          dateString={row.dateCreated}
+          prefixVerb='Created'
+          suffixText={row.createdBy?.name ? `by ${row.createdBy.name}` : ''}
+          TooltipProps={{ placement: 'right-end' }}
+        />
         {row.dateDeleted && (
-          <span>
-            Deleted on {lastUpdatedBy(row.dateDeleted, row.deletedBy)}
-          </span>
+          <RelativeDateDisplay
+            dateString={row.dateDeleted}
+            prefixVerb='Deactivated'
+            suffixText={row.deletedBy?.name ? `by ${row.deletedBy.name}` : ''}
+            TooltipProps={{ placement: 'right-end' }}
+          />
         )}
       </Stack>
     ),
