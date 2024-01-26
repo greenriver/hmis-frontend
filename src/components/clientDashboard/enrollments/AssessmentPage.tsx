@@ -1,17 +1,19 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import Loading from '@/components/elements/Loading';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessmentPage from '@/modules/assessments/components/IndividualAssessmentPage';
 import { applyDefinitionRulesForClient } from '@/modules/form/util/formUtil';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { useGetAssessmentQuery } from '@/types/gqlTypes';
 
 /**
  * Renders existing assessment(s), for an individual or a household
  */
 const AssessmentPage = () => {
-  const { enrollment, client } = useEnrollmentDashboardContext();
+  const { enrollment, client, overrideBreadcrumbTitles } =
+    useEnrollmentDashboardContext();
   const { assessmentId } = useSafeParams() as { assessmentId: string };
 
   // Fetch the Assessment, and the definition attached to it
@@ -31,6 +33,13 @@ const AssessmentPage = () => {
       enrollment.relationshipToHoH
     );
   }, [assessmentData, client, enrollment]);
+
+  // Set the breadcrumb so it says the correct name of this assessment
+  useEffect(() => {
+    overrideBreadcrumbTitles({
+      [EnrollmentDashboardRoutes.VIEW_ASSESSMENT]: definition?.title,
+    });
+  }, [overrideBreadcrumbTitles, definition]);
 
   if (assessmentError) throw assessmentError;
   if (!enrollment) return <NotFound />;
