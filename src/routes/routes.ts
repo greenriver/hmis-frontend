@@ -57,10 +57,10 @@ const enrollmentDashboardRoutes = {
   EVENTS: 'events',
   CE_ASSESSMENTS: 'ce-assessments',
   CUSTOM_CASE_NOTES: 'case-notes',
-  INTAKE: 'intake', // go to intake (regardless of hh size or existence)
-  EXIT: 'exit', // go to exit (regardless of hh size or existence)
-  VIEW_ASSESSMENT: 'assessments/:assessmentId', // view existing assmt individually
-  NEW_ASSESSMENT: 'assessments/new/:formDefinitionId', // create individual assessment
+  INTAKE: 'intake', // Go to intake (render household view, or navigate to View/Create individual assessment appropriate)
+  EXIT: 'exit', // Go to intake (render household view, or navigate to View/Create individual assessment as appropriate)
+  VIEW_ASSESSMENT: 'assessments/:assessmentId', // View/Edit individual assessment
+  NEW_ASSESSMENT: 'assessments/new/:formDefinitionId', // Create new individual assessment
   ESG_FUNDING_REPORT: 'esg-funding-report',
   AUDIT_HISTORY: 'history',
 };
