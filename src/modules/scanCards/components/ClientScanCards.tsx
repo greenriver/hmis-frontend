@@ -8,7 +8,7 @@ import {
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
-import RelativeDateDisplay from '@/modules/hmis/components/RelativeDateDisplay';
+import { lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import {
   GetClientScanCardCodesDocument,
   GetClientScanCardCodesQuery,
@@ -29,20 +29,12 @@ const columns: ColumnDef<Row>[] = [
     key: 'history',
     header: 'History',
     render: (row) => (
-      <Stack sx={{ width: 'fit-content' }}>
-        <RelativeDateDisplay
-          dateString={row.dateCreated}
-          prefixVerb='Created'
-          suffixText={row.createdBy?.name ? `by ${row.createdBy.name}` : ''}
-          TooltipProps={{ placement: 'right-end' }}
-        />
+      <Stack>
+        <span>Created on {lastUpdatedBy(row.dateCreated, row.createdBy)}</span>
         {row.dateDeleted && (
-          <RelativeDateDisplay
-            dateString={row.dateDeleted}
-            prefixVerb='Deactivated'
-            suffixText={row.deletedBy?.name ? `by ${row.deletedBy.name}` : ''}
-            TooltipProps={{ placement: 'right-end' }}
-          />
+          <span>
+            Deactivated on {lastUpdatedBy(row.dateDeleted, row.deletedBy)}
+          </span>
         )}
       </Stack>
     ),
