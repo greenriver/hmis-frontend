@@ -1,4 +1,4 @@
-import { Box, Grid, lighten } from '@mui/material';
+import { Box, lighten } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { GroupItemComponentProps } from '../types';
@@ -34,7 +34,7 @@ interface Props extends GroupItemComponentProps {
   debug?: (ids?: string[]) => void;
 }
 
-const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
+const RefactorGroup: React.FC<Props> = ({ debug, ...props }) => {
   // Always render top-level groups as cards
   if (props.nestingLevel === 0 && !props.item.component) {
     return (
@@ -49,13 +49,6 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
 
   switch (props.item.component) {
     case Component.InputGroup:
-      if (props.nestingLevel === 0) {
-        return (
-          <Grid item>
-            <InputGroup key={props.item.linkId} {...props} />
-          </Grid>
-        );
-      }
       return <InputGroup key={props.item.linkId} {...props} />;
     case Component.DisabilityTable:
       return <DisabilityTable key={props.item.linkId} {...props} />;
@@ -72,4 +65,4 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
   }
 };
 
-export default DynamicGroup;
+export default RefactorGroup;

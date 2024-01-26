@@ -1,12 +1,13 @@
-import { Typography } from '@mui/material';
+import { BreakpointOverrides, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 
 import { getValueFromPickListData, usePickList } from '../hooks/usePickList';
 import {
   ChangeType,
-  DynamicFieldProps,
   DynamicInputCommonProps,
+  PickListArgs,
+  ItemChangedFn,
 } from '../types';
 import {
   chooseSelectComponentType,
@@ -39,7 +40,14 @@ import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
-import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
+import {
+  Component,
+  DisabledDisplay,
+  FormItem,
+  InputSize,
+  ItemType,
+  ValidationError,
+} from '@/types/gqlTypes';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
   if (!item.text) return null;
@@ -77,11 +85,25 @@ const minWidthForType = (item: FormItem) => {
   }
 };
 
-const DynamicField: React.FC<DynamicFieldProps> = ({
+export interface Props {
+  item: FormItem;
+  itemChanged: ItemChangedFn;
+  nestingLevel?: number;
+  disabled?: boolean;
+  errors?: ValidationError[];
+  inputProps?: DynamicInputCommonProps;
+  horizontal?: boolean;
+  pickListArgs?: PickListArgs;
+  noLabel?: boolean;
+  warnIfEmpty?: boolean;
+  breakpoints?: BreakpointOverrides;
+  value?: any;
+}
+
+const RefactorField: React.FC<Props> = ({
   item,
   itemChanged,
   nestingLevel = 0,
-  value,
   disabled = false,
   horizontal = false,
   errors,
@@ -90,8 +112,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   noLabel = false,
   warnIfEmpty = false,
   breakpoints,
+  value: formValue,
 }) => {
   const { linkId } = item;
+  const value =
+    disabled && item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
+      ? undefined
+      : formValue;
   const onChangeEvent = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) =>
       itemChanged({ linkId, value: e.target.value, type: ChangeType.User }),
@@ -442,4 +469,4 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   }
 };
 
-export default DynamicField;
+export default RefactorField;

@@ -2,7 +2,6 @@ import { Grid, GridProps } from '@mui/material';
 
 import useDynamicFields from '../../hooks/useDynamicFields';
 import { LocalConstants, PickListArgs } from '../../types';
-
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 export interface DynamicViewProps {

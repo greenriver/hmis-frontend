@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DynamicFormFields, {
   Props as DynamicFormFieldsProps,
-} from '../components/DynamicFormFields';
+} from '../components/RefactorFormFields';
 import DynamicViewFields from '../components/viewable/DynamicViewFields';
 import {
   ChangeType,
@@ -21,6 +21,7 @@ import {
 } from '../util/formUtil';
 
 import useComputedData from './useComputedData';
+import useFormDefinitionHandlers from './useFormDefinitionHandlers';
 
 import {
   DisabledDisplay,
@@ -46,6 +47,12 @@ const useDynamicFields = ({
   const [values, setValues] = useState<FormValues>(
     Object.assign({}, initialValues)
   );
+
+  const handlers = useFormDefinitionHandlers({
+    definition,
+    initialValues: values,
+    localConstants,
+  });
 
   const {
     itemMap,
@@ -192,6 +199,7 @@ const useDynamicFields = ({
         | 'itemChanged'
         | 'severalItemsChanged'
         | 'localConstants'
+        | 'handlers'
       > & {
         itemChanged?: ItemChangedFn;
         severalItemsChanged?: SeveralItemsChangedFn;
@@ -209,6 +217,7 @@ const useDynamicFields = ({
             itemChanged,
             severalItemsChanged,
             localConstants,
+            handlers,
           }}
         />
       );
@@ -222,6 +231,7 @@ const useDynamicFields = ({
       itemChanged,
       severalItemsChanged,
       localConstants,
+      handlers,
     ]
   );
 
@@ -241,6 +251,7 @@ const useDynamicFields = ({
         | 'itemChanged'
         | 'severalItemsChanged'
         | 'localConstants'
+        | 'handlers'
       > & {
         itemChanged?: ItemChangedFn;
       }
@@ -254,21 +265,24 @@ const useDynamicFields = ({
           values,
           bulk,
           itemChanged: itemChanged,
+          handlers,
         }}
       />
     ),
-    [definition, itemMap, disabledLinkIds, values, bulk, itemChanged]
+    [definition, itemMap, disabledLinkIds, values, bulk, handlers, itemChanged]
   );
 
   return useMemo(
     () => ({
       renderFields: viewOnly ? renderViewFields : renderFormFields,
       values,
+      handlers,
       getCleanedValues,
       shouldShowItem,
     }),
     [
       values,
+      handlers,
       viewOnly,
       renderFormFields,
       renderViewFields,

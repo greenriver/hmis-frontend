@@ -1,12 +1,10 @@
-import React, { RefObject } from 'react';
+import { forwardRef, useCallback, useImperativeHandle } from 'react';
 
-import { FormValues, LocalConstants, PickListArgs } from '../types';
+import useFormDefinitionHandlers from '../hooks/useFormDefinitionHandlers';
+import { FormValues, LocalConstants } from '../types';
 
-import { FormActionProps } from './FormActions';
-import RefactorForm from './refactor/RefactorForm';
-
-import { ValidationDialogProps } from '@/modules/errors/components/ValidationDialog';
-import { ErrorState } from '@/modules/errors/util';
+import DirtyObserver from './DirtyObserver';
+import RefactorFormBase, { RefactorFormBaseProps } from './RefactorFormBase';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
@@ -20,41 +18,97 @@ interface DynamicFormSubmitInput {
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 
 export interface DynamicFormProps
-  extends Omit<
-    FormActionProps,
-    'disabled' | 'loading' | 'onSubmit' | 'onSaveDraft'
-  > {
+  extends Omit<RefactorFormBaseProps, 'handlers'> {
   clientId?: string;
   definition: FormDefinitionJson;
-  onSubmit: DynamicFormOnSubmit;
+  onSubmit: (input: DynamicFormSubmitInput) => void;
   onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
   onDirty?: (value: boolean) => void;
-  loading?: boolean;
   initialValues?: Record<string, any>;
-  errors: ErrorState;
-  showSavePrompt?: boolean;
-  alwaysShowSaveSlide?: boolean;
-  horizontal?: boolean;
-  pickListArgs?: PickListArgs;
-  warnIfEmpty?: boolean;
-  locked?: boolean;
-  visible?: boolean;
-  FormActionProps?: Omit<
-    FormActionProps,
-    'loading' | 'onSubmit' | 'onSaveDraft'
-  >;
-  ValidationDialogProps?: Omit<
-    ValidationDialogProps,
-    'errorState' | 'open' | 'onConfirm' | 'loading'
-  >;
-  hideSubmit?: boolean;
   localConstants?: LocalConstants;
-  errorRef?: RefObject<HTMLDivElement>;
 }
+
 export interface DynamicFormRef {
   SaveIfDirty: VoidFunction;
   SubmitIfDirty: (ignoreWarnings: boolean) => void;
   SubmitForm: VoidFunction;
 }
+
+const RefactorForm = forwardRef<DynamicFormRef, DynamicFormProps>(
+  (
+    {
+      definition,
+      onSubmit,
+      onSaveDraft,
+      onDirty,
+      initialValues,
+      errors: errorState,
+      localConstants,
+      ...props
+    },
+    ref
+  ) => {
+    const handlers = useFormDefinitionHandlers({
+      definition,
+      initialValues,
+      localConstants,
+    });
+
+    const { getCleanedValues } = handlers;
+
+    const handleSaveDraft = useCallback(() => {
+      if (!onSaveDraft) return;
+      onSaveDraft(getCleanedValues());
+    }, [onSaveDraft, getCleanedValues]);
+
+    const handleSubmit: DynamicFormOnSubmit = useCallback(
+      (input) => {
+        // console.log(input, handlers.getCleanedValues())
+        onSubmit(input);
+      },
+      [onSubmit]
+    );
+
+    // Expose handle for parent components to initiate a background save (used for household workflow tabs)
+    useImperativeHandle(
+      ref,
+      () => ({
+        SubmitForm: () => {
+          onSubmit({
+            values: getCleanedValues(),
+            confirmed: false,
+          });
+        },
+        SaveIfDirty: () => {
+          if (!handlers.methods.formState.isDirty || props.locked) return;
+          handleSaveDraft();
+        },
+        SubmitIfDirty: (ignoreWarnings: boolean) => {
+          if (!onSubmit || !handlers.methods.formState.isDirty || props.locked)
+            return;
+          onSubmit({
+            values: getCleanedValues(),
+            confirmed: ignoreWarnings,
+            onSuccess: () => {},
+          });
+        },
+      }),
+      [onSubmit, getCleanedValues, props, handlers, handleSaveDraft]
+    );
+
+    return (
+      <>
+        {onDirty && <DirtyObserver onDirty={onDirty} handlers={handlers} />}
+        <RefactorFormBase
+          {...props}
+          handlers={handlers}
+          errors={errorState}
+          onSubmit={handleSubmit}
+          onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
+        />
+      </>
+    );
+  }
+);
 
 export default RefactorForm;
