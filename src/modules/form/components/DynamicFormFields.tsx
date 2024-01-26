@@ -3,7 +3,7 @@ import React from 'react';
 import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import { PickListArgs } from '../types';
 
-import RefactorFormField from './RefactorFormField';
+import DynamicFormField from './DynamicFormField';
 
 export interface Props {
   handlers: FormDefinitionHandlers;
@@ -16,13 +16,13 @@ export interface Props {
   pickListArgs?: PickListArgs;
 }
 
-const RefactorFormFields: React.FC<Props> = ({ handlers, ...props }) => {
+const DynamicFormFields: React.FC<Props> = ({ handlers, ...props }) => {
   const definition = handlers.definition;
 
   return (
     <>
       {definition.item.map((item) => (
-        <RefactorFormField
+        <DynamicFormField
           key={item.linkId}
           handlers={handlers}
           nestingLevel={0}
@@ -34,4 +34,4 @@ const RefactorFormFields: React.FC<Props> = ({ handlers, ...props }) => {
   );
 };
 
-export default RefactorFormFields;
+export default DynamicFormFields;

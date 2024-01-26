@@ -2,11 +2,11 @@ import React, { ReactNode } from 'react';
 
 import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 
-export interface RefactorFormContainerProps {
+export interface DynamicFormContainerProps {
   children: ReactNode;
 }
 
-const RefactorFormContainer = ({ children }: RefactorFormContainerProps) => {
+const DynamicFormContainer = ({ children }: DynamicFormContainerProps) => {
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
@@ -17,4 +17,4 @@ const RefactorFormContainer = ({ children }: RefactorFormContainerProps) => {
   );
 };
 
-export default RefactorFormContainer;
+export default DynamicFormContainer;

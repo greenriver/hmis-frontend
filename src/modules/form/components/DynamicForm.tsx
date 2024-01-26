@@ -4,7 +4,7 @@ import useFormDefinitionHandlers from '../hooks/useFormDefinitionHandlers';
 import { FormValues, LocalConstants } from '../types';
 
 import DirtyObserver from './DirtyObserver';
-import RefactorFormBase, { RefactorFormBaseProps } from './RefactorFormBase';
+import DynamicFormBase, { DynamicFormBaseProps } from './DynamicFormBase';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
@@ -18,7 +18,7 @@ interface DynamicFormSubmitInput {
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 
 export interface DynamicFormProps
-  extends Omit<RefactorFormBaseProps, 'handlers'> {
+  extends Omit<DynamicFormBaseProps, 'handlers'> {
   clientId?: string;
   definition: FormDefinitionJson;
   onSubmit: (input: DynamicFormSubmitInput) => void;
@@ -34,7 +34,7 @@ export interface DynamicFormRef {
   SubmitForm: VoidFunction;
 }
 
-const RefactorForm = forwardRef<DynamicFormRef, DynamicFormProps>(
+const DynamicForm = forwardRef<DynamicFormRef, DynamicFormProps>(
   (
     {
       definition,
@@ -99,7 +99,7 @@ const RefactorForm = forwardRef<DynamicFormRef, DynamicFormProps>(
     return (
       <>
         {onDirty && <DirtyObserver onDirty={onDirty} handlers={handlers} />}
-        <RefactorFormBase
+        <DynamicFormBase
           {...props}
           handlers={handlers}
           errors={errorState}
@@ -111,4 +111,4 @@ const RefactorForm = forwardRef<DynamicFormRef, DynamicFormProps>(
   }
 );
 
-export default RefactorForm;
+export default DynamicForm;

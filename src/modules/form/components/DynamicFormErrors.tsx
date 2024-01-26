@@ -5,12 +5,12 @@ import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
 
-export interface RefactorFormErrorsProps {
+export interface DynamicFormErrorsProps {
   errors: ErrorState;
 }
 
-const RefactorFormErrors = forwardRef(
-  ({ errors: errorState }: RefactorFormErrorsProps, ref) => {
+const DynamicFormErrors = forwardRef(
+  ({ errors: errorState }: DynamicFormErrorsProps, ref) => {
     return (
       <Stack gap={2} ref={ref}>
         <ApolloErrorAlert error={errorState.apolloError} />
@@ -20,4 +20,4 @@ const RefactorFormErrors = forwardRef(
   }
 );
 
-export default RefactorFormErrors;
+export default DynamicFormErrors;

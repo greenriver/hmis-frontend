@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DynamicFormFields, {
   Props as DynamicFormFieldsProps,
-} from '../components/RefactorFormFields';
+} from '../components/DynamicFormFields';
 import DynamicViewFields from '../components/viewable/DynamicViewFields';
 import {
   ChangeType,

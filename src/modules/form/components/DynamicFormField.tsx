@@ -18,8 +18,8 @@ import {
   transformSubmitValues,
 } from '../util/formUtil';
 
-import RefactorField from './DynamicField';
-import RefactorGroup from './RefactorGroup';
+import DynamicField from './DynamicField';
+import DynamicGroup from './DynamicGroup';
 import ValueWrapper from './ValueWrapper';
 import { FormItem, ItemType, ServiceDetailType } from '@/types/gqlTypes';
 
@@ -38,7 +38,7 @@ export interface Props {
   renderFn?: (children: ReactNode) => ReactNode;
 }
 
-const RefactorFormField: React.FC<Props> = ({
+const DynamicFormField: React.FC<Props> = ({
   handlers,
   clientId,
   bulk,
@@ -89,13 +89,13 @@ const RefactorFormField: React.FC<Props> = ({
 
       if (item.type === ItemType.Group) {
         return (
-          <RefactorGroup
+          <DynamicGroup
             item={item}
             clientId={clientId}
             key={item.linkId}
             nestingLevel={nestingLevel}
             renderChildItem={(item, props, fn) => (
-              <RefactorFormField
+              <DynamicFormField
                 key={item.linkId}
                 handlers={handlers}
                 item={item}
@@ -136,7 +136,7 @@ const RefactorFormField: React.FC<Props> = ({
       const itemComponent = (
         <ValueWrapper name={getSafeLinkId(item.linkId)} handlers={handlers}>
           {(value) => (
-            <RefactorField
+            <DynamicField
               value={value}
               key={item.linkId}
               item={item}
@@ -191,4 +191,4 @@ const RefactorFormField: React.FC<Props> = ({
   return renderItemWithWrappers(renderChild, item, handlers);
 };
 
-export default RefactorFormField;
+export default DynamicFormField;

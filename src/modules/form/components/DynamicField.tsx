@@ -100,7 +100,7 @@ export interface Props {
   value?: any;
 }
 
-const RefactorField: React.FC<Props> = ({
+const DynamicField: React.FC<Props> = ({
   item,
   itemChanged,
   nestingLevel = 0,
@@ -469,4 +469,4 @@ const RefactorField: React.FC<Props> = ({
   }
 };
 
-export default RefactorField;
+export default DynamicField;

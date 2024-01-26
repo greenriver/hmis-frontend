@@ -1,17 +1,17 @@
 import { Grid } from '@mui/material';
 import { ReactNode } from 'react';
 
-export interface RefactorFormLayoutProps {
+export interface DynamicFormLayoutProps {
   errors?: ReactNode;
   children: ReactNode;
   saveButtons?: ReactNode;
 }
 
-const RefactorFormLayout = ({
+const DynamicFormLayout = ({
   errors,
   children,
   saveButtons,
-}: RefactorFormLayoutProps) => {
+}: DynamicFormLayoutProps) => {
   return (
     <>
       <Grid container direction='column' spacing={2}>
@@ -23,4 +23,4 @@ const RefactorFormLayout = ({
   );
 };
 
-export default RefactorFormLayout;
+export default DynamicFormLayout;

@@ -34,7 +34,7 @@ interface Props extends GroupItemComponentProps {
   debug?: (ids?: string[]) => void;
 }
 
-const RefactorGroup: React.FC<Props> = ({ debug, ...props }) => {
+const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
   // Always render top-level groups as cards
   if (props.nestingLevel === 0 && !props.item.component) {
     return (
@@ -65,4 +65,4 @@ const RefactorGroup: React.FC<Props> = ({ debug, ...props }) => {
   }
 };
 
-export default RefactorGroup;
+export default DynamicGroup;
