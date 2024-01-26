@@ -85,6 +85,7 @@ export const HmisEnums = {
     temp: 'Temp',
     work: 'Work',
   },
+  ClientAlertPriorityLevel: { high: 'high', low: 'low', medium: 'medium' },
   ClientContactPointSystem: { email: 'Email', phone: 'Phone', url: 'Url' },
   ClientContactPointUse: {
     home: 'Home',

@@ -113,7 +113,7 @@ fragment ClientAlertFields on ClientAlert {
     ...UserFields
   }
   createdAt
-  severity
+  priority
 }
 fragment ClientContactPointFields on ClientContactPoint {
   id

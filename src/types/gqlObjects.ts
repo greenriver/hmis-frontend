@@ -1006,7 +1006,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'expirationDate',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
         name: 'id',
@@ -1025,8 +1025,16 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'severity',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        name: 'priority',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'ClientAlertPriorityLevel',
+            ofType: null,
+          },
+        },
       },
     ],
   },

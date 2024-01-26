@@ -24,7 +24,7 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
   client,
   shouldShowClientName = false,
 }) => {
-  const priority = alert.severity || 'low';
+  const priority = alert.priority || 'low';
 
   const priorityColors: { [index: string]: any } = {
     high: {
