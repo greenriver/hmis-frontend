@@ -5,6 +5,7 @@ import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDash
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
+import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 
 const HouseholdPage = () => {
   const { enrollment } = useEnrollmentDashboardContext();
@@ -12,6 +13,10 @@ const HouseholdPage = () => {
     enrollmentId: string;
     clientId: string;
   };
+
+  const [householdMembers, { loading: householdMembersLoading, error }] =
+    useHouseholdMembers(enrollmentId);
+  if (error) throw error;
 
   if (!enrollment) return <NotFound />;
 
@@ -25,7 +30,12 @@ const HouseholdPage = () => {
         </CommonLabeledTextBlock>
       }
     >
-      <HouseholdMemberTable clientId={clientId} enrollmentId={enrollmentId} />
+      <HouseholdMemberTable
+        householdMembers={householdMembers ? householdMembers : []}
+        householdMembersLoading={householdMembersLoading}
+        clientId={clientId}
+        enrollmentId={enrollmentId}
+      />
     </TitleCard>
   );
 };

@@ -71,6 +71,7 @@ const EnrollmentOverview = () => {
             <TitleCard title='Household' headerVariant='border'>
               <HouseholdMemberTable
                 householdMembers={householdMembers ? householdMembers : []}
+                householdMembersLoading={householdMembersLoading}
                 clientId={clientId}
                 enrollmentId={enrollmentId}
                 hideActions
