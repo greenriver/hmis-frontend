@@ -5199,6 +5199,7 @@ export type Query = {
   applicationUsers: ApplicationUsersPaginated;
   /** Assessment lookup */
   assessment?: Maybe<Assessment>;
+  /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
   autoExitConfigs: AutoExitConfigsPaginated;
   /** Client lookup */
@@ -5221,7 +5222,7 @@ export type Query = {
   formRules: FormRulesPaginated;
   /** Funder lookup */
   funder?: Maybe<Funder>;
-  /** Get most relevant/recent form definition for the specified Role and project (optionally) */
+  /** Get the most relevant Form Definition to use for record viewing/editing */
   getFormDefinition?: Maybe<FormDefinition>;
   /** Get most relevant form definition for the specified service type */
   getServiceFormDefinition?: Maybe<FormDefinition>;
@@ -5340,7 +5341,6 @@ export type QueryFunderArgs = {
 };
 
 export type QueryGetFormDefinitionArgs = {
-  enrollmentId?: InputMaybe<Scalars['ID']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   role: FormRole;
 };
@@ -5839,9 +5839,13 @@ export enum RelationshipToHoH {
 
 export type Reminder = {
   __typename?: 'Reminder';
+  /** Relevant existing assessment, if any */
+  assessmentId?: Maybe<Scalars['ID']['output']>;
   client: Client;
   dueDate?: Maybe<Scalars['ISO8601Date']['output']>;
   enrollment: Enrollment;
+  /** Form definition to use, if a new assessment is needed */
+  formDefinitionId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   overdue: Scalars['Boolean']['output'];
   topic: ReminderTopic;
@@ -16709,6 +16713,8 @@ export type GetEnrollmentRemindersQuery = {
       topic: ReminderTopic;
       dueDate?: string | null;
       overdue: boolean;
+      formDefinitionId?: string | null;
+      assessmentId?: string | null;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
@@ -27054,6 +27060,8 @@ export type ReminderFieldsFragment = {
   topic: ReminderTopic;
   dueDate?: string | null;
   overdue: boolean;
+  formDefinitionId?: string | null;
+  assessmentId?: string | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -30175,6 +30183,8 @@ export const ReminderFieldsFragmentDoc = gql`
     topic
     dueDate
     overdue
+    formDefinitionId
+    assessmentId
     enrollment {
       id
       relationshipToHoH

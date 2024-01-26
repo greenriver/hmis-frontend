@@ -32675,11 +32675,11 @@
           },
           {
             "name": "assessmentFormDefinition",
-            "description": null,
+            "description": "Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID",
             "args": [
               {
                 "name": "assessmentDate",
-                "description": null,
+                "description": "Date to use for Rule filtering on the definition",
                 "type": {
                   "kind": "SCALAR",
                   "name": "ISO8601Date",
@@ -32691,7 +32691,7 @@
               },
               {
                 "name": "id",
-                "description": null,
+                "description": "Form Definition ID, if known",
                 "type": {
                   "kind": "SCALAR",
                   "name": "ID",
@@ -32703,7 +32703,7 @@
               },
               {
                 "name": "projectId",
-                "description": null,
+                "description": "Project to use for Rule filtering on the definition",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
@@ -32719,7 +32719,7 @@
               },
               {
                 "name": "role",
-                "description": null,
+                "description": "Assessment role, if looking up by role",
                 "type": {
                   "kind": "ENUM",
                   "name": "AssessmentRole",
@@ -33349,20 +33349,8 @@
           },
           {
             "name": "getFormDefinition",
-            "description": "Get most relevant/recent form definition for the specified Role and project (optionally)",
+            "description": "Get the most relevant Form Definition to use for record viewing/editing",
             "args": [
-              {
-                "name": "enrollmentId",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
               {
                 "name": "projectId",
                 "description": null,
@@ -36623,6 +36611,18 @@
         "description": null,
         "fields": [
           {
+            "name": "assessmentId",
+            "description": "Relevant existing assessment, if any",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "client",
             "description": null,
             "args": [],
@@ -36662,6 +36662,18 @@
                 "name": "Enrollment",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "formDefinitionId",
+            "description": "Form definition to use, if a new assessment is needed",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
