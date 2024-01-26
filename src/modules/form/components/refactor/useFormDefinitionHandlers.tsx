@@ -138,10 +138,10 @@ const useDynamicForm = <T extends FieldValues>({
         item,
         itemMap,
         localConstants,
-        values: mapKeysToClean(methods.getValues()),
+        values: getCleanedValues(),
       });
     },
-    [itemMap, methods, localConstants]
+    [itemMap, localConstants, getCleanedValues]
   );
 
   return useMemo(

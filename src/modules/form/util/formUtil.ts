@@ -829,14 +829,17 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
   return result;
 };
 
-export const getAllChildLinkIds = (item: FormItem): string[] => {
+export const getAllChildLinkIds = (
+  item: FormItem,
+  { onlyQuestions = true }: { onlyQuestions?: boolean } = {}
+): string[] => {
   function recursiveFind(items: FormItem[], ids: string[]) {
     items.forEach((item) => {
       if (Array.isArray(item.item)) {
         recursiveFind(item.item, ids);
       }
 
-      if (isQuestionItem(item)) {
+      if (onlyQuestions === false || (onlyQuestions && isQuestionItem(item))) {
         ids.push(item.linkId);
       }
     });
