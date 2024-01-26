@@ -130,8 +130,18 @@ const ClientAlerts: React.FC<ClientAlertsProps> = ({
       headerTypographyVariant='body1'
     >
       <Box sx={{ m: 2 }}>
-        {clientAlerts.length === 0 &&
-          `${alertContext} has no alerts at this time`}
+        {clientAlerts.length === 0 && (
+          <Box
+            sx={{
+              p: 2,
+              backgroundColor: '#fafafa',
+              color: '#00000060',
+              borderRadius: 1,
+            }}
+          >
+            {alertContext} has no alerts at this time
+          </Box>
+        )}
         <Stack gap={2}>
           {clientAlerts.map((ca) => (
             <ClientAlertCard
