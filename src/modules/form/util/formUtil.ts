@@ -68,6 +68,7 @@ import {
   ItemType,
   NoYesReasonsForMissingData,
   PickListOption,
+  PickListOptionFieldsFragment,
   RelatedRecordType,
   RelationshipToHoH,
   ServiceDetailType,
@@ -453,6 +454,22 @@ export const shouldEnableItem = ({
   }
 };
 
+const isPicklistOption = (
+  value: FormValues[string]
+): value is PickListOptionFieldsFragment => {
+  return (
+    isObject(value) &&
+    '__typename' in value &&
+    value?.__typename === 'PickListOption'
+  );
+};
+const numericValueForFormValue = (
+  value: FormValues[string]
+): number | null | undefined => {
+  if (isPicklistOption(value)) return value.numericValue;
+  return Number.isNaN(Number(value)) ? undefined : Number(value);
+};
+
 export const getAutofillComparisonValue = (
   av: AutofillValue,
   values: FormValues,
@@ -462,7 +479,7 @@ export const getAutofillComparisonValue = (
   if (av.sumQuestions && av.sumQuestions.length > 0) {
     const numbers = av.sumQuestions
       .map((linkId) => values[linkId])
-      .map((n) => (Number.isNaN(Number(n)) ? undefined : Number(n)))
+      .map(numericValueForFormValue)
       .filter((n) => !isNil(n));
     return sum(numbers);
   }

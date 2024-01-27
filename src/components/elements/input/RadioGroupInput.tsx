@@ -10,7 +10,7 @@ import {
   RadioGroupProps,
 } from '@mui/material';
 import { isNil } from 'lodash-es';
-import { KeyboardEventHandler, useCallback, useId } from 'react';
+import { Fragment, KeyboardEventHandler, useCallback, useId } from 'react';
 
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { DynamicInputCommonProps } from '@/modules/form/types';
@@ -146,8 +146,8 @@ const RadioGroupInput = ({
           }}
           {...props}
         >
-          {options.map(({ code, label, help }) => (
-            <>
+          {options.map(({ code, label, helperText }) => (
+            <Fragment key={code}>
               <FormControlLabel
                 data-testid={`option-${code}`}
                 disabled={props.disabled}
@@ -162,7 +162,6 @@ const RadioGroupInput = ({
                   />
                 }
                 checked={value?.code === code ? true : false}
-                key={code}
                 label={label || code}
                 componentsProps={{
                   typography: {
@@ -175,12 +174,12 @@ const RadioGroupInput = ({
                   },
                 }}
               />
-              {help && (
+              {helperText && (
                 <CommonHtmlContent variant='body2' sx={{ ml: 4 }}>
-                  {help}
+                  {helperText}
                 </CommonHtmlContent>
               )}
-            </>
+            </Fragment>
           ))}
           {value?.code === INVALID_ENUM && (
             <InvalidValueCheckbox control={<ControlComponent data-checked />} />

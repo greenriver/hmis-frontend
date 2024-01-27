@@ -28042,7 +28042,7 @@
             "deprecationReason": null
           },
           {
-            "name": "help",
+            "name": "helperText",
             "description": "Helper text/html",
             "args": [],
             "type": {
@@ -28072,6 +28072,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "numericValue",
+            "description": "numeric value, such as a score",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,
