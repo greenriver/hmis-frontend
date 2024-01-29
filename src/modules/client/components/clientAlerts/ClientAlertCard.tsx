@@ -15,7 +15,6 @@ export enum AlertContext {
 interface ClientAlertCardProps {
   clients: ClientWithAlertFieldsFragment[];
   alertContext: AlertContext;
-  loading?: boolean;
 }
 
 const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
