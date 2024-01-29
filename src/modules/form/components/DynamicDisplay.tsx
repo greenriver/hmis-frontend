@@ -19,13 +19,19 @@ const SeverityMap: Record<string, AlertColor> = {
   [Component.AlertWarning]: 'warning',
 };
 
+// simple string interpolation. Example interpolate("hello ${name}", {name: 'world'})
 const interpolate = (template: string, variables: Record<string, string>) => {
   return template.replace(/\${(\w+)}/g, (match, key) => {
     return typeof variables[key] !== 'undefined' ? variables[key] : match;
   });
 };
 
-const DynamicDisplay = ({ item, maxWidth, value, viewOnly = false }: Props) => {
+const DynamicDisplay: React.FC<Props> = ({
+  item,
+  maxWidth,
+  value = 'N/A',
+  viewOnly = false,
+}) => {
   const html = useMemo(() => {
     let stringValue = item.text;
     if (viewOnly && !isNil(item.readonlyText)) stringValue = item.readonlyText;
