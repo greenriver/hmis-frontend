@@ -104,6 +104,7 @@ export interface GroupItemComponentProps {
     props?: OverrideableDynamicFieldProps,
     renderFn?: (children: ReactNode) => ReactNode
   ) => ReactNode;
+  renderSummaryItem?: (item: FormItem, isCurrency: boolean) => ReactNode;
   values: Record<string, any>;
   itemChanged?: ItemChangedFn;
   severalItemsChanged?: SeveralItemsChangedFn;

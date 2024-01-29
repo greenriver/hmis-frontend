@@ -5,22 +5,27 @@ import {
   FormDefinitionHandlers,
   getSafeLinkId,
 } from '../hooks/useFormDefinitionHandlers';
-import { FormValues } from '../types';
 import { FormItem } from '@/types/gqlTypes';
 
 export interface Props {
   handlers: FormDefinitionHandlers;
   item: FormItem;
-  children: (values: FormValues) => ReactNode;
+  children: (value: any) => ReactNode;
+  getDependentLinkIds?: (item: FormItem) => string[];
 }
 
 const AutofillFormItemWrapper: React.FC<Props> = ({
   handlers,
   item,
   children,
+  getDependentLinkIds,
 }) => {
   const { autofillInvertedDependencyMap, getAutofillValueForField } = handlers;
-  const name = autofillInvertedDependencyMap[item.linkId].map(getSafeLinkId);
+  const name = (
+    getDependentLinkIds
+      ? getDependentLinkIds(item)
+      : autofillInvertedDependencyMap[item.linkId]
+  ).map(getSafeLinkId);
 
   // Listen for dependent field value changes
   useWatch({
@@ -51,7 +56,7 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
     });
   }, [autofillValue, item, handlers.methods, isDirty]);
 
-  return <>{children({})}</>;
+  return <>{children(autofillValue)}</>;
 };
 
 export default AutofillFormItemWrapper;

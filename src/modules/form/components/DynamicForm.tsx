@@ -17,8 +17,7 @@ interface DynamicFormSubmitInput {
 
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 
-export interface DynamicFormProps
-  extends Omit<DynamicFormBaseProps, 'handlers'> {
+export interface DynamicFormProps extends DynamicFormBaseProps {
   clientId?: string;
   definition: FormDefinitionJson;
   onSubmit: (input: DynamicFormSubmitInput) => void;
@@ -34,7 +33,10 @@ export interface DynamicFormRef {
   SubmitForm: VoidFunction;
 }
 
-const DynamicForm = forwardRef<DynamicFormRef, DynamicFormProps>(
+export const DynamicFormWithoutHandlers = forwardRef<
+  DynamicFormRef,
+  DynamicFormProps
+>(
   (
     {
       definition,
@@ -44,16 +46,11 @@ const DynamicForm = forwardRef<DynamicFormRef, DynamicFormProps>(
       initialValues,
       errors: errorState,
       localConstants,
+      handlers,
       ...props
     },
     ref
   ) => {
-    const handlers = useFormDefinitionHandlers({
-      definition,
-      initialValues,
-      localConstants,
-    });
-
     const { getCleanedValues } = handlers;
 
     const handleSaveDraft = useCallback(() => {
@@ -111,4 +108,20 @@ const DynamicForm = forwardRef<DynamicFormRef, DynamicFormProps>(
   }
 );
 
-export default DynamicForm;
+const DynamicFormWithHandlers = forwardRef<
+  DynamicFormRef,
+  Omit<DynamicFormProps, 'handlers'>
+>((props, ref) => {
+  const { definition, initialValues, localConstants } = props;
+  const handlers = useFormDefinitionHandlers({
+    definition,
+    initialValues,
+    localConstants,
+  });
+
+  return (
+    <DynamicFormWithoutHandlers {...props} handlers={handlers} ref={ref} />
+  );
+});
+
+export default DynamicFormWithHandlers;

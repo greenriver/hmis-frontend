@@ -4,8 +4,8 @@ import { ReactNode, useCallback, useId, useMemo } from 'react';
 
 import { GroupItemComponentProps } from '../../types';
 import { maxWidthAtNestingLevel } from '../../util/formUtil';
-
 import { formatCurrency } from '@/modules/hmis/hmisUtil';
+
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
 const InputGroup = ({
@@ -14,6 +14,7 @@ const InputGroup = ({
   renderChildItem,
   nestingLevel,
   viewOnly = false,
+  renderSummaryItem: renderSummaryItemProp,
   rowSx,
 }: GroupItemComponentProps) => {
   const [childItems, summaryItem] = useMemo(() => {
@@ -33,6 +34,18 @@ const InputGroup = ({
       [ItemType.Currency, ItemType.Integer].includes(childItemType),
     [childItemType]
   );
+
+  const defaultRenderSummaryItem = useCallback<
+    NonNullable<typeof renderSummaryItemProp>
+  >(
+    (item, isCurrency) => {
+      const value = values[item.linkId];
+      return isCurrency ? formatCurrency(value || 0) : value || 0;
+    },
+    [values]
+  );
+
+  const renderSummaryItem = renderSummaryItemProp || defaultRenderSummaryItem;
 
   const childProps = useMemo(
     () => ({ horizontal: isNumeric || viewOnly ? true : undefined }),
@@ -175,9 +188,10 @@ const InputGroup = ({
             sx={{ width: '120px', fontWeight: 600 }}
             data-testid='inputSum'
           >
-            {childItemType === ItemType.Currency
-              ? formatCurrency(values[summaryItem.linkId] || 0)
-              : values[summaryItem.linkId] || 0}
+            {renderSummaryItem(
+              summaryItem,
+              childItemType === ItemType.Currency
+            )}
           </Typography>
         </Stack>
       )}

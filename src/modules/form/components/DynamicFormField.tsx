@@ -1,5 +1,5 @@
 import { pick } from 'lodash-es';
-import React, { ReactNode, useCallback } from 'react';
+import React, { cloneElement, ReactNode, useCallback } from 'react';
 
 import {
   FormDefinitionHandlers,
@@ -14,14 +14,22 @@ import {
 } from '../types';
 import {
   buildCommonInputProps,
+  getAllChildLinkIds,
   renderItemWithWrappers,
   transformSubmitValues,
 } from '../util/formUtil';
 
+import AutofillFormItemWrapper from './AutofillFormItemWrapper';
 import DynamicField from './DynamicField';
 import DynamicGroup from './DynamicGroup';
 import ValueWrapper from './ValueWrapper';
-import { FormItem, ItemType, ServiceDetailType } from '@/types/gqlTypes';
+import { formatCurrency } from '@/modules/hmis/hmisUtil';
+import {
+  Component,
+  FormItem,
+  ItemType,
+  ServiceDetailType,
+} from '@/types/gqlTypes';
 
 export interface Props {
   handlers: FormDefinitionHandlers;
@@ -88,7 +96,7 @@ const DynamicFormField: React.FC<Props> = ({
         return null;
 
       if (item.type === ItemType.Group) {
-        return (
+        const group = (
           <DynamicGroup
             item={item}
             clientId={clientId}
@@ -104,6 +112,18 @@ const DynamicFormField: React.FC<Props> = ({
                 renderFn={fn}
               />
             )}
+            renderSummaryItem={(item, isCurrency) => {
+              if (!item) return null;
+              return (
+                <AutofillFormItemWrapper handlers={handlers} item={item}>
+                  {(autofillValue) => {
+                    return isCurrency
+                      ? formatCurrency(autofillValue || 0)
+                      : autofillValue || 0;
+                  }}
+                </AutofillFormItemWrapper>
+              );
+            }}
             values={values}
             itemChanged={itemChanged}
             severalItemsChanged={severalItemsChanged}
@@ -131,6 +151,23 @@ const DynamicFormField: React.FC<Props> = ({
             }
           />
         );
+
+        // Disability group actually needs accurate values for its own mechanics, so provide them
+        if (item.component === Component.DisabilityTable) {
+          return (
+            <ValueWrapper
+              handlers={handlers}
+              name={getAllChildLinkIds(item).map(getSafeLinkId)}
+            >
+              {/* We're just using this component to watch the group's child values and update the values prop when they change */}
+              {() =>
+                cloneElement(group, { values: handlers.getCleanedValues() })
+              }
+            </ValueWrapper>
+          );
+        }
+
+        return group;
       }
 
       const itemComponent = (
