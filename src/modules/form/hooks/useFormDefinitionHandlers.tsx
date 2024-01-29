@@ -24,6 +24,7 @@ export interface UseDynamicFormArgs<T extends FieldValues> {
   initialValues?: T;
   localConstants?: LocalConstants;
   errors?: ValidationError[];
+  viewOnly?: boolean;
 }
 
 export const getSafeLinkId = (linkId: string) =>
@@ -36,11 +37,12 @@ export const mapKeysToSafe = (values: FieldValues) =>
 export const mapKeysToClean = (values: FieldValues) =>
   mapKeys(values, (val, key) => getCleanedLinkId(key));
 
-const useDynamicForm = <T extends FieldValues>({
+const useFormDefinitionHandlers = <T extends FieldValues>({
   definition,
   initialValues = {} as T,
   localConstants = {},
   errors,
+  viewOnly = false,
 }: UseDynamicFormArgs<T>) => {
   const {
     itemMap,
@@ -48,7 +50,7 @@ const useDynamicForm = <T extends FieldValues>({
     autofillInvertedDependencyMap,
     enabledDependencyMap,
     disabledDependencyMap,
-  } = useComputedData({ definition, initialValues, localConstants });
+  } = useComputedData({ definition, initialValues, viewOnly, localConstants });
 
   const methods = useForm<T>({
     values: (() => {
@@ -62,7 +64,7 @@ const useDynamicForm = <T extends FieldValues>({
           values: newValues,
           itemMap,
           localConstants: localConstants || {},
-          viewOnly: false,
+          viewOnly,
         });
       });
       return mapKeysToSafe(newValues) as T;
@@ -82,7 +84,7 @@ const useDynamicForm = <T extends FieldValues>({
         values,
         itemMap,
         localConstants,
-        viewOnly: item.readOnly, // TODO: Handle this
+        viewOnly, // TODO: Handle this
       });
 
       if (!shouldAutofill) return undefined;
@@ -91,7 +93,7 @@ const useDynamicForm = <T extends FieldValues>({
 
       return result;
     },
-    [itemMap, autofillInvertedDependencyMap, localConstants, methods]
+    [itemMap, autofillInvertedDependencyMap, localConstants, viewOnly, methods]
   );
 
   // Get form state, with "hidden" fields (and their children) removed
@@ -182,6 +184,6 @@ const useDynamicForm = <T extends FieldValues>({
 };
 
 export type FormDefinitionHandlers<T extends FieldValues = FieldValues> =
-  ReturnType<typeof useDynamicForm<T>>;
+  ReturnType<typeof useFormDefinitionHandlers<T>>;
 
-export default useDynamicForm;
+export default useFormDefinitionHandlers;

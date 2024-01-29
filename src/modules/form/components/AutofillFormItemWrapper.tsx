@@ -25,7 +25,7 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
     getDependentLinkIds
       ? getDependentLinkIds(item)
       : autofillInvertedDependencyMap[item.linkId]
-  ).map(getSafeLinkId);
+  )?.map(getSafeLinkId);
 
   // Listen for dependent field value changes
   useWatch({

@@ -107,11 +107,9 @@ const DynamicFormField: React.FC<Props> = ({
   props: fieldProps,
   renderFn,
 }) => {
-  // TODO: Remove these once drilled down
   const values = handlers.getCleanedValues();
   const { definition, localConstants, getFieldErrors } = handlers;
 
-  // TODO: Push these down to individual fields maybe?
   const itemChanged: ItemChangedFn = useCallback(
     ({ linkId, value: baseValue, type }) => {
       const item = handlers.itemMap[linkId];
