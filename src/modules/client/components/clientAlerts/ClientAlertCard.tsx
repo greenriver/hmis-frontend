@@ -29,7 +29,8 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
         clientAlerts.push({
           alert: a,
           client: c,
-          shouldShowClientName: alertContext === AlertContext.Household,
+          shouldShowClientName:
+            alertContext === AlertContext.Household && clients.length > 1,
         });
       });
     }
