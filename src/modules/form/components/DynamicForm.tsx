@@ -1,6 +1,8 @@
 import { forwardRef, useCallback, useImperativeHandle } from 'react';
 
-import useFormDefinitionHandlers from '../hooks/useFormDefinitionHandlers';
+import useFormDefinitionHandlers, {
+  FormDefinitionHandlers,
+} from '../hooks/useFormDefinitionHandlers';
 import { FormValues, LocalConstants } from '../types';
 
 import DirtyObserver from './DirtyObserver';
@@ -17,7 +19,8 @@ interface DynamicFormSubmitInput {
 
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 
-export interface DynamicFormProps extends DynamicFormBaseProps {
+export interface DynamicFormProps
+  extends Omit<DynamicFormBaseProps, 'handlers'> {
   clientId?: string;
   definition: FormDefinitionJson;
   onSubmit: (input: DynamicFormSubmitInput) => void;
@@ -35,7 +38,7 @@ export interface DynamicFormRef {
 
 export const DynamicFormWithoutHandlers = forwardRef<
   DynamicFormRef,
-  DynamicFormProps
+  DynamicFormProps & { handlers: FormDefinitionHandlers }
 >(
   (
     {
