@@ -12,6 +12,12 @@ export enum AlertContext {
   Household = 'Household',
 }
 
+export enum AlertPriority {
+  high = 3,
+  medium = 2,
+  low = 1,
+}
+
 interface ClientAlertCardProps {
   clients: ClientWithAlertFieldsFragment[];
   alertContext: AlertContext;
@@ -23,6 +29,9 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
   alertContext = AlertContext.Client,
   shouldRenderFrame = true,
 }) => {
+  const shouldShowClientName =
+    alertContext === AlertContext.Household && clients.length > 1;
+
   const clientAlerts: ClientAlertProps[] = [];
   clients.forEach((c) => {
     if (c.access.canViewClientAlerts) {
@@ -30,24 +39,38 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
         clientAlerts.push({
           alert: a,
           client: c,
-          shouldShowClientName:
-            alertContext === AlertContext.Household && clients.length > 1,
+          shouldShowClientName: shouldShowClientName,
         });
       });
     }
   });
 
-  const title = `${alertContext} Alerts (${clientAlerts.length})`;
-  const alertComponents = clientAlerts.map((ca) => (
-    <ClientAlert
-      key={ca.alert.id}
-      alert={ca.alert}
-      client={ca.client}
-      shouldShowClientName={ca.shouldShowClientName}
-    />
-  ));
+  clientAlerts.sort((a, b) => {
+    if (AlertPriority[a.alert.priority] === AlertPriority[b.alert.priority]) {
+      return Date.parse(a.alert.createdAt) - Date.parse(b.alert.createdAt);
+    } else {
+      return AlertPriority[b.alert.priority] - AlertPriority[a.alert.priority];
+    }
+  });
 
-  return shouldRenderFrame ? (
+  const title = `${alertContext} Alerts (${clientAlerts.length})`;
+
+  if (!shouldRenderFrame) {
+    return (
+      <Stack gap={2}>
+        {clientAlerts.map((ca) => (
+          <ClientAlert
+            key={ca.alert.id}
+            alert={ca.alert}
+            client={ca.client}
+            shouldShowClientName={ca.shouldShowClientName}
+          />
+        ))}
+      </Stack>
+    );
+  }
+
+  return (
     <TitleCard
       title={title}
       headerVariant='border'
@@ -71,14 +94,19 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
         )}
         {clientAlerts.length > 0 && (
           <Stack gap={2}>
-            {alertComponents}
+            {clientAlerts.map((ca) => (
+              <ClientAlert
+                key={ca.alert.id}
+                alert={ca.alert}
+                client={ca.client}
+                shouldShowClientName={ca.shouldShowClientName}
+              />
+            ))}
             <CreateClientAlertButton />
           </Stack>
         )}
       </Box>
     </TitleCard>
-  ) : (
-    <Stack gap={2}>{alertComponents}</Stack>
   );
 };
 
