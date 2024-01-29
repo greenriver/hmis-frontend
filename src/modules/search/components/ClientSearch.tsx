@@ -260,7 +260,7 @@ const ClientSearch = () => {
           <ClientTextSearchForm
             initialValue={initialValues?.textSearch || ''}
             onSearch={(text) => handleSubmitSearch({ textSearch: text })}
-            label={''}
+            label={null}
             size='medium'
             hideSearchButton
             showSearchTips
