@@ -3,16 +3,20 @@ import { useEffect, useMemo, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
+import ClientAlertCard, {
+  AlertContext,
+} from '@/modules/client/components/clientAlerts/ClientAlertCard';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
+  ClientWithAlertFieldsFragment,
   FormRole,
   SubmittedEnrollmentResultFieldsFragment,
 } from '@/types/gqlTypes';
 
 interface Props {
-  clientId: string;
-  clientName: string;
+  client: ClientWithAlertFieldsFragment;
   isMember: boolean;
   householdId?: string; // if omitted, a new household will be created
   projectId: string;
@@ -20,8 +24,7 @@ interface Props {
 }
 
 const AddToHouseholdButton = ({
-  clientId,
-  clientName,
+  client,
   isMember,
   householdId,
   onSuccess,
@@ -41,6 +44,7 @@ const AddToHouseholdButton = ({
   let text = householdId ? 'Add to Household' : 'Enroll Client';
   const color: 'secondary' | 'error' = 'secondary';
   if (added) text = 'Added';
+  const clientId = client.id;
 
   const memoedArgs = useMemo(
     () => ({
@@ -76,8 +80,15 @@ const AddToHouseholdButton = ({
         </Button>
       </ButtonTooltipContainer>
       {renderFormDialog({
-        title: <>Enroll {clientName}</>,
+        title: <>Enroll {clientBriefName(client)}</>,
         submitButtonText: `Enroll`,
+        preFormComponent: (
+          <ClientAlertCard
+            clients={[client]}
+            alertContext={AlertContext.Client}
+            shouldRenderFrame={false}
+          />
+        ),
       })}
     </>
   );

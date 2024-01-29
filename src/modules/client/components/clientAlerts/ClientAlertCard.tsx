@@ -15,11 +15,13 @@ export enum AlertContext {
 interface ClientAlertCardProps {
   clients: ClientWithAlertFieldsFragment[];
   alertContext: AlertContext;
+  shouldRenderFrame?: boolean;
 }
 
 const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
   clients,
   alertContext = AlertContext.Client,
+  shouldRenderFrame = true,
 }) => {
   const clientAlerts: ClientAlertProps[] = [];
   clients.forEach((c) => {
@@ -36,8 +38,16 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
   });
 
   const title = `${alertContext} Alerts (${clientAlerts.length})`;
+  const alertComponents = clientAlerts.map((ca) => (
+    <ClientAlert
+      key={ca.alert.id}
+      alert={ca.alert}
+      client={ca.client}
+      shouldShowClientName={ca.shouldShowClientName}
+    />
+  ));
 
-  return (
+  return shouldRenderFrame ? (
     <TitleCard
       title={title}
       headerVariant='border'
@@ -61,19 +71,14 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
         )}
         {clientAlerts.length > 0 && (
           <Stack gap={2}>
-            {clientAlerts.map((ca) => (
-              <ClientAlert
-                key={ca.alert.id}
-                alert={ca.alert}
-                client={ca.client}
-                shouldShowClientName={ca.shouldShowClientName}
-              />
-            ))}
+            {alertComponents}
             <CreateClientAlertButton />
           </Stack>
         )}
       </Box>
     </TitleCard>
+  ) : (
+    <Stack gap={2}>{alertComponents}</Stack>
   );
 };
 

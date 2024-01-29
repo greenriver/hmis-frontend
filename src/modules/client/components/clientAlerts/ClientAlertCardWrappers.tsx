@@ -4,12 +4,12 @@ import ClientAlertCard, {
 } from '@/modules/client/components/clientAlerts/ClientAlertCard';
 import { useGetHouseholdClientAlertsQuery } from '@/types/gqlTypes';
 
-interface ClientAlertCardEnrollmentWrapperProps {
+interface ClientAlertCardHouseholdWrapperProps {
   householdId: string;
 }
 
-const ClientAlertCardEnrollmentWrapper: React.FC<
-  ClientAlertCardEnrollmentWrapperProps
+const ClientAlertCardHouseholdWrapper: React.FC<
+  ClientAlertCardHouseholdWrapperProps
 > = ({ householdId }) => {
   const {
     data: { household } = {},
@@ -33,4 +33,4 @@ const ClientAlertCardEnrollmentWrapper: React.FC<
   );
 };
 
-export default ClientAlertCardEnrollmentWrapper;
+export default ClientAlertCardHouseholdWrapper;

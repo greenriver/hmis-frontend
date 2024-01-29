@@ -12145,6 +12145,20 @@ export type ClientSearchResultFieldsFragment = {
     canViewClientAlerts: boolean;
     canManageClientAlerts: boolean;
   };
+  alerts: Array<{
+    __typename?: 'ClientAlert';
+    id: string;
+    note: string;
+    expirationDate?: string | null;
+    createdAt: string;
+    priority: ClientAlertPriorityLevel;
+    createdBy?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  }>;
 };
 
 export type ClientFieldsFragment = {
@@ -12535,6 +12549,20 @@ export type SearchClientsQuery = {
         canViewClientAlerts: boolean;
         canManageClientAlerts: boolean;
       };
+      alerts: Array<{
+        __typename?: 'ClientAlert';
+        id: string;
+        note: string;
+        expirationDate?: string | null;
+        createdAt: string;
+        priority: ClientAlertPriorityLevel;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }>;
     }>;
   };
 };
@@ -29408,11 +29436,15 @@ export const ClientSearchResultFieldsFragmentDoc = gql`
     access {
       ...ClientAccessFields
     }
+    alerts {
+      ...ClientAlertFields
+    }
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
 `;
 export const ClientVeteranInfoFieldsFragmentDoc = gql`
   fragment ClientVeteranInfoFields on Client {

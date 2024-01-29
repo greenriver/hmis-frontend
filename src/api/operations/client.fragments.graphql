@@ -12,6 +12,9 @@ fragment ClientSearchResultFields on Client {
   access {
     ...ClientAccessFields
   }
+  alerts {
+    ...ClientAlertFields
+  }
 }
 
 # Fragment to resolve many details on an individual client, when rendering the Client Dashboard
