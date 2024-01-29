@@ -2,6 +2,7 @@ import { Alert, AlertTitle, Box, Typography } from '@mui/material';
 import theme from '@/config/theme';
 import {
   clientNameAllParts,
+  parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
 import {
@@ -79,7 +80,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({
           Created by {alert.createdBy?.name} on{' '}
           {parseAndFormatDateTime(alert.createdAt)}.
           {alert.expirationDate &&
-            ` Expires on ${parseAndFormatDateTime(alert.expirationDate)}.`}
+            ` Expires on ${parseAndFormatDate(alert.expirationDate)}.`}
         </Typography>
       </Box>
     </Alert>
