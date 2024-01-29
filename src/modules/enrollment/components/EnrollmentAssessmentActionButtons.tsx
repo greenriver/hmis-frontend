@@ -76,7 +76,7 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
     );
   }, [data, getPath]);
 
-  if (loading) {
+  if (loading && !data) {
     return (
       <Skeleton variant='rectangular' aria-live='polite' aria-busy='true'>
         <CommonMenuButton title='New Assessment' items={[]} disabled />
