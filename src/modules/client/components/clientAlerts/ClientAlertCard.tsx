@@ -1,89 +1,79 @@
-import { Alert, AlertTitle, Box, Typography } from '@mui/material';
-import theme from '@/config/theme';
-import {
-  clientNameAllParts,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
-import {
-  ClientAlertFieldsFragment,
-  ClientFieldsFragment,
-  HouseholdClientFieldsClientFragment,
-} from '@/types/gqlTypes';
+import { Box } from '@mui/material';
+import { Stack } from '@mui/system';
+import TitleCard from '@/components/elements/TitleCard';
+import ClientAlert, {
+  ClientAlertProps,
+} from '@/modules/client/components/clientAlerts/ClientAlert';
+import { CreateClientAlertButton } from '@/modules/client/components/clientAlerts/CreateClientAlertDialog';
+import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
-export interface ClientAlertCardProps {
-  alert: ClientAlertFieldsFragment;
-  client: ClientFieldsFragment | HouseholdClientFieldsClientFragment;
-  shouldShowClientName?: boolean;
+export enum AlertContext {
+  Client = 'Client',
+  Household = 'Household',
+}
+
+interface ClientAlertCardProps {
+  clients: ClientWithAlertFieldsFragment[];
+  alertContext: AlertContext;
+  loading?: boolean;
 }
 
 const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
-  alert,
-  client,
-  shouldShowClientName = false,
+  clients,
+  alertContext = AlertContext.Client,
 }) => {
-  const priority = alert.priority || 'low';
+  const clientAlerts: ClientAlertProps[] = [];
+  clients.forEach((c) => {
+    if (c.access.canViewClientAlerts) {
+      c.alerts.forEach((a) => {
+        clientAlerts.push({
+          alert: a,
+          client: c,
+          shouldShowClientName: alertContext === AlertContext.Household,
+        });
+      });
+    }
+  });
 
-  const priorityColors: { [index: string]: any } = {
-    high: {
-      header: theme.palette.alerts.highPriorityErrorBackground,
-      body: `${theme.palette.error.main}04`,
-      border: `${theme.palette.error.main}50`,
-    },
-    medium: {
-      header: theme.palette.alerts.mediumPriorityHeaderBackground,
-      body: theme.palette.alerts.mediumPriorityBodyBackground,
-      border: theme.palette.alerts.mediumPriorityBorder,
-    },
-    low: {
-      header: theme.palette.alerts.lowPriorityHeaderBackground,
-      body: theme.palette.alerts.lowPriorityBodyBackground,
-      border: theme.palette.alerts.lowPriorityHeaderBackground,
-    },
-  };
+  const title = `${alertContext} Alerts (${clientAlerts.length})`;
 
   return (
-    <Alert
-      sx={{
-        p: 0,
-        color: 'black',
-        backgroundColor: priorityColors[priority].body,
-        borderColor: priorityColors[priority].border,
-        '& .MuiAlert-message': {
-          p: 0,
-          width: '100%',
-        },
-      }}
-      icon={false}
-      variant='outlined'
+    <TitleCard
+      title={title}
+      headerVariant='border'
+      headerTypographyVariant='body1'
     >
-      <AlertTitle
-        sx={{
-          p: 2,
-          m: 0,
-          backgroundColor: priorityColors[priority].header,
-          fontWeight: 'bold',
-          textTransform: 'capitalize',
-        }}
-      >
-        {priority} Priority Alert
-      </AlertTitle>
-      <Box sx={{ p: 2 }}>
-        {shouldShowClientName && (
-          <Typography variant='body2' sx={{ pb: 1 }}>
-            {clientNameAllParts(client)}
-          </Typography>
+      <Box sx={{ m: 2 }}>
+        {clientAlerts.length === 0 && (
+          <Box
+            sx={{
+              p: 2,
+              backgroundColor: '#fafafa',
+              color: '#00000060',
+              borderRadius: 1,
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            {alertContext} has no alerts at this time
+            <CreateClientAlertButton />
+          </Box>
         )}
-        <Typography variant='body1' sx={{ pb: 1 }}>
-          {alert.note}
-        </Typography>
-        <Typography variant='body2' sx={{ fontSize: '12px' }}>
-          Created by {alert.createdBy?.name} on{' '}
-          {parseAndFormatDateTime(alert.createdAt)}.
-          {alert.expirationDate &&
-            ` Expires on ${parseAndFormatDateTime(alert.expirationDate)}.`}
-        </Typography>
+        {clientAlerts.length > 0 && (
+          <Stack gap={2}>
+            {clientAlerts.map((ca) => (
+              <ClientAlert
+                key={ca.alert.id}
+                alert={ca.alert}
+                client={ca.client}
+                shouldShowClientName={ca.shouldShowClientName}
+              />
+            ))}
+            <CreateClientAlertButton />
+          </Stack>
+        )}
       </Box>
-    </Alert>
+    </TitleCard>
   );
 };
 

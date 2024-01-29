@@ -7399,6 +7399,92 @@ export type GetRootPermissionsQuery = {
   };
 };
 
+export type ClientWithAlertFieldsFragment = {
+  __typename?: 'Client';
+  id: string;
+  lockVersion: number;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+  alerts: Array<{
+    __typename?: 'ClientAlert';
+    id: string;
+    note: string;
+    expirationDate?: string | null;
+    createdAt: string;
+    priority: ClientAlertPriorityLevel;
+    createdBy?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  }>;
+  access: {
+    __typename?: 'ClientAccess';
+    canViewClientAlerts: boolean;
+    canManageClientAlerts: boolean;
+  };
+};
+
+export type ClientAlertFieldsFragment = {
+  __typename?: 'ClientAlert';
+  id: string;
+  note: string;
+  expirationDate?: string | null;
+  createdAt: string;
+  priority: ClientAlertPriorityLevel;
+  createdBy?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+};
+
+export type GetHouseholdClientAlertsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetHouseholdClientAlertsQuery = {
+  __typename?: 'Query';
+  household?: {
+    __typename?: 'Household';
+    householdClients: Array<{
+      __typename?: 'HouseholdClient';
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+        alerts: Array<{
+          __typename?: 'ClientAlert';
+          id: string;
+          note: string;
+          expirationDate?: string | null;
+          createdAt: string;
+          priority: ClientAlertPriorityLevel;
+          createdBy?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        }>;
+        access: {
+          __typename?: 'ClientAccess';
+          canViewClientAlerts: boolean;
+          canManageClientAlerts: boolean;
+        };
+      };
+    }>;
+  } | null;
+};
+
 export type AssessmentFieldsFragment = {
   __typename?: 'Assessment';
   id: string;
@@ -12300,21 +12386,6 @@ export type ClientAddressFieldsFragment = {
   addressType?: ClientAddressType | null;
   dateCreated?: string | null;
   dateUpdated?: string | null;
-};
-
-export type ClientAlertFieldsFragment = {
-  __typename?: 'ClientAlert';
-  id: string;
-  note: string;
-  expirationDate?: string | null;
-  createdAt: string;
-  priority: ClientAlertPriorityLevel;
-  createdBy?: {
-    __typename: 'ApplicationUser';
-    id: string;
-    name: string;
-    email: string;
-  } | null;
 };
 
 export type ClientContactPointFieldsFragment = {
@@ -24063,67 +24134,6 @@ export type HouseholdClientFieldsFragment = {
   };
 };
 
-export type HouseholdClientFieldsClientFragment = {
-  __typename?: 'Client';
-  id: string;
-  veteranStatus: NoYesReasonsForMissingData;
-  lockVersion: number;
-  firstName?: string | null;
-  middleName?: string | null;
-  lastName?: string | null;
-  nameSuffix?: string | null;
-  dob?: string | null;
-  age?: number | null;
-  ssn?: string | null;
-  gender: Array<Gender>;
-  access: {
-    __typename?: 'ClientAccess';
-    id: string;
-    canViewFullSsn: boolean;
-    canViewPartialSsn: boolean;
-    canEditClient: boolean;
-    canDeleteClient: boolean;
-    canViewDob: boolean;
-    canEditEnrollments: boolean;
-    canDeleteEnrollments: boolean;
-    canViewEnrollmentDetails: boolean;
-    canDeleteAssessments: boolean;
-    canManageAnyClientFiles: boolean;
-    canManageOwnClientFiles: boolean;
-    canViewAnyConfidentialClientFiles: boolean;
-    canViewAnyNonconfidentialClientFiles: boolean;
-    canUploadClientFiles: boolean;
-    canViewAnyFiles: boolean;
-    canAuditClients: boolean;
-    canManageScanCards: boolean;
-    canMergeClients: boolean;
-    canViewClientAlerts: boolean;
-    canManageClientAlerts: boolean;
-  };
-  externalIds: Array<{
-    __typename?: 'ExternalIdentifier';
-    id: string;
-    identifier?: string | null;
-    url?: string | null;
-    label: string;
-    type: ExternalIdentifierType;
-  }>;
-  alerts: Array<{
-    __typename?: 'ClientAlert';
-    id: string;
-    note: string;
-    expirationDate?: string | null;
-    createdAt: string;
-    priority: ClientAlertPriorityLevel;
-    createdBy?: {
-      __typename: 'ApplicationUser';
-      id: string;
-      name: string;
-      email: string;
-    } | null;
-  }>;
-};
-
 export type ProjectEnrollmentsHouseholdFieldsFragment = {
   __typename?: 'Household';
   id: string;
@@ -28741,6 +28751,16 @@ export const OrganizationAccessFieldsFragmentDoc = gql`
     canDeleteOrganization
   }
 `;
+export const ClientNameFragmentDoc = gql`
+  fragment ClientName on Client {
+    id
+    lockVersion
+    firstName
+    middleName
+    lastName
+    nameSuffix
+  }
+`;
 export const UserFieldsFragmentDoc = gql`
   fragment UserFields on ApplicationUser {
     __typename
@@ -28748,6 +28768,33 @@ export const UserFieldsFragmentDoc = gql`
     name
     email
   }
+`;
+export const ClientAlertFieldsFragmentDoc = gql`
+  fragment ClientAlertFields on ClientAlert {
+    id
+    note
+    expirationDate
+    createdBy {
+      ...UserFields
+    }
+    createdAt
+    priority
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export const ClientWithAlertFieldsFragmentDoc = gql`
+  fragment ClientWithAlertFields on Client {
+    ...ClientName
+    alerts {
+      ...ClientAlertFields
+    }
+    access {
+      canViewClientAlerts
+      canManageClientAlerts
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
 `;
 export const AssessmentFieldsFragmentDoc = gql`
   fragment AssessmentFields on Assessment {
@@ -29299,16 +29346,6 @@ export const AutoExitConfigFieldsFragmentDoc = gql`
     projectType
   }
 `;
-export const ClientNameFragmentDoc = gql`
-  fragment ClientName on Client {
-    id
-    lockVersion
-    firstName
-    middleName
-    lastName
-    nameSuffix
-  }
-`;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
@@ -29436,19 +29473,6 @@ export const ClientContactPointFieldsFragmentDoc = gql`
     dateCreated
     dateUpdated
   }
-`;
-export const ClientAlertFieldsFragmentDoc = gql`
-  fragment ClientAlertFields on ClientAlert {
-    id
-    note
-    expirationDate
-    createdBy {
-      ...UserFields
-    }
-    createdAt
-    priority
-  }
-  ${UserFieldsFragmentDoc}
 `;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
@@ -30034,34 +30058,24 @@ export const FormDefinitionFieldsForEditorFragmentDoc = gql`
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
-export const HouseholdClientFieldsClientFragmentDoc = gql`
-  fragment HouseholdClientFieldsClient on Client {
-    id
-    ...ClientName
-    ...ClientIdentificationFields
-    veteranStatus
-    access {
-      ...ClientAccessFields
-    }
-    externalIds {
-      ...ClientIdentifierFields
-    }
-    alerts {
-      ...ClientAlertFields
-    }
-  }
-  ${ClientNameFragmentDoc}
-  ${ClientIdentificationFieldsFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
-  ${ClientIdentifierFieldsFragmentDoc}
-  ${ClientAlertFieldsFragmentDoc}
-`;
 export const HouseholdClientFieldsFragmentDoc = gql`
   fragment HouseholdClientFields on HouseholdClient {
     id
     relationshipToHoH
     client {
-      ...HouseholdClientFieldsClient
+      id
+      ...ClientName
+      ...ClientIdentificationFields
+      veteranStatus
+      access {
+        ...ClientAccessFields
+      }
+      externalIds {
+        ...ClientIdentifierFields
+      }
+      alerts {
+        ...ClientAlertFields
+      }
     }
     enrollment {
       id
@@ -30075,7 +30089,11 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       }
     }
   }
-  ${HouseholdClientFieldsClientFragmentDoc}
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
 `;
 export const HouseholdFieldsFragmentDoc = gql`
   fragment HouseholdFields on Household {
@@ -30696,6 +30714,69 @@ export type GetRootPermissionsLazyQueryHookResult = ReturnType<
 export type GetRootPermissionsQueryResult = Apollo.QueryResult<
   GetRootPermissionsQuery,
   GetRootPermissionsQueryVariables
+>;
+export const GetHouseholdClientAlertsDocument = gql`
+  query GetHouseholdClientAlerts($id: ID!) {
+    household(id: $id) {
+      householdClients {
+        client {
+          ...ClientWithAlertFields
+        }
+      }
+    }
+  }
+  ${ClientWithAlertFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetHouseholdClientAlertsQuery__
+ *
+ * To run a query within a React component, call `useGetHouseholdClientAlertsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHouseholdClientAlertsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHouseholdClientAlertsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetHouseholdClientAlertsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetHouseholdClientAlertsQuery,
+    GetHouseholdClientAlertsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetHouseholdClientAlertsQuery,
+    GetHouseholdClientAlertsQueryVariables
+  >(GetHouseholdClientAlertsDocument, options);
+}
+export function useGetHouseholdClientAlertsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetHouseholdClientAlertsQuery,
+    GetHouseholdClientAlertsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetHouseholdClientAlertsQuery,
+    GetHouseholdClientAlertsQueryVariables
+  >(GetHouseholdClientAlertsDocument, options);
+}
+export type GetHouseholdClientAlertsQueryHookResult = ReturnType<
+  typeof useGetHouseholdClientAlertsQuery
+>;
+export type GetHouseholdClientAlertsLazyQueryHookResult = ReturnType<
+  typeof useGetHouseholdClientAlertsLazyQuery
+>;
+export type GetHouseholdClientAlertsQueryResult = Apollo.QueryResult<
+  GetHouseholdClientAlertsQuery,
+  GetHouseholdClientAlertsQueryVariables
 >;
 export const GetAssessmentDocument = gql`
   query GetAssessment($id: ID!) {

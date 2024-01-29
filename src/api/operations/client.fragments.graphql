@@ -105,16 +105,6 @@ fragment ClientAddressFields on ClientAddress {
   dateCreated
   dateUpdated
 }
-fragment ClientAlertFields on ClientAlert {
-  id
-  note
-  expirationDate
-  createdBy {
-    ...UserFields
-  }
-  createdAt
-  priority
-}
 fragment ClientContactPointFields on ClientContactPoint {
   id
   value

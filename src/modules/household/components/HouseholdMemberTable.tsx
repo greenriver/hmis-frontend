@@ -17,6 +17,7 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
+import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -146,24 +147,22 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
  * Table showing all members that belong to a given household
  */
 const HouseholdMemberTable = ({
-  householdMembers,
-  householdMembersLoading,
   clientId,
   enrollmentId,
   hideActions = false,
   columns: columnProp,
   condensed,
 }: {
-  householdMembers: HouseholdClientFieldsFragment[];
   clientId: string;
   enrollmentId: string;
-  householdMembersLoading?: boolean;
   hideActions?: boolean;
   columns?: ColumnDef<HouseholdClientFieldsFragment>[];
   condensed?: boolean;
 }) => {
   const { enrollment } = useEnrollmentDashboardContext();
   const { globalFeatureFlags } = useHmisAppSettings();
+  const [householdMembers, { loading: householdMembersLoading, error }] =
+    useHouseholdMembers(enrollmentId);
 
   const columns = useMemo(() => {
     if (!householdMembers) return;
@@ -187,8 +186,8 @@ const HouseholdMemberTable = ({
     return cols;
   }, [enrollmentId, columnProp, globalFeatureFlags?.mciId, householdMembers]);
 
-  if (householdMembersLoading && householdMembers.length === 0)
-    return <Loading />;
+  if (error) throw error;
+  if (householdMembersLoading && !householdMembers) return <Loading />;
 
   return (
     <>

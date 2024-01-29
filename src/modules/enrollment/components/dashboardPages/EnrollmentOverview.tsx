@@ -10,16 +10,13 @@ import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import ClientAlertFrame, {
-  AlertContext,
-} from '@/modules/client/components/clientAlerts/ClientAlertFrame';
+import ClientAlertCardEnrollmentWrapper from '@/modules/client/components/clientAlerts/ClientAlertCardWrappers';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable, {
   HOUSEHOLD_MEMBER_COLUMNS,
 } from '@/modules/household/components/HouseholdMemberTable';
-import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   DeleteEnrollmentDocument,
@@ -56,13 +53,6 @@ const EnrollmentOverview = () => {
     );
   }, [navigate, clientId, enrollmentId]);
 
-  const [householdMembers, { loading: householdMembersLoading, error }] =
-    useHouseholdMembers(enrollmentId);
-  if (error) throw error;
-
-  const clients = householdMembers ? householdMembers.map((h) => h.client) : [];
-  const canViewClientAlerts = clients.some((c) => c.access.canViewClientAlerts);
-
   if (!enrollment) return <NotFound />;
 
   return (
@@ -73,8 +63,6 @@ const EnrollmentOverview = () => {
           <Stack spacing={4}>
             <TitleCard title='Household' headerVariant='border'>
               <HouseholdMemberTable
-                householdMembers={householdMembers ? householdMembers : []}
-                householdMembersLoading={householdMembersLoading}
                 clientId={clientId}
                 enrollmentId={enrollmentId}
                 hideActions
@@ -95,13 +83,9 @@ const EnrollmentOverview = () => {
         </Grid>
         <Grid item xs={4}>
           <Stack spacing={4}>
-            {canViewClientAlerts && (
-              <ClientAlertFrame
-                clients={clients}
-                alertContext={AlertContext.Household}
-                loading={householdMembersLoading}
-              />
-            )}
+            <ClientAlertCardEnrollmentWrapper
+              householdId={enrollment.householdId}
+            />
             <EnrollmentReminders enrollmentId={enrollment.id} />
             <EnrollmentQuickActions
               enrollment={enrollment}
