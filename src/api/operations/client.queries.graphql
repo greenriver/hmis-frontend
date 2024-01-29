@@ -200,3 +200,9 @@ query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     }
   }
 }
+
+query ClientDetailForms {
+  clientDetailForms {
+    ...OccurrencePointFormFields
+  }
+}

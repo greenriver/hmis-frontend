@@ -148,10 +148,12 @@ export enum AnnualPercentAmi {
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
   activityLogs: ActivityLogsPaginated;
+  clientAccessSummaries: ClientAccessSummariesPaginated;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
   email: Scalars['String']['output'];
+  enrollmentAccessSummaries: EnrollmentAccessSummariesPaginated;
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
@@ -161,6 +163,20 @@ export type ApplicationUser = {
 
 /** User account for a user of the system */
 export type ApplicationUserActivityLogsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
+export type ApplicationUserClientAccessSummariesArgs = {
+  filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
+export type ApplicationUserEnrollmentAccessSummariesArgs = {
+  filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -368,11 +384,6 @@ export enum Availability {
   YearRound = 'YEAR_ROUND',
 }
 
-export type BaseAuditEventFilterOptions = {
-  auditEventRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
-  user?: InputMaybe<Array<Scalars['ID']['input']>>;
-};
-
 /** 2.07.5 */
 export enum BedType {
   /** (1) Facility-based */
@@ -514,6 +525,7 @@ export type Client = {
   dobDataQuality: DobDataQuality;
   emailAddresses: Array<ClientContactPoint>;
   employmentEducations: EmploymentEducationsPaginated;
+  enabledFeatures: Array<ClientDashboardFeature>;
   enrollments: EnrollmentsPaginated;
   externalIds: Array<ExternalIdentifier>;
   files: FilesPaginated;
@@ -563,7 +575,7 @@ export type ClientAssessmentsArgs = {
 
 /** HUD Client */
 export type ClientAuditHistoryArgs = {
-  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+  filters?: InputMaybe<ClientAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -662,6 +674,30 @@ export type ClientAccess = {
   id: Scalars['ID']['output'];
 };
 
+export type ClientAccessSummariesPaginated = {
+  __typename?: 'ClientAccessSummariesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ClientAccessSummary>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
+export type ClientAccessSummary = {
+  __typename?: 'ClientAccessSummary';
+  clientId: Scalars['ID']['output'];
+  clientName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastAccessedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type ClientAccessSummaryFilterOptions = {
+  onOrAfter?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type ClientAddress = {
   __typename?: 'ClientAddress';
   addressType?: Maybe<ClientAddressType>;
@@ -722,6 +758,11 @@ export type ClientAuditEvent = {
   user?: Maybe<ApplicationUser>;
 };
 
+export type ClientAuditEventFilterOptions = {
+  clientRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 export type ClientAuditEventsPaginated = {
   __typename?: 'ClientAuditEventsPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -771,6 +812,11 @@ export enum ClientContactPointUse {
   Temp = 'temp',
   /** Work */
   Work = 'work',
+}
+
+export enum ClientDashboardFeature {
+  CaseNote = 'CASE_NOTE',
+  File = 'FILE',
 }
 
 export type ClientFilterOptions = {
@@ -2109,7 +2155,7 @@ export type EnrollmentAssessmentsArgs = {
 
 /** HUD Enrollment */
 export type EnrollmentAuditHistoryArgs = {
-  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+  filters?: InputMaybe<EnrollmentAuditEventFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -2196,6 +2242,34 @@ export type EnrollmentAccess = {
   id: Scalars['ID']['output'];
 };
 
+export type EnrollmentAccessSummariesPaginated = {
+  __typename?: 'EnrollmentAccessSummariesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<EnrollmentAccessSummary>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
+export type EnrollmentAccessSummary = {
+  __typename?: 'EnrollmentAccessSummary';
+  clientId?: Maybe<Scalars['ID']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
+  enrollmentId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  lastAccessedAt: Scalars['ISO8601DateTime']['output'];
+  projectId?: Maybe<Scalars['ID']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
+};
+
+export type EnrollmentAccessSummaryFilterOptions = {
+  onOrAfter?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type EnrollmentAuditEvent = {
   __typename?: 'EnrollmentAuditEvent';
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -2208,6 +2282,11 @@ export type EnrollmentAuditEvent = {
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
   user?: Maybe<ApplicationUser>;
+};
+
+export type EnrollmentAuditEventFilterOptions = {
+  enrollmentRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type EnrollmentAuditEventsPaginated = {
@@ -2697,6 +2776,8 @@ export enum FormRole {
   CeParticipation = 'CE_PARTICIPATION',
   /** Client */
   Client = 'CLIENT',
+  /** Client detail */
+  ClientDetail = 'CLIENT_DETAIL',
   /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** Enrollment */
@@ -4048,6 +4129,7 @@ export enum PickListType {
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
   /** Grouped HUD CE Event types */
   CeEvents = 'CE_EVENTS',
+  ClientAuditEventRecordTypes = 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   Destination = 'DESTINATION',
@@ -5067,6 +5149,8 @@ export type Query = {
   autoExitConfigs: AutoExitConfigsPaginated;
   /** Client lookup */
   client?: Maybe<Client>;
+  /** Custom forms for collecting and/or displaying custom details for a Client (outside of the Client demographics form) */
+  clientDetailForms: Array<OccurrencePointForm>;
   /** Client omnisearch */
   clientOmniSearch: ClientsPaginated;
   /** Search for clients */
@@ -11270,7 +11354,7 @@ export type GetClientAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+  filters?: InputMaybe<ClientAuditEventFilterOptions>;
 }>;
 
 export type GetClientAuditEventsQuery = {
@@ -11311,7 +11395,7 @@ export type GetEnrollmentAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<BaseAuditEventFilterOptions>;
+  filters?: InputMaybe<EnrollmentAuditEventFilterOptions>;
 }>;
 
 export type GetEnrollmentAuditEventsQuery = {
@@ -11688,6 +11772,7 @@ export type ClientFieldsFragment = {
   dateCreated?: string | null;
   dateDeleted?: string | null;
   dateUpdated?: string | null;
+  enabledFeatures: Array<ClientDashboardFeature>;
   id: string;
   lockVersion: number;
   dob?: string | null;
@@ -12063,6 +12148,7 @@ export type GetClientQuery = {
     dateCreated?: string | null;
     dateDeleted?: string | null;
     dateUpdated?: string | null;
+    enabledFeatures: Array<ClientDashboardFeature>;
     id: string;
     lockVersion: number;
     dob?: string | null;
@@ -12811,6 +12897,488 @@ export type GetClientFilesQuery = {
   } | null;
 };
 
+export type ClientDetailFormsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ClientDetailFormsQuery = {
+  __typename?: 'Query';
+  clientDetailForms: Array<{
+    __typename?: 'OccurrencePointForm';
+    id: string;
+    dataCollectedAbout: DataCollectedAbout;
+    definition: {
+      __typename?: 'FormDefinition';
+      id: string;
+      role: FormRole;
+      title: string;
+      cacheKey: string;
+      identifier: string;
+      definition: {
+        __typename?: 'FormDefinitionJson';
+        item: Array<{
+          __typename: 'FormItem';
+          linkId: string;
+          type: ItemType;
+          component?: Component | null;
+          prefix?: string | null;
+          text?: string | null;
+          briefText?: string | null;
+          readonlyText?: string | null;
+          helperText?: string | null;
+          required: boolean;
+          warnIfEmpty: boolean;
+          hidden: boolean;
+          readOnly: boolean;
+          repeats: boolean;
+          pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
+          size?: InputSize | null;
+          assessmentDate?: boolean | null;
+          prefill: boolean;
+          dataCollectedAbout?: DataCollectedAbout | null;
+          disabledDisplay: DisabledDisplay;
+          enableBehavior: EnableBehavior;
+          item?: Array<{
+            __typename: 'FormItem';
+            linkId: string;
+            type: ItemType;
+            component?: Component | null;
+            prefix?: string | null;
+            text?: string | null;
+            briefText?: string | null;
+            readonlyText?: string | null;
+            helperText?: string | null;
+            required: boolean;
+            warnIfEmpty: boolean;
+            hidden: boolean;
+            readOnly: boolean;
+            repeats: boolean;
+            pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
+            size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill: boolean;
+            dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay: DisabledDisplay;
+            enableBehavior: EnableBehavior;
+            item?: Array<{
+              __typename: 'FormItem';
+              linkId: string;
+              type: ItemType;
+              component?: Component | null;
+              prefix?: string | null;
+              text?: string | null;
+              briefText?: string | null;
+              readonlyText?: string | null;
+              helperText?: string | null;
+              required: boolean;
+              warnIfEmpty: boolean;
+              hidden: boolean;
+              readOnly: boolean;
+              repeats: boolean;
+              pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
+              size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill: boolean;
+              dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay: DisabledDisplay;
+              enableBehavior: EnableBehavior;
+              item?: Array<{
+                __typename: 'FormItem';
+                linkId: string;
+                type: ItemType;
+                component?: Component | null;
+                prefix?: string | null;
+                text?: string | null;
+                briefText?: string | null;
+                readonlyText?: string | null;
+                helperText?: string | null;
+                required: boolean;
+                warnIfEmpty: boolean;
+                hidden: boolean;
+                readOnly: boolean;
+                repeats: boolean;
+                pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
+                size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill: boolean;
+                dataCollectedAbout?: DataCollectedAbout | null;
+                disabledDisplay: DisabledDisplay;
+                enableBehavior: EnableBehavior;
+                item?: Array<{
+                  __typename: 'FormItem';
+                  linkId: string;
+                  type: ItemType;
+                  component?: Component | null;
+                  prefix?: string | null;
+                  text?: string | null;
+                  briefText?: string | null;
+                  readonlyText?: string | null;
+                  helperText?: string | null;
+                  required: boolean;
+                  warnIfEmpty: boolean;
+                  hidden: boolean;
+                  readOnly: boolean;
+                  repeats: boolean;
+                  pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
+                  size?: InputSize | null;
+                  assessmentDate?: boolean | null;
+                  prefill: boolean;
+                  dataCollectedAbout?: DataCollectedAbout | null;
+                  disabledDisplay: DisabledDisplay;
+                  enableBehavior: EnableBehavior;
+                  mapping?: {
+                    __typename?: 'FieldMapping';
+                    recordType?: RelatedRecordType | null;
+                    fieldName?: string | null;
+                    customFieldKey?: string | null;
+                  } | null;
+                  bounds?: Array<{
+                    __typename?: 'ValueBound';
+                    id: string;
+                    severity: ValidationSeverity;
+                    type: BoundType;
+                    question?: string | null;
+                    valueNumber?: number | null;
+                    valueDate?: string | null;
+                    valueLocalConstant?: string | null;
+                    offset?: number | null;
+                  }> | null;
+                  pickListOptions?: Array<{
+                    __typename?: 'PickListOption';
+                    code: string;
+                    label?: string | null;
+                    secondaryLabel?: string | null;
+                    groupLabel?: string | null;
+                    groupCode?: string | null;
+                    initialSelected?: boolean | null;
+                  }> | null;
+                  initial?: Array<{
+                    __typename?: 'InitialValue';
+                    valueCode?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                    valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
+                  }> | null;
+                  enableWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question?: string | null;
+                    localConstant?: string | null;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                    compareQuestion?: string | null;
+                  }> | null;
+                  autofillValues?: Array<{
+                    __typename?: 'AutofillValue';
+                    valueCode?: string | null;
+                    valueQuestion?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
+                    autofillBehavior: EnableBehavior;
+                    autofillReadonly?: boolean | null;
+                    autofillWhen: Array<{
+                      __typename?: 'EnableWhen';
+                      question?: string | null;
+                      localConstant?: string | null;
+                      operator: EnableOperator;
+                      answerCode?: string | null;
+                      answerCodes?: Array<string> | null;
+                      answerNumber?: number | null;
+                      answerBoolean?: boolean | null;
+                      answerGroupCode?: string | null;
+                      compareQuestion?: string | null;
+                    }>;
+                  }> | null;
+                }> | null;
+                mapping?: {
+                  __typename?: 'FieldMapping';
+                  recordType?: RelatedRecordType | null;
+                  fieldName?: string | null;
+                  customFieldKey?: string | null;
+                } | null;
+                bounds?: Array<{
+                  __typename?: 'ValueBound';
+                  id: string;
+                  severity: ValidationSeverity;
+                  type: BoundType;
+                  question?: string | null;
+                  valueNumber?: number | null;
+                  valueDate?: string | null;
+                  valueLocalConstant?: string | null;
+                  offset?: number | null;
+                }> | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  groupCode?: string | null;
+                  initialSelected?: boolean | null;
+                }> | null;
+                initial?: Array<{
+                  __typename?: 'InitialValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question?: string | null;
+                  localConstant?: string | null;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                  compareQuestion?: string | null;
+                }> | null;
+                autofillValues?: Array<{
+                  __typename?: 'AutofillValue';
+                  valueCode?: string | null;
+                  valueQuestion?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
+                  autofillBehavior: EnableBehavior;
+                  autofillReadonly?: boolean | null;
+                  autofillWhen: Array<{
+                    __typename?: 'EnableWhen';
+                    question?: string | null;
+                    localConstant?: string | null;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                    compareQuestion?: string | null;
+                  }>;
+                }> | null;
+              }> | null;
+              mapping?: {
+                __typename?: 'FieldMapping';
+                recordType?: RelatedRecordType | null;
+                fieldName?: string | null;
+                customFieldKey?: string | null;
+              } | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                id: string;
+                severity: ValidationSeverity;
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
+                valueLocalConstant?: string | null;
+                offset?: number | null;
+              }> | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                groupCode?: string | null;
+                initialSelected?: boolean | null;
+              }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question?: string | null;
+                localConstant?: string | null;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+                compareQuestion?: string | null;
+              }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueQuestion?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
+                autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
+                autofillWhen: Array<{
+                  __typename?: 'EnableWhen';
+                  question?: string | null;
+                  localConstant?: string | null;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                  compareQuestion?: string | null;
+                }>;
+              }> | null;
+            }> | null;
+            mapping?: {
+              __typename?: 'FieldMapping';
+              recordType?: RelatedRecordType | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+            } | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              id: string;
+              severity: ValidationSeverity;
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
+              valueLocalConstant?: string | null;
+              offset?: number | null;
+            }> | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              groupCode?: string | null;
+              initialSelected?: boolean | null;
+            }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question?: string | null;
+              localConstant?: string | null;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              compareQuestion?: string | null;
+            }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueQuestion?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
+              autofillBehavior: EnableBehavior;
+              autofillReadonly?: boolean | null;
+              autofillWhen: Array<{
+                __typename?: 'EnableWhen';
+                question?: string | null;
+                localConstant?: string | null;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+                compareQuestion?: string | null;
+              }>;
+            }> | null;
+          }> | null;
+          mapping?: {
+            __typename?: 'FieldMapping';
+            recordType?: RelatedRecordType | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+          } | null;
+          bounds?: Array<{
+            __typename?: 'ValueBound';
+            id: string;
+            severity: ValidationSeverity;
+            type: BoundType;
+            question?: string | null;
+            valueNumber?: number | null;
+            valueDate?: string | null;
+            valueLocalConstant?: string | null;
+            offset?: number | null;
+          }> | null;
+          pickListOptions?: Array<{
+            __typename?: 'PickListOption';
+            code: string;
+            label?: string | null;
+            secondaryLabel?: string | null;
+            groupLabel?: string | null;
+            groupCode?: string | null;
+            initialSelected?: boolean | null;
+          }> | null;
+          initial?: Array<{
+            __typename?: 'InitialValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
+          }> | null;
+          enableWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question?: string | null;
+            localConstant?: string | null;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+            compareQuestion?: string | null;
+          }> | null;
+          autofillValues?: Array<{
+            __typename?: 'AutofillValue';
+            valueCode?: string | null;
+            valueQuestion?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
+            autofillBehavior: EnableBehavior;
+            autofillReadonly?: boolean | null;
+            autofillWhen: Array<{
+              __typename?: 'EnableWhen';
+              question?: string | null;
+              localConstant?: string | null;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              compareQuestion?: string | null;
+            }>;
+          }> | null;
+        }>;
+      };
+    };
+  }>;
+};
+
 export type MergeAuditEventFieldsFragment = {
   __typename?: 'MergeAuditEvent';
   id: string;
@@ -12955,6 +13523,7 @@ export type MergeClientsMutation = {
       dateCreated?: string | null;
       dateDeleted?: string | null;
       dateUpdated?: string | null;
+      enabledFeatures: Array<ClientDashboardFeature>;
       id: string;
       lockVersion: number;
       dob?: string | null;
@@ -22062,6 +22631,7 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateDeleted?: string | null;
           dateUpdated?: string | null;
+          enabledFeatures: Array<ClientDashboardFeature>;
           id: string;
           lockVersion: number;
           dob?: string | null;
@@ -27199,6 +27769,25 @@ export type UserActivityLogFieldsFragment = {
   }>;
 };
 
+export type ClientAccessSummaryFieldsFragment = {
+  __typename?: 'ClientAccessSummary';
+  id: string;
+  lastAccessedAt: string;
+  clientId: string;
+  clientName?: string | null;
+};
+
+export type EnrollmentAccessSummaryFieldsFragment = {
+  __typename?: 'EnrollmentAccessSummary';
+  id: string;
+  lastAccessedAt: string;
+  enrollmentId: string;
+  clientId?: string | null;
+  clientName?: string | null;
+  projectId?: string | null;
+  projectName?: string | null;
+};
+
 export type GetApplicationUsersQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -27261,6 +27850,65 @@ export type GetUserAccessHistoryQuery = {
           recordId: string;
           recordType: string;
         }>;
+      }>;
+    };
+  } | null;
+};
+
+export type GetUserClientSummariesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
+}>;
+
+export type GetUserClientSummariesQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    clientAccessSummaries: {
+      __typename?: 'ClientAccessSummariesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ClientAccessSummary';
+        id: string;
+        lastAccessedAt: string;
+        clientId: string;
+        clientName?: string | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetUserEnrollmentSummariesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
+}>;
+
+export type GetUserEnrollmentSummariesQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    enrollmentAccessSummaries: {
+      __typename?: 'EnrollmentAccessSummariesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'EnrollmentAccessSummary';
+        id: string;
+        lastAccessedAt: string;
+        enrollmentId: string;
+        clientId?: string | null;
+        clientName?: string | null;
+        projectId?: string | null;
+        projectName?: string | null;
       }>;
     };
   } | null;
@@ -28017,6 +28665,7 @@ export const ClientFieldsFragmentDoc = gql`
     emailAddresses {
       ...ClientContactPointFields
     }
+    enabledFeatures
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientVeteranInfoFieldsFragmentDoc}
@@ -29132,6 +29781,25 @@ export const UserActivityLogFieldsFragmentDoc = gql`
     }
   }
 `;
+export const ClientAccessSummaryFieldsFragmentDoc = gql`
+  fragment ClientAccessSummaryFields on ClientAccessSummary {
+    id
+    lastAccessedAt
+    clientId
+    clientName
+  }
+`;
+export const EnrollmentAccessSummaryFieldsFragmentDoc = gql`
+  fragment EnrollmentAccessSummaryFields on EnrollmentAccessSummary {
+    id
+    lastAccessedAt
+    enrollmentId
+    clientId
+    clientName
+    projectId
+    projectName
+  }
+`;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
     access {
@@ -29916,7 +30584,7 @@ export const GetClientAuditEventsDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
-    $filters: BaseAuditEventFilterOptions = null
+    $filters: ClientAuditEventFilterOptions = null
   ) {
     client(id: $id) {
       id
@@ -29991,7 +30659,7 @@ export const GetEnrollmentAuditEventsDocument = gql`
     $id: ID!
     $limit: Int = 25
     $offset: Int = 0
-    $filters: BaseAuditEventFilterOptions = null
+    $filters: EnrollmentAuditEventFilterOptions = null
   ) {
     enrollment(id: $id) {
       id
@@ -31427,6 +32095,64 @@ export type GetClientFilesLazyQueryHookResult = ReturnType<
 export type GetClientFilesQueryResult = Apollo.QueryResult<
   GetClientFilesQuery,
   GetClientFilesQueryVariables
+>;
+export const ClientDetailFormsDocument = gql`
+  query ClientDetailForms {
+    clientDetailForms {
+      ...OccurrencePointFormFields
+    }
+  }
+  ${OccurrencePointFormFieldsFragmentDoc}
+`;
+
+/**
+ * __useClientDetailFormsQuery__
+ *
+ * To run a query within a React component, call `useClientDetailFormsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClientDetailFormsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useClientDetailFormsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useClientDetailFormsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ClientDetailFormsQuery,
+    ClientDetailFormsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ClientDetailFormsQuery,
+    ClientDetailFormsQueryVariables
+  >(ClientDetailFormsDocument, options);
+}
+export function useClientDetailFormsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ClientDetailFormsQuery,
+    ClientDetailFormsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ClientDetailFormsQuery,
+    ClientDetailFormsQueryVariables
+  >(ClientDetailFormsDocument, options);
+}
+export type ClientDetailFormsQueryHookResult = ReturnType<
+  typeof useClientDetailFormsQuery
+>;
+export type ClientDetailFormsLazyQueryHookResult = ReturnType<
+  typeof useClientDetailFormsLazyQuery
+>;
+export type ClientDetailFormsQueryResult = Apollo.QueryResult<
+  ClientDetailFormsQuery,
+  ClientDetailFormsQueryVariables
 >;
 export const GetMergeCandidatesDocument = gql`
   query GetMergeCandidates($limit: Int, $offset: Int) {
@@ -37581,4 +38307,158 @@ export type GetUserAccessHistoryLazyQueryHookResult = ReturnType<
 export type GetUserAccessHistoryQueryResult = Apollo.QueryResult<
   GetUserAccessHistoryQuery,
   GetUserAccessHistoryQueryVariables
+>;
+export const GetUserClientSummariesDocument = gql`
+  query GetUserClientSummaries(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: ClientAccessSummaryFilterOptions
+  ) {
+    user(id: $id) {
+      id
+      clientAccessSummaries(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ClientAccessSummaryFields
+        }
+      }
+    }
+  }
+  ${ClientAccessSummaryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserClientSummariesQuery__
+ *
+ * To run a query within a React component, call `useGetUserClientSummariesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserClientSummariesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserClientSummariesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetUserClientSummariesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserClientSummariesQuery,
+    GetUserClientSummariesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserClientSummariesQuery,
+    GetUserClientSummariesQueryVariables
+  >(GetUserClientSummariesDocument, options);
+}
+export function useGetUserClientSummariesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserClientSummariesQuery,
+    GetUserClientSummariesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserClientSummariesQuery,
+    GetUserClientSummariesQueryVariables
+  >(GetUserClientSummariesDocument, options);
+}
+export type GetUserClientSummariesQueryHookResult = ReturnType<
+  typeof useGetUserClientSummariesQuery
+>;
+export type GetUserClientSummariesLazyQueryHookResult = ReturnType<
+  typeof useGetUserClientSummariesLazyQuery
+>;
+export type GetUserClientSummariesQueryResult = Apollo.QueryResult<
+  GetUserClientSummariesQuery,
+  GetUserClientSummariesQueryVariables
+>;
+export const GetUserEnrollmentSummariesDocument = gql`
+  query GetUserEnrollmentSummaries(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: EnrollmentAccessSummaryFilterOptions
+  ) {
+    user(id: $id) {
+      id
+      enrollmentAccessSummaries(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentAccessSummaryFields
+        }
+      }
+    }
+  }
+  ${EnrollmentAccessSummaryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserEnrollmentSummariesQuery__
+ *
+ * To run a query within a React component, call `useGetUserEnrollmentSummariesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserEnrollmentSummariesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserEnrollmentSummariesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetUserEnrollmentSummariesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserEnrollmentSummariesQuery,
+    GetUserEnrollmentSummariesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserEnrollmentSummariesQuery,
+    GetUserEnrollmentSummariesQueryVariables
+  >(GetUserEnrollmentSummariesDocument, options);
+}
+export function useGetUserEnrollmentSummariesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserEnrollmentSummariesQuery,
+    GetUserEnrollmentSummariesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserEnrollmentSummariesQuery,
+    GetUserEnrollmentSummariesQueryVariables
+  >(GetUserEnrollmentSummariesDocument, options);
+}
+export type GetUserEnrollmentSummariesQueryHookResult = ReturnType<
+  typeof useGetUserEnrollmentSummariesQuery
+>;
+export type GetUserEnrollmentSummariesLazyQueryHookResult = ReturnType<
+  typeof useGetUserEnrollmentSummariesLazyQuery
+>;
+export type GetUserEnrollmentSummariesQueryResult = Apollo.QueryResult<
+  GetUserEnrollmentSummariesQuery,
+  GetUserEnrollmentSummariesQueryVariables
 >;

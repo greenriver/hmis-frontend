@@ -1,4 +1,5 @@
 import { HmisAppSettings } from './types';
+import { HttpError } from '@/utils/HttpError';
 
 export const fetchHmisAppSettings = async (): Promise<HmisAppSettings> => {
   const response = await fetch(`/hmis/app_settings`, {
@@ -14,8 +15,11 @@ export const fetchHmisAppSettings = async (): Promise<HmisAppSettings> => {
   if (response.ok) {
     return json;
   } else {
-    throw new Error(`Failed to fetch app settings: ${JSON.stringify(json)}`, {
-      cause: json,
-    });
+    const error = new HttpError(
+      `Failed to fetch app settings`,
+      response.status
+    );
+    error.cause = json;
+    throw error;
   }
 };

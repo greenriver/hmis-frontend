@@ -2,7 +2,7 @@ query GetClientAuditEvents(
   $id: ID!
   $limit: Int = 25
   $offset: Int = 0
-  $filters: BaseAuditEventFilterOptions = null
+  $filters: ClientAuditEventFilterOptions = null
 ) {
   client(id: $id) {
     id
@@ -21,7 +21,7 @@ query GetEnrollmentAuditEvents(
   $id: ID!
   $limit: Int = 25
   $offset: Int = 0
-  $filters: BaseAuditEventFilterOptions = null
+  $filters: EnrollmentAuditEventFilterOptions = null
 ) {
   enrollment(id: $id) {
     id

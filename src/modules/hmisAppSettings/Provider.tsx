@@ -7,6 +7,7 @@ import {
   fetchCurrentUser,
   HmisUser,
   logout,
+  RELOAD_ONCE_SESSION_KEY,
   startImpersonating,
   stopImpersonating,
 } from '@/modules/auth/api/sessions';
@@ -16,6 +17,7 @@ import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrack
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
 import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
+import { HttpError } from '@/utils/HttpError';
 import { reloadWindow } from '@/utils/location';
 import { getCurrentSessionId } from '@/utils/sessionId';
 import { currentTimeInSeconds } from '@/utils/time';
@@ -39,7 +41,7 @@ interface Props {
 export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   const [appSettings, setAppSettings] = useState<HmisAppSettings>();
   const [user, setUser] = useState<HmisUser>();
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error | HttpError>();
   const [loading, setLoading] = useState(true);
 
   // clear stale localStorage if session has changed
@@ -130,6 +132,23 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     if (appSettings?.appName) document.title = appSettings.appName;
   }, [appSettings?.appName]);
 
+  useEffect(() => {
+    if (
+      error instanceof HttpError &&
+      error.status === 401 &&
+      !sessionStorage.getItem(RELOAD_ONCE_SESSION_KEY)
+    ) {
+      sessionStorage.setItem(RELOAD_ONCE_SESSION_KEY, 'true');
+      setLoading(true);
+      reloadWindow();
+    }
+  }, [error]);
+
+  const handleManualReload = useCallback(() => {
+    setLoading(true);
+    reloadWindow();
+  }, []);
+
   if (loading) return <Loading />;
   if (error) {
     return (
@@ -139,7 +158,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
         title='An error occurred'
         loading={loading}
         hideCancelButton
-        onConfirm={reloadWindow}
+        onConfirm={handleManualReload}
       >
         <Typography>Failed to connect to the server.</Typography>
       </ConfirmationDialog>
