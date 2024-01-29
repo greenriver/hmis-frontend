@@ -1,6 +1,5 @@
 import { v4 } from 'uuid';
 
-import { pickListData } from './pickLists';
 import MOCK_IMAGE from '@/components/elements/upload/MOCK_IMAGE';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisObjectSchemas } from '@/types/gqlObjects';
@@ -447,26 +446,6 @@ const getFileMock = {
   },
 };
 
-const getPickListMocks = Object.entries(pickListData).map(
-  ([pickListType, options]) => ({
-    request: {
-      query: GetPickListDocument,
-      variables: {
-        pickListType,
-      },
-    },
-    result: {
-      data: {
-        pickList: options.map((p: PickListOption) => {
-          p.__typename = 'PickListOption';
-          p.initialSelected = false;
-          return p;
-        }),
-      },
-    },
-  })
-);
-
 const getClientPermissionMocks = {
   request: {
     query: GetClientPermissionsDocument,
@@ -515,7 +494,6 @@ const mocks: any[] = [
   getClientPermissionMocks,
   getClientPermissionMocks,
   getClientPermissionMocks,
-  ...getPickListMocks,
   clientDetailFormsMock,
   clientDetailFormsMock,
 ];
