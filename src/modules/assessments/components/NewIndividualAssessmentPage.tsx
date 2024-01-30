@@ -9,16 +9,17 @@ import useAssessmentFormDefinition from '@/modules/assessments/hooks/useAssessme
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 
 /**
- * Renders blank assessment(s), for an individual or a household.
+ * Renders a blank assessment for an individual.
  */
-const NewAssessmentPage = () => {
-  const { enrollment, client, overrideBreadcrumbTitles } =
-    useEnrollmentDashboardContext();
+const NewIndividualAssessmentPage = () => {
   const { formDefinitionId } = useSafeParams() as {
     clientId: string;
     enrollmentId: string;
     formDefinitionId?: string;
   };
+
+  const { enrollment, client, overrideBreadcrumbTitles } =
+    useEnrollmentDashboardContext();
 
   // Fetch the FormDefinition. This also applies "data collected about" changes to form.
   const { formDefinition, loading } = useAssessmentFormDefinition({
@@ -48,4 +49,4 @@ const NewAssessmentPage = () => {
   );
 };
 
-export default NewAssessmentPage;
+export default NewIndividualAssessmentPage;

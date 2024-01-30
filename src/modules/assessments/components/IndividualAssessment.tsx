@@ -72,7 +72,7 @@ export interface IndividualAssessmentProps {
  * Renders a single assessment form for an individual, including form stepper nav.
  *
  * If assessment is provided, we're editing an existing assessment.
- * If formRole is provided, we're creating a new assessment.
+ * Otherwise, we're creating a new assessment.
  */
 const IndividualAssessment = ({
   enrollmentId,

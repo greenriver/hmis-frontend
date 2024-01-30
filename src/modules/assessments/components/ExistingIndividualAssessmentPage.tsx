@@ -9,9 +9,12 @@ import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { useGetAssessmentQuery } from '@/types/gqlTypes';
 
 /**
- * Renders existing assessment(s), for an individual or a household
+ * Renders an existing individual assessment.
+ *
+ * Note: used both for viewing and editing assessments. View/edit display
+ * depends on user permissions and whether the assessment is WIP or Submitted.
  */
-const AssessmentPage = () => {
+const ExistingIndividualAssessmentPage = () => {
   const { enrollment, client, overrideBreadcrumbTitles } =
     useEnrollmentDashboardContext();
   const { assessmentId } = useSafeParams() as { assessmentId: string };
@@ -58,4 +61,4 @@ const AssessmentPage = () => {
   );
 };
 
-export default AssessmentPage;
+export default ExistingIndividualAssessmentPage;
