@@ -16,7 +16,7 @@ import { cache } from '@/providers/apolloClient';
 import {
   CeParticipationFieldsFragment,
   DeleteCeParticipationDocument,
-  FormRole,
+  RecordFormRole,
   GetProjectCeParticipationsDocument,
   NoYes,
 } from '@/types/gqlTypes';
@@ -103,7 +103,7 @@ const CeParticipations = () => {
     useViewEditRecordDialogs({
       variant: project.access.canEditProjectDetails ? 'edit_only' : 'view_only',
       inputVariables: { projectId: project.id },
-      formRole: FormRole.CeParticipation,
+      formRole: RecordFormRole.CeParticipation,
       recordName: 'CE Participation',
       evictCache,
       deleteRecordDocument: DeleteCeParticipationDocument,

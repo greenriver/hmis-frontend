@@ -17,8 +17,8 @@ import {
   DeleteFunderDocument,
   DeleteFunderMutation,
   DeleteFunderMutationVariables,
-  FormRole,
   FunderFieldsFragment,
+  RecordFormRole,
   useGetFunderQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -75,7 +75,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
       }
       onCompleted={onCompleted}
       localConstants={localConstants}
-      formRole={FormRole.Funder}
+      formRole={RecordFormRole.Funder}
       inputVariables={{ projectId }}
       record={funder || undefined}
       title={

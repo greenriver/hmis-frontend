@@ -19,18 +19,14 @@ import { generateSafePath } from '@/utils/pathEncoding';
 type FinishIntakeButtonProps = {
   enrollmentId: string;
   clientId: string;
-  assessmentId?: string;
 };
 const FinishIntakeButton: React.FC<FinishIntakeButtonProps> = ({
   enrollmentId,
   clientId,
-  assessmentId,
 }) => {
-  const intakePath = generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+  const intakePath = generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
     clientId,
     enrollmentId,
-    formRole: AssessmentRole.Intake,
-    assessmentId,
   });
   return (
     <ButtonLink color='error' variant='contained' to={intakePath}>
@@ -55,11 +51,12 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
   if (error) throw error;
 
   const getPath = useCallback(
-    (formRole: AssessmentRole) =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+    (formRole: AssessmentRole, formDefinitionId?: string) =>
+      generateSafePath(EnrollmentDashboardRoutes.NEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         formRole,
+        formDefinitionId,
       }),
     [clientId, enrollmentId]
   );
@@ -68,9 +65,9 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
     if (!data?.enrollment) return [];
 
     return data.enrollment.assessmentEligibilities.map(
-      ({ id, role, title }) => ({
+      ({ id, title, role, formDefinitionId }) => ({
         key: id,
-        to: getPath(role),
+        to: getPath(role, formDefinitionId),
         title: title,
       })
     );
@@ -111,7 +108,6 @@ const EnrollmentAssessmentActionButtons: React.FC<Props> = ({ enrollment }) => {
         <FinishIntakeButton
           enrollmentId={enrollment.id}
           clientId={enrollment.client.id}
-          assessmentId={enrollment.intakeAssessment?.id}
         />
       )}
       {!enrollment.inProgress && <NewAssessmentMenu enrollment={enrollment} />}

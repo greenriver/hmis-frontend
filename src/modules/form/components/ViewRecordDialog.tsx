@@ -15,11 +15,11 @@ import ViewRecord from './ViewRecord';
 
 import CommonDialog from '@/components/elements/CommonDialog';
 import HudRecordMetadata from '@/modules/hmis/components/HudRecordMetadata';
-import { FormRole } from '@/types/gqlTypes';
+import { RecordFormRole } from '@/types/gqlTypes';
 
 export interface RecordDialogProps<RecordType> extends DialogProps {
   record: RecordType;
-  formRole: FormRole;
+  formRole: RecordFormRole;
   pickListArgs?: PickListArgs;
   actions?: ReactNode;
   children?: ReactNode;

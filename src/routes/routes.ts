@@ -57,7 +57,10 @@ const enrollmentDashboardRoutes = {
   EVENTS: 'events',
   CE_ASSESSMENTS: 'ce-assessments',
   CUSTOM_CASE_NOTES: 'case-notes',
-  ASSESSMENT: 'assessments/:formRole/:assessmentId?',
+  INTAKE: 'intake', // Go to intake (render household view, or navigate to View/Create individual assessment appropriate)
+  EXIT: 'exit', // Go to exit (render household view, or navigate to View/Create individual assessment as appropriate)
+  VIEW_ASSESSMENT: 'assessments/:assessmentId', // View/Edit individual assessment
+  NEW_ASSESSMENT: 'assessments/new/:formDefinitionId', // Create new individual assessment
   ESG_FUNDING_REPORT: 'esg-funding-report',
   AUDIT_HISTORY: 'history',
 };
@@ -140,21 +143,32 @@ export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
 } = adminDashboardRoutes;
 
-export const HIDE_NAV_ROUTES = [EnrollmentDashboardRoutes.ASSESSMENT];
+// Auto-hide left desktop nav for some routes (unused)
+export const HIDE_NAV_ROUTES: string[] = [
+  // EnrollmentDashboardRoutes.NEW_ASSESSMENT
+];
 
 export const FOCUS_MODE_ROUTES = [
-  // {
-  //   route: ClientDashboardRoutes.HOUSEHOLD_EXIT,
-  //   previous: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-  // },
-  // {
-  //   route: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
-  //   previous: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-  // },
+  {
+    route: EnrollmentDashboardRoutes.EXIT,
+    defaultReturnPath: EnrollmentDashboardRoutes.ASSESSMENTS,
+  },
+  {
+    route: EnrollmentDashboardRoutes.INTAKE,
+    defaultReturnPath: EnrollmentDashboardRoutes.ASSESSMENTS,
+  },
+  {
+    route: EnrollmentDashboardRoutes.NEW_ASSESSMENT,
+    defaultReturnPath: EnrollmentDashboardRoutes.ASSESSMENTS,
+  },
+  {
+    route: EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
+    defaultReturnPath: EnrollmentDashboardRoutes.ASSESSMENTS,
+  },
 ];
 
 export const PRINTABLE_ROUTES = [
-  EnrollmentDashboardRoutes.ASSESSMENT,
+  EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
   EnrollmentDashboardRoutes.ESG_FUNDING_REPORT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];

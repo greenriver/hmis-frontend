@@ -6,11 +6,12 @@ import {
   useGetEnrollmentWithHouseholdQuery,
 } from '@/types/gqlTypes';
 
-export function useHouseholdMembers(enrollmentId: string) {
+export function useHouseholdMembers(enrollmentId: string, skip?: boolean) {
   const { data: { enrollment: enrollment } = {}, ...status } =
     useGetEnrollmentWithHouseholdQuery({
       variables: { id: enrollmentId },
       fetchPolicy: 'cache-and-network',
+      skip,
     });
 
   const householdMembers: HouseholdClientFieldsFragment[] | undefined =

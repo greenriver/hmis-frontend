@@ -22,7 +22,7 @@ import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import { FormInput, FormRole, ItemType } from '@/types/gqlTypes';
+import { FormInput, ItemType, RecordFormRole } from '@/types/gqlTypes';
 
 export interface Props<RecordType>
   extends Omit<
@@ -34,7 +34,7 @@ export interface Props<RecordType>
     | 'onSubmit'
     | 'definition'
   > {
-  formRole: FormRole;
+  formRole: RecordFormRole;
   record?: RecordType;
   inputVariables?: Omit<
     FormInput,

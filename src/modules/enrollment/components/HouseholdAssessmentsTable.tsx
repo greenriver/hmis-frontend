@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
+import { generateAssessmentPath } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
 import {
@@ -8,13 +9,11 @@ import {
   formRoleDisplay,
   lastUpdatedBy,
 } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetHouseholdAssessmentsDocument,
   GetHouseholdAssessmentsQuery,
   GetHouseholdAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 type HhmAssessmentType = NonNullable<
   NonNullable<GetHouseholdAssessmentsQuery['household']>['assessments']
@@ -47,12 +46,11 @@ interface Props {
 const HouseholdAssessmentsTable: React.FC<Props> = ({ householdId }) => {
   const rowLinkTo = useCallback(
     (assessment: HhmAssessmentType) =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-        clientId: assessment.enrollment.client.id,
-        enrollmentId: assessment.enrollment.id,
-        assessmentId: assessment.id,
-        formRole: assessment.role,
-      }),
+      generateAssessmentPath(
+        assessment,
+        assessment.enrollment.client.id,
+        assessment.enrollment.id
+      ),
     []
   );
 

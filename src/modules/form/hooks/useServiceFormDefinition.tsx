@@ -21,11 +21,11 @@ const useServiceFormDefinition = ({
     onError,
   });
   const { formDefinition, itemMap } = useMemo(() => {
-    if (!data?.getServiceFormDefinition) return {};
+    if (!data?.serviceFormDefinition) return {};
 
     return {
-      formDefinition: data.getServiceFormDefinition,
-      itemMap: getItemMap(data.getServiceFormDefinition.definition, false),
+      formDefinition: data.serviceFormDefinition,
+      itemMap: getItemMap(data.serviceFormDefinition.definition, false),
     };
   }, [data]);
 

@@ -273,6 +273,7 @@ export enum AssessmentLevel {
   Invalid = 'INVALID',
 }
 
+/** Form Roles that are used for assessments. These types of forms are submitted using SubmitAssessment. */
 export enum AssessmentRole {
   /** Annual */
   Annual = 'ANNUAL',
@@ -5201,6 +5202,8 @@ export type Query = {
   applicationUsers: ApplicationUsersPaginated;
   /** Assessment lookup */
   assessment?: Maybe<Assessment>;
+  /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
+  assessmentFormDefinition?: Maybe<FormDefinition>;
   autoExitConfigs: AutoExitConfigsPaginated;
   /** Client lookup */
   client?: Maybe<Client>;
@@ -5222,10 +5225,6 @@ export type Query = {
   formRules: FormRulesPaginated;
   /** Funder lookup */
   funder?: Maybe<Funder>;
-  /** Get most relevant/recent form definition for the specified Role and project (optionally) */
-  getFormDefinition?: Maybe<FormDefinition>;
-  /** Get most relevant form definition for the specified service type */
-  getServiceFormDefinition?: Maybe<FormDefinition>;
   /** Household lookup */
   household?: Maybe<Household>;
   /** Get group of assessments that are performed together */
@@ -5245,11 +5244,15 @@ export type Query = {
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
   projects: ProjectsPaginated;
+  /** Get the most relevant Form Definition to use for record viewing/editing */
+  recordFormDefinition?: Maybe<FormDefinition>;
   referralPosting?: Maybe<ReferralPosting>;
   /** Service lookup */
   service?: Maybe<Service>;
   serviceCategories: ServiceCategoriesPaginated;
   serviceCategory?: Maybe<ServiceCategory>;
+  /** Get most relevant form definition for the specified service type */
+  serviceFormDefinition?: Maybe<FormDefinition>;
   /** Service type lookup */
   serviceType?: Maybe<ServiceType>;
   staticFormDefinition: FormDefinition;
@@ -5265,6 +5268,13 @@ export type QueryApplicationUsersArgs = {
 
 export type QueryAssessmentArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryAssessmentFormDefinitionArgs = {
+  assessmentDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  projectId: Scalars['ID']['input'];
+  role?: InputMaybe<AssessmentRole>;
 };
 
 export type QueryAutoExitConfigsArgs = {
@@ -5333,17 +5343,6 @@ export type QueryFunderArgs = {
   id: Scalars['ID']['input'];
 };
 
-export type QueryGetFormDefinitionArgs = {
-  enrollmentId?: InputMaybe<Scalars['ID']['input']>;
-  projectId?: InputMaybe<Scalars['ID']['input']>;
-  role: FormRole;
-};
-
-export type QueryGetServiceFormDefinitionArgs = {
-  projectId: Scalars['ID']['input'];
-  serviceTypeId: Scalars['ID']['input'];
-};
-
 export type QueryHouseholdArgs = {
   id: Scalars['ID']['input'];
 };
@@ -5406,6 +5405,11 @@ export type QueryProjectsArgs = {
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
+export type QueryRecordFormDefinitionArgs = {
+  projectId?: InputMaybe<Scalars['ID']['input']>;
+  role: RecordFormRole;
+};
+
 export type QueryReferralPostingArgs = {
   id: Scalars['ID']['input'];
 };
@@ -5421,6 +5425,11 @@ export type QueryServiceCategoriesArgs = {
 
 export type QueryServiceCategoryArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryServiceFormDefinitionArgs = {
+  projectId: Scalars['ID']['input'];
+  serviceTypeId: Scalars['ID']['input'];
 };
 
 export type QueryServiceTypeArgs = {
@@ -5577,6 +5586,48 @@ export enum ReasonNotInsured {
 export enum RecentItemType {
   Client = 'Client',
   Project = 'Project',
+}
+
+/** Form Roles that are used for record-editing. These types of forms are submitted using SubmitForm. */
+export enum RecordFormRole {
+  /** Case note */
+  CaseNote = 'CASE_NOTE',
+  /** CE assessment */
+  CeAssessment = 'CE_ASSESSMENT',
+  /** CE event */
+  CeEvent = 'CE_EVENT',
+  /** CE participation */
+  CeParticipation = 'CE_PARTICIPATION',
+  /** Client */
+  Client = 'CLIENT',
+  /** Client detail */
+  ClientDetail = 'CLIENT_DETAIL',
+  /** Current living situation */
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Enrollment */
+  Enrollment = 'ENROLLMENT',
+  /** File */
+  File = 'FILE',
+  /** Funder */
+  Funder = 'FUNDER',
+  /** HMIS participation */
+  HmisParticipation = 'HMIS_PARTICIPATION',
+  /** Inventory */
+  Inventory = 'INVENTORY',
+  /** New client enrollment */
+  NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
+  /** Occurrence point */
+  OccurrencePoint = 'OCCURRENCE_POINT',
+  /** Organization */
+  Organization = 'ORGANIZATION',
+  /** Project */
+  Project = 'PROJECT',
+  /** Project CoC */
+  ProjectCoc = 'PROJECT_COC',
+  /** Referral request */
+  ReferralRequest = 'REFERRAL_REQUEST',
+  /** Service */
+  Service = 'SERVICE',
 }
 
 /** 1.4 */
@@ -5835,9 +5886,13 @@ export enum RelationshipToHoH {
 
 export type Reminder = {
   __typename?: 'Reminder';
+  /** Relevant existing assessment, if any */
+  assessmentId?: Maybe<Scalars['ID']['output']>;
   client: Client;
   dueDate?: Maybe<Scalars['ISO8601Date']['output']>;
   enrollment: Enrollment;
+  /** Form definition to use, if a new assessment is needed */
+  formDefinitionId?: Maybe<Scalars['ID']['output']>;
   id: Scalars['ID']['output'];
   overdue: Scalars['Boolean']['output'];
   topic: ReminderTopic;
@@ -6422,6 +6477,7 @@ export enum SexualOrientation {
   QuestioningUnsure = 'QUESTIONING_UNSURE',
 }
 
+/** Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations. */
 export enum StaticFormRole {
   /** Auto exit config */
   AutoExitConfig = 'AUTO_EXIT_CONFIG',
@@ -16705,6 +16761,8 @@ export type GetEnrollmentRemindersQuery = {
       topic: ReminderTopic;
       dueDate?: string | null;
       overdue: boolean;
+      formDefinitionId?: string | null;
+      assessmentId?: string | null;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
@@ -19974,14 +20032,13 @@ export type GetPickListQuery = {
 };
 
 export type GetFormDefinitionQueryVariables = Exact<{
-  role: FormRole;
-  enrollmentId?: InputMaybe<Scalars['ID']['input']>;
+  role: RecordFormRole;
   projectId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 export type GetFormDefinitionQuery = {
   __typename?: 'Query';
-  getFormDefinition?: {
+  recordFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
@@ -20940,7 +20997,7 @@ export type GetServiceFormDefinitionQueryVariables = Exact<{
 
 export type GetServiceFormDefinitionQuery = {
   __typename?: 'Query';
-  getServiceFormDefinition?: {
+  serviceFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
@@ -21413,13 +21470,16 @@ export type GetServiceFormDefinitionQuery = {
   } | null;
 };
 
-export type GetFormDefinitionByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+export type GetAssessmentFormDefinitionQueryVariables = Exact<{
+  projectId: Scalars['ID']['input'];
+  id?: InputMaybe<Scalars['ID']['input']>;
+  role?: InputMaybe<AssessmentRole>;
+  assessmentDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
 }>;
 
-export type GetFormDefinitionByIdQuery = {
+export type GetAssessmentFormDefinitionQuery = {
   __typename?: 'Query';
-  formDefinition?: {
+  assessmentFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
@@ -27048,6 +27108,8 @@ export type ReminderFieldsFragment = {
   topic: ReminderTopic;
   dueDate?: string | null;
   overdue: boolean;
+  formDefinitionId?: string | null;
+  assessmentId?: string | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -30169,6 +30231,8 @@ export const ReminderFieldsFragmentDoc = gql`
     topic
     dueDate
     overdue
+    formDefinitionId
+    assessmentId
     enrollment {
       id
       relationshipToHoH
@@ -34629,12 +34693,8 @@ export type GetPickListQueryResult = Apollo.QueryResult<
   GetPickListQueryVariables
 >;
 export const GetFormDefinitionDocument = gql`
-  query GetFormDefinition($role: FormRole!, $enrollmentId: ID, $projectId: ID) {
-    getFormDefinition(
-      role: $role
-      enrollmentId: $enrollmentId
-      projectId: $projectId
-    ) {
+  query GetFormDefinition($role: RecordFormRole!, $projectId: ID) {
+    recordFormDefinition(role: $role, projectId: $projectId) {
       ...FormDefinitionFields
     }
   }
@@ -34654,7 +34714,6 @@ export const GetFormDefinitionDocument = gql`
  * const { data, loading, error } = useGetFormDefinitionQuery({
  *   variables: {
  *      role: // value for 'role'
- *      enrollmentId: // value for 'enrollmentId'
  *      projectId: // value for 'projectId'
  *   },
  * });
@@ -34754,7 +34813,7 @@ export type GetStaticFormDefinitionQueryResult = Apollo.QueryResult<
 >;
 export const GetServiceFormDefinitionDocument = gql`
   query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
-    getServiceFormDefinition(
+    serviceFormDefinition(
       serviceTypeId: $serviceTypeId
       projectId: $projectId
     ) {
@@ -34815,9 +34874,19 @@ export type GetServiceFormDefinitionQueryResult = Apollo.QueryResult<
   GetServiceFormDefinitionQuery,
   GetServiceFormDefinitionQueryVariables
 >;
-export const GetFormDefinitionByIdDocument = gql`
-  query GetFormDefinitionById($id: ID!) {
-    formDefinition(id: $id) {
+export const GetAssessmentFormDefinitionDocument = gql`
+  query GetAssessmentFormDefinition(
+    $projectId: ID!
+    $id: ID
+    $role: AssessmentRole
+    $assessmentDate: ISO8601Date
+  ) {
+    assessmentFormDefinition(
+      projectId: $projectId
+      id: $id
+      role: $role
+      assessmentDate: $assessmentDate
+    ) {
       ...FormDefinitionFields
     }
   }
@@ -34825,54 +34894,57 @@ export const GetFormDefinitionByIdDocument = gql`
 `;
 
 /**
- * __useGetFormDefinitionByIdQuery__
+ * __useGetAssessmentFormDefinitionQuery__
  *
- * To run a query within a React component, call `useGetFormDefinitionByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFormDefinitionByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAssessmentFormDefinitionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAssessmentFormDefinitionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetFormDefinitionByIdQuery({
+ * const { data, loading, error } = useGetAssessmentFormDefinitionQuery({
  *   variables: {
+ *      projectId: // value for 'projectId'
  *      id: // value for 'id'
+ *      role: // value for 'role'
+ *      assessmentDate: // value for 'assessmentDate'
  *   },
  * });
  */
-export function useGetFormDefinitionByIdQuery(
+export function useGetAssessmentFormDefinitionQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetFormDefinitionByIdQuery,
-    GetFormDefinitionByIdQueryVariables
+    GetAssessmentFormDefinitionQuery,
+    GetAssessmentFormDefinitionQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetFormDefinitionByIdQuery,
-    GetFormDefinitionByIdQueryVariables
-  >(GetFormDefinitionByIdDocument, options);
+    GetAssessmentFormDefinitionQuery,
+    GetAssessmentFormDefinitionQueryVariables
+  >(GetAssessmentFormDefinitionDocument, options);
 }
-export function useGetFormDefinitionByIdLazyQuery(
+export function useGetAssessmentFormDefinitionLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetFormDefinitionByIdQuery,
-    GetFormDefinitionByIdQueryVariables
+    GetAssessmentFormDefinitionQuery,
+    GetAssessmentFormDefinitionQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetFormDefinitionByIdQuery,
-    GetFormDefinitionByIdQueryVariables
-  >(GetFormDefinitionByIdDocument, options);
+    GetAssessmentFormDefinitionQuery,
+    GetAssessmentFormDefinitionQueryVariables
+  >(GetAssessmentFormDefinitionDocument, options);
 }
-export type GetFormDefinitionByIdQueryHookResult = ReturnType<
-  typeof useGetFormDefinitionByIdQuery
+export type GetAssessmentFormDefinitionQueryHookResult = ReturnType<
+  typeof useGetAssessmentFormDefinitionQuery
 >;
-export type GetFormDefinitionByIdLazyQueryHookResult = ReturnType<
-  typeof useGetFormDefinitionByIdLazyQuery
+export type GetAssessmentFormDefinitionLazyQueryHookResult = ReturnType<
+  typeof useGetAssessmentFormDefinitionLazyQuery
 >;
-export type GetFormDefinitionByIdQueryResult = Apollo.QueryResult<
-  GetFormDefinitionByIdQuery,
-  GetFormDefinitionByIdQueryVariables
+export type GetAssessmentFormDefinitionQueryResult = Apollo.QueryResult<
+  GetAssessmentFormDefinitionQuery,
+  GetAssessmentFormDefinitionQueryVariables
 >;
 export const GetFormDefinitionForEditorDocument = gql`
   query GetFormDefinitionForEditor($id: ID!) {

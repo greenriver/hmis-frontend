@@ -9,7 +9,10 @@ import useAuth from '@/modules/auth/hooks/useAuth';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { FormRole, ReferralRequestFieldsFragment } from '@/types/gqlTypes';
+import {
+  RecordFormRole,
+  ReferralRequestFieldsFragment,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const NewReferralRequest: React.FC = () => {
@@ -33,7 +36,7 @@ const NewReferralRequest: React.FC = () => {
     <EditRecord<ReferralRequestFieldsFragment>
       FormActionProps={{ submitButtonText: 'Submit Referral Request' }}
       onCompleted={onCompleted}
-      formRole={FormRole.ReferralRequest}
+      formRole={RecordFormRole.ReferralRequest}
       pickListArgs={pickListArgs}
       inputVariables={inputVariables}
       title={<ProjectFormTitle title={title} project={project} />}
