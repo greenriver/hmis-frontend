@@ -273,6 +273,7 @@ export enum AssessmentLevel {
   Invalid = 'INVALID',
 }
 
+/** Form Roles that are used for assessments. These types of forms are submitted using SubmitAssessment. */
 export enum AssessmentRole {
   /** Annual */
   Annual = 'ANNUAL',
@@ -5583,6 +5584,7 @@ export enum RecentItemType {
   Project = 'Project',
 }
 
+/** Form Roles that are used for record-editing. These types of forms are submitted using SubmitForm. */
 export enum RecordFormRole {
   /** Case note */
   CaseNote = 'CASE_NOTE',
@@ -6467,6 +6469,7 @@ export enum SexualOrientation {
   QuestioningUnsure = 'QUESTIONING_UNSURE',
 }
 
+/** Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations. */
 export enum StaticFormRole {
   /** Auto exit config */
   AutoExitConfig = 'AUTO_EXIT_CONFIG',

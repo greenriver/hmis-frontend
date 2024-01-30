@@ -1700,7 +1700,7 @@
       {
         "kind": "ENUM",
         "name": "AssessmentRole",
-        "description": null,
+        "description": "Form Roles that are used for assessments. These types of forms are submitted using SubmitAssessment.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -35119,7 +35119,7 @@
       {
         "kind": "ENUM",
         "name": "RecordFormRole",
-        "description": null,
+        "description": "Form Roles that are used for record-editing. These types of forms are submitted using SubmitForm.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -39831,7 +39831,7 @@
       {
         "kind": "ENUM",
         "name": "StaticFormRole",
-        "description": null,
+        "description": "Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
