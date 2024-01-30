@@ -47,8 +47,8 @@ import ConfigureServicesPage from '@/modules/admin/components/services/Configure
 import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
 import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
-import ExistingIndividualAssessmentPage from '@/modules/assessments/components/ExistingIndividualAssessmentPage';
 import ExitAssessmentPage from '@/modules/assessments/components/ExitAssessmentPage';
+import IndividualAssessmentPage from '@/modules/assessments/components/IndividualAssessmentPage';
 import IntakeAssessmentPage from '@/modules/assessments/components/IntakeAssessmentPage';
 import NewIndividualAssessmentPage from '@/modules/assessments/components/NewIndividualAssessmentPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
@@ -395,7 +395,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             // view/edit existing individual assessment
             path: EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
-            element: <ExistingIndividualAssessmentPage />,
+            element: <IndividualAssessmentPage />,
           },
           {
             // create new individual assessment

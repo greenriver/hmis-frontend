@@ -3,7 +3,7 @@ import Loading from '@/components/elements/Loading';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import IndividualAssessmentPage from '@/modules/assessments/components/IndividualAssessmentPage';
+import IndividualAssessmentFormController from '@/modules/assessments/components/IndividualAssessmentFormController';
 import MissingDefinitionAlert from '@/modules/assessments/components/MissingDefinitionAlert';
 import useAssessmentFormDefinition from '@/modules/assessments/hooks/useAssessmentFormDefinition';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -41,7 +41,7 @@ const NewIndividualAssessmentPage = () => {
   if (!formDefinition) return <MissingDefinitionAlert />;
 
   return (
-    <IndividualAssessmentPage
+    <IndividualAssessmentFormController
       enrollment={enrollment}
       client={client}
       definition={formDefinition}

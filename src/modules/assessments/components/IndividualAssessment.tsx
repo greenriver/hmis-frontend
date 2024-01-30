@@ -73,6 +73,8 @@ export interface IndividualAssessmentProps {
  *
  * If assessment is provided, we're editing an existing assessment.
  * Otherwise, we're creating a new assessment.
+ *
+ * This component is used by both individual assessment page & household assessments page.
  */
 const IndividualAssessment = ({
   enrollmentId,

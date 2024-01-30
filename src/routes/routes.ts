@@ -58,7 +58,7 @@ const enrollmentDashboardRoutes = {
   CE_ASSESSMENTS: 'ce-assessments',
   CUSTOM_CASE_NOTES: 'case-notes',
   INTAKE: 'intake', // Go to intake (render household view, or navigate to View/Create individual assessment appropriate)
-  EXIT: 'exit', // Go to intake (render household view, or navigate to View/Create individual assessment as appropriate)
+  EXIT: 'exit', // Go to exit (render household view, or navigate to View/Create individual assessment as appropriate)
   VIEW_ASSESSMENT: 'assessments/:assessmentId', // View/Edit individual assessment
   NEW_ASSESSMENT: 'assessments/new/:formDefinitionId', // Create new individual assessment
   ESG_FUNDING_REPORT: 'esg-funding-report',
