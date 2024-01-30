@@ -125,24 +125,56 @@ const generateColumns = (
   },
 ];
 
+const pathToNewOrExistingAssessment = (
+  clientId: string,
+  enrollmentId: string,
+  assessmentId?: string | null,
+  formDefinitionId?: string | null
+) => {
+  if (assessmentId) {
+    // link to existing assessment form if Assessments ID is present
+    return generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
+      clientId,
+      enrollmentId,
+      assessmentId,
+    });
+  }
+  if (formDefinitionId) {
+    // link to new assessment form if FD ID is present
+    return generateSafePath(EnrollmentDashboardRoutes.NEW_ASSESSMENT, {
+      clientId,
+      enrollmentId,
+      formDefinitionId,
+    });
+  }
+  return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
+    clientId,
+    enrollmentId,
+  });
+};
+
 const rowLinkTo = ({
   topic,
   client,
   enrollment,
+  assessmentId,
+  formDefinitionId,
 }: ReminderFieldsFragment): string => {
   switch (topic) {
     case ReminderTopic.AnnualAssessment:
-      // FIXME
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
-        clientId: client.id,
-        enrollmentId: enrollment.id,
-      });
+      return pathToNewOrExistingAssessment(
+        client.id,
+        enrollment.id,
+        assessmentId,
+        formDefinitionId
+      );
     case ReminderTopic.AgedIntoAdulthood:
-      // FIXME
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
-        clientId: client.id,
-        enrollmentId: enrollment.id,
-      });
+      return pathToNewOrExistingAssessment(
+        client.id,
+        enrollment.id,
+        assessmentId,
+        formDefinitionId
+      );
     case ReminderTopic.IntakeIncomplete:
       return generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
         clientId: client.id,
