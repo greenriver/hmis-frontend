@@ -62,7 +62,7 @@ const EnrollmentDashboard: React.FC = () => {
 
   const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
 
-  const { currentPath, setFocusMode, ...dashboardState } = useDashboardState();
+  const { currentPath, ...dashboardState } = useDashboardState();
 
   const focusMode = useMemo(() => {
     if (dashboardState.focusMode) return dashboardState.focusMode;
@@ -80,10 +80,9 @@ const EnrollmentDashboard: React.FC = () => {
             overrideBreadcrumbTitles,
             enrollment,
             enabledFeatures,
-            setFocusMode,
           }
         : undefined,
-    [client, enrollment, enabledFeatures, setFocusMode]
+    [client, enrollment, enabledFeatures]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);

@@ -273,6 +273,7 @@ export enum AssessmentLevel {
   Invalid = 'INVALID',
 }
 
+/** Form Roles that are used for assessments. These types of forms are submitted using SubmitAssessment. */
 export enum AssessmentRole {
   /** Annual */
   Annual = 'ANNUAL',
@@ -5222,10 +5223,6 @@ export type Query = {
   formRules: FormRulesPaginated;
   /** Funder lookup */
   funder?: Maybe<Funder>;
-  /** Get the most relevant Form Definition to use for record viewing/editing */
-  getFormDefinition?: Maybe<FormDefinition>;
-  /** Get most relevant form definition for the specified service type */
-  getServiceFormDefinition?: Maybe<FormDefinition>;
   /** Household lookup */
   household?: Maybe<Household>;
   /** Get group of assessments that are performed together */
@@ -5245,11 +5242,15 @@ export type Query = {
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
   projects: ProjectsPaginated;
+  /** Get the most relevant Form Definition to use for record viewing/editing */
+  recordFormDefinition?: Maybe<FormDefinition>;
   referralPosting?: Maybe<ReferralPosting>;
   /** Service lookup */
   service?: Maybe<Service>;
   serviceCategories: ServiceCategoriesPaginated;
   serviceCategory?: Maybe<ServiceCategory>;
+  /** Get most relevant form definition for the specified service type */
+  serviceFormDefinition?: Maybe<FormDefinition>;
   /** Service type lookup */
   serviceType?: Maybe<ServiceType>;
   staticFormDefinition: FormDefinition;
@@ -5340,16 +5341,6 @@ export type QueryFunderArgs = {
   id: Scalars['ID']['input'];
 };
 
-export type QueryGetFormDefinitionArgs = {
-  projectId?: InputMaybe<Scalars['ID']['input']>;
-  role: FormRole;
-};
-
-export type QueryGetServiceFormDefinitionArgs = {
-  projectId: Scalars['ID']['input'];
-  serviceTypeId: Scalars['ID']['input'];
-};
-
 export type QueryHouseholdArgs = {
   id: Scalars['ID']['input'];
 };
@@ -5412,6 +5403,11 @@ export type QueryProjectsArgs = {
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
+export type QueryRecordFormDefinitionArgs = {
+  projectId?: InputMaybe<Scalars['ID']['input']>;
+  role: RecordFormRole;
+};
+
 export type QueryReferralPostingArgs = {
   id: Scalars['ID']['input'];
 };
@@ -5427,6 +5423,11 @@ export type QueryServiceCategoriesArgs = {
 
 export type QueryServiceCategoryArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryServiceFormDefinitionArgs = {
+  projectId: Scalars['ID']['input'];
+  serviceTypeId: Scalars['ID']['input'];
 };
 
 export type QueryServiceTypeArgs = {
@@ -5581,6 +5582,48 @@ export enum ReasonNotInsured {
 export enum RecentItemType {
   Client = 'Client',
   Project = 'Project',
+}
+
+/** Form Roles that are used for record-editing. These types of forms are submitted using SubmitForm. */
+export enum RecordFormRole {
+  /** Case note */
+  CaseNote = 'CASE_NOTE',
+  /** CE assessment */
+  CeAssessment = 'CE_ASSESSMENT',
+  /** CE event */
+  CeEvent = 'CE_EVENT',
+  /** CE participation */
+  CeParticipation = 'CE_PARTICIPATION',
+  /** Client */
+  Client = 'CLIENT',
+  /** Client detail */
+  ClientDetail = 'CLIENT_DETAIL',
+  /** Current living situation */
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Enrollment */
+  Enrollment = 'ENROLLMENT',
+  /** File */
+  File = 'FILE',
+  /** Funder */
+  Funder = 'FUNDER',
+  /** HMIS participation */
+  HmisParticipation = 'HMIS_PARTICIPATION',
+  /** Inventory */
+  Inventory = 'INVENTORY',
+  /** New client enrollment */
+  NewClientEnrollment = 'NEW_CLIENT_ENROLLMENT',
+  /** Occurrence point */
+  OccurrencePoint = 'OCCURRENCE_POINT',
+  /** Organization */
+  Organization = 'ORGANIZATION',
+  /** Project */
+  Project = 'PROJECT',
+  /** Project CoC */
+  ProjectCoc = 'PROJECT_COC',
+  /** Referral request */
+  ReferralRequest = 'REFERRAL_REQUEST',
+  /** Service */
+  Service = 'SERVICE',
 }
 
 /** 1.4 */
@@ -6430,6 +6473,7 @@ export enum SexualOrientation {
   QuestioningUnsure = 'QUESTIONING_UNSURE',
 }
 
+/** Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations. */
 export enum StaticFormRole {
   /** Auto exit config */
   AutoExitConfig = 'AUTO_EXIT_CONFIG',
@@ -19984,13 +20028,13 @@ export type GetPickListQuery = {
 };
 
 export type GetFormDefinitionQueryVariables = Exact<{
-  role: FormRole;
+  role: RecordFormRole;
   projectId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 export type GetFormDefinitionQuery = {
   __typename?: 'Query';
-  getFormDefinition?: {
+  recordFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
@@ -20949,7 +20993,7 @@ export type GetServiceFormDefinitionQueryVariables = Exact<{
 
 export type GetServiceFormDefinitionQuery = {
   __typename?: 'Query';
-  getServiceFormDefinition?: {
+  serviceFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
     role: FormRole;
@@ -34645,8 +34689,8 @@ export type GetPickListQueryResult = Apollo.QueryResult<
   GetPickListQueryVariables
 >;
 export const GetFormDefinitionDocument = gql`
-  query GetFormDefinition($role: FormRole!, $projectId: ID) {
-    getFormDefinition(role: $role, projectId: $projectId) {
+  query GetFormDefinition($role: RecordFormRole!, $projectId: ID) {
+    recordFormDefinition(role: $role, projectId: $projectId) {
       ...FormDefinitionFields
     }
   }
@@ -34765,7 +34809,7 @@ export type GetStaticFormDefinitionQueryResult = Apollo.QueryResult<
 >;
 export const GetServiceFormDefinitionDocument = gql`
   query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
-    getServiceFormDefinition(
+    serviceFormDefinition(
       serviceTypeId: $serviceTypeId
       projectId: $projectId
     ) {

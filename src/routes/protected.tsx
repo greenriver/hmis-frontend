@@ -16,12 +16,8 @@ import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import ClientFiles from '@/components/clientDashboard/ClientFiles';
 import EditClient from '@/components/clientDashboard/EditClient';
-import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
 import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
 import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
-import ExitAssessmentPage from '@/components/clientDashboard/enrollments/ExitAssessmentPage';
-import IntakeAssessmentPage from '@/components/clientDashboard/enrollments/IntakeAssessmentPage';
-import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import PathHandler from '@/components/elements/PathHandler';
@@ -51,6 +47,10 @@ import ConfigureServicesPage from '@/modules/admin/components/services/Configure
 import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
 import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
+import ExitAssessmentPage from '@/modules/assessments/components/ExitAssessmentPage';
+import IndividualAssessmentPage from '@/modules/assessments/components/IndividualAssessmentPage';
+import IntakeAssessmentPage from '@/modules/assessments/components/IntakeAssessmentPage';
+import NewIndividualAssessmentPage from '@/modules/assessments/components/NewIndividualAssessmentPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
@@ -395,7 +395,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             // view/edit existing individual assessment
             path: EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
-            element: <AssessmentPage />,
+            element: <IndividualAssessmentPage />,
           },
           {
             // create new individual assessment
@@ -405,7 +405,7 @@ export const protectedRoutes: RouteNode[] = [
                 permissions='canEditEnrollments'
                 redirectRoute={EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW}
               >
-                <NewAssessmentPage />
+                <NewIndividualAssessmentPage />
               </EnrollmentRoute>
             ),
           },

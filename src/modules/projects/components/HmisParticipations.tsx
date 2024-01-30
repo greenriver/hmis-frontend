@@ -16,7 +16,7 @@ import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteHmisParticipationDocument,
-  FormRole,
+  RecordFormRole,
   GetProjectHmisParticipationsDocument,
   HmisParticipationFieldsFragment,
 } from '@/types/gqlTypes';
@@ -67,7 +67,7 @@ const HmisParticipations = () => {
     useViewEditRecordDialogs({
       variant: project.access.canEditProjectDetails ? 'edit_only' : 'view_only',
       inputVariables: { projectId: project.id },
-      formRole: FormRole.HmisParticipation,
+      formRole: RecordFormRole.HmisParticipation,
       recordName: 'HMIS Participation',
       evictCache,
       deleteRecordDocument: DeleteHmisParticipationDocument,

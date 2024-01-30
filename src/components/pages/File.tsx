@@ -9,8 +9,8 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
-  FormRole,
   FileFieldsFragment,
+  RecordFormRole,
   useGetFileQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -48,7 +48,7 @@ const File = ({ create = false }: { create?: boolean }) => {
 
   return (
     <EditRecord<FileFieldsFragment>
-      formRole={FormRole.File}
+      formRole={RecordFormRole.File}
       onCompleted={onCompleted}
       record={data?.file || undefined}
       FormActionProps={create ? { submitButtonText: 'Upload File' } : undefined}

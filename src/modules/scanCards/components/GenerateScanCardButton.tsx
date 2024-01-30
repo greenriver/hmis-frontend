@@ -5,20 +5,33 @@ import {
   DialogContent,
   DialogTitle,
   Stack,
+  Typography,
 } from '@mui/material';
 
-import { useCallback, useState } from 'react';
-import { ClickToCopyChip } from '@/components/elements/ClickToCopy';
+import { useCallback, useMemo, useState } from 'react';
+import { ClickToCopyButton } from '@/components/elements/ClickToCopy';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
-import { ScanCardIcon } from '@/components/elements/SemanticIcons';
-import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  DownloadIcon,
+  ScanCardIcon,
+} from '@/components/elements/SemanticIcons';
+import {
+  clientBriefName,
+  dataUrlForClientImage,
+  parseAndFormatDate,
+} from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   ClientFieldsFragment,
   useCreateScanCardMutation,
+  useGetClientImageQuery,
 } from '@/types/gqlTypes';
 
+/**
+ * Button to generate a scan card code, and then show
+ * the code + some client details in a modal.
+ */
 const GenerateScanCardButton: React.FC<{
   client: ClientFieldsFragment;
 }> = ({ client }) => {
@@ -28,6 +41,7 @@ const GenerateScanCardButton: React.FC<{
     setCode(undefined);
   }, []);
 
+  // Mutation for generating a new scan card code
   const [mutate, { loading, error }] = useCreateScanCardMutation({
     variables: { clientId },
     onCompleted: (data) => {
@@ -41,7 +55,26 @@ const GenerateScanCardButton: React.FC<{
     },
   });
 
+  // Fetch client image for download button
+  const { data: clientDataWithImage } = useGetClientImageQuery({
+    variables: { id: clientId },
+  });
+
+  // Info for client image download
+  const { href, filename } = useMemo(() => {
+    const image = clientDataWithImage?.client?.image;
+    if (!image) return {};
+
+    return {
+      href: dataUrlForClientImage(image),
+      filename: `${code}_image.jpeg`,
+    };
+  }, [clientDataWithImage, code]);
+
   if (error) throw error;
+
+  const clientName = clientBriefName(client);
+  const clientDob = parseAndFormatDate(client.dob);
 
   return (
     <>
@@ -53,36 +86,53 @@ const GenerateScanCardButton: React.FC<{
       >
         Generate Scan Card
       </LoadingButton>
-      <CommonDialog open={!!code} fullWidth onClose={closeDialog}>
+      <CommonDialog open={!!code} maxWidth='xs' fullWidth onClose={closeDialog}>
         <DialogTitle>Scan Card Information</DialogTitle>
         {code && (
           <DialogContent sx={{ mt: 2 }}>
+            <Typography sx={{ mb: 4 }}>
+              Copy the scan card information by highlighting the text or using
+              the copy buttons.
+            </Typography>
             <Stack gap={2}>
-              <CommonLabeledTextBlock title='Bar Code ID'>
-                <ClickToCopyChip value={code} />
+              <CommonLabeledTextBlock title='Bar Code ID' variant='body1'>
+                {code}
+                <ClickToCopyButton value={code} aria-label='Copy Bar Code ID' />
               </CommonLabeledTextBlock>
-              <CommonLabeledTextBlock title='Client Name'>
-                <ClickToCopyChip value={clientBriefName(client)} />
+              <CommonLabeledTextBlock title='Client Name' variant='body1'>
+                {clientName}
+                <ClickToCopyButton
+                  value={clientName}
+                  aria-label='Copy Client Name'
+                />
               </CommonLabeledTextBlock>
-              {parseAndFormatDate(client.dob) && (
-                <CommonLabeledTextBlock title='Date of Birth'>
-                  <ClickToCopyChip
-                    value={parseAndFormatDate(client.dob) || ''}
+              {clientDob && (
+                <CommonLabeledTextBlock title='Date of Birth' variant='body1'>
+                  {clientDob}
+                  <ClickToCopyButton
+                    value={clientDob}
+                    aria-label='Copy Client DOB'
                   />
                 </CommonLabeledTextBlock>
               )}
-              {/* <Button
-                variant='outlined'
-                sx={{ width: 'fit-content' }}
-                startIcon={<DownloadIcon />}
-              >
-                Download Client Photo
-              </Button> */}
+              {href && (
+                <Button
+                  variant='outlined'
+                  sx={{ width: 'fit-content', my: 1 }}
+                  startIcon={<DownloadIcon />}
+                  href={href}
+                  download={filename}
+                >
+                  Download Client Photo
+                </Button>
+              )}
             </Stack>
           </DialogContent>
         )}
         <DialogActions sx={{ justifyContent: 'center' }}>
-          <Button onClick={closeDialog}>Close</Button>
+          <Button onClick={closeDialog} variant='gray'>
+            Close
+          </Button>
         </DialogActions>
       </CommonDialog>
     </>

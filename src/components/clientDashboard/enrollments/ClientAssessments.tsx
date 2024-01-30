@@ -50,6 +50,8 @@ const ClientAssessments = () => {
 
   const rowLinkTo = useCallback(
     (record: AssessmentType) =>
+      // Note: this opens the assessment for individual viewing, even
+      // if it's an intake/exit in a multimember household.
       generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
         clientId,
         enrollmentId: record.enrollment.id,

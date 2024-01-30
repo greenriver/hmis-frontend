@@ -1,114 +1,62 @@
-import { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import {
-  AssessmentResponseStatus,
-  useAssessmentHandlers,
-} from '../hooks/useAssessmentHandlers';
-import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
-import { FormActionTypes } from '@/modules/form/types';
-import { DashboardEnrollment } from '@/modules/hmis/types';
-import { cache } from '@/providers/apolloClient';
+import { useEffect, useMemo } from 'react';
+import Loading from '@/components/elements/Loading';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
+import NotFound from '@/components/pages/NotFound';
+import useSafeParams from '@/hooks/useSafeParams';
+import IndividualAssessmentFormController from '@/modules/assessments/components/IndividualAssessmentFormController';
+import { applyDefinitionRulesForClient } from '@/modules/form/util/formUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import {
-  ClientNameDobVetFragment,
-  FormDefinitionFieldsFragment,
-  FullAssessmentFragment,
-} from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
+import { useGetAssessmentQuery } from '@/types/gqlTypes';
 
-interface Props {
-  enrollment: DashboardEnrollment;
-  client: ClientNameDobVetFragment;
-  definition: FormDefinitionFieldsFragment;
-  assessment?: FullAssessmentFragment;
-}
+/**
+ * Renders an existing individual assessment.
+ *
+ * Note: used both for viewing and editing assessments. View/edit display
+ * depends on user permissions and whether the assessment is WIP or Submitted.
+ */
+const IndividualAssessmentPage = () => {
+  const { enrollment, client, overrideBreadcrumbTitles } =
+    useEnrollmentDashboardContext();
+  const { assessmentId } = useSafeParams() as { assessmentId: string };
 
-const IndividualAssessmentPage: React.FC<Props> = ({
-  client,
-  enrollment,
-  definition,
-  assessment,
-}) => {
-  const navigate = useNavigate();
-  const navigateToEnrollment = useCallback(
-    () =>
-      navigate(
-        generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
-          enrollmentId: enrollment.id,
-          clientId: client.id,
-        })
-      ),
-    [navigate, enrollment, client]
-  );
+  // Fetch the Assessment, and the definition attached to it
+  const {
+    data: assessmentData,
+    loading: assessmentLoading,
+    error: assessmentError,
+  } = useGetAssessmentQuery({ variables: { id: assessmentId } });
 
-  const onCompletedMutation = useCallback(
-    (status: AssessmentResponseStatus) => {
-      if (!['saved', 'submitted'].includes(status)) return;
-      // We created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
-      if (!assessment) {
-        cache.evict({
-          id: `Enrollment:${enrollment.id}`,
-          fieldName: 'assessments',
-        });
-      }
-      navigateToEnrollment();
-    },
-    [navigateToEnrollment, assessment, enrollment]
-  );
+  // Retrieve the Definition from the Assessment, and apply any "Data Collected About" rules to it
+  const definition = useMemo(() => {
+    if (!assessmentData?.assessment?.definition || !enrollment) return;
 
-  const { submitHandler, saveDraftHandler, mutationLoading, errors } =
-    useAssessmentHandlers({
-      definition,
-      enrollmentId: enrollment.id,
-      assessmentId: assessment?.id,
-      assessmentLockVersion: assessment?.lockVersion,
-      onCompletedMutation,
+    return applyDefinitionRulesForClient(
+      assessmentData?.assessment?.definition,
+      client,
+      enrollment.relationshipToHoH
+    );
+  }, [assessmentData, client, enrollment]);
+
+  // Set the breadcrumb so it says the correct name of this assessment
+  useEffect(() => {
+    overrideBreadcrumbTitles({
+      [EnrollmentDashboardRoutes.VIEW_ASSESSMENT]: definition?.title,
     });
+  }, [overrideBreadcrumbTitles, definition]);
 
-  const FormActionProps = useMemo(() => {
-    return {
-      onDiscard: navigateToEnrollment,
-      config: [
-        {
-          id: 'submit',
-          label: 'Submit',
-          action: FormActionTypes.Submit,
-          buttonProps: { variant: 'contained' } as const,
-        },
-        ...(assessment && !assessment.inProgress
-          ? []
-          : [
-              {
-                id: 'saveDraft',
-                label: 'Save and finish later',
-                action: FormActionTypes.Save,
-                buttonProps: { variant: 'outlined' } as const,
-              },
-            ]),
-        {
-          id: 'discard',
-          label: 'Cancel',
-          action: FormActionTypes.Discard,
-          buttonProps: { variant: 'gray' } as const,
-        },
-      ],
-    };
-  }, [assessment, navigateToEnrollment]);
+  if (assessmentError) throw assessmentError;
+  if (!enrollment) return <NotFound />;
+  if (!assessmentData && assessmentLoading) return <Loading />;
+
+  const assessment = assessmentData?.assessment;
+  if (!assessment || !definition) return <NotFound />;
 
   return (
-    <IndividualAssessment
+    <IndividualAssessmentFormController
+      enrollment={enrollment}
+      client={client}
       definition={definition}
       assessment={assessment}
-      formRole={definition.role}
-      enrollmentId={enrollment.id}
-      title={definition.title}
-      client={client}
-      onSubmit={submitHandler}
-      onSaveDraft={saveDraftHandler}
-      errors={errors}
-      mutationLoading={mutationLoading}
-      FormActionProps={FormActionProps}
     />
   );
 };

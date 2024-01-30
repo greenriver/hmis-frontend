@@ -8,7 +8,7 @@ import { STICKY_BAR_HEIGHT } from '../layout/layoutConstants';
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { Routes } from '@/routes/routes';
-import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
+import { ClientFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const CreateClient: React.FC = () => {
@@ -36,7 +36,7 @@ const CreateClient: React.FC = () => {
   return (
     <BasicBreadcrumbPageLayout crumbs={crumbs} maxWidth='xl'>
       <EditRecord<ClientFieldsFragment>
-        formRole={FormRole.Client}
+        formRole={RecordFormRole.Client}
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Client' }}
         top={STICKY_BAR_HEIGHT}
