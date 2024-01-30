@@ -16,7 +16,6 @@ import ExpandInfoButton from '@/components/elements/ExpandInfoButton';
 import RouterLink from '@/components/elements/RouterLink';
 import useSafeParams from '@/hooks/useSafeParams';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { AssessmentRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -51,10 +50,9 @@ const HouseholdSummaryExitHelpCard: React.FC<Props> = ({ tabs }) => {
       enrollmentId: hohEnrollmentId,
     }
   );
-  const intakePath = generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+  const intakePath = generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
     clientId: hohClientId,
     enrollmentId: hohEnrollmentId,
-    formRole: AssessmentRole.Intake,
   });
 
   return (

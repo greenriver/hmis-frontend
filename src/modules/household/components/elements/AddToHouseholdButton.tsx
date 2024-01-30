@@ -6,7 +6,7 @@ import usePrevious from '@/hooks/usePrevious';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
-  FormRole,
+  RecordFormRole,
   SubmittedEnrollmentResultFieldsFragment,
 } from '@/types/gqlTypes';
 
@@ -44,7 +44,7 @@ const AddToHouseholdButton = ({
 
   const memoedArgs = useMemo(
     () => ({
-      formRole: FormRole.Enrollment,
+      formRole: RecordFormRole.Enrollment,
       onCompleted: (data: SubmittedEnrollmentResultFieldsFragment) => {
         setAdded(true);
         onSuccess(data.householdId);

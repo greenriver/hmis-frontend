@@ -3,6 +3,8 @@ fragment ReminderFields on Reminder {
   topic
   dueDate
   overdue
+  formDefinitionId
+  assessmentId
   enrollment {
     id
     relationshipToHoH

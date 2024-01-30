@@ -12,8 +12,8 @@ import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  FormRole,
   InventoryFieldsFragment,
+  RecordFormRole,
   useGetInventoryQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -67,7 +67,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
         create ? { submitButtonText: 'Create Inventory' } : undefined
       }
       onCompleted={onCompleted}
-      formRole={FormRole.Inventory}
+      formRole={RecordFormRole.Inventory}
       record={inventory || undefined}
       localConstants={localConstants}
       inputVariables={inputVariables}

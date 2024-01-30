@@ -1,7 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { Ref, useEffect, useMemo } from 'react';
-
-import { assessmentDate } from '../util';
+import { Ref, useMemo } from 'react';
 
 import AssessmentTitle from './AssessmentTitle';
 
@@ -11,7 +9,6 @@ import {
   HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
@@ -26,7 +23,6 @@ import {
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   ClientNameFragment,
@@ -76,7 +72,9 @@ export interface IndividualAssessmentProps {
  * Renders a single assessment form for an individual, including form stepper nav.
  *
  * If assessment is provided, we're editing an existing assessment.
- * If formRole is provided, we're creating a new assessment.
+ * Otherwise, we're creating a new assessment.
+ *
+ * This component is used by both individual assessment page & household assessments page.
  */
 const IndividualAssessment = ({
   enrollmentId,
@@ -97,29 +95,9 @@ const IndividualAssessment = ({
   mutationLoading,
   onCancelValidations,
 }: IndividualAssessmentProps) => {
-  const { overrideBreadcrumbTitles } = useClientDashboardContext();
-
   // Fetch the enrollment, which may be different from the current context enrollment if this assessment is part of a workflow.
   const { enrollment, loading: enrollmentLoading } =
     useBasicEnrollment(enrollmentId);
-
-  const informationDate = useMemo(
-    () => assessmentDate(formRole, enrollment),
-    [enrollment, formRole]
-  );
-
-  useEffect(() => {
-    if (!title || embeddedInWorkflow) return;
-    overrideBreadcrumbTitles({
-      [EnrollmentDashboardRoutes.ASSESSMENT]: title,
-    });
-  }, [
-    embeddedInWorkflow,
-    title,
-    informationDate,
-    assessment,
-    overrideBreadcrumbTitles,
-  ]);
 
   const topOffsetHeight =
     STICKY_BAR_HEIGHT +
@@ -127,6 +105,37 @@ const IndividualAssessment = ({
     (embeddedInWorkflow ? HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT : 0);
 
   useScrollToHash(enrollmentLoading, topOffsetHeight);
+
+  const navigationTitle = useMemo(() => {
+    if (!enrollment) return;
+    if (!embeddedInWorkflow) {
+      return (
+        <Typography variant='body2' component='div'>
+          Assessment Sections
+        </Typography>
+      );
+    }
+    return (
+      <Box>
+        <Typography variant='h5' sx={{ mb: 2 }}>
+          {clientBriefName(client)}
+        </Typography>
+        <Stack gap={1}>
+          <Typography variant='body2' component='div'>
+            <b>{`${definition.title}: `}</b>
+            {enrollment.project.projectName}
+          </Typography>
+          <AssessmentStatusIndicator status={assessmentStatus} />
+        </Stack>
+      </Box>
+    );
+  }, [
+    assessmentStatus,
+    client,
+    definition.title,
+    embeddedInWorkflow,
+    enrollment,
+  ]);
 
   if (enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
@@ -144,21 +153,6 @@ const IndividualAssessment = ({
       assessmentId={assessment?.id}
       householdSize={enrollment.householdSize}
     />
-  );
-
-  const navigationTitle = (
-    <Box>
-      <Typography variant='h5' sx={{ mb: 2 }}>
-        {clientBriefName(client)}
-      </Typography>
-      <Stack gap={1}>
-        <Typography variant='body2' component='div'>
-          <b>{`${definition.title}: `}</b>
-          {enrollment.project.projectName}
-        </Typography>
-        <AssessmentStatusIndicator status={assessmentStatus} />
-      </Stack>
-    </Box>
   );
 
   return (

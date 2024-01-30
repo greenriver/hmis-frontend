@@ -6,12 +6,12 @@ import { DynamicFormHandlerArgs } from '@/modules/form/hooks/useDynamicFormHandl
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import useViewDialog from '@/modules/form/hooks/useViewDialog';
 import { LocalConstants, SubmitFormAllowedTypes } from '@/modules/form/types';
-import { FormRole } from '@/types/gqlTypes';
+import { RecordFormRole } from '@/types/gqlTypes';
 
 interface Args<T> {
   variant: 'view_only' | 'edit_only' | 'view_and_edit';
   inputVariables?: DynamicFormHandlerArgs<T>['inputVariables'];
-  formRole: FormRole;
+  formRole: RecordFormRole;
   recordName: string;
   deleteRecordDocument?: DocumentNode;
   deleteRecordIdPath?: string;

@@ -15,8 +15,8 @@ import {
   DeleteProjectCocDocument,
   DeleteProjectCocMutation,
   DeleteProjectCocMutationVariables,
-  FormRole,
   ProjectCocFieldsFragment,
+  RecordFormRole,
   useGetProjectCocQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -64,7 +64,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
           create ? { submitButtonText: 'Create Project CoC' } : undefined
         }
         onCompleted={onCompleted}
-        formRole={FormRole.ProjectCoc}
+        formRole={RecordFormRole.ProjectCoc}
         inputVariables={{ projectId }}
         record={projectCoc || undefined}
         title={

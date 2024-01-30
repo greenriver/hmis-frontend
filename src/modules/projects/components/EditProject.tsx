@@ -14,9 +14,9 @@ import {
   DeleteProjectDocument,
   DeleteProjectMutation,
   DeleteProjectMutationVariables,
-  FormRole,
   PickListType,
   ProjectAllFieldsFragment,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 import { evictPickList } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -53,7 +53,7 @@ const EditProject = () => {
 
   return (
     <EditRecord<ProjectAllFieldsFragment>
-      formRole={FormRole.Project}
+      formRole={RecordFormRole.Project}
       record={project}
       onCompleted={onCompleted}
       FormActionProps={{

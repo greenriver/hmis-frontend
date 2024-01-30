@@ -125,37 +125,65 @@ const generateColumns = (
   },
 ];
 
+const pathToNewOrExistingAssessment = (
+  clientId: string,
+  enrollmentId: string,
+  assessmentId?: string | null,
+  formDefinitionId?: string | null
+) => {
+  if (assessmentId) {
+    // link to existing assessment form if Assessments ID is present
+    return generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
+      clientId,
+      enrollmentId,
+      assessmentId,
+    });
+  }
+  if (formDefinitionId) {
+    // link to new assessment form if FD ID is present
+    return generateSafePath(EnrollmentDashboardRoutes.NEW_ASSESSMENT, {
+      clientId,
+      enrollmentId,
+      formDefinitionId,
+    });
+  }
+  return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
+    clientId,
+    enrollmentId,
+  });
+};
+
 const rowLinkTo = ({
   topic,
   client,
   enrollment,
+  assessmentId,
+  formDefinitionId,
 }: ReminderFieldsFragment): string => {
   switch (topic) {
     case ReminderTopic.AnnualAssessment:
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-        clientId: client.id,
-        enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Annual,
-      });
+      return pathToNewOrExistingAssessment(
+        client.id,
+        enrollment.id,
+        assessmentId,
+        formDefinitionId
+      );
     case ReminderTopic.AgedIntoAdulthood:
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-        clientId: client.id,
-        enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Update,
-      });
+      return pathToNewOrExistingAssessment(
+        client.id,
+        enrollment.id,
+        assessmentId,
+        formDefinitionId
+      );
     case ReminderTopic.IntakeIncomplete:
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+      return generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
         clientId: client.id,
         enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Intake,
-        assessmentId: enrollment.intakeAssessment?.id,
       });
     case ReminderTopic.ExitIncomplete:
-      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+      return generateSafePath(EnrollmentDashboardRoutes.EXIT, {
         clientId: client.id,
         enrollmentId: enrollment.id,
-        formRole: AssessmentRole.Exit,
-        assessmentId: enrollment.exitAssessment?.id,
       });
     case ReminderTopic.CurrentLivingSituation:
       return generateSafePath(

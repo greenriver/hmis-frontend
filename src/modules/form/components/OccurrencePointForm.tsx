@@ -23,8 +23,8 @@ import {
 import {
   FormDefinitionFieldsFragment,
   FormDefinitionJson,
-  FormRole,
   InitialBehavior,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 export interface OccurrencePointFormProps {
@@ -102,7 +102,7 @@ const OccurrencePointForm: React.FC<OccurrencePointFormProps> = ({
 
   // Form dialog for editing
   const { openFormDialog, renderFormDialog } = useFormDialog({
-    formRole: FormRole.OccurrencePoint,
+    formRole: RecordFormRole.OccurrencePoint,
     localDefinition: definition,
     record,
     inputVariables: submitFormInputVariables,

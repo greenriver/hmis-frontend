@@ -59,6 +59,7 @@ const DeleteAssessmentButton = ({
       idPath={'deleteAssessment.assessmentId'}
       ButtonProps={{ fullWidth: true }}
       recordName='assessment'
+      deleteIcon
       onSuccess={() => {
         cache.evict({
           id: `Assessment:${assessment.id}`,
@@ -120,7 +121,7 @@ const DeleteAssessmentButton = ({
         </Stack>
       }
     >
-      Delete Assessment
+      Delete
     </DeleteMutationButton>
   );
 };

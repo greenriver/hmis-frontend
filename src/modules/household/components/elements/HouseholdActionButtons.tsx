@@ -7,10 +7,7 @@ import { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import {
-  AssessmentRole,
-  HouseholdClientFieldsFragment,
-} from '@/types/gqlTypes';
+import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -77,10 +74,9 @@ const HouseholdActionButtons = ({
             disabled={!canIntake}
             color={intakeColor}
             icon={PostAddIcon}
-            to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+            to={generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
               clientId,
               enrollmentId,
-              formRole: AssessmentRole.Intake,
             })}
           >
             {individual ? 'Intake Assessment' : 'Household Intakes'}
@@ -92,10 +88,9 @@ const HouseholdActionButtons = ({
           <ButtonLink
             disabled={!canExit}
             icon={ExitToAppIcon}
-            to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+            to={generateSafePath(EnrollmentDashboardRoutes.EXIT, {
               clientId,
               enrollmentId,
-              formRole: AssessmentRole.Exit,
             })}
           >
             {individual ? 'Exit Assessment' : 'Household Exits'}
