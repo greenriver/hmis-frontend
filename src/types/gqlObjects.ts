@@ -797,6 +797,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canManageClientAlerts',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageOwnClientFiles',
         type: {
           kind: 'NON_NULL',
@@ -846,6 +854,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewAnyNonconfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClientAlerts',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -4674,6 +4690,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canManageClientAlerts',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageDeniedReferrals',
         type: {
           kind: 'NON_NULL',
@@ -4755,6 +4779,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewAnyNonconfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClientAlerts',
         type: {
           kind: 'NON_NULL',
           name: null,

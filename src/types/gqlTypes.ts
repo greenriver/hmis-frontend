@@ -680,6 +680,7 @@ export type ClientAccess = {
   canEditClient: Scalars['Boolean']['output'];
   canEditEnrollments: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
+  canManageClientAlerts: Scalars['Boolean']['output'];
   canManageOwnClientFiles: Scalars['Boolean']['output'];
   canManageScanCards: Scalars['Boolean']['output'];
   canMergeClients: Scalars['Boolean']['output'];
@@ -687,6 +688,7 @@ export type ClientAccess = {
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
+  canViewClientAlerts: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
@@ -5456,6 +5458,7 @@ export type QueryAccess = {
   canEnrollClients: Scalars['Boolean']['output'];
   canImpersonateUsers: Scalars['Boolean']['output'];
   canManageAnyClientFiles: Scalars['Boolean']['output'];
+  canManageClientAlerts: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
   canManageInventory: Scalars['Boolean']['output'];
@@ -5467,6 +5470,7 @@ export type QueryAccess = {
   canTransferEnrollments: Scalars['Boolean']['output'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
+  canViewClientAlerts: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];

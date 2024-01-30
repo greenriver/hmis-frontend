@@ -1,7 +1,6 @@
 import {
-  Chip,
-  ChipProps,
   IconButton,
+  IconButtonProps,
   Typography,
   TypographyProps,
 } from '@mui/material';
@@ -41,19 +40,17 @@ export const ClickToCopyId: React.FC<Props> = ({
   );
 };
 
-export const ClickToCopyChip: React.FC<{ value: string } & ChipProps> = ({
-  value,
-  sx,
-  ...props
-}) => {
+export const ClickToCopyButton: React.FC<
+  { value: string } & IconButtonProps
+> = ({ value, ...props }) => {
   return (
-    <Chip
-      variant='outlined'
+    <IconButton
+      aria-label='copy'
       onClick={() => navigator.clipboard.writeText(value)}
-      icon={<CopyIcon fontSize='inherit' />}
-      label={value}
+      sx={{ fontSize: 'inherit', color: 'links' }}
       {...props}
-      sx={{ width: 'fit-content', px: 2, ...sx }}
-    />
+    >
+      <CopyIcon fontSize='inherit' />
+    </IconButton>
   );
 };
