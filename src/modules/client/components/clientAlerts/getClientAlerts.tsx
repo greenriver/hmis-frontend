@@ -9,7 +9,8 @@ enum AlertPriority {
 
 export function getClientAlerts(
   clients: ClientWithAlertFieldsFragment[],
-  shouldShowClientName: boolean = false
+  shouldShowClientName: boolean = false,
+  showDeleteButton: boolean = false
 ) {
   const clientAlerts: ClientAlertProps[] = [];
   clients.forEach((c) => {
@@ -19,6 +20,7 @@ export function getClientAlerts(
           alert: a,
           client: c,
           shouldShowClientName: shouldShowClientName,
+          showDeleteButton: showDeleteButton && c.access.canManageClientAlerts,
         });
       });
     }

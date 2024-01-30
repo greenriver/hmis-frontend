@@ -22,6 +22,7 @@ const ClientAlertStack: React.FC<ClientAlertStackProps> = ({
             alert={ca.alert}
             client={ca.client}
             shouldShowClientName={ca.shouldShowClientName}
+            showDeleteButton={ca.showDeleteButton}
           />
         ))}
         {children}

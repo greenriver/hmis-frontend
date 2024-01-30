@@ -1,5 +1,6 @@
 import { Alert, AlertTitle, Box, Typography } from '@mui/material';
 import theme from '@/config/theme';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import {
   clientNameAllParts,
   parseAndFormatDate,
@@ -8,18 +9,23 @@ import {
 import {
   ClientAlertFieldsFragment,
   ClientWithAlertFieldsFragment,
+  DeleteClientAlertDocument,
+  DeleteClientAlertMutation,
+  DeleteClientAlertMutationVariables,
 } from '@/types/gqlTypes';
 
 export interface ClientAlertProps {
   alert: ClientAlertFieldsFragment;
   client: ClientWithAlertFieldsFragment;
   shouldShowClientName?: boolean;
+  showDeleteButton?: boolean;
 }
 
 const ClientAlert: React.FC<ClientAlertProps> = ({
   alert,
   client,
   shouldShowClientName = false,
+  showDeleteButton = false,
 }) => {
   const priority = alert.priority || 'low';
 
@@ -63,9 +69,28 @@ const ClientAlert: React.FC<ClientAlertProps> = ({
           backgroundColor: priorityColors[priority].header,
           fontWeight: 'bold',
           textTransform: 'capitalize',
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
         {priority} Priority Alert
+        {showDeleteButton && (
+          <DeleteMutationButton<
+            DeleteClientAlertMutation,
+            DeleteClientAlertMutationVariables
+          >
+            queryDocument={DeleteClientAlertDocument}
+            variables={{ id: alert.id }}
+            idPath={'deleteClientAlert.clientAlert.id'}
+            recordName='Client Alert'
+            onSuccess={() => {
+              console.log('hello world from martha');
+            }}
+            deleteIcon={true}
+          >
+            Delete
+          </DeleteMutationButton>
+        )}
       </AlertTitle>
       <Box sx={{ p: 2 }}>
         {shouldShowClientName && (

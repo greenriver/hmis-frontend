@@ -18,7 +18,7 @@ export const ClientAlertProfileWrapper: React.FC<
 > = ({ client }) => {
   if (!client.access.canViewClientAlerts) return;
 
-  const clientAlerts = getClientAlerts([client], false);
+  const clientAlerts = getClientAlerts([client], false, true);
 
   return (
     <ClientAlertCard
@@ -50,7 +50,7 @@ export const ClientAlertHouseholdWrapper: React.FC<
   const canViewClientAlerts = clients.some((c) => c.access.canViewClientAlerts);
   if (!canViewClientAlerts) return;
 
-  const clientAlerts = getClientAlerts(clients, clients.length > 1);
+  const clientAlerts = getClientAlerts(clients, clients.length > 1, true);
 
   return (
     <ClientAlertCard
