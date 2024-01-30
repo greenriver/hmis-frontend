@@ -102,7 +102,6 @@ const ContextHeader: React.FC<Props> = ({
           >
             {client ? `Back to ${clientBriefName(client)}` : 'Back'}
           </Button>
-          {focusMode}
         </Box>
       ) : (
         <Box display='flex' alignItems='stretch' width='100%' flex={1}>
