@@ -68,7 +68,6 @@ import {
   ItemType,
   NoYesReasonsForMissingData,
   PickListOption,
-  PickListOptionFieldsFragment,
   RelatedRecordType,
   RelationshipToHoH,
   ServiceDetailType,
@@ -454,19 +453,10 @@ export const shouldEnableItem = ({
   }
 };
 
-const isPicklistOption = (
-  value: FormValues[string]
-): value is PickListOptionFieldsFragment => {
-  return (
-    isObject(value) &&
-    '__typename' in value &&
-    value?.__typename === 'PickListOption'
-  );
-};
 const numericValueForFormValue = (
   value: FormValues[string]
 ): number | null | undefined => {
-  if (isPicklistOption(value)) return value.numericValue;
+  if (isPickListOption(value)) return value.numericValue;
   return Number.isNaN(Number(value)) ? undefined : Number(value);
 };
 
