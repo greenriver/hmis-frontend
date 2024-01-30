@@ -1,0 +1,20 @@
+mutation CreateClientAlert(
+  $id: ID!
+  $note: String!
+  $expirationDate: ISO8601Date
+  $priority: ClientAlertPriorityLevel
+) {
+  createClientAlert(
+    id: $id
+    note: $note
+    expirationDate: $expirationDate
+    priority: $priority
+  ) {
+    clientAlert {
+      ...ClientAlertFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
