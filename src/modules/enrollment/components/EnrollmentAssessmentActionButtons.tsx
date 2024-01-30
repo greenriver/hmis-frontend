@@ -19,21 +19,15 @@ import { generateSafePath } from '@/utils/pathEncoding';
 type FinishIntakeButtonProps = {
   enrollmentId: string;
   clientId: string;
-  assessmentId?: string;
 };
 const FinishIntakeButton: React.FC<FinishIntakeButtonProps> = ({
   enrollmentId,
   clientId,
-  assessmentId,
 }) => {
-  const intakePath = generateSafePath(
-    EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
-    {
-      clientId,
-      enrollmentId,
-      assessmentId,
-    }
-  );
+  const intakePath = generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
+    clientId,
+    enrollmentId,
+  });
   return (
     <ButtonLink color='error' variant='contained' to={intakePath}>
       Finish Intake
@@ -114,7 +108,6 @@ const EnrollmentAssessmentActionButtons: React.FC<Props> = ({ enrollment }) => {
         <FinishIntakeButton
           enrollmentId={enrollment.id}
           clientId={enrollment.client.id}
-          assessmentId={enrollment.intakeAssessment?.id}
         />
       )}
       {!enrollment.inProgress && <NewAssessmentMenu enrollment={enrollment} />}

@@ -1,18 +1,16 @@
 import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
+import { generateAssessmentPath } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
 import { formRoleDisplay, lastUpdatedBy } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
-  AssessmentRole,
   GetEnrollmentAssessmentsDocument,
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
@@ -40,28 +38,8 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
   enrollmentId,
 }) => {
   const rowLinkTo = useCallback(
-    (assessment: AssessmentFieldsFragment) => {
-      // For Intakes/Exits, link to special routes so they can be viewed in hh context (if multi-member household).
-      // Not sure if this is desirable, it might be nice to be able to view them individually. But doing this to keep
-      // the current behavior, whereby multi-member intakes and exits are ALWAYS viewed in the household view.
-      if (assessment.role === AssessmentRole.Intake) {
-        return generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
-          clientId,
-          enrollmentId,
-        });
-      }
-      if (assessment.role === AssessmentRole.Exit) {
-        return generateSafePath(EnrollmentDashboardRoutes.EXIT, {
-          clientId,
-          enrollmentId,
-        });
-      }
-      return generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
-        clientId,
-        enrollmentId,
-        assessmentId: assessment.id,
-      });
-    },
+    (assessment: AssessmentFieldsFragment) =>
+      generateAssessmentPath(assessment, clientId, enrollmentId),
     [clientId, enrollmentId]
   );
 
