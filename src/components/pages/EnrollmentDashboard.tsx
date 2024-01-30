@@ -23,7 +23,6 @@ import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEn
 import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { EnrollmentDashboardRoutes, HIDE_NAV_ROUTES } from '@/routes/routes';
 import {
   ClientNameDobVetFragment,
   DataCollectionFeatureRole,
@@ -62,15 +61,7 @@ const EnrollmentDashboard: React.FC = () => {
 
   const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
 
-  const { currentPath, ...dashboardState } = useDashboardState();
-
-  const focusMode = useMemo(() => {
-    if (dashboardState.focusMode) return dashboardState.focusMode;
-    // hacky way to set "focus" for household assessments
-    if (currentPath && HIDE_NAV_ROUTES.includes(currentPath)) {
-      return EnrollmentDashboardRoutes.ASSESSMENTS;
-    }
-  }, [dashboardState.focusMode, currentPath]);
+  const { currentPath, focusMode, ...dashboardState } = useDashboardState();
 
   const outletContext: EnrollmentDashboardContext | undefined = useMemo(
     () =>

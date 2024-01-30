@@ -1,9 +1,9 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Button } from '@mui/material';
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -13,17 +13,14 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import {
-  ClientDashboardRoutes,
-  EnrollmentDashboardRoutes,
-} from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   isOpen: boolean;
   handleOpenMenu: () => void;
   children?: ReactNode;
-  focusMode?: string;
+  focusMode?: boolean;
+  focusModeDefaultReturnPath?: string;
 }
 
 export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
@@ -54,6 +51,7 @@ export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
 const ContextHeader: React.FC<Props> = ({
   children,
   focusMode,
+  focusModeDefaultReturnPath,
   isOpen,
   handleOpenMenu,
 }) => {
@@ -61,35 +59,42 @@ const ContextHeader: React.FC<Props> = ({
   const { clientId, enrollmentId } = useSafeParams();
   const { client } = useClientName(clientId);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Try to guess which path we should link to in the "back" button on the app bar if this is Focus Mode.
   // Not ideal, it would be better if the content specified exactly where to go back to, but this works for now.
-  const goBackPath = useMemo(() => {
+
+  const exitFocusMode = useCallback(() => {
     if (!focusMode) return;
-    if (clientId && enrollmentId) {
-      return generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+
+    if (location.key === 'default' && focusModeDefaultReturnPath) {
+      // This page was loaded directly, so go "back" to the default path
+      const defaultBackPath = generateSafePath(focusModeDefaultReturnPath, {
         clientId,
         enrollmentId,
       });
+      navigate(defaultBackPath);
+    } else {
+      navigate(-1);
     }
-    if (clientId) {
-      return generateSafePath(ClientDashboardRoutes.PROFILE, { clientId });
-    }
-  }, [clientId, enrollmentId, focusMode]);
+
+    handleOpenMenu(); // expand left nav
+  }, [
+    clientId,
+    enrollmentId,
+    focusMode,
+    focusModeDefaultReturnPath,
+    handleOpenMenu,
+    location.key,
+    navigate,
+  ]);
 
   return (
     <ContextHeaderAppBar>
       {focusMode ? (
         <Box>
           <Button
-            onClick={() => {
-              if (goBackPath) {
-                navigate(goBackPath);
-              } else {
-                navigate(-1);
-              }
-              handleOpenMenu(); // Expand left nav
-            }}
+            onClick={exitFocusMode}
             variant='transparent'
             startIcon={<ArrowBackIcon fontSize='small' />}
             sx={{ height: '32px', fontWeight: 600, ml: 2 }}
@@ -97,6 +102,7 @@ const ContextHeader: React.FC<Props> = ({
           >
             {client ? `Back to ${clientBriefName(client)}` : 'Back'}
           </Button>
+          {focusMode}
         </Box>
       ) : (
         <Box display='flex' alignItems='stretch' width='100%' flex={1}>

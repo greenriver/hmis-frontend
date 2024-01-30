@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { Ref } from 'react';
+import { Ref, useMemo } from 'react';
 
 import AssessmentTitle from './AssessmentTitle';
 
@@ -106,6 +106,37 @@ const IndividualAssessment = ({
 
   useScrollToHash(enrollmentLoading, topOffsetHeight);
 
+  const navigationTitle = useMemo(() => {
+    if (!enrollment) return;
+    if (!embeddedInWorkflow) {
+      return (
+        <Typography variant='body2' component='div'>
+          Assessment Sections
+        </Typography>
+      );
+    }
+    return (
+      <Box>
+        <Typography variant='h5' sx={{ mb: 2 }}>
+          {clientBriefName(client)}
+        </Typography>
+        <Stack gap={1}>
+          <Typography variant='body2' component='div'>
+            <b>{`${definition.title}: `}</b>
+            {enrollment.project.projectName}
+          </Typography>
+          <AssessmentStatusIndicator status={assessmentStatus} />
+        </Stack>
+      </Box>
+    );
+  }, [
+    assessmentStatus,
+    client,
+    definition.title,
+    embeddedInWorkflow,
+    enrollment,
+  ]);
+
   if (enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
   if (!formRole && !assessment) return <NotFound />;
@@ -122,21 +153,6 @@ const IndividualAssessment = ({
       assessmentId={assessment?.id}
       householdSize={enrollment.householdSize}
     />
-  );
-
-  const navigationTitle = (
-    <Box>
-      <Typography variant='h5' sx={{ mb: 2 }}>
-        {clientBriefName(client)}
-      </Typography>
-      <Stack gap={1}>
-        <Typography variant='body2' component='div'>
-          <b>{`${definition.title}: `}</b>
-          {enrollment.project.projectName}
-        </Typography>
-        <AssessmentStatusIndicator status={assessmentStatus} />
-      </Stack>
-    </Box>
   );
 
   return (

@@ -2,32 +2,31 @@ import { useCallback, useEffect, useState } from 'react';
 
 import useCurrentPath from './useCurrentPath';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FOCUS_MODE_ROUTES, HIDE_NAV_ROUTES } from '@/routes/routes';
 
 export function useDashboardState() {
   const currentPath = useCurrentPath();
+
   const [desktopNavIsOpen, setDesktopNavState] = useState(true);
   const [mobileNavIsOpen, setMobileNavState] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [focusMode, setFocusMode] = useState<string | undefined>();
 
   useEffect(() => {
     if (!currentPath) return;
-    // Auto-hide nav for certain pages, like assessments
+    // Auto-hide left desktop nav for some routes (unused)
     if (HIDE_NAV_ROUTES.includes(currentPath)) {
       setDesktopNavState(false);
     }
-    // Auto-enable focus mode for certain pages, like household exit
-    // const focused = FOCUS_MODE_ROUTES.find(
-    //   ({ route }) => route === currentPath
-    // );
-    // if (focused) {
-    //   // Path that you go "back" to when exiting focus mode
-    //   setFocusMode(focused.previous);
-    // } else {
-    //   setFocusMode(undefined);
-    // }
+    // Auto-enable "focus mode" for certain pages, like assessments
+    const focused = FOCUS_MODE_ROUTES.find(
+      ({ route }) => route === currentPath
+    );
+    if (focused) {
+      // Default path that to go "back" to when exiting focus mode
+      setFocusMode(focused.defaultReturnPath);
+    } else {
+      setFocusMode(undefined);
+    }
   }, [currentPath]);
 
   useEffect(() => {

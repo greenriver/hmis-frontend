@@ -143,20 +143,28 @@ export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
 } = adminDashboardRoutes;
 
-export const HIDE_NAV_ROUTES = [
-  EnrollmentDashboardRoutes.INTAKE,
-  EnrollmentDashboardRoutes.EXIT,
+// Auto-hide left desktop nav for some routes (unused)
+export const HIDE_NAV_ROUTES: string[] = [
+  // EnrollmentDashboardRoutes.NEW_ASSESSMENT
 ];
 
 export const FOCUS_MODE_ROUTES = [
-  // {
-  //   route: ClientDashboardRoutes.HOUSEHOLD_EXIT,
-  //   previous: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-  // },
-  // {
-  //   route: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
-  //   previous: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-  // },
+  {
+    route: EnrollmentDashboardRoutes.EXIT,
+    defaultReturnPath: EnrollmentDashboardRoutes.ASSESSMENTS,
+  },
+  {
+    route: EnrollmentDashboardRoutes.INTAKE,
+    defaultReturnPath: EnrollmentDashboardRoutes.ASSESSMENTS,
+  },
+  {
+    route: EnrollmentDashboardRoutes.NEW_ASSESSMENT,
+    defaultReturnPath: EnrollmentDashboardRoutes.ASSESSMENTS,
+  },
+  {
+    route: EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
+    defaultReturnPath: EnrollmentDashboardRoutes.ASSESSMENTS,
+  },
 ];
 
 export const PRINTABLE_ROUTES = [

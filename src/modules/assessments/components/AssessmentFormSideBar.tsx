@@ -71,7 +71,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
       {title && (
         <Box>
           {title}
-          <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 2, mx: -2 }} />
         </Box>
       )}
       <FormStepper
@@ -79,7 +79,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
         scrollOffset={top}
         useUrlHash={!embeddedInWorkflow}
       />
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ my: 2, mx: -2 }} />
       <Stack gap={2} sx={{ mt: 2 }}>
         {!assessment && canEdit && (
           <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
@@ -95,20 +95,14 @@ const AssessmentFormSideBar: React.FC<Props> = ({
         )}
         {!isPrintView && locked && assessment && (
           <PrintViewButton
-            // If embedded in household workflow, we need to link
-            // over to the individual view for the specific assessment in order to print it
-            openInNew={embeddedInWorkflow}
-            to={
-              embeddedInWorkflow
-                ? generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
-                    clientId: assessment.enrollment.client.id,
-                    enrollmentId: assessment.enrollment.id,
-                    assessmentId: assessment.id,
-                  })
-                : undefined
-            }
+            openInNew
+            to={generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
+              clientId: assessment.enrollment.client.id,
+              enrollmentId: assessment.enrollment.id,
+              assessmentId: assessment.id,
+            })}
           >
-            Print Assessment
+            Print
           </PrintViewButton>
         )}
         {assessment && (
