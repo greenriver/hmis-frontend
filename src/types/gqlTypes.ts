@@ -4169,7 +4169,7 @@ export type PickListOption = {
   initialSelected?: Maybe<Scalars['Boolean']['output']>;
   /** Label for the option */
   label?: Maybe<Scalars['String']['output']>;
-  /** numeric value, such as a score */
+  /** Numeric value, such as a score */
   numericValue?: Maybe<Scalars['Int']['output']>;
   /** Secondary label, such as project type or CoC code */
   secondaryLabel?: Maybe<Scalars['String']['output']>;

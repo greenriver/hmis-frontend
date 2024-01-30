@@ -28111,7 +28111,7 @@
           },
           {
             "name": "numericValue",
-            "description": "numeric value, such as a score",
+            "description": "Numeric value, such as a score",
             "args": [],
             "type": {
               "kind": "SCALAR",
