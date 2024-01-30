@@ -1,8 +1,10 @@
 import { Box, DialogContent, DialogProps, DialogTitle } from '@mui/material';
 import CommonDialog from '@/components/elements/CommonDialog';
 import StaticForm from '@/modules/form/components/StaticForm';
+import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import {
   ClientAlertInput,
+  ClientWithAlertFieldsFragment,
   CreateClientAlertDocument,
   CreateClientAlertMutation,
   CreateClientAlertMutationVariables,
@@ -10,15 +12,15 @@ import {
 } from '@/types/gqlTypes';
 
 interface ClientAlertDialogProps extends DialogProps {
-  clientId: string;
+  client: ClientWithAlertFieldsFragment;
 }
 export const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
-  clientId,
+  client,
   ...props
 }) => {
   return (
     <CommonDialog maxWidth='sm' fullWidth {...props}>
-      <DialogTitle>Create Alert for NAME</DialogTitle>
+      <DialogTitle>Create Alert for {clientNameAllParts(client)}</DialogTitle>
       <DialogContent>
         <Box mt={2}>
           <StaticForm<
@@ -30,7 +32,7 @@ export const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
             getVariables={(values) => {
               return {
                 input: {
-                  clientId: clientId,
+                  clientId: client.id,
                   ...values,
                 } as ClientAlertInput,
               };

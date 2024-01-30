@@ -2,12 +2,13 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import { CreateClientAlertDialog } from '@/modules/client/components/clientAlerts/CreateClientAlertDialog';
+import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
 export interface CreateClientAlertButtonProps {
-  clientId: string;
+  client: ClientWithAlertFieldsFragment;
 }
 const CreateClientAlertButton: React.FC<CreateClientAlertButtonProps> = ({
-  clientId,
+  client,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -23,7 +24,7 @@ const CreateClientAlertButton: React.FC<CreateClientAlertButtonProps> = ({
       <CreateClientAlertDialog
         open={open}
         onClose={() => setOpen(false)}
-        clientId={clientId}
+        client={client}
       />
     </>
   );
