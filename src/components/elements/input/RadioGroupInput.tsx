@@ -16,12 +16,10 @@ import { DynamicInputCommonProps } from '@/modules/form/types';
 import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
-type Option = PickListOption;
-
 export interface Props extends Omit<RadioGroupProps, 'onChange'> {
   name?: string;
-  options: Option[];
-  onChange: (value: Option | null | undefined) => void;
+  options: PickListOption[];
+  onChange: (value: PickListOption | null | undefined) => void;
   clearable?: boolean; // whether you can click again to clear the radio button value
   checkbox?: boolean; // display as exclusive checkbox group
 }
@@ -74,10 +72,10 @@ const RadioGroupInput = ({
   const htmlId = useId();
 
   const onClickOption = useCallback(
-    (option: Option) => {
+    (option: PickListOption) => {
       if (props.disabled) return;
 
-      if (clearable && option === value?.code) {
+      if (clearable && option.code === value?.code) {
         onChange(null);
       } else {
         onChange(option);
@@ -133,7 +131,7 @@ const RadioGroupInput = ({
               disabled={props.disabled}
               onChange={onClickOption}
               variant={checkbox ? 'checkbox' : 'radio'}
-              checked={value?.code === option.code}
+              value={value?.code}
             />
           ))}
           {value?.code === INVALID_ENUM && (

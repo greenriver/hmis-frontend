@@ -9,7 +9,7 @@ interface Props {
   disabled?: boolean;
   onChange: (option: PickListOption) => void;
   variant: 'checkbox' | 'radio';
-  checked: boolean;
+  value: string | undefined;
 }
 
 const RadioGroupInputOption: React.FC<Props> = ({
@@ -17,10 +17,11 @@ const RadioGroupInputOption: React.FC<Props> = ({
   disabled = false,
   onChange,
   variant,
-  checked,
+  value,
 }) => {
   const descriptionId = useId();
   const { code, label, helperText } = option;
+  const checked = value === option.code;
 
   const ControlComponent = variant === 'checkbox' ? Checkbox : Radio;
 
@@ -68,7 +69,8 @@ const RadioGroupInputOption: React.FC<Props> = ({
           typography: {
             variant: 'body2',
             mr: 0.5,
-            color: variant === 'checkbox' && !checked ? 'gray' : undefined,
+            color:
+              variant === 'checkbox' && value && !checked ? 'gray' : undefined,
           },
         }}
       />
