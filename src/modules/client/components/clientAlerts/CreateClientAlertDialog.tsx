@@ -8,40 +8,58 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
-// import StaticForm from '@/modules/form/components/StaticForm';
-// import {
-//   CreateClientAlertMutation,
-//   CreateClientAlertMutationVariables,
-//   MutationCreateClientAlertArgs,
-//   StaticFormRole,
-// } from '@/types/gqlTypes';
+import StaticForm from '@/modules/form/components/StaticForm';
+import {
+  ClientAlertInput,
+  CreateClientAlertDocument,
+  CreateClientAlertMutation,
+  CreateClientAlertMutationVariables,
+  StaticFormRole,
+} from '@/types/gqlTypes';
 
-interface ClientAlertDialogProps extends DialogProps {}
+interface ClientAlertDialogProps extends DialogProps {
+  clientId: string;
+}
 const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
+  clientId,
   ...props
 }) => {
-  // todo @martha = fill in NAME
-  // todo @martha - add reminder
   return (
     <CommonDialog maxWidth='sm' fullWidth {...props}>
       <DialogTitle>Create Alert for NAME</DialogTitle>
       <DialogContent>
         <Box mt={2}>
-          {/*<StaticForm<CreateClientAlertMutation, CreateClientAlertMutationVariables>*/}
-          {/*  role={StaticFormRole.ClientAlert}*/}
-          {/*  mutationDocument={CreateClientAlertDocument}*/}
-          {/*  getVariables={(values) => ({input: values})}*/}
-          {/*  getErrors={(data) => data.errors || []}*/}
-          {/*  onCompleted={(data) => {*/}
-          {/*    console.log('todo @martha - what to do on completion?')*/}
-          {/*  }}/>*/}
+          <StaticForm<
+            CreateClientAlertMutation,
+            CreateClientAlertMutationVariables
+          >
+            role={StaticFormRole.ClientAlert}
+            mutationDocument={CreateClientAlertDocument}
+            getVariables={(values) => {
+              return {
+                input: {
+                  clientId: clientId,
+                  ...values,
+                } as ClientAlertInput,
+              };
+            }}
+            getErrors={(data) => data.createClientAlert?.errors || []}
+            onCompleted={(data) => {
+              console.log(data);
+            }}
+          />
         </Box>
       </DialogContent>
     </CommonDialog>
   );
 };
 
-export const CreateClientAlertButton = () => {
+interface CreateClientAlertButtonProps {
+  clientId: string;
+}
+export const CreateClientAlertButton: React.FC<
+  CreateClientAlertButtonProps
+> = ({ clientId }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
@@ -53,7 +71,11 @@ export const CreateClientAlertButton = () => {
       >
         Create Alert
       </Button>
-      <CreateClientAlertDialog open={open} onClose={() => setOpen(false)} />
+      <CreateClientAlertDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        clientId={clientId}
+      />
     </>
   );
 };

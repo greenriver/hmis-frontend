@@ -29,6 +29,7 @@ const ProfileLayout: React.FC<Props> = ({ client }) => {
             {canViewClientAlerts && (
               <ClientAlertCard
                 clients={[client]}
+                clientId={client.id}
                 alertContext={AlertContext.Client}
               />
             )}

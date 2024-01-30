@@ -1,15 +1,5 @@
-mutation CreateClientAlert(
-  $id: ID!
-  $note: String!
-  $expirationDate: ISO8601Date
-  $priority: ClientAlertPriorityLevel
-) {
-  createClientAlert(
-    id: $id
-    note: $note
-    expirationDate: $expirationDate
-    priority: $priority
-  ) {
+mutation CreateClientAlert($input: ClientAlertInput!) {
+  createClientAlert(input: $input) {
     clientAlert {
       ...ClientAlertFields
     }

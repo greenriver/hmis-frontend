@@ -778,6 +778,14 @@ export type ClientAlert = {
   priority: ClientAlertPriorityLevel;
 };
 
+/** Client Alert Input */
+export type ClientAlertInput = {
+  clientId: Scalars['ID']['input'];
+  expirationDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  note: Scalars['String']['input'];
+  priority?: InputMaybe<ClientAlertPriorityLevel>;
+};
+
 export enum ClientAlertPriorityLevel {
   High = 'high',
   Low = 'low',
@@ -3828,10 +3836,7 @@ export type MutationCreateAutoExitConfigArgs = {
 };
 
 export type MutationCreateClientAlertArgs = {
-  expirationDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
-  id: Scalars['ID']['input'];
-  note: Scalars['String']['input'];
-  priority?: InputMaybe<ClientAlertPriorityLevel>;
+  input: ClientAlertInput;
 };
 
 export type MutationCreateDirectUploadArgs = {
@@ -7448,10 +7453,7 @@ export type ClientAlertFieldsFragment = {
 };
 
 export type CreateClientAlertMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-  note: Scalars['String']['input'];
-  expirationDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
-  priority?: InputMaybe<ClientAlertPriorityLevel>;
+  input: ClientAlertInput;
 }>;
 
 export type CreateClientAlertMutation = {
@@ -30794,18 +30796,8 @@ export type GetRootPermissionsQueryResult = Apollo.QueryResult<
   GetRootPermissionsQueryVariables
 >;
 export const CreateClientAlertDocument = gql`
-  mutation CreateClientAlert(
-    $id: ID!
-    $note: String!
-    $expirationDate: ISO8601Date
-    $priority: ClientAlertPriorityLevel
-  ) {
-    createClientAlert(
-      id: $id
-      note: $note
-      expirationDate: $expirationDate
-      priority: $priority
-    ) {
+  mutation CreateClientAlert($input: ClientAlertInput!) {
+    createClientAlert(input: $input) {
       clientAlert {
         ...ClientAlertFields
       }
@@ -30835,10 +30827,7 @@ export type CreateClientAlertMutationFn = Apollo.MutationFunction<
  * @example
  * const [createClientAlertMutation, { data, loading, error }] = useCreateClientAlertMutation({
  *   variables: {
- *      id: // value for 'id'
- *      note: // value for 'note'
- *      expirationDate: // value for 'expirationDate'
- *      priority: // value for 'priority'
+ *      input: // value for 'input'
  *   },
  * });
  */

@@ -20,12 +20,14 @@ export enum AlertPriority {
 
 interface ClientAlertCardProps {
   clients: ClientWithAlertFieldsFragment[];
+  clientId?: string;
   alertContext: AlertContext;
   shouldRenderFrame?: boolean;
 }
 
 const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
   clients,
+  clientId,
   alertContext = AlertContext.Client,
   shouldRenderFrame = true,
 }) => {
@@ -89,7 +91,7 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
             }}
           >
             {alertContext} has no alerts at this time
-            <CreateClientAlertButton />
+            {clientId && <CreateClientAlertButton clientId={clientId} />}
           </Box>
         )}
         {clientAlerts.length > 0 && (
@@ -102,7 +104,7 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
                 shouldShowClientName={ca.shouldShowClientName}
               />
             ))}
-            <CreateClientAlertButton />
+            {clientId && <CreateClientAlertButton clientId={clientId} />}
           </Stack>
         )}
       </Box>
