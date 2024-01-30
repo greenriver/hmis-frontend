@@ -51,7 +51,8 @@ export const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
             }}
             getErrors={(data) => data.createClientAlert?.errors || []}
             onCompleted={(data) => {
-              console.log(data);
+              if (!data?.createClientAlert?.errors?.length && props.onClose)
+                props.onClose({}, 'escapeKeyDown');
             }}
           />
         </Box>
