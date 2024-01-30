@@ -9,10 +9,9 @@ import {
   RadioGroup,
   RadioGroupProps,
 } from '@mui/material';
-import { isNil } from 'lodash-es';
-import { Fragment, KeyboardEventHandler, useCallback, useId } from 'react';
+import { useCallback, useId } from 'react';
 
-import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
+import RadioGroupInputOption from '@/components/elements/input/RadioGroupInputOption';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
 import { PickListOption } from '@/types/gqlTypes';
@@ -75,35 +74,16 @@ const RadioGroupInput = ({
   const htmlId = useId();
 
   const onClickOption = useCallback(
-    (
-      event:
-        | React.MouseEvent<HTMLLabelElement>
-        | React.KeyboardEvent<HTMLButtonElement>,
-      option: string
-    ) => {
-      event.preventDefault();
+    (option: Option) => {
       if (props.disabled) return;
 
-      if (isNil(option)) {
-        onChange(option);
-      } else if (clearable && option === value?.code) {
+      if (clearable && option === value?.code) {
         onChange(null);
       } else {
-        onChange(options.find((o) => o.code === option));
+        onChange(option);
       }
     },
-    [onChange, options, value, clearable, props.disabled]
-  );
-
-  // Prevent form submission on Enter. Enter should toggle the state.
-  const onKeyDown: KeyboardEventHandler<HTMLButtonElement> = useCallback(
-    (e) => {
-      if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space')
-        onClickOption(e, (e.target as HTMLInputElement).value);
-      // if (e.key.match(/(ArrowDown|ArrowUp|ArrowLeft|ArrowRight)/))
-      //   e.preventDefault();
-    },
-    [onClickOption]
+    [onChange, value, clearable, props.disabled]
   );
 
   const GroupComponent = checkbox ? FormGroup : RadioGroup;
@@ -146,40 +126,15 @@ const RadioGroupInput = ({
           }}
           {...props}
         >
-          {options.map(({ code, label, helperText }) => (
-            <Fragment key={code}>
-              <FormControlLabel
-                data-testid={`option-${code}`}
-                disabled={props.disabled}
-                value={code}
-                aria-label={label || code}
-                onClick={(e) => onClickOption(e, code)}
-                control={
-                  <ControlComponent
-                    disabled={props.disabled}
-                    onKeyDown={onKeyDown}
-                    data-checked={value?.code === code ? true : false}
-                  />
-                }
-                checked={value?.code === code ? true : false}
-                label={label || code}
-                componentsProps={{
-                  typography: {
-                    variant: 'body2',
-                    mr: 0.5,
-                    color:
-                      checkbox && value && value?.code !== code
-                        ? 'gray'
-                        : undefined,
-                  },
-                }}
-              />
-              {helperText && (
-                <CommonHtmlContent variant='body2' sx={{ ml: 4 }}>
-                  {helperText}
-                </CommonHtmlContent>
-              )}
-            </Fragment>
+          {options.map((option) => (
+            <RadioGroupInputOption
+              key={option.code}
+              option={option}
+              disabled={props.disabled}
+              onChange={onClickOption}
+              variant={checkbox ? 'checkbox' : 'radio'}
+              checked={value?.code === option.code}
+            />
           ))}
           {value?.code === INVALID_ENUM && (
             <InvalidValueCheckbox control={<ControlComponent data-checked />} />
