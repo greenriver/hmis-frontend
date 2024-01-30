@@ -13,6 +13,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { locationFromDefaultOrLogin } from '@/routes/routeUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -67,7 +68,7 @@ const ContextHeader: React.FC<Props> = ({
   const exitFocusMode = useCallback(() => {
     if (!focusMode) return;
 
-    if (location.key === 'default' && focusModeDefaultReturnPath) {
+    if (locationFromDefaultOrLogin(location) && focusModeDefaultReturnPath) {
       // This page was loaded directly, so go "back" to the default path
       const defaultBackPath = generateSafePath(focusModeDefaultReturnPath, {
         clientId,
@@ -85,7 +86,7 @@ const ContextHeader: React.FC<Props> = ({
     focusMode,
     focusModeDefaultReturnPath,
     handleOpenMenu,
-    location.key,
+    location,
     navigate,
   ]);
 

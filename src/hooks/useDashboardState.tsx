@@ -24,14 +24,11 @@ export function useDashboardState() {
     if (focused) {
       // Default path that to go "back" to when exiting focus mode
       setFocusMode(focused.defaultReturnPath);
+      setDesktopNavState(false);
     } else {
       setFocusMode(undefined);
     }
   }, [currentPath]);
-
-  useEffect(() => {
-    if (focusMode) setDesktopNavState(false);
-  }, [focusMode]);
 
   const handleCloseMobileMenu = useCallback(() => {
     setMobileNavState(false);
