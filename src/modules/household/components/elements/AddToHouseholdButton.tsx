@@ -3,9 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
-import ClientAlertCard, {
-  AlertContext,
-} from '@/modules/client/components/clientAlerts/ClientAlertCard';
+import { ClientAlertEnrollmentWrapper } from '@/modules/client/components/clientAlerts/ClientAlertWrappers';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
@@ -82,13 +80,7 @@ const AddToHouseholdButton = ({
       {renderFormDialog({
         title: <>Enroll {clientBriefName(client)}</>,
         submitButtonText: `Enroll`,
-        preFormComponent: (
-          <ClientAlertCard
-            clients={[client]}
-            alertContext={AlertContext.Client}
-            shouldRenderFrame={false}
-          />
-        ),
+        preFormComponent: <ClientAlertEnrollmentWrapper client={client} />,
       })}
     </>
   );

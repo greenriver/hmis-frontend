@@ -6,9 +6,9 @@ import { CreateClientAlertDialog } from '@/modules/client/components/clientAlert
 export interface CreateClientAlertButtonProps {
   clientId: string;
 }
-export const CreateClientAlertButton: React.FC<
-  CreateClientAlertButtonProps
-> = ({ clientId }) => {
+const CreateClientAlertButton: React.FC<CreateClientAlertButtonProps> = ({
+  clientId,
+}) => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
@@ -28,3 +28,5 @@ export const CreateClientAlertButton: React.FC<
     </>
   );
 };
+
+export default CreateClientAlertButton;

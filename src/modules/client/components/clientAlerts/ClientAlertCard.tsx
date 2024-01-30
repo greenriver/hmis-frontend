@@ -1,76 +1,25 @@
 import { Box } from '@mui/material';
-import { Stack } from '@mui/system';
+import { ReactNode } from 'react';
 import TitleCard from '@/components/elements/TitleCard';
-import ClientAlert, {
-  ClientAlertProps,
-} from '@/modules/client/components/clientAlerts/ClientAlert';
-import { CreateClientAlertButton } from '@/modules/client/components/clientAlerts/CreateClientAlertButton';
-import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
+import { ClientAlertProps } from '@/modules/client/components/clientAlerts/ClientAlert';
+import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
 
 export enum AlertContext {
   Client = 'Client',
   Household = 'Household',
 }
 
-export enum AlertPriority {
-  high = 3,
-  medium = 2,
-  low = 1,
-}
-
 interface ClientAlertCardProps {
-  clients: ClientWithAlertFieldsFragment[];
-  clientId?: string;
   alertContext: AlertContext;
-  shouldRenderFrame?: boolean;
+  clientAlerts: ClientAlertProps[];
+  children?: ReactNode;
 }
-
 const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
-  clients,
-  clientId,
   alertContext = AlertContext.Client,
-  shouldRenderFrame = true,
+  clientAlerts,
+  children,
 }) => {
-  const shouldShowClientName =
-    alertContext === AlertContext.Household && clients.length > 1;
-
-  const clientAlerts: ClientAlertProps[] = [];
-  clients.forEach((c) => {
-    if (c.access.canViewClientAlerts) {
-      c.alerts.forEach((a) => {
-        clientAlerts.push({
-          alert: a,
-          client: c,
-          shouldShowClientName: shouldShowClientName,
-        });
-      });
-    }
-  });
-
-  clientAlerts.sort((a, b) => {
-    if (AlertPriority[a.alert.priority] === AlertPriority[b.alert.priority]) {
-      return Date.parse(a.alert.createdAt) - Date.parse(b.alert.createdAt);
-    } else {
-      return AlertPriority[b.alert.priority] - AlertPriority[a.alert.priority];
-    }
-  });
-
   const title = `${alertContext} Alerts (${clientAlerts.length})`;
-
-  if (!shouldRenderFrame) {
-    return (
-      <Stack gap={2}>
-        {clientAlerts.map((ca) => (
-          <ClientAlert
-            key={ca.alert.id}
-            alert={ca.alert}
-            client={ca.client}
-            shouldShowClientName={ca.shouldShowClientName}
-          />
-        ))}
-      </Stack>
-    );
-  }
 
   return (
     <TitleCard
@@ -91,21 +40,13 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
             }}
           >
             {alertContext} has no alerts at this time
-            {clientId && <CreateClientAlertButton clientId={clientId} />}
+            {children}
           </Box>
         )}
         {clientAlerts.length > 0 && (
-          <Stack gap={2}>
-            {clientAlerts.map((ca) => (
-              <ClientAlert
-                key={ca.alert.id}
-                alert={ca.alert}
-                client={ca.client}
-                shouldShowClientName={ca.shouldShowClientName}
-              />
-            ))}
-            {clientId && <CreateClientAlertButton clientId={clientId} />}
-          </Stack>
+          <ClientAlertStack clientAlerts={clientAlerts}>
+            {children}
+          </ClientAlertStack>
         )}
       </Box>
     </TitleCard>
