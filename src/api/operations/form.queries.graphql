@@ -16,8 +16,8 @@ query GetPickList(
   }
 }
 
-query GetFormDefinition($role: FormRole!, $projectId: ID) {
-  getFormDefinition(role: $role, projectId: $projectId) {
+query GetFormDefinition($role: RecordFormRole!, $projectId: ID) {
+  recordFormDefinition(role: $role, projectId: $projectId) {
     ...FormDefinitionFields
   }
 }
@@ -29,10 +29,7 @@ query GetStaticFormDefinition($role: StaticFormRole!) {
 }
 
 query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
-  getServiceFormDefinition(
-    serviceTypeId: $serviceTypeId
-    projectId: $projectId
-  ) {
+  serviceFormDefinition(serviceTypeId: $serviceTypeId, projectId: $projectId) {
     ...FormDefinitionFields
   }
 }
