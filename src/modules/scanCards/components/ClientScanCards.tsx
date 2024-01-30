@@ -1,6 +1,5 @@
 import { Paper, Stack } from '@mui/material';
 import GenericTableWithData from '../../dataFetching/components/GenericTableWithData';
-import { lastUpdatedBy } from '../../hmis/hmisUtil';
 import GenerateScanCardButton from './GenerateScanCardButton';
 import {
   DeactivateScanCardButton,
@@ -9,6 +8,7 @@ import {
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import {
   GetClientScanCardCodesDocument,
   GetClientScanCardCodesQuery,
@@ -33,7 +33,7 @@ const columns: ColumnDef<Row>[] = [
         <span>Created on {lastUpdatedBy(row.dateCreated, row.createdBy)}</span>
         {row.dateDeleted && (
           <span>
-            Deleted on {lastUpdatedBy(row.dateDeleted, row.deletedBy)}
+            Deactivated on {lastUpdatedBy(row.dateDeleted, row.deletedBy)}
           </span>
         )}
       </Stack>
