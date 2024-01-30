@@ -3,7 +3,7 @@ import React from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
+import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import {
   ClientAccessSummaryFieldsFragment,
   GetUserClientSummariesDocument,
@@ -22,7 +22,12 @@ const columns: ColumnDef<ClientAccessSummaryFieldsFragment>[] = [
   },
   {
     header: 'Last Accessed',
-    render: ({ lastAccessedAt }) => parseAndFormatDateTime(lastAccessedAt),
+    render: ({ lastAccessedAt }) => (
+      <RelativeDateTableCellContents
+        dateTimeString={lastAccessedAt}
+        horizontal
+      />
+    ),
   },
 ];
 

@@ -27,6 +27,7 @@ import {
   AuditEventType,
   ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,
+  ClientImageFieldsFragment,
   ClientNameDobVetFragment,
   ClientNameFragment,
   CustomDataElementFieldsFragment,
@@ -594,4 +595,12 @@ export const auditActionForDisplay = (action: AuditEventType) => {
     return 'Delete';
   }
   return capitalize(action);
+};
+
+export const dataUrlForClientImage = (
+  image: ClientImageFieldsFragment
+): string | undefined => {
+  if (!image?.base64) return;
+
+  return `data:image/jpeg;base64,${image.base64}`;
 };

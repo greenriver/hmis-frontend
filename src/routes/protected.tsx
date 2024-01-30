@@ -16,7 +16,6 @@ import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import ClientFiles from '@/components/clientDashboard/ClientFiles';
 import EditClient from '@/components/clientDashboard/EditClient';
-import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
 import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
 import ClientEnrollments from '@/components/clientDashboard/enrollments/ClientEnrollments';
 import Profile from '@/components/clientDashboard/Profile';
@@ -48,6 +47,10 @@ import ConfigureServicesPage from '@/modules/admin/components/services/Configure
 import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
 import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
+import ExitAssessmentPage from '@/modules/assessments/components/ExitAssessmentPage';
+import IndividualAssessmentPage from '@/modules/assessments/components/IndividualAssessmentPage';
+import IntakeAssessmentPage from '@/modules/assessments/components/IntakeAssessmentPage';
+import NewIndividualAssessmentPage from '@/modules/assessments/components/NewIndividualAssessmentPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
 import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
@@ -382,9 +385,29 @@ export const protectedRoutes: RouteNode[] = [
             element: <EnrollmentAssessmentsPage />,
           },
           {
-            path: EnrollmentDashboardRoutes.ASSESSMENT,
-            // No perm needed because it only requires enrollment visibility
-            element: <AssessmentPage />,
+            path: EnrollmentDashboardRoutes.INTAKE,
+            element: <IntakeAssessmentPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.EXIT,
+            element: <ExitAssessmentPage />,
+          },
+          {
+            // view/edit existing individual assessment
+            path: EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
+            element: <IndividualAssessmentPage />,
+          },
+          {
+            // create new individual assessment
+            path: EnrollmentDashboardRoutes.NEW_ASSESSMENT,
+            element: (
+              <EnrollmentRoute
+                permissions='canEditEnrollments'
+                redirectRoute={EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW}
+              >
+                <NewIndividualAssessmentPage />
+              </EnrollmentRoute>
+            ),
           },
           {
             path: EnrollmentDashboardRoutes.SERVICES,

@@ -8,8 +8,8 @@ import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
+  RecordFormRole,
   ClientWithAlertFieldsFragment,
-  FormRole,
   SubmittedEnrollmentResultFieldsFragment,
 } from '@/types/gqlTypes';
 
@@ -46,7 +46,7 @@ const AddToHouseholdButton = ({
 
   const memoedArgs = useMemo(
     () => ({
-      formRole: FormRole.Enrollment,
+      formRole: RecordFormRole.Enrollment,
       onCompleted: (data: SubmittedEnrollmentResultFieldsFragment) => {
         setAdded(true);
         onSuccess(data.householdId);

@@ -16,7 +16,6 @@ import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
   FormDefinitionFieldsFragment,
-  FormRole,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -29,7 +28,6 @@ interface Props {
   embeddedInWorkflow?: boolean;
   onAutofill: VoidFunction;
   printPath?: string;
-  formRole?: FormRole;
   isPrintView: boolean;
   locked: boolean;
   canEdit: boolean;
@@ -43,7 +41,6 @@ const AssessmentFormSideBar: React.FC<Props> = ({
   title,
   embeddedInWorkflow,
   onAutofill,
-  formRole,
   isPrintView,
   locked,
   canEdit,
@@ -74,7 +71,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
       {title && (
         <Box>
           {title}
-          <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 2, mx: -2 }} />
         </Box>
       )}
       <FormStepper
@@ -82,7 +79,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
         scrollOffset={top}
         useUrlHash={!embeddedInWorkflow}
       />
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ my: 2, mx: -2 }} />
       <Stack gap={2} sx={{ mt: 2 }}>
         {!assessment && canEdit && (
           <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
@@ -98,21 +95,14 @@ const AssessmentFormSideBar: React.FC<Props> = ({
         )}
         {!isPrintView && locked && assessment && (
           <PrintViewButton
-            // If embedded in household workflow, we need to link
-            // over to the individual view for the specific assessment in order to print it
-            openInNew={embeddedInWorkflow}
-            to={
-              embeddedInWorkflow
-                ? generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-                    clientId: assessment.enrollment.client.id,
-                    enrollmentId: assessment.enrollment.id,
-                    assessmentId: assessment.id,
-                    formRole,
-                  })
-                : undefined
-            }
+            openInNew
+            to={generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
+              clientId: assessment.enrollment.client.id,
+              enrollmentId: assessment.enrollment.id,
+              assessmentId: assessment.id,
+            })}
           >
-            Print Assessment
+            Print
           </PrintViewButton>
         )}
         {assessment && (

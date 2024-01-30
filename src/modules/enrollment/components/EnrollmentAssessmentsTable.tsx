@@ -1,17 +1,16 @@
 import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
+import { generateAssessmentPath } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
 import { formRoleDisplay, lastUpdatedBy } from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
@@ -40,12 +39,7 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
 }) => {
   const rowLinkTo = useCallback(
     (assessment: AssessmentFieldsFragment) =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-        clientId,
-        enrollmentId,
-        assessmentId: assessment.id,
-        formRole: assessment.role,
-      }),
+      generateAssessmentPath(assessment, clientId, enrollmentId),
     [clientId, enrollmentId]
   );
 

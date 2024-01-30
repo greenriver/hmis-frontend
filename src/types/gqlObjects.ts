@@ -5133,8 +5133,16 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Reminder',
     fields: [
       {
+        name: 'assessmentId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'dueDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',

@@ -13,10 +13,8 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
-import {
-  auditActionForDisplay,
-  formatDateTimeForDisplay,
-} from '@/modules/hmis/hmisUtil';
+import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
+import { auditActionForDisplay } from '@/modules/hmis/hmisUtil';
 import {
   EnrollmentAuditEventFilterOptions,
   GetEnrollmentAuditEventsDocument,
@@ -32,8 +30,9 @@ const columns: ColumnDef<AuditHistoryType>[] = [
   {
     header: 'Timestamp',
     width: '180px',
-    render: (e) =>
-      e.createdAt && formatDateTimeForDisplay(new Date(e.createdAt)),
+    render: (e) => (
+      <RelativeDateTableCellContents dateTimeString={e.createdAt} />
+    ),
   },
   {
     header: 'User',
