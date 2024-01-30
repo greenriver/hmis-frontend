@@ -4,7 +4,7 @@ import TitleCard from '@/components/elements/TitleCard';
 import ClientAlert, {
   ClientAlertProps,
 } from '@/modules/client/components/clientAlerts/ClientAlert';
-import { CreateClientAlertButton } from '@/modules/client/components/clientAlerts/CreateClientAlertDialog';
+import { CreateClientAlertButton } from '@/modules/client/components/clientAlerts/CreateClientAlertButton';
 import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
 export enum AlertContext {

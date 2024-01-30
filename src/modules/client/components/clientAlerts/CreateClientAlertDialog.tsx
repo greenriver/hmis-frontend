@@ -1,12 +1,4 @@
-import AddIcon from '@mui/icons-material/Add';
-import {
-  Box,
-  Button,
-  DialogContent,
-  DialogProps,
-  DialogTitle,
-} from '@mui/material';
-import { useState } from 'react';
+import { Box, DialogContent, DialogProps, DialogTitle } from '@mui/material';
 import CommonDialog from '@/components/elements/CommonDialog';
 import StaticForm from '@/modules/form/components/StaticForm';
 import {
@@ -20,7 +12,7 @@ import {
 interface ClientAlertDialogProps extends DialogProps {
   clientId: string;
 }
-const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
+export const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
   clientId,
   ...props
 }) => {
@@ -51,31 +43,5 @@ const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
         </Box>
       </DialogContent>
     </CommonDialog>
-  );
-};
-
-interface CreateClientAlertButtonProps {
-  clientId: string;
-}
-export const CreateClientAlertButton: React.FC<
-  CreateClientAlertButtonProps
-> = ({ clientId }) => {
-  const [open, setOpen] = useState<boolean>(false);
-
-  return (
-    <>
-      <Button
-        startIcon={<AddIcon />}
-        variant='outlined'
-        onClick={() => setOpen(true)}
-      >
-        Create Alert
-      </Button>
-      <CreateClientAlertDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        clientId={clientId}
-      />
-    </>
   );
 };
