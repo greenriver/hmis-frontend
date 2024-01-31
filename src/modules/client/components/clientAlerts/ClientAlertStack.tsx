@@ -4,11 +4,10 @@ import ClientAlert, {
   ClientAlertType,
 } from '@/modules/client/components/clientAlerts/ClientAlert';
 
-export interface ClientAlertStackProps {
+interface ClientAlertStackProps {
   clientAlerts: ClientAlertType[];
   children?: ReactNode;
 }
-
 const ClientAlertStack: React.FC<ClientAlertStackProps> = ({
   clientAlerts,
   children,

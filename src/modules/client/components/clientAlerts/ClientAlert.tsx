@@ -12,7 +12,7 @@ export type ClientAlertType = {
   showClientName?: boolean;
 };
 
-export interface ClientAlertProps {
+interface ClientAlertProps {
   clientAlert: ClientAlertType;
 }
 const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {

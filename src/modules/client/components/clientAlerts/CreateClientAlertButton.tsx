@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { CreateClientAlertDialog } from '@/modules/client/components/clientAlerts/CreateClientAlertDialog';
 import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
-export interface CreateClientAlertButtonProps {
+interface CreateClientAlertButtonProps {
   client: ClientWithAlertFieldsFragment;
 }
 const CreateClientAlertButton: React.FC<CreateClientAlertButtonProps> = ({
