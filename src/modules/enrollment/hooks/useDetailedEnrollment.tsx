@@ -14,8 +14,5 @@ export function useDetailedEnrollment(enrollmentId?: string) {
   const enrollment: AllEnrollmentDetailsFragment | undefined =
     data?.enrollment || undefined;
 
-  return {
-    enrollment,
-    loading: loading && !enrollment,
-  };
+  return { enrollment, loading };
 }

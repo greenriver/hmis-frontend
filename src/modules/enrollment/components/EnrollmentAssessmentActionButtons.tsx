@@ -2,6 +2,7 @@ import { Skeleton } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo } from 'react';
 
+import { useAssessmentEligibilities } from '../hooks/useAssessmentEligibilities';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import CommonMenuButton, {
@@ -10,10 +11,7 @@ import CommonMenuButton, {
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import {
-  AssessmentRole,
-  useGetEnrollmentAssessmentEligibilitiesQuery,
-} from '@/types/gqlTypes';
+import { AssessmentEligibility, AssessmentRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 type FinishIntakeButtonProps = {
@@ -35,20 +33,17 @@ const FinishIntakeButton: React.FC<FinishIntakeButtonProps> = ({
   );
 };
 
-type Props = { enrollment: DashboardEnrollment };
+type Props = {
+  enrollment: DashboardEnrollment;
+  assessmentEligibilities: AssessmentEligibility[];
+};
 
-const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
+const NewAssessmentMenu: React.FC<Props> = ({
+  enrollment,
+  assessmentEligibilities,
+}) => {
   const enrollmentId = enrollment.id;
   const clientId = enrollment.client.id;
-
-  const { data, error, loading } = useGetEnrollmentAssessmentEligibilitiesQuery(
-    {
-      fetchPolicy: 'cache-and-network',
-      variables: { enrollmentId },
-    }
-  );
-
-  if (error) throw error;
 
   const getPath = useCallback(
     (formRole: AssessmentRole, formDefinitionId?: string) =>
@@ -61,25 +56,16 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
     [clientId, enrollmentId]
   );
 
-  const items: NavMenuItem[] = useMemo(() => {
-    if (!data?.enrollment) return [];
-
-    return data.enrollment.assessmentEligibilities.map(
-      ({ id, title, role, formDefinitionId }) => ({
+  const items: NavMenuItem[] = useMemo(
+    () =>
+      assessmentEligibilities.map(({ id, title, role, formDefinitionId }) => ({
         key: id,
         to: getPath(role, formDefinitionId),
         title: title,
-      })
-    );
-  }, [data, getPath]);
+      })),
+    [assessmentEligibilities, getPath]
+  );
 
-  if (loading && !data) {
-    return (
-      <Skeleton variant='rectangular' aria-live='polite' aria-busy='true'>
-        <CommonMenuButton title='New Assessment' items={[]} disabled />
-      </Skeleton>
-    );
-  }
   if (items.length === 0) {
     return (
       <ButtonTooltipContainer
@@ -96,11 +82,22 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
 const EnrollmentAssessmentActionButtons: React.FC<Props> = ({ enrollment }) => {
   const [householdMembers] = useHouseholdMembers(enrollment.id);
 
+  const { assessmentEligibilities, loading } = useAssessmentEligibilities(
+    enrollment.id
+  );
   const numIncompleteEnrollments = useMemo(
     () =>
       (householdMembers || []).filter((c) => !!c.enrollment.inProgress).length,
     [householdMembers]
   );
+
+  if (loading && !assessmentEligibilities) {
+    return (
+      <Skeleton variant='rectangular' aria-live='polite' aria-busy='true'>
+        <CommonMenuButton title='New Assessment' items={[]} disabled />
+      </Skeleton>
+    );
+  }
 
   return (
     <Stack direction='row' gap={2}>
@@ -110,7 +107,12 @@ const EnrollmentAssessmentActionButtons: React.FC<Props> = ({ enrollment }) => {
           clientId={enrollment.client.id}
         />
       )}
-      {!enrollment.inProgress && <NewAssessmentMenu enrollment={enrollment} />}
+      {!enrollment.inProgress && assessmentEligibilities && (
+        <NewAssessmentMenu
+          enrollment={enrollment}
+          assessmentEligibilities={assessmentEligibilities}
+        />
+      )}
     </Stack>
   );
 };

@@ -49,12 +49,9 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
   const onCompletedMutation = useCallback(
     (status: AssessmentResponseStatus) => {
       if (!['saved', 'submitted'].includes(status)) return;
-      // We created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
+      // If we created a NEW assessment, evict Enrollment from the cache.
       if (!assessment) {
-        cache.evict({
-          id: `Enrollment:${enrollment.id}`,
-          fieldName: 'assessments',
-        });
+        cache.evict({ id: `Enrollment:${enrollment.id}` });
       }
       navigateToEnrollment();
     },
