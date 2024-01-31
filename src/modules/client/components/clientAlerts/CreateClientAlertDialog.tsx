@@ -10,7 +10,7 @@ import StaticForm from '@/modules/form/components/StaticForm';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   ClientAlertInput,
-  ClientWithAlertFieldsFragment,
+  ClientNameFragment,
   CreateClientAlertDocument,
   CreateClientAlertMutation,
   CreateClientAlertMutationVariables,
@@ -18,7 +18,7 @@ import {
 } from '@/types/gqlTypes';
 
 interface ClientAlertDialogProps extends DialogProps {
-  client: ClientWithAlertFieldsFragment;
+  client: ClientNameFragment;
 }
 export const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
   client,
