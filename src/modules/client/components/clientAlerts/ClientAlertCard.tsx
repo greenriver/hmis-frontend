@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 import TitleCard from '@/components/elements/TitleCard';
-import { ClientAlertProps } from '@/modules/client/components/clientAlerts/ClientAlert';
+import { ClientAlertType } from '@/modules/client/components/clientAlerts/ClientAlert';
 import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
 
 export enum AlertContext {
@@ -11,7 +11,7 @@ export enum AlertContext {
 
 interface ClientAlertCardProps {
   alertContext: AlertContext;
-  clientAlerts: ClientAlertProps[];
+  clientAlerts: ClientAlertType[];
   children?: ReactNode;
 }
 const ClientAlertCard: React.FC<ClientAlertCardProps> = ({

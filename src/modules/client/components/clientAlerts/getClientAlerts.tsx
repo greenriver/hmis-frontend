@@ -1,4 +1,4 @@
-import { ClientAlertProps } from '@/modules/client/components/clientAlerts/ClientAlert';
+import { ClientAlertType } from '@/modules/client/components/clientAlerts/ClientAlert';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
@@ -12,7 +12,7 @@ export function getClientAlerts(
   clients: ClientWithAlertFieldsFragment[],
   shouldShowClientName: boolean = false
 ) {
-  const clientAlerts: ClientAlertProps[] = [];
+  const clientAlerts: ClientAlertType[] = [];
   clients.forEach((c) => {
     c.alerts.forEach((a) => {
       clientAlerts.push({

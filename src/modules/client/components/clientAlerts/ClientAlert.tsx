@@ -6,17 +6,19 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ClientAlertFieldsFragment } from '@/types/gqlTypes';
 
-export interface ClientAlertProps {
+export type ClientAlertType = {
   alert: ClientAlertFieldsFragment;
   clientName: string;
   showClientName?: boolean;
-}
+};
 
-const ClientAlert: React.FC<ClientAlertProps> = ({
-  alert,
-  clientName,
-  showClientName = false,
-}) => {
+export interface ClientAlertProps {
+  clientAlert: ClientAlertType;
+}
+const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
+  const alert = clientAlert.alert;
+  const clientName = clientAlert.clientName;
+  const showClientName = clientAlert.showClientName;
   const priority = alert.priority || 'low';
 
   const priorityColors: { [index: string]: any } = {
