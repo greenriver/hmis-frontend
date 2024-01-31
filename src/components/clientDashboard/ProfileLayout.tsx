@@ -11,22 +11,29 @@ export interface Props {
 }
 
 const ProfileLayout: React.FC<Props> = ({ client }) => {
-  const canViewEnrollments = client.access.canViewEnrollmentDetails;
+  const { canViewEnrollmentDetails, canViewClientAlerts } = client.access;
+  const hasRightColumn = canViewEnrollmentDetails || canViewClientAlerts;
   return (
     <Box data-testid='clientProfile'>
       <Grid container spacing={2}>
-        <Grid item md={12} lg={canViewEnrollments ? 6 : 8}>
+        <Grid item md={12} lg={hasRightColumn ? 6 : 8}>
           <Stack gap={2}>
             <ClientProfileCard client={client} />
             <ClientCustomDataElementsCard client={client} />
           </Stack>
         </Grid>
-        <Grid item md={12} lg={6}>
-          <Stack gap={2}>
-            <ClientAlertProfileWrapper client={client} />
-            {canViewEnrollments && <ClientEnrollmentCard client={client} />}
-          </Stack>
-        </Grid>
+        {hasRightColumn && (
+          <Grid item md={12} lg={6}>
+            <Stack gap={2}>
+              {canViewClientAlerts && (
+                <ClientAlertProfileWrapper client={client} />
+              )}
+              {canViewEnrollmentDetails && (
+                <ClientEnrollmentCard client={client} />
+              )}
+            </Stack>
+          </Grid>
+        )}
         {/* disabled "quick actions" card because the only action was Enroll in Project, which
           we are disabling for now #185750557 */}
         {/* <ClientActionsCard client={client} /> */}
