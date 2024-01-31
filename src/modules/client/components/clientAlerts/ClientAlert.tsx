@@ -1,7 +1,7 @@
 import { Alert, AlertTitle, Box, Typography } from '@mui/material';
 import theme from '@/config/theme';
 import {
-  clientNameAllParts,
+  clientBriefName,
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
@@ -70,7 +70,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({
       <Box sx={{ p: 2 }}>
         {shouldShowClientName && (
           <Typography variant='body2' sx={{ pb: 1 }}>
-            {clientNameAllParts(client)}
+            {clientBriefName(client)}
           </Typography>
         )}
         <Typography variant='body1' sx={{ pb: 1 }}>
