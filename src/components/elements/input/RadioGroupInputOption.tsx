@@ -20,6 +20,7 @@ const RadioGroupInputOption: React.FC<Props> = ({
   value,
 }) => {
   const descriptionId = useId();
+  const labelId = useId();
   const { code, label, helperText } = option;
   const checked = value === option.code;
 
@@ -53,18 +54,19 @@ const RadioGroupInputOption: React.FC<Props> = ({
         data-testid={`option-${code}`}
         disabled={disabled}
         value={code}
-        aria-label={label || code}
         onClick={handleClick}
         control={
           <ControlComponent
             disabled={disabled}
             onKeyDown={onKeyDown}
             data-checked={checked}
-            aria-describedby={helperText ? descriptionId : undefined}
+            inputProps={{
+              'aria-labelledby': `${labelId} ${descriptionId}`,
+            }}
           />
         }
         checked={checked}
-        label={label || code}
+        label={<span id={labelId}>{label || code}</span>}
         componentsProps={{
           typography: {
             variant: 'body2',

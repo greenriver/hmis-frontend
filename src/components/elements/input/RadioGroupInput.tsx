@@ -9,7 +9,7 @@ import {
   RadioGroup,
   RadioGroupProps,
 } from '@mui/material';
-import { useCallback, useId } from 'react';
+import { useCallback } from 'react';
 
 import RadioGroupInputOption from '@/components/elements/input/RadioGroupInputOption';
 import { DynamicInputCommonProps } from '@/modules/form/types';
@@ -69,8 +69,6 @@ const RadioGroupInput = ({
   checkbox = false,
   ...props
 }: RadioGroupInputProps) => {
-  const htmlId = useId();
-
   const onClickOption = useCallback(
     (option: PickListOption) => {
       if (props.disabled) return;
@@ -88,59 +86,56 @@ const RadioGroupInput = ({
   const ControlComponent = checkbox ? Checkbox : Radio;
 
   return (
-    <FormGroup>
-      <FormControl>
-        <FormLabel
-          id={htmlId}
-          error={error}
-          disabled={props.disabled}
-          sx={{
-            color: props.disabled ? 'text.disabled' : 'text.primary',
-            '&.Mui-focused': {
-              color: 'text.primary',
+    <FormControl component='fieldset'>
+      <FormLabel
+        error={error}
+        disabled={props.disabled}
+        component='legend'
+        sx={{
+          color: props.disabled ? 'text.disabled' : 'text.primary',
+          '&.Mui-focused': {
+            color: 'text.primary',
+          },
+        }}
+      >
+        {label}
+      </FormLabel>
+      <GroupComponent
+        row={row}
+        // value={value ? value.code : null}
+        onChange={() => null}
+        sx={{
+          ...(!row && {
+            'label:first-of-type': { pt: 1 },
+            // 'label:last-child': { pb: 1 },
+            'label .MuiRadio-root': { p: 1 },
+          }),
+          ...(warnIfEmptyTreatment && {
+            '[data-checked="false"] svg': {
+              backgroundColor: 'alerts.lightWarningBackground',
+              borderRadius: 1,
             },
-          }}
-        >
-          {label}
-        </FormLabel>
-        <GroupComponent
-          row={row}
-          aria-labelledby={htmlId}
-          // value={value ? value.code : null}
-          onChange={() => null}
-          sx={{
-            ...(!row && {
-              'label:first-of-type': { pt: 1 },
-              // 'label:last-child': { pb: 1 },
-              'label .MuiRadio-root': { p: 1 },
-            }),
-            ...(warnIfEmptyTreatment && {
-              '[data-checked="false"] svg': {
-                backgroundColor: 'alerts.lightWarningBackground',
-                borderRadius: 1,
-              },
-            }),
-            ...sx,
-          }}
-          {...props}
-        >
-          {options.map((option) => (
-            <RadioGroupInputOption
-              key={option.code}
-              option={option}
-              disabled={props.disabled}
-              onChange={onClickOption}
-              variant={checkbox ? 'checkbox' : 'radio'}
-              value={value?.code}
-            />
-          ))}
-          {value?.code === INVALID_ENUM && (
-            <InvalidValueCheckbox control={<ControlComponent data-checked />} />
-          )}
-        </GroupComponent>
-        {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      </FormControl>
-    </FormGroup>
+          }),
+          ...sx,
+        }}
+        {...props}
+      >
+        {options.map((option) => (
+          <RadioGroupInputOption
+            key={option.code}
+            option={option}
+            disabled={props.disabled}
+            onChange={onClickOption}
+            variant={checkbox ? 'checkbox' : 'radio'}
+            value={value?.code}
+          />
+        ))}
+        {value?.code === INVALID_ENUM && (
+          <InvalidValueCheckbox control={<ControlComponent data-checked />} />
+        )}
+      </GroupComponent>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+    </FormControl>
   );
 };
 
