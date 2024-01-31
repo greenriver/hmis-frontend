@@ -14,15 +14,13 @@ export function getClientAlerts(
 ) {
   const clientAlerts: ClientAlertProps[] = [];
   clients.forEach((c) => {
-    if (c.access.canViewClientAlerts) {
-      c.alerts.forEach((a) => {
-        clientAlerts.push({
-          alert: a,
-          clientName: clientBriefName(c),
-          showClientName: shouldShowClientName,
-        });
+    c.alerts.forEach((a) => {
+      clientAlerts.push({
+        alert: a,
+        clientName: clientBriefName(c),
+        showClientName: shouldShowClientName,
       });
-    }
+    });
   });
 
   clientAlerts.sort((a, b) => {

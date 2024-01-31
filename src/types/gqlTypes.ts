@@ -788,8 +788,11 @@ export type ClientAlertInput = {
 };
 
 export enum ClientAlertPriorityLevel {
+  /** 1 - High */
   High = 'high',
+  /** 3 - Low */
   Low = 'low',
+  /** 2 - Medium */
   Medium = 'medium',
 }
 

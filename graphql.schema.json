@@ -5931,19 +5931,19 @@
         "enumValues": [
           {
             "name": "high",
-            "description": null,
+            "description": "1 - High",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "low",
-            "description": null,
+            "description": "3 - Low",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "medium",
-            "description": null,
+            "description": "2 - Medium",
             "isDeprecated": false,
             "deprecationReason": null
           }
