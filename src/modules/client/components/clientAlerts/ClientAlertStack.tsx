@@ -20,7 +20,7 @@ const ClientAlertStack: React.FC<ClientAlertStackProps> = ({
           <ClientAlert
             key={ca.alert.id}
             alert={ca.alert}
-            client={ca.client}
+            clientName={ca.clientName}
             showClientName={ca.showClientName}
           />
         ))}

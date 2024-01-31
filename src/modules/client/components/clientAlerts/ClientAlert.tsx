@@ -1,24 +1,20 @@
 import { Alert, AlertTitle, Box, Typography } from '@mui/material';
 import theme from '@/config/theme';
 import {
-  clientBriefName,
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
-import {
-  ClientAlertFieldsFragment,
-  ClientWithAlertFieldsFragment,
-} from '@/types/gqlTypes';
+import { ClientAlertFieldsFragment } from '@/types/gqlTypes';
 
 export interface ClientAlertProps {
   alert: ClientAlertFieldsFragment;
-  client: ClientWithAlertFieldsFragment;
+  clientName: string;
   showClientName?: boolean;
 }
 
 const ClientAlert: React.FC<ClientAlertProps> = ({
   alert,
-  client,
+  clientName,
   showClientName = false,
 }) => {
   const priority = alert.priority || 'low';
@@ -70,7 +66,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({
       <Box sx={{ p: 2 }}>
         {showClientName && (
           <Typography variant='body2' sx={{ pb: 1 }}>
-            {clientBriefName(client)}
+            {clientName}
           </Typography>
         )}
         <Typography variant='body1' sx={{ pb: 1 }}>

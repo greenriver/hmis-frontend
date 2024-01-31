@@ -1,4 +1,5 @@
 import { ClientAlertProps } from '@/modules/client/components/clientAlerts/ClientAlert';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
 enum AlertPriority {
@@ -17,7 +18,7 @@ export function getClientAlerts(
       c.alerts.forEach((a) => {
         clientAlerts.push({
           alert: a,
-          client: c,
+          clientName: clientBriefName(c),
           showClientName: shouldShowClientName,
         });
       });
