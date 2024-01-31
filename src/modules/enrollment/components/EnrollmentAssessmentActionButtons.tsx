@@ -11,7 +11,10 @@ import CommonMenuButton, {
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { AssessmentEligibility, AssessmentRole } from '@/types/gqlTypes';
+import {
+  AssessmentRole,
+  GetEnrollmentAssessmentEligibilitiesQuery,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 type FinishIntakeButtonProps = {
@@ -33,15 +36,17 @@ const FinishIntakeButton: React.FC<FinishIntakeButtonProps> = ({
   );
 };
 
+type AssessmentEligibilityType = NonNullable<
+  GetEnrollmentAssessmentEligibilitiesQuery['enrollment']
+>['assessmentEligibilities'][0];
+
 type Props = {
   enrollment: DashboardEnrollment;
-  assessmentEligibilities: AssessmentEligibility[];
 };
 
-const NewAssessmentMenu: React.FC<Props> = ({
-  enrollment,
-  assessmentEligibilities,
-}) => {
+const NewAssessmentMenu: React.FC<
+  Props & { assessmentEligibilities: AssessmentEligibilityType[] }
+> = ({ enrollment, assessmentEligibilities }) => {
   const enrollmentId = enrollment.id;
   const clientId = enrollment.client.id;
 
