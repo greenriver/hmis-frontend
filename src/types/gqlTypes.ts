@@ -13335,6 +13335,20 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 label: string;
                 type: ExternalIdentifierType;
               }>;
+              alerts: Array<{
+                __typename?: 'ClientAlert';
+                id: string;
+                note: string;
+                expirationDate?: string | null;
+                createdAt: string;
+                priority: ClientAlertPriorityLevel;
+                createdBy?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  email: string;
+                } | null;
+              }>;
             };
             enrollment: {
               __typename?: 'Enrollment';
@@ -16884,6 +16898,20 @@ export type GetEnrollmentWithHouseholdQuery = {
             url?: string | null;
             label: string;
             type: ExternalIdentifierType;
+          }>;
+          alerts: Array<{
+            __typename?: 'ClientAlert';
+            id: string;
+            note: string;
+            expirationDate?: string | null;
+            createdAt: string;
+            priority: ClientAlertPriorityLevel;
+            createdBy?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
           }>;
         };
         enrollment: {
@@ -24143,6 +24171,20 @@ export type HouseholdFieldsFragment = {
         label: string;
         type: ExternalIdentifierType;
       }>;
+      alerts: Array<{
+        __typename?: 'ClientAlert';
+        id: string;
+        note: string;
+        expirationDate?: string | null;
+        createdAt: string;
+        priority: ClientAlertPriorityLevel;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }>;
     };
     enrollment: {
       __typename?: 'Enrollment';
@@ -24204,6 +24246,20 @@ export type HouseholdClientFieldsFragment = {
       url?: string | null;
       label: string;
       type: ExternalIdentifierType;
+    }>;
+    alerts: Array<{
+      __typename?: 'ClientAlert';
+      id: string;
+      note: string;
+      expirationDate?: string | null;
+      createdAt: string;
+      priority: ClientAlertPriorityLevel;
+      createdBy?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
     }>;
   };
   enrollment: {
@@ -24348,6 +24404,20 @@ export type GetHouseholdQuery = {
           url?: string | null;
           label: string;
           type: ExternalIdentifierType;
+        }>;
+        alerts: Array<{
+          __typename?: 'ClientAlert';
+          id: string;
+          note: string;
+          expirationDate?: string | null;
+          createdAt: string;
+          priority: ClientAlertPriorityLevel;
+          createdBy?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
         }>;
       };
       enrollment: {
@@ -30148,6 +30218,9 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       externalIds {
         ...ClientIdentifierFields
       }
+      alerts {
+        ...ClientAlertFields
+      }
     }
     enrollment {
       id
@@ -30165,6 +30238,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
 `;
 export const HouseholdFieldsFragmentDoc = gql`
   fragment HouseholdFields on Household {
