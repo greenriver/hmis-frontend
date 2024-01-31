@@ -18,7 +18,7 @@ export function getClientAlerts(
         clientAlerts.push({
           alert: a,
           client: c,
-          shouldShowClientName: shouldShowClientName,
+          showClientName: shouldShowClientName,
         });
       });
     }

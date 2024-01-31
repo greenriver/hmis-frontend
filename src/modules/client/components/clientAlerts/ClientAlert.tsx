@@ -13,13 +13,13 @@ import {
 export interface ClientAlertProps {
   alert: ClientAlertFieldsFragment;
   client: ClientWithAlertFieldsFragment;
-  shouldShowClientName?: boolean;
+  showClientName?: boolean;
 }
 
 const ClientAlert: React.FC<ClientAlertProps> = ({
   alert,
   client,
-  shouldShowClientName = false,
+  showClientName = false,
 }) => {
   const priority = alert.priority || 'low';
 
@@ -68,7 +68,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({
         {priority} Priority Alert
       </AlertTitle>
       <Box sx={{ p: 2 }}>
-        {shouldShowClientName && (
+        {showClientName && (
           <Typography variant='body2' sx={{ pb: 1 }}>
             {clientBriefName(client)}
           </Typography>
