@@ -5,7 +5,7 @@ import { DynamicFormHandlerArgs } from './useDynamicFormHandlersForRecord';
 import ViewRecordDialog, {
   RecordDialogProps,
 } from '@/modules/form/components/ViewRecordDialog';
-import { FormRole } from '@/types/gqlTypes';
+import { RecordFormRole } from '@/types/gqlTypes';
 
 export type RenderFormDialogProps<T> = Omit<
   RecordDialogProps<T>,
@@ -13,7 +13,7 @@ export type RenderFormDialogProps<T> = Omit<
 >;
 
 interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
-  formRole: FormRole;
+  formRole: RecordFormRole;
   onClose?: VoidFunction;
 }
 

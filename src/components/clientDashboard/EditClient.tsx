@@ -14,7 +14,7 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
-import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
+import { ClientFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const Profile = () => {
@@ -38,7 +38,7 @@ const Profile = () => {
 
   return (
     <EditRecord<ClientFieldsFragment>
-      formRole={FormRole.Client}
+      formRole={RecordFormRole.Client}
       record={client}
       localConstants={localConstants}
       onCompleted={onCompleted}

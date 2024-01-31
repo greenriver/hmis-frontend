@@ -99,7 +99,8 @@ const DashboardContentContainer: React.FC<Props> = ({
         >
           {contextHeader && (
             <ContextHeader
-              focusMode={focusMode}
+              focusMode={!!focusMode}
+              focusModeDefaultReturnPath={focusMode}
               isOpen={desktopNavIsOpen}
               handleOpenMenu={
                 isMobile ? handleOpenMobileMenu : handleOpenDesktopMenu

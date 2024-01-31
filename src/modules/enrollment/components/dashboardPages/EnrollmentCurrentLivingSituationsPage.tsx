@@ -17,7 +17,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   CurrentLivingSituationFieldsFragment,
   DeleteCurrentLivingSituationDocument,
-  FormRole,
+  RecordFormRole,
   GetEnrollmentCurrentLivingSituationsDocument,
   GetEnrollmentCurrentLivingSituationsQuery,
   GetEnrollmentCurrentLivingSituationsQueryVariables,
@@ -72,7 +72,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
     useViewEditRecordDialogs({
       variant: canEditCls ? 'view_and_edit' : 'view_only',
       inputVariables: { enrollmentId },
-      formRole: FormRole.CurrentLivingSituation,
+      formRole: RecordFormRole.CurrentLivingSituation,
       recordName: 'Current Living Situation',
       evictCache,
       deleteRecordDocument: DeleteCurrentLivingSituationDocument,

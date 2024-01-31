@@ -18,7 +18,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteCeEventDocument,
   EventFieldsFragment,
-  FormRole,
+  RecordFormRole,
   GetEnrollmentEventsDocument,
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables,
@@ -66,7 +66,7 @@ const EnrollmentCeEventsPage = () => {
     useViewEditRecordDialogs({
       variant: canEditCeEvents ? 'view_and_edit' : 'view_only',
       inputVariables: { enrollmentId },
-      formRole: FormRole.CeEvent,
+      formRole: RecordFormRole.CeEvent,
       recordName: 'CE Event',
       evictCache,
       deleteRecordDocument: DeleteCeEventDocument,

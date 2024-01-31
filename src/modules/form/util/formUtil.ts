@@ -1014,6 +1014,21 @@ export const applyDataCollectedAbout = (
     .map((child) => recur(child));
 };
 
+// Apply DataCollectedAbout to a FormDefinition. Return cloned definition.
+export const applyDefinitionRulesForClient = (
+  formDefinition: FormDefinitionFieldsFragment,
+  client: ClientNameDobVeteranFields,
+  relationshipToHoH: RelationshipToHoH
+): FormDefinitionFieldsFragment => {
+  const mutable = cloneDeep(formDefinition);
+  mutable.definition.item = applyDataCollectedAbout(
+    formDefinition.definition.item,
+    client,
+    relationshipToHoH
+  );
+  return mutable;
+};
+
 /**
  * Extracts target-only fields from the form definition
  * @param definition The form definition to pull items from

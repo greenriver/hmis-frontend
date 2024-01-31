@@ -1700,7 +1700,7 @@
       {
         "kind": "ENUM",
         "name": "AssessmentRole",
-        "description": null,
+        "description": "Form Roles that are used for assessments. These types of forms are submitted using SubmitAssessment.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -32730,6 +32730,71 @@
             "deprecationReason": null
           },
           {
+            "name": "assessmentFormDefinition",
+            "description": "Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID",
+            "args": [
+              {
+                "name": "assessmentDate",
+                "description": "Date to use for Rule filtering on the definition",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601Date",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "id",
+                "description": "Form Definition ID, if known",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "projectId",
+                "description": "Project to use for Rule filtering on the definition",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "role",
+                "description": "Assessment role, if looking up by role",
+                "type": {
+                  "kind": "ENUM",
+                  "name": "AssessmentRole",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FormDefinition",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "autoExitConfigs",
             "description": null,
             "args": [
@@ -33339,104 +33404,6 @@
             "deprecationReason": null
           },
           {
-            "name": "getFormDefinition",
-            "description": "Get most relevant/recent form definition for the specified Role and project (optionally)",
-            "args": [
-              {
-                "name": "enrollmentId",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "projectId",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "role",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "FormRole",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "FormDefinition",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "getServiceFormDefinition",
-            "description": "Get most relevant form definition for the specified service type",
-            "args": [
-              {
-                "name": "projectId",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "serviceTypeId",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "FormDefinition",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "household",
             "description": "Household lookup",
             "args": [
@@ -33977,6 +33944,47 @@
             "deprecationReason": null
           },
           {
+            "name": "recordFormDefinition",
+            "description": "Get the most relevant Form Definition to use for record viewing/editing",
+            "args": [
+              {
+                "name": "projectId",
+                "description": "Optional Project to apply rule filtering (e.g. show/hide questions based on Project applicability)",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "role",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "RecordFormRole",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FormDefinition",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "referralPosting",
             "description": null,
             "args": [
@@ -34099,6 +34107,51 @@
             "type": {
               "kind": "OBJECT",
               "name": "ServiceCategory",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "serviceFormDefinition",
+            "description": "Get most relevant form definition for the specified service type",
+            "args": [
+              {
+                "name": "projectId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "serviceTypeId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FormDefinition",
               "ofType": null
             },
             "isDeprecated": false,
@@ -35145,6 +35198,131 @@
           {
             "name": "Project",
             "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "RecordFormRole",
+        "description": "Form Roles that are used for record-editing. These types of forms are submitted using SubmitForm.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CASE_NOTE",
+            "description": "Case note",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE_ASSESSMENT",
+            "description": "CE assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE_EVENT",
+            "description": "CE event",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE_PARTICIPATION",
+            "description": "CE participation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT",
+            "description": "Client",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_DETAIL",
+            "description": "Client detail",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CURRENT_LIVING_SITUATION",
+            "description": "Current living situation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ENROLLMENT",
+            "description": "Enrollment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FILE",
+            "description": "File",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FUNDER",
+            "description": "Funder",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HMIS_PARTICIPATION",
+            "description": "HMIS participation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVENTORY",
+            "description": "Inventory",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NEW_CLIENT_ENROLLMENT",
+            "description": "New client enrollment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OCCURRENCE_POINT",
+            "description": "Occurrence point",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ORGANIZATION",
+            "description": "Organization",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECT",
+            "description": "Project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECT_COC",
+            "description": "Project CoC",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_REQUEST",
+            "description": "Referral request",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SERVICE",
+            "description": "Service",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -36646,6 +36824,18 @@
         "description": null,
         "fields": [
           {
+            "name": "assessmentId",
+            "description": "Relevant existing assessment, if any",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "client",
             "description": null,
             "args": [],
@@ -36685,6 +36875,18 @@
                 "name": "Enrollment",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "formDefinitionId",
+            "description": "Form definition to use, if a new assessment is needed",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -39741,7 +39943,7 @@
       {
         "kind": "ENUM",
         "name": "StaticFormRole",
-        "description": null,
+        "description": "Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations.",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
