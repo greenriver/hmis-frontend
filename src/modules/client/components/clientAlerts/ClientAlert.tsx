@@ -73,7 +73,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({
           {alert.note}
         </Typography>
         <Typography variant='body2' sx={{ fontSize: '12px' }}>
-          Created by {alert.createdBy?.name} on{' '}
+          Created by {alert.createdBy?.name || 'Unknown'} on{' '}
           {parseAndFormatDateTime(alert.createdAt)}.
           {alert.expirationDate &&
             ` Expires on ${parseAndFormatDate(alert.expirationDate)}.`}
