@@ -82,11 +82,11 @@ const ClientAlert: React.FC<ClientAlertProps> = ({
             queryDocument={DeleteClientAlertDocument}
             variables={{ id: alert.id }}
             idPath={'deleteClientAlert.clientAlert.id'}
-            recordName='Client Alert'
+            recordName='Alert'
             onSuccess={() => {
               console.log('hello world from martha');
             }}
-            deleteIcon={true}
+            onlyIcon
           >
             Delete
           </DeleteMutationButton>

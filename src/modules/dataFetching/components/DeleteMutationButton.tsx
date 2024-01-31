@@ -1,6 +1,6 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, ButtonProps, Typography } from '@mui/material';
+import { Button, ButtonProps, IconButton, Typography } from '@mui/material';
 import { camelCase, capitalize, get } from 'lodash-es';
 import { ReactNode, useCallback, useState } from 'react';
 
@@ -28,6 +28,7 @@ interface DeleteMutationButtonProps<MutationVariables> {
   confirmationDialogContent?: ReactNode;
   verb?: string;
   deleteIcon?: boolean;
+  onlyIcon?: boolean;
 }
 
 const DeleteMutationButton = <Mutation, MutationVariables>({
@@ -42,6 +43,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   confirmationDialogContent,
   verb = 'delete',
   deleteIcon = false,
+  onlyIcon = false,
 }: DeleteMutationButtonProps<MutationVariables>) => {
   const [showDialog, setShowDialog] = useState(false);
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
@@ -66,23 +68,35 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   const handleDelete = useCallback(() => {
     deleteRecord();
   }, [deleteRecord]);
+  const onClick = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setShowDialog(true);
+  };
 
   return (
     <>
-      <Button
-        data-testid={`deleteRecordButton-${camelCase(recordName)}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          setShowDialog(true);
-        }}
-        variant='outlined'
-        color='error'
-        startIcon={deleteIcon ? <DeleteIcon /> : undefined}
-        {...ButtonProps}
-      >
-        {children}
-      </Button>
+      {onlyIcon ? (
+        <IconButton
+          data-testid={`deleteRecordButton-${camelCase(recordName)}`}
+          onClick={onClick}
+          size='small'
+          {...ButtonProps}
+        >
+          <DeleteIcon fontSize='small' />
+        </IconButton>
+      ) : (
+        <Button
+          data-testid={`deleteRecordButton-${camelCase(recordName)}`}
+          onClick={onClick}
+          variant='outlined'
+          color='error'
+          startIcon={deleteIcon ? <DeleteIcon /> : undefined}
+          {...ButtonProps}
+        >
+          {children}
+        </Button>
+      )}
       <ConfirmationDialog
         id='deleteRecordDialog'
         open={showDialog}
