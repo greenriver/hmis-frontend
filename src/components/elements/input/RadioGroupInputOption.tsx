@@ -61,12 +61,15 @@ const RadioGroupInputOption: React.FC<Props> = ({
             onKeyDown={onKeyDown}
             data-checked={checked}
             inputProps={{
-              'aria-labelledby': `${labelId} ${descriptionId}`,
+              'aria-labelledby': helperText
+                ? `${labelId} ${descriptionId}`
+                : labelId,
             }}
           />
         }
         checked={checked}
-        label={<span id={labelId}>{label || code}</span>}
+        id={labelId}
+        label={label || code}
         componentsProps={{
           typography: {
             variant: 'body2',
