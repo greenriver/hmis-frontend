@@ -21,9 +21,6 @@ fragment HouseholdClientFields on HouseholdClient {
     externalIds {
       ...ClientIdentifierFields
     }
-    alerts {
-      ...ClientAlertFields
-    }
   }
   enrollment {
     id
