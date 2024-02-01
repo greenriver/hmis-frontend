@@ -4,6 +4,7 @@ import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import {
   ClientAlertFieldsFragment,
   DeleteClientAlertDocument,
@@ -14,6 +15,7 @@ import {
 export type ClientAlertType = {
   alert: ClientAlertFieldsFragment;
   clientName: string;
+  clientId: string;
   showClientName?: boolean;
   showDeleteButton?: boolean;
 };
@@ -36,6 +38,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
       >
         {priority} Priority Alert
         {clientAlert.showDeleteButton && (
+          // todo @martha - make the icon appropriately colored
           <DeleteMutationButton<
             DeleteClientAlertMutation,
             DeleteClientAlertMutationVariables
@@ -45,7 +48,10 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
             idPath={'deleteClientAlert.clientAlert.id'}
             recordName='Alert'
             onSuccess={() => {
-              console.log('hello world from martha');
+              cache.evict({
+                id: `Client:${clientAlert.clientId}`,
+                fieldName: 'alerts',
+              });
             }}
             onlyIcon
           >

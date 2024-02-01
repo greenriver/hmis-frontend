@@ -19,6 +19,7 @@ export function getClientAlerts(
       clientAlerts.push({
         alert: a,
         clientName: clientBriefName(c),
+        clientId: c.id,
         showClientName: shouldShowClientName,
         showDeleteButton: showDeleteButton && c.access.canManageClientAlerts,
       });

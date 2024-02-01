@@ -68,6 +68,6 @@ interface ClientAlertEnrollmentWrapperProps {
 export const ClientAlertEnrollmentWrapper: React.FC<
   ClientAlertEnrollmentWrapperProps
 > = ({ client }) => {
-  const clientAlerts = getClientAlerts([client], false);
+  const clientAlerts = getClientAlerts([client], false, false);
   return <ClientAlertStack clientAlerts={clientAlerts} />;
 };
