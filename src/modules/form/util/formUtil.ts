@@ -453,6 +453,13 @@ export const shouldEnableItem = ({
   }
 };
 
+const numericValueForFormValue = (
+  value: FormValues[string]
+): number | null | undefined => {
+  if (isPickListOption(value)) return value.numericValue;
+  return Number.isNaN(Number(value)) ? undefined : Number(value);
+};
+
 export const getAutofillComparisonValue = (
   av: AutofillValue,
   values: FormValues,
@@ -462,7 +469,7 @@ export const getAutofillComparisonValue = (
   if (av.sumQuestions && av.sumQuestions.length > 0) {
     const numbers = av.sumQuestions
       .map((linkId) => values[linkId])
-      .map((n) => (Number.isNaN(Number(n)) ? undefined : Number(n)))
+      .map(numericValueForFormValue)
       .filter((n) => !isNil(n));
     return sum(numbers);
   }

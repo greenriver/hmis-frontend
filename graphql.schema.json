@@ -28074,6 +28074,18 @@
             "deprecationReason": null
           },
           {
+            "name": "helperText",
+            "description": "Helper text/html",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "initialSelected",
             "description": "Whether option is selected by default",
             "args": [],
@@ -28092,6 +28104,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "numericValue",
+            "description": "Numeric value, such as a score",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,
