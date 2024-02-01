@@ -51,6 +51,7 @@ const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
             {useUrlHash ? (
               <RouterLink
                 to={`${pathname}#${step.anchor}`}
+                replace
                 data-testid={step.testId}
               >
                 {step.label}

@@ -87,8 +87,8 @@ const EnrollmentOverview = () => {
               enrollment={enrollment}
               enabledFeatures={enabledFeatures}
             />
-            {enrollment.inProgress &&
-              enrollment.access.canDeleteEnrollments && (
+            {enrollment.access.canDeleteEnrollments &&
+              (enrollment.inProgress || !enrollment.intakeAssessment) && (
                 <DeleteMutationButton<
                   DeleteEnrollmentMutation,
                   DeleteEnrollmentMutationVariables

@@ -6,7 +6,7 @@ import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import {
   ClientFieldsFragment,
   ExternalIdentifierType,
-  FormRole,
+  RecordFormRole,
   useGetClientQuery,
 } from '@/types/gqlTypes';
 
@@ -60,7 +60,7 @@ export function useClientFormDialog({
 
   const { openFormDialog, renderFormDialog } =
     useFormDialog<ClientFieldsFragment>({
-      formRole: FormRole.Client,
+      formRole: RecordFormRole.Client,
       onCompleted,
       localConstants,
       record: client,

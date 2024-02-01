@@ -143,6 +143,7 @@ const AssessmentForm: React.FC<Props> = ({
     () => ({
       entryDate: enrollment.entryDate,
       exitDate: enrollment.exitDate,
+      projectName: enrollment.project.projectName,
       ...AlwaysPresentLocalConstants,
     }),
     [enrollment]
@@ -274,7 +275,6 @@ const AssessmentForm: React.FC<Props> = ({
         definition={definition}
         assessment={assessment}
         title={navigationTitle}
-        formRole={formRole}
         isPrintView={isPrintView}
         locked={locked}
         embeddedInWorkflow={embeddedInWorkflow}

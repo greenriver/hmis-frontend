@@ -14,7 +14,7 @@ import { cache } from '@/providers/apolloClient';
 import {
   CustomCaseNoteFieldsFragment,
   DeleteCustomCaseNoteDocument,
-  FormRole,
+  RecordFormRole,
   GetEnrollmentCustomCaseNotesDocument,
   GetEnrollmentCustomCaseNotesQuery,
   GetEnrollmentCustomCaseNotesQueryVariables,
@@ -95,7 +95,7 @@ const EnrollmentCaseNotes = () => {
     useViewEditRecordDialogs({
       variant: canEdit ? 'view_and_edit' : 'view_only',
       inputVariables: { enrollmentId },
-      formRole: FormRole.CaseNote,
+      formRole: RecordFormRole.CaseNote,
       recordName: 'Case Note',
       evictCache,
       maxWidth: 'sm',

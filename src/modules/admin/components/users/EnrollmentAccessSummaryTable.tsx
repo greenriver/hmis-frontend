@@ -2,7 +2,7 @@ import { omit } from 'lodash-es';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
+import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import {
   EnrollmentAccessSummaryFieldsFragment,
   GetUserEnrollmentSummariesDocument,
@@ -29,7 +29,12 @@ const columns: ColumnDef<EnrollmentAccessSummaryFieldsFragment>[] = [
   },
   {
     header: 'Last Accessed',
-    render: ({ lastAccessedAt }) => parseAndFormatDateTime(lastAccessedAt),
+    render: ({ lastAccessedAt }) => (
+      <RelativeDateTableCellContents
+        dateTimeString={lastAccessedAt}
+        horizontal
+      />
+    ),
   },
 ];
 

@@ -7,9 +7,9 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { ALL_PROJECTS_CRUMB } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import {
-  FormRole,
   OrganizationFieldsFragment,
   PickListType,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 import { evictPickList, evictQuery } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -39,7 +39,7 @@ const CreateOrganization = () => {
   return (
     <BasicBreadcrumbPageLayout crumbs={crumbs}>
       <EditRecord<OrganizationFieldsFragment>
-        formRole={FormRole.Organization}
+        formRole={RecordFormRole.Organization}
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Organization' }}
         title={

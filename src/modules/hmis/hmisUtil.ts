@@ -23,9 +23,11 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   AssessmentFieldsFragment,
+  AssessmentRole,
   AuditEventType,
   ClientEnrollmentFieldsFragment,
   ClientFieldsFragment,
+  ClientImageFieldsFragment,
   ClientNameDobVetFragment,
   ClientNameFragment,
   CustomDataElementFieldsFragment,
@@ -347,13 +349,16 @@ const dataCollectionStageDisplay = {
   POST_EXIT: 'Post-exit',
 };
 export const formRoleDisplay = (assessment: AssessmentFieldsFragment) => {
-  if (!assessment.dataCollectionStage) return null;
-
-  if (!(assessment.dataCollectionStage in dataCollectionStageDisplay)) {
-    return null;
+  const defaultTitle = assessment.definition.title;
+  if (assessment.role === AssessmentRole.CustomAssessment) {
+    return defaultTitle;
   }
-
-  return dataCollectionStageDisplay[assessment.dataCollectionStage];
+  if (assessment.dataCollectionStage) {
+    return (
+      dataCollectionStageDisplay[assessment.dataCollectionStage] || defaultTitle
+    );
+  }
+  return defaultTitle;
 };
 
 export const assessmentDescription = (
@@ -590,4 +595,12 @@ export const auditActionForDisplay = (action: AuditEventType) => {
     return 'Delete';
   }
   return capitalize(action);
+};
+
+export const dataUrlForClientImage = (
+  image: ClientImageFieldsFragment
+): string | undefined => {
+  if (!image?.base64) return;
+
+  return `data:image/jpeg;base64,${image.base64}`;
 };

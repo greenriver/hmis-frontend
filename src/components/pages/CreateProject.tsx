@@ -10,7 +10,7 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
-import { FormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
+import { RecordFormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const CreateProject = () => {
@@ -38,7 +38,7 @@ const CreateProject = () => {
   return (
     <BasicBreadcrumbPageLayout crumbs={crumbs}>
       <EditRecord<ProjectAllFieldsFragment>
-        formRole={FormRole.Project}
+        formRole={RecordFormRole.Project}
         onCompleted={onCompleted}
         inputVariables={{ organizationId }}
         FormActionProps={{ submitButtonText: 'Create Project' }}

@@ -18,13 +18,13 @@ const useFormDefinition = (
     skip: !!localDefinition,
   });
   const { formDefinition, itemMap } = useMemo(() => {
-    const formDefinition = localDefinition || data?.getFormDefinition;
+    const formDefinition = localDefinition || data?.recordFormDefinition;
     if (!formDefinition) return {};
     return {
       formDefinition,
       itemMap: getItemMap(formDefinition.definition, false),
     };
-  }, [data?.getFormDefinition, localDefinition]);
+  }, [data?.recordFormDefinition, localDefinition]);
 
   if (error)
     throw new Error(

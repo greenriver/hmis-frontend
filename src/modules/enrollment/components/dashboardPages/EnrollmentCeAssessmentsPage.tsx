@@ -15,7 +15,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeAssessmentFieldsFragment,
   DeleteCeAssessmentDocument,
-  FormRole,
+  RecordFormRole,
   GetEnrollmentCeAssessmentsDocument,
   GetEnrollmentCeAssessmentsQuery,
   GetEnrollmentCeAssessmentsQueryVariables,
@@ -35,16 +35,26 @@ const EnrollmentCeAssessmentsPage = () => {
     });
   }, [enrollmentId]);
 
+  const localConstants = useMemo(
+    () => ({
+      projectName: enrollment?.project.projectName,
+      entryDate: enrollment?.entryDate,
+      exitDate: enrollment?.exitDate,
+    }),
+    [enrollment]
+  );
+
   const { onSelectRecord, editRecordDialog, openFormDialog, viewRecordDialog } =
     useViewEditRecordDialogs({
       variant: canEditCeAssessments ? 'edit_only' : 'view_only',
       inputVariables: { enrollmentId },
-      formRole: FormRole.CeAssessment,
+      formRole: RecordFormRole.CeAssessment,
       recordName: 'CE Assessment',
       evictCache,
       deleteRecordDocument: DeleteCeAssessmentDocument,
       deleteRecordIdPath: 'deleteCeAssessment.ceAssessment.id',
       maxWidth: 'sm',
+      localConstants,
     });
 
   const columns: ColumnDef<CeAssessmentFieldsFragment>[] = useMemo(

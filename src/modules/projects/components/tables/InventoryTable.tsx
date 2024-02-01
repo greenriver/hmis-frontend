@@ -17,7 +17,7 @@ import {
   DeleteInventoryDocument,
   DeleteInventoryMutation,
   DeleteInventoryMutationVariables,
-  FormRole,
+  RecordFormRole,
   GetProjectInventoriesDocument,
   InventoryFieldsFragment,
   ProjectType,
@@ -108,7 +108,7 @@ const InventoryTable = () => {
       {viewingRecord && (
         <ViewRecordDialog<InventoryFieldsFragment>
           record={viewingRecord}
-          formRole={FormRole.Inventory}
+          formRole={RecordFormRole.Inventory}
           title='Inventory'
           open={!!viewingRecord}
           onClose={() => setViewingRecord(undefined)}
