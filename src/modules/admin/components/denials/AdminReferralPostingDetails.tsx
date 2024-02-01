@@ -2,9 +2,11 @@ import { Box, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
+import ConsumerSummaryReportButton from './ConsumerSummaryReportButton';
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
+import TitleCard from '@/components/elements/TitleCard';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
@@ -88,21 +90,32 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
   }, [referralPosting, verb]);
 
   return (
-    <Stack spacing={2} component={CommonUnstyledList} sx={{ columns: 2 }}>
-      {attributeList
-        .filter((labelValue) => hasMeaningfulValue(labelValue[1]))
-        .map(([label, value]) => (
-          <Typography component='li' key={label} variant='body2'>
-            <Box
-              sx={({ typography }) => ({
-                fontWeight: typography.fontWeightBold,
-              })}
-            >
-              {label}
-            </Box>
-            {value || <NotCollectedText variant='body2' />}
-          </Typography>
-        ))}
+    <Stack gap={2}>
+      <TitleCard title='Referral Details' padded>
+        <Stack gap={2} component={CommonUnstyledList} sx={{ columns: 2 }}>
+          {attributeList
+            .filter((labelValue) => hasMeaningfulValue(labelValue[1]))
+            .map(([label, value]) => (
+              <Typography component='li' key={label} variant='body2'>
+                <Box
+                  sx={({ typography }) => ({
+                    fontWeight: typography.fontWeightBold,
+                  })}
+                >
+                  {label}
+                </Box>
+                {value || <NotCollectedText variant='body2' />}
+              </Typography>
+            ))}
+        </Stack>
+      </TitleCard>
+      <Stack gap={2}>
+        {referralPosting.referralIdentifier && (
+          <ConsumerSummaryReportButton
+            referralIdentifier={referralPosting.referralIdentifier}
+          />
+        )}
+      </Stack>
     </Stack>
   );
 };

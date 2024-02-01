@@ -25,7 +25,9 @@ export const ClientAlertProfileWrapper: React.FC<
       alertContext={AlertContext.Client}
       clientAlerts={clientAlerts}
     >
-      <CreateClientAlertButton client={client} />
+      {client.access.canManageClientAlerts && (
+        <CreateClientAlertButton client={client} />
+      )}
     </ClientAlertCard>
   );
 };

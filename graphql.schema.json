@@ -5931,19 +5931,19 @@
         "enumValues": [
           {
             "name": "high",
-            "description": null,
+            "description": "1 - High",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "low",
-            "description": null,
+            "description": "3 - Low",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "medium",
-            "description": null,
+            "description": "2 - Medium",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -28451,6 +28451,18 @@
             "deprecationReason": null
           },
           {
+            "name": "helperText",
+            "description": "Helper text/html",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "initialSelected",
             "description": "Whether option is selected by default",
             "args": [],
@@ -28469,6 +28481,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "numericValue",
+            "description": "Numeric value, such as a score",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,

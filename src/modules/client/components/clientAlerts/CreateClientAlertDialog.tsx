@@ -8,9 +8,10 @@ import {
 import CommonDialog from '@/components/elements/CommonDialog';
 import StaticForm from '@/modules/form/components/StaticForm';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import {
   ClientAlertInput,
-  ClientWithAlertFieldsFragment,
+  ClientNameFragment,
   CreateClientAlertDocument,
   CreateClientAlertMutation,
   CreateClientAlertMutationVariables,
@@ -18,7 +19,7 @@ import {
 } from '@/types/gqlTypes';
 
 interface ClientAlertDialogProps extends DialogProps {
-  client: ClientWithAlertFieldsFragment;
+  client: ClientNameFragment;
 }
 export const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
   client,
@@ -51,8 +52,22 @@ export const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
             }}
             getErrors={(data) => data.createClientAlert?.errors || []}
             onCompleted={(data) => {
-              if (!data?.createClientAlert?.errors?.length && props.onClose)
+              if (!data?.createClientAlert?.errors?.length && props.onClose) {
+                // Evicting alerts from cache forces reload, so newly created alert appears
+                cache.evict({ id: `Client:${client.id}`, fieldName: 'alerts' });
                 props.onClose({}, 'escapeKeyDown');
+              }
+            }}
+            DynamicFormProps={{
+              FormActionProps: {
+                onDiscard: () => {
+                  if (props.onClose) {
+                    props.onClose({}, 'escapeKeyDown');
+                  }
+                },
+                submitButtonText: 'Create Alert',
+                discardButtonText: 'Cancel',
+              },
             }}
           />
         </Box>

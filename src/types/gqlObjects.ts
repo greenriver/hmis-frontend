@@ -4283,10 +4283,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'helperText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'initialSelected',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       { name: 'label', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'numericValue',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
       {
         name: 'secondaryLabel',
         type: { kind: 'SCALAR', name: 'String', ofType: null },

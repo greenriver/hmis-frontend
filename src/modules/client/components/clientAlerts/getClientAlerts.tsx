@@ -1,4 +1,5 @@
-import { ClientAlertProps } from '@/modules/client/components/clientAlerts/ClientAlert';
+import { ClientAlertType } from '@/modules/client/components/clientAlerts/ClientAlert';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
 enum AlertPriority {
@@ -12,18 +13,16 @@ export function getClientAlerts(
   shouldShowClientName: boolean = false,
   showDeleteButton: boolean = false
 ) {
-  const clientAlerts: ClientAlertProps[] = [];
+  const clientAlerts: ClientAlertType[] = [];
   clients.forEach((c) => {
-    if (c.access.canViewClientAlerts) {
-      c.alerts.forEach((a) => {
-        clientAlerts.push({
-          alert: a,
-          client: c,
-          shouldShowClientName: shouldShowClientName,
-          showDeleteButton: showDeleteButton && c.access.canManageClientAlerts,
-        });
+    c.alerts.forEach((a) => {
+      clientAlerts.push({
+        alert: a,
+        clientName: clientBriefName(c),
+        showClientName: shouldShowClientName,
+        showDeleteButton: showDeleteButton && c.access.canManageClientAlerts,
       });
-    }
+    });
   });
 
   clientAlerts.sort((a, b) => {

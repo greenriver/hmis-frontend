@@ -1,4 +1,4 @@
-import { Theme } from '@mui/material';
+import { AlertProps, AlertPropsColorOverrides, Theme } from '@mui/material';
 import {
   PaletteColor,
   SimplePaletteColorOptions,
@@ -15,6 +15,17 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/Alert' {
+  interface AlertPropsVariantOverrides {
+    withHeader: true;
+  }
+  interface AlertPropsColorOverrides {
+    low: true;
+    medium: true;
+    high: true;
+  }
+}
+
 declare module '@mui/material/styles' {
   interface TypographyVariants {
     body3: React.CSSProperties;
@@ -27,23 +38,29 @@ declare module '@mui/material/styles' {
     cardTitle?: React.CSSProperties;
   }
 
+  interface AlertPriorityColorOptions {
+    low: {
+      background: string;
+      header: string;
+    };
+    medium: {
+      background: string;
+      header: string;
+    };
+    high: {
+      background: string;
+      header: string;
+    };
+  }
   interface Palette {
     borders: PaletteColor;
-    alerts: Record<string, string>;
+    alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
-    alerts: {
-      lightWarningBackground?: string;
-      highPriorityErrorBackground?: string;
-      mediumPriorityHeaderBackground?: string;
-      mediumPriorityBodyBackground?: string;
-      mediumPriorityBorder?: string;
-      lowPriorityHeaderBackground?: string;
-      lowPriorityBodyBackground?: string;
-    };
+    alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
   }
@@ -81,13 +98,18 @@ export const baseThemeDef: ThemeOptions = {
       main: '#c9c9c9',
     },
     alerts: {
-      lightWarningBackground: '#fffde0',
-      highPriorityErrorBackground: '#FF7575',
-      mediumPriorityHeaderBackground: '#FF9900',
-      mediumPriorityBodyBackground: '#ED6C020A',
-      mediumPriorityBorder: '#ED6C0280',
-      lowPriorityHeaderBackground: '#FFCB52',
-      lowPriorityBodyBackground: '#FCFAF5',
+      low: {
+        background: '#FFFDE0',
+        header: '#FFCB52',
+      },
+      medium: {
+        background: '#ED6C020A',
+        header: '#FF9900',
+      },
+      high: {
+        background: '#D32F2F26',
+        header: '#D32F2F',
+      },
     },
     links: '#1976D2',
     activeStatus: '#75559F',
@@ -291,7 +313,63 @@ const createThemeOptions = (theme: Theme) => ({
           // override default transparent bg
           backgroundColor: '#fff',
         },
+        root: ({
+          ownerState,
+          theme,
+        }: {
+          ownerState: AlertProps;
+          theme: Theme;
+        }) => {
+          let bgColor: string = '';
+          let headerColor: string = '';
+          if (ownerState.variant === 'withHeader') {
+            if (!ownerState.color) {
+              throw new Error(
+                'withHeader Alert variant requires color to be specified: low, medium, or high'
+              );
+            } else {
+              bgColor =
+                theme.palette.alerts[
+                  ownerState.color as keyof AlertPropsColorOverrides
+                ].background;
+              headerColor =
+                theme.palette.alerts[
+                  ownerState.color as keyof AlertPropsColorOverrides
+                ].header;
+            }
+          }
+
+          return {
+            ...(ownerState.variant === 'withHeader' && {
+              padding: 0,
+              color: 'black',
+              backgroundColor: bgColor,
+              borderColor: headerColor,
+              '& .MuiAlertTitle-root': {
+                padding: theme.spacing(2),
+                margin: 0,
+                backgroundColor: headerColor,
+                fontWeight: 'bold',
+                color: theme.palette.getContrastText(headerColor),
+              },
+              '& .MuiAlert-message': {
+                padding: 0,
+                width: '100%',
+              },
+              '& .MuiAlert-body': {
+                padding: theme.spacing(2),
+              },
+            }),
+          };
+        },
       },
+      variants: [
+        {
+          props: {
+            variant: 'withHeader',
+          },
+        },
+      ],
     },
     MuiButton: {
       defaultProps: {

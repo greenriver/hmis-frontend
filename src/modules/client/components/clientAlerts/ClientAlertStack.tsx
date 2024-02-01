@@ -1,14 +1,13 @@
 import { Stack } from '@mui/system';
 import { ReactNode } from 'react';
 import ClientAlert, {
-  ClientAlertProps,
+  ClientAlertType,
 } from '@/modules/client/components/clientAlerts/ClientAlert';
 
-export interface ClientAlertStackProps {
-  clientAlerts: ClientAlertProps[];
+interface ClientAlertStackProps {
+  clientAlerts: ClientAlertType[];
   children?: ReactNode;
 }
-
 const ClientAlertStack: React.FC<ClientAlertStackProps> = ({
   clientAlerts,
   children,
@@ -17,13 +16,7 @@ const ClientAlertStack: React.FC<ClientAlertStackProps> = ({
     return (
       <Stack gap={2}>
         {clientAlerts.map((ca) => (
-          <ClientAlert
-            key={ca.alert.id}
-            alert={ca.alert}
-            client={ca.client}
-            shouldShowClientName={ca.shouldShowClientName}
-            showDeleteButton={ca.showDeleteButton}
-          />
+          <ClientAlert key={ca.alert.id} clientAlert={ca} />
         ))}
         {children}
       </Stack>

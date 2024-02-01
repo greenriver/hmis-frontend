@@ -181,7 +181,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     case ItemType.Display:
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
-          <DynamicDisplay maxWidth={maxWidth + 100} item={item} />
+          <DynamicDisplay maxWidth={maxWidth + 100} item={item} value={value} />
         </InputContainer>
       );
     case ItemType.Boolean:
