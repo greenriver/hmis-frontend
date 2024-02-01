@@ -13,7 +13,7 @@ interface ClientAlertProfileWrapperProps {
 export const ClientAlertProfileWrapper: React.FC<
   ClientAlertProfileWrapperProps
 > = ({ client }) => {
-  const { clientAlerts } = useClientAlerts({ client }, false);
+  const { clientAlerts } = useClientAlerts({ client }, false, true);
   if (!client.access.canViewClientAlerts) return;
 
   return (
@@ -36,6 +36,7 @@ export const ClientAlertHouseholdWrapper: React.FC<
 > = ({ householdId }) => {
   const { clientAlerts, loading, showClientAlertCard } = useClientAlerts(
     { householdId },
+    true,
     true
   );
 
@@ -57,6 +58,6 @@ interface ClientAlertEnrollmentWrapperProps {
 export const ClientAlertEnrollmentWrapper: React.FC<
   ClientAlertEnrollmentWrapperProps
 > = ({ client }) => {
-  const { clientAlerts } = useClientAlerts({ client }, false);
+  const { clientAlerts } = useClientAlerts({ client }, false, false);
   return <ClientAlertStack clientAlerts={clientAlerts} />;
 };

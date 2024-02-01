@@ -38,7 +38,6 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
       >
         {priority} Priority Alert
         {clientAlert.showDeleteButton && (
-          // todo @martha - make the icon appropriately colored
           <DeleteMutationButton<
             DeleteClientAlertMutation,
             DeleteClientAlertMutationVariables
@@ -54,7 +53,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
               });
             }}
             onlyIcon
-            iconColor={'#FFFFFF8F'}
+            className='MuiAlert-deleteIcon'
           >
             Delete
           </DeleteMutationButton>

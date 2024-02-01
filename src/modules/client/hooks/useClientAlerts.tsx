@@ -19,7 +19,8 @@ interface ClientAlertParams {
 
 export default function useClientAlerts(
   params: ClientAlertParams,
-  showClientName?: boolean
+  showClientName?: boolean,
+  showDeleteButton?: boolean
 ) {
   const [canViewClientAlerts] = useHasRootPermissions(['canViewClientAlerts']);
 
@@ -51,7 +52,9 @@ export default function useClientAlerts(
         return {
           alert: a,
           clientName: clientBriefName(c),
+          clientId: c.id,
           showClientName: showClientName,
+          showDeleteButton: showDeleteButton && c.access.canManageClientAlerts,
         };
       })
     );

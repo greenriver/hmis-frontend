@@ -42,14 +42,17 @@ declare module '@mui/material/styles' {
     low: {
       background: string;
       header: string;
+      icon?: string;
     };
     medium: {
       background: string;
       header: string;
+      icon?: string;
     };
     high: {
       background: string;
       header: string;
+      icon?: string;
     };
   }
   interface Palette {
@@ -109,6 +112,7 @@ export const baseThemeDef: ThemeOptions = {
       high: {
         background: '#D32F2F26',
         header: '#D32F2F',
+        icon: '#FFFFFF8F',
       },
     },
     links: '#1976D2',
@@ -322,6 +326,7 @@ const createThemeOptions = (theme: Theme) => ({
         }) => {
           let bgColor: string = '';
           let headerColor: string = '';
+          let iconColor: string = '';
           if (ownerState.variant === 'withHeader') {
             if (!ownerState.color) {
               throw new Error(
@@ -336,6 +341,10 @@ const createThemeOptions = (theme: Theme) => ({
                 theme.palette.alerts[
                   ownerState.color as keyof AlertPropsColorOverrides
                 ].header;
+              iconColor =
+                theme.palette.alerts[
+                  ownerState.color as keyof AlertPropsColorOverrides
+                ].icon || 'rgba(0, 0, 0, 0.54)';
             }
           }
 
@@ -358,6 +367,9 @@ const createThemeOptions = (theme: Theme) => ({
               },
               '& .MuiAlert-body': {
                 padding: theme.spacing(2),
+              },
+              '& .MuiAlert-deleteIcon': {
+                color: iconColor,
               },
             }),
           };

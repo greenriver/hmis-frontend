@@ -29,7 +29,7 @@ interface DeleteMutationButtonProps<MutationVariables> {
   verb?: string;
   deleteIcon?: boolean;
   onlyIcon?: boolean;
-  iconColor?: string;
+  className?: string;
 }
 
 const DeleteMutationButton = <Mutation, MutationVariables>({
@@ -45,7 +45,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   verb = 'delete',
   deleteIcon = false,
   onlyIcon = false,
-  iconColor,
+  className,
 }: DeleteMutationButtonProps<MutationVariables>) => {
   const [showDialog, setShowDialog] = useState(false);
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
@@ -83,7 +83,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
           data-testid={`deleteRecordButton-${camelCase(recordName)}`}
           onClick={onClick}
           size='small'
-          sx={{ color: iconColor }}
+          className={className}
           {...ButtonProps}
         >
           <DeleteIcon fontSize='small' />
@@ -95,6 +95,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
           variant='outlined'
           color='error'
           startIcon={deleteIcon ? <DeleteIcon /> : undefined}
+          className={className}
           {...ButtonProps}
         >
           {children}
