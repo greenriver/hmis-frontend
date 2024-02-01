@@ -783,7 +783,7 @@ export type ClientAlert = {
 export type ClientAlertInput = {
   clientId: Scalars['ID']['input'];
   expirationDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
-  note: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
   priority?: InputMaybe<ClientAlertPriorityLevel>;
 };
 
@@ -7373,6 +7373,7 @@ export type RootPermissionsFragment = {
   canTransferEnrollments: boolean;
   canSplitHouseholds: boolean;
   canConfigureDataCollection: boolean;
+  canViewClientAlerts: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -7480,6 +7481,7 @@ export type GetRootPermissionsQuery = {
     canTransferEnrollments: boolean;
     canSplitHouseholds: boolean;
     canConfigureDataCollection: boolean;
+    canViewClientAlerts: boolean;
   };
 };
 
@@ -29114,6 +29116,7 @@ export const RootPermissionsFragmentDoc = gql`
     canTransferEnrollments
     canSplitHouseholds
     canConfigureDataCollection
+    canViewClientAlerts
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`
