@@ -7361,6 +7361,7 @@ export type RootPermissionsFragment = {
   canTransferEnrollments: boolean;
   canSplitHouseholds: boolean;
   canConfigureDataCollection: boolean;
+  canViewClientAlerts: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -7468,6 +7469,7 @@ export type GetRootPermissionsQuery = {
     canTransferEnrollments: boolean;
     canSplitHouseholds: boolean;
     canConfigureDataCollection: boolean;
+    canViewClientAlerts: boolean;
   };
 };
 
@@ -29063,6 +29065,7 @@ export const RootPermissionsFragmentDoc = gql`
     canTransferEnrollments
     canSplitHouseholds
     canConfigureDataCollection
+    canViewClientAlerts
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`

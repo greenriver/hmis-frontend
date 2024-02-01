@@ -4,11 +4,8 @@ import ClientAlertCard, {
 } from '@/modules/client/components/clientAlerts/ClientAlertCard';
 import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
 import CreateClientAlertButton from '@/modules/client/components/clientAlerts/CreateClientAlertButton';
-import { getClientAlerts } from '@/modules/client/components/clientAlerts/getClientAlerts';
-import {
-  ClientWithAlertFieldsFragment,
-  useGetHouseholdClientAlertsQuery,
-} from '@/types/gqlTypes';
+import useClientAlerts from '@/modules/client/hooks/useClientAlerts';
+import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
 
 interface ClientAlertProfileWrapperProps {
   client: ClientWithAlertFieldsFragment;
@@ -16,9 +13,7 @@ interface ClientAlertProfileWrapperProps {
 export const ClientAlertProfileWrapper: React.FC<
   ClientAlertProfileWrapperProps
 > = ({ client }) => {
-  if (!client.access.canViewClientAlerts) return;
-
-  const clientAlerts = getClientAlerts([client], false);
+  const { clientAlerts } = useClientAlerts({ client }, false);
 
   return (
     <ClientAlertCard
@@ -38,21 +33,14 @@ interface ClientAlertHouseholdWrapperProps {
 export const ClientAlertHouseholdWrapper: React.FC<
   ClientAlertHouseholdWrapperProps
 > = ({ householdId }) => {
-  const {
-    data: { household } = {},
-    loading,
-    error,
-  } = useGetHouseholdClientAlertsQuery({ variables: { id: householdId } });
+  const { clientAlerts, loading, showClientAlertCard } = useClientAlerts(
+    { householdId },
+    true
+  );
 
-  if (loading && !household) return <Loading />;
-  if (error) throw error;
-  if (!household) throw new Error('Household not found');
-
-  const clients = household.householdClients.map((c) => c.client);
-  const canViewClientAlerts = clients.some((c) => c.access.canViewClientAlerts);
-  if (!canViewClientAlerts) return;
-
-  const clientAlerts = getClientAlerts(clients, clients.length > 1);
+  if (!showClientAlertCard) return;
+  if (loading && (!clientAlerts || clientAlerts.length === 0))
+    return <Loading />;
 
   return (
     <ClientAlertCard
@@ -68,6 +56,6 @@ interface ClientAlertEnrollmentWrapperProps {
 export const ClientAlertEnrollmentWrapper: React.FC<
   ClientAlertEnrollmentWrapperProps
 > = ({ client }) => {
-  const clientAlerts = getClientAlerts([client], false);
+  const { clientAlerts } = useClientAlerts({ client }, false);
   return <ClientAlertStack clientAlerts={clientAlerts} />;
 };
