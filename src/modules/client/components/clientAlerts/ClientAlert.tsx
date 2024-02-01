@@ -54,6 +54,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
               });
             }}
             onlyIcon
+            iconColor={'#FFFFFF8F'}
           >
             Delete
           </DeleteMutationButton>
