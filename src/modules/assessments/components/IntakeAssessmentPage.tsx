@@ -11,17 +11,20 @@ import { AssessmentRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const IntakeAssessmentPage = () => {
-  const { enrollment, client } = useEnrollmentDashboardContext();
+  const { enrollment, enrollmentLoading, client } =
+    useEnrollmentDashboardContext();
   const navigate = useNavigate();
 
-  const { formDefinition, loading } = useAssessmentFormDefinition({
-    role: AssessmentRole.Intake,
-    projectId: enrollment?.project.id || '',
-    // apply form rules based on the entry date. if this enrollment is from a year ago and the project was funded by PATH at that time, we want to see PATH questions.
-    assessmentDate: enrollment?.entryDate,
-  });
+  const { formDefinition, loading: definitionLoading } =
+    useAssessmentFormDefinition({
+      role: AssessmentRole.Intake,
+      projectId: enrollment?.project.id || '',
+      // apply form rules based on the entry date. if this enrollment is from a year ago and the project was funded by PATH at that time, we want to see PATH questions.
+      assessmentDate: enrollment?.entryDate,
+    });
 
   useEffect(() => {
+    if (enrollmentLoading) return; // if enrollment is reloading, dont do anything yet
     if (!enrollment || !formDefinition) return;
     if (enrollment.householdSize > 1) return; // render in-place
 
@@ -46,11 +49,11 @@ const IntakeAssessmentPage = () => {
         { replace: true }
       );
     }
-  }, [client, enrollment, formDefinition, navigate]);
+  }, [client, enrollment, enrollmentLoading, formDefinition, navigate]);
 
-  if (!enrollment) return <NotFound />;
-  if (!formDefinition && loading) return <Loading />;
+  if (!formDefinition && definitionLoading) return <Loading />;
   if (!formDefinition) return <MissingDefinitionAlert />;
+  if (!enrollment) return <NotFound />;
 
   // Househould has multiple members
   if (enrollment.householdSize > 1) {
@@ -63,7 +66,7 @@ const IntakeAssessmentPage = () => {
     );
   }
 
-  return <NotFound />;
+  return null;
 };
 
 export default IntakeAssessmentPage;
