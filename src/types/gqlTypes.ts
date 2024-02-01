@@ -783,7 +783,7 @@ export type ClientAlert = {
 export type ClientAlertInput = {
   clientId: Scalars['ID']['input'];
   expirationDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
-  note: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
   priority?: InputMaybe<ClientAlertPriorityLevel>;
 };
 
