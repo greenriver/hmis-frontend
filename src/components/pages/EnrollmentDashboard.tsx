@@ -71,9 +71,10 @@ const EnrollmentDashboard: React.FC = () => {
             overrideBreadcrumbTitles,
             enrollment,
             enabledFeatures,
+            enrollmentLoading: loading,
           }
         : undefined,
-    [client, enrollment, enabledFeatures]
+    [client, enrollment, enabledFeatures, loading]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);
@@ -82,7 +83,7 @@ const EnrollmentDashboard: React.FC = () => {
     breadcrumbOverrides
   );
 
-  if (loading || !navItems) return <Loading />;
+  if (loading && !enrollment) return <Loading />;
   if (!enrollment || !client || !outletContext) return <NotFound />;
   if (enrollment && enrollment.client.id !== params.clientId) {
     return <NotFound />;
@@ -130,6 +131,7 @@ const EnrollmentDashboard: React.FC = () => {
 export type EnrollmentDashboardContext = {
   client: ClientNameDobVetFragment;
   enrollment?: DashboardEnrollment;
+  enrollmentLoading?: boolean; // this would indicate a re-loading, not the initial load
   overrideBreadcrumbTitles: (crumbs: any) => void;
   enabledFeatures: DataCollectionFeatureRole[];
 };
