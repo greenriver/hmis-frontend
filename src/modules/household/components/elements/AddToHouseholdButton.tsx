@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
-import { ClientAlertEnrollmentWrapper } from '@/modules/client/components/clientAlerts/ClientAlertWrappers';
+import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
+import useClientAlerts from '@/modules/client/hooks/useClientAlerts';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
@@ -61,6 +62,8 @@ const AddToHouseholdButton = ({
   const { openFormDialog, renderFormDialog } =
     useFormDialog<SubmittedEnrollmentResultFieldsFragment>(memoedArgs);
 
+  const { clientAlerts } = useClientAlerts({ client }, false);
+
   return (
     <>
       <ButtonTooltipContainer
@@ -80,7 +83,9 @@ const AddToHouseholdButton = ({
       {renderFormDialog({
         title: <>Enroll {clientBriefName(client)}</>,
         submitButtonText: `Enroll`,
-        preFormComponent: <ClientAlertEnrollmentWrapper client={client} />,
+        preFormComponent: clientAlerts.length > 0 && (
+          <ClientAlertStack clientAlerts={clientAlerts} />
+        ),
       })}
     </>
   );
