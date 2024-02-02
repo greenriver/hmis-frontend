@@ -35,7 +35,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
         <Typography variant='body1' sx={{ pb: 1 }}>
           {alert.note}
         </Typography>
-        <Typography variant='body2' sx={{ fontSize: '12px' }}>
+        <Typography variant='caption'>
           Created by {alert.createdBy?.name || 'Unknown'} on{' '}
           {parseAndFormatDateTime(alert.createdAt)}.
           {alert.expirationDate &&
