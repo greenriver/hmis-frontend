@@ -1,18 +1,9 @@
-import { Stack, Typography } from '@mui/material';
-import { filter } from 'lodash-es';
-import {
-  ContextualCollapsibleList,
-  ContextualListExpansionButton,
-} from '@/components/elements/CollapsibleListContext';
-import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
-import AuditObjectChangesSummary, {
-  ObjectChangesType,
-} from '@/modules/audit/components/AuditObjectChangesSummary';
+import {
+  AuditHistoryNode,
+  auditHistoryColumns,
+} from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
-import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
-import { auditActionForDisplay } from '@/modules/hmis/hmisUtil';
 import {
   UserAuditEventFilterOptions,
   GetUserAuditEventsDocument,
@@ -20,78 +11,16 @@ import {
   GetUserAuditEventsQueryVariables,
 } from '@/types/gqlTypes';
 
-type AuditHistoryType = NonNullable<
-  NonNullable<GetUserAuditEventsQuery['user']>['auditHistory']
->['nodes'][0];
-
-const columns: ColumnDef<AuditHistoryType>[] = [
-  {
-    header: 'Timestamp',
-    width: '180px',
-    render: (e) => (
-      <RelativeDateTableCellContents dateTimeString={e.createdAt} />
-    ),
-  },
-  {
-    header: 'Action',
-    width: '100px',
-    render: ({ event }) => auditActionForDisplay(event),
-  },
-  {
-    header: 'Record Type',
-    width: '150px',
-    render: ({ recordName, recordId }) => {
-      return (
-        <Stack>
-          <Typography variant='inherit'>{recordName}</Typography>
-          <Typography
-            color='text.secondary'
-            variant='inherit'
-          >{`ID: ${recordId}`}</Typography>
-        </Stack>
-      );
-    },
-  },
-  {
-    header: (
-      <Stack direction='row' justifyContent='space-between' alignItems='center'>
-        <strong>Fields Changed</strong>
-        <ContextualListExpansionButton />
-      </Stack>
-    ),
-    tableCellProps: {
-      sx: { p: 0, backgroundColor: (theme) => theme.palette.grey[50] },
-    },
-    render: (e) => {
-      if (!e.objectChanges || Object.keys(e.objectChanges).length === 0) {
-        return null;
-      }
-
-      const labels = Object.values(e.objectChanges as ObjectChangesType)
-        .filter((r) => filter(r.values, hasMeaningfulValue).length > 0)
-        .map((val) => val.displayName);
-
-      return (
-        <ContextualCollapsibleList title={labels.join(', ')}>
-          <AuditObjectChangesSummary
-            objectChanges={e.objectChanges as ObjectChangesType}
-            recordType={e.graphqlType}
-            eventType={e.event}
-          />
-        </ContextualCollapsibleList>
-      );
-    },
-  },
-];
-
 const UserAuditHistory = () => {
   const { userId } = useSafeParams() as { userId: string };
+  // On the user audit history page, we don't need to show the user column, since the value will always be the same
+  const columns = auditHistoryColumns.filter((column) => column.key !== 'user');
 
   return (
     <GenericTableWithData<
       GetUserAuditEventsQuery,
       GetUserAuditEventsQueryVariables,
-      AuditHistoryType,
+      AuditHistoryNode,
       UserAuditEventFilterOptions
     >
       columns={columns}
