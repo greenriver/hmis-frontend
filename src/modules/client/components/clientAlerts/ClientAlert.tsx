@@ -15,10 +15,7 @@ interface ClientAlertProps {
   clientAlert: ClientAlertType;
 }
 const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
-  const alert = clientAlert.alert;
-  const clientName = clientAlert.clientName;
-  const showClientName = clientAlert.showClientName;
-  const priority = alert.priority || 'low';
+  const { alert, clientName, showClientName, priority } = clientAlert;
 
   return (
     <Alert icon={false} variant='withHeader' color={priority}>
