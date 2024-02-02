@@ -39,6 +39,7 @@ export type RenderFormDialogProps = PartialPick<
   title: ReactNode;
   otherActions?: ReactNode;
   DialogProps?: Omit<DialogProps, 'open'>;
+  preFormComponent?: ReactNode;
 };
 
 interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
@@ -146,6 +147,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
             ) : formDefinition ? (
               <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
                 <Grid item xs>
+                  {props.preFormComponent}
                   <DynamicForm
                     ref={formRef}
                     definition={formDefinition.definition}

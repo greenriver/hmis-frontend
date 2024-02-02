@@ -1,0 +1,20 @@
+fragment ClientWithAlertFields on Client {
+  ...ClientName
+  alerts {
+    ...ClientAlertFields
+  }
+  access {
+    canViewClientAlerts
+    canManageClientAlerts
+  }
+}
+fragment ClientAlertFields on ClientAlert {
+  id
+  note
+  expirationDate
+  createdBy {
+    ...UserFields
+  }
+  createdAt
+  priority
+}

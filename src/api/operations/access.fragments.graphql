@@ -31,6 +31,7 @@ fragment RootPermissions on QueryAccess {
   canTransferEnrollments
   canSplitHouseholds
   canConfigureDataCollection
+  canViewClientAlerts
 }
 
 fragment ClientAccessFields on ClientAccess {
@@ -53,6 +54,8 @@ fragment ClientAccessFields on ClientAccess {
   canAuditClients
   canManageScanCards
   canMergeClients
+  canViewClientAlerts
+  canManageClientAlerts
 }
 
 fragment EnrollmentAccessFields on EnrollmentAccess {

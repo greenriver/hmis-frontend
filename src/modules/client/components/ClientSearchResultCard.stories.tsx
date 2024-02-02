@@ -35,9 +35,3 @@ WithFewerDetails.args = {
   } as ClientFieldsFragment,
   hideImage: true,
 };
-
-// export const WithNotices = Template.bind({});
-// WithNotices.args = {
-//   client: RITA_ACKROYD as ClientFieldsFragment,
-//   showNotices: true,
-// };

@@ -88,6 +88,7 @@ const StaticForm = <
       onSubmit={onSubmit}
       errors={errors}
       loading={submitLoading}
+      localConstants={localConstants}
       {...DynamicFormProps}
     />
   );
