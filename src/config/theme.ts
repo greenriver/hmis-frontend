@@ -1,4 +1,4 @@
-import { AlertProps, AlertPropsColorOverrides, Theme } from '@mui/material';
+import { Theme } from '@mui/material';
 import {
   PaletteColor,
   SimplePaletteColorOptions,
@@ -308,66 +308,68 @@ const createThemeOptions = (theme: Theme) => ({
       },
     },
     MuiAlert: {
-      styleOverrides: {
-        outlined: {
-          // override default transparent bg
-          backgroundColor: '#fff',
-        },
-        root: ({
-          ownerState,
-          theme,
-        }: {
-          ownerState: AlertProps;
-          theme: Theme;
-        }) => {
-          let bgColor: string = '';
-          let headerColor: string = '';
-          if (ownerState.variant === 'withHeader') {
-            if (!ownerState.color) {
-              throw new Error(
-                'withHeader Alert variant requires color to be specified: low, medium, or high'
-              );
-            } else {
-              bgColor =
-                theme.palette.alerts[
-                  ownerState.color as keyof AlertPropsColorOverrides
-                ].background;
-              headerColor =
-                theme.palette.alerts[
-                  ownerState.color as keyof AlertPropsColorOverrides
-                ].header;
-            }
-          }
-
-          return {
-            ...(ownerState.variant === 'withHeader' && {
-              padding: 0,
-              color: 'black',
-              backgroundColor: bgColor,
-              borderColor: headerColor,
-              '& .MuiAlertTitle-root': {
-                padding: theme.spacing(2),
-                margin: 0,
-                backgroundColor: headerColor,
-                fontWeight: 'bold',
-                color: theme.palette.getContrastText(headerColor),
-              },
-              '& .MuiAlert-message': {
-                padding: 0,
-                width: '100%',
-              },
-              '& .MuiAlert-body': {
-                padding: theme.spacing(2),
-              },
-            }),
-          };
-        },
-      },
       variants: [
         {
-          props: {
-            variant: 'withHeader',
-          },
+          // styles that are shared across all withHeader alerts
+          props: { variant: 'withHeader' },
+          style: theme.unstable_sx({
+            padding: 0,
+            color: 'black',
+            '& .MuiAlertTitle-root': {
+              padding: theme.spacing(2),
+              margin: 0,
+              fontWeight: 800,
+            },
+            '& .MuiAlert-message': {
+              padding: 0,
+              width: '100%',
+            },
+            '& .MuiAlert-body': {
+              padding: theme.spacing(2),
+            },
+          }),
+        },
+        {
+          // styles for LOW priority
+          props: { variant: 'withHeader', color: 'low' },
+          style: theme.unstable_sx({
+            borderColor: theme.palette.alerts.low.header,
+            backgroundColor: theme.palette.alerts.low.background,
+            '& .MuiAlertTitle-root': {
+              backgroundColor: theme.palette.alerts.low.header,
+              color: theme.palette.getContrastText(
+                theme.palette.alerts.low.header
+              ),
+            },
+          }),
+        },
+        {
+          // styles for MEDIUM priority
+          props: { variant: 'withHeader', color: 'medium' },
+          style: theme.unstable_sx({
+            borderColor: theme.palette.alerts.medium.header,
+            backgroundColor: theme.palette.alerts.medium.background,
+            '& .MuiAlertTitle-root': {
+              backgroundColor: theme.palette.alerts.medium.header,
+              color: theme.palette.getContrastText(
+                theme.palette.alerts.medium.header
+              ),
+            },
+          }),
+        },
+        {
+          // styles for HIGH priority
+          props: { variant: 'withHeader', color: 'high' },
+          style: theme.unstable_sx({
+            borderColor: theme.palette.alerts.high.header,
+            backgroundColor: theme.palette.alerts.high.background,
+            '& .MuiAlertTitle-root': {
+              backgroundColor: theme.palette.alerts.high.header,
+              color: theme.palette.getContrastText(
+                theme.palette.alerts.high.header
+              ),
+            },
+          }),
         },
       ],
     },

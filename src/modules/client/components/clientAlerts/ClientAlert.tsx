@@ -15,16 +15,16 @@ interface ClientAlertProps {
   clientAlert: ClientAlertType;
 }
 const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
-  const { alert, clientName, showClientName, priority } = clientAlert;
+  const { alert, clientName, showClientName } = clientAlert;
 
   return (
-    <Alert icon={false} variant='withHeader' color={priority}>
+    <Alert icon={false} variant='withHeader' color={alert.priority}>
       <AlertTitle
         sx={{
           textTransform: 'capitalize',
         }}
       >
-        {priority} Priority Alert
+        {alert.priority} Priority Alert
       </AlertTitle>
       <Box className='MuiAlert-body'>
         {showClientName && (
