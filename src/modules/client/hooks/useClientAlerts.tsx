@@ -46,14 +46,12 @@ export default function useClientAlerts(
       ? [params.client]
       : [];
 
-    const clientAlerts = clients.flatMap((c) =>
-      c.alerts.map((a) => {
-        return {
-          alert: a,
-          clientName: clientBriefName(c),
-          showClientName: showClientName,
-        };
-      })
+    const clientAlerts = clients.flatMap((client) =>
+      client.alerts.map((alert) => ({
+        alert,
+        clientName: clientBriefName(client),
+        showClientName,
+      }))
     );
 
     clientAlerts.sort((a, b) => {
