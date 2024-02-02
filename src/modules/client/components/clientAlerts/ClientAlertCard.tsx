@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 import TitleCard from '@/components/elements/TitleCard';
 import { ClientAlertType } from '@/modules/client/components/clientAlerts/ClientAlert';
@@ -29,19 +29,20 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
     >
       <Box sx={{ m: 2 }}>
         {clientAlerts.length === 0 && (
-          <Box
+          <Stack
+            direction='row'
+            justifyContent='space-between'
+            alignItems='center'
+            p={1}
             sx={{
-              p: 2,
-              backgroundColor: '#fafafa',
-              color: '#00000060',
+              backgroundColor: (theme) => theme.palette.grey[50],
+              color: 'text.secondary',
               borderRadius: 1,
-              display: 'flex',
-              justifyContent: 'space-between',
             }}
           >
             {alertContext} has no alerts at this time
             {children}
-          </Box>
+          </Stack>
         )}
         {clientAlerts.length > 0 && (
           <ClientAlertStack clientAlerts={clientAlerts}>
