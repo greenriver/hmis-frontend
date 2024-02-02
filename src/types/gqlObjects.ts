@@ -155,6 +155,63 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ApplicationUserAuditEvent',
+    fields: [
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'event',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'AuditEventType', ofType: null },
+        },
+      },
+      {
+        name: 'graphqlType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'objectChanges',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'recordId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'recordName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'Assessment',
     fields: [
       {
@@ -990,6 +1047,51 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'use',
         type: { kind: 'ENUM', name: 'ClientAddressUse', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ClientAlert',
+    fields: [
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'expirationDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'note',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'priority',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'ClientAlertPriorityLevel',
+            ofType: null,
+          },
+        },
       },
     ],
   },
@@ -7338,6 +7440,47 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
               name: null,
               ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
             },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'UserAuditEventFilterOptions',
+    args: [
+      {
+        name: 'clientRecordType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'enrollmentRecordType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'user',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
       },

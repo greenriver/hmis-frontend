@@ -148,6 +148,7 @@ export enum AnnualPercentAmi {
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
   activityLogs: ActivityLogsPaginated;
+  auditHistory: ApplicationUserAuditEventsPaginated;
   clientAccessSummaries: ClientAccessSummariesPaginated;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -168,6 +169,13 @@ export type ApplicationUserActivityLogsArgs = {
 };
 
 /** User account for a user of the system */
+export type ApplicationUserAuditHistoryArgs = {
+  filters?: InputMaybe<UserAuditEventFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
 export type ApplicationUserClientAccessSummariesArgs = {
   filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -179,6 +187,31 @@ export type ApplicationUserEnrollmentAccessSummariesArgs = {
   filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ApplicationUserAuditEvent = {
+  __typename?: 'ApplicationUserAuditEvent';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  event: AuditEventType;
+  graphqlType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
+  objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  recordId: Scalars['ID']['output'];
+  recordName: Scalars['String']['output'];
+  trueUser?: Maybe<ApplicationUser>;
+  user?: Maybe<ApplicationUser>;
+};
+
+export type ApplicationUserAuditEventsPaginated = {
+  __typename?: 'ApplicationUserAuditEventsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ApplicationUserAuditEvent>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type ApplicationUserFilterOptions = {
@@ -520,6 +553,7 @@ export type Client = {
   addresses: Array<ClientAddress>;
   afghanistanOef?: Maybe<NoYesReasonsForMissingData>;
   age?: Maybe<Scalars['Int']['output']>;
+  alerts: Array<ClientAlert>;
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
@@ -765,6 +799,23 @@ export enum ClientAddressUse {
   Temp = 'temp',
   /** Work */
   Work = 'work',
+}
+
+/** Alert */
+export type ClientAlert = {
+  __typename?: 'ClientAlert';
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  createdBy?: Maybe<ApplicationUser>;
+  expirationDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  id: Scalars['ID']['output'];
+  note: Scalars['String']['output'];
+  priority: ClientAlertPriorityLevel;
+};
+
+export enum ClientAlertPriorityLevel {
+  High = 'high',
+  Low = 'low',
+  Medium = 'medium',
 }
 
 export type ClientAuditEvent = {
@@ -6848,6 +6899,12 @@ export type UpdateUnitsPayload = {
   units: Array<Unit>;
 };
 
+export type UserAuditEventFilterOptions = {
+  clientRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  enrollmentRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  user?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 export type ValidationError = {
   __typename?: 'ValidationError';
   attribute: Scalars['String']['output'];
@@ -11685,6 +11742,23 @@ export type EnrollmentAuditEventFieldsFragment = {
   } | null;
 };
 
+export type UserAuditEventFieldsFragment = {
+  __typename?: 'ApplicationUserAuditEvent';
+  id: string;
+  createdAt: string;
+  event: AuditEventType;
+  objectChanges?: any | null;
+  recordName: string;
+  graphqlType: string;
+  recordId: string;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+  trueUser?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+};
+
 export type GetClientAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -11745,6 +11819,47 @@ export type GetEnrollmentAuditEventsQuery = {
       nodesCount: number;
       nodes: Array<{
         __typename?: 'EnrollmentAuditEvent';
+        id: string;
+        createdAt: string;
+        event: AuditEventType;
+        objectChanges?: any | null;
+        recordName: string;
+        graphqlType: string;
+        recordId: string;
+        user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+        trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetUserAuditEventsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<UserAuditEventFilterOptions>;
+}>;
+
+export type GetUserAuditEventsQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    auditHistory: {
+      __typename?: 'ApplicationUserAuditEventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ApplicationUserAuditEvent';
         id: string;
         createdAt: string;
         event: AuditEventType;
@@ -29251,6 +29366,25 @@ export const EnrollmentAuditEventFieldsFragmentDoc = gql`
     }
   }
 `;
+export const UserAuditEventFieldsFragmentDoc = gql`
+  fragment UserAuditEventFields on ApplicationUserAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    recordName
+    graphqlType
+    recordId
+    user {
+      id
+      name
+    }
+    trueUser {
+      id
+      name
+    }
+  }
+`;
 export const AutoExitConfigFieldsFragmentDoc = gql`
   fragment AutoExitConfigFields on AutoExitConfig {
     id
@@ -31511,6 +31645,81 @@ export type GetEnrollmentAuditEventsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentAuditEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentAuditEventsQuery,
   GetEnrollmentAuditEventsQueryVariables
+>;
+export const GetUserAuditEventsDocument = gql`
+  query GetUserAuditEvents(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: UserAuditEventFilterOptions = null
+  ) {
+    user(id: $id) {
+      id
+      auditHistory(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...UserAuditEventFields
+        }
+      }
+    }
+  }
+  ${UserAuditEventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserAuditEventsQuery__
+ *
+ * To run a query within a React component, call `useGetUserAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserAuditEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetUserAuditEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >(GetUserAuditEventsDocument, options);
+}
+export function useGetUserAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >(GetUserAuditEventsDocument, options);
+}
+export type GetUserAuditEventsQueryHookResult = ReturnType<
+  typeof useGetUserAuditEventsQuery
+>;
+export type GetUserAuditEventsLazyQueryHookResult = ReturnType<
+  typeof useGetUserAuditEventsLazyQuery
+>;
+export type GetUserAuditEventsQueryResult = Apollo.QueryResult<
+  GetUserAuditEventsQuery,
+  GetUserAuditEventsQueryVariables
 >;
 export const CreateAutoExitConfigDocument = gql`
   mutation CreateAutoExitConfig($input: AutoExitConfigInput!) {

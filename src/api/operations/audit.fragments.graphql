@@ -33,3 +33,21 @@ fragment EnrollmentAuditEventFields on EnrollmentAuditEvent {
     name
   }
 }
+
+fragment UserAuditEventFields on ApplicationUserAuditEvent {
+  id
+  createdAt
+  event
+  objectChanges
+  recordName
+  graphqlType
+  recordId
+  user {
+    id
+    name
+  }
+  trueUser {
+    id
+    name
+  }
+}
