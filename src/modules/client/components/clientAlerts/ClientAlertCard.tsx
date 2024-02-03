@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 import TitleCard from '@/components/elements/TitleCard';
 import { ClientAlertType } from '@/modules/client/components/clientAlerts/ClientAlert';
