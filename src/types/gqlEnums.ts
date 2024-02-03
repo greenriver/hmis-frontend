@@ -87,8 +87,8 @@ export const HmisEnums = {
   },
   ClientAlertPriorityLevel: {
     high: '1 - High',
-    low: '3 - Low',
     medium: '2 - Medium',
+    low: '3 - Low',
   },
   ClientContactPointSystem: { email: 'Email', phone: 'Phone', url: 'Url' },
   ClientContactPointUse: {

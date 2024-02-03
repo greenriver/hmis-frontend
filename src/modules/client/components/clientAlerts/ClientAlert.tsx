@@ -24,11 +24,10 @@ interface ClientAlertProps {
   clientAlert: ClientAlertType;
 }
 const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
-  const alert = clientAlert.alert;
-  const priority = alert.priority || 'low';
+  const { alert, clientName, showClientName } = clientAlert;
 
   return (
-    <Alert icon={false} variant='withHeader' color={priority}>
+    <Alert icon={false} variant='withHeader' color={alert.priority}>
       <AlertTitle
         sx={{
           textTransform: 'capitalize',
@@ -36,7 +35,7 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
           justifyContent: 'space-between',
         }}
       >
-        {priority} Priority Alert
+        {alert.priority} Priority Alert
         {clientAlert.showDeleteButton && (
           <DeleteMutationButton<
             DeleteClientAlertMutation,
@@ -60,15 +59,15 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
         )}
       </AlertTitle>
       <Box className='MuiAlert-body'>
-        {clientAlert.showClientName && (
+        {showClientName && (
           <Typography variant='body2' sx={{ pb: 1 }}>
-            {clientAlert.clientName}
+            {clientName}
           </Typography>
         )}
         <Typography variant='body1' sx={{ pb: 1 }}>
           {alert.note}
         </Typography>
-        <Typography variant='body2' sx={{ fontSize: '12px' }}>
+        <Typography variant='caption'>
           Created by {alert.createdBy?.name || 'Unknown'} on{' '}
           {parseAndFormatDateTime(alert.createdAt)}.
           {alert.expirationDate &&

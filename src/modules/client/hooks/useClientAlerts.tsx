@@ -47,16 +47,15 @@ export default function useClientAlerts(
       ? [params.client]
       : [];
 
-    const clientAlerts = clients.flatMap((c) =>
-      c.alerts.map((a) => {
-        return {
-          alert: a,
-          clientName: clientBriefName(c),
-          clientId: c.id,
-          showClientName: showClientName,
-          showDeleteButton: showDeleteButton && c.access.canManageClientAlerts,
-        };
-      })
+    const clientAlerts = clients.flatMap((client) =>
+      client.alerts.map((alert) => ({
+        alert,
+        clientName: clientBriefName(client),
+        clientId: client.id,
+        showClientName,
+        showDeleteButton:
+          showDeleteButton && client.access.canManageClientAlerts,
+      }))
     );
 
     clientAlerts.sort((a, b) => {
@@ -71,7 +70,7 @@ export default function useClientAlerts(
     });
 
     return clientAlerts;
-  }, [params.client, household, showClientName]); // only re-run when these change
+  }, [params.client, household, showClientName, showDeleteButton]); // only re-run when these change
 
   if (error) throw error;
 

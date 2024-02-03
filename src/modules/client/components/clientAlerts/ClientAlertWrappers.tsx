@@ -2,7 +2,6 @@ import Loading from '@/components/elements/Loading';
 import ClientAlertCard, {
   AlertContext,
 } from '@/modules/client/components/clientAlerts/ClientAlertCard';
-import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
 import CreateClientAlertButton from '@/modules/client/components/clientAlerts/CreateClientAlertButton';
 import useClientAlerts from '@/modules/client/hooks/useClientAlerts';
 import { ClientWithAlertFieldsFragment } from '@/types/gqlTypes';
@@ -13,8 +12,7 @@ interface ClientAlertProfileWrapperProps {
 export const ClientAlertProfileWrapper: React.FC<
   ClientAlertProfileWrapperProps
 > = ({ client }) => {
-  const { clientAlerts } = useClientAlerts({ client }, false, true);
-  if (!client.access.canViewClientAlerts) return;
+  const { clientAlerts } = useClientAlerts({ client }, false);
 
   return (
     <ClientAlertCard
@@ -50,14 +48,4 @@ export const ClientAlertHouseholdWrapper: React.FC<
       clientAlerts={clientAlerts}
     />
   );
-};
-
-interface ClientAlertEnrollmentWrapperProps {
-  client: ClientWithAlertFieldsFragment;
-}
-export const ClientAlertEnrollmentWrapper: React.FC<
-  ClientAlertEnrollmentWrapperProps
-> = ({ client }) => {
-  const { clientAlerts } = useClientAlerts({ client }, false, false);
-  return <ClientAlertStack clientAlerts={clientAlerts} />;
 };
