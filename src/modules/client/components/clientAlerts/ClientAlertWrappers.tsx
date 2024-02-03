@@ -12,7 +12,7 @@ interface ClientAlertProfileWrapperProps {
 export const ClientAlertProfileWrapper: React.FC<
   ClientAlertProfileWrapperProps
 > = ({ client }) => {
-  const { clientAlerts } = useClientAlerts({ client }, false);
+  const { clientAlerts } = useClientAlerts({ client }, false, true);
 
   return (
     <ClientAlertCard

@@ -62,7 +62,7 @@ const AddToHouseholdButton = ({
   const { openFormDialog, renderFormDialog } =
     useFormDialog<SubmittedEnrollmentResultFieldsFragment>(memoedArgs);
 
-  const { clientAlerts } = useClientAlerts({ client }, false);
+  const { clientAlerts } = useClientAlerts({ client }, false, false);
 
   return (
     <>
