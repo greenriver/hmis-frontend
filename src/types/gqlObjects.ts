@@ -5939,6 +5939,28 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ClientAlertInput',
+    args: [
+      {
+        name: 'clientId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'expirationDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      { name: 'note', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'priority',
+        type: { kind: 'ENUM', name: 'ClientAlertPriorityLevel', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ClientAuditEventFilterOptions',
     args: [
       {

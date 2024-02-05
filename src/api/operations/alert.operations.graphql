@@ -1,0 +1,10 @@
+mutation CreateClientAlert($input: ClientAlertInput!) {
+  createClientAlert(input: $input) {
+    clientAlert {
+      ...ClientAlertFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

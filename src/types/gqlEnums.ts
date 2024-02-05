@@ -85,7 +85,11 @@ export const HmisEnums = {
     temp: 'Temp',
     work: 'Work',
   },
-  ClientAlertPriorityLevel: { high: 'high', low: 'low', medium: 'medium' },
+  ClientAlertPriorityLevel: {
+    high: '1 - High',
+    medium: '2 - Medium',
+    low: '3 - Low',
+  },
   ClientContactPointSystem: { email: 'Email', phone: 'Phone', url: 'Url' },
   ClientContactPointUse: {
     home: 'Home',
@@ -521,6 +525,7 @@ export const HmisEnums = {
     CE_EVENT: 'CE event',
     CE_PARTICIPATION: 'CE participation',
     CLIENT: 'Client',
+    CLIENT_ALERT: 'Client alert',
     CLIENT_DETAIL: 'Client detail',
     CURRENT_LIVING_SITUATION: 'Current living situation',
     CUSTOM_ASSESSMENT: 'Custom assessment',
@@ -1764,6 +1769,7 @@ export const HmisEnums = {
   },
   StaticFormRole: {
     AUTO_EXIT_CONFIG: 'Auto exit config',
+    CLIENT_ALERT: 'Client alert',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
   },

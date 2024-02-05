@@ -112,7 +112,7 @@ const RadioGroupInput = ({
           }),
           ...(warnIfEmptyTreatment && {
             '[data-checked="false"] svg': {
-              backgroundColor: 'alerts.lightWarningBackground',
+              backgroundColor: 'alerts.low.background',
               borderRadius: 1,
             },
           }),

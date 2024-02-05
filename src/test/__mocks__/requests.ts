@@ -128,6 +128,7 @@ export const RITA_ACKROYD = {
     limit: 10,
     nodes: [fakeEnrollment(), fakeEnrollment(), fakeEnrollment()],
   },
+  alerts: [],
 };
 
 export const RITA_ACKROYD_WITHOUT_ENROLLMENTS = {

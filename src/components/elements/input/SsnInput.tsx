@@ -144,7 +144,7 @@ const SsnInput = ({
             InputProps={{
               sx: {
                 backgroundColor: warnIfEmptyTreatment
-                  ? 'alerts.lightWarningBackground'
+                  ? 'alerts.low.background'
                   : undefined,
               },
             }}
