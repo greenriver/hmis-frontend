@@ -6,7 +6,7 @@ import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFor
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
 import {
-  FormRole,
+  RecordFormRole,
   SubmittedEnrollmentResultFieldsFragment,
 } from '@/types/gqlTypes';
 
@@ -24,7 +24,7 @@ const AddNewClientButton: React.FC<Props> = ({
 
   const memoedArgs = useMemo(
     () => ({
-      formRole: FormRole.NewClientEnrollment,
+      formRole: RecordFormRole.NewClientEnrollment,
       localConstants: {
         ...localConstantsForClientForm(),
         householdId,

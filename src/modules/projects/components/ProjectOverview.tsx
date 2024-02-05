@@ -14,7 +14,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { FormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
+import { ProjectAllFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 export const InactiveBanner = ({
@@ -119,7 +119,7 @@ const ProjectOverview = () => {
         }
       />
       <InactiveBanner project={project} />
-      <ViewRecord record={project} formRole={FormRole.Project} />
+      <ViewRecord record={project} formRole={RecordFormRole.Project} />
     </>
   );
 };

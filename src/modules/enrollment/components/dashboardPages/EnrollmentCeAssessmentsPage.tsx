@@ -15,7 +15,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   CeAssessmentFieldsFragment,
   DeleteCeAssessmentDocument,
-  FormRole,
+  RecordFormRole,
   GetEnrollmentCeAssessmentsDocument,
   GetEnrollmentCeAssessmentsQuery,
   GetEnrollmentCeAssessmentsQueryVariables,
@@ -48,7 +48,7 @@ const EnrollmentCeAssessmentsPage = () => {
     useViewEditRecordDialogs({
       variant: canEditCeAssessments ? 'edit_only' : 'view_only',
       inputVariables: { enrollmentId },
-      formRole: FormRole.CeAssessment,
+      formRole: RecordFormRole.CeAssessment,
       recordName: 'CE Assessment',
       evictCache,
       deleteRecordDocument: DeleteCeAssessmentDocument,

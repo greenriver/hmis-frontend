@@ -9,6 +9,7 @@ interface Props {
   item: FormItem;
   maxWidth?: number;
   viewOnly?: boolean;
+  value: any;
 }
 
 const SeverityMap: Record<string, AlertColor> = {
@@ -18,14 +19,26 @@ const SeverityMap: Record<string, AlertColor> = {
   [Component.AlertWarning]: 'warning',
 };
 
-const DynamicDisplay = ({ item, maxWidth, viewOnly = false }: Props) => {
+// simple string interpolation. Example interpolate("hello ${name}", {name: 'world'})
+const interpolate = (template: string, variables: Record<string, string>) => {
+  return template.replace(/\${(\w+)}/g, (match, key) => {
+    return typeof variables[key] !== 'undefined' ? variables[key] : match;
+  });
+};
+
+const DynamicDisplay: React.FC<Props> = ({
+  item,
+  maxWidth,
+  value = 'N/A',
+  viewOnly = false,
+}) => {
   const html = useMemo(() => {
     let stringValue = item.text;
     if (viewOnly && !isNil(item.readonlyText)) stringValue = item.readonlyText;
     if (isNil(stringValue)) return undefined;
 
-    return { __html: DOMPurify.sanitize(stringValue) };
-  }, [item, viewOnly]);
+    return { __html: DOMPurify.sanitize(interpolate(stringValue, { value })) };
+  }, [item, viewOnly, value]);
 
   if (!html) return null;
 

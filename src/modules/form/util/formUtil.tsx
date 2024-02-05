@@ -462,6 +462,13 @@ export const shouldEnableItem = ({
   }
 };
 
+const numericValueForFormValue = (
+  value: FormValues[string]
+): number | null | undefined => {
+  if (isPickListOption(value)) return value.numericValue;
+  return Number.isNaN(Number(value)) ? undefined : Number(value);
+};
+
 export const getAutofillComparisonValue = (
   av: AutofillValue,
   values: FormValues,
@@ -471,7 +478,7 @@ export const getAutofillComparisonValue = (
   if (av.sumQuestions && av.sumQuestions.length > 0) {
     const numbers = av.sumQuestions
       .map((linkId) => values[linkId])
-      .map((n) => (Number.isNaN(Number(n)) ? undefined : Number(n)))
+      .map(numericValueForFormValue)
       .filter((n) => !isNil(n));
     return sum(numbers);
   }
@@ -1017,6 +1024,21 @@ export const applyDataCollectedAbout = (
   return items
     .filter((child) => isApplicable(child))
     .map((child) => recur(child));
+};
+
+// Apply DataCollectedAbout to a FormDefinition. Return cloned definition.
+export const applyDefinitionRulesForClient = (
+  formDefinition: FormDefinitionFieldsFragment,
+  client: ClientNameDobVeteranFields,
+  relationshipToHoH: RelationshipToHoH
+): FormDefinitionFieldsFragment => {
+  const mutable = cloneDeep(formDefinition);
+  mutable.definition.item = applyDataCollectedAbout(
+    formDefinition.definition.item,
+    client,
+    relationshipToHoH
+  );
+  return mutable;
 };
 
 /**

@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
 import { isRecentHouseholdMember, RecentHouseholdMember } from '../types';
 
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   ClientFieldsFragment,
   useGetHouseholdLazyQuery,
@@ -73,8 +72,7 @@ export default function useAddToHouseholdColumns({
             : record;
           return (
             <AddToHouseholdButton
-              clientId={client.id}
-              clientName={clientBriefName(client)}
+              client={client}
               householdId={householdId}
               projectId={projectId}
               isMember={currentMembersMap.has(client.id)}

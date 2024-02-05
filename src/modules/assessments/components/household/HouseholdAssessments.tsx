@@ -45,13 +45,14 @@ import {
   AssessmentFieldsFragment,
   AssessmentRole,
   EnrollmentFieldsFragment,
+  FormDefinitionFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
   role: HouseholdAssesmentRole;
-  assessmentId?: string;
+  formDefinition: FormDefinitionFieldsFragment;
 }
 
 const calculateAssessmentStatus = (
@@ -70,7 +71,7 @@ const calculateAssessmentStatus = (
 const HouseholdAssessments: React.FC<Props> = ({
   role,
   enrollment,
-  assessmentId,
+  formDefinition,
 }) => {
   // track if there are any dirty assessment forms
   const [formStates, setFormStates] = useState<
@@ -105,7 +106,6 @@ const HouseholdAssessments: React.FC<Props> = ({
     useHouseholdAssessments({
       role,
       householdId: enrollment.householdId,
-      assessmentId,
     });
   const [currentTab, setCurrentTab] = useState<string | undefined>('1');
   const [nextTab, setNextTab] = useState<string>();
@@ -399,7 +399,6 @@ const HouseholdAssessments: React.FC<Props> = ({
               navigateToTab={navigateToTab}
               nextTab={tabs[index + 1]?.id || SUMMARY_TAB_ID}
               previousTab={tabs[index - 1]?.id}
-              role={role}
               updateTabStatus={updateTabStatus}
               assessmentStatus={tabDefinition.status}
               onFormStateChange={handleFormStateChange}
@@ -407,6 +406,7 @@ const HouseholdAssessments: React.FC<Props> = ({
                 formStates[tabDefinition.enrollmentId] ||
                 initialHouseholdAssessmentFormState
               }
+              formDefinition={formDefinition}
               {...tabDefinition}
             />
           ))}

@@ -797,6 +797,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canManageClientAlerts',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageOwnClientFiles',
         type: {
           kind: 'NON_NULL',
@@ -846,6 +854,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewAnyNonconfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClientAlerts',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -974,6 +990,51 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'use',
         type: { kind: 'ENUM', name: 'ClientAddressUse', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ClientAlert',
+    fields: [
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'expirationDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'note',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'priority',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'ClientAlertPriorityLevel',
+            ofType: null,
+          },
+        },
       },
     ],
   },
@@ -4222,10 +4283,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'helperText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'initialSelected',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       { name: 'label', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'numericValue',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
       {
         name: 'secondaryLabel',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
@@ -4666,6 +4735,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canManageClientAlerts',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageDeniedReferrals',
         type: {
           kind: 'NON_NULL',
@@ -4747,6 +4824,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewAnyNonconfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClientAlerts',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5056,8 +5141,16 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Reminder',
     fields: [
       {
+        name: 'assessmentId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'dueDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'formDefinitionId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
@@ -5785,6 +5878,28 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ClientAlertInput',
+    args: [
+      {
+        name: 'clientId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'expirationDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      { name: 'note', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'priority',
+        type: { kind: 'ENUM', name: 'ClientAlertPriorityLevel', ofType: null },
       },
     ],
   },

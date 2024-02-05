@@ -1,19 +1,13 @@
-import { isAfter } from 'date-fns';
 import { useMemo } from 'react';
 
 import { To } from 'react-router-dom';
 import {
   clientBriefName,
-  parseHmisDateString,
   relationshipToHohForDisplay,
 } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import {
-  FormRole,
-  RelationshipToHoH,
-  useGetRelatedAnnualsQuery,
-} from '@/types/gqlTypes';
+import { RelationshipToHoH, useGetRelatedAnnualsQuery } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Args {
@@ -23,18 +17,13 @@ interface Args {
   skip?: boolean;
 }
 
-// type AssessmentResultType = NonNullable<
-//   NonNullable<GetRelatedAnnualsQuery['householdAssessments']>
-// >[0];
-
 type HouseholdMemberAnnualInfo = {
   clientName: string;
   firstName: string;
   enrollmentId: string;
   relationshipToHoH: RelationshipToHoH;
   path: To;
-  assessmentId?: string;
-  assessmentDate?: string;
+  assessmentDate: string;
 };
 
 function relationshipSuffix(relationship: RelationshipToHoH) {
@@ -48,8 +37,10 @@ export function useRelatedAnnualAssessments({
   assessmentId,
   skip,
 }: Args) {
-  const [householdMembers, { loading: hhmLoading }] =
-    useHouseholdMembers(enrollmentId);
+  const [householdMembers, { loading: hhmLoading }] = useHouseholdMembers(
+    enrollmentId,
+    skip
+  );
   const { data: { householdAssessments } = {}, loading: assmtsLoading } =
     useGetRelatedAnnualsQuery({
       variables: { householdId, assessmentId },
@@ -61,12 +52,9 @@ export function useRelatedAnnualAssessments({
     if (!householdAssessments || !householdMembers) return;
 
     const annualInfo: HouseholdMemberAnnualInfo[] = [];
-    let targetAnnualDate: Date | null = null;
-
-    // First, add all household members who have Annual Assessments within range of the "target" date (either the current assessment date or today if new)
+    // Add all household members who have Annual Assessments within range of the "target" date (either the current assessment date or today if new)
     householdAssessments.forEach(({ enrollment, client, ...assessment }) => {
       if (enrollment.id === enrollmentId) {
-        targetAnnualDate = parseHmisDateString(assessment.assessmentDate);
         return; // skip current member
       }
 
@@ -78,46 +66,10 @@ export function useRelatedAnnualAssessments({
         assessmentDate: assessment.assessmentDate,
         enrollmentId: enrollment.id,
         relationshipToHoH: enrollment.relationshipToHoH,
-        path: generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+        path: generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
           clientId: client.id,
           enrollmentId: enrollment.id,
           assessmentId: assessment.id,
-          formRole: FormRole.Annual,
-        }),
-      });
-    });
-
-    // Next, add all other members that DON'T have Annuals within that target range
-    householdMembers.forEach(({ client, enrollment, ...hhm }) => {
-      // skip current member
-      if (enrollment.id === enrollmentId) return;
-
-      // skip if already included
-      if (!!annualInfo.find((info) => info.enrollmentId === enrollment.id)) {
-        return;
-      }
-
-      // skip hh member if they enrolled after the target annual date
-      const entryDate = parseHmisDateString(enrollment.entryDate);
-      if (
-        entryDate &&
-        targetAnnualDate &&
-        isAfter(entryDate, targetAnnualDate)
-      ) {
-        return;
-      }
-
-      annualInfo.push({
-        clientName: `${clientBriefName(client)}${relationshipSuffix(
-          hhm.relationshipToHoH
-        )}`,
-        firstName: client.firstName || 'Client',
-        enrollmentId: enrollment.id,
-        relationshipToHoH: hhm.relationshipToHoH,
-        path: generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-          clientId: client.id,
-          enrollmentId: enrollment.id,
-          formRole: FormRole.Annual,
         }),
       });
     });

@@ -8,11 +8,11 @@ import DynamicView from './viewable/DynamicView';
 
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
-import { FormRole } from '@/types/gqlTypes';
+import { RecordFormRole } from '@/types/gqlTypes';
 
 export interface ViewRecordProps<RecordType> {
   record: RecordType;
-  formRole: FormRole;
+  formRole: RecordFormRole;
   pickListArgs?: PickListArgs;
 }
 

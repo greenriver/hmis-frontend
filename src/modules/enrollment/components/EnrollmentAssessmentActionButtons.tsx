@@ -2,6 +2,7 @@ import { Skeleton } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo } from 'react';
 
+import { useAssessmentEligibilities } from '../hooks/useAssessmentEligibilities';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import CommonMenuButton, {
@@ -12,25 +13,21 @@ import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembe
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
-  useGetEnrollmentAssessmentEligibilitiesQuery,
+  GetEnrollmentAssessmentEligibilitiesQuery,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 type FinishIntakeButtonProps = {
   enrollmentId: string;
   clientId: string;
-  assessmentId?: string;
 };
 const FinishIntakeButton: React.FC<FinishIntakeButtonProps> = ({
   enrollmentId,
   clientId,
-  assessmentId,
 }) => {
-  const intakePath = generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+  const intakePath = generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
     clientId,
     enrollmentId,
-    formRole: AssessmentRole.Intake,
-    assessmentId,
   });
   return (
     <ButtonLink color='error' variant='contained' to={intakePath}>
@@ -39,50 +36,41 @@ const FinishIntakeButton: React.FC<FinishIntakeButtonProps> = ({
   );
 };
 
-type Props = { enrollment: DashboardEnrollment };
+type AssessmentEligibilityType = NonNullable<
+  GetEnrollmentAssessmentEligibilitiesQuery['enrollment']
+>['assessmentEligibilities'][0];
 
-const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
+type Props = {
+  enrollment: DashboardEnrollment;
+};
+
+const NewAssessmentMenu: React.FC<
+  Props & { assessmentEligibilities: AssessmentEligibilityType[] }
+> = ({ enrollment, assessmentEligibilities }) => {
   const enrollmentId = enrollment.id;
   const clientId = enrollment.client.id;
 
-  const { data, error, loading } = useGetEnrollmentAssessmentEligibilitiesQuery(
-    {
-      fetchPolicy: 'cache-and-network',
-      variables: { enrollmentId },
-    }
-  );
-
-  if (error) throw error;
-
   const getPath = useCallback(
-    (formRole: AssessmentRole) =>
-      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+    (formRole: AssessmentRole, formDefinitionId?: string) =>
+      generateSafePath(EnrollmentDashboardRoutes.NEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         formRole,
+        formDefinitionId,
       }),
     [clientId, enrollmentId]
   );
 
-  const items: NavMenuItem[] = useMemo(() => {
-    if (!data?.enrollment) return [];
-
-    return data.enrollment.assessmentEligibilities.map(
-      ({ id, role, title }) => ({
+  const items: NavMenuItem[] = useMemo(
+    () =>
+      assessmentEligibilities.map(({ id, title, role, formDefinitionId }) => ({
         key: id,
-        to: getPath(role),
+        to: getPath(role, formDefinitionId),
         title: title,
-      })
-    );
-  }, [data, getPath]);
+      })),
+    [assessmentEligibilities, getPath]
+  );
 
-  if (loading && !data) {
-    return (
-      <Skeleton variant='rectangular' aria-live='polite' aria-busy='true'>
-        <CommonMenuButton title='New Assessment' items={[]} disabled />
-      </Skeleton>
-    );
-  }
   if (items.length === 0) {
     return (
       <ButtonTooltipContainer
@@ -99,11 +87,22 @@ const NewAssessmentMenu: React.FC<Props> = ({ enrollment }) => {
 const EnrollmentAssessmentActionButtons: React.FC<Props> = ({ enrollment }) => {
   const [householdMembers] = useHouseholdMembers(enrollment.id);
 
+  const { assessmentEligibilities, loading } = useAssessmentEligibilities(
+    enrollment.id
+  );
   const numIncompleteEnrollments = useMemo(
     () =>
       (householdMembers || []).filter((c) => !!c.enrollment.inProgress).length,
     [householdMembers]
   );
+
+  if (loading && !assessmentEligibilities) {
+    return (
+      <Skeleton variant='rectangular' aria-live='polite' aria-busy='true'>
+        <CommonMenuButton title='New Assessment' items={[]} disabled />
+      </Skeleton>
+    );
+  }
 
   return (
     <Stack direction='row' gap={2}>
@@ -111,10 +110,14 @@ const EnrollmentAssessmentActionButtons: React.FC<Props> = ({ enrollment }) => {
         <FinishIntakeButton
           enrollmentId={enrollment.id}
           clientId={enrollment.client.id}
-          assessmentId={enrollment.intakeAssessment?.id}
         />
       )}
-      {!enrollment.inProgress && <NewAssessmentMenu enrollment={enrollment} />}
+      {!enrollment.inProgress && assessmentEligibilities && (
+        <NewAssessmentMenu
+          enrollment={enrollment}
+          assessmentEligibilities={assessmentEligibilities}
+        />
+      )}
     </Stack>
   );
 };

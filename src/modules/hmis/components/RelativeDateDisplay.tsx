@@ -20,6 +20,9 @@ export interface RelativeDateDisplayProps {
   TypographyProps?: TypographyProps;
 }
 
+/**
+ * Relative date with actual date as a tooltip
+ */
 const RelativeDateDisplay = ({
   dateString,
   prefixVerb,

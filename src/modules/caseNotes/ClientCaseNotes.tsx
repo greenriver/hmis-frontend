@@ -9,7 +9,7 @@ import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
-  FormRole,
+  RecordFormRole,
   GetClientCaseNotesDocument,
   GetClientCaseNotesQuery,
   GetClientCaseNotesQueryVariables,
@@ -44,7 +44,7 @@ const ClientCaseNotes = () => {
   const { onSelectRecord, viewRecordDialog } = useViewEditRecordDialogs({
     variant: 'view_only',
     inputVariables: {},
-    formRole: FormRole.CaseNote,
+    formRole: RecordFormRole.CaseNote,
     recordName: 'Case Note',
     maxWidth: 'sm',
   });

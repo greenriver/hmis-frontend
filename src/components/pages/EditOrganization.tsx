@@ -16,7 +16,7 @@ import {
   DeleteOrganizationDocument,
   DeleteOrganizationMutation,
   DeleteOrganizationMutationVariables,
-  FormRole,
+  RecordFormRole,
   OrganizationFieldsFragment,
   PickListType,
 } from '@/types/gqlTypes';
@@ -54,7 +54,7 @@ const EditOrganization = () => {
       {loading && <Loading />}
       {organization && (
         <EditRecord<OrganizationFieldsFragment>
-          formRole={FormRole.Organization}
+          formRole={RecordFormRole.Organization}
           record={organization}
           onCompleted={onCompleted}
           title={

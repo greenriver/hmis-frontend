@@ -15,6 +15,17 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/Alert' {
+  interface AlertPropsVariantOverrides {
+    withHeader: true;
+  }
+  interface AlertPropsColorOverrides {
+    low: true;
+    medium: true;
+    high: true;
+  }
+}
+
 declare module '@mui/material/styles' {
   interface TypographyVariants {
     body3: React.CSSProperties;
@@ -27,15 +38,29 @@ declare module '@mui/material/styles' {
     cardTitle?: React.CSSProperties;
   }
 
+  interface AlertPriorityColorOptions {
+    low: {
+      background: string;
+      header: string;
+    };
+    medium: {
+      background: string;
+      header: string;
+    };
+    high: {
+      background: string;
+      header: string;
+    };
+  }
   interface Palette {
     borders: PaletteColor;
-    alerts: Record<string, string>;
+    alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
-    alerts: { lightWarningBackground?: string };
+    alerts: AlertPriorityColorOptions;
     links: string;
     activeStatus: string;
   }
@@ -73,7 +98,18 @@ export const baseThemeDef: ThemeOptions = {
       main: '#c9c9c9',
     },
     alerts: {
-      lightWarningBackground: '#fffde0',
+      low: {
+        background: '#FFFDE0',
+        header: '#FFCB52',
+      },
+      medium: {
+        background: '#ED6C020A',
+        header: '#FF9900',
+      },
+      high: {
+        background: '#D32F2F26',
+        header: '#D32F2F',
+      },
     },
     links: '#1976D2',
     activeStatus: '#75559F',
@@ -272,12 +308,70 @@ const createThemeOptions = (theme: Theme) => ({
       },
     },
     MuiAlert: {
-      styleOverrides: {
-        outlined: {
-          // override default transparent bg
-          backgroundColor: '#fff',
+      variants: [
+        {
+          // styles that are shared across all withHeader alerts
+          props: { variant: 'withHeader' },
+          style: theme.unstable_sx({
+            padding: 0,
+            color: 'black',
+            '& .MuiAlertTitle-root': {
+              padding: theme.spacing(2),
+              margin: 0,
+              fontWeight: 800,
+            },
+            '& .MuiAlert-message': {
+              padding: 0,
+              width: '100%',
+            },
+            '& .MuiAlert-body': {
+              padding: theme.spacing(2),
+            },
+          }),
         },
-      },
+        {
+          // styles for LOW priority
+          props: { variant: 'withHeader', color: 'low' },
+          style: theme.unstable_sx({
+            borderColor: theme.palette.alerts.low.header,
+            backgroundColor: theme.palette.alerts.low.background,
+            '& .MuiAlertTitle-root': {
+              backgroundColor: theme.palette.alerts.low.header,
+              color: theme.palette.getContrastText(
+                theme.palette.alerts.low.header
+              ),
+            },
+          }),
+        },
+        {
+          // styles for MEDIUM priority
+          props: { variant: 'withHeader', color: 'medium' },
+          style: theme.unstable_sx({
+            borderColor: theme.palette.alerts.medium.header,
+            backgroundColor: theme.palette.alerts.medium.background,
+            '& .MuiAlertTitle-root': {
+              backgroundColor: theme.palette.alerts.medium.header,
+              color: theme.palette.getContrastText(
+                theme.palette.alerts.medium.header
+              ),
+            },
+          }),
+        },
+        {
+          // styles for HIGH priority
+          props: { variant: 'withHeader', color: 'high' },
+          style: theme.unstable_sx({
+            borderColor: theme.palette.alerts.high.header,
+            backgroundColor: theme.palette.alerts.high.background,
+            '& .MuiAlertTitle-root': {
+              backgroundColor: theme.palette.alerts.high.header,
+              color: theme.palette.getContrastText(
+                theme.palette.alerts.high.header
+              ),
+            },
+          }),
+        },
+      ],
     },
     MuiButton: {
       defaultProps: {
