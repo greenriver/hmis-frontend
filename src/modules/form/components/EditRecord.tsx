@@ -68,16 +68,17 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   ...props
 }: Props<RecordType>) => {
   const localConstants: LocalConstants = useMemo(
-    () => ({ ...AlwaysPresentLocalConstants, ...localConstantsProp }),
-    [localConstantsProp]
+    () => ({
+      ...AlwaysPresentLocalConstants,
+      projectId: projectId || inputVariables?.projectId,
+      ...localConstantsProp,
+    }),
+    [inputVariables?.projectId, localConstantsProp, projectId]
   );
 
   const { formDefinition, loading: definitionLoading } = useFormDefinition({
     role: formRole,
-    // hack: pull project id from one of the existing args, if it exists.
-    // this project will be used to evaluate and "rules" on the resolved form definition.
-    projectId:
-      projectId || localConstants?.projectId || inputVariables?.projectId,
+    projectId,
   });
 
   const { initialValues, itemMap, errors, onSubmit, submitLoading } =

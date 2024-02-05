@@ -63,6 +63,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
         FormActionProps={
           create ? { submitButtonText: 'Create Project CoC' } : undefined
         }
+        projectId={projectId}
         onCompleted={onCompleted}
         formRole={RecordFormRole.ProjectCoc}
         inputVariables={{ projectId }}

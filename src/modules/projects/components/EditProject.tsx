@@ -54,6 +54,7 @@ const EditProject = () => {
   return (
     <EditRecord<ProjectAllFieldsFragment>
       formRole={RecordFormRole.Project}
+      projectId={project.id}
       record={project}
       onCompleted={onCompleted}
       FormActionProps={{

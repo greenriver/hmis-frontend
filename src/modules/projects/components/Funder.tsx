@@ -73,6 +73,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
       FormActionProps={
         create ? { submitButtonText: 'Create Funder' } : undefined
       }
+      projectId={projectId}
       onCompleted={onCompleted}
       localConstants={localConstants}
       formRole={RecordFormRole.Funder}

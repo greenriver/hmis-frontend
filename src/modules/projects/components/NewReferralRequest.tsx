@@ -36,6 +36,7 @@ const NewReferralRequest: React.FC = () => {
     <EditRecord<ReferralRequestFieldsFragment>
       FormActionProps={{ submitButtonText: 'Submit Referral Request' }}
       onCompleted={onCompleted}
+      projectId={projectId}
       formRole={RecordFormRole.ReferralRequest}
       pickListArgs={pickListArgs}
       inputVariables={inputVariables}

@@ -66,6 +66,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
       FormActionProps={
         create ? { submitButtonText: 'Create Inventory' } : undefined
       }
+      projectId={projectId}
       onCompleted={onCompleted}
       formRole={RecordFormRole.Inventory}
       record={inventory || undefined}
