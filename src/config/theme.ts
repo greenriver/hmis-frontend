@@ -345,9 +345,6 @@ const createThemeOptions = (theme: Theme) => ({
                 theme.palette.alerts.low.header
               ),
             },
-            '& .MuiAlert-deleteIcon': {
-              color: theme.palette.alerts.low.icon || 'rgba(0, 0, 0, 0.54)',
-            },
           }),
         },
         {
@@ -361,9 +358,6 @@ const createThemeOptions = (theme: Theme) => ({
               color: theme.palette.getContrastText(
                 theme.palette.alerts.medium.header
               ),
-            },
-            '& .MuiAlert-deleteIcon': {
-              color: theme.palette.alerts.medium.icon || 'rgba(0, 0, 0, 0.54)',
             },
           }),
         },
@@ -379,8 +373,8 @@ const createThemeOptions = (theme: Theme) => ({
                 theme.palette.alerts.high.header
               ),
             },
-            '& .MuiAlert-deleteIcon': {
-              color: theme.palette.alerts.high.icon || 'rgba(0, 0, 0, 0.54)',
+            '& .MuiAlertTitle-root .MuiIconButton-root': {
+              color: theme.palette.alerts.high.icon,
             },
           }),
         },

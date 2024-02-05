@@ -52,7 +52,6 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
               });
             }}
             onlyIcon
-            className='MuiAlert-deleteIcon'
           >
             Delete
           </DeleteMutationButton>
