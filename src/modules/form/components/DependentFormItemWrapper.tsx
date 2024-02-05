@@ -32,7 +32,7 @@ const DependentFormItemWrapper: React.FC<Props> = ({
     [item, itemMap]
   );
 
-  const name = useMemo(() => {
+  const dependentLinkIds = useMemo(() => {
     const list: string[] = [
       // All of this component's dependencies
       ...(disabledDependencyMap[item.linkId] || []),
@@ -50,7 +50,7 @@ const DependentFormItemWrapper: React.FC<Props> = ({
   // Listen for dependent field value changes
   useWatch({
     control: handlers.methods.control,
-    name,
+    name: dependentLinkIds,
   });
 
   const isDisabled = isItemDisabled(item);

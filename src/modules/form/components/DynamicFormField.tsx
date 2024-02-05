@@ -127,12 +127,10 @@ const DynamicFormField: React.FC<Props> = ({
   const severalItemsChanged: SeveralItemsChangedFn = useCallback(
     ({ values, type }) => {
       Object.entries(values).forEach(([linkId, value]) =>
-        handlers.methods.setValue(getSafeLinkId(linkId), value, {
-          shouldDirty: type === ChangeType.User,
-        })
+        itemChanged({ linkId, value, type })
       );
     },
-    [handlers]
+    [itemChanged]
   );
 
   const renderChild = useCallback(

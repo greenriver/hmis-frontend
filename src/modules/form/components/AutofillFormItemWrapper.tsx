@@ -21,7 +21,7 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
   getDependentLinkIds,
 }) => {
   const { autofillInvertedDependencyMap, getAutofillValueForField } = handlers;
-  const name = (
+  const dependentLinkIds = (
     getDependentLinkIds
       ? getDependentLinkIds(item)
       : autofillInvertedDependencyMap[item.linkId]
@@ -30,7 +30,7 @@ const AutofillFormItemWrapper: React.FC<Props> = ({
   // Listen for dependent field value changes
   useWatch({
     control: handlers.methods.control,
-    name,
+    name: dependentLinkIds,
   });
   // Listen to see if this field is changed
   const { isDirty } = useFormState({
