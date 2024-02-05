@@ -6929,7 +6929,6 @@ export type UpdateUnitsPayload = {
 export type UserAuditEventFilterOptions = {
   clientRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
   enrollmentRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
-  user?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type ValidationError = {
