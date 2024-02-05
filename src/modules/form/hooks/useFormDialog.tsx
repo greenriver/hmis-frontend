@@ -19,17 +19,11 @@ import {
   DynamicFormHandlerArgs,
   useDynamicFormHandlersForRecord,
 } from './useDynamicFormHandlersForRecord';
-import useFormDefinition from './useFormDefinition';
 
 import CommonDialog from '@/components/elements/CommonDialog';
-import Loading from '@/components/elements/Loading';
 import { emptyErrorState } from '@/modules/errors/util';
 
-import {
-  FormDefinitionFieldsFragment,
-  ItemType,
-  RecordFormRole,
-} from '@/types/gqlTypes';
+import { FormDefinitionFieldsFragment, ItemType } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 export type RenderFormDialogProps = PartialPick<
@@ -43,19 +37,17 @@ export type RenderFormDialogProps = PartialPick<
 };
 
 interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
-  formRole: RecordFormRole;
+  formDefinition?: FormDefinitionFieldsFragment;
   pickListArgs?: PickListArgs;
   onClose?: VoidFunction;
-  localDefinition?: FormDefinitionFieldsFragment;
 }
 export function useFormDialog<T extends SubmitFormAllowedTypes>({
   onCompleted,
-  formRole,
+  formDefinition,
   onClose,
   record,
   localConstants: localConstantsProp,
   inputVariables,
-  localDefinition,
   pickListArgs,
 }: Args<T>) {
   const errorRef = useRef<HTMLDivElement>(null);
@@ -67,16 +59,6 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   const localConstants: LocalConstants = useMemo(
     () => ({ ...AlwaysPresentLocalConstants, ...localConstantsProp }),
     [localConstantsProp]
-  );
-
-  const { formDefinition, loading: definitionLoading } = useFormDefinition(
-    {
-      role: formRole,
-      // hack: pull project id from one of the existing args, if it exists.
-      // this project will be used to evaluate and "rules" on the resolved form definition.
-      projectId: localConstants?.projectId || inputVariables?.projectId,
-    },
-    localDefinition
   );
 
   const hookArgs = useMemo(
@@ -114,10 +96,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   const renderFormDialog = useCallback(
     ({ title, otherActions, DialogProps, ...props }: RenderFormDialogProps) => {
       if (!dialogOpen) return null;
-      if (!definitionLoading && !formDefinition) {
-        throw new Error(`Form not found: ${formRole} `);
-      }
-
+      if (!formDefinition) return null; //ok?
       const hasMultipleTopLevelGroups =
         (formDefinition?.definition?.item || []).filter(
           ({ type }) => type === ItemType.Group
@@ -142,35 +121,31 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
         >
           <DialogTitle>{title}</DialogTitle>
           <DialogContent sx={contentSx}>
-            {definitionLoading ? (
-              <Loading />
-            ) : formDefinition ? (
-              <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
-                <Grid item xs>
-                  {props.preFormComponent}
-                  <DynamicForm
-                    ref={formRef}
-                    definition={formDefinition.definition}
-                    onSubmit={onSubmit}
-                    initialValues={initialValues}
-                    loading={submitLoading}
-                    errors={errors}
-                    localConstants={localConstants}
-                    pickListArgs={pickListArgs}
-                    FormActionProps={{
-                      onDiscard: () => setDialogOpen(false),
-                      ...props.FormActionProps,
-                    }}
-                    ValidationDialogProps={{
-                      ...props.ValidationDialogProps,
-                    }}
-                    hideSubmit
-                    {...props}
-                    errorRef={errorRef}
-                  />
-                </Grid>
+            <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
+              <Grid item xs>
+                {props.preFormComponent}
+                <DynamicForm
+                  ref={formRef}
+                  definition={formDefinition.definition}
+                  onSubmit={onSubmit}
+                  initialValues={initialValues}
+                  loading={submitLoading}
+                  errors={errors}
+                  localConstants={localConstants}
+                  pickListArgs={pickListArgs}
+                  FormActionProps={{
+                    onDiscard: () => setDialogOpen(false),
+                    ...props.FormActionProps,
+                  }}
+                  ValidationDialogProps={{
+                    ...props.ValidationDialogProps,
+                  }}
+                  hideSubmit
+                  {...props}
+                  errorRef={errorRef}
+                />
               </Grid>
-            ) : null}
+            </Grid>
           </DialogContent>
           <DialogActions>
             <FormDialogActionContent
@@ -179,7 +154,6 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
               discardButtonText={props.discardButtonText}
               submitButtonText={props.submitButtonText}
               submitLoading={submitLoading}
-              disabled={definitionLoading}
               otherActions={otherActions}
             />
           </DialogActions>
@@ -188,11 +162,9 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
     },
     [
       closeDialog,
-      definitionLoading,
       dialogOpen,
       errors,
       formDefinition,
-      formRole,
       initialValues,
       localConstants,
       onSubmit,

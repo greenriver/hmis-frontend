@@ -1,6 +1,7 @@
 import { DocumentNode } from '@apollo/client';
 import { Breakpoint, Button } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
+import useFormDefinition from './useFormDefinition';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { DynamicFormHandlerArgs } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
@@ -38,15 +39,22 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
 }: Args<T>) {
   const [viewingRecord, setViewingRecord] = useState<T | undefined>();
 
+  const { formDefinition, loading: definitionLoading } = useFormDefinition({
+    role: formRole,
+    // hack: pull project id from one of the existing args, if it exists.
+    // this project will be used to evaluate and "rules" on the resolved form definition.
+    projectId: localConstants?.projectId || inputVariables?.projectId,
+  });
+
   const { openViewDialog, renderViewDialog, closeViewDialog } =
     useViewDialog<T>({
       record: viewingRecord,
       onClose: () => setViewingRecord(undefined),
-      formRole,
+      formDefinition,
     });
 
   const { openFormDialog, renderFormDialog, closeDialog } = useFormDialog<T>({
-    formRole,
+    formDefinition,
     onCompleted: () => {
       // only gets called on success
       if (!viewingRecord) evictCache(); // clear cache if new record was created
@@ -156,5 +164,6 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
     editRecordDialog,
     onSuccessfulDelete,
     openFormDialog,
+    definitionLoading: !formDefinition && definitionLoading,
   };
 }

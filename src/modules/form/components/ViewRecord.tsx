@@ -1,18 +1,15 @@
 import { useMemo } from 'react';
 
-import useFormDefinition from '../hooks/useFormDefinition';
 import { PickListArgs, SubmitFormAllowedTypes } from '../types';
-import { createInitialValuesFromRecord } from '../util/formUtil';
+import { createInitialValuesFromRecord, getItemMap } from '../util/formUtil';
 
 import DynamicView from './viewable/DynamicView';
 
-import Loading from '@/components/elements/Loading';
-import NotFound from '@/components/pages/NotFound';
-import { RecordFormRole } from '@/types/gqlTypes';
+import { FormDefinitionFieldsFragment } from '@/types/gqlTypes';
 
 export interface ViewRecordProps<RecordType> {
   record: RecordType;
-  formRole: RecordFormRole;
+  formDefinition: FormDefinitionFieldsFragment;
   pickListArgs?: PickListArgs;
 }
 
@@ -22,22 +19,15 @@ export interface ViewRecordProps<RecordType> {
  */
 const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   record,
-  formRole,
+  formDefinition,
   pickListArgs,
 }: ViewRecordProps<RecordType>): JSX.Element => {
-  const { formDefinition, itemMap, loading } = useFormDefinition({
-    role: formRole,
-  });
-
   // Transform record into "form state" for DynamicView
   const values = useMemo(() => {
-    if (!itemMap) return {};
+    const itemMap = getItemMap(formDefinition.definition);
     const formValues = createInitialValuesFromRecord(itemMap, record);
     return formValues;
-  }, [itemMap, record]);
-
-  if (loading) return <Loading />;
-  if (!formDefinition || !itemMap) return <NotFound />;
+  }, [formDefinition.definition, record]);
 
   return (
     <DynamicView

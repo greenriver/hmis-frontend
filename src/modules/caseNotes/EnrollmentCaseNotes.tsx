@@ -101,6 +101,7 @@ const EnrollmentCaseNotes = () => {
       maxWidth: 'sm',
       deleteRecordDocument: DeleteCustomCaseNoteDocument,
       deleteRecordIdPath: 'deleteCustomCaseNote.customCaseNote.id',
+      localConstants: { projectId: enrollment?.project.id },
     });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;

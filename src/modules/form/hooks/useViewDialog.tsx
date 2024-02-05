@@ -5,22 +5,22 @@ import { DynamicFormHandlerArgs } from './useDynamicFormHandlersForRecord';
 import ViewRecordDialog, {
   RecordDialogProps,
 } from '@/modules/form/components/ViewRecordDialog';
-import { RecordFormRole } from '@/types/gqlTypes';
+import { FormDefinitionFieldsFragment } from '@/types/gqlTypes';
 
 export type RenderFormDialogProps<T> = Omit<
   RecordDialogProps<T>,
-  'open' | 'formRole' | 'record'
+  'open' | 'formRole' | 'record' | 'formDefinition'
 >;
 
 interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
-  formRole: RecordFormRole;
+  formDefinition?: FormDefinitionFieldsFragment;
   onClose?: VoidFunction;
 }
 
 export function useViewDialog<T extends SubmitFormAllowedTypes>({
   onClose,
   record,
-  formRole,
+  formDefinition,
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
@@ -30,19 +30,19 @@ export function useViewDialog<T extends SubmitFormAllowedTypes>({
   const renderViewDialog = useCallback(
     ({ title, ...props }: RenderFormDialogProps<T>) => (
       <>
-        {record && (
+        {record && formDefinition && (
           <ViewRecordDialog<T>
             title={title}
             record={record}
             {...props}
-            formRole={formRole}
+            formDefinition={formDefinition}
             open={dialogOpen}
             onClose={onClose}
           />
         )}
       </>
     ),
-    [onClose, record, dialogOpen, formRole]
+    [onClose, record, dialogOpen, formDefinition]
   );
 
   return useMemo(

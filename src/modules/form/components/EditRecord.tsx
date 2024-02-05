@@ -35,6 +35,7 @@ export interface Props<RecordType>
     | 'definition'
   > {
   formRole: RecordFormRole;
+  projectId?: string;
   record?: RecordType;
   inputVariables?: Omit<
     FormInput,
@@ -55,6 +56,7 @@ export interface Props<RecordType>
 const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   formRole,
   record,
+  projectId,
   onCompleted,
   title,
   FormNavigationProps,
@@ -74,7 +76,8 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
     role: formRole,
     // hack: pull project id from one of the existing args, if it exists.
     // this project will be used to evaluate and "rules" on the resolved form definition.
-    projectId: localConstants?.projectId || inputVariables?.projectId,
+    projectId:
+      projectId || localConstants?.projectId || inputVariables?.projectId,
   });
 
   const { initialValues, itemMap, errors, onSubmit, submitLoading } =

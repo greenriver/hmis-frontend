@@ -6,8 +6,11 @@ import { ReactNode } from 'react';
 import { useProjectDashboardContext } from './ProjectDashboard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
+import MissingDefinitionAlert from '@/modules/assessments/components/MissingDefinitionAlert';
 import ViewRecord from '@/modules/form/components/ViewRecord';
+import useFormDefinition from '@/modules/form/hooks/useFormDefinition';
 import {
   parseAndFormatDateRange,
   parseHmisDateString,
@@ -96,6 +99,13 @@ export const ProjectFormTitle = ({
 
 const ProjectOverview = () => {
   const { project } = useProjectDashboardContext();
+  const { formDefinition, loading } = useFormDefinition({
+    role: RecordFormRole.Project,
+    projectId: project.id,
+  });
+
+  if (!formDefinition && !loading) return <MissingDefinitionAlert />;
+
   return (
     <>
       <PageTitle
@@ -119,7 +129,13 @@ const ProjectOverview = () => {
         }
       />
       <InactiveBanner project={project} />
-      <ViewRecord record={project} formRole={RecordFormRole.Project} />
+      {loading ? (
+        <Loading />
+      ) : (
+        formDefinition && (
+          <ViewRecord record={project} formDefinition={formDefinition} />
+        )
+      )}
     </>
   );
 };

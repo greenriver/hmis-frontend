@@ -8,6 +8,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
+import useFormDefinition from '@/modules/form/hooks/useFormDefinition';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
@@ -95,6 +96,11 @@ const InventoryTable = () => {
   }, [project, navigate]);
   const pickListArgs = useMemo(() => ({ projectId: project.id }), [project]);
 
+  const { formDefinition } = useFormDefinition({
+    role: RecordFormRole.Inventory,
+    projectId: project.id,
+  });
+
   return (
     <>
       <GenericTableWithData
@@ -105,10 +111,10 @@ const InventoryTable = () => {
         noData='No inventory'
         handleRowClick={(record) => setViewingRecord(record)}
       />
-      {viewingRecord && (
+      {viewingRecord && formDefinition && (
         <ViewRecordDialog<InventoryFieldsFragment>
           record={viewingRecord}
-          formRole={RecordFormRole.Inventory}
+          formDefinition={formDefinition}
           title='Inventory'
           open={!!viewingRecord}
           onClose={() => setViewingRecord(undefined)}

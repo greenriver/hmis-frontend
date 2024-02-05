@@ -1,6 +1,7 @@
 import { filter } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
+import useFormDefinition from '@/modules/form/hooks/useFormDefinition';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import {
@@ -53,6 +54,10 @@ export function useClientFormDialog({
   });
   if (error) throw error;
 
+  const { formDefinition } = useFormDefinition({
+    role: RecordFormRole.Client,
+  });
+
   const localConstants = useMemo(
     () => localConstantsForClientForm(client),
     [client]
@@ -60,7 +65,7 @@ export function useClientFormDialog({
 
   const { openFormDialog, renderFormDialog } =
     useFormDialog<ClientFieldsFragment>({
-      formRole: RecordFormRole.Client,
+      formDefinition,
       onCompleted,
       localConstants,
       record: client,
