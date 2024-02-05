@@ -15,13 +15,11 @@ enum AlertPriority {
 interface ClientAlertParams {
   householdId?: string;
   client?: ClientWithAlertFieldsFragment;
+  showClientName?: boolean;
+  showDeleteButton?: boolean;
 }
 
-export default function useClientAlerts(
-  params: ClientAlertParams,
-  showClientName?: boolean,
-  showDeleteButton?: boolean
-) {
+export default function useClientAlerts(params: ClientAlertParams) {
   const [canViewClientAlerts] = useHasRootPermissions(['canViewClientAlerts']);
 
   const {
@@ -52,9 +50,9 @@ export default function useClientAlerts(
         alert,
         clientName: clientBriefName(client),
         clientId: client.id,
-        showClientName,
+        showClientName: params.showClientName,
         showDeleteButton:
-          showDeleteButton && client.access.canManageClientAlerts,
+          params.showDeleteButton && client.access.canManageClientAlerts,
       }))
     );
 
@@ -70,7 +68,12 @@ export default function useClientAlerts(
     });
 
     return clientAlerts;
-  }, [params.client, household, showClientName, showDeleteButton]); // only re-run when these change
+  }, [
+    params.client,
+    household,
+    params.showClientName,
+    params.showDeleteButton,
+  ]); // only re-run when these change
 
   if (error) throw error;
 

@@ -23,7 +23,7 @@ interface DeleteMutationButtonProps<MutationVariables> {
   queryDocument: TypedDocumentNode<MutationVariables, MutationVariables>;
   variables: MutationVariables;
   idPath: string;
-  children: ReactNode;
+  children?: ReactNode;
   recordName?: string;
   confirmationDialogContent?: ReactNode;
   verb?: string;
