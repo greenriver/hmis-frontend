@@ -308,6 +308,10 @@ const createThemeOptions = (theme: Theme) => ({
       },
     },
     MuiAlert: {
+      styleOverrides: {
+        // override default transparent bg
+        outlined: { backgroundColor: '#fff' },
+      },
       variants: [
         {
           // styles that are shared across all withHeader alerts
