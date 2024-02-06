@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, isValidElement, useMemo } from 'react';
 
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import MultilineTypography from '@/components/elements/MultilineTypography';
@@ -28,14 +28,13 @@ const TextContent = <T extends ReactNode>({
   const displayValue = useMemo(() => {
     if (hasMeaningfulValue(value) && !isDataNotCollected(value)) {
       const renderedValue = renderValue(value);
-      if (typeof renderedValue === 'string') {
-        return (
-          <MultilineTypography variant='body2' data-testid={testId}>
-            {renderedValue}
-          </MultilineTypography>
-        );
-      }
-      return renderedValue;
+      if (isValidElement(renderedValue)) return renderedValue;
+
+      return (
+        <MultilineTypography variant='body2' data-testid={testId}>
+          {renderedValue}
+        </MultilineTypography>
+      );
     } else {
       return (
         <NotCollectedText variant='body2' data-testid={testId}>
