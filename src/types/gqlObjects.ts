@@ -1362,6 +1362,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CustomDataElement',
     fields: [
       {
+        name: 'displayHooks',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'ENUM', name: 'DisplayHook', ofType: null },
+            },
+          },
+        },
+      },
+      {
         name: 'fieldType',
         type: {
           kind: 'NON_NULL',
@@ -1395,14 +1411,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'repeats',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
-        name: 'showInSummary',
         type: {
           kind: 'NON_NULL',
           name: null,

@@ -34,6 +34,7 @@ import {
   CustomDataElementValueFieldsFragment,
   DataCollectedAbout,
   DataCollectionFeatureFieldsFragment,
+  DisplayHook,
   EnrollmentFieldsFragment,
   EnrollmentOccurrencePointFieldsFragment,
   EnrollmentSummaryFieldsFragment,
@@ -494,7 +495,7 @@ export const serviceDetails = (service: ServiceFieldsFragment): string[] => {
 
   // Details about custom fields
   service.customDataElements
-    .filter((cde) => cde.showInSummary)
+    .filter((cde) => cde.displayHooks.includes(DisplayHook.TableSummary))
     .forEach((cde) => {
       const val = customDataElementValueAsString(cde);
       if (val) detailRows.push(`${cde.label}: ${val}`);
@@ -611,7 +612,7 @@ export function getCustomDataElementColumns<
   // We can look at the first record because records always resolve all
   // available CDEs, even if they dont have a value.
   return rows[0].customDataElements
-    .filter((cde) => cde.showInSummary)
+    .filter((cde) => cde.displayHooks.includes(DisplayHook.TableSummary))
     .map((cde) => ({
       header: cde.label,
       key: cde.key,
