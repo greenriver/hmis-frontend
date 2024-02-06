@@ -20,7 +20,7 @@ fragment CustomDataElementFields on CustomDataElement {
   label
   fieldType
   repeats
-  showInSummary
+  displayHooks
   value {
     ...CustomDataElementValueFields
   }

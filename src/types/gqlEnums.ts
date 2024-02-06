@@ -402,6 +402,10 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  DisplayHook: {
+    TABLE_SUMMARY:
+      'Display value as a column when viewing a table of records (e.g. Current Living Situations)',
+  },
   EmploymentType: {
     INVALID: 'Invalid Value',
     FULL_TIME: 'Full-time',
