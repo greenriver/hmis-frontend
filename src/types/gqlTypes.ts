@@ -14901,7 +14901,7 @@ export type CustomCaseNoteFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
-    showInSummary: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -14980,7 +14980,7 @@ export type GetEnrollmentCustomCaseNotesQuery = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
-          showInSummary: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -15098,7 +15098,7 @@ export type GetClientCaseNotesQuery = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
-          showInSummary: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -23954,7 +23954,7 @@ export type SubmitFormMutation = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
-            showInSummary: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
