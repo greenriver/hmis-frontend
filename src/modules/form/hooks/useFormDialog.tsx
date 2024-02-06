@@ -47,6 +47,7 @@ interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
   pickListArgs?: PickListArgs;
   onClose?: VoidFunction;
   localDefinition?: FormDefinitionFieldsFragment;
+  projectId?: string; // Project context for fetching form definition
 }
 export function useFormDialog<T extends SubmitFormAllowedTypes>({
   onCompleted,
@@ -57,6 +58,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   inputVariables,
   localDefinition,
   pickListArgs,
+  projectId,
 }: Args<T>) {
   const errorRef = useRef<HTMLDivElement>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -65,8 +67,12 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   const formRef = useRef<DynamicFormRef>(null);
 
   const localConstants: LocalConstants = useMemo(
-    () => ({ ...AlwaysPresentLocalConstants, ...localConstantsProp }),
-    [localConstantsProp]
+    () => ({
+      ...AlwaysPresentLocalConstants,
+      projectId,
+      ...localConstantsProp,
+    }),
+    [localConstantsProp, projectId]
   );
 
   const { formDefinition, loading: definitionLoading } = useFormDefinition(
@@ -74,7 +80,8 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       role: formRole,
       // hack: pull project id from one of the existing args, if it exists.
       // this project will be used to evaluate and "rules" on the resolved form definition.
-      projectId: localConstants?.projectId || inputVariables?.projectId,
+      projectId:
+        projectId || localConstants?.projectId || inputVariables?.projectId,
     },
     localDefinition
   );
