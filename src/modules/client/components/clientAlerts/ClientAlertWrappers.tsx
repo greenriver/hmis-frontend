@@ -12,7 +12,7 @@ interface ClientAlertProfileWrapperProps {
 export const ClientAlertProfileWrapper: React.FC<
   ClientAlertProfileWrapperProps
 > = ({ client }) => {
-  const { clientAlerts } = useClientAlerts({ client }, false);
+  const { clientAlerts } = useClientAlerts({ client, showDeleteButton: true });
 
   return (
     <ClientAlertCard
@@ -32,10 +32,11 @@ interface ClientAlertHouseholdWrapperProps {
 export const ClientAlertHouseholdWrapper: React.FC<
   ClientAlertHouseholdWrapperProps
 > = ({ householdId }) => {
-  const { clientAlerts, loading, showClientAlertCard } = useClientAlerts(
-    { householdId },
-    true
-  );
+  const { clientAlerts, loading, showClientAlertCard } = useClientAlerts({
+    householdId,
+    showClientName: true,
+    showDeleteButton: true,
+  });
 
   if (!showClientAlertCard) return;
   if (loading && (!clientAlerts || clientAlerts.length === 0))

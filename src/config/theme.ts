@@ -42,14 +42,17 @@ declare module '@mui/material/styles' {
     low: {
       background: string;
       header: string;
+      icon?: string;
     };
     medium: {
       background: string;
       header: string;
+      icon?: string;
     };
     high: {
       background: string;
       header: string;
+      icon?: string;
     };
   }
   interface Palette {
@@ -109,6 +112,7 @@ export const baseThemeDef: ThemeOptions = {
       high: {
         background: '#D32F2F26',
         header: '#D32F2F',
+        icon: '#FFFFFF8F',
       },
     },
     links: '#1976D2',
@@ -372,6 +376,9 @@ const createThemeOptions = (theme: Theme) => ({
               color: theme.palette.getContrastText(
                 theme.palette.alerts.high.header
               ),
+            },
+            '& .MuiAlertTitle-root .MuiIconButton-root': {
+              color: theme.palette.alerts.high.icon,
             },
           }),
         },
