@@ -38,6 +38,7 @@ import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
+import PhoneInput from '@/modules/form/components/client/phones/PhoneInputGroup';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
@@ -231,6 +232,17 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             />
           </InputContainer>
         );
+
+      if (item.component === Component.Phone) {
+        return (
+          <PhoneInput
+            id={linkId}
+            value={value || ''}
+            onChange={onChangeValue}
+            {...commonInputProps}
+          />
+        );
+      }
 
       const multiline = item.type === ItemType.Text;
       return (
