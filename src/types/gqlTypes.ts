@@ -7570,6 +7570,45 @@ export type CreateClientAlertMutation = {
   } | null;
 };
 
+export type DeleteClientAlertMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteClientAlertMutation = {
+  __typename?: 'Mutation';
+  deleteClientAlert?: {
+    __typename?: 'DeleteClientAlertPayload';
+    clientAlert?: {
+      __typename?: 'ClientAlert';
+      id: string;
+      note: string;
+      expirationDate?: string | null;
+      createdAt: string;
+      priority: ClientAlertPriorityLevel;
+      createdBy?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
 export type GetHouseholdClientAlertsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -31177,6 +31216,63 @@ export type CreateClientAlertMutationResult =
 export type CreateClientAlertMutationOptions = Apollo.BaseMutationOptions<
   CreateClientAlertMutation,
   CreateClientAlertMutationVariables
+>;
+export const DeleteClientAlertDocument = gql`
+  mutation DeleteClientAlert($id: ID!) {
+    deleteClientAlert(id: $id) {
+      clientAlert {
+        ...ClientAlertFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ClientAlertFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteClientAlertMutationFn = Apollo.MutationFunction<
+  DeleteClientAlertMutation,
+  DeleteClientAlertMutationVariables
+>;
+
+/**
+ * __useDeleteClientAlertMutation__
+ *
+ * To run a mutation, you first call `useDeleteClientAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteClientAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteClientAlertMutation, { data, loading, error }] = useDeleteClientAlertMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteClientAlertMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteClientAlertMutation,
+    DeleteClientAlertMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteClientAlertMutation,
+    DeleteClientAlertMutationVariables
+  >(DeleteClientAlertDocument, options);
+}
+export type DeleteClientAlertMutationHookResult = ReturnType<
+  typeof useDeleteClientAlertMutation
+>;
+export type DeleteClientAlertMutationResult =
+  Apollo.MutationResult<DeleteClientAlertMutation>;
+export type DeleteClientAlertMutationOptions = Apollo.BaseMutationOptions<
+  DeleteClientAlertMutation,
+  DeleteClientAlertMutationVariables
 >;
 export const GetHouseholdClientAlertsDocument = gql`
   query GetHouseholdClientAlerts($id: ID!) {

@@ -1,14 +1,23 @@
 import { Alert, AlertTitle, Box, Typography } from '@mui/material';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
-import { ClientAlertFieldsFragment } from '@/types/gqlTypes';
+import { cache } from '@/providers/apolloClient';
+import {
+  ClientAlertFieldsFragment,
+  DeleteClientAlertDocument,
+  DeleteClientAlertMutation,
+  DeleteClientAlertMutationVariables,
+} from '@/types/gqlTypes';
 
 export type ClientAlertType = {
   alert: ClientAlertFieldsFragment;
   clientName: string;
+  clientId: string;
   showClientName?: boolean;
+  showDeleteButton?: boolean;
 };
 
 interface ClientAlertProps {
@@ -22,9 +31,31 @@ const ClientAlert: React.FC<ClientAlertProps> = ({ clientAlert }) => {
       <AlertTitle
         sx={{
           textTransform: 'capitalize',
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
         {alert.priority} Priority Alert
+        {clientAlert.showDeleteButton && (
+          <DeleteMutationButton<
+            DeleteClientAlertMutation,
+            DeleteClientAlertMutationVariables
+          >
+            queryDocument={DeleteClientAlertDocument}
+            variables={{ id: alert.id }}
+            idPath={'deleteClientAlert.clientAlert.id'}
+            recordName='Alert'
+            onSuccess={() => {
+              cache.evict({
+                id: `Client:${clientAlert.clientId}`,
+                fieldName: 'alerts',
+              });
+            }}
+            onlyIcon
+          >
+            Delete
+          </DeleteMutationButton>
+        )}
       </AlertTitle>
       <Box className='MuiAlert-body'>
         {showClientName && (
