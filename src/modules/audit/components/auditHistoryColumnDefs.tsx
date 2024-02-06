@@ -15,11 +15,6 @@ import { Routes } from '@/routes/routes';
 import { AuditEventType } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-// todo @martha q on PR - maybe the best thing to do is have this be a graphql fragment,
-// but I wasn't able to figure out how to define a fragment 'on' several different underlying types
-
-// todo @martha q on PR - this is still code repetition (bc it also is defined in the graphql generated types),
-// but to my mind it's better repetition than what we had before?
 export type AuditHistoryNode = NonNullable<{
   id: string;
   createdAt: string;
@@ -36,6 +31,11 @@ export type AuditHistoryNode = NonNullable<{
     id: string;
     name: string;
   } | null;
+  clientId?: string;
+  clientName?: string;
+  projectId?: string;
+  projectName?: string;
+  enrollmentId?: string;
 }>;
 
 export const auditHistoryColumns: ColumnDef<AuditHistoryNode>[] = [
@@ -55,7 +55,6 @@ export const auditHistoryColumns: ColumnDef<AuditHistoryNode>[] = [
       compact([trueUser?.name, user?.name]).join(' acting as '),
   },
   {
-    // todo @martha - only want client name on useraudit history, not the others
     key: 'clientName',
     header: 'Client Name',
     width: '180px',
@@ -74,10 +73,8 @@ export const auditHistoryColumns: ColumnDef<AuditHistoryNode>[] = [
       }
       return clientName; // Should never get here, but just in case
     },
-    // todo @martha - this will break the other tables :)
   },
   {
-    // todo @martha - only want client name on useraudit history, not the others
     key: 'projectName',
     header: 'Project Name',
     width: '180px',
@@ -106,7 +103,7 @@ export const auditHistoryColumns: ColumnDef<AuditHistoryNode>[] = [
         );
       }
       return projectName; // Should never get here, but just in case
-    }, // todo @martha - this will break the other tables :)
+    },
   },
   {
     key: 'action',

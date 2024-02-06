@@ -1,6 +1,5 @@
 import { Paper } from '@mui/material';
 import { ContextualCollapsibleListsProvider } from '@/components/elements/CollapsibleListContext';
-import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
@@ -15,9 +14,12 @@ import {
   GetEnrollmentAuditEventsQueryVariables,
 } from '@/types/gqlTypes';
 
-const columns: ColumnDef<AuditHistoryNode>[] = auditHistoryColumns;
-
 const EnrollmentAuditHistory = () => {
+  const columns = auditHistoryColumns.filter(
+    (column) =>
+      !column.key || !['clientName', 'projectName'].includes(column.key)
+  );
+
   const { enrollmentId } = useSafeParams() as { enrollmentId: string };
 
   return (
