@@ -42,6 +42,11 @@ fragment UserAuditEventFields on ApplicationUserAuditEvent {
   recordName
   graphqlType
   recordId
+  clientId
+  clientName
+  enrollmentId
+  projectId
+  projectName
   user {
     id
     name

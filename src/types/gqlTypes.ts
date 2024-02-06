@@ -191,12 +191,17 @@ export type ApplicationUserEnrollmentAccessSummariesArgs = {
 
 export type ApplicationUserAuditEvent = {
   __typename?: 'ApplicationUserAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
   event: AuditEventType;
   graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
@@ -831,12 +836,17 @@ export enum ClientAlertPriorityLevel {
 
 export type ClientAuditEvent = {
   __typename?: 'ClientAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
   event: AuditEventType;
   graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
@@ -2379,12 +2389,17 @@ export type EnrollmentAccessSummaryFilterOptions = {
 
 export type EnrollmentAuditEvent = {
   __typename?: 'EnrollmentAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
   event: AuditEventType;
   graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
@@ -11906,6 +11921,11 @@ export type UserAuditEventFieldsFragment = {
   recordName: string;
   graphqlType: string;
   recordId: string;
+  clientId?: string | null;
+  clientName?: string | null;
+  enrollmentId?: string | null;
+  projectId?: string | null;
+  projectName?: string | null;
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
   trueUser?: {
     __typename?: 'ApplicationUser';
@@ -12022,6 +12042,11 @@ export type GetUserAuditEventsQuery = {
         recordName: string;
         graphqlType: string;
         recordId: string;
+        clientId?: string | null;
+        clientName?: string | null;
+        enrollmentId?: string | null;
+        projectId?: string | null;
+        projectName?: string | null;
         user?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -29758,6 +29783,11 @@ export const UserAuditEventFieldsFragmentDoc = gql`
     recordName
     graphqlType
     recordId
+    clientId
+    clientName
+    enrollmentId
+    projectId
+    projectName
     user {
       id
       name

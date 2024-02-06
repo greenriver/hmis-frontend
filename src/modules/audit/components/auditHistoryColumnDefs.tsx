@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Link, Stack, Typography } from '@mui/material';
 import { compact, filter } from 'lodash-es';
 import {
   ContextualCollapsibleList,
@@ -11,7 +11,9 @@ import AuditObjectChangesSummary, {
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import { auditActionForDisplay } from '@/modules/hmis/hmisUtil';
+import { Routes } from '@/routes/routes';
 import { AuditEventType } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 // todo @martha q on PR - maybe the best thing to do is have this be a graphql fragment,
 // but I wasn't able to figure out how to define a fragment 'on' several different underlying types
@@ -51,6 +53,60 @@ export const auditHistoryColumns: ColumnDef<AuditHistoryNode>[] = [
     width: '180px',
     render: ({ user, trueUser }) =>
       compact([trueUser?.name, user?.name]).join(' acting as '),
+  },
+  {
+    // todo @martha - only want client name on useraudit history, not the others
+    key: 'clientName',
+    header: 'Client Name',
+    width: '180px',
+    render: ({ clientName, clientId }) => {
+      if (!clientName) return;
+      if (clientName && clientId) {
+        return (
+          <Link
+            href={generateSafePath(Routes.CLIENT_DASHBOARD, {
+              clientId: clientId,
+            })}
+          >
+            {clientName}
+          </Link>
+        );
+      }
+      return clientName; // Should never get here, but just in case
+    },
+    // todo @martha - this will break the other tables :)
+  },
+  {
+    // todo @martha - only want client name on useraudit history, not the others
+    key: 'projectName',
+    header: 'Project Name',
+    width: '180px',
+    render: ({ projectName, clientId, enrollmentId, projectId }) => {
+      if (!projectName) return;
+      if (clientId && enrollmentId) {
+        // Link to the enrollment
+        return (
+          <Link
+            href={generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
+              enrollmentId: enrollmentId,
+              clientId: clientId,
+            })}
+          >
+            {projectName}
+          </Link>
+        );
+      }
+      if (projectId) {
+        return (
+          <Link
+            href={generateSafePath(Routes.PROJECT, { projectId: projectId })}
+          >
+            {projectName}
+          </Link>
+        );
+      }
+      return projectName; // Should never get here, but just in case
+    }, // todo @martha - this will break the other tables :)
   },
   {
     key: 'action',

@@ -1,6 +1,6 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import EditIcon from '@mui/icons-material/Edit';
-import { Alert, Box, Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 // import { formatISO, subWeeks } from 'date-fns';
 import { generatePath, useNavigate } from 'react-router-dom';
 
@@ -117,10 +117,6 @@ const UserAuditPage: React.FC<Props> = ({
   return (
     <>
       <PageTitle title={`${user.name} Audit History`} />
-      <Alert severity='warning' sx={{ mb: 2 }}>
-        Data on this page may be delayed by up to an hour. Recent user activity
-        may not be immediately visible.
-      </Alert>
       <LabelWithContent
         label='Audit History Type'
         labelId='page-type-label'

@@ -158,12 +158,24 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ApplicationUserAuditEvent',
     fields: [
       {
+        name: 'clientId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'createdAt',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
+      },
+      {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'event',
@@ -192,6 +204,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'objectChanges',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'projectId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'recordId',
@@ -1099,12 +1119,24 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ClientAuditEvent',
     fields: [
       {
+        name: 'clientId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'createdAt',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
+      },
+      {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'event',
@@ -1133,6 +1165,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'objectChanges',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'projectId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'recordId',
@@ -2472,12 +2512,24 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'EnrollmentAuditEvent',
     fields: [
       {
+        name: 'clientId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'createdAt',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
+      },
+      {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'event',
@@ -2506,6 +2558,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'objectChanges',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'projectId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'recordId',
