@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import TitleCard from '@/components/elements/TitleCard';
 import { ClientAlertType } from '@/modules/client/components/clientAlerts/ClientAlert';
@@ -40,7 +40,9 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
               borderRadius: 1,
             }}
           >
-            {alertContext} has no alerts at this time
+            <Typography variant={'body2'}>
+              {alertContext} has no alerts at this time
+            </Typography>
             {children}
           </Stack>
         )}
