@@ -231,6 +231,14 @@ export type AssessmentAccess = {
   id: Scalars['ID']['output'];
 };
 
+export type AssessmentEligibility = {
+  __typename?: 'AssessmentEligibility';
+  formDefinitionId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  role: AssessmentRole;
+  title: Scalars['String']['output'];
+};
+
 export type AssessmentFilterOptions = {
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
@@ -2040,6 +2048,7 @@ export type Enrollment = {
   access: EnrollmentAccess;
   alcoholDrugUseDisorderFam?: Maybe<NoYesMissing>;
   annualPercentAmi?: Maybe<AnnualPercentAmi>;
+  assessmentEligibilities: Array<AssessmentEligibility>;
   assessments: AssessmentsPaginated;
   auditHistory: EnrollmentAuditEventsPaginated;
   ceAssessments: CeAssessmentsPaginated;
@@ -16549,6 +16558,25 @@ export type DeleteCurrentLivingSituationMutation = {
       linkId?: string | null;
       section?: string | null;
       data?: any | null;
+    }>;
+  } | null;
+};
+
+export type GetEnrollmentAssessmentEligibilitiesQueryVariables = Exact<{
+  enrollmentId: Scalars['ID']['input'];
+}>;
+
+export type GetEnrollmentAssessmentEligibilitiesQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    assessmentEligibilities: Array<{
+      __typename?: 'AssessmentEligibility';
+      id: string;
+      title: string;
+      formDefinitionId: string;
+      role: AssessmentRole;
     }>;
   } | null;
 };
@@ -33719,6 +33747,70 @@ export type DeleteCurrentLivingSituationMutationOptions =
   Apollo.BaseMutationOptions<
     DeleteCurrentLivingSituationMutation,
     DeleteCurrentLivingSituationMutationVariables
+  >;
+export const GetEnrollmentAssessmentEligibilitiesDocument = gql`
+  query GetEnrollmentAssessmentEligibilities($enrollmentId: ID!) {
+    enrollment(id: $enrollmentId) {
+      id
+      assessmentEligibilities {
+        id
+        title
+        formDefinitionId
+        role
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetEnrollmentAssessmentEligibilitiesQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentAssessmentEligibilitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentAssessmentEligibilitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentAssessmentEligibilitiesQuery({
+ *   variables: {
+ *      enrollmentId: // value for 'enrollmentId'
+ *   },
+ * });
+ */
+export function useGetEnrollmentAssessmentEligibilitiesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentAssessmentEligibilitiesQuery,
+    GetEnrollmentAssessmentEligibilitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentAssessmentEligibilitiesQuery,
+    GetEnrollmentAssessmentEligibilitiesQueryVariables
+  >(GetEnrollmentAssessmentEligibilitiesDocument, options);
+}
+export function useGetEnrollmentAssessmentEligibilitiesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentAssessmentEligibilitiesQuery,
+    GetEnrollmentAssessmentEligibilitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentAssessmentEligibilitiesQuery,
+    GetEnrollmentAssessmentEligibilitiesQueryVariables
+  >(GetEnrollmentAssessmentEligibilitiesDocument, options);
+}
+export type GetEnrollmentAssessmentEligibilitiesQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAssessmentEligibilitiesQuery
+>;
+export type GetEnrollmentAssessmentEligibilitiesLazyQueryHookResult =
+  ReturnType<typeof useGetEnrollmentAssessmentEligibilitiesLazyQuery>;
+export type GetEnrollmentAssessmentEligibilitiesQueryResult =
+  Apollo.QueryResult<
+    GetEnrollmentAssessmentEligibilitiesQuery,
+    GetEnrollmentAssessmentEligibilitiesQueryVariables
   >;
 export const GetEnrollmentPermissionsDocument = gql`
   query GetEnrollmentPermissions($id: ID!) {

@@ -18,9 +18,10 @@ interface Props {
   title: ReactNode;
   items: NavMenuItem[];
   variant?: ButtonProps['variant'];
+  disabled?: ButtonProps['disabled'];
 }
 
-const CommonMenuButton = ({ title, items, variant }: Props) => {
+const CommonMenuButton = ({ title, items, ...buttonProps }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,7 +39,7 @@ const CommonMenuButton = ({ title, items, variant }: Props) => {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         endIcon={<ArrowDropDownIcon />}
-        variant={variant}
+        {...buttonProps}
       >
         {title}
       </Button>
