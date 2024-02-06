@@ -9462,6 +9462,22 @@
             "deprecationReason": null
           },
           {
+            "name": "showInSummary",
+            "description": "Whether the element should be shown in high-level summary views, such as tables",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "value",
             "description": null,
             "args": [],

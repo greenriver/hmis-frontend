@@ -479,6 +479,7 @@ export const customDataElementValueAsString = (
 };
 
 export const serviceDetails = (service: ServiceFieldsFragment): string[] => {
+  // Details about HUD Services
   const detailRows = [
     service.otherTypeProvided,
     service.movingOnOtherType,
@@ -486,23 +487,19 @@ export const serviceDetails = (service: ServiceFieldsFragment): string[] => {
       ? HmisEnums.ServiceSubTypeProvided[service.subTypeProvided]
       : null,
     formatCurrency(service.faAmount),
-    parseAndFormatDateRange(
-      service.faStartDate,
-      service.faEndDate,
-      'Unknown',
-      'Unknown'
-    ),
     service.referralOutcome
       ? HmisEnums.PATHReferralOutcome[service.referralOutcome]
       : null,
   ].filter((s) => hasMeaningfulValue(s)) as string[];
 
-  if (service.customDataElements) {
-    service.customDataElements.forEach((cde) => {
+  // Details about custom fields
+  service.customDataElements
+    .filter((cde) => cde.showInSummary)
+    .forEach((cde) => {
       const val = customDataElementValueAsString(cde);
-      if (val) detailRows.push(val);
+      if (val) detailRows.push(`${cde.label}: ${val}`);
     });
-  }
+
   return detailRows;
 };
 
@@ -604,3 +601,26 @@ export const dataUrlForClientImage = (
 
   return `data:image/jpeg;base64,${image.base64}`;
 };
+
+export function getCustomDataElementColumns<
+  RowType extends { customDataElements: CustomDataElementFieldsFragment[] }
+>(rows: RowType[]) {
+  if (!rows || rows.length === 0) return [];
+
+  // Determine which summary-level CDEs are present on these records.
+  // We can look at the first record because records always resolve all
+  // available CDEs, even if they dont have a value.
+  return rows[0].customDataElements
+    .filter((cde) => cde.showInSummary)
+    .map((cde) => ({
+      header: cde.label,
+      key: cde.key,
+      render: (row: RowType) => {
+        const thisCde = row.customDataElements.find(
+          (elem) => elem.key === cde.key
+        );
+        if (!thisCde) return null;
+        return customDataElementValueAsString(thisCde);
+      },
+    }));
+}
