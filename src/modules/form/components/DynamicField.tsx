@@ -31,6 +31,7 @@ import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
+import PhoneInput from '@/components/elements/input/PhoneInput';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
@@ -38,7 +39,6 @@ import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
-import PhoneInput from '@/modules/form/components/client/phones/PhoneInputGroup';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
@@ -238,7 +238,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <PhoneInput
             id={linkId}
             value={value || ''}
-            onChange={onChangeValue}
+            onChange={onChangeEvent}
+            sx={{
+              width,
+              maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+              '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+            }}
             {...commonInputProps}
           />
         );

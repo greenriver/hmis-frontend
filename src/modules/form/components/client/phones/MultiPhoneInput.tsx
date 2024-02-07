@@ -7,7 +7,7 @@ import { PhoneInputType } from '../types';
 import { useRenderLastUpdated } from '../useRenderLastUpdated';
 import { createInitialValue } from '../util';
 
-import PhoneInput from './PhoneInputGroup';
+import PhoneInputGroup from './PhoneInputGroup';
 
 import { ClientContactPointFieldsFragmentDoc } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
@@ -35,7 +35,7 @@ const MultiPhoneInput = ({ id, value, onChange, label }: Props) => {
       valueKey={(addrValue) => addrValue._key || addrValue.id || ''}
       renderChild={(addrValue, idx) => {
         return (
-          <PhoneInput
+          <PhoneInputGroup
             value={addrValue}
             onChange={(val) => {
               const copied = [...value];

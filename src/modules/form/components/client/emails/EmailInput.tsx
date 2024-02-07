@@ -1,16 +1,16 @@
 import { Grid, Stack } from '@mui/material';
 
 import { getRequiredLabel } from '../../RequiredLabel';
-import { PhoneInputType } from '../types';
+import { EmailInputType } from '../types';
 
 import TextInput from '@/components/elements/input/TextInput';
 
-const PhoneInput = ({
+const EmailInput = ({
   value,
   onChange,
 }: {
-  value: PhoneInputType;
-  onChange: (value: PhoneInputType) => void;
+  value: EmailInputType;
+  onChange: (value: EmailInputType) => void;
 }) => {
   return (
     <Stack direction={'column'} rowGap={0}>
@@ -36,4 +36,4 @@ const PhoneInput = ({
   );
 };
 
-export default PhoneInput;
+export default EmailInput;
