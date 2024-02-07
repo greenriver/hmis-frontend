@@ -1,4 +1,3 @@
-import { Alert } from '@mui/material';
 import { ContextualCollapsibleListsProvider } from '@/components/elements/CollapsibleListContext';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
@@ -20,10 +19,6 @@ const UserAuditHistory = () => {
 
   return (
     <>
-      <Alert severity='warning' sx={{ m: 3 }}>
-        Data on this page may be delayed by up to an hour. Recent user activity
-        may not be immediately visible.
-      </Alert>
       <ContextualCollapsibleListsProvider>
         <GenericTableWithData<
           GetUserAuditEventsQuery,
