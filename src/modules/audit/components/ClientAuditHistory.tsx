@@ -1,10 +1,11 @@
 import { Paper } from '@mui/material';
 import { ContextualCollapsibleListsProvider } from '@/components/elements/CollapsibleListContext';
+import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
-  AuditHistoryNode,
-  auditHistoryColumns,
+  AUDIT_HISTORY_COLUMNS,
+  AUDIT_HISTORY_USER_COLUMNS,
 } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -14,12 +15,19 @@ import {
   GetClientAuditEventsQueryVariables,
 } from '@/types/gqlTypes';
 
-const ClientAuditHistory = () => {
-  const columns = auditHistoryColumns.filter(
-    (column) =>
-      !column.key || !['clientName', 'projectName'].includes(column.key)
-  );
+type AuditHistoryType = NonNullable<
+  NonNullable<GetClientAuditEventsQuery['client']>['auditHistory']
+>['nodes'][0];
 
+const columns: ColumnDef<AuditHistoryType>[] = [
+  AUDIT_HISTORY_COLUMNS.timestamp,
+  AUDIT_HISTORY_USER_COLUMNS.user,
+  AUDIT_HISTORY_COLUMNS.action,
+  AUDIT_HISTORY_COLUMNS.recordType,
+  AUDIT_HISTORY_COLUMNS.fieldsChanged,
+];
+
+const ClientAuditHistory = () => {
   const { clientId } = useSafeParams() as { clientId: string };
 
   return (
@@ -29,7 +37,7 @@ const ClientAuditHistory = () => {
         <GenericTableWithData<
           GetClientAuditEventsQuery,
           GetClientAuditEventsQueryVariables,
-          AuditHistoryNode,
+          AuditHistoryType,
           ClientAuditEventFilterOptions
         >
           columns={columns}

@@ -11927,11 +11927,6 @@ export type UserAuditEventFieldsFragment = {
   projectId?: string | null;
   projectName?: string | null;
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
-  trueUser?: {
-    __typename?: 'ApplicationUser';
-    id: string;
-    name: string;
-  } | null;
 };
 
 export type GetClientAuditEventsQueryVariables = Exact<{
@@ -12048,11 +12043,6 @@ export type GetUserAuditEventsQuery = {
         projectId?: string | null;
         projectName?: string | null;
         user?: {
-          __typename?: 'ApplicationUser';
-          id: string;
-          name: string;
-        } | null;
-        trueUser?: {
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
@@ -29789,10 +29779,6 @@ export const UserAuditEventFieldsFragmentDoc = gql`
     projectId
     projectName
     user {
-      id
-      name
-    }
-    trueUser {
       id
       name
     }

@@ -1,4 +1,4 @@
-import { Link, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { compact, filter } from 'lodash-es';
 import {
   ContextualCollapsibleList,
@@ -11,108 +11,32 @@ import AuditObjectChangesSummary, {
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import { auditActionForDisplay } from '@/modules/hmis/hmisUtil';
-import { Routes } from '@/routes/routes';
-import { AuditEventType } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
+import {
+  ClientAuditEventFieldsFragment,
+  EnrollmentAuditEventFieldsFragment,
+  UserAuditEventFieldsFragment,
+} from '@/types/gqlTypes';
 
-export type AuditHistoryNode = NonNullable<{
-  id: string;
-  createdAt: string;
-  event: AuditEventType;
-  objectChanges?: any | null;
-  recordName: string;
-  graphqlType: string;
-  recordId: string;
-  user?: {
-    id: string;
-    name: string;
-  } | null;
-  trueUser?: {
-    id: string;
-    name: string;
-  } | null;
-  clientId?: string;
-  clientName?: string;
-  projectId?: string;
-  projectName?: string;
-  enrollmentId?: string;
-}>;
-
-export const auditHistoryColumns: ColumnDef<AuditHistoryNode>[] = [
-  {
-    key: 'timestamp',
+export const AUDIT_HISTORY_COLUMNS: {
+  [key: string]: ColumnDef<
+    | ClientAuditEventFieldsFragment
+    | EnrollmentAuditEventFieldsFragment
+    | UserAuditEventFieldsFragment
+  >;
+} = {
+  timestamp: {
     header: 'Timestamp',
     width: '180px',
     render: (e) => (
       <RelativeDateTableCellContents dateTimeString={e.createdAt} />
     ),
   },
-  {
-    key: 'user',
-    header: 'User',
-    width: '180px',
-    render: ({ user, trueUser }) =>
-      compact([trueUser?.name, user?.name]).join(' acting as '),
-  },
-  {
-    key: 'clientName',
-    header: 'Client Name',
-    width: '180px',
-    render: ({ clientName, clientId }) => {
-      if (!clientName) return;
-      if (clientName && clientId) {
-        return (
-          <Link
-            href={generateSafePath(Routes.CLIENT_DASHBOARD, {
-              clientId: clientId,
-            })}
-          >
-            {clientName}
-          </Link>
-        );
-      }
-      return clientName; // Should never get here, but just in case
-    },
-  },
-  {
-    key: 'projectName',
-    header: 'Project Name',
-    width: '180px',
-    render: ({ projectName, clientId, enrollmentId, projectId }) => {
-      if (!projectName) return;
-      if (clientId && enrollmentId) {
-        // Link to the enrollment
-        return (
-          <Link
-            href={generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
-              enrollmentId: enrollmentId,
-              clientId: clientId,
-            })}
-          >
-            {projectName}
-          </Link>
-        );
-      }
-      if (projectId) {
-        return (
-          <Link
-            href={generateSafePath(Routes.PROJECT, { projectId: projectId })}
-          >
-            {projectName}
-          </Link>
-        );
-      }
-      return projectName; // Should never get here, but just in case
-    },
-  },
-  {
-    key: 'action',
+  action: {
     header: 'Action',
     width: '100px',
     render: ({ event }) => auditActionForDisplay(event),
   },
-  {
-    key: 'recordType',
+  recordType: {
     header: 'Record Type',
     width: '180px',
     render: ({ recordName, recordId }) => {
@@ -127,8 +51,7 @@ export const auditHistoryColumns: ColumnDef<AuditHistoryNode>[] = [
       );
     },
   },
-  {
-    key: 'fieldsChanged',
+  fieldsChanged: {
     header: (
       <Stack direction='row' justifyContent='space-between' alignItems='center'>
         <strong>Fields Changed</strong>
@@ -158,4 +81,17 @@ export const auditHistoryColumns: ColumnDef<AuditHistoryNode>[] = [
       );
     },
   },
-];
+};
+
+export const AUDIT_HISTORY_USER_COLUMNS: {
+  [key: string]: ColumnDef<
+    ClientAuditEventFieldsFragment | EnrollmentAuditEventFieldsFragment
+  >;
+} = {
+  user: {
+    header: 'User',
+    width: '180px',
+    render: ({ user, trueUser }) =>
+      compact([trueUser?.name, user?.name]).join(' acting as '),
+  },
+};
