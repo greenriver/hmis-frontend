@@ -8,3 +8,14 @@ mutation CreateClientAlert($input: ClientAlertInput!) {
     }
   }
 }
+
+mutation DeleteClientAlert($id: ID!) {
+  deleteClientAlert(id: $id) {
+    clientAlert {
+      ...ClientAlertFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

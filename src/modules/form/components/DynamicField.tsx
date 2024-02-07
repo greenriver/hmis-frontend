@@ -32,6 +32,7 @@ import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
+import PhoneInput from '@/components/elements/input/PhoneInput';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
@@ -258,6 +259,22 @@ const DynamicField: React.FC<Props> = ({
             />
           </InputContainer>
         );
+
+      if (item.component === Component.Phone) {
+        return (
+          <PhoneInput
+            id={linkId}
+            value={value || ''}
+            onChange={onChangeEvent}
+            sx={{
+              width,
+              maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+              '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+            }}
+            {...commonInputProps}
+          />
+        );
+      }
 
       const multiline = item.type === ItemType.Text;
       return (
