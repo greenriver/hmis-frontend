@@ -23,8 +23,8 @@ import ClientTextSearchInput from '@/modules/search/components/ClientTextSearchI
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { AdminDashboardRoutes } from '@/routes/routes';
 
-type PageEntityType = 'access' | 'edits';
-const pageToggleItems: ToggleItem<PageEntityType>[] = [
+type UserHistoryType = 'access' | 'edits';
+const historyTypeToggleItems: ToggleItem<UserHistoryType>[] = [
   {
     value: 'access',
     label: 'User Access',
@@ -52,11 +52,11 @@ const accessToggleItems: ToggleItem<AccessEntityType>[] = [
 ];
 
 interface Props {
-  pageEntityType: PageEntityType;
+  userHistoryType: UserHistoryType;
   accessEntityType?: AccessEntityType;
 }
 const UserAuditPage: React.FC<Props> = ({
-  pageEntityType,
+  userHistoryType,
   accessEntityType,
 }) => {
   const { userId } = useSafeParams() as { userId: string };
@@ -69,14 +69,14 @@ const UserAuditPage: React.FC<Props> = ({
   //  return formatISO(twoWeeksAgo);
   //}, []);
 
-  if (pageEntityType === 'access' && !accessEntityType) {
+  if (userHistoryType === 'access' && !accessEntityType) {
     throw new Error('Access entity type must be provided');
   }
 
   if (!user && loading) return <Loading />;
   if (!user) return <NotFound />;
 
-  const handlePageToggleChange = (value: PageEntityType) => {
+  const handleHistoryTypeToggleChange = (value: UserHistoryType) => {
     switch (value) {
       case 'access':
         navigate(
@@ -123,9 +123,9 @@ const UserAuditPage: React.FC<Props> = ({
         renderChildren={(labelElement) => (
           <CommonToggle
             sx={{ mb: 3 }}
-            value={pageEntityType}
-            onChange={handlePageToggleChange}
-            items={pageToggleItems}
+            value={userHistoryType}
+            onChange={handleHistoryTypeToggleChange}
+            items={historyTypeToggleItems}
             aria-labelledby={
               (labelElement && labelElement.getAttribute('id')) || undefined
             }
@@ -133,7 +133,7 @@ const UserAuditPage: React.FC<Props> = ({
         )}
       />
       <Paper>
-        {pageEntityType === 'access' && (
+        {userHistoryType === 'access' && (
           <>
             <Box my={2} px={2}>
               <LabelWithContent
@@ -191,7 +191,7 @@ const UserAuditPage: React.FC<Props> = ({
             )}
           </>
         )}
-        {pageEntityType === 'edits' && <UserAuditHistory />}
+        {userHistoryType === 'edits' && <UserAuditHistory />}
       </Paper>
     </>
   );

@@ -661,7 +661,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
                 <UserAuditPage
-                  pageEntityType='access'
+                  userHistoryType='access'
                   accessEntityType='clients'
                 />
               </RootPermissionsFilter>
@@ -672,7 +672,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
                 <UserAuditPage
-                  pageEntityType='access'
+                  userHistoryType='access'
                   accessEntityType='enrollments'
                 />
               </RootPermissionsFilter>
@@ -682,7 +682,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.USER_EDIT_HISTORY,
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
-                <UserAuditPage pageEntityType='edits' />
+                <UserAuditPage userHistoryType='edits' />
               </RootPermissionsFilter>
             ),
           },
