@@ -4,20 +4,23 @@ import { Box, Button } from '@mui/material';
 import { useCallback } from 'react';
 
 import { useViewEditRecordDialogs } from '../form/hooks/useViewEditRecordDialogs';
-import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { lastUpdatedBy, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  getCustomDataElementColumns,
+  lastUpdatedBy,
+  parseAndFormatDate,
+} from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   CustomCaseNoteFieldsFragment,
   DeleteCustomCaseNoteDocument,
-  RecordFormRole,
   GetEnrollmentCustomCaseNotesDocument,
   GetEnrollmentCustomCaseNotesQuery,
   GetEnrollmentCustomCaseNotesQueryVariables,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 export const CASE_NOTE_COLUMNS = {
@@ -71,12 +74,6 @@ export const CASE_NOTE_COLUMNS = {
   },
 };
 
-const columns: ColumnDef<CustomCaseNoteFieldsFragment>[] = [
-  CASE_NOTE_COLUMNS.InformationDate,
-  CASE_NOTE_COLUMNS.NoteContent,
-  CASE_NOTE_COLUMNS.LastUpdated,
-];
-
 const EnrollmentCaseNotes = () => {
   const { enrollment } = useEnrollmentDashboardContext();
   const enrollmentId = enrollment?.id;
@@ -101,7 +98,18 @@ const EnrollmentCaseNotes = () => {
       maxWidth: 'sm',
       deleteRecordDocument: DeleteCustomCaseNoteDocument,
       deleteRecordIdPath: 'deleteCustomCaseNote.customCaseNote.id',
+      projectId: enrollment?.project.id,
     });
+
+  const getColumnDefs = useCallback((rows: CustomCaseNoteFieldsFragment[]) => {
+    const customColumns = getCustomDataElementColumns(rows);
+    return [
+      CASE_NOTE_COLUMNS.InformationDate,
+      ...customColumns,
+      CASE_NOTE_COLUMNS.NoteContent,
+      CASE_NOTE_COLUMNS.LastUpdated,
+    ];
+  }, []);
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
@@ -129,7 +137,7 @@ const EnrollmentCaseNotes = () => {
         >
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentCustomCaseNotesDocument}
-          columns={columns}
+          getColumnDefs={getColumnDefs}
           pagePath='enrollment.customCaseNotes'
           noData='No case notes'
           headerCellSx={() => ({ color: 'text.secondary' })}

@@ -73,6 +73,7 @@ const EnrollmentCeEventsPage = () => {
       deleteRecordIdPath: 'deleteCeEvent.ceEvent.id',
       maxWidth: 'sm',
       localConstants,
+      projectId: enrollment?.project.id,
     });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
