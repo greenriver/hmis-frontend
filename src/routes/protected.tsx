@@ -14,6 +14,7 @@ import EnrollmentProjectRoute from '@/components/accessWrappers/EnrollmentProjec
 import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
+import ProjectRoute from '@/components/accessWrappers/ProjectRoute';
 import ClientFiles from '@/components/clientDashboard/ClientFiles';
 import EditClient from '@/components/clientDashboard/EditClient';
 import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
@@ -131,7 +132,17 @@ export const protectedRoutes: RouteNode[] = [
         path: Routes.PROJECT,
         element: <ProjectDashboard />,
         children: [
-          { path: '', element: <Navigate to='overview' replace /> },
+          {
+            path: '',
+            element: (
+              <ProjectRoute
+                permissions={['canViewEnrollmentDetails']}
+                redirectRoute={ProjectDashboardRoutes.OVERVIEW}
+              >
+                <Navigate to='enrollments' replace />
+              </ProjectRoute>
+            ),
+          },
           {
             path: ProjectDashboardRoutes.OVERVIEW,
             element: <Project />,
