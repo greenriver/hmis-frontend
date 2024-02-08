@@ -18,6 +18,7 @@ interface Args<T> {
   evictCache?: VoidFunction;
   localConstants?: LocalConstants;
   maxWidth?: Breakpoint | false;
+  projectId?: string; // Project context for fetching form definition
 }
 
 /**
@@ -34,6 +35,7 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
   deleteRecordIdPath,
   evictCache = () => null,
   localConstants,
+  projectId,
   maxWidth = 'md',
 }: Args<T>) {
   const [viewingRecord, setViewingRecord] = useState<T | undefined>();
@@ -43,6 +45,7 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
       record: viewingRecord,
       onClose: () => setViewingRecord(undefined),
       formRole,
+      projectId,
     });
 
   const { openFormDialog, renderFormDialog, closeDialog } = useFormDialog<T>({
@@ -56,6 +59,7 @@ export function useViewEditRecordDialogs<T extends SubmitFormAllowedTypes>({
     inputVariables,
     record: viewingRecord,
     localConstants,
+    projectId,
     onClose: () => setViewingRecord(undefined),
   });
 

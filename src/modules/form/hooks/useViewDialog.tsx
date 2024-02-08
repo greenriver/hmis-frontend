@@ -9,17 +9,19 @@ import { RecordFormRole } from '@/types/gqlTypes';
 
 export type RenderFormDialogProps<T> = Omit<
   RecordDialogProps<T>,
-  'open' | 'formRole' | 'record'
+  'open' | 'formRole' | 'record' | 'projectId'
 >;
 
 interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
   formRole: RecordFormRole;
   onClose?: VoidFunction;
+  projectId?: string; // Project context for fetching form definition
 }
 
 export function useViewDialog<T extends SubmitFormAllowedTypes>({
   onClose,
   record,
+  projectId,
   formRole,
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -34,6 +36,7 @@ export function useViewDialog<T extends SubmitFormAllowedTypes>({
           <ViewRecordDialog<T>
             title={title}
             record={record}
+            projectId={projectId}
             {...props}
             formRole={formRole}
             open={dialogOpen}
@@ -42,7 +45,7 @@ export function useViewDialog<T extends SubmitFormAllowedTypes>({
         )}
       </>
     ),
-    [onClose, record, dialogOpen, formRole]
+    [record, projectId, formRole, dialogOpen, onClose]
   );
 
   return useMemo(

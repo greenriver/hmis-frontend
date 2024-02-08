@@ -110,6 +110,7 @@ const CeParticipations = () => {
       deleteRecordIdPath: 'deleteCeParticipation.ceParticipation.id',
       maxWidth: 'sm',
       localConstants,
+      projectId: project.id,
     });
 
   return (

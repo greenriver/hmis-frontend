@@ -79,6 +79,7 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       deleteRecordIdPath:
         'deleteCurrentLivingSituation.currentLivingSituation.id',
       localConstants,
+      projectId: enrollment?.project.id,
     });
 
   const getColumnDefs = useCallback(
