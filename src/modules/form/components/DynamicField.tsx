@@ -246,6 +246,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             value={value || initialValue}
             onChange={onChangeValue}
             whoseSignature={item.text || 'Signature'}
+            {...inputProps}
             {...commonInputProps}
           />
         );

@@ -1,6 +1,7 @@
 import { Draw } from '@mui/icons-material';
 import { Paper, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import theme from '@/config/theme';
 import { GroupItemComponentProps } from '@/modules/form/types';
 
 const SignatureEnvelope = ({
@@ -18,7 +19,16 @@ const SignatureEnvelope = ({
           The following signatures are required on this document.
         </Typography>
         {renderChildItem &&
-          item.item?.map((childItem) => renderChildItem(childItem))}
+          item.item?.map((childItem, index) =>
+            renderChildItem(childItem, {
+              inputProps: {
+                themeColor:
+                  index % 2 === 0
+                    ? theme.palette.primary.main
+                    : theme.palette.secondary.main,
+              },
+            })
+          )}
       </Stack>
     </Paper>
   );

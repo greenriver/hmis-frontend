@@ -18,14 +18,14 @@ type SignatureProps = {
   whoseSignature: string;
   value: ValueProps;
   onChange: (value: ValueProps) => any;
-  color?: string;
+  themeColor?: string;
 } & DynamicInputCommonProps;
 
 const Signature = ({
   whoseSignature,
   value,
   onChange,
-  color = theme.palette.primary.main,
+  themeColor = theme.palette.primary.main,
 }: SignatureProps) => {
   return (
     <Box
@@ -34,14 +34,14 @@ const Signature = ({
         py: 2,
         borderWidth: '6px',
         borderStyle: 'none none none solid',
-        borderColor: color,
+        borderColor: themeColor,
       }}
     >
       <Stack spacing={2}>
         <RequiredLabel
           text={whoseSignature}
           required={true}
-          TypographyProps={{ variant: 'h5', color: color }}
+          TypographyProps={{ variant: 'h5', color: themeColor }}
           requiredTypographyProps={{ variant: 'body1', fontWeight: '600' }}
         />
         <InputContainer horizontal={true} sx={{}}>
