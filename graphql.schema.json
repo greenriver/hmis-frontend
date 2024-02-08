@@ -1195,6 +1195,18 @@
             "deprecationReason": null
           },
           {
+            "name": "event",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Event",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "exit",
             "description": null,
             "args": [],
@@ -37173,6 +37185,12 @@
           {
             "name": "ENROLLMENT_COC",
             "description": "EnrollmentCoc",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EVENT",
+            "description": "Event",
             "isDeprecated": false,
             "deprecationReason": null
           },

@@ -218,23 +218,6 @@ fragment SubmittedEnrollmentResultFields on Enrollment {
   }
 }
 
-fragment EventFields on Event {
-  id
-  event
-  eventDate
-  locationCrisisOrPhHousing
-  probSolDivRrResult
-  referralCaseManageAfter
-  referralResult
-  resultDate
-  dateCreated
-  dateUpdated
-  dateDeleted
-  user {
-    ...UserFields
-  }
-}
-
 fragment CeAssessmentFields on CeAssessment {
   id
   assessmentDate

@@ -1,0 +1,16 @@
+fragment EventFields on Event {
+  id
+  event
+  eventDate
+  locationCrisisOrPhHousing
+  probSolDivRrResult
+  referralCaseManageAfter
+  referralResult
+  resultDate
+  dateCreated
+  dateUpdated
+  dateDeleted
+  user {
+    ...UserFields
+  }
+}
