@@ -14,6 +14,7 @@ export interface ViewRecordProps<RecordType> {
   record: RecordType;
   formRole: RecordFormRole;
   pickListArgs?: PickListArgs;
+  projectId?: string; // Project context for fetching form definition
 }
 
 /**
@@ -24,9 +25,11 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   record,
   formRole,
   pickListArgs,
+  projectId,
 }: ViewRecordProps<RecordType>): JSX.Element => {
   const { formDefinition, itemMap, loading } = useFormDefinition({
     role: formRole,
+    projectId,
   });
 
   // Transform record into "form state" for DynamicView

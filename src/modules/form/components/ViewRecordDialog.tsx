@@ -23,6 +23,7 @@ export interface RecordDialogProps<RecordType> extends DialogProps {
   pickListArgs?: PickListArgs;
   actions?: ReactNode;
   children?: ReactNode;
+  projectId?: string; // Project context for fetching form definition
 }
 
 const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
@@ -33,6 +34,7 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
   title,
   children,
   pickListArgs,
+  projectId,
   ...props
 }: RecordDialogProps<RecordType>) => {
   return (
@@ -98,6 +100,7 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
             record={record}
             formRole={formRole}
             pickListArgs={pickListArgs}
+            projectId={projectId}
           />
           {children}
         </Box>
