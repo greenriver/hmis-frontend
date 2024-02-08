@@ -4,10 +4,12 @@ const RequiredLabel = ({
   text,
   required = false,
   TypographyProps,
+  requiredTypographyProps,
 }: {
   text: string;
   required?: boolean | null;
   TypographyProps?: TypographyProps;
+  requiredTypographyProps?: TypographyProps;
 }) => {
   return (
     <Stack direction='row' spacing={1} component='span'>
@@ -15,7 +17,12 @@ const RequiredLabel = ({
         {text}
       </Typography>
       {required && (
-        <Typography variant='body2' color='error' component='span'>
+        <Typography
+          variant='body2'
+          {...requiredTypographyProps}
+          color='error'
+          component='span'
+        >
           (Required)
         </Typography>
       )}

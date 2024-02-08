@@ -39,6 +39,7 @@ import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
+import Signature from '@/modules/form/components/Signature';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
@@ -232,6 +233,23 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             />
           </InputContainer>
         );
+
+      if (item.component === Component.Signature) {
+        const initialValue = {
+          signature: '',
+          date: new Date(),
+          checked: false,
+        };
+        return (
+          <Signature
+            id={linkId}
+            value={value || initialValue}
+            onChange={onChangeValue}
+            whoseSignature={item.text || 'Signature'}
+            {...commonInputProps}
+          />
+        );
+      }
 
       if (item.component === Component.Phone) {
         return (

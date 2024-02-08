@@ -9,6 +9,7 @@ import HorizontalGroup from './group/HorizontalGroup';
 import InputGroup from './group/InputGroup';
 import QuestionGroup from './group/QuestionGroup';
 
+import SignatureEnvelope from '@/modules/form/components/SignatureEnvelope';
 import { Component } from '@/types/gqlTypes';
 
 export const InfoGroup = ({
@@ -67,6 +68,8 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
           <QuestionGroup key={props.item.linkId} {...props} />
         </InfoGroup>
       );
+    case Component.Signature:
+      return <SignatureEnvelope {...props} />;
     default:
       return <QuestionGroup key={props.item.linkId} {...props} />;
   }
