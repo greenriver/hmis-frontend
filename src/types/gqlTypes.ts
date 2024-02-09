@@ -250,6 +250,7 @@ export type Assessment = {
   disabilityGroup?: Maybe<DisabilityGroup>;
   employmentEducation?: Maybe<EmploymentEducation>;
   enrollment: Enrollment;
+  event?: Maybe<Event>;
   exit?: Maybe<Exit>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID']['output'];
@@ -5972,6 +5973,8 @@ export enum RelatedRecordType {
   Enrollment = 'ENROLLMENT',
   /** EnrollmentCoc */
   EnrollmentCoc = 'ENROLLMENT_COC',
+  /** Event */
+  Event = 'EVENT',
   /** Exit */
   Exit = 'EXIT',
   /** HealthAndDv */
@@ -7880,6 +7883,26 @@ export type AssessmentWithRecordsFragment = {
       email: string;
     } | null;
   } | null;
+  event?: {
+    __typename?: 'Event';
+    id: string;
+    event: EventType;
+    eventDate: string;
+    locationCrisisOrPhHousing?: string | null;
+    probSolDivRrResult?: NoYesMissing | null;
+    referralCaseManageAfter?: NoYesMissing | null;
+    referralResult?: ReferralResult | null;
+    resultDate?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
   incomeBenefit?: {
     __typename: 'IncomeBenefit';
     adap?: NoYesReasonsForMissingData | null;
@@ -8387,6 +8410,26 @@ export type FullAssessmentFragment = {
     dateUpdated?: string | null;
     dateDeleted?: string | null;
     prioritizationStatus?: PrioritizationStatus | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
+  event?: {
+    __typename?: 'Event';
+    id: string;
+    event: EventType;
+    eventDate: string;
+    locationCrisisOrPhHousing?: string | null;
+    probSolDivRrResult?: NoYesMissing | null;
+    referralCaseManageAfter?: NoYesMissing | null;
+    referralResult?: ReferralResult | null;
+    resultDate?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -9369,6 +9412,26 @@ export type GetAssessmentQuery = {
         email: string;
       } | null;
     } | null;
+    event?: {
+      __typename?: 'Event';
+      id: string;
+      event: EventType;
+      eventDate: string;
+      locationCrisisOrPhHousing?: string | null;
+      probSolDivRrResult?: NoYesMissing | null;
+      referralCaseManageAfter?: NoYesMissing | null;
+      referralResult?: ReferralResult | null;
+      resultDate?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      dateDeleted?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
     incomeBenefit?: {
       __typename: 'IncomeBenefit';
       adap?: NoYesReasonsForMissingData | null;
@@ -10110,6 +10173,26 @@ export type SubmitAssessmentMutation = {
           email: string;
         } | null;
       } | null;
+      event?: {
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
       incomeBenefit?: {
         __typename: 'IncomeBenefit';
         adap?: NoYesReasonsForMissingData | null;
@@ -10614,6 +10697,26 @@ export type SubmitHouseholdAssessmentsMutation = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
+      event?: {
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -11140,6 +11243,26 @@ export type GetAssessmentsForPopulationQuery = {
           dateUpdated?: string | null;
           dateDeleted?: string | null;
           prioritizationStatus?: PrioritizationStatus | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        } | null;
+        event?: {
+          __typename?: 'Event';
+          id: string;
+          event: EventType;
+          eventDate: string;
+          locationCrisisOrPhHousing?: string | null;
+          probSolDivRrResult?: NoYesMissing | null;
+          referralCaseManageAfter?: NoYesMissing | null;
+          referralResult?: ReferralResult | null;
+          resultDate?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          dateDeleted?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -16344,27 +16467,6 @@ export type SubmittedEnrollmentResultFieldsFragment = {
   }>;
 };
 
-export type EventFieldsFragment = {
-  __typename?: 'Event';
-  id: string;
-  event: EventType;
-  eventDate: string;
-  locationCrisisOrPhHousing?: string | null;
-  probSolDivRrResult?: NoYesMissing | null;
-  referralCaseManageAfter?: NoYesMissing | null;
-  referralResult?: ReferralResult | null;
-  resultDate?: string | null;
-  dateCreated?: string | null;
-  dateUpdated?: string | null;
-  dateDeleted?: string | null;
-  user?: {
-    __typename: 'ApplicationUser';
-    id: string;
-    name: string;
-    email: string;
-  } | null;
-};
-
 export type CeAssessmentFieldsFragment = {
   __typename?: 'CeAssessment';
   id: string;
@@ -17615,6 +17717,27 @@ export type GetEnrollmentPermissionsQuery = {
       canDeleteEnrollments: boolean;
       canAuditEnrollments: boolean;
     };
+  } | null;
+};
+
+export type EventFieldsFragment = {
+  __typename?: 'Event';
+  id: string;
+  event: EventType;
+  eventDate: string;
+  locationCrisisOrPhHousing?: string | null;
+  probSolDivRrResult?: NoYesMissing | null;
+  referralCaseManageAfter?: NoYesMissing | null;
+  referralResult?: ReferralResult | null;
+  resultDate?: string | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  dateDeleted?: string | null;
+  user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
   } | null;
 };
 
@@ -29684,6 +29807,25 @@ export const CeAssessmentFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
+export const EventFieldsFragmentDoc = gql`
+  fragment EventFields on Event {
+    id
+    event
+    eventDate
+    locationCrisisOrPhHousing
+    probSolDivRrResult
+    referralCaseManageAfter
+    referralResult
+    resultDate
+    dateCreated
+    dateUpdated
+    dateDeleted
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const IncomeBenefitValuesFragmentDoc = gql`
   fragment IncomeBenefitValues on IncomeBenefit {
     __typename
@@ -29898,6 +30040,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     ceAssessment {
       ...CeAssessmentFields
     }
+    event {
+      ...EventFields
+    }
     incomeBenefit {
       ...IncomeBenefitValues
       customDataElements {
@@ -29933,6 +30078,7 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${EnrollmentValuesFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
+  ${EventFieldsFragmentDoc}
   ${IncomeBenefitValuesFragmentDoc}
   ${DisabilityGroupValuesFragmentDoc}
   ${HealthAndDvValuesFragmentDoc}
@@ -30756,25 +30902,6 @@ export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   ${EnrollmentFieldsFragmentDoc}
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-`;
-export const EventFieldsFragmentDoc = gql`
-  fragment EventFields on Event {
-    id
-    event
-    eventDate
-    locationCrisisOrPhHousing
-    probSolDivRrResult
-    referralCaseManageAfter
-    referralResult
-    resultDate
-    dateCreated
-    dateUpdated
-    dateDeleted
-    user {
-      ...UserFields
-    }
-  }
-  ${UserFieldsFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {

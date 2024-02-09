@@ -1093,6 +1093,10 @@ export const transformSubmitValues = ({
         ? HmisEnums.RelatedRecordType[mapping.recordType]
         : parentRecordType;
 
+      if (mapping.recordType && !recordType) {
+        throw Error(`Unrecognized record type in form definition: ${mapping}`);
+      }
+
       if (Array.isArray(item.item)) {
         rescursiveFillMap(item.item, result, recordType);
       }
