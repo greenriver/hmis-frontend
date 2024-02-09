@@ -2,6 +2,7 @@ import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 import { ReactNode, useMemo, useState } from 'react';
+import { useWatch } from 'react-hook-form';
 
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
@@ -15,7 +16,8 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import DynamicField from '@/modules/form/components/DynamicField';
-import useDynamicFields from '@/modules/form/hooks/useDynamicFields';
+import DynamicFormFields from '@/modules/form/components/DynamicFormFields';
+import useFormDefinitionHandlers from '@/modules/form/hooks/useFormDefinitionHandlers';
 import useServiceFormDefinition from '@/modules/form/hooks/useServiceFormDefinition';
 import {
   DynamicFieldProps,
@@ -100,16 +102,19 @@ const BulkAdd = <
     [definition]
   );
 
-  const { renderFields, values, shouldShowItem, getCleanedValues } =
-    useDynamicFields({
-      definition,
-      bulk: true,
-      localConstants: props.localConstants,
-    });
+  const handlers = useFormDefinitionHandlers({
+    definition,
+    localConstants: props.localConstants,
+  });
+
+  const { getCleanedValues, isItemDisabled } = handlers;
+
+  useWatch({ control: handlers.methods.control });
+  const values = getCleanedValues();
 
   const targetItems = useMemo(
-    () => allTargetItems.filter(shouldShowItem),
-    [allTargetItems, shouldShowItem]
+    () => allTargetItems.filter((item) => !isItemDisabled(item)),
+    [allTargetItems, isItemDisabled]
   );
 
   const [mutateFunction, { loading: mutationLoading }] = useMutation<
@@ -153,7 +158,7 @@ const BulkAdd = <
   return (
     <Stack gap={2}>
       {title}
-      {renderFields({})}
+      <DynamicFormFields handlers={handlers} bulk />
       {errors && hasAnyValue(errors) && (
         <Stack gap={1} sx={{ mt: 4 }}>
           <ApolloErrorAlert error={errors.apolloError} />

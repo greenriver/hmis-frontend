@@ -1,7 +1,8 @@
 import { Grid, GridProps } from '@mui/material';
 
-import useDynamicFields from '../../hooks/useDynamicFields';
+import useFormDefinitionHandlers from '../../hooks/useFormDefinitionHandlers';
 import { LocalConstants, PickListArgs } from '../../types';
+import DynamicViewFields from './DynamicViewFields';
 
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
@@ -24,7 +25,7 @@ const DynamicView = ({
   localConstants,
   GridProps,
 }: DynamicViewProps): JSX.Element => {
-  const { renderFields } = useDynamicFields({
+  const handlers = useFormDefinitionHandlers({
     definition,
     initialValues: values,
     viewOnly: true,
@@ -39,11 +40,12 @@ const DynamicView = ({
       data-testid='dynamicView'
       {...GridProps}
     >
-      {renderFields({
-        horizontal,
-        pickListArgs,
-        visible,
-      })}
+      <DynamicViewFields
+        horizontal={horizontal}
+        pickListArgs={pickListArgs}
+        visible={visible}
+        handlers={handlers}
+      />
     </Grid>
   );
 };

@@ -1,14 +1,17 @@
 import { Box } from '@mui/material';
 import { Meta, StoryFn } from '@storybook/react';
 
+import { MockDefinition } from '../data';
 import DynamicForm from './DynamicForm';
 import { Default as ViewStory } from './viewable/DynamicView.stories';
 
 import { emptyErrorState } from '@/modules/errors/util';
-import formData from '@/modules/form/data/mock.json';
-import { FormDefinitionJson } from '@/types/gqlTypes';
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
+// import formData from '@/modules/form/data/mock.json';
+// import { FormDefinitionJson } from '@/types/gqlTypes';
+// // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+// const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
+
+const formDefinition = MockDefinition;
 
 export default {
   title: 'DynamicForm',
