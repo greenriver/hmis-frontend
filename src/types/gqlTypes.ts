@@ -148,6 +148,7 @@ export enum AnnualPercentAmi {
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
   activityLogs: ActivityLogsPaginated;
+  auditHistory: ApplicationUserAuditEventsPaginated;
   clientAccessSummaries: ClientAccessSummariesPaginated;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -168,6 +169,13 @@ export type ApplicationUserActivityLogsArgs = {
 };
 
 /** User account for a user of the system */
+export type ApplicationUserAuditHistoryArgs = {
+  filters?: InputMaybe<UserAuditEventFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
 export type ApplicationUserClientAccessSummariesArgs = {
   filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -179,6 +187,36 @@ export type ApplicationUserEnrollmentAccessSummariesArgs = {
   filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ApplicationUserAuditEvent = {
+  __typename?: 'ApplicationUserAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
+  event: AuditEventType;
+  graphqlType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
+  objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
+  recordId: Scalars['ID']['output'];
+  recordName: Scalars['String']['output'];
+  trueUser?: Maybe<ApplicationUser>;
+  user?: Maybe<ApplicationUser>;
+};
+
+export type ApplicationUserAuditEventsPaginated = {
+  __typename?: 'ApplicationUserAuditEventsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ApplicationUserAuditEvent>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type ApplicationUserFilterOptions = {
@@ -212,6 +250,7 @@ export type Assessment = {
   disabilityGroup?: Maybe<DisabilityGroup>;
   employmentEducation?: Maybe<EmploymentEducation>;
   enrollment: Enrollment;
+  event?: Maybe<Event>;
   exit?: Maybe<Exit>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID']['output'];
@@ -798,12 +837,17 @@ export enum ClientAlertPriorityLevel {
 
 export type ClientAuditEvent = {
   __typename?: 'ClientAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
   event: AuditEventType;
   graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
@@ -2364,12 +2408,17 @@ export type EnrollmentAccessSummaryFilterOptions = {
 
 export type EnrollmentAuditEvent = {
   __typename?: 'EnrollmentAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
   event: AuditEventType;
   graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
@@ -5926,6 +5975,8 @@ export enum RelatedRecordType {
   Enrollment = 'ENROLLMENT',
   /** EnrollmentCoc */
   EnrollmentCoc = 'ENROLLMENT_COC',
+  /** Event */
+  Event = 'EVENT',
   /** Exit */
   Exit = 'EXIT',
   /** HealthAndDv */
@@ -6916,6 +6967,11 @@ export type UpdateUnitsPayload = {
   units: Array<Unit>;
 };
 
+export type UserAuditEventFilterOptions = {
+  clientRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  enrollmentRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 export type ValidationError = {
   __typename?: 'ValidationError';
   attribute: Scalars['String']['output'];
@@ -7829,6 +7885,26 @@ export type AssessmentWithRecordsFragment = {
       email: string;
     } | null;
   } | null;
+  event?: {
+    __typename?: 'Event';
+    id: string;
+    event: EventType;
+    eventDate: string;
+    locationCrisisOrPhHousing?: string | null;
+    probSolDivRrResult?: NoYesMissing | null;
+    referralCaseManageAfter?: NoYesMissing | null;
+    referralResult?: ReferralResult | null;
+    resultDate?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
   incomeBenefit?: {
     __typename: 'IncomeBenefit';
     adap?: NoYesReasonsForMissingData | null;
@@ -8336,6 +8412,26 @@ export type FullAssessmentFragment = {
     dateUpdated?: string | null;
     dateDeleted?: string | null;
     prioritizationStatus?: PrioritizationStatus | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
+  event?: {
+    __typename?: 'Event';
+    id: string;
+    event: EventType;
+    eventDate: string;
+    locationCrisisOrPhHousing?: string | null;
+    probSolDivRrResult?: NoYesMissing | null;
+    referralCaseManageAfter?: NoYesMissing | null;
+    referralResult?: ReferralResult | null;
+    resultDate?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -9318,6 +9414,26 @@ export type GetAssessmentQuery = {
         email: string;
       } | null;
     } | null;
+    event?: {
+      __typename?: 'Event';
+      id: string;
+      event: EventType;
+      eventDate: string;
+      locationCrisisOrPhHousing?: string | null;
+      probSolDivRrResult?: NoYesMissing | null;
+      referralCaseManageAfter?: NoYesMissing | null;
+      referralResult?: ReferralResult | null;
+      resultDate?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      dateDeleted?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
     incomeBenefit?: {
       __typename: 'IncomeBenefit';
       adap?: NoYesReasonsForMissingData | null;
@@ -10059,6 +10175,26 @@ export type SubmitAssessmentMutation = {
           email: string;
         } | null;
       } | null;
+      event?: {
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
       incomeBenefit?: {
         __typename: 'IncomeBenefit';
         adap?: NoYesReasonsForMissingData | null;
@@ -10563,6 +10699,26 @@ export type SubmitHouseholdAssessmentsMutation = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
+      event?: {
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -11089,6 +11245,26 @@ export type GetAssessmentsForPopulationQuery = {
           dateUpdated?: string | null;
           dateDeleted?: string | null;
           prioritizationStatus?: PrioritizationStatus | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        } | null;
+        event?: {
+          __typename?: 'Event';
+          id: string;
+          event: EventType;
+          eventDate: string;
+          locationCrisisOrPhHousing?: string | null;
+          probSolDivRrResult?: NoYesMissing | null;
+          referralCaseManageAfter?: NoYesMissing | null;
+          referralResult?: ReferralResult | null;
+          resultDate?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          dateDeleted?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -11945,6 +12121,23 @@ export type EnrollmentAuditEventFieldsFragment = {
   } | null;
 };
 
+export type UserAuditEventFieldsFragment = {
+  __typename?: 'ApplicationUserAuditEvent';
+  id: string;
+  createdAt: string;
+  event: AuditEventType;
+  objectChanges?: any | null;
+  recordName: string;
+  graphqlType: string;
+  recordId: string;
+  clientId?: string | null;
+  clientName?: string | null;
+  enrollmentId?: string | null;
+  projectId?: string | null;
+  projectName?: string | null;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+};
+
 export type GetClientAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -12018,6 +12211,47 @@ export type GetEnrollmentAuditEventsQuery = {
           name: string;
         } | null;
         trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetUserAuditEventsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<UserAuditEventFilterOptions>;
+}>;
+
+export type GetUserAuditEventsQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    auditHistory: {
+      __typename?: 'ApplicationUserAuditEventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ApplicationUserAuditEvent';
+        id: string;
+        createdAt: string;
+        event: AuditEventType;
+        objectChanges?: any | null;
+        recordName: string;
+        graphqlType: string;
+        recordId: string;
+        clientId?: string | null;
+        clientName?: string | null;
+        enrollmentId?: string | null;
+        projectId?: string | null;
+        projectName?: string | null;
+        user?: {
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
@@ -16235,27 +16469,6 @@ export type SubmittedEnrollmentResultFieldsFragment = {
   }>;
 };
 
-export type EventFieldsFragment = {
-  __typename?: 'Event';
-  id: string;
-  event: EventType;
-  eventDate: string;
-  locationCrisisOrPhHousing?: string | null;
-  probSolDivRrResult?: NoYesMissing | null;
-  referralCaseManageAfter?: NoYesMissing | null;
-  referralResult?: ReferralResult | null;
-  resultDate?: string | null;
-  dateCreated?: string | null;
-  dateUpdated?: string | null;
-  dateDeleted?: string | null;
-  user?: {
-    __typename: 'ApplicationUser';
-    id: string;
-    name: string;
-    email: string;
-  } | null;
-};
-
 export type CeAssessmentFieldsFragment = {
   __typename?: 'CeAssessment';
   id: string;
@@ -17506,6 +17719,27 @@ export type GetEnrollmentPermissionsQuery = {
       canDeleteEnrollments: boolean;
       canAuditEnrollments: boolean;
     };
+  } | null;
+};
+
+export type EventFieldsFragment = {
+  __typename?: 'Event';
+  id: string;
+  event: EventType;
+  eventDate: string;
+  locationCrisisOrPhHousing?: string | null;
+  probSolDivRrResult?: NoYesMissing | null;
+  referralCaseManageAfter?: NoYesMissing | null;
+  referralResult?: ReferralResult | null;
+  resultDate?: string | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  dateDeleted?: string | null;
+  user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
   } | null;
 };
 
@@ -29575,6 +29809,25 @@ export const CeAssessmentFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
+export const EventFieldsFragmentDoc = gql`
+  fragment EventFields on Event {
+    id
+    event
+    eventDate
+    locationCrisisOrPhHousing
+    probSolDivRrResult
+    referralCaseManageAfter
+    referralResult
+    resultDate
+    dateCreated
+    dateUpdated
+    dateDeleted
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const IncomeBenefitValuesFragmentDoc = gql`
   fragment IncomeBenefitValues on IncomeBenefit {
     __typename
@@ -29789,6 +30042,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     ceAssessment {
       ...CeAssessmentFields
     }
+    event {
+      ...EventFields
+    }
     incomeBenefit {
       ...IncomeBenefitValues
       customDataElements {
@@ -29824,6 +30080,7 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${EnrollmentValuesFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
+  ${EventFieldsFragmentDoc}
   ${IncomeBenefitValuesFragmentDoc}
   ${DisabilityGroupValuesFragmentDoc}
   ${HealthAndDvValuesFragmentDoc}
@@ -29958,6 +30215,26 @@ export const EnrollmentAuditEventFieldsFragmentDoc = gql`
       name
     }
     trueUser {
+      id
+      name
+    }
+  }
+`;
+export const UserAuditEventFieldsFragmentDoc = gql`
+  fragment UserAuditEventFields on ApplicationUserAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    recordName
+    graphqlType
+    recordId
+    clientId
+    clientName
+    enrollmentId
+    projectId
+    projectName
+    user {
       id
       name
     }
@@ -30627,25 +30904,6 @@ export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   ${EnrollmentFieldsFragmentDoc}
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-`;
-export const EventFieldsFragmentDoc = gql`
-  fragment EventFields on Event {
-    id
-    event
-    eventDate
-    locationCrisisOrPhHousing
-    probSolDivRrResult
-    referralCaseManageAfter
-    referralResult
-    resultDate
-    dateCreated
-    dateUpdated
-    dateDeleted
-    user {
-      ...UserFields
-    }
-  }
-  ${UserFieldsFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -32408,6 +32666,81 @@ export type GetEnrollmentAuditEventsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentAuditEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentAuditEventsQuery,
   GetEnrollmentAuditEventsQueryVariables
+>;
+export const GetUserAuditEventsDocument = gql`
+  query GetUserAuditEvents(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: UserAuditEventFilterOptions = null
+  ) {
+    user(id: $id) {
+      id
+      auditHistory(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...UserAuditEventFields
+        }
+      }
+    }
+  }
+  ${UserAuditEventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserAuditEventsQuery__
+ *
+ * To run a query within a React component, call `useGetUserAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserAuditEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetUserAuditEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >(GetUserAuditEventsDocument, options);
+}
+export function useGetUserAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >(GetUserAuditEventsDocument, options);
+}
+export type GetUserAuditEventsQueryHookResult = ReturnType<
+  typeof useGetUserAuditEventsQuery
+>;
+export type GetUserAuditEventsLazyQueryHookResult = ReturnType<
+  typeof useGetUserAuditEventsLazyQuery
+>;
+export type GetUserAuditEventsQueryResult = Apollo.QueryResult<
+  GetUserAuditEventsQuery,
+  GetUserAuditEventsQueryVariables
 >;
 export const CreateAutoExitConfigDocument = gql`
   mutation CreateAutoExitConfig($input: AutoExitConfigInput!) {

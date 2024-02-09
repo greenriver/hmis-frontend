@@ -1478,6 +1478,7 @@ export const HmisEnums = {
     EMPLOYMENT_EDUCATION: 'EmploymentEducation',
     ENROLLMENT: 'Enrollment',
     ENROLLMENT_COC: 'EnrollmentCoc',
+    EVENT: 'Event',
     EXIT: 'Exit',
     HEALTH_AND_DV: 'HealthAndDv',
     INCOME_BENEFIT: 'IncomeBenefit',
