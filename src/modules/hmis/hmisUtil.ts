@@ -19,6 +19,7 @@ import {
 } from '../form/util/formUtil';
 
 import { DashboardEnrollment } from './types';
+import { ColumnDef } from '@/components/elements/table/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
@@ -608,20 +609,28 @@ export function getCustomDataElementColumns<
 >(rows: RowType[]) {
   if (!rows || rows.length === 0) return [];
 
+  // FIX ME
   // Determine which summary-level CDEs are present on these records.
   // We can look at the first record because records always resolve all
   // available CDEs, even if they dont have a value.
-  return rows[0].customDataElements
-    .filter((cde) => cde.displayHooks.includes(DisplayHook.TableSummary))
-    .map((cde) => ({
-      header: cde.label,
-      key: cde.key,
-      render: (row: RowType) => {
-        const thisCde = row.customDataElements.find(
-          (elem) => elem.key === cde.key
-        );
-        if (!thisCde) return null;
-        return customDataElementValueAsString(thisCde);
-      },
-    }));
+  const seen: Record<string, boolean> = {};
+  const cdeRows: ColumnDef<RowType>[] = [];
+  rows.forEach(({ customDataElements }) => {
+    customDataElements.forEach(({ label, key, displayHooks }) => {
+      if (seen[key]) return;
+      seen[key] = true;
+
+      if (!displayHooks.includes(DisplayHook.TableSummary)) return;
+
+      cdeRows.push({
+        header: label,
+        key,
+        render: (row: RowType) =>
+          // fixme: string display
+          customDataElementValueForKey(key, row.customDataElements),
+      });
+    });
+  });
+
+  return cdeRows;
 }

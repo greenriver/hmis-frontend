@@ -90,15 +90,17 @@ const HmisField = ({
   }
 
   if (customFieldKey) {
-    if (!hasCustomDataElements(record)) throw new Error('Expected to have CDE');
-
-    const cde = record.customDataElements.find(
-      (cde) => cde.key === customFieldKey
-    );
-    if (!cde) {
-      throw new Error(`Expected to have CDE with key ${customFieldKey}`);
+    // change this behavior...
+    if (!hasCustomDataElements(record)) {
+      throw new Error(`Expected record ${record?.__typename} to resolve CDEs`);
     }
 
+    const cde = record.customDataElements.find(
+      ({ key }) => key === customFieldKey
+    );
+    if (!cde) return null; // this custom field does not have a value
+
+    // transform custom data element value to string
     const value = customDataElementValueAsString(cde);
     if (isNil(value)) return null;
     return <>{value}</>;
