@@ -2895,9 +2895,13 @@ export type FormItem = {
   serviceDetailType?: Maybe<ServiceDetailType>;
   /** Size of the input element */
   size?: Maybe<InputSize>;
+  /** Secondary text for the item */
+  subtitle?: Maybe<Scalars['String']['output']>;
   /** Primary text for the item */
   text?: Maybe<Scalars['String']['output']>;
   type: ItemType;
+  /** Component variant to use for display */
+  variant?: Maybe<Variant>;
   /** Whether to show a warning if this question is unanswered */
   warnIfEmpty: Scalars['Boolean']['output'];
 };
@@ -7316,6 +7320,11 @@ export enum VamcStationNumber {
   Num_757ColumbusOh = 'NUM_757_COLUMBUS_OH',
 }
 
+export enum Variant {
+  /** Render a signature envelope */
+  Signature = 'SIGNATURE',
+}
+
 export type VersionedRecordInput = {
   id: Scalars['ID']['input'];
   lockVersion?: InputMaybe<Scalars['Int']['input']>;
@@ -8814,8 +8823,10 @@ export type GetAssessmentQuery = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -8837,8 +8848,10 @@ export type GetAssessmentQuery = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -8860,8 +8873,10 @@ export type GetAssessmentQuery = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -8883,8 +8898,10 @@ export type GetAssessmentQuery = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -8906,8 +8923,10 @@ export type GetAssessmentQuery = {
                   linkId: string;
                   type: ItemType;
                   component?: Component | null;
+                  variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
+                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -13845,8 +13864,10 @@ export type ClientDetailFormsQuery = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -13868,8 +13889,10 @@ export type ClientDetailFormsQuery = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -13891,8 +13914,10 @@ export type ClientDetailFormsQuery = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -13914,8 +13939,10 @@ export type ClientDetailFormsQuery = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -13937,8 +13964,10 @@ export type ClientDetailFormsQuery = {
                   linkId: string;
                   type: ItemType;
                   component?: Component | null;
+                  variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
+                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -15739,8 +15768,10 @@ export type AllEnrollmentDetailsFragment = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -15762,8 +15793,10 @@ export type AllEnrollmentDetailsFragment = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -15785,8 +15818,10 @@ export type AllEnrollmentDetailsFragment = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -15808,8 +15843,10 @@ export type AllEnrollmentDetailsFragment = {
                   linkId: string;
                   type: ItemType;
                   component?: Component | null;
+                  variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
+                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -15831,8 +15868,10 @@ export type AllEnrollmentDetailsFragment = {
                     linkId: string;
                     type: ItemType;
                     component?: Component | null;
+                    variant?: Variant | null;
                     prefix?: string | null;
                     text?: string | null;
+                    subtitle?: string | null;
                     briefText?: string | null;
                     readonlyText?: string | null;
                     helperText?: string | null;
@@ -16810,8 +16849,10 @@ export type GetEnrollmentDetailsQuery = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -16833,8 +16874,10 @@ export type GetEnrollmentDetailsQuery = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -16856,8 +16899,10 @@ export type GetEnrollmentDetailsQuery = {
                   linkId: string;
                   type: ItemType;
                   component?: Component | null;
+                  variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
+                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -16879,8 +16924,10 @@ export type GetEnrollmentDetailsQuery = {
                     linkId: string;
                     type: ItemType;
                     component?: Component | null;
+                    variant?: Variant | null;
                     prefix?: string | null;
                     text?: string | null;
+                    subtitle?: string | null;
                     briefText?: string | null;
                     readonlyText?: string | null;
                     helperText?: string | null;
@@ -16902,8 +16949,10 @@ export type GetEnrollmentDetailsQuery = {
                       linkId: string;
                       type: ItemType;
                       component?: Component | null;
+                      variant?: Variant | null;
                       prefix?: string | null;
                       text?: string | null;
+                      subtitle?: string | null;
                       briefText?: string | null;
                       readonlyText?: string | null;
                       helperText?: string | null;
@@ -17823,8 +17872,10 @@ export type ItemFieldsFragment = {
   linkId: string;
   type: ItemType;
   component?: Component | null;
+  variant?: Variant | null;
   prefix?: string | null;
   text?: string | null;
+  subtitle?: string | null;
   briefText?: string | null;
   readonlyText?: string | null;
   helperText?: string | null;
@@ -17920,8 +17971,10 @@ export type FormDefinitionJsonFieldsFragment = {
     linkId: string;
     type: ItemType;
     component?: Component | null;
+    variant?: Variant | null;
     prefix?: string | null;
     text?: string | null;
+    subtitle?: string | null;
     briefText?: string | null;
     readonlyText?: string | null;
     helperText?: string | null;
@@ -17943,8 +17996,10 @@ export type FormDefinitionJsonFieldsFragment = {
       linkId: string;
       type: ItemType;
       component?: Component | null;
+      variant?: Variant | null;
       prefix?: string | null;
       text?: string | null;
+      subtitle?: string | null;
       briefText?: string | null;
       readonlyText?: string | null;
       helperText?: string | null;
@@ -17966,8 +18021,10 @@ export type FormDefinitionJsonFieldsFragment = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -17989,8 +18046,10 @@ export type FormDefinitionJsonFieldsFragment = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -18012,8 +18071,10 @@ export type FormDefinitionJsonFieldsFragment = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -18410,8 +18471,10 @@ export type FormDefinitionFieldsFragment = {
       linkId: string;
       type: ItemType;
       component?: Component | null;
+      variant?: Variant | null;
       prefix?: string | null;
       text?: string | null;
+      subtitle?: string | null;
       briefText?: string | null;
       readonlyText?: string | null;
       helperText?: string | null;
@@ -18433,8 +18496,10 @@ export type FormDefinitionFieldsFragment = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -18456,8 +18521,10 @@ export type FormDefinitionFieldsFragment = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -18479,8 +18546,10 @@ export type FormDefinitionFieldsFragment = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -18502,8 +18571,10 @@ export type FormDefinitionFieldsFragment = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -18893,8 +18964,10 @@ export type FormDefinitionFieldsForEditorFragment = {
       linkId: string;
       type: ItemType;
       component?: Component | null;
+      variant?: Variant | null;
       prefix?: string | null;
       text?: string | null;
+      subtitle?: string | null;
       briefText?: string | null;
       readonlyText?: string | null;
       helperText?: string | null;
@@ -18916,8 +18989,10 @@ export type FormDefinitionFieldsForEditorFragment = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -18939,8 +19014,10 @@ export type FormDefinitionFieldsForEditorFragment = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -18962,8 +19039,10 @@ export type FormDefinitionFieldsForEditorFragment = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -18985,8 +19064,10 @@ export type FormDefinitionFieldsForEditorFragment = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -19385,8 +19466,10 @@ export type UpdateFormDefinitionMutation = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -19408,8 +19491,10 @@ export type UpdateFormDefinitionMutation = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -19431,8 +19516,10 @@ export type UpdateFormDefinitionMutation = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -19454,8 +19541,10 @@ export type UpdateFormDefinitionMutation = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -19477,8 +19566,10 @@ export type UpdateFormDefinitionMutation = {
                   linkId: string;
                   type: ItemType;
                   component?: Component | null;
+                  variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
+                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -19892,8 +19983,10 @@ export type CreateFormDefinitionMutation = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -19915,8 +20008,10 @@ export type CreateFormDefinitionMutation = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -19938,8 +20033,10 @@ export type CreateFormDefinitionMutation = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -19961,8 +20058,10 @@ export type CreateFormDefinitionMutation = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -19984,8 +20083,10 @@ export type CreateFormDefinitionMutation = {
                   linkId: string;
                   type: ItemType;
                   component?: Component | null;
+                  variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
+                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -20399,8 +20500,10 @@ export type DeleteFormDefinitionMutation = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -20422,8 +20525,10 @@ export type DeleteFormDefinitionMutation = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -20445,8 +20550,10 @@ export type DeleteFormDefinitionMutation = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -20468,8 +20575,10 @@ export type DeleteFormDefinitionMutation = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -20491,8 +20600,10 @@ export type DeleteFormDefinitionMutation = {
                   linkId: string;
                   type: ItemType;
                   component?: Component | null;
+                  variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
+                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -20927,8 +21038,10 @@ export type GetFormDefinitionQuery = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -20950,8 +21063,10 @@ export type GetFormDefinitionQuery = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -20973,8 +21088,10 @@ export type GetFormDefinitionQuery = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -20996,8 +21113,10 @@ export type GetFormDefinitionQuery = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -21019,8 +21138,10 @@ export type GetFormDefinitionQuery = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -21416,8 +21537,10 @@ export type GetStaticFormDefinitionQuery = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -21439,8 +21562,10 @@ export type GetStaticFormDefinitionQuery = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -21462,8 +21587,10 @@ export type GetStaticFormDefinitionQuery = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -21485,8 +21612,10 @@ export type GetStaticFormDefinitionQuery = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -21508,8 +21637,10 @@ export type GetStaticFormDefinitionQuery = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -21906,8 +22037,10 @@ export type GetServiceFormDefinitionQuery = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -21929,8 +22062,10 @@ export type GetServiceFormDefinitionQuery = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -21952,8 +22087,10 @@ export type GetServiceFormDefinitionQuery = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -21975,8 +22112,10 @@ export type GetServiceFormDefinitionQuery = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -21998,8 +22137,10 @@ export type GetServiceFormDefinitionQuery = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -22398,8 +22539,10 @@ export type GetAssessmentFormDefinitionQuery = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -22421,8 +22564,10 @@ export type GetAssessmentFormDefinitionQuery = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -22444,8 +22589,10 @@ export type GetAssessmentFormDefinitionQuery = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -22467,8 +22614,10 @@ export type GetAssessmentFormDefinitionQuery = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -22490,8 +22639,10 @@ export type GetAssessmentFormDefinitionQuery = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -22888,8 +23039,10 @@ export type GetFormDefinitionForEditorQuery = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -22911,8 +23064,10 @@ export type GetFormDefinitionForEditorQuery = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -22934,8 +23089,10 @@ export type GetFormDefinitionForEditorQuery = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -22957,8 +23114,10 @@ export type GetFormDefinitionForEditorQuery = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -22980,8 +23139,10 @@ export type GetFormDefinitionForEditorQuery = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -23398,8 +23559,10 @@ export type GetParsedFormDefinitionQuery = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -23421,8 +23584,10 @@ export type GetParsedFormDefinitionQuery = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -23444,8 +23609,10 @@ export type GetParsedFormDefinitionQuery = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -23467,8 +23634,10 @@ export type GetParsedFormDefinitionQuery = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -23490,8 +23659,10 @@ export type GetParsedFormDefinitionQuery = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -25897,8 +26068,10 @@ export type OccurrencePointFormFieldsFragment = {
         linkId: string;
         type: ItemType;
         component?: Component | null;
+        variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
+        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -25920,8 +26093,10 @@ export type OccurrencePointFormFieldsFragment = {
           linkId: string;
           type: ItemType;
           component?: Component | null;
+          variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
+          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -25943,8 +26118,10 @@ export type OccurrencePointFormFieldsFragment = {
             linkId: string;
             type: ItemType;
             component?: Component | null;
+            variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
+            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -25966,8 +26143,10 @@ export type OccurrencePointFormFieldsFragment = {
               linkId: string;
               type: ItemType;
               component?: Component | null;
+              variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
+              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -25989,8 +26168,10 @@ export type OccurrencePointFormFieldsFragment = {
                 linkId: string;
                 type: ItemType;
                 component?: Component | null;
+                variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
+                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -30718,8 +30899,10 @@ export const ItemFieldsFragmentDoc = gql`
     linkId
     type
     component
+    variant
     prefix
     text
+    subtitle
     briefText
     readonlyText
     helperText

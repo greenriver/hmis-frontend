@@ -3357,6 +3357,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'ServiceDetailType', ofType: null },
       },
       { name: 'size', type: { kind: 'ENUM', name: 'InputSize', ofType: null } },
+      {
+        name: 'subtitle',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       { name: 'text', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'type',
@@ -3365,6 +3369,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'ENUM', name: 'ItemType', ofType: null },
         },
+      },
+      {
+        name: 'variant',
+        type: { kind: 'ENUM', name: 'Variant', ofType: null },
       },
       {
         name: 'warnIfEmpty',

@@ -39,8 +39,10 @@ fragment ItemFields on FormItem {
   linkId
   type
   component
+  variant
   prefix
   text
+  subtitle
   briefText
   readonlyText
   helperText

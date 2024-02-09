@@ -1,3 +1,4 @@
+import { TypographyProps } from '@mui/material';
 import { BreakpointOverrides, SxProps } from '@mui/system';
 import { isNil, isObject } from 'lodash-es';
 import { ReactNode } from 'react';
@@ -10,6 +11,7 @@ import {
   PickListOption,
   SubmitFormMutation,
   ValidationError,
+  Variant,
 } from '@/types/gqlTypes';
 // BACKEND FORM PROCESSOR EXPECTS THE '_HIDDEN' STRING VALUE, DO NOT CHANGE
 export const HIDDEN_VALUE = '_HIDDEN';
@@ -51,6 +53,7 @@ export interface DynamicFieldProps {
   disabled?: boolean;
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
+  groupHeaderProps?: TypographyProps;
   horizontal?: boolean;
   pickListArgs?: PickListArgs;
   noLabel?: boolean;
@@ -82,7 +85,7 @@ export interface DynamicInputCommonProps {
   placeholder?: string;
   breakpoints?: BreakpointOverrides;
   ariaLabelledBy?: string;
-  themeColor?: string;
+  componentVariant?: Variant;
 }
 
 export interface DynamicViewItemCommonProps {
@@ -112,6 +115,7 @@ export interface GroupItemComponentProps {
   locked?: boolean;
   viewOnly?: boolean;
   rowSx?: SxProps;
+  groupHeaderProps?: TypographyProps;
 }
 
 export interface ViewGroupItemComponentProps {

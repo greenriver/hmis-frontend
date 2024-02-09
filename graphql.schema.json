@@ -20548,6 +20548,18 @@
             "deprecationReason": null
           },
           {
+            "name": "subtitle",
+            "description": "Secondary text for the item",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "text",
             "description": "Primary text for the item",
             "args": [],
@@ -20571,6 +20583,18 @@
                 "name": "ItemType",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "variant",
+            "description": "Component variant to use for display",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "Variant",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -44405,6 +44429,23 @@
           {
             "name": "NUM_757_COLUMBUS_OH",
             "description": "(757) (757) Columbus, OH",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "Variant",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "SIGNATURE",
+            "description": "Render a signature envelope",
             "isDeprecated": false,
             "deprecationReason": null
           }

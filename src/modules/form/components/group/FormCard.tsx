@@ -6,6 +6,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { Box } from '@mui/system';
 import { includes, isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -23,6 +24,10 @@ import {
 import RecordPickerDialog from '../RecordPickerDialog';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import {
+  FormVariantStylesProps,
+  getFormGroupVariantStyles,
+} from '@/modules/form/components/group/variants';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
 interface Props extends GroupItemComponentProps {
@@ -88,6 +93,11 @@ const FormCard: React.FC<Props> = ({
     size: 'small',
     sx: { height: 'fit-content' },
   };
+
+  // todo @martha this is a bit messy
+  let variantStyles: FormVariantStylesProps = {};
+  if (item.variant) variantStyles = getFormGroupVariantStyles(item.variant);
+
   return (
     <Grid id={anchor} item>
       <Paper
@@ -101,7 +111,12 @@ const FormCard: React.FC<Props> = ({
         {/* Card title */}
         {item.text && (
           <Stack justifyContent='space-between' direction='row'>
-            <Typography variant='cardTitle' sx={{ mb: 2 }}>
+            <Typography
+              variant='cardTitle'
+              sx={{ mb: 2 }}
+              {...variantStyles.titleProps}
+            >
+              {variantStyles.icon && <variantStyles.icon sx={{ mr: 1 }} />}
               {item.text}
             </Typography>
 
@@ -140,6 +155,12 @@ const FormCard: React.FC<Props> = ({
           </Stack>
         )}
 
+        {item.subtitle && (
+          <Typography sx={{ mb: 2 }} {...variantStyles.subtitleProps}>
+            {item.subtitle}
+          </Typography>
+        )}
+
         {/* Source record description */}
         {sourceRecord && (
           <Typography variant='body2' sx={{ mb: 3 }}>
@@ -162,7 +183,28 @@ const FormCard: React.FC<Props> = ({
           }}
         >
           {renderChildItem &&
-            item.item?.map((childItem) => renderChildItem(childItem))}
+            (variantStyles.themeColorFn
+              ? item.item?.map((childItem, index) => {
+                  const color = variantStyles.themeColorFn
+                    ? variantStyles.themeColorFn(index)
+                    : '';
+                  return (
+                    <Box
+                      sx={{
+                        px: 3,
+                        py: 2,
+                        borderWidth: '6px',
+                        borderStyle: 'none none none solid',
+                        borderColor: color,
+                      }}
+                    >
+                      {renderChildItem(childItem, {
+                        groupHeaderProps: { color: color, variant: 'h5' },
+                      })}
+                    </Box>
+                  );
+                })
+              : item.item?.map((childItem) => renderChildItem(childItem)))}
         </Grid>
 
         {/* Dialog for selecting autofill record */}
