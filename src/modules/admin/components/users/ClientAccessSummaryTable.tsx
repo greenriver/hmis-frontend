@@ -60,6 +60,7 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
       noData='No access history'
       filterInputType='ClientAccessSummaryFilterOptions'
       paginationItemName='accessed client'
+      recordType='ClientAccessSummary'
       filters={(filters) => omit(filters, 'searchTerm')}
       showFilters
     />
