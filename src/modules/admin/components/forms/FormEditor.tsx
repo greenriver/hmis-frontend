@@ -22,10 +22,13 @@ import AceEditor from 'react-ace';
 
 import 'ace-builds/src-noconflict/mode-json';
 import 'ace-builds/src-noconflict/theme-tomorrow';
+import ViewEditToggle, { ViewMode } from './ViewEditToggle';
 import CommonDialog from '@/components/elements/CommonDialog';
 import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
+import { emptyErrorState } from '@/modules/errors/util';
 import DynamicForm from '@/modules/form/components/DynamicForm';
+import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import {
   AlwaysPresentLocalConstants,
   getInitialValues,
@@ -46,6 +49,7 @@ const FormEditor: React.FC<FormEditorProps> = ({
   onSave,
   saveLoading = false,
 }) => {
+  const [viewMode, setViewMode] = useState<ViewMode>('edit');
   const [open, setOpen] = useState(false);
   const [currentDefinition, setCurrentDefinition] =
     useState<FormDefinitionJson>();
@@ -129,7 +133,7 @@ const FormEditor: React.FC<FormEditorProps> = ({
         display='flex'
         justifyContent='space-between'
       >
-        <Stack direction='row' gap={2} alignItems='center'>
+        <Stack direction='row' gap={4} alignItems='center'>
           <Button
             onClick={() => setOpen(true)}
             variant='outlined'
@@ -137,6 +141,7 @@ const FormEditor: React.FC<FormEditorProps> = ({
           >
             Open JSON Editor
           </Button>
+          <ViewEditToggle value={viewMode} onChange={setViewMode} />
           {!isEmpty(allErrors) && (
             <Typography color='error'>
               {allErrors.length} {pluralize('Issue', allErrors.length)} must be
@@ -288,6 +293,17 @@ const FormEditor: React.FC<FormEditorProps> = ({
       <Box my={2}>
         {!currentDefinition ? (
           <Skeleton width='100%' height='300px' variant='rounded' />
+        ) : viewMode === 'view' ? (
+          <DynamicView
+            // Using key here will force the form to re-mount when these values change
+            key={JSON.stringify({
+              effectiveInitialValues,
+              effectiveLocalConstants,
+            })}
+            definition={currentDefinition}
+            localConstants={effectiveLocalConstants}
+            values={effectiveInitialValues}
+          />
         ) : (
           <DynamicForm
             // Using key here will force the form to re-mount when these values change
@@ -297,7 +313,7 @@ const FormEditor: React.FC<FormEditorProps> = ({
             })}
             definition={currentDefinition}
             onSubmit={({ values }) => setFormSubmitResult(values)}
-            errors={{ errors: [], warnings: [] }}
+            errors={emptyErrorState}
             localConstants={effectiveLocalConstants}
             initialValues={effectiveInitialValues}
             FormActionProps={{

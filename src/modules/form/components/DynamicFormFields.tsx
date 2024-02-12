@@ -83,6 +83,7 @@ const DynamicFormFields: React.FC<Props> = ({
     props?: OverrideableDynamicFieldProps,
     renderFn?: (children: ReactNode) => ReactNode
   ) => {
+    if (item.hideWhenEditing) return null;
     const isDisabled = !isEnabled(item, disabledLinkIds);
     if (isDisabled && item.disabledDisplay === DisabledDisplay.Hidden)
       return null;

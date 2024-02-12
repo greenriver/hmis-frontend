@@ -47,6 +47,8 @@ fragment ItemFields on FormItem {
   required
   warnIfEmpty
   hidden
+  hideWhenViewing
+  hideWhenEditing
   readOnly
   repeats
   mapping {

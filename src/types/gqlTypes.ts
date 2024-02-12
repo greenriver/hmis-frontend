@@ -2866,6 +2866,10 @@ export type FormItem = {
   helperText?: Maybe<Scalars['String']['output']>;
   /** Whether the item should always be hidden */
   hidden: Scalars['Boolean']['output'];
+  /** Whether to hide the item when form is in view-mode */
+  hideWhenEditing: Scalars['Boolean']['output'];
+  /** Whether to hide the item when form is in view-mode */
+  hideWhenViewing: Scalars['Boolean']['output'];
   /** Initial value(s) when item is first rendered */
   initial?: Maybe<Array<InitialValue>>;
   /** Nested items */
@@ -3614,6 +3618,7 @@ export enum ItemType {
   OpenChoice = 'OPEN_CHOICE',
   String = 'STRING',
   Text = 'TEXT',
+  Time = 'TIME',
 }
 
 /** R4.1 */
@@ -8820,6 +8825,8 @@ export type GetAssessmentQuery = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -8843,6 +8850,8 @@ export type GetAssessmentQuery = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -8866,6 +8875,8 @@ export type GetAssessmentQuery = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -8889,6 +8900,8 @@ export type GetAssessmentQuery = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -8912,6 +8925,8 @@ export type GetAssessmentQuery = {
                   required: boolean;
                   warnIfEmpty: boolean;
                   hidden: boolean;
+                  hideWhenViewing: boolean;
+                  hideWhenEditing: boolean;
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
@@ -13851,6 +13866,8 @@ export type ClientDetailFormsQuery = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -13874,6 +13891,8 @@ export type ClientDetailFormsQuery = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -13897,6 +13916,8 @@ export type ClientDetailFormsQuery = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -13920,6 +13941,8 @@ export type ClientDetailFormsQuery = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -13943,6 +13966,8 @@ export type ClientDetailFormsQuery = {
                   required: boolean;
                   warnIfEmpty: boolean;
                   hidden: boolean;
+                  hideWhenViewing: boolean;
+                  hideWhenEditing: boolean;
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
@@ -15745,6 +15770,8 @@ export type AllEnrollmentDetailsFragment = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -15768,6 +15795,8 @@ export type AllEnrollmentDetailsFragment = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -15791,6 +15820,8 @@ export type AllEnrollmentDetailsFragment = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -15814,6 +15845,8 @@ export type AllEnrollmentDetailsFragment = {
                   required: boolean;
                   warnIfEmpty: boolean;
                   hidden: boolean;
+                  hideWhenViewing: boolean;
+                  hideWhenEditing: boolean;
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
@@ -15837,6 +15870,8 @@ export type AllEnrollmentDetailsFragment = {
                     required: boolean;
                     warnIfEmpty: boolean;
                     hidden: boolean;
+                    hideWhenViewing: boolean;
+                    hideWhenEditing: boolean;
                     readOnly: boolean;
                     repeats: boolean;
                     pickListReference?: string | null;
@@ -16816,6 +16851,8 @@ export type GetEnrollmentDetailsQuery = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -16839,6 +16876,8 @@ export type GetEnrollmentDetailsQuery = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -16862,6 +16901,8 @@ export type GetEnrollmentDetailsQuery = {
                   required: boolean;
                   warnIfEmpty: boolean;
                   hidden: boolean;
+                  hideWhenViewing: boolean;
+                  hideWhenEditing: boolean;
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
@@ -16885,6 +16926,8 @@ export type GetEnrollmentDetailsQuery = {
                     required: boolean;
                     warnIfEmpty: boolean;
                     hidden: boolean;
+                    hideWhenViewing: boolean;
+                    hideWhenEditing: boolean;
                     readOnly: boolean;
                     repeats: boolean;
                     pickListReference?: string | null;
@@ -16908,6 +16951,8 @@ export type GetEnrollmentDetailsQuery = {
                       required: boolean;
                       warnIfEmpty: boolean;
                       hidden: boolean;
+                      hideWhenViewing: boolean;
+                      hideWhenEditing: boolean;
                       readOnly: boolean;
                       repeats: boolean;
                       pickListReference?: string | null;
@@ -17829,6 +17874,8 @@ export type ItemFieldsFragment = {
   required: boolean;
   warnIfEmpty: boolean;
   hidden: boolean;
+  hideWhenViewing: boolean;
+  hideWhenEditing: boolean;
   readOnly: boolean;
   repeats: boolean;
   pickListReference?: string | null;
@@ -17926,6 +17973,8 @@ export type FormDefinitionJsonFieldsFragment = {
     required: boolean;
     warnIfEmpty: boolean;
     hidden: boolean;
+    hideWhenViewing: boolean;
+    hideWhenEditing: boolean;
     readOnly: boolean;
     repeats: boolean;
     pickListReference?: string | null;
@@ -17949,6 +17998,8 @@ export type FormDefinitionJsonFieldsFragment = {
       required: boolean;
       warnIfEmpty: boolean;
       hidden: boolean;
+      hideWhenViewing: boolean;
+      hideWhenEditing: boolean;
       readOnly: boolean;
       repeats: boolean;
       pickListReference?: string | null;
@@ -17972,6 +18023,8 @@ export type FormDefinitionJsonFieldsFragment = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -17995,6 +18048,8 @@ export type FormDefinitionJsonFieldsFragment = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -18018,6 +18073,8 @@ export type FormDefinitionJsonFieldsFragment = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -18416,6 +18473,8 @@ export type FormDefinitionFieldsFragment = {
       required: boolean;
       warnIfEmpty: boolean;
       hidden: boolean;
+      hideWhenViewing: boolean;
+      hideWhenEditing: boolean;
       readOnly: boolean;
       repeats: boolean;
       pickListReference?: string | null;
@@ -18439,6 +18498,8 @@ export type FormDefinitionFieldsFragment = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -18462,6 +18523,8 @@ export type FormDefinitionFieldsFragment = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -18485,6 +18548,8 @@ export type FormDefinitionFieldsFragment = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -18508,6 +18573,8 @@ export type FormDefinitionFieldsFragment = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -18899,6 +18966,8 @@ export type FormDefinitionFieldsForEditorFragment = {
       required: boolean;
       warnIfEmpty: boolean;
       hidden: boolean;
+      hideWhenViewing: boolean;
+      hideWhenEditing: boolean;
       readOnly: boolean;
       repeats: boolean;
       pickListReference?: string | null;
@@ -18922,6 +18991,8 @@ export type FormDefinitionFieldsForEditorFragment = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -18945,6 +19016,8 @@ export type FormDefinitionFieldsForEditorFragment = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -18968,6 +19041,8 @@ export type FormDefinitionFieldsForEditorFragment = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -18991,6 +19066,8 @@ export type FormDefinitionFieldsForEditorFragment = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -19391,6 +19468,8 @@ export type UpdateFormDefinitionMutation = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -19414,6 +19493,8 @@ export type UpdateFormDefinitionMutation = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -19437,6 +19518,8 @@ export type UpdateFormDefinitionMutation = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -19460,6 +19543,8 @@ export type UpdateFormDefinitionMutation = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -19483,6 +19568,8 @@ export type UpdateFormDefinitionMutation = {
                   required: boolean;
                   warnIfEmpty: boolean;
                   hidden: boolean;
+                  hideWhenViewing: boolean;
+                  hideWhenEditing: boolean;
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
@@ -19898,6 +19985,8 @@ export type CreateFormDefinitionMutation = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -19921,6 +20010,8 @@ export type CreateFormDefinitionMutation = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -19944,6 +20035,8 @@ export type CreateFormDefinitionMutation = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -19967,6 +20060,8 @@ export type CreateFormDefinitionMutation = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -19990,6 +20085,8 @@ export type CreateFormDefinitionMutation = {
                   required: boolean;
                   warnIfEmpty: boolean;
                   hidden: boolean;
+                  hideWhenViewing: boolean;
+                  hideWhenEditing: boolean;
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
@@ -20405,6 +20502,8 @@ export type DeleteFormDefinitionMutation = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -20428,6 +20527,8 @@ export type DeleteFormDefinitionMutation = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -20451,6 +20552,8 @@ export type DeleteFormDefinitionMutation = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -20474,6 +20577,8 @@ export type DeleteFormDefinitionMutation = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -20497,6 +20602,8 @@ export type DeleteFormDefinitionMutation = {
                   required: boolean;
                   warnIfEmpty: boolean;
                   hidden: boolean;
+                  hideWhenViewing: boolean;
+                  hideWhenEditing: boolean;
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
@@ -20933,6 +21040,8 @@ export type GetFormDefinitionQuery = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -20956,6 +21065,8 @@ export type GetFormDefinitionQuery = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -20979,6 +21090,8 @@ export type GetFormDefinitionQuery = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -21002,6 +21115,8 @@ export type GetFormDefinitionQuery = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -21025,6 +21140,8 @@ export type GetFormDefinitionQuery = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -21422,6 +21539,8 @@ export type GetStaticFormDefinitionQuery = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -21445,6 +21564,8 @@ export type GetStaticFormDefinitionQuery = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -21468,6 +21589,8 @@ export type GetStaticFormDefinitionQuery = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -21491,6 +21614,8 @@ export type GetStaticFormDefinitionQuery = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -21514,6 +21639,8 @@ export type GetStaticFormDefinitionQuery = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -21912,6 +22039,8 @@ export type GetServiceFormDefinitionQuery = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -21935,6 +22064,8 @@ export type GetServiceFormDefinitionQuery = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -21958,6 +22089,8 @@ export type GetServiceFormDefinitionQuery = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -21981,6 +22114,8 @@ export type GetServiceFormDefinitionQuery = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -22004,6 +22139,8 @@ export type GetServiceFormDefinitionQuery = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -22404,6 +22541,8 @@ export type GetAssessmentFormDefinitionQuery = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -22427,6 +22566,8 @@ export type GetAssessmentFormDefinitionQuery = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -22450,6 +22591,8 @@ export type GetAssessmentFormDefinitionQuery = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -22473,6 +22616,8 @@ export type GetAssessmentFormDefinitionQuery = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -22496,6 +22641,8 @@ export type GetAssessmentFormDefinitionQuery = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -22894,6 +23041,8 @@ export type GetFormDefinitionForEditorQuery = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -22917,6 +23066,8 @@ export type GetFormDefinitionForEditorQuery = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -22940,6 +23091,8 @@ export type GetFormDefinitionForEditorQuery = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -22963,6 +23116,8 @@ export type GetFormDefinitionForEditorQuery = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -22986,6 +23141,8 @@ export type GetFormDefinitionForEditorQuery = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -23404,6 +23561,8 @@ export type GetParsedFormDefinitionQuery = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -23427,6 +23586,8 @@ export type GetParsedFormDefinitionQuery = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -23450,6 +23611,8 @@ export type GetParsedFormDefinitionQuery = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -23473,6 +23636,8 @@ export type GetParsedFormDefinitionQuery = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -23496,6 +23661,8 @@ export type GetParsedFormDefinitionQuery = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -25903,6 +26070,8 @@ export type OccurrencePointFormFieldsFragment = {
         required: boolean;
         warnIfEmpty: boolean;
         hidden: boolean;
+        hideWhenViewing: boolean;
+        hideWhenEditing: boolean;
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
@@ -25926,6 +26095,8 @@ export type OccurrencePointFormFieldsFragment = {
           required: boolean;
           warnIfEmpty: boolean;
           hidden: boolean;
+          hideWhenViewing: boolean;
+          hideWhenEditing: boolean;
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
@@ -25949,6 +26120,8 @@ export type OccurrencePointFormFieldsFragment = {
             required: boolean;
             warnIfEmpty: boolean;
             hidden: boolean;
+            hideWhenViewing: boolean;
+            hideWhenEditing: boolean;
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
@@ -25972,6 +26145,8 @@ export type OccurrencePointFormFieldsFragment = {
               required: boolean;
               warnIfEmpty: boolean;
               hidden: boolean;
+              hideWhenViewing: boolean;
+              hideWhenEditing: boolean;
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
@@ -25995,6 +26170,8 @@ export type OccurrencePointFormFieldsFragment = {
                 required: boolean;
                 warnIfEmpty: boolean;
                 hidden: boolean;
+                hideWhenViewing: boolean;
+                hideWhenEditing: boolean;
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
@@ -30724,6 +30901,8 @@ export const ItemFieldsFragmentDoc = gql`
     required
     warnIfEmpty
     hidden
+    hideWhenViewing
+    hideWhenEditing
     readOnly
     repeats
     mapping {

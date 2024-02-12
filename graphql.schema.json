@@ -20330,6 +20330,38 @@
             "deprecationReason": null
           },
           {
+            "name": "hideWhenEditing",
+            "description": "Whether to hide the item when form is in view-mode",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hideWhenViewing",
+            "description": "Whether to hide the item when form is in view-mode",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "initial",
             "description": "Initial value(s) when item is first rendered",
             "args": [],
@@ -25429,6 +25461,12 @@
           },
           {
             "name": "TEXT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TIME",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

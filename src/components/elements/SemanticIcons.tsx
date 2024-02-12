@@ -2,10 +2,12 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionIcon from '@mui/icons-material/Description';
 import DownloadIcon from '@mui/icons-material/Download';
+import EditIcon from '@mui/icons-material/Edit';
 import Home from '@mui/icons-material/Home';
 import Person from '@mui/icons-material/Person';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 export {
   Person as ClientIcon,
@@ -16,4 +18,6 @@ export {
   ContentCopyIcon as CopyIcon,
   DownloadIcon as DownloadIcon,
   DescriptionIcon as AssessmentIcon,
+  EditIcon as EditIcon,
+  VisibilityIcon as ViewIcon,
 };

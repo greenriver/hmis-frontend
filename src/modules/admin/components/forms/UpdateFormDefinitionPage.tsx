@@ -37,6 +37,7 @@ const UpdateFormDefinitionPage = () => {
             });
           }}
           saveLoading={loading}
+          readOnly
         />
       )}
     </>
