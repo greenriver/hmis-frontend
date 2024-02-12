@@ -59,7 +59,6 @@ fragment ItemFields on FormItem {
   pickListReference
   serviceDetailType
   size
-  direction
   assessmentDate
   prefill
   bounds {

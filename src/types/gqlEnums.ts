@@ -366,7 +366,6 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  Direction: { column: 'column', row: 'row' },
   DisabilityResponse: {
     INVALID: 'Invalid Value',
     NO: 'No',

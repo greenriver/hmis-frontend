@@ -12,12 +12,7 @@ const QuestionGroup = ({
   groupHeaderProps,
 }: GroupItemComponentProps) => {
   const wrappedChildren = (
-    <Grid
-      container
-      direction={item.direction ? item.direction : 'column'}
-      sx={{ mt: 0 }}
-      gap={3}
-    >
+    <Grid container direction='column' sx={{ mt: 0 }} gap={3}>
       {renderChildItem &&
         item.item?.map((childItem) => renderChildItem(childItem))}
     </Grid>

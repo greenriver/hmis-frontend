@@ -24,7 +24,10 @@ import {
 import RecordPickerDialog from '../RecordPickerDialog';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
-import { getFormGroupVariantStyles } from '@/modules/form/components/group/variants';
+import {
+  FormVariantStylesProps,
+  getFormGroupVariantStyles,
+} from '@/modules/form/components/group/variants';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
 interface Props extends GroupItemComponentProps {
@@ -91,7 +94,9 @@ const FormCard: React.FC<Props> = ({
     sx: { height: 'fit-content' },
   };
 
-  const variantStyles = getFormGroupVariantStyles(item.variant);
+  // todo @martha this is a bit messy
+  let variantStyles: FormVariantStylesProps = {};
+  if (item.variant) variantStyles = getFormGroupVariantStyles(item.variant);
 
   return (
     <Grid id={anchor} item>
@@ -185,7 +190,6 @@ const FormCard: React.FC<Props> = ({
                     : '';
                   return (
                     <Box
-                      key={childItem.linkId}
                       sx={{
                         px: 3,
                         py: 2,

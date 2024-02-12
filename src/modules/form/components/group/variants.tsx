@@ -10,7 +10,7 @@ export interface FormVariantStylesProps {
   themeColorFn?: (i: number) => string;
 }
 export const getFormGroupVariantStyles = (
-  variant?: Variant | null
+  variant: Variant
 ): FormVariantStylesProps => {
   switch (variant) {
     case Variant.Signature:
@@ -23,7 +23,5 @@ export const getFormGroupVariantStyles = (
             ? theme.palette.primary.main
             : theme.palette.secondary.main,
       };
-    default:
-      return {};
   }
 };

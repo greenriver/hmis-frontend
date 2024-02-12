@@ -1943,11 +1943,6 @@ export type DirectUploadInput = {
   filename: Scalars['String']['input'];
 };
 
-export enum Direction {
-  Column = 'column',
-  Row = 'row',
-}
-
 export type DisabilitiesPaginated = {
   __typename?: 'DisabilitiesPaginated';
   hasMoreAfter: Scalars['Boolean']['output'];
@@ -2865,8 +2860,6 @@ export type FormItem = {
   component?: Maybe<Component>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
-  /** Whether the form group should be rendered as a row or a column */
-  direction?: Maybe<Direction>;
   /** How to display item if it is disabled */
   disabledDisplay: DisabledDisplay;
   enableBehavior: EnableBehavior;
@@ -8845,7 +8838,6 @@ export type GetAssessmentQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -8871,7 +8863,6 @@ export type GetAssessmentQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -8897,7 +8888,6 @@ export type GetAssessmentQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -8923,7 +8913,6 @@ export type GetAssessmentQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -8949,7 +8938,6 @@ export type GetAssessmentQuery = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
-                  direction?: Direction | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
                   dataCollectedAbout?: DataCollectedAbout | null;
@@ -13891,7 +13879,6 @@ export type ClientDetailFormsQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -13917,7 +13904,6 @@ export type ClientDetailFormsQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -13943,7 +13929,6 @@ export type ClientDetailFormsQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -13969,7 +13954,6 @@ export type ClientDetailFormsQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -13995,7 +13979,6 @@ export type ClientDetailFormsQuery = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
-                  direction?: Direction | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
                   dataCollectedAbout?: DataCollectedAbout | null;
@@ -15800,7 +15783,6 @@ export type AllEnrollmentDetailsFragment = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -15826,7 +15808,6 @@ export type AllEnrollmentDetailsFragment = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -15852,7 +15833,6 @@ export type AllEnrollmentDetailsFragment = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -15878,7 +15858,6 @@ export type AllEnrollmentDetailsFragment = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
-                  direction?: Direction | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
                   dataCollectedAbout?: DataCollectedAbout | null;
@@ -15904,7 +15883,6 @@ export type AllEnrollmentDetailsFragment = {
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
-                    direction?: Direction | null;
                     assessmentDate?: boolean | null;
                     prefill: boolean;
                     dataCollectedAbout?: DataCollectedAbout | null;
@@ -16886,7 +16864,6 @@ export type GetEnrollmentDetailsQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -16912,7 +16889,6 @@ export type GetEnrollmentDetailsQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -16938,7 +16914,6 @@ export type GetEnrollmentDetailsQuery = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
-                  direction?: Direction | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
                   dataCollectedAbout?: DataCollectedAbout | null;
@@ -16964,7 +16939,6 @@ export type GetEnrollmentDetailsQuery = {
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
-                    direction?: Direction | null;
                     assessmentDate?: boolean | null;
                     prefill: boolean;
                     dataCollectedAbout?: DataCollectedAbout | null;
@@ -16990,7 +16964,6 @@ export type GetEnrollmentDetailsQuery = {
                       pickListReference?: string | null;
                       serviceDetailType?: ServiceDetailType | null;
                       size?: InputSize | null;
-                      direction?: Direction | null;
                       assessmentDate?: boolean | null;
                       prefill: boolean;
                       dataCollectedAbout?: DataCollectedAbout | null;
@@ -17914,7 +17887,6 @@ export type ItemFieldsFragment = {
   pickListReference?: string | null;
   serviceDetailType?: ServiceDetailType | null;
   size?: InputSize | null;
-  direction?: Direction | null;
   assessmentDate?: boolean | null;
   prefill: boolean;
   dataCollectedAbout?: DataCollectedAbout | null;
@@ -18014,7 +17986,6 @@ export type FormDefinitionJsonFieldsFragment = {
     pickListReference?: string | null;
     serviceDetailType?: ServiceDetailType | null;
     size?: InputSize | null;
-    direction?: Direction | null;
     assessmentDate?: boolean | null;
     prefill: boolean;
     dataCollectedAbout?: DataCollectedAbout | null;
@@ -18040,7 +18011,6 @@ export type FormDefinitionJsonFieldsFragment = {
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
-      direction?: Direction | null;
       assessmentDate?: boolean | null;
       prefill: boolean;
       dataCollectedAbout?: DataCollectedAbout | null;
@@ -18066,7 +18036,6 @@ export type FormDefinitionJsonFieldsFragment = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -18092,7 +18061,6 @@ export type FormDefinitionJsonFieldsFragment = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -18118,7 +18086,6 @@ export type FormDefinitionJsonFieldsFragment = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -18519,7 +18486,6 @@ export type FormDefinitionFieldsFragment = {
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
-      direction?: Direction | null;
       assessmentDate?: boolean | null;
       prefill: boolean;
       dataCollectedAbout?: DataCollectedAbout | null;
@@ -18545,7 +18511,6 @@ export type FormDefinitionFieldsFragment = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -18571,7 +18536,6 @@ export type FormDefinitionFieldsFragment = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -18597,7 +18561,6 @@ export type FormDefinitionFieldsFragment = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -18623,7 +18586,6 @@ export type FormDefinitionFieldsFragment = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -19017,7 +18979,6 @@ export type FormDefinitionFieldsForEditorFragment = {
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
-      direction?: Direction | null;
       assessmentDate?: boolean | null;
       prefill: boolean;
       dataCollectedAbout?: DataCollectedAbout | null;
@@ -19043,7 +19004,6 @@ export type FormDefinitionFieldsForEditorFragment = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -19069,7 +19029,6 @@ export type FormDefinitionFieldsForEditorFragment = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -19095,7 +19054,6 @@ export type FormDefinitionFieldsForEditorFragment = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -19121,7 +19079,6 @@ export type FormDefinitionFieldsForEditorFragment = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -19524,7 +19481,6 @@ export type UpdateFormDefinitionMutation = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -19550,7 +19506,6 @@ export type UpdateFormDefinitionMutation = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -19576,7 +19531,6 @@ export type UpdateFormDefinitionMutation = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -19602,7 +19556,6 @@ export type UpdateFormDefinitionMutation = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -19628,7 +19581,6 @@ export type UpdateFormDefinitionMutation = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
-                  direction?: Direction | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
                   dataCollectedAbout?: DataCollectedAbout | null;
@@ -20046,7 +19998,6 @@ export type CreateFormDefinitionMutation = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -20072,7 +20023,6 @@ export type CreateFormDefinitionMutation = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -20098,7 +20048,6 @@ export type CreateFormDefinitionMutation = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -20124,7 +20073,6 @@ export type CreateFormDefinitionMutation = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -20150,7 +20098,6 @@ export type CreateFormDefinitionMutation = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
-                  direction?: Direction | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
                   dataCollectedAbout?: DataCollectedAbout | null;
@@ -20568,7 +20515,6 @@ export type DeleteFormDefinitionMutation = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -20594,7 +20540,6 @@ export type DeleteFormDefinitionMutation = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -20620,7 +20565,6 @@ export type DeleteFormDefinitionMutation = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -20646,7 +20590,6 @@ export type DeleteFormDefinitionMutation = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -20672,7 +20615,6 @@ export type DeleteFormDefinitionMutation = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
-                  direction?: Direction | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
                   dataCollectedAbout?: DataCollectedAbout | null;
@@ -21111,7 +21053,6 @@ export type GetFormDefinitionQuery = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -21137,7 +21078,6 @@ export type GetFormDefinitionQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -21163,7 +21103,6 @@ export type GetFormDefinitionQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -21189,7 +21128,6 @@ export type GetFormDefinitionQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -21215,7 +21153,6 @@ export type GetFormDefinitionQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -21615,7 +21552,6 @@ export type GetStaticFormDefinitionQuery = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -21641,7 +21577,6 @@ export type GetStaticFormDefinitionQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -21667,7 +21602,6 @@ export type GetStaticFormDefinitionQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -21693,7 +21627,6 @@ export type GetStaticFormDefinitionQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -21719,7 +21652,6 @@ export type GetStaticFormDefinitionQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -22120,7 +22052,6 @@ export type GetServiceFormDefinitionQuery = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -22146,7 +22077,6 @@ export type GetServiceFormDefinitionQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -22172,7 +22102,6 @@ export type GetServiceFormDefinitionQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -22198,7 +22127,6 @@ export type GetServiceFormDefinitionQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -22224,7 +22152,6 @@ export type GetServiceFormDefinitionQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -22627,7 +22554,6 @@ export type GetAssessmentFormDefinitionQuery = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -22653,7 +22579,6 @@ export type GetAssessmentFormDefinitionQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -22679,7 +22604,6 @@ export type GetAssessmentFormDefinitionQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -22705,7 +22629,6 @@ export type GetAssessmentFormDefinitionQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -22731,7 +22654,6 @@ export type GetAssessmentFormDefinitionQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -23132,7 +23054,6 @@ export type GetFormDefinitionForEditorQuery = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -23158,7 +23079,6 @@ export type GetFormDefinitionForEditorQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -23184,7 +23104,6 @@ export type GetFormDefinitionForEditorQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -23210,7 +23129,6 @@ export type GetFormDefinitionForEditorQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -23236,7 +23154,6 @@ export type GetFormDefinitionForEditorQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -23657,7 +23574,6 @@ export type GetParsedFormDefinitionQuery = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -23683,7 +23599,6 @@ export type GetParsedFormDefinitionQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -23709,7 +23624,6 @@ export type GetParsedFormDefinitionQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -23735,7 +23649,6 @@ export type GetParsedFormDefinitionQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -23761,7 +23674,6 @@ export type GetParsedFormDefinitionQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -26171,7 +26083,6 @@ export type OccurrencePointFormFieldsFragment = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
-        direction?: Direction | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
         dataCollectedAbout?: DataCollectedAbout | null;
@@ -26197,7 +26108,6 @@ export type OccurrencePointFormFieldsFragment = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
-          direction?: Direction | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
           dataCollectedAbout?: DataCollectedAbout | null;
@@ -26223,7 +26133,6 @@ export type OccurrencePointFormFieldsFragment = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
-            direction?: Direction | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
             dataCollectedAbout?: DataCollectedAbout | null;
@@ -26249,7 +26158,6 @@ export type OccurrencePointFormFieldsFragment = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
-              direction?: Direction | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
               dataCollectedAbout?: DataCollectedAbout | null;
@@ -26275,7 +26183,6 @@ export type OccurrencePointFormFieldsFragment = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
-                direction?: Direction | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
                 dataCollectedAbout?: DataCollectedAbout | null;
@@ -31012,7 +30919,6 @@ export const ItemFieldsFragmentDoc = gql`
     pickListReference
     serviceDetailType
     size
-    direction
     assessmentDate
     prefill
     bounds {
