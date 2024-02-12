@@ -84,11 +84,12 @@ const UserAuditHistory = () => {
           fetchPolicy='cache-and-network'
           noData='No audit history'
           pagePath='user.auditHistory'
-          paginationItemName='user audit event'
+          paginationItemName='event'
           queryDocument={GetUserAuditEventsDocument}
           queryVariables={{ id: userId }}
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
+          recordType='ApplicationUserAuditEvent'
           filterInputType='UserAuditEventFilterOptions'
           showFilters
         />
