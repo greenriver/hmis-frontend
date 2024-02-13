@@ -290,6 +290,7 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
           ? 'Household Tasks'
           : `Household Tasks (${displayReminders.length})`
       }
+      headerVariant='border'
     >
       {loading && !data ? (
         <Loading />
