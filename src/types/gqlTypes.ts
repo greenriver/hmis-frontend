@@ -2556,13 +2556,13 @@ export type Event = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   event: EventType;
-  eventDate: Scalars['ISO8601DateTime']['output'];
+  eventDate: Scalars['ISO8601Date']['output'];
   id: Scalars['ID']['output'];
   locationCrisisOrPhHousing?: Maybe<Scalars['String']['output']>;
   probSolDivRrResult?: Maybe<NoYesMissing>;
   referralCaseManageAfter?: Maybe<NoYesMissing>;
   referralResult?: Maybe<ReferralResult>;
-  resultDate?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  resultDate?: Maybe<Scalars['ISO8601Date']['output']>;
   user?: Maybe<ApplicationUser>;
 };
 
