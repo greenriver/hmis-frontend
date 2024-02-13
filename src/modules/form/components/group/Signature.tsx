@@ -20,23 +20,27 @@ const Signature = ({ item, renderChildItem }: GroupItemComponentProps) => {
         },
       }}
     >
-      {item.text && (
-        <Typography
-          variant='h5'
-          color={theme.palette.primary.main}
-          sx={{ mb: 2 }}
-        >
-          {item.text}
+      <fieldset style={{ border: 'none', margin: 'none', padding: 'none' }}>
+        {item.text && (
+          <legend>
+            <Typography
+              variant='h5'
+              color={theme.palette.primary.main}
+              sx={{ mb: 2 }}
+            >
+              {item.text}
+            </Typography>
+          </legend>
+        )}
+        <Grid container direction='row' sx={{ mb: 2 }} columnGap={2}>
+          {renderChildItem &&
+            item.item?.map((childItem) => renderChildItem(childItem))}
+        </Grid>
+        <Typography variant='body1'>
+          By signing, I do hereby certify that the above information is true,
+          accurate and complete to the best of my knowledge
         </Typography>
-      )}
-      <Grid container direction='row' sx={{ mb: 2 }} columnGap={2}>
-        {renderChildItem &&
-          item.item?.map((childItem) => renderChildItem(childItem))}
-      </Grid>
-      <Typography variant='body1'>
-        By signing, I do hereby certify that the above information is true,
-        accurate and complete to the best of my knowledge
-      </Typography>
+      </fieldset>
     </Grid>
   );
 };
