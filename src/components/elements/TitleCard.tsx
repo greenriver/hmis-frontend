@@ -9,17 +9,17 @@ import {
 } from '@mui/material';
 import { ReactNode } from 'react';
 
-interface Props extends PaperProps {
+export interface TitleCardProps extends PaperProps {
   title: string;
   children: ReactNode;
   actions?: ReactNode;
   headerVariant?: 'border';
-  headerTypographyVariant?: TypographyVariant | 'cardTitle';
+  headerTypographyVariant?: TypographyVariant | 'cardTitle' | 'cardTitleBold';
   'data-testid'?: string;
   headerSx?: SxProps;
   padded?: boolean;
 }
-const TitleCard: React.FC<Props> = ({
+const TitleCard: React.FC<TitleCardProps> = ({
   title,
   children,
   actions,

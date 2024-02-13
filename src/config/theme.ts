@@ -30,12 +30,14 @@ declare module '@mui/material/styles' {
   interface TypographyVariants {
     body3: React.CSSProperties;
     cardTitle?: React.CSSProperties;
+    cardTitleBold?: React.CSSProperties;
   }
 
   // allow configuration using `createTheme`
   interface TypographyVariantsOptions {
     body3?: React.CSSProperties;
     cardTitle?: React.CSSProperties;
+    cardTitleBold?: React.CSSProperties;
   }
 
   interface AlertPriorityColorOptions {
@@ -73,6 +75,7 @@ declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     body3: true;
     cardTitle: true;
+    cardTitleBold: true;
   }
 }
 
@@ -180,6 +183,12 @@ const createThemeOptions = (theme: Theme) => ({
       fontFamily: '"Open Sans", sans-serif',
       fontSize: 18,
       fontWeight: 400,
+    },
+    cardTitleBold: {
+      // h5
+      fontFamily: '"Open Sans", sans-serif',
+      fontSize: 18,
+      fontWeight: 600,
     },
   },
 

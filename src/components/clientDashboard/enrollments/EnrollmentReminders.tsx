@@ -290,7 +290,9 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
           ? 'Household Tasks'
           : `Household Tasks (${displayReminders.length})`
       }
-      headerTypographyVariant='h5'
+      headerTypographyVariant={
+        displayReminders.length > 0 ? 'cardTitleBold' : 'cardTitle'
+      }
     >
       {loading && !data ? (
         <Loading />
