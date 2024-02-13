@@ -93,9 +93,9 @@ const FormCard: React.FC<Props> = ({
     sx: { height: 'fit-content' },
   };
 
-  const variantStyles: FormVariantStylesProps = item.variant
-    ? getFormGroupVariantStyles(item.variant)
-    : {};
+  const variantStyles: FormVariantStylesProps = getFormGroupVariantStyles(
+    item.variant
+  );
 
   return (
     <Grid id={anchor} item>

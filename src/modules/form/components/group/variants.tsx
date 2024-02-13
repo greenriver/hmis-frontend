@@ -12,7 +12,7 @@ export interface FormVariantStylesProps {
   highlightProps?: SxProps;
 }
 export const getFormGroupVariantStyles = (
-  variant: Variant
+  variant?: Variant | null
 ): FormVariantStylesProps => {
   switch (variant) {
     case Variant.Signature:

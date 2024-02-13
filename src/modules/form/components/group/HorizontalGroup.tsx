@@ -10,9 +10,9 @@ const HorizontalGroup = ({
   item,
   renderChildItem,
 }: GroupItemComponentProps & { horizontal?: boolean }) => {
-  const variantStyles: FormVariantStylesProps = item.variant
-    ? getFormGroupVariantStyles(item.variant)
-    : {};
+  const variantStyles: FormVariantStylesProps = getFormGroupVariantStyles(
+    item.variant
+  );
   const manyChildren = (item.item || []).length > 2;
   const columnGap = manyChildren ? 2 : 4;
   const rowGap = manyChildren ? 1 : 2;
