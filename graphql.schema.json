@@ -8159,6 +8159,18 @@
             "deprecationReason": null
           },
           {
+            "name": "SIGNATURE",
+            "description": "Signature input component",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SIGNATURE_GROUP",
+            "description": "Signature input component",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SSN",
             "description": "SSN input component",
             "isDeprecated": false,
@@ -20565,18 +20577,6 @@
                 "name": "ItemType",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "variant",
-            "description": "Component variant to use for display",
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "Variant",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -44411,29 +44411,6 @@
           {
             "name": "NUM_757_COLUMBUS_OH",
             "description": "(757) (757) Columbus, OH",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "Variant",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "HIGHLIGHT",
-            "description": "Render form group with a highlighted bar",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SIGNATURE",
-            "description": "Render a signature envelope",
             "isDeprecated": false,
             "deprecationReason": null
           }

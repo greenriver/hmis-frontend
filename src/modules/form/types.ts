@@ -10,7 +10,6 @@ import {
   PickListOption,
   SubmitFormMutation,
   ValidationError,
-  Variant,
 } from '@/types/gqlTypes';
 // BACKEND FORM PROCESSOR EXPECTS THE '_HIDDEN' STRING VALUE, DO NOT CHANGE
 export const HIDDEN_VALUE = '_HIDDEN';
@@ -83,7 +82,6 @@ export interface DynamicInputCommonProps {
   placeholder?: string;
   breakpoints?: BreakpointOverrides;
   ariaLabelledBy?: string;
-  componentVariant?: Variant;
 }
 
 export interface DynamicViewItemCommonProps {

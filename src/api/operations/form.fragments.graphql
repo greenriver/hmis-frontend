@@ -39,7 +39,6 @@ fragment ItemFields on FormItem {
   linkId
   type
   component
-  variant
   prefix
   text
   briefText

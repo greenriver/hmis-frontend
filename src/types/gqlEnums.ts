@@ -173,6 +173,8 @@ export const HmisEnums = {
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
+    SIGNATURE: 'Signature input component',
+    SIGNATURE_GROUP: 'Signature input component',
     SSN: 'SSN input component',
   },
   CounselingMethod: {
@@ -1996,10 +1998,6 @@ export const HmisEnums = {
     NUM_756_EL_PASO_TX: '(756) El Paso, TX',
     NUM_757_COLUMBUS_OH: '(757) Columbus, OH',
     DATA_NOT_COLLECTED: 'Data not collected',
-  },
-  Variant: {
-    HIGHLIGHT: 'Render form group with a highlighted bar',
-    SIGNATURE: 'Render a signature envelope',
   },
   ViralLoadAvailable: {
     INVALID: 'Invalid Value',

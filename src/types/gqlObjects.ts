@@ -3367,10 +3367,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'variant',
-        type: { kind: 'ENUM', name: 'Variant', ofType: null },
-      },
-      {
         name: 'warnIfEmpty',
         type: {
           kind: 'NON_NULL',

@@ -1,3 +1,4 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import {
   Button,
   ButtonProps,
@@ -5,6 +6,7 @@ import {
   Paper,
   Stack,
   Typography,
+  TypographyProps,
 } from '@mui/material';
 import { includes, isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
@@ -23,16 +25,15 @@ import {
 import RecordPickerDialog from '../RecordPickerDialog';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
-import {
-  FormVariantStylesProps,
-  getFormGroupVariantStyles,
-} from '@/modules/form/components/group/variants';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
 interface Props extends GroupItemComponentProps {
   anchor?: string;
   clientId?: string;
   debug?: (ids?: string[]) => void;
+  TitleIcon?: SvgIconComponent;
+  titleProps?: TypographyProps;
+  helperTextProps?: TypographyProps;
 }
 
 const FormCard: React.FC<Props> = ({
@@ -44,6 +45,9 @@ const FormCard: React.FC<Props> = ({
   values,
   locked,
   debug,
+  TitleIcon,
+  helperTextProps,
+  titleProps,
 }) => {
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
@@ -93,10 +97,6 @@ const FormCard: React.FC<Props> = ({
     sx: { height: 'fit-content' },
   };
 
-  const variantStyles: FormVariantStylesProps = getFormGroupVariantStyles(
-    item.variant
-  );
-
   return (
     <Grid id={anchor} item>
       <Paper
@@ -110,12 +110,8 @@ const FormCard: React.FC<Props> = ({
         {/* Card title */}
         {item.text && (
           <Stack justifyContent='space-between' direction='row'>
-            <Typography
-              variant='cardTitle'
-              sx={{ mb: 2 }}
-              {...variantStyles.titleProps}
-            >
-              {variantStyles.icon && <variantStyles.icon sx={{ mr: 1 }} />}
+            <Typography variant='cardTitle' sx={{ mb: 2 }} {...titleProps}>
+              {TitleIcon && <TitleIcon sx={{ mr: 1 }} />}
               {item.text}
             </Typography>
 
@@ -155,7 +151,7 @@ const FormCard: React.FC<Props> = ({
         )}
 
         {item.helperText && (
-          <Typography sx={{ mb: 2 }} {...variantStyles.helperTextProps}>
+          <Typography sx={{ mb: 2 }} {...helperTextProps}>
             {item.helperText}
           </Typography>
         )}
