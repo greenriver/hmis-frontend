@@ -98,11 +98,7 @@ interface Props {
 
 const ClientEnrollmentCard: React.FC<Props> = ({ client }) => {
   return (
-    <TitleCard
-      title='Recent Enrollments'
-      headerVariant='border'
-      headerTypographyVariant='body1'
-    >
+    <TitleCard title='Recent Enrollments' headerVariant='border'>
       <RecentEnrollments clientId={client.id} />
     </TitleCard>
   );

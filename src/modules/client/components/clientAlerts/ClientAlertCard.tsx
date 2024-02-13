@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
+import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import { ClientAlertType } from '@/modules/client/components/clientAlerts/ClientAlert';
 import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
@@ -13,22 +14,25 @@ interface ClientAlertCardProps {
   alertContext: AlertContext;
   clientAlerts: ClientAlertType[];
   children?: ReactNode;
+  loading?: boolean;
 }
 const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
   alertContext = AlertContext.Client,
   clientAlerts,
   children,
+  loading = false,
 }) => {
-  const title = `${alertContext} Alerts (${clientAlerts.length})`;
+  const title = useMemo(() => {
+    const cardTitle = `${alertContext} Alerts`;
+    if (loading) return cardTitle;
+    return `${cardTitle} (${clientAlerts.length})`;
+  }, [alertContext, clientAlerts.length, loading]);
 
   return (
-    <TitleCard
-      title={title}
-      headerVariant='border'
-      headerTypographyVariant='body1'
-    >
+    <TitleCard title={title} headerVariant='border'>
       <Box sx={{ m: 2 }}>
-        {clientAlerts.length === 0 && (
+        {loading && <Loading />}
+        {!loading && clientAlerts.length === 0 && (
           <Stack
             direction='row'
             justifyContent='space-between'
@@ -40,7 +44,7 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
               borderRadius: 1,
             }}
           >
-            <Typography variant={'body2'}>
+            <Typography variant='body2'>
               {alertContext} has no alerts at this time
             </Typography>
             {children}
