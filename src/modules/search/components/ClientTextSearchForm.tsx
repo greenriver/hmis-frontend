@@ -7,6 +7,7 @@ import ClearSearchButton from './ClearSearchButton';
 import ClientTextSearchInput, {
   ClientTextSearchInputProps,
 } from './ClientTextSearchInput';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
   initialValue?: string;
@@ -29,6 +30,7 @@ const ClientTextSearchForm: React.FC<Props> = ({
   const { t } = useTranslation();
   const [value, setValue] = useState<string>(initialValue || '');
   const [tooShort, setTooShort] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (initialValue) setValue(initialValue);
@@ -64,6 +66,7 @@ const ClientTextSearchForm: React.FC<Props> = ({
           tooShort ? t<string>('clientSearch.inputTooShort') : undefined
         }
         onClearSearch={onClearSearch}
+        showHelperText={!isMobile}
         {...props}
       />
 

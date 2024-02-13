@@ -1,15 +1,15 @@
-import { Box, Button, Divider, Paper, Stack, Typography } from '@mui/material';
+import { Box, Divider, Paper, Stack, Typography } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import DeleteAssessmentButton from './DeleteAssessmentButton';
 
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
 import PrintViewButton from '@/components/layout/PrintViewButton';
+import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import FormStepper from '@/modules/form/components/FormStepper';
 
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -82,16 +82,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
       <Divider sx={{ my: 2, mx: -2 }} />
       <Stack gap={2} sx={{ mt: 2 }}>
         {!assessment && canEdit && (
-          <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
-            <Button
-              variant='outlined'
-              onClick={onAutofill}
-              sx={{ height: 'fit-content' }}
-              fullWidth
-            >
-              Autofill Assessment
-            </Button>
-          </ButtonTooltipContainer>
+          <AssessmentAutofillButton onClick={onAutofill} />
         )}
         {!isPrintView && locked && assessment && (
           <PrintViewButton

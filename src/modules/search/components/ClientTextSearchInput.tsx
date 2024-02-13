@@ -9,6 +9,7 @@ import CommonSearchInput, {
 
 export interface ClientTextSearchInputProps extends CommonSearchInputProps {
   showSearchTips?: boolean;
+  showHelperText?: boolean;
   errorMessage?: string;
   label?: string | null;
 }
@@ -45,6 +46,7 @@ const getDefaultPlaceholderAndHelper = (mciEnabled: boolean) => {
 
 const ClientTextSearchInput: React.FC<ClientTextSearchInputProps> = ({
   showSearchTips = false,
+  showHelperText = true,
   errorMessage,
   helperText: helperTextProp,
   label = 'Search Clients',
@@ -71,14 +73,15 @@ const ClientTextSearchInput: React.FC<ClientTextSearchInputProps> = ({
           {errorMessage && <b>{errorMessage}</b>}
           <span>
             <b>To add a client,</b> search first. <b>Search Tips:</b>{' '}
-            {helperTextElement} <span>{defaultSearchTips}</span>
+            {showHelperText && helperTextElement}{' '}
+            <span>{defaultSearchTips}</span>
           </span>
         </Stack>
       </>
     ) : (
       <Stack gap={0.5} component='span'>
         {errorMessage && <span>{errorMessage}</span>}
-        <span>{helperTextElement}</span>
+        {showHelperText && <span>{helperTextElement}</span>}
       </Stack>
     );
 

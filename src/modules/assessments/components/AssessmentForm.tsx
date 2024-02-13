@@ -17,9 +17,11 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
 import { ErrorState, hasAnyValue } from '@/modules/errors/util';
@@ -124,6 +126,7 @@ const AssessmentForm: React.FC<Props> = ({
   );
 
   const isPrintView = useIsPrintView();
+  const isMobile = useIsMobile();
 
   const handleDirty = useCallback(
     (dirty: boolean) => {
@@ -285,7 +288,7 @@ const AssessmentForm: React.FC<Props> = ({
     </Grid>
   );
 
-  const showNavigation = !isPrintView;
+  const showNavigation = !isPrintView && !isMobile;
 
   return (
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
@@ -298,6 +301,12 @@ const AssessmentForm: React.FC<Props> = ({
             locked={locked}
             allowUnlock={canEdit && !embeddedInWorkflow}
             onUnlock={handleUnlock}
+          />
+        )}
+        {isMobile && !assessment && canEdit && (
+          <AssessmentAutofillButton
+            sx={{ mb: 2 }}
+            onClick={() => setDialogOpen(true)}
           />
         )}
         {locked && assessment ? (
