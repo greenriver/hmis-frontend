@@ -20548,18 +20548,6 @@
             "deprecationReason": null
           },
           {
-            "name": "subtitle",
-            "description": "Secondary text for the item",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "text",
             "description": "Primary text for the item",
             "args": [],
@@ -44443,6 +44431,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "HIGHLIGHT",
+            "description": "Render form group with a highlighted bar",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "SIGNATURE",
             "description": "Render a signature envelope",

@@ -1998,7 +1998,10 @@ export const HmisEnums = {
     NUM_757_COLUMBUS_OH: '(757) Columbus, OH',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  Variant: { SIGNATURE: 'Render a signature envelope' },
+  Variant: {
+    HIGHLIGHT: 'Render form group with a highlighted bar',
+    SIGNATURE: 'Render a signature envelope',
+  },
   ViralLoadAvailable: {
     INVALID: 'Invalid Value',
     NOT_AVAILABLE: 'Not available',

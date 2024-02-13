@@ -2895,8 +2895,6 @@ export type FormItem = {
   serviceDetailType?: Maybe<ServiceDetailType>;
   /** Size of the input element */
   size?: Maybe<InputSize>;
-  /** Secondary text for the item */
-  subtitle?: Maybe<Scalars['String']['output']>;
   /** Primary text for the item */
   text?: Maybe<Scalars['String']['output']>;
   type: ItemType;
@@ -7321,6 +7319,8 @@ export enum VamcStationNumber {
 }
 
 export enum Variant {
+  /** Render form group with a highlighted bar */
+  Highlight = 'HIGHLIGHT',
   /** Render a signature envelope */
   Signature = 'SIGNATURE',
 }
@@ -8826,7 +8826,6 @@ export type GetAssessmentQuery = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -8851,7 +8850,6 @@ export type GetAssessmentQuery = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -8876,7 +8874,6 @@ export type GetAssessmentQuery = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -8901,7 +8898,6 @@ export type GetAssessmentQuery = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -8926,7 +8922,6 @@ export type GetAssessmentQuery = {
                   variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
-                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -13867,7 +13862,6 @@ export type ClientDetailFormsQuery = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -13892,7 +13886,6 @@ export type ClientDetailFormsQuery = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -13917,7 +13910,6 @@ export type ClientDetailFormsQuery = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -13942,7 +13934,6 @@ export type ClientDetailFormsQuery = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -13967,7 +13958,6 @@ export type ClientDetailFormsQuery = {
                   variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
-                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -15771,7 +15761,6 @@ export type AllEnrollmentDetailsFragment = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -15796,7 +15785,6 @@ export type AllEnrollmentDetailsFragment = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -15821,7 +15809,6 @@ export type AllEnrollmentDetailsFragment = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -15846,7 +15833,6 @@ export type AllEnrollmentDetailsFragment = {
                   variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
-                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -15871,7 +15857,6 @@ export type AllEnrollmentDetailsFragment = {
                     variant?: Variant | null;
                     prefix?: string | null;
                     text?: string | null;
-                    subtitle?: string | null;
                     briefText?: string | null;
                     readonlyText?: string | null;
                     helperText?: string | null;
@@ -16852,7 +16837,6 @@ export type GetEnrollmentDetailsQuery = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -16877,7 +16861,6 @@ export type GetEnrollmentDetailsQuery = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -16902,7 +16885,6 @@ export type GetEnrollmentDetailsQuery = {
                   variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
-                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -16927,7 +16909,6 @@ export type GetEnrollmentDetailsQuery = {
                     variant?: Variant | null;
                     prefix?: string | null;
                     text?: string | null;
-                    subtitle?: string | null;
                     briefText?: string | null;
                     readonlyText?: string | null;
                     helperText?: string | null;
@@ -16952,7 +16933,6 @@ export type GetEnrollmentDetailsQuery = {
                       variant?: Variant | null;
                       prefix?: string | null;
                       text?: string | null;
-                      subtitle?: string | null;
                       briefText?: string | null;
                       readonlyText?: string | null;
                       helperText?: string | null;
@@ -17875,7 +17855,6 @@ export type ItemFieldsFragment = {
   variant?: Variant | null;
   prefix?: string | null;
   text?: string | null;
-  subtitle?: string | null;
   briefText?: string | null;
   readonlyText?: string | null;
   helperText?: string | null;
@@ -17974,7 +17953,6 @@ export type FormDefinitionJsonFieldsFragment = {
     variant?: Variant | null;
     prefix?: string | null;
     text?: string | null;
-    subtitle?: string | null;
     briefText?: string | null;
     readonlyText?: string | null;
     helperText?: string | null;
@@ -17999,7 +17977,6 @@ export type FormDefinitionJsonFieldsFragment = {
       variant?: Variant | null;
       prefix?: string | null;
       text?: string | null;
-      subtitle?: string | null;
       briefText?: string | null;
       readonlyText?: string | null;
       helperText?: string | null;
@@ -18024,7 +18001,6 @@ export type FormDefinitionJsonFieldsFragment = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -18049,7 +18025,6 @@ export type FormDefinitionJsonFieldsFragment = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -18074,7 +18049,6 @@ export type FormDefinitionJsonFieldsFragment = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -18474,7 +18448,6 @@ export type FormDefinitionFieldsFragment = {
       variant?: Variant | null;
       prefix?: string | null;
       text?: string | null;
-      subtitle?: string | null;
       briefText?: string | null;
       readonlyText?: string | null;
       helperText?: string | null;
@@ -18499,7 +18472,6 @@ export type FormDefinitionFieldsFragment = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -18524,7 +18496,6 @@ export type FormDefinitionFieldsFragment = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -18549,7 +18520,6 @@ export type FormDefinitionFieldsFragment = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -18574,7 +18544,6 @@ export type FormDefinitionFieldsFragment = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -18967,7 +18936,6 @@ export type FormDefinitionFieldsForEditorFragment = {
       variant?: Variant | null;
       prefix?: string | null;
       text?: string | null;
-      subtitle?: string | null;
       briefText?: string | null;
       readonlyText?: string | null;
       helperText?: string | null;
@@ -18992,7 +18960,6 @@ export type FormDefinitionFieldsForEditorFragment = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -19017,7 +18984,6 @@ export type FormDefinitionFieldsForEditorFragment = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -19042,7 +19008,6 @@ export type FormDefinitionFieldsForEditorFragment = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -19067,7 +19032,6 @@ export type FormDefinitionFieldsForEditorFragment = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -19469,7 +19433,6 @@ export type UpdateFormDefinitionMutation = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -19494,7 +19457,6 @@ export type UpdateFormDefinitionMutation = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -19519,7 +19481,6 @@ export type UpdateFormDefinitionMutation = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -19544,7 +19505,6 @@ export type UpdateFormDefinitionMutation = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -19569,7 +19529,6 @@ export type UpdateFormDefinitionMutation = {
                   variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
-                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -19986,7 +19945,6 @@ export type CreateFormDefinitionMutation = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -20011,7 +19969,6 @@ export type CreateFormDefinitionMutation = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -20036,7 +19993,6 @@ export type CreateFormDefinitionMutation = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -20061,7 +20017,6 @@ export type CreateFormDefinitionMutation = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -20086,7 +20041,6 @@ export type CreateFormDefinitionMutation = {
                   variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
-                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -20503,7 +20457,6 @@ export type DeleteFormDefinitionMutation = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -20528,7 +20481,6 @@ export type DeleteFormDefinitionMutation = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -20553,7 +20505,6 @@ export type DeleteFormDefinitionMutation = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -20578,7 +20529,6 @@ export type DeleteFormDefinitionMutation = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -20603,7 +20553,6 @@ export type DeleteFormDefinitionMutation = {
                   variant?: Variant | null;
                   prefix?: string | null;
                   text?: string | null;
-                  subtitle?: string | null;
                   briefText?: string | null;
                   readonlyText?: string | null;
                   helperText?: string | null;
@@ -21041,7 +20990,6 @@ export type GetFormDefinitionQuery = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -21066,7 +21014,6 @@ export type GetFormDefinitionQuery = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -21091,7 +21038,6 @@ export type GetFormDefinitionQuery = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -21116,7 +21062,6 @@ export type GetFormDefinitionQuery = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -21141,7 +21086,6 @@ export type GetFormDefinitionQuery = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -21540,7 +21484,6 @@ export type GetStaticFormDefinitionQuery = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -21565,7 +21508,6 @@ export type GetStaticFormDefinitionQuery = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -21590,7 +21532,6 @@ export type GetStaticFormDefinitionQuery = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -21615,7 +21556,6 @@ export type GetStaticFormDefinitionQuery = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -21640,7 +21580,6 @@ export type GetStaticFormDefinitionQuery = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -22040,7 +21979,6 @@ export type GetServiceFormDefinitionQuery = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -22065,7 +22003,6 @@ export type GetServiceFormDefinitionQuery = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -22090,7 +22027,6 @@ export type GetServiceFormDefinitionQuery = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -22115,7 +22051,6 @@ export type GetServiceFormDefinitionQuery = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -22140,7 +22075,6 @@ export type GetServiceFormDefinitionQuery = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -22542,7 +22476,6 @@ export type GetAssessmentFormDefinitionQuery = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -22567,7 +22500,6 @@ export type GetAssessmentFormDefinitionQuery = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -22592,7 +22524,6 @@ export type GetAssessmentFormDefinitionQuery = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -22617,7 +22548,6 @@ export type GetAssessmentFormDefinitionQuery = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -22642,7 +22572,6 @@ export type GetAssessmentFormDefinitionQuery = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -23042,7 +22971,6 @@ export type GetFormDefinitionForEditorQuery = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -23067,7 +22995,6 @@ export type GetFormDefinitionForEditorQuery = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -23092,7 +23019,6 @@ export type GetFormDefinitionForEditorQuery = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -23117,7 +23043,6 @@ export type GetFormDefinitionForEditorQuery = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -23142,7 +23067,6 @@ export type GetFormDefinitionForEditorQuery = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -23562,7 +23486,6 @@ export type GetParsedFormDefinitionQuery = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -23587,7 +23510,6 @@ export type GetParsedFormDefinitionQuery = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -23612,7 +23534,6 @@ export type GetParsedFormDefinitionQuery = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -23637,7 +23558,6 @@ export type GetParsedFormDefinitionQuery = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -23662,7 +23582,6 @@ export type GetParsedFormDefinitionQuery = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -26071,7 +25990,6 @@ export type OccurrencePointFormFieldsFragment = {
         variant?: Variant | null;
         prefix?: string | null;
         text?: string | null;
-        subtitle?: string | null;
         briefText?: string | null;
         readonlyText?: string | null;
         helperText?: string | null;
@@ -26096,7 +26014,6 @@ export type OccurrencePointFormFieldsFragment = {
           variant?: Variant | null;
           prefix?: string | null;
           text?: string | null;
-          subtitle?: string | null;
           briefText?: string | null;
           readonlyText?: string | null;
           helperText?: string | null;
@@ -26121,7 +26038,6 @@ export type OccurrencePointFormFieldsFragment = {
             variant?: Variant | null;
             prefix?: string | null;
             text?: string | null;
-            subtitle?: string | null;
             briefText?: string | null;
             readonlyText?: string | null;
             helperText?: string | null;
@@ -26146,7 +26062,6 @@ export type OccurrencePointFormFieldsFragment = {
               variant?: Variant | null;
               prefix?: string | null;
               text?: string | null;
-              subtitle?: string | null;
               briefText?: string | null;
               readonlyText?: string | null;
               helperText?: string | null;
@@ -26171,7 +26086,6 @@ export type OccurrencePointFormFieldsFragment = {
                 variant?: Variant | null;
                 prefix?: string | null;
                 text?: string | null;
-                subtitle?: string | null;
                 briefText?: string | null;
                 readonlyText?: string | null;
                 helperText?: string | null;
@@ -30902,7 +30816,6 @@ export const ItemFieldsFragmentDoc = gql`
     variant
     prefix
     text
-    subtitle
     briefText
     readonlyText
     helperText

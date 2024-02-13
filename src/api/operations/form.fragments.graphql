@@ -42,7 +42,6 @@ fragment ItemFields on FormItem {
   variant
   prefix
   text
-  subtitle
   briefText
   readonlyText
   helperText

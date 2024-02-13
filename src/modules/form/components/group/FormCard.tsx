@@ -6,7 +6,6 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { Box } from '@mui/system';
 import { includes, isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -94,9 +93,9 @@ const FormCard: React.FC<Props> = ({
     sx: { height: 'fit-content' },
   };
 
-  // todo @martha this is a bit messy
-  let variantStyles: FormVariantStylesProps = {};
-  if (item.variant) variantStyles = getFormGroupVariantStyles(item.variant);
+  const variantStyles: FormVariantStylesProps = item.variant
+    ? getFormGroupVariantStyles(item.variant)
+    : {};
 
   return (
     <Grid id={anchor} item>
@@ -155,9 +154,9 @@ const FormCard: React.FC<Props> = ({
           </Stack>
         )}
 
-        {item.subtitle && (
-          <Typography sx={{ mb: 2 }} {...variantStyles.subtitleProps}>
-            {item.subtitle}
+        {item.helperText && (
+          <Typography sx={{ mb: 2 }} {...variantStyles.helperTextProps}>
+            {item.helperText}
           </Typography>
         )}
 
@@ -183,28 +182,7 @@ const FormCard: React.FC<Props> = ({
           }}
         >
           {renderChildItem &&
-            (variantStyles.themeColorFn
-              ? item.item?.map((childItem, index) => {
-                  const color = variantStyles.themeColorFn
-                    ? variantStyles.themeColorFn(index)
-                    : '';
-                  return (
-                    <Box
-                      sx={{
-                        px: 3,
-                        py: 2,
-                        borderWidth: '6px',
-                        borderStyle: 'none none none solid',
-                        borderColor: color,
-                      }}
-                    >
-                      {renderChildItem(childItem, {
-                        groupHeaderProps: { color: color, variant: 'h5' },
-                      })}
-                    </Box>
-                  );
-                })
-              : item.item?.map((childItem) => renderChildItem(childItem)))}
+            item.item?.map((childItem) => renderChildItem(childItem))}
         </Grid>
 
         {/* Dialog for selecting autofill record */}

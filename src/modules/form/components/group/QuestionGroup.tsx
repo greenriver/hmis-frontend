@@ -9,7 +9,6 @@ const QuestionGroup = ({
   nestingLevel,
   renderChildItem,
   viewOnly = false,
-  groupHeaderProps,
 }: GroupItemComponentProps) => {
   const wrappedChildren = (
     <Grid container direction='column' sx={{ mt: 0 }} gap={3}>
@@ -45,11 +44,7 @@ const QuestionGroup = ({
               : undefined
           }
         >
-          {label && (
-            <Typography sx={{ mb: 2 }} {...groupHeaderProps}>
-              {label}
-            </Typography>
-          )}
+          {label && <Typography sx={{ mb: 2 }}>{label}</Typography>}
           {wrappedChildren}
         </Box>
       </Grid>
@@ -58,11 +53,7 @@ const QuestionGroup = ({
 
   return (
     <Grid item xs>
-      {label && (
-        <Typography sx={{ mb: 2 }} {...groupHeaderProps}>
-          {label}
-        </Typography>
-      )}
+      {label && <Typography sx={{ mb: 2 }}>{label}</Typography>}
       {wrappedChildren}
     </Grid>
   );
