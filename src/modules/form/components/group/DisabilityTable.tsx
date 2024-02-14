@@ -192,8 +192,6 @@ const DisabilityTable = ({
                   <TableCell
                     key={cellItem.linkId}
                     sx={{
-                      minWidth: '220px',
-                      maxWidth: '250px',
                       pr: 2,
                     }}
                   >
