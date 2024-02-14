@@ -32,6 +32,7 @@ interface Props {
   locked: boolean;
   canEdit: boolean;
   top?: number;
+  showAutofill?: boolean;
 }
 
 const AssessmentFormSideBar: React.FC<Props> = ({
@@ -45,6 +46,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
   locked,
   canEdit,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
+  showAutofill = true,
 }) => {
   const navigate = useNavigate();
   const navigateToEnrollment = useMemo(
@@ -81,7 +83,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
       />
       <Divider sx={{ my: 2, mx: -2 }} />
       <Stack gap={2} sx={{ mt: 2 }}>
-        {!assessment && canEdit && (
+        {showAutofill && !assessment && canEdit && (
           <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
             <Button
               variant='outlined'
