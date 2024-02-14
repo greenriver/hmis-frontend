@@ -757,6 +757,7 @@ export const HmisEnums = {
     OPEN_CHOICE: 'OPEN_CHOICE',
     STRING: 'STRING',
     TEXT: 'TEXT',
+    TIME_OF_DAY: 'TIME_OF_DAY',
   },
   LastGradeCompleted: {
     INVALID: 'Invalid Value',

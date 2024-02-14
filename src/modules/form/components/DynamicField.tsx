@@ -304,6 +304,25 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           />
         </InputContainer>
       );
+    case ItemType.TimeOfDay:
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <DatePicker
+            value={
+              (value && typeof value === 'string'
+                ? parseHmisDateString(value)
+                : value) || null
+            }
+            onChange={onChangeValue}
+            textInputProps={{
+              id: linkId,
+              horizontal,
+              sx: { width },
+            }}
+            {...commonInputProps}
+          />
+        </InputContainer>
+      );
     case ItemType.OpenChoice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedChoiceVal = value ? value : item.repeats ? [] : null;
