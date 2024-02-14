@@ -79,7 +79,7 @@ export default function useClientAlerts(params: ClientAlertParams) {
 
   return {
     clientAlerts,
-    loading,
+    loading: loading && !household,
     showClientAlertCard: canViewAlertsForAnyHouseholdMembers,
   };
 }
