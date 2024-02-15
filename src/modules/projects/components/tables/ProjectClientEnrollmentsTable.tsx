@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
+import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import EnrollmentClientNameWithAge from '@/modules/hmis/components/EnrollmentClientNameWithAge';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
@@ -16,6 +17,7 @@ import {
   formatDateForGql,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
@@ -179,52 +181,54 @@ const ProjectClientEnrollmentsTable = ({
   const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
     useMemo(() => {
       return [
-        ENROLLMENT_COLUMNS.clientNameLinkedToEnrollmentWithAge,
+        ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
+        CLIENT_COLUMNS.dobAge,
         ENROLLMENT_COLUMNS.enrollmentStatus,
         ENROLLMENT_COLUMNS.enrollmentPeriod,
-        ENROLLMENT_COLUMNS.householdId,
         ENROLLMENT_COLUMNS.lastClsDate,
       ];
     }, []);
 
   return (
-    <GenericTableWithData<
-      GetProjectEnrollmentsQuery,
-      GetProjectEnrollmentsQueryVariables,
-      EnrollmentFields,
-      EnrollmentsForProjectFilterOptions
-    >
-      queryVariables={{
-        id: projectId,
-        filters: {
-          searchTerm,
-          openOnDate: openOnDateString,
-        },
-      }}
-      queryDocument={GetProjectEnrollmentsDocument}
-      columns={columns || defaultColumns}
-      rowLinkTo={linkRowToEnrollment ? rowLinkTo : undefined}
-      noData={
-        openOnDate
-          ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
-          : 'No enrollments'
-      }
-      pagePath='project.enrollments'
-      recordType='Enrollment'
-      showFilters
-      filters={(f) => omit(f, 'searchTerm', 'bedNightOnDate')}
-      filterInputType='EnrollmentsForProjectFilterOptions'
-      defaultSortOption={EnrollmentSortOption.MostRecent}
-      showOptionalColumns
-      applyOptionalColumns={(cols) => {
-        const result: Partial<GetProjectEnrollmentsQueryVariables> = {};
+    <SsnDobShowContextProvider>
+      <GenericTableWithData<
+        GetProjectEnrollmentsQuery,
+        GetProjectEnrollmentsQueryVariables,
+        EnrollmentFields,
+        EnrollmentsForProjectFilterOptions
+      >
+        queryVariables={{
+          id: projectId,
+          filters: {
+            searchTerm,
+            openOnDate: openOnDateString,
+          },
+        }}
+        queryDocument={GetProjectEnrollmentsDocument}
+        columns={columns || defaultColumns}
+        rowLinkTo={linkRowToEnrollment ? rowLinkTo : undefined}
+        noData={
+          openOnDate
+            ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
+            : 'No enrollments'
+        }
+        pagePath='project.enrollments'
+        recordType='Enrollment'
+        showFilters
+        filters={(f) => omit(f, 'searchTerm', 'bedNightOnDate')}
+        filterInputType='EnrollmentsForProjectFilterOptions'
+        defaultSortOption={EnrollmentSortOption.MostRecent}
+        showOptionalColumns
+        applyOptionalColumns={(cols) => {
+          const result: Partial<GetProjectEnrollmentsQueryVariables> = {};
 
-        if (cols.includes(ENROLLMENT_COLUMNS.lastClsDate.key || ''))
-          result.includeCls = true;
+          if (cols.includes(ENROLLMENT_COLUMNS.lastClsDate.key || ''))
+            result.includeCls = true;
 
-        return result;
-      }}
-    />
+          return result;
+        }}
+      />
+    </SsnDobShowContextProvider>
   );
 };
 export default ProjectClientEnrollmentsTable;
