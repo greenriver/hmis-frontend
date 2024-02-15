@@ -48,8 +48,9 @@ const TextInput = ({
   const generatedId = useId();
   const htmlId = id || generatedId;
 
+  // FIXME: seems hacky. Probably want a dedicated numeric component
   let width = inputWidth;
-  if (!width && inputProps.inputMode === 'numeric') {
+  if (!width && inputProps.inputMode === 'numeric' && !sx) {
     width = '120px';
   }
 
