@@ -75,12 +75,7 @@ const ClientName = forwardRef<Props, any>(
     return (
       <Stack direction='row' gap={1} data-testid='clientName' {...stackProps}>
         {linkTo ? (
-          <RouterLink
-            {...routerLinkProps}
-            to={linkTo}
-            ref={ref}
-            openInNew={true}
-          >
+          <RouterLink {...routerLinkProps} to={linkTo} ref={ref}>
             {primaryNameText}
           </RouterLink>
         ) : (
