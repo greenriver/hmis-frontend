@@ -24,9 +24,7 @@ interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
 export type TextInputProps = Props & DynamicInputCommonProps;
 
 export const horizontalInputSx: SxProps<Theme> = {
-  flexDirection: 'row',
   justifyContent: 'space-between',
-  alignItems: 'center',
 };
 
 const TextInput = ({
@@ -121,6 +119,7 @@ const TextInput = ({
           '.MuiFormHelperText-root':
             inputProps.inputMode === 'numeric' ? { width, mr: 0 } : {},
         }}
+        direction={{ xs: 'column', sm: 'row' }}
         justifyContent='space-between'
       >
         <Box sx={{ flexBasis: '80%' }}>
@@ -128,6 +127,7 @@ const TextInput = ({
             sx={(theme) => ({
               color: theme.palette.text.primary,
               fontSize: theme.typography.body2,
+              whiteSpace: 'unset', // unset the default value of 'nowrap'
             })}
             htmlFor={htmlId}
           >

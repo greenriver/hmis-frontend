@@ -89,7 +89,7 @@ const FormCard: React.FC<Props> = ({
     sx: { height: 'fit-content' },
   };
   return (
-    <Grid id={anchor} item>
+    <Grid id={anchor} item sx={{ width: '100%' }}>
       <Paper
         sx={{
           py: 3,
@@ -100,7 +100,11 @@ const FormCard: React.FC<Props> = ({
       >
         {/* Card title */}
         {item.text && (
-          <Stack justifyContent='space-between' direction='row'>
+          <Stack
+            justifyContent='space-between'
+            direction={{ xs: 'column', sm: 'row' }}
+            sx={{ mb: 2 }}
+          >
             <Typography variant='cardTitle' sx={{ mb: 2 }}>
               {item.text}
             </Typography>
