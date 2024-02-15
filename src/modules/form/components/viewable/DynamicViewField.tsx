@@ -102,6 +102,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           hasValue={(val) => !isNil(val)}
         />
       );
+    case ItemType.TimeOfDay:
     case ItemType.Text:
     case ItemType.String:
     case ItemType.Integer:

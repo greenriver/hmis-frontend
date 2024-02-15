@@ -21,32 +21,7 @@ interface PickerProps extends Omit<DatePickerProps<Date>, 'renderInput'> {
 
 type Props = PickerProps & DynamicInputCommonProps;
 
-/*
-const WrappedTaxInput:React.FC<Props> = ({
-  sx,
-  textInputProps,
-  error,
-  helperText,
-  warnIfEmptyTreatment,
-  ...props,
-}) => {
-  return <TextInput
-    sx={sx}
-    onBlur={handleBlur}
-    {...textInputProps}
-    {...params}
-    error={error || !!errorMessage}
-    warnIfEmptyTreatment={warnIfEmptyTreatment}
-    // If there is a server error, show that instead of the local message
-    helperText={error ? undefined : errorMessage || helperText}
-    FormHelperTextProps={{
-      sx: { '&.Mui-error': { whiteSpace: 'nowrap' } },
-    }}
-  />
-}
-*/
-
-const DatePicker = ({
+const DatePicker: React.FC<Props> = ({
   sx,
   textInputProps,
   error,
@@ -56,7 +31,7 @@ const DatePicker = ({
   helperText,
   warnIfEmptyTreatment,
   ...props
-}: Props) => {
+}) => {
   // If max date is in the past, default to the max date's month
   const defaultOpenMonth = useMemo(() => {
     // if (isDate(min)) return min;
@@ -109,7 +84,7 @@ const DatePicker = ({
           error: error || !!errorMessage,
           //eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore
-          warnIfEmptyTreatment: !warnIfEmptyTreatment,
+          warnIfEmptyTreatment,
           // If there is a server error, show that instead of the local message
           helperText: error ? undefined : errorMessage || helperText,
           FormHelperTextProps: {
