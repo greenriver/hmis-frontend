@@ -91,6 +91,7 @@ fragment ItemFields on FormItem {
     valueBoolean
     valueNumber
     sumQuestions
+    calculation
     autofillBehavior
     autofillReadonly
     autofillWhen {

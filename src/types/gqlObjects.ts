@@ -416,6 +416,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
+        name: 'calculation',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'sumQuestions',
         type: {
           kind: 'LIST',

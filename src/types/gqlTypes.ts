@@ -411,6 +411,8 @@ export type AutofillValue = {
   /** Whether to perform autofill when displaying a read-only view (defaults to false) */
   autofillReadonly?: Maybe<Scalars['Boolean']['output']>;
   autofillWhen: Array<EnableWhen>;
+  /** Expression evaluating Link IDs, sets value */
+  calculation?: Maybe<Scalars['String']['output']>;
   /** Link IDs of numeric questions to sum up and set as the value if condition is met */
   sumQuestions?: Maybe<Array<Scalars['String']['output']>>;
   /** Value to autofill if condition is met */
@@ -8978,6 +8980,7 @@ export type GetAssessmentQuery = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    calculation?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -9049,6 +9052,7 @@ export type GetAssessmentQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -9120,6 +9124,7 @@ export type GetAssessmentQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -9191,6 +9196,7 @@ export type GetAssessmentQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -9262,6 +9268,7 @@ export type GetAssessmentQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -14009,6 +14016,7 @@ export type ClientDetailFormsQuery = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    calculation?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -14080,6 +14088,7 @@ export type ClientDetailFormsQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -14151,6 +14160,7 @@ export type ClientDetailFormsQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -14222,6 +14232,7 @@ export type ClientDetailFormsQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -14293,6 +14304,7 @@ export type ClientDetailFormsQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -15903,6 +15915,7 @@ export type AllEnrollmentDetailsFragment = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
+                      calculation?: string | null;
                       autofillBehavior: EnableBehavior;
                       autofillReadonly?: boolean | null;
                       autofillWhen: Array<{
@@ -15974,6 +15987,7 @@ export type AllEnrollmentDetailsFragment = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    calculation?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -16045,6 +16059,7 @@ export type AllEnrollmentDetailsFragment = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -16116,6 +16131,7 @@ export type AllEnrollmentDetailsFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -16187,6 +16203,7 @@ export type AllEnrollmentDetailsFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -16974,6 +16991,7 @@ export type GetEnrollmentDetailsQuery = {
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         sumQuestions?: Array<string> | null;
+                        calculation?: string | null;
                         autofillBehavior: EnableBehavior;
                         autofillReadonly?: boolean | null;
                         autofillWhen: Array<{
@@ -17045,6 +17063,7 @@ export type GetEnrollmentDetailsQuery = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
+                      calculation?: string | null;
                       autofillBehavior: EnableBehavior;
                       autofillReadonly?: boolean | null;
                       autofillWhen: Array<{
@@ -17116,6 +17135,7 @@ export type GetEnrollmentDetailsQuery = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    calculation?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -17187,6 +17207,7 @@ export type GetEnrollmentDetailsQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -17258,6 +17279,7 @@ export type GetEnrollmentDetailsQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -17895,6 +17917,7 @@ export type ItemFieldsFragment = {
     valueBoolean?: boolean | null;
     valueNumber?: number | null;
     sumQuestions?: Array<string> | null;
+    calculation?: string | null;
     autofillBehavior: EnableBehavior;
     autofillReadonly?: boolean | null;
     autofillWhen: Array<{
@@ -18084,6 +18107,7 @@ export type FormDefinitionJsonFieldsFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -18155,6 +18179,7 @@ export type FormDefinitionJsonFieldsFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -18226,6 +18251,7 @@ export type FormDefinitionJsonFieldsFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -18297,6 +18323,7 @@ export type FormDefinitionJsonFieldsFragment = {
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
+        calculation?: string | null;
         autofillBehavior: EnableBehavior;
         autofillReadonly?: boolean | null;
         autofillWhen: Array<{
@@ -18368,6 +18395,7 @@ export type FormDefinitionJsonFieldsFragment = {
       valueBoolean?: boolean | null;
       valueNumber?: number | null;
       sumQuestions?: Array<string> | null;
+      calculation?: string | null;
       autofillBehavior: EnableBehavior;
       autofillReadonly?: boolean | null;
       autofillWhen: Array<{
@@ -18574,6 +18602,7 @@ export type FormDefinitionFieldsFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -18645,6 +18674,7 @@ export type FormDefinitionFieldsFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -18716,6 +18746,7 @@ export type FormDefinitionFieldsFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -18787,6 +18818,7 @@ export type FormDefinitionFieldsFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -18858,6 +18890,7 @@ export type FormDefinitionFieldsFragment = {
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
+        calculation?: string | null;
         autofillBehavior: EnableBehavior;
         autofillReadonly?: boolean | null;
         autofillWhen: Array<{
@@ -19057,6 +19090,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -19128,6 +19162,7 @@ export type FormDefinitionFieldsForEditorFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -19199,6 +19234,7 @@ export type FormDefinitionFieldsForEditorFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -19270,6 +19306,7 @@ export type FormDefinitionFieldsForEditorFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -19341,6 +19378,7 @@ export type FormDefinitionFieldsForEditorFragment = {
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
+        calculation?: string | null;
         autofillBehavior: EnableBehavior;
         autofillReadonly?: boolean | null;
         autofillWhen: Array<{
@@ -19549,6 +19587,7 @@ export type UpdateFormDefinitionMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    calculation?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -19620,6 +19659,7 @@ export type UpdateFormDefinitionMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -19691,6 +19731,7 @@ export type UpdateFormDefinitionMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -19762,6 +19803,7 @@ export type UpdateFormDefinitionMutation = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -19833,6 +19875,7 @@ export type UpdateFormDefinitionMutation = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -20056,6 +20099,7 @@ export type CreateFormDefinitionMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    calculation?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -20127,6 +20171,7 @@ export type CreateFormDefinitionMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -20198,6 +20243,7 @@ export type CreateFormDefinitionMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -20269,6 +20315,7 @@ export type CreateFormDefinitionMutation = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -20340,6 +20387,7 @@ export type CreateFormDefinitionMutation = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -20563,6 +20611,7 @@ export type DeleteFormDefinitionMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    calculation?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -20634,6 +20683,7 @@ export type DeleteFormDefinitionMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -20705,6 +20755,7 @@ export type DeleteFormDefinitionMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -20776,6 +20827,7 @@ export type DeleteFormDefinitionMutation = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -20847,6 +20899,7 @@ export type DeleteFormDefinitionMutation = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -21091,6 +21144,7 @@ export type GetFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -21162,6 +21216,7 @@ export type GetFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -21233,6 +21288,7 @@ export type GetFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -21304,6 +21360,7 @@ export type GetFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -21375,6 +21432,7 @@ export type GetFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -21580,6 +21638,7 @@ export type GetStaticFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -21651,6 +21710,7 @@ export type GetStaticFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -21722,6 +21782,7 @@ export type GetStaticFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -21793,6 +21854,7 @@ export type GetStaticFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -21864,6 +21926,7 @@ export type GetStaticFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -22070,6 +22133,7 @@ export type GetServiceFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -22141,6 +22205,7 @@ export type GetServiceFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -22212,6 +22277,7 @@ export type GetServiceFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -22283,6 +22349,7 @@ export type GetServiceFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -22354,6 +22421,7 @@ export type GetServiceFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -22562,6 +22630,7 @@ export type GetAssessmentFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -22633,6 +22702,7 @@ export type GetAssessmentFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -22704,6 +22774,7 @@ export type GetAssessmentFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -22775,6 +22846,7 @@ export type GetAssessmentFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -22846,6 +22918,7 @@ export type GetAssessmentFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -23052,6 +23125,7 @@ export type GetFormDefinitionForEditorQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -23123,6 +23197,7 @@ export type GetFormDefinitionForEditorQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -23194,6 +23269,7 @@ export type GetFormDefinitionForEditorQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -23265,6 +23341,7 @@ export type GetFormDefinitionForEditorQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -23336,6 +23413,7 @@ export type GetFormDefinitionForEditorQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -23562,6 +23640,7 @@ export type GetParsedFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -23633,6 +23712,7 @@ export type GetParsedFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -23704,6 +23784,7 @@ export type GetParsedFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -23775,6 +23856,7 @@ export type GetParsedFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -23846,6 +23928,7 @@ export type GetParsedFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -26061,6 +26144,7 @@ export type OccurrencePointFormFieldsFragment = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  calculation?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -26132,6 +26216,7 @@ export type OccurrencePointFormFieldsFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                calculation?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -26203,6 +26288,7 @@ export type OccurrencePointFormFieldsFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              calculation?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -26274,6 +26360,7 @@ export type OccurrencePointFormFieldsFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            calculation?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -26345,6 +26432,7 @@ export type OccurrencePointFormFieldsFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          calculation?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -30769,6 +30857,7 @@ export const ItemFieldsFragmentDoc = gql`
       valueBoolean
       valueNumber
       sumQuestions
+      calculation
       autofillBehavior
       autofillReadonly
       autofillWhen {

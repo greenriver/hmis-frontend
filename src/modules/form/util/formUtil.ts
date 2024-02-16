@@ -42,6 +42,10 @@ import {
 } from '../types';
 
 import {
+  collectVariablesFromExpression,
+  evaluateExpression,
+} from '@/modules/form/util/expressions';
+import {
   customDataElementValueForKey,
   evaluateDataCollectedAbout,
   formatDateForGql,
@@ -465,6 +469,15 @@ export const getAutofillComparisonValue = (
   values: FormValues,
   targetItem: FormItem
 ) => {
+  if (av.calculation) {
+    const context = new Map();
+    for (const key of Object.keys(values)) {
+      const value = numericValueForFormValue(values[key]);
+      if (!isNil(value)) context.set(key, value);
+    }
+    return evaluateExpression(av.calculation, context);
+  }
+
   // Perform summation if applicable
   if (av.sumQuestions && av.sumQuestions.length > 0) {
     const numbers = av.sumQuestions
@@ -864,6 +877,15 @@ export const buildAutofillDependencyMap = (
 
     item.autofillValues.forEach((av) => {
       if (viewOnly && !av.autofillReadonly) return;
+
+      if (av.calculation) {
+        for (const id of collectVariablesFromExpression(
+          av.calculation
+        ) as Array<string>) {
+          console.info('add dep', id);
+          addDependency(id);
+        }
+      }
 
       // If this item sums other items using sumQuestions, add those dependencies
       if (av.sumQuestions) {

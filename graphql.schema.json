@@ -2774,6 +2774,18 @@
             "deprecationReason": null
           },
           {
+            "name": "calculation",
+            "description": "Expression evaluating Link IDs, sets value",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "sumQuestions",
             "description": "Link IDs of numeric questions to sum up and set as the value if condition is met",
             "args": [],
