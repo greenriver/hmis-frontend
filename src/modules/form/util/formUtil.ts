@@ -882,7 +882,6 @@ export const buildAutofillDependencyMap = (
         for (const id of collectVariablesFromExpression(
           av.calculation
         ) as Array<string>) {
-          console.info('add dep', id);
           addDependency(id);
         }
       }

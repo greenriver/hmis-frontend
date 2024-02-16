@@ -25,6 +25,28 @@ export const tokens = (ast, collect) => {
   }
 };
 
+const functions = new Map();
+functions.add('formatMinutes', function formatMinutes(minutes) {
+  if (!minutes) return '0 minutes';
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  let result = '';
+
+  if (hours > 0) {
+    result += `${hours} hour${hours > 1 ? 's' : ''}`;
+  }
+
+  if (hours > 0 && remainingMinutes > 0) {
+    result += ' and ';
+  }
+
+  if (remainingMinutes > 0) {
+    result += `${remainingMinutes} minute${remainingMinutes > 1 ? 's' : ''}`;
+  }
+
+  return result || '0 minutes';
+});
+
 const evaluate = (ast, context) => {
   switch (ast.type) {
     case 'BinaryExpression':
@@ -44,6 +66,14 @@ const evaluate = (ast, context) => {
       }
     case 'Literal':
       return ast.value;
+    case 'CallExpression':
+      const fn = functions.get(ast.callee.name);
+      if (ast.callee && fn) {
+        const args = ast.arguments.map((arg) => evaluate(arg, context));
+        return fn(...args);
+      } else {
+        throw new Error(`Undefined function: ${ast.callee.name}`);
+      }
     case 'Identifier':
       const value = context.get(ast.name);
       return value ? value : 0;
