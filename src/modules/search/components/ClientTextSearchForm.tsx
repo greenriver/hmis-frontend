@@ -93,18 +93,20 @@ const ClientTextSearchForm: React.FC<Props> = ({
     );
   }, [globalFeatureFlags?.mciId, showSearchTips]);
 
-  const isXs = useIsMobile('sm');
-  const isMobile = useIsMobile();
+  // Using isTiny as the breakpoint for the mobile appearance here rather than vanilla isMobile
+  // gets us the search box appearing as normal/desktop (with buttons in one line) on reasonably large
+  // tablet screens, but really small phone screens will still have the buttons and helper text stack correctly.
+  const isTiny = useIsMobile('sm');
 
   const buttonSx = {
-    mt: isXs ? 0 : 3,
+    mt: isTiny ? 0 : 3,
     px: 4,
     height: 'fit-content',
     top: '2px',
   };
   return (
-    <Stack direction='column' spacing={{ xs: 2, sm: 0.5 }} width='100%'>
-      {isMobile && helperTextNode}
+    <Stack direction='column' spacing={{ md: 2, lg: 0.5 }} width='100%'>
+      {isTiny && helperTextNode}
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         alignItems='flex-start'
@@ -142,7 +144,7 @@ const ClientTextSearchForm: React.FC<Props> = ({
           </ClearSearchButton>
         )}
       </Stack>
-      {!isMobile && helperTextNode}
+      {!isTiny && helperTextNode}
     </Stack>
   );
 };
