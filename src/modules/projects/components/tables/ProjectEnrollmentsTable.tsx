@@ -75,11 +75,7 @@ const ProjectEnrollmentsTable = ({
           )}
           <Grid item flexGrow={1}>
             {searchable ? (
-              <ClientSearchInput
-                value={search || ''}
-                onChange={setSearch}
-                helperText={null}
-              />
+              <ClientSearchInput value={search || ''} onChange={setSearch} />
             ) : undefined}
           </Grid>
         </Grid>
