@@ -76,17 +76,25 @@ const ClientTextSearchForm: React.FC<Props> = ({
 
   const helperTextNode = useMemo(() => {
     const helperText = getDefaultHelperText(!!globalFeatureFlags?.mciId);
-    return showSearchTips ? (
-      <span>
-        <b>To add a client,</b> search first. <b>Search Tips:</b> {helperText}{' '}
-        <span>{defaultSearchTips}</span>
-      </span>
-    ) : (
-      <span>{helperText}</span>
+    return (
+      <Typography
+        variant='caption'
+        sx={{ color: theme.palette.text.secondary }}
+      >
+        {showSearchTips ? (
+          <span>
+            <b>To add a client,</b> search first. <b>Search Tips:</b>{' '}
+            {helperText} <span>{defaultSearchTips}</span>
+          </span>
+        ) : (
+          <span>{helperText}</span>
+        )}
+      </Typography>
     );
   }, [globalFeatureFlags?.mciId, showSearchTips]);
 
   const isXs = useIsMobile('sm');
+  const isMobile = useIsMobile();
 
   const buttonSx = {
     mt: isXs ? 0 : 3,
@@ -95,10 +103,8 @@ const ClientTextSearchForm: React.FC<Props> = ({
     top: '2px',
   };
   return (
-    <Stack direction='column' spacing={2}>
-      <Typography variant='body2' sx={{ color: theme.palette.text.secondary }}>
-        {helperTextNode}
-      </Typography>
+    <Stack direction='column' spacing={{ xs: 2, sm: 0.5 }} width='100%'>
+      {isMobile && helperTextNode}
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         alignItems='flex-start'
@@ -136,6 +142,7 @@ const ClientTextSearchForm: React.FC<Props> = ({
           </ClearSearchButton>
         )}
       </Stack>
+      {!isMobile && helperTextNode}
     </Stack>
   );
 };

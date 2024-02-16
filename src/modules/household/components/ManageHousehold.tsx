@@ -103,7 +103,7 @@ const ManageHousehold = ({
         ];
       }
       return defaults;
-    }, [addToEnrollmentColumns, globalFeatureFlags?.mciId]);
+    }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
 
   const handleNewClientAdded = useCallback(
     (data: EnrollmentFieldsFragment) => {
