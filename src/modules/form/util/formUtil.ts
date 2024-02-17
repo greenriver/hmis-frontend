@@ -42,7 +42,7 @@ import {
 } from '../types';
 
 import { evaluateFormula } from '@/modules/form/util/expressions/formula';
-import { expressionVariables } from '@/modules/form/util/expressions/variables';
+import { collectExpressionReferences } from '@/modules/form/util/expressions/references';
 import {
   customDataElementValueForKey,
   evaluateDataCollectedAbout,
@@ -877,7 +877,9 @@ export const buildAutofillDependencyMap = (
       if (viewOnly && !av.autofillReadonly) return;
 
       if (av.formula) {
-        for (const id of expressionVariables(av.formula) as Array<string>) {
+        for (const id of collectExpressionReferences(
+          av.formula
+        ) as Array<string>) {
           addDependency(id);
         }
       }

@@ -19,7 +19,10 @@ const evaluate = (ast: any, collect: Collection) => {
   }
 };
 
-export const expressionVariables = (expression: string): Array<string> => {
+// collect referenced variables in expression (for dependency tracking)
+export const collectExpressionReferences = (
+  expression: string
+): Array<string> => {
   const variables: Array<string> = [];
   const ast = parseExpression(expression);
   try {

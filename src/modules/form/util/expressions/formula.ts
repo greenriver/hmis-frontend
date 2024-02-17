@@ -50,6 +50,7 @@ const evaluate = (ast: any, context: EvalContext): number | undefined => {
   }
 };
 
+// evaluate a mathematical formula
 export const evaluateFormula = (
   expression: string,
   context: EvalContext

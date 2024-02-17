@@ -14,4 +14,5 @@ export function formatDurationMinutes(arg: number | string) {
 
 const displayFunctions = new Map();
 displayFunctions.set('FORMAT_DURATION', formatDurationMinutes);
+// functions to expose in a display expression
 export default displayFunctions;

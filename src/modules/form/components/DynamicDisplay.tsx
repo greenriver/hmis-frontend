@@ -20,16 +20,6 @@ const SeverityMap: Record<string, AlertColor> = {
   [Component.AlertWarning]: 'warning',
 };
 
-// simple string interpolation. Example interpolate("hello ${name}", {name: 'world'})
-const interpolate = (template: string, value: string) => {
-  const context = new Map();
-  context.set('value', value);
-  const regex = /\${(.*?)(?<!\\)}/g;
-  return template.replace(regex, (match, key) => {
-    return evaluateTemplate(key, context) || 'N/A';
-  });
-};
-
 const DynamicDisplay: React.FC<Props> = ({
   item,
   maxWidth,
@@ -37,11 +27,15 @@ const DynamicDisplay: React.FC<Props> = ({
   viewOnly = false,
 }) => {
   const html = useMemo(() => {
-    let stringValue = item.text;
-    if (viewOnly && !isNil(item.readonlyText)) stringValue = item.readonlyText;
-    if (isNil(stringValue)) return undefined;
+    let displayValue = item.text;
+    if (viewOnly && !isNil(item.readonlyText)) displayValue = item.readonlyText;
+    if (isNil(displayValue)) return undefined;
 
-    return { __html: DOMPurify.sanitize(interpolate(stringValue, value)) };
+    return {
+      __html: DOMPurify.sanitize(
+        evaluateTemplate(displayValue, new Map([['value', value]]))
+      ),
+    };
   }, [item, viewOnly, value]);
 
   if (!html) return null;
