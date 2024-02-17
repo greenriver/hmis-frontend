@@ -71,6 +71,7 @@ const TimeOfDayPicker: React.FC<Props> = ({
     <MuiTimePicker
       {...props}
       onChange={handleChange}
+      onAccept={handleChange}
       value={value || undefined}
       showDaysOutsideCurrentMonth
       referenceDate={mountTime.current}

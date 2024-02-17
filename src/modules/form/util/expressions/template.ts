@@ -1,38 +1,14 @@
+import displayFunctions from './displayFunctions';
 import ExpressionEvaluationError from './ExpressionEvaluationError';
-import formulaFunctions from './formulaFunctions';
 import { parseExpression } from './parser';
-import { parseNumber } from '@/utils/numbers';
-
-const ensureNumeric = (value: any): number => {
-  if (parseNumber(value) === undefined)
-    throw new ExpressionEvaluationError('Non numeric result');
-  return value;
-};
 
 type EvalContext = Map<string, any>;
 const evaluate = (ast: any, context: EvalContext): number | undefined => {
   switch (ast.type) {
-    case 'BinaryExpression':
-      const left = ensureNumeric(evaluate(ast.left, context));
-      const right = ensureNumeric(evaluate(ast.right, context));
-      switch (ast.operator) {
-        case '+':
-          return left + right;
-        case '-':
-          return left - right;
-        case '*':
-          return left * right;
-        case '/':
-          return left / right;
-        default:
-          throw new ExpressionEvaluationError(
-            `Unsupported operator: ${ast.operator}`
-          );
-      }
     case 'Literal':
-      return parseNumber(ast.value);
+      return ast.value;
     case 'CallExpression':
-      const fn = formulaFunctions.get(ast.callee.name.toUpperCase());
+      const fn = displayFunctions.get(ast.callee.name.toUpperCase());
       if (ast.callee && fn) {
         const args = ast.arguments.map((arg: any) => evaluate(arg, context));
         return fn(...args);
@@ -50,15 +26,15 @@ const evaluate = (ast: any, context: EvalContext): number | undefined => {
   }
 };
 
-export const evaluateFormula = (
+export const evaluateTemplate = (
   expression: string,
   context: EvalContext
-): number | undefined => {
+): string | undefined => {
   const parsedExpression = parseExpression(expression);
 
   try {
     const result = evaluate(parsedExpression, context);
-    return result ? result : undefined;
+    return result ? result + '' : undefined;
   } catch (error) {
     if (error instanceof ExpressionEvaluationError) {
       return undefined;

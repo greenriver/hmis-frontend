@@ -1,24 +1,17 @@
-function formatDuration(minutes: number) {
-  if (!minutes) return '0 minutes';
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  let result = '';
+import formatDuration from 'date-fns/formatDuration';
 
-  if (hours > 0) {
-    result += `${hours} hour${hours > 1 ? 's' : ''}`;
-  }
+import { parseNumber } from '@/utils/numbers';
 
-  if (hours > 0 && remainingMinutes > 0) {
-    result += ' and ';
-  }
+export function formatDurationMinutes(arg: number | string) {
+  const total = parseNumber(arg);
+  if (total === undefined) return undefined;
 
-  if (remainingMinutes > 0) {
-    result += `${remainingMinutes} minute${remainingMinutes > 1 ? 's' : ''}`;
-  }
+  const hours = Math.floor(total / 60);
+  const minutes = total % 60;
 
-  return result || '0 minutes';
+  return formatDuration({ hours, minutes });
 }
 
 const displayFunctions = new Map();
-displayFunctions.set('FORMAT_DURATION', formatDuration);
+displayFunctions.set('FORMAT_DURATION', formatDurationMinutes);
 export default displayFunctions;

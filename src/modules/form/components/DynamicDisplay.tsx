@@ -3,7 +3,7 @@ import DOMPurify from 'dompurify';
 import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
 
-import { evaluateFormula } from '@/modules/form/util/expressions/formula';
+import { evaluateTemplate } from '@/modules/form/util/expressions/template';
 import { Component, FormItem } from '@/types/gqlTypes';
 
 interface Props {
@@ -26,7 +26,7 @@ const interpolate = (template: string, value: string) => {
   context.set('value', value);
   const regex = /\${(.*?)(?<!\\)}/g;
   return template.replace(regex, (match, key) => {
-    return evaluateFormula(key, context) || match;
+    return evaluateTemplate(key, context) || 'N/A';
   });
 };
 
