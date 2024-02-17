@@ -41,7 +41,6 @@ import {
   TypedObject,
 } from '../types';
 
-import ExpressionEvaluationError from '@/modules/form/util/expressions/ExpressionEvaluationError';
 import { evaluateFormula } from '@/modules/form/util/expressions/formula';
 import { expressionVariables } from '@/modules/form/util/expressions/variables';
 import {
@@ -474,16 +473,7 @@ export const getAutofillComparisonValue = (
       const value = numericValueForFormValue(values[key]);
       if (!isNil(value)) context.set(key, value);
     }
-    try {
-      return evaluateFormula(av.calculation, context);
-    } catch (error) {
-      if (error instanceof ExpressionEvaluationError) {
-        console.info(error.message);
-        return undefined;
-      } else {
-        throw error;
-      }
-    }
+    return evaluateFormula(av.calculation, context);
   }
 
   // Perform summation if applicable

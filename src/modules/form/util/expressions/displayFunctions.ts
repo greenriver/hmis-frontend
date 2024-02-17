@@ -1,4 +1,4 @@
-function formatMinutes(minutes: number) {
+function formatDuration(minutes: number) {
   if (!minutes) return '0 minutes';
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
@@ -20,5 +20,5 @@ function formatMinutes(minutes: number) {
 }
 
 const displayFunctions = new Map();
-displayFunctions.set('formatMinutes', formatMinutes);
+displayFunctions.set('FORMAT_DURATION', formatDuration);
 export default displayFunctions;

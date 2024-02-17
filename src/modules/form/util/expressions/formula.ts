@@ -1,8 +1,8 @@
-import jsep from 'jsep';
 import isNumber from 'lodash-es/isNumber';
 
 import ExpressionEvaluationError from './ExpressionEvaluationError';
 import formulaFunctions from './formulaFunctions';
+import { parseExpression } from './parser';
 
 const ensureNumeric = (value: any): number => {
   if (!isNumber(value))
@@ -33,7 +33,7 @@ const evaluate = (ast: any, context: EvalContext): number => {
     case 'Literal':
       return ast.value;
     case 'CallExpression':
-      const fn = formulaFunctions.get(ast.callee.name);
+      const fn = formulaFunctions.get(ast.callee.name.toUpperCase());
       if (ast.callee && fn) {
         const args = ast.arguments.map((arg: any) => evaluate(arg, context));
         return fn(...args);
@@ -43,8 +43,7 @@ const evaluate = (ast: any, context: EvalContext): number => {
         );
       }
     case 'Identifier':
-      const value = context.get(ast.name);
-      return value ? value : 0;
+      return context.get(ast.name);
     default:
       throw new ExpressionEvaluationError(
         `Unsupported AST node type: ${ast.type}`
@@ -52,9 +51,20 @@ const evaluate = (ast: any, context: EvalContext): number => {
   }
 };
 
-export const evaluateFormula = (expression: string, context: EvalContext) => {
-  console.info('evaluate', expression);
-  const parsedExpression = jsep(expression);
+export const evaluateFormula = (
+  expression: string,
+  context: EvalContext
+): string | undefined => {
+  const parsedExpression = parseExpression(expression);
 
-  return evaluate(parsedExpression, context);
+  try {
+    const result = evaluate(parsedExpression, context);
+    return result ? result + '' : undefined;
+  } catch (error) {
+    if (error instanceof ExpressionEvaluationError) {
+      return undefined;
+    } else {
+      throw error;
+    }
+  }
 };

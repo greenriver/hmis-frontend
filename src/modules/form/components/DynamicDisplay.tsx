@@ -3,6 +3,7 @@ import DOMPurify from 'dompurify';
 import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
 
+import { evaluateFormula } from '@/modules/form/util/expressions/formula';
 import { Component, FormItem } from '@/types/gqlTypes';
 
 interface Props {
@@ -20,9 +21,12 @@ const SeverityMap: Record<string, AlertColor> = {
 };
 
 // simple string interpolation. Example interpolate("hello ${name}", {name: 'world'})
-const interpolate = (template: string, variables: Record<string, string>) => {
-  return template.replace(/\${(\w+)}/g, (match, key) => {
-    return typeof variables[key] !== 'undefined' ? variables[key] : match;
+const interpolate = (template: string, value: string) => {
+  const context = new Map();
+  context.set('value', value);
+  const regex = /\${(.*?)(?<!\\)}/g;
+  return template.replace(regex, (match, key) => {
+    return evaluateFormula(key, context) || match;
   });
 };
 
@@ -37,7 +41,7 @@ const DynamicDisplay: React.FC<Props> = ({
     if (viewOnly && !isNil(item.readonlyText)) stringValue = item.readonlyText;
     if (isNil(stringValue)) return undefined;
 
-    return { __html: DOMPurify.sanitize(interpolate(stringValue, { value })) };
+    return { __html: DOMPurify.sanitize(interpolate(stringValue, value)) };
   }, [item, viewOnly, value]);
 
   if (!html) return null;
