@@ -4,8 +4,8 @@ import {
   MobileTimePicker,
   TimePickerProps,
 } from '@mui/x-date-pickers';
-import { addMinutes, startOfDay, differenceInMinutes } from 'date-fns';
-import { useCallback, useMemo, useRef } from 'react';
+import { addMinutes, differenceInMinutes, startOfDay } from 'date-fns';
+import { useCallback, useRef, useState } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
@@ -42,12 +42,13 @@ const TimeOfDayPicker: React.FC<Props> = ({
   warnIfEmptyTreatment,
   ...props
 }) => {
-  const mountTime = useRef(new Date());
+  const mountTime = useRef(startOfDay(new Date()));
 
-  const value = useMemo(() => {
+  // keep value in state so the Date object doesn't keep changing on the input
+  const [value] = useState(() => {
     if (typeof stringValue !== 'string') return;
     return minutesToDate(mountTime.current, parseInt(stringValue));
-  }, [stringValue]);
+  });
 
   //if (stringValue) console.info('value toString', value, stringValue)
 
@@ -60,7 +61,6 @@ const TimeOfDayPicker: React.FC<Props> = ({
       if (!value) return onChange(null);
 
       const minutes = value ? minutesFromMidnight(value) : undefined;
-      // console.info('onChange', value, minutes);
       if (!minutes || isNaN(minutes)) return;
       onChange?.(minutes + '');
     },

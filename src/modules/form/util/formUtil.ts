@@ -41,10 +41,9 @@ import {
   TypedObject,
 } from '../types';
 
-import {
-  collectVariablesFromExpression,
-  evaluateExpression,
-} from '@/modules/form/util/expressions';
+import ExpressionEvaluationError from '@/modules/form/util/expressions/ExpressionEvaluationError';
+import { evaluateFormula } from '@/modules/form/util/expressions/formula';
+import { expressionVariables } from '@/modules/form/util/expressions/variables';
 import {
   customDataElementValueForKey,
   evaluateDataCollectedAbout,
@@ -475,7 +474,16 @@ export const getAutofillComparisonValue = (
       const value = numericValueForFormValue(values[key]);
       if (!isNil(value)) context.set(key, value);
     }
-    return evaluateExpression(av.calculation, context);
+    try {
+      return evaluateFormula(av.calculation, context);
+    } catch (error) {
+      if (error instanceof ExpressionEvaluationError) {
+        console.info(error.message);
+        return undefined;
+      } else {
+        throw error;
+      }
+    }
   }
 
   // Perform summation if applicable
@@ -879,9 +887,7 @@ export const buildAutofillDependencyMap = (
       if (viewOnly && !av.autofillReadonly) return;
 
       if (av.calculation) {
-        for (const id of collectVariablesFromExpression(
-          av.calculation
-        ) as Array<string>) {
+        for (const id of expressionVariables(av.calculation) as Array<string>) {
           addDependency(id);
         }
       }
