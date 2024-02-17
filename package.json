@@ -16,7 +16,7 @@
     "lint:check": "eslint --ext js,ts,jsx,tsx --ignore-path .gitignore .",
     "test": "NODE_ENV=test jest",
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'hmis.dev.test'",
-    "dedup": "yarn-deduplicate -s fewer yarn.lock",
+    "dedup": "yarn-deduplicate -s highest yarn.lock",
     "postinstall": "husky install",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
