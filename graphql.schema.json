@@ -2774,8 +2774,8 @@
             "deprecationReason": null
           },
           {
-            "name": "calculation",
-            "description": "Expression evaluating Link IDs, sets value",
+            "name": "formula",
+            "description": "Expression with mathematical or logical function defining the value",
             "args": [],
             "type": {
               "kind": "SCALAR",

@@ -467,13 +467,13 @@ export const getAutofillComparisonValue = (
   values: FormValues,
   targetItem: FormItem
 ) => {
-  if (av.calculation) {
+  if (av.formula) {
     const context = new Map();
     for (const key of Object.keys(values)) {
       const value = numericValueForFormValue(values[key]);
       if (!isNil(value)) context.set(key, value);
     }
-    return evaluateFormula(av.calculation, context);
+    return evaluateFormula(av.formula, context);
   }
 
   // Perform summation if applicable
@@ -876,8 +876,8 @@ export const buildAutofillDependencyMap = (
     item.autofillValues.forEach((av) => {
       if (viewOnly && !av.autofillReadonly) return;
 
-      if (av.calculation) {
-        for (const id of expressionVariables(av.calculation) as Array<string>) {
+      if (av.formula) {
+        for (const id of expressionVariables(av.formula) as Array<string>) {
           addDependency(id);
         }
       }
