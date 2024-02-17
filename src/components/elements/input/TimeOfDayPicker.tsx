@@ -44,13 +44,12 @@ const TimeOfDayPicker: React.FC<Props> = ({
 }) => {
   const mountTime = useRef(startOfDay(new Date()));
 
+  // time picker takes a date as an input. For this input, we don't care about the particular date, only the time of day.
   // keep value in state so the Date object doesn't keep changing on the input
   const [value] = useState(() => {
     if (typeof stringValue !== 'string') return;
     return minutesToDate(mountTime.current, parseInt(stringValue));
   });
-
-  //if (stringValue) console.info('value toString', value, stringValue)
 
   const MuiTimePicker = useIsMobile() ? MobileTimePicker : DesktopTimePicker;
 
@@ -85,6 +84,7 @@ const TimeOfDayPicker: React.FC<Props> = ({
           placeholder: 'HH:MM AM/PM',
           error,
           ...textInputProps,
+          // the slotProps don't accept types that aren't MUI text input; they do seem to work
           //eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore
           warnIfEmptyTreatment,
