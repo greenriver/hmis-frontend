@@ -80,7 +80,6 @@ const ProjectServicesTable = ({
       recordType='Service'
       showFilters
       filterInputType='ServicesForProjectFilterOptions'
-      noSort
     />
   );
 };

@@ -1,3 +1,4 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import {
   Button,
   ButtonProps,
@@ -5,6 +6,7 @@ import {
   Paper,
   Stack,
   Typography,
+  TypographyProps,
 } from '@mui/material';
 import { includes, isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
@@ -29,6 +31,9 @@ interface Props extends GroupItemComponentProps {
   anchor?: string;
   clientId?: string;
   debug?: (ids?: string[]) => void;
+  TitleIcon?: SvgIconComponent;
+  titleProps?: TypographyProps;
+  helperTextProps?: TypographyProps;
 }
 
 const FormCard: React.FC<Props> = ({
@@ -40,6 +45,9 @@ const FormCard: React.FC<Props> = ({
   values,
   locked,
   debug,
+  TitleIcon,
+  helperTextProps,
+  titleProps,
 }) => {
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
@@ -88,114 +96,126 @@ const FormCard: React.FC<Props> = ({
     size: 'small',
     sx: { height: 'fit-content' },
   };
+
   return (
     <Grid id={anchor} item sx={{ width: '100%' }}>
-      <Paper
-        sx={{
-          py: 3,
-          px: 2.5,
-          pageBreakInside: 'avoid',
-        }}
-        className='HmisForm-card'
-      >
-        {/* Card title */}
-        {item.text && (
-          <Stack
-            justifyContent='space-between'
-            direction={{ xs: 'column', sm: 'row' }}
-            sx={{ mb: 2 }}
-          >
-            <Typography variant='cardTitle' sx={{ mb: 2 }}>
-              {item.text}
-            </Typography>
-
-            <Stack direction='row' spacing={2}>
-              {debug && import.meta.env.MODE === 'development' && (
-                <Button
-                  {...buttonProps}
-                  onClick={() => debug(childLinkIds)}
-                  variant='text'
-                >
-                  Debug
-                </Button>
-              )}
-              {item.prefill && (
-                <>
-                  <Button
-                    data-testid='fillSectionButton'
-                    onClick={() => setFillDialogOpen(true)}
-                    disabled={locked}
-                    {...buttonProps}
-                  >
-                    Fill Section
-                  </Button>
-                  <Button
-                    data-testid='clearButton'
-                    color='error'
-                    onClick={() => setClearDialogOpen(true)}
-                    disabled={!hasAnyChildValues || locked}
-                    {...buttonProps}
-                  >
-                    Clear Section
-                  </Button>
-                </>
-              )}
-            </Stack>
-          </Stack>
-        )}
-
-        {/* Source record description */}
-        {sourceRecord && (
-          <Typography variant='body2' sx={{ mb: 3 }}>
-            Filled with record from{' '}
-            {parseAndFormatDate(sourceRecord.assessmentDate)}
-          </Typography>
-        )}
-
-        {/* Dynamically render child items */}
-        <Grid
-          container
-          direction='column'
-          // Spacing between input elements inside the card
-          gap={3}
+      <section>
+        <Paper
           sx={{
-            '& .MuiGrid-item:first-of-type': !item.text ? { pt: 0 } : undefined,
-            mt: 0,
-            // hide last pseudo element (assuming its a divider)
-            '& .MuiGrid-item:last-of-type::after': { display: 'none' },
+            py: 3,
+            px: 2.5,
+            pageBreakInside: 'avoid',
           }}
+          className='HmisForm-card'
         >
-          {renderChildItem &&
-            item.item?.map((childItem) => renderChildItem(childItem))}
-        </Grid>
-
-        {/* Dialog for selecting autofill record */}
-        {item.prefill && clientId && (
-          <>
-            <RecordPickerDialog
-              id={`recordPickerDialog-${item.linkId}`}
-              item={item}
-              clientId={clientId}
-              open={fillDialogOpen}
-              onSelected={onSelectAutofillRecord}
-              onCancel={() => setFillDialogOpen(false)}
-            />
-            <ConfirmationDialog
-              id='clearSection'
-              open={clearDialogOpen}
-              title='Clear Section'
-              onConfirm={onClear}
-              onCancel={() => setClearDialogOpen(false)}
-              loading={false}
+          {/* Card title */}
+          {item.text && (
+            <Stack
+              justifyContent='space-between'
+              direction={{ xs: 'column', sm: 'row' }}
+              sx={{ mb: 2 }}
             >
-              <Typography>
-                This will clear all the content in the <b>{item.text}</b>{' '}
-                section.
+              <Typography variant='cardTitle' sx={{ mb: 2 }} {...titleProps}>
+                {TitleIcon && <TitleIcon sx={{ mr: 1 }} />}
+                {item.text}
               </Typography>
-            </ConfirmationDialog>
-          </>
-        )}
-      </Paper>
+
+              <Stack direction='row' spacing={2}>
+                {debug && import.meta.env.MODE === 'development' && (
+                  <Button
+                    {...buttonProps}
+                    onClick={() => debug(childLinkIds)}
+                    variant='text'
+                  >
+                    Debug
+                  </Button>
+                )}
+                {item.prefill && (
+                  <>
+                    <Button
+                      data-testid='fillSectionButton'
+                      onClick={() => setFillDialogOpen(true)}
+                      disabled={locked}
+                      {...buttonProps}
+                    >
+                      Fill Section
+                    </Button>
+                    <Button
+                      data-testid='clearButton'
+                      color='error'
+                      onClick={() => setClearDialogOpen(true)}
+                      disabled={!hasAnyChildValues || locked}
+                      {...buttonProps}
+                    >
+                      Clear Section
+                    </Button>
+                  </>
+                )}
+              </Stack>
+            </Stack>
+          )}
+
+          {item.helperText && (
+            <Typography sx={{ mb: 2 }} {...helperTextProps}>
+              {item.helperText}
+            </Typography>
+          )}
+
+          {/* Source record description */}
+          {sourceRecord && (
+            <Typography variant='body2' sx={{ mb: 3 }}>
+              Filled with record from{' '}
+              {parseAndFormatDate(sourceRecord.assessmentDate)}
+            </Typography>
+          )}
+
+          {/* Dynamically render child items */}
+          <Grid
+            container
+            direction='column'
+            // Spacing between input elements inside the card
+            gap={3}
+            sx={{
+              '& .MuiGrid-item:first-of-type': !item.text
+                ? { pt: 0 }
+                : undefined,
+              mt: 0,
+              // hide last pseudo element (assuming its a divider)
+              '& .MuiGrid-item:last-of-type::after': { display: 'none' },
+            }}
+          >
+            {renderChildItem &&
+              item.item?.map((childItem) => renderChildItem(childItem))}
+          </Grid>
+
+          {/* Dialog for selecting autofill record */}
+          {item.prefill && clientId && (
+            <>
+              <RecordPickerDialog
+                id={`recordPickerDialog-${item.linkId}`}
+                item={item}
+                clientId={clientId}
+                open={fillDialogOpen}
+                onSelected={onSelectAutofillRecord}
+                onCancel={() => setFillDialogOpen(false)}
+              />
+              <ConfirmationDialog
+                id='clearSection'
+                open={clearDialogOpen}
+                title='Clear Section'
+                onConfirm={onClear}
+                onCancel={() => setClearDialogOpen(false)}
+                loading={false}
+              >
+                <Typography>
+                  This will clear all the content in the <b>{item.text}</b>{' '}
+                  section.
+                </Typography>
+              </ConfirmationDialog>
+            </>
+          )}
+        </Paper>
+      </section>
     </Grid>
   );
 };
