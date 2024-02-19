@@ -173,6 +173,8 @@ export const HmisEnums = {
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
+    SIGNATURE: 'Signature input component',
+    SIGNATURE_GROUP: 'Signature input component',
     SSN: 'SSN input component',
   },
   CounselingMethod: {

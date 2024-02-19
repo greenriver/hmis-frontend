@@ -1124,6 +1124,10 @@ export enum Component {
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
   RadioButtonsVertical = 'RADIO_BUTTONS_VERTICAL',
+  /** Signature input component */
+  Signature = 'SIGNATURE',
+  /** Signature input component */
+  SignatureGroup = 'SIGNATURE_GROUP',
   /** SSN input component */
   Ssn = 'SSN',
 }

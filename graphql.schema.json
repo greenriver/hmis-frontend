@@ -8159,6 +8159,18 @@
             "deprecationReason": null
           },
           {
+            "name": "SIGNATURE",
+            "description": "Signature input component",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SIGNATURE_GROUP",
+            "description": "Signature input component",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SSN",
             "description": "SSN input component",
             "isDeprecated": false,

@@ -124,6 +124,7 @@ const DynamicFormFields: React.FC<Props> = ({
                 }
               : undefined
           }
+          {...props}
         />
       );
     }
