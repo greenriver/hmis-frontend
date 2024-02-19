@@ -70,6 +70,23 @@ Use the `graphql:codegen` script to update generated types.
 SCHEMA_PATH=<path to schema.graphql> yarn graphql:codegen
 ```
 
+### Upgrading NPM Packages
+
+To add or grade an NPM package, you can edit the `package.json` OR run `yarn add` OR run `yarn upgrade`.
+Tarballs of external packages are stored in an offline mirror, so that they do
+not need to be fetched from the yarn registry on every build.
+
+```sh
+# 1. edit package.json, or run yarn add/upgrade
+# 2. download packages and update the yarn.lock
+yarn install
+# 3. remove duplicate packages
+yarn yarn-deduplicate
+# 4. always commit changes to these files
+git add yarn.lock package.json yarn/packages-cache
+```
+
+
 ### Cypress E2E tests
 
 These tests run against a real warehouse backend. Make sure you have the backend running at `https://hmis-warehouse.dev.test`.
