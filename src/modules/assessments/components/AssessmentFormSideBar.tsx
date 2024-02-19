@@ -30,7 +30,6 @@ interface Props {
   printPath?: string;
   isPrintView: boolean;
   locked: boolean;
-  canEdit: boolean;
   top?: number;
   showAutofill?: boolean;
 }
@@ -44,7 +43,6 @@ const AssessmentFormSideBar: React.FC<Props> = ({
   onAutofill,
   isPrintView,
   locked,
-  canEdit,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   showAutofill = true,
 }) => {
@@ -83,9 +81,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
       />
       <Divider sx={{ my: 2, mx: -2 }} />
       <Stack gap={2} sx={{ mt: 2 }}>
-        {showAutofill && !assessment && canEdit && (
-          <AssessmentAutofillButton onClick={onAutofill} />
-        )}
+        {showAutofill && <AssessmentAutofillButton onClick={onAutofill} />}
         {!isPrintView && locked && assessment && (
           <PrintViewButton
             openInNew

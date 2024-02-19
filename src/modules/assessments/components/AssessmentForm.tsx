@@ -272,7 +272,7 @@ const AssessmentForm: React.FC<Props> = ({
   ]);
 
   const isCustomAssessment = formRole === FormRole.CustomAssessment;
-  const showAutofill = !isCustomAssessment;
+  const showAutofill = !isCustomAssessment && !assessment && canEdit;
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
@@ -286,7 +286,6 @@ const AssessmentForm: React.FC<Props> = ({
         embeddedInWorkflow={embeddedInWorkflow}
         showAutofill={showAutofill}
         onAutofill={() => setDialogOpen(true)}
-        canEdit={canEdit}
         top={top}
       />
     </Grid>
@@ -307,7 +306,7 @@ const AssessmentForm: React.FC<Props> = ({
             onUnlock={handleUnlock}
           />
         )}
-        {showAutofill && isMobile && !assessment && canEdit && (
+        {showAutofill && !showNavigation && (
           <AssessmentAutofillButton
             sx={{ mb: 2 }}
             onClick={() => setDialogOpen(true)}
