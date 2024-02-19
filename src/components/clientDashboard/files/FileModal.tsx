@@ -18,7 +18,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 import useSafeParams from '@/hooks/useSafeParams';
 import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
-import { FileFieldsFragment, FormRole } from '@/types/gqlTypes';
+import { FileFieldsFragment, RecordFormRole } from '@/types/gqlTypes';
 
 export type FileDialogProps = {
   file: FileFieldsFragment;
@@ -183,7 +183,7 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
         <ViewRecordDialog<FileFieldsFragment>
           {...props}
           record={file}
-          formRole={FormRole.File}
+          formRole={RecordFormRole.File}
           title={file.name}
           actions={actions}
           pickListArgs={pickListArgs}

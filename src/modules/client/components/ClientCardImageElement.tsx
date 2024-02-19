@@ -1,6 +1,7 @@
 import { Box, BoxProps, Typography } from '@mui/material';
 import React from 'react';
 
+import { dataUrlForClientImage } from '@/modules/hmis/hmisUtil';
 import { ClientImageFragment } from '@/types/gqlTypes';
 
 type Props = {
@@ -20,8 +21,7 @@ const ClientCardImageElement: React.FC<Props> = ({
   // let src = 'https://dummyimage.com/150x150/e8e8e8/aaa';
   let src;
 
-  if (client?.image?.base64)
-    src = `data:image/jpeg;base64,${client.image.base64}`;
+  if (client?.image?.base64) src = dataUrlForClientImage(client.image);
   if (base64) src = `data:image/jpeg;base64,${base64}`;
   if (url) src = url;
 

@@ -1,0 +1,44 @@
+query GetClientScanCardCodes($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    scanCardCodes(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ScanCardFields
+      }
+    }
+  }
+}
+
+mutation CreateScanCard($clientId: ID!) {
+  createScanCardCode(clientId: $clientId) {
+    scanCardCode {
+      ...ScanCardFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+mutation DeleteScanCard($id: ID!) {
+  deleteScanCardCode(id: $id) {
+    scanCardCode {
+      ...ScanCardFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+mutation RestoreScanCard($id: ID!) {
+  restoreScanCardCode(id: $id) {
+    scanCardCode {
+      ...ScanCardFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

@@ -1,12 +1,19 @@
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { IconButton, Typography, TypographyProps } from '@mui/material';
+import {
+  IconButton,
+  IconButtonProps,
+  Typography,
+  TypographyProps,
+} from '@mui/material';
+import { CopyIcon } from './SemanticIcons';
 
 interface Props {
   value: string;
   sx?: TypographyProps['sx'];
   variant?: TypographyProps['variant'];
+  trimLengthAbove?: number | null;
 }
 
+// For displaying trimmed UUIDs
 export const ClickToCopyId: React.FC<Props> = ({
   value,
   variant = 'body2',
@@ -26,9 +33,24 @@ export const ClickToCopyId: React.FC<Props> = ({
           sx={{ fontSize: 'inherit' }}
           size='small'
         >
-          <ContentCopyIcon fontSize='inherit' />
+          <CopyIcon fontSize='inherit' />
         </IconButton>
       )}
     </Typography>
+  );
+};
+
+export const ClickToCopyButton: React.FC<
+  { value: string } & IconButtonProps
+> = ({ value, ...props }) => {
+  return (
+    <IconButton
+      aria-label='copy'
+      onClick={() => navigator.clipboard.writeText(value)}
+      sx={{ fontSize: 'inherit', color: 'links' }}
+      {...props}
+    >
+      <CopyIcon fontSize='inherit' />
+    </IconButton>
   );
 };

@@ -12,7 +12,6 @@ interface Args {
   householdId: string;
   role: HouseholdAssesmentRole;
   skip?: boolean;
-  assessmentId?: string; // ignored for now, may add back if we do something with annuals here
 }
 
 type HhmAssessmentType = NonNullable<

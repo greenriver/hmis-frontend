@@ -1,134 +1,62 @@
-import { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { useAssessment } from '../hooks/useAssessment';
-import {
-  AssessmentResponseStatus,
-  useAssessmentHandlers,
-} from '../hooks/useAssessmentHandlers';
-import MissingDefinitionAlert from './MissingDefinitionAlert';
+import { useEffect, useMemo } from 'react';
 import Loading from '@/components/elements/Loading';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
-import { FormActionTypes } from '@/modules/form/types';
-import { DashboardEnrollment } from '@/modules/hmis/types';
-import { cache } from '@/providers/apolloClient';
+import IndividualAssessmentFormController from '@/modules/assessments/components/IndividualAssessmentFormController';
+import { applyDefinitionRulesForClient } from '@/modules/form/util/formUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { ClientNameDobVetFragment, FormRole } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
+import { useGetAssessmentQuery } from '@/types/gqlTypes';
 
-interface Props {
-  enrollment: DashboardEnrollment;
-  client: ClientNameDobVetFragment;
-}
+/**
+ * Renders an existing individual assessment.
+ *
+ * Note: used both for viewing and editing assessments. View/edit display
+ * depends on user permissions and whether the assessment is WIP or Submitted.
+ */
+const IndividualAssessmentPage = () => {
+  const { enrollment, client, overrideBreadcrumbTitles } =
+    useEnrollmentDashboardContext();
+  const { assessmentId } = useSafeParams() as { assessmentId: string };
 
-const IndividualAssessmentPage: React.FC<Props> = ({ client, enrollment }) => {
-  const navigate = useNavigate();
-  const { clientId, enrollmentId, assessmentId, formRole } =
-    useSafeParams() as {
-      clientId: string;
-      enrollmentId: string;
-      formRole: FormRole;
-      assessmentId?: string;
-    };
-
-  const navigateToEnrollment = useCallback(
-    () =>
-      navigate(
-        generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
-          enrollmentId,
-          clientId,
-        })
-      ),
-    [navigate, enrollmentId, clientId]
-  );
-
-  const onCompletedMutation = useCallback(
-    (status: AssessmentResponseStatus) => {
-      if (!['saved', 'submitted'].includes(status)) return;
-      // We created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
-      if (!assessmentId) {
-        cache.evict({
-          id: `Enrollment:${enrollmentId}`,
-          fieldName: 'assessments',
-        });
-      }
-      navigateToEnrollment();
-    },
-    [navigateToEnrollment, assessmentId, enrollmentId]
-  );
-
+  // Fetch the Assessment, and the definition attached to it
   const {
-    definition,
-    assessment,
-    loading: dataLoading,
-    assessmentTitle,
-    formRole: role,
-  } = useAssessment({
-    enrollmentId,
-    assessmentId,
-    formRoleParam: formRole,
-    client,
-    relationshipToHoH: enrollment?.relationshipToHoH,
-  });
+    data: assessmentData,
+    loading: assessmentLoading,
+    error: assessmentError,
+  } = useGetAssessmentQuery({ variables: { id: assessmentId } });
 
-  const { submitHandler, saveDraftHandler, mutationLoading, errors } =
-    useAssessmentHandlers({
-      definition,
-      enrollmentId: enrollment.id,
-      assessmentId: assessment?.id,
-      assessmentLockVersion: assessment?.lockVersion,
-      onCompletedMutation,
+  // Retrieve the Definition from the Assessment, and apply any "Data Collected About" rules to it
+  const definition = useMemo(() => {
+    if (!assessmentData?.assessment?.definition || !enrollment) return;
+
+    return applyDefinitionRulesForClient(
+      assessmentData?.assessment?.definition,
+      client,
+      enrollment.relationshipToHoH
+    );
+  }, [assessmentData, client, enrollment]);
+
+  // Set the breadcrumb so it says the correct name of this assessment
+  useEffect(() => {
+    overrideBreadcrumbTitles({
+      [EnrollmentDashboardRoutes.VIEW_ASSESSMENT]: definition?.title,
     });
+  }, [overrideBreadcrumbTitles, definition]);
 
-  const FormActionProps = useMemo(() => {
-    return {
-      onDiscard: navigateToEnrollment,
-      config: [
-        {
-          id: 'submit',
-          label: 'Submit',
-          action: FormActionTypes.Submit,
-          buttonProps: { variant: 'contained' } as const,
-        },
-        ...(assessment && !assessment.inProgress
-          ? []
-          : [
-              {
-                id: 'saveDraft',
-                label: 'Save and finish later',
-                action: FormActionTypes.Save,
-                buttonProps: { variant: 'outlined' } as const,
-              },
-            ]),
-        {
-          id: 'discard',
-          label: 'Cancel',
-          action: FormActionTypes.Discard,
-          buttonProps: { variant: 'gray' } as const,
-        },
-      ],
-    };
-  }, [assessment, navigateToEnrollment]);
+  if (assessmentError) throw assessmentError;
+  if (!enrollment) return <NotFound />;
+  if (!assessmentData && assessmentLoading) return <Loading />;
 
-  if (!formRole) return <NotFound />;
-  if (dataLoading) return <Loading />;
-  if (!definition) return <MissingDefinitionAlert />;
+  const assessment = assessmentData?.assessment;
+  if (!assessment || !definition) return <NotFound />;
 
   return (
-    <IndividualAssessment
+    <IndividualAssessmentFormController
+      enrollment={enrollment}
+      client={client}
       definition={definition}
       assessment={assessment}
-      formRole={role}
-      enrollmentId={enrollmentId}
-      title={assessmentTitle}
-      client={client}
-      onSubmit={submitHandler}
-      onSaveDraft={saveDraftHandler}
-      errors={errors}
-      mutationLoading={mutationLoading}
-      FormActionProps={FormActionProps}
     />
   );
 };

@@ -9,6 +9,7 @@ import {
 
 import { protectedRoutes } from './protected';
 
+import { STATE_FROM_LOGIN_REDIRECT } from './routeUtil';
 import PathHandler from '@/components/elements/PathHandler';
 import { HmisUser } from '@/modules/auth/api/sessions';
 import Login from '@/modules/auth/components/Login';
@@ -80,7 +81,7 @@ const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
     const path = sessionStorage.getItem(REQUESTED_PATH_KEY);
     if (path) {
       sessionStorage.removeItem(REQUESTED_PATH_KEY);
-      navigate(path);
+      navigate(path, { state: STATE_FROM_LOGIN_REDIRECT });
     }
   }, [navigate]);
 

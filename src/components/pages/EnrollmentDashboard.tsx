@@ -3,7 +3,6 @@ import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
-import { showAssessmentInHousehold } from '../clientDashboard/enrollments/AssessmentPage';
 import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
@@ -24,7 +23,6 @@ import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEn
 import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientNameDobVetFragment,
   DataCollectionFeatureRole,
@@ -63,18 +61,7 @@ const EnrollmentDashboard: React.FC = () => {
 
   const navItems = useEnrollmentDashboardNavItems(enabledFeatures);
 
-  const { currentPath, ...dashboardState } = useDashboardState();
-
-  const focusMode = useMemo(() => {
-    if (dashboardState.focusMode) return dashboardState.focusMode;
-    // hacky way to set "focus" for household assessments, which depends on the household size
-    if (
-      currentPath === EnrollmentDashboardRoutes.ASSESSMENT &&
-      showAssessmentInHousehold(enrollment, params.formRole)
-    ) {
-      return EnrollmentDashboardRoutes.ASSESSMENTS;
-    }
-  }, [enrollment, dashboardState.focusMode, currentPath, params.formRole]);
+  const { currentPath, focusMode, ...dashboardState } = useDashboardState();
 
   const outletContext: EnrollmentDashboardContext | undefined = useMemo(
     () =>
@@ -84,9 +71,10 @@ const EnrollmentDashboard: React.FC = () => {
             overrideBreadcrumbTitles,
             enrollment,
             enabledFeatures,
+            enrollmentLoading: loading,
           }
         : undefined,
-    [client, enrollment, enabledFeatures]
+    [client, enrollment, enabledFeatures, loading]
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);
@@ -95,7 +83,7 @@ const EnrollmentDashboard: React.FC = () => {
     breadcrumbOverrides
   );
 
-  if (loading || !navItems) return <Loading />;
+  if (loading && !enrollment) return <Loading />;
   if (!enrollment || !client || !outletContext) return <NotFound />;
   if (enrollment && enrollment.client.id !== params.clientId) {
     return <NotFound />;
@@ -143,6 +131,7 @@ const EnrollmentDashboard: React.FC = () => {
 export type EnrollmentDashboardContext = {
   client: ClientNameDobVetFragment;
   enrollment?: DashboardEnrollment;
+  enrollmentLoading?: boolean; // this would indicate a re-loading, not the initial load
   overrideBreadcrumbTitles: (crumbs: any) => void;
   enabledFeatures: DataCollectionFeatureRole[];
 };

@@ -27,8 +27,8 @@ import { emptyErrorState } from '@/modules/errors/util';
 
 import {
   FormDefinitionFieldsFragment,
-  FormRole,
   ItemType,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
@@ -42,7 +42,7 @@ export type RenderFormDialogProps = PartialPick<
 };
 
 interface Args<T> extends Omit<DynamicFormHandlerArgs<T>, 'formDefinition'> {
-  formRole: FormRole;
+  formRole: RecordFormRole;
   pickListArgs?: PickListArgs;
   onClose?: VoidFunction;
   localDefinition?: FormDefinitionFieldsFragment;

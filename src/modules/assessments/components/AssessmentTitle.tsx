@@ -29,7 +29,6 @@ const AssessmentTitle = ({
   assessmentRole,
   householdSize,
 }: AssessmentTitleProps) => {
-  // const hhAssessments = useHouseholdAssessments(role, householdId, assessmentId)
   const isAnnual = assessmentRole === AssessmentRole.Annual;
   const skipQuery = !isAnnual || householdSize === 1 || embeddedInWorkflow;
   const { assessmentInfo, loading } = useRelatedAnnualAssessments({
@@ -59,10 +58,8 @@ const AssessmentTitle = ({
                   {':'}
                 </Typography>
                 <RouterLink to={path} openInNew>
-                  {assessmentDate
-                    ? parseAndFormatDate(assessmentDate)
-                    : 'Start new '}{' '}
-                  Annual Assessment for {firstName}
+                  {parseAndFormatDate(assessmentDate)} Annual Assessment for{' '}
+                  {firstName}
                 </RouterLink>
               </Stack>
             )
