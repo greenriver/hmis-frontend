@@ -1,0 +1,9 @@
+query GetHouseholdClientAlerts($id: ID!) {
+  household(id: $id) {
+    householdClients {
+      client {
+        ...ClientWithAlertFields
+      }
+    }
+  }
+}

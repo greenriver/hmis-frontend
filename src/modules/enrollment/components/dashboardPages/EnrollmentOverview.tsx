@@ -10,6 +10,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import { ClientAlertHouseholdWrapper } from '@/modules/client/components/clientAlerts/ClientAlertWrappers';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
@@ -82,6 +83,7 @@ const EnrollmentOverview = () => {
         </Grid>
         <Grid item xs={4}>
           <Stack spacing={4}>
+            <ClientAlertHouseholdWrapper householdId={enrollment.householdId} />
             <EnrollmentReminders enrollmentId={enrollment.id} />
             <EnrollmentQuickActions
               enrollment={enrollment}

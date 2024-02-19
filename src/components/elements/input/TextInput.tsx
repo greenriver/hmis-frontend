@@ -79,7 +79,7 @@ const TextInput = ({
             mt: 0.5,
           },
           backgroundColor: warnIfEmptyTreatment
-            ? 'alerts.lightWarningBackground'
+            ? 'alerts.low.background'
             : undefined,
           width,
           minWidth: width,

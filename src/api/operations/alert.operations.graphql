@@ -1,0 +1,21 @@
+mutation CreateClientAlert($input: ClientAlertInput!) {
+  createClientAlert(input: $input) {
+    clientAlert {
+      ...ClientAlertFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteClientAlert($id: ID!) {
+  deleteClientAlert(id: $id) {
+    clientAlert {
+      ...ClientAlertFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

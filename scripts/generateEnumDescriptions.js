@@ -20,6 +20,7 @@ const ALPHABETICAL = ['FundingSource', 'ServiceSubTypeProvided', 'AgeRange'];
 const SORT_LAST = {
   FundingSource: ['LOCAL_OR_OTHER_FUNDING_SOURCE', 'N_A'],
   ProjectType: ['OTHER'],
+  ClientAlertPriorityLevel: ['low'],
 };
 
 const SORT_FIRST = {

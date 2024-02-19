@@ -2,8 +2,6 @@
 import { Box } from '@mui/material';
 import { useMemo } from 'react';
 
-import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
-
 import HouseholdActionButtons from './elements/HouseholdActionButtons';
 
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
@@ -19,6 +17,7 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
+import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { HmisEnums } from '@/types/gqlEnums';
 import {

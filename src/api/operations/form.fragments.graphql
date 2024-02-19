@@ -19,6 +19,8 @@ fragment PickListOptionFields on PickListOption {
   groupLabel
   groupCode
   initialSelected
+  helperText
+  numericValue
 }
 
 fragment EnableWhenFields on EnableWhen {
