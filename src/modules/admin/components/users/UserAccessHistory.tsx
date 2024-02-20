@@ -88,6 +88,7 @@ const UserAccessHistory = ({ accessEntityType }: Props) => {
             label='Search client access'
             value={search}
             onChange={setSearch}
+            helperText={null}
             searchAdornment
           />
         )}
