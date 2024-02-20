@@ -8175,6 +8175,12 @@
             "description": "SSN input component",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "TIME_DURATION",
+            "description": "Time duration component with hours and minutes",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null

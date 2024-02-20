@@ -176,6 +176,7 @@ export const HmisEnums = {
     SIGNATURE: 'Signature input component',
     SIGNATURE_GROUP: 'Signature input component',
     SSN: 'SSN input component',
+    TIME_DURATION: 'Time duration component with hours and minutes',
   },
   CounselingMethod: {
     FAMILY: 'Family',

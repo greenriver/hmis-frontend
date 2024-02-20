@@ -1130,6 +1130,8 @@ export enum Component {
   SignatureGroup = 'SIGNATURE_GROUP',
   /** SSN input component */
   Ssn = 'SSN',
+  /** Time duration component with hours and minutes */
+  TimeDuration = 'TIME_DURATION',
 }
 
 export enum CounselingMethod {

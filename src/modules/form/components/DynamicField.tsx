@@ -35,6 +35,7 @@ import PhoneInput from '@/components/elements/input/PhoneInput';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
+import TimeDurationInput from '@/components/elements/input/TimeDurationInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
@@ -273,6 +274,17 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.Integer:
     case ItemType.Currency:
+      if (item.component === Component.TimeDuration)
+        return (
+          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+            <TimeDurationInput
+              value={isNil(value) ? '' : value}
+              onChange={onChangeValue}
+              inputWidth={width}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <NumberInput
