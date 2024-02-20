@@ -1126,6 +1126,10 @@ export enum Component {
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
   RadioButtonsVertical = 'RADIO_BUTTONS_VERTICAL',
+  /** Signature input component */
+  Signature = 'SIGNATURE',
+  /** Signature input component */
+  SignatureGroup = 'SIGNATURE_GROUP',
   /** SSN input component */
   Ssn = 'SSN',
 }
@@ -3342,6 +3346,18 @@ export type HouseholdFilterOptions = {
 
 /** HUD Household Sorting Options */
 export enum HouseholdSortOption {
+  /** Head of Household Age: Oldest to Youngest */
+  HohAgeOldestToYoungest = 'HOH_AGE_OLDEST_TO_YOUNGEST',
+  /** Head of Household Age: Youngest to Oldest */
+  HohAgeYoungestToOldest = 'HOH_AGE_YOUNGEST_TO_OLDEST',
+  /** Head of Household First Name: A-Z */
+  HohFirstNameAToZ = 'HOH_FIRST_NAME_A_TO_Z',
+  /** Head of Household First Name: Z-A */
+  HohFirstNameZToA = 'HOH_FIRST_NAME_Z_TO_A',
+  /** Head of Household Last Name: A-Z */
+  HohLastNameAToZ = 'HOH_LAST_NAME_A_TO_Z',
+  /** Head of Household Last Name: Z-A */
+  HohLastNameZToA = 'HOH_LAST_NAME_Z_TO_A',
   /** Most Recent */
   MostRecent = 'MOST_RECENT',
 }
@@ -6256,7 +6272,20 @@ export type ServiceInput = {
 
 /** HMIS Service Sorting Options */
 export enum ServiceSortOption {
+  /** Client Age: Oldest to Youngest */
+  AgeOldestToYoungest = 'AGE_OLDEST_TO_YOUNGEST',
+  /** Client Age: Youngest to Oldest */
+  AgeYoungestToOldest = 'AGE_YOUNGEST_TO_OLDEST',
+  /** Date service was provided */
   DateProvided = 'DATE_PROVIDED',
+  /** Client First Name: A-Z */
+  FirstNameAToZ = 'FIRST_NAME_A_TO_Z',
+  /** Client First Name: Z-A */
+  FirstNameZToA = 'FIRST_NAME_Z_TO_A',
+  /** Client Last Name: A-Z */
+  LastNameAToZ = 'LAST_NAME_A_TO_Z',
+  /** Client Last Name: Z-A */
+  LastNameZToA = 'LAST_NAME_Z_TO_A',
 }
 
 /** HUD Service TypeProvided:SubTypeProvided aggregate (V2.A, V2.B, V2.C) */

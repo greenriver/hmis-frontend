@@ -43,13 +43,17 @@ import SimpleAddressInput from '@/modules/form/components/client/addresses/Simpl
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
-const getLabel = (item: FormItem, horizontal?: boolean) => {
+const getLabel = (
+  item: FormItem,
+  horizontal?: boolean,
+  isDisabled?: boolean
+) => {
   if (!item.text) return null;
 
   return (
     <RequiredLabel
       text={item.text}
-      required={item.required}
+      required={item.required && !isDisabled}
       TypographyProps={{
         fontWeight:
           item.component === Component.Checkbox || horizontal ? undefined : 600,
@@ -108,8 +112,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       itemChanged({ linkId, value, type: ChangeType.User }),
     [linkId, itemChanged]
   );
-
-  const label = noLabel ? null : getLabel(item, horizontal);
+  const isDisabled = disabled || inputProps?.disabled;
+  const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
   const minWidth = minWidthForType(item);
   let width;
@@ -141,7 +145,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     helperText: item.helperText,
     id: linkId,
     ...inputProps,
-    disabled: disabled || inputProps?.disabled,
+    disabled: isDisabled,
   };
   commonInputProps.warnIfEmptyTreatment =
     warnIfEmpty &&
