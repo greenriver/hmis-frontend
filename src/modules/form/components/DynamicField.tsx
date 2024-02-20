@@ -112,7 +112,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     [linkId, itemChanged]
   );
   const isDisabled = disabled || inputProps?.disabled;
-  // FIXME: if no label, set ariaLabel
   const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
   const minWidth = minWidthForType(item);

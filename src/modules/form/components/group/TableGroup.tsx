@@ -49,7 +49,7 @@ const TableGroup = ({
 }: GroupItemComponentProps) => {
   const label = viewOnly ? item.readonlyText || item.text : item.text;
 
-  // Determin header row details by looking at the first row of Items
+  // Determine header row details by looking at the first row of Items
   const tableHeaderInfo = useMemo(() => {
     if (
       !item.item ||
@@ -69,7 +69,6 @@ const TableGroup = ({
     );
   }, [item, viewOnly]);
 
-  console.log(tableHeaderInfo, item);
   return (
     <Box>
       {(label || item.helperText) && (
