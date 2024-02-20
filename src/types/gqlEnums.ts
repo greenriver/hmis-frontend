@@ -176,6 +176,8 @@ export const HmisEnums = {
     SIGNATURE: 'Signature input component',
     SIGNATURE_GROUP: 'Signature input component',
     SSN: 'SSN input component',
+    TABLE:
+      'Render group as a table. Each child item should be a group representing 1 table row.',
   },
   CounselingMethod: {
     FAMILY: 'Family',

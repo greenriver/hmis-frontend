@@ -8175,6 +8175,12 @@
             "description": "SSN input component",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "TABLE",
+            "description": "Render group as a table. Each child item should be a group representing 1 table row.",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
