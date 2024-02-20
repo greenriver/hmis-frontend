@@ -472,7 +472,7 @@ const createThemeOptions = (theme: Theme) => ({
 });
 
 export const createFullTheme = (options?: ThemeOptions) => {
-  // Create theb ase theme, merged with any overlays from the backend
+  // Create the base theme, merged with any overlays from the backend
   const theme = createTheme(deepmerge(baseThemeDef, options || {}));
   // Create the full theme with composition
   return createTheme(theme, createThemeOptions(theme));

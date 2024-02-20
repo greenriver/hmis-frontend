@@ -15,6 +15,14 @@
           "helperText": "This is helper text"
         },
         {
+          "type": "TIME_OF_DAY",
+          "required": true,
+          "warnIfEmpty": true,
+          "linkId": "time-1",
+          "text": "Time of day",
+          "helperText": "This is helper text"
+        },
+        {
           "type": "INTEGER",
           "required": false,
           "warnIfEmpty": true,
