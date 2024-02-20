@@ -8159,20 +8159,14 @@
             "deprecationReason": null
           },
           {
-            "name": "SIGNATURE",
-            "description": "Signature input component",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SIGNATURE_GROUP",
-            "description": "Signature input component",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "SSN",
             "description": "SSN input component",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TABLE",
+            "description": "Render group as a table. Each child item should be a group representing 1 table row.",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -17954,7 +17948,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "ISO8601Date",
+                "name": "ISO8601DateTime",
                 "ofType": null
               }
             },
@@ -18031,7 +18025,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "ISO8601Date",
+              "name": "ISO8601DateTime",
               "ofType": null
             },
             "isDeprecated": false,
@@ -23254,42 +23248,6 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
-          {
-            "name": "HOH_AGE_OLDEST_TO_YOUNGEST",
-            "description": "Head of Household Age: Oldest to Youngest",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HOH_AGE_YOUNGEST_TO_OLDEST",
-            "description": "Head of Household Age: Youngest to Oldest",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HOH_FIRST_NAME_A_TO_Z",
-            "description": "Head of Household First Name: A-Z",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HOH_FIRST_NAME_Z_TO_A",
-            "description": "Head of Household First Name: Z-A",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HOH_LAST_NAME_A_TO_Z",
-            "description": "Head of Household Last Name: A-Z",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HOH_LAST_NAME_Z_TO_A",
-            "description": "Head of Household Last Name: Z-A",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "MOST_RECENT",
             "description": "Most Recent",
@@ -39535,44 +39493,8 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "AGE_OLDEST_TO_YOUNGEST",
-            "description": "Client Age: Oldest to Youngest",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "AGE_YOUNGEST_TO_OLDEST",
-            "description": "Client Age: Youngest to Oldest",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "DATE_PROVIDED",
-            "description": "Date service was provided",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FIRST_NAME_A_TO_Z",
-            "description": "Client First Name: A-Z",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FIRST_NAME_Z_TO_A",
-            "description": "Client First Name: Z-A",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "LAST_NAME_A_TO_Z",
-            "description": "Client Last Name: A-Z",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "LAST_NAME_Z_TO_A",
-            "description": "Client Last Name: Z-A",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }

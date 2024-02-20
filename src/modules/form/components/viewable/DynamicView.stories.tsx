@@ -3,7 +3,8 @@ import { Meta, StoryFn } from '@storybook/react';
 
 import DynamicView from './DynamicView';
 
-import formData from '@/modules/form/data/mock.json';
+import formData from '@/test/__mocks__/mockFormDefinition.json';
+import { generateMockValuesForFromDefinition } from '@/test/utils/testUtils';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -29,28 +30,8 @@ export const Default = Template.bind({});
 Default.args = {
   definition: formDefinition,
   values: {
-    'string-1': 'test',
-    'int-1': '3',
-    'curr-1': '10',
-    'boolean-1': true,
-    'date-1': '2023-04-06T04:00:00.000Z',
+    ...generateMockValuesForFromDefinition(formDefinition),
     ssn: '123456789',
-    'text-1':
-      'Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test ',
-    'choice-2': {
-      code: 'CLIENT_REFUSED',
-      label: 'Client refused',
-    },
-    'multi-choice': [
-      {
-        code: 'CLIENT_REFUSED',
-        label: 'Client refused',
-      },
-      {
-        code: 'CLIENT_DOESN_T_KNOW',
-        label: "Client doesn't know",
-      },
-    ],
     'multi-open': [
       {
         code: 'they/them',
@@ -60,50 +41,8 @@ Default.args = {
         code: 'other',
       },
     ],
-    'radio-1': {
-      code: 'CLIENT_DOESN_T_KNOW',
-      label: "Client doesn't know",
-    },
-    'vertical-radio-1': {
-      code: 'YES',
-      label: 'Yes',
-    },
-    'choice-1': {
-      code: 'YES',
-      label: 'Yes',
-    },
-    'string-4': 'Something',
-    '4.05.2': {
-      code: 'YES',
-      label: 'Yes',
-    },
-    '4.05.A': {
-      code: 'NO',
-      label: 'No',
-    },
-    '4.06.2': {
-      code: 'CLIENT_REFUSED',
-      label: 'Client refused',
-    },
-    '4.07.2': {
-      code: 'CLIENT_DOESN_T_KNOW',
-      label: "Client doesn't know",
-    },
-    '4.07.A': {
-      code: 'YES',
-      label: 'Yes',
-    },
-    n1: '1',
-    n2: '11',
-    n3: '111',
-    c1: true,
-    c3: true,
     image_blob_id: '9999',
     file_id: '9999',
-    'first-name': 'John',
-    'middle-name': 'Q',
-    'last-name': 'Public',
-    'name-suffix': 'Jr.',
   },
 };
 

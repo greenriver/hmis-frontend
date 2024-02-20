@@ -173,9 +173,9 @@ export const HmisEnums = {
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
-    SIGNATURE: 'Signature input component',
-    SIGNATURE_GROUP: 'Signature input component',
     SSN: 'SSN input component',
+    TABLE:
+      'Render group as a table. Each child item should be a group representing 1 table row.',
   },
   CounselingMethod: {
     FAMILY: 'Family',
@@ -682,15 +682,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  HouseholdSortOption: {
-    HOH_AGE_OLDEST_TO_YOUNGEST: 'Head of Household Age: Oldest to Youngest',
-    HOH_AGE_YOUNGEST_TO_OLDEST: 'Head of Household Age: Youngest to Oldest',
-    HOH_FIRST_NAME_A_TO_Z: 'Head of Household First Name: A-Z',
-    HOH_FIRST_NAME_Z_TO_A: 'Head of Household First Name: Z-A',
-    HOH_LAST_NAME_A_TO_Z: 'Head of Household Last Name: A-Z',
-    HOH_LAST_NAME_Z_TO_A: 'Head of Household Last Name: Z-A',
-    MOST_RECENT: 'Most Recent',
-  },
+  HouseholdSortOption: { MOST_RECENT: 'Most Recent' },
   HouseholdType: {
     INVALID: 'Invalid Value',
     HOUSEHOLDS_WITHOUT_CHILDREN: 'Households without children',
@@ -1564,15 +1556,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   ServiceDetailType: { BULK: 'BULK', CLIENT: 'CLIENT' },
-  ServiceSortOption: {
-    AGE_OLDEST_TO_YOUNGEST: 'Client Age: Oldest to Youngest',
-    AGE_YOUNGEST_TO_OLDEST: 'Client Age: Youngest to Oldest',
-    DATE_PROVIDED: 'Date service was provided',
-    FIRST_NAME_A_TO_Z: 'Client First Name: A-Z',
-    FIRST_NAME_Z_TO_A: 'Client First Name: Z-A',
-    LAST_NAME_A_TO_Z: 'Client Last Name: A-Z',
-    LAST_NAME_Z_TO_A: 'Client Last Name: Z-A',
-  },
+  ServiceSortOption: { DATE_PROVIDED: 'DATE_PROVIDED' },
   ServiceSubTypeProvided: {
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
       'Child care',
