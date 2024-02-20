@@ -29,7 +29,7 @@ const mockValueForItem = (item: FormItem) => {
       return null;
   }
 };
-export const generateMockValuesForFromDefinition = (
+export const generateMockValuesForDefinition = (
   definition: FormDefinitionJson
 ) => {
   const itemMap = getItemMap(definition, false);

@@ -4,7 +4,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import DynamicView from './DynamicView';
 
 import formData from '@/test/__mocks__/mockFormDefinition.json';
-import { generateMockValuesForFromDefinition } from '@/test/utils/testUtils';
+import { generateMockValuesForDefinition } from '@/test/utils/testUtils';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -30,7 +30,7 @@ export const Default = Template.bind({});
 Default.args = {
   definition: formDefinition,
   values: {
-    ...generateMockValuesForFromDefinition(formDefinition),
+    ...generateMockValuesForDefinition(formDefinition),
     ssn: '123456789',
     'multi-open': [
       {
