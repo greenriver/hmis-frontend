@@ -61,7 +61,7 @@ const TableGroup = ({
 
     return item.item[0].item.map(
       ({ linkId, text, helperText, readonlyText, required }) => ({
-        id: `${linkId}-label`,
+        id: `${linkId}-id`,
         label: viewOnly ? readonlyText || text : text,
         helperText,
         required,
@@ -98,6 +98,7 @@ const TableGroup = ({
             {tableHeaderInfo.map(({ id, label, required, helperText }) => (
               <TableCell
                 id={id}
+                key={id}
                 sx={{
                   borderBottomColor: 'borders.dark',
                   borderBottomWidth: 2,
@@ -126,9 +127,9 @@ const TableGroup = ({
           </TableRow>
         </TableHead>
         {item.item?.map((rowItem) => (
-          <TableRow>
+          <TableRow key={rowItem.linkId}>
             {rowItem.item?.map((cellItem, index) => (
-              <TableCell>
+              <TableCell key={cellItem.linkId}>
                 {renderChildItem(
                   // remove helper text, it is shown in table header
                   { ...cellItem, helperText: null },
