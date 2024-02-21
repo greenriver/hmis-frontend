@@ -6,6 +6,7 @@ import HorizontalGroup from '../group/HorizontalGroup';
 import InputGroup from '../group/InputGroup';
 import QuestionGroup from '../group/QuestionGroup';
 
+import TableGroup from '../group/TableGroup';
 import ViewCard from './group/ViewCard';
 
 import { Component } from '@/types/gqlTypes';
@@ -49,6 +50,8 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
           <QuestionGroup key={props.item.linkId} {...props} />
         </Box>
       );
+    case Component.Table:
+      return <TableGroup key={props.item.linkId} {...props} viewOnly />;
     default:
       return (
         <QuestionGroup

@@ -9,7 +9,6 @@
         {
           "type": "STRING",
           "required": true,
-          "warnIfEmpty": true,
           "linkId": "string-1",
           "text": "String",
           "helperText": "This is helper text"
@@ -17,10 +16,14 @@
         {
           "type": "INTEGER",
           "required": false,
-          "warnIfEmpty": true,
           "linkId": "int-1",
           "text": "Integer (max = 5)",
-          "bounds": [{ "type": "MAX", "valueNumber": 5 }],
+          "bounds": [
+            {
+              "type": "MAX",
+              "valueNumber": 5
+            }
+          ],
           "helperText": "This is helper text"
         },
         {
@@ -35,16 +38,19 @@
         {
           "type": "CURRENCY",
           "required": false,
-          "warnIfEmpty": true,
           "linkId": "curr-1",
           "text": "Currency (max = 100)",
-          "bounds": [{ "type": "MAX", "valueNumber": 100 }],
+          "bounds": [
+            {
+              "type": "MAX",
+              "valueNumber": 100
+            }
+          ],
           "helperText": "This is helper text"
         },
         {
           "type": "BOOLEAN",
           "required": false,
-          "warnIfEmpty": true,
           "linkId": "boolean-1",
           "text": "Boolean",
           "helperText": "This is helper text"
@@ -52,7 +58,6 @@
         {
           "type": "DATE",
           "required": false,
-          "warnIfEmpty": true,
           "linkId": "date-1",
           "text": "Date",
           "helperText": "This is helper text"
@@ -65,7 +70,6 @@
             {
               "type": "STRING",
               "required": false,
-              "warnIfEmpty": true,
               "linkId": "ssn",
               "text": "SSN",
               "component": "SSN",
@@ -76,14 +80,12 @@
         {
           "type": "TEXT",
           "required": false,
-          "warnIfEmpty": true,
           "linkId": "text-1",
           "text": "Text Field",
           "helperText": "This is helper text"
         },
         {
           "type": "CHOICE",
-          "warnIfEmpty": true,
           "linkId": "choice-2",
           "text": "Choice Option",
           "pickListReference": "NoYesReasonsForMissingData",
@@ -91,16 +93,14 @@
         },
         {
           "type": "CHOICE",
-          "warnIfEmpty": true,
           "repeats": true,
           "linkId": "multi-choice",
           "text": "Multi Select",
-          "pickListReference": "NoYesReasonsForMissingData",
+          "pickListReference": "Race",
           "helperText": "This is helper text"
         },
         {
           "type": "OPEN_CHOICE",
-          "warnIfEmpty": true,
           "linkId": "multi-open",
           "text": "Multi Open Choice",
           "helperText": "You can type anything into this box",
@@ -119,7 +119,6 @@
         },
         {
           "type": "CHOICE",
-          "warnIfEmpty": true,
           "component": "RADIO_BUTTONS",
           "linkId": "radio-1",
           "text": "Choice Option as Radio",
@@ -128,23 +127,45 @@
         },
         {
           "type": "CHOICE",
-          "warnIfEmpty": true,
           "component": "RADIO_BUTTONS_VERTICAL",
           "linkId": "vertical-radio-1",
           "text": "Choice Option as Vertical Radio",
           "pickListReference": "NoYesReasonsForMissingData",
           "helperText": "This is helper text"
-        },
+        }
+      ]
+    },
+    {
+      "type": "GROUP",
+      "linkId": "displays",
+      "text": "Display Items",
+      "item": [
         {
           "type": "DISPLAY",
-
-          "linkId": "alert-example",
+          "linkId": "alert-info",
           "component": "ALERT_INFO",
           "text": "This is a display item <b>in an alert box</b>"
         },
         {
           "type": "DISPLAY",
-
+          "linkId": "alert-warning",
+          "component": "ALERT_WARNING",
+          "text": "This is a display item <b>in an alert box</b>"
+        },
+        {
+          "type": "DISPLAY",
+          "linkId": "alert-error",
+          "component": "ALERT_ERROR",
+          "text": "This is a display item <b>in an alert box</b>"
+        },
+        {
+          "type": "DISPLAY",
+          "linkId": "alert-success",
+          "component": "ALERT_SUCCESS",
+          "text": "This is a display item <b>in an alert box</b>"
+        },
+        {
+          "type": "DISPLAY",
           "linkId": "display-example",
           "text": "This is a display item <b>with HTML</b><ul><li>List item!</li></ul>End of display item."
         }
@@ -200,7 +221,6 @@
       "item": [
         {
           "type": "CHOICE",
-          "warnIfEmpty": true,
           "linkId": "choice-1",
           "text": "Choice with dependencies",
           "briefText": "something",
@@ -210,7 +230,6 @@
         {
           "type": "STRING",
           "required": false,
-          "warnIfEmpty": true,
           "linkId": "string-4",
           "text": "Details (depends on previous)",
           "helperText": "This is helper text",
@@ -229,7 +248,58 @@
     {
       "type": "GROUP",
       "linkId": "groupWithTable",
-      "text": "Group with Table",
+      "text": "Table layout",
+      "item": [
+        {
+          "type": "GROUP",
+          "linkId": "table",
+          "component": "TABLE",
+          "text": "Table Title",
+          "helperText": "Instructional text for the table",
+          "item": [
+            {
+              "type": "GROUP",
+              "linkId": "table-r1",
+              "item": [
+                {
+                  "type": "STRING",
+                  "linkId": "r1-name",
+                  "text": "What is the clients name?",
+                  "readonlyText": "Name",
+                  "helperText": "full name please"
+                },
+                {
+                  "type": "CURRENCY",
+                  "linkId": "r1-amount",
+                  "text": "Amount",
+                  "helperText": "Helper for amount"
+                }
+              ]
+            },
+            {
+              "type": "GROUP",
+              "linkId": "table-r2",
+              "item": [
+                {
+                  "type": "STRING",
+                  "linkId": "r2-name",
+                  "text": "Name"
+                },
+                {
+                  "type": "CURRENCY",
+                  "linkId": "r2-amount",
+                  "text": "Amount"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "GROUP",
+      "linkId": "groupWithDisabilityTable",
+      "text": "Disability Table",
       "item": [
         {
           "type": "GROUP",
@@ -243,21 +313,15 @@
               "item": [
                 {
                   "type": "CHOICE",
-                  "warnIfEmpty": true,
                   "linkId": "4.05.2",
                   "text": "Physical Disability",
-                  "mapping": { "fieldName": "physicalDisability" },
                   "pickListReference": "NoYesReasonsForMissingData"
                 },
                 {
                   "type": "CHOICE",
-                  "warnIfEmpty": true,
                   "linkId": "4.05.A",
                   "text": "Is this a disabling condition?",
                   "briefText": "Disabling Condition",
-                  "mapping": {
-                    "fieldName": "physicalDisabilityIndefiniteAndImpairs"
-                  },
                   "pickListReference": "NoYesReasonsForMissingData"
                 }
               ]
@@ -269,10 +333,8 @@
               "item": [
                 {
                   "type": "CHOICE",
-                  "warnIfEmpty": true,
                   "linkId": "4.06.2",
                   "text": "Developmental Disability",
-                  "mapping": { "fieldName": "developmentalDisability" },
                   "pickListReference": "NoYesReasonsForMissingData"
                 },
                 {
@@ -289,21 +351,15 @@
               "item": [
                 {
                   "type": "CHOICE",
-                  "warnIfEmpty": true,
                   "linkId": "4.07.2",
                   "text": "Chronic Health Condition",
-                  "mapping": { "fieldName": "chronicHealthCondition" },
                   "pickListReference": "NoYesReasonsForMissingData"
                 },
                 {
                   "type": "CHOICE",
-                  "warnIfEmpty": true,
                   "linkId": "4.07.A",
                   "text": "Is this a disabling condition?",
                   "briefText": "Disabling Condition",
-                  "mapping": {
-                    "fieldName": "chronicHealthConditionIndefiniteAndImpairs"
-                  },
                   "pickListReference": "NoYesReasonsForMissingData"
                 }
               ]
@@ -332,20 +388,17 @@
             {
               "type": "CURRENCY",
               "linkId": "n1",
-              "text": "Question 1",
-              "warnIfEmpty": true
+              "text": "Question 1"
             },
             {
               "type": "CURRENCY",
               "linkId": "n2",
-              "warnIfEmpty": true,
               "text": "Question 2"
             },
             {
               "type": "CURRENCY",
               "linkId": "n3",
               "text": "Question 3",
-              "warnIfEmpty": true,
               "helperText": "This is helper text"
             }
           ]
@@ -366,20 +419,17 @@
               "type": "BOOLEAN",
               "component": "CHECKBOX",
               "linkId": "c1",
-              "warnIfEmpty": true,
               "text": "Question 1"
             },
             {
               "type": "BOOLEAN",
               "component": "CHECKBOX",
               "linkId": "c2",
-              "warnIfEmpty": true,
               "text": "Question 2"
             },
             {
               "type": "BOOLEAN",
               "component": "CHECKBOX",
-              "warnIfEmpty": true,
               "linkId": "c3",
               "text": "Question 3",
               "helperText": "This is helper text"
@@ -391,14 +441,12 @@
     {
       "type": "GROUP",
       "required": false,
-      "warnIfEmpty": true,
       "linkId": "image",
       "text": "Image",
       "item": [
         {
           "type": "IMAGE",
           "required": false,
-          "warnIfEmpty": true,
           "linkId": "image_blob_id",
           "text": "Image"
         },
@@ -406,7 +454,6 @@
           "type": "DISPLAY",
           "linkId": "image-alert",
           "required": false,
-          "warnIfEmpty": true,
           "text": "You must use the image from the uploader story to test this uploader component",
           "component": "ALERT_INFO"
         }
@@ -415,14 +462,12 @@
     {
       "type": "GROUP",
       "required": false,
-      "warnIfEmpty": true,
       "linkId": "file",
       "text": "File",
       "item": [
         {
           "type": "FILE",
           "required": false,
-          "warnIfEmpty": true,
           "linkId": "file_id",
           "text": "File"
         },
@@ -430,7 +475,6 @@
           "type": "DISPLAY",
           "linkId": "file-alert",
           "required": false,
-          "warnIfEmpty": true,
           "text": "Don't upload anything here",
           "component": "ALERT_INFO"
         }

@@ -1132,6 +1132,8 @@ export enum Component {
   SignatureGroup = 'SIGNATURE_GROUP',
   /** SSN input component */
   Ssn = 'SSN',
+  /** Render group as a table. Each child item should be a group representing 1 table row. */
+  Table = 'TABLE',
 }
 
 export enum CounselingMethod {
