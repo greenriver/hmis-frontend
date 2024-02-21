@@ -1,4 +1,3 @@
-import { DateType } from '@date-io/type';
 import { SxProps, Theme } from '@mui/material';
 import {
   DatePickerProps,
@@ -15,15 +14,14 @@ import { DynamicInputCommonProps, isDate } from '@/modules/form/types';
 import { isValidDate } from '@/modules/form/util/formUtil';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
 
-interface PickerProps
-  extends Omit<DatePickerProps<DateType, DateType>, 'renderInput'> {
+interface PickerProps extends Omit<DatePickerProps<Date>, 'renderInput'> {
   sx?: SxProps<Theme>;
   textInputProps?: TextInputProps;
 }
 
 type Props = PickerProps & DynamicInputCommonProps;
 
-const DatePicker = ({
+const DatePicker: React.FC<Props> = ({
   sx,
   textInputProps,
   error,
@@ -33,7 +31,7 @@ const DatePicker = ({
   helperText,
   warnIfEmptyTreatment,
   ...props
-}: Props) => {
+}) => {
   // If max date is in the past, default to the max date's month
   const defaultOpenMonth = useMemo(() => {
     // if (isDate(min)) return min;
@@ -74,22 +72,26 @@ const DatePicker = ({
       showDaysOutsideCurrentMonth
       minDate={isDate(min) ? min : undefined}
       maxDate={isDate(max) ? max : undefined}
-      defaultCalendarMonth={defaultOpenMonth}
-      renderInput={(params) => (
-        <TextInput
-          sx={sx}
-          onBlur={handleBlur}
-          {...textInputProps}
-          {...params}
-          error={error || !!errorMessage}
-          warnIfEmptyTreatment={warnIfEmptyTreatment}
+      referenceDate={defaultOpenMonth}
+      slots={{
+        textField: TextInput,
+      }}
+      slotProps={{
+        textField: {
+          sx,
+          onBlur: handleBlur,
+          ...textInputProps,
+          error: error || !!errorMessage,
+          //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          warnIfEmptyTreatment,
           // If there is a server error, show that instead of the local message
-          helperText={error ? undefined : errorMessage || helperText}
-          FormHelperTextProps={{
+          helperText: error ? undefined : errorMessage || helperText,
+          FormHelperTextProps: {
             sx: { '&.Mui-error': { whiteSpace: 'nowrap' } },
-          }}
-        />
-      )}
+          },
+        },
+      }}
     />
   );
 };

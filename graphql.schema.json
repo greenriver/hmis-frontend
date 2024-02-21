@@ -2774,6 +2774,18 @@
             "deprecationReason": null
           },
           {
+            "name": "formula",
+            "description": "Expression with mathematical or logical function defining the value",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "sumQuestions",
             "description": "Link IDs of numeric questions to sum up and set as the value if condition is met",
             "args": [],
@@ -17966,7 +17978,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "ISO8601Date",
+                "name": "ISO8601DateTime",
                 "ofType": null
               }
             },
@@ -18043,7 +18055,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "ISO8601Date",
+              "name": "ISO8601DateTime",
               "ofType": null
             },
             "isDeprecated": false,
@@ -25489,6 +25501,12 @@
           },
           {
             "name": "TEXT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TIME_OF_DAY",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
