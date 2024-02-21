@@ -27,6 +27,15 @@
           "helperText": "This is helper text"
         },
         {
+          "type": "INTEGER",
+          "required": false,
+          "warnIfEmpty": true,
+          "linkId": "time",
+          "text": "Duration",
+          "component": "MINUTES_DURATION",
+          "helperText": "This is helper text"
+        },
+        {
           "type": "CURRENCY",
           "required": false,
           "linkId": "curr-1",
