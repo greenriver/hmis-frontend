@@ -8135,6 +8135,12 @@
             "deprecationReason": null
           },
           {
+            "name": "MINUTES_DURATION",
+            "description": "Duration component with hours and minutes, value stored as minutes",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "NAME",
             "description": "Client Name input",
             "isDeprecated": false,
@@ -8173,12 +8179,6 @@
           {
             "name": "SSN",
             "description": "SSN input component",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "TIME_DURATION",
-            "description": "Time duration component with hours and minutes",
             "isDeprecated": false,
             "deprecationReason": null
           }
