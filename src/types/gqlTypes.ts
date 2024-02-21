@@ -1116,6 +1116,8 @@ export enum Component {
   InputGroup = 'INPUT_GROUP',
   /** MCI linking component */
   Mci = 'MCI',
+  /** Duration component with hours and minutes, value stored as minutes */
+  MinutesDuration = 'MINUTES_DURATION',
   /** Client Name input */
   Name = 'NAME',
   /** Phone number input for ContactPoint */

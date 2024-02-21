@@ -168,6 +168,8 @@ export const HmisEnums = {
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
     MCI: 'MCI linking component',
+    MINUTES_DURATION:
+      'Duration component with hours and minutes, value stored as minutes',
     NAME: 'Client Name input',
     PHONE: 'Phone number input for ContactPoint',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',

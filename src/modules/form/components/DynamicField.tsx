@@ -29,6 +29,7 @@ import RequiredLabel from './RequiredLabel';
 import CheckboxGroupInput from '@/components/elements/input/CheckboxGroupInput';
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
+import MinutesDurationInput from '@/components/elements/input/MinutesDurationInput';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import PhoneInput from '@/components/elements/input/PhoneInput';
@@ -273,6 +274,17 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.Integer:
     case ItemType.Currency:
+      if (item.component === Component.MinutesDuration)
+        return (
+          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+            <MinutesDurationInput
+              value={isNil(value) ? '' : value}
+              onChange={onChangeValue}
+              inputWidth={width}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <NumberInput
