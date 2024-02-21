@@ -9,6 +9,7 @@ import HorizontalGroup from './group/HorizontalGroup';
 import InputGroup from './group/InputGroup';
 import QuestionGroup from './group/QuestionGroup';
 
+import TableGroup from './group/TableGroup';
 import { SignatureIcon } from '@/components/elements/SemanticIcons';
 import Signature from '@/modules/form/components/group/Signature';
 import { Component } from '@/types/gqlTypes';
@@ -86,6 +87,8 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
           <QuestionGroup key={props.item.linkId} {...props} />
         </InfoGroup>
       );
+    case Component.Table:
+      return <TableGroup key={props.item.linkId} {...props} />;
     default:
       return <QuestionGroup key={props.item.linkId} {...props} />;
   }

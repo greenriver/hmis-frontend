@@ -1116,6 +1116,8 @@ export enum Component {
   InputGroup = 'INPUT_GROUP',
   /** MCI linking component */
   Mci = 'MCI',
+  /** Duration component with hours and minutes, value stored as minutes */
+  MinutesDuration = 'MINUTES_DURATION',
   /** Client Name input */
   Name = 'NAME',
   /** Phone number input for ContactPoint */
@@ -1130,6 +1132,8 @@ export enum Component {
   SignatureGroup = 'SIGNATURE_GROUP',
   /** SSN input component */
   Ssn = 'SSN',
+  /** Render group as a table. Each child item should be a group representing 1 table row. */
+  Table = 'TABLE',
 }
 
 export enum CounselingMethod {
