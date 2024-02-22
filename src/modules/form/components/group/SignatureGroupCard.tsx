@@ -3,9 +3,8 @@ import FormCard, { FormCardProps } from './FormCard';
 import { SignatureIcon } from '@/components/elements/SemanticIcons';
 
 /**
- * Render a top-level form card with Signature Icon
- * and special styling.
- *
+ * Render a top-level form card with Signature Icon and special styling.
+ * Usually has Signature group item(s) as children.
  */
 const SignatureGroupCard = ({
   debug,

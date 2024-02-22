@@ -1,9 +1,15 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 
 import { GroupItemComponentProps } from '../../types';
 import theme from '@/config/theme';
 
-const Signature = ({ item, renderChildItem }: GroupItemComponentProps) => {
+// Group component for rendering 1 person's signature.
+// Usually has String and Date items as children (signature & date signed).
+const Signature = ({
+  item,
+  renderChildItem,
+  viewOnly,
+}: GroupItemComponentProps) => {
   return (
     <Grid
       item
@@ -21,25 +27,25 @@ const Signature = ({ item, renderChildItem }: GroupItemComponentProps) => {
       }}
     >
       <fieldset style={{ border: 'none', margin: 'none', padding: 'none' }}>
-        {item.text && (
-          <legend>
-            <Typography
-              variant='h5'
-              color={theme.palette.primary.main}
-              sx={{ mb: 2 }}
-            >
-              {item.text}
+        <Stack gap={2}>
+          {item.text && (
+            <legend>
+              <Typography variant='h5' color={theme.palette.primary.main}>
+                {item.text}
+              </Typography>
+            </legend>
+          )}
+          <Grid container direction='row' columnGap={viewOnly ? 6 : 2}>
+            {renderChildItem &&
+              item.item?.map((childItem) => renderChildItem(childItem))}
+          </Grid>
+          {!viewOnly && (
+            <Typography variant='body2'>
+              By signing, I do hereby certify that the above information is
+              true, accurate and complete to the best of my knowledge
             </Typography>
-          </legend>
-        )}
-        <Grid container direction='row' sx={{ mb: 2 }} columnGap={2}>
-          {renderChildItem &&
-            item.item?.map((childItem) => renderChildItem(childItem))}
-        </Grid>
-        <Typography variant='body1'>
-          By signing, I do hereby certify that the above information is true,
-          accurate and complete to the best of my knowledge
-        </Typography>
+          )}
+        </Stack>
       </fieldset>
     </Grid>
   );

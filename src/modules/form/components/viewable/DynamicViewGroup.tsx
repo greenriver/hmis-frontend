@@ -7,6 +7,7 @@ import HorizontalGroup from '../group/HorizontalGroup';
 import InputGroup from '../group/InputGroup';
 import QuestionGroup from '../group/QuestionGroup';
 
+import Signature from '../group/Signature';
 import SignatureGroupCard from '../group/SignatureGroupCard';
 import TableGroup from '../group/TableGroup';
 
@@ -38,7 +39,9 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
     case Component.DisabilityTable:
       return <DisabilityTable key={props.item.linkId} {...props} />;
     case Component.HorizontalGroup:
-      return <HorizontalGroup key={props.item.linkId} {...props} />;
+      return <HorizontalGroup key={props.item.linkId} viewOnly {...props} />;
+    case Component.Signature:
+      return <Signature key={props.item.linkId} viewOnly {...props} />;
     case Component.InfoGroup:
       return (
         <Box
