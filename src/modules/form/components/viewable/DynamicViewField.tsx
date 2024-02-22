@@ -172,6 +172,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
             />
           );
       }
+
     default:
       return (
         <RecoverableError

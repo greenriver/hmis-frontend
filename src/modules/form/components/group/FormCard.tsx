@@ -27,7 +27,7 @@ import RecordPickerDialog from '../RecordPickerDialog';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
-interface Props extends GroupItemComponentProps {
+export interface FormCardProps extends GroupItemComponentProps {
   anchor?: string;
   clientId?: string;
   debug?: (ids?: string[]) => void;
@@ -36,7 +36,7 @@ interface Props extends GroupItemComponentProps {
   helperTextProps?: TypographyProps;
 }
 
-const FormCard: React.FC<Props> = ({
+const FormCard: React.FC<FormCardProps> = ({
   item,
   clientId,
   severalItemsChanged = () => {},
@@ -48,6 +48,7 @@ const FormCard: React.FC<Props> = ({
   TitleIcon,
   helperTextProps,
   titleProps,
+  viewOnly,
 }) => {
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
@@ -117,16 +118,18 @@ const FormCard: React.FC<Props> = ({
               </Typography>
 
               <Stack direction='row' spacing={2}>
-                {debug && import.meta.env.MODE === 'development' && (
-                  <Button
-                    {...buttonProps}
-                    onClick={() => debug(childLinkIds)}
-                    variant='text'
-                  >
-                    Debug
-                  </Button>
-                )}
-                {item.prefill && (
+                {debug &&
+                  import.meta.env.MODE === 'development' &&
+                  !viewOnly && (
+                    <Button
+                      {...buttonProps}
+                      onClick={() => debug(childLinkIds)}
+                      variant='text'
+                    >
+                      Debug
+                    </Button>
+                  )}
+                {item.prefill && !viewOnly && (
                   <>
                     <Button
                       data-testid='fillSectionButton'
@@ -185,7 +188,7 @@ const FormCard: React.FC<Props> = ({
           </Grid>
 
           {/* Dialog for selecting autofill record */}
-          {item.prefill && clientId && (
+          {item.prefill && clientId && !viewOnly && (
             <>
               <RecordPickerDialog
                 id={`recordPickerDialog-${item.linkId}`}
