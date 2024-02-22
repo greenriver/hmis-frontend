@@ -9,6 +9,10 @@ type Props = { value?: number; onChange?: (val: number | null) => void } & Omit<
   'value' | 'onChange'
 >;
 
+export const minutesToHoursAndMinutes = (minutes: number) => {
+  return [Math.floor(minutes / 60), minutes % 60];
+};
+
 const MinutesDurationInput = ({
   value,
   onChange,
@@ -18,7 +22,7 @@ const MinutesDurationInput = ({
 }: Props) => {
   const [hours, minutes] = useMemo(() => {
     if (!value) return ['', ''];
-    return [Math.floor(value / 60), value % 60];
+    return minutesToHoursAndMinutes(value);
   }, [value]);
 
   const getIntValue = (v?: string | number) => {

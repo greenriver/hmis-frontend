@@ -63,6 +63,13 @@
           "helperText": "This is helper text"
         },
         {
+          "type": "TIME_OF_DAY",
+          "required": false,
+          "linkId": "time-of-day-1",
+          "text": "Time of Day",
+          "helperText": "This is helper text"
+        },
+        {
           "type": "GROUP",
           "component": "INFO_GROUP",
           "linkId": "ssn-group",

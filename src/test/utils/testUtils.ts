@@ -15,6 +15,8 @@ const mockValueForItem = (item: FormItem) => {
       return sample([0, 50.0, 100.25]);
     case ItemType.Date:
       return new Date();
+    case ItemType.TimeOfDay:
+      return (60 * 6 + 30).toString(); // 6:30PM (minutes since midnight)
     case ItemType.Text:
       return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.';
     case ItemType.Choice:
