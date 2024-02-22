@@ -65,9 +65,44 @@
         {
           "type": "TIME_OF_DAY",
           "required": false,
-          "linkId": "time-of-day-1",
-          "text": "Time of Day",
+          "linkId": "time_1",
+          "text": "Time of Day 1",
           "helperText": "This is helper text"
+        },
+        {
+          "type": "TIME_OF_DAY",
+          "required": false,
+          "linkId": "time_2",
+          "text": "Time of Day 2",
+          "helperText": "This is helper text"
+        },
+        {
+          "text": "Duration",
+          "type": "INTEGER",
+          "component": "MINUTES_DURATION",
+          "linkId": "duration_formula",
+          "readOnly": true,
+          "autofillValues": [
+            {
+              "formula": "ABS(time_1 - time_2)",
+              "autofillWhen": [],
+              "autofillBehavior": "ANY",
+              "autofillReadonly": true
+            }
+          ]
+        },
+        {
+          "text": "<b>Duration</b>: ${FORMAT_DURATION(value)}",
+          "type": "DISPLAY",
+          "linkId": "duration_formula_display",
+          "autofillValues": [
+            {
+              "formula": "ABS(time_1 - time_2)",
+              "autofillWhen": [],
+              "autofillBehavior": "ANY",
+              "autofillReadonly": true
+            }
+          ]
         },
         {
           "type": "GROUP",

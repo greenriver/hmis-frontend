@@ -1,13 +1,15 @@
 import { FormControl, FormHelperText, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { ReactElement, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import NumberInput from '@/components/elements/input/NumberInput';
 import { TextInputProps } from '@/components/elements/input/TextInput';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 
-type Props = { value?: number; onChange?: (val: number | null) => void } & Omit<
-  TextInputProps,
-  'value' | 'onChange'
->;
+type Props = {
+  value?: number;
+  onChange?: (val: number | null) => void;
+} & Omit<TextInputProps, 'value' | 'onChange'> &
+  DynamicInputCommonProps;
 
 export const minutesToHoursAndMinutes = (minutes: number) => {
   return [Math.floor(minutes / 60), minutes % 60];
@@ -18,6 +20,7 @@ const MinutesDurationInput = ({
   onChange,
   label,
   helperText,
+  ariaLabel = 'duration',
   ...props
 }: Props) => {
   const [hours, minutes] = useMemo(() => {
@@ -62,12 +65,6 @@ const MinutesDurationInput = ({
     );
   }, []);
 
-  const getLabelText = useCallback(() => {
-    if ((label as ReactElement).props)
-      return (label as ReactElement).props.text;
-    return label;
-  }, [label]);
-
   return (
     <FormControl>
       {label}
@@ -80,8 +77,11 @@ const MinutesDurationInput = ({
           helperText={null}
           fullWidth={false}
           placeholder='0'
-          ariaLabelledBy={getLabelText() + ' (hours)'}
           inputWidth={90}
+          inputProps={{
+            'aria-label': `${ariaLabel} (hours)`,
+            ...props.inputProps,
+          }}
           InputProps={{
             endAdornment: getAdornment('hours'),
             ...props.InputProps,
@@ -98,7 +98,10 @@ const MinutesDurationInput = ({
           fullWidth={false}
           inputWidth={105}
           placeholder='0'
-          ariaLabelledBy={getLabelText() + ' (minutes)'}
+          inputProps={{
+            'aria-label': `${ariaLabel} (minutes)`,
+            ...props.inputProps,
+          }}
           InputProps={{
             endAdornment: getAdornment('minutes'),
             ...props.InputProps,

@@ -74,6 +74,7 @@ export interface DynamicInputCommonProps {
   id?: string;
   disabled?: boolean;
   label?: ReactNode;
+  ariaLabel?: string;
   error?: boolean;
   warnIfEmptyTreatment?: boolean;
   helperText?: ReactNode;
