@@ -173,7 +173,7 @@ const FormCard: React.FC<FormCardProps> = ({
             container
             direction='column'
             // Spacing between input elements inside the card
-            gap={3}
+            gap={viewOnly ? 2 : 3}
             sx={{
               '& .MuiGrid-item:first-of-type': !item.text
                 ? { pt: 0 }
