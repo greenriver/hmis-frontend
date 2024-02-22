@@ -1,4 +1,5 @@
 import { Skeleton, Stack, Typography } from '@mui/material';
+import { formatDuration } from 'date-fns';
 import { isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
 
@@ -12,6 +13,7 @@ import Image from './item/Image';
 
 import TextContent from './item/TextContent';
 
+import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import NotCollectedText from '@/components/elements/NotCollectedText';
@@ -19,6 +21,7 @@ import RecoverableError from '@/components/elements/RecoverableError';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import {
   formatDateForDisplay,
+  formatTimeOfDay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import {
@@ -103,9 +106,27 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         />
       );
     case ItemType.TimeOfDay:
+      return (
+        <TextContent
+          {...commonProps}
+          renderValue={(val) => formatTimeOfDay(val)}
+        />
+      );
     case ItemType.Text:
     case ItemType.String:
+      return <TextContent {...commonProps} />;
     case ItemType.Integer:
+      if (item.component === Component.MinutesDuration) {
+        return (
+          <TextContent
+            {...commonProps}
+            renderValue={(val) => {
+              const [hours, minutes] = minutesToHoursAndMinutes(val);
+              return formatDuration({ minutes, hours }, { zero: true });
+            }}
+          />
+        );
+      }
       return <TextContent {...commonProps} />;
     case ItemType.Currency:
       return <TextContent {...commonProps} renderValue={(val) => `$${val}`} />;
@@ -172,6 +193,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
             />
           );
       }
+
     default:
       return (
         <RecoverableError

@@ -9,6 +9,10 @@ type Props = { value?: number; onChange?: (val: number | null) => void } & Omit<
   'value' | 'onChange'
 >;
 
+export const minutesToHoursAndMinutes = (minutes: number) => {
+  return [Math.floor(minutes / 60), minutes % 60] as const;
+};
+
 const MinutesDurationInput = ({
   value,
   onChange,
@@ -18,7 +22,7 @@ const MinutesDurationInput = ({
 }: Props) => {
   const [hours, minutes] = useMemo(() => {
     if (!value) return ['', ''];
-    return [Math.floor(value / 60), value % 60];
+    return minutesToHoursAndMinutes(value);
   }, [value]);
 
   const getIntValue = (v?: string | number) => {
@@ -67,7 +71,7 @@ const MinutesDurationInput = ({
   return (
     <FormControl>
       {label}
-      <Stack alignItems='center' direction='row' gap={1}>
+      <Stack alignItems='center' direction='row' gap={1} sx={{ mt: 0.5 }}>
         <NumberInput
           {...props}
           value={hours || ''}
@@ -75,7 +79,9 @@ const MinutesDurationInput = ({
           label={null}
           helperText={null}
           fullWidth={false}
+          placeholder='0'
           ariaLabelledBy={getLabelText() + ' (hours)'}
+          inputWidth={90}
           InputProps={{
             endAdornment: getAdornment('hours'),
             ...props.InputProps,
@@ -90,6 +96,8 @@ const MinutesDurationInput = ({
           helperText={null}
           max={59}
           fullWidth={false}
+          inputWidth={105}
+          placeholder='0'
           ariaLabelledBy={getLabelText() + ' (minutes)'}
           InputProps={{
             endAdornment: getAdornment('minutes'),

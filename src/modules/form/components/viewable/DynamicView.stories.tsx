@@ -43,6 +43,7 @@ Default.args = {
     ],
     image_blob_id: '9999',
     file_id: '9999',
+    durationMinutes: 75,
   },
 };
 

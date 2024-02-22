@@ -1,5 +1,5 @@
 import {
-  Box,
+  Grid,
   Stack,
   Table,
   TableCell,
@@ -70,7 +70,7 @@ const TableGroup = ({
   }, [item, viewOnly]);
 
   return (
-    <Box>
+    <Grid item xs>
       {(label || item.helperText) && (
         <Stack sx={{ mb: 2 }} gap={1}>
           {label && <Typography>{label}</Typography>}
@@ -82,6 +82,7 @@ const TableGroup = ({
         </Stack>
       )}
       <Table
+        size='small' // less padding in table cells
         sx={{
           border: (theme) => `1px solid ${theme.palette.grey[200]}`,
           p: 1,
@@ -90,6 +91,7 @@ const TableGroup = ({
             borderRightWidth: 1,
             borderRightStyle: 'solid',
           },
+          width: 'initial',
         }}
         aria-label={label || undefined}
       >
@@ -144,7 +146,7 @@ const TableGroup = ({
           </TableRow>
         ))}
       </Table>
-    </Box>
+    </Grid>
   );
 };
 

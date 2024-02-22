@@ -78,6 +78,8 @@ const minWidthForType = (item: FormItem) => {
       return 300;
     case ItemType.Choice:
     case ItemType.OpenChoice:
+      // FIXME: this was added for dropdowns, but it's also applied
+      // to radio buttons, which is incorrect
       return FIXED_WIDTH_MEDIUM;
     default:
       return undefined;
