@@ -67,7 +67,7 @@ const MinutesDurationInput = ({
   return (
     <FormControl>
       {label}
-      <Stack alignItems='center' direction='row' gap={1}>
+      <Stack alignItems='center' direction='row' gap={1} sx={{ mt: 0.5 }}>
         <NumberInput
           {...props}
           value={hours || ''}
@@ -75,7 +75,9 @@ const MinutesDurationInput = ({
           label={null}
           helperText={null}
           fullWidth={false}
+          placeholder='0'
           ariaLabelledBy={getLabelText() + ' (hours)'}
+          inputWidth={90}
           InputProps={{
             endAdornment: getAdornment('hours'),
             ...props.InputProps,
@@ -90,6 +92,8 @@ const MinutesDurationInput = ({
           helperText={null}
           max={59}
           fullWidth={false}
+          inputWidth={105}
+          placeholder='0'
           ariaLabelledBy={getLabelText() + ' (minutes)'}
           InputProps={{
             endAdornment: getAdornment('minutes'),

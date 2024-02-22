@@ -1,4 +1,5 @@
 import { Skeleton, Stack, Typography } from '@mui/material';
+import { formatDuration } from 'date-fns';
 import { isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
 
@@ -105,7 +106,18 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     case ItemType.TimeOfDay:
     case ItemType.Text:
     case ItemType.String:
+      return <TextContent {...commonProps} />;
     case ItemType.Integer:
+      if (item.component === Component.MinutesDuration) {
+        return (
+          <TextContent
+            {...commonProps}
+            renderValue={(val) =>
+              formatDuration({ minutes: val }, { zero: true })
+            }
+          />
+        );
+      }
       return <TextContent {...commonProps} />;
     case ItemType.Currency:
       return <TextContent {...commonProps} renderValue={(val) => `$${val}`} />;

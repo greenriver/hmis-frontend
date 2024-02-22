@@ -30,7 +30,7 @@
           "type": "INTEGER",
           "required": false,
           "warnIfEmpty": true,
-          "linkId": "time",
+          "linkId": "durationMinutes",
           "text": "Duration",
           "component": "MINUTES_DURATION",
           "helperText": "This is helper text"
