@@ -2,6 +2,7 @@ import { ApolloProvider } from '@apollo/client';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
+import en from 'date-fns/locale/en-US';
 import * as React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -20,7 +21,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <React.Suspense fallback={<Loading />}>
       <SentryErrorBoundary>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={en}>
           <ApolloProvider client={apolloClient}>
             <BrowserRouter>
               <HmisAppSettingsProvider>

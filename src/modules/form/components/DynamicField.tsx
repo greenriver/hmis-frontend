@@ -36,6 +36,7 @@ import PhoneInput from '@/components/elements/input/PhoneInput';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
+import TimeOfDayPicker from '@/components/elements/input/TimeOfDayPicker';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
@@ -118,7 +119,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   const minWidth = minWidthForType(item);
   let width;
 
-  if (item.size === InputSize.Small || item.type === ItemType.Date) {
+  if (
+    item.size === InputSize.Small ||
+    item.type === ItemType.Date ||
+    item.type === ItemType.TimeOfDay
+  ) {
     width = FIXED_WIDTH_SMALL;
   } else if (item.size === InputSize.Xsmall) {
     width = FIXED_WIDTH_X_SMALL;
@@ -316,6 +321,21 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               sx: { width },
             }}
             {...datePickerProps}
+            {...commonInputProps}
+          />
+        </InputContainer>
+      );
+    case ItemType.TimeOfDay:
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <TimeOfDayPicker
+            value={value}
+            onChange={onChangeValue}
+            textInputProps={{
+              id: linkId,
+              horizontal,
+              sx: { width },
+            }}
             {...commonInputProps}
           />
         </InputContainer>
