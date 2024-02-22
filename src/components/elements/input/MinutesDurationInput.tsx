@@ -10,7 +10,7 @@ type Props = { value?: number; onChange?: (val: number | null) => void } & Omit<
 >;
 
 export const minutesToHoursAndMinutes = (minutes: number) => {
-  return [Math.floor(minutes / 60), minutes % 60];
+  return [Math.floor(minutes / 60), minutes % 60] as const;
 };
 
 const MinutesDurationInput = ({

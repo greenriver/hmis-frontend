@@ -29,11 +29,13 @@ const Signature = ({
       <fieldset style={{ border: 'none', margin: 'none', padding: 'none' }}>
         <Stack gap={2}>
           {item.text && (
-            <legend>
-              <Typography variant='h5' color={theme.palette.primary.main}>
-                {item.text}
-              </Typography>
-            </legend>
+            <Typography
+              variant='h5'
+              color={theme.palette.primary.main}
+              component='legend'
+            >
+              {item.text}
+            </Typography>
           )}
           <Grid container direction='row' columnGap={viewOnly ? 6 : 2}>
             {renderChildItem &&
