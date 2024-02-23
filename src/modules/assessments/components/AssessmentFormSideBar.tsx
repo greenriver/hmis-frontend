@@ -14,6 +14,7 @@ import FormStepper from '@/modules/form/components/FormStepper';
 
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
+  AssessmentRole,
   EnrollmentFieldsFragment,
   FormDefinitionFieldsFragment,
   FullAssessmentFragment,
@@ -59,9 +60,31 @@ const AssessmentFormSideBar: React.FC<Props> = ({
       ),
     [enrollment, navigate]
   );
+
+  const shouldShowDeleteButton = (assessment: FullAssessmentFragment) => {
+    const { canDeleteAssessments, canEditEnrollments, canDeleteEnrollments } =
+      assessment.access;
+
+    // canEditEnrollments is required for deleting WIP or Submitted assessments
+    if (!canEditEnrollments) return false;
+
+    const isSubmitted = !assessment.inProgress;
+    const deletesEnrollment = assessment.role === AssessmentRole.Intake;
+    if (isSubmitted) {
+      // canDeleteAssessments is required for deleting submitted assessments
+      if (!canDeleteAssessments) return false;
+
+      // canDeleteEnrollments is required for deleting submitted INTAKE assessments
+      if (!canDeleteEnrollments && deletesEnrollment) return false;
+    }
+
+    return true;
+  };
+
   const showAutofillButton = showAutofill && !assessment && canEdit;
   const showPrintViewButton = !isPrintView && locked && assessment;
-  const showDeleteAssessmentButton = !!assessment;
+  const showDeleteAssessmentButton =
+    assessment && shouldShowDeleteButton(assessment);
   const showAssessmentId = assessment && import.meta.env.MODE === 'development';
 
   return (
