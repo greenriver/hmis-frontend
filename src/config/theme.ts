@@ -204,11 +204,6 @@ const createThemeOptions = (theme: Theme) => ({
         },
       },
     },
-    MuiDatePicker: {
-      defaultProps: {
-        inputFormat: 'MM/dd/yyyy',
-      },
-    },
     MuiLink: {
       defaultProps: {
         variant: 'body2',

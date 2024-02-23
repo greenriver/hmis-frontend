@@ -47,7 +47,7 @@ const TextInput = ({
   const htmlId = id || generatedId;
 
   let width = inputWidth;
-  if (!width && inputProps.inputMode === 'numeric') {
+  if (!width && inputProps.inputMode === 'numeric' && !sx) {
     width = '120px';
   }
 

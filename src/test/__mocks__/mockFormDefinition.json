@@ -30,7 +30,7 @@
           "type": "INTEGER",
           "required": false,
           "warnIfEmpty": true,
-          "linkId": "time",
+          "linkId": "durationMinutes",
           "text": "Duration",
           "component": "MINUTES_DURATION",
           "helperText": "This is helper text"
@@ -61,6 +61,48 @@
           "linkId": "date-1",
           "text": "Date",
           "helperText": "This is helper text"
+        },
+        {
+          "type": "TIME_OF_DAY",
+          "required": false,
+          "linkId": "time_1",
+          "text": "Time of Day 1",
+          "helperText": "This is helper text"
+        },
+        {
+          "type": "TIME_OF_DAY",
+          "required": false,
+          "linkId": "time_2",
+          "text": "Time of Day 2",
+          "helperText": "This is helper text"
+        },
+        {
+          "text": "Duration",
+          "type": "INTEGER",
+          "component": "MINUTES_DURATION",
+          "linkId": "duration_formula",
+          "readOnly": true,
+          "autofillValues": [
+            {
+              "formula": "ABS(time_1 - time_2)",
+              "autofillWhen": [],
+              "autofillBehavior": "ANY",
+              "autofillReadonly": true
+            }
+          ]
+        },
+        {
+          "text": "<b>Duration</b>: ${FORMAT_DURATION(value)}",
+          "type": "DISPLAY",
+          "linkId": "duration_formula_display",
+          "autofillValues": [
+            {
+              "formula": "ABS(time_1 - time_2)",
+              "autofillWhen": [],
+              "autofillBehavior": "ANY",
+              "autofillReadonly": true
+            }
+          ]
         },
         {
           "type": "GROUP",
@@ -477,6 +519,55 @@
           "required": false,
           "text": "Don't upload anything here",
           "component": "ALERT_INFO"
+        }
+      ]
+    },
+    {
+      "type": "GROUP",
+      "component": "SIGNATURE_GROUP",
+      "linkId": "signatureGroupCard",
+      "text": "eSignatures",
+      "item": [
+        {
+          "linkId": "agreementText",
+          "type": "DISPLAY",
+          "text": "<b>This is a form that you are signing!</b> Make sure you read all the fine print."
+        },
+        {
+          "linkId": "signatureGroup1",
+          "type": "GROUP",
+          "text": "Client Signature",
+          "component": "SIGNATURE",
+          "item": [
+            {
+              "linkId": "clientSignature",
+              "type": "STRING",
+              "text": "Client Name"
+            },
+            {
+              "linkId": "clientSignatureDate",
+              "type": "DATE",
+              "text": "Date Signed"
+            }
+          ]
+        },
+        {
+          "linkId": "signatureGroup2",
+          "type": "GROUP",
+          "text": "Staff Signature",
+          "component": "SIGNATURE",
+          "item": [
+            {
+              "linkId": "staffSignature",
+              "type": "STRING",
+              "text": "Staff Name"
+            },
+            {
+              "linkId": "staffSignatureDate",
+              "type": "DATE",
+              "text": "Date Signed"
+            }
+          ]
         }
       ]
     }

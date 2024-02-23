@@ -36,6 +36,7 @@ import PhoneInput from '@/components/elements/input/PhoneInput';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
+import TimeOfDayPicker from '@/components/elements/input/TimeOfDayPicker';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -82,6 +83,8 @@ const minWidthForType = (item: FormItem, isMobile: boolean) => {
       return 300;
     case ItemType.Choice:
     case ItemType.OpenChoice:
+      // FIXME: this was added for dropdowns, but it's also applied
+      // to radio buttons, which is incorrect
       return FIXED_WIDTH_MEDIUM;
     default:
       return undefined;
@@ -124,7 +127,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   const minWidth = minWidthForType(item, isMobile);
   let width;
 
-  if (item.size === InputSize.Small || item.type === ItemType.Date) {
+  if (
+    item.size === InputSize.Small ||
+    item.type === ItemType.Date ||
+    item.type === ItemType.TimeOfDay
+  ) {
     width = FIXED_WIDTH_SMALL;
   } else if (item.size === InputSize.Xsmall) {
     width = FIXED_WIDTH_X_SMALL;
@@ -143,6 +150,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
 
   const commonInputProps: DynamicInputCommonProps = {
     label,
+    ariaLabel: item.text || undefined,
     error: !!(errors && errors.length > 0) || isInvalidEnumValue,
     helperText: item.helperText,
     id: linkId,
@@ -322,6 +330,21 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               sx: { width },
             }}
             {...datePickerProps}
+            {...commonInputProps}
+          />
+        </InputContainer>
+      );
+    case ItemType.TimeOfDay:
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <TimeOfDayPicker
+            value={value}
+            onChange={onChangeValue}
+            textInputProps={{
+              id: linkId,
+              horizontal,
+              sx: { width },
+            }}
             {...commonInputProps}
           />
         </InputContainer>

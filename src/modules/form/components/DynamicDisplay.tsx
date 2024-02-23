@@ -3,6 +3,7 @@ import DOMPurify from 'dompurify';
 import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
 
+import { evaluateTemplate } from '@/modules/form/util/expressions/template';
 import { Component, FormItem } from '@/types/gqlTypes';
 
 interface Props {
@@ -19,13 +20,6 @@ const SeverityMap: Record<string, AlertColor> = {
   [Component.AlertWarning]: 'warning',
 };
 
-// simple string interpolation. Example interpolate("hello ${name}", {name: 'world'})
-const interpolate = (template: string, variables: Record<string, string>) => {
-  return template.replace(/\${(\w+)}/g, (match, key) => {
-    return typeof variables[key] !== 'undefined' ? variables[key] : match;
-  });
-};
-
 const DynamicDisplay: React.FC<Props> = ({
   item,
   maxWidth,
@@ -33,11 +27,15 @@ const DynamicDisplay: React.FC<Props> = ({
   viewOnly = false,
 }) => {
   const html = useMemo(() => {
-    let stringValue = item.text;
-    if (viewOnly && !isNil(item.readonlyText)) stringValue = item.readonlyText;
-    if (isNil(stringValue)) return undefined;
+    let displayValue = item.text;
+    if (viewOnly && !isNil(item.readonlyText)) displayValue = item.readonlyText;
+    if (isNil(displayValue)) return undefined;
 
-    return { __html: DOMPurify.sanitize(interpolate(stringValue, { value })) };
+    return {
+      __html: DOMPurify.sanitize(
+        evaluateTemplate(displayValue, new Map([['value', value]]))
+      ),
+    };
   }, [item, viewOnly, value]);
 
   if (!html) return null;
