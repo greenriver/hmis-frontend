@@ -59,6 +59,10 @@ const AssessmentFormSideBar: React.FC<Props> = ({
       ),
     [enrollment, navigate]
   );
+  const showAutofillButton = showAutofill && !assessment && canEdit;
+  const showPrintViewButton = !isPrintView && locked && assessment;
+  const showDeleteAssessmentButton = !!assessment;
+  const showAssessmentId = assessment && import.meta.env.MODE === 'development';
 
   return (
     <Paper
@@ -81,46 +85,56 @@ const AssessmentFormSideBar: React.FC<Props> = ({
         scrollOffset={top}
         useUrlHash={!embeddedInWorkflow}
       />
-      <Divider sx={{ my: 2, mx: -2 }} />
-      <Stack gap={2} sx={{ mt: 2 }}>
-        {showAutofill && !assessment && canEdit && (
-          <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
-            <Button
-              variant='outlined'
-              onClick={onAutofill}
-              sx={{ height: 'fit-content' }}
-              fullWidth
-            >
-              Autofill Assessment
-            </Button>
-          </ButtonTooltipContainer>
-        )}
-        {!isPrintView && locked && assessment && (
-          <PrintViewButton
-            openInNew
-            to={generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
-              clientId: assessment.enrollment.client.id,
-              enrollmentId: assessment.enrollment.id,
-              assessmentId: assessment.id,
-            })}
-          >
-            Print
-          </PrintViewButton>
-        )}
-        {assessment && (
-          <DeleteAssessmentButton
-            assessment={assessment}
-            clientId={enrollment.client.id}
-            enrollmentId={enrollment.id}
-            onSuccess={navigateToEnrollment}
-          />
-        )}
-        {assessment && import.meta.env.MODE === 'development' && (
-          <Typography variant='body2'>
-            <b>Assessment ID:</b> {assessment.id}
-          </Typography>
-        )}
-      </Stack>
+      {(showAutofillButton ||
+        showPrintViewButton ||
+        showDeleteAssessmentButton ||
+        showAssessmentId) && (
+        <>
+          <Divider sx={{ my: 2, mx: -2 }} />
+          <Stack gap={2} sx={{ mt: 2 }}>
+            {showAutofillButton && (
+              <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
+                <Button
+                  variant='outlined'
+                  onClick={onAutofill}
+                  sx={{ height: 'fit-content' }}
+                  fullWidth
+                >
+                  Autofill Assessment
+                </Button>
+              </ButtonTooltipContainer>
+            )}
+            {showPrintViewButton && (
+              <PrintViewButton
+                openInNew
+                to={generateSafePath(
+                  EnrollmentDashboardRoutes.VIEW_ASSESSMENT,
+                  {
+                    clientId: assessment.enrollment.client.id,
+                    enrollmentId: assessment.enrollment.id,
+                    assessmentId: assessment.id,
+                  }
+                )}
+              >
+                Print
+              </PrintViewButton>
+            )}
+            {showDeleteAssessmentButton && (
+              <DeleteAssessmentButton
+                assessment={assessment}
+                clientId={enrollment.client.id}
+                enrollmentId={enrollment.id}
+                onSuccess={navigateToEnrollment}
+              />
+            )}
+            {showAssessmentId && (
+              <Typography variant='body2'>
+                <b>Assessment ID:</b> {assessment.id}
+              </Typography>
+            )}
+          </Stack>
+        </>
+      )}
     </Paper>
   );
 };
