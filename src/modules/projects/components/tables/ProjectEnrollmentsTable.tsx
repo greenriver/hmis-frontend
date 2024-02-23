@@ -40,7 +40,7 @@ const ProjectEnrollmentsTable = ({
   return (
     <>
       <Box py={2} px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Grid container direction='row' spacing={4}>
+        <Grid container direction='row' rowSpacing={2} columnSpacing={4}>
           {!modeProp && (
             <Grid item>
               <LabelWithContent

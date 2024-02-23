@@ -114,7 +114,7 @@ const FormCard: React.FC<FormCardProps> = ({
             <Stack
               justifyContent='space-between'
               direction={{ xs: 'column', sm: 'row' }}
-              sx={{ mb: 2 }}
+              sx={{ mb: { xs: 2, sm: 0 } }}
             >
               <Typography variant='cardTitle' sx={{ mb: 2 }} {...titleProps}>
                 {TitleIcon && <TitleIcon sx={{ mr: 1 }} />}
