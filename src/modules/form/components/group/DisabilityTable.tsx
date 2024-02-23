@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useCallback, useEffect, useId, useMemo } from 'react';
+import { ReactNode, useCallback, useEffect, useId, useMemo } from 'react';
 
 import {
   ChangeType,
@@ -148,17 +148,20 @@ const DisabilityTable = ({
   function getDisabilityDropdowns(
     cellItem: FormItem,
     idx: number,
-    disabilityTypeLabelId: string
+    disabilityTypeLabelId?: string,
+    label?: ReactNode
   ) {
     return renderChildItem(cellItem, {
-      noLabel: true,
+      noLabel: !!label,
       inputProps: {
-        label: null,
+        label: label,
         placeholder: idx === 0 ? 'Select Status' : 'Select Disabling Condition',
         // Reads as "Physical Disability Status" or "Physical Disability Disabling Condition"
-        ariaLabelledBy: `${disabilityTypeLabelId} ${
-          idx === 0 ? statusId : disablingConditionId
-        }`,
+        ariaLabelledBy:
+          disabilityTypeLabelId &&
+          `${disabilityTypeLabelId} ${
+            idx === 0 ? statusId : disablingConditionId
+          }`,
       },
       disabled:
         (cellItem.linkId === disablingConditionLinkId &&
@@ -213,21 +216,24 @@ const DisabilityTable = ({
                   sx={isMobile ? {} : { width: '250px', py: 3 }}
                   id={disabilityTypeLabelId}
                 >
-                  <Typography variant='body2' fontWeight={600}>
-                    {rowItem.text}
-                  </Typography>
+                  {!isMobile && (
+                    <Typography variant='body2' fontWeight={600}>
+                      {rowItem.text}
+                    </Typography>
+                  )}
                   {rowItem.helperText && (
                     <Typography variant='body2'>
                       {rowItem.helperText}
                     </Typography>
                   )}
                   {isMobile && (
-                    <Stack direction='column' spacing={1} sx={{ pt: 1 }}>
+                    <Stack direction='column' spacing={1}>
                       {rowItem.item.map((cellItem, idx) =>
                         getDisabilityDropdowns(
                           cellItem,
                           idx,
-                          disabilityTypeLabelId
+                          undefined,
+                          cellItem.text
                         )
                       )}
                     </Stack>
