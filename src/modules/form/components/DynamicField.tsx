@@ -144,6 +144,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
 
   const commonInputProps: DynamicInputCommonProps = {
     label,
+    ariaLabel: item.text || undefined,
     error: !!(errors && errors.length > 0) || isInvalidEnumValue,
     helperText: item.helperText,
     id: linkId,
