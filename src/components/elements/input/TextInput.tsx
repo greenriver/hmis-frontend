@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useId } from 'react';
 
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 
@@ -25,6 +26,7 @@ export type TextInputProps = Props & DynamicInputCommonProps;
 
 export const horizontalInputSx: SxProps<Theme> = {
   justifyContent: 'space-between',
+  alignItems: 'center',
 };
 
 const TextInput = ({
@@ -50,6 +52,8 @@ const TextInput = ({
   if (!width && inputProps.inputMode === 'numeric' && !sx) {
     width = '120px';
   }
+
+  const isTiny = useIsMobile('sm');
 
   const textField = (
     <TextField
@@ -115,7 +119,7 @@ const TextInput = ({
     return (
       <Stack
         sx={{
-          ...horizontalInputSx,
+          ...(!isTiny && horizontalInputSx),
           '.MuiFormHelperText-root':
             inputProps.inputMode === 'numeric' ? { width, mr: 0 } : {},
         }}

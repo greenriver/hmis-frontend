@@ -430,7 +430,7 @@
             {
               "type": "CURRENCY",
               "linkId": "n1",
-              "text": "Question 1"
+              "text": "Question 1 with long text lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet"
             },
             {
               "type": "CURRENCY",
