@@ -529,7 +529,6 @@ export const HmisEnums = {
   },
   FormRole: {
     ANNUAL: 'Annual',
-    AUTO_EXIT_CONFIG: 'Auto exit config',
     CASE_NOTE: 'Case note',
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
@@ -554,6 +553,7 @@ export const HmisEnums = {
     POST_EXIT: 'Post exit',
     PROJECT: 'Project',
     PROJECT_COC: 'Project CoC',
+    PROJECT_CONFIG: 'Project config',
     REFERRAL_REQUEST: 'Referral request',
     SERVICE: 'Service',
     UPDATE: 'Update',
@@ -686,6 +686,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  HmisProjectConfigType: { AUTO_ENTER: 'Auto Enter', AUTO_EXIT: 'Auto Exit' },
   HouseholdSortOption: {
     HOH_AGE_OLDEST_TO_YOUNGEST: 'Head of Household Age: Oldest to Youngest',
     HOH_AGE_YOUNGEST_TO_OLDEST: 'Head of Household Age: Youngest to Oldest',
@@ -1796,10 +1797,10 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   StaticFormRole: {
-    AUTO_EXIT_CONFIG: 'Auto exit config',
     CLIENT_ALERT: 'Client alert',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
+    PROJECT_CONFIG: 'Project config',
   },
   SubsidyInformation: {
     INVALID: 'Invalid Value',

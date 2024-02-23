@@ -2,36 +2,36 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button, Paper } from '@mui/material';
 import { useState } from 'react';
 
-import AutoExitDialog from './AutoExitDialog';
-import AutoExitTable from './AutoExitTable';
+import ProjectConfigDialog from './ProjectConfigDialog';
+import ProjectConfigTable from './ProjectConfigTable';
 import PageTitle from '@/components/layout/PageTitle';
 
-const ConfigureAutoExitPage = () => {
+const ProjectConfigPage = () => {
   const [selected, setSelected] = useState<string | null>(null);
   return (
     <>
       <PageTitle
-        title='Auto Exit Configs'
+        title='Project Configs'
         actions={
           <Button
             onClick={() => setSelected('new')}
             startIcon={<AddIcon />}
             variant='outlined'
           >
-            New Auto Exit Config
+            New Project Config
           </Button>
         }
       />
       <Paper>
-        <AutoExitTable selectedId={selected} setSelectedId={setSelected} />
+        <ProjectConfigTable selectedId={selected} setSelectedId={setSelected} />
       </Paper>
-      <AutoExitDialog
+      <ProjectConfigDialog
         open={!!selected}
-        autoExitId={selected || ''}
+        projectId={selected || ''}
         onClose={() => setSelected(null)}
       />
     </>
   );
 };
 
-export default ConfigureAutoExitPage;
+export default ProjectConfigPage;

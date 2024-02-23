@@ -1,0 +1,10 @@
+query GetProjectConfigs($limit: Int = 10, $offset: Int = 0) {
+  projectConfigs(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...ProjectConfigFields
+    }
+  }
+}
