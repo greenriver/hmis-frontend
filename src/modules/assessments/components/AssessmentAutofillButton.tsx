@@ -2,10 +2,12 @@ import { Button } from '@mui/material';
 import { SxProps } from '@mui/system';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 
-export default function AssessmentAutofillButton(props: {
+export interface Props {
   onClick: VoidFunction;
   sx?: SxProps;
-}) {
+}
+
+const AssessmentAutofillButton: React.FC<Props> = (props) => {
   return (
     <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
       <Button
@@ -18,4 +20,6 @@ export default function AssessmentAutofillButton(props: {
       </Button>
     </ButtonTooltipContainer>
   );
-}
+};
+
+export default AssessmentAutofillButton;
