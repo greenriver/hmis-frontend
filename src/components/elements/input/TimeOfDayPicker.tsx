@@ -57,7 +57,9 @@ const TimeOfDayPicker: React.FC<Props> = ({
     (value: Date | null) => {
       if (!onChange) return;
       // value was cleared
-      if (!value) return onChange(null);
+      if (!value || value.toString() === 'Invalid Date') {
+        return onChange(undefined);
+      }
 
       const minutes = value ? minutesFromMidnight(value) : undefined;
       if (!minutes || isNaN(minutes)) return;
