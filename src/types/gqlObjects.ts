@@ -155,6 +155,83 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ApplicationUserAuditEvent',
+    fields: [
+      {
+        name: 'clientId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'event',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'AuditEventType', ofType: null },
+        },
+      },
+      {
+        name: 'graphqlType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'objectChanges',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'projectId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'recordId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'recordName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'Assessment',
     fields: [
       {
@@ -1042,12 +1119,24 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ClientAuditEvent',
     fields: [
       {
+        name: 'clientId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'createdAt',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
+      },
+      {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'event',
@@ -1076,6 +1165,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'objectChanges',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'projectId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'recordId',
@@ -1361,6 +1458,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'CustomDataElement',
     fields: [
+      {
+        name: 'displayHooks',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'ENUM', name: 'DisplayHook', ofType: null },
+            },
+          },
+        },
+      },
       {
         name: 'fieldType',
         type: {
@@ -2415,12 +2528,24 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'EnrollmentAuditEvent',
     fields: [
       {
+        name: 'clientId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'clientName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'createdAt',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
+      },
+      {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'event',
@@ -2449,6 +2574,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'objectChanges',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
+        name: 'projectId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'projectName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'recordId',
@@ -2646,7 +2779,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
       },
       {
@@ -2675,7 +2808,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'resultDate',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
     ],
   },
@@ -7405,6 +7538,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
               name: null,
               ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
             },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'UserAuditEventFilterOptions',
+    args: [
+      {
+        name: 'clientRecordType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'enrollmentRecordType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
       },

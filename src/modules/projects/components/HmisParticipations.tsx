@@ -74,6 +74,7 @@ const HmisParticipations = () => {
       deleteRecordIdPath: 'deleteHmisParticipation.hmisParticipation.id',
       maxWidth: 'sm',
       localConstants,
+      projectId: project.id,
     });
 
   return (

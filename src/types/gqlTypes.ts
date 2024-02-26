@@ -148,6 +148,7 @@ export enum AnnualPercentAmi {
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
   activityLogs: ActivityLogsPaginated;
+  auditHistory: ApplicationUserAuditEventsPaginated;
   clientAccessSummaries: ClientAccessSummariesPaginated;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -168,6 +169,13 @@ export type ApplicationUserActivityLogsArgs = {
 };
 
 /** User account for a user of the system */
+export type ApplicationUserAuditHistoryArgs = {
+  filters?: InputMaybe<UserAuditEventFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
 export type ApplicationUserClientAccessSummariesArgs = {
   filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -179,6 +187,36 @@ export type ApplicationUserEnrollmentAccessSummariesArgs = {
   filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ApplicationUserAuditEvent = {
+  __typename?: 'ApplicationUserAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
+  event: AuditEventType;
+  graphqlType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
+  objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
+  recordId: Scalars['ID']['output'];
+  recordName: Scalars['String']['output'];
+  trueUser?: Maybe<ApplicationUser>;
+  user?: Maybe<ApplicationUser>;
+};
+
+export type ApplicationUserAuditEventsPaginated = {
+  __typename?: 'ApplicationUserAuditEventsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ApplicationUserAuditEvent>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type ApplicationUserFilterOptions = {
@@ -212,6 +250,7 @@ export type Assessment = {
   disabilityGroup?: Maybe<DisabilityGroup>;
   employmentEducation?: Maybe<EmploymentEducation>;
   enrollment: Enrollment;
+  event?: Maybe<Event>;
   exit?: Maybe<Exit>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID']['output'];
@@ -798,12 +837,17 @@ export enum ClientAlertPriorityLevel {
 
 export type ClientAuditEvent = {
   __typename?: 'ClientAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
   event: AuditEventType;
   graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
@@ -1340,6 +1384,7 @@ export type CustomCaseNote = {
   __typename?: 'CustomCaseNote';
   client: Client;
   content: Scalars['String']['output'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -1372,6 +1417,8 @@ export type CustomCaseNotesPaginated = {
 
 export type CustomDataElement = {
   __typename?: 'CustomDataElement';
+  /** Where to display the custom field in the application */
+  displayHooks: Array<DisplayHook>;
   fieldType: CustomDataElementType;
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
@@ -2026,6 +2073,12 @@ export enum DischargeStatus {
   UnderOtherThanHonorableConditionsOth = 'UNDER_OTHER_THAN_HONORABLE_CONDITIONS_OTH',
 }
 
+/** Application for displaying Custom Data Element values */
+export enum DisplayHook {
+  /** Display value as a column when viewing a table of records (e.g. Current Living Situations) */
+  TableSummary = 'TABLE_SUMMARY',
+}
+
 /** HUD Employment Education */
 export type EmploymentEducation = {
   __typename?: 'EmploymentEducation';
@@ -2353,12 +2406,17 @@ export type EnrollmentAccessSummaryFilterOptions = {
 
 export type EnrollmentAuditEvent = {
   __typename?: 'EnrollmentAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
   event: AuditEventType;
   graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
@@ -2498,13 +2556,13 @@ export type Event = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   event: EventType;
-  eventDate: Scalars['ISO8601DateTime']['output'];
+  eventDate: Scalars['ISO8601Date']['output'];
   id: Scalars['ID']['output'];
   locationCrisisOrPhHousing?: Maybe<Scalars['String']['output']>;
   probSolDivRrResult?: Maybe<NoYesMissing>;
   referralCaseManageAfter?: Maybe<NoYesMissing>;
   referralResult?: Maybe<ReferralResult>;
-  resultDate?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  resultDate?: Maybe<Scalars['ISO8601Date']['output']>;
   user?: Maybe<ApplicationUser>;
 };
 
@@ -5915,6 +5973,8 @@ export enum RelatedRecordType {
   Enrollment = 'ENROLLMENT',
   /** EnrollmentCoc */
   EnrollmentCoc = 'ENROLLMENT_COC',
+  /** Event */
+  Event = 'EVENT',
   /** Exit */
   Exit = 'EXIT',
   /** HealthAndDv */
@@ -6905,6 +6965,11 @@ export type UpdateUnitsPayload = {
   units: Array<Unit>;
 };
 
+export type UserAuditEventFilterOptions = {
+  clientRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  enrollmentRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 export type ValidationError = {
   __typename?: 'ValidationError';
   attribute: Scalars['String']['output'];
@@ -7758,6 +7823,7 @@ export type AssessmentWithRecordsFragment = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -7810,6 +7876,26 @@ export type AssessmentWithRecordsFragment = {
     dateUpdated?: string | null;
     dateDeleted?: string | null;
     prioritizationStatus?: PrioritizationStatus | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
+  event?: {
+    __typename?: 'Event';
+    id: string;
+    event: EventType;
+    eventDate: string;
+    locationCrisisOrPhHousing?: string | null;
+    probSolDivRrResult?: NoYesMissing | null;
+    referralCaseManageAfter?: NoYesMissing | null;
+    referralResult?: ReferralResult | null;
+    resultDate?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -7899,6 +7985,7 @@ export type AssessmentWithRecordsFragment = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -8025,6 +8112,7 @@ export type AssessmentWithRecordsFragment = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -8097,6 +8185,7 @@ export type AssessmentWithRecordsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -8268,6 +8357,7 @@ export type FullAssessmentFragment = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -8320,6 +8410,26 @@ export type FullAssessmentFragment = {
     dateUpdated?: string | null;
     dateDeleted?: string | null;
     prioritizationStatus?: PrioritizationStatus | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
+  event?: {
+    __typename?: 'Event';
+    id: string;
+    event: EventType;
+    eventDate: string;
+    locationCrisisOrPhHousing?: string | null;
+    probSolDivRrResult?: NoYesMissing | null;
+    referralCaseManageAfter?: NoYesMissing | null;
+    referralResult?: ReferralResult | null;
+    resultDate?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -8409,6 +8519,7 @@ export type FullAssessmentFragment = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -8535,6 +8646,7 @@ export type FullAssessmentFragment = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -8607,6 +8719,7 @@ export type FullAssessmentFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -9239,6 +9352,7 @@ export type GetAssessmentQuery = {
         label: string;
         fieldType: CustomDataElementType;
         repeats: boolean;
+        displayHooks: Array<DisplayHook>;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -9291,6 +9405,26 @@ export type GetAssessmentQuery = {
       dateUpdated?: string | null;
       dateDeleted?: string | null;
       prioritizationStatus?: PrioritizationStatus | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    event?: {
+      __typename?: 'Event';
+      id: string;
+      event: EventType;
+      eventDate: string;
+      locationCrisisOrPhHousing?: string | null;
+      probSolDivRrResult?: NoYesMissing | null;
+      referralCaseManageAfter?: NoYesMissing | null;
+      referralResult?: ReferralResult | null;
+      resultDate?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      dateDeleted?: string | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -9380,6 +9514,7 @@ export type GetAssessmentQuery = {
         label: string;
         fieldType: CustomDataElementType;
         repeats: boolean;
+        displayHooks: Array<DisplayHook>;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -9506,6 +9641,7 @@ export type GetAssessmentQuery = {
         label: string;
         fieldType: CustomDataElementType;
         repeats: boolean;
+        displayHooks: Array<DisplayHook>;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -9578,6 +9714,7 @@ export type GetAssessmentQuery = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -9976,6 +10113,7 @@ export type SubmitAssessmentMutation = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -10028,6 +10166,26 @@ export type SubmitAssessmentMutation = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
+      event?: {
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -10117,6 +10275,7 @@ export type SubmitAssessmentMutation = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -10243,6 +10402,7 @@ export type SubmitAssessmentMutation = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -10315,6 +10475,7 @@ export type SubmitAssessmentMutation = {
         label: string;
         fieldType: CustomDataElementType;
         repeats: boolean;
+        displayHooks: Array<DisplayHook>;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -10483,6 +10644,7 @@ export type SubmitHouseholdAssessmentsMutation = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -10535,6 +10697,26 @@ export type SubmitHouseholdAssessmentsMutation = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
+      event?: {
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -10624,6 +10806,7 @@ export type SubmitHouseholdAssessmentsMutation = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -10750,6 +10933,7 @@ export type SubmitHouseholdAssessmentsMutation = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -10822,6 +11006,7 @@ export type SubmitHouseholdAssessmentsMutation = {
         label: string;
         fieldType: CustomDataElementType;
         repeats: boolean;
+        displayHooks: Array<DisplayHook>;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -11005,6 +11190,7 @@ export type GetAssessmentsForPopulationQuery = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -11057,6 +11243,26 @@ export type GetAssessmentsForPopulationQuery = {
           dateUpdated?: string | null;
           dateDeleted?: string | null;
           prioritizationStatus?: PrioritizationStatus | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        } | null;
+        event?: {
+          __typename?: 'Event';
+          id: string;
+          event: EventType;
+          eventDate: string;
+          locationCrisisOrPhHousing?: string | null;
+          probSolDivRrResult?: NoYesMissing | null;
+          referralCaseManageAfter?: NoYesMissing | null;
+          referralResult?: ReferralResult | null;
+          resultDate?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          dateDeleted?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -11146,6 +11352,7 @@ export type GetAssessmentsForPopulationQuery = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -11272,6 +11479,7 @@ export type GetAssessmentsForPopulationQuery = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -11344,6 +11552,7 @@ export type GetAssessmentsForPopulationQuery = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -11910,6 +12119,23 @@ export type EnrollmentAuditEventFieldsFragment = {
   } | null;
 };
 
+export type UserAuditEventFieldsFragment = {
+  __typename?: 'ApplicationUserAuditEvent';
+  id: string;
+  createdAt: string;
+  event: AuditEventType;
+  objectChanges?: any | null;
+  recordName: string;
+  graphqlType: string;
+  recordId: string;
+  clientId?: string | null;
+  clientName?: string | null;
+  enrollmentId?: string | null;
+  projectId?: string | null;
+  projectName?: string | null;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+};
+
 export type GetClientAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -11983,6 +12209,47 @@ export type GetEnrollmentAuditEventsQuery = {
           name: string;
         } | null;
         trueUser?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetUserAuditEventsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<UserAuditEventFilterOptions>;
+}>;
+
+export type GetUserAuditEventsQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    auditHistory: {
+      __typename?: 'ApplicationUserAuditEventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ApplicationUserAuditEvent';
+        id: string;
+        createdAt: string;
+        event: AuditEventType;
+        objectChanges?: any | null;
+        recordName: string;
+        graphqlType: string;
+        recordId: string;
+        clientId?: string | null;
+        clientName?: string | null;
+        enrollmentId?: string | null;
+        projectId?: string | null;
+        projectName?: string | null;
+        user?: {
           __typename?: 'ApplicationUser';
           id: string;
           name: string;
@@ -12417,6 +12684,7 @@ export type ClientFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -12829,6 +13097,7 @@ export type GetClientQuery = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -13120,6 +13389,7 @@ export type GetClientServicesQuery = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -14254,6 +14524,7 @@ export type MergeClientsMutation = {
         label: string;
         fieldType: CustomDataElementType;
         repeats: boolean;
+        displayHooks: Array<DisplayHook>;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -14714,6 +14985,7 @@ export type CurrentLivingSituationFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -14798,6 +15070,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -14855,6 +15128,53 @@ export type CustomCaseNoteFieldsFragment = {
     name: string;
     email: string;
   } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
 };
 
 export type GetEnrollmentCustomCaseNotesQueryVariables = Exact<{
@@ -14887,6 +15207,53 @@ export type GetEnrollmentCustomCaseNotesQuery = {
           name: string;
           email: string;
         } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -14958,6 +15325,53 @@ export type GetClientCaseNotesQuery = {
           name: string;
           email: string;
         } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -14990,6 +15404,7 @@ export type CustomDataElementFieldsFragment = {
   label: string;
   fieldType: CustomDataElementType;
   repeats: boolean;
+  displayHooks: Array<DisplayHook>;
   value?: {
     __typename?: 'CustomDataElementValue';
     id: string;
@@ -15157,6 +15572,7 @@ export type AllEnrollmentDetailsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -15214,6 +15630,7 @@ export type AllEnrollmentDetailsFragment = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -15967,6 +16384,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -16047,27 +16465,6 @@ export type SubmittedEnrollmentResultFieldsFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
   }>;
-};
-
-export type EventFieldsFragment = {
-  __typename?: 'Event';
-  id: string;
-  event: EventType;
-  eventDate: string;
-  locationCrisisOrPhHousing?: string | null;
-  probSolDivRrResult?: NoYesMissing | null;
-  referralCaseManageAfter?: NoYesMissing | null;
-  referralResult?: ReferralResult | null;
-  resultDate?: string | null;
-  dateCreated?: string | null;
-  dateUpdated?: string | null;
-  dateDeleted?: string | null;
-  user?: {
-    __typename: 'ApplicationUser';
-    id: string;
-    name: string;
-    email: string;
-  } | null;
 };
 
 export type CeAssessmentFieldsFragment = {
@@ -16246,6 +16643,7 @@ export type GetEnrollmentDetailsQuery = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -16303,6 +16701,7 @@ export type GetEnrollmentDetailsQuery = {
         label: string;
         fieldType: CustomDataElementType;
         repeats: boolean;
+        displayHooks: Array<DisplayHook>;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -17318,6 +17717,27 @@ export type GetEnrollmentPermissionsQuery = {
       canDeleteEnrollments: boolean;
       canAuditEnrollments: boolean;
     };
+  } | null;
+};
+
+export type EventFieldsFragment = {
+  __typename?: 'Event';
+  id: string;
+  event: EventType;
+  eventDate: string;
+  locationCrisisOrPhHousing?: string | null;
+  probSolDivRrResult?: NoYesMissing | null;
+  referralCaseManageAfter?: NoYesMissing | null;
+  referralResult?: ReferralResult | null;
+  resultDate?: string | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  dateDeleted?: string | null;
+  user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
   } | null;
 };
 
@@ -23575,6 +23995,7 @@ export type SubmitFormMutation = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -23706,6 +24127,7 @@ export type SubmitFormMutation = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -23759,6 +24181,53 @@ export type SubmitFormMutation = {
             name: string;
             email: string;
           } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            fieldType: CustomDataElementType;
+            repeats: boolean;
+            displayHooks: Array<DisplayHook>;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                email: string;
+              } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                email: string;
+              } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'Enrollment';
@@ -23790,6 +24259,7 @@ export type SubmitFormMutation = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -23996,6 +24466,7 @@ export type SubmitFormMutation = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -24060,6 +24531,7 @@ export type SubmitFormMutation = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -24154,6 +24626,7 @@ export type SubmitFormMutation = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -24282,6 +24755,7 @@ export type SubmitFormMutation = {
             label: string;
             fieldType: CustomDataElementType;
             repeats: boolean;
+            displayHooks: Array<DisplayHook>;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -24736,6 +25210,7 @@ export type InventoryFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -25007,6 +25482,7 @@ export type OrganizationDetailFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -25072,6 +25548,7 @@ export type OrganizationFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -25169,6 +25646,7 @@ export type GetOrganizationQuery = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -25341,6 +25819,7 @@ export type ProjectAllFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -26093,6 +26572,7 @@ export type GetProjectQuery = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -26366,6 +26846,7 @@ export type GetProjectServicesQuery = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -26503,6 +26984,7 @@ export type GetInventoryQuery = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -26624,6 +27106,7 @@ export type GetProjectInventoriesQuery = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -27754,6 +28237,7 @@ export type EsgFundingServiceFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -27830,6 +28314,7 @@ export type GetEsgFundingReportQuery = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -28111,6 +28596,7 @@ export type ServiceFieldsFragment = {
     label: string;
     fieldType: CustomDataElementType;
     repeats: boolean;
+    displayHooks: Array<DisplayHook>;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -28209,6 +28695,7 @@ export type GetServiceQuery = {
       label: string;
       fieldType: CustomDataElementType;
       repeats: boolean;
+      displayHooks: Array<DisplayHook>;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -28315,6 +28802,7 @@ export type AddServiceToEnrollmentMutation = {
         label: string;
         fieldType: CustomDataElementType;
         repeats: boolean;
+        displayHooks: Array<DisplayHook>;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -28418,6 +28906,7 @@ export type DeleteServiceMutation = {
         label: string;
         fieldType: CustomDataElementType;
         repeats: boolean;
+        displayHooks: Array<DisplayHook>;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -28529,6 +29018,7 @@ export type GetEnrollmentServicesQuery = {
           label: string;
           fieldType: CustomDataElementType;
           repeats: boolean;
+          displayHooks: Array<DisplayHook>;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -29290,6 +29780,7 @@ export const CustomDataElementFieldsFragmentDoc = gql`
     label
     fieldType
     repeats
+    displayHooks
     value {
       ...CustomDataElementValueFields
     }
@@ -29310,6 +29801,25 @@ export const CeAssessmentFieldsFragmentDoc = gql`
     dateUpdated
     dateDeleted
     prioritizationStatus
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export const EventFieldsFragmentDoc = gql`
+  fragment EventFields on Event {
+    id
+    event
+    eventDate
+    locationCrisisOrPhHousing
+    probSolDivRrResult
+    referralCaseManageAfter
+    referralResult
+    resultDate
+    dateCreated
+    dateUpdated
+    dateDeleted
     user {
       ...UserFields
     }
@@ -29530,6 +30040,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     ceAssessment {
       ...CeAssessmentFields
     }
+    event {
+      ...EventFields
+    }
     incomeBenefit {
       ...IncomeBenefitValues
       customDataElements {
@@ -29565,6 +30078,7 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${EnrollmentValuesFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
+  ${EventFieldsFragmentDoc}
   ${IncomeBenefitValuesFragmentDoc}
   ${DisabilityGroupValuesFragmentDoc}
   ${HealthAndDvValuesFragmentDoc}
@@ -29699,6 +30213,26 @@ export const EnrollmentAuditEventFieldsFragmentDoc = gql`
       name
     }
     trueUser {
+      id
+      name
+    }
+  }
+`;
+export const UserAuditEventFieldsFragmentDoc = gql`
+  fragment UserAuditEventFields on ApplicationUserAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    recordName
+    graphqlType
+    recordId
+    clientId
+    clientName
+    enrollmentId
+    projectId
+    projectName
+    user {
       id
       name
     }
@@ -30019,8 +30553,12 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const ClientEnrollmentFieldsFragmentDoc = gql`
   fragment ClientEnrollmentFields on Enrollment {
@@ -30364,25 +30902,6 @@ export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   ${EnrollmentFieldsFragmentDoc}
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-`;
-export const EventFieldsFragmentDoc = gql`
-  fragment EventFields on Event {
-    id
-    event
-    eventDate
-    locationCrisisOrPhHousing
-    probSolDivRrResult
-    referralCaseManageAfter
-    referralResult
-    resultDate
-    dateCreated
-    dateUpdated
-    dateDeleted
-    user {
-      ...UserFields
-    }
-  }
-  ${UserFieldsFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -32145,6 +32664,81 @@ export type GetEnrollmentAuditEventsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentAuditEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentAuditEventsQuery,
   GetEnrollmentAuditEventsQueryVariables
+>;
+export const GetUserAuditEventsDocument = gql`
+  query GetUserAuditEvents(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: UserAuditEventFilterOptions = null
+  ) {
+    user(id: $id) {
+      id
+      auditHistory(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...UserAuditEventFields
+        }
+      }
+    }
+  }
+  ${UserAuditEventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUserAuditEventsQuery__
+ *
+ * To run a query within a React component, call `useGetUserAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserAuditEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetUserAuditEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >(GetUserAuditEventsDocument, options);
+}
+export function useGetUserAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >(GetUserAuditEventsDocument, options);
+}
+export type GetUserAuditEventsQueryHookResult = ReturnType<
+  typeof useGetUserAuditEventsQuery
+>;
+export type GetUserAuditEventsLazyQueryHookResult = ReturnType<
+  typeof useGetUserAuditEventsLazyQuery
+>;
+export type GetUserAuditEventsQueryResult = Apollo.QueryResult<
+  GetUserAuditEventsQuery,
+  GetUserAuditEventsQueryVariables
 >;
 export const CreateAutoExitConfigDocument = gql`
   mutation CreateAutoExitConfig($input: AutoExitConfigInput!) {

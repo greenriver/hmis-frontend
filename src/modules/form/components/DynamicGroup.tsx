@@ -22,7 +22,10 @@ export const InfoGroup = ({
       backgroundColor: (theme) => lighten(theme.palette.grey[100], 0.2),
       borderRadius: 1,
       width: 'fit-content',
-      p: 1,
+      px: 0.5,
+      // use box shadow to "extend" background color beyond div. doing this so we dont mess with the height
+      boxShadow: (theme) =>
+        `0 2px 0 6px ${lighten(theme.palette.grey[100], 0.2)}`,
     }}
   >
     {children}

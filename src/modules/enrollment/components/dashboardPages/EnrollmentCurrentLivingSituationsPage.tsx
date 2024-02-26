@@ -9,7 +9,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import { useViewEditRecordDialogs } from '@/modules/form/hooks/useViewEditRecordDialogs';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
-  customDataElementValueAsString,
+  getCustomDataElementColumns,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
@@ -17,10 +17,10 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   CurrentLivingSituationFieldsFragment,
   DeleteCurrentLivingSituationDocument,
-  RecordFormRole,
   GetEnrollmentCurrentLivingSituationsDocument,
   GetEnrollmentCurrentLivingSituationsQuery,
   GetEnrollmentCurrentLivingSituationsQueryVariables,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 const baseColumns: ColumnDef<CurrentLivingSituationFieldsFragment>[] = [
@@ -79,26 +79,13 @@ const EnrollmentCurrentLivingSituationsPage = () => {
       deleteRecordIdPath:
         'deleteCurrentLivingSituation.currentLivingSituation.id',
       localConstants,
+      projectId: enrollment?.project.id,
     });
 
   const getColumnDefs = useCallback(
     (rows: CurrentLivingSituationFieldsFragment[]) => {
-      // if the CLS has custom data elements, add them as columns in the table
-      if (rows.length > 0 && rows[0].customDataElements.length > 0) {
-        const cdes = rows[0].customDataElements.map((cde) => ({
-          header: cde.label,
-          key: cde.key,
-          render: (row: CurrentLivingSituationFieldsFragment) => {
-            const thisCde = row.customDataElements.find(
-              (elem) => elem.key === cde.key
-            );
-            if (!thisCde) return null;
-            return customDataElementValueAsString(thisCde);
-          },
-        }));
-        return [...baseColumns, ...cdes];
-      }
-      return baseColumns;
+      const customColumns = getCustomDataElementColumns(rows);
+      return [...baseColumns, ...customColumns];
     },
     []
   );

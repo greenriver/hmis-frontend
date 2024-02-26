@@ -55,6 +55,7 @@ const EnrollmentCeAssessmentsPage = () => {
       deleteRecordIdPath: 'deleteCeAssessment.ceAssessment.id',
       maxWidth: 'sm',
       localConstants,
+      projectId: enrollment?.project.id,
     });
 
   const columns: ColumnDef<CeAssessmentFieldsFragment>[] = useMemo(

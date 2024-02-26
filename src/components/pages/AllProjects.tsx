@@ -129,6 +129,7 @@ const AllProjects = () => {
               fullWidth
               size='medium'
               searchAdornment
+              clearAdornment
             />
           </Grid>
         )}

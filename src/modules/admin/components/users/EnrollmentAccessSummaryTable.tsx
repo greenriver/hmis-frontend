@@ -64,7 +64,8 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
       pagePath='user.enrollmentAccessSummaries'
       noData='No access history'
       filterInputType='EnrollmentAccessSummaryFilterOptions'
-      recordType='enrollments accessed'
+      paginationItemName='accessed enrollment'
+      recordType='EnrollmentAccessSummary'
       filters={(filters) => omit(filters, 'searchTerm')}
       showFilters
     />

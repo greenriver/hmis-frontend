@@ -14,6 +14,7 @@ import EnrollmentProjectRoute from '@/components/accessWrappers/EnrollmentProjec
 import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
+import ProjectRoute from '@/components/accessWrappers/ProjectRoute';
 import ClientFiles from '@/components/clientDashboard/ClientFiles';
 import EditClient from '@/components/clientDashboard/EditClient';
 import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
@@ -131,7 +132,17 @@ export const protectedRoutes: RouteNode[] = [
         path: Routes.PROJECT,
         element: <ProjectDashboard />,
         children: [
-          { path: '', element: <Navigate to='overview' replace /> },
+          {
+            path: '',
+            element: (
+              <ProjectRoute
+                permissions={['canViewEnrollmentDetails']}
+                redirectRoute={ProjectDashboardRoutes.OVERVIEW}
+              >
+                <Navigate to='enrollments' replace />
+              </ProjectRoute>
+            ),
+          },
           {
             path: ProjectDashboardRoutes.OVERVIEW,
             element: <Project />,
@@ -660,7 +671,10 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY,
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
-                <UserAuditPage entityType='clients' />
+                <UserAuditPage
+                  userHistoryType='access'
+                  accessEntityType='clients'
+                />
               </RootPermissionsFilter>
             ),
           },
@@ -668,7 +682,18 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY,
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
-                <UserAuditPage entityType='enrollments' />
+                <UserAuditPage
+                  userHistoryType='access'
+                  accessEntityType='enrollments'
+                />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.USER_EDIT_HISTORY,
+            element: (
+              <RootPermissionsFilter permissions='canAuditUsers'>
+                <UserAuditPage userHistoryType='edits' />
               </RootPermissionsFilter>
             ),
           },
