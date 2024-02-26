@@ -29,6 +29,16 @@ const evaluate = (ast: any, context: EvalContext): number | undefined => {
             `Unsupported operator: ${ast.operator}`
           );
       }
+    case 'UnaryExpression':
+      const argument = ensureNumeric(evaluate(ast.argument, context));
+      switch (ast.operator) {
+        case '-':
+          return -argument;
+        default:
+          throw new ExpressionEvaluationError(
+            `Unsupported unary operator: ${ast.operator}`
+          );
+      }
     case 'Literal':
       return parseNumber(ast.value);
     case 'CallExpression':
