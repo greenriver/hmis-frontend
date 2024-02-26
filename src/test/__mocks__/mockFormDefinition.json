@@ -14,6 +14,20 @@
           "helperText": "This is helper text"
         },
         {
+          "type": "STRING",
+          "required": false,
+          "linkId": "string-2",
+          "text": "String with bounds",
+          "helperText": "You can't type more than 8 characters",
+          "bounds": [
+            {
+              "id": "max-chars-string",
+              "type": "MAX",
+              "valueNumber": 8
+            }
+          ]
+        },
+        {
           "type": "INTEGER",
           "required": false,
           "linkId": "int-1",
@@ -125,6 +139,20 @@
           "linkId": "text-1",
           "text": "Text Field",
           "helperText": "This is helper text"
+        },
+        {
+          "type": "TEXT",
+          "required": false,
+          "linkId": "text-2",
+          "text": "Text with bounds",
+          "helperText": "You can't type more than 5000 characters",
+          "bounds": [
+            {
+              "id": "max-chars-text",
+              "type": "MAX",
+              "valueNumber": 5000
+            }
+          ]
         },
         {
           "type": "CHOICE",
