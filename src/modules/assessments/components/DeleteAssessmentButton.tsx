@@ -30,21 +30,7 @@ const DeleteAssessmentButton = ({
   onSuccess?: VoidFunction;
 }) => {
   const navigate = useNavigate();
-  const { canDeleteAssessments, canEditEnrollments, canDeleteEnrollments } =
-    assessment.access;
-
-  // canEditEnrollments is required for deleting WIP or Submitted assessments
-  if (!canEditEnrollments) return null;
-
-  const isSubmitted = !assessment.inProgress;
   const deletesEnrollment = assessment.role === AssessmentRole.Intake;
-  if (isSubmitted) {
-    // canDeleteAssessments is required for deleting submitted assessments
-    if (!canDeleteAssessments) return null;
-
-    // canDeleteEnrollments is required for deleting submitted INTAKE assessments
-    if (!canDeleteEnrollments && deletesEnrollment) return null;
-  }
 
   return (
     <DeleteMutationButton<
