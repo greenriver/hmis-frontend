@@ -61,7 +61,9 @@ const AssessmentFormSideBar: React.FC<Props> = ({
     [enrollment, navigate]
   );
 
-  const shouldShowDeleteButton = (assessment: FullAssessmentFragment) => {
+  const showDeleteAssessmentButton = useMemo(() => {
+    if (!assessment) return false;
+
     const { canDeleteAssessments, canEditEnrollments, canDeleteEnrollments } =
       assessment.access;
 
@@ -79,12 +81,10 @@ const AssessmentFormSideBar: React.FC<Props> = ({
     }
 
     return true;
-  };
+  }, [assessment]);
 
   const showAutofillButton = showAutofill && !assessment && canEdit;
   const showPrintViewButton = !isPrintView && locked && assessment;
-  const showDeleteAssessmentButton =
-    assessment && shouldShowDeleteButton(assessment);
   const showAssessmentId = assessment && import.meta.env.MODE === 'development';
 
   return (
@@ -142,7 +142,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
                 Print
               </PrintViewButton>
             )}
-            {showDeleteAssessmentButton && (
+            {showDeleteAssessmentButton && assessment && (
               <DeleteAssessmentButton
                 assessment={assessment}
                 clientId={enrollment.client.id}
