@@ -39,6 +39,7 @@ import TextInput from '@/components/elements/input/TextInput';
 import TimeOfDayPicker from '@/components/elements/input/TimeOfDayPicker';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
@@ -69,8 +70,12 @@ const FIXED_WIDTH_MEDIUM = 350;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
-const minWidthForType = (item: FormItem) => {
+const minWidthForType = (item: FormItem, isMobile: boolean) => {
   if (item.component || item.size) return undefined;
+
+  // minWidth clobbers maxWidth in css always, so for mobile, unset the property in order to prevent
+  // a minWidth that's > 100% of the container causing horizontal scroll
+  if (isMobile) return undefined;
 
   switch (item.type) {
     case ItemType.String:
@@ -115,10 +120,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       itemChanged({ linkId, value, type: ChangeType.User }),
     [linkId, itemChanged]
   );
+  const isMobile = useIsMobile();
   const isDisabled = disabled || inputProps?.disabled;
   const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
-  const minWidth = minWidthForType(item);
+  const minWidth = minWidthForType(item, isMobile);
   let width;
 
   if (

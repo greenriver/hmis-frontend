@@ -1,15 +1,15 @@
-import { Box, Button, Divider, Paper, Stack, Typography } from '@mui/material';
+import { Box, Divider, Paper, Stack, Typography } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import DeleteAssessmentButton from './DeleteAssessmentButton';
 
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
 import PrintViewButton from '@/components/layout/PrintViewButton';
+import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import FormStepper from '@/modules/form/components/FormStepper';
 
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -31,7 +31,6 @@ interface Props {
   printPath?: string;
   isPrintView: boolean;
   locked: boolean;
-  canEdit: boolean;
   top?: number;
   showAutofill?: boolean;
 }
@@ -45,7 +44,6 @@ const AssessmentFormSideBar: React.FC<Props> = ({
   onAutofill,
   isPrintView,
   locked,
-  canEdit,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   showAutofill = true,
 }) => {
@@ -83,7 +81,6 @@ const AssessmentFormSideBar: React.FC<Props> = ({
     return true;
   }, [assessment]);
 
-  const showAutofillButton = showAutofill && !assessment && canEdit;
   const showPrintViewButton = !isPrintView && locked && assessment;
   const showAssessmentId = assessment && import.meta.env.MODE === 'development';
 
@@ -108,25 +105,14 @@ const AssessmentFormSideBar: React.FC<Props> = ({
         scrollOffset={top}
         useUrlHash={!embeddedInWorkflow}
       />
-      {(showAutofillButton ||
+      {(showAutofill ||
         showPrintViewButton ||
         showDeleteAssessmentButton ||
         showAssessmentId) && (
         <>
           <Divider sx={{ my: 2, mx: -2 }} />
           <Stack gap={2} sx={{ mt: 2 }}>
-            {showAutofillButton && (
-              <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
-                <Button
-                  variant='outlined'
-                  onClick={onAutofill}
-                  sx={{ height: 'fit-content' }}
-                  fullWidth
-                >
-                  Autofill Assessment
-                </Button>
-              </ButtonTooltipContainer>
-            )}
+            {showAutofill && <AssessmentAutofillButton onClick={onAutofill} />}
             {showPrintViewButton && (
               <PrintViewButton
                 openInNew
