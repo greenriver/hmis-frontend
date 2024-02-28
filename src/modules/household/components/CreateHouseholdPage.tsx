@@ -17,7 +17,7 @@ const CreateHouseholdPage = () => {
     ) {
       return [
         'Back to Bed Night Management',
-        generateSafePath(ProjectDashboardRoutes.PROJECT_BED_NIGHTS, {
+        generateSafePath(ProjectDashboardRoutes.BULK_BED_NIGHTS, {
           projectId: project.id,
         }),
       ];
