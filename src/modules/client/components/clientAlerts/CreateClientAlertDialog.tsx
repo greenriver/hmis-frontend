@@ -5,6 +5,7 @@ import {
   DialogProps,
   DialogTitle,
 } from '@mui/material';
+import { startOfTomorrow } from 'date-fns';
 import CommonDialog from '@/components/elements/CommonDialog';
 import StaticForm from '@/modules/form/components/StaticForm';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
@@ -69,6 +70,7 @@ export const CreateClientAlertDialog: React.FC<ClientAlertDialogProps> = ({
                 discardButtonText: 'Cancel',
               },
             }}
+            localConstants={{ tomorrow: startOfTomorrow() }}
           />
         </Box>
       </DialogContent>
