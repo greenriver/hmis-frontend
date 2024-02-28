@@ -44,6 +44,9 @@ fragment ProjectAllFields on Project {
   dataCollectionFeatures {
     ...DataCollectionFeatureFields
   }
+  serviceTypes {
+    ...ServiceTypeFields
+  }
   ...ProjectCocCount
 }
 

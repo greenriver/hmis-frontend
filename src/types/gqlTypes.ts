@@ -4360,6 +4360,7 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
+  AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Units available for the given household at the given project */
@@ -5169,6 +5170,8 @@ export type Project = {
   residentialAffiliationProjectIds: Array<Scalars['ID']['output']>;
   residentialAffiliationProjects: Array<Project>;
   rrhSubType?: Maybe<RrhSubType>;
+  /** Service types that are collected for this Project */
+  serviceTypes: Array<ServiceType>;
   services: ServicesPaginated;
   targetPopulation?: Maybe<TargetPopulation>;
   unitTypes: Array<UnitTypeCapacity>;
@@ -6409,6 +6412,7 @@ export enum ServiceSubTypeProvided {
 
 export type ServiceType = {
   __typename?: 'ServiceType';
+  bulk: Scalars['Boolean']['output'];
   category: Scalars['String']['output'];
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -13584,6 +13588,7 @@ export type GetClientServicesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          bulk: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -24952,6 +24957,17 @@ export type SubmitFormMutation = {
             dataCollectedAbout: DataCollectedAbout;
             legacy: boolean;
           }>;
+          serviceTypes: Array<{
+            __typename?: 'ServiceType';
+            id: string;
+            name: string;
+            hudRecordType?: RecordType | null;
+            hudTypeProvided?: ServiceTypeProvided | null;
+            category: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            bulk: boolean;
+          }>;
           projectCocs: {
             __typename?: 'ProjectCocsPaginated';
             nodesCount: number;
@@ -25026,6 +25042,7 @@ export type SubmitFormMutation = {
             category: string;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            bulk: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -26145,6 +26162,17 @@ export type ProjectAllFieldsFragment = {
     dataCollectedAbout: DataCollectedAbout;
     legacy: boolean;
   }>;
+  serviceTypes: Array<{
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    bulk: boolean;
+  }>;
   projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
 };
 
@@ -26903,6 +26931,17 @@ export type GetProjectQuery = {
       dataCollectedAbout: DataCollectedAbout;
       legacy: boolean;
     }>;
+    serviceTypes: Array<{
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      bulk: boolean;
+    }>;
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   } | null;
 };
@@ -27122,6 +27161,7 @@ export type GetProjectServicesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          bulk: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -28841,6 +28881,7 @@ export type ServiceTypeFieldsFragment = {
   category: string;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+  bulk: boolean;
 };
 
 export type ServiceFieldsFragment = {
@@ -28872,6 +28913,7 @@ export type ServiceFieldsFragment = {
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    bulk: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -28971,6 +29013,7 @@ export type GetServiceQuery = {
       category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      bulk: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -29037,6 +29080,7 @@ export type GetServiceTypeQuery = {
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    bulk: boolean;
   } | null;
 };
 
@@ -29078,6 +29122,7 @@ export type AddServiceToEnrollmentMutation = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        bulk: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -29182,6 +29227,7 @@ export type DeleteServiceMutation = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        bulk: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -29294,6 +29340,7 @@ export type GetEnrollmentServicesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          bulk: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -29421,6 +29468,7 @@ export type GetServiceCategoryTypesQuery = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        bulk: boolean;
       }>;
     };
   } | null;
@@ -31404,6 +31452,18 @@ export const ProjectOperatingPeriodFragmentDoc = gql`
     operatingStartDate
   }
 `;
+export const ServiceTypeFieldsFragmentDoc = gql`
+  fragment ServiceTypeFields on ServiceType {
+    id
+    name
+    hudRecordType
+    hudTypeProvided
+    category
+    dateCreated
+    dateUpdated
+    bulk
+  }
+`;
 export const ProjectAllFieldsFragmentDoc = gql`
   fragment ProjectAllFields on Project {
     id
@@ -31434,6 +31494,9 @@ export const ProjectAllFieldsFragmentDoc = gql`
     dataCollectionFeatures {
       ...DataCollectionFeatureFields
     }
+    serviceTypes {
+      ...ServiceTypeFields
+    }
     ...ProjectCocCount
   }
   ${ProjectNameAndTypeFragmentDoc}
@@ -31443,6 +31506,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${DataCollectionFeatureFieldsFragmentDoc}
+  ${ServiceTypeFieldsFragmentDoc}
   ${ProjectCocCountFragmentDoc}
 `;
 export const ProjectCocFieldsFragmentDoc = gql`
@@ -31731,17 +31795,6 @@ export const ScanCardFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
-`;
-export const ServiceTypeFieldsFragmentDoc = gql`
-  fragment ServiceTypeFields on ServiceType {
-    id
-    name
-    hudRecordType
-    hudTypeProvided
-    category
-    dateCreated
-    dateUpdated
-  }
 `;
 export const ServiceFieldsFragmentDoc = gql`
   fragment ServiceFields on Service {

@@ -46,6 +46,7 @@ const ServiceDateRangeSelect: React.FC<Props> = ({ onChange }) => {
     <TextInput
       select
       label='Service Date Range'
+      hiddenLabel
       value={selected}
       onChange={handleChange}
       SelectProps={{

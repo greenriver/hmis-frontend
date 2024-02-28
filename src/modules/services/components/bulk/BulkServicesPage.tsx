@@ -1,28 +1,48 @@
 import { Box, Grid, Paper } from '@mui/material';
+import pluralize from 'pluralize';
 import React, { useMemo, useState } from 'react';
 import { ServicePeriod } from '../../types';
+import ServiceTypeSelect from '../ServiceTypeSelect';
 import BulkServicesTable from './BulkServicesTable';
 import ClientLookupForServiceToggle, {
-  ClientLookupMode,
+  isClientLookupMode,
 } from './ClientLookupForServiceToggle';
 import ServiceDateRangeSelect from './ServiceDateRangeSelect';
-import StepCard from './StepCard';
+import StepCard, { StepCardTitle } from './StepCard';
 import { CommonCard } from '@/components/elements/CommonCard';
 import DatePicker from '@/components/elements/input/DatePicker';
 import PageTitle from '@/components/layout/PageTitle';
+import useSafeParams from '@/hooks/useSafeParams';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchInput from '@/modules/search/components/ClientTextSearchInput';
 
 interface Props {
-  lookupMode?: ClientLookupMode;
+  serviceTypeId?: string;
+  serviceTypeName?: string;
+  title?: string;
 }
-const BulkServicesPage: React.FC<Props> = ({ lookupMode = 'search' }) => {
+const BulkServicesPage: React.FC<Props> = ({
+  serviceTypeId: serviceTypeIdProp,
+  serviceTypeName = 'Service',
+  title = 'Bulk Service Assignment',
+}) => {
   const { project } = useProjectDashboardContext();
+
+  const params = useSafeParams();
+  const lookupMode = useMemo(() => {
+    if (params.lookupMode && isClientLookupMode(params.lookupMode)) {
+      return params.lookupMode;
+    } else {
+      return 'search';
+    }
+  }, [params]);
+
+  const [serviceTypeId, setServiceTypeId] = useState(serviceTypeIdProp);
   const [serviceDate, setServiceDate] = useState<Date | null>(new Date());
 
   // 'search' mode value
   const [searchTerm, setSearchTerm] = useState<string>('');
-  // 'service_date' mode value
+  // 'list' mode value
   const [servicePeriod, setServicePeriod] = useState<
     ServicePeriod | undefined
   >();
@@ -31,32 +51,64 @@ const BulkServicesPage: React.FC<Props> = ({ lookupMode = 'search' }) => {
     if (lookupMode === 'search') {
       return !!searchTerm && searchTerm.length >= 3;
     }
-    if (lookupMode === 'service_date') {
+    if (lookupMode === 'list') {
       return !!servicePeriod;
     }
     return false;
   }, [lookupMode, searchTerm, servicePeriod]);
 
+  const hasServiceTypeStep = !serviceTypeIdProp;
   return (
     <>
-      <PageTitle title='Bulk Service Assignment' />
+      <PageTitle title={title} />
       <Grid container rowSpacing={2}>
+        {hasServiceTypeStep && (
+          <>
+            <Grid item sm={12} md={8} lg={8} xl={4}>
+              <StepCard step='1' title='Select Service Type' padded>
+                <ServiceTypeSelect
+                  projectId={project.id}
+                  value={serviceTypeId ? { code: serviceTypeId } : null}
+                  onChange={(option) => setServiceTypeId(option?.code)}
+                  label={null}
+                  textInputProps={{
+                    inputProps: { 'aria-label': 'Service Type' },
+                  }}
+                  bulk
+                />
+              </StepCard>
+            </Grid>
+            <Grid item xs={12}></Grid>
+          </>
+        )}
         <Grid item sm={12} md={8} lg={8} xl={4}>
-          <StepCard step='1' title='Set Bed Night Date' padded>
+          <StepCard
+            step={hasServiceTypeStep ? '2' : '1'}
+            title={`Select ${serviceTypeName} Date`}
+            padded
+          >
             <DatePicker
-              label='Bed Night Date'
               value={serviceDate}
               onChange={setServiceDate}
               max={new Date()}
               sx={{ width: '200px' }}
+              label={null}
+              textInputProps={{
+                inputProps: { 'aria-label': 'Service Date' },
+              }}
             />
           </StepCard>
         </Grid>
         <Grid item xs={12}></Grid>
         <Grid item xs={12} lg={8} xl={6}>
-          <StepCard step='2' title='Find Client' padded>
+          <StepCard
+            step={hasServiceTypeStep ? '3' : '2'}
+            title='Find Client'
+            padded
+          >
             <ClientLookupForServiceToggle
               value={lookupMode}
+              serviceTypeName={serviceTypeName}
               onNavigate={() => {
                 setSearchTerm('');
                 setServicePeriod(undefined);
@@ -67,7 +119,7 @@ const BulkServicesPage: React.FC<Props> = ({ lookupMode = 'search' }) => {
                 <ClientTextSearchInput
                   showSearchTips={false}
                   helperText='Seach includes all of HMIS'
-                  // label={null}
+                  label={null}
                   searchAdornment
                   clearAdornment
                   value={searchTerm}
@@ -75,7 +127,7 @@ const BulkServicesPage: React.FC<Props> = ({ lookupMode = 'search' }) => {
                   onClearSearch={() => setSearchTerm('')}
                 />
               )}
-              {lookupMode === 'service_date' && (
+              {lookupMode === 'list' && (
                 <ServiceDateRangeSelect onChange={setServicePeriod} />
               )}
             </Box>
@@ -83,20 +135,30 @@ const BulkServicesPage: React.FC<Props> = ({ lookupMode = 'search' }) => {
         </Grid>
         <Grid item xs={12}></Grid>
         <Grid item xs={12}>
-          {sufficientSearchCriteria ? (
+          {sufficientSearchCriteria && serviceTypeId ? (
             <Paper>
               <BulkServicesTable
                 projectId={project.id}
-                serviceTypeName='Bed Night'
-                serviceTypeId='209'
+                serviceTypeName={serviceTypeName}
+                serviceTypeId={serviceTypeId}
                 serviceDate={serviceDate || new Date()}
                 searchTerm={searchTerm}
                 servicePeriod={servicePeriod}
+                title={
+                  <StepCardTitle
+                    sx={{ pl: 0 }}
+                    step={hasServiceTypeStep ? '4' : '3'}
+                    title='Assign Services'
+                  />
+                }
               />
             </Paper>
           ) : (
             // fixme: need to label twice because of the selection toolbar
-            <StepCard step='3' title='Assign Services'>
+            <StepCard
+              step={hasServiceTypeStep ? '4' : '3'}
+              title={`Assign ${pluralize(serviceTypeName, 2)}`}
+            >
               <CommonCard
                 sx={{
                   m: 2,

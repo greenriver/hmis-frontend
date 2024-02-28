@@ -5466,6 +5466,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ServiceType',
     fields: [
       {
+        name: 'bulk',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'category',
         type: {
           kind: 'NON_NULL',

@@ -1,10 +1,9 @@
 import { omit } from 'lodash-es';
-import { useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
 import { ServicePeriod } from '../../types';
 import AssignServiceButton from './AssignServiceButton';
 import BulkAssignServicesButtons from './BulkAssignServicesButtons';
-import { StepCardTitle } from './StepCard';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
@@ -32,6 +31,7 @@ interface Props {
   searchTerm?: string;
   serviceDate: Date;
   servicePeriod?: ServicePeriod;
+  title: ReactNode;
 }
 
 type RowType = BulkServicesClientSearchQuery['clientSearch']['nodes'][0];
@@ -49,6 +49,7 @@ const BulkServicesTable: React.FC<Props> = ({
   serviceDate,
   searchTerm,
   servicePeriod,
+  title,
 }) => {
   const { bulkAssign, bulkRemove, apolloError } = useBulkAssignMutations();
 
@@ -157,9 +158,7 @@ const BulkServicesTable: React.FC<Props> = ({
         filterInputType='ClientFilterOptions'
         defaultSortOption={ClientSortOption.BestMatch}
         EnhancedTableToolbarProps={{
-          title: (
-            <StepCardTitle sx={{ pl: 0 }} step='3' title='Assign Services' />
-          ),
+          title,
           renderBulkAction: (_selectedClientIds, selectedRows) => {
             return (
               <BulkAssignServicesButtons

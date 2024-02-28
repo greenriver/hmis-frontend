@@ -1,43 +1,41 @@
 import SearchIcon from '@mui/icons-material/Search';
 
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+// eslint-disable-next-line no-restricted-imports
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import CommonToggle from '@/components/elements/CommonToggle';
 import { ServiceListIcon } from '@/components/elements/SemanticIcons';
-import useSafeParams from '@/hooks/useSafeParams';
-import { ProjectDashboardRoutes } from '@/routes/routes';
-import { generateSafePath } from '@/utils/pathEncoding';
+import useCurrentPath from '@/hooks/useCurrentPath';
 
-export type ClientLookupMode = 'search' | 'scan' | 'service_date';
+export type ClientLookupMode = 'search' | 'scan' | 'list';
 
 export function isClientLookupMode(value: string): value is ClientLookupMode {
-  return !!value && ['search', 'scan', 'service_date'].includes(value);
+  return !!value && ['search', 'scan', 'list'].includes(value);
 }
 interface ClientLookupForServiceToggleProps {
   value: ClientLookupMode;
   onNavigate: VoidFunction;
+  serviceTypeName: string;
 }
-
-const modeToRoute = {
-  search: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE_SEARCH,
-  service_date: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE_LIST,
-  scan: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE_SEARCH, // TODO  implement
-};
 
 /**
  * Toggle between Bulk Service lookup modes. Navigates on change.
  */
 const ClientLookupForServiceToggle: React.FC<
   ClientLookupForServiceToggleProps
-> = ({ value, onNavigate }) => {
-  const params = useSafeParams();
+> = ({ value, onNavigate, serviceTypeName }) => {
   const navigate = useNavigate();
+  const params = useParams();
+  const location = useCurrentPath();
+
   const onChange = useCallback(
     (newVal: ClientLookupMode) => {
       onNavigate();
-      navigate(generateSafePath(modeToRoute[newVal], params));
+      navigate(
+        generatePath(location || 'err', { ...params, lookupMode: newVal })
+      );
     },
-    [navigate, params, onNavigate]
+    [location, navigate, onNavigate, params]
   );
 
   return (
@@ -58,8 +56,8 @@ const ClientLookupForServiceToggle: React.FC<
         //   Icon: ScanCardIcon,
         // },
         {
-          value: 'service_date',
-          label: 'Show By Last Service Date',
+          value: 'list',
+          label: `Show By Last ${serviceTypeName} Date`,
           Icon: ServiceListIcon,
         },
       ]}
