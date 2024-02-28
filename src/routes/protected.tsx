@@ -92,6 +92,7 @@ import ProjectReferralPosting from '@/modules/projects/components/ProjectReferra
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
+import BulkServicesPage from '@/modules/services/components/bulk/BulkServicesPage';
 import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
@@ -158,6 +159,18 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
             element: <ProjectBedNights />,
+          },
+          {
+            path: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE,
+            element: <BulkServicesPage />,
+          },
+          {
+            path: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE_SEARCH,
+            element: <BulkServicesPage lookupMode='search' />,
+          },
+          {
+            path: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE_LIST,
+            element: <BulkServicesPage lookupMode='service_date' />,
           },
           {
             path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT,

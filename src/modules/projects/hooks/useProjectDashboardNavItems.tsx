@@ -54,6 +54,13 @@ export const useProjectDashboardNavItems = (
             hide: project.projectType !== ProjectType.EsNbn,
           },
           {
+            id: 'bulk-service',
+            title: 'Bulk Services',
+            path: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE,
+            permissions: ['canViewEnrollmentDetails'],
+            hide: project.projectType !== ProjectType.EsNbn,
+          },
+          {
             id: 'referrals',
             title: 'Referrals',
             path: ProjectDashboardRoutes.REFERRALS,

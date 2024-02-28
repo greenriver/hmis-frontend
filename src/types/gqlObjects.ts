@@ -2243,6 +2243,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
+        name: 'lastServiceDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'lengthOfStay',
         type: {
           kind: 'ENUM',
@@ -2783,7 +2787,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
       },
       {
@@ -2812,7 +2816,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'resultDate',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
     ],
   },
@@ -6096,6 +6100,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           },
         },
       },
+      {
+        name: 'serviceInRange',
+        type: {
+          kind: 'INPUT_OBJECT',
+          name: 'ServiceRangeFilter',
+          ofType: null,
+        },
+      },
     ],
   },
   {
@@ -7206,6 +7218,28 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'typeProvided',
         type: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ServiceRangeFilter',
+    args: [
+      {
+        name: 'endDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'serviceType',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'startDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
       },
     ],
   },

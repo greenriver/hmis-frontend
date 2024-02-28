@@ -56,7 +56,10 @@ export interface Props<
     GenericTableProps<RowDataType>,
     'rows' | 'tablePaginationProps' | 'loading' | 'paginated' | 'noData'
   > {
-  getColumnDefs?: (rows: RowDataType[]) => ColumnDef<RowDataType>[]; // dynamically define column defs based on current data
+  getColumnDefs?: (
+    rows: RowDataType[],
+    loading?: boolean
+  ) => ColumnDef<RowDataType>[]; // dynamically define column defs based on current data
   filters?:
     | TableFilterType<FilterOptionsType>
     | ((
@@ -119,7 +122,7 @@ function allFieldFilters<T>(
     if (filter) {
       result[name as keyof T] = filter;
     } else {
-      console.error(`Unable to create filter for ${name}`);
+      // console.error(`Unable to create filter for ${name}`);
     }
   });
 
@@ -283,11 +286,11 @@ const GenericTableWithData = <
 
   const columnDefs = useMemo(() => {
     if (columnsProp) return columnsProp;
-    if (getColumnDefs) return getColumnDefs(rows);
+    if (getColumnDefs) return getColumnDefs(rows, loading);
     if (recordType) return allFieldColumns(recordType);
     console.warn('No columns specified');
     return [] as ColumnDef<RowDataType>[];
-  }, [columnsProp, getColumnDefs, recordType, rows]);
+  }, [columnsProp, getColumnDefs, loading, recordType, rows]);
 
   const optionalColumns = useMemo(
     () => (columnDefs || []).filter((col) => col.optional),
