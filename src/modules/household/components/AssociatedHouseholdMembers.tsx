@@ -13,7 +13,7 @@ import { ClientFieldsFragment } from '@/types/gqlTypes';
 export const householdMemberColumns: ColumnDef<
   ClientFieldsFragment | RecentHouseholdMember
 >[] = [
-  CLIENT_COLUMNS.linkedName,
+  CLIENT_COLUMNS.linkedNameNewTab,
   { ...CLIENT_COLUMNS.ssn, width: '150px' },
   { ...CLIENT_COLUMNS.dobAge, width: '180px' },
 ];

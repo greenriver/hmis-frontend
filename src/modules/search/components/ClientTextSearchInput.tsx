@@ -1,6 +1,7 @@
 import { Stack } from '@mui/system';
 import { isNull } from 'lodash-es';
 import React, { useMemo } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import CommonSearchInput, {
@@ -17,12 +18,12 @@ export interface ClientTextSearchInputProps extends CommonSearchInputProps {
 
 const defaultSearchClientsPlaceholder =
   'Search by name, DOB, SSN, or Personal ID';
+
 // NOTE: description should match actual behavior of ClientSearch concern in the warehouse
 const defaultSearchClientsHelperText =
   'Search by name, DOB (mm/dd/yyyy), SSN (xxx-yy-zzzz), Warehouse ID, or Personal ID.';
 const defaultSearchTips =
   'It is often most efficient to search using the first few characters of the first name and last name, e.g. to find Jane Smith you might search for ja sm.';
-
 const getDefaultPlaceholderAndHelper = (mciEnabled: boolean) => {
   if (!mciEnabled) {
     return {
@@ -51,14 +52,14 @@ const ClientTextSearchInput: React.FC<ClientTextSearchInputProps> = ({
   ...props
 }) => {
   const { globalFeatureFlags } = useHmisAppSettings();
-
+  const isTiny = useIsMobile('sm');
   const [placeholder, helperText] = useMemo(() => {
     const { placeholder, helper } = getDefaultPlaceholderAndHelper(
       !!globalFeatureFlags?.mciId
     );
     // Construct helper text.
     // Even if helperText passed is `null`, we still need to show the `errorMessage` if present.
-
+    // We hide helper text on tiny screens
     const helperTextElement =
       helperTextProp || isNull(helperTextProp) ? helperTextProp : <>{helper}</>;
     const helperTextNode = showSearchTips ? (
@@ -69,21 +70,29 @@ const ClientTextSearchInput: React.FC<ClientTextSearchInputProps> = ({
           gap={2}
         >
           {errorMessage && <b>{errorMessage}</b>}
-          <span>
-            <b>To add a client,</b> search first. <b>Search Tips:</b>{' '}
-            {helperTextElement} <span>{defaultSearchTips}</span>
-          </span>
+          {!isTiny && (
+            <span>
+              <b>To add a client,</b> search first. <b>Search Tips:</b>{' '}
+              {helperTextElement} <span>{defaultSearchTips}</span>
+            </span>
+          )}
         </Stack>
       </>
     ) : (
       <Stack gap={0.5} component='span'>
         {errorMessage && <span>{errorMessage}</span>}
-        <span>{helperTextElement}</span>
+        {!isTiny && <span>{helperTextElement}</span>}
       </Stack>
     );
 
     return [placeholder, helperTextNode];
-  }, [errorMessage, globalFeatureFlags?.mciId, helperTextProp, showSearchTips]);
+  }, [
+    errorMessage,
+    globalFeatureFlags?.mciId,
+    helperTextProp,
+    showSearchTips,
+    isTiny,
+  ]);
 
   return (
     <CommonSearchInput

@@ -5,6 +5,7 @@ import { ReactNode, useCallback, useId, useMemo } from 'react';
 import { GroupItemComponentProps } from '../../types';
 import { maxWidthAtNestingLevel } from '../../util/formUtil';
 
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { formatCurrency } from '@/modules/hmis/hmisUtil';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
@@ -85,8 +86,11 @@ const InputGroup = ({
       ),
     [rowSx, viewOnly]
   );
+  const isMobile = useIsMobile();
 
-  const maxWidth = maxWidthAtNestingLevel(nestingLevel + 1) + 80;
+  const maxWidth: number | string = isMobile
+    ? '100%'
+    : maxWidthAtNestingLevel(nestingLevel + 1) + 80;
 
   const groupLabelId = useId();
 
@@ -142,7 +146,7 @@ const InputGroup = ({
   let label = item.text;
   if (viewOnly && !isNil(item.readonlyText)) label = item.readonlyText;
   return (
-    <Box id={item.linkId} sx={{ mb: 2 }}>
+    <Box id={item.linkId} sx={{ mb: 2, maxWidth: '100%' }}>
       {label && (
         <Typography
           id={groupLabelId}
@@ -157,7 +161,7 @@ const InputGroup = ({
       {isNumeric && summaryItem && (
         <Stack
           justifyContent='space-between'
-          direction='row'
+          direction={{ xs: 'column', sm: 'row' }}
           sx={{
             py: 2,
             pl: 1,

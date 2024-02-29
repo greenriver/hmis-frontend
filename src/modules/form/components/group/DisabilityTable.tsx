@@ -7,7 +7,8 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useCallback, useEffect, useId, useMemo } from 'react';
+import { Stack } from '@mui/system';
+import { ReactNode, useCallback, useEffect, useId, useMemo } from 'react';
 
 import {
   ChangeType,
@@ -17,6 +18,7 @@ import {
 } from '../../types';
 
 import { yesCode } from '../../util/formUtil';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
 interface DisabilityGroupRow extends FormItem {
@@ -141,18 +143,53 @@ const DisabilityTable = ({
   const statusId = useId();
   const disablingConditionId = useId();
   const disabilityTypeId = useId();
+  const isMobile = useIsMobile();
+
+  function getDisabilityDropdowns(
+    cellItem: FormItem,
+    idx: number,
+    disabilityTypeLabelId?: string,
+    label?: ReactNode
+  ) {
+    return renderChildItem(cellItem, {
+      noLabel: !!label,
+      inputProps: {
+        label: label,
+        placeholder: idx === 0 ? 'Select Status' : 'Select Disabling Condition',
+        // Reads as "Physical Disability Status" or "Physical Disability Disabling Condition"
+        ariaLabelledBy:
+          disabilityTypeLabelId &&
+          `${disabilityTypeLabelId} ${
+            idx === 0 ? statusId : disablingConditionId
+          }`,
+      },
+      disabled:
+        (cellItem.linkId === disablingConditionLinkId &&
+          dependentsThatAreYes.length > 0) ||
+        false,
+      itemChanged: handleItemChanged,
+    });
+  }
 
   return (
     <Table
       sx={{ border: (theme) => `1px solid ${theme.palette.grey[200]}`, mb: 2 }}
     >
-      <TableHead>
-        <TableRow>
-          <TableCell></TableCell>
-          <TableCell id={statusId}>Status</TableCell>
-          <TableCell id={disablingConditionId}>Disabling Condition</TableCell>
-        </TableRow>
-      </TableHead>
+      {isMobile ? (
+        <TableHead>
+          <TableRow>
+            <TableCell>Disability Status</TableCell>
+          </TableRow>
+        </TableHead>
+      ) : (
+        <TableHead>
+          <TableRow>
+            <TableCell></TableCell>
+            <TableCell id={statusId}>Status</TableCell>
+            <TableCell id={disablingConditionId}>Disabling Condition</TableCell>
+          </TableRow>
+        </TableHead>
+      )}
       <TableBody
         sx={{
           // Highlight last row
@@ -176,48 +213,47 @@ const DisabilityTable = ({
                 }}
               >
                 <TableCell
-                  sx={{ width: '250px', py: 3 }}
+                  sx={isMobile ? {} : { width: '250px', py: 3 }}
                   id={disabilityTypeLabelId}
                 >
-                  <Typography variant='body2' fontWeight={600}>
-                    {rowItem.text}
-                  </Typography>
+                  {!isMobile && (
+                    <Typography variant='body2' fontWeight={600}>
+                      {rowItem.text}
+                    </Typography>
+                  )}
                   {rowItem.helperText && (
                     <Typography variant='body2'>
                       {rowItem.helperText}
                     </Typography>
                   )}
+                  {isMobile && (
+                    <Stack direction='column' spacing={1}>
+                      {rowItem.item.map((cellItem, idx) =>
+                        getDisabilityDropdowns(
+                          cellItem,
+                          idx,
+                          undefined,
+                          cellItem.text
+                        )
+                      )}
+                    </Stack>
+                  )}
                 </TableCell>
-                {rowItem.item.map((cellItem, idx) => (
-                  <TableCell
-                    key={cellItem.linkId}
-                    sx={{
-                      minWidth: '220px',
-                      maxWidth: '250px',
-                      pr: 2,
-                    }}
-                  >
-                    {renderChildItem(cellItem, {
-                      noLabel: true,
-                      inputProps: {
-                        label: null,
-                        placeholder:
-                          idx === 0
-                            ? 'Select Status'
-                            : 'Select Disabling Condition',
-                        // Reads as "Physical Disability Status" or "Physical Disability Disabling Condition"
-                        ariaLabelledBy: `${disabilityTypeLabelId} ${
-                          idx === 0 ? statusId : disablingConditionId
-                        }`,
-                      },
-                      disabled:
-                        (cellItem.linkId === disablingConditionLinkId &&
-                          dependentsThatAreYes.length > 0) ||
-                        false,
-                      itemChanged: handleItemChanged,
-                    })}
-                  </TableCell>
-                ))}
+                {!isMobile &&
+                  rowItem.item.map((cellItem, idx) => (
+                    <TableCell
+                      key={cellItem.linkId}
+                      sx={{
+                        pr: 2,
+                      }}
+                    >
+                      {getDisabilityDropdowns(
+                        cellItem,
+                        idx,
+                        disabilityTypeLabelId
+                      )}
+                    </TableCell>
+                  ))}
               </TableRow>
             );
           })}
