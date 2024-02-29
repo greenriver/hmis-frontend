@@ -152,9 +152,14 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
             {definitionLoading ? (
               <Loading />
             ) : formDefinition ? (
-              <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
+              <Grid
+                container
+                direction='column'
+                spacing={2}
+                sx={{ mb: 2, mt: 0 }}
+              >
+                <Grid item>{props.preFormComponent}</Grid>
                 <Grid item xs>
-                  {props.preFormComponent}
                   <DynamicForm
                     ref={formRef}
                     definition={formDefinition.definition}
