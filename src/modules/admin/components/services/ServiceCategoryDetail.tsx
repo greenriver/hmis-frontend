@@ -51,6 +51,7 @@ const ServiceCategoryDetail = () => {
           //   </Button>
           // }
         >
+          {/* FIXME show instances for form types within this cateogry too, or just link over */}
           <ServiceCategoryRuleTable serviceCategoryId={serviceCategoryId} />
         </TitleCard>
         <TitleCard

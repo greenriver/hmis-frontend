@@ -14581,6 +14581,22 @@ export type FormRuleFieldsFragment = {
     hudId: string;
     organizationName: string;
   } | null;
+  serviceCategory?: {
+    __typename?: 'ServiceCategory';
+    id: string;
+    name: string;
+    hud: boolean;
+  } | null;
+  serviceType?: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  } | null;
 };
 
 export type GetFormRulesQueryVariables = Exact<{
@@ -14626,6 +14642,22 @@ export type GetFormRulesQuery = {
         id: string;
         hudId: string;
         organizationName: string;
+      } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+        hud: boolean;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
       } | null;
     }>;
   };
@@ -14679,6 +14711,22 @@ export type GetServiceCategoryRulesQuery = {
           hudId: string;
           organizationName: string;
         } | null;
+        serviceCategory?: {
+          __typename?: 'ServiceCategory';
+          id: string;
+          name: string;
+          hud: boolean;
+        } | null;
+        serviceType?: {
+          __typename?: 'ServiceType';
+          id: string;
+          name: string;
+          hudRecordType?: RecordType | null;
+          hudTypeProvided?: ServiceTypeProvided | null;
+          category: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+        } | null;
       }>;
     };
   } | null;
@@ -14719,6 +14767,22 @@ export type GetFormRuleQuery = {
       id: string;
       hudId: string;
       organizationName: string;
+    } | null;
+    serviceCategory?: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+      hud: boolean;
+    } | null;
+    serviceType?: {
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
     } | null;
   } | null;
 };
@@ -14761,6 +14825,22 @@ export type CreateFormRuleMutation = {
         id: string;
         hudId: string;
         organizationName: string;
+      } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+        hud: boolean;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
       } | null;
     };
     errors: Array<{
@@ -14818,6 +14898,22 @@ export type UpdateFormRuleMutation = {
         id: string;
         hudId: string;
         organizationName: string;
+      } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+        hud: boolean;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
       } | null;
     };
     errors: Array<{
@@ -30612,6 +30708,17 @@ export const OrganizationNameFieldsFragmentDoc = gql`
     organizationName
   }
 `;
+export const ServiceTypeFieldsFragmentDoc = gql`
+  fragment ServiceTypeFields on ServiceType {
+    id
+    name
+    hudRecordType
+    hudTypeProvided
+    category
+    dateCreated
+    dateUpdated
+  }
+`;
 export const FormRuleFieldsFragmentDoc = gql`
   fragment FormRuleFields on FormRule {
     id
@@ -30636,9 +30743,18 @@ export const FormRuleFieldsFragmentDoc = gql`
     }
     createdAt
     updatedAt
+    serviceCategory {
+      id
+      name
+      hud
+    }
+    serviceType {
+      ...ServiceTypeFields
+    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
+  ${ServiceTypeFieldsFragmentDoc}
 `;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
@@ -31586,17 +31702,6 @@ export const ScanCardFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
-`;
-export const ServiceTypeFieldsFragmentDoc = gql`
-  fragment ServiceTypeFields on ServiceType {
-    id
-    name
-    hudRecordType
-    hudTypeProvided
-    category
-    dateCreated
-    dateUpdated
-  }
 `;
 export const ServiceFieldsFragmentDoc = gql`
   fragment ServiceFields on Service {

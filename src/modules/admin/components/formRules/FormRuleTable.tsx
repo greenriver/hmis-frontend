@@ -1,8 +1,10 @@
-import { Button, Chip } from '@mui/material';
+import { Chip, IconButton } from '@mui/material';
 import { Stack } from '@mui/system';
 import { omit } from 'lodash-es';
 import React, { useMemo, useState } from 'react';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import { EditIcon } from '@/components/elements/SemanticIcons';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
@@ -10,6 +12,8 @@ import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { HmisEnums } from '@/types/gqlEnums';
 
 import {
+  DataCollectedAbout,
+  FormRole,
   FormRuleFieldsFragment,
   FormRuleInput,
   GetFormRulesDocument,
@@ -21,90 +25,97 @@ import {
   UpdateFormRuleMutation,
 } from '@/types/gqlTypes';
 
-export const SystemChip = () => (
+export const ActiveChip = ({ active }: { active: boolean }) => (
   <Chip
-    label='System'
+    label={active ? 'Active' : 'Inactive'}
     size='small'
-    color='success'
+    color={active ? 'success' : 'default'}
     variant='outlined'
     sx={{ width: 'fit-content' }}
   />
 );
 
 type RowType = FormRuleFieldsFragment;
-const FORM_RULE_COLUMNS: ColumnDef<RowType>[] = [
-  {
-    header: 'Rule ID',
+
+const FormRuleColumns: Record<string, ColumnDef<RowType>> = {
+  id: {
+    header: 'ID',
     render: 'id',
     linkTreatment: true,
     width: '80px',
   },
-  // {
-  //   header: 'Form Type',
-  //   render: ({ definitionRole }) =>
-  //     definitionRole && HmisEnums.FormRole[definitionRole],
-  // },
-  // {
-  //   header: 'Form Title',
-  //   render: 'definitionTitle',
-  // },
-  {
-    header: 'Project Type',
-    render: ({ projectType }) =>
-      projectType ? (
-        <ProjectTypeChip projectType={projectType} />
-      ) : (
-        <NotCollectedText>All Project Types</NotCollectedText>
-      ),
-  },
-  {
-    header: 'Funder',
-    render: ({ funder, otherFunder }) => {
-      if (otherFunder && !funder) return otherFunder;
-      if (funder)
-        return (
-          <Stack>
-            <span>{HmisEnums.FundingSource[funder]}</span>
-            <span>{otherFunder}</span>
-          </Stack>
-        );
-      return <NotCollectedText>All Funders</NotCollectedText>;
+  projectApplicability: {
+    header: 'Project Applicability',
+    render: ({ projectType, funder, otherFunder, project, organization }) => {
+      if (
+        !projectType &&
+        !funder &&
+        !otherFunder &&
+        !project &&
+        !organization
+      ) {
+        return 'All Projects';
+      }
+
+      return (
+        <Stack
+          sx={{
+            '.MuiChip-root': { width: 'fit-content', px: 1 },
+            maxWidth: '350px',
+          }}
+          gap={1}
+          direction='row'
+        >
+          {projectType && (
+            <ProjectTypeChip projectType={projectType} variant='filled' />
+          )}
+          {funder && (
+            <Chip size='small' label={HmisEnums.FundingSource[funder]} />
+          )}
+          {otherFunder && <Chip size='small' label={otherFunder} />}
+          {project && <Chip size='small' label={project.projectName} />}
+          {organization && (
+            <Chip size='small' label={organization.organizationName} />
+          )}
+        </Stack>
+      );
     },
   },
-  {
-    // Direct Project/Org applicability rule
-    header: 'Entity',
-    render: ({ project, organization }) => {
-      if (project) return project.projectName;
-      if (organization) return organization.organizationName;
+  serviceApplicability: {
+    header: 'Service Applicability',
+    render: ({ serviceType, serviceCategory }) => {
+      if (serviceType) return serviceType.name;
+      if (serviceCategory) return serviceCategory.name;
       return <NotCollectedText>None</NotCollectedText>;
     },
   },
-  {
-    header: 'Data Collected About',
+  dataCollectedAbout: {
+    header: 'Client Applicability',
     render: ({ dataCollectedAbout }) =>
-      dataCollectedAbout ? (
-        HmisEnums.DataCollectedAbout[dataCollectedAbout]
-      ) : (
-        <NotCollectedText>Not Specified</NotCollectedText>
-      ),
+      HmisEnums.DataCollectedAbout[
+        dataCollectedAbout || DataCollectedAbout.AllClients
+      ],
   },
-  {
+  activeStatus: {
     header: 'Status',
-    render: ({ system, active }) => (
-      <Stack direction={'row'} gap={1}>
-        {active ? 'Active' : 'Inactive'}
-        {system && <SystemChip />}
-      </Stack>
-    ),
+    render: ({ active }) => <ActiveChip active={active} />,
   },
+};
+
+const FORM_RULE_COLUMNS: ColumnDef<RowType>[] = [
+  FormRuleColumns.id,
+  FormRuleColumns.serviceApplicability,
+  FormRuleColumns.projectApplicability,
+  FormRuleColumns.dataCollectedAbout,
+  FormRuleColumns.activeStatus,
 ];
 
 interface Props {
-  queryVariables?: GetFormRulesQueryVariables;
+  formRole: FormRole;
+  queryVariables: GetFormRulesQueryVariables;
 }
 
-const FormRuleTable: React.FC<Props> = ({ queryVariables }) => {
+const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
   // Currently selected rule for editing
   const [selectedRule, setSelectedRule] = useState<RowType | undefined>();
 
@@ -124,32 +135,58 @@ const FormRuleTable: React.FC<Props> = ({ queryVariables }) => {
     onClose: () => setSelectedRule(undefined),
   });
 
-  const columnsWithAction: typeof FORM_RULE_COLUMNS = useMemo(() => {
-    return [
-      ...FORM_RULE_COLUMNS,
-      {
-        key: 'action',
-        textAlign: 'right',
-        render: (row) => {
-          // system rules cannot be changed
-          if (row.system) return null;
+  const columns: typeof FORM_RULE_COLUMNS = useMemo(() => {
+    const cols: typeof FORM_RULE_COLUMNS = [];
 
-          return (
-            <Button
+    if (formRole === FormRole.Service) {
+      cols.push(FormRuleColumns.serviceApplicability);
+    }
+
+    const nonProjectFormRoles = [FormRole.Organization];
+    if (!nonProjectFormRoles.includes(formRole)) {
+      cols.push(FormRuleColumns.projectApplicability);
+    }
+
+    const nonClientFormRoles = [
+      FormRole.CeParticipation,
+      FormRole.Funder,
+      FormRole.HmisParticipation,
+      FormRole.Inventory,
+      FormRole.Organization,
+      FormRole.Project,
+      FormRole.ProjectCoc,
+      FormRole.ReferralRequest,
+    ];
+    if (!nonClientFormRoles.includes(formRole)) {
+      cols.push(FormRuleColumns.dataCollectedAbout);
+    }
+    cols.push(FormRuleColumns.activeStatus);
+
+    cols.push({
+      key: 'action',
+      textAlign: 'right',
+      render: (row) => {
+        return (
+          <ButtonTooltipContainer
+            title={row.system ? 'System rule' : undefined}
+          >
+            <IconButton
+              aria-label='edit form rule'
+              disabled={row.system}
               onClick={() => {
                 setSelectedRule(row);
                 openFormDialog();
               }}
               size='small'
-              variant='outlined'
             >
-              Edit
-            </Button>
-          );
-        },
+              <EditIcon fontSize='inherit' />
+            </IconButton>
+          </ButtonTooltipContainer>
+        );
       },
-    ];
-  }, [openFormDialog]);
+    });
+    return cols;
+  }, [formRole, openFormDialog]);
 
   return (
     <>
@@ -158,9 +195,9 @@ const FormRuleTable: React.FC<Props> = ({ queryVariables }) => {
         GetFormRulesQueryVariables,
         RowType
       >
-        queryVariables={queryVariables || {}}
+        queryVariables={queryVariables}
         queryDocument={GetFormRulesDocument}
-        columns={columnsWithAction}
+        columns={columns}
         pagePath='formRules'
         noData='No form rules'
         showFilters

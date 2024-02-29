@@ -21,4 +21,12 @@ fragment FormRuleFields on FormRule {
   }
   createdAt
   updatedAt
+  serviceCategory {
+    id
+    name
+    hud
+  }
+  serviceType {
+    ...ServiceTypeFields
+  }
 }

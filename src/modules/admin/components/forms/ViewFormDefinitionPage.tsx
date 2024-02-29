@@ -1,31 +1,29 @@
-import AddIcon from '@mui/icons-material/Add';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { Button, Stack } from '@mui/material';
+import { IconButton, Paper, Stack, Typography } from '@mui/material';
 
 import { generatePath, useNavigate } from 'react-router-dom';
-import FormRuleTable from '../formRules/FormRuleTable';
+import FormRuleCard from '../formRules/FormRuleCard';
 import ButtonLink from '@/components/elements/ButtonLink';
 import Loading from '@/components/elements/Loading';
-import TitleCard from '@/components/elements/TitleCard';
+import { EditIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
-  CreateFormRuleDocument,
-  CreateFormRuleMutation,
   DeleteFormDefinitionDocument,
   DeleteFormDefinitionMutation,
   DeleteFormDefinitionMutationVariables,
-  FormRuleInput,
-  MutationCreateFormRuleArgs,
+  FormDefinitionInput,
+  MutationUpdateFormDefinitionArgs,
   StaticFormRole,
+  UpdateFormDefinitionDocument,
+  UpdateFormDefinitionMutation,
   useGetFormDefinitionForEditorQuery,
 } from '@/types/gqlTypes';
 import { evictQuery } from '@/utils/cacheUtil';
-
 const ViewFormDefinitionPage = () => {
   const { formId } = useSafeParams() as { formId: string };
   const navigate = useNavigate();
@@ -35,19 +33,23 @@ const ViewFormDefinitionPage = () => {
       variables: { id: formId },
     });
 
-  // Form dialog for adding new rules
-  const { openFormDialog, renderFormDialog } = useStaticFormDialog<
-    CreateFormRuleMutation,
-    MutationCreateFormRuleArgs
-  >({
-    formRole: StaticFormRole.FormRule,
-    mutationDocument: CreateFormRuleDocument,
-    getErrors: (data) => data.createFormRule?.errors || [],
-    getVariables: (values) => ({
-      input: { input: values as FormRuleInput, definitionId: formId },
-    }),
-    onCompleted: () => evictQuery('formRules'),
-  });
+  // Dialog for updating form definitions
+  const { openFormDialog: openEditDialog, renderFormDialog: renderEditDialog } =
+    useStaticFormDialog<
+      UpdateFormDefinitionMutation,
+      MutationUpdateFormDefinitionArgs
+    >({
+      formRole: StaticFormRole.FormDefinition,
+      initialValues: formDefinition || {},
+      mutationDocument: UpdateFormDefinitionDocument,
+      getErrors: (data) => data.updateFormDefinition?.errors || [],
+      getVariables: (values) => ({
+        input: values as FormDefinitionInput,
+        id: formId,
+      }),
+      onCompleted: () => {},
+      // onClose: () => setSelected(undefined),
+    });
 
   if (error) throw error;
   if (!formDefinition) return <Loading />;
@@ -55,15 +57,26 @@ const ViewFormDefinitionPage = () => {
   return (
     <>
       <PageTitle
-        title={formDefinition?.title}
+        title={
+          <Stack direction='row' gap={1}>
+            <Typography variant='h3'>{formDefinition.title}</Typography>
+            <IconButton
+              aria-label='edit title'
+              onClick={openEditDialog}
+              size='small'
+            >
+              <EditIcon fontSize='inherit' />
+            </IconButton>
+          </Stack>
+        }
         actions={
           <Stack direction='row' gap={2}>
             <ButtonLink
               to={generatePath(AdminDashboardRoutes.EDIT_FORM, { formId })}
-              startIcon={<EditIcon />}
-              variant='outlined'
+              startIcon={<DashboardCustomizeIcon />}
+              variant='contained'
             >
-              Edit Definition
+              Edit Form
             </ButtonLink>
             <DeleteMutationButton<
               DeleteFormDefinitionMutation,
@@ -81,33 +94,23 @@ const ViewFormDefinitionPage = () => {
                 navigate(generatePath(AdminDashboardRoutes.FORMS));
               }}
             >
-              Delete Definition
+              Delete
             </DeleteMutationButton>
           </Stack>
         }
       />
 
-      <TitleCard
-        title='Form Rules'
-        headerVariant='border'
-        actions={
-          <Stack direction='row' gap={1}>
-            <Button
-              onClick={() => openFormDialog()}
-              startIcon={<AddIcon />}
-              variant='outlined'
-            >
-              New Rule
-            </Button>
-          </Stack>
-        }
-      >
-        <FormRuleTable queryVariables={{ filters: { definition: formId } }} />
-      </TitleCard>
-      {renderFormDialog({
-        title: <span>New Rule for {formDefinition.title}</span>,
-        DialogProps: { maxWidth: 'sm' },
-      })}
+      <Stack gap={2}>
+        <Paper sx={{ p: 2 }}>
+          Some details here, like date last updated, active in X projects...
+        </Paper>
+        <FormRuleCard
+          formId={formId}
+          formTitle={formDefinition.title}
+          formRole={formDefinition.role}
+        />
+      </Stack>
+      {renderEditDialog({ title: 'Edit Form Details' })}
     </>
   );
 };
