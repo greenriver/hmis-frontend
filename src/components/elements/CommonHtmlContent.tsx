@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 interface Props extends TypographyProps {
   children: string;
-  component: React.ElementType;
+  component?: React.ElementType;
 }
 const CommonHtmlContent: React.FC<Props> = ({
   children,
