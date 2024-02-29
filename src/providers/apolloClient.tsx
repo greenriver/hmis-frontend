@@ -152,6 +152,7 @@ export const cache = new InMemoryCache({
     FormDefinition: {
       keyFields: ['cacheKey'],
     },
+    ValueBound: { keyFields: false },
   },
 });
 
