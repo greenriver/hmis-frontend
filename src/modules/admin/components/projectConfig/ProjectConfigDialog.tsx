@@ -35,7 +35,11 @@ const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
               UpdateProjectConfigMutationVariables
             >
               role={StaticFormRole.ProjectConfig}
-              initialValues={config}
+              initialValues={{
+                lengthOfAbsenceDays: JSON.parse(config.configOptions)
+                  .length_of_absence_days,
+                ...config,
+              }}
               mutationDocument={UpdateProjectConfigDocument}
               getVariables={(values) => ({
                 input: values as ProjectConfigInput,
