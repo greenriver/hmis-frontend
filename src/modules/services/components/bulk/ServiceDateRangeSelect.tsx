@@ -1,90 +1,167 @@
-import { Box, Divider, ListItemIcon, MenuItem } from '@mui/material';
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Link,
+  Stack,
+} from '@mui/material';
+
 import { sub } from 'date-fns';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { ServicePeriod } from '../../types';
-import TextInput from '@/components/elements/input/TextInput';
-import { CalendarIcon } from '@/components/elements/SemanticIcons';
+import CommonDialog from '@/components/elements/CommonDialog';
+import DatePicker from '@/components/elements/input/DatePicker';
+import GenericSelect from '@/components/elements/input/GenericSelect';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
 
 const today = new Date();
 
-type FixedRange = 'Yesterday' | 'LastWeek' | 'LastTwoWeeks' | 'LastMonth';
-type Option = FixedRange | 'Custom';
-
-const fixedRanges: Record<FixedRange, ServicePeriod> = {
+const fixedRanges: Record<string, ServicePeriod> = {
   Yesterday: { start: sub(today, { days: 1 }), end: sub(today, { days: 1 }) },
   LastWeek: { start: sub(today, { days: 7 }), end: today },
   LastTwoWeeks: { start: sub(today, { days: 14 }), end: today },
   LastMonth: { start: sub(today, { days: 30 }), end: today },
 };
-
+type FixedRange = keyof typeof fixedRanges;
 function isFixedRange(value: string): value is FixedRange {
   return !!value && Object.keys(fixedRanges).includes(value);
 }
+const options = [
+  { label: 'Yesterday', id: 'Yesterday' },
+  { label: 'Last Week', id: 'LastWeek' },
+  { label: 'Last Two Weeks', id: 'LastTwoWeeks' },
+  { label: 'Last Month', id: 'LastMonth' },
+  { label: 'Custom Date Range', id: 'Custom', groupLabel: 'Custom' },
+];
 
+type Option = (typeof options)[0];
 interface Props {
-  onChange: (value: ServicePeriod) => void;
+  onChange: (value?: ServicePeriod) => void;
 }
 
 const ServiceDateRangeSelect: React.FC<Props> = ({ onChange }) => {
-  const [selected, setSelected] = useState<Option | ''>('');
+  const [selected, setSelected] = useState<Option | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const selected = event.target.value as Option;
-      setSelected(selected);
-
-      if (isFixedRange(selected)) {
-        onChange(fixedRanges[selected]);
-      } else if (selected === 'Custom') {
-        // todo
-      }
+    (_event: SyntheticEvent, value: Option | null) => {
+      setSelected(value);
+      if (value && isFixedRange(value.id)) onChange(fixedRanges[value.id]);
     },
     [onChange]
   );
-  return (
-    <TextInput
-      select
-      label='Service Date Range'
-      hiddenLabel
-      value={selected}
-      onChange={handleChange}
-      SelectProps={{
-        placeholder: 'select',
-        autoWidth: true,
-        displayEmpty: true,
-        renderValue: (value: any) => {
-          if (!value)
-            return (
-              <Box component='span' color='text.secondary'>
-                Select date range...
-              </Box>
-            );
-          if (value === 'Custom') return 'custom date range...';
 
-          const label = value.replace(/([A-Z])/g, ' $1').trim();
-          const range = fixedRanges[value as FixedRange];
-          const startLabel = formatDateForDisplay(range.start);
-          const endLabel = formatDateForDisplay(range.end);
-          if (startLabel === endLabel) {
-            return `${label} (${startLabel})`;
+  const handleClear = useCallback(() => {
+    setSelected(null);
+    onChange(undefined);
+  }, [onChange]);
+
+  useEffect(() => {
+    if (selected?.id !== 'Custom') {
+      setStartDate(null);
+      setEndDate(null);
+    }
+  }, [selected]);
+
+  return (
+    <>
+      <Stack direction='row' gap={2}>
+        <GenericSelect<Option, false, undefined>
+          value={selected || null}
+          onChange={handleChange}
+          options={options}
+          fullWidth={false}
+          sx={{ width: '60%' }}
+          blurOnSelect
+          getOptionLabel={(option) =>
+            option.id === 'Custom' &&
+            selected === option &&
+            startDate &&
+            endDate
+              ? `${formatDateForDisplay(startDate)} - ${formatDateForDisplay(
+                  endDate
+                )}`
+              : option.label
           }
-          return `${label} (${startLabel} - ${endLabel})`;
-        },
-      }}
-    >
-      <MenuItem value={'Yesterday'}>Yesterday</MenuItem>
-      <MenuItem value={'LastWeek'}>Last Week</MenuItem>
-      <MenuItem value={'LastTwoWeeks'}>Last Two Weeks</MenuItem>
-      <MenuItem value={'LastMonth'}>Last Month</MenuItem>
-      <Divider />
-      <MenuItem value={'Custom'}>
-        <ListItemIcon>
-          <CalendarIcon fontSize='small' />
-        </ListItemIcon>
-        Custom Date Range
-      </MenuItem>
-    </TextInput>
+          textInputProps={{ placeholder: 'Select Date Range...' }}
+          renderOption={(props, option) => {
+            const datePickerLink = (
+              <Link
+                component='button'
+                variant='body1'
+                onClick={() => setOpen(true)}
+                sx={{
+                  width: '100%',
+                  textAlign: 'left',
+                }}
+              >
+                {option.label}
+              </Link>
+            );
+
+            return (
+              <li {...props}>
+                {option.id === 'Custom' ? datePickerLink : option.label}
+              </li>
+            );
+          }}
+          disableClearable
+        />
+        <Button color='error' variant='outlined' onClick={handleClear}>
+          Clear Results
+        </Button>
+      </Stack>
+      <CommonDialog
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          setStartDate(null);
+          setEndDate(null);
+          setSelected(null);
+        }}
+        enableBackdropClick
+      >
+        <DialogTitle>Service Period</DialogTitle>
+        <DialogContent>
+          <Stack gap={2} my={2}>
+            <DatePicker
+              label='Start Date'
+              value={startDate}
+              onChange={setStartDate}
+              sx={{ width: '200px' }}
+              max={new Date()}
+            />
+            <DatePicker
+              label='End Date'
+              value={endDate}
+              onChange={setEndDate}
+              sx={{ width: '200px' }}
+              max={new Date()}
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            fullWidth
+            onClick={() => {
+              if (startDate && endDate) {
+                onChange({ start: startDate, end: endDate });
+              } else {
+                setStartDate(null);
+                setEndDate(null);
+                onChange(undefined);
+              }
+              setOpen(false);
+            }}
+          >
+            Apply
+          </Button>
+        </DialogActions>
+      </CommonDialog>
+    </>
   );
 };
 
