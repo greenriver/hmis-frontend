@@ -22676,29 +22676,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "ENUM",
-        "name": "HmisProjectConfigType",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "AUTO_ENTER",
-            "description": "Auto Enter",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "AUTO_EXIT",
-            "description": "Auto Exit",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "Household",
         "description": null,
@@ -32963,7 +32940,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "HmisProjectConfigType",
+                "name": "ProjectConfigType",
                 "ofType": null
               }
             },
@@ -33063,7 +33040,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "HmisProjectConfigType",
+              "name": "ProjectConfigType",
               "ofType": null
             },
             "defaultValue": null,
@@ -33121,6 +33098,29 @@
         ],
         "interfaces": null,
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ProjectConfigType",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "AUTO_ENTER",
+            "description": "Auto Enter",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "AUTO_EXIT",
+            "description": "Auto Exit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {

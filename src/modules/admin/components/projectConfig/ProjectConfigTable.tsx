@@ -25,7 +25,7 @@ const columns: ColumnDef<ProjectConfigFieldsFragment>[] = [
   {
     header: 'Config Type',
     render: ({ configType }) => (
-      <HmisEnum enumMap={HmisEnums.HmisProjectConfigType} value={configType} />
+      <HmisEnum enumMap={HmisEnums.ProjectConfigType} value={configType} />
     ),
   },
   {

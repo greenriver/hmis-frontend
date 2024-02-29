@@ -686,7 +686,6 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  HmisProjectConfigType: { AUTO_ENTER: 'Auto Enter', AUTO_EXIT: 'Auto Exit' },
   HouseholdSortOption: {
     HOH_AGE_OLDEST_TO_YOUNGEST: 'Head of Household Age: Oldest to Youngest',
     HOH_AGE_YOUNGEST_TO_OLDEST: 'Head of Household Age: Youngest to Oldest',
@@ -1329,6 +1328,7 @@ export const HmisEnums = {
     CLIENT_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT:
       'Client was expelled or otherwise involuntarily discharged from project',
   },
+  ProjectConfigType: { AUTO_ENTER: 'Auto Enter', AUTO_EXIT: 'Auto Exit' },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
   ProjectSortOption: {
     NAME: 'Name',
