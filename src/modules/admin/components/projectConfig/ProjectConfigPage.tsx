@@ -5,16 +5,19 @@ import { useState } from 'react';
 import ProjectConfigDialog from './ProjectConfigDialog';
 import ProjectConfigTable from './ProjectConfigTable';
 import PageTitle from '@/components/layout/PageTitle';
+import { ProjectConfigFieldsFragment } from '@/types/gqlTypes';
 
 const ProjectConfigPage = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<ProjectConfigFieldsFragment | null>(
+    null
+  );
   return (
     <>
       <PageTitle
         title='Project Configs'
         actions={
           <Button
-            onClick={() => setSelected('new')}
+            onClick={() => setSelected({} as ProjectConfigFieldsFragment)}
             startIcon={<AddIcon />}
             variant='outlined'
           >
@@ -23,13 +26,15 @@ const ProjectConfigPage = () => {
         }
       />
       <Paper>
-        <ProjectConfigTable selectedId={selected} setSelectedId={setSelected} />
+        <ProjectConfigTable onClickRow={setSelected} />
       </Paper>
-      <ProjectConfigDialog
-        open={!!selected}
-        projectId={selected || ''}
-        onClose={() => setSelected(null)}
-      />
+      {selected && (
+        <ProjectConfigDialog
+          open={!!selected}
+          config={selected}
+          onClose={() => setSelected(null)}
+        />
+      )}
     </>
   );
 };
