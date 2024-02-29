@@ -20349,6 +20349,12 @@
             "deprecationReason": null
           },
           {
+            "name": "AUTO_EXIT_CONFIG",
+            "description": "Auto exit config",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CASE_NOTE",
             "description": "Case note",
             "isDeprecated": false,
@@ -41082,6 +41088,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "AUTO_EXIT_CONFIG",
+            "description": "Auto exit config",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "CLIENT_ALERT",
             "description": "Client alert",

@@ -529,6 +529,7 @@ export const HmisEnums = {
   },
   FormRole: {
     ANNUAL: 'Annual',
+    AUTO_EXIT_CONFIG: 'Auto exit config',
     CASE_NOTE: 'Case note',
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
@@ -1797,6 +1798,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   StaticFormRole: {
+    AUTO_EXIT_CONFIG: 'Auto exit config',
     CLIENT_ALERT: 'Client alert',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',

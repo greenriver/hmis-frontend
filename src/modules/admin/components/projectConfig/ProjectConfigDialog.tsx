@@ -17,7 +17,7 @@ import {
 import { evictProjectConfigs } from '@/utils/cacheUtil';
 
 export interface ProjectDialogProps extends DialogProps {
-  config?: ProjectConfigFieldsFragment;
+  config?: ProjectConfigFieldsFragment | null;
 }
 
 const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
@@ -36,7 +36,7 @@ const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
             >
               role={StaticFormRole.ProjectConfig}
               initialValues={{
-                lengthOfAbsenceDays: JSON.parse(config.configOptions)
+                lengthOfAbsenceDays: (JSON.parse(config.configOptions) || {})
                   .length_of_absence_days,
                 ...config,
               }}
