@@ -371,36 +371,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
-    name: 'AutoExitConfig',
-    fields: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'lengthOfAbsenceDays',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
-        },
-      },
-      {
-        name: 'organizationId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
-      {
-        name: 'projectType',
-        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-      },
-    ],
-  },
-  {
     name: 'AutofillValue',
     fields: [
       {
@@ -4737,6 +4707,40 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ProjectConfig',
+    fields: [
+      {
+        name: 'configOptions',
+        type: { kind: 'SCALAR', name: 'JSON', ofType: null },
+      },
+      {
+        name: 'configType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'QueryAccess',
     fields: [
       {
@@ -5957,24 +5961,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'AutoExitConfigInput',
-    args: [
-      {
-        name: 'lengthOfAbsenceDays',
-        type: { kind: 'SCALAR', name: 'Int', ofType: null },
-      },
-      {
-        name: 'organizationId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
-      {
-        name: 'projectType',
-        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-      },
-    ],
-  },
-  {
     name: 'BulkMergeClientsInput',
     args: [
       {
@@ -6228,19 +6214,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'INPUT_OBJECT', name: 'FormRuleInput', ofType: null },
-        },
-      },
-    ],
-  },
-  {
-    name: 'CreateServiceInput',
-    args: [
-      {
-        name: 'input',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'INPUT_OBJECT', name: 'ServiceInput', ofType: null },
         },
       },
     ],
@@ -6971,6 +6944,28 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ProjectConfigInput',
+    args: [
+      {
+        name: 'configType',
+        type: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
+      },
+      {
+        name: 'lengthOfAbsenceDays',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ProjectFilterOptions',
     args: [
       {
@@ -7185,47 +7180,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
-      },
-    ],
-  },
-  {
-    name: 'ServiceInput',
-    args: [
-      {
-        name: 'dateProvided',
-        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-      },
-      {
-        name: 'enrollmentId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
-        name: 'faAmount',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
-      },
-      {
-        name: 'movingOnOtherType',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'otherTypeProvided',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'recordType',
-        type: { kind: 'ENUM', name: 'RecordType', ofType: null },
-      },
-      {
-        name: 'referralOutcome',
-        type: { kind: 'ENUM', name: 'PATHReferralOutcome', ofType: null },
-      },
-      {
-        name: 'subTypeProvided',
-        type: { kind: 'ENUM', name: 'ServiceSubTypeProvided', ofType: null },
-      },
-      {
-        name: 'typeProvided',
-        type: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
       },
     ],
   },

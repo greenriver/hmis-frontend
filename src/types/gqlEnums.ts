@@ -554,6 +554,7 @@ export const HmisEnums = {
     POST_EXIT: 'Post exit',
     PROJECT: 'Project',
     PROJECT_COC: 'Project CoC',
+    PROJECT_CONFIG: 'Project config',
     REFERRAL_REQUEST: 'Referral request',
     SERVICE: 'Service',
     UPDATE: 'Update',
@@ -1329,6 +1330,7 @@ export const HmisEnums = {
     CLIENT_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT:
       'Client was expelled or otherwise involuntarily discharged from project',
   },
+  ProjectConfigType: { AUTO_ENTER: 'Auto Enter', AUTO_EXIT: 'Auto Exit' },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
   ProjectSortOption: {
     NAME: 'Name',
@@ -1801,6 +1803,7 @@ export const HmisEnums = {
     CLIENT_ALERT: 'Client alert',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
+    PROJECT_CONFIG: 'Project config',
   },
   SubsidyInformation: {
     INVALID: 'Invalid Value',

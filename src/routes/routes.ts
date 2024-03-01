@@ -26,7 +26,7 @@ const adminDashboardRoutes = {
   FORMS: 'forms',
   VIEW_FORM: 'forms/:formId',
   EDIT_FORM: 'forms/:formId/edit',
-  CONFIGURE_AUTO_EXIT: 'auto-exit',
+  PROJECT_CONFIG: 'project-configs',
 };
 
 // Routes within the client dashboard

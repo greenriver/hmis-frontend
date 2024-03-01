@@ -17,7 +17,7 @@
           "type": "STRING",
           "required": false,
           "linkId": "string-2",
-          "text": "String with bounds",
+          "text": "String with <b>bounds</b> <span style='color:#1976D2'>and a rich text label</span>",
           "helperText": "You can't type more than 8 characters",
           "bounds": [
             {

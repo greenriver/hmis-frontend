@@ -153,6 +153,7 @@ export const cache = new InMemoryCache({
       keyFields: ['cacheKey'],
     },
     ValueBound: { keyFields: false },
+    ValidationError: { keyFields: false },
   },
 });
 
