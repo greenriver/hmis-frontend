@@ -17,6 +17,7 @@ const CreateHouseholdPage = () => {
     if (currentPath === ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD) {
       return [
         'Back to Bed Nights',
+        // TODO navigate(-1) to preserve state, or tack on serach params from state?
         generateSafePath(ProjectDashboardRoutes.BULK_BED_NIGHTS, {
           projectId: project.id,
         }),

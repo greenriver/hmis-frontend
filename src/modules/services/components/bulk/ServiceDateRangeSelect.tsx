@@ -27,24 +27,41 @@ type FixedRange = keyof typeof fixedRanges;
 function isFixedRange(value: string): value is FixedRange {
   return !!value && Object.keys(fixedRanges).includes(value);
 }
+
+const CustomOption = {
+  label: 'Custom Date Range',
+  id: 'Custom',
+  groupLabel: 'Custom',
+};
 const options = [
   { label: 'Yesterday', id: 'Yesterday' },
   { label: 'Last Week', id: 'LastWeek' },
   { label: 'Last Two Weeks', id: 'LastTwoWeeks' },
   { label: 'Last Month', id: 'LastMonth' },
-  { label: 'Custom Date Range', id: 'Custom', groupLabel: 'Custom' },
+  CustomOption,
 ];
 
 type Option = (typeof options)[0];
 interface Props {
+  initialValue?: ServicePeriod;
   onChange: (value?: ServicePeriod) => void;
   disabled?: boolean;
 }
 
-const ServiceDateRangeSelect: React.FC<Props> = ({ onChange, disabled }) => {
-  const [selected, setSelected] = useState<Option | null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+const ServiceDateRangeSelect: React.FC<Props> = ({
+  initialValue, // initial value from serach params
+  onChange,
+  disabled,
+}) => {
+  const [selected, setSelected] = useState<Option | null>(
+    initialValue ? CustomOption : null
+  );
+  const [startDate, setStartDate] = useState<Date | null>(
+    initialValue?.start || null
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    initialValue?.end || null
+  );
   const [open, setOpen] = useState<boolean>(false);
 
   const handleChange = useCallback(
@@ -116,7 +133,7 @@ const ServiceDateRangeSelect: React.FC<Props> = ({ onChange, disabled }) => {
           color='error'
           variant='outlined'
           onClick={handleClear}
-          disabled={disabled}
+          disabled={disabled || !selected}
         >
           Clear Results
         </Button>

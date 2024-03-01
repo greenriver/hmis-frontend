@@ -1,13 +1,11 @@
-import SearchIcon from '@mui/icons-material/Search';
-import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ClearSearchButton from './ClearSearchButton';
 import ClientTextSearchInput, {
   ClientTextSearchInputProps,
 } from './ClientTextSearchInput';
-import { useIsMobile } from '@/hooks/useIsMobile';
+import { ClearIcon, SearchIcon } from '@/components/elements/SemanticIcons';
 
 interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
   initialValue?: string;
@@ -31,9 +29,15 @@ const ClientTextSearchForm: React.FC<Props> = ({
   const [value, setValue] = useState<string>(initialValue || '');
   const [tooShort, setTooShort] = useState(false);
 
+  const [hasSearched, setHasSearched] = useState(false);
+
   useEffect(() => {
     if (initialValue) setValue(initialValue);
   }, [initialValue]);
+
+  useEffect(() => {
+    setHasSearched(false);
+  }, [value]);
 
   useEffect(() => {
     if (!minChars || !tooShort) return;
@@ -45,25 +49,16 @@ const ClientTextSearchForm: React.FC<Props> = ({
       setTooShort(true);
     } else {
       onSearch(value);
+      setHasSearched(true);
     }
   }, [minChars, onSearch, value]);
 
   const handleClear = useCallback(() => {
     setValue('');
+
     if (onClearSearch) onClearSearch();
   }, [onClearSearch]);
 
-  // Using isTiny as the breakpoint for the mobile appearance here rather than vanilla isMobile
-  // gets us the search box appearing as normal/desktop (with buttons in one line) on reasonably large
-  // tablet screens, but really small phone screens will still have the buttons stack correctly.
-  const isTiny = useIsMobile('sm');
-
-  const buttonSx = {
-    mt: isTiny ? 0 : 3,
-    px: 4,
-    height: 'fit-content',
-    top: '2px',
-  };
   return (
     <Stack
       direction={{ xs: 'column', sm: 'row' }}
@@ -79,28 +74,27 @@ const ClientTextSearchForm: React.FC<Props> = ({
           tooShort ? t<string>('clientSearch.inputTooShort') : undefined
         }
         onClearSearch={onClearSearch}
+        InputProps={{
+          sx: { pr: 1 },
+          endAdornment: !hasSearched ? (
+            <IconButton
+              size='small'
+              onClick={handleSearch}
+              disabled={!value}
+              color='primary'
+            >
+              <SearchIcon />
+            </IconButton>
+          ) : (
+            value && (
+              <IconButton size='small' onClick={handleClear}>
+                <ClearIcon />
+              </IconButton>
+            )
+          ),
+        }}
         {...props}
       />
-
-      {!hideSearchButton && (
-        <Button
-          startIcon={<SearchIcon />}
-          sx={buttonSx}
-          variant='outlined'
-          onClick={handleSearch}
-        >
-          Search
-        </Button>
-      )}
-      {onClearSearch && !hideClearButton && (
-        <ClearSearchButton
-          onClick={handleClear}
-          sx={buttonSx}
-          disabled={!value}
-        >
-          Clear
-        </ClearSearchButton>
-      )}
     </Stack>
   );
 };

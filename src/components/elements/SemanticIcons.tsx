@@ -1,4 +1,5 @@
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import ClearIcon from '@mui/icons-material/Clear';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,6 +14,7 @@ import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import SearchIcon from '@mui/icons-material/Search';
+
 export {
   Person as ClientIcon,
   Home as EnrollmentIcon,
@@ -29,4 +31,5 @@ export {
   CalendarTodayIcon as CalendarIcon,
   PersonAddIcon as AddPersonIcon,
   PeopleIcon as HouseholdIcon,
+  ClearIcon as ClearIcon,
 };

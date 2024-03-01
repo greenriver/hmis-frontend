@@ -26,6 +26,7 @@ interface Props {
   navigateToHousehold: VoidFunction;
   onClientAdded?: (data: SubmittedEnrollmentResultFieldsFragment) => void;
   sx?: SxProps;
+  disabled?: boolean;
 }
 
 /**
@@ -36,6 +37,7 @@ const AddNewClientMenu: React.FC<Props> = ({
   projectId,
   onClientAdded,
   navigateToHousehold,
+  disabled,
 }) => {
   const cocCount = useProjectCocsCountFromCache(projectId);
 
@@ -65,6 +67,7 @@ const AddNewClientMenu: React.FC<Props> = ({
             <Button
               variant='outlined'
               startIcon={<AddPersonIcon />}
+              disabled={disabled}
               {...bindTrigger(popupState)}
             >
               Add New Client
