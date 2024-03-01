@@ -158,7 +158,9 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                 spacing={2}
                 sx={{ mb: 2, mt: 0 }}
               >
-                <Grid item>{props.preFormComponent}</Grid>
+                {props.preFormComponent && (
+                  <Grid item>{props.preFormComponent}</Grid>
+                )}
                 <Grid item xs>
                   <DynamicForm
                     ref={formRef}
