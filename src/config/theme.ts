@@ -250,6 +250,7 @@ const createThemeOptions = (theme: Theme) => ({
       },
       styleOverrides: {
         root: {
+          whiteSpace: 'nowrap',
           '&.Mui-focusVisible': {
             outlineColor: '-webkit-focus-ring-color',
             outlineWidth: '2px',

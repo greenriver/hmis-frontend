@@ -165,12 +165,17 @@ export const protectedRoutes: RouteNode[] = [
             element: <BulkServicesPage />,
           },
           {
-            path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT,
+            path: ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD,
             element: (
-              <ProjectEditRoute
-                permissions={['canEnrollClients']}
-                redirectRoute={ProjectDashboardRoutes.PROJECT_ENROLLMENTS}
-              >
+              <ProjectEditRoute permissions={['canEnrollClients']}>
+                <CreateHouseholdPage />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD,
+            element: (
+              <ProjectEditRoute permissions={['canEnrollClients']}>
                 <CreateHouseholdPage />
               </ProjectEditRoute>
             ),

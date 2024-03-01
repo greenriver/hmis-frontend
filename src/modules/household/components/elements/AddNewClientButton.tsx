@@ -1,7 +1,7 @@
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { Button } from '@mui/material';
+import { Button, SxProps } from '@mui/material';
 import { useMemo } from 'react';
 
+import { AddPersonIcon } from '@/components/elements/SemanticIcons';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
@@ -15,11 +15,15 @@ interface Props {
   projectId: string;
   householdId?: string;
   onCompleted?: (data: SubmittedEnrollmentResultFieldsFragment) => void;
+  disabled?: boolean;
+  sx?: SxProps;
 }
 const AddNewClientButton: React.FC<Props> = ({
   projectId,
   householdId,
   onCompleted,
+  sx,
+  disabled,
 }) => {
   const cocCount = useProjectCocsCountFromCache(projectId);
 
@@ -47,9 +51,10 @@ const AddNewClientButton: React.FC<Props> = ({
       <Button
         onClick={openFormDialog}
         data-testid='addClientButton'
-        sx={{ px: 3, mt: 3, float: 'right' }}
-        startIcon={<PersonAddIcon />}
+        sx={{ px: 3, mt: 3, float: 'right', ...sx }}
+        startIcon={<AddPersonIcon />}
         variant='outlined'
+        disabled={disabled}
       >
         Add New Client
       </Button>

@@ -77,13 +77,16 @@ export const useProjectBreadcrumbConfig = (
       [ProjectDashboardRoutes.BULK_BED_NIGHTS]: {
         title: 'Bed Nights',
       },
-      // TODO
-      [ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT]: {
-        title: 'Add Enrollment',
-        parent: ProjectDashboardRoutes.BULK_BED_NIGHTS,
-      },
       [ProjectDashboardRoutes.BULK_ASSIGN_SERVICE]: {
         title: 'Bulk Service Assignment',
+      },
+      [ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD]: {
+        title: 'Add Household',
+        parent: ProjectDashboardRoutes.BULK_BED_NIGHTS,
+      },
+      [ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD]: {
+        title: 'Add Household',
+        parent: ProjectDashboardRoutes.BULK_BED_NIGHTS,
       },
       [ProjectDashboardRoutes.ADD_HOUSEHOLD]: {
         title: 'Add Enrollment',

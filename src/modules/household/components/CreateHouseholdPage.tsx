@@ -12,12 +12,18 @@ const CreateHouseholdPage = () => {
   const currentPath = useCurrentPath();
 
   const [buttonText, buttonPath] = useMemo(() => {
-    if (
-      currentPath === ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT
-    ) {
+    if (currentPath === ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD) {
       return [
-        'Back to Bed Night Management',
+        'Back to Bed Nights',
         generateSafePath(ProjectDashboardRoutes.BULK_BED_NIGHTS, {
+          projectId: project.id,
+        }),
+      ];
+    }
+    if (currentPath === ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD) {
+      return [
+        'Back to Bulk Services',
+        generateSafePath(ProjectDashboardRoutes.BULK_ASSIGN_SERVICE, {
           projectId: project.id,
         }),
       ];

@@ -6,12 +6,13 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import DownloadIcon from '@mui/icons-material/Download';
 import Draw from '@mui/icons-material/Draw';
 import Home from '@mui/icons-material/Home';
+import PeopleIcon from '@mui/icons-material/People';
 import Person from '@mui/icons-material/Person';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import SearchIcon from '@mui/icons-material/Search';
-
 export {
   Person as ClientIcon,
   Home as EnrollmentIcon,
@@ -26,4 +27,6 @@ export {
   CreditCardIcon as ScanCardIcon,
   PlaylistAddCheckIcon as ServiceListIcon,
   CalendarTodayIcon as CalendarIcon,
+  PersonAddIcon as AddPersonIcon,
+  PeopleIcon as HouseholdIcon,
 };

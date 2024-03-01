@@ -14,9 +14,12 @@ import { CommonCard } from '@/components/elements/CommonCard';
 import DatePicker from '@/components/elements/input/DatePicker';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import AddNewClientMenu from '@/modules/household/components/elements/AddNewClientMenu';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import CocPicker from '@/modules/projects/components/CocPicker';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchInput from '@/modules/search/components/ClientTextSearchInput';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { PickListOption } from '@/types/gqlTypes';
 
 interface Props {
@@ -42,6 +45,7 @@ const BulkServicesPage: React.FC<Props> = ({
     }
   }, [params]);
 
+  // FIXME move to route or search param. need to retain when navigating from hh screen
   const [serviceTypeId, setServiceTypeId] = useState(serviceTypeIdProp);
   const [serviceDate, setServiceDate] = useState<Date | null>(new Date());
 
@@ -99,7 +103,13 @@ const BulkServicesPage: React.FC<Props> = ({
                 onChange={setServiceDate}
                 max={new Date()}
                 sx={{ width: '200px' }}
-                label='Service Date'
+                label={
+                  // hide label if its the only input field
+                  hasServiceTypeSelection || multipleCocs
+                    ? `${serviceTypeName} Date`
+                    : null
+                }
+                ariaLabel={`${serviceTypeName} Date`}
               />
               {multipleCocs && (
                 <CocPicker
@@ -114,7 +124,7 @@ const BulkServicesPage: React.FC<Props> = ({
           </StepCard>
         </Grid>
         <Grid item xs={12}></Grid>
-        <Grid item xs={12} lg={8} xl={6}>
+        <Grid item xs={12} lg={10} xl={6}>
           <StepCard step='2' title='Find Client' padded>
             <ButtonTooltipContainer
               placement='right'
@@ -135,17 +145,38 @@ const BulkServicesPage: React.FC<Props> = ({
                 />
                 <Box sx={{ mt: 2 }}>
                   {lookupMode === 'search' && (
-                    <ClientTextSearchInput
-                      showSearchTips={false}
-                      helperText='Seach includes all of HMIS'
-                      label={null}
-                      searchAdornment
-                      clearAdornment
-                      value={searchTerm}
-                      onChange={setSearchTerm}
-                      onClearSearch={() => setSearchTerm('')}
-                      disabled={!hasSufficientCriteria}
-                    />
+                    <Grid container gap={2}>
+                      <Grid item xs={8}>
+                        <ClientTextSearchInput
+                          showSearchTips={false}
+                          helperText='Seach includes all of HMIS'
+                          label={null}
+                          searchAdornment
+                          clearAdornment
+                          value={searchTerm}
+                          onChange={setSearchTerm}
+                          onClearSearch={() => setSearchTerm('')}
+                          disabled={!hasSufficientCriteria}
+                        />
+                      </Grid>
+                      {hasSufficientCriteria && (
+                        <Grid item xs={3}>
+                          <RootPermissionsFilter permissions='canEditClients'>
+                            <AddNewClientMenu
+                              projectId={project.id}
+                              onClientAdded={(data) => {
+                                setSearchTerm(data.client.id);
+                              }}
+                              addHouseholdRoute={
+                                serviceTypeIdProp
+                                  ? ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD
+                                  : ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD
+                              }
+                            />
+                          </RootPermissionsFilter>
+                        </Grid>
+                      )}
+                    </Grid>
                   )}
                   {lookupMode === 'list' && (
                     <ServiceDateRangeSelect
