@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
 import React, { useMemo } from 'react';
-import RouterLink from '@/components/elements/RouterLink';
 import {
   AddPersonIcon,
   HouseholdIcon,
@@ -21,11 +20,10 @@ import {
   RecordFormRole,
   SubmittedEnrollmentResultFieldsFragment,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   projectId: string;
-  addHouseholdRoute: string;
+  navigateToHousehold: VoidFunction;
   onClientAdded?: (data: SubmittedEnrollmentResultFieldsFragment) => void;
   sx?: SxProps;
 }
@@ -37,7 +35,7 @@ interface Props {
 const AddNewClientMenu: React.FC<Props> = ({
   projectId,
   onClientAdded,
-  addHouseholdRoute,
+  navigateToHousehold,
 }) => {
   const cocCount = useProjectCocsCountFromCache(projectId);
 
@@ -61,7 +59,7 @@ const AddNewClientMenu: React.FC<Props> = ({
 
   return (
     <>
-      <PopupState variant='popover' popupId='demo-popup-menu'>
+      <PopupState variant='popover' popupId='enroll-new-client-menu'>
         {(popupState) => (
           <>
             <Button
@@ -83,10 +81,7 @@ const AddNewClientMenu: React.FC<Props> = ({
                 </ListItemIcon>
                 <ListItemText>Add New Client</ListItemText>
               </MenuItem>
-              <MenuItem
-                component={RouterLink}
-                to={generateSafePath(addHouseholdRoute, { projectId })}
-              >
+              <MenuItem onClick={navigateToHousehold}>
                 <ListItemIcon>
                   <HouseholdIcon fontSize='small' />
                 </ListItemIcon>

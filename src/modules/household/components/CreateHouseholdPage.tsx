@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import ManageHousehold from './ManageHousehold';
 import BackButton from '@/components/elements/BackButton';
 import PageTitle from '@/components/layout/PageTitle';
@@ -10,6 +11,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 const CreateHouseholdPage = () => {
   const { project } = useProjectDashboardContext();
   const currentPath = useCurrentPath();
+  const { state } = useLocation();
 
   const [buttonText, buttonPath] = useMemo(() => {
     if (currentPath === ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD) {
@@ -41,7 +43,11 @@ const CreateHouseholdPage = () => {
       <PageTitle title={`Enroll Household in ${project.projectName}`} />
       <ManageHousehold
         projectId={project.id}
-        BackButton={<BackButton to={buttonPath}>{buttonText}</BackButton>}
+        BackButton={
+          <BackButton to={buttonPath} state={state}>
+            {buttonText}
+          </BackButton>
+        }
       />
     </>
   );

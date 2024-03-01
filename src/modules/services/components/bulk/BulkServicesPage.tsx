@@ -1,6 +1,7 @@
 import { Box, Grid, Paper, Stack } from '@mui/material';
 import pluralize from 'pluralize';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ServicePeriod } from '../../types';
 import ServiceTypeSelect from '../ServiceTypeSelect';
 import BulkServicesTable from './BulkServicesTable';
@@ -21,6 +22,7 @@ import { useProjectDashboardContext } from '@/modules/projects/components/Projec
 import ClientTextSearchInput from '@/modules/search/components/ClientTextSearchInput';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { PickListOption } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   serviceTypeId?: string;
@@ -34,7 +36,10 @@ const BulkServicesPage: React.FC<Props> = ({
 }) => {
   const { project } = useProjectDashboardContext();
   const multipleCocs = project.projectCocs.nodesCount > 1;
+  const { state } = useLocation();
+
   const [coc, setCoc] = useState<PickListOption | null>(null);
+  const navigate = useNavigate();
 
   const params = useSafeParams();
   const lookupMode = useMemo(() => {
@@ -46,7 +51,9 @@ const BulkServicesPage: React.FC<Props> = ({
   }, [params]);
 
   // FIXME move to route or search param. need to retain when navigating from hh screen
-  const [serviceTypeId, setServiceTypeId] = useState(serviceTypeIdProp);
+  const [serviceTypeId, setServiceTypeId] = useState(
+    serviceTypeIdProp || state?.serviceTypeId
+  );
   const [serviceDate, setServiceDate] = useState<Date | null>(new Date());
 
   // 'search' mode value
@@ -73,6 +80,30 @@ const BulkServicesPage: React.FC<Props> = ({
     if (multipleCocs && !coc) return false;
     return true;
   }, [coc, multipleCocs, serviceDate, serviceTypeId]);
+
+  const navigateToHousehold = useCallback(() => {
+    const route = serviceTypeIdProp
+      ? ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD
+      : ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD;
+
+    // TODO switch to url params or local storage
+    navigate(generateSafePath(route, { projectId: project.id }), {
+      state: {
+        coc,
+        serviceTypeId,
+        searchTerm,
+        servicePeriod,
+      },
+    });
+  }, [
+    serviceTypeIdProp,
+    navigate,
+    project.id,
+    coc,
+    serviceTypeId,
+    searchTerm,
+    servicePeriod,
+  ]);
 
   return (
     <>
@@ -167,11 +198,7 @@ const BulkServicesPage: React.FC<Props> = ({
                               onClientAdded={(data) => {
                                 setSearchTerm(data.client.id);
                               }}
-                              addHouseholdRoute={
-                                serviceTypeIdProp
-                                  ? ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD
-                                  : ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD
-                              }
+                              navigateToHousehold={navigateToHousehold}
                             />
                           </RootPermissionsFilter>
                         </Grid>
