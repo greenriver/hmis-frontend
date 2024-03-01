@@ -42,6 +42,7 @@ const TextInput = ({
   sx,
   warnIfEmptyTreatment,
   ariaLabelledBy,
+  ariaLabel,
   id,
   ...props
 }: TextInputProps) => {
@@ -67,7 +68,7 @@ const TextInput = ({
       {...props}
       sx={sx}
       inputProps={{
-        'aria-label': hiddenLabel ? String(label) : undefined,
+        'aria-label': ariaLabel,
         'aria-labelledby': ariaLabelledBy,
         minLength: min,
         maxLength: max,

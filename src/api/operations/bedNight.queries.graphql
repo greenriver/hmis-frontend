@@ -96,18 +96,8 @@ mutation UpdateBedNights($input: UpdateBedNightsInput!) {
   }
 }
 
-mutation BulkAssignService(
-  $clientIds: [ID!]!
-  $projectId: ID!
-  $serviceTypeId: ID!
-  $dateProvided: ISO8601Date!
-) {
-  bulkAssignService(
-    clientIds: $clientIds
-    projectId: $projectId
-    serviceTypeId: $serviceTypeId
-    dateProvided: $dateProvided
-  ) {
+mutation BulkAssignService($input: BulkAssignServiceInput!) {
+  bulkAssignService(input: $input) {
     success
     errors {
       ...ValidationErrorFields

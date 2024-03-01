@@ -5,6 +5,7 @@ import { ServicePeriod } from '../../types';
 import AssignServiceButton from './AssignServiceButton';
 import BulkAssignServicesButtons from './BulkAssignServicesButtons';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -17,12 +18,14 @@ import {
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   BulkServicesClientSearchDocument,
   BulkServicesClientSearchQuery,
   BulkServicesClientSearchQueryVariables,
   ClientSortOption,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   projectId: string;
@@ -31,6 +34,7 @@ interface Props {
   searchTerm?: string;
   serviceDate: Date;
   servicePeriod?: ServicePeriod;
+  cocCode?: string;
   title: ReactNode;
 }
 
@@ -50,6 +54,7 @@ const BulkServicesTable: React.FC<Props> = ({
   searchTerm,
   servicePeriod,
   title,
+  cocCode,
 }) => {
   const { bulkAssign, bulkRemove, apolloError } = useBulkAssignMutations();
 
@@ -62,8 +67,20 @@ const BulkServicesTable: React.FC<Props> = ({
         CLIENT_COLUMNS.dobAge,
         {
           header: 'Entry Date',
-          render: (row: RowType) =>
-            parseAndFormatDate(row.activeEnrollment?.entryDate) || <NaText />,
+          render: (row: RowType) => {
+            if (!row.activeEnrollment) return <NaText />;
+            return (
+              <RouterLink
+                to={generateSafePath(
+                  EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                  { clientId: row.id, enrollmentId: row.activeEnrollment.id }
+                )}
+                openInNew
+              >
+                {parseAndFormatDate(row.activeEnrollment.entryDate)}
+              </RouterLink>
+            );
+          },
         },
         {
           header: `Last ${serviceTypeName} Date`,
@@ -99,6 +116,7 @@ const BulkServicesTable: React.FC<Props> = ({
                 dateProvided={serviceDate}
                 projectId={projectId}
                 serviceTypeId={serviceTypeId}
+                cocCode={cocCode}
                 bulkAssign={bulkAssign}
                 bulkRemove={bulkRemove}
                 tableLoading={loading}
@@ -113,6 +131,7 @@ const BulkServicesTable: React.FC<Props> = ({
       serviceDate,
       projectId,
       serviceTypeId,
+      cocCode,
       bulkAssign,
       bulkRemove,
     ]
@@ -166,6 +185,7 @@ const BulkServicesTable: React.FC<Props> = ({
                 dateProvided={serviceDate}
                 projectId={projectId}
                 serviceTypeId={serviceTypeId}
+                cocCode={cocCode}
                 bulkAssign={bulkAssign}
                 bulkRemove={bulkRemove}
               />

@@ -15,6 +15,7 @@ interface Props {
   dateProvided: Date;
   projectId: string;
   serviceTypeId: string;
+  cocCode?: string;
   bulkAssign: BulkAssignServiceMutationFn;
   bulkRemove: BulkRemoveServiceMutationFn;
 }
@@ -32,6 +33,7 @@ const BulkAssignServicesButtons: React.FC<Props> = ({
   dateProvided,
   projectId,
   serviceTypeId,
+  cocCode,
   bulkAssign,
   bulkRemove,
 }) => {
@@ -60,13 +62,16 @@ const BulkAssignServicesButtons: React.FC<Props> = ({
 
     bulkAssign({
       variables: {
-        projectId,
-        clientIds: toAssign,
-        dateProvided: formatDateForGql(dateProvided) || '',
-        serviceTypeId,
+        input: {
+          projectId,
+          clientIds: toAssign,
+          dateProvided: formatDateForGql(dateProvided) || '',
+          serviceTypeId,
+          cocCode,
+        },
       },
     });
-  }, [bulkAssign, dateProvided, projectId, serviceTypeId, toAssign]);
+  }, [bulkAssign, cocCode, dateProvided, projectId, serviceTypeId, toAssign]);
 
   const handleRemove = useCallback(() => {
     const serviceIds = clients

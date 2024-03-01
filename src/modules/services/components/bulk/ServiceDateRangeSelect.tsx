@@ -38,9 +38,10 @@ const options = [
 type Option = (typeof options)[0];
 interface Props {
   onChange: (value?: ServicePeriod) => void;
+  disabled?: boolean;
 }
 
-const ServiceDateRangeSelect: React.FC<Props> = ({ onChange }) => {
+const ServiceDateRangeSelect: React.FC<Props> = ({ onChange, disabled }) => {
   const [selected, setSelected] = useState<Option | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -76,6 +77,7 @@ const ServiceDateRangeSelect: React.FC<Props> = ({ onChange }) => {
           fullWidth={false}
           sx={{ width: '60%' }}
           blurOnSelect
+          disabled={disabled}
           getOptionLabel={(option) =>
             option.id === 'Custom' &&
             selected === option &&
@@ -110,7 +112,12 @@ const ServiceDateRangeSelect: React.FC<Props> = ({ onChange }) => {
           }}
           disableClearable
         />
-        <Button color='error' variant='outlined' onClick={handleClear}>
+        <Button
+          color='error'
+          variant='outlined'
+          onClick={handleClear}
+          disabled={disabled}
+        >
           Clear Results
         </Button>
       </Stack>

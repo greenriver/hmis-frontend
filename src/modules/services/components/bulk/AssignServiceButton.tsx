@@ -19,6 +19,7 @@ interface Props {
   bulkRemove: BulkRemoveServiceMutationFn;
   tableLoading?: boolean;
   disabled?: boolean;
+  cocCode?: string;
 }
 
 const AssignServiceButton: React.FC<Props> = ({
@@ -30,6 +31,7 @@ const AssignServiceButton: React.FC<Props> = ({
   bulkRemove,
   tableLoading,
   disabled,
+  cocCode,
 }) => {
   // Internal loading state to display in the interface for this button.
   // We display as loading for the duration of two queries: (1) when the mutation
@@ -60,16 +62,23 @@ const AssignServiceButton: React.FC<Props> = ({
           client.activeEnrollment?.services.nodes.map((s) => s.id) || [];
 
         setLoading(true);
-        bulkRemove({ variables: { projectId, serviceIds } });
+        bulkRemove({
+          variables: { projectId, serviceIds },
+          onError: () => setLoading(false),
+        });
       } else {
         setLoading(true);
         bulkAssign({
           variables: {
-            projectId,
-            clientIds: [client.id],
-            dateProvided: formatDateForGql(dateProvided) || '',
-            serviceTypeId,
+            input: {
+              projectId,
+              clientIds: [client.id],
+              dateProvided: formatDateForGql(dateProvided) || '',
+              serviceTypeId,
+              cocCode,
+            },
           },
+          onError: () => setLoading(false),
         });
       }
     },
@@ -79,6 +88,7 @@ const AssignServiceButton: React.FC<Props> = ({
       client.activeEnrollment,
       client.id,
       dateProvided,
+      cocCode,
       isAssignedOnDate,
       projectId,
       serviceTypeId,

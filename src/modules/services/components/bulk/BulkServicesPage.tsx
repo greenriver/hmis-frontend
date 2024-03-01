@@ -1,4 +1,4 @@
-import { Box, Grid, Paper } from '@mui/material';
+import { Box, Grid, Paper, Stack } from '@mui/material';
 import pluralize from 'pluralize';
 import React, { useMemo, useState } from 'react';
 import { ServicePeriod } from '../../types';
@@ -9,12 +9,15 @@ import ClientLookupForServiceToggle, {
 } from './ClientLookupForServiceToggle';
 import ServiceDateRangeSelect from './ServiceDateRangeSelect';
 import StepCard, { StepCardTitle } from './StepCard';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { CommonCard } from '@/components/elements/CommonCard';
 import DatePicker from '@/components/elements/input/DatePicker';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import CocPicker from '@/modules/projects/components/CocPicker';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchInput from '@/modules/search/components/ClientTextSearchInput';
+import { PickListOption } from '@/types/gqlTypes';
 
 interface Props {
   serviceTypeId?: string;
@@ -27,6 +30,8 @@ const BulkServicesPage: React.FC<Props> = ({
   title = 'Bulk Service Assignment',
 }) => {
   const { project } = useProjectDashboardContext();
+  const multipleCocs = project.projectCocs.nodesCount > 1;
+  const [coc, setCoc] = useState<PickListOption | null>(null);
 
   const params = useSafeParams();
   const lookupMode = useMemo(() => {
@@ -57,80 +62,100 @@ const BulkServicesPage: React.FC<Props> = ({
     return false;
   }, [lookupMode, searchTerm, servicePeriod]);
 
-  const hasServiceTypeStep = !serviceTypeIdProp;
+  const hasServiceTypeSelection = !serviceTypeIdProp;
+  const hasSufficientCriteria = useMemo(() => {
+    if (!serviceDate) return false;
+    if (!serviceTypeId) return false;
+    if (multipleCocs && !coc) return false;
+    return true;
+  }, [coc, multipleCocs, serviceDate, serviceTypeId]);
+
   return (
     <>
       <PageTitle title={title} />
       <Grid container rowSpacing={2}>
-        {hasServiceTypeStep && (
-          <>
-            <Grid item sm={12} md={8} lg={8} xl={4}>
-              <StepCard step='1' title='Select Service Type' padded>
+        <Grid item sm={12} md={8} lg={8} xl={4}>
+          <StepCard
+            step='1'
+            title={
+              hasServiceTypeSelection
+                ? 'Enter Service Details'
+                : `Select ${serviceTypeName} Date`
+            }
+            padded
+          >
+            <Stack gap={2}>
+              {hasServiceTypeSelection && (
                 <ServiceTypeSelect
                   projectId={project.id}
                   value={serviceTypeId ? { code: serviceTypeId } : null}
                   onChange={(option) => setServiceTypeId(option?.code)}
-                  label={null}
-                  textInputProps={{
-                    inputProps: { 'aria-label': 'Service Type' },
-                  }}
+                  label='Service Type'
                   bulk
                 />
-              </StepCard>
-            </Grid>
-            <Grid item xs={12}></Grid>
-          </>
-        )}
-        <Grid item sm={12} md={8} lg={8} xl={4}>
-          <StepCard
-            step={hasServiceTypeStep ? '2' : '1'}
-            title={`Select ${serviceTypeName} Date`}
-            padded
-          >
-            <DatePicker
-              value={serviceDate}
-              onChange={setServiceDate}
-              max={new Date()}
-              sx={{ width: '200px' }}
-              label={null}
-              textInputProps={{
-                inputProps: { 'aria-label': 'Service Date' },
-              }}
-            />
+              )}
+              <DatePicker
+                value={serviceDate}
+                onChange={setServiceDate}
+                max={new Date()}
+                sx={{ width: '200px' }}
+                label='Service Date'
+              />
+              {multipleCocs && (
+                <CocPicker
+                  project={project}
+                  value={coc}
+                  onChange={setCoc}
+                  label='CoC Code'
+                  helperText='CoC to use when enrolling new clients'
+                />
+              )}
+            </Stack>
           </StepCard>
         </Grid>
         <Grid item xs={12}></Grid>
         <Grid item xs={12} lg={8} xl={6}>
-          <StepCard
-            step={hasServiceTypeStep ? '3' : '2'}
-            title='Find Client'
-            padded
-          >
-            <ClientLookupForServiceToggle
-              value={lookupMode}
-              serviceTypeName={serviceTypeName}
-              onNavigate={() => {
-                setSearchTerm('');
-                setServicePeriod(undefined);
-              }}
-            />
-            <Box sx={{ mt: 2 }}>
-              {lookupMode === 'search' && (
-                <ClientTextSearchInput
-                  showSearchTips={false}
-                  helperText='Seach includes all of HMIS'
-                  label={null}
-                  searchAdornment
-                  clearAdornment
-                  value={searchTerm}
-                  onChange={setSearchTerm}
-                  onClearSearch={() => setSearchTerm('')}
+          <StepCard step='2' title='Find Client' padded>
+            <ButtonTooltipContainer
+              placement='right'
+              title={
+                hasSufficientCriteria
+                  ? undefined
+                  : 'Enter service details to enable search'
+              }
+            >
+              <>
+                <ClientLookupForServiceToggle
+                  value={lookupMode}
+                  serviceTypeName={serviceTypeName}
+                  onNavigate={() => {
+                    setSearchTerm('');
+                    setServicePeriod(undefined);
+                  }}
                 />
-              )}
-              {lookupMode === 'list' && (
-                <ServiceDateRangeSelect onChange={setServicePeriod} />
-              )}
-            </Box>
+                <Box sx={{ mt: 2 }}>
+                  {lookupMode === 'search' && (
+                    <ClientTextSearchInput
+                      showSearchTips={false}
+                      helperText='Seach includes all of HMIS'
+                      label={null}
+                      searchAdornment
+                      clearAdornment
+                      value={searchTerm}
+                      onChange={setSearchTerm}
+                      onClearSearch={() => setSearchTerm('')}
+                      disabled={!hasSufficientCriteria}
+                    />
+                  )}
+                  {lookupMode === 'list' && (
+                    <ServiceDateRangeSelect
+                      onChange={setServicePeriod}
+                      disabled={!hasSufficientCriteria}
+                    />
+                  )}
+                </Box>
+              </>
+            </ButtonTooltipContainer>
           </StepCard>
         </Grid>
         <Grid item xs={12}></Grid>
@@ -144,10 +169,11 @@ const BulkServicesPage: React.FC<Props> = ({
                 serviceDate={serviceDate || new Date()}
                 searchTerm={searchTerm}
                 servicePeriod={servicePeriod}
+                cocCode={coc?.code}
                 title={
                   <StepCardTitle
                     sx={{ pl: 0 }}
-                    step={hasServiceTypeStep ? '4' : '3'}
+                    step='3'
                     title='Assign Services'
                   />
                 }
@@ -156,7 +182,7 @@ const BulkServicesPage: React.FC<Props> = ({
           ) : (
             // fixme: need to label twice because of the selection toolbar
             <StepCard
-              step={hasServiceTypeStep ? '4' : '3'}
+              step='3'
               title={`Assign ${pluralize(serviceTypeName, 2)}`}
             >
               <CommonCard
