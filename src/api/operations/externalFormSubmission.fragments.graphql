@@ -1,0 +1,12 @@
+fragment ExternalFormSubmissionFields on ExternalFormSubmission {
+  id
+  submittedAt
+  spamScore
+  status
+  notes
+  definition {
+    id
+    cacheKey
+    title
+  }
+}

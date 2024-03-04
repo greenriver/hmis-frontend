@@ -2682,6 +2682,32 @@ export enum ExpelledReason {
   UnknownDisappeared = 'UNKNOWN_DISAPPEARED',
 }
 
+export type ExternalFormSubmission = {
+  __typename?: 'ExternalFormSubmission';
+  customDataElements: Array<CustomDataElement>;
+  definition: FormDefinition;
+  id: Scalars['ID']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  spamScore?: Maybe<Scalars['Float']['output']>;
+  status: Scalars['String']['output'];
+  submittedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type ExternalFormSubmissionFilterOptions = {
+  status?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type ExternalFormSubmissionsPaginated = {
+  __typename?: 'ExternalFormSubmissionsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ExternalFormSubmission>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
 /** External Identifier */
 export type ExternalIdentifier = {
   __typename?: 'ExternalIdentifier';
@@ -2908,6 +2934,8 @@ export enum FormRole {
   Enrollment = 'ENROLLMENT',
   /** Exit */
   Exit = 'EXIT',
+  /** External form */
+  ExternalForm = 'EXTERNAL_FORM',
   /** File */
   File = 'FILE',
   /** Form definition */
@@ -5076,6 +5104,7 @@ export type Project = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   enrollments: EnrollmentsPaginated;
+  externalFormSubmissions: ExternalFormSubmissionsPaginated;
   funders: FundersPaginated;
   hasUnits: Scalars['Boolean']['output'];
   hmisParticipations: HmisParticipationsPaginated;
@@ -5116,6 +5145,12 @@ export type ProjectEnrollmentsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
+};
+
+export type ProjectExternalFormSubmissionsArgs = {
+  filters?: InputMaybe<ExternalFormSubmissionFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ProjectFundersArgs = {
@@ -5759,6 +5794,8 @@ export enum RecordFormRole {
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** Enrollment */
   Enrollment = 'ENROLLMENT',
+  /** External form */
+  ExternalForm = 'EXTERNAL_FORM',
   /** File */
   File = 'FILE',
   /** Funder */
@@ -17631,6 +17668,55 @@ export type EventFieldsFragment = {
     id: string;
     name: string;
     email: string;
+  } | null;
+};
+
+export type ExternalFormSubmissionFieldsFragment = {
+  __typename?: 'ExternalFormSubmission';
+  id: string;
+  submittedAt: string;
+  spamScore?: number | null;
+  status: string;
+  notes?: string | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
+};
+
+export type ProjectExternalFormSubmissionsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type ProjectExternalFormSubmissionsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    externalFormSubmissions: {
+      __typename?: 'ExternalFormSubmissionsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ExternalFormSubmission';
+        id: string;
+        submittedAt: string;
+        spamScore?: number | null;
+        status: string;
+        notes?: string | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
+      }>;
+    };
   } | null;
 };
 
@@ -31029,6 +31115,20 @@ export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
 `;
+export const ExternalFormSubmissionFieldsFragmentDoc = gql`
+  fragment ExternalFormSubmissionFields on ExternalFormSubmission {
+    id
+    submittedAt
+    spamScore
+    status
+    notes
+    definition {
+      id
+      cacheKey
+      title
+    }
+  }
+`;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
     confidential
@@ -35763,6 +35863,79 @@ export type GetEnrollmentPermissionsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentPermissionsQueryResult = Apollo.QueryResult<
   GetEnrollmentPermissionsQuery,
   GetEnrollmentPermissionsQueryVariables
+>;
+export const ProjectExternalFormSubmissionsDocument = gql`
+  query projectExternalFormSubmissions(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    project(id: $id) {
+      id
+      externalFormSubmissions(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ExternalFormSubmissionFields
+        }
+      }
+    }
+  }
+  ${ExternalFormSubmissionFieldsFragmentDoc}
+`;
+
+/**
+ * __useProjectExternalFormSubmissionsQuery__
+ *
+ * To run a query within a React component, call `useProjectExternalFormSubmissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectExternalFormSubmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectExternalFormSubmissionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useProjectExternalFormSubmissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ProjectExternalFormSubmissionsQuery,
+    ProjectExternalFormSubmissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ProjectExternalFormSubmissionsQuery,
+    ProjectExternalFormSubmissionsQueryVariables
+  >(ProjectExternalFormSubmissionsDocument, options);
+}
+export function useProjectExternalFormSubmissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectExternalFormSubmissionsQuery,
+    ProjectExternalFormSubmissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ProjectExternalFormSubmissionsQuery,
+    ProjectExternalFormSubmissionsQueryVariables
+  >(ProjectExternalFormSubmissionsDocument, options);
+}
+export type ProjectExternalFormSubmissionsQueryHookResult = ReturnType<
+  typeof useProjectExternalFormSubmissionsQuery
+>;
+export type ProjectExternalFormSubmissionsLazyQueryHookResult = ReturnType<
+  typeof useProjectExternalFormSubmissionsLazyQuery
+>;
+export type ProjectExternalFormSubmissionsQueryResult = Apollo.QueryResult<
+  ProjectExternalFormSubmissionsQuery,
+  ProjectExternalFormSubmissionsQueryVariables
 >;
 export const UpdateFormDefinitionDocument = gql`
   mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
