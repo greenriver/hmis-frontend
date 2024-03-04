@@ -54,6 +54,7 @@ const TextInput = ({
   }
 
   const isTiny = useIsMobile('sm');
+  const { ariaLabel, ...restOfProps } = props;
 
   const textField = (
     <TextField
@@ -64,7 +65,8 @@ const TextInput = ({
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
       autoComplete={formAutoCompleteOff}
-      {...props}
+      aria-label={ariaLabel}
+      {...restOfProps}
       sx={sx}
       inputProps={{
         'aria-label': hiddenLabel ? String(label) : undefined,

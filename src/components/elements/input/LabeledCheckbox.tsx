@@ -56,6 +56,8 @@ const LabeledCheckbox = ({
     [onChange]
   );
 
+  const { ariaLabel, ...restOfProps } = props;
+
   return (
     <FormControl>
       <FormGroup sx={horizontal ? horizontalInputSx : undefined}>
@@ -71,7 +73,8 @@ const LabeledCheckbox = ({
             ...labelSx,
           }}
           onChange={onChange}
-          {...props}
+          aria-label={ariaLabel}
+          {...restOfProps}
         />
       </FormGroup>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}

@@ -34,6 +34,7 @@ const GenericSelect = <
   ...rest
 }: GenericSelectProps<T, Multiple, Creatable>) => {
   const { placeholder, ...inputProps } = textInputProps || {};
+  const { ariaLabel, ...restOfProps } = rest;
   // Show a loading indicator if we have a value but the picklist is still loading
   const startAdornment =
     rest.loading && hasMeaningfulValue(value) ? (
@@ -65,12 +66,13 @@ const GenericSelect = <
             ...inputProps.inputProps,
           }}
           disabled={rest.disabled}
+          aria-label={ariaLabel}
           // Only render placeholder if no values are selected
           placeholder={hasMeaningfulValue(value) ? undefined : placeholder}
           label={label}
         />
       )}
-      {...rest}
+      {...restOfProps}
     />
   );
 };
