@@ -132,7 +132,7 @@ const ProjectEnrollmentsTableForBedNights = ({
           ],
         }}
         noData={noResultsDisplay}
-        selectable={editable ? 'row' : undefined}
+        selectable={editable ? 'checkbox' : undefined}
         defaultPageSize={25}
         rowsPerPageOptions={[25, 50, 100, 150, 200]}
         EnhancedTableToolbarProps={{

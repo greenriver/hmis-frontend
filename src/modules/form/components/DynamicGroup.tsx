@@ -9,6 +9,8 @@ import HorizontalGroup from './group/HorizontalGroup';
 import InputGroup from './group/InputGroup';
 import QuestionGroup from './group/QuestionGroup';
 
+import { SignatureIcon } from '@/components/elements/SemanticIcons';
+import Signature from '@/modules/form/components/group/Signature';
 import { Component } from '@/types/gqlTypes';
 
 export const InfoGroup = ({
@@ -64,6 +66,20 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
       return <DisabilityTable key={props.item.linkId} {...props} />;
     case Component.HorizontalGroup:
       return <HorizontalGroup key={props.item.linkId} {...props} />;
+    case Component.SignatureGroup:
+      return (
+        <FormCard
+          key={props.item.linkId}
+          anchor={props.visible ? props.item.linkId : undefined}
+          debug={debug}
+          TitleIcon={SignatureIcon}
+          titleProps={{ color: 'primary', variant: 'h3', fontWeight: 600 }}
+          helperTextProps={{ variant: 'body1' }}
+          {...props}
+        />
+      );
+    case Component.Signature:
+      return <Signature key={props.item.linkId} {...props} />;
     case Component.InfoGroup:
       return (
         <InfoGroup nestingLevel={props.nestingLevel}>

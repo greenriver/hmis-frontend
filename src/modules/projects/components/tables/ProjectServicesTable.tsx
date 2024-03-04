@@ -27,12 +27,24 @@ const ProjectServicesTable = ({
     if (columns) return columns;
     return [
       {
-        header: 'Client',
+        header: 'First Name',
         linkTreatment: true,
         render: (s: ServiceFields) => (
           <ClientName
             client={s.enrollment.client}
             linkToEnrollmentId={s.enrollment.id}
+            nameParts='first_only'
+          />
+        ),
+      },
+      {
+        header: 'Last Name',
+        linkTreatment: true,
+        render: (s: ServiceFields) => (
+          <ClientName
+            client={s.enrollment.client}
+            linkToEnrollmentId={s.enrollment.id}
+            nameParts='last_only'
           />
         ),
       },
@@ -68,7 +80,6 @@ const ProjectServicesTable = ({
       recordType='Service'
       showFilters
       filterInputType='ServicesForProjectFilterOptions'
-      noSort
     />
   );
 };
