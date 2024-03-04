@@ -42,6 +42,7 @@ const TextInput = ({
   sx,
   warnIfEmptyTreatment,
   ariaLabelledBy,
+  ariaLabel,
   id,
   ...props
 }: TextInputProps) => {
@@ -54,7 +55,6 @@ const TextInput = ({
   }
 
   const isTiny = useIsMobile('sm');
-  const { ariaLabel, ...restOfProps } = props;
 
   const textField = (
     <TextField
@@ -66,10 +66,14 @@ const TextInput = ({
       }
       autoComplete={formAutoCompleteOff}
       aria-label={ariaLabel}
-      {...restOfProps}
+      {...props}
       sx={sx}
       inputProps={{
-        'aria-label': hiddenLabel ? String(label) : undefined,
+        'aria-label': ariaLabel
+          ? ariaLabel
+          : hiddenLabel
+          ? String(label)
+          : undefined,
         'aria-labelledby': ariaLabelledBy,
         minLength: min,
         maxLength: max,

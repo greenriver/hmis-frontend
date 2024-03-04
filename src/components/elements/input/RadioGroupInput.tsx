@@ -66,6 +66,7 @@ const RadioGroupInput = ({
   sx,
   clearable,
   helperText,
+  ariaLabel,
   checkbox = false,
   ...props
 }: RadioGroupInputProps) => {
@@ -84,7 +85,6 @@ const RadioGroupInput = ({
 
   const GroupComponent = checkbox ? FormGroup : RadioGroup;
   const ControlComponent = checkbox ? Checkbox : Radio;
-  const { ariaLabel, ...restOfProps } = props;
 
   return (
     <FormControl component='fieldset'>
@@ -120,7 +120,7 @@ const RadioGroupInput = ({
           ...sx,
         }}
         aria-label={ariaLabel}
-        {...restOfProps}
+        {...props}
       >
         {options.map((option) => (
           <RadioGroupInputOption

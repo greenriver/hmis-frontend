@@ -24,9 +24,9 @@ const SsnInput = ({
   helperText,
   onlylast4 = false,
   warnIfEmptyTreatment,
+  ariaLabel,
   ...props
 }: SsnInputProps) => {
-  const { ariaLabel, ...restOfProps } = props;
   const baseInputProps: TextFieldProps = {
     inputProps: {
       // FIXME: switch to string input, allow use to type "X" or "x"
@@ -35,7 +35,7 @@ const SsnInput = ({
       ...inputProps,
     },
     InputProps,
-    ...restOfProps,
+    ...props,
   };
 
   const values = useMemo(() => {

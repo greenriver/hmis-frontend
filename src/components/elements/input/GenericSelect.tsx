@@ -65,9 +65,9 @@ const GenericSelect = <
             ...params.inputProps,
             value: rest.loading ? '' : params.inputProps.value,
             ...inputProps.inputProps,
+            'aria-label': ariaLabel,
           }}
           disabled={rest.disabled}
-          aria-label={ariaLabel}
           // Only render placeholder if no values are selected
           placeholder={hasMeaningfulValue(value) ? undefined : placeholder}
           label={label}
