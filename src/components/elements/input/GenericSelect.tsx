@@ -20,6 +20,7 @@ export interface GenericSelectProps<
   > {
   label?: ReactNode;
   textInputProps?: TextInputProps;
+  ariaLabel?: string;
 }
 
 const GenericSelect = <
@@ -31,10 +32,10 @@ const GenericSelect = <
   label,
   textInputProps,
   options,
+  ariaLabel,
   ...rest
 }: GenericSelectProps<T, Multiple, Creatable>) => {
   const { placeholder, ...inputProps } = textInputProps || {};
-  const { ariaLabel, ...restOfProps } = rest;
   // Show a loading indicator if we have a value but the picklist is still loading
   const startAdornment =
     rest.loading && hasMeaningfulValue(value) ? (
@@ -72,7 +73,7 @@ const GenericSelect = <
           label={label}
         />
       )}
-      {...restOfProps}
+      {...rest}
     />
   );
 };
