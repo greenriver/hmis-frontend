@@ -584,6 +584,7 @@
           "type": "GROUP",
           "text": "Staff Signature",
           "component": "SIGNATURE",
+          "helperText": "You can customize the language here by supplying the optional helper text attribute.",
           "item": [
             {
               "linkId": "staffSignature",

@@ -1,5 +1,4 @@
 import { IconButton } from '@mui/material';
-import { Stack } from '@mui/system';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ClientTextSearchInput, {
@@ -7,21 +6,25 @@ import ClientTextSearchInput, {
 } from './ClientTextSearchInput';
 import { ClearIcon, SearchIcon } from '@/components/elements/SemanticIcons';
 
-interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
+interface Props
+  extends Omit<
+    ClientTextSearchInputProps,
+    'onChange' | 'value' | 'searchAdornment' | 'clearAdornment'
+  > {
   initialValue?: string;
   onSearch: (value: string) => void;
-  hideSearchButton?: boolean;
   minChars?: number;
-  onClearSearch?: VoidFunction;
-  hideClearButton?: boolean;
+  onClearSearch?: VoidFunction; // if not provided, clear button will simply clear the current text value
 }
 
+/**
+ * Mini-form for performing a text-based client search.
+ * Search and Clear icon buttons are embedded inside the input, as adornments
+ */
 const ClientTextSearchForm: React.FC<Props> = ({
   onSearch,
   initialValue,
-  hideSearchButton,
   onClearSearch,
-  hideClearButton,
   minChars = 3,
   ...props
 }) => {
@@ -60,42 +63,36 @@ const ClientTextSearchForm: React.FC<Props> = ({
   }, [onClearSearch]);
 
   return (
-    <Stack
-      direction={{ xs: 'column', sm: 'row' }}
-      alignItems='flex-start'
-      gap={{ xs: 1, sm: 2 }}
-    >
-      <ClientTextSearchInput
-        value={value}
-        onChange={setValue}
-        onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
-        error={tooShort}
-        errorMessage={
-          tooShort ? t<string>('clientSearch.inputTooShort') : undefined
-        }
-        onClearSearch={onClearSearch}
-        InputProps={{
-          sx: { pr: 1 },
-          endAdornment: !hasSearched ? (
-            <IconButton
-              size='small'
-              onClick={handleSearch}
-              disabled={!value}
-              color='primary'
-            >
-              <SearchIcon />
+    <ClientTextSearchInput
+      value={value}
+      onChange={setValue}
+      onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
+      error={tooShort}
+      errorMessage={
+        tooShort ? t<string>('clientSearch.inputTooShort') : undefined
+      }
+      onClearSearch={onClearSearch}
+      InputProps={{
+        sx: { pr: 1 },
+        endAdornment: !hasSearched ? (
+          <IconButton
+            size='small'
+            onClick={handleSearch}
+            disabled={!value}
+            color='primary'
+          >
+            <SearchIcon />
+          </IconButton>
+        ) : (
+          value && (
+            <IconButton size='small' onClick={handleClear}>
+              <ClearIcon />
             </IconButton>
-          ) : (
-            value && (
-              <IconButton size='small' onClick={handleClear}>
-                <ClearIcon />
-              </IconButton>
-            )
-          ),
-        }}
-        {...props}
-      />
-    </Stack>
+          )
+        ),
+      }}
+      {...props}
+    />
   );
 };
 
