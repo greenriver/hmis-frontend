@@ -273,13 +273,9 @@ const ClientSearch = () => {
             onSearch={(text) => handleSubmitSearch({ textSearch: text })}
             label={null}
             size='medium'
-            hideSearchButton
             showSearchTips
             minChars={3}
             onClearSearch={onClearSearch}
-            searchAdornment
-            clearAdornment
-            hideClearButton
           />
         ) : (
           <ClientSearchAdvancedForm

@@ -21,7 +21,6 @@ import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
-  ClientSearchInput,
   ClientSortOption,
   SearchClientsDocument,
   SearchClientsQuery,
@@ -32,7 +31,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const NewClientMerge = () => {
   const { client } = useClientDashboardContext();
-  const [searchInput, setSearchInput] = useState<ClientSearchInput>();
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [candidate, setCandidate] = useState<
     ClientFieldsFragment | undefined
   >();
@@ -142,24 +141,23 @@ const NewClientMerge = () => {
         <TitleCard title='Merge Client Records'>
           <Stack gap={6}>
             <Grid container alignItems={'flex-start'}>
-              <Grid item xs={12} sx={{ px: 2, py: 2 }}>
+              <Grid item xs={12} lg={6} sx={{ px: 2, py: 2 }}>
                 <ClientTextSearchForm
-                  onSearch={(text) => setSearchInput({ textSearch: text })}
-                  searchAdornment
-                  minChars={3}
+                  onSearch={(text) => setSearchTerm(text)}
+                  onClearSearch={() => setSearchTerm('')}
                 />
               </Grid>
               <Grid item xs></Grid>
             </Grid>
 
-            {searchInput && (
+            {searchTerm && (
               <SsnDobShowContextProvider>
                 <GenericTableWithData<
                   SearchClientsQuery,
                   SearchClientsQueryVariables,
                   ClientFieldsFragment
                 >
-                  queryVariables={{ input: searchInput }}
+                  queryVariables={{ input: { textSearch: searchTerm } }}
                   queryDocument={SearchClientsDocument}
                   columns={columns}
                   pagePath='clientSearch'
