@@ -1,8 +1,9 @@
-import { Alert, AlertColor, Typography } from '@mui/material';
-import DOMPurify from 'dompurify';
+import { Alert, AlertColor } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
 
+import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
+import { evaluateTemplate } from '@/modules/form/util/expressions/template';
 import { Component, FormItem } from '@/types/gqlTypes';
 
 interface Props {
@@ -19,13 +20,6 @@ const SeverityMap: Record<string, AlertColor> = {
   [Component.AlertWarning]: 'warning',
 };
 
-// simple string interpolation. Example interpolate("hello ${name}", {name: 'world'})
-const interpolate = (template: string, variables: Record<string, string>) => {
-  return template.replace(/\${(\w+)}/g, (match, key) => {
-    return typeof variables[key] !== 'undefined' ? variables[key] : match;
-  });
-};
-
 const DynamicDisplay: React.FC<Props> = ({
   item,
   maxWidth,
@@ -33,11 +27,10 @@ const DynamicDisplay: React.FC<Props> = ({
   viewOnly = false,
 }) => {
   const html = useMemo(() => {
-    let stringValue = item.text;
-    if (viewOnly && !isNil(item.readonlyText)) stringValue = item.readonlyText;
-    if (isNil(stringValue)) return undefined;
-
-    return { __html: DOMPurify.sanitize(interpolate(stringValue, { value })) };
+    let displayValue = item.text;
+    if (viewOnly && !isNil(item.readonlyText)) displayValue = item.readonlyText;
+    if (isNil(displayValue)) return undefined;
+    return evaluateTemplate(displayValue, new Map([['value', value]]));
   }, [item, viewOnly, value]);
 
   if (!html) return null;
@@ -53,17 +46,18 @@ const DynamicDisplay: React.FC<Props> = ({
           severity={SeverityMap[item.component as keyof typeof SeverityMap]}
           sx={{ mt: 2 }}
         >
-          <div dangerouslySetInnerHTML={html} />
+          <CommonHtmlContent>{html}</CommonHtmlContent>
         </Alert>
       );
     default:
       return (
-        <Typography
-          data-testid={`display-${item.linkId}`}
+        <CommonHtmlContent
           variant='body2'
+          data-testid={`display-${item.linkId}`}
           sx={{ maxWidth }}
-          dangerouslySetInnerHTML={html}
-        />
+        >
+          {html}
+        </CommonHtmlContent>
       );
   }
 };

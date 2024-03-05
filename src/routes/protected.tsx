@@ -38,12 +38,12 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
-import ConfigureAutoExitPage from '@/modules/admin/components/autoExit/ConfigureAutoExitPage';
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormEditorPage from '@/modules/admin/components/forms/UpdateFormDefinitionPage';
 import ViewFormDefinitionPage from '@/modules/admin/components/forms/ViewFormDefinitionPage';
+import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
 import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
@@ -738,10 +738,10 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.CONFIGURE_AUTO_EXIT,
+            path: AdminDashboardRoutes.PROJECT_CONFIG,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <ConfigureAutoExitPage />
+                <ProjectConfigPage />
               </RootPermissionsFilter>
             ),
           },

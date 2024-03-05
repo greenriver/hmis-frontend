@@ -1,4 +1,5 @@
 import {
+  addMinutes,
   differenceInDays,
   differenceInYears,
   format,
@@ -10,6 +11,7 @@ import {
   isValid,
   isYesterday,
   parseISO,
+  startOfDay,
 } from 'date-fns';
 import { capitalize, find, isNil, sortBy, startCase } from 'lodash-es';
 
@@ -111,6 +113,13 @@ export const formatDateTimeForDisplay = (date: Date) => {
     );
     return null;
   }
+};
+
+// "Time of day" is stored as minutes since midnight
+export const formatTimeOfDay = (timeOfDayMinutes: number) => {
+  const midnight = startOfDay(new Date());
+  const date = addMinutes(midnight, timeOfDayMinutes);
+  return format(date, 'h:mm a'); // 6:30 am
 };
 
 export const briefProjectType = (projectType: ProjectType) => {

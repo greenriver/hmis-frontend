@@ -371,36 +371,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
-    name: 'AutoExitConfig',
-    fields: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'lengthOfAbsenceDays',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
-        },
-      },
-      {
-        name: 'organizationId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
-      {
-        name: 'projectType',
-        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-      },
-    ],
-  },
-  {
     name: 'AutofillValue',
     fields: [
       {
@@ -414,6 +384,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'autofillReadonly',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'formula',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'sumQuestions',
@@ -2779,7 +2753,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
       },
       {
@@ -2808,7 +2782,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'resultDate',
-        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
     ],
   },
@@ -4729,6 +4703,40 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ProjectConfig',
+    fields: [
+      {
+        name: 'configOptions',
+        type: { kind: 'SCALAR', name: 'JSON', ofType: null },
+      },
+      {
+        name: 'configType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'QueryAccess',
     fields: [
       {
@@ -5941,24 +5949,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'AutoExitConfigInput',
-    args: [
-      {
-        name: 'lengthOfAbsenceDays',
-        type: { kind: 'SCALAR', name: 'Int', ofType: null },
-      },
-      {
-        name: 'organizationId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
-      {
-        name: 'projectType',
-        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-      },
-    ],
-  },
-  {
     name: 'BulkMergeClientsInput',
     args: [
       {
@@ -6943,6 +6933,28 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'unitTypeId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ProjectConfigInput',
+    args: [
+      {
+        name: 'configType',
+        type: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
+      },
+      {
+        name: 'lengthOfAbsenceDays',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'organizationId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'projectType',
+        type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
       },
     ],
   },

@@ -29,26 +29,33 @@ import RequiredLabel from './RequiredLabel';
 import CheckboxGroupInput from '@/components/elements/input/CheckboxGroupInput';
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
+import MinutesDurationInput from '@/components/elements/input/MinutesDurationInput';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import PhoneInput from '@/components/elements/input/PhoneInput';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
+import TimeOfDayPicker from '@/components/elements/input/TimeOfDayPicker';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
-const getLabel = (item: FormItem, horizontal?: boolean) => {
+const getLabel = (
+  item: FormItem,
+  horizontal?: boolean,
+  isDisabled?: boolean
+) => {
   if (!item.text) return null;
 
   return (
     <RequiredLabel
       text={item.text}
-      required={item.required}
+      required={item.required && !isDisabled}
       TypographyProps={{
         fontWeight:
           item.component === Component.Checkbox || horizontal ? undefined : 600,
@@ -63,8 +70,12 @@ const FIXED_WIDTH_MEDIUM = 350;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
-const minWidthForType = (item: FormItem) => {
+const minWidthForType = (item: FormItem, isMobile: boolean) => {
   if (item.component || item.size) return undefined;
+
+  // minWidth clobbers maxWidth in css always, so for mobile, unset the property in order to prevent
+  // a minWidth that's > 100% of the container causing horizontal scroll
+  if (isMobile) return undefined;
 
   switch (item.type) {
     case ItemType.String:
@@ -72,6 +83,8 @@ const minWidthForType = (item: FormItem) => {
       return 300;
     case ItemType.Choice:
     case ItemType.OpenChoice:
+      // FIXME: this was added for dropdowns, but it's also applied
+      // to radio buttons, which is incorrect
       return FIXED_WIDTH_MEDIUM;
     default:
       return undefined;
@@ -107,13 +120,18 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       itemChanged({ linkId, value, type: ChangeType.User }),
     [linkId, itemChanged]
   );
-
-  const label = noLabel ? null : getLabel(item, horizontal);
+  const isMobile = useIsMobile();
+  const isDisabled = disabled || inputProps?.disabled;
+  const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
-  const minWidth = minWidthForType(item);
+  const minWidth = minWidthForType(item, isMobile);
   let width;
 
-  if (item.size === InputSize.Small || item.type === ItemType.Date) {
+  if (
+    item.size === InputSize.Small ||
+    item.type === ItemType.Date ||
+    item.type === ItemType.TimeOfDay
+  ) {
     width = FIXED_WIDTH_SMALL;
   } else if (item.size === InputSize.Xsmall) {
     width = FIXED_WIDTH_X_SMALL;
@@ -132,11 +150,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
 
   const commonInputProps: DynamicInputCommonProps = {
     label,
+    ariaLabel: item.text || undefined,
     error: !!(errors && errors.length > 0) || isInvalidEnumValue,
     helperText: item.helperText,
     id: linkId,
     ...inputProps,
-    disabled: disabled || inputProps?.disabled,
+    disabled: isDisabled,
   };
   commonInputProps.warnIfEmptyTreatment =
     warnIfEmpty &&
@@ -269,6 +288,17 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.Integer:
     case ItemType.Currency:
+      if (item.component === Component.MinutesDuration)
+        return (
+          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+            <MinutesDurationInput
+              value={isNil(value) ? '' : value}
+              onChange={onChangeValue}
+              inputWidth={width}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <NumberInput
@@ -300,6 +330,21 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               sx: { width },
             }}
             {...datePickerProps}
+            {...commonInputProps}
+          />
+        </InputContainer>
+      );
+    case ItemType.TimeOfDay:
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <TimeOfDayPicker
+            value={value}
+            onChange={onChangeValue}
+            textInputProps={{
+              id: linkId,
+              horizontal,
+              sx: { width },
+            }}
             {...commonInputProps}
           />
         </InputContainer>

@@ -59,7 +59,7 @@ const EnrollmentOverview = () => {
     <>
       <PageTitle title='Enrollment Overview' />
       <Grid container spacing={4}>
-        <Grid item xs={7}>
+        <Grid item md={8} xs={12}>
           <Stack spacing={4}>
             <TitleCard title='Household' headerVariant='border'>
               <HouseholdMemberTable
@@ -81,7 +81,7 @@ const EnrollmentOverview = () => {
             </TitleCard>
           </Stack>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item md={4} xs={12}>
           <Stack spacing={4}>
             <ClientAlertHouseholdWrapper householdId={enrollment.householdId} />
             <EnrollmentReminders enrollmentId={enrollment.id} />

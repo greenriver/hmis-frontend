@@ -31,7 +31,7 @@ const ClientServices: React.FC<{
     () =>
       (
         [
-          ...SERVICE_COLUMNS.filter((col) => col.header !== 'Service Details'),
+          ...SERVICE_COLUMNS,
           {
             key: 'project',
             header: 'Project Name',
