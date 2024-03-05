@@ -1,5 +1,5 @@
 import { omit } from 'lodash-es';
-import { ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
 import { ServicePeriod } from '../../types';
 import AssignServiceButton from './AssignServiceButton';
@@ -57,6 +57,7 @@ const BulkServicesTable: React.FC<Props> = ({
   cocCode,
 }) => {
   const { bulkAssign, bulkRemove, apolloError } = useBulkAssignMutations();
+  const [anyRowsSelected, setAnyRowsSelected] = useState<boolean>(false);
 
   const getColumnDefs = useCallback(
     (_rows: RowType[], loading?: boolean) => {
@@ -120,6 +121,7 @@ const BulkServicesTable: React.FC<Props> = ({
                 bulkAssign={bulkAssign}
                 bulkRemove={bulkRemove}
                 tableLoading={loading}
+                disabled={anyRowsSelected}
               />
             );
           },
@@ -134,6 +136,7 @@ const BulkServicesTable: React.FC<Props> = ({
       cocCode,
       bulkAssign,
       bulkRemove,
+      anyRowsSelected,
     ]
   );
 
@@ -144,8 +147,8 @@ const BulkServicesTable: React.FC<Props> = ({
         BulkServicesClientSearchQueryVariables,
         RowType
       >
-        // re-render when default filters change
-        key={JSON.stringify(servicePeriod || '')}
+        // remount when default filters change
+        key={JSON.stringify({ ...servicePeriod, serviceTypeId })}
         queryVariables={{
           textSearch: searchTerm || '',
           serviceTypeId: serviceTypeId,
@@ -154,6 +157,7 @@ const BulkServicesTable: React.FC<Props> = ({
         }}
         loadingVariant='linear'
         selectable='checkbox'
+        onChangeSelectedRowIds={(rows) => setAnyRowsSelected(rows.length > 0)}
         queryDocument={BulkServicesClientSearchDocument}
         pagePath='clientSearch'
         getColumnDefs={getColumnDefs}

@@ -36,7 +36,7 @@ const AssignServiceButton: React.FC<Props> = ({
   // Internal loading state to display in the interface for this button
   const [loading, setLoading] = useState(false);
   // Locally disable the button while the table refetches, AFTER this specific mutation has completed
-  const [localDisabled, setLocalDisabled] = useState(true);
+  const [localDisabled, setLocalDisabled] = useState(false);
 
   const isAssignedOnDate = useMemo(() => {
     if (!client.activeEnrollment) return false;

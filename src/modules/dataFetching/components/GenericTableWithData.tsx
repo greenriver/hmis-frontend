@@ -164,7 +164,6 @@ const GenericTableWithData = <
   onCompleted,
   paginationItemName,
   filterRows,
-  loadingVariant,
   ...props
 }: Props<
   Query,
@@ -364,17 +363,14 @@ const GenericTableWithData = <
       )}
       <Box sx={containerSx}>
         <GenericTable<RowDataType>
-          // if loadingVariant was passed explicitly, show the loading state for refetches.
-          // otherwise only show the initial loading state
-          loading={loadingVariant ? loading : loading && !data}
-          loadingVariant={loadingVariant}
+          loading={loading && !data}
           rows={rows}
           paginated={!nonTablePagination && !hidePagination}
           tablePaginationProps={
             nonTablePagination ? undefined : tablePaginationProps
           }
           columns={showColumnDefs}
-          noData={loading ? 'Loading...' : noDataValue}
+          noData={noDataValue}
           filterToolbar={
             (showFilters || !isEmpty(toolbars)) && (
               <>

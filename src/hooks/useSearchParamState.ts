@@ -10,6 +10,7 @@ type DefaultType =
   | number
   | boolean
   | Array<string | number | boolean>
+  | Date
   | null;
 
 type SearchParamStateType = {
