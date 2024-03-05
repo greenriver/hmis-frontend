@@ -48,8 +48,6 @@ const BulkServicesPage: React.FC<Props> = ({
 
   const [filterParams, setFilterParams] = useSearchParamsState(filtersDefaults);
 
-  // const { state } = useLocation();
-
   const { coc, serviceDate, searchTerm, mode: lookupMode } = filterParams;
   const servicePeriod = useMemo(() => {
     if (!filterParams.servicePeriodStart || !filterParams.servicePeriodEnd) {
@@ -87,9 +85,7 @@ const BulkServicesPage: React.FC<Props> = ({
       ? ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD
       : ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD;
 
-    navigate(generateSafePath(route, { projectId: project.id }), {
-      state: filterParams,
-    });
+    navigate(generateSafePath(route, { projectId: project.id }));
   }, [serviceTypeIdProp, navigate, project.id, filterParams]);
 
   return (

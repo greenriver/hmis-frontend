@@ -33,15 +33,10 @@ const AssignServiceButton: React.FC<Props> = ({
   disabled,
   cocCode,
 }) => {
-  // Internal loading state to display in the interface for this button.
-  // We display as loading for the duration of two queries: (1) when the mutation
-  // is being performed, and (2) when the table is re-fetching after that mutation succeeds.
-  // This can cause the loading state to be present longer than necessary (if multiple buttons
-  // are clicked in succession), but I think this is preferable than the alternative, which I
-  // think would be an optimistic update to the button state (saying its assigned/unassigned) because
-  // that would need to be disabled while refetch occurs. That causes a UI flash when moving quickly
-  // in and out of the disabled state. (Could be fixed by disabling button without UI treatment - maybe revisit).
+  // Internal loading state to display in the interface for this button
   const [loading, setLoading] = useState(false);
+  // Locally disable the button while the table refetches, AFTER this specific mutation has completed
+  const [localDisabled, setLocalDisabled] = useState(true);
 
   const isAssignedOnDate = useMemo(() => {
     if (!client.activeEnrollment) return false;
@@ -50,8 +45,19 @@ const AssignServiceButton: React.FC<Props> = ({
 
   // When the entire table has finished re-fetching, remove the loading state for this button.
   useEffect(() => {
-    if (!tableLoading) setLoading(false);
+    if (!tableLoading) setLocalDisabled(false);
   }, [tableLoading]);
+
+  const handlers = useMemo(
+    () => ({
+      onCompleted: () => {
+        setLoading(false);
+        setLocalDisabled(true); // disabled while table refetches
+      },
+      onError: () => setLoading(false),
+    }),
+    []
+  );
 
   const onClick = useCallback<NonNullable<ButtonProps['onClick']>>(
     (e) => {
@@ -64,7 +70,7 @@ const AssignServiceButton: React.FC<Props> = ({
         setLoading(true);
         bulkRemove({
           variables: { projectId, serviceIds },
-          onError: () => setLoading(false),
+          ...handlers,
         });
       } else {
         setLoading(true);
@@ -78,35 +84,36 @@ const AssignServiceButton: React.FC<Props> = ({
               cocCode,
             },
           },
-          onError: () => setLoading(false),
+          ...handlers,
         });
       }
     },
     [
-      bulkAssign,
-      bulkRemove,
-      client.activeEnrollment,
-      client.id,
-      dateProvided,
-      cocCode,
       isAssignedOnDate,
+      client,
+      bulkRemove,
       projectId,
+      handlers,
+      bulkAssign,
+      dateProvided,
       serviceTypeId,
+      cocCode,
     ]
   );
 
   const buttonText = useMemo(() => {
+    if (localDisabled) return 'Reloading...';
     if (isAssignedOnDate) return 'Assigned';
     if (client.activeEnrollment) return 'Assign';
     return 'Enroll + Assign';
-  }, [client, isAssignedOnDate]);
+  }, [client.activeEnrollment, isAssignedOnDate, localDisabled]);
 
   return (
     <LoadingButton
       onClick={onClick}
       loading={loading}
-      disabled={disabled}
-      startIcon={isAssignedOnDate ? <CheckIcon /> : undefined}
+      disabled={disabled || localDisabled}
+      startIcon={isAssignedOnDate && !localDisabled ? <CheckIcon /> : undefined}
       fullWidth
       variant={isAssignedOnDate ? 'contained' : 'gray'}
     >

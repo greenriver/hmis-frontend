@@ -152,13 +152,13 @@ const BulkServicesTable: React.FC<Props> = ({
           serviceDate: formatDateForGql(serviceDate) || '',
           projectId,
         }}
+        loadingVariant='linear'
         selectable='checkbox'
         queryDocument={BulkServicesClientSearchDocument}
         pagePath='clientSearch'
         getColumnDefs={getColumnDefs}
         showFilters
         recordType='Client'
-        // TODO: default sort by last name if showing by-list view?
         defaultFilters={
           // If "service period" is selected, filter down Client results to
           // only clients who received this service within the specified date range.
@@ -175,7 +175,11 @@ const BulkServicesTable: React.FC<Props> = ({
         }
         filters={(f) => omit(f, 'project', 'organization')}
         filterInputType='ClientFilterOptions'
-        defaultSortOption={ClientSortOption.BestMatch}
+        defaultSortOption={
+          searchTerm
+            ? ClientSortOption.BestMatch
+            : ClientSortOption.LastNameAToZ
+        }
         EnhancedTableToolbarProps={{
           title,
           renderBulkAction: (_selectedClientIds, selectedRows) => {

@@ -164,6 +164,7 @@ const GenericTableWithData = <
   onCompleted,
   paginationItemName,
   filterRows,
+  loadingVariant,
   ...props
 }: Props<
   Query,
@@ -341,7 +342,7 @@ const GenericTableWithData = <
         startCase(recordType || 'record').toLowerCase()
       )} matching selected filters`;
     return noData;
-  }, [noData, recordType, showFilters, filterValues]);
+  }, [noData, filterValues, showFilters, recordType]);
 
   // If this is the first time loading, return loading (hide search headers)
   if (loading && !hasRefetched && !data) return <Loading />;
@@ -363,14 +364,17 @@ const GenericTableWithData = <
       )}
       <Box sx={containerSx}>
         <GenericTable<RowDataType>
-          loading={loading && !data}
+          // if loadingVariant was passed explicitly, show the loading state for refetches.
+          // otherwise only show the initial loading state
+          loading={loadingVariant ? loading : loading && !data}
+          loadingVariant={loadingVariant}
           rows={rows}
           paginated={!nonTablePagination && !hidePagination}
           tablePaginationProps={
             nonTablePagination ? undefined : tablePaginationProps
           }
           columns={showColumnDefs}
-          noData={noDataValue}
+          noData={loading ? 'Loading...' : noDataValue}
           filterToolbar={
             (showFilters || !isEmpty(toolbars)) && (
               <>
