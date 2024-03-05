@@ -1,4 +1,5 @@
 import { Stack, Typography, TypographyProps } from '@mui/material';
+import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 
 const RequiredLabel = ({
   text,
@@ -13,9 +14,9 @@ const RequiredLabel = ({
 }) => {
   return (
     <Stack direction='row' spacing={1} component='span'>
-      <Typography variant='body2' {...TypographyProps} component='span'>
+      <CommonHtmlContent variant='body2' {...TypographyProps} component='span'>
         {text}
-      </Typography>
+      </CommonHtmlContent>
       {required && (
         <Typography
           variant='body2'

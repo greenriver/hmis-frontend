@@ -2884,6 +2884,8 @@ export type FormItem = {
 export enum FormRole {
   /** Annual */
   Annual = 'ANNUAL',
+  /** Auto exit config */
+  AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Case note */
   CaseNote = 'CASE_NOTE',
   /** CE assessment */
@@ -3285,13 +3287,6 @@ export type HmisParticipationsPaginated = {
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
 };
-
-export enum HmisProjectConfigType {
-  /** Auto Enter */
-  AutoEnter = 'AUTO_ENTER',
-  /** Auto Exit */
-  AutoExit = 'AUTO_EXIT',
-}
 
 export type Household = {
   __typename?: 'Household';
@@ -5243,7 +5238,7 @@ export enum ProjectCompletionStatus {
 export type ProjectConfig = {
   __typename?: 'ProjectConfig';
   configOptions?: Maybe<Scalars['JSON']['output']>;
-  configType: HmisProjectConfigType;
+  configType: ProjectConfigType;
   id: Scalars['ID']['output'];
   organization?: Maybe<Organization>;
   organizationId?: Maybe<Scalars['ID']['output']>;
@@ -5254,12 +5249,19 @@ export type ProjectConfig = {
 
 /** Project Config Input */
 export type ProjectConfigInput = {
-  configType?: InputMaybe<HmisProjectConfigType>;
+  configType?: InputMaybe<ProjectConfigType>;
   lengthOfAbsenceDays?: InputMaybe<Scalars['Int']['input']>;
   organizationId?: InputMaybe<Scalars['ID']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<ProjectType>;
 };
+
+export enum ProjectConfigType {
+  /** Auto Enter */
+  AutoEnter = 'AUTO_ENTER',
+  /** Auto Exit */
+  AutoExit = 'AUTO_EXIT',
+}
 
 export type ProjectConfigsPaginated = {
   __typename?: 'ProjectConfigsPaginated';
@@ -6645,6 +6647,8 @@ export enum SexualOrientation {
 
 /** Form Roles that are used for non-configurable forms. These types of forms are submitted using custom mutations. */
 export enum StaticFormRole {
+  /** Auto exit config */
+  AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
   /** Form definition */
@@ -14581,22 +14585,6 @@ export type FormRuleFieldsFragment = {
     hudId: string;
     organizationName: string;
   } | null;
-  serviceCategory?: {
-    __typename?: 'ServiceCategory';
-    id: string;
-    name: string;
-    hud: boolean;
-  } | null;
-  serviceType?: {
-    __typename?: 'ServiceType';
-    id: string;
-    name: string;
-    hudRecordType?: RecordType | null;
-    hudTypeProvided?: ServiceTypeProvided | null;
-    category: string;
-    dateCreated?: string | null;
-    dateUpdated?: string | null;
-  } | null;
 };
 
 export type GetFormRulesQueryVariables = Exact<{
@@ -14642,22 +14630,6 @@ export type GetFormRulesQuery = {
         id: string;
         hudId: string;
         organizationName: string;
-      } | null;
-      serviceCategory?: {
-        __typename?: 'ServiceCategory';
-        id: string;
-        name: string;
-        hud: boolean;
-      } | null;
-      serviceType?: {
-        __typename?: 'ServiceType';
-        id: string;
-        name: string;
-        hudRecordType?: RecordType | null;
-        hudTypeProvided?: ServiceTypeProvided | null;
-        category: string;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
       } | null;
     }>;
   };
@@ -14711,22 +14683,6 @@ export type GetServiceCategoryRulesQuery = {
           hudId: string;
           organizationName: string;
         } | null;
-        serviceCategory?: {
-          __typename?: 'ServiceCategory';
-          id: string;
-          name: string;
-          hud: boolean;
-        } | null;
-        serviceType?: {
-          __typename?: 'ServiceType';
-          id: string;
-          name: string;
-          hudRecordType?: RecordType | null;
-          hudTypeProvided?: ServiceTypeProvided | null;
-          category: string;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-        } | null;
       }>;
     };
   } | null;
@@ -14767,22 +14723,6 @@ export type GetFormRuleQuery = {
       id: string;
       hudId: string;
       organizationName: string;
-    } | null;
-    serviceCategory?: {
-      __typename?: 'ServiceCategory';
-      id: string;
-      name: string;
-      hud: boolean;
-    } | null;
-    serviceType?: {
-      __typename?: 'ServiceType';
-      id: string;
-      name: string;
-      hudRecordType?: RecordType | null;
-      hudTypeProvided?: ServiceTypeProvided | null;
-      category: string;
-      dateCreated?: string | null;
-      dateUpdated?: string | null;
     } | null;
   } | null;
 };
@@ -14825,22 +14765,6 @@ export type CreateFormRuleMutation = {
         id: string;
         hudId: string;
         organizationName: string;
-      } | null;
-      serviceCategory?: {
-        __typename?: 'ServiceCategory';
-        id: string;
-        name: string;
-        hud: boolean;
-      } | null;
-      serviceType?: {
-        __typename?: 'ServiceType';
-        id: string;
-        name: string;
-        hudRecordType?: RecordType | null;
-        hudTypeProvided?: ServiceTypeProvided | null;
-        category: string;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
       } | null;
     };
     errors: Array<{
@@ -14898,22 +14822,6 @@ export type UpdateFormRuleMutation = {
         id: string;
         hudId: string;
         organizationName: string;
-      } | null;
-      serviceCategory?: {
-        __typename?: 'ServiceCategory';
-        id: string;
-        name: string;
-        hud: boolean;
-      } | null;
-      serviceType?: {
-        __typename?: 'ServiceType';
-        id: string;
-        name: string;
-        hudRecordType?: RecordType | null;
-        hudTypeProvided?: ServiceTypeProvided | null;
-        category: string;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
       } | null;
     };
     errors: Array<{
@@ -27626,7 +27534,7 @@ export type DeleteCeParticipationMutation = {
 export type ProjectConfigFieldsFragment = {
   __typename?: 'ProjectConfig';
   id: string;
-  configType: HmisProjectConfigType;
+  configType: ProjectConfigType;
   organizationId?: string | null;
   projectId?: string | null;
   projectType?: ProjectType | null;
@@ -27650,7 +27558,7 @@ export type CreateProjectConfigMutation = {
     projectConfig?: {
       __typename?: 'ProjectConfig';
       id: string;
-      configType: HmisProjectConfigType;
+      configType: ProjectConfigType;
       organizationId?: string | null;
       projectId?: string | null;
       projectType?: ProjectType | null;
@@ -27695,7 +27603,7 @@ export type UpdateProjectConfigMutation = {
     projectConfig?: {
       __typename?: 'ProjectConfig';
       id: string;
-      configType: HmisProjectConfigType;
+      configType: ProjectConfigType;
       organizationId?: string | null;
       projectId?: string | null;
       projectType?: ProjectType | null;
@@ -27739,7 +27647,7 @@ export type DeleteProjectConfigMutation = {
     projectConfig?: {
       __typename?: 'ProjectConfig';
       id: string;
-      configType: HmisProjectConfigType;
+      configType: ProjectConfigType;
       organizationId?: string | null;
       projectId?: string | null;
       projectType?: ProjectType | null;
@@ -27787,7 +27695,7 @@ export type GetProjectConfigsQuery = {
     nodes: Array<{
       __typename?: 'ProjectConfig';
       id: string;
-      configType: HmisProjectConfigType;
+      configType: ProjectConfigType;
       organizationId?: string | null;
       projectId?: string | null;
       projectType?: ProjectType | null;
@@ -30708,17 +30616,6 @@ export const OrganizationNameFieldsFragmentDoc = gql`
     organizationName
   }
 `;
-export const ServiceTypeFieldsFragmentDoc = gql`
-  fragment ServiceTypeFields on ServiceType {
-    id
-    name
-    hudRecordType
-    hudTypeProvided
-    category
-    dateCreated
-    dateUpdated
-  }
-`;
 export const FormRuleFieldsFragmentDoc = gql`
   fragment FormRuleFields on FormRule {
     id
@@ -30743,18 +30640,9 @@ export const FormRuleFieldsFragmentDoc = gql`
     }
     createdAt
     updatedAt
-    serviceCategory {
-      id
-      name
-      hud
-    }
-    serviceType {
-      ...ServiceTypeFields
-    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
-  ${ServiceTypeFieldsFragmentDoc}
 `;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
@@ -31702,6 +31590,17 @@ export const ScanCardFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const ServiceTypeFieldsFragmentDoc = gql`
+  fragment ServiceTypeFields on ServiceType {
+    id
+    name
+    hudRecordType
+    hudTypeProvided
+    category
+    dateCreated
+    dateUpdated
+  }
 `;
 export const ServiceFieldsFragmentDoc = gql`
   fragment ServiceFields on Service {

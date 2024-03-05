@@ -1,5 +1,5 @@
 import { Box, DialogContent, DialogProps, DialogTitle } from '@mui/material';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import CommonDialog from '@/components/elements/CommonDialog';
 import StaticForm from '@/modules/form/components/StaticForm';
@@ -7,46 +7,43 @@ import {
   CreateProjectConfigDocument,
   CreateProjectConfigMutation,
   CreateProjectConfigMutationVariables,
+  ProjectConfigFieldsFragment,
   ProjectConfigInput,
   StaticFormRole,
   UpdateProjectConfigDocument,
   UpdateProjectConfigMutation,
   UpdateProjectConfigMutationVariables,
-  useGetProjectConfigsQuery,
 } from '@/types/gqlTypes';
 import { evictProjectConfigs } from '@/utils/cacheUtil';
 
 export interface ProjectDialogProps extends DialogProps {
-  projectId?: string;
+  config?: ProjectConfigFieldsFragment | null;
 }
 
 const ProjectConfigDialog: React.FC<ProjectDialogProps> = ({
-  projectId,
+  config,
   ...props
 }) => {
-  const { data } = useGetProjectConfigsQuery();
-
-  const project = useMemo(
-    () => data?.projectConfigs?.nodes?.find((aec) => aec.id === projectId),
-    [data, projectId]
-  );
-
   return (
     <CommonDialog maxWidth='sm' fullWidth {...props}>
-      <DialogTitle>{projectId ? 'Edit' : 'New'} Project Config</DialogTitle>
+      <DialogTitle>{config ? 'Edit' : 'New'} Project Config</DialogTitle>
       <DialogContent>
         <Box mt={2}>
-          {project ? (
+          {config ? (
             <StaticForm<
               UpdateProjectConfigMutation,
               UpdateProjectConfigMutationVariables
             >
               role={StaticFormRole.ProjectConfig}
-              initialValues={project}
+              initialValues={{
+                lengthOfAbsenceDays: (JSON.parse(config.configOptions) || {})
+                  .length_of_absence_days,
+                ...config,
+              }}
               mutationDocument={UpdateProjectConfigDocument}
               getVariables={(values) => ({
                 input: values as ProjectConfigInput,
-                id: project.id,
+                id: config.id,
               })}
               getErrors={(data) => data.updateProjectConfig?.errors || []}
               onCompleted={(data) => {

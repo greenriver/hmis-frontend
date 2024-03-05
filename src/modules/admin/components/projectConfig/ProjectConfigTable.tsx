@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 
+import { Stack } from '@mui/system';
 import { capitalize } from 'lodash-es';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
@@ -25,7 +26,7 @@ const columns: ColumnDef<ProjectConfigFieldsFragment>[] = [
   {
     header: 'Config Type',
     render: ({ configType }) => (
-      <HmisEnum enumMap={HmisEnums.HmisProjectConfigType} value={configType} />
+      <HmisEnum enumMap={HmisEnums.ProjectConfigType} value={configType} />
     ),
   },
   {
@@ -71,22 +72,23 @@ const columns: ColumnDef<ProjectConfigFieldsFragment>[] = [
       if (!configOptions) return;
       const parsedOptions = JSON.parse(configOptions);
 
-      return Object.keys(parsedOptions).map((key) => {
-        return (
-          <span key={key}>
-            {capitalize(key.replaceAll(/_/g, ' '))}: {parsedOptions[key]}
-          </span>
-        );
-      });
+      return (
+        <Stack>
+          {Object.keys(parsedOptions).map((key) => (
+            <Box key={key}>
+              {capitalize(key.replaceAll(/_/g, ' '))}: {parsedOptions[key]}
+            </Box>
+          ))}
+        </Stack>
+      );
     },
   },
 ];
 
 const ProjectConfigTable = ({
-  setSelectedId,
+  onClickRow,
 }: {
-  selectedId?: string | null;
-  setSelectedId: (id: string | null) => any;
+  onClickRow: (projectConfig: ProjectConfigFieldsFragment | null) => any;
 }) => {
   return (
     <>
@@ -129,7 +131,7 @@ const ProjectConfigTable = ({
         showFilters
         recordType='ProjectConfig'
         paginationItemName='project config'
-        handleRowClick={(row) => setSelectedId(row.id)}
+        handleRowClick={onClickRow}
       />
     </>
   );

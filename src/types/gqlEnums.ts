@@ -1329,6 +1329,7 @@ export const HmisEnums = {
     CLIENT_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT:
       'Client was expelled or otherwise involuntarily discharged from project',
   },
+  ProjectConfigType: { AUTO_ENTER: 'Auto Enter', AUTO_EXIT: 'Auto Exit' },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
   ProjectSortOption: {
     NAME: 'Name',

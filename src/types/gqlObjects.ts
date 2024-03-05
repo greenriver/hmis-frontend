@@ -4714,7 +4714,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'ENUM', name: 'HmisProjectConfigType', ofType: null },
+          ofType: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
         },
       },
       {
@@ -6941,7 +6941,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     args: [
       {
         name: 'configType',
-        type: { kind: 'ENUM', name: 'HmisProjectConfigType', ofType: null },
+        type: { kind: 'ENUM', name: 'ProjectConfigType', ofType: null },
       },
       {
         name: 'lengthOfAbsenceDays',

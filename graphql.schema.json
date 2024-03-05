@@ -20349,6 +20349,12 @@
             "deprecationReason": null
           },
           {
+            "name": "AUTO_EXIT_CONFIG",
+            "description": "Auto exit config",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CASE_NOTE",
             "description": "Case note",
             "isDeprecated": false,
@@ -22673,29 +22679,6 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "HmisProjectConfigType",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "AUTO_ENTER",
-            "description": "Auto Enter",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "AUTO_EXIT",
-            "description": "Auto Exit",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
         "possibleTypes": null
       },
       {
@@ -32963,7 +32946,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "HmisProjectConfigType",
+                "name": "ProjectConfigType",
                 "ofType": null
               }
             },
@@ -33063,7 +33046,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "HmisProjectConfigType",
+              "name": "ProjectConfigType",
               "ofType": null
             },
             "defaultValue": null,
@@ -33121,6 +33104,29 @@
         ],
         "interfaces": null,
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ProjectConfigType",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "AUTO_ENTER",
+            "description": "Auto Enter",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "AUTO_EXIT",
+            "description": "Auto Exit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -41082,6 +41088,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "AUTO_EXIT_CONFIG",
+            "description": "Auto exit config",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "CLIENT_ALERT",
             "description": "Client alert",
