@@ -65,15 +65,10 @@ const TextInput = ({
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
       autoComplete={formAutoCompleteOff}
-      aria-label={ariaLabel}
       {...props}
       sx={sx}
       inputProps={{
-        'aria-label': ariaLabel
-          ? ariaLabel
-          : hiddenLabel
-          ? String(label)
-          : undefined,
+        'aria-label': hiddenLabel ? ariaLabel || String(label) : undefined,
         'aria-labelledby': ariaLabelledBy,
         minLength: min,
         maxLength: max,
