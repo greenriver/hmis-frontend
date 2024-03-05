@@ -47,6 +47,15 @@ export const useProjectDashboardNavItems = (
             ),
           },
           {
+            id: 'externalForms',
+            title: 'External Forms',
+            path: ProjectDashboardRoutes.EXTERNAL_FORM_SUBMISSIONS,
+            permissions: ['canManageExternalFormSubmissions'],
+            hide: !dataCollectionRoles.includes(
+              DataCollectionFeatureRole.ExternalForm
+            ),
+          },
+          {
             id: 'bed-nights',
             title: 'Bed Nights',
             path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,

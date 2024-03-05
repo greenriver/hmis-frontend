@@ -1,0 +1,13 @@
+mutation UpdateExternalFormSubmission(
+  $id: ID!
+  $input: ExternalFormSubmissionInput!
+) {
+  updateExternalFormSubmission(id: $id, input: $input) {
+    externalFormSubmission {
+      ...ExternalFormSubmissionFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

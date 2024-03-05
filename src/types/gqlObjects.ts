@@ -3024,7 +3024,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          ofType: {
+            kind: 'ENUM',
+            name: 'ExternalFormSubmissionStatus',
+            ofType: null,
+          },
         },
       },
       {
@@ -4619,6 +4623,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canManageExternalFormSubmissions',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageIncomingReferrals',
         type: {
           kind: 'NON_NULL',
@@ -4919,6 +4931,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageDeniedReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageExternalFormSubmissions',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6698,13 +6718,24 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'status',
         type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-          },
+          kind: 'ENUM',
+          name: 'ExternalFormSubmissionStatus',
+          ofType: null,
+        },
+      },
+    ],
+  },
+  {
+    name: 'ExternalFormSubmissionInput',
+    args: [
+      { name: 'note', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'spam', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'status',
+        type: {
+          kind: 'ENUM',
+          name: 'ExternalFormSubmissionStatus',
+          ofType: null,
         },
       },
     ],

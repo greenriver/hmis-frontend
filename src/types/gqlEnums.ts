@@ -299,6 +299,7 @@ export const HmisEnums = {
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
     CURRENT_LIVING_SITUATION: 'Current living situation',
+    EXTERNAL_FORM: 'External form',
     REFERRAL_REQUEST: 'Referral request',
     SERVICE: 'Service',
   },
@@ -517,6 +518,7 @@ export const HmisEnums = {
     PROJECT_TERMINATED: 'Project terminated',
     UNKNOWN_DISAPPEARED: 'Unknown/disappeared',
   },
+  ExternalFormSubmissionStatus: { new: 'new', reviewed: 'reviewed' },
   ExternalIdentifierType: {
     CLIENT_ID: 'HMIS ID',
     MCI_ID: 'MCI ID',
