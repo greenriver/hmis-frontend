@@ -25,7 +25,7 @@ import {
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentRole,
-  ClientNameFragment,
+  ClientNameDobSsnFragment,
   FormDefinitionFieldsFragment,
   FormRole,
   FullAssessmentFragment,
@@ -42,7 +42,7 @@ export interface IndividualAssessmentProps {
   formRole?: FormRole;
   // Whether the assessment is embedded in a household workflow
   embeddedInWorkflow?: boolean;
-  client: ClientNameFragment;
+  client: ClientNameDobSsnFragment;
   // Assessment status to use for indicator
   assessmentStatus?: AssessmentStatus;
   // Whether the form is currently visible on the page. Used for household workflow when the assessment is on an inactive tab.
@@ -158,7 +158,7 @@ const IndividualAssessment = ({
   return (
     <AssessmentForm
       assessmentTitle={titleNode}
-      clientId={client.id}
+      client={client}
       navigationTitle={navigationTitle}
       key={assessment?.id}
       formRole={formRole}

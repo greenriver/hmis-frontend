@@ -87,6 +87,7 @@ fragment AllEnrollmentDetails on Enrollment {
   client {
     hudChronic
     ...ClientNameDobVet
+    ssn
     customDataElements {
       ...CustomDataElementFields
     }

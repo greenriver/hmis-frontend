@@ -42,6 +42,7 @@ import {
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
 import {
+  ClientNameDobSsnFragment,
   EnrollmentFieldsFragment,
   FormDefinitionFieldsFragment,
   FormRole,
@@ -51,7 +52,7 @@ import {
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
-  clientId: string;
+  client: ClientNameDobSsnFragment;
   formRole?: FormRole;
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
@@ -75,7 +76,7 @@ interface Props {
 
 const AssessmentForm: React.FC<Props> = ({
   assessment,
-  clientId,
+  client,
   assessmentTitle,
   formRole,
   definition,
@@ -147,9 +148,14 @@ const AssessmentForm: React.FC<Props> = ({
       entryDate: enrollment.entryDate,
       exitDate: enrollment.exitDate,
       projectName: enrollment.project.projectName,
+      clientFirstName: client.firstName,
+      clientMiddleInitial: client.middleName ? client.middleName[0] : '',
+      clientLastName: client.lastName,
+      clientDob: client.dob,
+      clientSsn: client.ssn,
       ...AlwaysPresentLocalConstants,
     }),
-    [enrollment]
+    [enrollment, client]
   );
 
   // Set initial values for the assessment. This happens on initial load,
@@ -351,7 +357,7 @@ const AssessmentForm: React.FC<Props> = ({
             errors={errors}
             locked={locked}
             visible={visible}
-            clientId={clientId}
+            clientId={client.id}
             showSavePrompt
             alwaysShowSaveSlide={!!embeddedInWorkflow}
             FormActionProps={formActionsPropsWithLastUpdated}
@@ -368,7 +374,7 @@ const AssessmentForm: React.FC<Props> = ({
       {definition && (
         <RecordPickerDialog
           id='assessmentPickerDialog'
-          clientId={clientId}
+          clientId={client.id}
           open={dialogOpen}
           role={formRole}
           onSelected={onSelectAutofillRecord}
