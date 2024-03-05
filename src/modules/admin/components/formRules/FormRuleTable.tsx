@@ -54,7 +54,7 @@ const FormRuleColumns: Record<string, ColumnDef<RowType>> = {
         !project &&
         !organization
       ) {
-        return 'All Projects';
+        return <Chip size='small' label='All Projects' />;
       }
 
       return (
@@ -67,15 +67,31 @@ const FormRuleColumns: Record<string, ColumnDef<RowType>> = {
           direction='row'
         >
           {projectType && (
-            <ProjectTypeChip projectType={projectType} variant='filled' />
+            <ProjectTypeChip
+              projectType={projectType}
+              variant='filled'
+              color='secondary'
+            />
           )}
           {funder && (
-            <Chip size='small' label={HmisEnums.FundingSource[funder]} />
+            <Chip
+              size='small'
+              label={HmisEnums.FundingSource[funder]}
+              color='primary'
+            />
           )}
-          {otherFunder && <Chip size='small' label={otherFunder} />}
-          {project && <Chip size='small' label={project.projectName} />}
+          {otherFunder && (
+            <Chip size='small' label={otherFunder} color='primary' />
+          )}
+          {project && (
+            <Chip size='small' label={project.projectName} color='primary' />
+          )}
           {organization && (
-            <Chip size='small' label={organization.organizationName} />
+            <Chip
+              size='small'
+              label={organization.organizationName}
+              color='warning'
+            />
           )}
         </Stack>
       );
