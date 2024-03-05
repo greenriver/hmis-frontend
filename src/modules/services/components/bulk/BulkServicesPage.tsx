@@ -178,24 +178,23 @@ const BulkServicesPage: React.FC<Props> = ({
                           label={null}
                           placeholder='Client Name, DOB, SSN or ID' // FIXME make default?
                           helperText='Search includes all of HMIS'
-                          disabled={!hasSufficientCriteria}
+                          hideSearchButton
                         />
                       </Grid>
-                      {hasSufficientCriteria && (
-                        <Grid item xs={3}>
-                          <RootPermissionsFilter permissions='canEditClients'>
-                            <AddNewClientMenu
-                              disabled={!searchTerm}
-                              projectId={project.id}
-                              onClientAdded={(data) => {
-                                // setSearchTerm(data.client.id);
-                                setFilterParams({ searchTerm: data.client.id });
-                              }}
-                              navigateToHousehold={navigateToHousehold}
-                            />
-                          </RootPermissionsFilter>
-                        </Grid>
-                      )}
+
+                      <Grid item xs={3}>
+                        <RootPermissionsFilter permissions='canEditClients'>
+                          <AddNewClientMenu
+                            disabled={!searchTerm}
+                            projectId={project.id}
+                            onClientAdded={(data) => {
+                              // setSearchTerm(data.client.id);
+                              setFilterParams({ searchTerm: data.client.id });
+                            }}
+                            navigateToHousehold={navigateToHousehold}
+                          />
+                        </RootPermissionsFilter>
+                      </Grid>
                     </Grid>
                   )}
                   {lookupMode === 'list' && (

@@ -1,3 +1,4 @@
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Box, Paper, Stack, TableCell, TableRow } from '@mui/material';
 
 import { isEmpty, isNil, omitBy } from 'lodash-es';
@@ -13,7 +14,6 @@ import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 import ClientTextSearchForm from './ClientTextSearchForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
-import { AddPersonIcon } from '@/components/elements/SemanticIcons';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
@@ -257,7 +257,7 @@ const ClientSearch = () => {
                 data-testid='addClientButton'
                 to={Routes.CREATE_CLIENT}
                 sx={{ px: 4, py: 2 }}
-                Icon={AddPersonIcon}
+                Icon={PersonAddIcon}
                 size='medium'
               >
                 Add New Client
@@ -273,9 +273,13 @@ const ClientSearch = () => {
             onSearch={(text) => handleSubmitSearch({ textSearch: text })}
             label={null}
             size='medium'
+            hideSearchButton
             showSearchTips
             minChars={3}
             onClearSearch={onClearSearch}
+            searchAdornment
+            clearAdornment
+            hideClearButton
           />
         ) : (
           <ClientSearchAdvancedForm

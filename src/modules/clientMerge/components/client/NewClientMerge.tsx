@@ -3,7 +3,7 @@ import { Box, Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
-import BackButtonLink from '@/components/elements/BackButtonLink';
+import BackButton from '@/components/elements/BackButton';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import RouterLink from '@/components/elements/RouterLink';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -21,6 +21,7 @@ import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
+  ClientSearchInput,
   ClientSortOption,
   SearchClientsDocument,
   SearchClientsQuery,
@@ -31,7 +32,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 const NewClientMerge = () => {
   const { client } = useClientDashboardContext();
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchInput, setSearchInput] = useState<ClientSearchInput>();
   const [candidate, setCandidate] = useState<
     ClientFieldsFragment | undefined
   >();
@@ -130,34 +131,35 @@ const NewClientMerge = () => {
             />
           </SsnDobShowContextProvider>
         </TitleCard>
-        <BackButtonLink
+        <BackButton
           to={generateSafePath(ClientDashboardRoutes.MERGE_HISTORY, {
             clientId: client.id,
           })}
         >
           Back to Merge History
-        </BackButtonLink>
+        </BackButton>
 
         <TitleCard title='Merge Client Records'>
           <Stack gap={6}>
             <Grid container alignItems={'flex-start'}>
-              <Grid item xs={12} lg={6} sx={{ px: 2, py: 2 }}>
+              <Grid item xs={12} sx={{ px: 2, py: 2 }}>
                 <ClientTextSearchForm
-                  onSearch={(text) => setSearchTerm(text)}
-                  onClearSearch={() => setSearchTerm('')}
+                  onSearch={(text) => setSearchInput({ textSearch: text })}
+                  searchAdornment
+                  minChars={3}
                 />
               </Grid>
               <Grid item xs></Grid>
             </Grid>
 
-            {searchTerm && (
+            {searchInput && (
               <SsnDobShowContextProvider>
                 <GenericTableWithData<
                   SearchClientsQuery,
                   SearchClientsQueryVariables,
                   ClientFieldsFragment
                 >
-                  queryVariables={{ input: { textSearch: searchTerm } }}
+                  queryVariables={{ input: searchInput }}
                   queryDocument={SearchClientsDocument}
                   columns={columns}
                   pagePath='clientSearch'

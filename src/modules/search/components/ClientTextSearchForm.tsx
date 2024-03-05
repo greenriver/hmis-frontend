@@ -1,30 +1,29 @@
-import { IconButton } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button } from '@mui/material';
+import { Stack } from '@mui/system';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import ClearSearchButton from './ClearSearchButton';
 import ClientTextSearchInput, {
   ClientTextSearchInputProps,
 } from './ClientTextSearchInput';
-import { ClearIcon, SearchIcon } from '@/components/elements/SemanticIcons';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
-interface Props
-  extends Omit<
-    ClientTextSearchInputProps,
-    'onChange' | 'value' | 'searchAdornment' | 'clearAdornment'
-  > {
+interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
   initialValue?: string;
   onSearch: (value: string) => void;
+  hideSearchButton?: boolean;
   minChars?: number;
-  onClearSearch?: VoidFunction; // if not provided, clear button will simply clear the current text value
+  onClearSearch?: VoidFunction;
+  hideClearButton?: boolean;
 }
 
-/**
- * Mini-form for performing a text-based client search.
- * Search and Clear icon buttons are embedded inside the input, as adornments
- */
 const ClientTextSearchForm: React.FC<Props> = ({
   onSearch,
   initialValue,
+  hideSearchButton,
   onClearSearch,
+  hideClearButton,
   minChars = 3,
   ...props
 }) => {
@@ -32,15 +31,9 @@ const ClientTextSearchForm: React.FC<Props> = ({
   const [value, setValue] = useState<string>(initialValue || '');
   const [tooShort, setTooShort] = useState(false);
 
-  const [hasSearched, setHasSearched] = useState(false);
-
   useEffect(() => {
     if (initialValue) setValue(initialValue);
   }, [initialValue]);
-
-  useEffect(() => {
-    setHasSearched(false);
-  }, [value]);
 
   useEffect(() => {
     if (!minChars || !tooShort) return;
@@ -52,47 +45,63 @@ const ClientTextSearchForm: React.FC<Props> = ({
       setTooShort(true);
     } else {
       onSearch(value);
-      setHasSearched(true);
     }
   }, [minChars, onSearch, value]);
 
   const handleClear = useCallback(() => {
     setValue('');
-
     if (onClearSearch) onClearSearch();
   }, [onClearSearch]);
 
+  // Using isTiny as the breakpoint for the mobile appearance here rather than vanilla isMobile
+  // gets us the search box appearing as normal/desktop (with buttons in one line) on reasonably large
+  // tablet screens, but really small phone screens will still have the buttons stack correctly.
+  const isTiny = useIsMobile('sm');
+
+  const buttonSx = {
+    mt: isTiny ? 0 : 3,
+    px: 4,
+    height: 'fit-content',
+    top: '2px',
+  };
   return (
-    <ClientTextSearchInput
-      value={value}
-      onChange={setValue}
-      onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
-      error={tooShort}
-      errorMessage={
-        tooShort ? t<string>('clientSearch.inputTooShort') : undefined
-      }
-      onClearSearch={onClearSearch}
-      InputProps={{
-        sx: { pr: 1 },
-        endAdornment: !hasSearched ? (
-          <IconButton
-            size='small'
-            onClick={handleSearch}
-            disabled={!value}
-            color='primary'
-          >
-            <SearchIcon />
-          </IconButton>
-        ) : (
-          value && (
-            <IconButton size='small' onClick={handleClear}>
-              <ClearIcon />
-            </IconButton>
-          )
-        ),
-      }}
-      {...props}
-    />
+    <Stack
+      direction={{ xs: 'column', sm: 'row' }}
+      alignItems='flex-start'
+      gap={{ xs: 1, sm: 2 }}
+    >
+      <ClientTextSearchInput
+        value={value}
+        onChange={setValue}
+        onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
+        error={tooShort}
+        errorMessage={
+          tooShort ? t<string>('clientSearch.inputTooShort') : undefined
+        }
+        onClearSearch={onClearSearch}
+        {...props}
+      />
+
+      {!hideSearchButton && (
+        <Button
+          startIcon={<SearchIcon />}
+          sx={buttonSx}
+          variant='outlined'
+          onClick={handleSearch}
+        >
+          Search
+        </Button>
+      )}
+      {onClearSearch && !hideClearButton && (
+        <ClearSearchButton
+          onClick={handleClear}
+          sx={buttonSx}
+          disabled={!value}
+        >
+          Clear
+        </ClearSearchButton>
+      )}
+    </Stack>
   );
 };
 

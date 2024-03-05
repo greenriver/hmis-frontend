@@ -26,6 +26,7 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import {
   ClientFieldsFragment,
+  ClientSearchInput,
   ClientSortOption,
   EnrollmentFieldsFragment,
   ExternalIdentifierType,
@@ -115,7 +116,7 @@ const ManageHousehold = ({
     [householdId, onHouseholdIdChange, refetchHousehold]
   );
 
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchInput, setSearchInput] = useState<ClientSearchInput>();
   const [hasSearched, setHasSearched] = useState(false);
 
   if (initialHouseholdId && !household) return <Loading />;
@@ -165,8 +166,9 @@ const ManageHousehold = ({
           <Grid container alignItems={'flex-start'}>
             <Grid item xs={12} md={9} lg={8}>
               <ClientTextSearchForm
-                onSearch={(text) => setSearchTerm(text)}
-                onClearSearch={() => setSearchTerm('')}
+                onSearch={(text) => setSearchInput({ textSearch: text })}
+                searchAdornment
+                minChars={3}
               />
             </Grid>
             <Grid item xs></Grid>
@@ -183,14 +185,14 @@ const ManageHousehold = ({
             </Grid>
           </Grid>
 
-          {searchTerm && (
+          {searchInput && (
             <SsnDobShowContextProvider>
               <GenericTableWithData<
                 SearchClientsQuery,
                 SearchClientsQueryVariables,
                 ClientFieldsFragment
               >
-                queryVariables={{ input: { textSearch: searchTerm } }}
+                queryVariables={{ input: searchInput }}
                 queryDocument={SearchClientsDocument}
                 columns={columns}
                 pagePath='clientSearch'
