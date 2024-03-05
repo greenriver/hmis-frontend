@@ -7,33 +7,22 @@ import {
   Stack,
 } from '@mui/material';
 
-import { sub } from 'date-fns';
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
-import { ServicePeriod } from '../../types';
+import { FixedServiceRanges, ServicePeriod, isFixedRange } from '../../types';
 import CommonDialog from '@/components/elements/CommonDialog';
 import DatePicker from '@/components/elements/input/DatePicker';
-import GenericSelect from '@/components/elements/input/GenericSelect';
+import GenericSelect, {
+  GenericSelectProps,
+} from '@/components/elements/input/GenericSelect';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
-
-const today = new Date();
-
-const fixedRanges: Record<string, ServicePeriod> = {
-  Yesterday: { start: sub(today, { days: 1 }), end: sub(today, { days: 1 }) },
-  LastWeek: { start: sub(today, { days: 7 }), end: today },
-  LastTwoWeeks: { start: sub(today, { days: 14 }), end: today },
-  LastMonth: { start: sub(today, { days: 30 }), end: today },
-};
-type FixedRange = keyof typeof fixedRanges;
-function isFixedRange(value: string): value is FixedRange {
-  return !!value && Object.keys(fixedRanges).includes(value);
-}
 
 const CustomOption = {
   label: 'Custom Date Range',
   id: 'Custom',
-  groupLabel: 'Custom',
 };
+
 const options = [
+  { label: 'Today', id: 'Today' },
   { label: 'Yesterday', id: 'Yesterday' },
   { label: 'Last Week', id: 'LastWeek' },
   { label: 'Last Two Weeks', id: 'LastTwoWeeks' },
@@ -42,6 +31,7 @@ const options = [
 ];
 
 type Option = (typeof options)[0];
+
 interface Props {
   initialValue?: ServicePeriod;
   onChange: (value?: ServicePeriod) => void;
@@ -53,21 +43,30 @@ const ServiceDateRangeSelect: React.FC<Props> = ({
   onChange,
   disabled,
 }) => {
+  // currently selected option. if there is an initial service period from search params, set the initial selection to "custom" with that date range
   const [selected, setSelected] = useState<Option | null>(
     initialValue ? CustomOption : null
   );
+
+  // custom start date
   const [startDate, setStartDate] = useState<Date | null>(
     initialValue?.start || null
   );
+
+  // custom end date
   const [endDate, setEndDate] = useState<Date | null>(
     initialValue?.end || null
   );
+
+  // whether custom dialog is open
   const [open, setOpen] = useState<boolean>(false);
 
   const handleChange = useCallback(
     (_event: SyntheticEvent, value: Option | null) => {
       setSelected(value);
-      if (value && isFixedRange(value.id)) onChange(fixedRanges[value.id]);
+      if (value && isFixedRange(value.id)) {
+        onChange(FixedServiceRanges[value.id]);
+      }
     },
     [onChange]
   );
@@ -78,11 +77,38 @@ const ServiceDateRangeSelect: React.FC<Props> = ({
   }, [onChange]);
 
   useEffect(() => {
-    if (selected?.id !== 'Custom') {
+    // if selection changes and its not custom, clear out the start/end dates
+    if (selected?.id !== CustomOption.id) {
       setStartDate(null);
       setEndDate(null);
     }
   }, [selected]);
+
+  const renderOption: GenericSelectProps<Option, false, false>['renderOption'] =
+    useCallback(
+      (props: React.HTMLAttributes<HTMLLIElement>, option: Option) => {
+        if (option.id === CustomOption.id) {
+          return (
+            <li {...props}>
+              <Link
+                component='button'
+                variant='body1'
+                onClick={() => setOpen(true)}
+                sx={{
+                  width: '100%',
+                  textAlign: 'left',
+                }}
+              >
+                {option.label}
+              </Link>
+            </li>
+          );
+        }
+
+        return <li {...props}>{option.label}</li>;
+      },
+      []
+    );
 
   return (
     <>
@@ -95,38 +121,23 @@ const ServiceDateRangeSelect: React.FC<Props> = ({
           sx={{ width: '60%' }}
           blurOnSelect
           disabled={disabled}
-          getOptionLabel={(option) =>
-            option.id === 'Custom' &&
-            selected === option &&
-            startDate &&
-            endDate
-              ? `${formatDateForDisplay(startDate)} - ${formatDateForDisplay(
-                  endDate
-                )}`
-              : option.label
-          }
-          textInputProps={{ placeholder: 'Select Date Range...' }}
-          renderOption={(props, option) => {
-            const datePickerLink = (
-              <Link
-                component='button'
-                variant='body1'
-                onClick={() => setOpen(true)}
-                sx={{
-                  width: '100%',
-                  textAlign: 'left',
-                }}
-              >
-                {option.label}
-              </Link>
-            );
+          getOptionLabel={(option) => {
+            // If custom option is selected, label it as the date range
+            if (
+              option.id === 'Custom' &&
+              selected === option &&
+              startDate &&
+              endDate
+            ) {
+              return `${formatDateForDisplay(
+                startDate
+              )} - ${formatDateForDisplay(endDate)}`;
+            }
 
-            return (
-              <li {...props}>
-                {option.id === 'Custom' ? datePickerLink : option.label}
-              </li>
-            );
+            return option.label;
           }}
+          textInputProps={{ placeholder: 'Select Date Range...' }}
+          renderOption={renderOption}
           disableClearable
         />
         <Button
@@ -140,12 +151,7 @@ const ServiceDateRangeSelect: React.FC<Props> = ({
       </Stack>
       <CommonDialog
         open={open}
-        onClose={() => {
-          setOpen(false);
-          setStartDate(null);
-          setEndDate(null);
-          setSelected(null);
-        }}
+        onClose={() => setOpen(false)}
         enableBackdropClick
       >
         <DialogTitle>Service Period</DialogTitle>
@@ -170,13 +176,10 @@ const ServiceDateRangeSelect: React.FC<Props> = ({
         <DialogActions>
           <Button
             fullWidth
+            disabled={!startDate || !endDate}
             onClick={() => {
               if (startDate && endDate) {
                 onChange({ start: startDate, end: endDate });
-              } else {
-                setStartDate(null);
-                setEndDate(null);
-                onChange(undefined);
               }
               setOpen(false);
             }}
