@@ -1,3 +1,4 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ClearIcon from '@mui/icons-material/Clear';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -32,4 +33,5 @@ export {
   PersonAddIcon as AddPersonIcon,
   PeopleIcon as HouseholdIcon,
   ClearIcon as ClearIcon,
+  ArrowBackIcon as BackIcon,
 };
