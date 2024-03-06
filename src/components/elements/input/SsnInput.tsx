@@ -24,6 +24,7 @@ const SsnInput = ({
   helperText,
   onlylast4 = false,
   warnIfEmptyTreatment,
+  ariaLabel,
   ...props
 }: SsnInputProps) => {
   const baseInputProps: TextFieldProps = {

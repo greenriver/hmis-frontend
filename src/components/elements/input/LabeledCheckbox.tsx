@@ -25,6 +25,7 @@ const LabeledCheckbox = ({
   helperText,
   horizontal = false,
   warnIfEmptyTreatment: _ignored,
+  ariaLabel,
   ...props
 }: Props & DynamicInputCommonProps) => {
   const labelSx = horizontal
@@ -60,7 +61,13 @@ const LabeledCheckbox = ({
     <FormControl>
       <FormGroup sx={horizontal ? horizontalInputSx : undefined}>
         <FormControlLabel
-          control={<Checkbox sx={checkboxSx} onKeyDown={onKeyDown} />}
+          control={
+            <Checkbox
+              sx={checkboxSx}
+              onKeyDown={onKeyDown}
+              aria-label={ariaLabel}
+            />
+          }
           labelPlacement={horizontal ? 'start' : 'end'}
           label={label}
           sx={{
