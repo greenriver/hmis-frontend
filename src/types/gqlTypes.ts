@@ -2697,7 +2697,7 @@ export type ExternalFormSubmission = {
 
 export type ExternalFormSubmissionFilterOptions = {
   status?: InputMaybe<ExternalFormSubmissionStatus>;
-  submittedAt?: InputMaybe<Scalars['ISO8601DateTime']['input']>;
+  submittedDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
 };
 
 /** External Form Submission Input */
@@ -5170,6 +5170,7 @@ export type ProjectEnrollmentsArgs = {
 
 export type ProjectExternalFormSubmissionsArgs = {
   filters?: InputMaybe<ExternalFormSubmissionFilterOptions>;
+  formDefinitionIdentifier: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -17761,13 +17762,14 @@ export type UpdateExternalFormSubmissionMutation = {
   } | null;
 };
 
-export type ProjectExternalFormSubmissionsQueryVariables = Exact<{
+export type GetProjectExternalFormSubmissionsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  formDefinitionIdentifier: Scalars['ID']['input'];
 }>;
 
-export type ProjectExternalFormSubmissionsQuery = {
+export type GetProjectExternalFormSubmissionsQuery = {
   __typename?: 'Query';
   project?: {
     __typename?: 'Project';
@@ -36007,15 +36009,20 @@ export type UpdateExternalFormSubmissionMutationOptions =
     UpdateExternalFormSubmissionMutation,
     UpdateExternalFormSubmissionMutationVariables
   >;
-export const ProjectExternalFormSubmissionsDocument = gql`
-  query projectExternalFormSubmissions(
+export const GetProjectExternalFormSubmissionsDocument = gql`
+  query GetProjectExternalFormSubmissions(
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
+    $formDefinitionIdentifier: ID!
   ) {
     project(id: $id) {
       id
-      externalFormSubmissions(limit: $limit, offset: $offset) {
+      externalFormSubmissions(
+        limit: $limit
+        offset: $offset
+        formDefinitionIdentifier: $formDefinitionIdentifier
+      ) {
         offset
         limit
         nodesCount
@@ -36029,56 +36036,57 @@ export const ProjectExternalFormSubmissionsDocument = gql`
 `;
 
 /**
- * __useProjectExternalFormSubmissionsQuery__
+ * __useGetProjectExternalFormSubmissionsQuery__
  *
- * To run a query within a React component, call `useProjectExternalFormSubmissionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectExternalFormSubmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetProjectExternalFormSubmissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectExternalFormSubmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectExternalFormSubmissionsQuery({
+ * const { data, loading, error } = useGetProjectExternalFormSubmissionsQuery({
  *   variables: {
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      formDefinitionIdentifier: // value for 'formDefinitionIdentifier'
  *   },
  * });
  */
-export function useProjectExternalFormSubmissionsQuery(
+export function useGetProjectExternalFormSubmissionsQuery(
   baseOptions: Apollo.QueryHookOptions<
-    ProjectExternalFormSubmissionsQuery,
-    ProjectExternalFormSubmissionsQueryVariables
+    GetProjectExternalFormSubmissionsQuery,
+    GetProjectExternalFormSubmissionsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    ProjectExternalFormSubmissionsQuery,
-    ProjectExternalFormSubmissionsQueryVariables
-  >(ProjectExternalFormSubmissionsDocument, options);
+    GetProjectExternalFormSubmissionsQuery,
+    GetProjectExternalFormSubmissionsQueryVariables
+  >(GetProjectExternalFormSubmissionsDocument, options);
 }
-export function useProjectExternalFormSubmissionsLazyQuery(
+export function useGetProjectExternalFormSubmissionsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    ProjectExternalFormSubmissionsQuery,
-    ProjectExternalFormSubmissionsQueryVariables
+    GetProjectExternalFormSubmissionsQuery,
+    GetProjectExternalFormSubmissionsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    ProjectExternalFormSubmissionsQuery,
-    ProjectExternalFormSubmissionsQueryVariables
-  >(ProjectExternalFormSubmissionsDocument, options);
+    GetProjectExternalFormSubmissionsQuery,
+    GetProjectExternalFormSubmissionsQueryVariables
+  >(GetProjectExternalFormSubmissionsDocument, options);
 }
-export type ProjectExternalFormSubmissionsQueryHookResult = ReturnType<
-  typeof useProjectExternalFormSubmissionsQuery
+export type GetProjectExternalFormSubmissionsQueryHookResult = ReturnType<
+  typeof useGetProjectExternalFormSubmissionsQuery
 >;
-export type ProjectExternalFormSubmissionsLazyQueryHookResult = ReturnType<
-  typeof useProjectExternalFormSubmissionsLazyQuery
+export type GetProjectExternalFormSubmissionsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectExternalFormSubmissionsLazyQuery
 >;
-export type ProjectExternalFormSubmissionsQueryResult = Apollo.QueryResult<
-  ProjectExternalFormSubmissionsQuery,
-  ProjectExternalFormSubmissionsQueryVariables
+export type GetProjectExternalFormSubmissionsQueryResult = Apollo.QueryResult<
+  GetProjectExternalFormSubmissionsQuery,
+  GetProjectExternalFormSubmissionsQueryVariables
 >;
 export const UpdateFormDefinitionDocument = gql`
   mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {

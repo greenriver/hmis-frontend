@@ -18852,11 +18852,11 @@
             "deprecationReason": null
           },
           {
-            "name": "submittedAt",
+            "name": "submittedDate",
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "ISO8601DateTime",
+              "name": "ISO8601Date",
               "ofType": null
             },
             "defaultValue": null,
@@ -31983,6 +31983,22 @@
                   "kind": "INPUT_OBJECT",
                   "name": "ExternalFormSubmissionFilterOptions",
                   "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "formDefinitionIdentifier",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,

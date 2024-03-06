@@ -1,11 +1,16 @@
-query projectExternalFormSubmissions(
+query GetProjectExternalFormSubmissions(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
+  $formDefinitionIdentifier: ID!
 ) {
   project(id: $id) {
     id
-    externalFormSubmissions(limit: $limit, offset: $offset) {
+    externalFormSubmissions(
+      limit: $limit
+      offset: $offset
+      formDefinitionIdentifier: $formDefinitionIdentifier
+    ) {
       offset
       limit
       nodesCount
