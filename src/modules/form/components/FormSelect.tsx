@@ -148,6 +148,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
       onChange={handleChange}
       textInputProps={{
         ...props.textInputProps,
+        ariaLabel,
         ariaLabelledBy,
         ariaLabel,
         placeholder,

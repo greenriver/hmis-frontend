@@ -2,6 +2,7 @@ import {
   Grid,
   Stack,
   Table,
+  TableBody,
   TableCell,
   TableHead,
   TableRow,
@@ -128,23 +129,25 @@ const TableGroup = ({
             ))}
           </TableRow>
         </TableHead>
-        {item.item?.map((rowItem) => (
-          <TableRow key={rowItem.linkId}>
-            {rowItem.item?.map((cellItem, index) => (
-              <TableCell key={cellItem.linkId}>
-                {renderChildItem(
-                  // remove helper text, it is shown in table header
-                  { ...cellItem, helperText: null },
-                  // hide label for each input, since they are labeled by the header
-                  {
-                    noLabel: true,
-                    inputProps: { ariaLabelledBy: tableHeaderInfo[index].id },
-                  }
-                )}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
+        <TableBody>
+          {item.item?.map((rowItem) => (
+            <TableRow key={rowItem.linkId}>
+              {rowItem.item?.map((cellItem, index) => (
+                <TableCell key={cellItem.linkId}>
+                  {renderChildItem(
+                    // remove helper text, it is shown in table header
+                    { ...cellItem, helperText: null },
+                    // hide label for each input, since they are labeled by the header
+                    {
+                      noLabel: true,
+                      inputProps: { ariaLabelledBy: tableHeaderInfo[index].id },
+                    }
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
     </Grid>
   );
