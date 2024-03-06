@@ -6723,6 +6723,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           ofType: null,
         },
       },
+      {
+        name: 'submittedAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
     ],
   },
   {

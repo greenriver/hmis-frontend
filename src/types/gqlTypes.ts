@@ -2697,6 +2697,7 @@ export type ExternalFormSubmission = {
 
 export type ExternalFormSubmissionFilterOptions = {
   status?: InputMaybe<ExternalFormSubmissionStatus>;
+  submittedAt?: InputMaybe<Scalars['ISO8601DateTime']['input']>;
 };
 
 /** External Form Submission Input */
