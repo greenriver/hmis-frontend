@@ -23,7 +23,6 @@ const ProjectServicesTable = ({
   projectId: string;
   columns?: typeof SERVICE_COLUMNS;
 }) => {
-  // const columns: ColumnDef<ExternalFormSubmissionFields>[] = useMemo(() => {
   const displayColumns: ColumnDef<ServiceFields>[] = useMemo(() => {
     if (columns) return columns;
     return [
