@@ -12690,18 +12690,6 @@ export type ClientNameDobVetFragment = {
   nameSuffix?: string | null;
 };
 
-export type ClientNameDobSsnFragment = {
-  __typename?: 'Client';
-  ssn?: string | null;
-  dob?: string | null;
-  id: string;
-  lockVersion: number;
-  firstName?: string | null;
-  middleName?: string | null;
-  lastName?: string | null;
-  nameSuffix?: string | null;
-};
-
 export type ClientNameObjectFieldsFragment = {
   __typename?: 'ClientName';
   id: string;
@@ -30584,14 +30572,6 @@ export const ClientFieldsFragmentDoc = gql`
   ${ClientAddressFieldsFragmentDoc}
   ${ClientContactPointFieldsFragmentDoc}
   ${ClientAlertFieldsFragmentDoc}
-`;
-export const ClientNameDobSsnFragmentDoc = gql`
-  fragment ClientNameDobSsn on Client {
-    ...ClientName
-    ssn
-    dob
-  }
-  ${ClientNameFragmentDoc}
 `;
 export const ClientImageFieldsFragmentDoc = gql`
   fragment ClientImageFields on ClientImage {

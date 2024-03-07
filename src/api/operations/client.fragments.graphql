@@ -80,12 +80,6 @@ fragment ClientNameDobVet on Client {
   veteranStatus
 }
 
-fragment ClientNameDobSsn on Client {
-  ...ClientName
-  ssn
-  dob
-}
-
 fragment ClientNameObjectFields on ClientName {
   id
   first

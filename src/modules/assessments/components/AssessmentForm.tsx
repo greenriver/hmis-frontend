@@ -24,6 +24,7 @@ import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
+import { ClientNameDobSsn } from '@/modules/assessments/components/IndividualAssessment';
 import { ErrorState, hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
@@ -42,7 +43,6 @@ import {
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
 import {
-  ClientNameDobSsnFragment,
   EnrollmentFieldsFragment,
   FormDefinitionFieldsFragment,
   FormRole,
@@ -52,7 +52,7 @@ import {
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
-  client: ClientNameDobSsnFragment;
+  client: ClientNameDobSsn;
   formRole?: FormRole;
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
