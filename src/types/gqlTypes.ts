@@ -4356,6 +4356,8 @@ export enum PickListType {
   /** Enrollments for the client, including WIP and Exited. */
   EnrollmentsForClient = 'ENROLLMENTS_FOR_CLIENT',
   EnrollmentAuditEventRecordTypes = 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
+  /** External form types for the project. */
+  ExternalFormTypesForProject = 'EXTERNAL_FORM_TYPES_FOR_PROJECT',
   Geocode = 'GEOCODE',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
@@ -17720,6 +17722,53 @@ export type ExternalFormSubmissionFieldsFragment = {
     cacheKey: string;
     title: string;
   };
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
 };
 
 export type UpdateExternalFormSubmissionMutationVariables = Exact<{
@@ -17744,6 +17793,53 @@ export type UpdateExternalFormSubmissionMutation = {
         cacheKey: string;
         title: string;
       };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        displayHooks: Array<DisplayHook>;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        }> | null;
+      }>;
     };
     errors: Array<{
       __typename?: 'ValidationError';
@@ -17764,9 +17860,10 @@ export type UpdateExternalFormSubmissionMutation = {
 
 export type GetProjectExternalFormSubmissionsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
+  formDefinitionIdentifier: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  formDefinitionIdentifier: Scalars['ID']['input'];
+  filters?: InputMaybe<ExternalFormSubmissionFilterOptions>;
 }>;
 
 export type GetProjectExternalFormSubmissionsQuery = {
@@ -17792,6 +17889,53 @@ export type GetProjectExternalFormSubmissionsQuery = {
           cacheKey: string;
           title: string;
         };
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -31210,7 +31354,11 @@ export const ExternalFormSubmissionFieldsFragmentDoc = gql`
       cacheKey
       title
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -36012,9 +36160,10 @@ export type UpdateExternalFormSubmissionMutationOptions =
 export const GetProjectExternalFormSubmissionsDocument = gql`
   query GetProjectExternalFormSubmissions(
     $id: ID!
+    $formDefinitionIdentifier: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $formDefinitionIdentifier: ID!
+    $filters: ExternalFormSubmissionFilterOptions = null
   ) {
     project(id: $id) {
       id
@@ -36022,6 +36171,7 @@ export const GetProjectExternalFormSubmissionsDocument = gql`
         limit: $limit
         offset: $offset
         formDefinitionIdentifier: $formDefinitionIdentifier
+        filters: $filters
       ) {
         offset
         limit
@@ -36048,9 +36198,10 @@ export const GetProjectExternalFormSubmissionsDocument = gql`
  * const { data, loading, error } = useGetProjectExternalFormSubmissionsQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      formDefinitionIdentifier: // value for 'formDefinitionIdentifier'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *      formDefinitionIdentifier: // value for 'formDefinitionIdentifier'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

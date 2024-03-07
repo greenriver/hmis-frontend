@@ -9,4 +9,7 @@ fragment ExternalFormSubmissionFields on ExternalFormSubmission {
     cacheKey
     title
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }

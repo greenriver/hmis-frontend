@@ -91,6 +91,7 @@ import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
+import ProjectSubmissions from '@/modules/projects/components/ProjectSubmissions';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
 import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
@@ -305,6 +306,14 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectEditRoute>
                 <ProjectCoc />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.EXTERNAL_FORM_SUBMISSIONS,
+            element: (
+              <ProjectEditRoute>
+                <ProjectSubmissions />
               </ProjectEditRoute>
             ),
           },
