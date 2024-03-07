@@ -1,4 +1,3 @@
-import { Grid } from '@mui/material';
 import React, { ReactNode } from 'react';
 
 import {
@@ -10,9 +9,9 @@ import {
 } from '../../types';
 import { isEnabled } from '../../util/formUtil';
 
-import DynamicViewField from './DynamicViewField';
 import DynamicViewGroup from './DynamicViewGroup';
 
+import DynamicViewItem from '@/modules/form/components/viewable/DynamicViewItem';
 import {
   DisabledDisplay,
   FormDefinitionJson,
@@ -75,30 +74,19 @@ const DynamicViewFields: React.FC<Props> = ({
       );
     }
 
-    const itemComponent = (
-      <Grid item key={item.linkId}>
-        <DynamicViewField
-          item={item}
-          value={
-            isDisabled &&
-            item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
-              ? undefined
-              : values[item.linkId]
-          }
-          disabled={isDisabled}
-          nestingLevel={nestingLevel}
-          horizontal={horizontal}
-          pickListArgs={pickListArgs}
-          // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
-          adjustValue={itemChanged}
-          {...props}
-        />
-      </Grid>
+    return (
+      <DynamicViewItem
+        key={item.linkId}
+        item={item}
+        isDisabled={isDisabled}
+        horizontal={horizontal}
+        nestingLevel={nestingLevel}
+        values={values}
+        renderFn={renderFn}
+        pickListArgs={pickListArgs}
+        itemChanged={itemChanged}
+      />
     );
-    if (renderFn) {
-      return renderFn(itemComponent);
-    }
-    return itemComponent;
   };
 
   return <>{definition.item.map((item) => renderItem(item, 0))}</>;

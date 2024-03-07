@@ -114,6 +114,16 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       );
     case ItemType.Text:
     case ItemType.String:
+      if (item.component === Component.Ssn) {
+        return (
+          <TextContent
+            {...commonProps}
+            renderValue={(val) =>
+              `${val.slice(0, 3)}-${val.slice(3, 5)}-${val.slice(5, 9)}`
+            }
+          />
+        );
+      }
       return <TextContent {...commonProps} />;
     case ItemType.Integer:
       if (item.component === Component.MinutesDuration) {
