@@ -13,6 +13,7 @@ import Image from './item/Image';
 
 import TextContent from './item/TextContent';
 
+import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
@@ -38,9 +39,13 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 
   return (
     <Stack direction='row' spacing={1}>
-      <Typography variant='body2' fontWeight={horizontal ? undefined : 600}>
+      <CommonHtmlContent
+        variant='body2'
+        fontWeight={horizontal ? undefined : 600}
+        component='p'
+      >
         {label}
-      </Typography>
+      </CommonHtmlContent>
     </Stack>
   );
 };
