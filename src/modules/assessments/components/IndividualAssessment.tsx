@@ -33,7 +33,7 @@ import {
 
 export type ClientNameDobSsn = ClientNameFragment & {
   ssn?: string;
-  dob?: string;
+  dob?: string | null;
 };
 
 export interface IndividualAssessmentProps {
