@@ -178,7 +178,7 @@ const BulkServicesPage: React.FC<Props> = ({
             title='Find Client'
             padded
             disabled={disableClientSearch}
-            disabledText='Select date to search'
+            disabledText='Enter Service Details to Search'
           >
             <BulkServiceSearchToggle
               value={lookupMode}
