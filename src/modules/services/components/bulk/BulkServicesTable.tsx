@@ -3,7 +3,7 @@ import { ReactNode, useCallback, useState } from 'react';
 import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
 import { ServicePeriod } from '../../types';
 import AssignServiceButton from './AssignServiceButton';
-import BulkAssignServicesButtons from './BulkAssignServicesButtons';
+import MultiAssignServiceButton from './MultiAssignServiceButton';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -40,12 +40,6 @@ interface Props {
 
 type RowType = BulkServicesClientSearchQuery['clientSearch']['nodes'][0];
 
-const NaText = () => (
-  <NotCollectedText variant='inherit' color='text.disabled'>
-    N/A
-  </NotCollectedText>
-);
-
 const BulkServicesTable: React.FC<Props> = ({
   projectId,
   serviceTypeId,
@@ -61,15 +55,21 @@ const BulkServicesTable: React.FC<Props> = ({
 
   const getColumnDefs = useCallback(
     (_rows: RowType[], loading?: boolean) => {
+      const notEnrolledText = (
+        <NotCollectedText variant='inherit' color='text.disabled'>
+          Not enrolled on {formatDateForDisplay(serviceDate, 'M/d')}
+        </NotCollectedText>
+      );
       return [
-        // CLIENT_COLUMNS.id,
+        { ...CLIENT_COLUMNS.id, header: 'ID' },
         CLIENT_COLUMNS.first,
         CLIENT_COLUMNS.last,
         CLIENT_COLUMNS.dobAge,
         {
           header: 'Entry Date',
           render: (row: RowType) => {
-            if (!row.activeEnrollment) return <NaText />;
+            if (!row.activeEnrollment) return notEnrolledText;
+
             return (
               <RouterLink
                 to={generateSafePath(
@@ -86,7 +86,7 @@ const BulkServicesTable: React.FC<Props> = ({
         {
           header: `Last ${serviceTypeName} Date`,
           render: (row: RowType) => {
-            if (!row.activeEnrollment) return <NaText />;
+            if (!row.activeEnrollment) return notEnrolledText;
 
             const noService = (
               <NotCollectedText variant='inherit' color='text.disabled'>
@@ -188,7 +188,7 @@ const BulkServicesTable: React.FC<Props> = ({
           title,
           renderBulkAction: (_selectedClientIds, selectedRows) => {
             return (
-              <BulkAssignServicesButtons
+              <MultiAssignServiceButton
                 clients={selectedRows}
                 dateProvided={serviceDate}
                 projectId={projectId}

@@ -24,11 +24,13 @@ type LoadingStates = {
   assign: boolean;
   remove: boolean;
 };
+
 const initialLoadingState = {
   assign: false,
   remove: false,
 };
-const BulkAssignServicesButtons: React.FC<Props> = ({
+
+const MultiAssignServiceButton: React.FC<Props> = ({
   clients,
   dateProvided,
   projectId,
@@ -39,21 +41,23 @@ const BulkAssignServicesButtons: React.FC<Props> = ({
 }) => {
   const [loading, setLoading] = useState<LoadingStates>(initialLoadingState);
 
-  const { toAssign, toRemove } = useMemo(() => {
+  const { toAssign, toRemove, numToEnroll } = useMemo(() => {
     const toAssign: string[] = [];
     const toRemove: string[] = [];
+    let numToEnroll: number = 0;
     clients.forEach(({ id, activeEnrollment }) => {
       if (activeEnrollment) {
         if (activeEnrollment.services.nodesCount === 0) {
           toAssign.push(id); // client to assign
         } else {
-          toRemove.push(id); // client with services to remove
+          toRemove.push(id); // client with service(s) to remove
         }
       } else {
+        numToEnroll += 1;
         toAssign.push(id); // client to assign + enroll
       }
     });
-    return { toAssign, toRemove };
+    return { toAssign, toRemove, numToEnroll };
   }, [clients]);
 
   const handleAssign = useCallback(() => {
@@ -74,16 +78,15 @@ const BulkAssignServicesButtons: React.FC<Props> = ({
   }, [bulkAssign, cocCode, dateProvided, projectId, serviceTypeId, toAssign]);
 
   const handleRemove = useCallback(() => {
+    // Service IDs to remove
     const serviceIds = clients
       .map((c) => (c.activeEnrollment?.services?.nodes || []).map((s) => s.id))
       .flat();
 
     // Set loading indicator on Remove button
     setLoading((old) => ({ ...old, remove: true }));
-
-    bulkRemove({
-      variables: { projectId, serviceIds },
-    });
+    // Perform mutation
+    bulkRemove({ variables: { projectId, serviceIds } });
   }, [clients, bulkRemove, projectId]);
 
   const disabledMessage =
@@ -98,7 +101,9 @@ const BulkAssignServicesButtons: React.FC<Props> = ({
         disabled={toAssign.length === 0}
         loading={loading.assign}
       >
-        {`Assign (${toAssign.length})`}
+        {numToEnroll > 0
+          ? `Enroll (${numToEnroll}) + Assign (${toAssign.length})`
+          : `Assign (${toAssign.length})`}
       </LoadingButton>
       <ButtonTooltipContainer title={disabledMessage}>
         <LoadingButton
@@ -114,4 +119,4 @@ const BulkAssignServicesButtons: React.FC<Props> = ({
   );
 };
 
-export default BulkAssignServicesButtons;
+export default MultiAssignServiceButton;
