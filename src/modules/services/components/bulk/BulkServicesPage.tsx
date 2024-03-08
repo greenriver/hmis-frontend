@@ -115,6 +115,8 @@ const BulkServicesPage: React.FC<Props> = ({
           navigateToHousehold={() =>
             navigate({
               pathname: generateSafePath(route, { projectId: project.id }),
+              // when navigating to the household creation page, we store the previous URL as a search
+              // param so that it can navigate back with a prefilled household id search
               search: prevSearchParam(),
             })
           }
