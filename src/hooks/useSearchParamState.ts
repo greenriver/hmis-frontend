@@ -113,11 +113,11 @@ const useSearchParamsState = (paramsDefinition: SearchParamsStateType) => {
     const currentParams = getAllCurrentParams(searchParams);
     for (const key in newValues) {
       if (Object.prototype.hasOwnProperty.call(newValues, key)) {
-        const value = newValues[key];
+        let value = newValues[key];
 
         if (paramsDefinition[key].type === 'date' && isDate(value)) {
-          // serialize date
-          newValues[key] = formatDateForGql(value);
+          // serialize date. if it is invalid, it will be null
+          value = newValues[key] = formatDateForGql(value);
         }
         if (
           isNil(value) ||

@@ -3,8 +3,8 @@ import pluralize from 'pluralize';
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ServiceTypeSelect from '../ServiceTypeSelect';
+import BulkServiceSearchToggle from './BulkServiceSearchToggle';
 import BulkServicesTable from './BulkServicesTable';
-import ClientLookupForServiceToggle from './ClientLookupForServiceToggle';
 import ServiceDateRangeSelect from './ServiceDateRangeSelect';
 import StepCard, { StepCardTitle } from './StepCard';
 import DatePicker from '@/components/elements/input/DatePicker';
@@ -42,24 +42,53 @@ const BulkServicesPage: React.FC<Props> = ({
   title = 'Bulk Service Assignment',
 }) => {
   const { project } = useProjectDashboardContext();
-  const multipleCocs = project.projectCocs.nodesCount > 1;
+  const navigate = useNavigate();
 
-  const [filterParams, setFilterParams] = useSearchParamsState(filtersDefaults);
+  // If project operates in multiple CoCs, we need to show CoC picker
+  // so that we can set EnrollmentCoC when we enroll new clients
+  const showCocPicker = project.projectCocs.nodesCount > 1;
 
-  const { coc, serviceDate, searchTerm, mode: lookupMode } = filterParams;
+  // If Service Type was passed in as a prop, we don't let the user change it
+  const showServiceTypePicker = !serviceTypeIdProp;
+
+  // State is stored in Search Params so we can preserve it on navigation
+  const [
+    {
+      coc,
+      serviceDate,
+      searchTerm,
+      mode: lookupMode,
+      servicePeriodStart,
+      servicePeriodEnd,
+      serviceTypeId: serviceTypeIdParam,
+    },
+    setFilterParams,
+  ] = useSearchParamsState(filtersDefaults);
+
+  const serviceTypeId = useMemo(
+    () => serviceTypeIdProp || serviceTypeIdParam,
+    [serviceTypeIdProp, serviceTypeIdParam]
+  );
+
   const servicePeriod = useMemo(() => {
-    if (!filterParams.servicePeriodStart || !filterParams.servicePeriodEnd) {
+    if (!servicePeriodStart || !servicePeriodEnd) {
       return undefined;
     }
     return {
-      start: filterParams.servicePeriodStart,
-      end: filterParams.servicePeriodEnd,
+      start: servicePeriodStart,
+      end: servicePeriodEnd,
     };
-  }, [filterParams]);
+  }, [servicePeriodStart, servicePeriodEnd]);
 
-  const serviceTypeId = serviceTypeIdProp || filterParams.serviceTypeId;
-  const navigate = useNavigate();
+  // whether to disable "step 2"
+  const disableClientSearch = useMemo(() => {
+    if (!serviceDate) return true; // required for search
+    if (!serviceTypeId) return true; // required for search
+    if (showCocPicker && !coc) return true;
+    return false;
+  }, [coc, showCocPicker, serviceDate, serviceTypeId]);
 
+  // whether we have enough criteria to perform the client search
   const sufficientSearchCriteria = useMemo(() => {
     if (lookupMode === 'search') {
       return !!searchTerm && searchTerm.length >= 3;
@@ -69,14 +98,6 @@ const BulkServicesPage: React.FC<Props> = ({
     }
     return false;
   }, [lookupMode, searchTerm, servicePeriod]);
-
-  const hasServiceTypeSelection = !serviceTypeIdProp;
-  const hasSufficientCriteria = useMemo(() => {
-    if (!serviceDate) return false;
-    if (!serviceTypeId) return false;
-    if (multipleCocs && !coc) return false;
-    return true;
-  }, [coc, multipleCocs, serviceDate, serviceTypeId]);
 
   const addNewClientMenuButton = useMemo(() => {
     const route = serviceTypeIdProp
@@ -102,19 +123,19 @@ const BulkServicesPage: React.FC<Props> = ({
   return (
     <>
       <PageTitle title={title} />
-      <Grid container rowSpacing={2}>
+      <Grid container rowSpacing={1}>
         <Grid item sm={12} md={8} lg={8} xl={4}>
           <StepCard
             step='1'
             title={
-              hasServiceTypeSelection
+              showServiceTypePicker
                 ? 'Enter Service Details'
                 : `Select ${serviceTypeName} Date`
             }
             padded
           >
             <Stack gap={2}>
-              {hasServiceTypeSelection && (
+              {showServiceTypePicker && (
                 <ServiceTypeSelect
                   projectId={project.id}
                   value={serviceTypeId ? { code: serviceTypeId } : null}
@@ -132,13 +153,13 @@ const BulkServicesPage: React.FC<Props> = ({
                 sx={{ width: '200px' }}
                 label={
                   // hide label if its the only input field
-                  hasServiceTypeSelection || multipleCocs
+                  showServiceTypePicker || showCocPicker
                     ? `${serviceTypeName} Date`
                     : null
                 }
                 ariaLabel={`${serviceTypeName} Date`}
               />
-              {multipleCocs && (
+              {showCocPicker && (
                 <CocPicker
                   project={project}
                   value={coc}
@@ -156,10 +177,10 @@ const BulkServicesPage: React.FC<Props> = ({
             step='2'
             title='Find Client'
             padded
-            disabled={!hasSufficientCriteria}
+            disabled={disableClientSearch}
             disabledText='Select date to search'
           >
-            <ClientLookupForServiceToggle
+            <BulkServiceSearchToggle
               value={lookupMode}
               serviceTypeName={serviceTypeName}
               onChange={(mode) => {
@@ -174,24 +195,23 @@ const BulkServicesPage: React.FC<Props> = ({
             <Box sx={{ mt: 2 }}>
               {lookupMode === 'search' && (
                 <ClientTextSearchForm
-                  initialValue={filterParams.searchTerm}
+                  initialValue={searchTerm}
                   onSearch={(value) => setFilterParams({ searchTerm: value })}
                   onClearSearch={() => setFilterParams({ searchTerm: null })}
                   label={null}
-                  placeholder='Client Name, DOB, SSN or ID' // FIXME make default?
+                  placeholder='Client Name, DOB, SSN or ID'
                   helperText='Search includes all of HMIS'
                   ClearButtonProps={{
                     color: 'error',
                     startIcon: null,
                     variant: 'outlined',
                     children: 'Clear Results',
-                    disabled: !filterParams.searchTerm,
+                    disabled: !searchTerm,
                   }}
                 />
               )}
               {lookupMode === 'list' && (
                 <ServiceDateRangeSelect
-                  disabled={!hasSufficientCriteria}
                   initialValue={servicePeriod}
                   onChange={(servicePeriod) =>
                     setFilterParams({
@@ -206,13 +226,13 @@ const BulkServicesPage: React.FC<Props> = ({
         </Grid>
         <Grid item xs={12}></Grid>
         <Grid item xs={12}>
-          {sufficientSearchCriteria && serviceTypeId ? (
+          {sufficientSearchCriteria && !disableClientSearch ? (
             <Paper>
               <BulkServicesTable
                 projectId={project.id}
                 serviceTypeName={serviceTypeName}
                 serviceTypeId={serviceTypeId}
-                serviceDate={serviceDate || new Date()}
+                serviceDate={serviceDate}
                 searchTerm={searchTerm}
                 servicePeriod={servicePeriod}
                 cocCode={coc?.code}

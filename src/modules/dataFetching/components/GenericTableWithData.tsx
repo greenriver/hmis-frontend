@@ -370,7 +370,7 @@ const GenericTableWithData = <
             nonTablePagination ? undefined : tablePaginationProps
           }
           columns={showColumnDefs}
-          noData={noDataValue}
+          noData={loading ? 'Loading...' : noDataValue}
           filterToolbar={
             (showFilters || !isEmpty(toolbars)) && (
               <>

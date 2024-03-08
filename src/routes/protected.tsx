@@ -91,7 +91,7 @@ import ProjectReferralPosting from '@/modules/projects/components/ProjectReferra
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
-import BulkBedNightsPage from '@/modules/services/components/bulk/BulkBedNightsPage';
+import BedNightsPage from '@/modules/services/components/bulk/BedNightsPage';
 import BulkServicesPage from '@/modules/services/components/bulk/BulkServicesPage';
 import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
@@ -160,7 +160,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.BULK_BED_NIGHTS,
             element: (
               <ProjectEditRoute permissions={['canEditEnrollments']}>
-                <BulkBedNightsPage />
+                <BedNightsPage />
               </ProjectEditRoute>
             ),
           },

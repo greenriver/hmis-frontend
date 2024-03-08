@@ -1,19 +1,17 @@
-import React from 'react';
 import BulkServicesPage from './BulkServicesPage';
-import { ClientLookupMode } from './ClientLookupForServiceToggle';
 import NotFound from '@/components/pages/NotFound';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { RecordType } from '@/types/gqlTypes';
 
-interface Props {
-  lookupMode?: ClientLookupMode;
-}
-const BulkBedNightsPage: React.FC<Props> = (props) => {
+// Renders BulkServicePage for BedNight service type
+const BedNightsPage = () => {
   const { project } = useProjectDashboardContext();
+
   const bedNightServiceType = project.serviceTypes.find(
     (s) => s.hudRecordType === RecordType.BedNight
   );
 
+  // project does not support bed nights
   if (!bedNightServiceType) return <NotFound />;
 
   return (
@@ -21,9 +19,8 @@ const BulkBedNightsPage: React.FC<Props> = (props) => {
       serviceTypeId={bedNightServiceType.id}
       serviceTypeName='Bed Night'
       title='Bed Nights'
-      {...props}
     />
   );
 };
 
-export default BulkBedNightsPage;
+export default BedNightsPage;

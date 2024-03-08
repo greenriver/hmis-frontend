@@ -6,21 +6,20 @@ import { ServiceListIcon } from '@/components/elements/SemanticIcons';
 
 export type ClientLookupMode = 'search' | 'scan' | 'list';
 
-export function isClientLookupMode(value: string): value is ClientLookupMode {
-  return !!value && ['search', 'scan', 'list'].includes(value);
-}
-interface ClientLookupForServiceToggleProps {
+interface BulkServiceSearchToggleProps {
   value: ClientLookupMode;
   onChange: (mode: ClientLookupMode) => void;
   serviceTypeName: string;
 }
 
 /**
- * Toggle between Bulk Service lookup modes. Navigates on change.
+ * Toggle between Bulk Service lookup modes
  */
-const ClientLookupForServiceToggle: React.FC<
-  ClientLookupForServiceToggleProps
-> = ({ value, onChange, serviceTypeName }) => {
+const BulkServiceSearchToggle: React.FC<BulkServiceSearchToggleProps> = ({
+  value,
+  onChange,
+  serviceTypeName,
+}) => {
   return (
     <CommonToggle
       value={value}
@@ -48,4 +47,4 @@ const ClientLookupForServiceToggle: React.FC<
   );
 };
 
-export default ClientLookupForServiceToggle;
+export default BulkServiceSearchToggle;
