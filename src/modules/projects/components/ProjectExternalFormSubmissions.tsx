@@ -12,7 +12,7 @@ import ProjectSubmissionsTable from '@/modules/projects/components/tables/Projec
 import { ItemType, PickListOption, PickListType } from '@/types/gqlTypes';
 
 interface Props {}
-const ProjectSubmissions: React.FC<Props> = ({}) => {
+const ProjectExternalFormSubmissions: React.FC<Props> = ({}) => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
@@ -25,7 +25,6 @@ const ProjectSubmissions: React.FC<Props> = ({}) => {
       pickListReference: PickListType.ExternalFormTypesForProject,
     },
     projectId,
-    fetchOptions: { fetchPolicy: 'network-only' },
   });
 
   const [selectedFormType, setSelectedFormType] =
@@ -62,4 +61,4 @@ const ProjectSubmissions: React.FC<Props> = ({}) => {
   );
 };
 
-export default ProjectSubmissions;
+export default ProjectExternalFormSubmissions;

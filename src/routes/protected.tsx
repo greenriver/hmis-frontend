@@ -87,11 +87,11 @@ import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
 import ProjectEsgFundingReport from '@/modules/projects/components/ProjectEsgFundingReport';
+import ProjectExternalFormSubmissions from '@/modules/projects/components/ProjectExternalFormSubmissions';
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
-import ProjectSubmissions from '@/modules/projects/components/ProjectSubmissions';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
 import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
@@ -313,7 +313,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.EXTERNAL_FORM_SUBMISSIONS,
             element: (
               <ProjectEditRoute>
-                <ProjectSubmissions />
+                <ProjectExternalFormSubmissions />
               </ProjectEditRoute>
             ),
           },
