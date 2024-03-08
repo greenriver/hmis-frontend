@@ -10,8 +10,8 @@ import {
 } from '../../types';
 import { isEnabled } from '../../util/formUtil';
 
+import DynamicViewField from './DynamicViewField';
 import DynamicViewGroup from './DynamicViewGroup';
-import DynamicViewField from '@/modules/form/components/viewable/DynamicViewField';
 
 import {
   DisabledDisplay,
