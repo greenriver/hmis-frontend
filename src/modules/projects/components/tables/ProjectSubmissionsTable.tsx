@@ -1,11 +1,12 @@
 import { Chip } from '@mui/material';
 import { capitalize } from 'lodash-es';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   getCustomDataElementColumns,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
+import ProjectSubmissionsDialog from '@/modules/projects/components/ProjectSubmissionsDialog';
 import {
   ExternalFormSubmissionFieldsFragment,
   ExternalFormSubmissionFilterOptions,
@@ -54,26 +55,39 @@ const ProjectSubmissionsTable = ({
     ];
   }, []);
 
+  const [selected, setSelected] =
+    useState<ExternalFormSubmissionFieldsFragment | null>(null);
+
   return (
-    <GenericTableWithData<
-      GetProjectExternalFormSubmissionsQuery,
-      GetProjectExternalFormSubmissionsQueryVariables,
-      ExternalFormSubmissionFields,
-      ExternalFormSubmissionFilterOptions
-    >
-      queryVariables={{
-        id: projectId,
-        formDefinitionIdentifier: formType.code,
-      }}
-      queryDocument={GetProjectExternalFormSubmissionsDocument}
-      getColumnDefs={getColumnDefs}
-      noData='No external form submissions'
-      pagePath='project.externalFormSubmissions'
-      recordType='ExternalFormSubmission'
-      paginationItemName='submission'
-      showFilters
-      filterInputType='ExternalFormSubmissionFilterOptions'
-    />
+    <>
+      <GenericTableWithData<
+        GetProjectExternalFormSubmissionsQuery,
+        GetProjectExternalFormSubmissionsQueryVariables,
+        ExternalFormSubmissionFields,
+        ExternalFormSubmissionFilterOptions
+      >
+        queryVariables={{
+          id: projectId,
+          formDefinitionIdentifier: formType.code,
+        }}
+        queryDocument={GetProjectExternalFormSubmissionsDocument}
+        getColumnDefs={getColumnDefs}
+        noData='No external form submissions'
+        pagePath='project.externalFormSubmissions'
+        recordType='ExternalFormSubmission'
+        paginationItemName='submission'
+        showFilters
+        filterInputType='ExternalFormSubmissionFilterOptions'
+        handleRowClick={(row) => setSelected(row)}
+      />
+      {selected && (
+        <ProjectSubmissionsDialog
+          submission={selected}
+          open={!!selected}
+          onClose={() => setSelected(null)}
+        />
+      )}
+    </>
   );
 };
 

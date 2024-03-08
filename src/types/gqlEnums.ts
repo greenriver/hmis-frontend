@@ -544,6 +544,7 @@ export const HmisEnums = {
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
     EXTERNAL_FORM: 'External form',
+    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FILE: 'File',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
@@ -1805,6 +1806,7 @@ export const HmisEnums = {
   StaticFormRole: {
     AUTO_EXIT_CONFIG: 'Auto exit config',
     CLIENT_ALERT: 'Client alert',
+    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
     PROJECT_CONFIG: 'Project config',

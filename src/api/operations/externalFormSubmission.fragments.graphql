@@ -1,13 +1,11 @@
 fragment ExternalFormSubmissionFields on ExternalFormSubmission {
   id
   submittedAt
-  spamScore
+  spam
   status
   notes
   definition {
-    id
-    cacheKey
-    title
+    ...FormDefinitionFields
   }
   customDataElements {
     ...CustomDataElementFields
