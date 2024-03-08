@@ -118,8 +118,6 @@ const BulkServicesTable: React.FC<Props> = ({
                 projectId={projectId}
                 serviceTypeId={serviceTypeId}
                 cocCode={cocCode}
-                bulkAssign={bulkAssign}
-                bulkRemove={bulkRemove}
                 tableLoading={loading}
                 disabled={anyRowsSelected}
               />
@@ -134,8 +132,6 @@ const BulkServicesTable: React.FC<Props> = ({
       projectId,
       serviceTypeId,
       cocCode,
-      bulkAssign,
-      bulkRemove,
       anyRowsSelected,
     ]
   );

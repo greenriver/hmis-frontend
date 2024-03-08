@@ -172,7 +172,7 @@ const BulkServicesPage: React.FC<Props> = ({
           </StepCard>
         </Grid>
         <Grid item xs={12}></Grid>
-        <Grid item xs={12} lg={10} xl={6}>
+        <Grid item xs={12} lg={10} xl={8}>
           <StepCard
             step='2'
             title='Find Client'
