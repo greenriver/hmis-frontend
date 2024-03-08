@@ -3845,6 +3845,7 @@ export enum MostRecentEdStatus {
 export type Mutation = {
   __typename?: 'Mutation';
   addRecentItem?: Maybe<ApplicationUser>;
+  /** Assign services for a set of Clients. If any client is not enrolled, the client will be enrolled in the project as well. */
   bulkAssignService?: Maybe<BulkAssignServicePayload>;
   bulkMergeClients?: Maybe<BulkMergeClientsPayload>;
   bulkRemoveService?: Maybe<BulkRemoveServicePayload>;
@@ -6399,7 +6400,6 @@ export enum ServiceSubTypeProvided {
 
 export type ServiceType = {
   __typename?: 'ServiceType';
-  bulk: Scalars['Boolean']['output'];
   category: Scalars['String']['output'];
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -6409,6 +6409,7 @@ export type ServiceType = {
   hudTypeProvided?: Maybe<ServiceTypeProvided>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  supportsBulkAssignment: Scalars['Boolean']['output'];
   user?: Maybe<ApplicationUser>;
 };
 
@@ -13294,7 +13295,7 @@ export type GetClientServicesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          bulk: boolean;
+          supportsBulkAssignment: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -24672,7 +24673,7 @@ export type SubmitFormMutation = {
             category: string;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            bulk: boolean;
+            supportsBulkAssignment: boolean;
           }>;
           projectCocs: {
             __typename?: 'ProjectCocsPaginated';
@@ -24748,7 +24749,7 @@ export type SubmitFormMutation = {
             category: string;
             dateCreated?: string | null;
             dateUpdated?: string | null;
-            bulk: boolean;
+            supportsBulkAssignment: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -25877,7 +25878,7 @@ export type ProjectAllFieldsFragment = {
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
-    bulk: boolean;
+    supportsBulkAssignment: boolean;
   }>;
   projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
 };
@@ -26646,7 +26647,7 @@ export type GetProjectQuery = {
       category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      bulk: boolean;
+      supportsBulkAssignment: boolean;
     }>;
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   } | null;
@@ -26867,7 +26868,7 @@ export type GetProjectServicesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          bulk: boolean;
+          supportsBulkAssignment: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -28770,7 +28771,7 @@ export type ServiceTypeFieldsFragment = {
   category: string;
   dateCreated?: string | null;
   dateUpdated?: string | null;
-  bulk: boolean;
+  supportsBulkAssignment: boolean;
 };
 
 export type ServiceFieldsFragment = {
@@ -28802,7 +28803,7 @@ export type ServiceFieldsFragment = {
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
-    bulk: boolean;
+    supportsBulkAssignment: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -28902,7 +28903,7 @@ export type GetServiceQuery = {
       category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
-      bulk: boolean;
+      supportsBulkAssignment: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -28969,7 +28970,7 @@ export type GetServiceTypeQuery = {
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
-    bulk: boolean;
+    supportsBulkAssignment: boolean;
   } | null;
 };
 
@@ -29011,7 +29012,7 @@ export type DeleteServiceMutation = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        bulk: boolean;
+        supportsBulkAssignment: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -29124,7 +29125,7 @@ export type GetEnrollmentServicesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
-          bulk: boolean;
+          supportsBulkAssignment: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -29252,7 +29253,7 @@ export type GetServiceCategoryTypesQuery = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
-        bulk: boolean;
+        supportsBulkAssignment: boolean;
       }>;
     };
   } | null;
@@ -31228,7 +31229,7 @@ export const ServiceTypeFieldsFragmentDoc = gql`
     category
     dateCreated
     dateUpdated
-    bulk
+    supportsBulkAssignment
   }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`

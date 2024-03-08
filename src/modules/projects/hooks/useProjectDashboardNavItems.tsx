@@ -61,7 +61,7 @@ export const useProjectDashboardNavItems = (
             title: 'Bulk Services',
             path: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE,
             permissions: ['canEditEnrollments'],
-            hide: !project.serviceTypes.find((s) => s.bulk),
+            hide: !project.serviceTypes.find((s) => s.supportsBulkAssignment),
           },
           {
             id: 'referrals',

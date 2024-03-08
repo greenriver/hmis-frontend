@@ -26548,7 +26548,7 @@
           },
           {
             "name": "bulkAssignService",
-            "description": null,
+            "description": "Assign services for a set of Clients. If any client is not enrolled, the client will be enrolled in the project as well.",
             "args": [
               {
                 "name": "input",
@@ -40067,22 +40067,6 @@
         "description": null,
         "fields": [
           {
-            "name": "bulk",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "category",
             "description": null,
             "args": [],
@@ -40200,6 +40184,22 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "supportsBulkAssignment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },

@@ -6,7 +6,7 @@ fragment ServiceTypeFields on ServiceType {
   category
   dateCreated
   dateUpdated
-  bulk
+  supportsBulkAssignment
 }
 
 fragment ServiceFields on Service {

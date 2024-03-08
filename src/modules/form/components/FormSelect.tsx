@@ -150,7 +150,6 @@ const FormSelect = <Multiple extends boolean | undefined>({
         ...props.textInputProps,
         ariaLabel,
         ariaLabelledBy,
-        ariaLabel,
         placeholder,
         error,
         helperText,
