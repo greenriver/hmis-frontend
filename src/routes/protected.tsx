@@ -158,11 +158,19 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.BULK_BED_NIGHTS,
-            element: <BulkBedNightsPage />,
+            element: (
+              <ProjectEditRoute permissions={['canEditEnrollments']}>
+                <BulkBedNightsPage />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE,
-            element: <BulkServicesPage />,
+            element: (
+              <ProjectEditRoute permissions={['canEditEnrollments']}>
+                <BulkServicesPage />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD,

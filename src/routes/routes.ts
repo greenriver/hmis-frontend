@@ -73,8 +73,8 @@ const projectDashboardRoutes = {
   // Enrollment-related
   PROJECT_ENROLLMENTS: 'enrollments',
   PROJECT_SERVICES: 'services',
-  BULK_BED_NIGHTS: 'bed-nights/:lookupMode?',
-  BULK_ASSIGN_SERVICE: 'bulk-service/:lookupMode?',
+  BULK_BED_NIGHTS: 'bed-nights',
+  BULK_ASSIGN_SERVICE: 'bulk-service',
   BULK_BED_NIGHTS_NEW_HOUSEHOLD: 'bed-nights/new-household',
   BULK_SERVICE_NEW_HOUSEHOLD: 'bulk-service/new-household',
   ADD_SERVICES: 'add-services',

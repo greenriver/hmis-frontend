@@ -122,7 +122,7 @@ function allFieldFilters<T>(
     if (filter) {
       result[name as keyof T] = filter;
     } else {
-      // console.error(`Unable to create filter for ${name}`);
+      console.error(`Unable to create filter for ${name}`);
     }
   });
 
