@@ -269,8 +269,9 @@ const HouseholdAssessments: React.FC<Props> = ({
           top: STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
           backgroundColor: 'white',
           px: { sm: 3, lg: 5 },
-          ml: { xs: -2, sm: -3, lg: -4 },
-          mt: { xs: -1, sm: -2 },
+          // negative left-margin to offset the Container gutter
+          ml: { xs: -2, sm: -4, lg: -8 },
+          mt: { xs: -2, sm: -2 },
           // Has same scrollbar gutter issue
           width: '100vw',
         }}
