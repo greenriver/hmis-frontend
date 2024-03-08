@@ -11,7 +11,7 @@ const PageContainer = ({
   title: ReactNode;
   actions?: ReactNode;
 }) => (
-  <Container maxWidth='lg' sx={{ pt: 4, pb: 6 }}>
+  <Container maxWidth='lg' sx={{ px: { xs: 1, sm: 3, lg: 4 }, pt: 4, pb: 6 }}>
     <Stack
       spacing={2}
       direction='row'
