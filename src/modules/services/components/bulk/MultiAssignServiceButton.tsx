@@ -1,14 +1,12 @@
 import { Stack } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import LoadingButton from '@/components/elements/LoadingButton';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { formatDateForGql } from '@/modules/hmis/hmisUtil';
-import {
-  BulkAssignServiceMutationFn,
-  BulkRemoveServiceMutationFn,
-  BulkServicesClientSearchQuery,
-} from '@/types/gqlTypes';
+import { BulkServicesClientSearchQuery } from '@/types/gqlTypes';
 
 interface Props {
   clients: BulkServicesClientSearchQuery['clientSearch']['nodes']; // selected clients
@@ -16,8 +14,6 @@ interface Props {
   projectId: string;
   serviceTypeId: string;
   cocCode?: string;
-  bulkAssign: BulkAssignServiceMutationFn;
-  bulkRemove: BulkRemoveServiceMutationFn;
 }
 
 type LoadingStates = {
@@ -36,12 +32,19 @@ const MultiAssignServiceButton: React.FC<Props> = ({
   projectId,
   serviceTypeId,
   cocCode,
-  bulkAssign,
-  bulkRemove,
 }) => {
+  const { bulkAssign, bulkRemove, apolloError } = useBulkAssignMutations();
+
+  // Use internal loading state, so that buttons appear as if they are loading even while table refetches.
+  // We never clear the loading state in this component, except on error.
+  // On success, it will un-mount when the table refetch completes.
   const [loading, setLoading] = useState<LoadingStates>(initialLoadingState);
 
-  const { toAssign, toRemove, numToEnroll } = useMemo(() => {
+  useEffect(() => {
+    if (apolloError) setLoading(initialLoadingState);
+  }, [apolloError]);
+
+  const { clientIdsToAssign, clientIdsToRemove, numToEnroll } = useMemo(() => {
     const toAssign: string[] = [];
     const toRemove: string[] = [];
     let numToEnroll: number = 0;
@@ -57,7 +60,11 @@ const MultiAssignServiceButton: React.FC<Props> = ({
         toAssign.push(id); // client to assign + enroll
       }
     });
-    return { toAssign, toRemove, numToEnroll };
+    return {
+      clientIdsToAssign: toAssign,
+      clientIdsToRemove: toRemove,
+      numToEnroll,
+    };
   }, [clients]);
 
   const handleAssign = useCallback(() => {
@@ -68,14 +75,21 @@ const MultiAssignServiceButton: React.FC<Props> = ({
       variables: {
         input: {
           projectId,
-          clientIds: toAssign,
+          clientIds: clientIdsToAssign,
           dateProvided: formatDateForGql(dateProvided) || '',
           serviceTypeId,
           cocCode,
         },
       },
     });
-  }, [bulkAssign, cocCode, dateProvided, projectId, serviceTypeId, toAssign]);
+  }, [
+    bulkAssign,
+    cocCode,
+    dateProvided,
+    projectId,
+    serviceTypeId,
+    clientIdsToAssign,
+  ]);
 
   const handleRemove = useCallback(() => {
     // Service IDs to remove
@@ -90,32 +104,35 @@ const MultiAssignServiceButton: React.FC<Props> = ({
   }, [clients, bulkRemove, projectId]);
 
   const disabledMessage =
-    toRemove.length > 0 && toAssign.length > 0
+    clientIdsToRemove.length > 0 && clientIdsToAssign.length > 0
       ? `To remove multiple services, please only select clients that are assigned on the specified date.`
       : null;
 
   return (
-    <Stack direction='row' gap={2}>
-      <LoadingButton
-        onClick={handleAssign}
-        disabled={toAssign.length === 0}
-        loading={loading.assign}
-      >
-        {numToEnroll > 0
-          ? `Enroll (${numToEnroll}) + Assign (${toAssign.length})`
-          : `Assign (${toAssign.length})`}
-      </LoadingButton>
-      <ButtonTooltipContainer title={disabledMessage}>
+    <>
+      <Stack direction='row' gap={2}>
         <LoadingButton
-          onClick={handleRemove}
-          color='error'
-          disabled={toRemove.length === 0 || !!disabledMessage}
-          loading={loading.remove}
+          onClick={handleAssign}
+          disabled={clientIdsToAssign.length === 0}
+          loading={loading.assign}
         >
-          {`Remove (${toRemove.length})`}
+          {numToEnroll > 0
+            ? `Enroll (${numToEnroll}) + Assign (${clientIdsToAssign.length})`
+            : `Assign (${clientIdsToAssign.length})`}
         </LoadingButton>
-      </ButtonTooltipContainer>
-    </Stack>
+        <ButtonTooltipContainer title={disabledMessage}>
+          <LoadingButton
+            onClick={handleRemove}
+            color='error'
+            disabled={clientIdsToRemove.length === 0 || !!disabledMessage}
+            loading={loading.remove}
+          >
+            {`Remove (${clientIdsToRemove.length})`}
+          </LoadingButton>
+        </ButtonTooltipContainer>
+      </Stack>
+      {apolloError && <ApolloErrorAlert error={apolloError} />}
+    </>
   );
 };
 

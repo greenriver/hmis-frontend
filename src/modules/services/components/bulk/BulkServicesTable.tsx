@@ -1,6 +1,5 @@
 import { omit } from 'lodash-es';
 import { ReactNode, useCallback, useState } from 'react';
-import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
 import { ServicePeriod } from '../../types';
 import AssignServiceButton from './AssignServiceButton';
 import MultiAssignServiceButton from './MultiAssignServiceButton';
@@ -9,7 +8,6 @@ import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import {
   formatDateForDisplay,
   formatDateForGql,
@@ -50,7 +48,6 @@ const BulkServicesTable: React.FC<Props> = ({
   title,
   cocCode,
 }) => {
-  const { bulkAssign, bulkRemove, apolloError } = useBulkAssignMutations();
   const [anyRowsSelected, setAnyRowsSelected] = useState<boolean>(false);
 
   const getColumnDefs = useCallback(
@@ -190,14 +187,11 @@ const BulkServicesTable: React.FC<Props> = ({
                 projectId={projectId}
                 serviceTypeId={serviceTypeId}
                 cocCode={cocCode}
-                bulkAssign={bulkAssign}
-                bulkRemove={bulkRemove}
               />
             );
           },
         }}
       />
-      {apolloError && <ApolloErrorAlert error={apolloError} />}
     </SsnDobShowContextProvider>
   );
 };
