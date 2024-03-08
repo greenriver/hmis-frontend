@@ -116,7 +116,8 @@ const DashboardContentContainer: React.FC<Props> = ({
           )}
           <Box
             sx={{
-              py: 2,
+              pt: 2,
+              pb: 8,
               px: { xs: 1, sm: 3, lg: 4 },
               maxWidth: `${maxPageWidth}px`,
             }}

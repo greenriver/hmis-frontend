@@ -105,7 +105,7 @@ const ProjectDashboard: React.FC = () => {
       contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       {...dashboardState}
     >
-      <Container maxWidth='xl' disableGutters sx={{ pb: 6 }}>
+      <Container maxWidth='xl' disableGutters>
         <Outlet context={outletContext} />
       </Container>
     </DashboardContentContainer>

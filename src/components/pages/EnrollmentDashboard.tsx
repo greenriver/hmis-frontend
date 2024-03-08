@@ -116,14 +116,9 @@ const EnrollmentDashboard: React.FC = () => {
       {...dashboardState}
       focusMode={focusMode}
     >
-      {focusMode ? (
-        // focused views like household intake/exit shouldn't have a container
+      <Container maxWidth='xl' disableGutters>
         <Outlet context={outletContext} />
-      ) : (
-        <Container maxWidth='xl' disableGutters sx={{ pb: 6 }}>
-          <Outlet context={outletContext} />
-        </Container>
-      )}
+      </Container>
     </DashboardContentContainer>
   );
 };

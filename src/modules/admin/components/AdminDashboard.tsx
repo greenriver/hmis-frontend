@@ -127,7 +127,7 @@ const AdminDashboard: React.FC = () => {
       }
       {...dashboardState}
     >
-      <Container maxWidth='xl' disableGutters sx={{ pb: 6 }}>
+      <Container maxWidth='xl' disableGutters>
         <Outlet />
       </Container>
     </DashboardContentContainer>
