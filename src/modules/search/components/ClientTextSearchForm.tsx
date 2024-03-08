@@ -60,11 +60,12 @@ const ClientTextSearchForm: React.FC<Props> = ({
   // tablet screens, but really small phone screens will still have the buttons stack correctly.
   const isTiny = useIsMobile('sm');
 
+  const hasInputLabel = props.label !== null;
   const buttonSx = {
-    mt: props.label && !isTiny ? 3 : 0, // space to account for label
+    mt: hasInputLabel && !isTiny ? 3 : 0, // space to account for label
     px: 4,
     height: 'fit-content',
-    top: props.label ? '2px' : 0,
+    top: hasInputLabel ? '2px' : 0,
   };
   return (
     <Stack

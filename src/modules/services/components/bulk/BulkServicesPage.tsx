@@ -18,6 +18,7 @@ import CocPicker from '@/modules/projects/components/CocPicker';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ProjectDashboardRoutes } from '@/routes/routes';
+import { prevSearchParam } from '@/routes/routeUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -112,7 +113,10 @@ const BulkServicesPage: React.FC<Props> = ({
             setFilterParams({ searchTerm: data.client.id })
           }
           navigateToHousehold={() =>
-            navigate(generateSafePath(route, { projectId: project.id }))
+            navigate({
+              pathname: generateSafePath(route, { projectId: project.id }),
+              search: prevSearchParam(),
+            })
           }
         />
       </RootPermissionsFilter>
@@ -120,6 +124,7 @@ const BulkServicesPage: React.FC<Props> = ({
   }, [project, navigate, serviceTypeIdProp, setFilterParams]);
 
   const stepThreeTitle = `Assign ${pluralize(serviceTypeName, 2)}`;
+
   return (
     <>
       <PageTitle title={title} />
