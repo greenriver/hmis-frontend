@@ -11,8 +11,8 @@ import {
 import { isEnabled } from '../../util/formUtil';
 
 import DynamicViewGroup from './DynamicViewGroup';
-
 import DynamicViewField from '@/modules/form/components/viewable/DynamicViewField';
+
 import {
   DisabledDisplay,
   FormDefinitionJson,
