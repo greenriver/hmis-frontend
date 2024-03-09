@@ -30,3 +30,16 @@ fragment FormRuleFields on FormRule {
     ...ServiceTypeFields
   }
 }
+
+fragment ServiceTypeConfigFields on ServiceType {
+  ...ServiceTypeFields
+  # TODO: add fields for project applicability count
+  formRules(limit: 1) {
+    nodesCount
+  }
+  formDefinitions {
+    id
+    cacheKey
+    title
+  }
+}

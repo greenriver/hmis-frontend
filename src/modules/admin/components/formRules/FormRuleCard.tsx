@@ -27,6 +27,7 @@ const FormRuleCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
   >({
     formRole: StaticFormRole.FormRule,
     mutationDocument: CreateFormRuleDocument,
+    localConstants: { formRole },
     getErrors: (data) => data.createFormRule?.errors || [],
     getVariables: (values) => ({
       input: { input: values as FormRuleInput, definitionId: formId },
@@ -57,8 +58,11 @@ const FormRuleCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
         />
       </TitleCard>
       {renderFormDialog({
-        title: <span>New rule for {formTitle}</span>,
-        DialogProps: { maxWidth: 'sm' },
+        title: (
+          <span>
+            New rule for Form: <b>{formTitle}</b>
+          </span>
+        ),
       })}
     </>
   );

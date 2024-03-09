@@ -1,13 +1,16 @@
 import { Chip, IconButton } from '@mui/material';
 import { omit } from 'lodash-es';
 import React, { useMemo, useState } from 'react';
+import { generatePath } from 'react-router-dom';
 import ProjectApplicabilitySummary from './ProjectApplicabilitySummary';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import NotCollectedText from '@/components/elements/NotCollectedText';
+import RouterLink from '@/components/elements/RouterLink';
 import { EditIcon } from '@/components/elements/SemanticIcons';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 
 import {
@@ -36,7 +39,7 @@ export const ActiveChip = ({ active }: { active: boolean }) => (
 
 type RowType = FormRuleFieldsFragment;
 
-const FormRuleColumns: Record<string, ColumnDef<RowType>> = {
+export const FormRuleColumns: Record<string, ColumnDef<RowType>> = {
   id: {
     header: 'ID',
     render: 'id',
@@ -66,22 +69,43 @@ const FormRuleColumns: Record<string, ColumnDef<RowType>> = {
     header: 'Status',
     render: ({ active }) => <ActiveChip active={active} />,
   },
+  formDefinition: {
+    header: 'Form',
+    render: ({ definitionTitle, definitionId }) => (
+      <RouterLink
+        to={generatePath(AdminDashboardRoutes.VIEW_FORM, {
+          formId: definitionId,
+        })}
+        openInNew
+      >
+        {definitionTitle}
+      </RouterLink>
+    ),
+  },
 };
 
-const FORM_RULE_COLUMNS: ColumnDef<RowType>[] = [
-  FormRuleColumns.id,
-  FormRuleColumns.serviceApplicability,
-  FormRuleColumns.projectApplicability,
-  FormRuleColumns.dataCollectedAbout,
-  FormRuleColumns.activeStatus,
+const nonClientFormRoles = [
+  FormRole.CeParticipation,
+  FormRole.Funder,
+  FormRole.HmisParticipation,
+  FormRole.Inventory,
+  FormRole.Organization,
+  FormRole.Project,
+  FormRole.ProjectCoc,
+  FormRole.ReferralRequest,
 ];
 
 interface Props {
   formRole: FormRole;
   queryVariables: GetFormRulesQueryVariables;
+  columns?: ColumnDef<RowType>[];
 }
 
-const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
+const FormRuleTable: React.FC<Props> = ({
+  formRole,
+  queryVariables,
+  columns: columnsOverride,
+}) => {
   // Currently selected rule for editing
   const [selectedRule, setSelectedRule] = useState<RowType | undefined>();
 
@@ -101,9 +125,10 @@ const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
     onClose: () => setSelectedRule(undefined),
   });
 
-  const columns: typeof FORM_RULE_COLUMNS = useMemo(() => {
-    const cols: typeof FORM_RULE_COLUMNS = [];
+  const columns: ColumnDef<RowType>[] = useMemo(() => {
+    if (columnsOverride) return columnsOverride;
 
+    const cols: ColumnDef<RowType>[] = [FormRuleColumns.id];
     if (formRole === FormRole.Service) {
       cols.push(FormRuleColumns.serviceApplicability);
     }
@@ -113,25 +138,15 @@ const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
       cols.push(FormRuleColumns.projectApplicability);
     }
 
-    const nonClientFormRoles = [
-      FormRole.CeParticipation,
-      FormRole.Funder,
-      FormRole.HmisParticipation,
-      FormRole.Inventory,
-      FormRole.Organization,
-      FormRole.Project,
-      FormRole.ProjectCoc,
-      FormRole.ReferralRequest,
-    ];
     if (!nonClientFormRoles.includes(formRole)) {
       cols.push(FormRuleColumns.dataCollectedAbout);
     }
-    cols.push(FormRuleColumns.activeStatus);
 
+    cols.push(FormRuleColumns.activeStatus);
     cols.push({
       key: 'action',
       textAlign: 'right',
-      render: (row) => {
+      render: (row: RowType) => {
         return (
           <ButtonTooltipContainer
             title={row.system ? 'System rule' : undefined}
@@ -152,7 +167,7 @@ const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
       },
     });
     return cols;
-  }, [formRole, openFormDialog]);
+  }, [formRole, openFormDialog, columnsOverride]);
 
   return (
     <>
@@ -172,7 +187,6 @@ const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
         paginationItemName='rule'
         filters={(filters) => omit(filters, 'definition', 'formType')}
         noSort
-        // tableProps={{ sx: { tableLayout: 'fixed' } }}
       />
       {renderFormDialog({
         title: 'Edit Rule',

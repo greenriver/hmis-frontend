@@ -1,55 +1,73 @@
 import { Chip } from '@mui/material';
+import { omit } from 'lodash-es';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
-  GetServiceCategoryTypesDocument,
-  GetServiceCategoryTypesQuery,
-  GetServiceCategoryTypesQueryVariables,
-  ServiceTypeFieldsFragment,
+  GetServiceTypesDocument,
+  GetServiceTypesQuery,
+  GetServiceTypesQueryVariables,
+  ServiceTypeConfigFieldsFragment,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
-export const columns: ColumnDef<ServiceTypeFieldsFragment>[] = [
+const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
   {
-    header: 'ID',
-    render: 'id',
-  },
-  {
-    header: 'Service Type Name',
+    header: 'Service Name',
     render: 'name',
+    linkTreatment: true,
   },
   {
-    key: 'tags',
-    textAlign: 'right',
-    render: ({ supportsBulkAssignment }) =>
-      supportsBulkAssignment ? (
-        <Chip size='small' label='Supports Bulk Assignment' />
-      ) : null,
+    header: 'Service Category',
+    render: 'category',
   },
+  {
+    header: 'Applicability Rules',
+    render: ({ formRules }) => formRules.nodesCount,
+  },
+  {
+    header: 'Type',
+    render: ({ hud }) => (
+      <Chip
+        label={hud ? 'HUD' : 'Custom'}
+        size='small'
+        color={hud ? undefined : 'primary'}
+        variant='outlined'
+        sx={{ width: 'fit-content' }}
+      />
+    ),
+  },
+  // {
+  //   header: 'Service Types',
+  //   render: ({ serviceTypes }) =>
+  //     serviceTypes.nodesCount < 3
+  //       ? serviceTypes.nodes.map((t) => t.name).join(', ')
+  //       : `${serviceTypes.nodesCount} service types`,
+  // },
 ];
 
-interface Props {
-  serviceCategoryId: string;
-}
-
-const ServiceTypeTable: React.FC<Props> = ({ serviceCategoryId }) => {
+const ServiceTypeTable = () => {
   return (
     <>
       <GenericTableWithData<
-        GetServiceCategoryTypesQuery,
-        GetServiceCategoryTypesQueryVariables,
-        ServiceTypeFieldsFragment
+        GetServiceTypesQuery,
+        GetServiceTypesQueryVariables,
+        ServiceTypeConfigFieldsFragment
       >
-        queryVariables={{ id: serviceCategoryId }}
-        queryDocument={GetServiceCategoryTypesDocument}
+        queryVariables={{}}
+        queryDocument={GetServiceTypesDocument}
         columns={columns}
-        pagePath='serviceCategory.serviceTypes'
+        pagePath='serviceTypes'
         noData='No service types'
+        showFilters
         recordType='ServiceType'
         paginationItemName='service type'
-        defaultPageSize={50} // shouldnt need to paginate
-        showFilters
-        // condensed
-        // noFilter
+        filters={(filters) => omit(filters, 'searchTerm')}
+        rowLinkTo={(row) =>
+          generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
+            serviceTypeId: row.id,
+          })
+        }
       />
     </>
   );

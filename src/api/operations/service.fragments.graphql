@@ -1,6 +1,7 @@
 fragment ServiceTypeFields on ServiceType {
   id
   name
+  hud
   hudRecordType
   hudTypeProvided
   category

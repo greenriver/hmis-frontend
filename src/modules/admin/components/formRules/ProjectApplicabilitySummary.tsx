@@ -19,7 +19,7 @@ const ProjectApplicabilitySummary: React.FC<Props> = ({ rule }) => {
 
   return (
     <Stack
-      sx={{ '.MuiChip-root': { width: 'fit-content', px: 1 } }}
+      sx={{ '.MuiChip-root': { width: 'fit-content', px: 0.5 } }}
       gap={1}
       direction='row'
     >

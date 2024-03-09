@@ -21,7 +21,8 @@ import {
   UpdateFormDefinitionMutation,
   useGetFormDefinitionForEditorQuery,
 } from '@/types/gqlTypes';
-const ViewFormDefinitionPage = () => {
+
+const FormDefinitionDetailPage = () => {
   const { formId } = useSafeParams() as { formId: string };
 
   const { data: { formDefinition } = {}, error } =
@@ -53,7 +54,9 @@ const ViewFormDefinitionPage = () => {
       <PageTitle
         title={
           <Stack direction='row' gap={1}>
-            <Typography variant='h3'>{formDefinition.title}</Typography>
+            <Typography variant='h3'>
+              Manage Form: <b>{formDefinition.title}</b>
+            </Typography>
             <IconButton
               aria-label='edit title'
               onClick={openEditDialog}
@@ -118,4 +121,4 @@ const ViewFormDefinitionPage = () => {
   );
 };
 
-export default ViewFormDefinitionPage;
+export default FormDefinitionDetailPage;

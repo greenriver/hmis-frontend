@@ -40,12 +40,12 @@ import AdminDashboard, {
 
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
+import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormEditorPage from '@/modules/admin/components/forms/UpdateFormDefinitionPage';
-import ViewFormDefinitionPage from '@/modules/admin/components/forms/ViewFormDefinitionPage';
 import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
-import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
+import ServiceTypeDetailPage from '@/modules/admin/components/services/ServiceTypeDetailPage';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
 import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
 import ExitAssessmentPage from '@/modules/assessments/components/ExitAssessmentPage';
@@ -727,7 +727,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.VIEW_FORM,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <ViewFormDefinitionPage />
+                <FormDefinitionDetailPage />
               </RootPermissionsFilter>
             ),
           },
@@ -748,10 +748,10 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.CONFIGURE_SERVICE_CATEGORY,
+            path: AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <ServiceCategoryDetail />
+                <ServiceTypeDetailPage />
               </RootPermissionsFilter>
             ),
           },
