@@ -1,3 +1,4 @@
+import { Chip } from '@mui/material';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -11,6 +12,14 @@ export const columns: ColumnDef<ServiceTypeFieldsFragment>[] = [
   {
     header: 'Service Type Name',
     render: 'name',
+  },
+  {
+    key: 'tags',
+    textAlign: 'right',
+    render: ({ supportsBulkAssignment }) =>
+      supportsBulkAssignment ? (
+        <Chip size='small' label='Supports Bulk Assignment' />
+      ) : null,
   },
 ];
 

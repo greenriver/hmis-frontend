@@ -1,4 +1,4 @@
-import BackButton from '@/components/elements/BackButton';
+import BackButtonLink from '@/components/elements/BackButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
@@ -25,14 +25,14 @@ const EditHousehold = () => {
         householdId={enrollment.householdId}
         projectId={enrollment.project.id}
         BackButton={
-          <BackButton
+          <BackButtonLink
             to={generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, {
               clientId,
               enrollmentId,
             })}
           >
             Back to Enrollment
-          </BackButton>
+          </BackButtonLink>
         }
       />
     </>

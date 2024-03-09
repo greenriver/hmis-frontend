@@ -108,6 +108,7 @@ const ClientTextSearchInput: React.FC<ClientTextSearchInputProps> = ({
       InputProps={{
         ...props.InputProps,
         inputProps: {
+          'aria-label': label ? undefined : 'search clients',
           'data-testid': 'clientSearchInput',
           ...props.InputProps?.inputProps,
         },

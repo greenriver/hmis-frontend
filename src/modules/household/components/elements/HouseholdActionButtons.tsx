@@ -1,11 +1,11 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import PeopleIcon from '@mui/icons-material/People';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import { Stack } from '@mui/material';
 import { useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import { HouseholdIcon } from '@/components/elements/SemanticIcons';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -59,7 +59,7 @@ const HouseholdActionButtons = ({
   return (
     <Stack direction='row' gap={3} sx={{ mt: 4, mb: 4 }}>
       <ButtonLink
-        Icon={PeopleIcon}
+        Icon={HouseholdIcon}
         to={generateSafePath(EnrollmentDashboardRoutes.EDIT_HOUSEHOLD, {
           clientId,
           enrollmentId,
