@@ -6715,6 +6715,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'FormDefinitionFilterOptions',
+    args: [
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'FormDefinitionInput',
     args: [
       {

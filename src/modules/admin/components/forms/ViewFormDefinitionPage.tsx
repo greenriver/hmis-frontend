@@ -1,8 +1,7 @@
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, Paper, Stack, Typography } from '@mui/material';
 
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import FormRuleCard from '../formRules/FormRuleCard';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -10,15 +9,11 @@ import Loading from '@/components/elements/Loading';
 import { EditIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
-import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  DeleteFormDefinitionDocument,
-  DeleteFormDefinitionMutation,
-  DeleteFormDefinitionMutationVariables,
   FormDefinitionInput,
   MutationUpdateFormDefinitionArgs,
   StaticFormRole,
@@ -26,10 +21,8 @@ import {
   UpdateFormDefinitionMutation,
   useGetFormDefinitionForEditorQuery,
 } from '@/types/gqlTypes';
-import { evictQuery } from '@/utils/cacheUtil';
 const ViewFormDefinitionPage = () => {
   const { formId } = useSafeParams() as { formId: string };
-  const navigate = useNavigate();
 
   const { data: { formDefinition } = {}, error } =
     useGetFormDefinitionForEditorQuery({
@@ -50,8 +43,6 @@ const ViewFormDefinitionPage = () => {
         input: values as FormDefinitionInput,
         id: formId,
       }),
-      onCompleted: () => {},
-      // onClose: () => setSelected(undefined),
     });
 
   if (error) throw error;
@@ -81,6 +72,7 @@ const ViewFormDefinitionPage = () => {
             >
               Edit Form
             </ButtonLink>
+            {/* Form deletion is not allowed, disabling */}
             {/* <DeleteMutationButton<
               DeleteFormDefinitionMutation,
               DeleteFormDefinitionMutationVariables
@@ -112,12 +104,7 @@ const ViewFormDefinitionPage = () => {
                 value={formDefinition.role}
               />
             </CommonLabeledTextBlock>
-            <CommonLabeledTextBlock title='Last Updated'>
-              Yesterday by XYZ User
-            </CommonLabeledTextBlock>
-            <CommonLabeledTextBlock title='More stuff'>
-              Active in 15 projects [see info]
-            </CommonLabeledTextBlock>
+            {/* maybe add more details here, such as recent edit history and project usage */}
           </Stack>
         </Paper>
         <FormRuleCard

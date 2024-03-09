@@ -10,6 +10,10 @@ import {
 
 export const columns: ColumnDef<ServiceTypeFieldsFragment>[] = [
   {
+    header: 'ID',
+    render: 'id',
+  },
+  {
     header: 'Service Type Name',
     render: 'name',
   },

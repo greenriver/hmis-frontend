@@ -1,14 +1,13 @@
 import { Chip, IconButton } from '@mui/material';
-import { Stack } from '@mui/system';
 import { omit } from 'lodash-es';
 import React, { useMemo, useState } from 'react';
+import ProjectApplicabilitySummary from './ProjectApplicabilitySummary';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { EditIcon } from '@/components/elements/SemanticIcons';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
-import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { HmisEnums } from '@/types/gqlEnums';
 
 import {
@@ -46,56 +45,7 @@ const FormRuleColumns: Record<string, ColumnDef<RowType>> = {
   },
   projectApplicability: {
     header: 'Project Applicability',
-    render: ({ projectType, funder, otherFunder, project, organization }) => {
-      if (
-        !projectType &&
-        !funder &&
-        !otherFunder &&
-        !project &&
-        !organization
-      ) {
-        return <Chip size='small' label='All Projects' />;
-      }
-
-      return (
-        <Stack
-          sx={{
-            '.MuiChip-root': { width: 'fit-content', px: 1 },
-            maxWidth: '350px',
-          }}
-          gap={1}
-          direction='row'
-        >
-          {projectType && (
-            <ProjectTypeChip
-              projectType={projectType}
-              variant='filled'
-              color='secondary'
-            />
-          )}
-          {funder && (
-            <Chip
-              size='small'
-              label={HmisEnums.FundingSource[funder]}
-              color='primary'
-            />
-          )}
-          {otherFunder && (
-            <Chip size='small' label={otherFunder} color='primary' />
-          )}
-          {project && (
-            <Chip size='small' label={project.projectName} color='primary' />
-          )}
-          {organization && (
-            <Chip
-              size='small'
-              label={organization.organizationName}
-              color='warning'
-            />
-          )}
-        </Stack>
-      );
-    },
+    render: (rule) => <ProjectApplicabilitySummary rule={rule} />,
   },
   serviceApplicability: {
     header: 'Service Applicability',

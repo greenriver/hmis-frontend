@@ -37,7 +37,7 @@ const FormRuleCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
   return (
     <>
       <TitleCard
-        title='Form Rules (rules that dictate where this form is used)'
+        title='Form Rules'
         headerVariant='border'
         actions={
           <Stack direction='row' gap={1}>

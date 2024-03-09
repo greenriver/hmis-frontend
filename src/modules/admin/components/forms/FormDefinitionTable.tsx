@@ -48,44 +48,21 @@ const columns: ColumnDef<Row>[] = [
   // TODO ADD: last updated
 ];
 
-const FormDefinitionTable: React.FC = () => {
+interface Props {
+  queryVariables: GetFormDefinitionsQueryVariables;
+}
+const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
   return (
     <GenericTableWithData<
       GetFormDefinitionsQuery,
       GetFormDefinitionsQueryVariables,
       Row
     >
-      queryVariables={{}}
+      queryVariables={queryVariables}
       queryDocument={GetFormDefinitionsDocument}
       columns={columns}
-      // columns={[
-      //   ...columns,
-      //   ...(onSelect
-      //     ? ([
-      //         {
-      //           key: 'actions',
-      //           textAlign: 'right',
-      //           render: (row) => {
-      //             return (
-      //               <Button
-      //                 onClick={(e) => {
-      //                   e.preventDefault();
-      //                   e.stopPropagation();
-      //                   onSelect(row);
-      //                 }}
-      //                 size='small'
-      //                 variant='outlined'
-      //               >
-      //                 Edit
-      //               </Button>
-      //             );
-      //           },
-      //         },
-      //       ] as ColumnDef<Row>[])
-      //     : []),
-      // ]}
       pagePath='formDefinitions'
-      showFilters
+      // showFilters
       recordType='FormDefinition'
       // TODO: add filter/sort capabilities
       // filterInputType='FormDefinitionFilterOptions'

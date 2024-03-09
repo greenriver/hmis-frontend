@@ -1,9 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid, Paper } from '@mui/material';
-import { useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import FormDefinitionTable from './FormDefinitionTable';
 import PageTitle from '@/components/layout/PageTitle';
+import useDebouncedState from '@/hooks/useDebouncedState';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { AdminDashboardRoutes } from '@/routes/routes';
@@ -18,7 +18,7 @@ import { evictQuery } from '@/utils/cacheUtil';
 
 const FormDefinitionsPage = () => {
   const navigate = useNavigate();
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch, debouncedSearch] = useDebouncedState<string>('');
 
   // Dialog for creating new form definitions
   const {
@@ -57,8 +57,9 @@ const FormDefinitionsPage = () => {
         <Grid item xs={12} xl={6}>
           <CommonSearchInput
             label='Search forms'
+            size='medium'
             name='searchForms'
-            placeholder='Search forms by title'
+            placeholder='Search forms'
             value={search}
             onChange={setSearch}
             searchAdornment
@@ -67,7 +68,9 @@ const FormDefinitionsPage = () => {
 
         <Grid item xs={12}>
           <Paper>
-            <FormDefinitionTable />
+            <FormDefinitionTable
+              queryVariables={{ filters: { searchTerm: debouncedSearch } }}
+            />
           </Paper>
         </Grid>
       </Grid>

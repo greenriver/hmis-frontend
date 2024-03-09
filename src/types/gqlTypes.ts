@@ -2801,6 +2801,10 @@ export type FormDefinitionFormRulesArgs = {
   sortOrder?: InputMaybe<FormRuleSortOption>;
 };
 
+export type FormDefinitionFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type FormDefinitionForJsonResult = {
   __typename?: 'FormDefinitionForJsonResult';
   definition?: Maybe<FormDefinitionJson>;
@@ -5506,6 +5510,7 @@ export type QueryFormDefinitionArgs = {
 };
 
 export type QueryFormDefinitionsArgs = {
+  filters?: InputMaybe<FormDefinitionFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -6404,6 +6409,7 @@ export type ServiceType = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  formRules: FormRulesPaginated;
   hud: Scalars['Boolean']['output'];
   hudRecordType?: Maybe<RecordType>;
   hudTypeProvided?: Maybe<ServiceTypeProvided>;
@@ -6411,6 +6417,13 @@ export type ServiceType = {
   name: Scalars['String']['output'];
   supportsBulkAssignment: Scalars['Boolean']['output'];
   user?: Maybe<ApplicationUser>;
+};
+
+export type ServiceTypeFormRulesArgs = {
+  filters?: InputMaybe<FormRuleFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<FormRuleSortOption>;
 };
 
 /** HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2) */
@@ -14637,6 +14650,7 @@ export type FormRuleFieldsFragment = {
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
   } | null;
 };
 
@@ -14699,6 +14713,7 @@ export type GetFormRulesQuery = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       } | null;
     }>;
   };
@@ -14767,6 +14782,7 @@ export type GetServiceCategoryRulesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
         } | null;
       }>;
     };
@@ -14824,6 +14840,7 @@ export type GetFormRuleQuery = {
       category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
     } | null;
   } | null;
 };
@@ -14882,6 +14899,7 @@ export type CreateFormRuleMutation = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       } | null;
     };
     errors: Array<{
@@ -14955,6 +14973,7 @@ export type UpdateFormRuleMutation = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       } | null;
     };
     errors: Array<{
@@ -23440,6 +23459,7 @@ export type GetFormDefinitionForEditorQuery = {
 };
 
 export type GetFormDefinitionsQueryVariables = Exact<{
+  filters?: InputMaybe<FormDefinitionFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -30698,6 +30718,7 @@ export const ServiceTypeFieldsFragmentDoc = gql`
     category
     dateCreated
     dateUpdated
+    supportsBulkAssignment
   }
 `;
 export const FormRuleFieldsFragmentDoc = gql`
@@ -31337,18 +31358,6 @@ export const ProjectOperatingPeriodFragmentDoc = gql`
     id
     operatingEndDate
     operatingStartDate
-  }
-`;
-export const ServiceTypeFieldsFragmentDoc = gql`
-  fragment ServiceTypeFields on ServiceType {
-    id
-    name
-    hudRecordType
-    hudTypeProvided
-    category
-    dateCreated
-    dateUpdated
-    supportsBulkAssignment
   }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`
@@ -36432,8 +36441,12 @@ export type GetFormDefinitionForEditorQueryResult = Apollo.QueryResult<
   GetFormDefinitionForEditorQueryVariables
 >;
 export const GetFormDefinitionsDocument = gql`
-  query GetFormDefinitions($limit: Int = 25, $offset: Int = 0) {
-    formDefinitions(limit: $limit, offset: $offset) {
+  query GetFormDefinitions(
+    $filters: FormDefinitionFilterOptions
+    $limit: Int = 25
+    $offset: Int = 0
+  ) {
+    formDefinitions(filters: $filters, limit: $limit, offset: $offset) {
       offset
       limit
       nodesCount
@@ -36461,6 +36474,7 @@ export const GetFormDefinitionsDocument = gql`
  * @example
  * const { data, loading, error } = useGetFormDefinitionsQuery({
  *   variables: {
+ *      filters: // value for 'filters'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
