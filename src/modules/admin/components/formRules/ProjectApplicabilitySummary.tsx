@@ -5,12 +5,25 @@ import { Chip, ChipProps } from '@mui/material';
 import { Stack } from '@mui/system';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { HmisEnums } from '@/types/gqlEnums';
-import { FormRuleFieldsFragment } from '@/types/gqlTypes';
+import {
+  FormRuleFieldsFragment,
+  ProjectConfigFieldsFragment,
+} from '@/types/gqlTypes';
 interface Props {
-  rule: FormRuleFieldsFragment;
+  rule: FormRuleFieldsFragment | ProjectConfigFieldsFragment;
 }
+
+function isFormRuleFragment(
+  obj: FormRuleFieldsFragment | ProjectConfigFieldsFragment
+): obj is FormRuleFieldsFragment {
+  return obj && obj.hasOwnProperty('funder');
+}
+
 const ProjectApplicabilitySummary: React.FC<Props> = ({ rule }) => {
-  const { projectType, funder, otherFunder, project, organization } = rule;
+  const { projectType, project, organization } = rule;
+  const funder = isFormRuleFragment(rule) ? rule.funder : undefined;
+  const otherFunder = isFormRuleFragment(rule) ? rule.otherFunder : undefined;
+
   if (!projectType && !funder && !otherFunder && !project && !organization) {
     return <Chip size='small' label='All Projects' />;
   }
