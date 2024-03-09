@@ -5,15 +5,15 @@ import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import LoadingButton from '@/components/elements/LoadingButton';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { formatDateForGql } from '@/modules/hmis/hmisUtil';
-import { BulkServicesClientSearchQuery } from '@/types/gqlTypes';
+import {
+  BulkAssignServiceInput,
+  BulkServicesClientSearchQuery,
+} from '@/types/gqlTypes';
 
 interface Props {
-  clients: BulkServicesClientSearchQuery['clientSearch']['nodes']; // selected clients
-  dateProvided: Date;
-  projectId: string;
-  serviceTypeId: string;
-  cocCode?: string;
+  // selected clients
+  clients: BulkServicesClientSearchQuery['clientSearch']['nodes'];
+  queryVariables: Omit<BulkAssignServiceInput, 'clientIds'>;
 }
 
 type LoadingStates = {
@@ -28,10 +28,7 @@ const initialLoadingState = {
 
 const MultiAssignServiceButton: React.FC<Props> = ({
   clients,
-  dateProvided,
-  projectId,
-  serviceTypeId,
-  cocCode,
+  queryVariables,
 }) => {
   const { bulkAssign, bulkRemove, apolloError } = useBulkAssignMutations();
 
@@ -74,22 +71,12 @@ const MultiAssignServiceButton: React.FC<Props> = ({
     bulkAssign({
       variables: {
         input: {
-          projectId,
+          ...queryVariables,
           clientIds: clientIdsToAssign,
-          dateProvided: formatDateForGql(dateProvided) || '',
-          serviceTypeId,
-          cocCode,
         },
       },
     });
-  }, [
-    bulkAssign,
-    cocCode,
-    dateProvided,
-    projectId,
-    serviceTypeId,
-    clientIdsToAssign,
-  ]);
+  }, [bulkAssign, clientIdsToAssign, queryVariables]);
 
   const handleRemove = useCallback(() => {
     // Service IDs to remove
@@ -100,8 +87,10 @@ const MultiAssignServiceButton: React.FC<Props> = ({
     // Set loading indicator on Remove button
     setLoading((old) => ({ ...old, remove: true }));
     // Perform mutation
-    bulkRemove({ variables: { projectId, serviceIds } });
-  }, [clients, bulkRemove, projectId]);
+    bulkRemove({
+      variables: { projectId: queryVariables.projectId, serviceIds },
+    });
+  }, [clients, bulkRemove, queryVariables.projectId]);
 
   const disabledMessage =
     clientIdsToRemove.length > 0 && clientIdsToAssign.length > 0

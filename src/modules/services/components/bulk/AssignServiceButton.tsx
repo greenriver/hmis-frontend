@@ -5,27 +5,23 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { formatDateForGql } from '@/modules/hmis/hmisUtil';
-import { BulkServicesClientSearchQuery } from '@/types/gqlTypes';
+import {
+  BulkAssignServiceInput,
+  BulkServicesClientSearchQuery,
+} from '@/types/gqlTypes';
 
 interface Props {
   client: BulkServicesClientSearchQuery['clientSearch']['nodes'][0];
-  dateProvided: Date;
-  projectId: string;
-  serviceTypeId: string;
+  queryVariables: Omit<BulkAssignServiceInput, 'clientIds'>;
   tableLoading?: boolean;
   disabled?: boolean;
-  cocCode?: string;
 }
 
 const AssignServiceButton: React.FC<Props> = ({
   client,
-  dateProvided,
-  projectId,
-  serviceTypeId,
+  queryVariables,
   tableLoading,
   disabled,
-  cocCode,
 }) => {
   const { bulkAssign, bulkRemove, loading, apolloError } =
     useBulkAssignMutations();
@@ -53,34 +49,22 @@ const AssignServiceButton: React.FC<Props> = ({
           client.activeEnrollment?.services.nodes.map((s) => s.id) || [];
 
         bulkRemove({
-          variables: { projectId, serviceIds },
+          variables: { projectId: queryVariables.projectId, serviceIds },
           onCompleted: () => setLocalDisabled(true),
         });
       } else {
         bulkAssign({
           variables: {
             input: {
-              projectId,
+              ...queryVariables,
               clientIds: [client.id],
-              dateProvided: formatDateForGql(dateProvided) || '',
-              serviceTypeId,
-              cocCode,
             },
           },
           onCompleted: () => setLocalDisabled(true),
         });
       }
     },
-    [
-      isAssignedOnDate,
-      client,
-      bulkRemove,
-      projectId,
-      bulkAssign,
-      dateProvided,
-      serviceTypeId,
-      cocCode,
-    ]
+    [isAssignedOnDate, client, bulkRemove, bulkAssign, queryVariables]
   );
 
   const buttonText = useMemo(() => {

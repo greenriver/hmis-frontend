@@ -1,5 +1,5 @@
 import { omit } from 'lodash-es';
-import { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { ServicePeriod } from '../../types';
 import AssignServiceButton from './AssignServiceButton';
 import MultiAssignServiceButton from './MultiAssignServiceButton';
@@ -49,6 +49,16 @@ const BulkServicesTable: React.FC<Props> = ({
   cocCode,
 }) => {
   const [anyRowsSelected, setAnyRowsSelected] = useState<boolean>(false);
+
+  const mutationQueryVariables = useMemo(
+    () => ({
+      projectId,
+      dateProvided: formatDateForGql(serviceDate) || '',
+      serviceTypeId,
+      cocCode,
+    }),
+    [cocCode, projectId, serviceDate, serviceTypeId]
+  );
 
   const getColumnDefs = useCallback(
     (_rows: RowType[], loading?: boolean) => {
@@ -111,10 +121,7 @@ const BulkServicesTable: React.FC<Props> = ({
             return (
               <AssignServiceButton
                 client={row}
-                dateProvided={serviceDate}
-                projectId={projectId}
-                serviceTypeId={serviceTypeId}
-                cocCode={cocCode}
+                queryVariables={mutationQueryVariables}
                 tableLoading={loading}
                 disabled={anyRowsSelected}
               />
@@ -123,15 +130,24 @@ const BulkServicesTable: React.FC<Props> = ({
         },
       ] as ColumnDef<RowType>[];
     },
-    [
-      serviceTypeName,
-      serviceDate,
-      projectId,
-      serviceTypeId,
-      cocCode,
-      anyRowsSelected,
-    ]
+    [serviceDate, serviceTypeName, mutationQueryVariables, anyRowsSelected]
   );
+
+  const defaultFilters = useMemo(() => {
+    if (!servicePeriod) return;
+
+    // If "service period" is selected, filter down Client results to
+    // only clients who received this service within the specified date range.
+    // This is a "default filter" because it's not specified by the user.
+    return {
+      serviceInRange: {
+        startDate: formatDateForGql(servicePeriod.start) || '',
+        endDate: formatDateForGql(servicePeriod.end) || '',
+        serviceType: serviceTypeId,
+        projectId,
+      },
+    };
+  }, [projectId, servicePeriod, serviceTypeId]);
 
   return (
     <SsnDobShowContextProvider>
@@ -140,11 +156,11 @@ const BulkServicesTable: React.FC<Props> = ({
         BulkServicesClientSearchQueryVariables,
         RowType
       >
-        // remount when default filters change
-        key={JSON.stringify({ ...servicePeriod, serviceTypeId })}
+        // remount when defaultFilters change
+        key={JSON.stringify(defaultFilters)}
         queryVariables={{
           textSearch: searchTerm || '',
-          serviceTypeId: serviceTypeId,
+          serviceTypeId,
           serviceDate: formatDateForGql(serviceDate) || '',
           projectId,
         }}
@@ -156,20 +172,8 @@ const BulkServicesTable: React.FC<Props> = ({
         getColumnDefs={getColumnDefs}
         showFilters
         recordType='Client'
-        defaultFilters={
-          // If "service period" is selected, filter down Client results to
-          // only clients who received this service within the specified date range.
-          servicePeriod
-            ? {
-                serviceInRange: {
-                  startDate: formatDateForGql(servicePeriod.start) || '',
-                  endDate: formatDateForGql(servicePeriod.end) || '',
-                  serviceType: serviceTypeId,
-                  projectId,
-                },
-              }
-            : undefined
-        }
+        defaultFilters={defaultFilters}
+        // TODO: add user-facing filter options for enrolled clients and bed night date. No filter options for now.
         filters={(f) => omit(f, 'project', 'organization')}
         filterInputType='ClientFilterOptions'
         defaultSortOption={
@@ -179,17 +183,12 @@ const BulkServicesTable: React.FC<Props> = ({
         }
         EnhancedTableToolbarProps={{
           title,
-          renderBulkAction: (_selectedClientIds, selectedRows) => {
-            return (
-              <MultiAssignServiceButton
-                clients={selectedRows}
-                dateProvided={serviceDate}
-                projectId={projectId}
-                serviceTypeId={serviceTypeId}
-                cocCode={cocCode}
-              />
-            );
-          },
+          renderBulkAction: (_selectedClientIds, selectedRows) => (
+            <MultiAssignServiceButton
+              clients={selectedRows}
+              queryVariables={mutationQueryVariables}
+            />
+          ),
         }}
       />
     </SsnDobShowContextProvider>

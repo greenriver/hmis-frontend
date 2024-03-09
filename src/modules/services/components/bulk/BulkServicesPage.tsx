@@ -169,7 +169,7 @@ const BulkServicesPage: React.FC<Props> = ({
               {showCocPicker && (
                 <CocPicker
                   project={project}
-                  value={coc}
+                  value={coc ? { code: coc } : null}
                   onChange={(option) => setFilterParams({ coc: option?.code })}
                   label='CoC Code'
                   helperText='CoC to use when enrolling new clients'
@@ -242,7 +242,7 @@ const BulkServicesPage: React.FC<Props> = ({
                 serviceDate={serviceDate}
                 searchTerm={searchTerm}
                 servicePeriod={servicePeriod}
-                cocCode={coc?.code}
+                cocCode={coc}
                 title={
                   <StepCardTitle
                     sx={{ px: 0 }}
