@@ -2,12 +2,17 @@ import { DialogContent, DialogProps, DialogTitle } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useMemo } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import StaticForm from '@/modules/form/components/StaticForm';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { FormValues } from '@/modules/form/types';
 import { getItemMap } from '@/modules/form/util/formUtil';
 import { customDataElementValueForKey } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import {
+  DeleteExternalFormSubmissionDocument,
+  DeleteExternalFormSubmissionMutation,
+  DeleteExternalFormSubmissionMutationVariables,
   ExternalFormSubmissionFieldsFragment,
   ExternalFormSubmissionInput,
   ExternalFormSubmissionStatus,
@@ -27,7 +32,6 @@ const ProjectSubmissionsDialog: React.FC<Props> = ({
 }) => {
   const submissionValues = useMemo(() => {
     const itemMap = getItemMap(submission.definition.definition, true);
-    // console.log(itemMap);
     const submissionValues: FormValues = {};
     Object.keys(itemMap).forEach((key) => {
       const pickListOptions = itemMap[key].pickListOptions;
@@ -54,6 +58,24 @@ const ProjectSubmissionsDialog: React.FC<Props> = ({
             definition={submission.definition.definition}
           />
         </Box>
+        <DeleteMutationButton<
+          DeleteExternalFormSubmissionMutation,
+          DeleteExternalFormSubmissionMutationVariables
+        >
+          queryDocument={DeleteExternalFormSubmissionDocument}
+          variables={{ id: submission.id }}
+          idPath={'deleteExternalFormSubmission.externalFormSubmission.id'}
+          recordName='Submission'
+          onSuccess={() => {
+            cache.evict({
+              id: `ExternalFormSubmission:${submission.id}`,
+            });
+            if (onClose) onClose({}, 'escapeKeyDown');
+          }}
+          ButtonProps={{ sx: { mb: 2 } }}
+        >
+          Delete this submission
+        </DeleteMutationButton>
         <StaticForm<
           UpdateExternalFormSubmissionMutation,
           UpdateExternalFormSubmissionMutationVariables

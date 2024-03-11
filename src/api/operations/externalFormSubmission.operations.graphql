@@ -11,3 +11,14 @@ mutation UpdateExternalFormSubmission(
     }
   }
 }
+
+mutation DeleteExternalFormSubmission($id: ID!) {
+  deleteExternalFormSubmission(id: $id) {
+    externalFormSubmission {
+      ...ExternalFormSubmissionFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
