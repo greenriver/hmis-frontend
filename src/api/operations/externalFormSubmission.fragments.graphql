@@ -1,7 +1,7 @@
 fragment ExternalFormSubmissionFields on ExternalFormSubmission {
   id
   submittedAt
-  spamScore
+  spam
   status
   notes
   definition {

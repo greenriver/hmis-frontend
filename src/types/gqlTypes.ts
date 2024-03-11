@@ -2690,7 +2690,7 @@ export type ExternalFormSubmission = {
   definition: FormDefinition;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
-  spamScore?: Maybe<Scalars['Float']['output']>;
+  spam?: Maybe<Scalars['Boolean']['output']>;
   status: ExternalFormSubmissionStatus;
   submittedAt: Scalars['ISO8601DateTime']['output'];
 };
@@ -2702,7 +2702,7 @@ export type ExternalFormSubmissionFilterOptions = {
 
 /** External Form Submission Input */
 export type ExternalFormSubmissionInput = {
-  note?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
   spam?: InputMaybe<Scalars['Boolean']['input']>;
   status?: InputMaybe<ExternalFormSubmissionStatus>;
 };
@@ -2951,6 +2951,8 @@ export enum FormRole {
   Exit = 'EXIT',
   /** External form */
   ExternalForm = 'EXTERNAL_FORM',
+  /** External form submission review */
+  ExternalFormSubmissionReview = 'EXTERNAL_FORM_SUBMISSION_REVIEW',
   /** File */
   File = 'FILE',
   /** Form definition */
@@ -6714,6 +6716,8 @@ export enum StaticFormRole {
   AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
+  /** External form submission review */
+  ExternalFormSubmissionReview = 'EXTERNAL_FORM_SUBMISSION_REVIEW',
   /** Form definition */
   FormDefinition = 'FORM_DEFINITION',
   /** Form rule */
@@ -17713,7 +17717,7 @@ export type ExternalFormSubmissionFieldsFragment = {
   __typename?: 'ExternalFormSubmission';
   id: string;
   submittedAt: string;
-  spamScore?: number | null;
+  spam?: boolean | null;
   status: ExternalFormSubmissionStatus;
   notes?: string | null;
   definition: {
@@ -17784,7 +17788,7 @@ export type UpdateExternalFormSubmissionMutation = {
       __typename?: 'ExternalFormSubmission';
       id: string;
       submittedAt: string;
-      spamScore?: number | null;
+      spam?: boolean | null;
       status: ExternalFormSubmissionStatus;
       notes?: string | null;
       definition: {
@@ -17880,7 +17884,7 @@ export type GetProjectExternalFormSubmissionsQuery = {
         __typename?: 'ExternalFormSubmission';
         id: string;
         submittedAt: string;
-        spamScore?: number | null;
+        spam?: boolean | null;
         status: ExternalFormSubmissionStatus;
         notes?: string | null;
         definition: {
@@ -31346,7 +31350,7 @@ export const ExternalFormSubmissionFieldsFragmentDoc = gql`
   fragment ExternalFormSubmissionFields on ExternalFormSubmission {
     id
     submittedAt
-    spamScore
+    spam
     status
     notes
     definition {

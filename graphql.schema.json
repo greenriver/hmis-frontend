@@ -18784,12 +18784,12 @@
             "deprecationReason": null
           },
           {
-            "name": "spamScore",
+            "name": "spam",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Float",
+              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,
@@ -18875,7 +18875,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "note",
+            "name": "notes",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -20788,6 +20788,12 @@
           {
             "name": "EXTERNAL_FORM",
             "description": "External form",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXTERNAL_FORM_SUBMISSION_REVIEW",
+            "description": "External form submission review",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -41626,6 +41632,12 @@
           {
             "name": "CLIENT_ALERT",
             "description": "Client alert",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXTERNAL_FORM_SUBMISSION_REVIEW",
+            "description": "External form submission review",
             "isDeprecated": false,
             "deprecationReason": null
           },
