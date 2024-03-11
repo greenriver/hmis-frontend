@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   getCustomDataElementColumns,
-  parseAndFormatDate,
+  parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
 import ProjectSubmissionsDialog from '@/modules/projects/components/ProjectSubmissionsDialog';
 import {
@@ -14,7 +14,6 @@ import {
   GetProjectExternalFormSubmissionsDocument,
   GetProjectExternalFormSubmissionsQuery,
   GetProjectExternalFormSubmissionsQueryVariables,
-  PickListOption,
 } from '@/types/gqlTypes';
 
 export type ExternalFormSubmissionFields = NonNullable<
@@ -23,10 +22,10 @@ export type ExternalFormSubmissionFields = NonNullable<
 
 const ProjectSubmissionsTable = ({
   projectId,
-  formType,
+  formDefinitionIdentifier,
 }: {
   projectId: string;
-  formType: PickListOption;
+  formDefinitionIdentifier: string;
 }) => {
   const getColumnDefs = useCallback((rows: ExternalFormSubmissionFields[]) => {
     const customColumns = getCustomDataElementColumns(rows);
@@ -49,7 +48,7 @@ const ProjectSubmissionsTable = ({
         header: 'Date Submitted',
         linkTreatment: false,
         render: (s: ExternalFormSubmissionFieldsFragment) =>
-          parseAndFormatDate(s.submittedAt),
+          parseAndFormatDateTime(s.submittedAt),
       },
       ...customColumns,
     ];
@@ -68,7 +67,7 @@ const ProjectSubmissionsTable = ({
       >
         queryVariables={{
           id: projectId,
-          formDefinitionIdentifier: formType.code,
+          formDefinitionIdentifier: formDefinitionIdentifier,
         }}
         queryDocument={GetProjectExternalFormSubmissionsDocument}
         getColumnDefs={getColumnDefs}
