@@ -22,10 +22,6 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
     render: 'category',
   },
   {
-    header: 'Applicability Rules',
-    render: ({ formRules }) => formRules.nodesCount,
-  },
-  {
     header: 'Type',
     render: ({ hud }) => (
       <Chip
@@ -37,13 +33,6 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
       />
     ),
   },
-  // {
-  //   header: 'Service Types',
-  //   render: ({ serviceTypes }) =>
-  //     serviceTypes.nodesCount < 3
-  //       ? serviceTypes.nodes.map((t) => t.name).join(', ')
-  //       : `${serviceTypes.nodesCount} service types`,
-  // },
 ];
 
 const ServiceTypeTable = () => {

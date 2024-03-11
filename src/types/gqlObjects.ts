@@ -6826,14 +6826,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'serviceCategory',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
-        name: 'serviceType',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
         name: 'systemForm',
         type: {
           kind: 'LIST',

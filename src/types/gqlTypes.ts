@@ -3001,8 +3001,6 @@ export type FormRuleFilterOptions = {
   definition?: InputMaybe<Scalars['ID']['input']>;
   formType?: InputMaybe<Array<FormRole>>;
   projectType?: InputMaybe<Array<ProjectType>>;
-  serviceCategory?: InputMaybe<Scalars['ID']['input']>;
-  serviceType?: InputMaybe<Scalars['ID']['input']>;
   systemForm?: InputMaybe<Array<SystemStatus>>;
 };
 
@@ -6422,7 +6420,6 @@ export type ServiceType = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /** Definitions that are specified for this service type */
   formDefinitions: Array<FormDefinition>;
-  formRules: FormRulesPaginated;
   hud: Scalars['Boolean']['output'];
   hudRecordType?: Maybe<RecordType>;
   hudTypeProvided?: Maybe<ServiceTypeProvided>;
@@ -6430,13 +6427,6 @@ export type ServiceType = {
   name: Scalars['String']['output'];
   supportsBulkAssignment: Scalars['Boolean']['output'];
   user?: Maybe<ApplicationUser>;
-};
-
-export type ServiceTypeFormRulesArgs = {
-  filters?: InputMaybe<FormRuleFilterOptions>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  sortOrder?: InputMaybe<FormRuleSortOption>;
 };
 
 export type ServiceTypeFilterOptions = {
@@ -14685,7 +14675,6 @@ export type ServiceTypeConfigFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   supportsBulkAssignment: boolean;
-  formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
   formDefinitions: Array<{
     __typename?: 'FormDefinition';
     id: string;
@@ -15062,7 +15051,6 @@ export type GetServiceTypesQuery = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
-      formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
       formDefinitions: Array<{
         __typename?: 'FormDefinition';
         id: string;
@@ -15118,7 +15106,6 @@ export type GetServiceTypeDetailsQuery = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
-    formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
     formDefinitions: Array<{
       __typename?: 'FormDefinition';
       id: string;
@@ -30881,9 +30868,6 @@ export const FormRuleFieldsFragmentDoc = gql`
 export const ServiceTypeConfigFieldsFragmentDoc = gql`
   fragment ServiceTypeConfigFields on ServiceType {
     ...ServiceTypeFields
-    formRules(limit: 1) {
-      nodesCount
-    }
     formDefinitions {
       id
       cacheKey
