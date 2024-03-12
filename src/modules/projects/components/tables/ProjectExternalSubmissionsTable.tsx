@@ -20,7 +20,7 @@ export type ExternalFormSubmissionFields = NonNullable<
   GetProjectExternalFormSubmissionsQuery['project']
 >['externalFormSubmissions']['nodes'][number];
 
-const ProjectSubmissionsTable = ({
+const ProjectExternalSubmissionsTable = ({
   projectId,
   formDefinitionIdentifier,
 }: {
@@ -90,4 +90,4 @@ const ProjectSubmissionsTable = ({
   );
 };
 
-export default ProjectSubmissionsTable;
+export default ProjectExternalSubmissionsTable;

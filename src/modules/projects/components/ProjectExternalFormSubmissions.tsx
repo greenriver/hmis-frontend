@@ -6,7 +6,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import { isPickListOption } from '@/modules/form/types';
-import ProjectSubmissionsTable from '@/modules/projects/components/tables/ProjectSubmissionsTable';
+import ProjectExternalSubmissionsTable from '@/modules/projects/components/tables/ProjectExternalSubmissionsTable';
 import {
   PickListOption,
   PickListType,
@@ -55,7 +55,7 @@ const ProjectExternalFormSubmissions: React.FC<Props> = ({}) => {
 
       {formType && (
         <Paper sx={{ p: 2 }}>
-          <ProjectSubmissionsTable
+          <ProjectExternalSubmissionsTable
             projectId={projectId}
             formDefinitionIdentifier={formType.code}
           />
