@@ -8906,7 +8906,6 @@ export type GetAssessmentQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -8929,7 +8928,6 @@ export type GetAssessmentQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -8952,7 +8950,6 @@ export type GetAssessmentQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -8975,7 +8972,6 @@ export type GetAssessmentQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -8998,7 +8994,6 @@ export type GetAssessmentQuery = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -13764,7 +13759,6 @@ export type ClientDetailFormsQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -13787,7 +13781,6 @@ export type ClientDetailFormsQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -13810,7 +13803,6 @@ export type ClientDetailFormsQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -13833,7 +13825,6 @@ export type ClientDetailFormsQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -13856,7 +13847,6 @@ export type ClientDetailFormsQuery = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -15664,7 +15654,6 @@ export type AllEnrollmentDetailsFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -15687,7 +15676,6 @@ export type AllEnrollmentDetailsFragment = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -15710,7 +15698,6 @@ export type AllEnrollmentDetailsFragment = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -15733,7 +15720,6 @@ export type AllEnrollmentDetailsFragment = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -15756,7 +15742,6 @@ export type AllEnrollmentDetailsFragment = {
                     readOnly: boolean;
                     repeats: boolean;
                     pickListReference?: string | null;
-                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
                     prefill: boolean;
@@ -16741,7 +16726,6 @@ export type GetEnrollmentDetailsQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -16764,7 +16748,6 @@ export type GetEnrollmentDetailsQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -16787,7 +16770,6 @@ export type GetEnrollmentDetailsQuery = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -16810,7 +16792,6 @@ export type GetEnrollmentDetailsQuery = {
                     readOnly: boolean;
                     repeats: boolean;
                     pickListReference?: string | null;
-                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
                     prefill: boolean;
@@ -16833,7 +16814,6 @@ export type GetEnrollmentDetailsQuery = {
                       readOnly: boolean;
                       repeats: boolean;
                       pickListReference?: string | null;
-                      serviceDetailType?: ServiceDetailType | null;
                       size?: InputSize | null;
                       assessmentDate?: boolean | null;
                       prefill: boolean;
@@ -17759,7 +17739,6 @@ export type ItemFieldsFragment = {
   readOnly: boolean;
   repeats: boolean;
   pickListReference?: string | null;
-  serviceDetailType?: ServiceDetailType | null;
   size?: InputSize | null;
   assessmentDate?: boolean | null;
   prefill: boolean;
@@ -17857,7 +17836,6 @@ export type FormDefinitionJsonFieldsFragment = {
     readOnly: boolean;
     repeats: boolean;
     pickListReference?: string | null;
-    serviceDetailType?: ServiceDetailType | null;
     size?: InputSize | null;
     assessmentDate?: boolean | null;
     prefill: boolean;
@@ -17880,7 +17858,6 @@ export type FormDefinitionJsonFieldsFragment = {
       readOnly: boolean;
       repeats: boolean;
       pickListReference?: string | null;
-      serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
       prefill: boolean;
@@ -17903,7 +17880,6 @@ export type FormDefinitionJsonFieldsFragment = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -17926,7 +17902,6 @@ export type FormDefinitionJsonFieldsFragment = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -17949,7 +17924,6 @@ export type FormDefinitionJsonFieldsFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -18352,7 +18326,6 @@ export type FormDefinitionFieldsFragment = {
       readOnly: boolean;
       repeats: boolean;
       pickListReference?: string | null;
-      serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
       prefill: boolean;
@@ -18375,7 +18348,6 @@ export type FormDefinitionFieldsFragment = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -18398,7 +18370,6 @@ export type FormDefinitionFieldsFragment = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -18421,7 +18392,6 @@ export type FormDefinitionFieldsFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -18444,7 +18414,6 @@ export type FormDefinitionFieldsFragment = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -18840,7 +18809,6 @@ export type FormDefinitionFieldsForEditorFragment = {
       readOnly: boolean;
       repeats: boolean;
       pickListReference?: string | null;
-      serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
       prefill: boolean;
@@ -18863,7 +18831,6 @@ export type FormDefinitionFieldsForEditorFragment = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -18886,7 +18853,6 @@ export type FormDefinitionFieldsForEditorFragment = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -18909,7 +18875,6 @@ export type FormDefinitionFieldsForEditorFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -18932,7 +18897,6 @@ export type FormDefinitionFieldsForEditorFragment = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -19337,7 +19301,6 @@ export type UpdateFormDefinitionMutation = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -19360,7 +19323,6 @@ export type UpdateFormDefinitionMutation = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -19383,7 +19345,6 @@ export type UpdateFormDefinitionMutation = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -19406,7 +19367,6 @@ export type UpdateFormDefinitionMutation = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -19429,7 +19389,6 @@ export type UpdateFormDefinitionMutation = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -19849,7 +19808,6 @@ export type CreateFormDefinitionMutation = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -19872,7 +19830,6 @@ export type CreateFormDefinitionMutation = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -19895,7 +19852,6 @@ export type CreateFormDefinitionMutation = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -19918,7 +19874,6 @@ export type CreateFormDefinitionMutation = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -19941,7 +19896,6 @@ export type CreateFormDefinitionMutation = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -20361,7 +20315,6 @@ export type DeleteFormDefinitionMutation = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -20384,7 +20337,6 @@ export type DeleteFormDefinitionMutation = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -20407,7 +20359,6 @@ export type DeleteFormDefinitionMutation = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -20430,7 +20381,6 @@ export type DeleteFormDefinitionMutation = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -20453,7 +20403,6 @@ export type DeleteFormDefinitionMutation = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -20894,7 +20843,6 @@ export type GetFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -20917,7 +20865,6 @@ export type GetFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -20940,7 +20887,6 @@ export type GetFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -20963,7 +20909,6 @@ export type GetFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -20986,7 +20931,6 @@ export type GetFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -21388,7 +21332,6 @@ export type GetStaticFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -21411,7 +21354,6 @@ export type GetStaticFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -21434,7 +21376,6 @@ export type GetStaticFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -21457,7 +21398,6 @@ export type GetStaticFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -21480,7 +21420,6 @@ export type GetStaticFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -21883,7 +21822,6 @@ export type GetServiceFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -21906,7 +21844,6 @@ export type GetServiceFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -21929,7 +21866,6 @@ export type GetServiceFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -21952,7 +21888,6 @@ export type GetServiceFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -21975,7 +21910,6 @@ export type GetServiceFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -22380,7 +22314,6 @@ export type GetAssessmentFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -22403,7 +22336,6 @@ export type GetAssessmentFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -22426,7 +22358,6 @@ export type GetAssessmentFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -22449,7 +22380,6 @@ export type GetAssessmentFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -22472,7 +22402,6 @@ export type GetAssessmentFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -22875,7 +22804,6 @@ export type GetFormDefinitionForEditorQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -22898,7 +22826,6 @@ export type GetFormDefinitionForEditorQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -22921,7 +22848,6 @@ export type GetFormDefinitionForEditorQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -22944,7 +22870,6 @@ export type GetFormDefinitionForEditorQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -22967,7 +22892,6 @@ export type GetFormDefinitionForEditorQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -23390,7 +23314,6 @@ export type GetParsedFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -23413,7 +23336,6 @@ export type GetParsedFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -23436,7 +23358,6 @@ export type GetParsedFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -23459,7 +23380,6 @@ export type GetParsedFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -23482,7 +23402,6 @@ export type GetParsedFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -25894,7 +25813,6 @@ export type OccurrencePointFormFieldsFragment = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -25917,7 +25835,6 @@ export type OccurrencePointFormFieldsFragment = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -25940,7 +25857,6 @@ export type OccurrencePointFormFieldsFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -25963,7 +25879,6 @@ export type OccurrencePointFormFieldsFragment = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -25986,7 +25901,6 @@ export type OccurrencePointFormFieldsFragment = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -30787,7 +30701,6 @@ export const ItemFieldsFragmentDoc = gql`
       customFieldKey
     }
     pickListReference
-    serviceDetailType
     size
     assessmentDate
     prefill
