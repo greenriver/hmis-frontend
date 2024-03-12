@@ -92,7 +92,7 @@ export function useStaticFormDialog<
             }}
           >
             <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
-              <Grid item>{beforeFormComponent}</Grid>
+              {beforeFormComponent && <Grid item>{beforeFormComponent}</Grid>}
               <Grid item xs>
                 <StaticForm
                   role={formRole}
