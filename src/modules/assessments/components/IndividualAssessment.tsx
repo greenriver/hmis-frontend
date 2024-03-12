@@ -31,6 +31,11 @@ import {
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
 
+export type ClientNameDobSsn = ClientNameFragment & {
+  ssn?: string;
+  dob?: string | null;
+};
+
 export interface IndividualAssessmentProps {
   // FormDefiniton to use for rendering the assessment
   definition: FormDefinitionFieldsFragment;
@@ -42,7 +47,7 @@ export interface IndividualAssessmentProps {
   formRole?: FormRole;
   // Whether the assessment is embedded in a household workflow
   embeddedInWorkflow?: boolean;
-  client: ClientNameFragment;
+  client: ClientNameDobSsn;
   // Assessment status to use for indicator
   assessmentStatus?: AssessmentStatus;
   // Whether the form is currently visible on the page. Used for household workflow when the assessment is on an inactive tab.
@@ -158,7 +163,7 @@ const IndividualAssessment = ({
   return (
     <AssessmentForm
       assessmentTitle={titleNode}
-      clientId={client.id}
+      client={client}
       navigationTitle={navigationTitle}
       key={assessment?.id}
       formRole={formRole}
@@ -181,7 +186,7 @@ const IndividualAssessment = ({
 };
 
 const WrappedAssessment = (props: IndividualAssessmentProps) => (
-  <Box sx={{ mt: 3 }}>
+  <Box sx={{ mt: { xs: 0, lg: 2 } }}>
     <SentryErrorBoundary>
       <IndividualAssessment {...props} />
     </SentryErrorBoundary>
