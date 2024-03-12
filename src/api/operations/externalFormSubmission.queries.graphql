@@ -1,8 +1,9 @@
 query GetProjectExternalFormSubmissions(
   $id: ID!
+  $formDefinitionIdentifier: ID!
   $limit: Int = 10
   $offset: Int = 0
-  $formDefinitionIdentifier: ID!
+  $filters: ExternalFormSubmissionFilterOptions = null
 ) {
   project(id: $id) {
     id
@@ -10,6 +11,7 @@ query GetProjectExternalFormSubmissions(
       limit: $limit
       offset: $offset
       formDefinitionIdentifier: $formDefinitionIdentifier
+      filters: $filters
     ) {
       offset
       limit

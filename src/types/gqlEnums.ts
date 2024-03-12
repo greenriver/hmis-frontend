@@ -544,6 +544,7 @@ export const HmisEnums = {
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
     EXTERNAL_FORM: 'External form',
+    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FILE: 'File',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
@@ -928,6 +929,7 @@ export const HmisEnums = {
     ENROLLMENTS_FOR_CLIENT:
       'Enrollments for the client, including WIP and Exited.',
     ENROLLMENT_AUDIT_EVENT_RECORD_TYPES: 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
+    EXTERNAL_FORM_TYPES_FOR_PROJECT: 'External form types for the project.',
     GEOCODE: 'GEOCODE',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     ORGANIZATION: 'All Organizations that the User can see',
@@ -1804,6 +1806,7 @@ export const HmisEnums = {
   StaticFormRole: {
     AUTO_EXIT_CONFIG: 'Auto exit config',
     CLIENT_ALERT: 'Client alert',
+    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
     PROJECT_CONFIG: 'Project config',

@@ -3015,10 +3015,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
-      {
-        name: 'spamScore',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
-      },
+      { name: 'spam', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
       {
         name: 'status',
         type: {
@@ -6732,7 +6729,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'ExternalFormSubmissionInput',
     args: [
-      { name: 'note', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       { name: 'spam', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
       {
         name: 'status',
