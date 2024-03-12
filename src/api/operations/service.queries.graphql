@@ -10,18 +10,6 @@ query GetServiceType($id: ID!) {
   }
 }
 
-mutation AddServiceToEnrollment($input: CreateServiceInput!) {
-  createService(input: $input) {
-    clientMutationId
-    service {
-      ...ServiceFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeleteService($input: DeleteServiceInput!) {
   deleteService(input: $input) {
     clientMutationId
