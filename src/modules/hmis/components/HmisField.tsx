@@ -90,7 +90,6 @@ const HmisField = ({
   }
 
   if (customFieldKey) {
-    // change this behavior...
     if (!hasCustomDataElements(record)) {
       throw new Error(`Expected record ${record?.__typename} to resolve CDEs`);
     }
