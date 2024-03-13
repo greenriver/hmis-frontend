@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 
 import HmisField from './HmisField';
-import { RITA_ACKROYD, fakeEnrollment } from '@/test/__mocks__/requests';
+import { Gender, RelationshipToHoH } from '@/types/gqlTypes';
 
 export default {
   title: 'HmisField',
@@ -10,32 +10,46 @@ export default {
 
 const Template: StoryFn<typeof HmisField> = (args) => <HmisField {...args} />;
 
-const ENROLLMENT = fakeEnrollment();
-
 export const EnumField = Template.bind({});
 EnumField.args = {
-  record: ENROLLMENT,
+  record: {
+    __typename: 'Enrollment',
+    id: '1',
+    relationshipToHoH: RelationshipToHoH.SpouseOrPartner,
+  },
   recordType: 'Enrollment',
   fieldName: 'relationshipToHoH',
 };
 
 export const EnumArrayField = Template.bind({});
 EnumArrayField.args = {
-  record: RITA_ACKROYD,
+  record: {
+    __typename: 'Client',
+    id: '1',
+    gender: [Gender.Man, Gender.NonBinary],
+  },
   recordType: 'Client',
   fieldName: 'gender',
 };
 
 export const DateField = Template.bind({});
 DateField.args = {
-  record: ENROLLMENT,
+  record: {
+    __typename: 'Enrollment',
+    id: '1',
+    entryDate: '2020-01-01',
+  },
   recordType: 'Enrollment',
   fieldName: 'entryDate',
 };
 
 export const BooleanField = Template.bind({});
 BooleanField.args = {
-  record: ENROLLMENT,
+  record: {
+    __typename: 'Enrollment',
+    id: '1',
+    inProgress: false,
+  },
   recordType: 'Enrollment',
   fieldName: 'inProgress',
 };
@@ -43,7 +57,8 @@ BooleanField.args = {
 export const CustomDataElementField = Template.bind({});
 CustomDataElementField.args = {
   record: {
-    ...ENROLLMENT,
+    __typename: 'Client',
+    id: '1',
     customDataElements: [
       {
         key: 'color',
@@ -52,6 +67,6 @@ CustomDataElementField.args = {
       },
     ],
   },
-  recordType: 'Enrollment',
+  recordType: 'Client',
   customFieldKey: 'color',
 };
