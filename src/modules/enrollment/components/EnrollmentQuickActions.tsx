@@ -43,7 +43,7 @@ const EnrollmentQuickActions = ({
 
   return (
     <TitleCard title='Quick Actions'>
-      <Stack spacing={2} sx={{ px: 2, pb: 2 }}>
+      <Stack spacing={2} sx={{ px: 2, pb: 2, textAlign: 'center' }}>
         {/* Record a Service */}
         {canRecordService && (
           <Button onClick={openServiceDialog} variant='outlined'>

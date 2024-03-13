@@ -38,13 +38,15 @@ const primaryToggleSx: SxProps<Theme> = {
   '& .MuiToggleButtonGroup-grouped': {
     margin: 0.5,
     border: 0,
-    px: 2,
+    px: { xs: 1, sm: 2 },
+    py: { xs: 1, sm: '11px' }, // 11px is default coming from MUI
     '&.Mui-selected, &.Mui-selected:hover': {
       backgroundColor: (theme) => theme.palette.primary.main,
       color: (theme) => theme.palette.primary.contrastText,
     },
     '&:not(:first-of-type)': {
       borderRadius: 1,
+      ml: '-1px', // Default coming from MUI, but clobbered by setting margin on the group above
     },
     '&:first-of-type': {
       borderRadius: 1,
