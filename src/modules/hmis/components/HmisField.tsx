@@ -67,12 +67,12 @@ interface Props {
   customFieldKey?: string;
 }
 
-const HmisField = ({
+const HmisField: React.FC<Props> = ({
   record,
   recordType,
   fieldName,
   customFieldKey,
-}: Props) => {
+}) => {
   if (fieldName) {
     const value = get(record, fieldName);
     if (isNil(value)) return null;

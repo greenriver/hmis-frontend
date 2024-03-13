@@ -44,7 +44,7 @@ const ENROLLMENT_ACCESS_MOCK = {
   id: '9999:1',
 } as EnrollmentAccess;
 
-const fakeEnrollment = () => {
+export const fakeEnrollment = () => {
   return {
     __typename: 'Enrollment',
     id: v4(),

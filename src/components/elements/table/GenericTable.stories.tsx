@@ -11,7 +11,6 @@ import { ClientFieldsFragment, DisplayHook } from '@/types/gqlTypes';
 export default {
   title: 'GenericTable',
   component: GenericTable,
-  argTypes: { label: { control: 'text' } },
   decorators: [
     (Story) => (
       <Box sx={{ width: 800 }}>
