@@ -613,33 +613,40 @@ export const dataUrlForClientImage = (
   return `data:image/jpeg;base64,${image.base64}`;
 };
 
+// Construct ColumnDefs based on which summary-level CustomDataElements
+// are present on the records.
+//services
 export function getCustomDataElementColumns<
   RowType extends { customDataElements: CustomDataElementFieldsFragment[] }
 >(rows: RowType[]) {
   if (!rows || rows.length === 0) return [];
 
-  // FIX ME
-  // Determine which summary-level CDEs are present on these records.
-  // We can look at the first record because records always resolve all
-  // available CDEs, even if they dont have a value.
-  const seen: Record<string, boolean> = {};
-  const cdeRows: ColumnDef<RowType>[] = [];
-  rows.forEach(({ customDataElements }) => {
-    customDataElements.forEach(({ label, key, displayHooks }) => {
-      if (seen[key]) return;
-      seen[key] = true;
+  function generateColumnDefinition(cded: CustomDataElementFieldsFragment) {
+    return {
+      header: cded.label,
+      key: cded.key,
+      render: (row: RowType) => {
+        const thisCde = row.customDataElements.find(
+          (elem) => elem.key === cded.key
+        );
+        if (!thisCde) return null;
+        return customDataElementValueAsString(thisCde);
+      },
+    };
+  }
 
-      if (!displayHooks.includes(DisplayHook.TableSummary)) return;
+  const columnsByKey: Record<string, ColumnDef<RowType>> = {};
+  rows.forEach((row) => {
+    row.customDataElements.forEach((cded) => {
+      if (!cded.displayHooks.includes(DisplayHook.TableSummary)) return;
+      if (columnsByKey[cded.key]) return; // seen
 
-      cdeRows.push({
-        header: label,
-        key,
-        render: (row: RowType) =>
-          // fixme: string display
-          customDataElementValueForKey(key, row.customDataElements),
-      });
+      columnsByKey[cded.key] = generateColumnDefinition(cded);
     });
   });
 
-  return cdeRows;
+  // sort columns by CDED Key so they always appear in the same order
+  return Object.keys(columnsByKey)
+    .sort()
+    .map((key) => columnsByKey[key]);
 }
