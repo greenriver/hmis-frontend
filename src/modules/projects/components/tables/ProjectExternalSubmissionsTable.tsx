@@ -1,6 +1,7 @@
 import { Card, Chip } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import React, { useCallback, useMemo, useState } from 'react';
+import theme from '@/config/theme';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
@@ -47,16 +48,18 @@ const ProjectExternalSubmissionsTable = ({
       {
         header: 'Status',
         linkTreatment: false,
-        render: (s: ExternalFormSubmissionFieldsFragment) => (
-          <Chip
-            label={capitalize(s.status)}
-            color={
-              s.status === ExternalFormSubmissionStatus.New
-                ? 'primary'
-                : 'default'
-            }
-          />
-        ),
+        render: (s: ExternalFormSubmissionFieldsFragment) => {
+          const isNew = s.status === ExternalFormSubmissionStatus.New;
+          return (
+            <Chip
+              label={capitalize(s.status)}
+              size='small'
+              color={isNew ? 'primary' : 'default'}
+              variant={isNew ? 'filled' : 'outlined'}
+              sx={isNew ? {} : { color: theme.palette.text.secondary }}
+            />
+          );
+        },
       },
       {
         header: 'Date Submitted',
