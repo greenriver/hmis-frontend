@@ -9,7 +9,8 @@ import HorizontalGroup from './group/HorizontalGroup';
 import InputGroup from './group/InputGroup';
 import QuestionGroup from './group/QuestionGroup';
 
-import { SignatureIcon } from '@/components/elements/SemanticIcons';
+import SignatureGroupCard from './group/SignatureGroupCard';
+import TableGroup from './group/TableGroup';
 import Signature from '@/modules/form/components/group/Signature';
 import { Component } from '@/types/gqlTypes';
 
@@ -68,15 +69,7 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
       return <HorizontalGroup key={props.item.linkId} {...props} />;
     case Component.SignatureGroup:
       return (
-        <FormCard
-          key={props.item.linkId}
-          anchor={props.visible ? props.item.linkId : undefined}
-          debug={debug}
-          TitleIcon={SignatureIcon}
-          titleProps={{ color: 'primary', variant: 'h3', fontWeight: 600 }}
-          helperTextProps={{ variant: 'body1' }}
-          {...props}
-        />
+        <SignatureGroupCard key={props.item.linkId} debug={debug} {...props} />
       );
     case Component.Signature:
       return <Signature key={props.item.linkId} {...props} />;
@@ -86,6 +79,8 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
           <QuestionGroup key={props.item.linkId} {...props} />
         </InfoGroup>
       );
+    case Component.Table:
+      return <TableGroup key={props.item.linkId} {...props} />;
     default:
       return <QuestionGroup key={props.item.linkId} {...props} />;
   }

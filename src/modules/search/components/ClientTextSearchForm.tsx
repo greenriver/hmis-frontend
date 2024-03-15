@@ -7,6 +7,7 @@ import ClearSearchButton from './ClearSearchButton';
 import ClientTextSearchInput, {
   ClientTextSearchInputProps,
 } from './ClientTextSearchInput';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
   initialValue?: string;
@@ -52,9 +53,23 @@ const ClientTextSearchForm: React.FC<Props> = ({
     if (onClearSearch) onClearSearch();
   }, [onClearSearch]);
 
-  const buttonSx = { mt: 3, px: 4, height: 'fit-content', top: '2px' };
+  // Using isTiny as the breakpoint for the mobile appearance here rather than vanilla isMobile
+  // gets us the search box appearing as normal/desktop (with buttons in one line) on reasonably large
+  // tablet screens, but really small phone screens will still have the buttons stack correctly.
+  const isTiny = useIsMobile('sm');
+
+  const buttonSx = {
+    mt: isTiny ? 0 : 3,
+    px: 4,
+    height: 'fit-content',
+    top: '2px',
+  };
   return (
-    <Stack direction={'row'} alignItems='flex-start' gap={2}>
+    <Stack
+      direction={{ xs: 'column', sm: 'row' }}
+      alignItems='flex-start'
+      gap={{ xs: 1, sm: 2 }}
+    >
       <ClientTextSearchInput
         value={value}
         onChange={setValue}

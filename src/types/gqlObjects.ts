@@ -416,6 +416,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
+        name: 'formula',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'sumQuestions',
         type: {
           kind: 'LIST',
@@ -2779,7 +2783,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
       {
@@ -2808,7 +2812,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'resultDate',
-        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
     ],
   },

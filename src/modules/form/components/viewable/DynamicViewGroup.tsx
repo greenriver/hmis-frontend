@@ -2,11 +2,14 @@ import { Box } from '@mui/system';
 
 import { ViewGroupItemComponentProps } from '../../types';
 import DisabilityTable from '../group/DisabilityTable';
+import FormCard from '../group/FormCard';
 import HorizontalGroup from '../group/HorizontalGroup';
 import InputGroup from '../group/InputGroup';
 import QuestionGroup from '../group/QuestionGroup';
 
-import ViewCard from './group/ViewCard';
+import Signature from '../group/Signature';
+import SignatureGroupCard from '../group/SignatureGroupCard';
+import TableGroup from '../group/TableGroup';
 
 import { Component } from '@/types/gqlTypes';
 
@@ -14,9 +17,10 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
   // Always render top-level groups as cards
   if (props.nestingLevel === 0 && !props.item.component) {
     return (
-      <ViewCard
+      <FormCard
         key={props.item.linkId}
         anchor={props.visible ? props.item.linkId : undefined}
+        viewOnly
         {...props}
       />
     );
@@ -35,7 +39,9 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
     case Component.DisabilityTable:
       return <DisabilityTable key={props.item.linkId} {...props} />;
     case Component.HorizontalGroup:
-      return <HorizontalGroup key={props.item.linkId} {...props} />;
+      return <HorizontalGroup key={props.item.linkId} viewOnly {...props} />;
+    case Component.Signature:
+      return <Signature key={props.item.linkId} viewOnly {...props} />;
     case Component.InfoGroup:
       return (
         <Box
@@ -49,6 +55,10 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
           <QuestionGroup key={props.item.linkId} {...props} />
         </Box>
       );
+    case Component.Table:
+      return <TableGroup key={props.item.linkId} {...props} viewOnly />;
+    case Component.SignatureGroup:
+      return <SignatureGroupCard key={props.item.linkId} viewOnly {...props} />;
     default:
       return (
         <QuestionGroup

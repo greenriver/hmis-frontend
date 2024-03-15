@@ -168,6 +168,8 @@ export const HmisEnums = {
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
     MCI: 'MCI linking component',
+    MINUTES_DURATION:
+      'Duration component with hours and minutes, value stored as minutes',
     NAME: 'Client Name input',
     PHONE: 'Phone number input for ContactPoint',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
@@ -176,6 +178,8 @@ export const HmisEnums = {
     SIGNATURE: 'Signature input component',
     SIGNATURE_GROUP: 'Signature input component',
     SSN: 'SSN input component',
+    TABLE:
+      'Render group as a table. Each child item should be a group representing 1 table row.',
   },
   CounselingMethod: {
     FAMILY: 'Family',
@@ -767,6 +771,7 @@ export const HmisEnums = {
     OPEN_CHOICE: 'OPEN_CHOICE',
     STRING: 'STRING',
     TEXT: 'TEXT',
+    TIME_OF_DAY: 'TIME_OF_DAY',
   },
   LastGradeCompleted: {
     INVALID: 'Invalid Value',
