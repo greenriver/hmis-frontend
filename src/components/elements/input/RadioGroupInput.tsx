@@ -87,7 +87,7 @@ const RadioGroupInput = ({
   const ControlComponent = checkbox ? Checkbox : Radio;
 
   return (
-    <FormControl component='fieldset'>
+    <FormControl component='fieldset' sx={sx}>
       <FormLabel
         error={error}
         disabled={props.disabled}
@@ -117,7 +117,6 @@ const RadioGroupInput = ({
               borderRadius: 1,
             },
           }),
-          ...sx,
         }}
         aria-label={ariaLabel}
         {...props}

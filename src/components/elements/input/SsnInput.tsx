@@ -25,6 +25,7 @@ const SsnInput = ({
   onlylast4 = false,
   warnIfEmptyTreatment,
   ariaLabel,
+  sx,
   ...props
 }: SsnInputProps) => {
   const baseInputProps: TextFieldProps = {
@@ -117,7 +118,7 @@ const SsnInput = ({
         )
       }
       renderInputs={(inputs) => (
-        <LabelWithContent label={label} helperText={helperText}>
+        <LabelWithContent sx={sx} label={label} helperText={helperText}>
           <Box
             sx={{
               display: 'inline-flex',

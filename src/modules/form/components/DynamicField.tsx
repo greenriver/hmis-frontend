@@ -218,6 +218,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
                 })
               }
               horizontal={horizontal}
+              sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
               {...commonInputProps}
             />
           </InputContainer>
@@ -228,6 +229,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <YesNoRadio
             value={value}
             onChange={onChangeValue}
+            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
         </InputContainer>
@@ -242,11 +244,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               name={linkId}
               value={value || ''}
               onChange={onChangeValue}
-              sx={{
-                width,
-                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
-              }}
+              sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
               {...commonInputProps}
             />
           </InputContainer>
@@ -258,11 +256,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             id={linkId}
             value={value || ''}
             onChange={onChangeEvent}
-            sx={{
-              width,
-              maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-              '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+            InputProps={{
+              sx: {
+                width,
+                maxWidth: MAX_INPUT_WIDTH,
+              },
             }}
+            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
         );
@@ -277,10 +277,14 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             multiline={multiline}
             minRows={multiline ? 2 : undefined}
             horizontal={horizontal}
+            InputProps={{
+              sx: {
+                width,
+                maxWidth: MAX_INPUT_WIDTH,
+              },
+            }}
             sx={{
-              width,
               maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-              '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
             }}
             {...commonInputProps}
           />
@@ -294,7 +298,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             <MinutesDurationInput
               value={isNil(value) ? '' : value}
               onChange={onChangeValue}
-              inputWidth={width}
+              sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
               {...commonInputProps}
             />
           </InputContainer>
@@ -306,8 +310,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEvent}
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
-            inputWidth={width}
+            inputWidth='120px'
             disableArrowKeys={item.type === ItemType.Currency}
+            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
         </InputContainer>
@@ -327,7 +332,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             textInputProps={{
               id: linkId,
               horizontal,
-              sx: { width },
+              InputProps: { sx: { width } },
+              sx: { maxWidth: MAX_INPUT_AND_LABEL_WIDTH },
             }}
             {...datePickerProps}
             {...commonInputProps}
@@ -343,7 +349,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             textInputProps={{
               id: linkId,
               horizontal,
-              sx: { width },
+              InputProps: { sx: { width } },
+              sx: { maxWidth: MAX_INPUT_AND_LABEL_WIDTH },
             }}
             {...commonInputProps}
           />
@@ -364,11 +371,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             placeholder={placeholder}
             textInputProps={{
               horizontal,
-              sx: {
-                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
-              },
+              InputProps: { sx: { width } },
+              // cant allow label to extend, because it messes up click target for closing dropdown
+              sx: { maxWidth: MAX_INPUT_WIDTH },
             }}
+            sx={{ maxWidth: MAX_INPUT_WIDTH }} // for click target for closing dropdwon
             {...commonInputProps}
           />
         </InputContainer>
@@ -392,6 +399,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             value={currentValue}
             onChange={onChangeValue}
             horizontal={horizontal}
+            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
         );
@@ -405,6 +413,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeValue}
             options={options || []}
             row={componentType === Component.RadioButtons}
+            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
         ) : (
@@ -414,6 +423,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             options={options || []}
             row={componentType === Component.RadioButtons}
             clearable
+            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
         );
@@ -429,12 +439,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             textInputProps={{
               name: linkId,
               horizontal,
-              sx: {
-                width,
-                // cant allow label to extend, because it messes up click target for closing dropdwon
-                maxWidth: MAX_INPUT_WIDTH,
-                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
-              },
+              InputProps: { sx: { width } },
+              // cant allow label to extend, because it messes up click target for closing dropdown
+              sx: { maxWidth: MAX_INPUT_WIDTH },
             }}
             sx={{ maxWidth: MAX_INPUT_WIDTH }} // for click target for closing dropdwon
             {...commonInputProps}

@@ -66,7 +66,7 @@ const MinutesDurationInput = ({
   }, []);
 
   return (
-    <FormControl>
+    <FormControl sx={props.sx}>
       {label}
       <Stack alignItems='center' direction='row' gap={1} sx={{ mt: 0.5 }}>
         <NumberInput
