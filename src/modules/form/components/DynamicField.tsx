@@ -244,7 +244,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               name={linkId}
               value={value || ''}
               onChange={onChangeValue}
-              sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
+              sx={{
+                width,
+                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+              }}
               {...commonInputProps}
             />
           </InputContainer>
@@ -372,10 +375,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             textInputProps={{
               horizontal,
               InputProps: { sx: { width } },
-              // cant allow label to extend, because it messes up click target for closing dropdown
+              // using MAX_INPUT_WIDTH instead of MAX_INPUT_AND_LABEL_WIDTH here so that
+              // label doesn't extend beyond select, which messes up click target for opening/closing the dropdown
               sx: { maxWidth: MAX_INPUT_WIDTH },
             }}
-            sx={{ maxWidth: MAX_INPUT_WIDTH }} // for click target for closing dropdwon
+            sx={{ maxWidth: MAX_INPUT_WIDTH }}
             {...commonInputProps}
           />
         </InputContainer>
@@ -440,10 +444,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               name: linkId,
               horizontal,
               InputProps: { sx: { width } },
-              // cant allow label to extend, because it messes up click target for closing dropdown
+              // using MAX_INPUT_WIDTH instead of MAX_INPUT_AND_LABEL_WIDTH here so that
+              // label doesn't extend beyond select, which messes up click target for opening/closing the dropdown
               sx: { maxWidth: MAX_INPUT_WIDTH },
             }}
-            sx={{ maxWidth: MAX_INPUT_WIDTH }} // for click target for closing dropdwon
+            sx={{ maxWidth: MAX_INPUT_WIDTH }}
             {...commonInputProps}
           />
         );
