@@ -1,5 +1,4 @@
-import { Location, To, matchRoutes } from 'react-router-dom';
-import { allRoutes } from './routes';
+import { Location, To } from 'react-router-dom';
 
 export type LocationState = {
   fromLoginRedirect?: boolean;
@@ -17,38 +16,22 @@ export const locationFromDefaultOrLogin = (location: Location): boolean => {
   return !!location.state?.fromLoginRedirect;
 };
 
-export const PREV_SEARCH_KEY = 'prev';
-export const prevSearchParam = () =>
-  `${PREV_SEARCH_KEY}=${encodeURIComponent(
-    window.location.pathname + window.location.search
-  )}`;
-
-export const toPreviousUrlFromSearchParam = (
-  params: URLSearchParams,
-  inject: Record<string, any>
+export const injectSearchParams = (
+  route: string, // route with params, e.g.  '/projects/218/bed-nights?coc=MA-509'
+  inject: Record<string, any> // search params to inject
 ): To | undefined => {
-  const prevParam = params.get(PREV_SEARCH_KEY);
-  if (!prevParam) return;
-
   let url: URL | undefined;
   try {
-    url = new URL(prevParam, window.location.href);
+    url = new URL(route, window.location.href);
   } catch (e) {
     console.error(e);
   }
 
-  if (!url) return;
+  if (!url) return route;
 
   Object.keys(inject).forEach((key) => {
     (url as URL).searchParams.set(key, inject[key] || '');
   });
 
-  const matches = matchRoutes(allRoutes, url.pathname);
-
-  if (!matches || matches.length === 0) return;
-
-  return {
-    pathname: matches[0].pathname,
-    search: url.searchParams.toString(),
-  };
+  return `${url.pathname}?${url.searchParams.toString()}`;
 };

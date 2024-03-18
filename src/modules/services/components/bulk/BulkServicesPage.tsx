@@ -18,7 +18,6 @@ import CocPicker from '@/modules/projects/components/CocPicker';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { prevSearchParam } from '@/routes/routeUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -113,12 +112,16 @@ const BulkServicesPage: React.FC<Props> = ({
             setFilterParams({ searchTerm: data.client.id })
           }
           navigateToHousehold={() =>
-            navigate({
-              pathname: generateSafePath(route, { projectId: project.id }),
-              // when navigating to the household creation page, we store the previous URL as a search
-              // param so that it can navigate back with a prefilled household id search
-              search: prevSearchParam(),
-            })
+            navigate(
+              {
+                pathname: generateSafePath(route, { projectId: project.id }),
+              },
+              {
+                state: {
+                  prev: window.location.pathname + window.location.search,
+                },
+              }
+            )
           }
         />
       </RootPermissionsFilter>

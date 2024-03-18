@@ -1,11 +1,11 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { To, useLocation, useNavigate } from 'react-router-dom';
 import ManageHousehold from './ManageHousehold';
 import BackButton from '@/components/elements/BackButton';
 import PageTitle from '@/components/layout/PageTitle';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { toPreviousUrlFromSearchParam } from '@/routes/routeUtil';
+import { injectSearchParams } from '@/routes/routeUtil';
 
 function buttonTextForPath(path?: string) {
   if (path === ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD) {
@@ -20,8 +20,8 @@ function buttonTextForPath(path?: string) {
 const CreateHouseholdPage = () => {
   const { project } = useProjectDashboardContext();
   const currentPath = useCurrentPath();
-  const [params] = useSearchParams();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   return (
     <>
@@ -31,19 +31,17 @@ const CreateHouseholdPage = () => {
         renderBackButton={(householdId) => (
           <BackButton
             onClick={() => {
-              if (!householdId) {
+              if (!state.prev) {
                 navigate(-1);
-                return;
-              }
-              // if possible, prefill search query with household id when navigating back
-              const backTo = toPreviousUrlFromSearchParam(params, {
-                searchTerm: `household:${householdId}`,
-              });
-
-              if (backTo) {
-                navigate(backTo);
+              } else if (householdId) {
+                // If previous path was specified and a household was created,
+                // inject household query as `searchTerm`
+                const path = injectSearchParams(state.prev, {
+                  searchTerm: `household:${householdId}`,
+                });
+                navigate(path as To);
               } else {
-                navigate(-1);
+                navigate(state.prev);
               }
             }}
           >
