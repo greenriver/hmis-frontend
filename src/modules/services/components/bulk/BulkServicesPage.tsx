@@ -141,7 +141,7 @@ const BulkServicesPage: React.FC<Props> = ({
             }
             padded
           >
-            <Stack gap={2}>
+            <Stack gap={2} maxWidth='380px'>
               {showServiceTypePicker && (
                 <ServiceTypeSelect
                   projectId={project.id}
