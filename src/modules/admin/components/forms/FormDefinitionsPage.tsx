@@ -69,7 +69,9 @@ const FormDefinitionsPage = () => {
         <Grid item xs={12}>
           <Paper>
             <FormDefinitionTable
-              queryVariables={{ filters: { searchTerm: debouncedSearch } }}
+              queryVariables={{
+                filters: { searchTerm: debouncedSearch || undefined },
+              }}
             />
           </Paper>
         </Grid>
