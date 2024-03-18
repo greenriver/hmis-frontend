@@ -6715,6 +6715,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'FormDefinitionFilterOptions',
+    args: [
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'FormDefinitionInput',
     args: [
       {
@@ -6857,6 +6866,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+      {
+        name: 'serviceCategoryId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'serviceTypeId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
     ],
   },
@@ -7251,6 +7268,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
+      },
+    ],
+  },
+  {
+    name: 'ServiceTypeFilterOptions',
+    args: [
+      {
+        name: 'includeHudServices',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

@@ -22,7 +22,7 @@ const adminDashboardRoutes = {
   USER_ENROLLMENT_ACCESS_HISTORY: 'users/:userId/enrollmentAccessHistory',
   USER_EDIT_HISTORY: 'users/:userId/editHistory',
   CONFIGURE_SERVICES: 'services',
-  CONFIGURE_SERVICE_CATEGORY: 'services/:serviceCategoryId',
+  CONFIGURE_SERVICE_TYPE: 'services/:serviceTypeId',
   FORMS: 'forms',
   VIEW_FORM: 'forms/:formId',
   EDIT_FORM: 'forms/:formId/edit',

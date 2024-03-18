@@ -240,11 +240,11 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
       },
       [AdminDashboardRoutes.CONFIGURE_SERVICES]: {
-        title: 'Service Categories',
+        title: 'Service Types',
       },
-      [AdminDashboardRoutes.CONFIGURE_SERVICE_CATEGORY]: {
+      [AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE]: {
         parent: AdminDashboardRoutes.CONFIGURE_SERVICES,
-        title: 'View Service Category',
+        title: 'View Service Type',
       },
       [AdminDashboardRoutes.VIEW_FORM]: {
         parent: AdminDashboardRoutes.FORMS,

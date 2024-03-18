@@ -2801,6 +2801,10 @@ export type FormDefinitionFormRulesArgs = {
   sortOrder?: InputMaybe<FormRuleSortOption>;
 };
 
+export type FormDefinitionFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type FormDefinitionForJsonResult = {
   __typename?: 'FormDefinitionForJsonResult';
   definition?: Maybe<FormDefinitionJson>;
@@ -3008,6 +3012,8 @@ export type FormRuleInput = {
   otherFunder?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<ProjectType>;
+  serviceCategoryId?: InputMaybe<Scalars['ID']['input']>;
+  serviceTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export enum FormRuleSortOption {
@@ -5442,6 +5448,7 @@ export type Query = {
   serviceFormDefinition?: Maybe<FormDefinition>;
   /** Service type lookup */
   serviceType?: Maybe<ServiceType>;
+  serviceTypes: ServiceTypesPaginated;
   staticFormDefinition: FormDefinition;
   /** User lookup */
   user?: Maybe<ApplicationUser>;
@@ -5506,6 +5513,7 @@ export type QueryFormDefinitionArgs = {
 };
 
 export type QueryFormDefinitionsArgs = {
+  filters?: InputMaybe<FormDefinitionFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5621,6 +5629,12 @@ export type QueryServiceFormDefinitionArgs = {
 
 export type QueryServiceTypeArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryServiceTypesArgs = {
+  filters?: InputMaybe<ServiceTypeFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryStaticFormDefinitionArgs = {
@@ -6404,6 +6418,8 @@ export type ServiceType = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  /** Definitions that are specified for this service type */
+  formDefinitions: Array<FormDefinition>;
   hud: Scalars['Boolean']['output'];
   hudRecordType?: Maybe<RecordType>;
   hudTypeProvided?: Maybe<ServiceTypeProvided>;
@@ -6411,6 +6427,11 @@ export type ServiceType = {
   name: Scalars['String']['output'];
   supportsBulkAssignment: Scalars['Boolean']['output'];
   user?: Maybe<ApplicationUser>;
+};
+
+export type ServiceTypeFilterOptions = {
+  includeHudServices?: InputMaybe<Scalars['Boolean']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2) */
@@ -13285,6 +13306,7 @@ export type GetClientServicesQuery = {
           __typename?: 'ServiceType';
           id: string;
           name: string;
+          hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
           category: string;
@@ -14612,6 +14634,43 @@ export type FormRuleFieldsFragment = {
     hudId: string;
     organizationName: string;
   } | null;
+  serviceCategory?: {
+    __typename?: 'ServiceCategory';
+    id: string;
+    name: string;
+    hud: boolean;
+  } | null;
+  serviceType?: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hud: boolean;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+  } | null;
+};
+
+export type ServiceTypeConfigFieldsFragment = {
+  __typename?: 'ServiceType';
+  id: string;
+  name: string;
+  hud: boolean;
+  hudRecordType?: RecordType | null;
+  hudTypeProvided?: ServiceTypeProvided | null;
+  category: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  supportsBulkAssignment: boolean;
+  formDefinitions: Array<{
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  }>;
 };
 
 export type GetFormRulesQueryVariables = Exact<{
@@ -14657,6 +14716,24 @@ export type GetFormRulesQuery = {
         id: string;
         hudId: string;
         organizationName: string;
+      } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+        hud: boolean;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hud: boolean;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       } | null;
     }>;
   };
@@ -14710,6 +14787,24 @@ export type GetServiceCategoryRulesQuery = {
           hudId: string;
           organizationName: string;
         } | null;
+        serviceCategory?: {
+          __typename?: 'ServiceCategory';
+          id: string;
+          name: string;
+          hud: boolean;
+        } | null;
+        serviceType?: {
+          __typename?: 'ServiceType';
+          id: string;
+          name: string;
+          hud: boolean;
+          hudRecordType?: RecordType | null;
+          hudTypeProvided?: ServiceTypeProvided | null;
+          category: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
+        } | null;
       }>;
     };
   } | null;
@@ -14750,6 +14845,24 @@ export type GetFormRuleQuery = {
       id: string;
       hudId: string;
       organizationName: string;
+    } | null;
+    serviceCategory?: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+      hud: boolean;
+    } | null;
+    serviceType?: {
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hud: boolean;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
     } | null;
   } | null;
 };
@@ -14792,6 +14905,24 @@ export type CreateFormRuleMutation = {
         id: string;
         hudId: string;
         organizationName: string;
+      } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+        hud: boolean;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hud: boolean;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       } | null;
     };
     errors: Array<{
@@ -14850,6 +14981,24 @@ export type UpdateFormRuleMutation = {
         hudId: string;
         organizationName: string;
       } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+        hud: boolean;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hud: boolean;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
+      } | null;
     };
     errors: Array<{
       __typename?: 'ValidationError';
@@ -14864,6 +15013,94 @@ export type UpdateFormRuleMutation = {
       linkId?: string | null;
       section?: string | null;
       data?: any | null;
+    }>;
+  } | null;
+};
+
+export type GetServiceTypesQueryVariables = Exact<{
+  filters?: InputMaybe<ServiceTypeFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetServiceTypesQuery = {
+  __typename?: 'Query';
+  serviceTypes: {
+    __typename?: 'ServiceTypesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hud: boolean;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
+      formDefinitions: Array<{
+        __typename?: 'FormDefinition';
+        id: string;
+        cacheKey: string;
+        title: string;
+      }>;
+    }>;
+  };
+};
+
+export type GetServiceCategoriesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetServiceCategoriesQuery = {
+  __typename?: 'Query';
+  serviceCategories: {
+    __typename?: 'ServiceCategoriesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+      hud: boolean;
+      serviceTypes: {
+        __typename?: 'ServiceTypesPaginated';
+        offset: number;
+        limit: number;
+        nodesCount: number;
+        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+      };
+    }>;
+  };
+};
+
+export type GetServiceTypeDetailsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetServiceTypeDetailsQuery = {
+  __typename?: 'Query';
+  serviceType?: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hud: boolean;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+    formDefinitions: Array<{
+      __typename?: 'FormDefinition';
+      id: string;
+      cacheKey: string;
+      title: string;
     }>;
   } | null;
 };
@@ -23268,6 +23505,7 @@ export type GetFormDefinitionForEditorQuery = {
 };
 
 export type GetFormDefinitionsQueryVariables = Exact<{
+  filters?: InputMaybe<FormDefinitionFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -24589,6 +24827,7 @@ export type SubmitFormMutation = {
             __typename?: 'ServiceType';
             id: string;
             name: string;
+            hud: boolean;
             hudRecordType?: RecordType | null;
             hudTypeProvided?: ServiceTypeProvided | null;
             category: string;
@@ -24665,6 +24904,7 @@ export type SubmitFormMutation = {
             __typename?: 'ServiceType';
             id: string;
             name: string;
+            hud: boolean;
             hudRecordType?: RecordType | null;
             hudTypeProvided?: ServiceTypeProvided | null;
             category: string;
@@ -25794,6 +26034,7 @@ export type ProjectAllFieldsFragment = {
     __typename?: 'ServiceType';
     id: string;
     name: string;
+    hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
     category: string;
@@ -26558,6 +26799,7 @@ export type GetProjectQuery = {
       __typename?: 'ServiceType';
       id: string;
       name: string;
+      hud: boolean;
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
       category: string;
@@ -26779,6 +27021,7 @@ export type GetProjectServicesQuery = {
           __typename?: 'ServiceType';
           id: string;
           name: string;
+          hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
           category: string;
@@ -28682,6 +28925,7 @@ export type ServiceTypeFieldsFragment = {
   __typename?: 'ServiceType';
   id: string;
   name: string;
+  hud: boolean;
   hudRecordType?: RecordType | null;
   hudTypeProvided?: ServiceTypeProvided | null;
   category: string;
@@ -28714,6 +28958,7 @@ export type ServiceFieldsFragment = {
     __typename?: 'ServiceType';
     id: string;
     name: string;
+    hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
     category: string;
@@ -28814,6 +29059,7 @@ export type GetServiceQuery = {
       __typename?: 'ServiceType';
       id: string;
       name: string;
+      hud: boolean;
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
       category: string;
@@ -28881,6 +29127,7 @@ export type GetServiceTypeQuery = {
     __typename?: 'ServiceType';
     id: string;
     name: string;
+    hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
     category: string;
@@ -28923,6 +29170,7 @@ export type DeleteServiceMutation = {
         __typename?: 'ServiceType';
         id: string;
         name: string;
+        hud: boolean;
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
         category: string;
@@ -29036,6 +29284,7 @@ export type GetEnrollmentServicesQuery = {
           __typename?: 'ServiceType';
           id: string;
           name: string;
+          hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
           category: string;
@@ -29095,34 +29344,6 @@ export type GetEnrollmentServicesQuery = {
   } | null;
 };
 
-export type GetServiceCategoriesQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetServiceCategoriesQuery = {
-  __typename?: 'Query';
-  serviceCategories: {
-    __typename?: 'ServiceCategoriesPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'ServiceCategory';
-      id: string;
-      name: string;
-      hud: boolean;
-      serviceTypes: {
-        __typename?: 'ServiceTypesPaginated';
-        offset: number;
-        limit: number;
-        nodesCount: number;
-        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
-      };
-    }>;
-  };
-};
-
 export type GetServiceCategoryQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -29164,6 +29385,7 @@ export type GetServiceCategoryTypesQuery = {
         __typename?: 'ServiceType';
         id: string;
         name: string;
+        hud: boolean;
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
         category: string;
@@ -30507,6 +30729,19 @@ export const OrganizationNameFieldsFragmentDoc = gql`
     organizationName
   }
 `;
+export const ServiceTypeFieldsFragmentDoc = gql`
+  fragment ServiceTypeFields on ServiceType {
+    id
+    name
+    hud
+    hudRecordType
+    hudTypeProvided
+    category
+    dateCreated
+    dateUpdated
+    supportsBulkAssignment
+  }
+`;
 export const FormRuleFieldsFragmentDoc = gql`
   fragment FormRuleFields on FormRule {
     id
@@ -30531,9 +30766,29 @@ export const FormRuleFieldsFragmentDoc = gql`
     }
     createdAt
     updatedAt
+    serviceCategory {
+      id
+      name
+      hud
+    }
+    serviceType {
+      ...ServiceTypeFields
+    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
+  ${ServiceTypeFieldsFragmentDoc}
+`;
+export const ServiceTypeConfigFieldsFragmentDoc = gql`
+  fragment ServiceTypeConfigFields on ServiceType {
+    ...ServiceTypeFields
+    formDefinitions {
+      id
+      cacheKey
+      title
+    }
+  }
+  ${ServiceTypeFieldsFragmentDoc}
 `;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
@@ -31134,18 +31389,6 @@ export const ProjectOperatingPeriodFragmentDoc = gql`
     id
     operatingEndDate
     operatingStartDate
-  }
-`;
-export const ServiceTypeFieldsFragmentDoc = gql`
-  fragment ServiceTypeFields on ServiceType {
-    id
-    name
-    hudRecordType
-    hudTypeProvided
-    category
-    dateCreated
-    dateUpdated
-    supportsBulkAssignment
   }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`
@@ -34635,6 +34878,200 @@ export type UpdateFormRuleMutationOptions = Apollo.BaseMutationOptions<
   UpdateFormRuleMutation,
   UpdateFormRuleMutationVariables
 >;
+export const GetServiceTypesDocument = gql`
+  query GetServiceTypes(
+    $filters: ServiceTypeFilterOptions
+    $limit: Int = 25
+    $offset: Int = 0
+  ) {
+    serviceTypes(filters: $filters, limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceTypeConfigFields
+      }
+    }
+  }
+  ${ServiceTypeConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceTypesQuery__
+ *
+ * To run a query within a React component, call `useGetServiceTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceTypesQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetServiceTypesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetServiceTypesQuery,
+    GetServiceTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetServiceTypesQuery, GetServiceTypesQueryVariables>(
+    GetServiceTypesDocument,
+    options
+  );
+}
+export function useGetServiceTypesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceTypesQuery,
+    GetServiceTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceTypesQuery,
+    GetServiceTypesQueryVariables
+  >(GetServiceTypesDocument, options);
+}
+export type GetServiceTypesQueryHookResult = ReturnType<
+  typeof useGetServiceTypesQuery
+>;
+export type GetServiceTypesLazyQueryHookResult = ReturnType<
+  typeof useGetServiceTypesLazyQuery
+>;
+export type GetServiceTypesQueryResult = Apollo.QueryResult<
+  GetServiceTypesQuery,
+  GetServiceTypesQueryVariables
+>;
+export const GetServiceCategoriesDocument = gql`
+  query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
+    serviceCategories(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceCategoryFields
+      }
+    }
+  }
+  ${ServiceCategoryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetServiceCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceCategoriesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetServiceCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >(GetServiceCategoriesDocument, options);
+}
+export function useGetServiceCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >(GetServiceCategoriesDocument, options);
+}
+export type GetServiceCategoriesQueryHookResult = ReturnType<
+  typeof useGetServiceCategoriesQuery
+>;
+export type GetServiceCategoriesLazyQueryHookResult = ReturnType<
+  typeof useGetServiceCategoriesLazyQuery
+>;
+export type GetServiceCategoriesQueryResult = Apollo.QueryResult<
+  GetServiceCategoriesQuery,
+  GetServiceCategoriesQueryVariables
+>;
+export const GetServiceTypeDetailsDocument = gql`
+  query GetServiceTypeDetails($id: ID!) {
+    serviceType(id: $id) {
+      ...ServiceTypeConfigFields
+    }
+  }
+  ${ServiceTypeConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceTypeDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetServiceTypeDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceTypeDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceTypeDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetServiceTypeDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceTypeDetailsQuery,
+    GetServiceTypeDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceTypeDetailsQuery,
+    GetServiceTypeDetailsQueryVariables
+  >(GetServiceTypeDetailsDocument, options);
+}
+export function useGetServiceTypeDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceTypeDetailsQuery,
+    GetServiceTypeDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceTypeDetailsQuery,
+    GetServiceTypeDetailsQueryVariables
+  >(GetServiceTypeDetailsDocument, options);
+}
+export type GetServiceTypeDetailsQueryHookResult = ReturnType<
+  typeof useGetServiceTypeDetailsQuery
+>;
+export type GetServiceTypeDetailsLazyQueryHookResult = ReturnType<
+  typeof useGetServiceTypeDetailsLazyQuery
+>;
+export type GetServiceTypeDetailsQueryResult = Apollo.QueryResult<
+  GetServiceTypeDetailsQuery,
+  GetServiceTypeDetailsQueryVariables
+>;
 export const GetEnrollmentCurrentLivingSituationsDocument = gql`
   query GetEnrollmentCurrentLivingSituations(
     $id: ID!
@@ -36229,8 +36666,12 @@ export type GetFormDefinitionForEditorQueryResult = Apollo.QueryResult<
   GetFormDefinitionForEditorQueryVariables
 >;
 export const GetFormDefinitionsDocument = gql`
-  query GetFormDefinitions($limit: Int = 25, $offset: Int = 0) {
-    formDefinitions(limit: $limit, offset: $offset) {
+  query GetFormDefinitions(
+    $filters: FormDefinitionFilterOptions
+    $limit: Int = 25
+    $offset: Int = 0
+  ) {
+    formDefinitions(filters: $filters, limit: $limit, offset: $offset) {
       offset
       limit
       nodesCount
@@ -36258,6 +36699,7 @@ export const GetFormDefinitionsDocument = gql`
  * @example
  * const { data, loading, error } = useGetFormDefinitionsQuery({
  *   variables: {
+ *      filters: // value for 'filters'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
@@ -39883,71 +40325,6 @@ export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
 export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables
->;
-export const GetServiceCategoriesDocument = gql`
-  query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
-    serviceCategories(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...ServiceCategoryFields
-      }
-    }
-  }
-  ${ServiceCategoryFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceCategoriesQuery__
- *
- * To run a query within a React component, call `useGetServiceCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceCategoriesQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetServiceCategoriesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >(GetServiceCategoriesDocument, options);
-}
-export function useGetServiceCategoriesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >(GetServiceCategoriesDocument, options);
-}
-export type GetServiceCategoriesQueryHookResult = ReturnType<
-  typeof useGetServiceCategoriesQuery
->;
-export type GetServiceCategoriesLazyQueryHookResult = ReturnType<
-  typeof useGetServiceCategoriesLazyQuery
->;
-export type GetServiceCategoriesQueryResult = Apollo.QueryResult<
-  GetServiceCategoriesQuery,
-  GetServiceCategoriesQueryVariables
 >;
 export const GetServiceCategoryDocument = gql`
   query GetServiceCategory($id: ID!) {
