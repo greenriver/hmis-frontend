@@ -54,7 +54,7 @@ const FormDefinitionsPage = () => {
         }
       />
       <Grid container gap={2}>
-        <Grid item xs={12} xl={6}>
+        <Grid item xs={12}>
           <CommonSearchInput
             label='Search forms'
             size='medium'
