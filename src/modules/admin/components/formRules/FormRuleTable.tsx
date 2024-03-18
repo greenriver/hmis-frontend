@@ -115,8 +115,14 @@ const FormRuleTable: React.FC<Props> = ({
     MutationUpdateFormRuleArgs
   >({
     formRole: StaticFormRole.FormRule,
-    initialValues: selectedRule,
+    initialValues: {
+      ...selectedRule,
+      // hack: pass service type ids as initial values. We should resolve these on FormRule instead
+      serviceTypeId: selectedRule?.serviceType?.id,
+      serviceCategoryId: selectedRule?.serviceCategory?.id,
+    },
     mutationDocument: UpdateFormRuleDocument,
+    localConstants: { formRole },
     getErrors: (data) => data.updateFormRule?.errors || [],
     getVariables: (values) => ({
       input: { input: values as FormRuleInput, id: selectedRule?.id || '' },
