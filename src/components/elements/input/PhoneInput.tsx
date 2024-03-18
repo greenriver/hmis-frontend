@@ -51,6 +51,8 @@ const PhoneInput = ({ InputProps, ...props }: TextInputProps) => {
   return (
     <TextInput
       InputProps={{ inputComponent: TextMaskCustom as any, ...InputProps }}
+      placeholder='(XXX) XXX - XXXX'
+      inputWidth='155px'
       {...props}
     />
   );

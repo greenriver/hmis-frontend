@@ -259,12 +259,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             id={linkId}
             value={value || ''}
             onChange={onChangeEvent}
-            InputProps={{
-              sx: {
-                width,
-                maxWidth: MAX_INPUT_WIDTH,
-              },
-            }}
             sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
