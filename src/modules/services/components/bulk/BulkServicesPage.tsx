@@ -130,8 +130,8 @@ const BulkServicesPage: React.FC<Props> = ({
   return (
     <>
       <PageTitle title={title} />
-      <Grid container rowSpacing={1}>
-        <Grid item sm={12} md={8} lg={8} xl={4}>
+      <Grid container rowSpacing={2}>
+        <Grid item xs={12}>
           <StepCard
             step='1'
             title={
@@ -178,8 +178,7 @@ const BulkServicesPage: React.FC<Props> = ({
             </Stack>
           </StepCard>
         </Grid>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={12} lg={10} xl={8}>
+        <Grid item xs={12}>
           <StepCard
             step='2'
             title='Find Client'
@@ -199,7 +198,7 @@ const BulkServicesPage: React.FC<Props> = ({
                 });
               }}
             />
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 2 }} maxWidth='800px'>
               {lookupMode === 'search' && (
                 <ClientTextSearchForm
                   initialValue={searchTerm}
@@ -213,6 +212,7 @@ const BulkServicesPage: React.FC<Props> = ({
                     startIcon: null,
                     variant: 'outlined',
                     children: 'Reset Search',
+                    sx: { whiteSpace: 'nowrap' },
                     disabled: !searchTerm,
                   }}
                 />
@@ -231,7 +231,6 @@ const BulkServicesPage: React.FC<Props> = ({
             </Box>
           </StepCard>
         </Grid>
-        <Grid item xs={12}></Grid>
         <Grid item xs={12}>
           {sufficientSearchCriteria && !disableClientSearch ? (
             <Paper>
