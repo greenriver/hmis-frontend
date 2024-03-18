@@ -33,6 +33,14 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
       />
     ),
   },
+  {
+    key: 'tags',
+    textAlign: 'right',
+    render: ({ supportsBulkAssignment }) =>
+      supportsBulkAssignment ? (
+        <Chip size='small' label='Supports Bulk Assignment' />
+      ) : null,
+  },
 ];
 
 const ServiceTypeTable = () => {
