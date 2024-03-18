@@ -80,9 +80,6 @@ import {
 // works in current versions of chrome as of 2023 but is not valid HTML.
 export const formAutoCompleteOff = 'do-not-autocomplete';
 
-export const maxWidthAtNestingLevel = (nestingLevel: number) =>
-  600 - nestingLevel * 26;
-
 export const isDataNotCollected = (val?: any): boolean => {
   if (typeof val === 'string') {
     return val.endsWith('_NOT_COLLECTED') || val.endsWith(' not collected');
@@ -1478,3 +1475,8 @@ export const parseOccurrencePointFormDefinition = (
 
   return { displayTitle, isEditable, readOnlyDefinition };
 };
+export const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
+export const MAX_INPUT_WIDTH = 500;
+export const FIXED_WIDTH_MEDIUM = 350;
+export const FIXED_WIDTH_SMALL = 200;
+export const FIXED_WIDTH_X_SMALL = 100;

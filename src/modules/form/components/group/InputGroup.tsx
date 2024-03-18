@@ -3,9 +3,7 @@ import { isNil } from 'lodash-es';
 import { ReactNode, useCallback, useId, useMemo } from 'react';
 
 import { GroupItemComponentProps } from '../../types';
-import { maxWidthAtNestingLevel } from '../../util/formUtil';
 
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { formatCurrency } from '@/modules/hmis/hmisUtil';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
@@ -13,7 +11,6 @@ const InputGroup = ({
   item,
   values,
   renderChildItem,
-  nestingLevel,
   viewOnly = false,
   rowSx,
 }: GroupItemComponentProps) => {
@@ -86,11 +83,6 @@ const InputGroup = ({
       ),
     [rowSx, viewOnly]
   );
-  const isMobile = useIsMobile();
-
-  const maxWidth: number | string = isMobile
-    ? '100%'
-    : maxWidthAtNestingLevel(nestingLevel + 1) + 80;
 
   const groupLabelId = useId();
 
@@ -105,7 +97,6 @@ const InputGroup = ({
           '& .MuiGrid-item': { pt: 0, maxWidth: '100%' },
           mt: 0,
           border: (theme) => `1px solid ${theme.palette.grey[200]}`,
-          maxWidth,
         }}
         role='group'
         aria-labelledby={groupLabelId}
@@ -134,14 +125,7 @@ const InputGroup = ({
             )}
       </Grid>
     );
-  }, [
-    maxWidth,
-    groupLabelId,
-    renderChildItem,
-    childItems,
-    childProps,
-    childRenderFunc,
-  ]);
+  }, [groupLabelId, renderChildItem, childItems, childProps, childRenderFunc]);
 
   let label = item.text;
   if (viewOnly && !isNil(item.readonlyText)) label = item.readonlyText;
@@ -166,7 +150,6 @@ const InputGroup = ({
             py: 2,
             pl: 1,
             border: (theme) => `1px solid ${theme.palette.grey[200]}`,
-            maxWidth,
             textAlign: viewOnly ? 'right' : undefined,
             ...rowSx,
           }}

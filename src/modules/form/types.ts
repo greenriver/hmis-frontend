@@ -46,7 +46,6 @@ export type PickListArgs = {
 export interface DynamicFieldProps {
   item: FormItem;
   itemChanged: ItemChangedFn;
-  nestingLevel?: number;
   value: any;
   disabled?: boolean;
   errors?: ValidationError[];
