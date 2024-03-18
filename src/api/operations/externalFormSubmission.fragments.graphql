@@ -5,9 +5,7 @@ fragment ExternalFormSubmissionFields on ExternalFormSubmission {
   status
   notes
   definition {
-    id
-    cacheKey
-    title
+    ...FormDefinitionFields
   }
   customDataElements {
     ...CustomDataElementFields
