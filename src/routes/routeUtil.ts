@@ -23,7 +23,7 @@ export const prevSearchParam = () =>
     window.location.pathname + window.location.search
   )}`;
 
-export const backToFromSearchParam = (
+export const toPreviousUrlFromSearchParam = (
   params: URLSearchParams,
   inject: Record<string, any>
 ): To | undefined => {

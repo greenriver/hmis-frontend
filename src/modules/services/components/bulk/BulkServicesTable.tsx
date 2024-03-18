@@ -124,6 +124,7 @@ const BulkServicesTable: React.FC<Props> = ({
                 queryVariables={mutationQueryVariables}
                 tableLoading={loading}
                 disabled={anyRowsSelected}
+                disabledReason='Bulk action in progress'
               />
             );
           },

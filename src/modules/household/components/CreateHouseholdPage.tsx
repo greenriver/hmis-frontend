@@ -5,7 +5,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { backToFromSearchParam } from '@/routes/routeUtil';
+import { toPreviousUrlFromSearchParam } from '@/routes/routeUtil';
 
 function buttonTextForPath(path?: string) {
   if (path === ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD) {
@@ -36,7 +36,7 @@ const CreateHouseholdPage = () => {
                 return;
               }
               // if possible, prefill search query with household id when navigating back
-              const backTo = backToFromSearchParam(params, {
+              const backTo = toPreviousUrlFromSearchParam(params, {
                 searchTerm: `household:${householdId}`,
               });
 

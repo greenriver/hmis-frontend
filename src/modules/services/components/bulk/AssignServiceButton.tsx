@@ -4,6 +4,7 @@ import { ButtonProps } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import {
   BulkAssignServiceInput,
@@ -15,6 +16,7 @@ interface Props {
   queryVariables: Omit<BulkAssignServiceInput, 'clientIds'>;
   tableLoading?: boolean;
   disabled?: boolean;
+  disabledReason?: string;
 }
 
 const AssignServiceButton: React.FC<Props> = ({
@@ -22,6 +24,7 @@ const AssignServiceButton: React.FC<Props> = ({
   queryVariables,
   tableLoading,
   disabled,
+  disabledReason,
 }) => {
   const { bulkAssign, bulkRemove, loading, apolloError } =
     useBulkAssignMutations();
@@ -76,18 +79,20 @@ const AssignServiceButton: React.FC<Props> = ({
 
   return (
     <>
-      <LoadingButton
-        onClick={onClick}
-        loading={loading}
-        disabled={disabled || localDisabled}
-        startIcon={
-          isAssignedOnDate && !localDisabled ? <CheckIcon /> : undefined
-        }
-        fullWidth
-        variant={isAssignedOnDate ? 'contained' : 'gray'}
-      >
-        {buttonText}
-      </LoadingButton>
+      <ButtonTooltipContainer title={disabledReason}>
+        <LoadingButton
+          onClick={onClick}
+          loading={loading}
+          disabled={disabled || localDisabled}
+          startIcon={
+            isAssignedOnDate && !localDisabled ? <CheckIcon /> : undefined
+          }
+          fullWidth
+          variant={isAssignedOnDate ? 'contained' : 'gray'}
+        >
+          {buttonText}
+        </LoadingButton>
+      </ButtonTooltipContainer>
       {apolloError && <ApolloErrorAlert error={apolloError} />}
     </>
   );
