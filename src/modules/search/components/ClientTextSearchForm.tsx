@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Button } from '@mui/material';
+import { Button, ButtonProps } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
   minChars?: number;
   onClearSearch?: VoidFunction;
   hideClearButton?: boolean;
+  ClearButtonProps?: ButtonProps;
 }
 
 const ClientTextSearchForm: React.FC<Props> = ({
@@ -25,6 +26,7 @@ const ClientTextSearchForm: React.FC<Props> = ({
   onClearSearch,
   hideClearButton,
   minChars = 3,
+  ClearButtonProps,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -58,11 +60,12 @@ const ClientTextSearchForm: React.FC<Props> = ({
   // tablet screens, but really small phone screens will still have the buttons stack correctly.
   const isTiny = useIsMobile('sm');
 
+  const hasInputLabel = props.label !== null;
   const buttonSx = {
-    mt: isTiny ? 0 : 3,
+    mt: hasInputLabel && !isTiny ? 3 : 0, // space to account for label
     px: 4,
     height: 'fit-content',
-    top: '2px',
+    top: hasInputLabel ? '2px' : 0,
   };
   return (
     <Stack
@@ -97,8 +100,9 @@ const ClientTextSearchForm: React.FC<Props> = ({
           onClick={handleClear}
           sx={buttonSx}
           disabled={!value}
+          {...ClearButtonProps}
         >
-          Clear
+          {ClearButtonProps?.children || 'Clear'}
         </ClearSearchButton>
       )}
     </Stack>

@@ -54,7 +54,6 @@ import IntakeAssessmentPage from '@/modules/assessments/components/IntakeAssessm
 import NewIndividualAssessmentPage from '@/modules/assessments/components/NewIndividualAssessmentPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
-import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
@@ -92,6 +91,8 @@ import ProjectReferralPosting from '@/modules/projects/components/ProjectReferra
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
+import BedNightsPage from '@/modules/services/components/bulk/BedNightsPage';
+import BulkServicesPage from '@/modules/services/components/bulk/BulkServicesPage';
 import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
@@ -156,16 +157,33 @@ export const protectedRoutes: RouteNode[] = [
             element: <ProjectServices />,
           },
           {
-            path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
-            element: <ProjectBedNights />,
+            path: ProjectDashboardRoutes.BULK_BED_NIGHTS,
+            element: (
+              <ProjectEditRoute permissions={['canEditEnrollments']}>
+                <BedNightsPage />
+              </ProjectEditRoute>
+            ),
           },
           {
-            path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT,
+            path: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE,
             element: (
-              <ProjectEditRoute
-                permissions={['canEnrollClients']}
-                redirectRoute={ProjectDashboardRoutes.PROJECT_ENROLLMENTS}
-              >
+              <ProjectEditRoute permissions={['canEditEnrollments']}>
+                <BulkServicesPage />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD,
+            element: (
+              <ProjectEditRoute permissions={['canEnrollClients']}>
+                <CreateHouseholdPage />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD,
+            element: (
+              <ProjectEditRoute permissions={['canEnrollClients']}>
                 <CreateHouseholdPage />
               </ProjectEditRoute>
             ),

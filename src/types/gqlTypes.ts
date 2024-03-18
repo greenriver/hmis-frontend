@@ -12342,90 +12342,94 @@ export type GetUserAuditEventsQuery = {
   } | null;
 };
 
-export type GetProjectEnrollmentsForBedNightsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
-  sortOrder?: InputMaybe<EnrollmentSortOption>;
+export type BulkServicesClientSearchQueryVariables = Exact<{
+  textSearch: Scalars['String']['input'];
+  filters?: InputMaybe<ClientFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetProjectEnrollmentsForBedNightsQuery = {
-  __typename?: 'Query';
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    enrollments: {
-      __typename?: 'EnrollmentsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Enrollment';
-        lastBedNightDate?: string | null;
-        id: string;
-        lockVersion: number;
-        entryDate: string;
-        exitDate?: string | null;
-        inProgress: boolean;
-        relationshipToHoH: RelationshipToHoH;
-        enrollmentCoc?: string | null;
-        householdId: string;
-        householdShortId: string;
-        householdSize: number;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          dob?: string | null;
-          veteranStatus: NoYesReasonsForMissingData;
-          lockVersion: number;
-          age?: number | null;
-          ssn?: string | null;
-          gender: Array<Gender>;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-          access: {
-            __typename?: 'ClientAccess';
-            id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
-          };
-        };
-      }>;
-    };
-  } | null;
-};
-
-export type GetBedNightsOnDateQueryVariables = Exact<{
+  sortOrder?: InputMaybe<ClientSortOption>;
+  serviceTypeId: Scalars['ID']['input'];
   projectId: Scalars['ID']['input'];
-  bedNightOnDate: Scalars['ISO8601Date']['input'];
+  serviceDate: Scalars['ISO8601Date']['input'];
 }>;
 
-export type GetBedNightsOnDateQuery = {
+export type BulkServicesClientSearchQuery = {
   __typename?: 'Query';
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    enrollments: {
-      __typename?: 'EnrollmentsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{ __typename?: 'Enrollment'; id: string }>;
-    };
+  clientSearch: {
+    __typename?: 'ClientsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Client';
+      id: string;
+      lockVersion: number;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      dob?: string | null;
+      age?: number | null;
+      ssn?: string | null;
+      gender: Array<Gender>;
+      activeEnrollment?: {
+        __typename?: 'Enrollment';
+        id: string;
+        entryDate: string;
+        lastServiceDate?: string | null;
+        services: {
+          __typename?: 'ServicesPaginated';
+          limit: number;
+          offset: number;
+          nodesCount: number;
+          nodes: Array<{ __typename?: 'Service'; id: string }>;
+        };
+      } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
+    }>;
+  };
+};
+
+export type BulkAssignServiceMutationVariables = Exact<{
+  input: BulkAssignServiceInput;
+}>;
+
+export type BulkAssignServiceMutation = {
+  __typename?: 'Mutation';
+  bulkAssignService?: {
+    __typename?: 'BulkAssignServicePayload';
+    success?: boolean | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
-export type UpdateBedNightsMutationVariables = Exact<{
-  input: UpdateBedNightsInput;
+export type BulkRemoveServiceMutationVariables = Exact<{
+  projectId: Scalars['ID']['input'];
+  serviceIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
 }>;
 
-export type UpdateBedNightsMutation = {
+export type BulkRemoveServiceMutation = {
   __typename?: 'Mutation';
-  updateBedNights?: {
-    __typename?: 'UpdateBedNightsPayload';
+  bulkRemoveService?: {
+    __typename?: 'BulkRemoveServicePayload';
     success?: boolean | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -13286,6 +13290,7 @@ export type GetClientServicesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -24580,6 +24585,17 @@ export type SubmitFormMutation = {
             dataCollectedAbout: DataCollectedAbout;
             legacy: boolean;
           }>;
+          serviceTypes: Array<{
+            __typename?: 'ServiceType';
+            id: string;
+            name: string;
+            hudRecordType?: RecordType | null;
+            hudTypeProvided?: ServiceTypeProvided | null;
+            category: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            supportsBulkAssignment: boolean;
+          }>;
           projectCocs: {
             __typename?: 'ProjectCocsPaginated';
             nodesCount: number;
@@ -24654,6 +24670,7 @@ export type SubmitFormMutation = {
             category: string;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            supportsBulkAssignment: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -25773,6 +25790,17 @@ export type ProjectAllFieldsFragment = {
     dataCollectedAbout: DataCollectedAbout;
     legacy: boolean;
   }>;
+  serviceTypes: Array<{
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+  }>;
   projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
 };
 
@@ -26526,6 +26554,17 @@ export type GetProjectQuery = {
       dataCollectedAbout: DataCollectedAbout;
       legacy: boolean;
     }>;
+    serviceTypes: Array<{
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
+    }>;
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   } | null;
 };
@@ -26745,6 +26784,7 @@ export type GetProjectServicesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -28647,6 +28687,7 @@ export type ServiceTypeFieldsFragment = {
   category: string;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+  supportsBulkAssignment: boolean;
 };
 
 export type ServiceFieldsFragment = {
@@ -28678,6 +28719,7 @@ export type ServiceFieldsFragment = {
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -28777,6 +28819,7 @@ export type GetServiceQuery = {
       category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -28843,6 +28886,7 @@ export type GetServiceTypeQuery = {
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
   } | null;
 };
 
@@ -28884,6 +28928,7 @@ export type DeleteServiceMutation = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -28996,6 +29041,7 @@ export type GetEnrollmentServicesQuery = {
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -29123,6 +29169,7 @@ export type GetServiceCategoryTypesQuery = {
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       }>;
     };
   } | null;
@@ -31089,6 +31136,18 @@ export const ProjectOperatingPeriodFragmentDoc = gql`
     operatingStartDate
   }
 `;
+export const ServiceTypeFieldsFragmentDoc = gql`
+  fragment ServiceTypeFields on ServiceType {
+    id
+    name
+    hudRecordType
+    hudTypeProvided
+    category
+    dateCreated
+    dateUpdated
+    supportsBulkAssignment
+  }
+`;
 export const ProjectAllFieldsFragmentDoc = gql`
   fragment ProjectAllFields on Project {
     id
@@ -31119,6 +31178,9 @@ export const ProjectAllFieldsFragmentDoc = gql`
     dataCollectionFeatures {
       ...DataCollectionFeatureFields
     }
+    serviceTypes {
+      ...ServiceTypeFields
+    }
     ...ProjectCocCount
   }
   ${ProjectNameAndTypeFragmentDoc}
@@ -31128,6 +31190,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${DataCollectionFeatureFieldsFragmentDoc}
+  ${ServiceTypeFieldsFragmentDoc}
   ${ProjectCocCountFragmentDoc}
 `;
 export const ProjectCocFieldsFragmentDoc = gql`
@@ -31434,17 +31497,6 @@ export const ScanCardFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
-`;
-export const ServiceTypeFieldsFragmentDoc = gql`
-  fragment ServiceTypeFields on ServiceType {
-    id
-    name
-    hudRecordType
-    hudTypeProvided
-    category
-    dateCreated
-    dateUpdated
-  }
 `;
 export const ServiceFieldsFragmentDoc = gql`
   fragment ServiceFields on Service {
@@ -32728,163 +32780,118 @@ export type GetUserAuditEventsQueryResult = Apollo.QueryResult<
   GetUserAuditEventsQuery,
   GetUserAuditEventsQueryVariables
 >;
-export const GetProjectEnrollmentsForBedNightsDocument = gql`
-  query GetProjectEnrollmentsForBedNights(
-    $id: ID!
-    $filters: EnrollmentsForProjectFilterOptions
-    $sortOrder: EnrollmentSortOption
-    $limit: Int = 10
-    $offset: Int = 0
+export const BulkServicesClientSearchDocument = gql`
+  query BulkServicesClientSearch(
+    $textSearch: String!
+    $filters: ClientFilterOptions
+    $limit: Int
+    $offset: Int
+    $sortOrder: ClientSortOption
+    $serviceTypeId: ID!
+    $projectId: ID!
+    $serviceDate: ISO8601Date!
   ) {
-    project(id: $id) {
-      id
-      enrollments(
-        limit: $limit
-        offset: $offset
-        sortOrder: $sortOrder
-        filters: $filters
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...ProjectEnrollmentFields
-          lastBedNightDate
+    clientSearch(
+      input: { textSearch: $textSearch }
+      filters: $filters
+      limit: $limit
+      offset: $offset
+      sortOrder: $sortOrder
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        ...ClientName
+        ...ClientIdentificationFields
+        activeEnrollment(projectId: $projectId, openOnDate: $serviceDate) {
+          id
+          entryDate
+          lastServiceDate(serviceTypeId: $serviceTypeId)
+          services(
+            limit: 25
+            offset: 0
+            filters: {
+              dateProvided: $serviceDate
+              serviceType: [$serviceTypeId]
+            }
+          ) {
+            limit
+            offset
+            nodesCount
+            nodes {
+              id
+            }
+          }
         }
       }
     }
   }
-  ${ProjectEnrollmentFieldsFragmentDoc}
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
 `;
 
 /**
- * __useGetProjectEnrollmentsForBedNightsQuery__
+ * __useBulkServicesClientSearchQuery__
  *
- * To run a query within a React component, call `useGetProjectEnrollmentsForBedNightsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectEnrollmentsForBedNightsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useBulkServicesClientSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBulkServicesClientSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetProjectEnrollmentsForBedNightsQuery({
+ * const { data, loading, error } = useBulkServicesClientSearchQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      textSearch: // value for 'textSearch'
  *      filters: // value for 'filters'
- *      sortOrder: // value for 'sortOrder'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetProjectEnrollmentsForBedNightsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetProjectEnrollmentsForBedNightsQuery,
-    GetProjectEnrollmentsForBedNightsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetProjectEnrollmentsForBedNightsQuery,
-    GetProjectEnrollmentsForBedNightsQueryVariables
-  >(GetProjectEnrollmentsForBedNightsDocument, options);
-}
-export function useGetProjectEnrollmentsForBedNightsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetProjectEnrollmentsForBedNightsQuery,
-    GetProjectEnrollmentsForBedNightsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetProjectEnrollmentsForBedNightsQuery,
-    GetProjectEnrollmentsForBedNightsQueryVariables
-  >(GetProjectEnrollmentsForBedNightsDocument, options);
-}
-export type GetProjectEnrollmentsForBedNightsQueryHookResult = ReturnType<
-  typeof useGetProjectEnrollmentsForBedNightsQuery
->;
-export type GetProjectEnrollmentsForBedNightsLazyQueryHookResult = ReturnType<
-  typeof useGetProjectEnrollmentsForBedNightsLazyQuery
->;
-export type GetProjectEnrollmentsForBedNightsQueryResult = Apollo.QueryResult<
-  GetProjectEnrollmentsForBedNightsQuery,
-  GetProjectEnrollmentsForBedNightsQueryVariables
->;
-export const GetBedNightsOnDateDocument = gql`
-  query GetBedNightsOnDate($projectId: ID!, $bedNightOnDate: ISO8601Date!) {
-    project(id: $projectId) {
-      id
-      enrollments(
-        limit: 500
-        offset: 0
-        filters: { bedNightOnDate: $bedNightOnDate }
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          id
-        }
-      }
-    }
-  }
-`;
-
-/**
- * __useGetBedNightsOnDateQuery__
- *
- * To run a query within a React component, call `useGetBedNightsOnDateQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBedNightsOnDateQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBedNightsOnDateQuery({
- *   variables: {
+ *      sortOrder: // value for 'sortOrder'
+ *      serviceTypeId: // value for 'serviceTypeId'
  *      projectId: // value for 'projectId'
- *      bedNightOnDate: // value for 'bedNightOnDate'
+ *      serviceDate: // value for 'serviceDate'
  *   },
  * });
  */
-export function useGetBedNightsOnDateQuery(
+export function useBulkServicesClientSearchQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetBedNightsOnDateQuery,
-    GetBedNightsOnDateQueryVariables
+    BulkServicesClientSearchQuery,
+    BulkServicesClientSearchQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetBedNightsOnDateQuery,
-    GetBedNightsOnDateQueryVariables
-  >(GetBedNightsOnDateDocument, options);
+    BulkServicesClientSearchQuery,
+    BulkServicesClientSearchQueryVariables
+  >(BulkServicesClientSearchDocument, options);
 }
-export function useGetBedNightsOnDateLazyQuery(
+export function useBulkServicesClientSearchLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetBedNightsOnDateQuery,
-    GetBedNightsOnDateQueryVariables
+    BulkServicesClientSearchQuery,
+    BulkServicesClientSearchQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetBedNightsOnDateQuery,
-    GetBedNightsOnDateQueryVariables
-  >(GetBedNightsOnDateDocument, options);
+    BulkServicesClientSearchQuery,
+    BulkServicesClientSearchQueryVariables
+  >(BulkServicesClientSearchDocument, options);
 }
-export type GetBedNightsOnDateQueryHookResult = ReturnType<
-  typeof useGetBedNightsOnDateQuery
+export type BulkServicesClientSearchQueryHookResult = ReturnType<
+  typeof useBulkServicesClientSearchQuery
 >;
-export type GetBedNightsOnDateLazyQueryHookResult = ReturnType<
-  typeof useGetBedNightsOnDateLazyQuery
+export type BulkServicesClientSearchLazyQueryHookResult = ReturnType<
+  typeof useBulkServicesClientSearchLazyQuery
 >;
-export type GetBedNightsOnDateQueryResult = Apollo.QueryResult<
-  GetBedNightsOnDateQuery,
-  GetBedNightsOnDateQueryVariables
+export type BulkServicesClientSearchQueryResult = Apollo.QueryResult<
+  BulkServicesClientSearchQuery,
+  BulkServicesClientSearchQueryVariables
 >;
-export const UpdateBedNightsDocument = gql`
-  mutation UpdateBedNights($input: UpdateBedNightsInput!) {
-    updateBedNights(input: $input) {
+export const BulkAssignServiceDocument = gql`
+  mutation BulkAssignService($input: BulkAssignServiceInput!) {
+    bulkAssignService(input: $input) {
       success
       errors {
         ...ValidationErrorFields
@@ -32893,48 +32900,103 @@ export const UpdateBedNightsDocument = gql`
   }
   ${ValidationErrorFieldsFragmentDoc}
 `;
-export type UpdateBedNightsMutationFn = Apollo.MutationFunction<
-  UpdateBedNightsMutation,
-  UpdateBedNightsMutationVariables
+export type BulkAssignServiceMutationFn = Apollo.MutationFunction<
+  BulkAssignServiceMutation,
+  BulkAssignServiceMutationVariables
 >;
 
 /**
- * __useUpdateBedNightsMutation__
+ * __useBulkAssignServiceMutation__
  *
- * To run a mutation, you first call `useUpdateBedNightsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateBedNightsMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useBulkAssignServiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBulkAssignServiceMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateBedNightsMutation, { data, loading, error }] = useUpdateBedNightsMutation({
+ * const [bulkAssignServiceMutation, { data, loading, error }] = useBulkAssignServiceMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUpdateBedNightsMutation(
+export function useBulkAssignServiceMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    UpdateBedNightsMutation,
-    UpdateBedNightsMutationVariables
+    BulkAssignServiceMutation,
+    BulkAssignServiceMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
-    UpdateBedNightsMutation,
-    UpdateBedNightsMutationVariables
-  >(UpdateBedNightsDocument, options);
+    BulkAssignServiceMutation,
+    BulkAssignServiceMutationVariables
+  >(BulkAssignServiceDocument, options);
 }
-export type UpdateBedNightsMutationHookResult = ReturnType<
-  typeof useUpdateBedNightsMutation
+export type BulkAssignServiceMutationHookResult = ReturnType<
+  typeof useBulkAssignServiceMutation
 >;
-export type UpdateBedNightsMutationResult =
-  Apollo.MutationResult<UpdateBedNightsMutation>;
-export type UpdateBedNightsMutationOptions = Apollo.BaseMutationOptions<
-  UpdateBedNightsMutation,
-  UpdateBedNightsMutationVariables
+export type BulkAssignServiceMutationResult =
+  Apollo.MutationResult<BulkAssignServiceMutation>;
+export type BulkAssignServiceMutationOptions = Apollo.BaseMutationOptions<
+  BulkAssignServiceMutation,
+  BulkAssignServiceMutationVariables
+>;
+export const BulkRemoveServiceDocument = gql`
+  mutation BulkRemoveService($projectId: ID!, $serviceIds: [ID!]!) {
+    bulkRemoveService(projectId: $projectId, serviceIds: $serviceIds) {
+      success
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type BulkRemoveServiceMutationFn = Apollo.MutationFunction<
+  BulkRemoveServiceMutation,
+  BulkRemoveServiceMutationVariables
+>;
+
+/**
+ * __useBulkRemoveServiceMutation__
+ *
+ * To run a mutation, you first call `useBulkRemoveServiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBulkRemoveServiceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bulkRemoveServiceMutation, { data, loading, error }] = useBulkRemoveServiceMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      serviceIds: // value for 'serviceIds'
+ *   },
+ * });
+ */
+export function useBulkRemoveServiceMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    BulkRemoveServiceMutation,
+    BulkRemoveServiceMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    BulkRemoveServiceMutation,
+    BulkRemoveServiceMutationVariables
+  >(BulkRemoveServiceDocument, options);
+}
+export type BulkRemoveServiceMutationHookResult = ReturnType<
+  typeof useBulkRemoveServiceMutation
+>;
+export type BulkRemoveServiceMutationResult =
+  Apollo.MutationResult<BulkRemoveServiceMutation>;
+export type BulkRemoveServiceMutationOptions = Apollo.BaseMutationOptions<
+  BulkRemoveServiceMutation,
+  BulkRemoveServiceMutationVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
