@@ -1,5 +1,6 @@
 import { isDate } from 'date-fns';
 import { isNil } from 'lodash-es';
+import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 
@@ -107,30 +108,36 @@ const getAllCurrentParams = (searchParams: URLSearchParams) => {
 const useSearchParamsState = (paramsDefinition: SearchParamsStateType) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const values = getValues(paramsDefinition, searchParams);
+  const values = useMemo(
+    () => getValues(paramsDefinition, searchParams),
+    [paramsDefinition, searchParams]
+  );
 
-  const setValues = (newValues: Record<string, any>) => {
-    const currentParams = getAllCurrentParams(searchParams);
-    for (const key in newValues) {
-      if (Object.prototype.hasOwnProperty.call(newValues, key)) {
-        let value = newValues[key];
+  const setValues = useCallback(
+    (newValues: Record<string, any>) => {
+      const currentParams = getAllCurrentParams(searchParams);
+      for (const key in newValues) {
+        if (Object.prototype.hasOwnProperty.call(newValues, key)) {
+          let value = newValues[key];
 
-        if (paramsDefinition[key].type === 'date' && isDate(value)) {
-          // serialize date. if it is invalid, it will be null
-          value = newValues[key] = formatDateForGql(value);
-        }
-        if (
-          isNil(value) ||
-          value === '' ||
-          (Array.isArray(value) && value.length === 0)
-        ) {
-          delete currentParams[key];
-          delete newValues[key];
+          if (paramsDefinition[key].type === 'date' && isDate(value)) {
+            // serialize date. if it is invalid, it will be null
+            value = newValues[key] = formatDateForGql(value);
+          }
+          if (
+            isNil(value) ||
+            value === '' ||
+            (Array.isArray(value) && value.length === 0)
+          ) {
+            delete currentParams[key];
+            delete newValues[key];
+          }
         }
       }
-    }
-    setSearchParams({ ...currentParams, ...newValues });
-  };
+      setSearchParams({ ...currentParams, ...newValues });
+    },
+    [paramsDefinition, searchParams, setSearchParams]
+  );
 
   return [values, setValues] as const;
 };
