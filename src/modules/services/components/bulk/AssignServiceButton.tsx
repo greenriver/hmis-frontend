@@ -79,7 +79,7 @@ const AssignServiceButton: React.FC<Props> = ({
 
   return (
     <>
-      <ButtonTooltipContainer title={disabledReason}>
+      <ButtonTooltipContainer title={disabledReason} placement='top-start'>
         <LoadingButton
           onClick={onClick}
           loading={loading}
