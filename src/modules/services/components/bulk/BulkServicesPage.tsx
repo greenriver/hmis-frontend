@@ -212,7 +212,7 @@ const BulkServicesPage: React.FC<Props> = ({
                     color: 'error',
                     startIcon: null,
                     variant: 'outlined',
-                    children: 'Clear Results',
+                    children: 'Reset Search',
                     disabled: !searchTerm,
                   }}
                 />

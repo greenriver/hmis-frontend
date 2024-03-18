@@ -146,7 +146,7 @@ const ServiceDateRangeSelect: React.FC<Props> = ({
           onClick={handleClear}
           disabled={disabled || !selected}
         >
-          Clear Results
+          Reset Search
         </Button>
       </Stack>
       <CommonDialog
