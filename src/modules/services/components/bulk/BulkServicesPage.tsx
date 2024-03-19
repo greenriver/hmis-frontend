@@ -18,7 +18,6 @@ import CocPicker from '@/modules/projects/components/CocPicker';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { prevSearchParam } from '@/routes/routeUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
@@ -113,12 +112,16 @@ const BulkServicesPage: React.FC<Props> = ({
             setFilterParams({ searchTerm: data.client.id })
           }
           navigateToHousehold={() =>
-            navigate({
-              pathname: generateSafePath(route, { projectId: project.id }),
-              // when navigating to the household creation page, we store the previous URL as a search
-              // param so that it can navigate back with a prefilled household id search
-              search: prevSearchParam(),
-            })
+            navigate(
+              {
+                pathname: generateSafePath(route, { projectId: project.id }),
+              },
+              {
+                state: {
+                  prev: window.location.pathname + window.location.search,
+                },
+              }
+            )
           }
         />
       </RootPermissionsFilter>
@@ -130,8 +133,8 @@ const BulkServicesPage: React.FC<Props> = ({
   return (
     <>
       <PageTitle title={title} />
-      <Grid container rowSpacing={1}>
-        <Grid item sm={12} md={8} lg={8} xl={4}>
+      <Grid container rowSpacing={2}>
+        <Grid item xs={12}>
           <StepCard
             step='1'
             title={
@@ -141,7 +144,7 @@ const BulkServicesPage: React.FC<Props> = ({
             }
             padded
           >
-            <Stack gap={2}>
+            <Stack gap={2} maxWidth='380px'>
               {showServiceTypePicker && (
                 <ServiceTypeSelect
                   projectId={project.id}
@@ -178,8 +181,7 @@ const BulkServicesPage: React.FC<Props> = ({
             </Stack>
           </StepCard>
         </Grid>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={12} lg={10} xl={8}>
+        <Grid item xs={12}>
           <StepCard
             step='2'
             title='Find Client'
@@ -199,7 +201,7 @@ const BulkServicesPage: React.FC<Props> = ({
                 });
               }}
             />
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 2 }} maxWidth='800px'>
               {lookupMode === 'search' && (
                 <ClientTextSearchForm
                   initialValue={searchTerm}
@@ -212,7 +214,8 @@ const BulkServicesPage: React.FC<Props> = ({
                     color: 'error',
                     startIcon: null,
                     variant: 'outlined',
-                    children: 'Clear Results',
+                    children: 'Reset Search',
+                    sx: { whiteSpace: 'nowrap' },
                     disabled: !searchTerm,
                   }}
                 />
@@ -231,7 +234,6 @@ const BulkServicesPage: React.FC<Props> = ({
             </Box>
           </StepCard>
         </Grid>
-        <Grid item xs={12}></Grid>
         <Grid item xs={12}>
           {sufficientSearchCriteria && !disableClientSearch ? (
             <Paper>

@@ -1,5 +1,4 @@
 import { Paper } from '@mui/material';
-import { Stack } from '@mui/system';
 import { useState } from 'react';
 import ServiceCategoryTable from './ServiceCategoryTable';
 import ServiceTypeTable from './ServiceTypeTable';
