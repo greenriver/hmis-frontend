@@ -173,6 +173,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         <InputContainer {...commonContainerProps}>
           <DynamicDisplay
             maxWidth={MAX_INPUT_AND_LABEL_WIDTH}
+            width={width}
             item={item}
             value={value}
           />
