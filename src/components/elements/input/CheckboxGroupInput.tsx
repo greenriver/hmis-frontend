@@ -21,6 +21,7 @@ export interface Props {
   onChange: (value?: Option[] | null) => void;
   row?: boolean;
   sx?: SxProps;
+  labelSx?: SxProps;
 }
 export type CheckboxGroupInputProps = Props & DynamicInputCommonProps;
 
@@ -36,6 +37,7 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
   warnIfEmptyTreatment,
   maxWidth,
   sx,
+  labelSx,
 }) => {
   const isChecked = (code: string) =>
     (value || []).map((o) => o.code).includes(code);
@@ -65,6 +67,7 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
             sx={{
               color: disabled ? 'text.disabled' : 'text.primary',
               '&.Mui-focused': { color: 'text.primary' },
+              ...labelSx,
             }}
           >
             {label}

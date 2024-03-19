@@ -9,6 +9,7 @@ import {
   RadioGroup,
   RadioGroupProps,
 } from '@mui/material';
+import { SxProps } from '@mui/system';
 import { useCallback } from 'react';
 
 import RadioGroupInputOption from '@/components/elements/input/RadioGroupInputOption';
@@ -22,6 +23,7 @@ export interface Props extends Omit<RadioGroupProps, 'onChange'> {
   onChange: (value: PickListOption | null | undefined) => void;
   clearable?: boolean; // whether you can click again to clear the radio button value
   checkbox?: boolean; // display as exclusive checkbox group
+  labelSx?: SxProps;
 }
 export type RadioGroupInputProps = Props & DynamicInputCommonProps;
 
@@ -70,6 +72,7 @@ const RadioGroupInput = ({
   checkbox = false,
   maxWidth,
   inputWidth,
+  labelSx,
   ...props
 }: RadioGroupInputProps) => {
   const onClickOption = useCallback(
@@ -99,6 +102,7 @@ const RadioGroupInput = ({
           '&.Mui-focused': {
             color: 'text.primary',
           },
+          ...labelSx,
         }}
       >
         {label}

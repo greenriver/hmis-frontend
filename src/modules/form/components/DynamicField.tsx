@@ -256,7 +256,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             <MinutesDurationInput
               value={isNil(value) ? '' : value}
               onChange={onChangeValue}
-              sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
               {...commonInputProps}
             />
           </InputContainer>
@@ -364,6 +363,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             options={options || []}
             row={componentType === Component.RadioButtons}
             {...commonInputProps}
+            maxWidth='100%'
+            labelSx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
           />
         ) : (
           <RadioGroupInput
@@ -373,6 +374,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             row={componentType === Component.RadioButtons}
             clearable
             {...commonInputProps}
+            maxWidth='100%'
+            labelSx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
           />
         );
       } else {

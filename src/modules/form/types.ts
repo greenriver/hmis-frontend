@@ -82,7 +82,7 @@ export interface DynamicInputCommonProps {
   placeholder?: string;
   breakpoints?: BreakpointOverrides;
   ariaLabelledBy?: string;
-  maxWidth?: number;
+  maxWidth?: number | string;
   inputWidth?: number;
 }
 
