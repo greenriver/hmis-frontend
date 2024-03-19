@@ -30,6 +30,7 @@ const DatePicker: React.FC<Props> = ({
   value,
   helperText,
   warnIfEmptyTreatment,
+  ariaLabel,
   maxWidth,
   inputWidth,
   ...props
@@ -85,6 +86,10 @@ const DatePicker: React.FC<Props> = ({
           maxWidth,
           onBlur: handleBlur,
           ...textInputProps,
+          inputProps: {
+            'aria-label': ariaLabel,
+            ...textInputProps?.inputProps,
+          },
           error: error || !!errorMessage,
           //eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore

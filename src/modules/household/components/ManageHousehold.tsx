@@ -39,12 +39,14 @@ interface Props {
   householdId?: string;
   projectId: string;
   BackButton?: ReactNode;
+  renderBackButton?: (householdId?: string) => ReactNode;
 }
 
 const ManageHousehold = ({
   householdId: initialHouseholdId,
   projectId,
   BackButton,
+  renderBackButton,
 }: Props) => {
   const { globalFeatureFlags } = useHmisAppSettings();
   // This may be rendered either on the Project Dashboard or the Enrollment Dashboard. If on the Enrollment Dash, we need to treat the "current" client differently.
@@ -147,6 +149,7 @@ const ManageHousehold = ({
         </TitleCard>
       )}
       {BackButton}
+      {renderBackButton && renderBackButton(householdId)}
       {recentEligibleMembers && recentEligibleMembers.length > 0 && (
         <>
           <TitleCard

@@ -41,17 +41,6 @@ query GetEnrollmentServices(
   }
 }
 
-query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
-  serviceCategories(limit: $limit, offset: $offset) {
-    offset
-    limit
-    nodesCount
-    nodes {
-      ...ServiceCategoryFields
-    }
-  }
-}
-
 query GetServiceCategory($id: ID!) {
   serviceCategory(id: $id) {
     ...ServiceCategoryFields

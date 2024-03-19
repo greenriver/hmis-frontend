@@ -3,6 +3,7 @@ import NotStartedIcon from '@mui/icons-material/PendingOutlined';
 import InProgressIcon from '@mui/icons-material/Timelapse';
 import { Alert, AlertColor, AlertTitle, Button, Stack } from '@mui/material';
 import React from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { FullAssessmentFragment } from '@/types/gqlTypes';
 
 interface Props {
@@ -17,6 +18,8 @@ const AssessmentAlert: React.FC<Props> = ({
   allowUnlock,
   onUnlock,
 }) => {
+  const isTiny = useIsMobile('sm');
+
   let text;
   let Icon;
   let severity: AlertColor | undefined;
@@ -39,7 +42,7 @@ const AssessmentAlert: React.FC<Props> = ({
         data-testid='unlockAssessmentButton'
         onClick={onUnlock}
         color='inherit'
-        sx={{ fontWeight: 600 }}
+        sx={{ fontWeight: 600, width: isTiny ? '100%' : 'fit-content' }}
       >
         Unlock Assessment
       </Button>
@@ -52,13 +55,18 @@ const AssessmentAlert: React.FC<Props> = ({
     color: 'text.primary',
     '.MuiAlert-icon': { alignItems: 'center', color: 'text.secondary' },
   };
+
+  // If an Icon is provided for the Alert, but there's also an Icon on the
+  // Button, then on mobile screens it looks better if we omit the Alert icon
+  const omitIcon = isTiny && action?.props.startIcon;
+
   if (!text) return null;
 
   return (
     <Alert
       severity={severity}
       variant='outlined'
-      icon={Icon ? <Icon /> : false}
+      icon={Icon && !omitIcon ? <Icon /> : false}
       sx={{
         my: 2,
         '.MuiAlert-message': { width: '100%' },
@@ -67,7 +75,7 @@ const AssessmentAlert: React.FC<Props> = ({
       }}
     >
       <Stack
-        direction='row'
+        direction={isTiny ? 'column' : 'row'}
         justifyContent={'space-between'}
         display='flex'
         alignItems={'flex-end'}
