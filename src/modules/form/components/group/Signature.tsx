@@ -2,7 +2,7 @@ import { Grid, Stack, Typography } from '@mui/material';
 
 import { GroupItemComponentProps } from '../../types';
 import theme from '@/config/theme';
-import { MAX_INPUT_AND_LABEL_WIDTH } from '@/modules/form/util/formUtil';
+import { FIXED_WIDTH_X_LARGE } from '@/modules/form/util/formUtil';
 
 // Group component for rendering 1 person's signature.
 // Usually has String and Date items as children (signature & date signed).
@@ -31,7 +31,7 @@ const Signature = ({
       }}
     >
       <fieldset style={{ border: 'none', margin: 'none', padding: 'none' }}>
-        <Stack gap={2} maxWidth={MAX_INPUT_AND_LABEL_WIDTH}>
+        <Stack gap={2} maxWidth={FIXED_WIDTH_X_LARGE}>
           {item.text && (
             <Typography
               variant='h5'
