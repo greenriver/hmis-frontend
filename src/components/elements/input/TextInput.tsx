@@ -52,7 +52,7 @@ const TextInput = ({
 
   let width = inputWidth;
   if (!width && inputProps.inputMode === 'numeric' && !sx) {
-    width = 120; // todo @martha test this change
+    width = 120;
   }
 
   const isTiny = useIsMobile('sm');
