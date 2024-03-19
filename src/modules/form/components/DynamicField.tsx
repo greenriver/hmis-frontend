@@ -12,10 +12,10 @@ import {
   chooseSelectComponentType,
   FIXED_WIDTH_MEDIUM,
   FIXED_WIDTH_SMALL,
+  FIXED_WIDTH_X_LARGE,
   FIXED_WIDTH_X_SMALL,
   hasMeaningfulValue,
   isDataNotCollected,
-  MAX_INPUT_WIDTH,
   MAX_INPUT_AND_LABEL_WIDTH,
   placeholderText,
 } from '../util/formUtil';
@@ -104,8 +104,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     item.type === ItemType.Date ||
     item.type === ItemType.TimeOfDay
   ) {
-    console.log(item);
-    console.log('it small');
     width = FIXED_WIDTH_SMALL;
   } else if (item.size === InputSize.Xsmall) {
     width = FIXED_WIDTH_X_SMALL;
@@ -196,6 +194,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               }
               horizontal={horizontal}
               {...commonInputProps}
+              inputWidth={width}
+              maxWidth={FIXED_WIDTH_X_LARGE}
             />
           </InputContainer>
         );
@@ -325,9 +325,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             placeholder={placeholder}
             textInputProps={{ name: linkId, horizontal }}
             {...commonInputProps}
-            // using MAX_INPUT_WIDTH instead of MAX_INPUT_AND_LABEL_WIDTH here so that
-            // label doesn't extend beyond select, which messes up click target for opening/closing the dropdown
-            maxWidth={MAX_INPUT_WIDTH}
+            maxWidth={MAX_INPUT_AND_LABEL_WIDTH}
             inputWidth={width}
           />
         </InputContainer>
@@ -391,9 +389,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             placeholder={placeholder}
             textInputProps={{ name: linkId, horizontal }}
             {...commonInputProps}
-            // using MAX_INPUT_WIDTH instead of MAX_INPUT_AND_LABEL_WIDTH here so that
-            // label doesn't extend beyond select, which messes up click target for opening/closing the dropdown
-            maxWidth={MAX_INPUT_WIDTH}
+            maxWidth={MAX_INPUT_AND_LABEL_WIDTH}
             inputWidth={width}
           />
         );

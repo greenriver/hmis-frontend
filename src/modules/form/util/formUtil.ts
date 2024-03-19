@@ -1475,8 +1475,8 @@ export const parseOccurrencePointFormDefinition = (
 
   return { displayTitle, isEditable, readOnlyDefinition };
 };
-export const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
-export const MAX_INPUT_WIDTH = 500;
+export const MAX_INPUT_AND_LABEL_WIDTH = 500;
 export const FIXED_WIDTH_MEDIUM = 350;
 export const FIXED_WIDTH_SMALL = 200;
 export const FIXED_WIDTH_X_SMALL = 100;
+export const FIXED_WIDTH_X_LARGE = 800;

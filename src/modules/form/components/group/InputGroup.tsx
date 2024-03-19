@@ -4,6 +4,7 @@ import { ReactNode, useCallback, useId, useMemo } from 'react';
 
 import { GroupItemComponentProps } from '../../types';
 
+import { FIXED_WIDTH_X_LARGE } from '@/modules/form/util/formUtil';
 import { formatCurrency } from '@/modules/hmis/hmisUtil';
 import { FormItem, ItemType } from '@/types/gqlTypes';
 
@@ -48,6 +49,7 @@ const InputGroup = ({
             pl: 1,
             pb: 0.5,
             pr: 0.5,
+            maxWidth: FIXED_WIDTH_X_LARGE,
             ...(viewOnly
               ? {
                   '.MuiFormLabel-root .MuiTypography-root': {

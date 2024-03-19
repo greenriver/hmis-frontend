@@ -60,6 +60,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
   ariaLabel,
   inputWidth,
   maxWidth,
+  sx,
   ...props
 }: GenericSelectProps<Option, Multiple, boolean> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.groupLabel;
@@ -119,6 +120,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
             }
           : undefined
       }
+      sx={{ ...sx, maxWidth }}
       {...props}
       textInputProps={{
         ...props.textInputProps,
@@ -128,7 +130,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
         warnIfEmptyTreatment,
         ariaLabelledBy,
         ariaLabel,
-        sx: { ...props.textInputProps?.sx, inputWidth, maxWidth },
+        inputWidth,
       }}
       onChange={
         onChange
