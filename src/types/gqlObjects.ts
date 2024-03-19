@@ -7285,6 +7285,31 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ServiceTypeInput',
+    args: [
+      {
+        name: 'customServiceCategoryId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'supportsBulkAssignment',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ServicesForEnrollmentFilterOptions',
     args: [
       {
