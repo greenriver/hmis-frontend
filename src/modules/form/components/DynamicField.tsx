@@ -104,6 +104,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     item.type === ItemType.Date ||
     item.type === ItemType.TimeOfDay
   ) {
+    console.log(item);
+    console.log('it small');
     width = FIXED_WIDTH_SMALL;
   } else if (item.size === InputSize.Xsmall) {
     width = FIXED_WIDTH_X_SMALL;
@@ -244,7 +246,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             minRows={multiline ? 2 : undefined}
             horizontal={horizontal}
             {...commonInputProps}
-            inputWidth={MAX_INPUT_WIDTH}
+            inputWidth={width}
           />
         </InputContainer>
       );

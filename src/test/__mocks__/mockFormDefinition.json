@@ -595,7 +595,8 @@
             {
               "linkId": "clientSignature",
               "type": "STRING",
-              "text": "Client Name"
+              "text": "Client Name",
+              "size": "MEDIUM"
             },
             {
               "linkId": "clientSignatureDate",
@@ -614,7 +615,8 @@
             {
               "linkId": "staffSignature",
               "type": "STRING",
-              "text": "Staff Name"
+              "text": "Staff Name",
+              "size": "MEDIUM"
             },
             {
               "linkId": "staffSignatureDate",
