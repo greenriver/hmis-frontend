@@ -34,6 +34,7 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
   error,
   row,
   warnIfEmptyTreatment,
+  maxWidth,
   sx,
 }) => {
   const isChecked = (code: string) =>
@@ -51,7 +52,11 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
 
   return (
     <>
-      <FormControl component='fieldset' variant='standard' sx={sx}>
+      <FormControl
+        component='fieldset'
+        variant='standard'
+        sx={{ maxWidth, ...sx }}
+      >
         {label && (
           <FormLabel
             error={error}

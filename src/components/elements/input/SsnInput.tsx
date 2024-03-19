@@ -26,6 +26,7 @@ const SsnInput = ({
   warnIfEmptyTreatment,
   ariaLabel,
   sx,
+  maxWidth,
   ...props
 }: SsnInputProps) => {
   const baseInputProps: TextFieldProps = {
@@ -118,7 +119,11 @@ const SsnInput = ({
         )
       }
       renderInputs={(inputs) => (
-        <LabelWithContent sx={sx} label={label} helperText={helperText}>
+        <LabelWithContent
+          sx={{ maxWidth, ...sx }}
+          label={label}
+          helperText={helperText}
+        >
           <Box
             sx={{
               display: 'inline-flex',

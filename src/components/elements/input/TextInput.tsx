@@ -20,7 +20,7 @@ interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
   highlight?: boolean; // toggle highlight state
   horizontal?: boolean;
-  inputWidth?: string | number;
+  inputWidth?: number;
 }
 export type TextInputProps = Props & DynamicInputCommonProps;
 
@@ -39,6 +39,7 @@ const TextInput = ({
   max,
   highlight,
   inputWidth,
+  maxWidth,
   sx,
   warnIfEmptyTreatment,
   ariaLabelledBy,
@@ -51,7 +52,7 @@ const TextInput = ({
 
   let width = inputWidth;
   if (!width && inputProps.inputMode === 'numeric' && !sx) {
-    width = '120px';
+    width = 120; // todo @martha test this change
   }
 
   const isTiny = useIsMobile('sm');
@@ -66,7 +67,7 @@ const TextInput = ({
       }
       autoComplete={formAutoCompleteOff}
       {...props}
-      sx={sx}
+      sx={{ maxWidth, ...sx }}
       inputProps={{
         'aria-label': hiddenLabel ? ariaLabel || String(label) : undefined,
         'aria-labelledby': ariaLabelledBy,
@@ -85,7 +86,6 @@ const TextInput = ({
             ? 'alerts.low.background'
             : undefined,
           width,
-          minWidth: width,
           boxShadow: highlight
             ? (theme) => `0 0 8px ${theme.palette.warning.main}`
             : undefined,

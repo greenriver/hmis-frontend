@@ -30,6 +30,8 @@ const DatePicker: React.FC<Props> = ({
   value,
   helperText,
   warnIfEmptyTreatment,
+  maxWidth,
+  inputWidth,
   ...props
 }) => {
   // If max date is in the past, default to the max date's month
@@ -79,6 +81,8 @@ const DatePicker: React.FC<Props> = ({
       slotProps={{
         textField: {
           sx,
+          inputWidth,
+          maxWidth,
           onBlur: handleBlur,
           ...textInputProps,
           error: error || !!errorMessage,

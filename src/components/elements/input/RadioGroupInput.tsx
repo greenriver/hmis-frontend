@@ -68,6 +68,8 @@ const RadioGroupInput = ({
   helperText,
   ariaLabel,
   checkbox = false,
+  maxWidth,
+  inputWidth,
   ...props
 }: RadioGroupInputProps) => {
   const onClickOption = useCallback(
@@ -87,7 +89,7 @@ const RadioGroupInput = ({
   const ControlComponent = checkbox ? Checkbox : Radio;
 
   return (
-    <FormControl component='fieldset' sx={sx}>
+    <FormControl component='fieldset' sx={{ maxWidth, ...sx }}>
       <FormLabel
         error={error}
         disabled={props.disabled}
@@ -106,6 +108,7 @@ const RadioGroupInput = ({
         // value={value ? value.code : null}
         onChange={() => null}
         sx={{
+          width: inputWidth,
           ...(!row && {
             'label:first-of-type': { pt: 1 },
             // 'label:last-child': { pb: 1 },

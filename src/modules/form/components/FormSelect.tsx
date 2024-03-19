@@ -83,6 +83,8 @@ const FormSelect = <Multiple extends boolean | undefined>({
   onChange,
   ariaLabelledBy,
   ariaLabel,
+  inputWidth,
+  maxWidth,
   ...props
 }: GenericSelectProps<Option, Multiple, false> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.groupLabel;
@@ -154,6 +156,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
         error,
         helperText,
         warnIfEmptyTreatment,
+        sx: { ...props.textInputProps?.sx, inputWidth, maxWidth },
       }}
     />
   );

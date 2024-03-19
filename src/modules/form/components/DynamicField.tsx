@@ -124,6 +124,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     id: linkId,
     ...inputProps,
     disabled: isDisabled,
+    inputWidth: width,
+    maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
   };
   commonInputProps.warnIfEmptyTreatment =
     warnIfEmpty &&
@@ -190,7 +192,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
                 })
               }
               horizontal={horizontal}
-              sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
               {...commonInputProps}
             />
           </InputContainer>
@@ -201,7 +202,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <YesNoRadio
             value={value}
             onChange={onChangeValue}
-            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
         </InputContainer>
@@ -216,10 +216,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               name={linkId}
               value={value || ''}
               onChange={onChangeValue}
-              sx={{
-                width,
-                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-              }}
               {...commonInputProps}
             />
           </InputContainer>
@@ -231,8 +227,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             id={linkId}
             value={value || ''}
             onChange={onChangeEvent}
-            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
+            inputWidth={155}
           />
         );
       }
@@ -246,16 +242,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             multiline={multiline}
             minRows={multiline ? 2 : undefined}
             horizontal={horizontal}
-            InputProps={{
-              sx: {
-                width,
-                maxWidth: MAX_INPUT_WIDTH,
-              },
-            }}
-            sx={{
-              maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-            }}
             {...commonInputProps}
+            inputWidth={MAX_INPUT_WIDTH}
           />
         </InputContainer>
       );
@@ -279,10 +267,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEvent}
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
-            inputWidth='120px'
             disableArrowKeys={item.type === ItemType.Currency}
-            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
+            inputWidth={120}
           />
         </InputContainer>
       );
@@ -301,8 +288,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             textInputProps={{
               id: linkId,
               horizontal,
-              InputProps: { sx: { width } },
-              sx: { maxWidth: MAX_INPUT_AND_LABEL_WIDTH },
             }}
             {...datePickerProps}
             {...commonInputProps}
@@ -318,8 +303,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             textInputProps={{
               id: linkId,
               horizontal,
-              InputProps: { sx: { width } },
-              sx: { maxWidth: MAX_INPUT_AND_LABEL_WIDTH },
             }}
             {...commonInputProps}
           />
@@ -338,15 +321,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             multiple={!!item.repeats}
             loading={pickListLoading}
             placeholder={placeholder}
-            textInputProps={{
-              horizontal,
-              InputProps: { sx: { width } },
-              // using MAX_INPUT_WIDTH instead of MAX_INPUT_AND_LABEL_WIDTH here so that
-              // label doesn't extend beyond select, which messes up click target for opening/closing the dropdown
-              sx: { maxWidth: MAX_INPUT_WIDTH },
-            }}
-            sx={{ maxWidth: MAX_INPUT_WIDTH }}
+            textInputProps={{ name: linkId, horizontal }}
             {...commonInputProps}
+            // using MAX_INPUT_WIDTH instead of MAX_INPUT_AND_LABEL_WIDTH here so that
+            // label doesn't extend beyond select, which messes up click target for opening/closing the dropdown
+            maxWidth={MAX_INPUT_WIDTH}
+            inputWidth={width}
           />
         </InputContainer>
       );
@@ -382,7 +362,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeValue}
             options={options || []}
             row={componentType === Component.RadioButtons}
-            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
         ) : (
@@ -392,7 +371,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             options={options || []}
             row={componentType === Component.RadioButtons}
             clearable
-            sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
             {...commonInputProps}
           />
         );
@@ -405,16 +383,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             multiple={!!item.repeats}
             loading={pickListLoading}
             placeholder={placeholder}
-            textInputProps={{
-              name: linkId,
-              horizontal,
-              InputProps: { sx: { width } },
-              // using MAX_INPUT_WIDTH instead of MAX_INPUT_AND_LABEL_WIDTH here so that
-              // label doesn't extend beyond select, which messes up click target for opening/closing the dropdown
-              sx: { maxWidth: MAX_INPUT_WIDTH },
-            }}
-            sx={{ maxWidth: MAX_INPUT_WIDTH }}
+            textInputProps={{ name: linkId, horizontal }}
             {...commonInputProps}
+            // using MAX_INPUT_WIDTH instead of MAX_INPUT_AND_LABEL_WIDTH here so that
+            // label doesn't extend beyond select, which messes up click target for opening/closing the dropdown
+            maxWidth={MAX_INPUT_WIDTH}
+            inputWidth={width}
           />
         );
       }
