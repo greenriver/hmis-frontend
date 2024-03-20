@@ -80,14 +80,19 @@ const ProjectExternalSubmissionsTable = ({
     const submissionValues: FormValues = {};
     Object.keys(itemMap).forEach((key) => {
       const pickListOptions = itemMap[key].pickListOptions;
+      const customFieldKey = itemMap[key].mapping?.customFieldKey;
+      if (!customFieldKey) return;
+
       const value = customDataElementValueForKey(
-        key,
+        customFieldKey,
         selected.customDataElements
       );
       if (pickListOptions) {
-        submissionValues[key] = pickListOptions.find((o) => o.code === value);
+        submissionValues[customFieldKey] = pickListOptions.find(
+          (o) => o.code === value
+        );
       } else {
-        submissionValues[key] = value;
+        submissionValues[customFieldKey] = value;
       }
     });
     return submissionValues;
