@@ -6510,8 +6510,8 @@ export type ServiceTypeFilterOptions = {
 
 /** Create service type input */
 export type ServiceTypeInput = {
-  customServiceCategoryId: Scalars['ID']['input'];
   name: Scalars['String']['input'];
+  serviceCategoryId: Scalars['ID']['input'];
   supportsBulkAssignment?: InputMaybe<Scalars['Boolean']['input']>;
 };
 

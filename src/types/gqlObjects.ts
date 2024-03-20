@@ -7288,19 +7288,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ServiceTypeInput',
     args: [
       {
-        name: 'customServiceCategoryId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
         name: 'name',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'serviceCategoryId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
       {

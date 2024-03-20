@@ -37,7 +37,7 @@ const NewServiceTypeButton = () => {
       input: {
         name,
         supportsBulkAssignment,
-        customServiceCategoryId: serviceCategory?.code || '',
+        serviceCategoryId: serviceCategory?.code || '',
       },
     },
     onCompleted: () => {
