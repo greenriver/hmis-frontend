@@ -26984,16 +26984,6 @@ export type GetProjectServicesQuery = {
         __typename?: 'Service';
         id: string;
         dateProvided?: string | null;
-        faAmount?: number | null;
-        faStartDate?: string | null;
-        faEndDate?: string | null;
-        movingOnOtherType?: string | null;
-        referralOutcome?: PathReferralOutcome | null;
-        subTypeProvided?: ServiceSubTypeProvided | null;
-        otherTypeProvided?: string | null;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-        dateDeleted?: string | null;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -27011,12 +27001,6 @@ export type GetProjectServicesQuery = {
             nameSuffix?: string | null;
           };
         };
-        user?: {
-          __typename: 'ApplicationUser';
-          id: string;
-          name: string;
-          email: string;
-        } | null;
         serviceType: {
           __typename?: 'ServiceType';
           id: string;
@@ -27029,53 +27013,6 @@ export type GetProjectServicesQuery = {
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
         };
-        customDataElements: Array<{
-          __typename?: 'CustomDataElement';
-          id: string;
-          key: string;
-          label: string;
-          fieldType: CustomDataElementType;
-          repeats: boolean;
-          displayHooks: Array<DisplayHook>;
-          value?: {
-            __typename?: 'CustomDataElementValue';
-            id: string;
-            valueBoolean?: boolean | null;
-            valueDate?: string | null;
-            valueFloat?: number | null;
-            valueInteger?: number | null;
-            valueJson?: any | null;
-            valueString?: string | null;
-            valueText?: string | null;
-            dateCreated?: string | null;
-            dateUpdated?: string | null;
-            user?: {
-              __typename: 'ApplicationUser';
-              id: string;
-              name: string;
-              email: string;
-            } | null;
-          } | null;
-          values?: Array<{
-            __typename?: 'CustomDataElementValue';
-            id: string;
-            valueBoolean?: boolean | null;
-            valueDate?: string | null;
-            valueFloat?: number | null;
-            valueInteger?: number | null;
-            valueJson?: any | null;
-            valueString?: string | null;
-            valueText?: string | null;
-            dateCreated?: string | null;
-            dateUpdated?: string | null;
-            user?: {
-              __typename: 'ApplicationUser';
-              id: string;
-              name: string;
-              email: string;
-            } | null;
-          }> | null;
-        }>;
       }>;
     };
   } | null;
@@ -28932,6 +28869,24 @@ export type ServiceTypeFieldsFragment = {
   dateCreated?: string | null;
   dateUpdated?: string | null;
   supportsBulkAssignment: boolean;
+};
+
+export type ServiceBasicFieldsFragment = {
+  __typename?: 'Service';
+  id: string;
+  dateProvided?: string | null;
+  serviceType: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hud: boolean;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+  };
 };
 
 export type ServiceFieldsFragment = {
@@ -31740,6 +31695,16 @@ export const ScanCardFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const ServiceBasicFieldsFragmentDoc = gql`
+  fragment ServiceBasicFields on Service {
+    id
+    dateProvided
+    serviceType {
+      ...ServiceTypeFields
+    }
+  }
+  ${ServiceTypeFieldsFragmentDoc}
 `;
 export const ServiceFieldsFragmentDoc = gql`
   fragment ServiceFields on Service {
@@ -38082,7 +38047,7 @@ export const GetProjectServicesDocument = gql`
         limit
         nodesCount
         nodes {
-          ...ServiceFields
+          ...ServiceBasicFields
           enrollment {
             id
             entryDate
@@ -38095,7 +38060,7 @@ export const GetProjectServicesDocument = gql`
       }
     }
   }
-  ${ServiceFieldsFragmentDoc}
+  ${ServiceBasicFieldsFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
 `;
 
