@@ -55,7 +55,6 @@ fragment ItemFields on FormItem {
     customFieldKey
   }
   pickListReference
-  serviceDetailType
   size
   assessmentDate
   prefill

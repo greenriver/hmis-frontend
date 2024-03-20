@@ -1,7 +1,6 @@
-import { Button } from '@mui/material';
+import { Chip } from '@mui/material';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
-import { SystemChip } from '../formRules/FormRuleTable';
 import FormTypeChip from './FormTypeChip';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -33,7 +32,15 @@ const columns: ColumnDef<Row>[] = [
   },
   {
     key: 'system',
-    render: ({ system }) => system && <SystemChip />,
+    render: ({ system }) =>
+      system && (
+        <Chip
+          label='System'
+          size='small'
+          variant='outlined'
+          sx={{ width: 'fit-content' }}
+        />
+      ),
   },
   // TODO ADD: # projects active in (based on all rules)
   // TODO ADD: version
@@ -41,45 +48,21 @@ const columns: ColumnDef<Row>[] = [
   // TODO ADD: last updated
 ];
 
-const FormDefinitionTable: React.FC<{ onSelect?: (row: Row) => any }> = ({
-  onSelect,
-}) => {
+interface Props {
+  queryVariables: GetFormDefinitionsQueryVariables;
+}
+const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
   return (
     <GenericTableWithData<
       GetFormDefinitionsQuery,
       GetFormDefinitionsQueryVariables,
       Row
     >
-      queryVariables={{}}
+      queryVariables={queryVariables}
       queryDocument={GetFormDefinitionsDocument}
-      columns={[
-        ...columns,
-        ...(onSelect
-          ? ([
-              {
-                key: 'actions',
-                textAlign: 'right',
-                render: (row) => {
-                  return (
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onSelect(row);
-                      }}
-                      size='small'
-                      variant='outlined'
-                    >
-                      Edit
-                    </Button>
-                  );
-                },
-              },
-            ] as ColumnDef<Row>[])
-          : []),
-      ]}
+      columns={columns}
       pagePath='formDefinitions'
-      showFilters
+      // showFilters
       recordType='FormDefinition'
       // TODO: add filter/sort capabilities
       // filterInputType='FormDefinitionFilterOptions'

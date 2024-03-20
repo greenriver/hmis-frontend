@@ -1,4 +1,5 @@
 import DatePicker from '../../input/DatePicker';
+import LabeledCheckbox from '../../input/LabeledCheckbox';
 import TextInput from '../../input/TextInput';
 import LabelWithContent from '../../LabelWithContent';
 
@@ -33,6 +34,16 @@ const TableFilterItem = <T,>({
   value,
   onChange,
 }: TableFilterItemProps<T>): JSX.Element => {
+  if (filter.type === 'boolean') {
+    return (
+      <LabeledCheckbox
+        label={filter.label || keyName}
+        checked={value || false}
+        onChange={(e, checked) => onChange(checked)}
+      />
+    );
+  }
+
   return (
     <LabelWithContent label={filter.label || keyName}>
       {(() => {

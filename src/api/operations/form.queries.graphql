@@ -56,8 +56,12 @@ query GetFormDefinitionForEditor($id: ID!) {
   }
 }
 
-query GetFormDefinitions($limit: Int = 25, $offset: Int = 0) {
-  formDefinitions(limit: $limit, offset: $offset) {
+query GetFormDefinitions(
+  $filters: FormDefinitionFilterOptions
+  $limit: Int = 25
+  $offset: Int = 0
+) {
+  formDefinitions(filters: $filters, limit: $limit, offset: $offset) {
     offset
     limit
     nodesCount

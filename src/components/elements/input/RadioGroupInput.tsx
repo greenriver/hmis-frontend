@@ -66,6 +66,7 @@ const RadioGroupInput = ({
   sx,
   clearable,
   helperText,
+  ariaLabel,
   checkbox = false,
   ...props
 }: RadioGroupInputProps) => {
@@ -118,6 +119,7 @@ const RadioGroupInput = ({
           }),
           ...sx,
         }}
+        aria-label={ariaLabel}
         {...props}
       >
         {options.map((option) => (

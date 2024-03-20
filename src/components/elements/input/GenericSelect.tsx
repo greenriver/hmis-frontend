@@ -20,6 +20,7 @@ export interface GenericSelectProps<
   > {
   label?: ReactNode;
   textInputProps?: TextInputProps;
+  ariaLabel?: string;
 }
 
 const GenericSelect = <
@@ -31,6 +32,7 @@ const GenericSelect = <
   label,
   textInputProps,
   options,
+  ariaLabel,
   ...rest
 }: GenericSelectProps<T, Multiple, Creatable>) => {
   const { placeholder, ...inputProps } = textInputProps || {};
@@ -63,6 +65,7 @@ const GenericSelect = <
             ...params.inputProps,
             value: rest.loading ? '' : params.inputProps.value,
             ...inputProps.inputProps,
+            'aria-label': ariaLabel,
           }}
           disabled={rest.disabled}
           // Only render placeholder if no values are selected

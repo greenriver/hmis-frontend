@@ -2,7 +2,7 @@ import { alpha, Stack, Toolbar, Typography } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 
 export interface EnhancedTableToolbarProps<T> {
-  title?: string;
+  title?: ReactNode;
   selectedIds?: readonly string[];
   rows: T[];
   renderBulkAction?: (
@@ -51,10 +51,12 @@ const EnhancedTableToolbar = <T extends { id: string }>({
           <Typography variant='subtitle1' component='div'>
             {selectedIds.length} selected
           </Typography>
-        ) : (
+        ) : typeof title === 'string' ? (
           <Typography variant='h5' component='div'>
             {title}
           </Typography>
+        ) : (
+          title
         )}
         {selectedIds.length > 0 &&
           renderBulkAction &&

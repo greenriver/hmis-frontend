@@ -63,6 +63,7 @@ const Organization = () => {
         <TitleCard
           data-testid='projectsCard'
           title='Projects'
+          stackOnMobile={false}
           actions={
             canCreateProject && (
               <ButtonLink
