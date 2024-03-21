@@ -7,7 +7,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { FormValues } from '@/modules/form/types';
-import { getItemMap } from '@/modules/form/util/formUtil';
+import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
 import {
   customDataElementValueForKey,
   getCustomDataElementColumns,
@@ -79,22 +79,28 @@ const ProjectExternalSubmissionsTable = ({
     const itemMap = getItemMap(selected.definition.definition, true);
     const submissionValues: FormValues = {};
     Object.keys(itemMap).forEach((key) => {
-      const pickListOptions = itemMap[key].pickListOptions;
-      const customFieldKey = itemMap[key].mapping?.customFieldKey;
+      const item = itemMap[key];
+      const customFieldKey = item.mapping?.customFieldKey;
       if (!customFieldKey) return;
 
       const value = customDataElementValueForKey(
         customFieldKey,
         selected.customDataElements
       );
-      if (pickListOptions) {
-        submissionValues[key] = pickListOptions.find((o) => o.code === value);
+
+      // if item has a picklist, convert value to PickListOption(s) so we can display the readable label
+      if (item.pickListOptions) {
+        if (Array.isArray(value)) {
+          submissionValues[key] = value.map((v) => getOptionValue(v, item));
+        } else {
+          submissionValues[key] = getOptionValue(value, item);
+        }
       } else {
         submissionValues[key] = value;
       }
     });
     return submissionValues;
-  }, [selected]);
+  }, [selected, definition]);
 
   const { openFormDialog, renderFormDialog, closeDialog } = useStaticFormDialog<
     UpdateExternalFormSubmissionMutation,

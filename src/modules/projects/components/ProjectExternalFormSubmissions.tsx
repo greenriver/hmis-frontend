@@ -48,7 +48,7 @@ const ProjectExternalFormSubmissions: React.FC<Props> = ({}) => {
           onChange={(e, val) =>
             setSelectedFormType(isPickListOption(val) ? val : null)
           }
-          label={getRequiredLabel('Select form type', false)}
+          label={getRequiredLabel('Form type', false)}
           placeholder='Select a form type'
         />
       )}

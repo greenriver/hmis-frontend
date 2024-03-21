@@ -330,7 +330,9 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.EXTERNAL_FORM_SUBMISSIONS,
             element: (
-              <ProjectEditRoute>
+              <ProjectEditRoute
+                permissions={['canManageExternalFormSubmissions']}
+              >
                 <ProjectExternalFormSubmissions />
               </ProjectEditRoute>
             ),

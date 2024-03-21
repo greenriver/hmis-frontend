@@ -147,6 +147,7 @@ export function useStaticFormDialog<
       mutationDocument,
       onCompleted,
       pickListArgs,
+      beforeFormComponent,
     ]
   );
   return {
