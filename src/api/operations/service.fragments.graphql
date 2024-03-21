@@ -10,6 +10,14 @@ fragment ServiceTypeFields on ServiceType {
   supportsBulkAssignment
 }
 
+fragment ServiceBasicFields on Service {
+  id
+  dateProvided
+  serviceType {
+    ...ServiceTypeFields
+  }
+}
+
 fragment ServiceFields on Service {
   id
   dateProvided
