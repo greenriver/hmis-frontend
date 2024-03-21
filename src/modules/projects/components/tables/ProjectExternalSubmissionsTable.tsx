@@ -88,11 +88,9 @@ const ProjectExternalSubmissionsTable = ({
         selected.customDataElements
       );
       if (pickListOptions) {
-        submissionValues[customFieldKey] = pickListOptions.find(
-          (o) => o.code === value
-        );
+        submissionValues[key] = pickListOptions.find((o) => o.code === value);
       } else {
-        submissionValues[customFieldKey] = value;
+        submissionValues[key] = value;
       }
     });
     return submissionValues;
