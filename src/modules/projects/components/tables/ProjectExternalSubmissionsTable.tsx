@@ -1,6 +1,7 @@
 import { Card, Chip } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import React, { useCallback, useMemo, useState } from 'react';
+import Loading from '@/components/elements/Loading';
 import theme from '@/config/theme';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -29,6 +30,7 @@ import {
   UpdateExternalFormSubmissionDocument,
   UpdateExternalFormSubmissionMutation,
   UpdateExternalFormSubmissionMutationVariables,
+  useGetExternalFormDefinitionQuery,
 } from '@/types/gqlTypes';
 
 export type ExternalFormSubmissionFields = NonNullable<
@@ -42,6 +44,12 @@ const ProjectExternalSubmissionsTable = ({
   projectId: string;
   formDefinitionIdentifier: string;
 }) => {
+  const { data, loading, error } = useGetExternalFormDefinitionQuery({
+    variables: { formDefinitionIdentifier: formDefinitionIdentifier },
+    skip: !formDefinitionIdentifier,
+  });
+  const definition = data?.externalFormDefinition;
+
   const getColumnDefs = useCallback((rows: ExternalFormSubmissionFields[]) => {
     const customColumns = getCustomDataElementColumns(rows);
     return [
@@ -75,8 +83,8 @@ const ProjectExternalSubmissionsTable = ({
     useState<ExternalFormSubmissionFieldsFragment | null>(null);
 
   const submissionValues = useMemo(() => {
-    if (!selected) return {};
-    const itemMap = getItemMap(selected.definition.definition, true);
+    if (!selected || !definition) return {};
+    const itemMap = getItemMap(definition.definition, true);
     const submissionValues: FormValues = {};
     Object.keys(itemMap).forEach((key) => {
       const item = itemMap[key];
@@ -134,11 +142,11 @@ const ProjectExternalSubmissionsTable = ({
       }
     },
     onClose: () => setSelected(null),
-    beforeFormComponent: selected && (
+    beforeFormComponent: selected && definition && (
       <Card sx={{ p: 2 }}>
         <DynamicView
           values={submissionValues}
-          definition={selected.definition.definition}
+          definition={definition.definition}
         />
       </Card>
     ),
@@ -167,6 +175,9 @@ const ProjectExternalSubmissionsTable = ({
       ),
     [closeDialog, selected]
   );
+
+  if (loading) return <Loading />;
+  if (error) throw error;
 
   return (
     <>
