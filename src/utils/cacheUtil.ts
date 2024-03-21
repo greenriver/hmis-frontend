@@ -53,5 +53,5 @@ export const evictDeletedEnrollment = ({
   cache.evict({ id: `Client:${clientId}`, fieldName: 'enrollments' });
 };
 
-export const evictAutoExitConfigs = () =>
-  cache.evict({ id: 'ROOT_QUERY', fieldName: 'autoExitConfigs' });
+export const evictProjectConfigs = () =>
+  cache.evict({ id: 'ROOT_QUERY', fieldName: 'projectConfigs' });

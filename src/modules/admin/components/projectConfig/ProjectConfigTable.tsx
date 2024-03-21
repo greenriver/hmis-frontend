@@ -1,5 +1,7 @@
 import { Box } from '@mui/material';
 
+import { Stack } from '@mui/system';
+import { capitalize } from 'lodash-es';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -9,21 +11,23 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  AutoExitConfigFieldsFragment,
-  DeleteAutoExitConfigDocument,
-  DeleteAutoExitConfigMutation,
-  DeleteAutoExitConfigMutationVariables,
-  GetAutoExitConfigsDocument,
-  GetAutoExitConfigsQuery,
-  GetAutoExitConfigsQueryVariables,
+  ProjectConfigFieldsFragment,
+  DeleteProjectConfigDocument,
+  DeleteProjectConfigMutation,
+  DeleteProjectConfigMutationVariables,
+  GetProjectConfigsDocument,
+  GetProjectConfigsQuery,
+  GetProjectConfigsQueryVariables,
 } from '@/types/gqlTypes';
-import { evictAutoExitConfigs } from '@/utils/cacheUtil';
+import { evictProjectConfigs } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const columns: ColumnDef<AutoExitConfigFieldsFragment>[] = [
+const columns: ColumnDef<ProjectConfigFieldsFragment>[] = [
   {
-    header: 'Length of Absence',
-    render: ({ lengthOfAbsenceDays }) => <>{lengthOfAbsenceDays} Days</>,
+    header: 'Config Type',
+    render: ({ configType }) => (
+      <HmisEnum enumMap={HmisEnums.ProjectConfigType} value={configType} />
+    ),
   },
   {
     header: 'Project Type',
@@ -62,23 +66,39 @@ const columns: ColumnDef<AutoExitConfigFieldsFragment>[] = [
         <NotCollectedText variant='body2'>Any Organization</NotCollectedText>
       ),
   },
+  {
+    header: 'Config Options',
+    render: ({ configOptions }) => {
+      if (!configOptions) return;
+      const parsedOptions = JSON.parse(configOptions);
+
+      return (
+        <Stack>
+          {Object.keys(parsedOptions).map((key) => (
+            <Box key={key}>
+              {capitalize(key.replaceAll(/_/g, ' '))}: {parsedOptions[key]}
+            </Box>
+          ))}
+        </Stack>
+      );
+    },
+  },
 ];
 
-const AutoExitTable = ({
-  setSelectedId,
+const ProjectConfigTable = ({
+  onClickRow,
 }: {
-  selectedId?: string | null;
-  setSelectedId: (id: string | null) => any;
+  onClickRow: (projectConfig: ProjectConfigFieldsFragment | null) => any;
 }) => {
   return (
     <>
       <GenericTableWithData<
-        GetAutoExitConfigsQuery,
-        GetAutoExitConfigsQueryVariables,
-        AutoExitConfigFieldsFragment
+        GetProjectConfigsQuery,
+        GetProjectConfigsQueryVariables,
+        ProjectConfigFieldsFragment
       >
         queryVariables={{}}
-        queryDocument={GetAutoExitConfigsDocument}
+        queryDocument={GetProjectConfigsDocument}
         columns={[
           ...columns,
           {
@@ -91,14 +111,14 @@ const AutoExitTable = ({
                 }}
               >
                 <DeleteMutationButton<
-                  DeleteAutoExitConfigMutation,
-                  DeleteAutoExitConfigMutationVariables
+                  DeleteProjectConfigMutation,
+                  DeleteProjectConfigMutationVariables
                 >
-                  queryDocument={DeleteAutoExitConfigDocument}
+                  queryDocument={DeleteProjectConfigDocument}
                   variables={{ id }}
-                  idPath={'deleteAutoExitConfig.autoExitConfig.id'}
-                  recordName='Auto Exit Config'
-                  onSuccess={() => evictAutoExitConfigs()}
+                  idPath={'deleteProjectConfig.projectConfig.id'}
+                  recordName='Project Config'
+                  onSuccess={() => evictProjectConfigs()}
                 >
                   Delete
                 </DeleteMutationButton>
@@ -106,14 +126,14 @@ const AutoExitTable = ({
             ),
           },
         ]}
-        pagePath='autoExitConfigs'
-        noData='No auto exit configs'
+        pagePath='projectConfigs'
+        noData='No project configs'
         showFilters
-        recordType='AutoExitConfig'
-        paginationItemName='auto exit config'
-        handleRowClick={(row) => setSelectedId(row.id)}
+        recordType='ProjectConfig'
+        paginationItemName='project config'
+        handleRowClick={onClickRow}
       />
     </>
   );
 };
-export default AutoExitTable;
+export default ProjectConfigTable;

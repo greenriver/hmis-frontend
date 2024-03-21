@@ -1,0 +1,32 @@
+mutation CreateProjectConfig($input: ProjectConfigInput!) {
+  createProjectConfig(input: $input) {
+    projectConfig {
+      ...ProjectConfigFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateProjectConfig($input: ProjectConfigInput!, $id: ID!) {
+  updateProjectConfig(input: $input, id: $id) {
+    projectConfig {
+      ...ProjectConfigFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteProjectConfig($id: ID!) {
+  deleteProjectConfig(id: $id) {
+    projectConfig {
+      ...ProjectConfigFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
