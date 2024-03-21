@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client';
 import AddIcon from '@mui/icons-material/Add';
 import { Button, DialogActions, DialogContent } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -12,11 +11,9 @@ import FormActions from '@/modules/form/components/FormActions';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { isPickListOption } from '@/modules/form/types';
 import {
-  CreateServiceTypeDocument,
-  CreateServiceTypeMutation,
-  CreateServiceTypeMutationVariables,
   PickListOption,
   PickListType,
+  useCreateServiceTypeMutation,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
 import { evictQuery } from '@/utils/cacheUtil';
@@ -29,10 +26,7 @@ const NewServiceTypeButton = () => {
     null
   );
 
-  const [createServiceType, { error, loading }] = useMutation<
-    CreateServiceTypeMutation,
-    CreateServiceTypeMutationVariables
-  >(CreateServiceTypeDocument, {
+  const [createServiceType, { error, loading }] = useCreateServiceTypeMutation({
     variables: {
       input: {
         name,

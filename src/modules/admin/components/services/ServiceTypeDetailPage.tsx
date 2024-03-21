@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client';
 import {
   DialogActions,
   DialogContent,
@@ -28,10 +27,8 @@ import {
   DeleteServiceTypeDocument,
   DeleteServiceTypeMutation,
   DeleteServiceTypeMutationVariables,
-  RenameServiceTypeDocument,
-  RenameServiceTypeMutation,
-  RenameServiceTypeMutationVariables,
   useGetServiceTypeDetailsQuery,
+  useRenameServiceTypeMutation,
 } from '@/types/gqlTypes';
 import { evictQuery } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -51,13 +48,10 @@ const ServiceTypeDetailPage = () => {
   const [editedName, setEditedName] = useState<string>();
 
   const [renameServiceType, { error: renameError, loading: renameLoading }] =
-    useMutation<RenameServiceTypeMutation, RenameServiceTypeMutationVariables>(
-      RenameServiceTypeDocument,
-      {
-        variables: { id: data?.serviceType?.id || '', name: editedName || '' },
-        onCompleted: () => setEditDialogOpen(false),
-      }
-    );
+    useRenameServiceTypeMutation({
+      variables: { id: data?.serviceType?.id || '', name: editedName || '' },
+      onCompleted: () => setEditDialogOpen(false),
+    });
 
   if (error) throw error;
   if (!data && loading) return <Loading />;
