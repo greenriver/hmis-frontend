@@ -31,7 +31,7 @@ const CreateHouseholdPage = () => {
         renderBackButton={(householdId) => (
           <BackButton
             onClick={() => {
-              if (!state.prev) {
+              if (!state?.prev) {
                 navigate(-1);
               } else if (householdId) {
                 // If previous path was specified and a household was created,
