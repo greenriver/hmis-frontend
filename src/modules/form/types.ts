@@ -82,8 +82,8 @@ export interface DynamicInputCommonProps {
   placeholder?: string;
   breakpoints?: BreakpointOverrides;
   ariaLabelledBy?: string;
-  maxWidth?: number | string;
-  inputWidth?: number;
+  maxWidth?: number | string; // maximum width of form element (including the label)
+  inputWidth?: number; // fixed with of input element (does not affect label)
 }
 
 export interface DynamicViewItemCommonProps {
