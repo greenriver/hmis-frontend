@@ -54,7 +54,7 @@ const ProjectExternalFormSubmissions: React.FC<Props> = ({}) => {
       )}
 
       {formType && (
-        <Paper sx={{ p: 2 }}>
+        <Paper>
           <ProjectExternalSubmissionsTable
             projectId={projectId}
             formDefinitionIdentifier={formType.code}
