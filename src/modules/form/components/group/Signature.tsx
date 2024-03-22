@@ -2,7 +2,10 @@ import { Grid, Stack, Typography } from '@mui/material';
 
 import { GroupItemComponentProps } from '../../types';
 import theme from '@/config/theme';
-import { FIXED_WIDTH_X_LARGE } from '@/modules/form/util/formUtil';
+import {
+  FIXED_WIDTH_MEDIUM,
+  FIXED_WIDTH_X_LARGE,
+} from '@/modules/form/util/formUtil';
 
 // Group component for rendering 1 person's signature.
 // Usually has String and Date items as children (signature & date signed).
@@ -41,7 +44,18 @@ const Signature = ({
               {item.text}
             </Typography>
           )}
-          <Grid container direction='row' columnGap={viewOnly ? 6 : 2}>
+          <Grid
+            container
+            direction='row'
+            columnGap={viewOnly ? 6 : 2}
+            sx={{
+              // Use max medium-width for name input, which is expected to be first
+              '.HmisForm-inputContainer:first-of-type': {
+                flex: 1,
+                width: FIXED_WIDTH_MEDIUM,
+              },
+            }}
+          >
             {renderChildItem &&
               item.item?.map((childItem) => renderChildItem(childItem))}
           </Grid>
