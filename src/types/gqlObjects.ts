@@ -7285,6 +7285,31 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ServiceTypeInput',
+    args: [
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'serviceCategoryId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'supportsBulkAssignment',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ServicesForEnrollmentFilterOptions',
     args: [
       {
@@ -7473,51 +7498,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'unitTypeId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'UpdateBedNightsInput',
-    args: [
-      {
-        name: 'action',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'BulkActionType', ofType: null },
-        },
-      },
-      {
-        name: 'bedNightDate',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-        },
-      },
-      {
-        name: 'enrollmentIds',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-            },
-          },
-        },
-      },
-      {
-        name: 'projectId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
       },
     ],
   },

@@ -109,7 +109,7 @@ query GetProjectServices(
       limit
       nodesCount
       nodes {
-        ...ServiceFields
+        ...ServiceBasicFields
         enrollment {
           id
           entryDate
