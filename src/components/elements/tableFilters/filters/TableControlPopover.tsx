@@ -8,9 +8,11 @@ import {
 import { ReactNode } from 'react';
 
 import TableFilterButton from './FilterButton';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 export interface TableControlPopoverProps {
   filterCount?: number;
+  filterHint?: ReactNode;
   children: ReactNode;
   onCancel: VoidFunction;
   onReset: VoidFunction;
@@ -24,6 +26,7 @@ export interface TableControlPopoverProps {
 const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
   const {
     filterCount = 0,
+    filterHint,
     children,
     onCancel,
     onReset,
@@ -38,6 +41,8 @@ const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
     popupId: 'filterMenu',
   });
 
+  const isTiny = useIsMobile('sm');
+
   return (
     <>
       <TableFilterButton
@@ -46,7 +51,8 @@ const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
         {...bindTrigger(popupState)}
       >
         {label}
-        {filterCount > 0 && <> ({filterCount})</>}
+        {!isTiny && filterHint && <> ({filterHint})</>}
+        {filterCount > 0 && (isTiny || !filterHint) && <> ({filterCount})</>}
       </TableFilterButton>
       <Popover
         {...bindPopover(popupState)}
