@@ -20,7 +20,7 @@ interface Props extends PaperProps {
   headerSx?: SxProps;
   padded?: boolean;
   stackOnMobile?: boolean;
-  mobileBreakpoint?: 'xs' | 'sm' | 'md';
+  mobileBreakpoint?: 'xs' | 'sm' | 'md'; // breakpoint at which the actions will stack below the title
 }
 const TitleCard: React.FC<Props> = ({
   title,
