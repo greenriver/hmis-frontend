@@ -1,6 +1,5 @@
 import PersonIcon from '@mui/icons-material/Person';
-import { Stack } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import EnrollmentAssessmentActionButtons from '../EnrollmentAssessmentActionButtons';
 import EnrollmentAssessmentsTable from '../EnrollmentAssessmentsTable';
 import HouseholdAssessmentsTable from '../HouseholdAssessmentsTable';
@@ -19,6 +18,45 @@ const AssessmentsTable = () => {
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
+  const actions = useMemo(() => {
+    if (!enrollment) return [];
+
+    const actions = [];
+    if (enrollment.householdSize > 1) {
+      actions.push(
+        <CommonToggle
+          value={mode}
+          onChange={setMode}
+          variant='gray'
+          size='small'
+          aria-label='view assessments for'
+          items={[
+            {
+              value: 'current_client',
+              label: 'Client',
+              Icon: PersonIcon,
+            },
+            {
+              value: 'household',
+              label: 'Household',
+              Icon: HouseholdIcon,
+            },
+          ]}
+          key='household-client-toggle'
+        />
+      );
+    }
+    if (enrollment.access.canEditEnrollments) {
+      actions.push(
+        <EnrollmentAssessmentActionButtons
+          enrollment={enrollment}
+          key='enrollment-assessment-action'
+        />
+      );
+    }
+    return actions;
+  }, [enrollment, mode]);
+
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   return (
@@ -28,36 +66,10 @@ const AssessmentsTable = () => {
           ? `${clientBriefName(enrollment.client)} Assessments`
           : 'Household Assessments'
       }
-      actions={
-        <Stack direction='row' gap={4}>
-          {enrollment.householdSize > 1 && (
-            <CommonToggle
-              value={mode}
-              onChange={setMode}
-              variant='gray'
-              size='small'
-              aria-label='view assessments for'
-              items={[
-                {
-                  value: 'current_client',
-                  label: 'Client',
-                  Icon: PersonIcon,
-                },
-                {
-                  value: 'household',
-                  label: 'Household',
-                  Icon: HouseholdIcon,
-                },
-              ]}
-            />
-          )}
-          {enrollment.access.canEditEnrollments && (
-            <EnrollmentAssessmentActionButtons enrollment={enrollment} />
-          )}
-        </Stack>
-      }
+      actions={actions}
       headerVariant='border'
       data-testid='enrollmentAssessmentsCard'
+      mobileBreakpoint='md'
     >
       {mode === 'current_client' && (
         <EnrollmentAssessmentsTable

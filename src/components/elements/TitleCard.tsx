@@ -20,6 +20,7 @@ interface Props extends PaperProps {
   headerSx?: SxProps;
   padded?: boolean;
   stackOnMobile?: boolean;
+  mobileBreakpoint?: 'xs' | 'sm' | 'md';
 }
 const TitleCard: React.FC<Props> = ({
   title,
@@ -30,16 +31,18 @@ const TitleCard: React.FC<Props> = ({
   headerSx,
   padded = false,
   stackOnMobile = true,
+  mobileBreakpoint = 'xs',
   ...props
 }) => {
-  const isTiny = useIsMobile('sm');
+  const isMobile = useIsMobile(mobileBreakpoint);
 
   return (
     <Paper data-testid={props['data-testid']} {...props}>
       <Stack
         justifyContent={'space-between'}
-        alignItems={isTiny && stackOnMobile ? 'left' : 'center'}
-        direction={isTiny && stackOnMobile ? 'column' : 'row'}
+        alignItems={isMobile && stackOnMobile ? 'left' : 'center'}
+        direction={isMobile && stackOnMobile ? 'column' : 'row'}
+        spacing={{ sm: 1, md: 2, lg: 4 }}
         sx={{
           px: 2,
           py: actions ? 2 : 1,
@@ -51,12 +54,18 @@ const TitleCard: React.FC<Props> = ({
               }
             : {}),
           ...headerSx,
+          '& MuiButton-root': {
+            width: 'fit-content',
+          },
         }}
       >
-        <Typography variant={headerTypographyVariant} sx={{ py: 1 }}>
+        <Typography
+          variant={headerTypographyVariant}
+          sx={{ py: 1, flexGrow: 1 }}
+        >
           {title}
         </Typography>
-        <Box sx={{ width: 'fit-content' }}>{actions}</Box>
+        {actions}
       </Stack>
 
       {padded ? <Box sx={{ px: 2, pb: 2 }}>{children}</Box> : children}
