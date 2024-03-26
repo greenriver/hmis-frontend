@@ -8,7 +8,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 export const CommonDetailGridContainer: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const isTiny = useIsMobile('sm');
+  const isTiny = useIsMobile('md');
 
   return (
     <Grid
