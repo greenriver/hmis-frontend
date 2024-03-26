@@ -42,7 +42,7 @@ const TitleCard: React.FC<Props> = ({
         justifyContent={'space-between'}
         alignItems={isMobile && stackOnMobile ? 'left' : 'center'}
         direction={isMobile && stackOnMobile ? 'column' : 'row'}
-        spacing={{ sm: 1, md: 2, lg: 4 }}
+        spacing={{ xs: 1, md: 2, lg: 4 }}
         sx={{
           px: 2,
           py: actions ? 2 : 1,
