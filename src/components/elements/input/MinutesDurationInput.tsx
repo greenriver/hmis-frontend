@@ -21,6 +21,7 @@ const MinutesDurationInput = ({
   label,
   helperText,
   ariaLabel = 'duration',
+  maxWidth,
   ...props
 }: Props) => {
   const [hours, minutes] = useMemo(() => {
@@ -66,7 +67,7 @@ const MinutesDurationInput = ({
   }, []);
 
   return (
-    <FormControl>
+    <FormControl sx={{ maxWidth, ...props.sx }}>
       {label}
       <Stack alignItems='center' direction='row' gap={1} sx={{ mt: 0.5 }}>
         <NumberInput

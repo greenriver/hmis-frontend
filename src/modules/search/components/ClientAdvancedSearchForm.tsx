@@ -65,7 +65,6 @@ const ClientSearchAdvancedForm: React.FC<Props> = ({
       >
         {SearchFormDefinition.item?.map((item: FormItem) => (
           <DynamicField
-            nestingLevel={0}
             key={item.linkId}
             item={item}
             itemChanged={itemChanged}

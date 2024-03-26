@@ -47,10 +47,11 @@ const TextMaskCustom = forwardRef<HTMLInputElement, CustomProps>(
   }
 );
 
-const PhoneInput = (props: TextInputProps) => {
+const PhoneInput = ({ InputProps, ...props }: TextInputProps) => {
   return (
     <TextInput
-      InputProps={{ inputComponent: TextMaskCustom as any }}
+      InputProps={{ inputComponent: TextMaskCustom as any, ...InputProps }}
+      placeholder='(XXX) XXX - XXXX'
       {...props}
     />
   );

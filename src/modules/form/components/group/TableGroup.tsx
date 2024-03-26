@@ -92,7 +92,6 @@ const TableGroup = ({
             borderRightWidth: 1,
             borderRightStyle: 'solid',
           },
-          width: 'initial',
         }}
         aria-label={label || undefined}
       >

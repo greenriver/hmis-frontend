@@ -10,9 +10,13 @@ import {
 } from '../types';
 import {
   chooseSelectComponentType,
+  FIXED_WIDTH_MEDIUM,
+  FIXED_WIDTH_SMALL,
+  FIXED_WIDTH_X_LARGE,
+  FIXED_WIDTH_X_SMALL,
   hasMeaningfulValue,
   isDataNotCollected,
-  maxWidthAtNestingLevel,
+  MAX_INPUT_AND_LABEL_WIDTH,
   placeholderText,
 } from '../util/formUtil';
 
@@ -39,7 +43,6 @@ import TextInput from '@/components/elements/input/TextInput';
 import TimeOfDayPicker from '@/components/elements/input/TimeOfDayPicker';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
@@ -64,37 +67,9 @@ const getLabel = (
   );
 };
 
-const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
-export const MAX_INPUT_WIDTH = 500;
-const FIXED_WIDTH_MEDIUM = 350;
-const FIXED_WIDTH_SMALL = 200;
-const FIXED_WIDTH_X_SMALL = 100;
-
-const minWidthForType = (item: FormItem, isMobile: boolean) => {
-  if (item.component || item.size) return undefined;
-
-  // minWidth clobbers maxWidth in css always, so for mobile, unset the property in order to prevent
-  // a minWidth that's > 100% of the container causing horizontal scroll
-  if (isMobile) return undefined;
-
-  switch (item.type) {
-    case ItemType.String:
-    case ItemType.Text:
-      return 300;
-    case ItemType.Choice:
-    case ItemType.OpenChoice:
-      // FIXME: this was added for dropdowns, but it's also applied
-      // to radio buttons, which is incorrect
-      return FIXED_WIDTH_MEDIUM;
-    default:
-      return undefined;
-  }
-};
-
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
-  nestingLevel = 0,
   value,
   disabled = false,
   horizontal = false,
@@ -120,11 +95,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       itemChanged({ linkId, value, type: ChangeType.User }),
     [linkId, itemChanged]
   );
-  const isMobile = useIsMobile();
   const isDisabled = disabled || inputProps?.disabled;
   const label = noLabel ? null : getLabel(item, horizontal, isDisabled);
-  let maxWidth = maxWidthAtNestingLevel(nestingLevel);
-  const minWidth = minWidthForType(item, isMobile);
   let width;
 
   if (
@@ -137,10 +109,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     width = FIXED_WIDTH_X_SMALL;
   } else if (item.size === InputSize.Medium) {
     width = FIXED_WIDTH_MEDIUM;
-  }
-
-  if (item.component === Component.RadioButtons) {
-    maxWidth = 600;
   }
 
   const commonContainerProps = { errors, horizontal, breakpoints };
@@ -156,6 +124,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     id: linkId,
     ...inputProps,
     disabled: isDisabled,
+    inputWidth: width,
+    maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
   };
   commonInputProps.warnIfEmptyTreatment =
     warnIfEmpty &&
@@ -200,14 +170,19 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   switch (item.type) {
     case ItemType.Display:
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
-          <DynamicDisplay maxWidth={maxWidth + 100} item={item} value={value} />
+        <InputContainer {...commonContainerProps}>
+          <DynamicDisplay
+            maxWidth={MAX_INPUT_AND_LABEL_WIDTH}
+            width={width}
+            item={item}
+            value={value}
+          />
         </InputContainer>
       );
     case ItemType.Boolean:
       if (item.component === Component.Checkbox) {
         return (
-          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <InputContainer {...commonContainerProps}>
             <LabeledCheckbox
               checked={!!value}
               onChange={(e) =>
@@ -219,12 +194,14 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               }
               horizontal={horizontal}
               {...commonInputProps}
+              inputWidth={width}
+              maxWidth={FIXED_WIDTH_X_LARGE}
             />
           </InputContainer>
         );
       }
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+        <InputContainer {...commonContainerProps}>
           <YesNoRadio
             value={value}
             onChange={onChangeValue}
@@ -236,17 +213,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     case ItemType.Text:
       if (item.component === Component.Ssn)
         return (
-          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <InputContainer {...commonContainerProps}>
             <SsnInput
               id={linkId}
               name={linkId}
               value={value || ''}
               onChange={onChangeValue}
-              sx={{
-                width,
-                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
-              }}
               {...commonInputProps}
             />
           </InputContainer>
@@ -258,31 +230,23 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             id={linkId}
             value={value || ''}
             onChange={onChangeEvent}
-            sx={{
-              width,
-              maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-              '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
-            }}
             {...commonInputProps}
+            inputWidth={155}
           />
         );
       }
 
       const multiline = item.type === ItemType.Text;
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+        <InputContainer {...commonContainerProps}>
           <TextInput
             value={value || ''}
             onChange={onChangeEvent}
             multiline={multiline}
             minRows={multiline ? 2 : undefined}
             horizontal={horizontal}
-            sx={{
-              width,
-              maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-              '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
-            }}
             {...commonInputProps}
+            inputWidth={width}
           />
         </InputContainer>
       );
@@ -290,25 +254,24 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     case ItemType.Currency:
       if (item.component === Component.MinutesDuration)
         return (
-          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <InputContainer {...commonContainerProps}>
             <MinutesDurationInput
               value={isNil(value) ? '' : value}
               onChange={onChangeValue}
-              inputWidth={width}
               {...commonInputProps}
             />
           </InputContainer>
         );
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+        <InputContainer {...commonContainerProps}>
           <NumberInput
             value={isNil(value) ? '' : value}
             onChange={onChangeEvent}
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
-            inputWidth={width}
             disableArrowKeys={item.type === ItemType.Currency}
             {...commonInputProps}
+            inputWidth={120}
           />
         </InputContainer>
       );
@@ -320,14 +283,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       //   ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
       //   : {};
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+        <InputContainer {...commonContainerProps}>
           <DatePicker
             value={dateValue || null}
             onChange={onChangeValue}
             textInputProps={{
               id: linkId,
               horizontal,
-              sx: { width },
             }}
             {...datePickerProps}
             {...commonInputProps}
@@ -336,14 +298,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.TimeOfDay:
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+        <InputContainer {...commonContainerProps}>
           <TimeOfDayPicker
             value={value}
             onChange={onChangeValue}
             textInputProps={{
               id: linkId,
               horizontal,
-              sx: { width },
             }}
             {...commonInputProps}
           />
@@ -353,7 +314,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedChoiceVal = value ? value : item.repeats ? [] : null;
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+        <InputContainer {...commonContainerProps}>
           <CreatableFormSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={selectedChoiceVal}
@@ -362,14 +323,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             multiple={!!item.repeats}
             loading={pickListLoading}
             placeholder={placeholder}
-            textInputProps={{
-              horizontal,
-              sx: {
-                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
-              },
-            }}
+            textInputProps={{ name: linkId, horizontal }}
             {...commonInputProps}
+            maxWidth={MAX_INPUT_AND_LABEL_WIDTH}
+            inputWidth={width}
           />
         </InputContainer>
       );
@@ -406,6 +363,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             options={options || []}
             row={componentType === Component.RadioButtons}
             {...commonInputProps}
+            maxWidth='100%'
+            labelSx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
           />
         ) : (
           <RadioGroupInput
@@ -415,6 +374,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             row={componentType === Component.RadioButtons}
             clearable
             {...commonInputProps}
+            maxWidth='100%'
+            labelSx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
           />
         );
       } else {
@@ -426,30 +387,22 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             multiple={!!item.repeats}
             loading={pickListLoading}
             placeholder={placeholder}
-            textInputProps={{
-              name: linkId,
-              horizontal,
-              sx: {
-                width,
-                // cant allow label to extend, because it messes up click target for closing dropdwon
-                maxWidth: MAX_INPUT_WIDTH,
-                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
-              },
-            }}
-            sx={{ maxWidth: MAX_INPUT_WIDTH }} // for click target for closing dropdwon
+            textInputProps={{ name: linkId, horizontal }}
             {...commonInputProps}
+            maxWidth={MAX_INPUT_AND_LABEL_WIDTH}
+            inputWidth={width}
           />
         );
       }
 
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+        <InputContainer {...commonContainerProps}>
           {inputComponent}
         </InputContainer>
       );
     case ItemType.Image:
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+        <InputContainer {...commonContainerProps}>
           <Uploader
             id={linkId}
             image
@@ -459,7 +412,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.File:
       return (
-        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+        <InputContainer {...commonContainerProps}>
           <Uploader
             id={linkId}
             onUpload={async (upload) => onChangeValue(upload.blobId)}
