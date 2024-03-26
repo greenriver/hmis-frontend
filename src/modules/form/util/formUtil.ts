@@ -1422,6 +1422,7 @@ export const getFieldOnAssessment = (
   }
 
   const record = get(assessment, relatedRecordAttribute);
+  if (!record) return {};
 
   let value;
   if (mapping.fieldName) {
