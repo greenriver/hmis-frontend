@@ -99,6 +99,7 @@ const projectDashboardRoutes = {
   EDIT_INVENTORY: 'inventory/:inventoryId/edit',
   HMIS_PARTICIPATION: 'hmis-participation',
   CE_PARTICIPATION: 'ce-participation',
+  EXTERNAL_FORM_SUBMISSIONS: 'external-form-submissions',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`

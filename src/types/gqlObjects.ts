@@ -3008,6 +3008,41 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ExternalFormSubmission',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'spam', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'status',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'ExternalFormSubmissionStatus',
+            ofType: null,
+          },
+        },
+      },
+      {
+        name: 'submittedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'ExternalIdentifier',
     fields: [
       {
@@ -4589,6 +4624,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canManageExternalFormSubmissions',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageIncomingReferrals',
         type: {
           kind: 'NON_NULL',
@@ -4889,6 +4932,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageDeniedReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageExternalFormSubmissions',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6710,6 +6761,38 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
               ofType: null,
             },
           },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ExternalFormSubmissionFilterOptions',
+    args: [
+      {
+        name: 'status',
+        type: {
+          kind: 'ENUM',
+          name: 'ExternalFormSubmissionStatus',
+          ofType: null,
+        },
+      },
+      {
+        name: 'submittedDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ExternalFormSubmissionInput',
+    args: [
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'spam', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'status',
+        type: {
+          kind: 'ENUM',
+          name: 'ExternalFormSubmissionStatus',
+          ofType: null,
         },
       },
     ],
