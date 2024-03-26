@@ -92,6 +92,15 @@ export default defineConfig(({ command, mode }) => {
             }
           },
         },
+        onwarn(warning, defaultHandler) {
+          if (warning.code === 'SOURCEMAP_ERROR') {
+            return;
+          }
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+            return;
+          }
+          defaultHandler(warning);
+        },
       },
       sourcemap: true,
       minify: mode === 'development' ? false : 'esbuild',
