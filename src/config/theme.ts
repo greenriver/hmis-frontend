@@ -87,7 +87,7 @@ export const baseThemeDef: ThemeOptions = {
       main: '#1976D2',
     },
     background: {
-      default: '#F9F9F9',
+      default: '#FCFCFC',
     },
     secondary: {
       main: '#75559F',
