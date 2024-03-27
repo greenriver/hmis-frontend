@@ -30,6 +30,7 @@ const DatePicker: React.FC<Props> = ({
   value,
   helperText,
   warnIfEmptyTreatment,
+  ariaLabel,
   ...props
 }) => {
   // If max date is in the past, default to the max date's month
@@ -81,6 +82,10 @@ const DatePicker: React.FC<Props> = ({
           sx,
           onBlur: handleBlur,
           ...textInputProps,
+          inputProps: {
+            'aria-label': ariaLabel,
+            ...textInputProps?.inputProps,
+          },
           error: error || !!errorMessage,
           //eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore

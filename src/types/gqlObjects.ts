@@ -2213,6 +2213,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
+        name: 'lastServiceDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'lengthOfStay',
         type: {
           kind: 'ENUM',
@@ -5517,6 +5521,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
+      {
+        name: 'supportsBulkAssignment',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -5949,6 +5961,55 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'BulkAssignServiceInput',
+    args: [
+      {
+        name: 'clientIds',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+            },
+          },
+        },
+      },
+      {
+        name: 'cocCode',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'dateProvided',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'projectId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'serviceTypeId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'BulkMergeClientsInput',
     args: [
       {
@@ -6082,6 +6143,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           },
         },
       },
+      {
+        name: 'serviceInRange',
+        type: {
+          kind: 'INPUT_OBJECT',
+          name: 'ServiceRangeFilter',
+          ofType: null,
+        },
+      },
     ],
   },
   {
@@ -6194,19 +6263,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'INPUT_OBJECT', name: 'FormRuleInput', ofType: null },
-        },
-      },
-    ],
-  },
-  {
-    name: 'CreateServiceInput',
-    args: [
-      {
-        name: 'input',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'INPUT_OBJECT', name: 'ServiceInput', ofType: null },
         },
       },
     ],
@@ -6659,6 +6715,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'FormDefinitionFilterOptions',
+    args: [
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'FormDefinitionInput',
     args: [
       {
@@ -6801,6 +6866,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'projectType',
         type: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+      },
+      {
+        name: 'serviceCategoryId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'serviceTypeId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
     ],
   },
@@ -7177,43 +7250,37 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'ServiceInput',
+    name: 'ServiceRangeFilter',
     args: [
       {
-        name: 'dateProvided',
+        name: 'endDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
-        name: 'enrollmentId',
+        name: 'serviceType',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
-        name: 'faAmount',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
+        name: 'startDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ServiceTypeFilterOptions',
+    args: [
+      {
+        name: 'includeHudServices',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
-        name: 'movingOnOtherType',
+        name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'otherTypeProvided',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'recordType',
-        type: { kind: 'ENUM', name: 'RecordType', ofType: null },
-      },
-      {
-        name: 'referralOutcome',
-        type: { kind: 'ENUM', name: 'PATHReferralOutcome', ofType: null },
-      },
-      {
-        name: 'subTypeProvided',
-        type: { kind: 'ENUM', name: 'ServiceSubTypeProvided', ofType: null },
-      },
-      {
-        name: 'typeProvided',
-        type: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
       },
     ],
   },

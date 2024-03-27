@@ -14,10 +14,11 @@ import {
   GetEnrollmentServicesDocument,
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables,
+  ServiceBasicFieldsFragment,
   ServiceFieldsFragment,
 } from '@/types/gqlTypes';
 
-export const SERVICE_COLUMNS: ColumnDef<ServiceFieldsFragment>[] = [
+export const SERVICE_COLUMNS: ColumnDef<ServiceBasicFieldsFragment>[] = [
   {
     header: 'Date Provided',
     linkTreatment: true,

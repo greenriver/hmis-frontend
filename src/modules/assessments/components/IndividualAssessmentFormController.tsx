@@ -70,6 +70,7 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
   const FormActionProps = useMemo(() => {
     return {
       onDiscard: navigateToEnrollment,
+      stackOnMobile: true,
       config: [
         {
           id: 'submit',

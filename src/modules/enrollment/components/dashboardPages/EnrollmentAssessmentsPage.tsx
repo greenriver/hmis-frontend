@@ -1,4 +1,3 @@
-import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
 import { Stack } from '@mui/material';
 import { useState } from 'react';
@@ -6,6 +5,7 @@ import EnrollmentAssessmentActionButtons from '../EnrollmentAssessmentActionButt
 import EnrollmentAssessmentsTable from '../EnrollmentAssessmentsTable';
 import HouseholdAssessmentsTable from '../HouseholdAssessmentsTable';
 import CommonToggle from '@/components/elements/CommonToggle';
+import { HouseholdIcon } from '@/components/elements/SemanticIcons';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
@@ -46,7 +46,7 @@ const AssessmentsTable = () => {
                 {
                   value: 'household',
                   label: 'Household',
-                  Icon: PeopleIcon,
+                  Icon: HouseholdIcon,
                 },
               ]}
             />

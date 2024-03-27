@@ -34,7 +34,7 @@ interface Args<TData, TVariables> {
   mutationDocument: TypedDocumentNode<TData, TVariables>;
   getErrors: (data: TData) => ValidationError[];
   getVariables: (values: FormValues, confirmed?: boolean) => TVariables;
-  onCompleted: (data: TData) => void;
+  onCompleted?: (data: TData) => void;
   pickListArgs?: PickListArgs;
   onClose?: VoidFunction;
   localConstants?: LocalConstants;

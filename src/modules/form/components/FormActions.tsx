@@ -14,6 +14,7 @@ import { FormActionTypes } from '../types';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import LoadingButton from '@/components/elements/LoadingButton';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import AssessmentLastUpdated from '@/modules/hmis/components/AssessmentLastUpdated';
 
 type ButtonConfig = {
@@ -39,6 +40,7 @@ export interface FormActionProps {
   lastSaved?: string;
   lastSubmitted?: string;
   noDiscard?: boolean;
+  stackOnMobile?: boolean;
 }
 
 const FormActions = ({
@@ -53,8 +55,10 @@ const FormActions = ({
   lastSaved,
   lastSubmitted,
   noDiscard = false,
+  stackOnMobile = false,
 }: FormActionProps) => {
   const navigate = useNavigate();
+  const isTiny = useIsMobile('sm');
 
   const [leftConfig, centerConfig, rightConfig] = useMemo(() => {
     if (config) {
@@ -168,7 +172,17 @@ const FormActions = ({
     );
   };
 
-  return (
+  return isTiny && stackOnMobile ? (
+    <Stack direction='column' spacing={2}>
+      {leftConfig.map((c) => renderButton(c))}
+      {centerConfig.map((c) => renderButton(c))}
+      <AssessmentLastUpdated
+        lastSaved={lastSaved}
+        lastSubmitted={lastSubmitted}
+      />
+      {rightConfig.map((c) => renderButton(c))}
+    </Stack>
+  ) : (
     <Stack direction='row' spacing={2} justifyContent={'space-between'}>
       {leftConfig.length > 0 && (
         <Stack direction='row' spacing={2}>

@@ -21,4 +21,21 @@ fragment FormRuleFields on FormRule {
   }
   createdAt
   updatedAt
+  serviceCategory {
+    id
+    name
+    hud
+  }
+  serviceType {
+    ...ServiceTypeFields
+  }
+}
+
+fragment ServiceTypeConfigFields on ServiceType {
+  ...ServiceTypeFields
+  formDefinitions {
+    id
+    cacheKey
+    title
+  }
 }

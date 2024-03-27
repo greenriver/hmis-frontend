@@ -19,12 +19,12 @@ import {
 import DynamicField from './DynamicField';
 import DynamicGroup from './DynamicGroup';
 
+import DynamicViewField from '@/modules/form/components/viewable/DynamicViewField';
 import {
   DisabledDisplay,
   FormDefinitionJson,
   FormItem,
   ItemType,
-  ServiceDetailType,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -36,7 +36,6 @@ export interface Props {
   horizontal?: boolean;
   warnIfEmpty?: boolean;
   locked?: boolean;
-  bulk?: boolean;
   visible?: boolean;
   pickListArgs?: PickListArgs;
   values: FormValues;
@@ -51,7 +50,6 @@ const DynamicFormFields: React.FC<Props> = ({
   clientId,
   definition,
   errors = [],
-  bulk,
   horizontal = false,
   warnIfEmpty = false,
   locked = false,
@@ -85,8 +83,6 @@ const DynamicFormFields: React.FC<Props> = ({
   ) => {
     const isDisabled = !isEnabled(item, disabledLinkIds);
     if (isDisabled && item.disabledDisplay === DisabledDisplay.Hidden)
-      return null;
-    if (bulk && item.serviceDetailType === ServiceDetailType.Client)
       return null;
 
     if (item.type === ItemType.Group) {
@@ -129,7 +125,19 @@ const DynamicFormFields: React.FC<Props> = ({
       );
     }
 
-    const itemComponent = (
+    const itemComponent = item.readOnly ? (
+      <DynamicViewField
+        item={item}
+        value={values[item.linkId]}
+        disabled={isDisabled}
+        nestingLevel={nestingLevel}
+        horizontal={horizontal}
+        pickListArgs={pickListArgs}
+        // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
+        adjustValue={itemChanged}
+        {...props}
+      />
+    ) : (
       <DynamicField
         key={item.linkId}
         item={item}

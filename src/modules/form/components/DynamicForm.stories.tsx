@@ -57,3 +57,14 @@ WithValues.args = {
   initialValues: ViewStory.args?.values,
   errors: emptyErrorState,
 };
+
+// Render the DynamicForm with values, modified such that every item is marked "readOnly" in the FormDefinition
+export const WithValuesAsReadOnly = Template.bind({});
+WithValuesAsReadOnly.args = {
+  definition: modifyFormDefinition(
+    formDefinition,
+    (item) => (item.readOnly = true)
+  ),
+  initialValues: ViewStory.args?.values,
+  errors: emptyErrorState,
+};

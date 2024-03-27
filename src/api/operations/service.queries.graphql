@@ -10,18 +10,6 @@ query GetServiceType($id: ID!) {
   }
 }
 
-mutation AddServiceToEnrollment($input: CreateServiceInput!) {
-  createService(input: $input) {
-    clientMutationId
-    service {
-      ...ServiceFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeleteService($input: DeleteServiceInput!) {
   deleteService(input: $input) {
     clientMutationId
@@ -49,17 +37,6 @@ query GetEnrollmentServices(
       nodes {
         ...ServiceFields
       }
-    }
-  }
-}
-
-query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
-  serviceCategories(limit: $limit, offset: $offset) {
-    offset
-    limit
-    nodesCount
-    nodes {
-      ...ServiceCategoryFields
     }
   }
 }

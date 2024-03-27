@@ -19,7 +19,7 @@ import {
   tabPanelA11yProps,
 } from './util';
 
-import BackButton from '@/components/elements/BackButton';
+import BackButtonLink from '@/components/elements/BackButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
 import LoadingSkeleton from '@/components/elements/LoadingSkeleton';
 import TitleCard from '@/components/elements/TitleCard';
@@ -218,9 +218,9 @@ const HouseholdSummaryTabPanel = memo(
             </TitleCard>
             {(submitResponseData?.submitHouseholdAssessments?.assessments ||
               allSubmitted) && (
-              <BackButton sx={{ my: 4 }} to={enrollmentPath}>
+              <BackButtonLink sx={{ my: 4 }} to={enrollmentPath}>
                 Back to Enrollment
-              </BackButton>
+              </BackButtonLink>
             )}
           </Grid>
         </Grid>

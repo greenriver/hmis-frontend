@@ -1,0 +1,62 @@
+query BulkServicesClientSearch(
+  $textSearch: String!
+  $filters: ClientFilterOptions
+  $limit: Int
+  $offset: Int
+  $sortOrder: ClientSortOption
+  $serviceTypeId: ID!
+  $projectId: ID!
+  $serviceDate: ISO8601Date!
+) {
+  clientSearch(
+    input: { textSearch: $textSearch }
+    filters: $filters
+    limit: $limit
+    offset: $offset
+    sortOrder: $sortOrder
+  ) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      id
+      ...ClientName
+      ...ClientIdentificationFields
+      activeEnrollment(projectId: $projectId, openOnDate: $serviceDate) {
+        id
+        entryDate
+        lastServiceDate(serviceTypeId: $serviceTypeId)
+        services(
+          limit: 25 # not expected to receive >25 services of 1 type on 1 day at 1 project
+          offset: 0
+          filters: { dateProvided: $serviceDate, serviceType: [$serviceTypeId] }
+        ) {
+          limit
+          offset
+          nodesCount
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation BulkAssignService($input: BulkAssignServiceInput!) {
+  bulkAssignService(input: $input) {
+    success
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation BulkRemoveService($projectId: ID!, $serviceIds: [ID!]!) {
+  bulkRemoveService(projectId: $projectId, serviceIds: $serviceIds) {
+    success
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

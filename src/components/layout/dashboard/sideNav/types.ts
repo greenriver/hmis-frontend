@@ -5,6 +5,7 @@ export interface NavItem<T> {
   items?: NavItem<T>[];
   href?: string;
   path?: string;
+  pathParams?: Record<string, string>;
   type?: 'topic' | 'category' | 'section';
   hide?: boolean;
   permissions?: (keyof Omit<T, 'id' | '__typename'>)[];

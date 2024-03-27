@@ -1,41 +1,53 @@
-import { useMemo } from 'react';
+import { To, useLocation, useNavigate } from 'react-router-dom';
 import ManageHousehold from './ManageHousehold';
 import BackButton from '@/components/elements/BackButton';
 import PageTitle from '@/components/layout/PageTitle';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { generateSafePath } from '@/utils/pathEncoding';
+import { injectSearchParams } from '@/routes/routeUtil';
+
+function buttonTextForPath(path?: string) {
+  if (path === ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD) {
+    return 'Back to Bed Nights';
+  }
+  if (path === ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD) {
+    return 'Back to Bulk Services';
+  }
+  return 'Back to Project Enrollments';
+}
 
 const CreateHouseholdPage = () => {
   const { project } = useProjectDashboardContext();
   const currentPath = useCurrentPath();
-
-  const [buttonText, buttonPath] = useMemo(() => {
-    if (
-      currentPath === ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT
-    ) {
-      return [
-        'Back to Bed Night Management',
-        generateSafePath(ProjectDashboardRoutes.PROJECT_BED_NIGHTS, {
-          projectId: project.id,
-        }),
-      ];
-    }
-    return [
-      'Back to Project Enrollments',
-      generateSafePath(ProjectDashboardRoutes.PROJECT_ENROLLMENTS, {
-        projectId: project.id,
-      }),
-    ];
-  }, [currentPath, project.id]);
+  const navigate = useNavigate();
+  const { state } = useLocation();
 
   return (
     <>
       <PageTitle title={`Enroll Household in ${project.projectName}`} />
       <ManageHousehold
         projectId={project.id}
-        BackButton={<BackButton to={buttonPath}>{buttonText}</BackButton>}
+        renderBackButton={(householdId) => (
+          <BackButton
+            onClick={() => {
+              if (!state?.prev) {
+                navigate(-1);
+              } else if (householdId) {
+                // If previous path was specified and a household was created,
+                // inject household query as `searchTerm`
+                const path = injectSearchParams(state.prev, {
+                  searchTerm: `household:${householdId}`,
+                });
+                navigate(path as To);
+              } else {
+                navigate(state.prev);
+              }
+            }}
+          >
+            {buttonTextForPath(currentPath)}
+          </BackButton>
+        )}
       />
     </>
   );

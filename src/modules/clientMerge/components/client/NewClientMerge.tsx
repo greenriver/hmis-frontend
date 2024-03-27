@@ -3,7 +3,7 @@ import { Box, Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClientMergeDetailsTable from '../ClientMergeDetailsTable';
-import BackButton from '@/components/elements/BackButton';
+import BackButtonLink from '@/components/elements/BackButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import RouterLink from '@/components/elements/RouterLink';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -131,13 +131,13 @@ const NewClientMerge = () => {
             />
           </SsnDobShowContextProvider>
         </TitleCard>
-        <BackButton
+        <BackButtonLink
           to={generateSafePath(ClientDashboardRoutes.MERGE_HISTORY, {
             clientId: client.id,
           })}
         >
           Back to Merge History
-        </BackButton>
+        </BackButtonLink>
 
         <TitleCard title='Merge Client Records'>
           <Stack gap={6}>

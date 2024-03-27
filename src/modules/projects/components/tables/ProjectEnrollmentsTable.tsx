@@ -1,4 +1,3 @@
-import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
 import { Box, Grid } from '@mui/material';
 import { useState } from 'react';
@@ -10,6 +9,7 @@ import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 
 import CommonToggle from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import { HouseholdIcon } from '@/components/elements/SemanticIcons';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import ClientSearchInput from '@/modules/search/components/ClientTextSearchInput';
@@ -60,7 +60,7 @@ const ProjectEnrollmentsTable = ({
                       {
                         value: 'households',
                         label: 'Households',
-                        Icon: PeopleIcon,
+                        Icon: HouseholdIcon,
                       },
                       {
                         value: 'clients',

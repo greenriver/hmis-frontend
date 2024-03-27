@@ -31,14 +31,12 @@ import {
 const useDynamicFields = ({
   definition,
   initialValues,
-  bulk = false,
   viewOnly = false,
   localConstants,
   onFieldChange,
 }: {
   definition: FormDefinitionJson;
   initialValues?: Record<string, any>;
-  bulk?: boolean;
   viewOnly?: boolean;
   localConstants?: LocalConstants;
   onFieldChange?: (type: ChangeType) => void;
@@ -188,7 +186,6 @@ const useDynamicFields = ({
         | 'setDisabledLinkIds'
         | 'values'
         | 'setValues'
-        | 'bulk'
         | 'itemChanged'
         | 'severalItemsChanged'
         | 'localConstants'
@@ -205,7 +202,6 @@ const useDynamicFields = ({
             itemMap,
             disabledLinkIds,
             values,
-            bulk,
             itemChanged,
             severalItemsChanged,
             localConstants,
@@ -218,7 +214,6 @@ const useDynamicFields = ({
       itemMap,
       disabledLinkIds,
       values,
-      bulk,
       itemChanged,
       severalItemsChanged,
       localConstants,
@@ -237,7 +232,6 @@ const useDynamicFields = ({
         | 'setDisabledLinkIds'
         | 'values'
         | 'setValues'
-        | 'bulk'
         | 'itemChanged'
         | 'severalItemsChanged'
         | 'localConstants'
@@ -252,12 +246,11 @@ const useDynamicFields = ({
           itemMap,
           disabledLinkIds,
           values,
-          bulk,
           itemChanged: itemChanged,
         }}
       />
     ),
-    [definition, itemMap, disabledLinkIds, values, bulk, itemChanged]
+    [definition, itemMap, disabledLinkIds, values, itemChanged]
   );
 
   return useMemo(

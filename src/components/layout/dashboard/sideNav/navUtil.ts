@@ -56,11 +56,13 @@ export const firstNavItemWithAccess = <T>(config: NavItem<T>[], access: T) => {
  */
 export const applySafePaths = <T>(
   config: NavItem<T>[],
-  pathParams: Record<string, string>
+  globalPathParams: Record<string, string>
 ) => {
   function recur(item: NavItem<T>): NavItem<T> {
-    const { items, path, ...rest } = item;
-    const safePath = path ? generateSafePath(path, pathParams) : undefined;
+    const { items, path, pathParams, ...rest } = item;
+    const safePath = path
+      ? generateSafePath(path, { ...globalPathParams, ...pathParams })
+      : undefined;
 
     if (!items) return { path: safePath, ...rest };
 
