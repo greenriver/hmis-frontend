@@ -152,9 +152,9 @@ const DisabilityTable = ({
     label?: ReactNode
   ) {
     return renderChildItem(cellItem, {
-      noLabel: !!label,
+      noLabel: !label,
       inputProps: {
-        label: label,
+        label,
         placeholder: idx === 0 ? 'Select Status' : 'Select Disabling Condition',
         // Reads as "Physical Disability Status" or "Physical Disability Disabling Condition"
         ariaLabelledBy:
@@ -213,7 +213,7 @@ const DisabilityTable = ({
                 }}
               >
                 <TableCell
-                  sx={isMobile ? {} : { width: '250px', py: 3 }}
+                  sx={isMobile ? {} : { width: '25%', py: 3 }}
                   id={disabilityTypeLabelId}
                 >
                   {!isMobile && (
@@ -245,12 +245,14 @@ const DisabilityTable = ({
                       key={cellItem.linkId}
                       sx={{
                         pr: 2,
+                        width: '33%',
                       }}
                     >
                       {getDisabilityDropdowns(
                         cellItem,
                         idx,
                         disabilityTypeLabelId
+                        // dont pass a label because it is labelled-by the header cells
                       )}
                     </TableCell>
                   ))}
