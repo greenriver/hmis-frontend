@@ -14,13 +14,13 @@ import {
 
 const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
+    header: 'Assessment Type',
+    render: (assessment) => formRoleDisplay(assessment),
+  },
+  {
     header: 'Assessment Date',
     render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
     linkTreatment: true,
-  },
-  {
-    header: 'Assessment Type',
-    render: (assessment) => formRoleDisplay(assessment),
   },
   {
     header: 'Last Updated',
