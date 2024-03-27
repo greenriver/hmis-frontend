@@ -1,5 +1,4 @@
-import { Box, Grid, lighten } from '@mui/material';
-import { ReactNode } from 'react';
+import { Grid, lighten } from '@mui/material';
 
 import { GroupItemComponentProps } from '../types';
 
@@ -13,27 +12,6 @@ import SignatureGroupCard from './group/SignatureGroupCard';
 import TableGroup from './group/TableGroup';
 import Signature from '@/modules/form/components/group/Signature';
 import { Component } from '@/types/gqlTypes';
-
-export const InfoGroup = ({
-  children,
-}: {
-  children: ReactNode;
-  nestingLevel?: number;
-}) => (
-  <Box
-    sx={{
-      backgroundColor: (theme) => lighten(theme.palette.grey[100], 0.2),
-      borderRadius: 1,
-      width: 'fit-content',
-      px: 0.5,
-      // use box shadow to "extend" background color beyond div. doing this so we dont mess with the height
-      boxShadow: (theme) =>
-        `0 2px 0 6px ${lighten(theme.palette.grey[100], 0.2)}`,
-    }}
-  >
-    {children}
-  </Box>
-);
 
 interface Props extends GroupItemComponentProps {
   clientId?: string;
@@ -75,9 +53,18 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
       return <Signature key={props.item.linkId} {...props} />;
     case Component.InfoGroup:
       return (
-        <InfoGroup nestingLevel={props.nestingLevel}>
-          <QuestionGroup key={props.item.linkId} {...props} />
-        </InfoGroup>
+        <QuestionGroup
+          key={props.item.linkId}
+          {...props}
+          sx={{
+            backgroundColor: (theme) => lighten(theme.palette.grey[100], 0.2),
+            borderRadius: 1,
+            px: 0.5,
+            // use box shadow to "extend" background color beyond div. doing this so we dont mess with the height
+            boxShadow: (theme) =>
+              `0 2px 0 6px ${lighten(theme.palette.grey[100], 0.2)}`,
+          }}
+        />
       );
     case Component.Table:
       return <TableGroup key={props.item.linkId} {...props} />;
