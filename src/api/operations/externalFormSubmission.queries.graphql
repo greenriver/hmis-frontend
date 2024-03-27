@@ -1,0 +1,30 @@
+query GetProjectExternalFormSubmissions(
+  $id: ID!
+  $formDefinitionIdentifier: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ExternalFormSubmissionFilterOptions = null
+) {
+  project(id: $id) {
+    id
+    externalFormSubmissions(
+      limit: $limit
+      offset: $offset
+      formDefinitionIdentifier: $formDefinitionIdentifier
+      filters: $filters
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ExternalFormSubmissionFields
+      }
+    }
+  }
+}
+
+query GetExternalFormDefinition($formDefinitionIdentifier: String!) {
+  externalFormDefinition(identifier: $formDefinitionIdentifier) {
+    ...FormDefinitionFields
+  }
+}

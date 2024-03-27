@@ -38,6 +38,7 @@ const primaryToggleSx: SxProps<Theme> = {
   '& .MuiToggleButtonGroup-grouped': {
     margin: 0.5,
     border: 0,
+    fontWeight: 600,
     px: { xs: 1, sm: 2 },
     py: { xs: 1, sm: '11px' }, // 11px is default coming from MUI
     '&.Mui-selected, &.Mui-selected:hover': {

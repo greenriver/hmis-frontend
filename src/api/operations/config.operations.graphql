@@ -1,0 +1,65 @@
+mutation CreateServiceType($input: ServiceTypeInput!) {
+  createServiceType(input: $input) {
+    serviceType {
+      ...ServiceTypeFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteServiceType($id: ID!) {
+  deleteServiceType(id: $id) {
+    serviceType {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation RenameServiceType($id: ID!, $name: String!) {
+  renameServiceType(id: $id, name: $name) {
+    serviceType {
+      ...ServiceTypeFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateServiceCategory($name: String!) {
+  createServiceCategory(name: $name) {
+    serviceCategory {
+      ...ServiceCategoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteServiceCategory($id: ID!) {
+  deleteServiceCategory(id: $id) {
+    serviceCategory {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation RenameServiceCategory($id: ID!, $name: String!) {
+  renameServiceCategory(id: $id, name: $name) {
+    serviceCategory {
+      ...ServiceCategoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

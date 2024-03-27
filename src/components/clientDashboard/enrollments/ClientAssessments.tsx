@@ -26,14 +26,14 @@ type AssessmentType = NonNullable<
 
 const columns: ColumnDef<AssessmentType>[] = [
   {
-    header: 'Assessment Date',
-    render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
-    linkTreatment: true,
-    ariaLabel: (row) => assessmentDescription(row),
-  },
-  {
     header: 'Assessment Type',
     render: (assessment) => formRoleDisplay(assessment),
+    linkTreatment: true,
+  },
+  {
+    header: 'Assessment Date',
+    render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
+    ariaLabel: (row) => assessmentDescription(row),
   },
   {
     header: 'Project Name',

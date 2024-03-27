@@ -2,24 +2,20 @@ import { Grid, Stack, Typography } from '@mui/material';
 
 import { GroupItemComponentProps } from '../../types';
 import theme from '@/config/theme';
-import { useIsMobile } from '@/hooks/useIsMobile';
-import { maxWidthAtNestingLevel } from '@/modules/form/util/formUtil';
+import {
+  FIXED_WIDTH_MEDIUM,
+  FIXED_WIDTH_X_LARGE,
+} from '@/modules/form/util/formUtil';
 
 // Group component for rendering 1 person's signature.
 // Usually has String and Date items as children (signature & date signed).
 const Signature = ({
   item,
   renderChildItem,
-  nestingLevel,
   viewOnly,
 }: GroupItemComponentProps) => {
   const defaultHelperText =
     'By typing my name in the box above, I understand that I am signing this form electronically. I agree that this form of electronic signature is the legal equivalent of my manual signature.';
-
-  const isMobile = useIsMobile();
-  const maxWidth: number | string = isMobile
-    ? '100%'
-    : maxWidthAtNestingLevel(nestingLevel + 1);
 
   return (
     <Grid
@@ -38,7 +34,7 @@ const Signature = ({
       }}
     >
       <fieldset style={{ border: 'none', margin: 'none', padding: 'none' }}>
-        <Stack gap={2} maxWidth={maxWidth}>
+        <Stack gap={2} maxWidth={FIXED_WIDTH_X_LARGE}>
           {item.text && (
             <Typography
               variant='h5'
@@ -48,7 +44,18 @@ const Signature = ({
               {item.text}
             </Typography>
           )}
-          <Grid container direction='row' columnGap={viewOnly ? 6 : 2}>
+          <Grid
+            container
+            direction='row'
+            columnGap={viewOnly ? 6 : 2}
+            sx={{
+              // Use max medium-width for name input, which is expected to be first
+              '.HmisForm-inputContainer:first-of-type': {
+                flex: 1,
+                width: FIXED_WIDTH_MEDIUM,
+              },
+            }}
+          >
             {renderChildItem &&
               item.item?.map((childItem) => renderChildItem(childItem))}
           </Grid>

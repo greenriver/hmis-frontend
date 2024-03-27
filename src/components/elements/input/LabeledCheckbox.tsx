@@ -26,6 +26,8 @@ const LabeledCheckbox = ({
   horizontal = false,
   warnIfEmptyTreatment: _ignored,
   ariaLabel,
+  inputWidth,
+  maxWidth,
   ...props
 }: Props & DynamicInputCommonProps) => {
   const labelSx = horizontal
@@ -63,7 +65,7 @@ const LabeledCheckbox = ({
         <FormControlLabel
           control={
             <Checkbox
-              sx={checkboxSx}
+              sx={{ width: inputWidth, ...checkboxSx }}
               onKeyDown={onKeyDown}
               aria-label={ariaLabel}
             />
@@ -75,6 +77,7 @@ const LabeledCheckbox = ({
             '.MuiCheckbox-root': {
               color: error ? 'error.main' : undefined,
             },
+            maxWidth,
             ...labelSx,
           }}
           onChange={onChange}

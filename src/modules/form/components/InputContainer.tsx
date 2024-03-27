@@ -10,7 +10,7 @@ const InputContainer = ({
   horizontal,
   breakpoints,
 }: {
-  sx: SxProps;
+  sx?: SxProps;
   errors?: ValidationError[];
   children: ReactNode;
   horizontal: boolean;

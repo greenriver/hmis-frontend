@@ -5,12 +5,14 @@ import {
   bindTrigger,
   bindPopover,
 } from 'material-ui-popup-state/hooks';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import TableFilterButton from './FilterButton';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 export interface TableControlPopoverProps {
   filterCount?: number;
+  filterHint?: ReactNode;
   children: ReactNode;
   onCancel: VoidFunction;
   onReset: VoidFunction;
@@ -24,6 +26,7 @@ export interface TableControlPopoverProps {
 const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
   const {
     filterCount = 0,
+    filterHint,
     children,
     onCancel,
     onReset,
@@ -38,6 +41,17 @@ const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
     popupId: 'filterMenu',
   });
 
+  const isTiny = useIsMobile('sm');
+  const filterSummary = useMemo(() => {
+    if (filterCount === 0) return;
+    // show num filters applied on mobile, or if we dont have a more descriptive hint
+    if (isTiny || !filterHint) {
+      return <> ({filterCount})</>;
+    }
+    // show hint summarizing applied filters
+    return <> ({filterHint})</>;
+  }, [filterCount, filterHint, isTiny]);
+
   return (
     <>
       <TableFilterButton
@@ -46,7 +60,7 @@ const TableControlPopover = (props: TableControlPopoverProps): JSX.Element => {
         {...bindTrigger(popupState)}
       >
         {label}
-        {filterCount > 0 && <> ({filterCount})</>}
+        {filterSummary}
       </TableFilterButton>
       <Popover
         {...bindPopover(popupState)}

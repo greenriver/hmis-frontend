@@ -87,7 +87,7 @@ export const baseThemeDef: ThemeOptions = {
       main: '#1976D2',
     },
     background: {
-      default: '#F9F9F9',
+      default: '#FCFCFC',
     },
     secondary: {
       main: '#75559F',
@@ -400,23 +400,12 @@ const createThemeOptions = (theme: Theme) => ({
           },
         },
       ],
-      // "bold" styled buttons
       styleOverrides: {
-        outlined: {
+        root: {
           fontWeight: 600,
-          backgroundColor: theme.palette.background.paper,
-          // borderWidth: '2px',
-          // lineHeight: 'initial',
-          // '&:hover': {
-          //   borderWidth: '2px',
-          // },
         },
-        contained: {
-          fontWeight: 600,
-          // borderWidth: '2px',
-          // '&:hover': {
-          //   borderWidth: '2px',
-          // },
+        outlined: {
+          backgroundColor: theme.palette.background.paper,
         },
       },
     },

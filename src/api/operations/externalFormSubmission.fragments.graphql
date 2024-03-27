@@ -1,0 +1,14 @@
+fragment ExternalFormSubmissionFields on ExternalFormSubmission {
+  id
+  submittedAt
+  spam
+  status
+  notes
+  definition {
+    identifier
+    cacheKey
+  }
+  customDataElements {
+    ...CustomDataElementFields
+  }
+}

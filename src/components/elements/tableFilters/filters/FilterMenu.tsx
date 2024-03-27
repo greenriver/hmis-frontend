@@ -1,8 +1,8 @@
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Stack } from '@mui/material';
 import { isDate, isValid } from 'date-fns';
-import { isEmpty, isNil } from 'lodash-es';
-import { useCallback } from 'react';
+import { isEmpty, isNil, startCase } from 'lodash-es';
+import { useCallback, useMemo } from 'react';
 
 import TableFilterItem from './FilterItem';
 import TableControlPopover from './TableControlPopover';
@@ -22,11 +22,23 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
     defaultValue as typeof props.filterValues
   );
 
-  // Count # of filters that have values applied
-  const filterCount = Object.entries(props.filterValues)
-    // Skip filters that aren't visible to the user
-    .filter(([k]) => props.filters.hasOwnProperty(k))
-    .filter(([, v]) => (Array.isArray(v) ? !isEmpty(v) : !isNil(v))).length;
+  const { filterCount, filterHint } = useMemo(() => {
+    const filters = Object.entries(props.filterValues)
+      // Skip filters that aren't visible to the user
+      .filter(([k]) => props.filters.hasOwnProperty(k))
+      // Count # of filters that have values applied
+      .filter(([, v]) => (Array.isArray(v) ? !isEmpty(v) : !isNil(v)))
+      // Get the human-readable label of this filter
+      .map(([k]) => props.filters[k as keyof T]?.label || startCase(k));
+
+    const filterCount = filters.length;
+    const filterHint = filters
+      .slice(0, 2) // only hint about the first 2
+      .join(', ')
+      .concat(filterCount > 2 ? `, ${filterCount - 2} more` : ''); // if > 2, show # of remaining filters
+
+    return { filterCount, filterHint };
+  }, [props.filterValues, props.filters]);
 
   const cleanedValues = useCallback((values: Partial<T>) => {
     const cleaned: typeof values = {};
@@ -47,6 +59,7 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
       icon={<FilterListIcon />}
       header='Filter By'
       applyLabel='Apply Filters'
+      filterHint={filterHint}
       filterCount={filterCount}
       onCancel={cancel}
       onApply={() => props.setFilterValues(cleanedValues(state))}

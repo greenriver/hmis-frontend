@@ -55,6 +55,7 @@ const RecordPickerDialog = ({
             assessment,
             i.mapping
           );
+          if (!record || !recordType) return;
 
           return (
             <HmisField

@@ -17,7 +17,7 @@ export default {
   argTypes: { label: { control: 'text' } },
   decorators: [
     (Story) => (
-      <Box sx={{ width: 800 }}>
+      <Box>
         <Story />
       </Box>
     ),
@@ -66,5 +66,19 @@ WithValuesAsReadOnly.args = {
     (item) => (item.readOnly = true)
   ),
   initialValues: ViewStory.args?.values,
+  errors: emptyErrorState,
+};
+
+// Render the DynamicForm with all fields having extra long labels
+export const WithExtraLongLabels = Template.bind({});
+WithExtraLongLabels.args = {
+  definition: modifyFormDefinition(
+    formDefinition,
+    (item) =>
+      (item.text = item.text
+        ? item.text +
+          ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sagittis aliquet ex in rutrum. Curabitur posuere ligula nec dignissim egestas. Nunc erat quam, feugiat porttitor ligula sed, porta tincidunt erat.'
+        : item.text)
+  ),
   errors: emptyErrorState,
 };

@@ -34,6 +34,7 @@ const PhoneInputGroup = ({
               value={value.value || ''}
               onChange={(e) => onChange({ ...value, value: e.target.value })}
               label={getRequiredLabel('Phone Number')}
+              inputWidth={155}
             />
             <FormSelect
               value={typeValue}

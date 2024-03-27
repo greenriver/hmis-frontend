@@ -6,6 +6,7 @@ import {
   FormHelperText,
   FormLabel,
 } from '@mui/material';
+import { SxProps } from '@mui/system';
 import React from 'react';
 
 import { DynamicInputCommonProps } from '@/modules/form/types';
@@ -19,6 +20,8 @@ export interface Props {
   options: Option[];
   onChange: (value?: Option[] | null) => void;
   row?: boolean;
+  sx?: SxProps;
+  labelSx?: SxProps;
 }
 export type CheckboxGroupInputProps = Props & DynamicInputCommonProps;
 
@@ -32,6 +35,9 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
   error,
   row,
   warnIfEmptyTreatment,
+  maxWidth,
+  sx,
+  labelSx,
 }) => {
   const isChecked = (code: string) =>
     (value || []).map((o) => o.code).includes(code);
@@ -48,7 +54,11 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
 
   return (
     <>
-      <FormControl component='fieldset' variant='standard'>
+      <FormControl
+        component='fieldset'
+        variant='standard'
+        sx={{ maxWidth, ...sx }}
+      >
         {label && (
           <FormLabel
             error={error}
@@ -57,6 +67,7 @@ const CheckboxGroupInput: React.FC<CheckboxGroupInputProps> = ({
             sx={{
               color: disabled ? 'text.disabled' : 'text.primary',
               '&.Mui-focused': { color: 'text.primary' },
+              ...labelSx,
             }}
           >
             {label}

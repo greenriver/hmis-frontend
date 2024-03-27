@@ -75,7 +75,7 @@ const OrganizationProjectsTable = ({
             placeholder='Search projects...'
             value={search || ''}
             onChange={(e) => setSearch(e.target.value)}
-            inputWidth='300px'
+            inputWidth={300}
           />
         )
       }

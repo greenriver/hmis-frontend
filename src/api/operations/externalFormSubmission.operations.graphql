@@ -1,0 +1,24 @@
+mutation UpdateExternalFormSubmission(
+  $id: ID!
+  $input: ExternalFormSubmissionInput!
+) {
+  updateExternalFormSubmission(id: $id, input: $input) {
+    externalFormSubmission {
+      ...ExternalFormSubmissionFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteExternalFormSubmission($id: ID!) {
+  deleteExternalFormSubmission(id: $id) {
+    externalFormSubmission {
+      ...ExternalFormSubmissionFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

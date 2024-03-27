@@ -40,6 +40,8 @@ const TimeOfDayPicker: React.FC<Props> = ({
   onChange,
   helperText,
   warnIfEmptyTreatment,
+  inputWidth,
+  maxWidth,
   ...props
 }) => {
   const mountTime = useRef(startOfDay(new Date()));
@@ -85,6 +87,8 @@ const TimeOfDayPicker: React.FC<Props> = ({
           sx,
           placeholder: 'HH:MM AM/PM',
           error,
+          inputWidth,
+          maxWidth,
           ...textInputProps,
           // the slotProps don't accept types that aren't MUI text input; they do seem to work
           //eslint-disable-next-line @typescript-eslint/ban-ts-comment

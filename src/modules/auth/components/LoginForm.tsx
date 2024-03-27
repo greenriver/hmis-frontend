@@ -176,9 +176,7 @@ const LoginForm = () => {
         <Box
           sx={{ width: '100%', display: 'flex', mt: 2, justifyContent: 'end' }}
         >
-          <Link href={resetPasswordUrl} color='text.secondary'>
-            Forgot password?
-          </Link>
+          <Link href={resetPasswordUrl}>Forgot password?</Link>
         </Box>
       )}
     </Box>
