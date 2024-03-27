@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { AssessmentIcon } from '@/components/elements/SemanticIcons';
+import theme from '@/config/theme';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -58,7 +59,7 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
               <ButtonLink
                 to={intakePath}
                 variant='text'
-                sx={{ minWidth: '30px' }}
+                sx={{ minWidth: '30px', color: theme.palette.links }}
               >
                 <AssessmentIcon fontSize='small' />
               </ButtonLink>
@@ -73,7 +74,11 @@ const EntryExitDatesWithAssessmentLinks: React.FC<Props> = ({ enrollment }) => {
         <Stack direction='row' alignItems='center'>
           <span>{exitDateOrActive}</span>
           <ButtonTooltipContainer title='Go to Exit Assessment'>
-            <ButtonLink to={exitPath} variant='text' sx={{ minWidth: '30px' }}>
+            <ButtonLink
+              to={exitPath}
+              variant='text'
+              sx={{ minWidth: '30px', color: theme.palette.links }}
+            >
               <AssessmentIcon fontSize='small' />
             </ButtonLink>
           </ButtonTooltipContainer>
