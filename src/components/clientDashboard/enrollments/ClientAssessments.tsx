@@ -28,11 +28,11 @@ const columns: ColumnDef<AssessmentType>[] = [
   {
     header: 'Assessment Type',
     render: (assessment) => formRoleDisplay(assessment),
+    linkTreatment: true,
   },
   {
     header: 'Assessment Date',
     render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
-    linkTreatment: true,
     ariaLabel: (row) => assessmentDescription(row),
   },
   {
