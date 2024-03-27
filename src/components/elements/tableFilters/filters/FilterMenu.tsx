@@ -1,7 +1,7 @@
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Stack } from '@mui/material';
 import { isDate, isValid } from 'date-fns';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty, isNil, startCase } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import TableFilterItem from './FilterItem';
@@ -29,7 +29,7 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
       // Count # of filters that have values applied
       .filter(([, v]) => (Array.isArray(v) ? !isEmpty(v) : !isNil(v)))
       // Get the human-readable label of this filter
-      .map(([k]) => props.filters[k as keyof T]?.label);
+      .map(([k]) => props.filters[k as keyof T]?.label || startCase(k));
 
     const filterCount = filters.length;
     const filterHint = filters
