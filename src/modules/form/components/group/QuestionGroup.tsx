@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, SxProps, Theme, Typography } from '@mui/material';
 
 import { GroupItemComponentProps } from '../../types';
 
@@ -9,7 +9,8 @@ const QuestionGroup = ({
   nestingLevel,
   renderChildItem,
   viewOnly = false,
-}: GroupItemComponentProps) => {
+  sx,
+}: GroupItemComponentProps & { sx?: SxProps<Theme> }) => {
   const wrappedChildren = (
     <Grid container direction='column' sx={{ mt: 0 }} gap={3}>
       {renderChildItem &&
@@ -27,7 +28,7 @@ const QuestionGroup = ({
 
   if (nestingLevel >= 1) {
     return (
-      <Grid item xs>
+      <Grid item xs sx={sx}>
         <Box
           sx={
             isConditionalGroup
@@ -52,7 +53,7 @@ const QuestionGroup = ({
   }
 
   return (
-    <Grid item xs>
+    <Grid item xs sx={sx}>
       {label && <Typography sx={{ mb: 2 }}>{label}</Typography>}
       {wrappedChildren}
     </Grid>
