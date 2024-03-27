@@ -15498,6 +15498,7 @@ export type AllEnrollmentDetailsFragment = {
   client: {
     __typename?: 'Client';
     hudChronic?: boolean | null;
+    ssn?: string | null;
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
@@ -16574,6 +16575,7 @@ export type GetEnrollmentDetailsQuery = {
     client: {
       __typename?: 'Client';
       hudChronic?: boolean | null;
+      ssn?: string | null;
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
@@ -30980,6 +30982,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     client {
       hudChronic
       ...ClientNameDobVet
+      ssn
       customDataElements {
         ...CustomDataElementFields
       }

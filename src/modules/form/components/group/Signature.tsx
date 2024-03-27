@@ -2,14 +2,25 @@ import { Grid, Stack, Typography } from '@mui/material';
 
 import { GroupItemComponentProps } from '../../types';
 import theme from '@/config/theme';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { maxWidthAtNestingLevel } from '@/modules/form/util/formUtil';
 
 // Group component for rendering 1 person's signature.
 // Usually has String and Date items as children (signature & date signed).
 const Signature = ({
   item,
   renderChildItem,
+  nestingLevel,
   viewOnly,
 }: GroupItemComponentProps) => {
+  const defaultHelperText =
+    'By typing my name in the box above, I understand that I am signing this form electronically. I agree that this form of electronic signature is the legal equivalent of my manual signature.';
+
+  const isMobile = useIsMobile();
+  const maxWidth: number | string = isMobile
+    ? '100%'
+    : maxWidthAtNestingLevel(nestingLevel + 1);
+
   return (
     <Grid
       item
@@ -27,7 +38,7 @@ const Signature = ({
       }}
     >
       <fieldset style={{ border: 'none', margin: 'none', padding: 'none' }}>
-        <Stack gap={2}>
+        <Stack gap={2} maxWidth={maxWidth}>
           {item.text && (
             <Typography
               variant='h5'
@@ -43,8 +54,7 @@ const Signature = ({
           </Grid>
           {!viewOnly && (
             <Typography variant='body2'>
-              By signing, I do hereby certify that the above information is
-              true, accurate and complete to the best of my knowledge
+              {item.helperText ? item.helperText : defaultHelperText}
             </Typography>
           )}
         </Stack>
