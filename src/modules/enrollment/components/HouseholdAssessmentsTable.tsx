@@ -27,11 +27,11 @@ const columns: ColumnDef<HhmAssessmentType>[] = [
   {
     header: 'Assessment Type',
     render: (assessment) => formRoleDisplay(assessment),
+    linkTreatment: true,
   },
   {
     header: 'Assessment Date',
     render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
-    linkTreatment: true,
   },
   {
     header: 'Last Updated',
