@@ -58,10 +58,12 @@ const ProjectEnrollmentsTable = ({
                     }
                     sx={{
                       '.MuiToggleButton-root': { fontWeight: 600 },
-                      '.Mui-selected, .Mui-selected:hover': {
-                        backgroundColor: (theme) => theme.palette.primary.main,
-                        color: (theme) => theme.palette.primary.contrastText,
-                      },
+                      '.MuiButtonBase-root.Mui-selected, .MuiButtonBase-root.Mui-selected:hover':
+                        {
+                          backgroundColor: (theme) =>
+                            theme.palette.primary.main,
+                          color: (theme) => theme.palette.primary.contrastText,
+                        },
                     }}
                     items={[
                       {

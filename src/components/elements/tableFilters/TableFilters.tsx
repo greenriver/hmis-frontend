@@ -49,7 +49,8 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   return (
     <Typography variant='body2'>
       Displaying <strong>{displayRange}</strong> of{' '}
-      <strong>{totalEntries}</strong> {pluralize(itemName, totalEntries)}
+      <strong>{totalEntries.toLocaleString()}</strong>{' '}
+      {pluralize(itemName, totalEntries)}
     </Typography>
   );
 };
