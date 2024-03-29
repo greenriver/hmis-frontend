@@ -14,7 +14,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import {
   DownloadIcon,
-  ScanCardIcon,
+  GenerateScanCardIcon,
 } from '@/components/elements/SemanticIcons';
 import {
   clientBriefName,
@@ -79,7 +79,7 @@ const GenerateScanCardButton: React.FC<{
   return (
     <>
       <LoadingButton
-        startIcon={<ScanCardIcon />}
+        startIcon={<GenerateScanCardIcon />}
         variant='outlined'
         loading={loading}
         onClick={() => mutate()}

@@ -1,11 +1,12 @@
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import PeopleIcon from '@mui/icons-material/People';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import { Stack } from '@mui/material';
 import { useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import { HouseholdIcon } from '@/components/elements/SemanticIcons';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -56,15 +57,22 @@ const HouseholdActionButtons = ({
     return [true, message, 'error'];
   }, [householdMembers]);
 
+  const isTiny = useIsMobile('sm');
+
   return (
-    <Stack direction='row' gap={3} sx={{ mt: 4, mb: 4 }}>
+    <Stack
+      direction={isTiny ? 'column' : 'row'}
+      gap={{ xs: 1, sm: 2, md: 3 }}
+      sx={{ mt: 4, mb: 4 }}
+    >
       <ButtonLink
-        Icon={PeopleIcon}
+        Icon={HouseholdIcon}
         to={generateSafePath(EnrollmentDashboardRoutes.EDIT_HOUSEHOLD, {
           clientId,
           enrollmentId,
         })}
         color='secondary'
+        sx={{ width: { xs: '100%', sm: 'fit-content' }, textAlign: 'center' }}
       >
         Manage Household
       </ButtonLink>
@@ -78,6 +86,10 @@ const HouseholdActionButtons = ({
               clientId,
               enrollmentId,
             })}
+            sx={{
+              width: { xs: '100%', sm: 'fit-content' },
+              textAlign: 'center',
+            }}
           >
             {individual ? 'Intake Assessment' : 'Household Intakes'}
           </ButtonLink>
@@ -92,6 +104,10 @@ const HouseholdActionButtons = ({
               clientId,
               enrollmentId,
             })}
+            sx={{
+              width: { xs: '100%', sm: 'fit-content' },
+              textAlign: 'center',
+            }}
           >
             {individual ? 'Exit Assessment' : 'Household Exits'}
           </ButtonLink>

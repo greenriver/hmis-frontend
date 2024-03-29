@@ -184,6 +184,13 @@ const createThemeOptions = (theme: Theme) => ({
   },
 
   components: {
+    MuiTypography: {
+      styleOverrides: {
+        h3: {
+          b: { fontWeight: 500 },
+        },
+      },
+    },
     MuiPaper: {
       defaultProps: {
         elevation: 0,
@@ -250,6 +257,7 @@ const createThemeOptions = (theme: Theme) => ({
       },
       styleOverrides: {
         root: {
+          whiteSpace: 'nowrap',
           '&.Mui-focusVisible': {
             outlineColor: '-webkit-focus-ring-color',
             outlineWidth: '2px',

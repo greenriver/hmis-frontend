@@ -18,7 +18,6 @@ import {
   FormDefinitionJson,
   FormItem,
   ItemType,
-  ServiceDetailType,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -27,7 +26,6 @@ export interface Props {
   errors?: ValidationError[];
   warnings?: ValidationError[];
   horizontal?: boolean;
-  bulk?: boolean;
   visible?: boolean;
   pickListArgs?: PickListArgs;
   values: FormValues;
@@ -38,7 +36,6 @@ export interface Props {
 
 const DynamicViewFields: React.FC<Props> = ({
   definition,
-  bulk,
   itemMap,
   horizontal = false,
   pickListArgs,
@@ -56,8 +53,6 @@ const DynamicViewFields: React.FC<Props> = ({
   ) => {
     const isDisabled = !isEnabled(item, disabledLinkIds);
     if (isDisabled && item.disabledDisplay === DisabledDisplay.Hidden)
-      return null;
-    if (bulk && item.serviceDetailType === ServiceDetailType.Client)
       return null;
 
     if (item.type === ItemType.Group) {

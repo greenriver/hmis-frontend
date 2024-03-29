@@ -21,7 +21,7 @@ const ProjectServicesTable = ({
   columns,
 }: {
   projectId: string;
-  columns?: typeof SERVICE_COLUMNS;
+  columns?: ColumnDef<ServiceFields>[];
 }) => {
   const displayColumns: ColumnDef<ServiceFields>[] = useMemo(() => {
     if (columns) return columns;
