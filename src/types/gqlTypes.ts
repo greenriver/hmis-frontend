@@ -4363,6 +4363,10 @@ export type OrganizationAccess = {
   id: Scalars['ID']['output'];
 };
 
+export type OrganizationFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** HUD Organization Sorting Options */
 export enum OrganizationSortOption {
   Name = 'NAME',
@@ -5691,6 +5695,7 @@ export type QueryOrganizationArgs = {
 };
 
 export type QueryOrganizationsArgs = {
+  filters?: InputMaybe<OrganizationFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<OrganizationSortOption>;
@@ -26912,6 +26917,7 @@ export type OrganizationFieldsFragment = {
 export type GetOrganizationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<OrganizationFilterOptions>;
 }>;
 
 export type GetOrganizationsQuery = {
@@ -39169,8 +39175,17 @@ export type ClearRecentItemsMutationOptions = Apollo.BaseMutationOptions<
   ClearRecentItemsMutationVariables
 >;
 export const GetOrganizationsDocument = gql`
-  query GetOrganizations($limit: Int = 10, $offset: Int = 0) {
-    organizations(limit: $limit, offset: $offset, sortOrder: NAME) {
+  query GetOrganizations(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: OrganizationFilterOptions
+  ) {
+    organizations(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: NAME
+    ) {
       nodesCount
       nodes {
         ...OrganizationNameFields
@@ -39197,6 +39212,7 @@ export const GetOrganizationsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

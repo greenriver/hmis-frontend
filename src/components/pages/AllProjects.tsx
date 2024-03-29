@@ -1,5 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Grid, Paper } from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import { omit } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
@@ -10,6 +11,7 @@ import CommonToggle, { ToggleItem } from '../elements/CommonToggle';
 import PageContainer from '../layout/PageContainer';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
@@ -106,6 +108,8 @@ const AllProjects = () => {
     []
   );
 
+  const isMobile = useIsMobile('sm');
+
   return (
     <PageContainer
       title={viewMode === 'projects' ? 'Projects' : 'Organizations'}
@@ -136,14 +140,29 @@ const AllProjects = () => {
         {viewMode === 'organizations' && (
           <RootPermissionsFilter permissions={['canEditOrganization']}>
             <Grid item xs={12}>
-              <ButtonLink
-                data-testid='addOrganizationButton'
-                to={generateSafePath(Routes.CREATE_ORGANIZATION)}
-                Icon={AddIcon}
-                leftAlign
-              >
-                Add Organization
-              </ButtonLink>
+              <Stack gap={2} direction={isMobile ? 'column' : 'row'}>
+                <CommonSearchInput
+                  label='Search Organizations'
+                  name='search organizations'
+                  placeholder='Search by Organization Name or ID'
+                  value={search}
+                  onChange={setSearch}
+                  fullWidth
+                  size='medium'
+                  searchAdornment
+                  clearAdornment
+                />
+                <Box sx={{ width: 'fit-content', pt: isMobile ? 0 : 3.5 }}>
+                  <ButtonLink
+                    data-testid='addOrganizationButton'
+                    to={generateSafePath(Routes.CREATE_ORGANIZATION)}
+                    Icon={AddIcon}
+                    leftAlign
+                  >
+                    Add Organization
+                  </ButtonLink>
+                </Box>
+              </Stack>
             </Grid>
           </RootPermissionsFilter>
         )}
@@ -171,21 +190,27 @@ const AllProjects = () => {
                 defaultPageSize={25}
               />
             ) : (
-              <GenericTableWithData<
-                GetOrganizationsQuery,
-                GetOrganizationsQueryVariables,
-                OrganizationType
-              >
-                queryDocument={GetOrganizationsDocument}
-                columns={ORGANIZATION_COLUMNS}
-                rowLinkTo={organizationRowLink}
-                noData='No organizations'
-                pagePath='organizations'
-                showFilters
-                recordType='Organization'
-                defaultPageSize={25}
-                queryVariables={{}}
-              />
+              <Box>
+                <GenericTableWithData<
+                  GetOrganizationsQuery,
+                  GetOrganizationsQueryVariables,
+                  OrganizationType
+                >
+                  queryDocument={GetOrganizationsDocument}
+                  columns={ORGANIZATION_COLUMNS}
+                  rowLinkTo={organizationRowLink}
+                  noData='No organizations'
+                  pagePath='organizations'
+                  showFilters={false}
+                  defaultFilters={undefined}
+                  filters={undefined}
+                  recordType='Organization'
+                  defaultPageSize={25}
+                  queryVariables={{
+                    filters: { searchTerm: debouncedSearch || undefined },
+                  }}
+                />
+              </Box>
             )}
           </Paper>
         </Grid>
