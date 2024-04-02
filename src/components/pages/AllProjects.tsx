@@ -138,20 +138,20 @@ const AllProjects = () => {
           </Grid>
         )}
         {viewMode === 'organizations' && (
-          <RootPermissionsFilter permissions={['canEditOrganization']}>
-            <Grid item xs={12}>
-              <Stack gap={2} direction={isMobile ? 'column' : 'row'}>
-                <CommonSearchInput
-                  label='Search Organizations'
-                  name='search organizations'
-                  placeholder='Search by Organization Name or ID'
-                  value={search}
-                  onChange={setSearch}
-                  fullWidth
-                  size='medium'
-                  searchAdornment
-                  clearAdornment
-                />
+          <Grid item xs={12}>
+            <Stack gap={2} direction={isMobile ? 'column' : 'row'}>
+              <CommonSearchInput
+                label='Search Organizations'
+                name='search organizations'
+                placeholder='Search by Organization Name or ID'
+                value={search}
+                onChange={setSearch}
+                fullWidth
+                size='medium'
+                searchAdornment
+                clearAdornment
+              />
+              <RootPermissionsFilter permissions={['canEditOrganization']}>
                 <Box sx={{ width: 'fit-content', pt: isMobile ? 0 : 3.5 }}>
                   <ButtonLink
                     data-testid='addOrganizationButton'
@@ -162,9 +162,9 @@ const AllProjects = () => {
                     Add Organization
                   </ButtonLink>
                 </Box>
-              </Stack>
-            </Grid>
-          </RootPermissionsFilter>
+              </RootPermissionsFilter>
+            </Stack>
+          </Grid>
         )}
         <Grid item xs={12}>
           <Paper data-testid='allProjectsTable'>
@@ -174,6 +174,7 @@ const AllProjects = () => {
                 GetProjectsQueryVariables,
                 ProjectAllFieldsFragment
               >
+                key='projectTable'
                 queryVariables={{
                   filters: { searchTerm: debouncedSearch || undefined },
                 }}
@@ -190,27 +191,24 @@ const AllProjects = () => {
                 defaultPageSize={25}
               />
             ) : (
-              <Box>
-                <GenericTableWithData<
-                  GetOrganizationsQuery,
-                  GetOrganizationsQueryVariables,
-                  OrganizationType
-                >
-                  queryDocument={GetOrganizationsDocument}
-                  columns={ORGANIZATION_COLUMNS}
-                  rowLinkTo={organizationRowLink}
-                  noData='No organizations'
-                  pagePath='organizations'
-                  showFilters={false}
-                  defaultFilters={undefined}
-                  filters={undefined}
-                  recordType='Organization'
-                  defaultPageSize={25}
-                  queryVariables={{
-                    filters: { searchTerm: debouncedSearch || undefined },
-                  }}
-                />
-              </Box>
+              <GenericTableWithData<
+                GetOrganizationsQuery,
+                GetOrganizationsQueryVariables,
+                OrganizationType
+              >
+                key='organizationTable'
+                queryDocument={GetOrganizationsDocument}
+                columns={ORGANIZATION_COLUMNS}
+                rowLinkTo={organizationRowLink}
+                noData='No organizations'
+                pagePath='organizations'
+                showFilters={false}
+                recordType='Organization'
+                defaultPageSize={25}
+                queryVariables={{
+                  filters: { searchTerm: debouncedSearch || undefined },
+                }}
+              />
             )}
           </Paper>
         </Grid>
