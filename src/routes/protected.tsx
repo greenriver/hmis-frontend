@@ -514,7 +514,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.EDIT,
             element: (
               <ClientRoute
-                permissions='canEditClient'
+                permissions={['canEditClient', 'canViewClientName']}
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <EditClient />
