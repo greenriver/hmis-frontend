@@ -30,7 +30,9 @@ const EnrollmentQuickActions = ({
     enabledFeatures.includes(DataCollectionFeatureRole.Service) &&
     enrollment.access.canEditEnrollments;
 
-  const canEditClient = enrollment.client.access.canEditClient;
+  const canEditClient =
+    enrollment.client.access.canEditClient &&
+    enrollment.client.access.canViewClientName;
 
   const canViewEsgFundingReport =
     enrollment.project.access.canManageIncomingReferrals;
