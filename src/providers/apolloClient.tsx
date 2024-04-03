@@ -3,7 +3,6 @@ import {
   ApolloLink,
   HttpOptions,
   InMemoryCache,
-  ServerError,
   from,
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
@@ -125,24 +124,26 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
         user: sentryUser(),
       })
     );
-  }
-
-  if (networkError) {
+  } else if (networkError) {
     if (isServerError(networkError)) {
       const { statusCode, result } = networkError;
       console.error('[Server error]', statusCode, result);
-      Sentry.captureException(statusCode, {
-        user: sentryUser(),
-        extra: { result },
-      });
+
+      if (statusCode === 401) {
+        // May mean that session was invalidated on the server. No need to send to Sentry.
+        dispatchSessionTrackingEvent(undefined);
+      } else {
+        // Other server error. We may not get to this code because
+        // 500s should appear as `graphQLErrors` with more context.
+        Sentry.captureException(statusCode, {
+          user: sentryUser(),
+          extra: { result },
+        });
+      }
     } else {
+      // This is usually 504 or "Network request failed", track in Sentry
       console.error('[Network error]', networkError);
       Sentry.captureException(networkError, { user: sentryUser() });
-    }
-
-    if ((networkError as ServerError).statusCode === 401) {
-      // might occur if session was invalidated on the server
-      dispatchSessionTrackingEvent(undefined);
     }
   }
 });
