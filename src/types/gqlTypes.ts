@@ -730,6 +730,7 @@ export type ClientAccess = {
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientName: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
@@ -5811,6 +5812,7 @@ export type QueryAccess = {
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientName: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
@@ -7663,6 +7665,7 @@ export type RootPermissionsFragment = {
   canAuditUsers: boolean;
   canEditClients: boolean;
   canViewClients: boolean;
+  canViewClientName: boolean;
   canDeleteClients: boolean;
   canEditOrganization: boolean;
   canDeleteOrganization: boolean;
@@ -7701,6 +7704,7 @@ export type ClientAccessFieldsFragment = {
   canViewDob: boolean;
   canViewFullSsn: boolean;
   canViewPartialSsn: boolean;
+  canViewClientName: boolean;
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
@@ -7773,6 +7777,7 @@ export type GetRootPermissionsQuery = {
     canAuditUsers: boolean;
     canEditClients: boolean;
     canViewClients: boolean;
+    canViewClientName: boolean;
     canDeleteClients: boolean;
     canEditOrganization: boolean;
     canDeleteOrganization: boolean;
@@ -12650,6 +12655,7 @@ export type ClientSearchResultFieldsFragment = {
     canEditClient: boolean;
     canDeleteClient: boolean;
     canViewDob: boolean;
+    canViewClientName: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -12741,6 +12747,7 @@ export type ClientFieldsFragment = {
     canEditClient: boolean;
     canDeleteClient: boolean;
     canViewDob: boolean;
+    canViewClientName: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -13055,6 +13062,7 @@ export type SearchClientsQuery = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -13154,6 +13162,7 @@ export type GetClientQuery = {
       canEditClient: boolean;
       canDeleteClient: boolean;
       canViewDob: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -13318,6 +13327,7 @@ export type GetClientPermissionsQuery = {
       canViewDob: boolean;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -13730,6 +13740,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canEditClient: boolean;
                 canDeleteClient: boolean;
                 canViewDob: boolean;
+                canViewClientName: boolean;
                 canEditEnrollments: boolean;
                 canDeleteEnrollments: boolean;
                 canViewEnrollmentDetails: boolean;
@@ -14583,6 +14594,7 @@ export type MergeClientsMutation = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -16180,6 +16192,7 @@ export type AllEnrollmentDetailsFragment = {
       canViewDob: boolean;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -17253,6 +17266,7 @@ export type GetEnrollmentDetailsQuery = {
         canViewDob: boolean;
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -17876,6 +17890,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -25281,6 +25296,7 @@ export type SubmitFormMutation = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -26168,6 +26184,7 @@ export type HouseholdFieldsFragment = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -26244,6 +26261,7 @@ export type HouseholdClientFieldsFragment = {
       canEditClient: boolean;
       canDeleteClient: boolean;
       canViewDob: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -26402,6 +26420,7 @@ export type GetHouseholdQuery = {
           canEditClient: boolean;
           canDeleteClient: boolean;
           canViewDob: boolean;
+          canViewClientName: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -29160,6 +29179,7 @@ export type GetReferralPostingQuery = {
           canEditClient: boolean;
           canDeleteClient: boolean;
           canViewDob: boolean;
+          canViewClientName: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -29280,6 +29300,7 @@ export type UpdateReferralPostingMutation = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -29414,6 +29435,7 @@ export type CreateOutgoingReferralPostingMutation = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -29606,6 +29628,7 @@ export type ReferralPostingDetailFieldsFragment = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -30954,6 +30977,7 @@ export const RootPermissionsFragmentDoc = gql`
     canAuditUsers
     canEditClients
     canViewClients
+    canViewClientName
     canDeleteClients
     canEditOrganization
     canDeleteOrganization
@@ -31645,6 +31669,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewDob
     canViewFullSsn
     canViewPartialSsn
+    canViewClientName
     canEditEnrollments
     canDeleteEnrollments
     canViewEnrollmentDetails

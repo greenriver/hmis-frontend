@@ -17,7 +17,7 @@ const ClientRoute: React.FC<
   }>
 > = ({ permissions, redirectRoute, children }) => {
   const { client } = useClientDashboardContext();
-  const hasPermission = useHasPermissions(client?.access, permissions);
+  const hasPermission = useHasPermissions(client?.access, permissions, 'all');
   if (!hasPermission) {
     return redirectRoute ? (
       <Navigate
