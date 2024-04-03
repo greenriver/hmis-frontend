@@ -730,6 +730,8 @@ export type ClientAccess = {
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientName: Scalars['Boolean']['output'];
+  canViewClientPhoto: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
@@ -4363,6 +4365,10 @@ export type OrganizationAccess = {
   id: Scalars['ID']['output'];
 };
 
+export type OrganizationFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** HUD Organization Sorting Options */
 export enum OrganizationSortOption {
   Name = 'NAME',
@@ -5691,6 +5697,7 @@ export type QueryOrganizationArgs = {
 };
 
 export type QueryOrganizationsArgs = {
+  filters?: InputMaybe<OrganizationFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<OrganizationSortOption>;
@@ -5806,6 +5813,9 @@ export type QueryAccess = {
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientContactInfo: Scalars['Boolean']['output'];
+  canViewClientName: Scalars['Boolean']['output'];
+  canViewClientPhoto: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
@@ -12939,6 +12949,11 @@ export type ClientImageFragment = {
     contentType: string;
     base64: string;
   } | null;
+  access: {
+    __typename?: 'ClientAccess';
+    canEditClient: boolean;
+    canViewClientPhoto: boolean;
+  };
 };
 
 export type ClientIdentificationFieldsFragment = {
@@ -13347,6 +13362,11 @@ export type GetClientImageQuery = {
       contentType: string;
       base64: string;
     } | null;
+    access: {
+      __typename?: 'ClientAccess';
+      canEditClient: boolean;
+      canViewClientPhoto: boolean;
+    };
   } | null;
 };
 
@@ -13530,6 +13550,11 @@ export type UpdateClientImageMutation = {
         contentType: string;
         base64: string;
       } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        canEditClient: boolean;
+        canViewClientPhoto: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -13566,6 +13591,11 @@ export type DeleteClientImageMutation = {
         contentType: string;
         base64: string;
       } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        canEditClient: boolean;
+        canViewClientPhoto: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -31810,6 +31840,10 @@ export const ClientImageFragmentDoc = gql`
     id
     image {
       ...ClientImageFields
+    }
+    access {
+      canEditClient
+      canViewClientPhoto
     }
   }
   ${ClientImageFieldsFragmentDoc}
