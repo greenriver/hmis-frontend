@@ -415,7 +415,7 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
               <Stack sx={{ flexGrow: 1, maxWidth: '300px' }} gap={1} mt={2}>
                 <ClientPermissionsFilter
                   id={client.id}
-                  permissions={['canEditClient']}
+                  permissions='canEditClient'
                 >
                   <ButtonLink
                     data-testid='editClientButton'
