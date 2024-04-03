@@ -1,5 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Grid, Paper } from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import { omit } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
@@ -10,6 +11,7 @@ import CommonToggle, { ToggleItem } from '../elements/CommonToggle';
 import PageContainer from '../layout/PageContainer';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
@@ -106,6 +108,8 @@ const AllProjects = () => {
     []
   );
 
+  const isMobile = useIsMobile('sm');
+
   return (
     <PageContainer
       title={viewMode === 'projects' ? 'Projects' : 'Organizations'}
@@ -134,18 +138,33 @@ const AllProjects = () => {
           </Grid>
         )}
         {viewMode === 'organizations' && (
-          <RootPermissionsFilter permissions={['canEditOrganization']}>
-            <Grid item xs={12}>
-              <ButtonLink
-                data-testid='addOrganizationButton'
-                to={generateSafePath(Routes.CREATE_ORGANIZATION)}
-                Icon={AddIcon}
-                leftAlign
-              >
-                Add Organization
-              </ButtonLink>
-            </Grid>
-          </RootPermissionsFilter>
+          <Grid item xs={12}>
+            <Stack gap={2} direction={isMobile ? 'column' : 'row'}>
+              <CommonSearchInput
+                label='Search Organizations'
+                name='search organizations'
+                placeholder='Search by Organization Name or ID'
+                value={search}
+                onChange={setSearch}
+                fullWidth
+                size='medium'
+                searchAdornment
+                clearAdornment
+              />
+              <RootPermissionsFilter permissions={['canEditOrganization']}>
+                <Box sx={{ width: 'fit-content', pt: isMobile ? 0 : 3.5 }}>
+                  <ButtonLink
+                    data-testid='addOrganizationButton'
+                    to={generateSafePath(Routes.CREATE_ORGANIZATION)}
+                    Icon={AddIcon}
+                    leftAlign
+                  >
+                    Add Organization
+                  </ButtonLink>
+                </Box>
+              </RootPermissionsFilter>
+            </Stack>
+          </Grid>
         )}
         <Grid item xs={12}>
           <Paper data-testid='allProjectsTable'>
@@ -155,6 +174,7 @@ const AllProjects = () => {
                 GetProjectsQueryVariables,
                 ProjectAllFieldsFragment
               >
+                key='projectTable'
                 queryVariables={{
                   filters: { searchTerm: debouncedSearch || undefined },
                 }}
@@ -176,15 +196,18 @@ const AllProjects = () => {
                 GetOrganizationsQueryVariables,
                 OrganizationType
               >
+                key='organizationTable'
                 queryDocument={GetOrganizationsDocument}
                 columns={ORGANIZATION_COLUMNS}
                 rowLinkTo={organizationRowLink}
                 noData='No organizations'
                 pagePath='organizations'
-                showFilters
+                showFilters={false}
                 recordType='Organization'
                 defaultPageSize={25}
-                queryVariables={{}}
+                queryVariables={{
+                  filters: { searchTerm: debouncedSearch || undefined },
+                }}
               />
             )}
           </Paper>
