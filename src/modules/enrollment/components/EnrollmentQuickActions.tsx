@@ -30,9 +30,7 @@ const EnrollmentQuickActions = ({
     enabledFeatures.includes(DataCollectionFeatureRole.Service) &&
     enrollment.access.canEditEnrollments;
 
-  const canEditClient =
-    enrollment.client.access.canEditClient &&
-    enrollment.client.access.canViewClientName; # Prevent UI-access to edit client if user lacks name access, to avoid situation where masked name ("Client X") is submitted. See follow-up #187358025
+  const canEditClient = enrollment.client.access.canEditClient;
 
   const canViewEsgFundingReport =
     enrollment.project.access.canManageIncomingReferrals;
