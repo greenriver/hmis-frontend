@@ -5,6 +5,7 @@ fragment RootPermissions on QueryAccess {
   canAuditUsers
   canEditClients
   canViewClients
+  canViewClientName
   canDeleteClients
   canEditOrganization
   canDeleteOrganization
@@ -42,6 +43,7 @@ fragment ClientAccessFields on ClientAccess {
   canViewDob
   canViewFullSsn
   canViewPartialSsn
+  canViewClientName
   canEditEnrollments
   canDeleteEnrollments
   canViewEnrollmentDetails
