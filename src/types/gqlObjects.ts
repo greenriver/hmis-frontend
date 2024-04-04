@@ -5043,6 +5043,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewClientContactInfo',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewClientName',
         type: {
           kind: 'NON_NULL',
@@ -7627,6 +7635,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
+      },
+      {
+        name: 'lockVersion',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
     ],
   },

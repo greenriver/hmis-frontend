@@ -286,6 +286,7 @@ const ClientCardImage = ({
         open={open}
         onClose={handleClose}
         clientId={client.id}
+        lockVersion={client.lockVersion}
       />
       <Link
         component='button'

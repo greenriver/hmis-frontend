@@ -26,11 +26,13 @@ import {
 
 export type ClientImageUploadDialogProps = {
   clientId: string;
+  lockVersion?: number;
 } & DialogProps;
 
 const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   clientId,
   onClose,
+  lockVersion,
   ...props
 }) => {
   const {
@@ -60,11 +62,11 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   const handleSave = useCallback<NonNullable<ButtonProps['onClick']>>(
     (e) => {
       if (newBlobId)
-        mutate({ variables: { clientId, imageBlobId: newBlobId } }).then(() =>
-          handleClose(e)
-        );
+        mutate({
+          variables: { clientId, imageBlobId: newBlobId, lockVersion },
+        }).then(() => handleClose(e));
     },
-    [newBlobId, clientId, mutate, handleClose]
+    [newBlobId, mutate, clientId, lockVersion, handleClose]
   );
 
   const handleDelete = useCallback<NonNullable<ButtonProps['onClick']>>(

@@ -102,8 +102,18 @@ query GetClientServices(
   }
 }
 
-mutation UpdateClientImage($clientId: ID!, $imageBlobId: ID!) {
-  updateClientImage(input: { clientId: $clientId, imageBlobId: $imageBlobId }) {
+mutation UpdateClientImage(
+  $clientId: ID!
+  $imageBlobId: ID!
+  $lockVersion: Int
+) {
+  updateClientImage(
+    input: {
+      clientId: $clientId
+      imageBlobId: $imageBlobId
+      lockVersion: $lockVersion
+    }
+  ) {
     clientMutationId
     client {
       ...ClientImage
