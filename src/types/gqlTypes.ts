@@ -34,6 +34,8 @@ export type Scalars = {
   ISO8601Date: { input: string; output: string };
   /** An ISO 8601-encoded datetime */
   ISO8601DateTime: { input: string; output: string };
+  /** Represents untyped JSON */
+  JSON: { input: any; output: any };
   /** Arbitrary JSON Type */
   JsonObject: { input: any; output: any };
 };
@@ -148,6 +150,7 @@ export enum AnnualPercentAmi {
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
   activityLogs: ActivityLogsPaginated;
+  auditHistory: ApplicationUserAuditEventsPaginated;
   clientAccessSummaries: ClientAccessSummariesPaginated;
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -168,6 +171,13 @@ export type ApplicationUserActivityLogsArgs = {
 };
 
 /** User account for a user of the system */
+export type ApplicationUserAuditHistoryArgs = {
+  filters?: InputMaybe<UserAuditEventFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
 export type ApplicationUserClientAccessSummariesArgs = {
   filters?: InputMaybe<ClientAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -179,6 +189,36 @@ export type ApplicationUserEnrollmentAccessSummariesArgs = {
   filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ApplicationUserAuditEvent = {
+  __typename?: 'ApplicationUserAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
+  event: AuditEventType;
+  graphqlType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
+  objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
+  recordId: Scalars['ID']['output'];
+  recordName: Scalars['String']['output'];
+  trueUser?: Maybe<ApplicationUser>;
+  user?: Maybe<ApplicationUser>;
+};
+
+export type ApplicationUserAuditEventsPaginated = {
+  __typename?: 'ApplicationUserAuditEventsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ApplicationUserAuditEvent>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export type ApplicationUserFilterOptions = {
@@ -212,6 +252,7 @@ export type Assessment = {
   disabilityGroup?: Maybe<DisabilityGroup>;
   employmentEducation?: Maybe<EmploymentEducation>;
   enrollment: Enrollment;
+  event?: Maybe<Event>;
   exit?: Maybe<Exit>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID']['output'];
@@ -334,37 +375,6 @@ export enum AuditEventType {
   Update = 'update',
 }
 
-/** Auto Exit Config */
-export type AutoExitConfig = {
-  __typename?: 'AutoExitConfig';
-  id: Scalars['ID']['output'];
-  lengthOfAbsenceDays: Scalars['Int']['output'];
-  organization?: Maybe<Organization>;
-  organizationId?: Maybe<Scalars['ID']['output']>;
-  project?: Maybe<Project>;
-  projectId?: Maybe<Scalars['ID']['output']>;
-  projectType?: Maybe<ProjectType>;
-};
-
-/** Auto Exit Config Input */
-export type AutoExitConfigInput = {
-  lengthOfAbsenceDays?: InputMaybe<Scalars['Int']['input']>;
-  organizationId?: InputMaybe<Scalars['ID']['input']>;
-  projectId?: InputMaybe<Scalars['ID']['input']>;
-  projectType?: InputMaybe<ProjectType>;
-};
-
-export type AutoExitConfigsPaginated = {
-  __typename?: 'AutoExitConfigsPaginated';
-  hasMoreAfter: Scalars['Boolean']['output'];
-  hasMoreBefore: Scalars['Boolean']['output'];
-  limit: Scalars['Int']['output'];
-  nodes: Array<AutoExitConfig>;
-  nodesCount: Scalars['Int']['output'];
-  offset: Scalars['Int']['output'];
-  pagesCount: Scalars['Int']['output'];
-};
-
 /** Value to autofill based on conditional logic */
 export type AutofillValue = {
   __typename?: 'AutofillValue';
@@ -372,6 +382,8 @@ export type AutofillValue = {
   /** Whether to perform autofill when displaying a read-only view (defaults to false) */
   autofillReadonly?: Maybe<Scalars['Boolean']['output']>;
   autofillWhen: Array<EnableWhen>;
+  /** Expression with mathematical or logical function defining the value */
+  formula?: Maybe<Scalars['String']['output']>;
   /** Link IDs of numeric questions to sum up and set as the value if condition is met */
   sumQuestions?: Maybe<Array<Scalars['String']['output']>>;
   /** Value to autofill if condition is met */
@@ -413,10 +425,23 @@ export enum BoundType {
   Min = 'MIN',
 }
 
-export enum BulkActionType {
-  Add = 'ADD',
-  Remove = 'REMOVE',
-}
+/** Input for BulkAssignService mutation */
+export type BulkAssignServiceInput = {
+  /** Clients that should receive service. Clients that are unenrolled in the project will be enrolled in the project. */
+  clientIds: Array<Scalars['ID']['input']>;
+  /** CoC code to store as EnrollmentCoC when enrolling a new client. Only needed if Project operaties in multiple CoCs. */
+  cocCode?: InputMaybe<Scalars['String']['input']>;
+  dateProvided: Scalars['ISO8601Date']['input'];
+  projectId: Scalars['ID']['input'];
+  serviceTypeId: Scalars['ID']['input'];
+};
+
+/** Autogenerated return type of BulkAssignService. */
+export type BulkAssignServicePayload = {
+  __typename?: 'BulkAssignServicePayload';
+  errors: Array<ValidationError>;
+  success?: Maybe<Scalars['Boolean']['output']>;
+};
 
 /** Autogenerated input type of BulkMergeClients */
 export type BulkMergeClientsInput = {
@@ -430,6 +455,13 @@ export type BulkMergeClientsPayload = {
   __typename?: 'BulkMergeClientsPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  errors: Array<ValidationError>;
+  success?: Maybe<Scalars['Boolean']['output']>;
+};
+
+/** Autogenerated return type of BulkRemoveService. */
+export type BulkRemoveServicePayload = {
+  __typename?: 'BulkRemoveServicePayload';
   errors: Array<ValidationError>;
   success?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -516,6 +548,7 @@ export type ClearRecentItemsInput = {
 export type Client = {
   __typename?: 'Client';
   access: ClientAccess;
+  activeEnrollment?: Maybe<Enrollment>;
   additionalRaceEthnicity?: Maybe<Scalars['String']['output']>;
   addresses: Array<ClientAddress>;
   afghanistanOef?: Maybe<NoYesReasonsForMissingData>;
@@ -576,6 +609,12 @@ export type Client = {
   yearEnteredService?: Maybe<Scalars['Int']['output']>;
   yearSeparated?: Maybe<Scalars['Int']['output']>;
   youthEducationStatuses: YouthEducationStatusesPaginated;
+};
+
+/** HUD Client */
+export type ClientActiveEnrollmentArgs = {
+  openOnDate: Scalars['ISO8601Date']['input'];
+  projectId: Scalars['ID']['input'];
 };
 
 /** HUD Client */
@@ -691,6 +730,7 @@ export type ClientAccess = {
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientName: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
@@ -798,12 +838,17 @@ export enum ClientAlertPriorityLevel {
 
 export type ClientAuditEvent = {
   __typename?: 'ClientAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
   event: AuditEventType;
   graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
@@ -874,6 +919,7 @@ export enum ClientDashboardFeature {
 export type ClientFilterOptions = {
   organization?: InputMaybe<Array<Scalars['ID']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
+  serviceInRange?: InputMaybe<ServiceRangeFilter>;
 };
 
 /** Client Image */
@@ -1072,6 +1118,8 @@ export enum Component {
   InputGroup = 'INPUT_GROUP',
   /** MCI linking component */
   Mci = 'MCI',
+  /** Duration component with hours and minutes, value stored as minutes */
+  MinutesDuration = 'MINUTES_DURATION',
   /** Client Name input */
   Name = 'NAME',
   /** Phone number input for ContactPoint */
@@ -1080,8 +1128,14 @@ export enum Component {
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
   RadioButtonsVertical = 'RADIO_BUTTONS_VERTICAL',
+  /** Signature input component */
+  Signature = 'SIGNATURE',
+  /** Signature input component */
+  SignatureGroup = 'SIGNATURE_GROUP',
   /** SSN input component */
   Ssn = 'SSN',
+  /** Render group as a table. Each child item should be a group representing 1 table row. */
+  Table = 'TABLE',
 }
 
 export enum CounselingMethod {
@@ -1112,13 +1166,6 @@ export enum CountExchangeForSex {
   /** (4) 12 or more */
   Num_12OrMore = 'NUM_12_OR_MORE',
 }
-
-/** Autogenerated return type of CreateAutoExitConfig. */
-export type CreateAutoExitConfigPayload = {
-  __typename?: 'CreateAutoExitConfigPayload';
-  autoExitConfig?: Maybe<AutoExitConfig>;
-  errors: Array<ValidationError>;
-};
 
 /** Autogenerated return type of CreateClientAlert. */
 export type CreateClientAlertPayload = {
@@ -1165,6 +1212,13 @@ export type CreateOutgoingReferralPostingPayload = {
   record?: Maybe<ReferralPosting>;
 };
 
+/** Autogenerated return type of CreateProjectConfig. */
+export type CreateProjectConfigPayload = {
+  __typename?: 'CreateProjectConfigPayload';
+  errors: Array<ValidationError>;
+  projectConfig?: Maybe<ProjectConfig>;
+};
+
 /** Autogenerated return type of CreateScanCardCode. */
 export type CreateScanCardCodePayload = {
   __typename?: 'CreateScanCardCodePayload';
@@ -1172,20 +1226,18 @@ export type CreateScanCardCodePayload = {
   scanCardCode?: Maybe<ScanCardCode>;
 };
 
-/** Autogenerated input type of CreateService */
-export type CreateServiceInput = {
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: InputMaybe<Scalars['String']['input']>;
-  input: ServiceInput;
+/** Autogenerated return type of CreateServiceCategory. */
+export type CreateServiceCategoryPayload = {
+  __typename?: 'CreateServiceCategoryPayload';
+  errors: Array<ValidationError>;
+  serviceCategory?: Maybe<ServiceCategory>;
 };
 
-/** Autogenerated return type of CreateService. */
-export type CreateServicePayload = {
-  __typename?: 'CreateServicePayload';
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']['output']>;
+/** Autogenerated return type of CreateServiceType. */
+export type CreateServiceTypePayload = {
+  __typename?: 'CreateServiceTypePayload';
   errors: Array<ValidationError>;
-  service?: Maybe<Service>;
+  serviceType?: Maybe<ServiceType>;
 };
 
 /** Autogenerated input type of CreateUnits */
@@ -1340,6 +1392,7 @@ export type CustomCaseNote = {
   __typename?: 'CustomCaseNote';
   client: Client;
   content: Scalars['String']['output'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -1456,6 +1509,8 @@ export enum DataCollectionFeatureRole {
   CeEvent = 'CE_EVENT',
   /** Current living situation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** External form */
+  ExternalForm = 'EXTERNAL_FORM',
   /** Referral request */
   ReferralRequest = 'REFERRAL_REQUEST',
   /** Service */
@@ -1492,13 +1547,6 @@ export type DeleteAssessmentPayload = {
   assessmentId?: Maybe<Scalars['ID']['output']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
-  errors: Array<ValidationError>;
-};
-
-/** Autogenerated return type of DeleteAutoExitConfig. */
-export type DeleteAutoExitConfigPayload = {
-  __typename?: 'DeleteAutoExitConfigPayload';
-  autoExitConfig?: Maybe<AutoExitConfig>;
   errors: Array<ValidationError>;
 };
 
@@ -1647,6 +1695,13 @@ export type DeleteEnrollmentPayload = {
   errors: Array<ValidationError>;
 };
 
+/** Autogenerated return type of DeleteExternalFormSubmission. */
+export type DeleteExternalFormSubmissionPayload = {
+  __typename?: 'DeleteExternalFormSubmissionPayload';
+  errors: Array<ValidationError>;
+  externalFormSubmission?: Maybe<ExternalFormSubmission>;
+};
+
 /** Autogenerated return type of DeleteFormDefinition. */
 export type DeleteFormDefinitionPayload = {
   __typename?: 'DeleteFormDefinitionPayload';
@@ -1734,6 +1789,13 @@ export type DeleteProjectCocPayload = {
   projectCoc?: Maybe<ProjectCoc>;
 };
 
+/** Autogenerated return type of DeleteProjectConfig. */
+export type DeleteProjectConfigPayload = {
+  __typename?: 'DeleteProjectConfigPayload';
+  errors: Array<ValidationError>;
+  projectConfig?: Maybe<ProjectConfig>;
+};
+
 /** Autogenerated input type of DeleteProject */
 export type DeleteProjectInput = {
   /** A unique identifier for the client performing the mutation. */
@@ -1757,6 +1819,13 @@ export type DeleteScanCardCodePayload = {
   scanCardCode?: Maybe<ScanCardCode>;
 };
 
+/** Autogenerated return type of DeleteServiceCategory. */
+export type DeleteServiceCategoryPayload = {
+  __typename?: 'DeleteServiceCategoryPayload';
+  errors: Array<ValidationError>;
+  serviceCategory?: Maybe<ServiceCategory>;
+};
+
 /** Autogenerated input type of DeleteService */
 export type DeleteServiceInput = {
   /** A unique identifier for the client performing the mutation. */
@@ -1771,6 +1840,13 @@ export type DeleteServicePayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
   errors: Array<ValidationError>;
   service?: Maybe<Service>;
+};
+
+/** Autogenerated return type of DeleteServiceType. */
+export type DeleteServiceTypePayload = {
+  __typename?: 'DeleteServiceTypePayload';
+  errors: Array<ValidationError>;
+  serviceType?: Maybe<ServiceType>;
 };
 
 /** Autogenerated input type of DeleteUnits */
@@ -2187,6 +2263,7 @@ export type Enrollment = {
   juvenileJusticeYears?: Maybe<RhyNumberofYears>;
   lastBedNightDate?: Maybe<Scalars['ISO8601Date']['output']>;
   lastCurrentLivingSituation?: Maybe<CurrentLivingSituation>;
+  lastServiceDate?: Maybe<Scalars['ISO8601Date']['output']>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   literalHomelessHistory?: Maybe<LiteralHomelessHistory>;
   livingSituation?: Maybe<PriorLivingSituation>;
@@ -2308,6 +2385,11 @@ export type EnrollmentIncomeBenefitsArgs = {
 };
 
 /** HUD Enrollment */
+export type EnrollmentLastServiceDateArgs = {
+  serviceTypeId: Scalars['ID']['input'];
+};
+
+/** HUD Enrollment */
 export type EnrollmentServicesArgs = {
   filters?: InputMaybe<ServicesForEnrollmentFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -2361,12 +2443,17 @@ export type EnrollmentAccessSummaryFilterOptions = {
 
 export type EnrollmentAuditEvent = {
   __typename?: 'EnrollmentAuditEvent';
+  clientId?: Maybe<Scalars['String']['output']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
+  enrollmentId?: Maybe<Scalars['String']['output']>;
   event: AuditEventType;
   graphqlType: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']['output']>;
+  projectId?: Maybe<Scalars['String']['output']>;
+  projectName?: Maybe<Scalars['String']['output']>;
   recordId: Scalars['ID']['output'];
   recordName: Scalars['String']['output'];
   trueUser?: Maybe<ApplicationUser>;
@@ -2506,13 +2593,13 @@ export type Event = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   enrollment: Enrollment;
   event: EventType;
-  eventDate: Scalars['ISO8601DateTime']['output'];
+  eventDate: Scalars['ISO8601Date']['output'];
   id: Scalars['ID']['output'];
   locationCrisisOrPhHousing?: Maybe<Scalars['String']['output']>;
   probSolDivRrResult?: Maybe<NoYesMissing>;
   referralCaseManageAfter?: Maybe<NoYesMissing>;
   referralResult?: Maybe<ReferralResult>;
-  resultDate?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  resultDate?: Maybe<Scalars['ISO8601Date']['output']>;
   user?: Maybe<ApplicationUser>;
 };
 
@@ -2651,6 +2738,45 @@ export enum ExpelledReason {
   UnknownDisappeared = 'UNKNOWN_DISAPPEARED',
 }
 
+export type ExternalFormSubmission = {
+  __typename?: 'ExternalFormSubmission';
+  customDataElements: Array<CustomDataElement>;
+  definition: FormDefinition;
+  id: Scalars['ID']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  spam?: Maybe<Scalars['Boolean']['output']>;
+  status: ExternalFormSubmissionStatus;
+  submittedAt: Scalars['ISO8601DateTime']['output'];
+};
+
+export type ExternalFormSubmissionFilterOptions = {
+  status?: InputMaybe<ExternalFormSubmissionStatus>;
+  submittedDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
+};
+
+/** External Form Submission Input */
+export type ExternalFormSubmissionInput = {
+  notes?: InputMaybe<Scalars['String']['input']>;
+  spam?: InputMaybe<Scalars['Boolean']['input']>;
+  status?: InputMaybe<ExternalFormSubmissionStatus>;
+};
+
+export enum ExternalFormSubmissionStatus {
+  New = 'new',
+  Reviewed = 'reviewed',
+}
+
+export type ExternalFormSubmissionsPaginated = {
+  __typename?: 'ExternalFormSubmissionsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ExternalFormSubmission>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
 /** External Identifier */
 export type ExternalIdentifier = {
   __typename?: 'ExternalIdentifier';
@@ -2745,6 +2871,10 @@ export type FormDefinitionFormRulesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<FormRuleSortOption>;
+};
+
+export type FormDefinitionFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type FormDefinitionForJsonResult = {
@@ -2877,6 +3007,10 @@ export enum FormRole {
   Enrollment = 'ENROLLMENT',
   /** Exit */
   Exit = 'EXIT',
+  /** External form */
+  ExternalForm = 'EXTERNAL_FORM',
+  /** External form submission review */
+  ExternalFormSubmissionReview = 'EXTERNAL_FORM_SUBMISSION_REVIEW',
   /** File */
   File = 'FILE',
   /** Form definition */
@@ -2903,6 +3037,8 @@ export enum FormRole {
   Project = 'PROJECT',
   /** Project CoC */
   ProjectCoc = 'PROJECT_COC',
+  /** Project config */
+  ProjectConfig = 'PROJECT_CONFIG',
   /** Referral request */
   ReferralRequest = 'REFERRAL_REQUEST',
   /** Service */
@@ -2952,6 +3088,8 @@ export type FormRuleInput = {
   otherFunder?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   projectType?: InputMaybe<ProjectType>;
+  serviceCategoryId?: InputMaybe<Scalars['ID']['input']>;
+  serviceTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export enum FormRuleSortOption {
@@ -3290,6 +3428,18 @@ export type HouseholdFilterOptions = {
 
 /** HUD Household Sorting Options */
 export enum HouseholdSortOption {
+  /** Head of Household Age: Oldest to Youngest */
+  HohAgeOldestToYoungest = 'HOH_AGE_OLDEST_TO_YOUNGEST',
+  /** Head of Household Age: Youngest to Oldest */
+  HohAgeYoungestToOldest = 'HOH_AGE_YOUNGEST_TO_OLDEST',
+  /** Head of Household First Name: A-Z */
+  HohFirstNameAToZ = 'HOH_FIRST_NAME_A_TO_Z',
+  /** Head of Household First Name: Z-A */
+  HohFirstNameZToA = 'HOH_FIRST_NAME_Z_TO_A',
+  /** Head of Household Last Name: A-Z */
+  HohLastNameAToZ = 'HOH_LAST_NAME_A_TO_Z',
+  /** Head of Household Last Name: Z-A */
+  HohLastNameZToA = 'HOH_LAST_NAME_Z_TO_A',
   /** Most Recent */
   MostRecent = 'MOST_RECENT',
 }
@@ -3564,6 +3714,7 @@ export enum ItemType {
   OpenChoice = 'OPEN_CHOICE',
   String = 'STRING',
   Text = 'TEXT',
+  TimeOfDay = 'TIME_OF_DAY',
 }
 
 /** R4.1 */
@@ -3776,22 +3927,25 @@ export enum MostRecentEdStatus {
 export type Mutation = {
   __typename?: 'Mutation';
   addRecentItem?: Maybe<ApplicationUser>;
+  /** Assign services for a set of Clients. If any client is not enrolled, the client will be enrolled in the project as well. */
+  bulkAssignService?: Maybe<BulkAssignServicePayload>;
   bulkMergeClients?: Maybe<BulkMergeClientsPayload>;
+  bulkRemoveService?: Maybe<BulkRemoveServicePayload>;
   /** Perform MCI clearance and return matches */
   clearMci?: Maybe<ClearMciPayload>;
   clearRecentItems?: Maybe<ApplicationUser>;
-  createAutoExitConfig?: Maybe<CreateAutoExitConfigPayload>;
   createClientAlert?: Maybe<CreateClientAlertPayload>;
   createDirectUpload?: Maybe<DirectUpload>;
   createFormDefinition?: Maybe<CreateFormDefinitionPayload>;
   createFormRule?: Maybe<CreateFormRulePayload>;
   /** Create outgoing referral posting */
   createOutgoingReferralPosting?: Maybe<CreateOutgoingReferralPostingPayload>;
+  createProjectConfig?: Maybe<CreateProjectConfigPayload>;
   createScanCardCode?: Maybe<CreateScanCardCodePayload>;
-  createService?: Maybe<CreateServicePayload>;
+  createServiceCategory?: Maybe<CreateServiceCategoryPayload>;
+  createServiceType?: Maybe<CreateServiceTypePayload>;
   createUnits?: Maybe<CreateUnitsPayload>;
   deleteAssessment?: Maybe<DeleteAssessmentPayload>;
-  deleteAutoExitConfig?: Maybe<DeleteAutoExitConfigPayload>;
   deleteCeAssessment?: Maybe<DeleteCeAssessmentPayload>;
   deleteCeEvent?: Maybe<DeleteCeEventPayload>;
   deleteCeParticipation?: Maybe<DeleteCeParticipationPayload>;
@@ -3802,6 +3956,7 @@ export type Mutation = {
   deleteCurrentLivingSituation?: Maybe<DeleteCurrentLivingSituationPayload>;
   deleteCustomCaseNote?: Maybe<DeleteCustomCaseNotePayload>;
   deleteEnrollment?: Maybe<DeleteEnrollmentPayload>;
+  deleteExternalFormSubmission?: Maybe<DeleteExternalFormSubmissionPayload>;
   deleteFormDefinition?: Maybe<DeleteFormDefinitionPayload>;
   deleteFunder?: Maybe<DeleteFunderPayload>;
   deleteHmisParticipation?: Maybe<DeleteHmisParticipationPayload>;
@@ -3809,10 +3964,15 @@ export type Mutation = {
   deleteOrganization?: Maybe<DeleteOrganizationPayload>;
   deleteProject?: Maybe<DeleteProjectPayload>;
   deleteProjectCoc?: Maybe<DeleteProjectCocPayload>;
+  deleteProjectConfig?: Maybe<DeleteProjectConfigPayload>;
   deleteScanCardCode?: Maybe<DeleteScanCardCodePayload>;
   deleteService?: Maybe<DeleteServicePayload>;
+  deleteServiceCategory?: Maybe<DeleteServiceCategoryPayload>;
+  deleteServiceType?: Maybe<DeleteServiceTypePayload>;
   deleteUnits?: Maybe<DeleteUnitsPayload>;
   mergeClients?: Maybe<MergeClientsPayload>;
+  renameServiceCategory?: Maybe<RenameServiceCategoryPayload>;
+  renameServiceType?: Maybe<RenameServiceTypePayload>;
   restoreScanCardCode?: Maybe<RestoreScanCardCodePayload>;
   /** Create/Save assessment as work-in-progress */
   saveAssessment?: Maybe<SaveAssessmentPayload>;
@@ -3822,11 +3982,11 @@ export type Mutation = {
   submitForm?: Maybe<SubmitFormPayload>;
   /** Submit multiple assessments in a household */
   submitHouseholdAssessments?: Maybe<SubmitHouseholdAssessmentsPayload>;
-  updateAutoExitConfig?: Maybe<UpdateAutoExitConfigPayload>;
-  updateBedNights?: Maybe<UpdateBedNightsPayload>;
   updateClientImage?: Maybe<UpdateClientImagePayload>;
+  updateExternalFormSubmission?: Maybe<UpdateExternalFormSubmissionPayload>;
   updateFormDefinition?: Maybe<UpdateFormDefinitionPayload>;
   updateFormRule?: Maybe<UpdateFormRulePayload>;
+  updateProjectConfig?: Maybe<UpdateProjectConfigPayload>;
   /** Update a referral posting */
   updateReferralPosting?: Maybe<UpdateReferralPostingPayload>;
   updateRelationshipToHoH?: Maybe<UpdateRelationshipToHoHPayload>;
@@ -3839,8 +3999,17 @@ export type MutationAddRecentItemArgs = {
   input: AddRecentItemInput;
 };
 
+export type MutationBulkAssignServiceArgs = {
+  input: BulkAssignServiceInput;
+};
+
 export type MutationBulkMergeClientsArgs = {
   input: BulkMergeClientsInput;
+};
+
+export type MutationBulkRemoveServiceArgs = {
+  projectId: Scalars['ID']['input'];
+  serviceIds: Array<Scalars['ID']['input']>;
 };
 
 export type MutationClearMciArgs = {
@@ -3849,10 +4018,6 @@ export type MutationClearMciArgs = {
 
 export type MutationClearRecentItemsArgs = {
   input: ClearRecentItemsInput;
-};
-
-export type MutationCreateAutoExitConfigArgs = {
-  input: AutoExitConfigInput;
 };
 
 export type MutationCreateClientAlertArgs = {
@@ -3875,13 +4040,21 @@ export type MutationCreateOutgoingReferralPostingArgs = {
   input?: InputMaybe<OutgoingReferralPostingInput>;
 };
 
+export type MutationCreateProjectConfigArgs = {
+  input: ProjectConfigInput;
+};
+
 export type MutationCreateScanCardCodeArgs = {
   clientId: Scalars['ID']['input'];
   expirationDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
 };
 
-export type MutationCreateServiceArgs = {
-  input: CreateServiceInput;
+export type MutationCreateServiceCategoryArgs = {
+  name: Scalars['String']['input'];
+};
+
+export type MutationCreateServiceTypeArgs = {
+  input: ServiceTypeInput;
 };
 
 export type MutationCreateUnitsArgs = {
@@ -3890,10 +4063,6 @@ export type MutationCreateUnitsArgs = {
 
 export type MutationDeleteAssessmentArgs = {
   input: DeleteAssessmentInput;
-};
-
-export type MutationDeleteAutoExitConfigArgs = {
-  id: Scalars['ID']['input'];
 };
 
 export type MutationDeleteCeAssessmentArgs = {
@@ -3936,6 +4105,10 @@ export type MutationDeleteEnrollmentArgs = {
   input: DeleteEnrollmentInput;
 };
 
+export type MutationDeleteExternalFormSubmissionArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type MutationDeleteFormDefinitionArgs = {
   id: Scalars['ID']['input'];
 };
@@ -3964,6 +4137,10 @@ export type MutationDeleteProjectCocArgs = {
   input: DeleteProjectCocInput;
 };
 
+export type MutationDeleteProjectConfigArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type MutationDeleteScanCardCodeArgs = {
   id: Scalars['ID']['input'];
 };
@@ -3972,12 +4149,30 @@ export type MutationDeleteServiceArgs = {
   input: DeleteServiceInput;
 };
 
+export type MutationDeleteServiceCategoryArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteServiceTypeArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type MutationDeleteUnitsArgs = {
   input: DeleteUnitsInput;
 };
 
 export type MutationMergeClientsArgs = {
   input: MergeClientsInput;
+};
+
+export type MutationRenameServiceCategoryArgs = {
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+};
+
+export type MutationRenameServiceTypeArgs = {
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type MutationRestoreScanCardCodeArgs = {
@@ -4000,17 +4195,13 @@ export type MutationSubmitHouseholdAssessmentsArgs = {
   input: SubmitHouseholdAssessmentsInput;
 };
 
-export type MutationUpdateAutoExitConfigArgs = {
-  id: Scalars['ID']['input'];
-  input: AutoExitConfigInput;
-};
-
-export type MutationUpdateBedNightsArgs = {
-  input: UpdateBedNightsInput;
-};
-
 export type MutationUpdateClientImageArgs = {
   input: UpdateClientImageInput;
+};
+
+export type MutationUpdateExternalFormSubmissionArgs = {
+  id: Scalars['ID']['input'];
+  input: ExternalFormSubmissionInput;
 };
 
 export type MutationUpdateFormDefinitionArgs = {
@@ -4020,6 +4211,11 @@ export type MutationUpdateFormDefinitionArgs = {
 
 export type MutationUpdateFormRuleArgs = {
   input: UpdateFormRuleInput;
+};
+
+export type MutationUpdateProjectConfigArgs = {
+  id: Scalars['ID']['input'];
+  input: ProjectConfigInput;
 };
 
 export type MutationUpdateReferralPostingArgs = {
@@ -4168,6 +4364,10 @@ export type OrganizationAccess = {
   id: Scalars['ID']['output'];
 };
 
+export type OrganizationFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** HUD Organization Sorting Options */
 export enum OrganizationSortOption {
   Name = 'NAME',
@@ -4244,6 +4444,7 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
+  AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Units available for the given household at the given project */
@@ -4261,6 +4462,8 @@ export enum PickListType {
   /** Enrollments for the client, including WIP and Exited. */
   EnrollmentsForClient = 'ENROLLMENTS_FOR_CLIENT',
   EnrollmentAuditEventRecordTypes = 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
+  /** External form types for the project. */
+  ExternalFormTypesForProject = 'EXTERNAL_FORM_TYPES_FOR_PROJECT',
   Geocode = 'GEOCODE',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
@@ -5030,6 +5233,7 @@ export type Project = {
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   enrollments: EnrollmentsPaginated;
+  externalFormSubmissions: ExternalFormSubmissionsPaginated;
   funders: FundersPaginated;
   hasUnits: Scalars['Boolean']['output'];
   hmisParticipations: HmisParticipationsPaginated;
@@ -5053,6 +5257,8 @@ export type Project = {
   residentialAffiliationProjectIds: Array<Scalars['ID']['output']>;
   residentialAffiliationProjects: Array<Project>;
   rrhSubType?: Maybe<RrhSubType>;
+  /** Service types that are collected for this Project */
+  serviceTypes: Array<ServiceType>;
   services: ServicesPaginated;
   targetPopulation?: Maybe<TargetPopulation>;
   unitTypes: Array<UnitTypeCapacity>;
@@ -5070,6 +5276,13 @@ export type ProjectEnrollmentsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
+};
+
+export type ProjectExternalFormSubmissionsArgs = {
+  filters?: InputMaybe<ExternalFormSubmissionFilterOptions>;
+  formDefinitionIdentifier: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ProjectFundersArgs = {
@@ -5138,6 +5351,7 @@ export type ProjectAccess = {
   canEditProjectDetails: Scalars['Boolean']['output'];
   canEnrollClients: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
+  canManageExternalFormSubmissions: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
   canManageInventory: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
@@ -5187,6 +5401,46 @@ export enum ProjectCompletionStatus {
   /** Invalid Value */
   Invalid = 'INVALID',
 }
+
+/** Project Config */
+export type ProjectConfig = {
+  __typename?: 'ProjectConfig';
+  configOptions?: Maybe<Scalars['JSON']['output']>;
+  configType: ProjectConfigType;
+  id: Scalars['ID']['output'];
+  organization?: Maybe<Organization>;
+  organizationId?: Maybe<Scalars['ID']['output']>;
+  project?: Maybe<Project>;
+  projectId?: Maybe<Scalars['ID']['output']>;
+  projectType?: Maybe<ProjectType>;
+};
+
+/** Project Config Input */
+export type ProjectConfigInput = {
+  configType?: InputMaybe<ProjectConfigType>;
+  lengthOfAbsenceDays?: InputMaybe<Scalars['Int']['input']>;
+  organizationId?: InputMaybe<Scalars['ID']['input']>;
+  projectId?: InputMaybe<Scalars['ID']['input']>;
+  projectType?: InputMaybe<ProjectType>;
+};
+
+export enum ProjectConfigType {
+  /** Auto Enter */
+  AutoEnter = 'AUTO_ENTER',
+  /** Auto Exit */
+  AutoExit = 'AUTO_EXIT',
+}
+
+export type ProjectConfigsPaginated = {
+  __typename?: 'ProjectConfigsPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<ProjectConfig>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
 
 export enum ProjectFilterOptionStatus {
   /** Closed */
@@ -5271,7 +5525,6 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
-  autoExitConfigs: AutoExitConfigsPaginated;
   /** Client lookup */
   client?: Maybe<Client>;
   /** Custom forms for collecting and/or displaying custom details for a Client (outside of the Client demographics form) */
@@ -5285,6 +5538,7 @@ export type Query = {
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
   esgFundingReport: Array<EsgFundingService>;
+  externalFormDefinition?: Maybe<FormDefinition>;
   file?: Maybe<File>;
   formDefinition?: Maybe<FormDefinition>;
   formDefinitions: FormDefinitionsPaginated;
@@ -5310,6 +5564,7 @@ export type Query = {
   project?: Maybe<Project>;
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
+  projectConfigs: ProjectConfigsPaginated;
   projects: ProjectsPaginated;
   /** Get the most relevant Form Definition to use for record viewing/editing */
   recordFormDefinition?: Maybe<FormDefinition>;
@@ -5322,6 +5577,7 @@ export type Query = {
   serviceFormDefinition?: Maybe<FormDefinition>;
   /** Service type lookup */
   serviceType?: Maybe<ServiceType>;
+  serviceTypes: ServiceTypesPaginated;
   staticFormDefinition: FormDefinition;
   /** User lookup */
   user?: Maybe<ApplicationUser>;
@@ -5342,11 +5598,6 @@ export type QueryAssessmentFormDefinitionArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   projectId: Scalars['ID']['input'];
   role?: InputMaybe<AssessmentRole>;
-};
-
-export type QueryAutoExitConfigsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryClientArgs = {
@@ -5382,6 +5633,10 @@ export type QueryEsgFundingReportArgs = {
   clientIds: Array<Scalars['ID']['input']>;
 };
 
+export type QueryExternalFormDefinitionArgs = {
+  identifier: Scalars['String']['input'];
+};
+
 export type QueryFileArgs = {
   id: Scalars['ID']['input'];
 };
@@ -5391,6 +5646,7 @@ export type QueryFormDefinitionArgs = {
 };
 
 export type QueryFormDefinitionsArgs = {
+  filters?: InputMaybe<FormDefinitionFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5440,6 +5696,7 @@ export type QueryOrganizationArgs = {
 };
 
 export type QueryOrganizationsArgs = {
+  filters?: InputMaybe<OrganizationFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<OrganizationSortOption>;
@@ -5463,6 +5720,11 @@ export type QueryProjectArgs = {
 
 export type QueryProjectCocArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryProjectConfigsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type QueryProjectsArgs = {
@@ -5503,6 +5765,12 @@ export type QueryServiceTypeArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type QueryServiceTypesArgs = {
+  filters?: InputMaybe<ServiceTypeFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type QueryStaticFormDefinitionArgs = {
   role: StaticFormRole;
 };
@@ -5532,6 +5800,7 @@ export type QueryAccess = {
   canManageAnyClientFiles: Scalars['Boolean']['output'];
   canManageClientAlerts: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
+  canManageExternalFormSubmissions: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
   canManageInventory: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
@@ -5543,6 +5812,7 @@ export type QueryAccess = {
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientName: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
@@ -5673,6 +5943,8 @@ export enum RecordFormRole {
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** Enrollment */
   Enrollment = 'ENROLLMENT',
+  /** External form */
+  ExternalForm = 'EXTERNAL_FORM',
   /** File */
   File = 'FILE',
   /** Funder */
@@ -5923,6 +6195,8 @@ export enum RelatedRecordType {
   Enrollment = 'ENROLLMENT',
   /** EnrollmentCoc */
   EnrollmentCoc = 'ENROLLMENT_COC',
+  /** Event */
+  Event = 'EVENT',
   /** Exit */
   Exit = 'EXIT',
   /** HealthAndDv */
@@ -5972,6 +6246,20 @@ export enum ReminderTopic {
   ExitIncomplete = 'exit_incomplete',
   IntakeIncomplete = 'intake_incomplete',
 }
+
+/** Autogenerated return type of RenameServiceCategory. */
+export type RenameServiceCategoryPayload = {
+  __typename?: 'RenameServiceCategoryPayload';
+  errors: Array<ValidationError>;
+  serviceCategory?: Maybe<ServiceCategory>;
+};
+
+/** Autogenerated return type of RenameServiceType. */
+export type RenameServiceTypePayload = {
+  __typename?: 'RenameServiceTypePayload';
+  errors: Array<ValidationError>;
+  serviceType?: Maybe<ServiceType>;
+};
 
 /** 3.12.A */
 export enum RentalSubsidyType {
@@ -6186,22 +6474,32 @@ export type ServiceFilterOptions = {
   serviceType?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
-/** HUD Service Input */
-export type ServiceInput = {
-  dateProvided?: InputMaybe<Scalars['ISO8601Date']['input']>;
-  enrollmentId?: InputMaybe<Scalars['ID']['input']>;
-  faAmount?: InputMaybe<Scalars['Float']['input']>;
-  movingOnOtherType?: InputMaybe<Scalars['String']['input']>;
-  otherTypeProvided?: InputMaybe<Scalars['String']['input']>;
-  recordType?: InputMaybe<RecordType>;
-  referralOutcome?: InputMaybe<PathReferralOutcome>;
-  subTypeProvided?: InputMaybe<ServiceSubTypeProvided>;
-  typeProvided?: InputMaybe<ServiceTypeProvided>;
+/** Object to capture input for filtering by date range served */
+export type ServiceRangeFilter = {
+  endDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
+  /** Project where the service was rendered */
+  projectId?: InputMaybe<Scalars['ID']['input']>;
+  /** Service type that was rendered during date range */
+  serviceType?: InputMaybe<Scalars['ID']['input']>;
+  startDate: Scalars['ISO8601Date']['input'];
 };
 
 /** HMIS Service Sorting Options */
 export enum ServiceSortOption {
+  /** Client Age: Oldest to Youngest */
+  AgeOldestToYoungest = 'AGE_OLDEST_TO_YOUNGEST',
+  /** Client Age: Youngest to Oldest */
+  AgeYoungestToOldest = 'AGE_YOUNGEST_TO_OLDEST',
+  /** Date service was provided */
   DateProvided = 'DATE_PROVIDED',
+  /** Client First Name: A-Z */
+  FirstNameAToZ = 'FIRST_NAME_A_TO_Z',
+  /** Client First Name: Z-A */
+  FirstNameZToA = 'FIRST_NAME_Z_TO_A',
+  /** Client Last Name: A-Z */
+  LastNameAToZ = 'LAST_NAME_A_TO_Z',
+  /** Client Last Name: Z-A */
+  LastNameZToA = 'LAST_NAME_Z_TO_A',
 }
 
 /** HUD Service TypeProvided:SubTypeProvided aggregate (V2.A, V2.B, V2.C) */
@@ -6272,12 +6570,27 @@ export type ServiceType = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  /** Definitions that are specified for this service type */
+  formDefinitions: Array<FormDefinition>;
   hud: Scalars['Boolean']['output'];
   hudRecordType?: Maybe<RecordType>;
   hudTypeProvided?: Maybe<ServiceTypeProvided>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  supportsBulkAssignment: Scalars['Boolean']['output'];
   user?: Maybe<ApplicationUser>;
+};
+
+export type ServiceTypeFilterOptions = {
+  includeHudServices?: InputMaybe<Scalars['Boolean']['input']>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Create service type input */
+export type ServiceTypeInput = {
+  name: Scalars['String']['input'];
+  serviceCategoryId: Scalars['ID']['input'];
+  supportsBulkAssignment?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2) */
@@ -6550,10 +6863,14 @@ export enum StaticFormRole {
   AutoExitConfig = 'AUTO_EXIT_CONFIG',
   /** Client alert */
   ClientAlert = 'CLIENT_ALERT',
+  /** External form submission review */
+  ExternalFormSubmissionReview = 'EXTERNAL_FORM_SUBMISSION_REVIEW',
   /** Form definition */
   FormDefinition = 'FORM_DEFINITION',
   /** Form rule */
   FormRule = 'FORM_RULE',
+  /** Project config */
+  ProjectConfig = 'PROJECT_CONFIG',
 }
 
 /** Autogenerated input type of SubmitAssessment */
@@ -6801,32 +7118,6 @@ export type UnitsPaginated = {
   pagesCount: Scalars['Int']['output'];
 };
 
-/** Autogenerated return type of UpdateAutoExitConfig. */
-export type UpdateAutoExitConfigPayload = {
-  __typename?: 'UpdateAutoExitConfigPayload';
-  autoExitConfig?: Maybe<AutoExitConfig>;
-  errors: Array<ValidationError>;
-};
-
-/** Autogenerated input type of UpdateBedNights */
-export type UpdateBedNightsInput = {
-  action: BulkActionType;
-  bedNightDate: Scalars['ISO8601Date']['input'];
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: InputMaybe<Scalars['String']['input']>;
-  enrollmentIds: Array<Scalars['ID']['input']>;
-  projectId: Scalars['ID']['input'];
-};
-
-/** Autogenerated return type of UpdateBedNights. */
-export type UpdateBedNightsPayload = {
-  __typename?: 'UpdateBedNightsPayload';
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']['output']>;
-  errors: Array<ValidationError>;
-  success?: Maybe<Scalars['Boolean']['output']>;
-};
-
 /** Autogenerated input type of UpdateClientImage */
 export type UpdateClientImageInput = {
   clientId: Scalars['ID']['input'];
@@ -6842,6 +7133,13 @@ export type UpdateClientImagePayload = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   errors: Array<ValidationError>;
+};
+
+/** Autogenerated return type of UpdateExternalFormSubmission. */
+export type UpdateExternalFormSubmissionPayload = {
+  __typename?: 'UpdateExternalFormSubmissionPayload';
+  errors: Array<ValidationError>;
+  externalFormSubmission: ExternalFormSubmission;
 };
 
 /** Autogenerated return type of UpdateFormDefinition. */
@@ -6866,6 +7164,13 @@ export type UpdateFormRulePayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
   errors: Array<ValidationError>;
   formRule: FormRule;
+};
+
+/** Autogenerated return type of UpdateProjectConfig. */
+export type UpdateProjectConfigPayload = {
+  __typename?: 'UpdateProjectConfigPayload';
+  errors: Array<ValidationError>;
+  projectConfig?: Maybe<ProjectConfig>;
 };
 
 /** Autogenerated return type of UpdateReferralPosting. */
@@ -6911,6 +7216,11 @@ export type UpdateUnitsPayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
   errors: Array<ValidationError>;
   units: Array<Unit>;
+};
+
+export type UserAuditEventFilterOptions = {
+  clientRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
+  enrollmentRecordType?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type ValidationError = {
@@ -7355,6 +7665,7 @@ export type RootPermissionsFragment = {
   canAuditUsers: boolean;
   canEditClients: boolean;
   canViewClients: boolean;
+  canViewClientName: boolean;
   canDeleteClients: boolean;
   canEditOrganization: boolean;
   canDeleteOrganization: boolean;
@@ -7382,6 +7693,7 @@ export type RootPermissionsFragment = {
   canSplitHouseholds: boolean;
   canConfigureDataCollection: boolean;
   canViewClientAlerts: boolean;
+  canManageExternalFormSubmissions: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -7392,6 +7704,7 @@ export type ClientAccessFieldsFragment = {
   canViewDob: boolean;
   canViewFullSsn: boolean;
   canViewPartialSsn: boolean;
+  canViewClientName: boolean;
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
@@ -7442,6 +7755,7 @@ export type ProjectAccessFieldsFragment = {
   canManageDeniedReferrals: boolean;
   canManageIncomingReferrals: boolean;
   canManageOutgoingReferrals: boolean;
+  canManageExternalFormSubmissions: boolean;
 };
 
 export type OrganizationAccessFieldsFragment = {
@@ -7463,6 +7777,7 @@ export type GetRootPermissionsQuery = {
     canAuditUsers: boolean;
     canEditClients: boolean;
     canViewClients: boolean;
+    canViewClientName: boolean;
     canDeleteClients: boolean;
     canEditOrganization: boolean;
     canDeleteOrganization: boolean;
@@ -7490,6 +7805,7 @@ export type GetRootPermissionsQuery = {
     canSplitHouseholds: boolean;
     canConfigureDataCollection: boolean;
     canViewClientAlerts: boolean;
+    canManageExternalFormSubmissions: boolean;
   };
 };
 
@@ -7819,6 +8135,26 @@ export type AssessmentWithRecordsFragment = {
     dateUpdated?: string | null;
     dateDeleted?: string | null;
     prioritizationStatus?: PrioritizationStatus | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
+  event?: {
+    __typename?: 'Event';
+    id: string;
+    event: EventType;
+    eventDate: string;
+    locationCrisisOrPhHousing?: string | null;
+    probSolDivRrResult?: NoYesMissing | null;
+    referralCaseManageAfter?: NoYesMissing | null;
+    referralResult?: ReferralResult | null;
+    resultDate?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
     user?: {
       __typename: 'ApplicationUser';
       id: string;
@@ -8340,6 +8676,26 @@ export type FullAssessmentFragment = {
       email: string;
     } | null;
   } | null;
+  event?: {
+    __typename?: 'Event';
+    id: string;
+    event: EventType;
+    eventDate: string;
+    locationCrisisOrPhHousing?: string | null;
+    probSolDivRrResult?: NoYesMissing | null;
+    referralCaseManageAfter?: NoYesMissing | null;
+    referralResult?: ReferralResult | null;
+    resultDate?: string | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    dateDeleted?: string | null;
+    user?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
+  } | null;
   incomeBenefit?: {
     __typename: 'IncomeBenefit';
     adap?: NoYesReasonsForMissingData | null;
@@ -8726,7 +9082,6 @@ export type GetAssessmentQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -8749,7 +9104,6 @@ export type GetAssessmentQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -8772,7 +9126,6 @@ export type GetAssessmentQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -8795,7 +9148,6 @@ export type GetAssessmentQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -8818,7 +9170,6 @@ export type GetAssessmentQuery = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -8880,6 +9231,7 @@ export type GetAssessmentQuery = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    formula?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -8951,6 +9303,7 @@ export type GetAssessmentQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -9022,6 +9375,7 @@ export type GetAssessmentQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -9093,6 +9447,7 @@ export type GetAssessmentQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -9164,6 +9519,7 @@ export type GetAssessmentQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -9308,6 +9664,26 @@ export type GetAssessmentQuery = {
       dateUpdated?: string | null;
       dateDeleted?: string | null;
       prioritizationStatus?: PrioritizationStatus | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    event?: {
+      __typename?: 'Event';
+      id: string;
+      event: EventType;
+      eventDate: string;
+      locationCrisisOrPhHousing?: string | null;
+      probSolDivRrResult?: NoYesMissing | null;
+      referralCaseManageAfter?: NoYesMissing | null;
+      referralResult?: ReferralResult | null;
+      resultDate?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      dateDeleted?: string | null;
       user?: {
         __typename: 'ApplicationUser';
         id: string;
@@ -10056,6 +10432,26 @@ export type SubmitAssessmentMutation = {
           email: string;
         } | null;
       } | null;
+      event?: {
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
       incomeBenefit?: {
         __typename: 'IncomeBenefit';
         adap?: NoYesReasonsForMissingData | null;
@@ -10560,6 +10956,26 @@ export type SubmitHouseholdAssessmentsMutation = {
         dateUpdated?: string | null;
         dateDeleted?: string | null;
         prioritizationStatus?: PrioritizationStatus | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
+      event?: {
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -11086,6 +11502,26 @@ export type GetAssessmentsForPopulationQuery = {
           dateUpdated?: string | null;
           dateDeleted?: string | null;
           prioritizationStatus?: PrioritizationStatus | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        } | null;
+        event?: {
+          __typename?: 'Event';
+          id: string;
+          event: EventType;
+          eventDate: string;
+          locationCrisisOrPhHousing?: string | null;
+          probSolDivRrResult?: NoYesMissing | null;
+          referralCaseManageAfter?: NoYesMissing | null;
+          referralResult?: ReferralResult | null;
+          resultDate?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          dateDeleted?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -11942,6 +12378,23 @@ export type EnrollmentAuditEventFieldsFragment = {
   } | null;
 };
 
+export type UserAuditEventFieldsFragment = {
+  __typename?: 'ApplicationUserAuditEvent';
+  id: string;
+  createdAt: string;
+  event: AuditEventType;
+  objectChanges?: any | null;
+  recordName: string;
+  graphqlType: string;
+  recordId: string;
+  clientId?: string | null;
+  clientName?: string | null;
+  enrollmentId?: string | null;
+  projectId?: string | null;
+  projectName?: string | null;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
+};
+
 export type GetClientAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -12024,268 +12477,135 @@ export type GetEnrollmentAuditEventsQuery = {
   } | null;
 };
 
-export type AutoExitConfigFieldsFragment = {
-  __typename?: 'AutoExitConfig';
-  id: string;
-  lengthOfAbsenceDays: number;
-  organizationId?: string | null;
-  projectId?: string | null;
-  projectType?: ProjectType | null;
-  organization?: {
-    __typename?: 'Organization';
-    id: string;
-    organizationName: string;
-  } | null;
-  project?: { __typename?: 'Project'; id: string; projectName: string } | null;
-};
-
-export type CreateAutoExitConfigMutationVariables = Exact<{
-  input: AutoExitConfigInput;
-}>;
-
-export type CreateAutoExitConfigMutation = {
-  __typename?: 'Mutation';
-  createAutoExitConfig?: {
-    __typename?: 'CreateAutoExitConfigPayload';
-    autoExitConfig?: {
-      __typename?: 'AutoExitConfig';
-      id: string;
-      lengthOfAbsenceDays: number;
-      organizationId?: string | null;
-      projectId?: string | null;
-      projectType?: ProjectType | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-      } | null;
-    } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type UpdateAutoExitConfigMutationVariables = Exact<{
-  input: AutoExitConfigInput;
+export type GetUserAuditEventsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
-}>;
-
-export type UpdateAutoExitConfigMutation = {
-  __typename?: 'Mutation';
-  updateAutoExitConfig?: {
-    __typename?: 'UpdateAutoExitConfigPayload';
-    autoExitConfig?: {
-      __typename?: 'AutoExitConfig';
-      id: string;
-      lengthOfAbsenceDays: number;
-      organizationId?: string | null;
-      projectId?: string | null;
-      projectType?: ProjectType | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-      } | null;
-    } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type DeleteAutoExitConfigMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type DeleteAutoExitConfigMutation = {
-  __typename?: 'Mutation';
-  deleteAutoExitConfig?: {
-    __typename?: 'DeleteAutoExitConfigPayload';
-    autoExitConfig?: {
-      __typename?: 'AutoExitConfig';
-      id: string;
-      lengthOfAbsenceDays: number;
-      organizationId?: string | null;
-      projectId?: string | null;
-      projectType?: ProjectType | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-      } | null;
-    } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type GetAutoExitConfigsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<UserAuditEventFilterOptions>;
 }>;
 
-export type GetAutoExitConfigsQuery = {
+export type GetUserAuditEventsQuery = {
   __typename?: 'Query';
-  autoExitConfigs: {
-    __typename?: 'AutoExitConfigsPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'AutoExitConfig';
-      id: string;
-      lengthOfAbsenceDays: number;
-      organizationId?: string | null;
-      projectId?: string | null;
-      projectType?: ProjectType | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
-      project?: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-      } | null;
-    }>;
-  };
-};
-
-export type GetProjectEnrollmentsForBedNightsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
-  sortOrder?: InputMaybe<EnrollmentSortOption>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetProjectEnrollmentsForBedNightsQuery = {
-  __typename?: 'Query';
-  project?: {
-    __typename?: 'Project';
+  user?: {
+    __typename?: 'ApplicationUser';
     id: string;
-    enrollments: {
-      __typename?: 'EnrollmentsPaginated';
+    auditHistory: {
+      __typename?: 'ApplicationUserAuditEventsPaginated';
       offset: number;
       limit: number;
       nodesCount: number;
       nodes: Array<{
-        __typename?: 'Enrollment';
-        lastBedNightDate?: string | null;
+        __typename?: 'ApplicationUserAuditEvent';
         id: string;
-        lockVersion: number;
-        entryDate: string;
-        exitDate?: string | null;
-        inProgress: boolean;
-        relationshipToHoH: RelationshipToHoH;
-        enrollmentCoc?: string | null;
-        householdId: string;
-        householdShortId: string;
-        householdSize: number;
-        client: {
-          __typename?: 'Client';
+        createdAt: string;
+        event: AuditEventType;
+        objectChanges?: any | null;
+        recordName: string;
+        graphqlType: string;
+        recordId: string;
+        clientId?: string | null;
+        clientName?: string | null;
+        enrollmentId?: string | null;
+        projectId?: string | null;
+        projectName?: string | null;
+        user?: {
+          __typename?: 'ApplicationUser';
           id: string;
-          dob?: string | null;
-          veteranStatus: NoYesReasonsForMissingData;
-          lockVersion: number;
-          age?: number | null;
-          ssn?: string | null;
-          gender: Array<Gender>;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-          access: {
-            __typename?: 'ClientAccess';
-            id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
-          };
-        };
+          name: string;
+        } | null;
       }>;
     };
   } | null;
 };
 
-export type GetBedNightsOnDateQueryVariables = Exact<{
+export type BulkServicesClientSearchQueryVariables = Exact<{
+  textSearch: Scalars['String']['input'];
+  filters?: InputMaybe<ClientFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<ClientSortOption>;
+  serviceTypeId: Scalars['ID']['input'];
   projectId: Scalars['ID']['input'];
-  bedNightOnDate: Scalars['ISO8601Date']['input'];
+  serviceDate: Scalars['ISO8601Date']['input'];
 }>;
 
-export type GetBedNightsOnDateQuery = {
+export type BulkServicesClientSearchQuery = {
   __typename?: 'Query';
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    enrollments: {
-      __typename?: 'EnrollmentsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{ __typename?: 'Enrollment'; id: string }>;
-    };
+  clientSearch: {
+    __typename?: 'ClientsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Client';
+      id: string;
+      lockVersion: number;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      dob?: string | null;
+      age?: number | null;
+      ssn?: string | null;
+      gender: Array<Gender>;
+      activeEnrollment?: {
+        __typename?: 'Enrollment';
+        id: string;
+        entryDate: string;
+        lastServiceDate?: string | null;
+        services: {
+          __typename?: 'ServicesPaginated';
+          limit: number;
+          offset: number;
+          nodesCount: number;
+          nodes: Array<{ __typename?: 'Service'; id: string }>;
+        };
+      } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
+    }>;
+  };
+};
+
+export type BulkAssignServiceMutationVariables = Exact<{
+  input: BulkAssignServiceInput;
+}>;
+
+export type BulkAssignServiceMutation = {
+  __typename?: 'Mutation';
+  bulkAssignService?: {
+    __typename?: 'BulkAssignServicePayload';
+    success?: boolean | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
-export type UpdateBedNightsMutationVariables = Exact<{
-  input: UpdateBedNightsInput;
+export type BulkRemoveServiceMutationVariables = Exact<{
+  projectId: Scalars['ID']['input'];
+  serviceIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
 }>;
 
-export type UpdateBedNightsMutation = {
+export type BulkRemoveServiceMutation = {
   __typename?: 'Mutation';
-  updateBedNights?: {
-    __typename?: 'UpdateBedNightsPayload';
+  bulkRemoveService?: {
+    __typename?: 'BulkRemoveServicePayload';
     success?: boolean | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -12335,6 +12655,7 @@ export type ClientSearchResultFieldsFragment = {
     canEditClient: boolean;
     canDeleteClient: boolean;
     canViewDob: boolean;
+    canViewClientName: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -12426,6 +12747,7 @@ export type ClientFieldsFragment = {
     canEditClient: boolean;
     canDeleteClient: boolean;
     canViewDob: boolean;
+    canViewClientName: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -12740,6 +13062,7 @@ export type SearchClientsQuery = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -12839,6 +13162,7 @@ export type GetClientQuery = {
       canEditClient: boolean;
       canDeleteClient: boolean;
       canViewDob: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -13003,6 +13327,7 @@ export type GetClientPermissionsQuery = {
       canViewDob: boolean;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -13141,11 +13466,13 @@ export type GetClientServicesQuery = {
           __typename?: 'ServiceType';
           id: string;
           name: string;
+          hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -13413,6 +13740,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canEditClient: boolean;
                 canDeleteClient: boolean;
                 canViewDob: boolean;
+                canViewClientName: boolean;
                 canEditEnrollments: boolean;
                 canDeleteEnrollments: boolean;
                 canViewEnrollmentDetails: boolean;
@@ -13619,7 +13947,6 @@ export type ClientDetailFormsQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -13642,7 +13969,6 @@ export type ClientDetailFormsQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -13665,7 +13991,6 @@ export type ClientDetailFormsQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -13688,7 +14013,6 @@ export type ClientDetailFormsQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -13711,7 +14035,6 @@ export type ClientDetailFormsQuery = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -13773,6 +14096,7 @@ export type ClientDetailFormsQuery = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    formula?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -13844,6 +14168,7 @@ export type ClientDetailFormsQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -13915,6 +14240,7 @@ export type ClientDetailFormsQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -13986,6 +14312,7 @@ export type ClientDetailFormsQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -14057,6 +14384,7 @@ export type ClientDetailFormsQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -14266,6 +14594,7 @@ export type MergeClientsMutation = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -14467,6 +14796,247 @@ export type FormRuleFieldsFragment = {
     hudId: string;
     organizationName: string;
   } | null;
+  serviceCategory?: {
+    __typename?: 'ServiceCategory';
+    id: string;
+    name: string;
+    hud: boolean;
+  } | null;
+  serviceType?: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hud: boolean;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+  } | null;
+};
+
+export type ServiceTypeConfigFieldsFragment = {
+  __typename?: 'ServiceType';
+  id: string;
+  name: string;
+  hud: boolean;
+  hudRecordType?: RecordType | null;
+  hudTypeProvided?: ServiceTypeProvided | null;
+  category: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  supportsBulkAssignment: boolean;
+  formDefinitions: Array<{
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  }>;
+};
+
+export type CreateServiceTypeMutationVariables = Exact<{
+  input: ServiceTypeInput;
+}>;
+
+export type CreateServiceTypeMutation = {
+  __typename?: 'Mutation';
+  createServiceType?: {
+    __typename?: 'CreateServiceTypePayload';
+    serviceType?: {
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hud: boolean;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteServiceTypeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteServiceTypeMutation = {
+  __typename?: 'Mutation';
+  deleteServiceType?: {
+    __typename?: 'DeleteServiceTypePayload';
+    serviceType?: { __typename?: 'ServiceType'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type RenameServiceTypeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+}>;
+
+export type RenameServiceTypeMutation = {
+  __typename?: 'Mutation';
+  renameServiceType?: {
+    __typename?: 'RenameServiceTypePayload';
+    serviceType?: {
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hud: boolean;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type CreateServiceCategoryMutationVariables = Exact<{
+  name: Scalars['String']['input'];
+}>;
+
+export type CreateServiceCategoryMutation = {
+  __typename?: 'Mutation';
+  createServiceCategory?: {
+    __typename?: 'CreateServiceCategoryPayload';
+    serviceCategory?: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+      hud: boolean;
+      serviceTypes: {
+        __typename?: 'ServiceTypesPaginated';
+        offset: number;
+        limit: number;
+        nodesCount: number;
+        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+      };
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteServiceCategoryMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteServiceCategoryMutation = {
+  __typename?: 'Mutation';
+  deleteServiceCategory?: {
+    __typename?: 'DeleteServiceCategoryPayload';
+    serviceCategory?: { __typename?: 'ServiceCategory'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type RenameServiceCategoryMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+}>;
+
+export type RenameServiceCategoryMutation = {
+  __typename?: 'Mutation';
+  renameServiceCategory?: {
+    __typename?: 'RenameServiceCategoryPayload';
+    serviceCategory?: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+      hud: boolean;
+      serviceTypes: {
+        __typename?: 'ServiceTypesPaginated';
+        offset: number;
+        limit: number;
+        nodesCount: number;
+        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+      };
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
 };
 
 export type GetFormRulesQueryVariables = Exact<{
@@ -14512,6 +15082,24 @@ export type GetFormRulesQuery = {
         id: string;
         hudId: string;
         organizationName: string;
+      } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+        hud: boolean;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hud: boolean;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       } | null;
     }>;
   };
@@ -14565,6 +15153,24 @@ export type GetServiceCategoryRulesQuery = {
           hudId: string;
           organizationName: string;
         } | null;
+        serviceCategory?: {
+          __typename?: 'ServiceCategory';
+          id: string;
+          name: string;
+          hud: boolean;
+        } | null;
+        serviceType?: {
+          __typename?: 'ServiceType';
+          id: string;
+          name: string;
+          hud: boolean;
+          hudRecordType?: RecordType | null;
+          hudTypeProvided?: ServiceTypeProvided | null;
+          category: string;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
+        } | null;
       }>;
     };
   } | null;
@@ -14605,6 +15211,24 @@ export type GetFormRuleQuery = {
       id: string;
       hudId: string;
       organizationName: string;
+    } | null;
+    serviceCategory?: {
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+      hud: boolean;
+    } | null;
+    serviceType?: {
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hud: boolean;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
     } | null;
   } | null;
 };
@@ -14647,6 +15271,24 @@ export type CreateFormRuleMutation = {
         id: string;
         hudId: string;
         organizationName: string;
+      } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+        hud: boolean;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hud: boolean;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       } | null;
     };
     errors: Array<{
@@ -14705,6 +15347,24 @@ export type UpdateFormRuleMutation = {
         hudId: string;
         organizationName: string;
       } | null;
+      serviceCategory?: {
+        __typename?: 'ServiceCategory';
+        id: string;
+        name: string;
+        hud: boolean;
+      } | null;
+      serviceType?: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hud: boolean;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
+      } | null;
     };
     errors: Array<{
       __typename?: 'ValidationError';
@@ -14719,6 +15379,94 @@ export type UpdateFormRuleMutation = {
       linkId?: string | null;
       section?: string | null;
       data?: any | null;
+    }>;
+  } | null;
+};
+
+export type GetServiceTypesQueryVariables = Exact<{
+  filters?: InputMaybe<ServiceTypeFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetServiceTypesQuery = {
+  __typename?: 'Query';
+  serviceTypes: {
+    __typename?: 'ServiceTypesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hud: boolean;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
+      formDefinitions: Array<{
+        __typename?: 'FormDefinition';
+        id: string;
+        cacheKey: string;
+        title: string;
+      }>;
+    }>;
+  };
+};
+
+export type GetServiceCategoriesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetServiceCategoriesQuery = {
+  __typename?: 'Query';
+  serviceCategories: {
+    __typename?: 'ServiceCategoriesPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'ServiceCategory';
+      id: string;
+      name: string;
+      hud: boolean;
+      serviceTypes: {
+        __typename?: 'ServiceTypesPaginated';
+        offset: number;
+        limit: number;
+        nodesCount: number;
+        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
+      };
+    }>;
+  };
+};
+
+export type GetServiceTypeDetailsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetServiceTypeDetailsQuery = {
+  __typename?: 'Query';
+  serviceType?: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hud: boolean;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+    formDefinitions: Array<{
+      __typename?: 'FormDefinition';
+      id: string;
+      cacheKey: string;
+      title: string;
     }>;
   } | null;
 };
@@ -14893,6 +15641,53 @@ export type CustomCaseNoteFieldsFragment = {
     name: string;
     email: string;
   } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
 };
 
 export type GetEnrollmentCustomCaseNotesQueryVariables = Exact<{
@@ -14925,6 +15720,53 @@ export type GetEnrollmentCustomCaseNotesQuery = {
           name: string;
           email: string;
         } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -14996,6 +15838,53 @@ export type GetClientCaseNotesQuery = {
           name: string;
           email: string;
         } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -15239,6 +16128,7 @@ export type AllEnrollmentDetailsFragment = {
   client: {
     __typename?: 'Client';
     hudChronic?: boolean | null;
+    ssn?: string | null;
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
     id: string;
@@ -15302,6 +16192,7 @@ export type AllEnrollmentDetailsFragment = {
       canViewDob: boolean;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -15372,7 +16263,6 @@ export type AllEnrollmentDetailsFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -15395,7 +16285,6 @@ export type AllEnrollmentDetailsFragment = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -15418,7 +16307,6 @@ export type AllEnrollmentDetailsFragment = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -15441,7 +16329,6 @@ export type AllEnrollmentDetailsFragment = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -15464,7 +16351,6 @@ export type AllEnrollmentDetailsFragment = {
                     readOnly: boolean;
                     repeats: boolean;
                     pickListReference?: string | null;
-                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
                     prefill: boolean;
@@ -15526,6 +16412,7 @@ export type AllEnrollmentDetailsFragment = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
+                      formula?: string | null;
                       autofillBehavior: EnableBehavior;
                       autofillReadonly?: boolean | null;
                       autofillWhen: Array<{
@@ -15597,6 +16484,7 @@ export type AllEnrollmentDetailsFragment = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    formula?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -15668,6 +16556,7 @@ export type AllEnrollmentDetailsFragment = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -15739,6 +16628,7 @@ export type AllEnrollmentDetailsFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -15810,6 +16700,7 @@ export type AllEnrollmentDetailsFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -15846,6 +16737,7 @@ export type AllEnrollmentDetailsFragment = {
       canManageDeniedReferrals: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
+      canManageExternalFormSubmissions: boolean;
     };
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   };
@@ -16091,27 +16983,6 @@ export type SubmittedEnrollmentResultFieldsFragment = {
   }>;
 };
 
-export type EventFieldsFragment = {
-  __typename?: 'Event';
-  id: string;
-  event: EventType;
-  eventDate: string;
-  locationCrisisOrPhHousing?: string | null;
-  probSolDivRrResult?: NoYesMissing | null;
-  referralCaseManageAfter?: NoYesMissing | null;
-  referralResult?: ReferralResult | null;
-  resultDate?: string | null;
-  dateCreated?: string | null;
-  dateUpdated?: string | null;
-  dateDeleted?: string | null;
-  user?: {
-    __typename: 'ApplicationUser';
-    id: string;
-    name: string;
-    email: string;
-  } | null;
-};
-
 export type CeAssessmentFieldsFragment = {
   __typename?: 'CeAssessment';
   id: string;
@@ -16331,6 +17202,7 @@ export type GetEnrollmentDetailsQuery = {
     client: {
       __typename?: 'Client';
       hudChronic?: boolean | null;
+      ssn?: string | null;
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
       id: string;
@@ -16394,6 +17266,7 @@ export type GetEnrollmentDetailsQuery = {
         canViewDob: boolean;
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -16464,7 +17337,6 @@ export type GetEnrollmentDetailsQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -16487,7 +17359,6 @@ export type GetEnrollmentDetailsQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -16510,7 +17381,6 @@ export type GetEnrollmentDetailsQuery = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -16533,7 +17403,6 @@ export type GetEnrollmentDetailsQuery = {
                     readOnly: boolean;
                     repeats: boolean;
                     pickListReference?: string | null;
-                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
                     prefill: boolean;
@@ -16556,7 +17425,6 @@ export type GetEnrollmentDetailsQuery = {
                       readOnly: boolean;
                       repeats: boolean;
                       pickListReference?: string | null;
-                      serviceDetailType?: ServiceDetailType | null;
                       size?: InputSize | null;
                       assessmentDate?: boolean | null;
                       prefill: boolean;
@@ -16618,6 +17486,7 @@ export type GetEnrollmentDetailsQuery = {
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         sumQuestions?: Array<string> | null;
+                        formula?: string | null;
                         autofillBehavior: EnableBehavior;
                         autofillReadonly?: boolean | null;
                         autofillWhen: Array<{
@@ -16689,6 +17558,7 @@ export type GetEnrollmentDetailsQuery = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
+                      formula?: string | null;
                       autofillBehavior: EnableBehavior;
                       autofillReadonly?: boolean | null;
                       autofillWhen: Array<{
@@ -16760,6 +17630,7 @@ export type GetEnrollmentDetailsQuery = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    formula?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -16831,6 +17702,7 @@ export type GetEnrollmentDetailsQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -16902,6 +17774,7 @@ export type GetEnrollmentDetailsQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -16938,6 +17811,7 @@ export type GetEnrollmentDetailsQuery = {
         canManageDeniedReferrals: boolean;
         canManageIncomingReferrals: boolean;
         canManageOutgoingReferrals: boolean;
+        canManageExternalFormSubmissions: boolean;
       };
       projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
     };
@@ -17016,6 +17890,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -17365,6 +18240,830 @@ export type GetEnrollmentPermissionsQuery = {
   } | null;
 };
 
+export type EventFieldsFragment = {
+  __typename?: 'Event';
+  id: string;
+  event: EventType;
+  eventDate: string;
+  locationCrisisOrPhHousing?: string | null;
+  probSolDivRrResult?: NoYesMissing | null;
+  referralCaseManageAfter?: NoYesMissing | null;
+  referralResult?: ReferralResult | null;
+  resultDate?: string | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  dateDeleted?: string | null;
+  user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+};
+
+export type ExternalFormSubmissionFieldsFragment = {
+  __typename?: 'ExternalFormSubmission';
+  id: string;
+  submittedAt: string;
+  spam?: boolean | null;
+  status: ExternalFormSubmissionStatus;
+  notes?: string | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    identifier: string;
+    cacheKey: string;
+  };
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
+};
+
+export type UpdateExternalFormSubmissionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: ExternalFormSubmissionInput;
+}>;
+
+export type UpdateExternalFormSubmissionMutation = {
+  __typename?: 'Mutation';
+  updateExternalFormSubmission?: {
+    __typename?: 'UpdateExternalFormSubmissionPayload';
+    externalFormSubmission: {
+      __typename?: 'ExternalFormSubmission';
+      id: string;
+      submittedAt: string;
+      spam?: boolean | null;
+      status: ExternalFormSubmissionStatus;
+      notes?: string | null;
+      definition: {
+        __typename?: 'FormDefinition';
+        identifier: string;
+        cacheKey: string;
+      };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        displayHooks: Array<DisplayHook>;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        }> | null;
+      }>;
+    };
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteExternalFormSubmissionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteExternalFormSubmissionMutation = {
+  __typename?: 'Mutation';
+  deleteExternalFormSubmission?: {
+    __typename?: 'DeleteExternalFormSubmissionPayload';
+    externalFormSubmission?: {
+      __typename?: 'ExternalFormSubmission';
+      id: string;
+      submittedAt: string;
+      spam?: boolean | null;
+      status: ExternalFormSubmissionStatus;
+      notes?: string | null;
+      definition: {
+        __typename?: 'FormDefinition';
+        identifier: string;
+        cacheKey: string;
+      };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        displayHooks: Array<DisplayHook>;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        }> | null;
+      }>;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type GetProjectExternalFormSubmissionsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  formDefinitionIdentifier: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ExternalFormSubmissionFilterOptions>;
+}>;
+
+export type GetProjectExternalFormSubmissionsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    externalFormSubmissions: {
+      __typename?: 'ExternalFormSubmissionsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ExternalFormSubmission';
+        id: string;
+        submittedAt: string;
+        spam?: boolean | null;
+        status: ExternalFormSubmissionStatus;
+        notes?: string | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          identifier: string;
+          cacheKey: string;
+        };
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
+      }>;
+    };
+  } | null;
+};
+
+export type GetExternalFormDefinitionQueryVariables = Exact<{
+  formDefinitionIdentifier: Scalars['String']['input'];
+}>;
+
+export type GetExternalFormDefinitionQuery = {
+  __typename?: 'Query';
+  externalFormDefinition?: {
+    __typename?: 'FormDefinition';
+    id: string;
+    role: FormRole;
+    title: string;
+    cacheKey: string;
+    identifier: string;
+    definition: {
+      __typename?: 'FormDefinitionJson';
+      item: Array<{
+        __typename: 'FormItem';
+        linkId: string;
+        type: ItemType;
+        component?: Component | null;
+        prefix?: string | null;
+        text?: string | null;
+        briefText?: string | null;
+        readonlyText?: string | null;
+        helperText?: string | null;
+        required: boolean;
+        warnIfEmpty: boolean;
+        hidden: boolean;
+        readOnly: boolean;
+        repeats: boolean;
+        pickListReference?: string | null;
+        size?: InputSize | null;
+        assessmentDate?: boolean | null;
+        prefill: boolean;
+        dataCollectedAbout?: DataCollectedAbout | null;
+        disabledDisplay: DisabledDisplay;
+        enableBehavior: EnableBehavior;
+        item?: Array<{
+          __typename: 'FormItem';
+          linkId: string;
+          type: ItemType;
+          component?: Component | null;
+          prefix?: string | null;
+          text?: string | null;
+          briefText?: string | null;
+          readonlyText?: string | null;
+          helperText?: string | null;
+          required: boolean;
+          warnIfEmpty: boolean;
+          hidden: boolean;
+          readOnly: boolean;
+          repeats: boolean;
+          pickListReference?: string | null;
+          size?: InputSize | null;
+          assessmentDate?: boolean | null;
+          prefill: boolean;
+          dataCollectedAbout?: DataCollectedAbout | null;
+          disabledDisplay: DisabledDisplay;
+          enableBehavior: EnableBehavior;
+          item?: Array<{
+            __typename: 'FormItem';
+            linkId: string;
+            type: ItemType;
+            component?: Component | null;
+            prefix?: string | null;
+            text?: string | null;
+            briefText?: string | null;
+            readonlyText?: string | null;
+            helperText?: string | null;
+            required: boolean;
+            warnIfEmpty: boolean;
+            hidden: boolean;
+            readOnly: boolean;
+            repeats: boolean;
+            pickListReference?: string | null;
+            size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill: boolean;
+            dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay: DisabledDisplay;
+            enableBehavior: EnableBehavior;
+            item?: Array<{
+              __typename: 'FormItem';
+              linkId: string;
+              type: ItemType;
+              component?: Component | null;
+              prefix?: string | null;
+              text?: string | null;
+              briefText?: string | null;
+              readonlyText?: string | null;
+              helperText?: string | null;
+              required: boolean;
+              warnIfEmpty: boolean;
+              hidden: boolean;
+              readOnly: boolean;
+              repeats: boolean;
+              pickListReference?: string | null;
+              size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill: boolean;
+              dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay: DisabledDisplay;
+              enableBehavior: EnableBehavior;
+              item?: Array<{
+                __typename: 'FormItem';
+                linkId: string;
+                type: ItemType;
+                component?: Component | null;
+                prefix?: string | null;
+                text?: string | null;
+                briefText?: string | null;
+                readonlyText?: string | null;
+                helperText?: string | null;
+                required: boolean;
+                warnIfEmpty: boolean;
+                hidden: boolean;
+                readOnly: boolean;
+                repeats: boolean;
+                pickListReference?: string | null;
+                size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill: boolean;
+                dataCollectedAbout?: DataCollectedAbout | null;
+                disabledDisplay: DisabledDisplay;
+                enableBehavior: EnableBehavior;
+                mapping?: {
+                  __typename?: 'FieldMapping';
+                  recordType?: RelatedRecordType | null;
+                  fieldName?: string | null;
+                  customFieldKey?: string | null;
+                } | null;
+                bounds?: Array<{
+                  __typename?: 'ValueBound';
+                  id: string;
+                  severity: ValidationSeverity;
+                  type: BoundType;
+                  question?: string | null;
+                  valueNumber?: number | null;
+                  valueDate?: string | null;
+                  valueLocalConstant?: string | null;
+                  offset?: number | null;
+                }> | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  groupCode?: string | null;
+                  initialSelected?: boolean | null;
+                  helperText?: string | null;
+                  numericValue?: number | null;
+                }> | null;
+                initial?: Array<{
+                  __typename?: 'InitialValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question?: string | null;
+                  localConstant?: string | null;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                  compareQuestion?: string | null;
+                }> | null;
+                autofillValues?: Array<{
+                  __typename?: 'AutofillValue';
+                  valueCode?: string | null;
+                  valueQuestion?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
+                  formula?: string | null;
+                  autofillBehavior: EnableBehavior;
+                  autofillReadonly?: boolean | null;
+                  autofillWhen: Array<{
+                    __typename?: 'EnableWhen';
+                    question?: string | null;
+                    localConstant?: string | null;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                    compareQuestion?: string | null;
+                  }>;
+                }> | null;
+              }> | null;
+              mapping?: {
+                __typename?: 'FieldMapping';
+                recordType?: RelatedRecordType | null;
+                fieldName?: string | null;
+                customFieldKey?: string | null;
+              } | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                id: string;
+                severity: ValidationSeverity;
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
+                valueLocalConstant?: string | null;
+                offset?: number | null;
+              }> | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                groupCode?: string | null;
+                initialSelected?: boolean | null;
+                helperText?: string | null;
+                numericValue?: number | null;
+              }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question?: string | null;
+                localConstant?: string | null;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+                compareQuestion?: string | null;
+              }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueQuestion?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
+                formula?: string | null;
+                autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
+                autofillWhen: Array<{
+                  __typename?: 'EnableWhen';
+                  question?: string | null;
+                  localConstant?: string | null;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                  compareQuestion?: string | null;
+                }>;
+              }> | null;
+            }> | null;
+            mapping?: {
+              __typename?: 'FieldMapping';
+              recordType?: RelatedRecordType | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+            } | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              id: string;
+              severity: ValidationSeverity;
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
+              valueLocalConstant?: string | null;
+              offset?: number | null;
+            }> | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              groupCode?: string | null;
+              initialSelected?: boolean | null;
+              helperText?: string | null;
+              numericValue?: number | null;
+            }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question?: string | null;
+              localConstant?: string | null;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              compareQuestion?: string | null;
+            }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueQuestion?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
+              formula?: string | null;
+              autofillBehavior: EnableBehavior;
+              autofillReadonly?: boolean | null;
+              autofillWhen: Array<{
+                __typename?: 'EnableWhen';
+                question?: string | null;
+                localConstant?: string | null;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+                compareQuestion?: string | null;
+              }>;
+            }> | null;
+          }> | null;
+          mapping?: {
+            __typename?: 'FieldMapping';
+            recordType?: RelatedRecordType | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+          } | null;
+          bounds?: Array<{
+            __typename?: 'ValueBound';
+            id: string;
+            severity: ValidationSeverity;
+            type: BoundType;
+            question?: string | null;
+            valueNumber?: number | null;
+            valueDate?: string | null;
+            valueLocalConstant?: string | null;
+            offset?: number | null;
+          }> | null;
+          pickListOptions?: Array<{
+            __typename?: 'PickListOption';
+            code: string;
+            label?: string | null;
+            secondaryLabel?: string | null;
+            groupLabel?: string | null;
+            groupCode?: string | null;
+            initialSelected?: boolean | null;
+            helperText?: string | null;
+            numericValue?: number | null;
+          }> | null;
+          initial?: Array<{
+            __typename?: 'InitialValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
+          }> | null;
+          enableWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question?: string | null;
+            localConstant?: string | null;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+            compareQuestion?: string | null;
+          }> | null;
+          autofillValues?: Array<{
+            __typename?: 'AutofillValue';
+            valueCode?: string | null;
+            valueQuestion?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
+            formula?: string | null;
+            autofillBehavior: EnableBehavior;
+            autofillReadonly?: boolean | null;
+            autofillWhen: Array<{
+              __typename?: 'EnableWhen';
+              question?: string | null;
+              localConstant?: string | null;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              compareQuestion?: string | null;
+            }>;
+          }> | null;
+        }> | null;
+        mapping?: {
+          __typename?: 'FieldMapping';
+          recordType?: RelatedRecordType | null;
+          fieldName?: string | null;
+          customFieldKey?: string | null;
+        } | null;
+        bounds?: Array<{
+          __typename?: 'ValueBound';
+          id: string;
+          severity: ValidationSeverity;
+          type: BoundType;
+          question?: string | null;
+          valueNumber?: number | null;
+          valueDate?: string | null;
+          valueLocalConstant?: string | null;
+          offset?: number | null;
+        }> | null;
+        pickListOptions?: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          groupCode?: string | null;
+          initialSelected?: boolean | null;
+          helperText?: string | null;
+          numericValue?: number | null;
+        }> | null;
+        initial?: Array<{
+          __typename?: 'InitialValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+          valueLocalConstant?: string | null;
+          initialBehavior: InitialBehavior;
+        }> | null;
+        enableWhen?: Array<{
+          __typename?: 'EnableWhen';
+          question?: string | null;
+          localConstant?: string | null;
+          operator: EnableOperator;
+          answerCode?: string | null;
+          answerCodes?: Array<string> | null;
+          answerNumber?: number | null;
+          answerBoolean?: boolean | null;
+          answerGroupCode?: string | null;
+          compareQuestion?: string | null;
+        }> | null;
+        autofillValues?: Array<{
+          __typename?: 'AutofillValue';
+          valueCode?: string | null;
+          valueQuestion?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+          sumQuestions?: Array<string> | null;
+          formula?: string | null;
+          autofillBehavior: EnableBehavior;
+          autofillReadonly?: boolean | null;
+          autofillWhen: Array<{
+            __typename?: 'EnableWhen';
+            question?: string | null;
+            localConstant?: string | null;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+            compareQuestion?: string | null;
+          }>;
+        }> | null;
+      }>;
+    };
+  } | null;
+};
+
 export type FileFieldsFragment = {
   __typename?: 'File';
   confidential?: boolean | null;
@@ -17456,7 +19155,6 @@ export type ItemFieldsFragment = {
   readOnly: boolean;
   repeats: boolean;
   pickListReference?: string | null;
-  serviceDetailType?: ServiceDetailType | null;
   size?: InputSize | null;
   assessmentDate?: boolean | null;
   prefill: boolean;
@@ -17518,6 +19216,7 @@ export type ItemFieldsFragment = {
     valueBoolean?: boolean | null;
     valueNumber?: number | null;
     sumQuestions?: Array<string> | null;
+    formula?: string | null;
     autofillBehavior: EnableBehavior;
     autofillReadonly?: boolean | null;
     autofillWhen: Array<{
@@ -17553,7 +19252,6 @@ export type FormDefinitionJsonFieldsFragment = {
     readOnly: boolean;
     repeats: boolean;
     pickListReference?: string | null;
-    serviceDetailType?: ServiceDetailType | null;
     size?: InputSize | null;
     assessmentDate?: boolean | null;
     prefill: boolean;
@@ -17576,7 +19274,6 @@ export type FormDefinitionJsonFieldsFragment = {
       readOnly: boolean;
       repeats: boolean;
       pickListReference?: string | null;
-      serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
       prefill: boolean;
@@ -17599,7 +19296,6 @@ export type FormDefinitionJsonFieldsFragment = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -17622,7 +19318,6 @@ export type FormDefinitionJsonFieldsFragment = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -17645,7 +19340,6 @@ export type FormDefinitionJsonFieldsFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -17707,6 +19401,7 @@ export type FormDefinitionJsonFieldsFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -17778,6 +19473,7 @@ export type FormDefinitionJsonFieldsFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -17849,6 +19545,7 @@ export type FormDefinitionJsonFieldsFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -17920,6 +19617,7 @@ export type FormDefinitionJsonFieldsFragment = {
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
+        formula?: string | null;
         autofillBehavior: EnableBehavior;
         autofillReadonly?: boolean | null;
         autofillWhen: Array<{
@@ -17991,6 +19689,7 @@ export type FormDefinitionJsonFieldsFragment = {
       valueBoolean?: boolean | null;
       valueNumber?: number | null;
       sumQuestions?: Array<string> | null;
+      formula?: string | null;
       autofillBehavior: EnableBehavior;
       autofillReadonly?: boolean | null;
       autofillWhen: Array<{
@@ -18043,7 +19742,6 @@ export type FormDefinitionFieldsFragment = {
       readOnly: boolean;
       repeats: boolean;
       pickListReference?: string | null;
-      serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
       prefill: boolean;
@@ -18066,7 +19764,6 @@ export type FormDefinitionFieldsFragment = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -18089,7 +19786,6 @@ export type FormDefinitionFieldsFragment = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -18112,7 +19808,6 @@ export type FormDefinitionFieldsFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -18135,7 +19830,6 @@ export type FormDefinitionFieldsFragment = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -18197,6 +19891,7 @@ export type FormDefinitionFieldsFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -18268,6 +19963,7 @@ export type FormDefinitionFieldsFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -18339,6 +20035,7 @@ export type FormDefinitionFieldsFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -18410,6 +20107,7 @@ export type FormDefinitionFieldsFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -18481,6 +20179,7 @@ export type FormDefinitionFieldsFragment = {
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
+        formula?: string | null;
         autofillBehavior: EnableBehavior;
         autofillReadonly?: boolean | null;
         autofillWhen: Array<{
@@ -18526,7 +20225,6 @@ export type FormDefinitionFieldsForEditorFragment = {
       readOnly: boolean;
       repeats: boolean;
       pickListReference?: string | null;
-      serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
       prefill: boolean;
@@ -18549,7 +20247,6 @@ export type FormDefinitionFieldsForEditorFragment = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -18572,7 +20269,6 @@ export type FormDefinitionFieldsForEditorFragment = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -18595,7 +20291,6 @@ export type FormDefinitionFieldsForEditorFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -18618,7 +20313,6 @@ export type FormDefinitionFieldsForEditorFragment = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -18680,6 +20374,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -18751,6 +20446,7 @@ export type FormDefinitionFieldsForEditorFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -18822,6 +20518,7 @@ export type FormDefinitionFieldsForEditorFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -18893,6 +20590,7 @@ export type FormDefinitionFieldsForEditorFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -18964,6 +20662,7 @@ export type FormDefinitionFieldsForEditorFragment = {
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
+        formula?: string | null;
         autofillBehavior: EnableBehavior;
         autofillReadonly?: boolean | null;
         autofillWhen: Array<{
@@ -19018,7 +20717,6 @@ export type UpdateFormDefinitionMutation = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -19041,7 +20739,6 @@ export type UpdateFormDefinitionMutation = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -19064,7 +20761,6 @@ export type UpdateFormDefinitionMutation = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -19087,7 +20783,6 @@ export type UpdateFormDefinitionMutation = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -19110,7 +20805,6 @@ export type UpdateFormDefinitionMutation = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -19172,6 +20866,7 @@ export type UpdateFormDefinitionMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    formula?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -19243,6 +20938,7 @@ export type UpdateFormDefinitionMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -19314,6 +21010,7 @@ export type UpdateFormDefinitionMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -19385,6 +21082,7 @@ export type UpdateFormDefinitionMutation = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -19456,6 +21154,7 @@ export type UpdateFormDefinitionMutation = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -19525,7 +21224,6 @@ export type CreateFormDefinitionMutation = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -19548,7 +21246,6 @@ export type CreateFormDefinitionMutation = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -19571,7 +21268,6 @@ export type CreateFormDefinitionMutation = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -19594,7 +21290,6 @@ export type CreateFormDefinitionMutation = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -19617,7 +21312,6 @@ export type CreateFormDefinitionMutation = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -19679,6 +21373,7 @@ export type CreateFormDefinitionMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    formula?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -19750,6 +21445,7 @@ export type CreateFormDefinitionMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -19821,6 +21517,7 @@ export type CreateFormDefinitionMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -19892,6 +21589,7 @@ export type CreateFormDefinitionMutation = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -19963,6 +21661,7 @@ export type CreateFormDefinitionMutation = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -20032,7 +21731,6 @@ export type DeleteFormDefinitionMutation = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -20055,7 +21753,6 @@ export type DeleteFormDefinitionMutation = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -20078,7 +21775,6 @@ export type DeleteFormDefinitionMutation = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -20101,7 +21797,6 @@ export type DeleteFormDefinitionMutation = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -20124,7 +21819,6 @@ export type DeleteFormDefinitionMutation = {
                   readOnly: boolean;
                   repeats: boolean;
                   pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill: boolean;
@@ -20186,6 +21880,7 @@ export type DeleteFormDefinitionMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
+                    formula?: string | null;
                     autofillBehavior: EnableBehavior;
                     autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
@@ -20257,6 +21952,7 @@ export type DeleteFormDefinitionMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -20328,6 +22024,7 @@ export type DeleteFormDefinitionMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -20399,6 +22096,7 @@ export type DeleteFormDefinitionMutation = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -20470,6 +22168,7 @@ export type DeleteFormDefinitionMutation = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -20560,7 +22259,6 @@ export type GetFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -20583,7 +22281,6 @@ export type GetFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -20606,7 +22303,6 @@ export type GetFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -20629,7 +22325,6 @@ export type GetFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -20652,7 +22347,6 @@ export type GetFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -20714,6 +22408,7 @@ export type GetFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -20785,6 +22480,7 @@ export type GetFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -20856,6 +22552,7 @@ export type GetFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -20927,6 +22624,7 @@ export type GetFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -20998,6 +22696,7 @@ export type GetFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -21049,7 +22748,6 @@ export type GetStaticFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -21072,7 +22770,6 @@ export type GetStaticFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -21095,7 +22792,6 @@ export type GetStaticFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -21118,7 +22814,6 @@ export type GetStaticFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -21141,7 +22836,6 @@ export type GetStaticFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -21203,6 +22897,7 @@ export type GetStaticFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -21274,6 +22969,7 @@ export type GetStaticFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -21345,6 +23041,7 @@ export type GetStaticFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -21416,6 +23113,7 @@ export type GetStaticFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -21487,6 +23185,7 @@ export type GetStaticFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -21539,7 +23238,6 @@ export type GetServiceFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -21562,7 +23260,6 @@ export type GetServiceFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -21585,7 +23282,6 @@ export type GetServiceFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -21608,7 +23304,6 @@ export type GetServiceFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -21631,7 +23326,6 @@ export type GetServiceFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -21693,6 +23387,7 @@ export type GetServiceFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -21764,6 +23459,7 @@ export type GetServiceFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -21835,6 +23531,7 @@ export type GetServiceFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -21906,6 +23603,7 @@ export type GetServiceFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -21977,6 +23675,7 @@ export type GetServiceFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -22031,7 +23730,6 @@ export type GetAssessmentFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -22054,7 +23752,6 @@ export type GetAssessmentFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -22077,7 +23774,6 @@ export type GetAssessmentFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -22100,7 +23796,6 @@ export type GetAssessmentFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -22123,7 +23818,6 @@ export type GetAssessmentFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -22185,6 +23879,7 @@ export type GetAssessmentFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -22256,6 +23951,7 @@ export type GetAssessmentFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -22327,6 +24023,7 @@ export type GetAssessmentFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -22398,6 +24095,7 @@ export type GetAssessmentFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -22469,6 +24167,7 @@ export type GetAssessmentFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -22521,7 +24220,6 @@ export type GetFormDefinitionForEditorQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -22544,7 +24242,6 @@ export type GetFormDefinitionForEditorQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -22567,7 +24264,6 @@ export type GetFormDefinitionForEditorQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -22590,7 +24286,6 @@ export type GetFormDefinitionForEditorQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -22613,7 +24308,6 @@ export type GetFormDefinitionForEditorQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -22675,6 +24369,7 @@ export type GetFormDefinitionForEditorQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -22746,6 +24441,7 @@ export type GetFormDefinitionForEditorQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -22817,6 +24513,7 @@ export type GetFormDefinitionForEditorQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -22888,6 +24585,7 @@ export type GetFormDefinitionForEditorQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -22959,6 +24657,7 @@ export type GetFormDefinitionForEditorQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -22980,6 +24679,7 @@ export type GetFormDefinitionForEditorQuery = {
 };
 
 export type GetFormDefinitionsQueryVariables = Exact<{
+  filters?: InputMaybe<FormDefinitionFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -23031,7 +24731,6 @@ export type GetParsedFormDefinitionQuery = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -23054,7 +24753,6 @@ export type GetParsedFormDefinitionQuery = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -23077,7 +24775,6 @@ export type GetParsedFormDefinitionQuery = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -23100,7 +24797,6 @@ export type GetParsedFormDefinitionQuery = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -23123,7 +24819,6 @@ export type GetParsedFormDefinitionQuery = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -23185,6 +24880,7 @@ export type GetParsedFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -23256,6 +24952,7 @@ export type GetParsedFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -23327,6 +25024,7 @@ export type GetParsedFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -23398,6 +25096,7 @@ export type GetParsedFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -23469,6 +25168,7 @@ export type GetParsedFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -23596,6 +25296,7 @@ export type SubmitFormMutation = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -23805,6 +25506,53 @@ export type SubmitFormMutation = {
             name: string;
             email: string;
           } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            fieldType: CustomDataElementType;
+            repeats: boolean;
+            displayHooks: Array<DisplayHook>;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                email: string;
+              } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated?: string | null;
+              dateUpdated?: string | null;
+              user?: {
+                __typename: 'ApplicationUser';
+                id: string;
+                name: string;
+                email: string;
+              } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'Enrollment';
@@ -24189,6 +25937,7 @@ export type SubmitFormMutation = {
             canManageDeniedReferrals: boolean;
             canManageIncomingReferrals: boolean;
             canManageOutgoingReferrals: boolean;
+            canManageExternalFormSubmissions: boolean;
           };
           user?: {
             __typename: 'ApplicationUser';
@@ -24249,6 +25998,18 @@ export type SubmitFormMutation = {
             role: DataCollectionFeatureRole;
             dataCollectedAbout: DataCollectedAbout;
             legacy: boolean;
+          }>;
+          serviceTypes: Array<{
+            __typename?: 'ServiceType';
+            id: string;
+            name: string;
+            hud: boolean;
+            hudRecordType?: RecordType | null;
+            hudTypeProvided?: ServiceTypeProvided | null;
+            category: string;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            supportsBulkAssignment: boolean;
           }>;
           projectCocs: {
             __typename?: 'ProjectCocsPaginated';
@@ -24319,11 +26080,13 @@ export type SubmitFormMutation = {
             __typename?: 'ServiceType';
             id: string;
             name: string;
+            hud: boolean;
             hudRecordType?: RecordType | null;
             hudTypeProvided?: ServiceTypeProvided | null;
             category: string;
             dateCreated?: string | null;
             dateUpdated?: string | null;
+            supportsBulkAssignment: boolean;
           };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
@@ -24421,6 +26184,7 @@ export type HouseholdFieldsFragment = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -24497,6 +26261,7 @@ export type HouseholdClientFieldsFragment = {
       canEditClient: boolean;
       canDeleteClient: boolean;
       canViewDob: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -24655,6 +26420,7 @@ export type GetHouseholdQuery = {
           canEditClient: boolean;
           canDeleteClient: boolean;
           canViewDob: boolean;
+          canViewClientName: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -25170,6 +26936,7 @@ export type OrganizationFieldsFragment = {
 export type GetOrganizationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<OrganizationFilterOptions>;
 }>;
 
 export type GetOrganizationsQuery = {
@@ -25382,6 +27149,7 @@ export type ProjectAllFieldsFragment = {
     canManageDeniedReferrals: boolean;
     canManageIncomingReferrals: boolean;
     canManageOutgoingReferrals: boolean;
+    canManageExternalFormSubmissions: boolean;
   };
   user?: {
     __typename: 'ApplicationUser';
@@ -25443,6 +27211,18 @@ export type ProjectAllFieldsFragment = {
     dataCollectedAbout: DataCollectedAbout;
     legacy: boolean;
   }>;
+  serviceTypes: Array<{
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hud: boolean;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+  }>;
   projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
 };
 
@@ -25483,7 +27263,6 @@ export type OccurrencePointFormFieldsFragment = {
         readOnly: boolean;
         repeats: boolean;
         pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill: boolean;
@@ -25506,7 +27285,6 @@ export type OccurrencePointFormFieldsFragment = {
           readOnly: boolean;
           repeats: boolean;
           pickListReference?: string | null;
-          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill: boolean;
@@ -25529,7 +27307,6 @@ export type OccurrencePointFormFieldsFragment = {
             readOnly: boolean;
             repeats: boolean;
             pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill: boolean;
@@ -25552,7 +27329,6 @@ export type OccurrencePointFormFieldsFragment = {
               readOnly: boolean;
               repeats: boolean;
               pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill: boolean;
@@ -25575,7 +27351,6 @@ export type OccurrencePointFormFieldsFragment = {
                 readOnly: boolean;
                 repeats: boolean;
                 pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill: boolean;
@@ -25637,6 +27412,7 @@ export type OccurrencePointFormFieldsFragment = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
+                  formula?: string | null;
                   autofillBehavior: EnableBehavior;
                   autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
@@ -25708,6 +27484,7 @@ export type OccurrencePointFormFieldsFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
+                formula?: string | null;
                 autofillBehavior: EnableBehavior;
                 autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
@@ -25779,6 +27556,7 @@ export type OccurrencePointFormFieldsFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
+              formula?: string | null;
               autofillBehavior: EnableBehavior;
               autofillReadonly?: boolean | null;
               autofillWhen: Array<{
@@ -25850,6 +27628,7 @@ export type OccurrencePointFormFieldsFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
+            formula?: string | null;
             autofillBehavior: EnableBehavior;
             autofillReadonly?: boolean | null;
             autofillWhen: Array<{
@@ -25921,6 +27700,7 @@ export type OccurrencePointFormFieldsFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
+          formula?: string | null;
           autofillBehavior: EnableBehavior;
           autofillReadonly?: boolean | null;
           autofillWhen: Array<{
@@ -26135,6 +27915,7 @@ export type GetProjectQuery = {
       canManageDeniedReferrals: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
+      canManageExternalFormSubmissions: boolean;
     };
     user?: {
       __typename: 'ApplicationUser';
@@ -26196,6 +27977,18 @@ export type GetProjectQuery = {
       dataCollectedAbout: DataCollectedAbout;
       legacy: boolean;
     }>;
+    serviceTypes: Array<{
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hud: boolean;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
+    }>;
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   } | null;
 };
@@ -26226,6 +28019,7 @@ export type GetProjectPermissionsQuery = {
       canManageDeniedReferrals: boolean;
       canManageIncomingReferrals: boolean;
       canManageOutgoingReferrals: boolean;
+      canManageExternalFormSubmissions: boolean;
     };
   } | null;
 };
@@ -26373,16 +28167,6 @@ export type GetProjectServicesQuery = {
         __typename?: 'Service';
         id: string;
         dateProvided?: string | null;
-        faAmount?: number | null;
-        faStartDate?: string | null;
-        faEndDate?: string | null;
-        movingOnOtherType?: string | null;
-        referralOutcome?: PathReferralOutcome | null;
-        subTypeProvided?: ServiceSubTypeProvided | null;
-        otherTypeProvided?: string | null;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-        dateDeleted?: string | null;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -26400,69 +28184,18 @@ export type GetProjectServicesQuery = {
             nameSuffix?: string | null;
           };
         };
-        user?: {
-          __typename: 'ApplicationUser';
-          id: string;
-          name: string;
-          email: string;
-        } | null;
         serviceType: {
           __typename?: 'ServiceType';
           id: string;
           name: string;
+          hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
         };
-        customDataElements: Array<{
-          __typename?: 'CustomDataElement';
-          id: string;
-          key: string;
-          label: string;
-          fieldType: CustomDataElementType;
-          repeats: boolean;
-          displayHooks: Array<DisplayHook>;
-          value?: {
-            __typename?: 'CustomDataElementValue';
-            id: string;
-            valueBoolean?: boolean | null;
-            valueDate?: string | null;
-            valueFloat?: number | null;
-            valueInteger?: number | null;
-            valueJson?: any | null;
-            valueString?: string | null;
-            valueText?: string | null;
-            dateCreated?: string | null;
-            dateUpdated?: string | null;
-            user?: {
-              __typename: 'ApplicationUser';
-              id: string;
-              name: string;
-              email: string;
-            } | null;
-          } | null;
-          values?: Array<{
-            __typename?: 'CustomDataElementValue';
-            id: string;
-            valueBoolean?: boolean | null;
-            valueDate?: string | null;
-            valueFloat?: number | null;
-            valueInteger?: number | null;
-            valueJson?: any | null;
-            valueString?: string | null;
-            valueText?: string | null;
-            dateCreated?: string | null;
-            dateUpdated?: string | null;
-            user?: {
-              __typename: 'ApplicationUser';
-              id: string;
-              name: string;
-              email: string;
-            } | null;
-          }> | null;
-        }>;
       }>;
     };
   } | null;
@@ -27149,6 +28882,189 @@ export type DeleteCeParticipationMutation = {
   } | null;
 };
 
+export type ProjectConfigFieldsFragment = {
+  __typename?: 'ProjectConfig';
+  id: string;
+  configType: ProjectConfigType;
+  organizationId?: string | null;
+  projectId?: string | null;
+  projectType?: ProjectType | null;
+  configOptions?: any | null;
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  } | null;
+  project?: { __typename?: 'Project'; id: string; projectName: string } | null;
+};
+
+export type CreateProjectConfigMutationVariables = Exact<{
+  input: ProjectConfigInput;
+}>;
+
+export type CreateProjectConfigMutation = {
+  __typename?: 'Mutation';
+  createProjectConfig?: {
+    __typename?: 'CreateProjectConfigPayload';
+    projectConfig?: {
+      __typename?: 'ProjectConfig';
+      id: string;
+      configType: ProjectConfigType;
+      organizationId?: string | null;
+      projectId?: string | null;
+      projectType?: ProjectType | null;
+      configOptions?: any | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      } | null;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type UpdateProjectConfigMutationVariables = Exact<{
+  input: ProjectConfigInput;
+  id: Scalars['ID']['input'];
+}>;
+
+export type UpdateProjectConfigMutation = {
+  __typename?: 'Mutation';
+  updateProjectConfig?: {
+    __typename?: 'UpdateProjectConfigPayload';
+    projectConfig?: {
+      __typename?: 'ProjectConfig';
+      id: string;
+      configType: ProjectConfigType;
+      organizationId?: string | null;
+      projectId?: string | null;
+      projectType?: ProjectType | null;
+      configOptions?: any | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      } | null;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteProjectConfigMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteProjectConfigMutation = {
+  __typename?: 'Mutation';
+  deleteProjectConfig?: {
+    __typename?: 'DeleteProjectConfigPayload';
+    projectConfig?: {
+      __typename?: 'ProjectConfig';
+      id: string;
+      configType: ProjectConfigType;
+      organizationId?: string | null;
+      projectId?: string | null;
+      projectType?: ProjectType | null;
+      configOptions?: any | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      } | null;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type GetProjectConfigsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetProjectConfigsQuery = {
+  __typename?: 'Query';
+  projectConfigs: {
+    __typename?: 'ProjectConfigsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'ProjectConfig';
+      id: string;
+      configType: ProjectConfigType;
+      organizationId?: string | null;
+      projectId?: string | null;
+      projectType?: ProjectType | null;
+      configOptions?: any | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      } | null;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+      } | null;
+    }>;
+  };
+};
+
 export type VoidReferralRequestMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -27263,6 +29179,7 @@ export type GetReferralPostingQuery = {
           canEditClient: boolean;
           canDeleteClient: boolean;
           canViewDob: boolean;
+          canViewClientName: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -27383,6 +29300,7 @@ export type UpdateReferralPostingMutation = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -27517,6 +29435,7 @@ export type CreateOutgoingReferralPostingMutation = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -27709,6 +29628,7 @@ export type ReferralPostingDetailFieldsFragment = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -28129,11 +30049,31 @@ export type ServiceTypeFieldsFragment = {
   __typename?: 'ServiceType';
   id: string;
   name: string;
+  hud: boolean;
   hudRecordType?: RecordType | null;
   hudTypeProvided?: ServiceTypeProvided | null;
   category: string;
   dateCreated?: string | null;
   dateUpdated?: string | null;
+  supportsBulkAssignment: boolean;
+};
+
+export type ServiceBasicFieldsFragment = {
+  __typename?: 'Service';
+  id: string;
+  dateProvided?: string | null;
+  serviceType: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hud: boolean;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
+  };
 };
 
 export type ServiceFieldsFragment = {
@@ -28160,11 +30100,13 @@ export type ServiceFieldsFragment = {
     __typename?: 'ServiceType';
     id: string;
     name: string;
+    hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
+    supportsBulkAssignment: boolean;
   };
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -28259,11 +30201,13 @@ export type GetServiceQuery = {
       __typename?: 'ServiceType';
       id: string;
       name: string;
+      hud: boolean;
       hudRecordType?: RecordType | null;
       hudTypeProvided?: ServiceTypeProvided | null;
       category: string;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      supportsBulkAssignment: boolean;
     };
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -28325,115 +30269,13 @@ export type GetServiceTypeQuery = {
     __typename?: 'ServiceType';
     id: string;
     name: string;
+    hud: boolean;
     hudRecordType?: RecordType | null;
     hudTypeProvided?: ServiceTypeProvided | null;
     category: string;
     dateCreated?: string | null;
     dateUpdated?: string | null;
-  } | null;
-};
-
-export type AddServiceToEnrollmentMutationVariables = Exact<{
-  input: CreateServiceInput;
-}>;
-
-export type AddServiceToEnrollmentMutation = {
-  __typename?: 'Mutation';
-  createService?: {
-    __typename?: 'CreateServicePayload';
-    clientMutationId?: string | null;
-    service?: {
-      __typename?: 'Service';
-      id: string;
-      dateProvided?: string | null;
-      faAmount?: number | null;
-      faStartDate?: string | null;
-      faEndDate?: string | null;
-      movingOnOtherType?: string | null;
-      referralOutcome?: PathReferralOutcome | null;
-      subTypeProvided?: ServiceSubTypeProvided | null;
-      otherTypeProvided?: string | null;
-      dateCreated?: string | null;
-      dateUpdated?: string | null;
-      dateDeleted?: string | null;
-      user?: {
-        __typename: 'ApplicationUser';
-        id: string;
-        name: string;
-        email: string;
-      } | null;
-      serviceType: {
-        __typename?: 'ServiceType';
-        id: string;
-        name: string;
-        hudRecordType?: RecordType | null;
-        hudTypeProvided?: ServiceTypeProvided | null;
-        category: string;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-      };
-      customDataElements: Array<{
-        __typename?: 'CustomDataElement';
-        id: string;
-        key: string;
-        label: string;
-        fieldType: CustomDataElementType;
-        repeats: boolean;
-        displayHooks: Array<DisplayHook>;
-        value?: {
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-          user?: {
-            __typename: 'ApplicationUser';
-            id: string;
-            name: string;
-            email: string;
-          } | null;
-        } | null;
-        values?: Array<{
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-          dateCreated?: string | null;
-          dateUpdated?: string | null;
-          user?: {
-            __typename: 'ApplicationUser';
-            id: string;
-            name: string;
-            email: string;
-          } | null;
-        }> | null;
-      }>;
-    } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
+    supportsBulkAssignment: boolean;
   } | null;
 };
 
@@ -28470,11 +30312,13 @@ export type DeleteServiceMutation = {
         __typename?: 'ServiceType';
         id: string;
         name: string;
+        hud: boolean;
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       };
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -28582,11 +30426,13 @@ export type GetEnrollmentServicesQuery = {
           __typename?: 'ServiceType';
           id: string;
           name: string;
+          hud: boolean;
           hudRecordType?: RecordType | null;
           hudTypeProvided?: ServiceTypeProvided | null;
           category: string;
           dateCreated?: string | null;
           dateUpdated?: string | null;
+          supportsBulkAssignment: boolean;
         };
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -28640,34 +30486,6 @@ export type GetEnrollmentServicesQuery = {
   } | null;
 };
 
-export type GetServiceCategoriesQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetServiceCategoriesQuery = {
-  __typename?: 'Query';
-  serviceCategories: {
-    __typename?: 'ServiceCategoriesPaginated';
-    offset: number;
-    limit: number;
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'ServiceCategory';
-      id: string;
-      name: string;
-      hud: boolean;
-      serviceTypes: {
-        __typename?: 'ServiceTypesPaginated';
-        offset: number;
-        limit: number;
-        nodesCount: number;
-        nodes: Array<{ __typename?: 'ServiceType'; id: string; name: string }>;
-      };
-    }>;
-  };
-};
-
 export type GetServiceCategoryQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -28709,11 +30527,13 @@ export type GetServiceCategoryTypesQuery = {
         __typename?: 'ServiceType';
         id: string;
         name: string;
+        hud: boolean;
         hudRecordType?: RecordType | null;
         hudTypeProvided?: ServiceTypeProvided | null;
         category: string;
         dateCreated?: string | null;
         dateUpdated?: string | null;
+        supportsBulkAssignment: boolean;
       }>;
     };
   } | null;
@@ -29157,6 +30977,7 @@ export const RootPermissionsFragmentDoc = gql`
     canAuditUsers
     canEditClients
     canViewClients
+    canViewClientName
     canDeleteClients
     canEditOrganization
     canDeleteOrganization
@@ -29184,6 +31005,7 @@ export const RootPermissionsFragmentDoc = gql`
     canSplitHouseholds
     canConfigureDataCollection
     canViewClientAlerts
+    canManageExternalFormSubmissions
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`
@@ -29378,6 +31200,25 @@ export const CeAssessmentFieldsFragmentDoc = gql`
     dateUpdated
     dateDeleted
     prioritizationStatus
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export const EventFieldsFragmentDoc = gql`
+  fragment EventFields on Event {
+    id
+    event
+    eventDate
+    locationCrisisOrPhHousing
+    probSolDivRrResult
+    referralCaseManageAfter
+    referralResult
+    resultDate
+    dateCreated
+    dateUpdated
+    dateDeleted
     user {
       ...UserFields
     }
@@ -29598,6 +31439,9 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     ceAssessment {
       ...CeAssessmentFields
     }
+    event {
+      ...EventFields
+    }
     incomeBenefit {
       ...IncomeBenefitValues
       customDataElements {
@@ -29633,6 +31477,7 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${EnrollmentValuesFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${CeAssessmentFieldsFragmentDoc}
+  ${EventFieldsFragmentDoc}
   ${IncomeBenefitValuesFragmentDoc}
   ${DisabilityGroupValuesFragmentDoc}
   ${HealthAndDvValuesFragmentDoc}
@@ -29772,21 +31617,24 @@ export const EnrollmentAuditEventFieldsFragmentDoc = gql`
     }
   }
 `;
-export const AutoExitConfigFieldsFragmentDoc = gql`
-  fragment AutoExitConfigFields on AutoExitConfig {
+export const UserAuditEventFieldsFragmentDoc = gql`
+  fragment UserAuditEventFields on ApplicationUserAuditEvent {
     id
-    lengthOfAbsenceDays
-    organizationId
-    organization {
-      id
-      organizationName
-    }
+    createdAt
+    event
+    objectChanges
+    recordName
+    graphqlType
+    recordId
+    clientId
+    clientName
+    enrollmentId
     projectId
-    project {
+    projectName
+    user {
       id
-      projectName
+      name
     }
-    projectType
   }
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`
@@ -29821,6 +31669,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewDob
     canViewFullSsn
     canViewPartialSsn
+    canViewClientName
     canEditEnrollments
     canDeleteEnrollments
     canViewEnrollmentDetails
@@ -30025,6 +31874,19 @@ export const OrganizationNameFieldsFragmentDoc = gql`
     organizationName
   }
 `;
+export const ServiceTypeFieldsFragmentDoc = gql`
+  fragment ServiceTypeFields on ServiceType {
+    id
+    name
+    hud
+    hudRecordType
+    hudTypeProvided
+    category
+    dateCreated
+    dateUpdated
+    supportsBulkAssignment
+  }
+`;
 export const FormRuleFieldsFragmentDoc = gql`
   fragment FormRuleFields on FormRule {
     id
@@ -30049,9 +31911,29 @@ export const FormRuleFieldsFragmentDoc = gql`
     }
     createdAt
     updatedAt
+    serviceCategory {
+      id
+      name
+      hud
+    }
+    serviceType {
+      ...ServiceTypeFields
+    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
+  ${ServiceTypeFieldsFragmentDoc}
+`;
+export const ServiceTypeConfigFieldsFragmentDoc = gql`
+  fragment ServiceTypeConfigFields on ServiceType {
+    ...ServiceTypeFields
+    formDefinitions {
+      id
+      cacheKey
+      title
+    }
+  }
+  ${ServiceTypeFieldsFragmentDoc}
 `;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
@@ -30087,8 +31969,12 @@ export const CustomCaseNoteFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const ClientEnrollmentFieldsFragmentDoc = gql`
   fragment ClientEnrollmentFields on Enrollment {
@@ -30262,7 +32148,6 @@ export const ItemFieldsFragmentDoc = gql`
       customFieldKey
     }
     pickListReference
-    serviceDetailType
     size
     assessmentDate
     prefill
@@ -30298,6 +32183,7 @@ export const ItemFieldsFragmentDoc = gql`
       valueBoolean
       valueNumber
       sumQuestions
+      formula
       autofillBehavior
       autofillReadonly
       autofillWhen {
@@ -30365,6 +32251,7 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canManageDeniedReferrals
     canManageIncomingReferrals
     canManageOutgoingReferrals
+    canManageExternalFormSubmissions
   }
 `;
 export const AllEnrollmentDetailsFragmentDoc = gql`
@@ -30384,6 +32271,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     client {
       hudChronic
       ...ClientNameDobVet
+      ssn
       customDataElements {
         ...CustomDataElementFields
       }
@@ -30433,24 +32321,22 @@ export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
 `;
-export const EventFieldsFragmentDoc = gql`
-  fragment EventFields on Event {
+export const ExternalFormSubmissionFieldsFragmentDoc = gql`
+  fragment ExternalFormSubmissionFields on ExternalFormSubmission {
     id
-    event
-    eventDate
-    locationCrisisOrPhHousing
-    probSolDivRrResult
-    referralCaseManageAfter
-    referralResult
-    resultDate
-    dateCreated
-    dateUpdated
-    dateDeleted
-    user {
-      ...UserFields
+    submittedAt
+    spam
+    status
+    notes
+    definition {
+      identifier
+      cacheKey
+    }
+    customDataElements {
+      ...CustomDataElementFields
     }
   }
-  ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -30698,6 +32584,9 @@ export const ProjectAllFieldsFragmentDoc = gql`
     dataCollectionFeatures {
       ...DataCollectionFeatureFields
     }
+    serviceTypes {
+      ...ServiceTypeFields
+    }
     ...ProjectCocCount
   }
   ${ProjectNameAndTypeFragmentDoc}
@@ -30707,6 +32596,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${DataCollectionFeatureFieldsFragmentDoc}
+  ${ServiceTypeFieldsFragmentDoc}
   ${ProjectCocCountFragmentDoc}
 `;
 export const ProjectCocFieldsFragmentDoc = gql`
@@ -30809,6 +32699,24 @@ export const ProjectEnrollmentQueryEnrollmentFieldsFragmentDoc = gql`
     }
   }
   ${ProjectEnrollmentFieldsFragmentDoc}
+`;
+export const ProjectConfigFieldsFragmentDoc = gql`
+  fragment ProjectConfigFields on ProjectConfig {
+    id
+    configType
+    organizationId
+    organization {
+      id
+      organizationName
+    }
+    projectId
+    project {
+      id
+      projectName
+    }
+    projectType
+    configOptions
+  }
 `;
 export const ReferralPostingFieldsFragmentDoc = gql`
   fragment ReferralPostingFields on ReferralPosting {
@@ -30996,16 +32904,15 @@ export const ScanCardFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
-export const ServiceTypeFieldsFragmentDoc = gql`
-  fragment ServiceTypeFields on ServiceType {
+export const ServiceBasicFieldsFragmentDoc = gql`
+  fragment ServiceBasicFields on Service {
     id
-    name
-    hudRecordType
-    hudTypeProvided
-    category
-    dateCreated
-    dateUpdated
+    dateProvided
+    serviceType {
+      ...ServiceTypeFields
+    }
   }
+  ${ServiceTypeFieldsFragmentDoc}
 `;
 export const ServiceFieldsFragmentDoc = gql`
   fragment ServiceFields on Service {
@@ -32214,400 +34121,193 @@ export type GetEnrollmentAuditEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentAuditEventsQuery,
   GetEnrollmentAuditEventsQueryVariables
 >;
-export const CreateAutoExitConfigDocument = gql`
-  mutation CreateAutoExitConfig($input: AutoExitConfigInput!) {
-    createAutoExitConfig(input: $input) {
-      autoExitConfig {
-        ...AutoExitConfigFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${AutoExitConfigFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type CreateAutoExitConfigMutationFn = Apollo.MutationFunction<
-  CreateAutoExitConfigMutation,
-  CreateAutoExitConfigMutationVariables
->;
-
-/**
- * __useCreateAutoExitConfigMutation__
- *
- * To run a mutation, you first call `useCreateAutoExitConfigMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAutoExitConfigMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createAutoExitConfigMutation, { data, loading, error }] = useCreateAutoExitConfigMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateAutoExitConfigMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateAutoExitConfigMutation,
-    CreateAutoExitConfigMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateAutoExitConfigMutation,
-    CreateAutoExitConfigMutationVariables
-  >(CreateAutoExitConfigDocument, options);
-}
-export type CreateAutoExitConfigMutationHookResult = ReturnType<
-  typeof useCreateAutoExitConfigMutation
->;
-export type CreateAutoExitConfigMutationResult =
-  Apollo.MutationResult<CreateAutoExitConfigMutation>;
-export type CreateAutoExitConfigMutationOptions = Apollo.BaseMutationOptions<
-  CreateAutoExitConfigMutation,
-  CreateAutoExitConfigMutationVariables
->;
-export const UpdateAutoExitConfigDocument = gql`
-  mutation UpdateAutoExitConfig($input: AutoExitConfigInput!, $id: ID!) {
-    updateAutoExitConfig(input: $input, id: $id) {
-      autoExitConfig {
-        ...AutoExitConfigFields
-      }
-      errors {
-        ...ValidationErrorFields
+export const GetUserAuditEventsDocument = gql`
+  query GetUserAuditEvents(
+    $id: ID!
+    $limit: Int = 25
+    $offset: Int = 0
+    $filters: UserAuditEventFilterOptions = null
+  ) {
+    user(id: $id) {
+      id
+      auditHistory(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...UserAuditEventFields
+        }
       }
     }
   }
-  ${AutoExitConfigFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
+  ${UserAuditEventFieldsFragmentDoc}
 `;
-export type UpdateAutoExitConfigMutationFn = Apollo.MutationFunction<
-  UpdateAutoExitConfigMutation,
-  UpdateAutoExitConfigMutationVariables
->;
 
 /**
- * __useUpdateAutoExitConfigMutation__
+ * __useGetUserAuditEventsQuery__
  *
- * To run a mutation, you first call `useUpdateAutoExitConfigMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAutoExitConfigMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useGetUserAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateAutoExitConfigMutation, { data, loading, error }] = useUpdateAutoExitConfigMutation({
- *   variables: {
- *      input: // value for 'input'
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useUpdateAutoExitConfigMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateAutoExitConfigMutation,
-    UpdateAutoExitConfigMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateAutoExitConfigMutation,
-    UpdateAutoExitConfigMutationVariables
-  >(UpdateAutoExitConfigDocument, options);
-}
-export type UpdateAutoExitConfigMutationHookResult = ReturnType<
-  typeof useUpdateAutoExitConfigMutation
->;
-export type UpdateAutoExitConfigMutationResult =
-  Apollo.MutationResult<UpdateAutoExitConfigMutation>;
-export type UpdateAutoExitConfigMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAutoExitConfigMutation,
-  UpdateAutoExitConfigMutationVariables
->;
-export const DeleteAutoExitConfigDocument = gql`
-  mutation DeleteAutoExitConfig($id: ID!) {
-    deleteAutoExitConfig(id: $id) {
-      autoExitConfig {
-        ...AutoExitConfigFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${AutoExitConfigFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type DeleteAutoExitConfigMutationFn = Apollo.MutationFunction<
-  DeleteAutoExitConfigMutation,
-  DeleteAutoExitConfigMutationVariables
->;
-
-/**
- * __useDeleteAutoExitConfigMutation__
- *
- * To run a mutation, you first call `useDeleteAutoExitConfigMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteAutoExitConfigMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [deleteAutoExitConfigMutation, { data, loading, error }] = useDeleteAutoExitConfigMutation({
+ * const { data, loading, error } = useGetUserAuditEventsQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
-export function useDeleteAutoExitConfigMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteAutoExitConfigMutation,
-    DeleteAutoExitConfigMutationVariables
+export function useGetUserAuditEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteAutoExitConfigMutation,
-    DeleteAutoExitConfigMutationVariables
-  >(DeleteAutoExitConfigDocument, options);
+  return Apollo.useQuery<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >(GetUserAuditEventsDocument, options);
 }
-export type DeleteAutoExitConfigMutationHookResult = ReturnType<
-  typeof useDeleteAutoExitConfigMutation
+export function useGetUserAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserAuditEventsQuery,
+    GetUserAuditEventsQueryVariables
+  >(GetUserAuditEventsDocument, options);
+}
+export type GetUserAuditEventsQueryHookResult = ReturnType<
+  typeof useGetUserAuditEventsQuery
 >;
-export type DeleteAutoExitConfigMutationResult =
-  Apollo.MutationResult<DeleteAutoExitConfigMutation>;
-export type DeleteAutoExitConfigMutationOptions = Apollo.BaseMutationOptions<
-  DeleteAutoExitConfigMutation,
-  DeleteAutoExitConfigMutationVariables
+export type GetUserAuditEventsLazyQueryHookResult = ReturnType<
+  typeof useGetUserAuditEventsLazyQuery
 >;
-export const GetAutoExitConfigsDocument = gql`
-  query GetAutoExitConfigs($limit: Int = 10, $offset: Int = 0) {
-    autoExitConfigs(limit: $limit, offset: $offset) {
+export type GetUserAuditEventsQueryResult = Apollo.QueryResult<
+  GetUserAuditEventsQuery,
+  GetUserAuditEventsQueryVariables
+>;
+export const BulkServicesClientSearchDocument = gql`
+  query BulkServicesClientSearch(
+    $textSearch: String!
+    $filters: ClientFilterOptions
+    $limit: Int
+    $offset: Int
+    $sortOrder: ClientSortOption
+    $serviceTypeId: ID!
+    $projectId: ID!
+    $serviceDate: ISO8601Date!
+  ) {
+    clientSearch(
+      input: { textSearch: $textSearch }
+      filters: $filters
+      limit: $limit
+      offset: $offset
+      sortOrder: $sortOrder
+    ) {
       offset
       limit
       nodesCount
       nodes {
-        ...AutoExitConfigFields
-      }
-    }
-  }
-  ${AutoExitConfigFieldsFragmentDoc}
-`;
-
-/**
- * __useGetAutoExitConfigsQuery__
- *
- * To run a query within a React component, call `useGetAutoExitConfigsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAutoExitConfigsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAutoExitConfigsQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetAutoExitConfigsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetAutoExitConfigsQuery,
-    GetAutoExitConfigsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetAutoExitConfigsQuery,
-    GetAutoExitConfigsQueryVariables
-  >(GetAutoExitConfigsDocument, options);
-}
-export function useGetAutoExitConfigsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAutoExitConfigsQuery,
-    GetAutoExitConfigsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetAutoExitConfigsQuery,
-    GetAutoExitConfigsQueryVariables
-  >(GetAutoExitConfigsDocument, options);
-}
-export type GetAutoExitConfigsQueryHookResult = ReturnType<
-  typeof useGetAutoExitConfigsQuery
->;
-export type GetAutoExitConfigsLazyQueryHookResult = ReturnType<
-  typeof useGetAutoExitConfigsLazyQuery
->;
-export type GetAutoExitConfigsQueryResult = Apollo.QueryResult<
-  GetAutoExitConfigsQuery,
-  GetAutoExitConfigsQueryVariables
->;
-export const GetProjectEnrollmentsForBedNightsDocument = gql`
-  query GetProjectEnrollmentsForBedNights(
-    $id: ID!
-    $filters: EnrollmentsForProjectFilterOptions
-    $sortOrder: EnrollmentSortOption
-    $limit: Int = 10
-    $offset: Int = 0
-  ) {
-    project(id: $id) {
-      id
-      enrollments(
-        limit: $limit
-        offset: $offset
-        sortOrder: $sortOrder
-        filters: $filters
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...ProjectEnrollmentFields
-          lastBedNightDate
-        }
-      }
-    }
-  }
-  ${ProjectEnrollmentFieldsFragmentDoc}
-`;
-
-/**
- * __useGetProjectEnrollmentsForBedNightsQuery__
- *
- * To run a query within a React component, call `useGetProjectEnrollmentsForBedNightsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectEnrollmentsForBedNightsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProjectEnrollmentsForBedNightsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      filters: // value for 'filters'
- *      sortOrder: // value for 'sortOrder'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetProjectEnrollmentsForBedNightsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetProjectEnrollmentsForBedNightsQuery,
-    GetProjectEnrollmentsForBedNightsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetProjectEnrollmentsForBedNightsQuery,
-    GetProjectEnrollmentsForBedNightsQueryVariables
-  >(GetProjectEnrollmentsForBedNightsDocument, options);
-}
-export function useGetProjectEnrollmentsForBedNightsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetProjectEnrollmentsForBedNightsQuery,
-    GetProjectEnrollmentsForBedNightsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetProjectEnrollmentsForBedNightsQuery,
-    GetProjectEnrollmentsForBedNightsQueryVariables
-  >(GetProjectEnrollmentsForBedNightsDocument, options);
-}
-export type GetProjectEnrollmentsForBedNightsQueryHookResult = ReturnType<
-  typeof useGetProjectEnrollmentsForBedNightsQuery
->;
-export type GetProjectEnrollmentsForBedNightsLazyQueryHookResult = ReturnType<
-  typeof useGetProjectEnrollmentsForBedNightsLazyQuery
->;
-export type GetProjectEnrollmentsForBedNightsQueryResult = Apollo.QueryResult<
-  GetProjectEnrollmentsForBedNightsQuery,
-  GetProjectEnrollmentsForBedNightsQueryVariables
->;
-export const GetBedNightsOnDateDocument = gql`
-  query GetBedNightsOnDate($projectId: ID!, $bedNightOnDate: ISO8601Date!) {
-    project(id: $projectId) {
-      id
-      enrollments(
-        limit: 500
-        offset: 0
-        filters: { bedNightOnDate: $bedNightOnDate }
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
+        id
+        ...ClientName
+        ...ClientIdentificationFields
+        activeEnrollment(projectId: $projectId, openOnDate: $serviceDate) {
           id
+          entryDate
+          lastServiceDate(serviceTypeId: $serviceTypeId)
+          services(
+            limit: 25
+            offset: 0
+            filters: {
+              dateProvided: $serviceDate
+              serviceType: [$serviceTypeId]
+            }
+          ) {
+            limit
+            offset
+            nodesCount
+            nodes {
+              id
+            }
+          }
         }
       }
     }
   }
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
 `;
 
 /**
- * __useGetBedNightsOnDateQuery__
+ * __useBulkServicesClientSearchQuery__
  *
- * To run a query within a React component, call `useGetBedNightsOnDateQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBedNightsOnDateQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useBulkServicesClientSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBulkServicesClientSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetBedNightsOnDateQuery({
+ * const { data, loading, error } = useBulkServicesClientSearchQuery({
  *   variables: {
+ *      textSearch: // value for 'textSearch'
+ *      filters: // value for 'filters'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *      serviceTypeId: // value for 'serviceTypeId'
  *      projectId: // value for 'projectId'
- *      bedNightOnDate: // value for 'bedNightOnDate'
+ *      serviceDate: // value for 'serviceDate'
  *   },
  * });
  */
-export function useGetBedNightsOnDateQuery(
+export function useBulkServicesClientSearchQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetBedNightsOnDateQuery,
-    GetBedNightsOnDateQueryVariables
+    BulkServicesClientSearchQuery,
+    BulkServicesClientSearchQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetBedNightsOnDateQuery,
-    GetBedNightsOnDateQueryVariables
-  >(GetBedNightsOnDateDocument, options);
+    BulkServicesClientSearchQuery,
+    BulkServicesClientSearchQueryVariables
+  >(BulkServicesClientSearchDocument, options);
 }
-export function useGetBedNightsOnDateLazyQuery(
+export function useBulkServicesClientSearchLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetBedNightsOnDateQuery,
-    GetBedNightsOnDateQueryVariables
+    BulkServicesClientSearchQuery,
+    BulkServicesClientSearchQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetBedNightsOnDateQuery,
-    GetBedNightsOnDateQueryVariables
-  >(GetBedNightsOnDateDocument, options);
+    BulkServicesClientSearchQuery,
+    BulkServicesClientSearchQueryVariables
+  >(BulkServicesClientSearchDocument, options);
 }
-export type GetBedNightsOnDateQueryHookResult = ReturnType<
-  typeof useGetBedNightsOnDateQuery
+export type BulkServicesClientSearchQueryHookResult = ReturnType<
+  typeof useBulkServicesClientSearchQuery
 >;
-export type GetBedNightsOnDateLazyQueryHookResult = ReturnType<
-  typeof useGetBedNightsOnDateLazyQuery
+export type BulkServicesClientSearchLazyQueryHookResult = ReturnType<
+  typeof useBulkServicesClientSearchLazyQuery
 >;
-export type GetBedNightsOnDateQueryResult = Apollo.QueryResult<
-  GetBedNightsOnDateQuery,
-  GetBedNightsOnDateQueryVariables
+export type BulkServicesClientSearchQueryResult = Apollo.QueryResult<
+  BulkServicesClientSearchQuery,
+  BulkServicesClientSearchQueryVariables
 >;
-export const UpdateBedNightsDocument = gql`
-  mutation UpdateBedNights($input: UpdateBedNightsInput!) {
-    updateBedNights(input: $input) {
+export const BulkAssignServiceDocument = gql`
+  mutation BulkAssignService($input: BulkAssignServiceInput!) {
+    bulkAssignService(input: $input) {
       success
       errors {
         ...ValidationErrorFields
@@ -32616,48 +34316,103 @@ export const UpdateBedNightsDocument = gql`
   }
   ${ValidationErrorFieldsFragmentDoc}
 `;
-export type UpdateBedNightsMutationFn = Apollo.MutationFunction<
-  UpdateBedNightsMutation,
-  UpdateBedNightsMutationVariables
+export type BulkAssignServiceMutationFn = Apollo.MutationFunction<
+  BulkAssignServiceMutation,
+  BulkAssignServiceMutationVariables
 >;
 
 /**
- * __useUpdateBedNightsMutation__
+ * __useBulkAssignServiceMutation__
  *
- * To run a mutation, you first call `useUpdateBedNightsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateBedNightsMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useBulkAssignServiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBulkAssignServiceMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateBedNightsMutation, { data, loading, error }] = useUpdateBedNightsMutation({
+ * const [bulkAssignServiceMutation, { data, loading, error }] = useBulkAssignServiceMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUpdateBedNightsMutation(
+export function useBulkAssignServiceMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    UpdateBedNightsMutation,
-    UpdateBedNightsMutationVariables
+    BulkAssignServiceMutation,
+    BulkAssignServiceMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
-    UpdateBedNightsMutation,
-    UpdateBedNightsMutationVariables
-  >(UpdateBedNightsDocument, options);
+    BulkAssignServiceMutation,
+    BulkAssignServiceMutationVariables
+  >(BulkAssignServiceDocument, options);
 }
-export type UpdateBedNightsMutationHookResult = ReturnType<
-  typeof useUpdateBedNightsMutation
+export type BulkAssignServiceMutationHookResult = ReturnType<
+  typeof useBulkAssignServiceMutation
 >;
-export type UpdateBedNightsMutationResult =
-  Apollo.MutationResult<UpdateBedNightsMutation>;
-export type UpdateBedNightsMutationOptions = Apollo.BaseMutationOptions<
-  UpdateBedNightsMutation,
-  UpdateBedNightsMutationVariables
+export type BulkAssignServiceMutationResult =
+  Apollo.MutationResult<BulkAssignServiceMutation>;
+export type BulkAssignServiceMutationOptions = Apollo.BaseMutationOptions<
+  BulkAssignServiceMutation,
+  BulkAssignServiceMutationVariables
+>;
+export const BulkRemoveServiceDocument = gql`
+  mutation BulkRemoveService($projectId: ID!, $serviceIds: [ID!]!) {
+    bulkRemoveService(projectId: $projectId, serviceIds: $serviceIds) {
+      success
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type BulkRemoveServiceMutationFn = Apollo.MutationFunction<
+  BulkRemoveServiceMutation,
+  BulkRemoveServiceMutationVariables
+>;
+
+/**
+ * __useBulkRemoveServiceMutation__
+ *
+ * To run a mutation, you first call `useBulkRemoveServiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBulkRemoveServiceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bulkRemoveServiceMutation, { data, loading, error }] = useBulkRemoveServiceMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      serviceIds: // value for 'serviceIds'
+ *   },
+ * });
+ */
+export function useBulkRemoveServiceMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    BulkRemoveServiceMutation,
+    BulkRemoveServiceMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    BulkRemoveServiceMutation,
+    BulkRemoveServiceMutationVariables
+  >(BulkRemoveServiceDocument, options);
+}
+export type BulkRemoveServiceMutationHookResult = ReturnType<
+  typeof useBulkRemoveServiceMutation
+>;
+export type BulkRemoveServiceMutationResult =
+  Apollo.MutationResult<BulkRemoveServiceMutation>;
+export type BulkRemoveServiceMutationOptions = Apollo.BaseMutationOptions<
+  BulkRemoveServiceMutation,
+  BulkRemoveServiceMutationVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
@@ -33964,6 +35719,348 @@ export type BulkMergeClientsMutationOptions = Apollo.BaseMutationOptions<
   BulkMergeClientsMutation,
   BulkMergeClientsMutationVariables
 >;
+export const CreateServiceTypeDocument = gql`
+  mutation CreateServiceType($input: ServiceTypeInput!) {
+    createServiceType(input: $input) {
+      serviceType {
+        ...ServiceTypeFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ServiceTypeFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateServiceTypeMutationFn = Apollo.MutationFunction<
+  CreateServiceTypeMutation,
+  CreateServiceTypeMutationVariables
+>;
+
+/**
+ * __useCreateServiceTypeMutation__
+ *
+ * To run a mutation, you first call `useCreateServiceTypeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateServiceTypeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createServiceTypeMutation, { data, loading, error }] = useCreateServiceTypeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateServiceTypeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateServiceTypeMutation,
+    CreateServiceTypeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateServiceTypeMutation,
+    CreateServiceTypeMutationVariables
+  >(CreateServiceTypeDocument, options);
+}
+export type CreateServiceTypeMutationHookResult = ReturnType<
+  typeof useCreateServiceTypeMutation
+>;
+export type CreateServiceTypeMutationResult =
+  Apollo.MutationResult<CreateServiceTypeMutation>;
+export type CreateServiceTypeMutationOptions = Apollo.BaseMutationOptions<
+  CreateServiceTypeMutation,
+  CreateServiceTypeMutationVariables
+>;
+export const DeleteServiceTypeDocument = gql`
+  mutation DeleteServiceType($id: ID!) {
+    deleteServiceType(id: $id) {
+      serviceType {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteServiceTypeMutationFn = Apollo.MutationFunction<
+  DeleteServiceTypeMutation,
+  DeleteServiceTypeMutationVariables
+>;
+
+/**
+ * __useDeleteServiceTypeMutation__
+ *
+ * To run a mutation, you first call `useDeleteServiceTypeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteServiceTypeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteServiceTypeMutation, { data, loading, error }] = useDeleteServiceTypeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteServiceTypeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteServiceTypeMutation,
+    DeleteServiceTypeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteServiceTypeMutation,
+    DeleteServiceTypeMutationVariables
+  >(DeleteServiceTypeDocument, options);
+}
+export type DeleteServiceTypeMutationHookResult = ReturnType<
+  typeof useDeleteServiceTypeMutation
+>;
+export type DeleteServiceTypeMutationResult =
+  Apollo.MutationResult<DeleteServiceTypeMutation>;
+export type DeleteServiceTypeMutationOptions = Apollo.BaseMutationOptions<
+  DeleteServiceTypeMutation,
+  DeleteServiceTypeMutationVariables
+>;
+export const RenameServiceTypeDocument = gql`
+  mutation RenameServiceType($id: ID!, $name: String!) {
+    renameServiceType(id: $id, name: $name) {
+      serviceType {
+        ...ServiceTypeFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ServiceTypeFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type RenameServiceTypeMutationFn = Apollo.MutationFunction<
+  RenameServiceTypeMutation,
+  RenameServiceTypeMutationVariables
+>;
+
+/**
+ * __useRenameServiceTypeMutation__
+ *
+ * To run a mutation, you first call `useRenameServiceTypeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRenameServiceTypeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [renameServiceTypeMutation, { data, loading, error }] = useRenameServiceTypeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useRenameServiceTypeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RenameServiceTypeMutation,
+    RenameServiceTypeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RenameServiceTypeMutation,
+    RenameServiceTypeMutationVariables
+  >(RenameServiceTypeDocument, options);
+}
+export type RenameServiceTypeMutationHookResult = ReturnType<
+  typeof useRenameServiceTypeMutation
+>;
+export type RenameServiceTypeMutationResult =
+  Apollo.MutationResult<RenameServiceTypeMutation>;
+export type RenameServiceTypeMutationOptions = Apollo.BaseMutationOptions<
+  RenameServiceTypeMutation,
+  RenameServiceTypeMutationVariables
+>;
+export const CreateServiceCategoryDocument = gql`
+  mutation CreateServiceCategory($name: String!) {
+    createServiceCategory(name: $name) {
+      serviceCategory {
+        ...ServiceCategoryFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ServiceCategoryFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateServiceCategoryMutationFn = Apollo.MutationFunction<
+  CreateServiceCategoryMutation,
+  CreateServiceCategoryMutationVariables
+>;
+
+/**
+ * __useCreateServiceCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateServiceCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateServiceCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createServiceCategoryMutation, { data, loading, error }] = useCreateServiceCategoryMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateServiceCategoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateServiceCategoryMutation,
+    CreateServiceCategoryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateServiceCategoryMutation,
+    CreateServiceCategoryMutationVariables
+  >(CreateServiceCategoryDocument, options);
+}
+export type CreateServiceCategoryMutationHookResult = ReturnType<
+  typeof useCreateServiceCategoryMutation
+>;
+export type CreateServiceCategoryMutationResult =
+  Apollo.MutationResult<CreateServiceCategoryMutation>;
+export type CreateServiceCategoryMutationOptions = Apollo.BaseMutationOptions<
+  CreateServiceCategoryMutation,
+  CreateServiceCategoryMutationVariables
+>;
+export const DeleteServiceCategoryDocument = gql`
+  mutation DeleteServiceCategory($id: ID!) {
+    deleteServiceCategory(id: $id) {
+      serviceCategory {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteServiceCategoryMutationFn = Apollo.MutationFunction<
+  DeleteServiceCategoryMutation,
+  DeleteServiceCategoryMutationVariables
+>;
+
+/**
+ * __useDeleteServiceCategoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteServiceCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteServiceCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteServiceCategoryMutation, { data, loading, error }] = useDeleteServiceCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteServiceCategoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteServiceCategoryMutation,
+    DeleteServiceCategoryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteServiceCategoryMutation,
+    DeleteServiceCategoryMutationVariables
+  >(DeleteServiceCategoryDocument, options);
+}
+export type DeleteServiceCategoryMutationHookResult = ReturnType<
+  typeof useDeleteServiceCategoryMutation
+>;
+export type DeleteServiceCategoryMutationResult =
+  Apollo.MutationResult<DeleteServiceCategoryMutation>;
+export type DeleteServiceCategoryMutationOptions = Apollo.BaseMutationOptions<
+  DeleteServiceCategoryMutation,
+  DeleteServiceCategoryMutationVariables
+>;
+export const RenameServiceCategoryDocument = gql`
+  mutation RenameServiceCategory($id: ID!, $name: String!) {
+    renameServiceCategory(id: $id, name: $name) {
+      serviceCategory {
+        ...ServiceCategoryFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ServiceCategoryFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type RenameServiceCategoryMutationFn = Apollo.MutationFunction<
+  RenameServiceCategoryMutation,
+  RenameServiceCategoryMutationVariables
+>;
+
+/**
+ * __useRenameServiceCategoryMutation__
+ *
+ * To run a mutation, you first call `useRenameServiceCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRenameServiceCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [renameServiceCategoryMutation, { data, loading, error }] = useRenameServiceCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useRenameServiceCategoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RenameServiceCategoryMutation,
+    RenameServiceCategoryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RenameServiceCategoryMutation,
+    RenameServiceCategoryMutationVariables
+  >(RenameServiceCategoryDocument, options);
+}
+export type RenameServiceCategoryMutationHookResult = ReturnType<
+  typeof useRenameServiceCategoryMutation
+>;
+export type RenameServiceCategoryMutationResult =
+  Apollo.MutationResult<RenameServiceCategoryMutation>;
+export type RenameServiceCategoryMutationOptions = Apollo.BaseMutationOptions<
+  RenameServiceCategoryMutation,
+  RenameServiceCategoryMutationVariables
+>;
 export const GetFormRulesDocument = gql`
   query GetFormRules(
     $limit: Int = 25
@@ -34295,6 +36392,200 @@ export type UpdateFormRuleMutationResult =
 export type UpdateFormRuleMutationOptions = Apollo.BaseMutationOptions<
   UpdateFormRuleMutation,
   UpdateFormRuleMutationVariables
+>;
+export const GetServiceTypesDocument = gql`
+  query GetServiceTypes(
+    $filters: ServiceTypeFilterOptions
+    $limit: Int = 25
+    $offset: Int = 0
+  ) {
+    serviceTypes(filters: $filters, limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceTypeConfigFields
+      }
+    }
+  }
+  ${ServiceTypeConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceTypesQuery__
+ *
+ * To run a query within a React component, call `useGetServiceTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceTypesQuery({
+ *   variables: {
+ *      filters: // value for 'filters'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetServiceTypesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetServiceTypesQuery,
+    GetServiceTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetServiceTypesQuery, GetServiceTypesQueryVariables>(
+    GetServiceTypesDocument,
+    options
+  );
+}
+export function useGetServiceTypesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceTypesQuery,
+    GetServiceTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceTypesQuery,
+    GetServiceTypesQueryVariables
+  >(GetServiceTypesDocument, options);
+}
+export type GetServiceTypesQueryHookResult = ReturnType<
+  typeof useGetServiceTypesQuery
+>;
+export type GetServiceTypesLazyQueryHookResult = ReturnType<
+  typeof useGetServiceTypesLazyQuery
+>;
+export type GetServiceTypesQueryResult = Apollo.QueryResult<
+  GetServiceTypesQuery,
+  GetServiceTypesQueryVariables
+>;
+export const GetServiceCategoriesDocument = gql`
+  query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
+    serviceCategories(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceCategoryFields
+      }
+    }
+  }
+  ${ServiceCategoryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetServiceCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceCategoriesQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetServiceCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >(GetServiceCategoriesDocument, options);
+}
+export function useGetServiceCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceCategoriesQuery,
+    GetServiceCategoriesQueryVariables
+  >(GetServiceCategoriesDocument, options);
+}
+export type GetServiceCategoriesQueryHookResult = ReturnType<
+  typeof useGetServiceCategoriesQuery
+>;
+export type GetServiceCategoriesLazyQueryHookResult = ReturnType<
+  typeof useGetServiceCategoriesLazyQuery
+>;
+export type GetServiceCategoriesQueryResult = Apollo.QueryResult<
+  GetServiceCategoriesQuery,
+  GetServiceCategoriesQueryVariables
+>;
+export const GetServiceTypeDetailsDocument = gql`
+  query GetServiceTypeDetails($id: ID!) {
+    serviceType(id: $id) {
+      ...ServiceTypeConfigFields
+    }
+  }
+  ${ServiceTypeConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceTypeDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetServiceTypeDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceTypeDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceTypeDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetServiceTypeDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceTypeDetailsQuery,
+    GetServiceTypeDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceTypeDetailsQuery,
+    GetServiceTypeDetailsQueryVariables
+  >(GetServiceTypeDetailsDocument, options);
+}
+export function useGetServiceTypeDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceTypeDetailsQuery,
+    GetServiceTypeDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceTypeDetailsQuery,
+    GetServiceTypeDetailsQueryVariables
+  >(GetServiceTypeDetailsDocument, options);
+}
+export type GetServiceTypeDetailsQueryHookResult = ReturnType<
+  typeof useGetServiceTypeDetailsQuery
+>;
+export type GetServiceTypeDetailsLazyQueryHookResult = ReturnType<
+  typeof useGetServiceTypeDetailsLazyQuery
+>;
+export type GetServiceTypeDetailsQueryResult = Apollo.QueryResult<
+  GetServiceTypeDetailsQuery,
+  GetServiceTypeDetailsQueryVariables
 >;
 export const GetEnrollmentCurrentLivingSituationsDocument = gql`
   query GetEnrollmentCurrentLivingSituations(
@@ -35331,6 +37622,267 @@ export type GetEnrollmentPermissionsQueryResult = Apollo.QueryResult<
   GetEnrollmentPermissionsQuery,
   GetEnrollmentPermissionsQueryVariables
 >;
+export const UpdateExternalFormSubmissionDocument = gql`
+  mutation UpdateExternalFormSubmission(
+    $id: ID!
+    $input: ExternalFormSubmissionInput!
+  ) {
+    updateExternalFormSubmission(id: $id, input: $input) {
+      externalFormSubmission {
+        ...ExternalFormSubmissionFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ExternalFormSubmissionFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateExternalFormSubmissionMutationFn = Apollo.MutationFunction<
+  UpdateExternalFormSubmissionMutation,
+  UpdateExternalFormSubmissionMutationVariables
+>;
+
+/**
+ * __useUpdateExternalFormSubmissionMutation__
+ *
+ * To run a mutation, you first call `useUpdateExternalFormSubmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateExternalFormSubmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateExternalFormSubmissionMutation, { data, loading, error }] = useUpdateExternalFormSubmissionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateExternalFormSubmissionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateExternalFormSubmissionMutation,
+    UpdateExternalFormSubmissionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateExternalFormSubmissionMutation,
+    UpdateExternalFormSubmissionMutationVariables
+  >(UpdateExternalFormSubmissionDocument, options);
+}
+export type UpdateExternalFormSubmissionMutationHookResult = ReturnType<
+  typeof useUpdateExternalFormSubmissionMutation
+>;
+export type UpdateExternalFormSubmissionMutationResult =
+  Apollo.MutationResult<UpdateExternalFormSubmissionMutation>;
+export type UpdateExternalFormSubmissionMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateExternalFormSubmissionMutation,
+    UpdateExternalFormSubmissionMutationVariables
+  >;
+export const DeleteExternalFormSubmissionDocument = gql`
+  mutation DeleteExternalFormSubmission($id: ID!) {
+    deleteExternalFormSubmission(id: $id) {
+      externalFormSubmission {
+        ...ExternalFormSubmissionFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ExternalFormSubmissionFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteExternalFormSubmissionMutationFn = Apollo.MutationFunction<
+  DeleteExternalFormSubmissionMutation,
+  DeleteExternalFormSubmissionMutationVariables
+>;
+
+/**
+ * __useDeleteExternalFormSubmissionMutation__
+ *
+ * To run a mutation, you first call `useDeleteExternalFormSubmissionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteExternalFormSubmissionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteExternalFormSubmissionMutation, { data, loading, error }] = useDeleteExternalFormSubmissionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteExternalFormSubmissionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteExternalFormSubmissionMutation,
+    DeleteExternalFormSubmissionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteExternalFormSubmissionMutation,
+    DeleteExternalFormSubmissionMutationVariables
+  >(DeleteExternalFormSubmissionDocument, options);
+}
+export type DeleteExternalFormSubmissionMutationHookResult = ReturnType<
+  typeof useDeleteExternalFormSubmissionMutation
+>;
+export type DeleteExternalFormSubmissionMutationResult =
+  Apollo.MutationResult<DeleteExternalFormSubmissionMutation>;
+export type DeleteExternalFormSubmissionMutationOptions =
+  Apollo.BaseMutationOptions<
+    DeleteExternalFormSubmissionMutation,
+    DeleteExternalFormSubmissionMutationVariables
+  >;
+export const GetProjectExternalFormSubmissionsDocument = gql`
+  query GetProjectExternalFormSubmissions(
+    $id: ID!
+    $formDefinitionIdentifier: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ExternalFormSubmissionFilterOptions = null
+  ) {
+    project(id: $id) {
+      id
+      externalFormSubmissions(
+        limit: $limit
+        offset: $offset
+        formDefinitionIdentifier: $formDefinitionIdentifier
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ExternalFormSubmissionFields
+        }
+      }
+    }
+  }
+  ${ExternalFormSubmissionFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectExternalFormSubmissionsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectExternalFormSubmissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectExternalFormSubmissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectExternalFormSubmissionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      formDefinitionIdentifier: // value for 'formDefinitionIdentifier'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetProjectExternalFormSubmissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectExternalFormSubmissionsQuery,
+    GetProjectExternalFormSubmissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectExternalFormSubmissionsQuery,
+    GetProjectExternalFormSubmissionsQueryVariables
+  >(GetProjectExternalFormSubmissionsDocument, options);
+}
+export function useGetProjectExternalFormSubmissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectExternalFormSubmissionsQuery,
+    GetProjectExternalFormSubmissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectExternalFormSubmissionsQuery,
+    GetProjectExternalFormSubmissionsQueryVariables
+  >(GetProjectExternalFormSubmissionsDocument, options);
+}
+export type GetProjectExternalFormSubmissionsQueryHookResult = ReturnType<
+  typeof useGetProjectExternalFormSubmissionsQuery
+>;
+export type GetProjectExternalFormSubmissionsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectExternalFormSubmissionsLazyQuery
+>;
+export type GetProjectExternalFormSubmissionsQueryResult = Apollo.QueryResult<
+  GetProjectExternalFormSubmissionsQuery,
+  GetProjectExternalFormSubmissionsQueryVariables
+>;
+export const GetExternalFormDefinitionDocument = gql`
+  query GetExternalFormDefinition($formDefinitionIdentifier: String!) {
+    externalFormDefinition(identifier: $formDefinitionIdentifier) {
+      ...FormDefinitionFields
+    }
+  }
+  ${FormDefinitionFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetExternalFormDefinitionQuery__
+ *
+ * To run a query within a React component, call `useGetExternalFormDefinitionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExternalFormDefinitionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExternalFormDefinitionQuery({
+ *   variables: {
+ *      formDefinitionIdentifier: // value for 'formDefinitionIdentifier'
+ *   },
+ * });
+ */
+export function useGetExternalFormDefinitionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetExternalFormDefinitionQuery,
+    GetExternalFormDefinitionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetExternalFormDefinitionQuery,
+    GetExternalFormDefinitionQueryVariables
+  >(GetExternalFormDefinitionDocument, options);
+}
+export function useGetExternalFormDefinitionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetExternalFormDefinitionQuery,
+    GetExternalFormDefinitionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetExternalFormDefinitionQuery,
+    GetExternalFormDefinitionQueryVariables
+  >(GetExternalFormDefinitionDocument, options);
+}
+export type GetExternalFormDefinitionQueryHookResult = ReturnType<
+  typeof useGetExternalFormDefinitionQuery
+>;
+export type GetExternalFormDefinitionLazyQueryHookResult = ReturnType<
+  typeof useGetExternalFormDefinitionLazyQuery
+>;
+export type GetExternalFormDefinitionQueryResult = Apollo.QueryResult<
+  GetExternalFormDefinitionQuery,
+  GetExternalFormDefinitionQueryVariables
+>;
 export const UpdateFormDefinitionDocument = gql`
   mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
     updateFormDefinition(id: $id, input: $input) {
@@ -35890,8 +38442,12 @@ export type GetFormDefinitionForEditorQueryResult = Apollo.QueryResult<
   GetFormDefinitionForEditorQueryVariables
 >;
 export const GetFormDefinitionsDocument = gql`
-  query GetFormDefinitions($limit: Int = 25, $offset: Int = 0) {
-    formDefinitions(limit: $limit, offset: $offset) {
+  query GetFormDefinitions(
+    $filters: FormDefinitionFilterOptions
+    $limit: Int = 25
+    $offset: Int = 0
+  ) {
+    formDefinitions(filters: $filters, limit: $limit, offset: $offset) {
       offset
       limit
       nodesCount
@@ -35919,6 +38475,7 @@ export const GetFormDefinitionsDocument = gql`
  * @example
  * const { data, loading, error } = useGetFormDefinitionsQuery({
  *   variables: {
+ *      filters: // value for 'filters'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
@@ -36643,8 +39200,17 @@ export type ClearRecentItemsMutationOptions = Apollo.BaseMutationOptions<
   ClearRecentItemsMutationVariables
 >;
 export const GetOrganizationsDocument = gql`
-  query GetOrganizations($limit: Int = 10, $offset: Int = 0) {
-    organizations(limit: $limit, offset: $offset, sortOrder: NAME) {
+  query GetOrganizations(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: OrganizationFilterOptions
+  ) {
+    organizations(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: NAME
+    ) {
       nodesCount
       nodes {
         ...OrganizationNameFields
@@ -36671,6 +39237,7 @@ export const GetOrganizationsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -37301,7 +39868,7 @@ export const GetProjectServicesDocument = gql`
         limit
         nodesCount
         nodes {
-          ...ServiceFields
+          ...ServiceBasicFields
           enrollment {
             id
             entryDate
@@ -37314,7 +39881,7 @@ export const GetProjectServicesDocument = gql`
       }
     }
   }
-  ${ServiceFieldsFragmentDoc}
+  ${ServiceBasicFieldsFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
 `;
 
@@ -38462,6 +41029,243 @@ export type DeleteCeParticipationMutationOptions = Apollo.BaseMutationOptions<
   DeleteCeParticipationMutation,
   DeleteCeParticipationMutationVariables
 >;
+export const CreateProjectConfigDocument = gql`
+  mutation CreateProjectConfig($input: ProjectConfigInput!) {
+    createProjectConfig(input: $input) {
+      projectConfig {
+        ...ProjectConfigFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ProjectConfigFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateProjectConfigMutationFn = Apollo.MutationFunction<
+  CreateProjectConfigMutation,
+  CreateProjectConfigMutationVariables
+>;
+
+/**
+ * __useCreateProjectConfigMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectConfigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectConfigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectConfigMutation, { data, loading, error }] = useCreateProjectConfigMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateProjectConfigMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateProjectConfigMutation,
+    CreateProjectConfigMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateProjectConfigMutation,
+    CreateProjectConfigMutationVariables
+  >(CreateProjectConfigDocument, options);
+}
+export type CreateProjectConfigMutationHookResult = ReturnType<
+  typeof useCreateProjectConfigMutation
+>;
+export type CreateProjectConfigMutationResult =
+  Apollo.MutationResult<CreateProjectConfigMutation>;
+export type CreateProjectConfigMutationOptions = Apollo.BaseMutationOptions<
+  CreateProjectConfigMutation,
+  CreateProjectConfigMutationVariables
+>;
+export const UpdateProjectConfigDocument = gql`
+  mutation UpdateProjectConfig($input: ProjectConfigInput!, $id: ID!) {
+    updateProjectConfig(input: $input, id: $id) {
+      projectConfig {
+        ...ProjectConfigFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ProjectConfigFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateProjectConfigMutationFn = Apollo.MutationFunction<
+  UpdateProjectConfigMutation,
+  UpdateProjectConfigMutationVariables
+>;
+
+/**
+ * __useUpdateProjectConfigMutation__
+ *
+ * To run a mutation, you first call `useUpdateProjectConfigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProjectConfigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProjectConfigMutation, { data, loading, error }] = useUpdateProjectConfigMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdateProjectConfigMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateProjectConfigMutation,
+    UpdateProjectConfigMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateProjectConfigMutation,
+    UpdateProjectConfigMutationVariables
+  >(UpdateProjectConfigDocument, options);
+}
+export type UpdateProjectConfigMutationHookResult = ReturnType<
+  typeof useUpdateProjectConfigMutation
+>;
+export type UpdateProjectConfigMutationResult =
+  Apollo.MutationResult<UpdateProjectConfigMutation>;
+export type UpdateProjectConfigMutationOptions = Apollo.BaseMutationOptions<
+  UpdateProjectConfigMutation,
+  UpdateProjectConfigMutationVariables
+>;
+export const DeleteProjectConfigDocument = gql`
+  mutation DeleteProjectConfig($id: ID!) {
+    deleteProjectConfig(id: $id) {
+      projectConfig {
+        ...ProjectConfigFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ProjectConfigFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteProjectConfigMutationFn = Apollo.MutationFunction<
+  DeleteProjectConfigMutation,
+  DeleteProjectConfigMutationVariables
+>;
+
+/**
+ * __useDeleteProjectConfigMutation__
+ *
+ * To run a mutation, you first call `useDeleteProjectConfigMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProjectConfigMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteProjectConfigMutation, { data, loading, error }] = useDeleteProjectConfigMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteProjectConfigMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteProjectConfigMutation,
+    DeleteProjectConfigMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteProjectConfigMutation,
+    DeleteProjectConfigMutationVariables
+  >(DeleteProjectConfigDocument, options);
+}
+export type DeleteProjectConfigMutationHookResult = ReturnType<
+  typeof useDeleteProjectConfigMutation
+>;
+export type DeleteProjectConfigMutationResult =
+  Apollo.MutationResult<DeleteProjectConfigMutation>;
+export type DeleteProjectConfigMutationOptions = Apollo.BaseMutationOptions<
+  DeleteProjectConfigMutation,
+  DeleteProjectConfigMutationVariables
+>;
+export const GetProjectConfigsDocument = gql`
+  query GetProjectConfigs($limit: Int = 10, $offset: Int = 0) {
+    projectConfigs(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ProjectConfigFields
+      }
+    }
+  }
+  ${ProjectConfigFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectConfigsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectConfigsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectConfigsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectConfigsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProjectConfigsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetProjectConfigsQuery,
+    GetProjectConfigsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectConfigsQuery,
+    GetProjectConfigsQueryVariables
+  >(GetProjectConfigsDocument, options);
+}
+export function useGetProjectConfigsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectConfigsQuery,
+    GetProjectConfigsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectConfigsQuery,
+    GetProjectConfigsQueryVariables
+  >(GetProjectConfigsDocument, options);
+}
+export type GetProjectConfigsQueryHookResult = ReturnType<
+  typeof useGetProjectConfigsQuery
+>;
+export type GetProjectConfigsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectConfigsLazyQuery
+>;
+export type GetProjectConfigsQueryResult = Apollo.QueryResult<
+  GetProjectConfigsQuery,
+  GetProjectConfigsQueryVariables
+>;
 export const VoidReferralRequestDocument = gql`
   mutation VoidReferralRequest($id: ID!) {
     voidReferralRequest(referralRequestId: $id) {
@@ -39175,64 +41979,6 @@ export type GetServiceTypeQueryResult = Apollo.QueryResult<
   GetServiceTypeQuery,
   GetServiceTypeQueryVariables
 >;
-export const AddServiceToEnrollmentDocument = gql`
-  mutation AddServiceToEnrollment($input: CreateServiceInput!) {
-    createService(input: $input) {
-      clientMutationId
-      service {
-        ...ServiceFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ServiceFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type AddServiceToEnrollmentMutationFn = Apollo.MutationFunction<
-  AddServiceToEnrollmentMutation,
-  AddServiceToEnrollmentMutationVariables
->;
-
-/**
- * __useAddServiceToEnrollmentMutation__
- *
- * To run a mutation, you first call `useAddServiceToEnrollmentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddServiceToEnrollmentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addServiceToEnrollmentMutation, { data, loading, error }] = useAddServiceToEnrollmentMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useAddServiceToEnrollmentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddServiceToEnrollmentMutation,
-    AddServiceToEnrollmentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    AddServiceToEnrollmentMutation,
-    AddServiceToEnrollmentMutationVariables
-  >(AddServiceToEnrollmentDocument, options);
-}
-export type AddServiceToEnrollmentMutationHookResult = ReturnType<
-  typeof useAddServiceToEnrollmentMutation
->;
-export type AddServiceToEnrollmentMutationResult =
-  Apollo.MutationResult<AddServiceToEnrollmentMutation>;
-export type AddServiceToEnrollmentMutationOptions = Apollo.BaseMutationOptions<
-  AddServiceToEnrollmentMutation,
-  AddServiceToEnrollmentMutationVariables
->;
 export const DeleteServiceDocument = gql`
   mutation DeleteService($input: DeleteServiceInput!) {
     deleteService(input: $input) {
@@ -39365,71 +42111,6 @@ export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
 export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables
->;
-export const GetServiceCategoriesDocument = gql`
-  query GetServiceCategories($limit: Int = 25, $offset: Int = 0) {
-    serviceCategories(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...ServiceCategoryFields
-      }
-    }
-  }
-  ${ServiceCategoryFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceCategoriesQuery__
- *
- * To run a query within a React component, call `useGetServiceCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceCategoriesQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetServiceCategoriesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >(GetServiceCategoriesDocument, options);
-}
-export function useGetServiceCategoriesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetServiceCategoriesQuery,
-    GetServiceCategoriesQueryVariables
-  >(GetServiceCategoriesDocument, options);
-}
-export type GetServiceCategoriesQueryHookResult = ReturnType<
-  typeof useGetServiceCategoriesQuery
->;
-export type GetServiceCategoriesLazyQueryHookResult = ReturnType<
-  typeof useGetServiceCategoriesLazyQuery
->;
-export type GetServiceCategoriesQueryResult = Apollo.QueryResult<
-  GetServiceCategoriesQuery,
-  GetServiceCategoriesQueryVariables
 >;
 export const GetServiceCategoryDocument = gql`
   query GetServiceCategory($id: ID!) {

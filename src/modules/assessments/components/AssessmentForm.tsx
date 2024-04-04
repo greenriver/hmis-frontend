@@ -17,11 +17,14 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
+import { ClientNameDobSsn } from '@/modules/assessments/components/IndividualAssessment';
 import { ErrorState, hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
@@ -49,7 +52,7 @@ import {
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
-  clientId: string;
+  client: ClientNameDobSsn;
   formRole?: FormRole;
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
@@ -73,7 +76,7 @@ interface Props {
 
 const AssessmentForm: React.FC<Props> = ({
   assessment,
-  clientId,
+  client,
   assessmentTitle,
   formRole,
   definition,
@@ -124,6 +127,7 @@ const AssessmentForm: React.FC<Props> = ({
   );
 
   const isPrintView = useIsPrintView();
+  const isMobile = useIsMobile();
 
   const handleDirty = useCallback(
     (dirty: boolean) => {
@@ -144,9 +148,14 @@ const AssessmentForm: React.FC<Props> = ({
       entryDate: enrollment.entryDate,
       exitDate: enrollment.exitDate,
       projectName: enrollment.project.projectName,
+      clientFirstName: client.firstName,
+      clientMiddleInitial: client.middleName ? client.middleName[0] : '',
+      clientLastName: client.lastName,
+      clientDob: client.dob,
+      clientSsn: client.ssn,
       ...AlwaysPresentLocalConstants,
     }),
-    [enrollment]
+    [enrollment, client]
   );
 
   // Set initial values for the assessment. This happens on initial load,
@@ -268,6 +277,9 @@ const AssessmentForm: React.FC<Props> = ({
     handleUnlock,
   ]);
 
+  const isCustomAssessment = formRole === FormRole.CustomAssessment;
+  const showAutofill = !isCustomAssessment && !assessment && canEdit;
+
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
       <AssessmentFormSideBar
@@ -278,14 +290,14 @@ const AssessmentForm: React.FC<Props> = ({
         isPrintView={isPrintView}
         locked={locked}
         embeddedInWorkflow={embeddedInWorkflow}
+        showAutofill={showAutofill}
         onAutofill={() => setDialogOpen(true)}
-        canEdit={canEdit}
         top={top}
       />
     </Grid>
   );
 
-  const showNavigation = !isPrintView;
+  const showNavigation = !isPrintView && !isMobile;
 
   return (
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
@@ -298,6 +310,12 @@ const AssessmentForm: React.FC<Props> = ({
             locked={locked}
             allowUnlock={canEdit && !embeddedInWorkflow}
             onUnlock={handleUnlock}
+          />
+        )}
+        {showAutofill && !showNavigation && (
+          <AssessmentAutofillButton
+            sx={{ mb: 2 }}
+            onClick={() => setDialogOpen(true)}
           />
         )}
         {locked && assessment ? (
@@ -339,7 +357,7 @@ const AssessmentForm: React.FC<Props> = ({
             errors={errors}
             locked={locked}
             visible={visible}
-            clientId={clientId}
+            clientId={client.id}
             showSavePrompt
             alwaysShowSaveSlide={!!embeddedInWorkflow}
             FormActionProps={formActionsPropsWithLastUpdated}
@@ -356,7 +374,7 @@ const AssessmentForm: React.FC<Props> = ({
       {definition && (
         <RecordPickerDialog
           id='assessmentPickerDialog'
-          clientId={clientId}
+          clientId={client.id}
           open={dialogOpen}
           role={formRole}
           onSelected={onSelectAutofillRecord}

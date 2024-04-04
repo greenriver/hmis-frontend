@@ -1,6 +1,5 @@
-import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
-import { Box, Stack } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { useState } from 'react';
 
 import ProjectClientEnrollmentsTable, {
@@ -10,6 +9,7 @@ import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 
 import CommonToggle from '@/components/elements/CommonToggle';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import { HouseholdIcon } from '@/components/elements/SemanticIcons';
 import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import ClientSearchInput from '@/modules/search/components/ClientTextSearchInput';
@@ -40,9 +40,9 @@ const ProjectEnrollmentsTable = ({
   return (
     <>
       <Box py={2} px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Stack direction='row' gap={4}>
+        <Grid container direction='row' rowSpacing={2} columnSpacing={4}>
           {!modeProp && (
-            <Box>
+            <Grid item>
               <LabelWithContent
                 label='View enrollments by'
                 labelId='results-display-format-label'
@@ -56,11 +56,20 @@ const ProjectEnrollmentsTable = ({
                       (labelElement && labelElement.getAttribute('id')) ||
                       undefined
                     }
+                    sx={{
+                      '.MuiToggleButton-root': { fontWeight: 600 },
+                      '.MuiButtonBase-root.Mui-selected, .MuiButtonBase-root.Mui-selected:hover':
+                        {
+                          backgroundColor: (theme) =>
+                            theme.palette.primary.main,
+                          color: (theme) => theme.palette.primary.contrastText,
+                        },
+                    }}
                     items={[
                       {
                         value: 'households',
                         label: 'Households',
-                        Icon: PeopleIcon,
+                        Icon: HouseholdIcon,
                       },
                       {
                         value: 'clients',
@@ -71,9 +80,9 @@ const ProjectEnrollmentsTable = ({
                   />
                 )}
               />
-            </Box>
+            </Grid>
           )}
-          <Box flexGrow={1}>
+          <Grid item flexGrow={1}>
             {searchable ? (
               <ClientSearchInput
                 value={search || ''}
@@ -81,8 +90,8 @@ const ProjectEnrollmentsTable = ({
                 helperText={null}
               />
             ) : undefined}
-          </Box>
-        </Stack>
+          </Grid>
+        </Grid>
       </Box>
       {mode === 'clients' && (
         <ProjectClientEnrollmentsTable

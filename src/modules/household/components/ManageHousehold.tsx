@@ -13,6 +13,7 @@ import Loading from '@/components/elements/Loading';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -38,12 +39,14 @@ interface Props {
   householdId?: string;
   projectId: string;
   BackButton?: ReactNode;
+  renderBackButton?: (householdId?: string) => ReactNode;
 }
 
 const ManageHousehold = ({
   householdId: initialHouseholdId,
   projectId,
   BackButton,
+  renderBackButton,
 }: Props) => {
   const { globalFeatureFlags } = useHmisAppSettings();
   // This may be rendered either on the Project Dashboard or the Enrollment Dashboard. If on the Enrollment Dash, we need to treat the "current" client differently.
@@ -83,10 +86,18 @@ const ManageHousehold = ({
   }, [currentDashboardClientId, recentMembers, household, loading]);
 
   useScrollToHash(loading || recentMembersLoading);
+  const isMobile = useIsMobile();
 
   const columns: ColumnDef<ClientFieldsFragment | RecentHouseholdMember>[] =
     useMemo(() => {
-      const defaults = [...householdMemberColumns, ...addToEnrollmentColumns];
+      const defaults = [...householdMemberColumns];
+      if (isMobile) {
+        // On mobile, show enrollment button right next to the client name so user
+        // doesn't have to scroll to the right.
+        defaults.splice(1, 0, ...addToEnrollmentColumns);
+      } else {
+        defaults.push(...addToEnrollmentColumns);
+      }
       if (globalFeatureFlags?.mciId) {
         return [
           externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
@@ -94,7 +105,7 @@ const ManageHousehold = ({
         ];
       }
       return defaults;
-    }, [addToEnrollmentColumns, globalFeatureFlags?.mciId]);
+    }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
 
   const handleNewClientAdded = useCallback(
     (data: EnrollmentFieldsFragment) => {
@@ -138,6 +149,7 @@ const ManageHousehold = ({
         </TitleCard>
       )}
       {BackButton}
+      {renderBackButton && renderBackButton(householdId)}
       {recentEligibleMembers && recentEligibleMembers.length > 0 && (
         <>
           <TitleCard

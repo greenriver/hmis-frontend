@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useId } from 'react';
 
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 
@@ -19,12 +20,11 @@ interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
   highlight?: boolean; // toggle highlight state
   horizontal?: boolean;
-  inputWidth?: string | number;
+  inputWidth?: number;
 }
 export type TextInputProps = Props & DynamicInputCommonProps;
 
 export const horizontalInputSx: SxProps<Theme> = {
-  flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
 };
@@ -39,9 +39,11 @@ const TextInput = ({
   max,
   highlight,
   inputWidth,
+  maxWidth,
   sx,
   warnIfEmptyTreatment,
   ariaLabelledBy,
+  ariaLabel,
   id,
   ...props
 }: TextInputProps) => {
@@ -49,9 +51,11 @@ const TextInput = ({
   const htmlId = id || generatedId;
 
   let width = inputWidth;
-  if (!width && inputProps.inputMode === 'numeric') {
-    width = '120px';
+  if (!width && inputProps.inputMode === 'numeric' && !sx) {
+    width = 120;
   }
+
+  const isTiny = useIsMobile('sm');
 
   const textField = (
     <TextField
@@ -63,9 +67,9 @@ const TextInput = ({
       }
       autoComplete={formAutoCompleteOff}
       {...props}
-      sx={sx}
+      sx={{ maxWidth, ...sx }}
       inputProps={{
-        'aria-label': hiddenLabel ? String(label) : undefined,
+        'aria-label': hiddenLabel ? ariaLabel || String(label) : undefined,
         'aria-labelledby': ariaLabelledBy,
         minLength: min,
         maxLength: max,
@@ -82,7 +86,6 @@ const TextInput = ({
             ? 'alerts.low.background'
             : undefined,
           width,
-          minWidth: width,
           boxShadow: highlight
             ? (theme) => `0 0 8px ${theme.palette.warning.main}`
             : undefined,
@@ -117,10 +120,11 @@ const TextInput = ({
     return (
       <Stack
         sx={{
-          ...horizontalInputSx,
+          ...(!isTiny && horizontalInputSx),
           '.MuiFormHelperText-root':
             inputProps.inputMode === 'numeric' ? { width, mr: 0 } : {},
         }}
+        direction={{ xs: 'column', sm: 'row' }}
         justifyContent='space-between'
       >
         <Box sx={{ flexBasis: '80%' }}>
@@ -128,6 +132,7 @@ const TextInput = ({
             sx={(theme) => ({
               color: theme.palette.text.primary,
               fontSize: theme.typography.body2,
+              whiteSpace: 'unset', // unset the default value of 'nowrap'
             })}
             htmlFor={htmlId}
           >

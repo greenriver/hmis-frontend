@@ -51,13 +51,29 @@ const NewAssessmentMenu: React.FC<
   const clientId = enrollment.client.id;
 
   const getPath = useCallback(
-    (formRole: AssessmentRole, formDefinitionId?: string) =>
-      generateSafePath(EnrollmentDashboardRoutes.NEW_ASSESSMENT, {
+    (formRole: AssessmentRole, formDefinitionId?: string) => {
+      // For intake and exit, navigate to the specific Intake/Exit page
+      // so that assessment can be rendered in Household view if applicable
+      if (formRole === AssessmentRole.Intake) {
+        return generateSafePath(EnrollmentDashboardRoutes.INTAKE, {
+          clientId,
+          enrollmentId,
+        });
+      }
+      if (formRole === AssessmentRole.Exit) {
+        return generateSafePath(EnrollmentDashboardRoutes.EXIT, {
+          clientId,
+          enrollmentId,
+        });
+      }
+
+      return generateSafePath(EnrollmentDashboardRoutes.NEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         formRole,
         formDefinitionId,
-      }),
+      });
+    },
     [clientId, enrollmentId]
   );
 

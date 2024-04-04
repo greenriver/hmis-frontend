@@ -1,11 +1,21 @@
 fragment ServiceTypeFields on ServiceType {
   id
   name
+  hud
   hudRecordType
   hudTypeProvided
   category
   dateCreated
   dateUpdated
+  supportsBulkAssignment
+}
+
+fragment ServiceBasicFields on Service {
+  id
+  dateProvided
+  serviceType {
+    ...ServiceTypeFields
+  }
 }
 
 fragment ServiceFields on Service {

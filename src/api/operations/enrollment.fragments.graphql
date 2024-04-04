@@ -87,6 +87,7 @@ fragment AllEnrollmentDetails on Enrollment {
   client {
     hudChronic
     ...ClientNameDobVet
+    ssn
     customDataElements {
       ...CustomDataElementFields
     }
@@ -215,23 +216,6 @@ fragment SubmittedEnrollmentResultFields on Enrollment {
   ...EnrollmentOccurrencePointFields
   customDataElements {
     ...CustomDataElementFields
-  }
-}
-
-fragment EventFields on Event {
-  id
-  event
-  eventDate
-  locationCrisisOrPhHousing
-  probSolDivRrResult
-  referralCaseManageAfter
-  referralResult
-  resultDate
-  dateCreated
-  dateUpdated
-  dateDeleted
-  user {
-    ...UserFields
   }
 }
 

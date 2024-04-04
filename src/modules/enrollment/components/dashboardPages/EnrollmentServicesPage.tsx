@@ -14,10 +14,11 @@ import {
   GetEnrollmentServicesDocument,
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables,
+  ServiceBasicFieldsFragment,
   ServiceFieldsFragment,
 } from '@/types/gqlTypes';
 
-export const SERVICE_COLUMNS: ColumnDef<ServiceFieldsFragment>[] = [
+export const SERVICE_COLUMNS: ColumnDef<ServiceBasicFieldsFragment>[] = [
   {
     header: 'Date Provided',
     linkTreatment: true,
@@ -30,19 +31,6 @@ export const SERVICE_COLUMNS: ColumnDef<ServiceFieldsFragment>[] = [
       if (name === category) return name;
       return `${category} - ${name}`;
     },
-  },
-  {
-    header: 'Service Details',
-    render: (e) => (
-      <Stack>
-        {serviceDetails(e).map((s, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Typography key={i} variant='body2'>
-            {s}
-          </Typography>
-        ))}
-      </Stack>
-    ),
   },
 ];
 
@@ -63,6 +51,24 @@ const EnrollmentServicesPage = () => {
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   const canEditServices = enrollment.access.canEditEnrollments;
+
+  const columns = [
+    ...SERVICE_COLUMNS,
+    {
+      header: 'Service Details',
+      render: (e: ServiceFieldsFragment) => (
+        <Stack>
+          {serviceDetails(e).map((s, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Typography key={i} variant='body2'>
+              {s}
+            </Typography>
+          ))}
+        </Stack>
+      ),
+    },
+  ];
+
   return (
     <>
       <TitleCard
@@ -95,7 +101,7 @@ const EnrollmentServicesPage = () => {
           }
           queryVariables={{ id: enrollmentId }}
           queryDocument={GetEnrollmentServicesDocument}
-          columns={SERVICE_COLUMNS}
+          columns={columns}
           pagePath='enrollment.services'
           noData='No services'
           recordType='Service'

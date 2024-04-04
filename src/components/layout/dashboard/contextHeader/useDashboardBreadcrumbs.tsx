@@ -74,12 +74,19 @@ export const useProjectBreadcrumbConfig = (
       [ProjectDashboardRoutes.PROJECT_ENROLLMENTS]: {
         title: 'Enrollments',
       },
-      [ProjectDashboardRoutes.PROJECT_BED_NIGHTS]: {
-        title: 'Bed Night Management',
+      [ProjectDashboardRoutes.BULK_BED_NIGHTS]: {
+        title: 'Bed Nights',
       },
-      [ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT]: {
-        title: 'Add Enrollment',
-        parent: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
+      [ProjectDashboardRoutes.BULK_ASSIGN_SERVICE]: {
+        title: 'Bulk Service Assignment',
+      },
+      [ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD]: {
+        title: 'Add Household',
+        parent: ProjectDashboardRoutes.BULK_BED_NIGHTS,
+      },
+      [ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD]: {
+        title: 'Add Household',
+        parent: ProjectDashboardRoutes.BULK_BED_NIGHTS,
       },
       [ProjectDashboardRoutes.ADD_HOUSEHOLD]: {
         title: 'Add Enrollment',
@@ -233,11 +240,11 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         parent: AdminDashboardRoutes.CLIENT_MERGE_HISTORY,
       },
       [AdminDashboardRoutes.CONFIGURE_SERVICES]: {
-        title: 'Service Categories',
+        title: 'Service Types',
       },
-      [AdminDashboardRoutes.CONFIGURE_SERVICE_CATEGORY]: {
+      [AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE]: {
         parent: AdminDashboardRoutes.CONFIGURE_SERVICES,
-        title: 'View Service Category',
+        title: 'View Service Type',
       },
       [AdminDashboardRoutes.VIEW_FORM]: {
         parent: AdminDashboardRoutes.FORMS,
@@ -252,6 +259,10 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
         title: 'Audit User',
       },
       [AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY]: {
+        parent: AdminDashboardRoutes.USERS,
+        title: 'Audit User',
+      },
+      [AdminDashboardRoutes.USER_EDIT_HISTORY]: {
         parent: AdminDashboardRoutes.USERS,
         title: 'Audit User',
       },

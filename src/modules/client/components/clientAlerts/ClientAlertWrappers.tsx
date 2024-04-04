@@ -1,4 +1,3 @@
-import Loading from '@/components/elements/Loading';
 import ClientAlertCard, {
   AlertContext,
 } from '@/modules/client/components/clientAlerts/ClientAlertCard';
@@ -39,13 +38,12 @@ export const ClientAlertHouseholdWrapper: React.FC<
   });
 
   if (!showClientAlertCard) return;
-  if (loading && (!clientAlerts || clientAlerts.length === 0))
-    return <Loading />;
 
   return (
     <ClientAlertCard
       alertContext={AlertContext.Household}
       clientAlerts={clientAlerts}
+      loading={loading}
     />
   );
 };

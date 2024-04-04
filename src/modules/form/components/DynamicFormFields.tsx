@@ -2,7 +2,6 @@ import React from 'react';
 
 import { FormDefinitionHandlers } from '../hooks/useFormDefinitionHandlers';
 import { PickListArgs } from '../types';
-
 import DynamicFormField from './DynamicFormField';
 
 export interface Props {
@@ -11,7 +10,6 @@ export interface Props {
   horizontal?: boolean;
   warnIfEmpty?: boolean;
   locked?: boolean;
-  bulk?: boolean;
   visible?: boolean;
   pickListArgs?: PickListArgs;
 }

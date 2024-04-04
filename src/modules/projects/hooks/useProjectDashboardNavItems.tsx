@@ -7,7 +7,7 @@ import {
   DataCollectionFeatureRole,
   ProjectAccessFieldsFragment,
   ProjectAllFieldsFragment,
-  ProjectType,
+  RecordType,
 } from '@/types/gqlTypes';
 
 export const useProjectDashboardNavItems = (
@@ -46,12 +46,31 @@ export const useProjectDashboardNavItems = (
               DataCollectionFeatureRole.Service
             ),
           },
+
+          {
+            id: 'externalForms',
+            title: 'External Forms',
+            path: ProjectDashboardRoutes.EXTERNAL_FORM_SUBMISSIONS,
+            permissions: ['canManageExternalFormSubmissions'],
+            hide: !dataCollectionRoles.includes(
+              DataCollectionFeatureRole.ExternalForm
+            ),
+          },
           {
             id: 'bed-nights',
             title: 'Bed Nights',
-            path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
-            permissions: ['canViewEnrollmentDetails'],
-            hide: project.projectType !== ProjectType.EsNbn,
+            path: ProjectDashboardRoutes.BULK_BED_NIGHTS,
+            permissions: ['canEditEnrollments'],
+            hide: !project.serviceTypes.find(
+              ({ hudRecordType }) => hudRecordType === RecordType.BedNight
+            ),
+          },
+          {
+            id: 'bulk-service',
+            title: 'Bulk Services',
+            path: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE,
+            permissions: ['canEditEnrollments'],
+            hide: !project.serviceTypes.find((s) => s.supportsBulkAssignment),
           },
           {
             id: 'referrals',

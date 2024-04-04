@@ -8,6 +8,7 @@ import {
   TypographyVariant,
 } from '@mui/material';
 import { ReactNode } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface Props extends PaperProps {
   title: string;
@@ -18,6 +19,8 @@ interface Props extends PaperProps {
   'data-testid'?: string;
   headerSx?: SxProps;
   padded?: boolean;
+  stackOnMobile?: boolean;
+  mobileBreakpoint?: 'xs' | 'sm' | 'md'; // breakpoint at which the actions will stack below the title
 }
 const TitleCard: React.FC<Props> = ({
   title,
@@ -27,34 +30,47 @@ const TitleCard: React.FC<Props> = ({
   headerVariant,
   headerSx,
   padded = false,
+  stackOnMobile = true,
+  mobileBreakpoint = 'xs',
   ...props
-}) => (
-  <Paper data-testid={props['data-testid']} {...props}>
-    <Stack
-      justifyContent={'space-between'}
-      alignItems='center'
-      direction='row'
-      sx={{
-        px: 2,
-        py: actions ? 2 : 1,
-        ...(headerVariant === 'border'
-          ? {
-              borderBottomColor: 'borders.light',
-              borderBottomWidth: 1,
-              borderBottomStyle: 'solid',
-            }
-          : {}),
-        ...headerSx,
-      }}
-    >
-      <Typography variant={headerTypographyVariant} sx={{ py: 1 }}>
-        {title}
-      </Typography>
-      {actions}
-    </Stack>
+}) => {
+  const isMobile = useIsMobile(mobileBreakpoint);
 
-    {padded ? <Box sx={{ px: 2, pb: 2 }}>{children}</Box> : children}
-  </Paper>
-);
+  return (
+    <Paper data-testid={props['data-testid']} {...props}>
+      <Stack
+        justifyContent={'space-between'}
+        alignItems={isMobile && stackOnMobile ? 'left' : 'center'}
+        direction={isMobile && stackOnMobile ? 'column' : 'row'}
+        spacing={{ xs: 1, md: 2, lg: 4 }}
+        sx={{
+          px: 2,
+          py: actions ? 2 : 1,
+          ...(headerVariant === 'border'
+            ? {
+                borderBottomColor: 'borders.light',
+                borderBottomWidth: 1,
+                borderBottomStyle: 'solid',
+              }
+            : {}),
+          ...headerSx,
+          '& MuiButton-root': {
+            width: 'fit-content',
+          },
+        }}
+      >
+        <Typography
+          variant={headerTypographyVariant}
+          sx={{ py: 1, flexGrow: 1 }}
+        >
+          {title}
+        </Typography>
+        {actions}
+      </Stack>
+
+      {padded ? <Box sx={{ px: 2, pb: 2 }}>{children}</Box> : children}
+    </Paper>
+  );
+};
 
 export default TitleCard;

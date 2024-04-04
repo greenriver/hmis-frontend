@@ -25,13 +25,13 @@ const columns: ColumnDef<HhmAssessmentType>[] = [
     render: (a) => clientBriefName(a.enrollment.client),
   },
   {
-    header: 'Assessment Date',
-    render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
+    header: 'Assessment Type',
+    render: (assessment) => formRoleDisplay(assessment),
     linkTreatment: true,
   },
   {
-    header: 'Assessment Type',
-    render: (assessment) => formRoleDisplay(assessment),
+    header: 'Assessment Date',
+    render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
   },
   {
     header: 'Last Updated',

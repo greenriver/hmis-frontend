@@ -75,7 +75,6 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
-  BulkActionType: { ADD: 'ADD', REMOVE: 'REMOVE' },
   ClientAddressType: { both: 'Both', physical: 'Physical', postal: 'Postal' },
   ClientAddressUse: {
     home: 'Home',
@@ -168,12 +167,18 @@ export const HmisEnums = {
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
     MCI: 'MCI linking component',
+    MINUTES_DURATION:
+      'Duration component with hours and minutes, value stored as minutes',
     NAME: 'Client Name input',
     PHONE: 'Phone number input for ContactPoint',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
+    SIGNATURE: 'Signature input component',
+    SIGNATURE_GROUP: 'Signature input component',
     SSN: 'SSN input component',
+    TABLE:
+      'Render group as a table. Each child item should be a group representing 1 table row.',
   },
   CounselingMethod: {
     FAMILY: 'Family',
@@ -293,6 +298,7 @@ export const HmisEnums = {
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
     CURRENT_LIVING_SITUATION: 'Current living situation',
+    EXTERNAL_FORM: 'External form',
     REFERRAL_REQUEST: 'Referral request',
     SERVICE: 'Service',
   },
@@ -511,6 +517,7 @@ export const HmisEnums = {
     PROJECT_TERMINATED: 'Project terminated',
     UNKNOWN_DISAPPEARED: 'Unknown/disappeared',
   },
+  ExternalFormSubmissionStatus: { new: 'new', reviewed: 'reviewed' },
   ExternalIdentifierType: {
     CLIENT_ID: 'HMIS ID',
     MCI_ID: 'MCI ID',
@@ -535,6 +542,8 @@ export const HmisEnums = {
     CUSTOM_ASSESSMENT: 'Custom assessment',
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
+    EXTERNAL_FORM: 'External form',
+    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FILE: 'File',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
@@ -548,6 +557,7 @@ export const HmisEnums = {
     POST_EXIT: 'Post exit',
     PROJECT: 'Project',
     PROJECT_COC: 'Project CoC',
+    PROJECT_CONFIG: 'Project config',
     REFERRAL_REQUEST: 'Referral request',
     SERVICE: 'Service',
     UPDATE: 'Update',
@@ -680,7 +690,15 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  HouseholdSortOption: { MOST_RECENT: 'Most Recent' },
+  HouseholdSortOption: {
+    HOH_AGE_OLDEST_TO_YOUNGEST: 'Head of Household Age: Oldest to Youngest',
+    HOH_AGE_YOUNGEST_TO_OLDEST: 'Head of Household Age: Youngest to Oldest',
+    HOH_FIRST_NAME_A_TO_Z: 'Head of Household First Name: A-Z',
+    HOH_FIRST_NAME_Z_TO_A: 'Head of Household First Name: Z-A',
+    HOH_LAST_NAME_A_TO_Z: 'Head of Household Last Name: A-Z',
+    HOH_LAST_NAME_Z_TO_A: 'Head of Household Last Name: Z-A',
+    MOST_RECENT: 'Most Recent',
+  },
   HouseholdType: {
     INVALID: 'Invalid Value',
     HOUSEHOLDS_WITHOUT_CHILDREN: 'Households without children',
@@ -757,6 +775,7 @@ export const HmisEnums = {
     OPEN_CHOICE: 'OPEN_CHOICE',
     STRING: 'STRING',
     TEXT: 'TEXT',
+    TIME_OF_DAY: 'TIME_OF_DAY',
   },
   LastGradeCompleted: {
     INVALID: 'Invalid Value',
@@ -894,6 +913,7 @@ export const HmisEnums = {
     ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
     ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ALL_UNIT_TYPES: 'All unit types.',
+    AVAILABLE_BULK_SERVICE_TYPES: 'AVAILABLE_BULK_SERVICE_TYPES',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
     AVAILABLE_UNITS_FOR_ENROLLMENT:
@@ -909,6 +929,7 @@ export const HmisEnums = {
     ENROLLMENTS_FOR_CLIENT:
       'Enrollments for the client, including WIP and Exited.',
     ENROLLMENT_AUDIT_EVENT_RECORD_TYPES: 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
+    EXTERNAL_FORM_TYPES_FOR_PROJECT: 'External form types for the project.',
     GEOCODE: 'GEOCODE',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     ORGANIZATION: 'All Organizations that the User can see',
@@ -1313,6 +1334,7 @@ export const HmisEnums = {
     CLIENT_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT:
       'Client was expelled or otherwise involuntarily discharged from project',
   },
+  ProjectConfigType: { AUTO_ENTER: 'Auto Enter', AUTO_EXIT: 'Auto Exit' },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
   ProjectSortOption: {
     NAME: 'Name',
@@ -1395,6 +1417,7 @@ export const HmisEnums = {
     CLIENT_DETAIL: 'Client detail',
     CURRENT_LIVING_SITUATION: 'Current living situation',
     ENROLLMENT: 'Enrollment',
+    EXTERNAL_FORM: 'External form',
     FILE: 'File',
     FUNDER: 'Funder',
     HMIS_PARTICIPATION: 'HMIS participation',
@@ -1477,6 +1500,7 @@ export const HmisEnums = {
     EMPLOYMENT_EDUCATION: 'EmploymentEducation',
     ENROLLMENT: 'Enrollment',
     ENROLLMENT_COC: 'EnrollmentCoc',
+    EVENT: 'Event',
     EXIT: 'Exit',
     HEALTH_AND_DV: 'HealthAndDv',
     INCOME_BENEFIT: 'IncomeBenefit',
@@ -1553,7 +1577,15 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   ServiceDetailType: { BULK: 'BULK', CLIENT: 'CLIENT' },
-  ServiceSortOption: { DATE_PROVIDED: 'DATE_PROVIDED' },
+  ServiceSortOption: {
+    AGE_OLDEST_TO_YOUNGEST: 'Client Age: Oldest to Youngest',
+    AGE_YOUNGEST_TO_OLDEST: 'Client Age: Youngest to Oldest',
+    DATE_PROVIDED: 'Date service was provided',
+    FIRST_NAME_A_TO_Z: 'Client First Name: A-Z',
+    FIRST_NAME_Z_TO_A: 'Client First Name: Z-A',
+    LAST_NAME_A_TO_Z: 'Client Last Name: A-Z',
+    LAST_NAME_Z_TO_A: 'Client Last Name: Z-A',
+  },
   ServiceSubTypeProvided: {
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
       'Child care',
@@ -1774,8 +1806,10 @@ export const HmisEnums = {
   StaticFormRole: {
     AUTO_EXIT_CONFIG: 'Auto exit config',
     CLIENT_ALERT: 'Client alert',
+    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
+    PROJECT_CONFIG: 'Project config',
   },
   SubsidyInformation: {
     INVALID: 'Invalid Value',

@@ -55,7 +55,6 @@ fragment ItemFields on FormItem {
     customFieldKey
   }
   pickListReference
-  serviceDetailType
   size
   assessmentDate
   prefill
@@ -91,6 +90,7 @@ fragment ItemFields on FormItem {
     valueBoolean
     valueNumber
     sumQuestions
+    formula
     autofillBehavior
     autofillReadonly
     autofillWhen {

@@ -46,7 +46,6 @@ export type PickListArgs = {
 export interface DynamicFieldProps {
   item: FormItem;
   itemChanged: ItemChangedFn;
-  nestingLevel?: number;
   value: any;
   disabled?: boolean;
   errors?: ValidationError[];
@@ -74,6 +73,7 @@ export interface DynamicInputCommonProps {
   id?: string;
   disabled?: boolean;
   label?: ReactNode;
+  ariaLabel?: string;
   error?: boolean;
   warnIfEmptyTreatment?: boolean;
   helperText?: ReactNode;
@@ -82,6 +82,8 @@ export interface DynamicInputCommonProps {
   placeholder?: string;
   breakpoints?: BreakpointOverrides;
   ariaLabelledBy?: string;
+  maxWidth?: number | string; // maximum width of form element (including the label)
+  inputWidth?: number; // fixed with of input element (does not affect label)
 }
 
 export interface DynamicViewItemCommonProps {

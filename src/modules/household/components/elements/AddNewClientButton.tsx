@@ -2,6 +2,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Button } from '@mui/material';
 import { useMemo } from 'react';
 
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { localConstantsForClientForm } from '@/modules/client/hooks/useClientFormDialog';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { useProjectCocsCountFromCache } from '@/modules/projects/hooks/useProjectCocsCountFromCache';
@@ -39,6 +40,8 @@ const AddNewClientButton: React.FC<Props> = ({
 
   const { openFormDialog, renderFormDialog } =
     useFormDialog<SubmittedEnrollmentResultFieldsFragment>(memoedArgs);
+  const isMobile = useIsMobile();
+
   return (
     <>
       <Button
@@ -53,7 +56,7 @@ const AddNewClientButton: React.FC<Props> = ({
       {renderFormDialog({
         title: 'Enroll a New Client',
         submitButtonText: 'Create & Enroll Client',
-        DialogProps: { maxWidth: 'lg' },
+        DialogProps: { maxWidth: 'lg', fullScreen: isMobile },
       })}
     </>
   );

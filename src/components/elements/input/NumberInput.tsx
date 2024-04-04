@@ -85,7 +85,7 @@ const NumberInput = ({
 
   return (
     <TextInput
-      type='number'
+      type='text'
       inputProps={{
         inputMode: 'numeric',
         pattern: '[0-9]*',

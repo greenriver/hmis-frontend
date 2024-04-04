@@ -1,12 +1,15 @@
 import { Grid, Typography } from '@mui/material';
 
 import React, { ReactNode, useId } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 // Grid of Key/Value pairs that has the specific styling used for Enrollment Details and custom client attributes
 
 export const CommonDetailGridContainer: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
+  const isTiny = useIsMobile('md');
+
   return (
     <Grid
       container
@@ -17,6 +20,19 @@ export const CommonDetailGridContainer: React.FC<{
           borderBottomWidth: 1,
           borderBottomStyle: 'solid',
         },
+        '> .CommonDetailGridLabel': isTiny
+          ? {
+              borderBottom: 'unset',
+              paddingBottom: 0,
+            }
+          : {},
+        '> .CommonDetailGridLabel:first-of-type': isTiny
+          ? {
+              borderTopColor: 'borders.light',
+              borderTopWidth: 1,
+              borderTopStyle: 'solid',
+            }
+          : {},
         '> .MuiGrid-item:nth-last-of-type(2)': {
           border: 'unset',
         },
@@ -46,6 +62,7 @@ export const CommonDetailGridItem: React.FC<{
     <>
       <Grid
         key='label'
+        className='CommonDetailGridLabel'
         id={labelId}
         item
         xs={12}

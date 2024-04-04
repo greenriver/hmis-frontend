@@ -23,8 +23,7 @@ const UpdateFormDefinitionPage = () => {
 
   return (
     <>
-      <PageTitle title={`Edit Form Definition: ${formDefinition?.title}`} />
-
+      <PageTitle title={`Edit Form: ${formDefinition?.title}`} />
       {formDefinition && (
         <FormEditor
           definition={formDefinition?.rawDefinition}

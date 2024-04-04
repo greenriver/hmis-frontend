@@ -5,6 +5,7 @@ fragment RootPermissions on QueryAccess {
   canAuditUsers
   canEditClients
   canViewClients
+  canViewClientName
   canDeleteClients
   canEditOrganization
   canDeleteOrganization
@@ -32,6 +33,7 @@ fragment RootPermissions on QueryAccess {
   canSplitHouseholds
   canConfigureDataCollection
   canViewClientAlerts
+  canManageExternalFormSubmissions
 }
 
 fragment ClientAccessFields on ClientAccess {
@@ -41,6 +43,7 @@ fragment ClientAccessFields on ClientAccess {
   canViewDob
   canViewFullSsn
   canViewPartialSsn
+  canViewClientName
   canEditEnrollments
   canDeleteEnrollments
   canViewEnrollmentDetails
@@ -88,6 +91,7 @@ fragment ProjectAccessFields on ProjectAccess {
   canManageDeniedReferrals
   canManageIncomingReferrals
   canManageOutgoingReferrals
+  canManageExternalFormSubmissions
 }
 
 fragment OrganizationAccessFields on OrganizationAccess {

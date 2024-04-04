@@ -1,4 +1,5 @@
 import {
+  addMinutes,
   differenceInDays,
   differenceInYears,
   format,
@@ -10,6 +11,7 @@ import {
   isValid,
   isYesterday,
   parseISO,
+  startOfDay,
 } from 'date-fns';
 import { capitalize, find, isNil, sortBy, startCase } from 'lodash-es';
 
@@ -19,6 +21,7 @@ import {
 } from '../form/util/formUtil';
 
 import { DashboardEnrollment } from './types';
+import { ColumnDef } from '@/components/elements/table/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
@@ -110,6 +113,16 @@ export const formatDateTimeForDisplay = (date: Date) => {
     );
     return null;
   }
+};
+
+// "Time of day" is stored as minutes since midnight
+export const formatTimeOfDay = (timeOfDayMinutes: number) => {
+  if (isNaN(Number(timeOfDayMinutes))) {
+    return timeOfDayMinutes;
+  }
+  const midnight = startOfDay(new Date());
+  const date = addMinutes(midnight, timeOfDayMinutes);
+  return format(date, 'h:mm a'); // 6:30 am
 };
 
 export const briefProjectType = (projectType: ProjectType) => {
@@ -603,25 +616,40 @@ export const dataUrlForClientImage = (
   return `data:image/jpeg;base64,${image.base64}`;
 };
 
+// Construct ColumnDefs based on which summary-level CustomDataElements
+// are present on the records.
+//services
 export function getCustomDataElementColumns<
   RowType extends { customDataElements: CustomDataElementFieldsFragment[] }
 >(rows: RowType[]) {
   if (!rows || rows.length === 0) return [];
 
-  // Determine which summary-level CDEs are present on these records.
-  // We can look at the first record because records always resolve all
-  // available CDEs, even if they dont have a value.
-  return rows[0].customDataElements
-    .filter((cde) => cde.displayHooks.includes(DisplayHook.TableSummary))
-    .map((cde) => ({
-      header: cde.label,
-      key: cde.key,
+  function generateColumnDefinition(cded: CustomDataElementFieldsFragment) {
+    return {
+      header: cded.label,
+      key: cded.key,
       render: (row: RowType) => {
         const thisCde = row.customDataElements.find(
-          (elem) => elem.key === cde.key
+          (elem) => elem.key === cded.key
         );
         if (!thisCde) return null;
         return customDataElementValueAsString(thisCde);
       },
-    }));
+    };
+  }
+
+  const columnsByKey: Record<string, ColumnDef<RowType>> = {};
+  rows.forEach((row) => {
+    row.customDataElements.forEach((cded) => {
+      if (!cded.displayHooks.includes(DisplayHook.TableSummary)) return;
+      if (columnsByKey[cded.key]) return; // seen
+
+      columnsByKey[cded.key] = generateColumnDefinition(cded);
+    });
+  });
+
+  // sort columns by CDED Key so they always appear in the same order
+  return Object.keys(columnsByKey)
+    .sort()
+    .map((key) => columnsByKey[key]);
 }

@@ -1,14 +1,12 @@
 import { Chip } from '@mui/material';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetServiceCategoriesDocument,
   GetServiceCategoriesQuery,
   GetServiceCategoriesQueryVariables,
   ServiceCategoryFieldsFragment,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 const columns: ColumnDef<ServiceCategoryFieldsFragment>[] = [
   {
@@ -37,7 +35,9 @@ const columns: ColumnDef<ServiceCategoryFieldsFragment>[] = [
   },
 ];
 
-const FormRuleTable = () => {
+const ServiceCategoryTable = () => {
+  // TODO: add mechanism to rename existing service category
+  // TODO: add mechanism to delete service category (if empty)
   return (
     <>
       <GenericTableWithData<
@@ -53,13 +53,8 @@ const FormRuleTable = () => {
         showFilters
         recordType='ServiceCategory'
         paginationItemName='service category'
-        rowLinkTo={(row) =>
-          generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_CATEGORY, {
-            serviceCategoryId: row.id,
-          })
-        }
       />
     </>
   );
 };
-export default FormRuleTable;
+export default ServiceCategoryTable;

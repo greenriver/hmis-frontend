@@ -20,12 +20,13 @@ const adminDashboardRoutes = {
   USERS: 'users',
   USER_CLIENT_ACCESS_HISTORY: 'users/:userId/clientAccessHistory',
   USER_ENROLLMENT_ACCESS_HISTORY: 'users/:userId/enrollmentAccessHistory',
+  USER_EDIT_HISTORY: 'users/:userId/editHistory',
   CONFIGURE_SERVICES: 'services',
-  CONFIGURE_SERVICE_CATEGORY: 'services/:serviceCategoryId',
+  CONFIGURE_SERVICE_TYPE: 'services/:serviceTypeId',
   FORMS: 'forms',
   VIEW_FORM: 'forms/:formId',
   EDIT_FORM: 'forms/:formId/edit',
-  CONFIGURE_AUTO_EXIT: 'auto-exit',
+  PROJECT_CONFIG: 'project-configs',
 };
 
 // Routes within the client dashboard
@@ -72,8 +73,10 @@ const projectDashboardRoutes = {
   // Enrollment-related
   PROJECT_ENROLLMENTS: 'enrollments',
   PROJECT_SERVICES: 'services',
-  PROJECT_BED_NIGHTS: 'bed-nights',
-  PROJECT_BED_NIGHTS_NEW_ENROLLMENT: 'bed-nights/enroll',
+  BULK_BED_NIGHTS: 'bed-nights',
+  BULK_ASSIGN_SERVICE: 'bulk-service',
+  BULK_BED_NIGHTS_NEW_HOUSEHOLD: 'bed-nights/new-household',
+  BULK_SERVICE_NEW_HOUSEHOLD: 'bulk-service/new-household',
   ADD_SERVICES: 'add-services',
   ADD_HOUSEHOLD: 'add-household',
   REFERRALS: 'referrals',
@@ -96,6 +99,7 @@ const projectDashboardRoutes = {
   EDIT_INVENTORY: 'inventory/:inventoryId/edit',
   HMIS_PARTICIPATION: 'hmis-participation',
   CE_PARTICIPATION: 'ce-participation',
+  EXTERNAL_FORM_SUBMISSIONS: 'external-form-submissions',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`

@@ -16,11 +16,10 @@ import ValueWrapper from '../ValueWrapper';
 import DynamicViewField from './DynamicViewField';
 import DynamicViewGroup from './DynamicViewGroup';
 
-import { FormItem, ItemType, ServiceDetailType } from '@/types/gqlTypes';
+import { FormItem, ItemType } from '@/types/gqlTypes';
 
 export interface Props {
   horizontal?: boolean;
-  bulk?: boolean;
   visible?: boolean;
   pickListArgs?: PickListArgs;
   handlers: FormDefinitionHandlers;
@@ -32,7 +31,6 @@ export interface Props {
 }
 
 const DynamicViewFormField: React.FC<Props> = ({
-  bulk,
   horizontal = false,
   pickListArgs,
   handlers,
@@ -61,9 +59,6 @@ const DynamicViewFormField: React.FC<Props> = ({
 
   // Recursively render an item
   const renderChild = (isDisabled?: boolean) => {
-    if (bulk && item.serviceDetailType === ServiceDetailType.Client)
-      return null;
-
     if (item.type === ItemType.Group) {
       return (
         <DynamicViewGroup

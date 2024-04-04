@@ -9,6 +9,9 @@ import HorizontalGroup from './group/HorizontalGroup';
 import InputGroup from './group/InputGroup';
 import QuestionGroup from './group/QuestionGroup';
 
+import SignatureGroupCard from './group/SignatureGroupCard';
+import TableGroup from './group/TableGroup';
+import Signature from '@/modules/form/components/group/Signature';
 import { Component } from '@/types/gqlTypes';
 
 export const InfoGroup = ({
@@ -22,7 +25,10 @@ export const InfoGroup = ({
       backgroundColor: (theme) => lighten(theme.palette.grey[100], 0.2),
       borderRadius: 1,
       width: 'fit-content',
-      p: 1,
+      px: 0.5,
+      // use box shadow to "extend" background color beyond div. doing this so we dont mess with the height
+      boxShadow: (theme) =>
+        `0 2px 0 6px ${lighten(theme.palette.grey[100], 0.2)}`,
     }}
   >
     {children}
@@ -54,12 +60,20 @@ const DynamicGroup: React.FC<Props> = ({ debug, ...props }) => {
       return <DisabilityTable key={props.item.linkId} {...props} />;
     case Component.HorizontalGroup:
       return <HorizontalGroup key={props.item.linkId} {...props} />;
+    case Component.SignatureGroup:
+      return (
+        <SignatureGroupCard key={props.item.linkId} debug={debug} {...props} />
+      );
+    case Component.Signature:
+      return <Signature key={props.item.linkId} {...props} />;
     case Component.InfoGroup:
       return (
         <InfoGroup nestingLevel={props.nestingLevel}>
           <QuestionGroup key={props.item.linkId} {...props} />
         </InfoGroup>
       );
+    case Component.Table:
+      return <TableGroup key={props.item.linkId} {...props} />;
     default:
       return <QuestionGroup key={props.item.linkId} {...props} />;
   }

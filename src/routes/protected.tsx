@@ -14,6 +14,7 @@ import EnrollmentProjectRoute from '@/components/accessWrappers/EnrollmentProjec
 import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
+import ProjectRoute from '@/components/accessWrappers/ProjectRoute';
 import ClientFiles from '@/components/clientDashboard/ClientFiles';
 import EditClient from '@/components/clientDashboard/EditClient';
 import ClientAssessments from '@/components/clientDashboard/enrollments/ClientAssessments';
@@ -37,14 +38,14 @@ import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
 
-import ConfigureAutoExitPage from '@/modules/admin/components/autoExit/ConfigureAutoExitPage';
 import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
+import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormEditorPage from '@/modules/admin/components/forms/UpdateFormDefinitionPage';
-import ViewFormDefinitionPage from '@/modules/admin/components/forms/ViewFormDefinitionPage';
+import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
-import ServiceCategoryDetail from '@/modules/admin/components/services/ServiceCategoryDetail';
+import ServiceTypeDetailPage from '@/modules/admin/components/services/ServiceTypeDetailPage';
 import AdminUsers from '@/modules/admin/components/users/AdminUsers';
 import UserAuditPage from '@/modules/admin/components/users/UserAuditPage';
 import ExitAssessmentPage from '@/modules/assessments/components/ExitAssessmentPage';
@@ -53,7 +54,6 @@ import IntakeAssessmentPage from '@/modules/assessments/components/IntakeAssessm
 import NewIndividualAssessmentPage from '@/modules/assessments/components/NewIndividualAssessmentPage';
 import ClientAuditHistory from '@/modules/audit/components/ClientAuditHistory';
 import EnrollmentAuditHistory from '@/modules/audit/components/EnrollmentAuditHistory';
-import ProjectBedNights from '@/modules/bedNights/components/ProjectBedNights';
 import ClientCaseNotes from '@/modules/caseNotes/ClientCaseNotes';
 import EnrollmentCaseNotes from '@/modules/caseNotes/EnrollmentCaseNotes';
 import AdminClientMerge from '@/modules/clientMerge/components/admin/AdminClientMerge';
@@ -86,11 +86,14 @@ import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
 import ProjectEsgFundingReport from '@/modules/projects/components/ProjectEsgFundingReport';
+import ProjectExternalFormSubmissions from '@/modules/projects/components/ProjectExternalFormSubmissions';
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ProjectServices from '@/modules/projects/components/ProjectServices';
 import ClientScanCards from '@/modules/scanCards/components/ClientScanCards';
+import BedNightsPage from '@/modules/services/components/bulk/BedNightsPage';
+import BulkServicesPage from '@/modules/services/components/bulk/BulkServicesPage';
 import ClientServices from '@/modules/services/components/ClientServices';
 import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
@@ -131,7 +134,17 @@ export const protectedRoutes: RouteNode[] = [
         path: Routes.PROJECT,
         element: <ProjectDashboard />,
         children: [
-          { path: '', element: <Navigate to='overview' replace /> },
+          {
+            path: '',
+            element: (
+              <ProjectRoute
+                permissions={['canViewEnrollmentDetails']}
+                redirectRoute={ProjectDashboardRoutes.OVERVIEW}
+              >
+                <Navigate to='enrollments' replace />
+              </ProjectRoute>
+            ),
+          },
           {
             path: ProjectDashboardRoutes.OVERVIEW,
             element: <Project />,
@@ -145,16 +158,33 @@ export const protectedRoutes: RouteNode[] = [
             element: <ProjectServices />,
           },
           {
-            path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS,
-            element: <ProjectBedNights />,
+            path: ProjectDashboardRoutes.BULK_BED_NIGHTS,
+            element: (
+              <ProjectEditRoute permissions={['canEditEnrollments']}>
+                <BedNightsPage />
+              </ProjectEditRoute>
+            ),
           },
           {
-            path: ProjectDashboardRoutes.PROJECT_BED_NIGHTS_NEW_ENROLLMENT,
+            path: ProjectDashboardRoutes.BULK_ASSIGN_SERVICE,
             element: (
-              <ProjectEditRoute
-                permissions={['canEnrollClients']}
-                redirectRoute={ProjectDashboardRoutes.PROJECT_ENROLLMENTS}
-              >
+              <ProjectEditRoute permissions={['canEditEnrollments']}>
+                <BulkServicesPage />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.BULK_BED_NIGHTS_NEW_HOUSEHOLD,
+            element: (
+              <ProjectEditRoute permissions={['canEnrollClients']}>
+                <CreateHouseholdPage />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.BULK_SERVICE_NEW_HOUSEHOLD,
+            element: (
+              <ProjectEditRoute permissions={['canEnrollClients']}>
                 <CreateHouseholdPage />
               </ProjectEditRoute>
             ),
@@ -294,6 +324,16 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectEditRoute>
                 <ProjectCoc />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.EXTERNAL_FORM_SUBMISSIONS,
+            element: (
+              <ProjectEditRoute
+                permissions={['canManageExternalFormSubmissions']}
+              >
+                <ProjectExternalFormSubmissions />
               </ProjectEditRoute>
             ),
           },
@@ -473,8 +513,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ClientDashboardRoutes.EDIT,
             element: (
+              // Prevent UI-access to edit client if user lacks name access, to avoid situation where masked name ("Client X") is submitted. See follow-up #187358025
+              // This is just a safeguard against a situation that should never happen, so we aren't adding checks to hide the button/link to this route everywhere it appears
               <ClientRoute
-                permissions='canEditClient'
+                permissions={['canEditClient', 'canViewClientName']}
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <EditClient />
@@ -660,7 +702,10 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.USER_CLIENT_ACCESS_HISTORY,
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
-                <UserAuditPage entityType='clients' />
+                <UserAuditPage
+                  userHistoryType='access'
+                  accessEntityType='clients'
+                />
               </RootPermissionsFilter>
             ),
           },
@@ -668,7 +713,18 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.USER_ENROLLMENT_ACCESS_HISTORY,
             element: (
               <RootPermissionsFilter permissions='canAuditUsers'>
-                <UserAuditPage entityType='enrollments' />
+                <UserAuditPage
+                  userHistoryType='access'
+                  accessEntityType='enrollments'
+                />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.USER_EDIT_HISTORY,
+            element: (
+              <RootPermissionsFilter permissions='canAuditUsers'>
+                <UserAuditPage userHistoryType='edits' />
               </RootPermissionsFilter>
             ),
           },
@@ -684,7 +740,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.VIEW_FORM,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <ViewFormDefinitionPage />
+                <FormDefinitionDetailPage />
               </RootPermissionsFilter>
             ),
           },
@@ -705,18 +761,18 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: AdminDashboardRoutes.CONFIGURE_SERVICE_CATEGORY,
+            path: AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <ServiceCategoryDetail />
+                <ServiceTypeDetailPage />
               </RootPermissionsFilter>
             ),
           },
           {
-            path: AdminDashboardRoutes.CONFIGURE_AUTO_EXIT,
+            path: AdminDashboardRoutes.PROJECT_CONFIG,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
-                <ConfigureAutoExitPage />
+                <ProjectConfigPage />
               </RootPermissionsFilter>
             ),
           },

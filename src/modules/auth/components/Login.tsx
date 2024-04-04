@@ -14,7 +14,7 @@ const Login: React.FC = () => {
   return (
     <Box sx={{ backgroundColor: 'background.default', height: '100vh' }}>
       <Container component='main' maxWidth='xs'>
-        <Box sx={{ pt: 4 }}>
+        <Box sx={{ pt: { md: 4, xs: 2 } }}>
           <Typography variant='h5' fontWeight={600} textAlign='center'>
             OPEN PATH{' '}
             <Box display='inline' color='text.secondary' component='span'>
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
         </Box>
         <Card
           sx={{
-            mt: 10,
+            mt: { lg: 10, md: 8, xs: 4 },
             p: 4,
             display: 'flex',
             flexDirection: 'column',
@@ -49,30 +49,22 @@ const Login: React.FC = () => {
 
         <Stack
           justifyContent={'space-evenly'}
-          sx={{ mt: 14, mb: 2 }}
+          sx={{ mt: { lg: 14, md: 6, xs: 4 }, mb: 2 }}
           direction='row'
           gap={3}
         >
           {warehouseUrl && (
-            <Link href={warehouseUrl} color='text.secondary'>
+            <Link href={warehouseUrl}>
               {warehouseName || 'Open Path Warehouse'}
             </Link>
           )}
           {oktaPath && !showPwLogin && (
-            <Link
-              component='button'
-              color='text.secondary'
-              onClick={() => setShowPwLogin(true)}
-            >
+            <Link component='button' onClick={() => setShowPwLogin(true)}>
               Login with Password
             </Link>
           )}
           {oktaPath && showPwLogin && (
-            <Link
-              component='button'
-              color='text.secondary'
-              onClick={() => setShowPwLogin(false)}
-            >
+            <Link component='button' onClick={() => setShowPwLogin(false)}>
               Login with Okta
             </Link>
           )}

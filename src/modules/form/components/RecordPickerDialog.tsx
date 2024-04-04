@@ -16,7 +16,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import RelativeDate from '@/components/elements/RelativeDate';
 import { ColumnDef } from '@/components/elements/table/types';
 import HmisField from '@/modules/hmis/components/HmisField';
-import { FormItem, FormRole } from '@/types/gqlTypes';
+import { AssessmentRole, FormItem, FormRole } from '@/types/gqlTypes';
 
 interface Props extends Omit<DialogProps, 'children'> {
   clientId: string;
@@ -55,6 +55,7 @@ const RecordPickerDialog = ({
             assessment,
             i.mapping
           );
+          if (!record || !recordType) return;
 
           return (
             <HmisField
@@ -71,6 +72,14 @@ const RecordPickerDialog = ({
 
   // Need to set height on the dialog in order for the scrolling to work
   const height = `${Math.min(Math.max(columns.length * 60 + 250, 550), 850)}px`;
+
+  const hudRoles = [
+    AssessmentRole.Intake,
+    AssessmentRole.Update,
+    AssessmentRole.Exit,
+    AssessmentRole.Annual,
+    AssessmentRole.PostExit,
+  ];
 
   return (
     <CommonDialog
@@ -104,7 +113,7 @@ const RecordPickerDialog = ({
       >
         {description}
         <AssessmentsForPopulationTable
-          queryVariables={{ id: clientId }}
+          queryVariables={{ id: clientId, roles: hudRoles }}
           defaultPageSize={5}
           columns={columns}
           nonTablePagination

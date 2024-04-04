@@ -1,4 +1,5 @@
 import { Skeleton, Stack, Typography } from '@mui/material';
+import { formatDuration } from 'date-fns';
 import { isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
 
@@ -12,6 +13,8 @@ import Image from './item/Image';
 
 import TextContent from './item/TextContent';
 
+import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
+import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import NotCollectedText from '@/components/elements/NotCollectedText';
@@ -19,6 +22,7 @@ import RecoverableError from '@/components/elements/RecoverableError';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import {
   formatDateForDisplay,
+  formatTimeOfDay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import {
@@ -35,9 +39,13 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 
   return (
     <Stack direction='row' spacing={1}>
-      <Typography variant='body2' fontWeight={horizontal ? undefined : 600}>
+      <CommonHtmlContent
+        variant='body2'
+        fontWeight={horizontal ? undefined : 600}
+        component='p'
+      >
         {label}
-      </Typography>
+      </CommonHtmlContent>
     </Stack>
   );
 };
@@ -102,9 +110,28 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           hasValue={(val) => !isNil(val)}
         />
       );
+    case ItemType.TimeOfDay:
+      return (
+        <TextContent
+          {...commonProps}
+          renderValue={(val) => formatTimeOfDay(val)}
+        />
+      );
     case ItemType.Text:
     case ItemType.String:
+      return <TextContent {...commonProps} />;
     case ItemType.Integer:
+      if (item.component === Component.MinutesDuration) {
+        return (
+          <TextContent
+            {...commonProps}
+            renderValue={(val) => {
+              const [hours, minutes] = minutesToHoursAndMinutes(val);
+              return formatDuration({ minutes, hours }, { zero: true });
+            }}
+          />
+        );
+      }
       return <TextContent {...commonProps} />;
     case ItemType.Currency:
       return <TextContent {...commonProps} renderValue={(val) => `$${val}`} />;
@@ -171,6 +198,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
             />
           );
       }
+
     default:
       return (
         <RecoverableError

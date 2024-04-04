@@ -1,0 +1,16 @@
+fragment ProjectConfigFields on ProjectConfig {
+  id
+  configType
+  organizationId
+  organization {
+    id
+    organizationName
+  }
+  projectId
+  project {
+    id
+    projectName
+  }
+  projectType
+  configOptions
+}

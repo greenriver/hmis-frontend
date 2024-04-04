@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Button } from '@mui/material';
+import { Button, ButtonProps } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import ClearSearchButton from './ClearSearchButton';
 import ClientTextSearchInput, {
   ClientTextSearchInputProps,
 } from './ClientTextSearchInput';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
   initialValue?: string;
@@ -15,6 +16,7 @@ interface Props extends Omit<ClientTextSearchInputProps, 'onChange' | 'value'> {
   minChars?: number;
   onClearSearch?: VoidFunction;
   hideClearButton?: boolean;
+  ClearButtonProps?: ButtonProps;
 }
 
 const ClientTextSearchForm: React.FC<Props> = ({
@@ -24,6 +26,7 @@ const ClientTextSearchForm: React.FC<Props> = ({
   onClearSearch,
   hideClearButton,
   minChars = 3,
+  ClearButtonProps,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -52,9 +55,24 @@ const ClientTextSearchForm: React.FC<Props> = ({
     if (onClearSearch) onClearSearch();
   }, [onClearSearch]);
 
-  const buttonSx = { mt: 3, px: 4, height: 'fit-content', top: '2px' };
+  // Using isTiny as the breakpoint for the mobile appearance here rather than vanilla isMobile
+  // gets us the search box appearing as normal/desktop (with buttons in one line) on reasonably large
+  // tablet screens, but really small phone screens will still have the buttons stack correctly.
+  const isTiny = useIsMobile('sm');
+
+  const hasInputLabel = props.label !== null;
+  const buttonSx = {
+    mt: hasInputLabel && !isTiny ? 3 : 0, // space to account for label
+    px: 4,
+    height: 'fit-content',
+    top: hasInputLabel ? '2px' : 0,
+  };
   return (
-    <Stack direction={'row'} alignItems='flex-start' gap={2}>
+    <Stack
+      direction={{ xs: 'column', sm: 'row' }}
+      alignItems='flex-start'
+      gap={{ xs: 1, sm: 2 }}
+    >
       <ClientTextSearchInput
         value={value}
         onChange={setValue}
@@ -82,8 +100,9 @@ const ClientTextSearchForm: React.FC<Props> = ({
           onClick={handleClear}
           sx={buttonSx}
           disabled={!value}
+          {...ClearButtonProps}
         >
-          Clear
+          {ClearButtonProps?.children || 'Clear'}
         </ClearSearchButton>
       )}
     </Stack>

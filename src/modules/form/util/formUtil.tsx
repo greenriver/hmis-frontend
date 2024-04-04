@@ -41,6 +41,8 @@ import {
   TypedObject,
 } from '../types';
 
+import { evaluateFormula } from '@/modules/form/util/expressions/formula';
+import { collectExpressionReferences } from '@/modules/form/util/expressions/references';
 import {
   customDataElementValueForKey,
   evaluateDataCollectedAbout,
@@ -70,7 +72,6 @@ import {
   PickListOption,
   RelatedRecordType,
   RelationshipToHoH,
-  ServiceDetailType,
   ValueBound,
 } from '@/types/gqlTypes';
 
@@ -87,9 +88,6 @@ export const invertDependencyMap = (depMap: LinkIdMap): LinkIdMap =>
     });
     return result;
   }, {} as LinkIdMap);
-
-export const maxWidthAtNestingLevel = (nestingLevel: number) =>
-  600 - nestingLevel * 26;
 
 export const isDataNotCollected = (val?: any): boolean => {
   if (typeof val === 'string') {
@@ -474,6 +472,15 @@ export const getAutofillComparisonValue = (
   values: FormValues,
   targetItem: FormItem
 ) => {
+  if (av.formula) {
+    const context = new Map();
+    for (const key of Object.keys(values)) {
+      const value = numericValueForFormValue(values[key]);
+      if (!isNil(value)) context.set(key, value);
+    }
+    return evaluateFormula(av.formula, context);
+  }
+
   // Perform summation if applicable
   if (av.sumQuestions && av.sumQuestions.length > 0) {
     const numbers = av.sumQuestions
@@ -877,6 +884,14 @@ export const buildAutofillDependencyMap = (
     item.autofillValues.forEach((av) => {
       if (viewOnly && !av.autofillReadonly) return;
 
+      if (av.formula) {
+        for (const id of collectExpressionReferences(
+          av.formula
+        ) as Array<string>) {
+          addDependency(id);
+        }
+      }
+
       // If this item sums other items using sumQuestions, add those dependencies
       if (av.sumQuestions) {
         av.sumQuestions.forEach((summedLinkId) => {
@@ -1041,22 +1056,6 @@ export const applyDefinitionRulesForClient = (
   return mutable;
 };
 
-/**
- * Extracts target-only fields from the form definition
- * @param definition The form definition to pull items from
- * @returns The items that are target-only
- */
-export const extractClientItemsFromDefinition = (
-  definition: FormDefinitionJson
-) => {
-  const itemMap = getItemMap(definition, false); // flattened map { linkId => item }
-  const targetItems = Object.values(itemMap).filter(
-    ({ serviceDetailType }) => serviceDetailType === ServiceDetailType.Client
-  );
-
-  return targetItems;
-};
-
 const findDataNotCollectedCode = (item: FormItem): string | undefined => {
   const options = resolveOptionList(item) || [];
 
@@ -1104,6 +1103,10 @@ export const transformSubmitValues = ({
       const recordType = mapping.recordType
         ? HmisEnums.RelatedRecordType[mapping.recordType]
         : parentRecordType;
+
+      if (mapping.recordType && !recordType) {
+        throw Error(`Unrecognized record type in form definition: ${mapping}`);
+      }
 
       if (Array.isArray(item.item)) {
         rescursiveFillMap(item.item, result, recordType);
@@ -1432,6 +1435,7 @@ export const getFieldOnAssessment = (
   }
 
   const record = get(assessment, relatedRecordAttribute);
+  if (!record) return {};
 
   let value;
   if (mapping.fieldName) {
@@ -1485,3 +1489,8 @@ export const parseOccurrencePointFormDefinition = (
 
   return { displayTitle, isEditable, readOnlyDefinition };
 };
+export const MAX_INPUT_AND_LABEL_WIDTH = 500;
+export const FIXED_WIDTH_MEDIUM = 350;
+export const FIXED_WIDTH_SMALL = 200;
+export const FIXED_WIDTH_X_SMALL = 100;
+export const FIXED_WIDTH_X_LARGE = 800;

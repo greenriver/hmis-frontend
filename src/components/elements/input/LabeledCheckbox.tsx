@@ -25,6 +25,9 @@ const LabeledCheckbox = ({
   helperText,
   horizontal = false,
   warnIfEmptyTreatment: _ignored,
+  ariaLabel,
+  inputWidth,
+  maxWidth,
   ...props
 }: Props & DynamicInputCommonProps) => {
   const labelSx = horizontal
@@ -60,7 +63,13 @@ const LabeledCheckbox = ({
     <FormControl>
       <FormGroup sx={horizontal ? horizontalInputSx : undefined}>
         <FormControlLabel
-          control={<Checkbox sx={checkboxSx} onKeyDown={onKeyDown} />}
+          control={
+            <Checkbox
+              sx={{ width: inputWidth, ...checkboxSx }}
+              onKeyDown={onKeyDown}
+              aria-label={ariaLabel}
+            />
+          }
           labelPlacement={horizontal ? 'start' : 'end'}
           label={label}
           sx={{
@@ -68,6 +77,7 @@ const LabeledCheckbox = ({
             '.MuiCheckbox-root': {
               color: error ? 'error.main' : undefined,
             },
+            maxWidth,
             ...labelSx,
           }}
           onChange={onChange}

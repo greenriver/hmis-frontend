@@ -73,9 +73,9 @@ const navItems: NavItem<RootPermissionsFragment>[] = [
         permissions: ['canConfigureDataCollection'],
       },
       {
-        id: 'auto-exit',
-        title: 'Auto-Exit',
-        path: AdminDashboardRoutes.CONFIGURE_AUTO_EXIT,
+        id: 'project-config',
+        title: 'Project',
+        path: AdminDashboardRoutes.PROJECT_CONFIG,
         permissions: ['canConfigureDataCollection'],
       },
     ],
@@ -127,7 +127,7 @@ const AdminDashboard: React.FC = () => {
       }
       {...dashboardState}
     >
-      <Container maxWidth='xl' sx={{ pb: 6 }}>
+      <Container maxWidth='xl' disableGutters>
         <Outlet />
       </Container>
     </DashboardContentContainer>
