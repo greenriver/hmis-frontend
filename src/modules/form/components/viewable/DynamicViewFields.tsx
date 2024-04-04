@@ -115,7 +115,6 @@ export interface DynamicViewFieldsProps {
   horizontal?: boolean;
   warnIfEmpty?: boolean;
   locked?: boolean;
-  bulk?: boolean;
   visible?: boolean;
   pickListArgs?: PickListArgs;
 }

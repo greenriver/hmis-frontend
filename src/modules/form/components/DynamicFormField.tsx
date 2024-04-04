@@ -23,13 +23,9 @@ import DependentFormItemWrapper from './DependentFormItemWrapper';
 import DynamicField from './DynamicField';
 import DynamicGroup from './DynamicGroup';
 import ValueWrapper from './ValueWrapper';
+import DynamicViewField from './viewable/DynamicViewField';
 import { formatCurrency } from '@/modules/hmis/hmisUtil';
-import {
-  Component,
-  FormItem,
-  ItemType,
-  ServiceDetailType,
-} from '@/types/gqlTypes';
+import { Component, FormItem, ItemType } from '@/types/gqlTypes';
 
 export const renderItemWithWrappers = (
   renderChild: (disabled?: boolean) => ReactNode,
@@ -84,7 +80,6 @@ export interface Props {
   horizontal?: boolean;
   warnIfEmpty?: boolean;
   locked?: boolean;
-  bulk?: boolean;
   visible?: boolean;
   pickListArgs?: PickListArgs;
   nestingLevel: number;
@@ -96,9 +91,8 @@ export interface Props {
 const DynamicFormField: React.FC<Props> = ({
   handlers,
   clientId,
-  bulk,
-  horizontal = false,
   warnIfEmpty = false,
+  horizontal = false,
   locked = false,
   visible = true,
   pickListArgs,
@@ -135,9 +129,6 @@ const DynamicFormField: React.FC<Props> = ({
 
   const renderChild = useCallback(
     (isDisabled?: boolean) => {
-      if (bulk && item.serviceDetailType === ServiceDetailType.Client)
-        return null;
-
       if (item.type === ItemType.Group) {
         const group = (
           <DynamicGroup
@@ -151,6 +142,8 @@ const DynamicFormField: React.FC<Props> = ({
                 handlers={handlers}
                 item={item}
                 nestingLevel={nestingLevel + 1}
+                locked={locked}
+                warnIfEmpty={warnIfEmpty}
                 props={props}
                 renderFn={fn}
               />
@@ -213,7 +206,19 @@ const DynamicFormField: React.FC<Props> = ({
         return group;
       }
 
-      const itemComponent = (
+      const itemComponent = item.readOnly ? (
+        <DynamicViewField
+          item={item}
+          value={values[item.linkId]}
+          disabled={isDisabled}
+          nestingLevel={nestingLevel}
+          horizontal={horizontal}
+          pickListArgs={pickListArgs}
+          // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
+          adjustValue={itemChanged}
+          {...fieldProps}
+        />
+      ) : (
         <ValueWrapper name={getSafeLinkId(item.linkId)} handlers={handlers}>
           {(value) => (
             <DynamicField
@@ -246,7 +251,6 @@ const DynamicFormField: React.FC<Props> = ({
       return itemComponent;
     },
     [
-      bulk,
       clientId,
       definition,
       fieldProps,
