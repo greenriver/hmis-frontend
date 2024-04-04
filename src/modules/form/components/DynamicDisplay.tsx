@@ -9,6 +9,7 @@ import { Component, FormItem } from '@/types/gqlTypes';
 interface Props {
   item: FormItem;
   maxWidth?: number;
+  width?: number;
   viewOnly?: boolean;
   value: any;
 }
@@ -22,6 +23,7 @@ const SeverityMap: Record<string, AlertColor> = {
 
 const DynamicDisplay: React.FC<Props> = ({
   item,
+  width,
   maxWidth,
   value = 'N/A',
   viewOnly = false,
@@ -44,7 +46,7 @@ const DynamicDisplay: React.FC<Props> = ({
         <Alert
           data-testid={`alert-${item.linkId}`}
           severity={SeverityMap[item.component as keyof typeof SeverityMap]}
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, width, maxWidth }}
         >
           <CommonHtmlContent>{html}</CommonHtmlContent>
         </Alert>
@@ -54,7 +56,7 @@ const DynamicDisplay: React.FC<Props> = ({
         <CommonHtmlContent
           variant='body2'
           data-testid={`display-${item.linkId}`}
-          sx={{ maxWidth }}
+          sx={{ width, maxWidth }}
         >
           {html}
         </CommonHtmlContent>

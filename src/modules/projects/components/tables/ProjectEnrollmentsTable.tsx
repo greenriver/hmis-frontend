@@ -56,6 +56,15 @@ const ProjectEnrollmentsTable = ({
                       (labelElement && labelElement.getAttribute('id')) ||
                       undefined
                     }
+                    sx={{
+                      '.MuiToggleButton-root': { fontWeight: 600 },
+                      '.MuiButtonBase-root.Mui-selected, .MuiButtonBase-root.Mui-selected:hover':
+                        {
+                          backgroundColor: (theme) =>
+                            theme.palette.primary.main,
+                          color: (theme) => theme.palette.primary.contrastText,
+                        },
+                    }}
                     items={[
                       {
                         value: 'households',

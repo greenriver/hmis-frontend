@@ -75,7 +75,6 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
-  BulkActionType: { ADD: 'ADD', REMOVE: 'REMOVE' },
   ClientAddressType: { both: 'Both', physical: 'Physical', postal: 'Postal' },
   ClientAddressUse: {
     home: 'Home',
@@ -299,6 +298,7 @@ export const HmisEnums = {
     CE_ASSESSMENT: 'CE assessment',
     CE_EVENT: 'CE event',
     CURRENT_LIVING_SITUATION: 'Current living situation',
+    EXTERNAL_FORM: 'External form',
     REFERRAL_REQUEST: 'Referral request',
     SERVICE: 'Service',
   },
@@ -517,6 +517,7 @@ export const HmisEnums = {
     PROJECT_TERMINATED: 'Project terminated',
     UNKNOWN_DISAPPEARED: 'Unknown/disappeared',
   },
+  ExternalFormSubmissionStatus: { new: 'new', reviewed: 'reviewed' },
   ExternalIdentifierType: {
     CLIENT_ID: 'HMIS ID',
     MCI_ID: 'MCI ID',
@@ -541,6 +542,8 @@ export const HmisEnums = {
     CUSTOM_ASSESSMENT: 'Custom assessment',
     ENROLLMENT: 'Enrollment',
     EXIT: 'Exit',
+    EXTERNAL_FORM: 'External form',
+    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FILE: 'File',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
@@ -926,6 +929,7 @@ export const HmisEnums = {
     ENROLLMENTS_FOR_CLIENT:
       'Enrollments for the client, including WIP and Exited.',
     ENROLLMENT_AUDIT_EVENT_RECORD_TYPES: 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
+    EXTERNAL_FORM_TYPES_FOR_PROJECT: 'External form types for the project.',
     GEOCODE: 'GEOCODE',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     ORGANIZATION: 'All Organizations that the User can see',
@@ -1413,6 +1417,7 @@ export const HmisEnums = {
     CLIENT_DETAIL: 'Client detail',
     CURRENT_LIVING_SITUATION: 'Current living situation',
     ENROLLMENT: 'Enrollment',
+    EXTERNAL_FORM: 'External form',
     FILE: 'File',
     FUNDER: 'Funder',
     HMIS_PARTICIPATION: 'HMIS participation',
@@ -1801,6 +1806,7 @@ export const HmisEnums = {
   StaticFormRole: {
     AUTO_EXIT_CONFIG: 'Auto exit config',
     CLIENT_ALERT: 'Client alert',
+    EXTERNAL_FORM_SUBMISSION_REVIEW: 'External form submission review',
     FORM_DEFINITION: 'Form definition',
     FORM_RULE: 'Form rule',
     PROJECT_CONFIG: 'Project config',

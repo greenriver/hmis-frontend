@@ -148,7 +148,6 @@ const DynamicFormFields: React.FC<Props> = ({
             ? undefined
             : values[item.linkId]
         }
-        nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
         horizontal={horizontal}
         pickListArgs={pickListArgs}

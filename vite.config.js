@@ -92,6 +92,15 @@ export default defineConfig(({ command, mode }) => {
             }
           },
         },
+        onwarn(warning, defaultHandler) {
+          if (warning.code === 'SOURCEMAP_ERROR') {
+            return;
+          }
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+            return;
+          }
+          defaultHandler(warning);
+        },
       },
       sourcemap: true,
       minify: mode === 'development' ? false : 'esbuild',
@@ -112,7 +121,7 @@ export default defineConfig(({ command, mode }) => {
           env.SERVER_HTTPS === undefined ? true : env.SERVER_HTTPS === 'true',
         proxy: {
           '/hmis': warehouseProxyServer,
-          '/assets/theme': warehouseProxyServer,
+          '/dev-assets/theme': warehouseProxyServer,
         },
       },
     }),

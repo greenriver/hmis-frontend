@@ -9,6 +9,7 @@ import {
   RadioGroup,
   RadioGroupProps,
 } from '@mui/material';
+import { SxProps } from '@mui/system';
 import { useCallback } from 'react';
 
 import RadioGroupInputOption from '@/components/elements/input/RadioGroupInputOption';
@@ -22,6 +23,7 @@ export interface Props extends Omit<RadioGroupProps, 'onChange'> {
   onChange: (value: PickListOption | null | undefined) => void;
   clearable?: boolean; // whether you can click again to clear the radio button value
   checkbox?: boolean; // display as exclusive checkbox group
+  labelSx?: SxProps;
 }
 export type RadioGroupInputProps = Props & DynamicInputCommonProps;
 
@@ -68,6 +70,9 @@ const RadioGroupInput = ({
   helperText,
   ariaLabel,
   checkbox = false,
+  maxWidth,
+  inputWidth,
+  labelSx,
   ...props
 }: RadioGroupInputProps) => {
   const onClickOption = useCallback(
@@ -87,7 +92,7 @@ const RadioGroupInput = ({
   const ControlComponent = checkbox ? Checkbox : Radio;
 
   return (
-    <FormControl component='fieldset'>
+    <FormControl component='fieldset' sx={{ maxWidth, ...sx }}>
       <FormLabel
         error={error}
         disabled={props.disabled}
@@ -97,6 +102,7 @@ const RadioGroupInput = ({
           '&.Mui-focused': {
             color: 'text.primary',
           },
+          ...labelSx,
         }}
       >
         {label}
@@ -106,6 +112,7 @@ const RadioGroupInput = ({
         // value={value ? value.code : null}
         onChange={() => null}
         sx={{
+          width: inputWidth,
           ...(!row && {
             'label:first-of-type': { pt: 1 },
             // 'label:last-child': { pb: 1 },
@@ -117,7 +124,6 @@ const RadioGroupInput = ({
               borderRadius: 1,
             },
           }),
-          ...sx,
         }}
         aria-label={ariaLabel}
         {...props}

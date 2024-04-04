@@ -3008,6 +3008,41 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ExternalFormSubmission',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'spam', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'status',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'ExternalFormSubmissionStatus',
+            ofType: null,
+          },
+        },
+      },
+      {
+        name: 'submittedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'ExternalIdentifier',
     fields: [
       {
@@ -4589,6 +4624,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canManageExternalFormSubmissions',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageIncomingReferrals',
         type: {
           kind: 'NON_NULL',
@@ -4889,6 +4932,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canManageDeniedReferrals',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageExternalFormSubmissions',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6715,6 +6766,38 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ExternalFormSubmissionFilterOptions',
+    args: [
+      {
+        name: 'status',
+        type: {
+          kind: 'ENUM',
+          name: 'ExternalFormSubmissionStatus',
+          ofType: null,
+        },
+      },
+      {
+        name: 'submittedDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ExternalFormSubmissionInput',
+    args: [
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'spam', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'status',
+        type: {
+          kind: 'ENUM',
+          name: 'ExternalFormSubmissionStatus',
+          ofType: null,
+        },
+      },
+    ],
+  },
+  {
     name: 'FormDefinitionFilterOptions',
     args: [
       {
@@ -7285,6 +7368,31 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ServiceTypeInput',
+    args: [
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'serviceCategoryId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'supportsBulkAssignment',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ServicesForEnrollmentFilterOptions',
     args: [
       {
@@ -7473,51 +7581,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'unitTypeId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'UpdateBedNightsInput',
-    args: [
-      {
-        name: 'action',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'BulkActionType', ofType: null },
-        },
-      },
-      {
-        name: 'bedNightDate',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-        },
-      },
-      {
-        name: 'enrollmentIds',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-            },
-          },
-        },
-      },
-      {
-        name: 'projectId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
       },
     ],
   },
