@@ -12933,6 +12933,7 @@ export type ClientContactPointFieldsFragment = {
 export type ClientImageFragment = {
   __typename?: 'Client';
   id: string;
+  lockVersion: number;
   image?: {
     __typename?: 'ClientImage';
     id: string;
@@ -13341,6 +13342,7 @@ export type GetClientImageQuery = {
   client?: {
     __typename?: 'Client';
     id: string;
+    lockVersion: number;
     image?: {
       __typename?: 'ClientImage';
       id: string;
@@ -13524,6 +13526,7 @@ export type UpdateClientImageMutation = {
     client?: {
       __typename?: 'Client';
       id: string;
+      lockVersion: number;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -13560,6 +13563,7 @@ export type DeleteClientImageMutation = {
     client?: {
       __typename?: 'Client';
       id: string;
+      lockVersion: number;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -31808,6 +31812,7 @@ export const ClientImageFieldsFragmentDoc = gql`
 export const ClientImageFragmentDoc = gql`
   fragment ClientImage on Client {
     id
+    lockVersion
     image {
       ...ClientImageFields
     }

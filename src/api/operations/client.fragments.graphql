@@ -120,6 +120,7 @@ fragment ClientContactPointFields on ClientContactPoint {
 
 fragment ClientImage on Client {
   id
+  lockVersion
   image {
     ...ClientImageFields
   }
