@@ -117,6 +117,9 @@ export const formatDateTimeForDisplay = (date: Date) => {
 
 // "Time of day" is stored as minutes since midnight
 export const formatTimeOfDay = (timeOfDayMinutes: number) => {
+  if (isNaN(Number(timeOfDayMinutes))) {
+    return timeOfDayMinutes;
+  }
   const midnight = startOfDay(new Date());
   const date = addMinutes(midnight, timeOfDayMinutes);
   return format(date, 'h:mm a'); // 6:30 am
