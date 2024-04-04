@@ -9,7 +9,6 @@ export interface Props {
   clientId?: string;
   horizontal?: boolean;
   warnIfEmpty?: boolean;
-  locked?: boolean;
   visible?: boolean;
   pickListArgs?: PickListArgs;
 }

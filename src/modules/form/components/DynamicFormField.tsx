@@ -78,8 +78,7 @@ export interface Props {
   handlers: FormDefinitionHandlers;
   clientId?: string;
   horizontal?: boolean;
-  warnIfEmpty?: boolean;
-  locked?: boolean;
+  warnIfEmpty?: boolean; // whether to render warn if empty treatment if applicable (specified on item)
   visible?: boolean;
   pickListArgs?: PickListArgs;
   nestingLevel: number;
@@ -93,7 +92,6 @@ const DynamicFormField: React.FC<Props> = ({
   clientId,
   warnIfEmpty = false,
   horizontal = false,
-  locked = false,
   visible = true,
   pickListArgs,
   item,
@@ -142,7 +140,6 @@ const DynamicFormField: React.FC<Props> = ({
                 handlers={handlers}
                 item={item}
                 nestingLevel={nestingLevel + 1}
-                locked={locked}
                 warnIfEmpty={warnIfEmpty}
                 props={props}
                 renderFn={fn}
@@ -164,7 +161,6 @@ const DynamicFormField: React.FC<Props> = ({
             itemChanged={itemChanged}
             severalItemsChanged={severalItemsChanged}
             visible={visible}
-            locked={locked}
             debug={
               import.meta.env.MODE === 'development'
                 ? (keys?: string[]) => {
@@ -239,7 +235,7 @@ const DynamicFormField: React.FC<Props> = ({
                   values,
                   localConstants: localConstants || {},
                 }),
-                disabled: isDisabled || locked || undefined,
+                disabled: isDisabled,
               }}
             />
           )}
@@ -260,7 +256,6 @@ const DynamicFormField: React.FC<Props> = ({
       item,
       itemChanged,
       localConstants,
-      locked,
       nestingLevel,
       pickListArgs,
       renderFn,

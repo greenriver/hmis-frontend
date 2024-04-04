@@ -23,7 +23,6 @@ export interface Props {
   visible?: boolean;
   pickListArgs?: PickListArgs;
   handlers: FormDefinitionHandlers;
-  locked?: boolean;
   nestingLevel: number;
   item: FormItem;
   props?: OverrideableDynamicFieldProps;
@@ -114,7 +113,6 @@ export interface DynamicViewFieldsProps {
   clientId?: string;
   horizontal?: boolean;
   warnIfEmpty?: boolean;
-  locked?: boolean;
   visible?: boolean;
   pickListArgs?: PickListArgs;
 }
