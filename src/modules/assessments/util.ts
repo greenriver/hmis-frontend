@@ -1,3 +1,5 @@
+import { ClientAssessmentType } from '@/components/clientDashboard/enrollments/ClientAssessments';
+import { ProjectAssessmentType } from '@/modules/projects/components/ProjectAssessments';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { AssessmentFieldsFragment, AssessmentRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -42,3 +44,15 @@ export const generateAssessmentPath = (
     assessmentId: assessment.id,
   });
 };
+
+export const assessmentRowLinkTo = (
+  record: ClientAssessmentType | ProjectAssessmentType,
+  clientId?: string
+) =>
+  // Note: this opens the assessment for individual viewing, even
+  // if it's an intake/exit in a multimember household.
+  generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
+    clientId: clientId,
+    enrollmentId: record.enrollment.id,
+    assessmentId: record.id,
+  });

@@ -82,6 +82,7 @@ import Inventories from '@/modules/projects/components/Inventories';
 import Inventory from '@/modules/projects/components/Inventory';
 import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferral';
 import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
+import ProjectAssessments from '@/modules/projects/components/ProjectAssessments';
 import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
@@ -152,6 +153,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
             element: <ProjectEnrollments />,
+          },
+          {
+            path: ProjectDashboardRoutes.PROJECT_ASSESSMENTS,
+            element: <ProjectAssessments />,
           },
           {
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
