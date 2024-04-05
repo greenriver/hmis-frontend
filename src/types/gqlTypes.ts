@@ -7676,6 +7676,7 @@ export type RootPermissionsFragment = {
   canViewFullSsn: boolean;
   canDeleteProject: boolean;
   canViewPartialSsn: boolean;
+  canViewClientPhoto: boolean;
   canEnrollClients: boolean;
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
@@ -7788,6 +7789,7 @@ export type GetRootPermissionsQuery = {
     canViewFullSsn: boolean;
     canDeleteProject: boolean;
     canViewPartialSsn: boolean;
+    canViewClientPhoto: boolean;
     canEnrollClients: boolean;
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -31008,6 +31010,7 @@ export const RootPermissionsFragmentDoc = gql`
     canViewFullSsn
     canDeleteProject
     canViewPartialSsn
+    canViewClientPhoto
     canEnrollClients
     canEditEnrollments
     canViewEnrollmentDetails

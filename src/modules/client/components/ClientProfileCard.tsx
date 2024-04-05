@@ -360,6 +360,8 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
     variables: { id: client.id },
   });
 
+  const [canViewClientPhoto] = useHasRootPermissions(['canViewClientPhoto']);
+
   const [canViewSsn] = useHasRootPermissions([
     'canViewFullSsn',
     'canViewPartialSsn',
@@ -381,20 +383,21 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
             <Typography variant='h4'>{clientNameAllParts(client)}</Typography>
           </Grid>
           <Grid item xs={12} sx={{ display: 'flex', gap: 2 }}>
-            {imageLoading ? (
-              <Skeleton
-                variant='rectangular'
-                sx={{
-                  height: size,
-                  width: size,
-                }}
-              />
-            ) : (
-              <ClientCardImage
-                size={size}
-                client={clientImageData || undefined}
-              />
-            )}
+            {canViewClientPhoto &&
+              (imageLoading ? (
+                <Skeleton
+                  variant='rectangular'
+                  sx={{
+                    height: size,
+                    width: size,
+                  }}
+                />
+              ) : (
+                <ClientCardImage
+                  size={size}
+                  client={clientImageData || undefined}
+                />
+              ))}
             <Box
               sx={{
                 display: 'flex',
