@@ -152,7 +152,14 @@ const AllProjects = () => {
                 clearAdornment
               />
               <RootPermissionsFilter permissions={['canEditOrganization']}>
-                <Box sx={{ width: 'fit-content', pt: isMobile ? 0 : 3.5 }}>
+                <Box
+                  sx={{
+                    width: 'fit-content',
+                    pt: isMobile ? 0 : 3.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
                   <ButtonLink
                     data-testid='addOrganizationButton'
                     to={generateSafePath(Routes.CREATE_ORGANIZATION)}
