@@ -231,7 +231,11 @@ const Uploader: React.FC<UploaderProps> = ({
             setCurrentUpload(res);
             onUpload(res, file);
           })
-          .then(() => setLoading(false));
+          .then(() => setLoading(false))
+          .catch((error) => {
+            setLoading(false);
+            setError(error.message);
+          });
       }
     },
     [uploadFile, onUpload]

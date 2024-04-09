@@ -731,6 +731,7 @@ export type ClientAccess = {
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
   canViewClientName: Scalars['Boolean']['output'];
+  canViewClientPhoto: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
@@ -5812,7 +5813,9 @@ export type QueryAccess = {
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientContactInfo: Scalars['Boolean']['output'];
   canViewClientName: Scalars['Boolean']['output'];
+  canViewClientPhoto: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
@@ -7673,6 +7676,7 @@ export type RootPermissionsFragment = {
   canViewFullSsn: boolean;
   canDeleteProject: boolean;
   canViewPartialSsn: boolean;
+  canViewClientPhoto: boolean;
   canEnrollClients: boolean;
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
@@ -7785,6 +7789,7 @@ export type GetRootPermissionsQuery = {
     canViewFullSsn: boolean;
     canDeleteProject: boolean;
     canViewPartialSsn: boolean;
+    canViewClientPhoto: boolean;
     canEnrollClients: boolean;
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -12951,6 +12956,11 @@ export type ClientImageFragment = {
     contentType: string;
     base64: string;
   } | null;
+  access: {
+    __typename?: 'ClientAccess';
+    canEditClient: boolean;
+    canViewClientPhoto: boolean;
+  };
 };
 
 export type ClientIdentificationFieldsFragment = {
@@ -13362,6 +13372,11 @@ export type GetClientImageQuery = {
       contentType: string;
       base64: string;
     } | null;
+    access: {
+      __typename?: 'ClientAccess';
+      canEditClient: boolean;
+      canViewClientPhoto: boolean;
+    };
   } | null;
 };
 
@@ -13545,6 +13560,11 @@ export type UpdateClientImageMutation = {
         contentType: string;
         base64: string;
       } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        canEditClient: boolean;
+        canViewClientPhoto: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -13581,6 +13601,11 @@ export type DeleteClientImageMutation = {
         contentType: string;
         base64: string;
       } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        canEditClient: boolean;
+        canViewClientPhoto: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -30985,6 +31010,7 @@ export const RootPermissionsFragmentDoc = gql`
     canViewFullSsn
     canDeleteProject
     canViewPartialSsn
+    canViewClientPhoto
     canEnrollClients
     canEditEnrollments
     canViewEnrollmentDetails
@@ -31841,6 +31867,10 @@ export const ClientImageFragmentDoc = gql`
     id
     image {
       ...ClientImageFields
+    }
+    access {
+      canEditClient
+      canViewClientPhoto
     }
   }
   ${ClientImageFieldsFragmentDoc}

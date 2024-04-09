@@ -123,6 +123,10 @@ fragment ClientImage on Client {
   image {
     ...ClientImageFields
   }
+  access {
+    canEditClient
+    canViewClientPhoto
+  }
 }
 
 fragment ClientIdentificationFields on Client {
