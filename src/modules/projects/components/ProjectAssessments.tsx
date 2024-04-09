@@ -8,8 +8,8 @@ import useSafeParams from '@/hooks/useSafeParams';
 import {
   ASSESSMENT_COLUMNS,
   ASSESSMENT_ENROLLMENT_COLUMNS,
-} from '@/modules/assessments/assessmentColumns';
-import { assessmentRowLinkTo } from '@/modules/assessments/util';
+  assessmentRowLinkTo,
+} from '@/modules/assessments/util';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {

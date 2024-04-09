@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
-import { ASSESSMENT_COLUMNS } from '@/modules/assessments/assessmentColumns';
-import { generateAssessmentPath } from '@/modules/assessments/util';
+import {
+  ASSESSMENT_COLUMNS,
+  generateAssessmentPath,
+} from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   AssessmentFieldsFragment,

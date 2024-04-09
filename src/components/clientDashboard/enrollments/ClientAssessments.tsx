@@ -7,8 +7,8 @@ import useSafeParams from '@/hooks/useSafeParams';
 import {
   ASSESSMENT_COLUMNS,
   ASSESSMENT_ENROLLMENT_COLUMNS,
-} from '@/modules/assessments/assessmentColumns';
-import { assessmentRowLinkTo } from '@/modules/assessments/util';
+  assessmentRowLinkTo,
+} from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
 import { assessmentDescription } from '@/modules/hmis/hmisUtil';
