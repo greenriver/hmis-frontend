@@ -5223,6 +5223,7 @@ export type Project = {
   access: ProjectAccess;
   active: Scalars['Boolean']['output'];
   affiliatedProjects: Array<Project>;
+  assessments: AssessmentsPaginated;
   ceParticipations: CeParticipationsPaginated;
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
@@ -5265,6 +5266,14 @@ export type Project = {
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   user?: Maybe<ApplicationUser>;
+};
+
+export type ProjectAssessmentsArgs = {
+  filters?: InputMaybe<AssessmentFilterOptions>;
+  inProgress?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
 export type ProjectCeParticipationsArgs = {
@@ -28226,6 +28235,95 @@ export type GetProjectServicesQuery = {
   } | null;
 };
 
+export type GetProjectAssessmentsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
+}>;
+
+export type GetProjectAssessmentsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    assessments: {
+      __typename?: 'AssessmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Assessment';
+        id: string;
+        lockVersion: number;
+        inProgress: boolean;
+        assessmentDate: string;
+        dataCollectionStage?: DataCollectionStage | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
+        role: AssessmentRole;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          lockVersion: number;
+          entryDate: string;
+          exitDate?: string | null;
+          exitDestination?: Destination | null;
+          inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          enrollmentCoc?: string | null;
+          householdId: string;
+          householdShortId: string;
+          householdSize: number;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          client: {
+            __typename?: 'Client';
+            dob?: string | null;
+            veteranStatus: NoYesReasonsForMissingData;
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+            canAuditEnrollments: boolean;
+          };
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+          } | null;
+        };
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
+      }>;
+    };
+  } | null;
+};
+
 export type DeleteProjectMutationVariables = Exact<{
   input: DeleteProjectInput;
 }>;
@@ -39968,6 +40066,92 @@ export type GetProjectServicesLazyQueryHookResult = ReturnType<
 export type GetProjectServicesQueryResult = Apollo.QueryResult<
   GetProjectServicesQuery,
   GetProjectServicesQueryVariables
+>;
+export const GetProjectAssessmentsDocument = gql`
+  query GetProjectAssessments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+    $filters: AssessmentFilterOptions = null
+  ) {
+    project(id: $id) {
+      id
+      assessments(
+        limit: $limit
+        offset: $offset
+        sortOrder: $sortOrder
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...AssessmentFields
+          enrollment {
+            ...EnrollmentFields
+          }
+        }
+      }
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectAssessmentsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectAssessmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetProjectAssessmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectAssessmentsQuery,
+    GetProjectAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectAssessmentsQuery,
+    GetProjectAssessmentsQueryVariables
+  >(GetProjectAssessmentsDocument, options);
+}
+export function useGetProjectAssessmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectAssessmentsQuery,
+    GetProjectAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectAssessmentsQuery,
+    GetProjectAssessmentsQueryVariables
+  >(GetProjectAssessmentsDocument, options);
+}
+export type GetProjectAssessmentsQueryHookResult = ReturnType<
+  typeof useGetProjectAssessmentsQuery
+>;
+export type GetProjectAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectAssessmentsLazyQuery
+>;
+export type GetProjectAssessmentsQueryResult = Apollo.QueryResult<
+  GetProjectAssessmentsQuery,
+  GetProjectAssessmentsQueryVariables
 >;
 export const DeleteProjectDocument = gql`
   mutation DeleteProject($input: DeleteProjectInput!) {
