@@ -2,6 +2,7 @@ import { Paper } from '@mui/material';
 
 import { omit } from 'lodash-es';
 import { useMemo } from 'react';
+import { useProjectDashboardContext } from './ProjectDashboard';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -27,6 +28,7 @@ const ProjectAssessments = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
+  const { project } = useProjectDashboardContext();
 
   const displayColumns: ColumnDef<ProjectAssessmentType>[] = useMemo(() => {
     return [
@@ -69,6 +71,7 @@ const ProjectAssessments = () => {
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectAssessmentsDocument}
           rowLinkTo={rowLinkTo}
+          rowLinkState={{ backToLabel: project.projectName }}
           columns={displayColumns}
           noData='No assessments'
           pagePath='project.assessments'

@@ -2,6 +2,7 @@ import { Location, To } from 'react-router-dom';
 
 export type LocationState = {
   fromLoginRedirect?: boolean;
+  backToLabel?: string; // title of page to go back to. Used like `Back to ${backToLabel}`
 };
 
 export const STATE_FROM_LOGIN_REDIRECT: LocationState = {
