@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         corepack enable
-        yarn install --offline
+        yarn install
 
     # - name: Audit dependencies
     #   run: |
