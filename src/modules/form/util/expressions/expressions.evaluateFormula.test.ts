@@ -13,6 +13,9 @@ describe('evaluateFormula', () => {
   it('calls functions and handles UnaryExpressions', () => {
     expect(evaluateFormula('ABS(-2)', context({}))).toBe(2);
   });
+  it('handles 0', () => {
+    expect(evaluateFormula('a + b', context({ a: 0, b: 0 }))).toBe(0);
+  });
   it('returns undefined if any values are undefined', () => {
     expect(evaluateFormula('ABS(a - b)', context({ a: 1, b: undefined }))).toBe(
       undefined
