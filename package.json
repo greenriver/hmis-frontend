@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "18.2.0"
+    "node": "20.12.2"
   },
   "scripts": {
     "dev": "DEBUG=vite:proxy vite --clearScreen false",
