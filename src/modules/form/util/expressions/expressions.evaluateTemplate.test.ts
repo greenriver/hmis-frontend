@@ -31,9 +31,9 @@ describe('evaluateTemplate', () => {
   it('returns 0 if blank 0', () => {
     expect(evaluateTemplate('${sum}', context({ sum: '0' }))).toBe('0');
   });
-  it('removes escaped braces without interpolation', () => {
-    expect(evaluateTemplate('$\\{literalBraces\\}', context({}))).toBe(
-      '${literalBraces}'
+  it('handles braces without interpolation', () => {
+    expect(evaluateTemplate('{literalBraces}', context({}))).toBe(
+      '{literalBraces}'
     );
   });
 });

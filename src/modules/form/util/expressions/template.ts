@@ -54,9 +54,7 @@ export const evaluateTemplate = (
 ): string => {
   // doesn't match if the braces are escaped
   const regex = /\${(.*?)}/g;
-  const interpolated = template.replace(regex, (match, key) => {
+  return template.replace(regex, (match, key) => {
     return evaluateTemplateVariable(key, context) || 'N/A';
   });
-  // replace escaped braces
-  return interpolated.replace(/\\([{}])/g, '$1');
 };
