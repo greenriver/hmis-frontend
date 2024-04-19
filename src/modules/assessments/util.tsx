@@ -1,12 +1,17 @@
 import { ClientAssessmentType } from '@/components/clientDashboard/enrollments/ClientAssessments';
 import { ColumnDef } from '@/components/elements/table/types';
+import { FilterType } from '@/modules/dataFetching/types';
 import { HhmAssessmentType } from '@/modules/enrollment/components/HouseholdAssessmentsTable';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { formRoleDisplay, lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import { ProjectAssessmentType } from '@/modules/projects/components/ProjectAssessments';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { AssessmentFieldsFragment, AssessmentRole } from '@/types/gqlTypes';
+import {
+  AssessmentFieldsFragment,
+  AssessmentRole,
+  PickListType,
+} from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
 export const assessmentPrefix = (role: AssessmentRole) => {
@@ -95,4 +100,15 @@ export const ASSESSMENT_ENROLLMENT_COLUMNS: {
     header: 'Enrollment Period',
     render: (a) => <EnrollmentDateRangeWithStatus enrollment={a.enrollment} />,
   },
+};
+
+export const getAssessmentTypeFilter = (projectId: string): FilterType<any> => {
+  return {
+    key: 'formDefinitionIdentifier',
+    label: 'Assessment Type',
+    multi: true,
+    type: 'picklist',
+    pickListReference: PickListType.AssessmentTypes,
+    pickListArgs: { projectId: projectId },
+  };
 };

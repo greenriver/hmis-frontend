@@ -1,6 +1,4 @@
 import { Paper } from '@mui/material';
-
-import { omit } from 'lodash-es';
 import { useMemo } from 'react';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -10,6 +8,7 @@ import {
   ASSESSMENT_COLUMNS,
   ASSESSMENT_ENROLLMENT_COLUMNS,
   assessmentRowLinkTo,
+  getAssessmentTypeFilter,
 } from '@/modules/assessments/util';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -59,6 +58,8 @@ const ProjectAssessments = () => {
   const rowLinkTo = (record: ProjectAssessmentType) =>
     assessmentRowLinkTo(record, record.enrollment.client.id);
 
+  const filter = useMemo(() => getAssessmentTypeFilter(projectId), [projectId]);
+
   return (
     <>
       <PageTitle title='Assessments' />
@@ -77,7 +78,8 @@ const ProjectAssessments = () => {
           pagePath='project.assessments'
           recordType='Assessment'
           showFilters
-          filters={(filters) => omit(filters, 'project', 'projectType')}
+          filters={{ formDefinitionIdentifier: filter }}
+          filterInputType='AssessmentsForProjectFilterOptions'
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
       </Paper>

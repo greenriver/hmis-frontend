@@ -69,6 +69,7 @@ const FILTER_NAME_TO_PICK_LIST = {
   project: PickListType.Project,
   appliedToProject: PickListType.Project,
   organization: PickListType.Organization,
+  assessmentType: PickListType.AssessmentTypes,
   serviceType: PickListType.AllServiceTypes,
   user: PickListType.Users,
   clientRecordType: PickListType.ClientAuditEventRecordTypes,

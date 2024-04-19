@@ -282,6 +282,7 @@ export type AssessmentEligibility = {
 };
 
 export type AssessmentFilterOptions = {
+  formDefinitionIdentifier?: InputMaybe<Array<Scalars['String']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   type?: InputMaybe<Array<AssessmentRole>>;
@@ -351,11 +352,17 @@ export enum AssessmentType {
 }
 
 export type AssessmentsForEnrollmentFilterOptions = {
+  formDefinitionIdentifier?: InputMaybe<Array<Scalars['String']['input']>>;
   type?: InputMaybe<Array<AssessmentRole>>;
 };
 
 export type AssessmentsForHouseholdFilterOptions = {
+  formDefinitionIdentifier?: InputMaybe<Array<Scalars['String']['input']>>;
   type?: InputMaybe<Array<AssessmentRole>>;
+};
+
+export type AssessmentsForProjectFilterOptions = {
+  formDefinitionIdentifier?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsPaginated = {
@@ -4445,6 +4452,7 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
+  AssessmentTypes = 'ASSESSMENT_TYPES',
   AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
@@ -5269,7 +5277,7 @@ export type Project = {
 };
 
 export type ProjectAssessmentsArgs = {
-  filters?: InputMaybe<AssessmentFilterOptions>;
+  filters?: InputMaybe<AssessmentsForProjectFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -28240,7 +28248,7 @@ export type GetProjectAssessmentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
-  filters?: InputMaybe<AssessmentFilterOptions>;
+  filters?: InputMaybe<AssessmentsForProjectFilterOptions>;
 }>;
 
 export type GetProjectAssessmentsQuery = {
@@ -40073,7 +40081,7 @@ export const GetProjectAssessmentsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-    $filters: AssessmentFilterOptions = null
+    $filters: AssessmentsForProjectFilterOptions = null
   ) {
     project(id: $id) {
       id
