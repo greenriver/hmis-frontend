@@ -1,7 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Button } from '@mui/material';
-import React, { ReactNode, useCallback } from 'react';
+import React, { ReactNode, useCallback, useMemo } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -65,6 +65,17 @@ const ContextHeader: React.FC<Props> = ({
   // Try to guess which path we should link to in the "back" button on the app bar if this is Focus Mode.
   // Not ideal, it would be better if the content specified exactly where to go back to, but this works for now.
 
+  const backToLabel = useMemo(() => {
+    const state = location.state;
+    if (state?.backToLabel) {
+      return `Back to ${state?.backToLabel}`;
+    }
+    if (client) {
+      return `Back to ${clientBriefName(client)}`;
+    }
+    return 'Back';
+  }, [client, location.state]);
+
   const exitFocusMode = useCallback(() => {
     if (!focusMode) return;
 
@@ -101,7 +112,7 @@ const ContextHeader: React.FC<Props> = ({
             sx={{ height: '32px', fontWeight: 600, ml: 2 }}
             data-testid='headerBackButton'
           >
-            {client ? `Back to ${clientBriefName(client)}` : 'Back'}
+            {backToLabel}
           </Button>
         </Box>
       ) : (

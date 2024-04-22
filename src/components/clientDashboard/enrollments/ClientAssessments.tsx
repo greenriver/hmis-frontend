@@ -4,32 +4,27 @@ import { useCallback } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import {
+  ASSESSMENT_COLUMNS,
+  ASSESSMENT_ENROLLMENT_COLUMNS,
+  assessmentRowLinkTo,
+} from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
-import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import {
-  assessmentDescription,
-  formRoleDisplay,
-} from '@/modules/hmis/hmisUtil';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import { assessmentDescription } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentSortOption,
   GetClientAssessmentsDocument,
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
-type AssessmentType = NonNullable<
+export type ClientAssessmentType = NonNullable<
   NonNullable<GetClientAssessmentsQuery['client']>['assessments']
 >['nodes'][0];
 
-const columns: ColumnDef<AssessmentType>[] = [
-  {
-    header: 'Assessment Type',
-    render: (assessment) => formRoleDisplay(assessment),
-    linkTreatment: true,
-  },
+const columns: ColumnDef<ClientAssessmentType>[] = [
+  ASSESSMENT_COLUMNS.linkedType,
   {
     header: 'Assessment Date',
     render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
@@ -39,24 +34,14 @@ const columns: ColumnDef<AssessmentType>[] = [
     header: 'Project Name',
     render: (row) => row.enrollment.projectName,
   },
-  {
-    header: 'Enrollment Period',
-    render: (a) => <EnrollmentDateRangeWithStatus enrollment={a.enrollment} />,
-  },
+  ASSESSMENT_ENROLLMENT_COLUMNS.period,
 ];
 
 const ClientAssessments = () => {
   const { clientId } = useSafeParams() as { clientId: string };
 
   const rowLinkTo = useCallback(
-    (record: AssessmentType) =>
-      // Note: this opens the assessment for individual viewing, even
-      // if it's an intake/exit in a multimember household.
-      generateSafePath(EnrollmentDashboardRoutes.VIEW_ASSESSMENT, {
-        clientId,
-        enrollmentId: record.enrollment.id,
-        assessmentId: record.id,
-      }),
+    (record: ClientAssessmentType) => assessmentRowLinkTo(record, clientId),
     [clientId]
   );
 
@@ -67,7 +52,7 @@ const ClientAssessments = () => {
         <GenericTableWithData<
           GetClientAssessmentsQuery,
           GetClientAssessmentsQueryVariables,
-          AssessmentType
+          ClientAssessmentType
         >
           showFilters
           queryVariables={{ id: clientId }}

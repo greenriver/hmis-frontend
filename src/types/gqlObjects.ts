@@ -920,6 +920,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewClientName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClientPhoto',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewDob',
         type: {
           kind: 'NON_NULL',
@@ -5035,6 +5051,30 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewClientContactInfo',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClientName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClientPhoto',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewClients',
         type: {
           kind: 'NON_NULL',
@@ -7074,6 +7114,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             },
           },
         },
+      },
+    ],
+  },
+  {
+    name: 'OrganizationFilterOptions',
+    args: [
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

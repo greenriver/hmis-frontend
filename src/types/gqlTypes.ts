@@ -730,6 +730,8 @@ export type ClientAccess = {
   canViewAnyFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientName: Scalars['Boolean']['output'];
+  canViewClientPhoto: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
@@ -4363,6 +4365,10 @@ export type OrganizationAccess = {
   id: Scalars['ID']['output'];
 };
 
+export type OrganizationFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** HUD Organization Sorting Options */
 export enum OrganizationSortOption {
   Name = 'NAME',
@@ -5217,6 +5223,7 @@ export type Project = {
   access: ProjectAccess;
   active: Scalars['Boolean']['output'];
   affiliatedProjects: Array<Project>;
+  assessments: AssessmentsPaginated;
   ceParticipations: CeParticipationsPaginated;
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
@@ -5259,6 +5266,14 @@ export type Project = {
   unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   user?: Maybe<ApplicationUser>;
+};
+
+export type ProjectAssessmentsArgs = {
+  filters?: InputMaybe<AssessmentFilterOptions>;
+  inProgress?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
 export type ProjectCeParticipationsArgs = {
@@ -5691,6 +5706,7 @@ export type QueryOrganizationArgs = {
 };
 
 export type QueryOrganizationsArgs = {
+  filters?: InputMaybe<OrganizationFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<OrganizationSortOption>;
@@ -5806,6 +5822,9 @@ export type QueryAccess = {
   canViewAnyConfidentialClientFiles: Scalars['Boolean']['output'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean']['output'];
   canViewClientAlerts: Scalars['Boolean']['output'];
+  canViewClientContactInfo: Scalars['Boolean']['output'];
+  canViewClientName: Scalars['Boolean']['output'];
+  canViewClientPhoto: Scalars['Boolean']['output'];
   canViewClients: Scalars['Boolean']['output'];
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
@@ -7658,6 +7677,7 @@ export type RootPermissionsFragment = {
   canAuditUsers: boolean;
   canEditClients: boolean;
   canViewClients: boolean;
+  canViewClientName: boolean;
   canDeleteClients: boolean;
   canEditOrganization: boolean;
   canDeleteOrganization: boolean;
@@ -7665,6 +7685,7 @@ export type RootPermissionsFragment = {
   canViewFullSsn: boolean;
   canDeleteProject: boolean;
   canViewPartialSsn: boolean;
+  canViewClientPhoto: boolean;
   canEnrollClients: boolean;
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
@@ -7696,6 +7717,7 @@ export type ClientAccessFieldsFragment = {
   canViewDob: boolean;
   canViewFullSsn: boolean;
   canViewPartialSsn: boolean;
+  canViewClientName: boolean;
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
@@ -7768,6 +7790,7 @@ export type GetRootPermissionsQuery = {
     canAuditUsers: boolean;
     canEditClients: boolean;
     canViewClients: boolean;
+    canViewClientName: boolean;
     canDeleteClients: boolean;
     canEditOrganization: boolean;
     canDeleteOrganization: boolean;
@@ -7775,6 +7798,7 @@ export type GetRootPermissionsQuery = {
     canViewFullSsn: boolean;
     canDeleteProject: boolean;
     canViewPartialSsn: boolean;
+    canViewClientPhoto: boolean;
     canEnrollClients: boolean;
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -12645,6 +12669,7 @@ export type ClientSearchResultFieldsFragment = {
     canEditClient: boolean;
     canDeleteClient: boolean;
     canViewDob: boolean;
+    canViewClientName: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -12736,6 +12761,7 @@ export type ClientFieldsFragment = {
     canEditClient: boolean;
     canDeleteClient: boolean;
     canViewDob: boolean;
+    canViewClientName: boolean;
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
@@ -12939,6 +12965,11 @@ export type ClientImageFragment = {
     contentType: string;
     base64: string;
   } | null;
+  access: {
+    __typename?: 'ClientAccess';
+    canEditClient: boolean;
+    canViewClientPhoto: boolean;
+  };
 };
 
 export type ClientIdentificationFieldsFragment = {
@@ -13050,6 +13081,7 @@ export type SearchClientsQuery = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -13149,6 +13181,7 @@ export type GetClientQuery = {
       canEditClient: boolean;
       canDeleteClient: boolean;
       canViewDob: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -13313,6 +13346,7 @@ export type GetClientPermissionsQuery = {
       canViewDob: boolean;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -13347,6 +13381,11 @@ export type GetClientImageQuery = {
       contentType: string;
       base64: string;
     } | null;
+    access: {
+      __typename?: 'ClientAccess';
+      canEditClient: boolean;
+      canViewClientPhoto: boolean;
+    };
   } | null;
 };
 
@@ -13530,6 +13569,11 @@ export type UpdateClientImageMutation = {
         contentType: string;
         base64: string;
       } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        canEditClient: boolean;
+        canViewClientPhoto: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -13566,6 +13610,11 @@ export type DeleteClientImageMutation = {
         contentType: string;
         base64: string;
       } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        canEditClient: boolean;
+        canViewClientPhoto: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -13725,6 +13774,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canEditClient: boolean;
                 canDeleteClient: boolean;
                 canViewDob: boolean;
+                canViewClientName: boolean;
                 canEditEnrollments: boolean;
                 canDeleteEnrollments: boolean;
                 canViewEnrollmentDetails: boolean;
@@ -14578,6 +14628,7 @@ export type MergeClientsMutation = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -16175,6 +16226,7 @@ export type AllEnrollmentDetailsFragment = {
       canViewDob: boolean;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -17248,6 +17300,7 @@ export type GetEnrollmentDetailsQuery = {
         canViewDob: boolean;
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -17871,6 +17924,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -25276,6 +25330,7 @@ export type SubmitFormMutation = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -26163,6 +26218,7 @@ export type HouseholdFieldsFragment = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -26239,6 +26295,7 @@ export type HouseholdClientFieldsFragment = {
       canEditClient: boolean;
       canDeleteClient: boolean;
       canViewDob: boolean;
+      canViewClientName: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
@@ -26397,6 +26454,7 @@ export type GetHouseholdQuery = {
           canEditClient: boolean;
           canDeleteClient: boolean;
           canViewDob: boolean;
+          canViewClientName: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -26912,6 +26970,7 @@ export type OrganizationFieldsFragment = {
 export type GetOrganizationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<OrganizationFilterOptions>;
 }>;
 
 export type GetOrganizationsQuery = {
@@ -28176,6 +28235,95 @@ export type GetProjectServicesQuery = {
   } | null;
 };
 
+export type GetProjectAssessmentsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
+}>;
+
+export type GetProjectAssessmentsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    assessments: {
+      __typename?: 'AssessmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Assessment';
+        id: string;
+        lockVersion: number;
+        inProgress: boolean;
+        assessmentDate: string;
+        dataCollectionStage?: DataCollectionStage | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        dateDeleted?: string | null;
+        role: AssessmentRole;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          lockVersion: number;
+          entryDate: string;
+          exitDate?: string | null;
+          exitDestination?: Destination | null;
+          inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          enrollmentCoc?: string | null;
+          householdId: string;
+          householdShortId: string;
+          householdSize: number;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          client: {
+            __typename?: 'Client';
+            dob?: string | null;
+            veteranStatus: NoYesReasonsForMissingData;
+            id: string;
+            lockVersion: number;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+            canAuditEnrollments: boolean;
+          };
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+          } | null;
+        };
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          cacheKey: string;
+          title: string;
+        };
+      }>;
+    };
+  } | null;
+};
+
 export type DeleteProjectMutationVariables = Exact<{
   input: DeleteProjectInput;
 }>;
@@ -29154,6 +29302,7 @@ export type GetReferralPostingQuery = {
           canEditClient: boolean;
           canDeleteClient: boolean;
           canViewDob: boolean;
+          canViewClientName: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
@@ -29274,6 +29423,7 @@ export type UpdateReferralPostingMutation = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -29408,6 +29558,7 @@ export type CreateOutgoingReferralPostingMutation = {
             canEditClient: boolean;
             canDeleteClient: boolean;
             canViewDob: boolean;
+            canViewClientName: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
@@ -29600,6 +29751,7 @@ export type ReferralPostingDetailFieldsFragment = {
         canEditClient: boolean;
         canDeleteClient: boolean;
         canViewDob: boolean;
+        canViewClientName: boolean;
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
         canViewEnrollmentDetails: boolean;
@@ -30948,6 +31100,7 @@ export const RootPermissionsFragmentDoc = gql`
     canAuditUsers
     canEditClients
     canViewClients
+    canViewClientName
     canDeleteClients
     canEditOrganization
     canDeleteOrganization
@@ -30955,6 +31108,7 @@ export const RootPermissionsFragmentDoc = gql`
     canViewFullSsn
     canDeleteProject
     canViewPartialSsn
+    canViewClientPhoto
     canEnrollClients
     canEditEnrollments
     canViewEnrollmentDetails
@@ -31639,6 +31793,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewDob
     canViewFullSsn
     canViewPartialSsn
+    canViewClientName
     canEditEnrollments
     canDeleteEnrollments
     canViewEnrollmentDetails
@@ -31810,6 +31965,10 @@ export const ClientImageFragmentDoc = gql`
     id
     image {
       ...ClientImageFields
+    }
+    access {
+      canEditClient
+      canViewClientPhoto
     }
   }
   ${ClientImageFieldsFragmentDoc}
@@ -39169,8 +39328,17 @@ export type ClearRecentItemsMutationOptions = Apollo.BaseMutationOptions<
   ClearRecentItemsMutationVariables
 >;
 export const GetOrganizationsDocument = gql`
-  query GetOrganizations($limit: Int = 10, $offset: Int = 0) {
-    organizations(limit: $limit, offset: $offset, sortOrder: NAME) {
+  query GetOrganizations(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: OrganizationFilterOptions
+  ) {
+    organizations(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: NAME
+    ) {
       nodesCount
       nodes {
         ...OrganizationNameFields
@@ -39197,6 +39365,7 @@ export const GetOrganizationsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -39897,6 +40066,92 @@ export type GetProjectServicesLazyQueryHookResult = ReturnType<
 export type GetProjectServicesQueryResult = Apollo.QueryResult<
   GetProjectServicesQuery,
   GetProjectServicesQueryVariables
+>;
+export const GetProjectAssessmentsDocument = gql`
+  query GetProjectAssessments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+    $filters: AssessmentFilterOptions = null
+  ) {
+    project(id: $id) {
+      id
+      assessments(
+        limit: $limit
+        offset: $offset
+        sortOrder: $sortOrder
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...AssessmentFields
+          enrollment {
+            ...EnrollmentFields
+          }
+        }
+      }
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectAssessmentsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectAssessmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetProjectAssessmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectAssessmentsQuery,
+    GetProjectAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectAssessmentsQuery,
+    GetProjectAssessmentsQueryVariables
+  >(GetProjectAssessmentsDocument, options);
+}
+export function useGetProjectAssessmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectAssessmentsQuery,
+    GetProjectAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectAssessmentsQuery,
+    GetProjectAssessmentsQueryVariables
+  >(GetProjectAssessmentsDocument, options);
+}
+export type GetProjectAssessmentsQueryHookResult = ReturnType<
+  typeof useGetProjectAssessmentsQuery
+>;
+export type GetProjectAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectAssessmentsLazyQuery
+>;
+export type GetProjectAssessmentsQueryResult = Apollo.QueryResult<
+  GetProjectAssessmentsQuery,
+  GetProjectAssessmentsQueryVariables
 >;
 export const DeleteProjectDocument = gql`
   mutation DeleteProject($input: DeleteProjectInput!) {

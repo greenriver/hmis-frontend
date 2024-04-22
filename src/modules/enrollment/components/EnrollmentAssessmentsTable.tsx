@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
-import { generateAssessmentPath } from '@/modules/assessments/util';
+import {
+  ASSESSMENT_COLUMNS,
+  generateAssessmentPath,
+} from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
-import { formRoleDisplay, lastUpdatedBy } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
@@ -13,19 +14,9 @@ import {
 } from '@/types/gqlTypes';
 
 const columns: ColumnDef<AssessmentFieldsFragment>[] = [
-  {
-    header: 'Assessment Type',
-    render: (assessment) => formRoleDisplay(assessment),
-    linkTreatment: true,
-  },
-  {
-    header: 'Assessment Date',
-    render: (a) => <AssessmentDateWithStatusIndicator assessment={a} />,
-  },
-  {
-    header: 'Last Updated',
-    render: (e) => lastUpdatedBy(e.dateUpdated, e.user),
-  },
+  ASSESSMENT_COLUMNS.linkedType,
+  ASSESSMENT_COLUMNS.date,
+  ASSESSMENT_COLUMNS.lastUpdated,
 ];
 
 interface Props {

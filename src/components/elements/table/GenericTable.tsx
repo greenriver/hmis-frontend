@@ -33,11 +33,13 @@ import {
   isRenderFunction,
   RenderFunction,
 } from './types';
+import { LocationState } from '@/routes/routeUtil';
 
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
   rowLinkTo?: (row: T) => To | null | undefined;
+  rowLinkState?: LocationState;
   columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
@@ -117,6 +119,7 @@ const GenericTable = <T extends { id: string }>({
   noData = 'No data',
   loadingVariant = 'circular',
   condensed = false,
+  rowLinkState,
 }: Props<T>) => {
   const columns = useMemo(
     () => (columnProp || []).filter((c) => !c.hide),
@@ -402,6 +405,7 @@ const GenericTable = <T extends { id: string }>({
                           {isLinked ? (
                             <RouterLink
                               to={rowLink}
+                              state={rowLinkState}
                               aria-label={ariaLabel && ariaLabel(row)}
                               plain={!linkTreatment}
                               data-testid={linkTreatment && 'table-linkedCell'}

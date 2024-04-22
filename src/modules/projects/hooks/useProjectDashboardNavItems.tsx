@@ -38,6 +38,12 @@ export const useProjectDashboardNavItems = (
             hide: !project.access.canViewEnrollmentDetails,
           },
           {
+            id: 'assessments',
+            title: 'Assessments',
+            path: ProjectDashboardRoutes.PROJECT_ASSESSMENTS,
+            hide: !project.access.canViewEnrollmentDetails,
+          },
+          {
             id: 'services',
             title: 'Services',
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
