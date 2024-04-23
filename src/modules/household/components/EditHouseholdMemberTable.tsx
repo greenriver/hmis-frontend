@@ -21,6 +21,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { sortHouseholdMembers, clientBriefName } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import {
   HouseholdClientFieldsFragment,
   HouseholdFieldsFragment,
@@ -226,7 +227,11 @@ const EditHouseholdMemberTable = ({
           <RemoveFromHouseholdButton
             currentDashboardEnrollmentId={currentDashboardEnrollmentId}
             householdClient={hc}
-            onSuccess={refetchHousehold}
+            onSuccess={() => {
+              refetchHousehold();
+              // update the Enrollment so we aren't caching an outdated enrollment.householdSize
+              cache.evict({ id: `Enrollment:${currentDashboardEnrollmentId}` });
+            }}
             householdSize={currentMembers.length}
             ariaLabel={`Remove ${clientBriefName(hc.client)}`}
           />
