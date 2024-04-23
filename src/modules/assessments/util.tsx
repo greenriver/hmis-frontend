@@ -104,7 +104,7 @@ export const ASSESSMENT_ENROLLMENT_COLUMNS: {
 
 export const getAssessmentTypeFilter = (projectId: string): FilterType<any> => {
   return {
-    key: 'formDefinitionIdentifier',
+    key: 'type',
     label: 'Assessment Type',
     multi: true,
     type: 'picklist',

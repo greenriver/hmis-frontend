@@ -1892,26 +1892,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "formDefinitionIdentifier",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "project",
             "description": null,
             "type": {
@@ -1961,8 +1941,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "AssessmentRole",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
@@ -2228,7 +2208,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "formDefinitionIdentifier",
+            "name": "type",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -2239,26 +2219,6 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "type",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "AssessmentRole",
                   "ofType": null
                 }
               }
@@ -2279,7 +2239,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "formDefinitionIdentifier",
+            "name": "type",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -2290,26 +2250,6 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "type",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "AssessmentRole",
                   "ofType": null
                 }
               }
@@ -2330,7 +2270,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "formDefinitionIdentifier",
+            "name": "type",
             "description": null,
             "type": {
               "kind": "LIST",

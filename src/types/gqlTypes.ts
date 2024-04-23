@@ -282,10 +282,9 @@ export type AssessmentEligibility = {
 };
 
 export type AssessmentFilterOptions = {
-  formDefinitionIdentifier?: InputMaybe<Array<Scalars['String']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
-  type?: InputMaybe<Array<AssessmentRole>>;
+  type?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentInput = {
@@ -352,17 +351,15 @@ export enum AssessmentType {
 }
 
 export type AssessmentsForEnrollmentFilterOptions = {
-  formDefinitionIdentifier?: InputMaybe<Array<Scalars['String']['input']>>;
-  type?: InputMaybe<Array<AssessmentRole>>;
+  type?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsForHouseholdFilterOptions = {
-  formDefinitionIdentifier?: InputMaybe<Array<Scalars['String']['input']>>;
-  type?: InputMaybe<Array<AssessmentRole>>;
+  type?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsForProjectFilterOptions = {
-  formDefinitionIdentifier?: InputMaybe<Array<Scalars['String']['input']>>;
+  type?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsPaginated = {
@@ -11368,7 +11365,9 @@ export type GetAssessmentsForPopulationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  roles?: InputMaybe<Array<AssessmentRole> | AssessmentRole>;
+  roles?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
 }>;
 
 export type GetAssessmentsForPopulationQuery = {
@@ -33964,7 +33963,7 @@ export const GetAssessmentsForPopulationDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $roles: [AssessmentRole!]
+    $roles: [String!]
   ) {
     client(id: $id) {
       id

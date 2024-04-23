@@ -78,7 +78,7 @@ const ProjectAssessments = () => {
           pagePath='project.assessments'
           recordType='Assessment'
           showFilters
-          filters={{ formDefinitionIdentifier: filter }}
+          filters={{ type: filter }}
           filterInputType='AssessmentsForProjectFilterOptions'
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
