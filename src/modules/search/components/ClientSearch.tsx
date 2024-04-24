@@ -91,9 +91,31 @@ export const CLIENT_COLUMNS: {
     header: 'First Name',
     render: (client) => asClient(client).firstName,
   },
+  linkedFirst: {
+    header: 'First Name',
+    render: (client) => (
+      <ClientName
+        client={asClient(client)}
+        linkToProfile
+        nameParts='first_only'
+        routerLinkProps={{ openInNew: true }}
+      />
+    ),
+  },
   last: {
     header: 'Last Name',
     render: (client) => asClient(client).lastName,
+  },
+  linkedLast: {
+    header: 'Last Name',
+    render: (client) => (
+      <ClientName
+        client={asClient(client)}
+        linkToProfile
+        nameParts='last_only'
+        routerLinkProps={{ openInNew: true }}
+      />
+    ),
   },
   ssn: {
     header: (

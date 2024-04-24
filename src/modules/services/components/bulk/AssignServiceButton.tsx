@@ -1,11 +1,20 @@
 import CheckIcon from '@mui/icons-material/Check';
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import { LoadingButton } from '@mui/lab';
-import { ButtonProps } from '@mui/material';
+import { ButtonProps, DialogActions, DialogContent } from '@mui/material';
+import DialogTitle from '@mui/material/DialogTitle';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import * as React from 'react';
 import { useBulkAssignMutations } from '../../hooks/useBulkAssignMutations';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+
+import CommonDialog from '@/components/elements/CommonDialog';
+import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
+import useClientAlerts from '@/modules/client/hooks/useClientAlerts';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import FormActions from '@/modules/form/components/FormActions';
+import { FormActionTypes } from '@/modules/form/types';
 import {
   BulkAssignServiceInput,
   BulkServicesClientSearchQuery,
@@ -17,6 +26,7 @@ interface Props {
   tableLoading?: boolean;
   disabled?: boolean;
   disabledReason?: string;
+  serviceTypeName: string;
 }
 
 const AssignServiceButton: React.FC<Props> = ({
@@ -25,6 +35,7 @@ const AssignServiceButton: React.FC<Props> = ({
   tableLoading,
   disabled,
   disabledReason,
+  serviceTypeName,
 }) => {
   const { bulkAssign, bulkRemove, loading, apolloError } =
     useBulkAssignMutations();
@@ -43,6 +54,9 @@ const AssignServiceButton: React.FC<Props> = ({
     return client.activeEnrollment.services.nodesCount > 0;
   }, [client]);
 
+  const { clientAlerts } = useClientAlerts({ client: client });
+  const [clientAlertDialogOpen, setClientAlertDialogOpen] = useState(false);
+
   const onClick = useCallback<NonNullable<ButtonProps['onClick']>>(
     (e) => {
       e.stopPropagation();
@@ -56,6 +70,11 @@ const AssignServiceButton: React.FC<Props> = ({
           onCompleted: () => setLocalDisabled(true),
         });
       } else {
+        if (clientAlerts.length > 0) {
+          setClientAlertDialogOpen(true);
+          return;
+        }
+
         bulkAssign({
           variables: {
             input: {
@@ -67,7 +86,14 @@ const AssignServiceButton: React.FC<Props> = ({
         });
       }
     },
-    [isAssignedOnDate, client, bulkRemove, bulkAssign, queryVariables]
+    [
+      isAssignedOnDate,
+      client,
+      bulkRemove,
+      bulkAssign,
+      queryVariables,
+      clientAlerts.length,
+    ]
   );
 
   const buttonText = useMemo(() => {
@@ -77,6 +103,13 @@ const AssignServiceButton: React.FC<Props> = ({
     return 'Enroll + Assign';
   }, [client.activeEnrollment, isAssignedOnDate, localDisabled]);
 
+  const startIcon =
+    isAssignedOnDate && !localDisabled ? (
+      <CheckIcon />
+    ) : clientAlerts.length > 0 ? (
+      <WarningAmberRoundedIcon />
+    ) : undefined;
+
   return (
     <>
       <ButtonTooltipContainer title={disabledReason} placement='top-start'>
@@ -84,9 +117,7 @@ const AssignServiceButton: React.FC<Props> = ({
           onClick={onClick}
           loading={loading}
           disabled={disabled || localDisabled}
-          startIcon={
-            isAssignedOnDate && !localDisabled ? <CheckIcon /> : undefined
-          }
+          startIcon={startIcon}
           fullWidth
           variant={isAssignedOnDate ? 'contained' : 'gray'}
         >
@@ -94,6 +125,44 @@ const AssignServiceButton: React.FC<Props> = ({
         </LoadingButton>
       </ButtonTooltipContainer>
       {apolloError && <ApolloErrorAlert error={apolloError} />}
+      <CommonDialog fullWidth open={clientAlertDialogOpen}>
+        <DialogTitle>
+          {clientAlerts.length === 1 ? 'Client Alert' : 'Client Alerts'}
+        </DialogTitle>
+        <DialogContent sx={{ mt: 2 }}>
+          <ClientAlertStack clientAlerts={clientAlerts} />
+        </DialogContent>
+        <DialogActions>
+          <FormActions
+            onDiscard={() => setClientAlertDialogOpen(false)}
+            onSubmit={() => {
+              bulkAssign({
+                variables: {
+                  input: {
+                    ...queryVariables,
+                    clientIds: [client.id],
+                  },
+                },
+                onCompleted: () => setLocalDisabled(true),
+              });
+              setClientAlertDialogOpen(false);
+            }}
+            config={[
+              {
+                action: FormActionTypes.Discard,
+                id: 'discard',
+                label: `Cancel ${serviceTypeName}`,
+                buttonProps: { variant: 'gray' },
+              },
+              {
+                action: FormActionTypes.Submit,
+                id: 'submit',
+                label: `Add ${serviceTypeName}`,
+              },
+            ]}
+          />
+        </DialogActions>
+      </CommonDialog>
     </>
   );
 };

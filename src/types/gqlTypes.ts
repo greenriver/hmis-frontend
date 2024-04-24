@@ -12562,6 +12562,28 @@ export type BulkServicesClientSearchQuery = {
       age?: number | null;
       ssn?: string | null;
       gender: Array<Gender>;
+      alerts: Array<{
+        __typename?: 'ClientAlert';
+        id: string;
+        note: string;
+        expirationDate?: string | null;
+        createdAt: string;
+        priority: ClientAlertPriorityLevel;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }>;
+      access: {
+        __typename?: 'ClientAccess';
+        canViewClientAlerts: boolean;
+        canManageClientAlerts: boolean;
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
       activeEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
@@ -12575,12 +12597,6 @@ export type BulkServicesClientSearchQuery = {
           nodes: Array<{ __typename?: 'Service'; id: string }>;
         };
       } | null;
-      access: {
-        __typename?: 'ClientAccess';
-        id: string;
-        canViewFullSsn: boolean;
-        canViewPartialSsn: boolean;
-      };
     }>;
   };
 };
@@ -34349,6 +34365,13 @@ export const BulkServicesClientSearchDocument = gql`
         id
         ...ClientName
         ...ClientIdentificationFields
+        alerts {
+          ...ClientAlertFields
+        }
+        access {
+          canViewClientAlerts
+          canManageClientAlerts
+        }
         activeEnrollment(projectId: $projectId, openOnDate: $serviceDate) {
           id
           entryDate
@@ -34374,6 +34397,7 @@ export const BulkServicesClientSearchDocument = gql`
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
 `;
 
 /**
