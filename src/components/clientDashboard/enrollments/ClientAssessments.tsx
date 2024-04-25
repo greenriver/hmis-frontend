@@ -46,7 +46,7 @@ const ClientAssessments = () => {
     [clientId]
   );
 
-  const filter = useMemo(() => getAssessmentTypeFilter(), []);
+  const typeFilter = useMemo(() => getAssessmentTypeFilter(), []);
 
   return (
     <>
@@ -67,7 +67,7 @@ const ClientAssessments = () => {
           noData='No assessments'
           recordType='Assessment'
           filters={(filters) => {
-            return { ...filters, type: filter };
+            return { ...filters, type: typeFilter };
           }}
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
