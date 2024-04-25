@@ -102,7 +102,9 @@ export const ASSESSMENT_ENROLLMENT_COLUMNS: {
   },
 };
 
-export const getAssessmentTypeFilter = (projectId: string): FilterType<any> => {
+export const getAssessmentTypeFilter = (
+  projectId?: string
+): FilterType<any> => {
   return {
     key: 'type',
     label: 'Assessment Type',
