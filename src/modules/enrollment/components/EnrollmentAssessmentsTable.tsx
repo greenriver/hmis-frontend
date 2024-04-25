@@ -51,7 +51,7 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
       noData='No assessments'
       recordType='Assessment'
       headerCellSx={() => ({ color: 'text.secondary' })}
-      filterArgs={{ type: { projectId: projectId } }}
+      filterPickListArgs={{ projectId: projectId }}
       filterInputType='AssessmentsForEnrollmentFilterOptions'
     />
   );

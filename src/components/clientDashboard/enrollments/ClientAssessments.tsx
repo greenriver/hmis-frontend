@@ -1,5 +1,5 @@
 import { Paper } from '@mui/material';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
@@ -8,7 +8,6 @@ import {
   ASSESSMENT_COLUMNS,
   ASSESSMENT_ENROLLMENT_COLUMNS,
   assessmentRowLinkTo,
-  getAssessmentTypeFilter,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
@@ -46,8 +45,6 @@ const ClientAssessments = () => {
     [clientId]
   );
 
-  const typeFilter = useMemo(() => getAssessmentTypeFilter(), []);
-
   return (
     <>
       <PageTitle title='Assessments' />
@@ -66,9 +63,6 @@ const ClientAssessments = () => {
           fetchPolicy='cache-and-network'
           noData='No assessments'
           recordType='Assessment'
-          filters={(filters) => {
-            return { ...filters, type: typeFilter };
-          }}
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
       </Paper>

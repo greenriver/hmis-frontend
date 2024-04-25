@@ -1,9 +1,8 @@
-import { isNil, startCase } from 'lodash-es';
+import { startCase } from 'lodash-es';
 
-import { getSchemaForInputType } from '../hmisUtil';
-
-import TableFilterItem from '@/components/elements/tableFilters/filters/FilterItem';
 import { BaseFilter, FilterType } from '@/modules/dataFetching/types';
+import { PickListArgs } from '@/modules/form/types';
+import { getSchemaForInputType } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
 import {
@@ -13,20 +12,6 @@ import {
   PickListType,
   ProjectSortOption,
 } from '@/types/gqlTypes';
-
-/**
- * Component for dynamically displaying a filter
- * on an input type, according to its type
- * defined in the graphql schema.
- */
-
-interface Props {
-  recordType: string;
-  inputType: string;
-  fieldName: string;
-  value: any;
-  onChange: (value: any) => any;
-}
 
 const getType = (
   type: GqlInputObjectSchemaType
@@ -69,7 +54,7 @@ const FILTER_NAME_TO_PICK_LIST = {
   project: PickListType.Project,
   appliedToProject: PickListType.Project,
   organization: PickListType.Organization,
-  type: PickListType.AssessmentTypes, // todo @Martha
+  type: PickListType.AssessmentTypes, // todo @Martha - rename to assessmentType or maybe assessmentName?
   serviceType: PickListType.AllServiceTypes,
   user: PickListType.Users,
   clientRecordType: PickListType.ClientAuditEventRecordTypes,
@@ -83,10 +68,9 @@ function isPicklistType(
 }
 
 const getFilterForType = (
-  recordType: string,
   fieldName: any,
   type: GqlInputObjectSchemaType,
-  filterArgs: any
+  filterPickListArgs?: PickListArgs
 ): FilterType<any> | null => {
   const inputType = getType(type);
   if (!inputType) return null;
@@ -108,7 +92,7 @@ const getFilterForType = (
       ...baseFields,
       type: 'picklist',
       pickListReference: FILTER_NAME_TO_PICK_LIST[fieldName],
-      pickListArgs: filterArgs,
+      pickListArgs: filterPickListArgs,
     };
   }
 
@@ -126,39 +110,14 @@ const getFilterForType = (
 };
 
 export const getFilter = (
-  recordType: string,
   inputType: string,
   fieldName: string,
-  filterArgs?: any
+  filterPickListArgs?: PickListArgs
 ) => {
   const fieldSchema = (getSchemaForInputType(inputType)?.args || []).find(
     (f) => f.name === fieldName
   );
   if (!fieldSchema) return null;
 
-  return getFilterForType(recordType, fieldName, fieldSchema.type, filterArgs);
+  return getFilterForType(fieldName, fieldSchema.type, filterPickListArgs);
 };
-
-const HmisFilter = ({
-  recordType,
-  inputType,
-  fieldName,
-  value,
-  onChange,
-}: Props) => {
-  if (isNil(value)) return null;
-
-  const filter = getFilter(recordType, inputType, fieldName);
-  if (!filter) return null;
-
-  return (
-    <TableFilterItem
-      filter={filter}
-      keyName={fieldName}
-      value={value}
-      onChange={onChange}
-    />
-  );
-};
-
-export default HmisFilter;

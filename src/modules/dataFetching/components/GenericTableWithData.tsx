@@ -29,6 +29,7 @@ import TableFilters, {
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+import { PickListArgs } from '@/modules/form/types';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import {
@@ -36,7 +37,7 @@ import {
   getFilter,
   getInputTypeForRecordType,
   getSortOptionForType,
-} from '@/modules/hmis/components/HmisFilter';
+} from '@/modules/hmis/filterUtil';
 import {
   getSchemaForInputType,
   getSchemaForType,
@@ -65,7 +66,7 @@ export interface Props<
     | ((
         baseFilters: TableFilterType<FilterOptionsType>
       ) => TableFilterType<FilterOptionsType>);
-  filterArgs?: any;
+  filterPickListArgs?: PickListArgs;
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;
   defaultFilters?: Partial<FilterOptionsType>;
@@ -109,9 +110,8 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
 }
 
 function allFieldFilters<T>(
-  recordType: string,
   filterInputType: string,
-  filterArgs: any
+  filterPickListArgs: PickListArgs
 ): Partial<Record<keyof T, FilterType<T>>> {
   const schema = getSchemaForInputType(filterInputType);
   if (!schema) return {};
@@ -119,12 +119,7 @@ function allFieldFilters<T>(
   const result: Partial<Record<keyof T, FilterType<T>>> = {};
 
   schema.args.forEach(({ name }) => {
-    const filter = getFilter(
-      recordType,
-      filterInputType,
-      name,
-      filterArgs[name]
-    );
+    const filter = getFilter(filterInputType, name, filterPickListArgs);
 
     if (filter) {
       result[name as keyof T] = filter;
@@ -144,7 +139,7 @@ const GenericTableWithData = <
   SortOptionsType extends Record<string, string> = Record<string, string>
 >({
   filters,
-  filterArgs = {},
+  filterPickListArgs = {},
   defaultFilters = {},
   showFilters = false,
   sortOptions: sortOptionsProp,
@@ -321,14 +316,14 @@ const GenericTableWithData = <
 
     const derivedFilters =
       filterInputType && recordType
-        ? allFieldFilters(recordType, filterInputType, filterArgs)
+        ? allFieldFilters(filterInputType, filterPickListArgs)
         : {};
 
     if (filters)
       return typeof filters === 'function' ? filters(derivedFilters) : filters;
 
     return derivedFilters;
-  }, [filters, filterArgs, recordType, filterInputTypeProp]);
+  }, [filters, filterPickListArgs, recordType, filterInputTypeProp]);
 
   const sortOptions = useMemo(
     () =>

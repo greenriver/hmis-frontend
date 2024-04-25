@@ -1,10 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import {
   ASSESSMENT_COLUMNS,
   generateAssessmentPath,
-  getAssessmentTypeFilter,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
@@ -47,8 +46,6 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
     []
   );
 
-  const filter = useMemo(() => getAssessmentTypeFilter(projectId), [projectId]);
-
   return (
     <GenericTableWithData<
       GetHouseholdAssessmentsQuery,
@@ -64,7 +61,7 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
       noData='No assessments'
       recordType='Assessment'
       headerCellSx={() => ({ color: 'text.secondary' })}
-      filters={{ type: filter }}
+      filterPickListArgs={{ projectId: projectId }}
       filterInputType='AssessmentsForHouseholdFilterOptions'
     />
   );
