@@ -54,7 +54,7 @@ const AssignServiceButton: React.FC<Props> = ({
     return client.activeEnrollment.services.nodesCount > 0;
   }, [client]);
 
-  const { clientAlerts } = useClientAlerts({ client: client });
+  const { clientAlerts } = useClientAlerts({ client });
   const [clientAlertDialogOpen, setClientAlertDialogOpen] = useState(false);
 
   const onClick = useCallback<NonNullable<ButtonProps['onClick']>>(
