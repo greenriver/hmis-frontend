@@ -108,7 +108,7 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
 }
 
 function allFieldFilters<T>(
-  recordType: string,
+  recordType: string, // < not needed
   filterInputType: string
 ): Partial<Record<keyof T, FilterType<T>>> {
   const schema = getSchemaForInputType(filterInputType);

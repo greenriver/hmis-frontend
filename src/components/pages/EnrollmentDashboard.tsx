@@ -41,6 +41,7 @@ const EnrollmentDashboard: React.FC = () => {
   >();
 
   const { enrollment, loading } = useDetailedEnrollment(params.enrollmentId);
+  console.log('detailed enrollment:', loading, enrollment);
   const client = enrollment?.client;
 
   const enabledFeatures = useMemo(

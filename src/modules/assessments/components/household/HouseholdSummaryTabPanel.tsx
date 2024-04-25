@@ -97,7 +97,7 @@ const HouseholdSummaryTabPanel = memo(
             // Make it so the "Assessments" table on the Enrollment page gets refetched next time
             cache.evict({
               id: `Enrollment:${enrollmentId}`,
-              fieldName: 'assessments',
+              // fieldName: 'assessments',
             });
             // Make it so the "Assessments" table on the Client page gets refetched next time
             cache.evict({

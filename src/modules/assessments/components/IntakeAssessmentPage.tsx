@@ -26,6 +26,7 @@ const IntakeAssessmentPage = () => {
   useEffect(() => {
     if (enrollmentLoading) return; // if enrollment is reloading, dont do anything yet
     if (!enrollment || !formDefinition) return;
+    console.log('checking', enrollment);
     if (enrollment.householdSize > 1) return; // render in-place
 
     // Navigate away for single-member HH with existing Intake Assessment

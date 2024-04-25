@@ -230,7 +230,7 @@ const EditHouseholdMemberTable = ({
             onSuccess={() => {
               refetchHousehold();
               // update the Enrollment so we aren't caching an outdated enrollment.householdSize
-              cache.evict({ id: `Enrollment:${currentDashboardEnrollmentId}` });
+              // cache.evict({ id: `Enrollment:${currentDashboardEnrollmentId}` });
             }}
             householdSize={currentMembers.length}
             ariaLabel={`Remove ${clientBriefName(hc.client)}`}
