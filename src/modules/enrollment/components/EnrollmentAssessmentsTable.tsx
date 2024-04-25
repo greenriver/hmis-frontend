@@ -1,10 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import {
   ASSESSMENT_COLUMNS,
   generateAssessmentPath,
-  getAssessmentTypeFilter,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -37,8 +36,6 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
     [clientId, enrollmentId]
   );
 
-  const filter = useMemo(() => getAssessmentTypeFilter(projectId), [projectId]);
-
   return (
     <GenericTableWithData<
       GetEnrollmentAssessmentsQuery,
@@ -54,7 +51,7 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
       noData='No assessments'
       recordType='Assessment'
       headerCellSx={() => ({ color: 'text.secondary' })}
-      filters={{ type: filter }}
+      filterArgs={{ type: { projectId: projectId } }}
       filterInputType='AssessmentsForEnrollmentFilterOptions'
     />
   );

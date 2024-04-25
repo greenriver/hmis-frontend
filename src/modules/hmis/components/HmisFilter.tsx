@@ -69,7 +69,7 @@ const FILTER_NAME_TO_PICK_LIST = {
   project: PickListType.Project,
   appliedToProject: PickListType.Project,
   organization: PickListType.Organization,
-  assessmentType: PickListType.AssessmentTypes,
+  type: PickListType.AssessmentTypes, // todo @Martha
   serviceType: PickListType.AllServiceTypes,
   user: PickListType.Users,
   clientRecordType: PickListType.ClientAuditEventRecordTypes,
@@ -85,7 +85,8 @@ function isPicklistType(
 const getFilterForType = (
   recordType: string,
   fieldName: any,
-  type: GqlInputObjectSchemaType
+  type: GqlInputObjectSchemaType,
+  filterArgs: any
 ): FilterType<any> | null => {
   const inputType = getType(type);
   if (!inputType) return null;
@@ -107,6 +108,7 @@ const getFilterForType = (
       ...baseFields,
       type: 'picklist',
       pickListReference: FILTER_NAME_TO_PICK_LIST[fieldName],
+      pickListArgs: filterArgs,
     };
   }
 
@@ -126,14 +128,15 @@ const getFilterForType = (
 export const getFilter = (
   recordType: string,
   inputType: string,
-  fieldName: string
+  fieldName: string,
+  filterArgs?: any
 ) => {
   const fieldSchema = (getSchemaForInputType(inputType)?.args || []).find(
     (f) => f.name === fieldName
   );
   if (!fieldSchema) return null;
 
-  return getFilterForType(recordType, fieldName, fieldSchema.type);
+  return getFilterForType(recordType, fieldName, fieldSchema.type, filterArgs);
 };
 
 const HmisFilter = ({

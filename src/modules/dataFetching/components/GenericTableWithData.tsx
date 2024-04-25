@@ -65,6 +65,7 @@ export interface Props<
     | ((
         baseFilters: TableFilterType<FilterOptionsType>
       ) => TableFilterType<FilterOptionsType>);
+  filterArgs?: any;
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;
   defaultFilters?: Partial<FilterOptionsType>;
@@ -109,7 +110,8 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
 
 function allFieldFilters<T>(
   recordType: string,
-  filterInputType: string
+  filterInputType: string,
+  filterArgs: any
 ): Partial<Record<keyof T, FilterType<T>>> {
   const schema = getSchemaForInputType(filterInputType);
   if (!schema) return {};
@@ -117,7 +119,12 @@ function allFieldFilters<T>(
   const result: Partial<Record<keyof T, FilterType<T>>> = {};
 
   schema.args.forEach(({ name }) => {
-    const filter = getFilter(recordType, filterInputType, name);
+    const filter = getFilter(
+      recordType,
+      filterInputType,
+      name,
+      filterArgs[name]
+    );
 
     if (filter) {
       result[name as keyof T] = filter;
@@ -137,6 +144,7 @@ const GenericTableWithData = <
   SortOptionsType extends Record<string, string> = Record<string, string>
 >({
   filters,
+  filterArgs = {},
   defaultFilters = {},
   showFilters = false,
   sortOptions: sortOptionsProp,
@@ -313,14 +321,14 @@ const GenericTableWithData = <
 
     const derivedFilters =
       filterInputType && recordType
-        ? allFieldFilters(recordType, filterInputType)
+        ? allFieldFilters(recordType, filterInputType, filterArgs)
         : {};
 
     if (filters)
       return typeof filters === 'function' ? filters(derivedFilters) : filters;
 
     return derivedFilters;
-  }, [filters, recordType, filterInputTypeProp]);
+  }, [filters, filterArgs, recordType, filterInputTypeProp]);
 
   const sortOptions = useMemo(
     () =>
