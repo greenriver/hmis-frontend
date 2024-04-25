@@ -282,9 +282,9 @@ export type AssessmentEligibility = {
 };
 
 export type AssessmentFilterOptions = {
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
-  type?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentInput = {
@@ -351,15 +351,15 @@ export enum AssessmentType {
 }
 
 export type AssessmentsForEnrollmentFilterOptions = {
-  type?: InputMaybe<Array<Scalars['String']['input']>>;
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsForHouseholdFilterOptions = {
-  type?: InputMaybe<Array<Scalars['String']['input']>>;
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsForProjectFilterOptions = {
-  type?: InputMaybe<Array<Scalars['String']['input']>>;
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsPaginated = {
@@ -4449,7 +4449,12 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
-  AssessmentTypes = 'ASSESSMENT_TYPES',
+  /**
+   * Assessment names, including custom assessments and assessments that are
+   * inactive. If a project is specified, the list is limited to assessments that
+   * exist in the project (both active and inactive).
+   */
+  AssessmentNames = 'ASSESSMENT_NAMES',
   AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
@@ -33970,7 +33975,7 @@ export const GetAssessmentsForPopulationDocument = gql`
       assessments(
         limit: $limit
         offset: $offset
-        filters: { type: $roles }
+        filters: { assessmentName: $roles }
         inProgress: false
         sortOrder: ASSESSMENT_DATE
       ) {

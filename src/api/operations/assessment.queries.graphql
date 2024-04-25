@@ -158,7 +158,7 @@ query GetAssessmentsForPopulation(
     assessments(
       limit: $limit
       offset: $offset
-      filters: { type: $roles }
+      filters: { assessmentName: $roles }
       inProgress: false
       sortOrder: ASSESSMENT_DATE
     ) {

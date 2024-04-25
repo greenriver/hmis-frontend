@@ -54,7 +54,7 @@ const FILTER_NAME_TO_PICK_LIST = {
   project: PickListType.Project,
   appliedToProject: PickListType.Project,
   organization: PickListType.Organization,
-  type: PickListType.AssessmentTypes, // todo @Martha - rename to assessmentType or maybe assessmentName?
+  assessmentName: PickListType.AssessmentNames,
   serviceType: PickListType.AllServiceTypes,
   user: PickListType.Users,
   clientRecordType: PickListType.ClientAuditEventRecordTypes,

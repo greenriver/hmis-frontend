@@ -5931,6 +5931,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentFilterOptions',
     args: [
       {
+        name: 'assessmentName',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          },
+        },
+      },
+      {
         name: 'project',
         type: {
           kind: 'LIST',
@@ -5951,18 +5963,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'type',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
       },
@@ -6021,7 +6021,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentsForEnrollmentFilterOptions',
     args: [
       {
-        name: 'type',
+        name: 'assessmentName',
         type: {
           kind: 'LIST',
           name: null,
@@ -6038,7 +6038,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentsForHouseholdFilterOptions',
     args: [
       {
-        name: 'type',
+        name: 'assessmentName',
         type: {
           kind: 'LIST',
           name: null,
@@ -6055,7 +6055,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentsForProjectFilterOptions',
     args: [
       {
-        name: 'type',
+        name: 'assessmentName',
         type: {
           kind: 'LIST',
           name: null,

@@ -1892,6 +1892,26 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "assessmentName",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "project",
             "description": null,
             "type": {
@@ -1923,26 +1943,6 @@
                 "ofType": {
                   "kind": "ENUM",
                   "name": "ProjectType",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "type",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
                   "ofType": null
                 }
               }
@@ -2208,7 +2208,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "type",
+            "name": "assessmentName",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -2239,7 +2239,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "type",
+            "name": "assessmentName",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -2270,7 +2270,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "type",
+            "name": "assessmentName",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -30127,8 +30127,8 @@
             "deprecationReason": null
           },
           {
-            "name": "ASSESSMENT_TYPES",
-            "description": null,
+            "name": "ASSESSMENT_NAMES",
+            "description": "Assessment names, including custom assessments and assessments that are\ninactive. If a project is specified, the list is limited to assessments that\nexist in the project (both active and inactive).",
             "isDeprecated": false,
             "deprecationReason": null
           },
