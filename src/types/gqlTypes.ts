@@ -5381,7 +5381,7 @@ export type ProjectCoc = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  geocode: Scalars['String']['output'];
+  geocode?: Maybe<Scalars['String']['output']>;
   geographyType?: Maybe<GeographyType>;
   id: Scalars['ID']['output'];
   state?: Maybe<Scalars['String']['output']>;
@@ -26060,7 +26060,7 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateDeleted?: string | null;
           dateUpdated?: string | null;
-          geocode: string;
+          geocode?: string | null;
           geographyType?: GeographyType | null;
           state?: string | null;
           zip?: string | null;
@@ -27765,7 +27765,7 @@ export type ProjectCocFieldsFragment = {
   dateCreated?: string | null;
   dateDeleted?: string | null;
   dateUpdated?: string | null;
-  geocode: string;
+  geocode?: string | null;
   geographyType?: GeographyType | null;
   state?: string | null;
   zip?: string | null;
@@ -28476,7 +28476,7 @@ export type GetProjectCocQuery = {
     dateCreated?: string | null;
     dateDeleted?: string | null;
     dateUpdated?: string | null;
-    geocode: string;
+    geocode?: string | null;
     geographyType?: GeographyType | null;
     state?: string | null;
     zip?: string | null;
@@ -28744,7 +28744,7 @@ export type GetProjectProjectCocsQuery = {
         dateCreated?: string | null;
         dateDeleted?: string | null;
         dateUpdated?: string | null;
-        geocode: string;
+        geocode?: string | null;
         geographyType?: GeographyType | null;
         state?: string | null;
         zip?: string | null;
