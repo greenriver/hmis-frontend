@@ -68,9 +68,9 @@ const BulkServicesTable: React.FC<Props> = ({
         </NotCollectedText>
       );
       return [
-        { ...CLIENT_COLUMNS.id, header: 'ID' },
-        CLIENT_COLUMNS.linkedFirst,
-        CLIENT_COLUMNS.linkedLast,
+        { ...CLIENT_COLUMNS.linkedId },
+        CLIENT_COLUMNS.first,
+        CLIENT_COLUMNS.last,
         CLIENT_COLUMNS.dobAge,
         {
           header: 'Entry Date',

@@ -14,6 +14,7 @@ import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 import ClientTextSearchForm from './ClientTextSearchForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
+import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
@@ -66,6 +67,19 @@ export const CLIENT_COLUMNS: {
   >;
 } = {
   id: { header: 'HMIS ID', render: 'id' },
+  linkedId: {
+    header: 'ID',
+    render: (client) => (
+      <RouterLink
+        openInNew={true}
+        to={generateSafePath(Routes.CLIENT_DASHBOARD, {
+          clientId: client.id,
+        })}
+      >
+        {client.id}
+      </RouterLink>
+    ),
+  },
   name: {
     header: 'Name',
     key: 'name',
@@ -91,31 +105,9 @@ export const CLIENT_COLUMNS: {
     header: 'First Name',
     render: (client) => asClient(client).firstName,
   },
-  linkedFirst: {
-    header: 'First Name',
-    render: (client) => (
-      <ClientName
-        client={asClient(client)}
-        linkToProfile
-        nameParts='first_only'
-        routerLinkProps={{ openInNew: true }}
-      />
-    ),
-  },
   last: {
     header: 'Last Name',
     render: (client) => asClient(client).lastName,
-  },
-  linkedLast: {
-    header: 'Last Name',
-    render: (client) => (
-      <ClientName
-        client={asClient(client)}
-        linkToProfile
-        nameParts='last_only'
-        routerLinkProps={{ openInNew: true }}
-      />
-    ),
   },
   ssn: {
     header: (

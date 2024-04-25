@@ -13,8 +13,8 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import ClientAlertStack from '@/modules/client/components/clientAlerts/ClientAlertStack';
 import useClientAlerts from '@/modules/client/hooks/useClientAlerts';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import FormActions from '@/modules/form/components/FormActions';
-import { FormActionTypes } from '@/modules/form/types';
+import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   BulkAssignServiceInput,
   BulkServicesClientSearchQuery,
@@ -110,6 +110,10 @@ const AssignServiceButton: React.FC<Props> = ({
       <WarningAmberRoundedIcon />
     ) : undefined;
 
+  const alertModalTitle = `${
+    clientAlerts.length === 1 ? 'Client Alert' : 'Client Alerts'
+  } for ${clientBriefName(client)}`;
+
   return (
     <>
       <ButtonTooltipContainer title={disabledReason} placement='top-start'>
@@ -126,15 +130,12 @@ const AssignServiceButton: React.FC<Props> = ({
       </ButtonTooltipContainer>
       {apolloError && <ApolloErrorAlert error={apolloError} />}
       <CommonDialog fullWidth open={clientAlertDialogOpen}>
-        <DialogTitle>
-          {clientAlerts.length === 1 ? 'Client Alert' : 'Client Alerts'}
-        </DialogTitle>
+        <DialogTitle>{alertModalTitle}</DialogTitle>
         <DialogContent sx={{ mt: 2 }}>
           <ClientAlertStack clientAlerts={clientAlerts} />
         </DialogContent>
         <DialogActions>
-          <FormActions
-            onDiscard={() => setClientAlertDialogOpen(false)}
+          <FormDialogActionContent
             onSubmit={() => {
               bulkAssign({
                 variables: {
@@ -147,19 +148,9 @@ const AssignServiceButton: React.FC<Props> = ({
               });
               setClientAlertDialogOpen(false);
             }}
-            config={[
-              {
-                action: FormActionTypes.Discard,
-                id: 'discard',
-                label: `Cancel ${serviceTypeName}`,
-                buttonProps: { variant: 'gray' },
-              },
-              {
-                action: FormActionTypes.Submit,
-                id: 'submit',
-                label: `Add ${serviceTypeName}`,
-              },
-            ]}
+            onDiscard={() => setClientAlertDialogOpen(false)}
+            discardButtonText={`Cancel ${serviceTypeName}`}
+            submitButtonText={`Add ${serviceTypeName}`}
           />
         </DialogActions>
       </CommonDialog>
