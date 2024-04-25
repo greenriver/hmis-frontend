@@ -11,6 +11,7 @@ import {
 } from '@/modules/assessments/util';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   AssessmentSortOption,
   GetProjectAssessmentsDocument,
@@ -57,6 +58,11 @@ const ProjectAssessments = () => {
   const rowLinkTo = (record: ProjectAssessmentType) =>
     assessmentRowLinkTo(record, record.enrollment.client.id);
 
+  const filters = useFilters({
+    type: 'AssessmentsForProjectFilterOptions',
+    pickListArgs: { projectId: projectId },
+  });
+
   return (
     <>
       <PageTitle title='Assessments' />
@@ -74,9 +80,8 @@ const ProjectAssessments = () => {
           noData='No assessments'
           pagePath='project.assessments'
           recordType='Assessment'
+          filters={filters}
           showFilters
-          filterPickListArgs={{ projectId: projectId }}
-          filterInputType='AssessmentsForProjectFilterOptions'
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
       </Paper>

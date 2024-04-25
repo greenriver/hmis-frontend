@@ -1,5 +1,4 @@
 import { Stack, Tooltip, Typography } from '@mui/material';
-import { omit } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
@@ -189,6 +188,11 @@ const ProjectClientEnrollmentsTable = ({
       ];
     }, []);
 
+  const filters = useFilters({
+    type: 'EnrollmentsForProjectFilterOptions',
+    omit: ['searchTerm', 'bedNightOnDate'],
+  });
+
   return (
     <SsnDobShowContextProvider>
       <GenericTableWithData<
@@ -215,8 +219,7 @@ const ProjectClientEnrollmentsTable = ({
         pagePath='project.enrollments'
         recordType='Enrollment'
         showFilters
-        filters={(f) => omit(f, 'searchTerm', 'bedNightOnDate')}
-        filterInputType='EnrollmentsForProjectFilterOptions'
+        filters={filters}
         defaultSortOption={EnrollmentSortOption.MostRecent}
         showOptionalColumns
         applyOptionalColumns={(cols) => {

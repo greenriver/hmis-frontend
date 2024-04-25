@@ -1,7 +1,10 @@
 import { Chip } from '@mui/material';
-import { omit } from 'lodash-es';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import {
+  getInputTypeForRecordType,
+  useFilters,
+} from '@/modules/hmis/filterUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetServiceTypesDocument,
@@ -44,6 +47,11 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
 ];
 
 const ServiceTypeTable = () => {
+  const filters = useFilters({
+    type: getInputTypeForRecordType('ServiceType'),
+    omit: ['searchTerm'],
+  });
+
   return (
     <>
       <GenericTableWithData<
@@ -57,9 +65,9 @@ const ServiceTypeTable = () => {
         pagePath='serviceTypes'
         noData='No service types'
         showFilters
+        filters={filters}
         recordType='ServiceType'
         paginationItemName='service type'
-        filters={(filters) => omit(filters, 'searchTerm')}
         rowLinkTo={(row) =>
           generateSafePath(AdminDashboardRoutes.CONFIGURE_SERVICE_TYPE, {
             serviceTypeId: row.id,

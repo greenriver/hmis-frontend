@@ -8,6 +8,7 @@ import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import {
@@ -48,6 +49,11 @@ const EnrollmentServicesPage = () => {
     service: viewingRecord,
     onClose: () => setViewingRecord(undefined),
   });
+
+  const filters = useFilters({
+    type: 'ServicesForEnrollmentFilterOptions',
+  });
+
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   const canEditServices = enrollment.access.canEditEnrollments;
@@ -106,7 +112,7 @@ const EnrollmentServicesPage = () => {
           noData='No services'
           recordType='Service'
           showFilters
-          filterInputType='ServicesForEnrollmentFilterOptions'
+          filters={filters}
           headerCellSx={() => ({ color: 'text.secondary' })}
           noSort
         />

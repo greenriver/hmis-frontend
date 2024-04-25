@@ -29,19 +29,13 @@ import TableFilters, {
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
-import { PickListArgs } from '@/modules/form/types';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import {
   getDefaultSortOptionForType,
-  getFilter,
-  getInputTypeForRecordType,
   getSortOptionForType,
 } from '@/modules/hmis/filterUtil';
-import {
-  getSchemaForInputType,
-  getSchemaForType,
-} from '@/modules/hmis/hmisUtil';
+import { getSchemaForType } from '@/modules/hmis/hmisUtil';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
 
@@ -61,15 +55,10 @@ export interface Props<
     rows: RowDataType[],
     loading?: boolean
   ) => ColumnDef<RowDataType>[]; // dynamically define column defs based on current data
-  filters?:
-    | TableFilterType<FilterOptionsType>
-    | ((
-        baseFilters: TableFilterType<FilterOptionsType>
-      ) => TableFilterType<FilterOptionsType>);
-  filterPickListArgs?: PickListArgs;
+  filters?: TableFilterType<FilterOptionsType>;
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;
-  defaultFilters?: Partial<FilterOptionsType>;
+  defaultFilterValues?: Partial<FilterOptionsType>;
   showFilters?: boolean;
   noSort?: boolean;
   noFilter?: boolean;
@@ -81,7 +70,6 @@ export interface Props<
   defaultPageSize?: number;
   rowsPerPageOptions?: number[];
   recordType?: string; // record type for inferring columns if not provided
-  filterInputType?: string; // filter input type type for inferring filters if not provided
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
   paginationItemName?: string;
@@ -109,28 +97,6 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
   }));
 }
 
-function allFieldFilters<T>(
-  filterInputType: string,
-  filterPickListArgs: PickListArgs
-): Partial<Record<keyof T, FilterType<T>>> {
-  const schema = getSchemaForInputType(filterInputType);
-  if (!schema) return {};
-
-  const result: Partial<Record<keyof T, FilterType<T>>> = {};
-
-  schema.args.forEach(({ name }) => {
-    const filter = getFilter(filterInputType, name, filterPickListArgs);
-
-    if (filter) {
-      result[name as keyof T] = filter;
-    } else {
-      console.error(`Unable to create filter for ${name}`);
-    }
-  });
-
-  return result;
-}
-
 const GenericTableWithData = <
   Query,
   QueryVariables,
@@ -139,8 +105,7 @@ const GenericTableWithData = <
   SortOptionsType extends Record<string, string> = Record<string, string>
 >({
   filters,
-  filterPickListArgs = {},
-  defaultFilters = {},
+  defaultFilterValues = {},
   showFilters = false,
   sortOptions: sortOptionsProp,
   defaultSortOption: defaultSortOptionProp,
@@ -151,7 +116,6 @@ const GenericTableWithData = <
   columns: columnsProp,
   getColumnDefs,
   recordType,
-  filterInputType: filterInputTypeProp,
   fetchPolicy = 'cache-and-network',
   nonTablePagination = false,
   fullHeight = false,
@@ -178,7 +142,7 @@ const GenericTableWithData = <
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const previousQueryVariables = usePrevious(queryVariables);
-  const [filterValues, setFilterValues] = useState(defaultFilters);
+  const [filterValues, setFilterValues] = useState(defaultFilterValues);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
   const [includedOptionalColumns, setIncludedOptionalColumns] = useState<
     string[]
@@ -308,23 +272,6 @@ const GenericTableWithData = <
     });
   }, [columnDefs, includedOptionalColumns]);
 
-  const filterDefs = useMemo(() => {
-    const filterInputType =
-      filterInputTypeProp ||
-      (recordType ? getInputTypeForRecordType(recordType) : undefined);
-    if (!filters && !(filterInputType && recordType)) return undefined;
-
-    const derivedFilters =
-      filterInputType && recordType
-        ? allFieldFilters(filterInputType, filterPickListArgs)
-        : {};
-
-    if (filters)
-      return typeof filters === 'function' ? filters(derivedFilters) : filters;
-
-    return derivedFilters;
-  }, [filters, filterPickListArgs, recordType, filterInputTypeProp]);
-
   const sortOptions = useMemo(
     () =>
       sortOptionsProp ||
@@ -413,9 +360,9 @@ const GenericTableWithData = <
                           : undefined
                       }
                       filters={
-                        !isEmpty(filterDefs)
+                        !isEmpty(filters)
                           ? {
-                              filters: filterDefs,
+                              filters,
                               filterValues,
                               setFilterValues,
                             }

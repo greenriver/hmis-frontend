@@ -4,6 +4,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import {
   GetProjectServicesDocument,
@@ -63,6 +64,10 @@ const ProjectServicesTable = ({
     ];
   }, [columns]);
 
+  const filters = useFilters({
+    type: 'ServicesForProjectFilterOptions',
+  });
+
   return (
     <GenericTableWithData<
       GetProjectServicesQuery,
@@ -79,7 +84,7 @@ const ProjectServicesTable = ({
       pagePath='project.services'
       recordType='Service'
       showFilters
-      filterInputType='ServicesForProjectFilterOptions'
+      filters={filters}
     />
   );
 };

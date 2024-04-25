@@ -1,5 +1,7 @@
 import { startCase } from 'lodash-es';
 
+import { useMemo } from 'react';
+import { TableFilterType } from '@/modules/dataFetching/components/GenericTableWithData';
 import { BaseFilter, FilterType } from '@/modules/dataFetching/types';
 import { PickListArgs } from '@/modules/form/types';
 import { getSchemaForInputType } from '@/modules/hmis/hmisUtil';
@@ -121,3 +123,37 @@ export const getFilter = (
 
   return getFilterForType(fieldName, fieldSchema.type, filterPickListArgs);
 };
+
+interface FilterParams {
+  type?: string | null; // filter input type type for inferring filters if not provided
+  pickListArgs?: PickListArgs; // optional: pick list args to be applied to all PickList filter items
+  omit?: Array<string>; // optional: skip some filters
+}
+export function useFilters<T>({
+  type,
+  pickListArgs = {},
+  omit = [],
+}: FilterParams): TableFilterType<T> {
+  return useMemo(() => {
+    if (!type) return {};
+
+    const schema = getSchemaForInputType(type);
+    if (!schema) return {};
+
+    const result: Partial<Record<keyof T, FilterType<T>>> = {};
+
+    schema.args.forEach(({ name }) => {
+      if (omit.includes(name)) return;
+
+      const filter = getFilter(type, name, pickListArgs);
+
+      if (filter) {
+        result[name as keyof T] = filter;
+      } else {
+        console.error(`Unable to create filter for ${name}`);
+      }
+    });
+
+    return result;
+  }, [type, pickListArgs, omit]);
+}

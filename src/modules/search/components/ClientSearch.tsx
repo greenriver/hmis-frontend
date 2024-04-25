@@ -28,6 +28,10 @@ import {
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
+import {
+  getInputTypeForRecordType,
+  useFilters,
+} from '@/modules/hmis/filterUtil';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
@@ -241,6 +245,11 @@ const ClientSearch = () => {
     };
   }, [setSearchParams, setDerivedSearchParams]);
 
+  const filters = useFilters({
+    type: getInputTypeForRecordType('Client'),
+    omit: ['searchTerm'],
+  });
+
   return (
     <SsnDobShowContextProvider>
       <Stack
@@ -304,8 +313,8 @@ const ClientSearch = () => {
             pagePath='clientSearch'
             fetchPolicy='cache-and-network'
             showFilters
+            filters={filters}
             recordType='Client'
-            filterInputType='ClientFilterOptions'
             defaultSortOption={
               searchType === 'broad'
                 ? ClientSortOption.BestMatch

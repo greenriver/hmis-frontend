@@ -8,6 +8,7 @@ import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   PERMANENT_HOUSING_PROJECT_TYPES,
   parseAndFormatDate,
@@ -112,6 +113,10 @@ const ClientEnrollments = () => {
     [client]
   );
 
+  const filters = useFilters({
+    type: 'EnrollmentsForClientFilterOptions',
+  });
+
   return (
     <>
       <PageTitle
@@ -142,8 +147,8 @@ const ClientEnrollments = () => {
           columns={columns}
           pagePath='client.enrollments'
           showFilters
+          filters={filters}
           recordType='Enrollment'
-          filterInputType='EnrollmentsForClientFilterOptions'
           noSort
           defaultSortOption={EnrollmentSortOption.MostRecent}
         />

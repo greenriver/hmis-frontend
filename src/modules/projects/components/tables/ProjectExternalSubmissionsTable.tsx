@@ -10,6 +10,10 @@ import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { FormValues } from '@/modules/form/types';
 import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
 import {
+  getInputTypeForRecordType,
+  useFilters,
+} from '@/modules/hmis/filterUtil';
+import {
   customDataElementValueForKey,
   getCustomDataElementColumns,
   parseAndFormatDateTime,
@@ -176,6 +180,10 @@ const ProjectExternalSubmissionsTable = ({
     [closeDialog, selected]
   );
 
+  const filters = useFilters({
+    type: getInputTypeForRecordType('ExternalFormSubmission'),
+  });
+
   if (loading) return <Loading />;
   if (error) throw error;
 
@@ -198,7 +206,7 @@ const ProjectExternalSubmissionsTable = ({
         recordType='ExternalFormSubmission'
         paginationItemName='submission'
         showFilters
-        filterInputType='ExternalFormSubmissionFilterOptions'
+        filters={filters}
         handleRowClick={(row) => {
           setSelected(row);
           openFormDialog();

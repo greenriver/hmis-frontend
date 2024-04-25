@@ -1,5 +1,4 @@
 import { Stack, Typography } from '@mui/material';
-import { omit } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
@@ -9,6 +8,10 @@ import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentD
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
+import {
+  getInputTypeForRecordType,
+  useFilters,
+} from '@/modules/hmis/filterUtil';
 import {
   formatDateForDisplay,
   formatDateForGql,
@@ -151,6 +154,11 @@ const ProjectHouseholdsTable = ({
     [openOnDate]
   );
 
+  const filters = useFilters({
+    type: getInputTypeForRecordType('Household'),
+    omit: ['searchTerm'],
+  });
+
   return (
     <GenericTableWithData<
       GetProjectHouseholdsQuery,
@@ -174,8 +182,8 @@ const ProjectHouseholdsTable = ({
       }
       pagePath='project.households'
       showFilters
+      filters={filters}
       recordType='Household'
-      filters={(filters) => omit(filters, 'searchTerm')}
     />
   );
 };

@@ -50,7 +50,6 @@ const ServiceCategoryTable = () => {
         columns={columns}
         pagePath='serviceCategories'
         noData='No service categories'
-        showFilters
         recordType='ServiceCategory'
         paginationItemName='service category'
       />
