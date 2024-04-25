@@ -177,7 +177,6 @@ const BulkServicesTable: React.FC<Props> = ({
         recordType='Client'
         // TODO: add user-facing filter options for enrolled clients and bed night date. No filter options for now.
         defaultFilterValues={defaultFilterValues}
-        // todo @Martha - confirm default filters still works if showFilters is false
         defaultSortOption={
           searchTerm
             ? ClientSortOption.BestMatch
