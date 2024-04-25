@@ -11,6 +11,7 @@ import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentD
 import EnrollmentEntryDateWithStatusIndicator from '@/modules/hmis/components/EnrollmentEntryDateWithStatusIndicator';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   formatDateForDisplay,
   formatDateForGql,
