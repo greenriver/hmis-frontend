@@ -25,10 +25,6 @@ query BulkServicesClientSearch(
       alerts {
         ...ClientAlertFields
       }
-      access {
-        canViewClientAlerts
-        canManageClientAlerts
-      }
       activeEnrollment(projectId: $projectId, openOnDate: $serviceDate) {
         id
         entryDate

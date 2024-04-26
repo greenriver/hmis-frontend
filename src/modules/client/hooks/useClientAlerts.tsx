@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import {
+  ClientAccess,
   ClientWithAlertFieldsFragment,
   useGetHouseholdClientAlertsQuery,
 } from '@/types/gqlTypes';
@@ -14,7 +15,9 @@ enum AlertPriority {
 
 interface ClientAlertParams {
   householdId?: string;
-  client?: ClientWithAlertFieldsFragment;
+  client?: Omit<ClientWithAlertFieldsFragment, 'access'> & {
+    access?: Partial<ClientAccess>;
+  };
   showClientName?: boolean;
   showDeleteButton?: boolean;
 }
@@ -52,7 +55,7 @@ export default function useClientAlerts(params: ClientAlertParams) {
         clientId: client.id,
         showClientName: params.showClientName,
         showDeleteButton:
-          params.showDeleteButton && client.access.canManageClientAlerts,
+          params.showDeleteButton && client.access?.canManageClientAlerts,
       }))
     );
 
