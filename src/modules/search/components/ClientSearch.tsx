@@ -312,7 +312,7 @@ const ClientSearch = () => {
             columns={columns}
             pagePath='clientSearch'
             fetchPolicy='cache-and-network'
-            showFilters
+            showTopToolbar
             filters={filters}
             recordType='Client'
             defaultSortOption={

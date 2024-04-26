@@ -57,7 +57,7 @@ const GlobalClientMergeHistory = () => {
           columns={columns}
           pagePath='mergeAuditHistory'
           noData='No merge history'
-          showFilters
+          showTopToolbar
           filters={filters}
           recordType='MergeAuditEvent'
           paginationItemName='merge event'

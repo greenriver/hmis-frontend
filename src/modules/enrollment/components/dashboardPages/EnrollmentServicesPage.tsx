@@ -111,7 +111,7 @@ const EnrollmentServicesPage = () => {
           pagePath='enrollment.services'
           noData='No services'
           recordType='Service'
-          showFilters
+          showTopToolbar
           filters={filters}
           headerCellSx={() => ({ color: 'text.secondary' })}
           noSort

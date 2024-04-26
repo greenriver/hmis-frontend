@@ -132,7 +132,7 @@ const ServiceCategoryRuleTable: React.FC<Props> = ({ serviceCategoryId }) => {
         columns={columnsWithAction}
         pagePath='serviceCategory.formRules'
         noData='No form rules'
-        showFilters
+        showTopToolbar
         filters={filters}
         recordType='FormRule'
         paginationItemName='rule'

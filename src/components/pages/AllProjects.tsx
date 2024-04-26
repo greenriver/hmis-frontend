@@ -199,7 +199,7 @@ const AllProjects = () => {
                 rowLinkTo={projectRowLink}
                 noData='No projects'
                 pagePath='projects'
-                showFilters
+                showTopToolbar
                 recordType='Project'
                 defaultFilterValues={{
                   status: [ProjectFilterOptionStatus.Open],
@@ -219,7 +219,7 @@ const AllProjects = () => {
                 rowLinkTo={organizationRowLink}
                 noData='No organizations'
                 pagePath='organizations'
-                showFilters={false}
+                showTopToolbar={false}
                 recordType='Organization'
                 defaultPageSize={25}
                 queryVariables={{

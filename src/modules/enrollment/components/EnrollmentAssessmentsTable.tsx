@@ -48,7 +48,7 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
       GetEnrollmentAssessmentsQueryVariables,
       AssessmentFieldsFragment
     >
-      showFilters
+      showTopToolbar
       filters={filters}
       queryVariables={{ id: enrollmentId }}
       queryDocument={GetEnrollmentAssessmentsDocument}

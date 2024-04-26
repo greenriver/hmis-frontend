@@ -69,7 +69,7 @@ const ClientCaseNotes = () => {
           handleRowClick={onSelectRecord}
           recordType='CustomCaseNote'
           paginationItemName='case note'
-          showFilters
+          showTopToolbar
           noFilter
         />
       </Paper>

@@ -205,7 +205,7 @@ const ProjectExternalSubmissionsTable = ({
         pagePath='project.externalFormSubmissions'
         recordType='ExternalFormSubmission'
         paginationItemName='submission'
-        showFilters
+        showTopToolbar
         filters={filters}
         handleRowClick={(row) => {
           setSelected(row);

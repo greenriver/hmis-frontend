@@ -73,7 +73,7 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
       paginationItemName='accessed enrollment'
       recordType='EnrollmentAccessSummary'
       filters={filters}
-      showFilters
+      showTopToolbar
     />
   );
 };

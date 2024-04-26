@@ -62,7 +62,7 @@ const ClientAssessments = () => {
           GetClientAssessmentsQueryVariables,
           ClientAssessmentType
         >
-          showFilters
+          showTopToolbar
           filters={filters}
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}

@@ -195,7 +195,7 @@ const FormRuleTable: React.FC<Props> = ({
         columns={columns}
         pagePath='formRules'
         noData='No form rules'
-        showFilters
+        showTopToolbar
         filters={filters}
         recordType='FormRule'
         paginationItemName='rule'

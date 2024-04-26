@@ -85,7 +85,7 @@ const ClientServices: React.FC<{
           GetClientServicesQueryVariables,
           ServiceType
         >
-          showFilters
+          showTopToolbar
           filters={filters}
           queryVariables={{ id: clientId }}
           queryDocument={GetClientServicesDocument}

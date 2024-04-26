@@ -83,7 +83,7 @@ const ProjectServicesTable = ({
       noData='No services'
       pagePath='project.services'
       recordType='Service'
-      showFilters
+      showTopToolbar
       filters={filters}
     />
   );

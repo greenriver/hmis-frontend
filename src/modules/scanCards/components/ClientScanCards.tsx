@@ -75,7 +75,7 @@ const ClientScanCards = () => {
           headerCellSx={() => ({ color: 'text.secondary' })}
           recordType='ScanCardCode'
           paginationItemName='scan card'
-          showFilters
+          showTopToolbar
           noFilter
         />
       </Paper>
