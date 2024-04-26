@@ -12562,6 +12562,20 @@ export type BulkServicesClientSearchQuery = {
       age?: number | null;
       ssn?: string | null;
       gender: Array<Gender>;
+      alerts: Array<{
+        __typename?: 'ClientAlert';
+        id: string;
+        note: string;
+        expirationDate?: string | null;
+        createdAt: string;
+        priority: ClientAlertPriorityLevel;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }>;
       activeEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
@@ -34349,6 +34363,9 @@ export const BulkServicesClientSearchDocument = gql`
         id
         ...ClientName
         ...ClientIdentificationFields
+        alerts {
+          ...ClientAlertFields
+        }
         activeEnrollment(projectId: $projectId, openOnDate: $serviceDate) {
           id
           entryDate
@@ -34374,6 +34391,7 @@ export const BulkServicesClientSearchDocument = gql`
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
 `;
 
 /**

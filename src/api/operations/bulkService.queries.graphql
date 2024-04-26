@@ -22,6 +22,9 @@ query BulkServicesClientSearch(
       id
       ...ClientName
       ...ClientIdentificationFields
+      alerts {
+        ...ClientAlertFields
+      }
       activeEnrollment(projectId: $projectId, openOnDate: $serviceDate) {
         id
         entryDate
