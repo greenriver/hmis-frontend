@@ -28,10 +28,7 @@ import {
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
@@ -246,7 +243,7 @@ const ClientSearch = () => {
   }, [setSearchParams, setDerivedSearchParams]);
 
   const filters = useFilters({
-    type: getInputTypeForRecordType('Client'),
+    type: 'ClientFilterOptions',
     omit: ['searchTerm'],
   });
 

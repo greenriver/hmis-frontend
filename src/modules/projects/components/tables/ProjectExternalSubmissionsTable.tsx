@@ -9,10 +9,7 @@ import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { FormValues } from '@/modules/form/types';
 import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   customDataElementValueForKey,
   getCustomDataElementColumns,
@@ -181,7 +178,7 @@ const ProjectExternalSubmissionsTable = ({
   );
 
   const filters = useFilters({
-    type: getInputTypeForRecordType('ExternalFormSubmission'),
+    type: 'ExternalFormSubmissionFilterOptions',
   });
 
   if (loading) return <Loading />;

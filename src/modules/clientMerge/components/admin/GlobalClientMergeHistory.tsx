@@ -5,10 +5,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GlobalClientMergeHistoryDocument,
@@ -35,7 +32,7 @@ const GlobalClientMergeHistory = () => {
     AdminDashboardRoutes.PERFORM_CLIENT_MERGES
   );
   const filters = useFilters({
-    type: getInputTypeForRecordType('MergeAuditEvent'),
+    type: 'MergeAuditEventFilterOptions',
   });
 
   return (

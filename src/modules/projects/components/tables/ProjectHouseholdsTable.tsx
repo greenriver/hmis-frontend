@@ -8,10 +8,7 @@ import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentD
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   formatDateForDisplay,
   formatDateForGql,
@@ -155,7 +152,7 @@ const ProjectHouseholdsTable = ({
   );
 
   const filters = useFilters({
-    type: getInputTypeForRecordType('Household'),
+    type: 'HouseholdFilterOptions',
     omit: ['searchTerm'],
   });
 

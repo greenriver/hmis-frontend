@@ -46,12 +46,6 @@ export const getDefaultSortOptionForType = (
   return null;
 };
 
-export const getInputTypeForRecordType = (
-  recordType: string
-): string | null => {
-  return `${recordType}FilterOptions`;
-};
-
 const FILTER_NAME_TO_PICK_LIST = {
   project: PickListType.Project,
   appliedToProject: PickListType.Project,

@@ -3,10 +3,7 @@ import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   ClientAccessSummaryFieldsFragment,
   GetUserClientSummariesDocument,
@@ -45,7 +42,7 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
   searchTerm = '',
 }) => {
   const filters = useFilters({
-    type: getInputTypeForRecordType('ClientAccessSummary'),
+    type: 'ClientAccessSummaryFilterOptions',
     omit: ['searchTerm'],
   });
 

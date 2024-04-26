@@ -9,10 +9,7 @@ import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer
 import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { evictUnitsQuery } from '@/modules/units/util';
 import {
   DeleteUnitsDocument,
@@ -123,7 +120,7 @@ const UnitManagementTable = ({
   }, [allowDeleteUnits, renderDeleteButton]);
 
   const filters = useFilters({
-    type: getInputTypeForRecordType('Unit'),
+    type: 'UnitFilterOptions',
   });
 
   return (

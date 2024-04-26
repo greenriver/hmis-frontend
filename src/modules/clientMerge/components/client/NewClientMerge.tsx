@@ -15,10 +15,7 @@ import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnD
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ClientDashboardRoutes, Routes } from '@/routes/routes';
@@ -101,7 +98,7 @@ const NewClientMerge = () => {
   );
 
   const filters = useFilters({
-    type: getInputTypeForRecordType('Client'),
+    type: 'ClientFilterOptions',
   });
 
   const columns = useMemo(() => {

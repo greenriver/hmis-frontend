@@ -1,10 +1,7 @@
 import { Chip } from '@mui/material';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetServiceTypesDocument,
@@ -48,7 +45,7 @@ const columns: ColumnDef<ServiceTypeConfigFieldsFragment>[] = [
 
 const ServiceTypeTable = () => {
   const filters = useFilters({
-    type: getInputTypeForRecordType('ServiceType'),
+    type: 'ServiceTypeFilterOptions',
     omit: ['searchTerm'],
   });
 

@@ -11,10 +11,7 @@ import {
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { assessmentDescription } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentSortOption,
@@ -50,7 +47,7 @@ const ClientAssessments = () => {
   );
 
   const filters = useFilters({
-    type: getInputTypeForRecordType('Assessment'),
+    type: 'AssessmentFilterOptions',
   });
 
   return (

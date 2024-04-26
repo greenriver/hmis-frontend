@@ -1,10 +1,7 @@
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   EnrollmentAccessSummaryFieldsFragment,
   GetUserEnrollmentSummariesDocument,
@@ -51,7 +48,7 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
   searchTerm,
 }) => {
   const filters = useFilters({
-    type: getInputTypeForRecordType('EnrollmentAccessSummary'),
+    type: 'EnrollmentAccessSummaryFilterOptions',
     omit: ['searchTerm'],
   });
 

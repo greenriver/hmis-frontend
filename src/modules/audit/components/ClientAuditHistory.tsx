@@ -8,10 +8,7 @@ import {
   AUDIT_HISTORY_USER_COLUMNS,
 } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   ClientAuditEventFilterOptions,
   GetClientAuditEventsDocument,
@@ -34,7 +31,7 @@ const columns: ColumnDef<AuditHistoryType>[] = [
 const ClientAuditHistory = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const filters = useFilters({
-    type: getInputTypeForRecordType('ClientAuditEvent'),
+    type: 'ClientAuditEventFilterOptions',
   });
 
   return (

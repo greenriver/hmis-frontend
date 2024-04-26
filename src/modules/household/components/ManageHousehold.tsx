@@ -17,10 +17,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import AssociatedHouseholdMembers, {
   householdMemberColumns,
@@ -112,7 +109,7 @@ const ManageHousehold = ({
     }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
 
   const filters = useFilters({
-    type: getInputTypeForRecordType('Client'),
+    type: 'ClientFilterOptions',
   });
 
   const handleNewClientAdded = useCallback(

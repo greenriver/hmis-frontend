@@ -13,10 +13,7 @@ import useDebouncedState from '@/hooks/useDebouncedState';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
@@ -104,7 +101,7 @@ const AllProjects = () => {
   );
 
   const projectFilters = useFilters({
-    type: getInputTypeForRecordType('Project'),
+    type: 'ProjectFilterOptions',
     omit: ['searchTerm'],
   });
 

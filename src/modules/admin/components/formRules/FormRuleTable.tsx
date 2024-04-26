@@ -9,10 +9,7 @@ import { EditIcon } from '@/components/elements/SemanticIcons';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 
@@ -179,7 +176,7 @@ const FormRuleTable: React.FC<Props> = ({
   }, [formRole, openFormDialog, columnsOverride]);
 
   const filters = useFilters({
-    type: getInputTypeForRecordType('FormRule'),
+    type: 'FormRuleFilterOptions',
     omit: ['definition', 'formType'],
   });
 

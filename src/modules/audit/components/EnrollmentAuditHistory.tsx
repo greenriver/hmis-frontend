@@ -8,10 +8,7 @@ import {
   AUDIT_HISTORY_USER_COLUMNS,
 } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   EnrollmentAuditEventFilterOptions,
   GetEnrollmentAuditEventsDocument,
@@ -34,7 +31,7 @@ const columns: ColumnDef<AuditHistoryType>[] = [
 const EnrollmentAuditHistory = () => {
   const { enrollmentId } = useSafeParams() as { enrollmentId: string };
   const filters = useFilters({
-    type: getInputTypeForRecordType('EnrollmentAuditEvent'),
+    type: 'EnrollmentAuditEventFilterOptions',
   });
 
   return (

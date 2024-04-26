@@ -8,10 +8,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
-import {
-  getInputTypeForRecordType,
-  useFilters,
-} from '@/modules/hmis/filterUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetClientServicesDocument,
@@ -73,7 +70,7 @@ const ClientServices: React.FC<{
   );
 
   const filters = useFilters({
-    type: getInputTypeForRecordType('Service'),
+    type: 'ServiceFilterOptions',
   });
 
   return (
