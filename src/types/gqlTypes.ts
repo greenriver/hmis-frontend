@@ -5381,7 +5381,7 @@ export type ProjectCoc = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  geocode: Scalars['String']['output'];
+  geocode?: Maybe<Scalars['String']['output']>;
   geographyType?: Maybe<GeographyType>;
   id: Scalars['ID']['output'];
   state?: Maybe<Scalars['String']['output']>;
@@ -13821,6 +13821,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
+              householdSize: number;
               currentUnit?: {
                 __typename?: 'Unit';
                 id: string;
@@ -17971,6 +17972,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          householdSize: number;
           currentUnit?: {
             __typename?: 'Unit';
             id: string;
@@ -26060,7 +26062,7 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateDeleted?: string | null;
           dateUpdated?: string | null;
-          geocode: string;
+          geocode?: string | null;
           geographyType?: GeographyType | null;
           state?: string | null;
           zip?: string | null;
@@ -26265,6 +26267,7 @@ export type HouseholdFieldsFragment = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      householdSize: number;
       currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     };
   }>;
@@ -26342,6 +26345,7 @@ export type HouseholdClientFieldsFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    householdSize: number;
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   };
 };
@@ -26501,6 +26505,7 @@ export type GetHouseholdQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        householdSize: number;
         currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       };
     }>;
@@ -27765,7 +27770,7 @@ export type ProjectCocFieldsFragment = {
   dateCreated?: string | null;
   dateDeleted?: string | null;
   dateUpdated?: string | null;
-  geocode: string;
+  geocode?: string | null;
   geographyType?: GeographyType | null;
   state?: string | null;
   zip?: string | null;
@@ -28476,7 +28481,7 @@ export type GetProjectCocQuery = {
     dateCreated?: string | null;
     dateDeleted?: string | null;
     dateUpdated?: string | null;
-    geocode: string;
+    geocode?: string | null;
     geographyType?: GeographyType | null;
     state?: string | null;
     zip?: string | null;
@@ -28744,7 +28749,7 @@ export type GetProjectProjectCocsQuery = {
         dateCreated?: string | null;
         dateDeleted?: string | null;
         dateUpdated?: string | null;
-        geocode: string;
+        geocode?: string | null;
         geographyType?: GeographyType | null;
         state?: string | null;
         zip?: string | null;
@@ -32546,6 +32551,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       entryDate
       exitDate
       inProgress
+      householdSize
       currentUnit {
         id
         name
