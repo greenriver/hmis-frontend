@@ -53,7 +53,7 @@ const FormDefinitionDetailPage = () => {
 
   return (
     <>
-      <Stack gap={0.5}>
+      <Stack gap={0.5} sx={{ my: 2 }}>
         <Typography
           variant='caption'
           color='links'
@@ -61,7 +61,7 @@ const FormDefinitionDetailPage = () => {
         >
           Selected Form
         </Typography>
-        <Stack direction='row' gap={1} sx={{ pb: 2 }}>
+        <Stack direction='row' gap={1}>
           <Typography variant='h3'>{formDefinition.title}</Typography>
           <ButtonTooltipContainer title='Edit Title'>
             <IconButton
@@ -75,7 +75,6 @@ const FormDefinitionDetailPage = () => {
           </ButtonTooltipContainer>
         </Stack>
       </Stack>
-
       <Stack gap={2}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
