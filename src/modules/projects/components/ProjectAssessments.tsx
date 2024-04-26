@@ -60,7 +60,7 @@ const ProjectAssessments = () => {
 
   const filters = useFilters({
     type: 'AssessmentsForProjectFilterOptions',
-    pickListArgs: { projectId: projectId },
+    pickListArgs: { projectId },
   });
 
   return (

@@ -39,7 +39,7 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
 
   const filters = useFilters({
     type: 'AssessmentsForEnrollmentFilterOptions',
-    pickListArgs: { projectId: projectId },
+    pickListArgs: { projectId },
   });
 
   return (

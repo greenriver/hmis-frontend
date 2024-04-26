@@ -49,7 +49,7 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
 
   const filters = useFilters({
     type: 'AssessmentsForHouseholdFilterOptions',
-    pickListArgs: { projectId: projectId },
+    pickListArgs: { projectId },
   });
 
   return (
