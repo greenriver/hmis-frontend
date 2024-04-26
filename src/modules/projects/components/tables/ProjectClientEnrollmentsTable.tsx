@@ -219,7 +219,6 @@ const ProjectClientEnrollmentsTable = ({
         }
         pagePath='project.enrollments'
         recordType='Enrollment'
-        showTopToolbar
         filters={filters}
         defaultSortOption={EnrollmentSortOption.MostRecent}
         showOptionalColumns

@@ -66,7 +66,6 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
       paginationItemName='accessed client'
       recordType='ClientAccessSummary'
       filters={filters}
-      showTopToolbar
     />
   );
 };

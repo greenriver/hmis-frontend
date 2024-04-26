@@ -64,7 +64,6 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
       pagePath='formDefinitions'
       recordType='FormDefinition'
       // TODO: add filter/sort capabilities
-      // showTopToolbar
       paginationItemName='form'
       rowLinkTo={(row) =>
         generatePath(AdminDashboardRoutes.VIEW_FORM, { formId: row.id })

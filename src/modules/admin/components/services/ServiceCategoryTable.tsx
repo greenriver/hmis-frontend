@@ -52,7 +52,6 @@ const ServiceCategoryTable = () => {
         noData='No service categories'
         recordType='ServiceCategory'
         paginationItemName='service category'
-        showTopToolbar
       />
     </>
   );

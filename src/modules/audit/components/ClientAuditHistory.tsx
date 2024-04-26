@@ -59,7 +59,6 @@ const ClientAuditHistory = () => {
           tableProps={{ sx: { tableLayout: 'fixed' } }}
           recordType='ClientAuditEvent'
           filters={filters}
-          showTopToolbar
         />
       </Paper>
     </ContextualCollapsibleListsProvider>

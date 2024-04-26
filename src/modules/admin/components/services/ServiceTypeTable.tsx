@@ -61,7 +61,6 @@ const ServiceTypeTable = () => {
         columns={columns}
         pagePath='serviceTypes'
         noData='No service types'
-        showTopToolbar
         filters={filters}
         recordType='ServiceType'
         paginationItemName='service type'

@@ -58,7 +58,6 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({
       GetHouseholdAssessmentsQueryVariables,
       HhmAssessmentType
     >
-      showTopToolbar
       filters={filters}
       queryVariables={{ id: householdId }}
       queryDocument={GetHouseholdAssessmentsDocument}

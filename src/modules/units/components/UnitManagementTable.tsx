@@ -137,7 +137,6 @@ const UnitManagementTable = ({
       noData='No units'
       selectable={allowDeleteUnits ? 'row' : undefined}
       isRowSelectable={(row) => row.occupants.length === 0}
-      showTopToolbar
       filters={filters}
       recordType='Unit'
       EnhancedTableToolbarProps={{

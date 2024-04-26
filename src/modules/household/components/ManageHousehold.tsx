@@ -205,7 +205,6 @@ const ManageHousehold = ({
                 columns={columns}
                 pagePath='clientSearch'
                 fetchPolicy='cache-and-network'
-                showTopToolbar
                 filters={filters}
                 recordType='Client'
                 defaultSortOption={ClientSortOption.BestMatch}

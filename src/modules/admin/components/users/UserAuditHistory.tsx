@@ -95,7 +95,6 @@ const UserAuditHistory = () => {
           tableProps={{ sx: { tableLayout: 'fixed' } }}
           recordType='ApplicationUserAuditEvent'
           filters={filters}
-          showTopToolbar
         />
       </ContextualCollapsibleListsProvider>
     </>

@@ -93,7 +93,6 @@ const OrganizationProjectsTable = ({
       rowLinkTo={rowLinkTo}
       noData='No projects'
       pagePath='organization.projects'
-      showTopToolbar={!hideFilters}
       filters={hideFilters ? undefined : filters}
       recordType='Project'
       defaultFilterValues={

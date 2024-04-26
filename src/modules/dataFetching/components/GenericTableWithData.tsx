@@ -105,7 +105,7 @@ const GenericTableWithData = <
 >({
   filters,
   defaultFilterValues = {},
-  showTopToolbar = false,
+  showTopToolbar: showTopToolbarProp = false,
   sortOptions: sortOptionsProp,
   defaultSortOption: defaultSortOptionProp,
   queryVariables,
@@ -281,7 +281,7 @@ const GenericTableWithData = <
 
   const noDataValue = useMemo(() => {
     if (typeof noData === 'function') return noData(filterValues);
-    if (!showTopToolbar) return noData;
+    if (!filters) return noData;
 
     const isFiltered = Object.values(filterValues).some(hasMeaningfulValue);
     if (isFiltered)
@@ -289,7 +289,7 @@ const GenericTableWithData = <
         startCase(recordType || 'record').toLowerCase()
       )} matching selected filters`;
     return noData;
-  }, [noData, filterValues, showTopToolbar, recordType]);
+  }, [noData, filters, filterValues, recordType]);
 
   // If this is the first time loading, return loading (hide search headers)
   if (loading && !hasRefetched && !data) return <Loading />;
@@ -301,6 +301,15 @@ const GenericTableWithData = <
   const hidePagination = !hasRefetched && nodesCount <= defaultPageSize;
 
   const containerSx = fullHeight ? { height: '100%' } : undefined;
+
+  const showTableFilters =
+    !isEmpty(filters) ||
+    (!isEmpty(sortOptions) && !noSort) ||
+    !isEmpty(tableDisplayOptionButtons) ||
+    showOptionalColumns;
+
+  const showTopToolbar =
+    showTopToolbarProp || showTableFilters || !isEmpty(toolbars);
 
   return (
     <Stack spacing={1} sx={containerSx}>
@@ -320,9 +329,9 @@ const GenericTableWithData = <
           columns={showColumnDefs}
           noData={loading ? 'Loading...' : noDataValue}
           filterToolbar={
-            (showTopToolbar || !isEmpty(toolbars)) && (
+            showTopToolbar && (
               <>
-                {showTopToolbar && (
+                {showTableFilters && (
                   <Box
                     px={2}
                     py={1}

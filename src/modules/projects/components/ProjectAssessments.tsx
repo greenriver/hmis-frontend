@@ -81,7 +81,6 @@ const ProjectAssessments = () => {
           pagePath='project.assessments'
           recordType='Assessment'
           filters={filters}
-          showTopToolbar
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
       </Paper>

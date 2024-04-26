@@ -178,7 +178,6 @@ const ProjectHouseholdsTable = ({
           : 'No households'
       }
       pagePath='project.households'
-      showTopToolbar
       filters={filters}
       recordType='Household'
     />

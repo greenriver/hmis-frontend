@@ -146,7 +146,6 @@ const ClientEnrollments = () => {
           rowLinkTo={rowLinkTo}
           columns={columns}
           pagePath='client.enrollments'
-          showTopToolbar
           filters={filters}
           recordType='Enrollment'
           noSort

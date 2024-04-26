@@ -59,7 +59,6 @@ const EnrollmentAuditHistory = () => {
           tableProps={{ sx: { tableLayout: 'fixed' } }}
           recordType='EnrollmentAuditEvent'
           filters={filters}
-          showTopToolbar
         />
       </Paper>
     </ContextualCollapsibleListsProvider>
