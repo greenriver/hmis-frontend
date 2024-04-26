@@ -11,6 +11,7 @@ import {
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import AssessmentDateWithStatusIndicator from '@/modules/hmis/components/AssessmentDateWithStatusIndicator';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { assessmentDescription } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentSortOption,
@@ -45,6 +46,10 @@ const ClientAssessments = () => {
     [clientId]
   );
 
+  const filters = useFilters({
+    type: 'AssessmentFilterOptions',
+  });
+
   return (
     <>
       <PageTitle title='Assessments' />
@@ -54,7 +59,7 @@ const ClientAssessments = () => {
           GetClientAssessmentsQueryVariables,
           ClientAssessmentType
         >
-          showFilters
+          filters={filters}
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
           rowLinkTo={rowLinkTo}

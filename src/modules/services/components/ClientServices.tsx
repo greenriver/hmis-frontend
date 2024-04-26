@@ -8,6 +8,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetClientServicesDocument,
@@ -68,6 +69,10 @@ const ClientServices: React.FC<{
     [clientId, omitColumns]
   );
 
+  const filters = useFilters({
+    type: 'ServiceFilterOptions',
+  });
+
   return (
     <>
       <PageTitle title='Services' />
@@ -77,7 +82,7 @@ const ClientServices: React.FC<{
           GetClientServicesQueryVariables,
           ServiceType
         >
-          showFilters
+          filters={filters}
           queryVariables={{ id: clientId }}
           queryDocument={GetClientServicesDocument}
           columns={columns}

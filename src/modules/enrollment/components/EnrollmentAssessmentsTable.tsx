@@ -6,6 +6,7 @@ import {
   generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   AssessmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
@@ -36,13 +37,18 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
     [clientId, enrollmentId]
   );
 
+  const filters = useFilters({
+    type: 'AssessmentsForEnrollmentFilterOptions',
+    pickListArgs: { projectId: projectId },
+  });
+
   return (
     <GenericTableWithData<
       GetEnrollmentAssessmentsQuery,
       GetEnrollmentAssessmentsQueryVariables,
       AssessmentFieldsFragment
     >
-      showFilters
+      filters={filters}
       queryVariables={{ id: enrollmentId }}
       queryDocument={GetEnrollmentAssessmentsDocument}
       rowLinkTo={rowLinkTo}
@@ -51,8 +57,6 @@ const EnrollmentAssessmentsTable: React.FC<Props> = ({
       noData='No assessments'
       recordType='Assessment'
       headerCellSx={() => ({ color: 'text.secondary' })}
-      filterPickListArgs={{ projectId: projectId }}
-      filterInputType='AssessmentsForEnrollmentFilterOptions'
     />
   );
 };

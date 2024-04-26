@@ -17,6 +17,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import AssociatedHouseholdMembers, {
   householdMemberColumns,
@@ -106,6 +107,10 @@ const ManageHousehold = ({
       }
       return defaults;
     }, [addToEnrollmentColumns, globalFeatureFlags?.mciId, isMobile]);
+
+  const filters = useFilters({
+    type: 'ClientFilterOptions',
+  });
 
   const handleNewClientAdded = useCallback(
     (data: EnrollmentFieldsFragment) => {
@@ -200,9 +205,8 @@ const ManageHousehold = ({
                 columns={columns}
                 pagePath='clientSearch'
                 fetchPolicy='cache-and-network'
-                showFilters
+                filters={filters}
                 recordType='Client'
-                filterInputType='ClientFilterOptions'
                 defaultSortOption={ClientSortOption.BestMatch}
                 onCompleted={() => setHasSearched(true)}
               />

@@ -29,19 +29,13 @@ import TableFilters, {
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
-import { PickListArgs } from '@/modules/form/types';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import {
   getDefaultSortOptionForType,
-  getFilter,
-  getInputTypeForRecordType,
   getSortOptionForType,
 } from '@/modules/hmis/filterUtil';
-import {
-  getSchemaForInputType,
-  getSchemaForType,
-} from '@/modules/hmis/hmisUtil';
+import { getSchemaForType } from '@/modules/hmis/hmisUtil';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
 
@@ -61,18 +55,12 @@ export interface Props<
     rows: RowDataType[],
     loading?: boolean
   ) => ColumnDef<RowDataType>[]; // dynamically define column defs based on current data
-  filters?:
-    | TableFilterType<FilterOptionsType>
-    | ((
-        baseFilters: TableFilterType<FilterOptionsType>
-      ) => TableFilterType<FilterOptionsType>);
-  filterPickListArgs?: PickListArgs;
+  filters?: TableFilterType<FilterOptionsType>;
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;
-  defaultFilters?: Partial<FilterOptionsType>;
-  showFilters?: boolean;
+  defaultFilterValues?: Partial<FilterOptionsType>;
+  showTopToolbar?: boolean;
   noSort?: boolean;
-  noFilter?: boolean;
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -81,7 +69,6 @@ export interface Props<
   defaultPageSize?: number;
   rowsPerPageOptions?: number[];
   recordType?: string; // record type for inferring columns if not provided
-  filterInputType?: string; // filter input type type for inferring filters if not provided
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
   paginationItemName?: string;
@@ -109,28 +96,6 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
   }));
 }
 
-function allFieldFilters<T>(
-  filterInputType: string,
-  filterPickListArgs: PickListArgs
-): Partial<Record<keyof T, FilterType<T>>> {
-  const schema = getSchemaForInputType(filterInputType);
-  if (!schema) return {};
-
-  const result: Partial<Record<keyof T, FilterType<T>>> = {};
-
-  schema.args.forEach(({ name }) => {
-    const filter = getFilter(filterInputType, name, filterPickListArgs);
-
-    if (filter) {
-      result[name as keyof T] = filter;
-    } else {
-      console.error(`Unable to create filter for ${name}`);
-    }
-  });
-
-  return result;
-}
-
 const GenericTableWithData = <
   Query,
   QueryVariables,
@@ -139,9 +104,8 @@ const GenericTableWithData = <
   SortOptionsType extends Record<string, string> = Record<string, string>
 >({
   filters,
-  filterPickListArgs = {},
-  defaultFilters = {},
-  showFilters = false,
+  defaultFilterValues = {},
+  showTopToolbar: showTopToolbarProp = false,
   sortOptions: sortOptionsProp,
   defaultSortOption: defaultSortOptionProp,
   queryVariables,
@@ -151,13 +115,11 @@ const GenericTableWithData = <
   columns: columnsProp,
   getColumnDefs,
   recordType,
-  filterInputType: filterInputTypeProp,
   fetchPolicy = 'cache-and-network',
   nonTablePagination = false,
   fullHeight = false,
   showOptionalColumns = false,
   noSort,
-  noFilter,
   header,
   toolbars = [],
   noData,
@@ -178,7 +140,7 @@ const GenericTableWithData = <
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const previousQueryVariables = usePrevious(queryVariables);
-  const [filterValues, setFilterValues] = useState(defaultFilters);
+  const [filterValues, setFilterValues] = useState(defaultFilterValues);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>();
   const [includedOptionalColumns, setIncludedOptionalColumns] = useState<
     string[]
@@ -308,23 +270,6 @@ const GenericTableWithData = <
     });
   }, [columnDefs, includedOptionalColumns]);
 
-  const filterDefs = useMemo(() => {
-    const filterInputType =
-      filterInputTypeProp ||
-      (recordType ? getInputTypeForRecordType(recordType) : undefined);
-    if (!filters && !(filterInputType && recordType)) return undefined;
-
-    const derivedFilters =
-      filterInputType && recordType
-        ? allFieldFilters(filterInputType, filterPickListArgs)
-        : {};
-
-    if (filters)
-      return typeof filters === 'function' ? filters(derivedFilters) : filters;
-
-    return derivedFilters;
-  }, [filters, filterPickListArgs, recordType, filterInputTypeProp]);
-
   const sortOptions = useMemo(
     () =>
       sortOptionsProp ||
@@ -336,7 +281,7 @@ const GenericTableWithData = <
 
   const noDataValue = useMemo(() => {
     if (typeof noData === 'function') return noData(filterValues);
-    if (!showFilters) return noData;
+    if (!filters) return noData;
 
     const isFiltered = Object.values(filterValues).some(hasMeaningfulValue);
     if (isFiltered)
@@ -344,7 +289,7 @@ const GenericTableWithData = <
         startCase(recordType || 'record').toLowerCase()
       )} matching selected filters`;
     return noData;
-  }, [noData, filterValues, showFilters, recordType]);
+  }, [noData, filters, filterValues, recordType]);
 
   // If this is the first time loading, return loading (hide search headers)
   if (loading && !hasRefetched && !data) return <Loading />;
@@ -356,6 +301,14 @@ const GenericTableWithData = <
   const hidePagination = !hasRefetched && nodesCount <= defaultPageSize;
 
   const containerSx = fullHeight ? { height: '100%' } : undefined;
+
+  const showTopToolbar =
+    showTopToolbarProp ||
+    !isEmpty(filters) ||
+    (!isEmpty(sortOptions) && !noSort) ||
+    !isEmpty(tableDisplayOptionButtons) ||
+    showOptionalColumns ||
+    !isEmpty(toolbars);
 
   return (
     <Stack spacing={1} sx={containerSx}>
@@ -375,63 +328,60 @@ const GenericTableWithData = <
           columns={showColumnDefs}
           noData={loading ? 'Loading...' : noDataValue}
           filterToolbar={
-            (showFilters || !isEmpty(toolbars)) && (
+            showTopToolbar && (
               <>
-                {showFilters && (
-                  <Box
-                    px={2}
-                    py={1}
-                    sx={(theme) => ({
-                      borderBottom: `1px solid ${theme.palette.divider}`,
-                    })}
-                  >
-                    <TableFilters
-                      noSort={noSort}
-                      noFilter={noFilter}
-                      loading={loading && !data}
-                      tableDisplayOptionButtons={tableDisplayOptionButtons}
-                      optionalColumns={
-                        showOptionalColumns
-                          ? {
-                              columns: optionalColumns.map((col) => ({
-                                value: col.key || '',
-                                header: col.header,
-                                defaultHidden: !!col.defaultHidden,
-                              })),
-                              columnsValue: includedOptionalColumns,
-                              setColumnsValue: setIncludedOptionalColumns,
-                            }
-                          : undefined
-                      }
-                      sorting={
-                        sortOptions
-                          ? {
-                              sortOptions,
-                              sortOptionValue: effectiveSortOrder,
-                              setSortOptionValue: setSortOrder,
-                            }
-                          : undefined
-                      }
-                      filters={
-                        !isEmpty(filterDefs)
-                          ? {
-                              filters: filterDefs,
-                              filterValues,
-                              setFilterValues,
-                            }
-                          : undefined
-                      }
-                      pagination={{
-                        limit,
-                        offset,
-                        totalEntries: nodesCount,
-                        itemName:
-                          paginationItemName ||
-                          (recordType ? lowerFirst(recordType) : undefined),
-                      }}
-                    />
-                  </Box>
-                )}
+                <Box
+                  px={2}
+                  py={1}
+                  sx={(theme) => ({
+                    borderBottom: `1px solid ${theme.palette.divider}`,
+                  })}
+                >
+                  <TableFilters
+                    noSort={noSort}
+                    loading={loading && !data}
+                    tableDisplayOptionButtons={tableDisplayOptionButtons}
+                    optionalColumns={
+                      showOptionalColumns
+                        ? {
+                            columns: optionalColumns.map((col) => ({
+                              value: col.key || '',
+                              header: col.header,
+                              defaultHidden: !!col.defaultHidden,
+                            })),
+                            columnsValue: includedOptionalColumns,
+                            setColumnsValue: setIncludedOptionalColumns,
+                          }
+                        : undefined
+                    }
+                    sorting={
+                      sortOptions
+                        ? {
+                            sortOptions,
+                            sortOptionValue: effectiveSortOrder,
+                            setSortOptionValue: setSortOrder,
+                          }
+                        : undefined
+                    }
+                    filters={
+                      !isEmpty(filters)
+                        ? {
+                            filters,
+                            filterValues,
+                            setFilterValues,
+                          }
+                        : undefined
+                    }
+                    pagination={{
+                      limit,
+                      offset,
+                      totalEntries: nodesCount,
+                      itemName:
+                        paginationItemName ||
+                        (recordType ? lowerFirst(recordType) : undefined),
+                    }}
+                  />
+                </Box>
                 {!isEmpty(toolbars) &&
                   toolbars.map((t) => (
                     <Box
