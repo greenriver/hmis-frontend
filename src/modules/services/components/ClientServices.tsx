@@ -6,7 +6,10 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
+import {
+  SERVICE_BASIC_COLUMNS,
+  SERVICE_COLUMNS,
+} from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
@@ -31,7 +34,8 @@ const ClientServices: React.FC<{
     () =>
       (
         [
-          ...SERVICE_COLUMNS,
+          SERVICE_BASIC_COLUMNS.dateProvided,
+          SERVICE_BASIC_COLUMNS.serviceType,
           {
             key: 'project',
             header: 'Project Name',
@@ -55,9 +59,15 @@ const ClientServices: React.FC<{
           {
             key: 'en-period',
             header: 'Enrollment Period',
+            optional: true,
             render: (row) => (
               <EnrollmentDateRangeWithStatus enrollment={row.enrollment} />
             ),
+          },
+          {
+            ...SERVICE_COLUMNS.serviceDetails,
+            optional: true,
+            defaultHidden: true,
           },
         ] as ColumnDef<ServiceType>[]
       ).filter((col) => {
@@ -87,6 +97,7 @@ const ClientServices: React.FC<{
           recordType='Service'
           defaultSortOption={ServiceSortOption.DateProvided}
           noSort
+          showOptionalColumns
         />
       </Paper>
     </>
