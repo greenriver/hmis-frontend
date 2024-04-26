@@ -95,6 +95,7 @@ const ProjectConfigTable = ({
         recordType='ProjectConfig'
         paginationItemName='project config'
         handleRowClick={onClickRow}
+        showTopToolbar
       />
     </>
   );

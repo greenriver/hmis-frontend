@@ -220,6 +220,7 @@ const AllProjects = () => {
                 queryVariables={{
                   filters: { searchTerm: debouncedSearch || undefined },
                 }}
+                noSort
               />
             )}
           </Paper>

@@ -302,14 +302,13 @@ const GenericTableWithData = <
 
   const containerSx = fullHeight ? { height: '100%' } : undefined;
 
-  const showTableFilters =
+  const showTopToolbar =
+    showTopToolbarProp ||
     !isEmpty(filters) ||
     (!isEmpty(sortOptions) && !noSort) ||
     !isEmpty(tableDisplayOptionButtons) ||
-    showOptionalColumns;
-
-  const showTopToolbar =
-    showTopToolbarProp || showTableFilters || !isEmpty(toolbars);
+    showOptionalColumns ||
+    !isEmpty(toolbars);
 
   return (
     <Stack spacing={1} sx={containerSx}>
@@ -331,60 +330,58 @@ const GenericTableWithData = <
           filterToolbar={
             showTopToolbar && (
               <>
-                {showTableFilters && (
-                  <Box
-                    px={2}
-                    py={1}
-                    sx={(theme) => ({
-                      borderBottom: `1px solid ${theme.palette.divider}`,
-                    })}
-                  >
-                    <TableFilters
-                      noSort={noSort}
-                      loading={loading && !data}
-                      tableDisplayOptionButtons={tableDisplayOptionButtons}
-                      optionalColumns={
-                        showOptionalColumns
-                          ? {
-                              columns: optionalColumns.map((col) => ({
-                                value: col.key || '',
-                                header: col.header,
-                                defaultHidden: !!col.defaultHidden,
-                              })),
-                              columnsValue: includedOptionalColumns,
-                              setColumnsValue: setIncludedOptionalColumns,
-                            }
-                          : undefined
-                      }
-                      sorting={
-                        sortOptions
-                          ? {
-                              sortOptions,
-                              sortOptionValue: effectiveSortOrder,
-                              setSortOptionValue: setSortOrder,
-                            }
-                          : undefined
-                      }
-                      filters={
-                        !isEmpty(filters)
-                          ? {
-                              filters,
-                              filterValues,
-                              setFilterValues,
-                            }
-                          : undefined
-                      }
-                      pagination={{
-                        limit,
-                        offset,
-                        totalEntries: nodesCount,
-                        itemName:
-                          paginationItemName ||
-                          (recordType ? lowerFirst(recordType) : undefined),
-                      }}
-                    />
-                  </Box>
-                )}
+                <Box
+                  px={2}
+                  py={1}
+                  sx={(theme) => ({
+                    borderBottom: `1px solid ${theme.palette.divider}`,
+                  })}
+                >
+                  <TableFilters
+                    noSort={noSort}
+                    loading={loading && !data}
+                    tableDisplayOptionButtons={tableDisplayOptionButtons}
+                    optionalColumns={
+                      showOptionalColumns
+                        ? {
+                            columns: optionalColumns.map((col) => ({
+                              value: col.key || '',
+                              header: col.header,
+                              defaultHidden: !!col.defaultHidden,
+                            })),
+                            columnsValue: includedOptionalColumns,
+                            setColumnsValue: setIncludedOptionalColumns,
+                          }
+                        : undefined
+                    }
+                    sorting={
+                      sortOptions
+                        ? {
+                            sortOptions,
+                            sortOptionValue: effectiveSortOrder,
+                            setSortOptionValue: setSortOrder,
+                          }
+                        : undefined
+                    }
+                    filters={
+                      !isEmpty(filters)
+                        ? {
+                            filters,
+                            filterValues,
+                            setFilterValues,
+                          }
+                        : undefined
+                    }
+                    pagination={{
+                      limit,
+                      offset,
+                      totalEntries: nodesCount,
+                      itemName:
+                        paginationItemName ||
+                        (recordType ? lowerFirst(recordType) : undefined),
+                    }}
+                  />
+                </Box>
                 {!isEmpty(toolbars) &&
                   toolbars.map((t) => (
                     <Box
