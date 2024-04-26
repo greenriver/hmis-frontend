@@ -76,7 +76,6 @@ const ClientScanCards = () => {
           recordType='ScanCardCode'
           paginationItemName='scan card'
           showTopToolbar
-          noFilter
         />
       </Paper>
     </>

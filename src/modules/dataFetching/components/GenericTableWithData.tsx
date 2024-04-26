@@ -61,7 +61,6 @@ export interface Props<
   defaultFilterValues?: Partial<FilterOptionsType>;
   showTopToolbar?: boolean;
   noSort?: boolean;
-  noFilter?: boolean;
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -121,7 +120,6 @@ const GenericTableWithData = <
   fullHeight = false,
   showOptionalColumns = false,
   noSort,
-  noFilter,
   header,
   toolbars = [],
   noData,
@@ -334,7 +332,6 @@ const GenericTableWithData = <
                   >
                     <TableFilters
                       noSort={noSort}
-                      noFilter={noFilter}
                       loading={loading && !data}
                       tableDisplayOptionButtons={tableDisplayOptionButtons}
                       optionalColumns={

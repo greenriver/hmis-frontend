@@ -145,7 +145,6 @@ const EnrollmentCaseNotes = () => {
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar
-          noFilter
         />
       </TitleCard>
       {viewRecordDialog()}

@@ -70,7 +70,6 @@ const ClientCaseNotes = () => {
           recordType='CustomCaseNote'
           paginationItemName='case note'
           showTopToolbar
-          noFilter
         />
       </Paper>
       {viewRecordDialog()}
