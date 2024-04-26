@@ -226,7 +226,7 @@ const EditHouseholdMemberTable = ({
           <RemoveFromHouseholdButton
             currentDashboardEnrollmentId={currentDashboardEnrollmentId}
             householdClient={hc}
-            onSuccess={() => refetchHousehold()}
+            onSuccess={refetchHousehold}
             householdSize={currentMembers.length}
             ariaLabel={`Remove ${clientBriefName(hc.client)}`}
           />

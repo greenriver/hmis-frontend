@@ -94,7 +94,7 @@ const HouseholdSummaryTabPanel = memo(
           refetch();
 
           tabs.forEach(({ clientId, enrollmentId }) => {
-            // Fully refetch the Enrollment for fields like householdSize
+            // Fully refetch the Enrollment
             cache.evict({
               id: `Enrollment:${enrollmentId}`,
             });

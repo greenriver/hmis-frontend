@@ -31,7 +31,6 @@ fragment HouseholdClientFields on HouseholdClient {
     entryDate
     exitDate
     inProgress
-    householdSize
     currentUnit {
       id
       name

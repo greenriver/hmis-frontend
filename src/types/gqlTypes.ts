@@ -12562,6 +12562,20 @@ export type BulkServicesClientSearchQuery = {
       age?: number | null;
       ssn?: string | null;
       gender: Array<Gender>;
+      alerts: Array<{
+        __typename?: 'ClientAlert';
+        id: string;
+        note: string;
+        expirationDate?: string | null;
+        createdAt: string;
+        priority: ClientAlertPriorityLevel;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }>;
       activeEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
@@ -13821,7 +13835,6 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
-              householdSize: number;
               currentUnit?: {
                 __typename?: 'Unit';
                 id: string;
@@ -17972,7 +17985,6 @@ export type GetEnrollmentWithHouseholdQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
-          householdSize: number;
           currentUnit?: {
             __typename?: 'Unit';
             id: string;
@@ -26267,7 +26279,6 @@ export type HouseholdFieldsFragment = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
-      householdSize: number;
       currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     };
   }>;
@@ -26345,7 +26356,6 @@ export type HouseholdClientFieldsFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
-    householdSize: number;
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   };
 };
@@ -26505,7 +26515,6 @@ export type GetHouseholdQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
-        householdSize: number;
         currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       };
     }>;
@@ -32551,7 +32560,6 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       entryDate
       exitDate
       inProgress
-      householdSize
       currentUnit {
         id
         name
@@ -34355,6 +34363,9 @@ export const BulkServicesClientSearchDocument = gql`
         id
         ...ClientName
         ...ClientIdentificationFields
+        alerts {
+          ...ClientAlertFields
+        }
         activeEnrollment(projectId: $projectId, openOnDate: $serviceDate) {
           id
           entryDate
@@ -34380,6 +34391,7 @@ export const BulkServicesClientSearchDocument = gql`
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
 `;
 
 /**
