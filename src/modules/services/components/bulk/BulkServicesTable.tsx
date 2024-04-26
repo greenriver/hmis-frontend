@@ -67,7 +67,7 @@ const BulkServicesTable: React.FC<Props> = ({
         </NotCollectedText>
       );
       return [
-        { ...CLIENT_COLUMNS.id, header: 'ID' },
+        { ...CLIENT_COLUMNS.linkedId },
         CLIENT_COLUMNS.first,
         CLIENT_COLUMNS.last,
         CLIENT_COLUMNS.dobAge,
@@ -128,6 +128,7 @@ const BulkServicesTable: React.FC<Props> = ({
                     ? 'Deselect checkboxes to assign clients individually.'
                     : undefined
                 }
+                serviceTypeName={serviceTypeName}
               />
             );
           },

@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
+import { SERVICE_BASIC_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import {
@@ -49,10 +49,8 @@ const ProjectServicesTable = ({
           />
         ),
       },
-      ...SERVICE_COLUMNS.map((c) => {
-        if (c.header === 'Date Provided') return { ...c, linkTreatment: false };
-        return c;
-      }),
+      { ...SERVICE_BASIC_COLUMNS.dateProvided, linkTreatment: false },
+      SERVICE_BASIC_COLUMNS.serviceType,
       {
         header: 'Enrollment Period',
         render: (s: ServiceFields) =>

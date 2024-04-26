@@ -35,7 +35,8 @@ const evaluateTemplateVariable = (
 
   try {
     const result = evaluate(parsedExpression, context);
-    return result ? result + '' : undefined;
+    // test for undefined so 0 doesn't end up as falsy
+    return result === undefined ? undefined : result + '';
   } catch (error) {
     if (error instanceof ExpressionEvaluationError) {
       return undefined;
@@ -51,7 +52,8 @@ export const evaluateTemplate = (
   template: string,
   context: EvalContext
 ): string => {
-  const regex = /\${(.*?)(?<!\\)}/g;
+  // doesn't match if the braces are escaped
+  const regex = /\${(.*?)}/g;
   return template.replace(regex, (match, key) => {
     return evaluateTemplateVariable(key, context) || 'N/A';
   });
