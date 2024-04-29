@@ -2033,6 +2033,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'AnnualPercentAMI', ofType: null },
       },
       {
+        name: 'autoExited',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'childWelfareMonths',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },

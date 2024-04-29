@@ -4,6 +4,7 @@ fragment ProjectEnrollmentFields on Enrollment {
   lockVersion
   entryDate
   exitDate
+  autoExited
   inProgress
   relationshipToHoH
   enrollmentCoc
@@ -26,6 +27,7 @@ fragment ClientEnrollmentFields on Enrollment {
   lockVersion
   entryDate
   exitDate
+  autoExited
   moveInDate
   lastBedNightDate
   projectName
@@ -46,6 +48,7 @@ fragment EnrollmentFields on Enrollment {
   entryDate
   exitDate
   exitDestination
+  autoExited
   project {
     ...ProjectNameAndType
   }
