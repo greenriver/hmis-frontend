@@ -40,6 +40,7 @@ const FormRuleCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
       <TitleCard
         title='Form Rules'
         headerVariant='border'
+        headerTypographyVariant='h5'
         actions={
           <Stack direction='row' gap={1}>
             <Button
