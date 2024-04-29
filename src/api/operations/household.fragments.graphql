@@ -31,6 +31,7 @@ fragment HouseholdClientFields on HouseholdClient {
     entryDate
     exitDate
     inProgress
+    autoExited
     currentUnit {
       id
       name
@@ -61,5 +62,6 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
     entryDate
     exitDate
     inProgress
+    autoExited
   }
 }
