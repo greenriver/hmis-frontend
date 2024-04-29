@@ -1,8 +1,7 @@
-import { omit } from 'lodash-es';
-
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   EnrollmentAccessSummaryFieldsFragment,
   GetUserEnrollmentSummariesDocument,
@@ -48,6 +47,11 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
   startDate,
   searchTerm,
 }) => {
+  const filters = useFilters({
+    type: 'EnrollmentAccessSummaryFilterOptions',
+    omit: ['searchTerm'],
+  });
+
   return (
     <GenericTableWithData<
       GetUserEnrollmentSummariesQuery,
@@ -58,16 +62,14 @@ const EnrollmentAccessSummaryTable: React.FC<Props> = ({
         id: userId,
         filters: { searchTerm },
       }}
-      defaultFilters={{ onOrAfter: startDate }}
+      defaultFilterValues={{ onOrAfter: startDate }}
       queryDocument={GetUserEnrollmentSummariesDocument}
       columns={columns}
       pagePath='user.enrollmentAccessSummaries'
       noData='No access history'
-      filterInputType='EnrollmentAccessSummaryFilterOptions'
       paginationItemName='accessed enrollment'
       recordType='EnrollmentAccessSummary'
-      filters={(filters) => omit(filters, 'searchTerm')}
-      showFilters
+      filters={filters}
     />
   );
 };

@@ -144,8 +144,7 @@ const EnrollmentCaseNotes = () => {
           handleRowClick={onSelectRecord}
           recordType='CustomCaseNote'
           paginationItemName='case note'
-          showFilters
-          noFilter
+          showTopToolbar
         />
       </TitleCard>
       {viewRecordDialog()}

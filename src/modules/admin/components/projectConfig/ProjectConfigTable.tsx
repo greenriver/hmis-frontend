@@ -92,10 +92,10 @@ const ProjectConfigTable = ({
         ]}
         pagePath='projectConfigs'
         noData='No project configs'
-        showFilters
         recordType='ProjectConfig'
         paginationItemName='project config'
         handleRowClick={onClickRow}
+        showTopToolbar
       />
     </>
   );

@@ -4,6 +4,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import { AUDIT_HISTORY_COLUMNS } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { Routes } from '@/routes/routes';
 import {
   UserAuditEventFilterOptions,
@@ -70,6 +71,9 @@ const columns: ColumnDef<AuditHistoryType>[] = [
 
 const UserAuditHistory = () => {
   const { userId } = useSafeParams() as { userId: string };
+  const filters = useFilters({
+    type: 'UserAuditEventFilterOptions',
+  });
 
   return (
     <>
@@ -90,8 +94,7 @@ const UserAuditHistory = () => {
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
           recordType='ApplicationUserAuditEvent'
-          filterInputType='UserAuditEventFilterOptions'
-          showFilters
+          filters={filters}
         />
       </ContextualCollapsibleListsProvider>
     </>
