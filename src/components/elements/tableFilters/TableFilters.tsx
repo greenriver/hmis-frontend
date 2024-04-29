@@ -31,7 +31,6 @@ export interface TableFiltersProps<T, S> {
   pagination?: PaginationProps;
   loading?: boolean;
   noSort?: boolean;
-  noFilter?: boolean;
   tableDisplayOptionButtons?: ReactNode;
 }
 
@@ -62,7 +61,6 @@ const TableFilters = <T, S extends Record<string, string>>({
   tableDisplayOptionButtons,
   loading,
   noSort = false,
-  noFilter = false,
   optionalColumns,
 }: TableFiltersProps<T, S>) => {
   return (
@@ -82,7 +80,7 @@ const TableFilters = <T, S extends Record<string, string>>({
           <TableColumnsMenu {...optionalColumns} />
         </Box>
       )}
-      {filters && !noFilter && (
+      {filters && (
         <Box>
           <TableFilterMenu {...filters} />
         </Box>

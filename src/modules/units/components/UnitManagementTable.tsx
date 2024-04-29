@@ -9,6 +9,7 @@ import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer
 import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { evictUnitsQuery } from '@/modules/units/util';
 import {
   DeleteUnitsDocument,
@@ -118,6 +119,10 @@ const UnitManagementTable = ({
     ];
   }, [allowDeleteUnits, renderDeleteButton]);
 
+  const filters = useFilters({
+    type: 'UnitFilterOptions',
+  });
+
   return (
     <GenericTableWithData<
       GetUnitsQuery,
@@ -132,7 +137,7 @@ const UnitManagementTable = ({
       noData='No units'
       selectable={allowDeleteUnits ? 'row' : undefined}
       isRowSelectable={(row) => row.occupants.length === 0}
-      showFilters
+      filters={filters}
       recordType='Unit'
       EnhancedTableToolbarProps={{
         title: 'Unit Management',

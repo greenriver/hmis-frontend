@@ -6,6 +6,7 @@ import {
   generateAssessmentPath,
 } from '@/modules/assessments/util';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   GetHouseholdAssessmentsDocument,
@@ -29,9 +30,13 @@ const columns: ColumnDef<HhmAssessmentType>[] = [
 
 interface Props {
   householdId: string;
+  projectId: string;
 }
 
-const HouseholdAssessmentsTable: React.FC<Props> = ({ householdId }) => {
+const HouseholdAssessmentsTable: React.FC<Props> = ({
+  householdId,
+  projectId,
+}) => {
   const rowLinkTo = useCallback(
     (assessment: HhmAssessmentType) =>
       generateAssessmentPath(
@@ -42,13 +47,18 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({ householdId }) => {
     []
   );
 
+  const filters = useFilters({
+    type: 'AssessmentsForHouseholdFilterOptions',
+    pickListArgs: { projectId },
+  });
+
   return (
     <GenericTableWithData<
       GetHouseholdAssessmentsQuery,
       GetHouseholdAssessmentsQueryVariables,
       HhmAssessmentType
     >
-      showFilters
+      filters={filters}
       queryVariables={{ id: householdId }}
       queryDocument={GetHouseholdAssessmentsDocument}
       rowLinkTo={rowLinkTo}
@@ -57,7 +67,6 @@ const HouseholdAssessmentsTable: React.FC<Props> = ({ householdId }) => {
       noData='No assessments'
       recordType='Assessment'
       headerCellSx={() => ({ color: 'text.secondary' })}
-      filterInputType='AssessmentsForHouseholdFilterOptions'
     />
   );
 };

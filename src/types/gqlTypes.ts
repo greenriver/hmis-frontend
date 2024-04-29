@@ -282,9 +282,9 @@ export type AssessmentEligibility = {
 };
 
 export type AssessmentFilterOptions = {
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
-  type?: InputMaybe<Array<AssessmentRole>>;
 };
 
 export type AssessmentInput = {
@@ -351,11 +351,15 @@ export enum AssessmentType {
 }
 
 export type AssessmentsForEnrollmentFilterOptions = {
-  type?: InputMaybe<Array<AssessmentRole>>;
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsForHouseholdFilterOptions = {
-  type?: InputMaybe<Array<AssessmentRole>>;
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type AssessmentsForProjectFilterOptions = {
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsPaginated = {
@@ -4445,6 +4449,12 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
+  /**
+   * Assessment names, including custom assessments and assessments that are
+   * inactive. If a project is specified, the list is limited to assessments that
+   * exist in the project (both active and inactive).
+   */
+  AssessmentNames = 'ASSESSMENT_NAMES',
   AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
@@ -5269,7 +5279,7 @@ export type Project = {
 };
 
 export type ProjectAssessmentsArgs = {
-  filters?: InputMaybe<AssessmentFilterOptions>;
+  filters?: InputMaybe<AssessmentsForProjectFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -11360,7 +11370,9 @@ export type GetAssessmentsForPopulationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  roles?: InputMaybe<Array<AssessmentRole> | AssessmentRole>;
+  roles?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
 }>;
 
 export type GetAssessmentsForPopulationQuery = {
@@ -28254,7 +28266,7 @@ export type GetProjectAssessmentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
-  filters?: InputMaybe<AssessmentFilterOptions>;
+  filters?: InputMaybe<AssessmentsForProjectFilterOptions>;
 }>;
 
 export type GetProjectAssessmentsQuery = {
@@ -33970,14 +33982,14 @@ export const GetAssessmentsForPopulationDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $roles: [AssessmentRole!]
+    $roles: [String!]
   ) {
     client(id: $id) {
       id
       assessments(
         limit: $limit
         offset: $offset
-        filters: { type: $roles }
+        filters: { assessmentName: $roles }
         inProgress: false
         sortOrder: ASSESSMENT_DATE
       ) {
@@ -40091,7 +40103,7 @@ export const GetProjectAssessmentsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-    $filters: AssessmentFilterOptions = null
+    $filters: AssessmentsForProjectFilterOptions = null
   ) {
     project(id: $id) {
       id

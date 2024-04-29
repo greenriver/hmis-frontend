@@ -1,9 +1,9 @@
-import { omit } from 'lodash-es';
 import React from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   ClientAccessSummaryFieldsFragment,
   GetUserClientSummariesDocument,
@@ -41,6 +41,11 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
   startDate,
   searchTerm = '',
 }) => {
+  const filters = useFilters({
+    type: 'ClientAccessSummaryFilterOptions',
+    omit: ['searchTerm'],
+  });
+
   return (
     <GenericTableWithData<
       GetUserClientSummariesQuery,
@@ -52,17 +57,15 @@ const ClientAccessSummaryTable: React.FC<Props> = ({
         filters: { searchTerm },
       }}
       queryDocument={GetUserClientSummariesDocument}
-      defaultFilters={{
+      defaultFilterValues={{
         onOrAfter: startDate,
       }}
       columns={columns}
       pagePath='user.clientAccessSummaries'
       noData='No access history'
-      filterInputType='ClientAccessSummaryFilterOptions'
       paginationItemName='accessed client'
       recordType='ClientAccessSummary'
-      filters={(filters) => omit(filters, 'searchTerm')}
-      showFilters
+      filters={filters}
     />
   );
 };

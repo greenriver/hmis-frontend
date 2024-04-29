@@ -1,4 +1,3 @@
-import { omit } from 'lodash-es';
 import { useCallback } from 'react';
 
 import TextInput from '@/components/elements/input/TextInput';
@@ -6,6 +5,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import {
@@ -61,6 +61,11 @@ const OrganizationProjectsTable = ({
     []
   );
 
+  const filters = useFilters({
+    type: 'ProjectsForEnrollmentFilterOptions',
+    omit: ['searchTerm'],
+  });
+
   return (
     <GenericTableWithData<
       GetOrganizationProjectsQuery,
@@ -88,13 +93,11 @@ const OrganizationProjectsTable = ({
       rowLinkTo={rowLinkTo}
       noData='No projects'
       pagePath='organization.projects'
-      showFilters={!hideFilters}
+      filters={hideFilters ? undefined : filters}
       recordType='Project'
-      filterInputType='ProjectsForEnrollmentFilterOptions'
-      defaultFilters={
+      defaultFilterValues={
         hideFilters ? undefined : { status: [ProjectFilterOptionStatus.Open] }
       }
-      filters={(filters) => omit(filters, 'searchTerm')}
       noSort
     />
   );

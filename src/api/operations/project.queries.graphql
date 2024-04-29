@@ -128,7 +128,7 @@ query GetProjectAssessments(
   $limit: Int = 10
   $offset: Int = 0
   $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-  $filters: AssessmentFilterOptions = null
+  $filters: AssessmentsForProjectFilterOptions = null
 ) {
   project(id: $id) {
     id

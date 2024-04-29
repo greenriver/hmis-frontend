@@ -1,5 +1,4 @@
 import { Stack, Tooltip, Typography } from '@mui/material';
-import { omit } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
@@ -12,6 +11,7 @@ import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentD
 import EnrollmentEntryDateWithStatusIndicator from '@/modules/hmis/components/EnrollmentEntryDateWithStatusIndicator';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   formatDateForDisplay,
   formatDateForGql,
@@ -189,6 +189,11 @@ const ProjectClientEnrollmentsTable = ({
       ];
     }, []);
 
+  const filters = useFilters({
+    type: 'EnrollmentsForProjectFilterOptions',
+    omit: ['searchTerm', 'bedNightOnDate'],
+  });
+
   return (
     <SsnDobShowContextProvider>
       <GenericTableWithData<
@@ -214,9 +219,7 @@ const ProjectClientEnrollmentsTable = ({
         }
         pagePath='project.enrollments'
         recordType='Enrollment'
-        showFilters
-        filters={(f) => omit(f, 'searchTerm', 'bedNightOnDate')}
-        filterInputType='EnrollmentsForProjectFilterOptions'
+        filters={filters}
         defaultSortOption={EnrollmentSortOption.MostRecent}
         showOptionalColumns
         applyOptionalColumns={(cols) => {

@@ -23,7 +23,7 @@ export function useHouseholdAssessments({ role, householdId, skip }: Args) {
     useGetHouseholdAssessmentsQuery({
       variables: {
         id: householdId,
-        filters: { type: [role] },
+        filters: { assessmentName: [role] },
         limit: 30,
       },
       skip,

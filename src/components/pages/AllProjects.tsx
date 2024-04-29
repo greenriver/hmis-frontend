@@ -1,7 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Grid, Paper } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { omit } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
 import CommonSearchInput from '../../modules/search/components/CommonSearchInput';
@@ -14,6 +13,7 @@ import useDebouncedState from '@/hooks/useDebouncedState';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
@@ -99,6 +99,11 @@ const AllProjects = () => {
       }),
     []
   );
+
+  const projectFilters = useFilters({
+    type: 'ProjectFilterOptions',
+    omit: ['searchTerm'],
+  });
 
   const organizationRowLink = useCallback(
     (row: OrganizationType) =>
@@ -191,10 +196,11 @@ const AllProjects = () => {
                 rowLinkTo={projectRowLink}
                 noData='No projects'
                 pagePath='projects'
-                showFilters
                 recordType='Project'
-                defaultFilters={{ status: [ProjectFilterOptionStatus.Open] }}
-                filters={(filters) => omit(filters, 'searchTerm')}
+                defaultFilterValues={{
+                  status: [ProjectFilterOptionStatus.Open],
+                }}
+                filters={projectFilters}
                 defaultPageSize={25}
               />
             ) : (
@@ -209,12 +215,12 @@ const AllProjects = () => {
                 rowLinkTo={organizationRowLink}
                 noData='No organizations'
                 pagePath='organizations'
-                showFilters={false}
                 recordType='Organization'
                 defaultPageSize={25}
                 queryVariables={{
                   filters: { searchTerm: debouncedSearch || undefined },
                 }}
+                noSort
               />
             )}
           </Paper>

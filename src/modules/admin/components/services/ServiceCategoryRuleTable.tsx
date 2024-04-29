@@ -1,11 +1,11 @@
 import { Button } from '@mui/material';
-import { omit } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DataCollectedAbout,
@@ -112,6 +112,11 @@ const ServiceCategoryRuleTable: React.FC<Props> = ({ serviceCategoryId }) => {
     ];
   }, [openFormDialog]);
 
+  const filters = useFilters({
+    type: 'FormRuleFilterOptions',
+    omit: ['formType'],
+  });
+
   return (
     <>
       <GenericTableWithData<
@@ -124,11 +129,9 @@ const ServiceCategoryRuleTable: React.FC<Props> = ({ serviceCategoryId }) => {
         columns={columnsWithAction}
         pagePath='serviceCategory.formRules'
         noData='No form rules'
-        showFilters
+        filters={filters}
         recordType='FormRule'
-        filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
-        filters={(filters) => omit(filters, 'formType')}
       />
       {renderFormDialog({
         title: 'Edit Rule',
