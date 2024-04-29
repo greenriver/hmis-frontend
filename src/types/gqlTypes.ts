@@ -15880,12 +15880,21 @@ export type GetClientCaseNotesQuery = {
           __typename?: 'Enrollment';
           id: string;
           lockVersion: number;
-          projectName: string;
-          projectType?: ProjectType | null;
           entryDate: string;
           exitDate?: string | null;
           autoExited: boolean;
+          moveInDate?: string | null;
+          lastBedNightDate?: string | null;
+          projectName: string;
+          organizationName: string;
+          projectType?: ProjectType | null;
           inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canViewEnrollmentDetails: boolean;
+          };
         };
         user?: {
           __typename: 'ApplicationUser';
@@ -36984,20 +36993,14 @@ export const GetClientCaseNotesDocument = gql`
         nodes {
           ...CustomCaseNoteFields
           enrollment {
-            id
-            lockVersion
-            projectName
-            projectType
-            entryDate
-            exitDate
-            autoExited
-            inProgress
+            ...ClientEnrollmentFields
           }
         }
       }
     }
   }
   ${CustomCaseNoteFieldsFragmentDoc}
+  ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
 /**
