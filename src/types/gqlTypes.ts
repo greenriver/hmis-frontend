@@ -15884,6 +15884,7 @@ export type GetClientCaseNotesQuery = {
           projectType?: ProjectType | null;
           entryDate: string;
           exitDate?: string | null;
+          autoExited: boolean;
           inProgress: boolean;
         };
         user?: {
@@ -36989,6 +36990,7 @@ export const GetClientCaseNotesDocument = gql`
             projectType
             entryDate
             exitDate
+            autoExited
             inProgress
           }
         }

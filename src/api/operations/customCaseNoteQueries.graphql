@@ -49,6 +49,7 @@ query GetClientCaseNotes(
           projectType
           entryDate
           exitDate
+          autoExited
           inProgress
         }
       }
