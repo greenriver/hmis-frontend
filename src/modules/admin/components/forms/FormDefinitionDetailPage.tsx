@@ -86,7 +86,7 @@ const FormDefinitionDetailPage = () => {
                     value={formDefinition.role}
                   />
                 </CommonLabeledTextBlock>
-                <CommonLabeledTextBlock title='Form identifier'>
+                <CommonLabeledTextBlock title='Form Identifier'>
                   {formDefinition.identifier}
                 </CommonLabeledTextBlock>
               </Stack>
