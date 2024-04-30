@@ -3,7 +3,10 @@ import { Stack } from '@mui/system';
 import { ReactNode, useState } from 'react';
 import { useRelatedAnnualAssessments } from '../hooks/useRelatedAnnualAssessments';
 import RouterLink from '@/components/elements/RouterLink';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDate,
+  parseAndFormatDateRange,
+} from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -95,10 +98,8 @@ const AssessmentTitle = ({
             clientId,
           })}
           openInNew
-          sx={{ display: 'inline-flex' }}
         >
-          {projectName} ({parseAndFormatDate(entryDate)} -{' '}
-          {exitDate ? parseAndFormatDate(exitDate) : 'Active'})
+          {projectName} ({parseAndFormatDateRange(entryDate, exitDate)})
         </RouterLink>
       </Typography>
       {subtitle}

@@ -24,7 +24,12 @@ const RouterLink = forwardRef<RouterLinkProps, any>(
       target={openInNew ? '_blank' : undefined}
     >
       {openInNew || Icon ? (
-        <Stack direction={'row'} gap={0.75} alignItems='center'>
+        <Stack
+          direction={'row'}
+          gap={0.75}
+          alignItems='center'
+          sx={{ display: 'inline-flex', textDecoration: 'inherit' }}
+        >
           {children}
           {openInNew ? (
             <OpenInNewIcon fontSize='inherit' />
