@@ -150,8 +150,11 @@ const IndividualAssessment = ({
     <AssessmentTitle
       assessmentTitle={title}
       clientName={clientBriefName(client)}
+      clientId={client.id}
       projectName={enrollment.project.projectName}
       enrollmentId={enrollment.id}
+      entryDate={enrollment.entryDate}
+      exitDate={enrollment.exitDate}
       householdId={enrollment.householdId}
       assessmentRole={formRole as unknown as AssessmentRole}
       embeddedInWorkflow={embeddedInWorkflow}
