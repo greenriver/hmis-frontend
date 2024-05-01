@@ -19,15 +19,17 @@ import {
   StaticFormRole,
   UpdateFormDefinitionDocument,
   UpdateFormDefinitionMutation,
-  useGetFormDefinitionForEditorQuery,
+  useGetFormIdentifierForEditorQuery,
 } from '@/types/gqlTypes';
 
 const FormDefinitionDetailPage = () => {
-  const { formId } = useSafeParams() as { formId: string };
+  const { formIdentifier: identifier } = useSafeParams() as {
+    formIdentifier: string;
+  };
 
-  const { data: { formDefinition } = {}, error } =
-    useGetFormDefinitionForEditorQuery({
-      variables: { id: formId },
+  const { data: { formIdentifier } = {}, error } =
+    useGetFormIdentifierForEditorQuery({
+      variables: { identifier },
     });
 
   // Dialog for updating form definitions
@@ -37,17 +39,17 @@ const FormDefinitionDetailPage = () => {
       MutationUpdateFormDefinitionArgs
     >({
       formRole: StaticFormRole.FormDefinition,
-      initialValues: formDefinition || {},
+      initialValues: formIdentifier?.draft || {},
       mutationDocument: UpdateFormDefinitionDocument,
       getErrors: (data) => data.updateFormDefinition?.errors || [],
       getVariables: (values) => ({
         input: values as FormDefinitionInput,
-        id: formId,
+        id: formIdentifier.currentVersion.id,
       }),
     });
 
   if (error) throw error;
-  if (!formDefinition) return <Loading />;
+  if (!formIdentifier) return <Loading />;
 
   return (
     <>
@@ -55,7 +57,7 @@ const FormDefinitionDetailPage = () => {
         title={
           <Stack direction='row' gap={1}>
             <Typography variant='h3'>
-              Manage Form: <b>{formDefinition.title}</b>
+              Manage Form: <b>{formIdentifier.title}</b>
             </Typography>
             <IconButton
               aria-label='edit title'
@@ -69,7 +71,9 @@ const FormDefinitionDetailPage = () => {
         actions={
           <Stack direction='row' gap={2}>
             <ButtonLink
-              to={generatePath(AdminDashboardRoutes.EDIT_FORM, { formId })}
+              to={generatePath(AdminDashboardRoutes.EDIT_FORM, {
+                formIdentifier: identifier,
+              })}
               startIcon={<DashboardCustomizeIcon />}
               variant='contained'
             >
@@ -104,16 +108,16 @@ const FormDefinitionDetailPage = () => {
             <CommonLabeledTextBlock title='Form Type'>
               <HmisEnum
                 enumMap={HmisEnums.FormRole}
-                value={formDefinition.role}
+                value={formIdentifier.role}
               />
             </CommonLabeledTextBlock>
             {/* maybe add more details here, such as recent edit history and project usage */}
           </Stack>
         </Paper>
         <FormRuleCard
-          formId={formId}
-          formTitle={formDefinition.title}
-          formRole={formDefinition.role}
+          formId={formIdentifier.currentVersion.id}
+          formTitle={formIdentifier.title}
+          formRole={formIdentifier.role}
         />
       </Stack>
       {renderEditDialog({ title: 'Edit Form Details' })}

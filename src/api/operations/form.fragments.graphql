@@ -137,3 +137,10 @@ fragment FormDefinitionFieldsForEditor on FormDefinition {
   ...FormDefinitionFields
   rawDefinition
 }
+
+fragment FormIdentifierMetadata on FormIdentifier {
+  id
+  identifier
+  role
+  title
+}

@@ -6,13 +6,13 @@ import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
-  GetFormDefinitionsDocument,
-  GetFormDefinitionsQuery,
-  GetFormDefinitionsQueryVariables,
+  GetFormIdentifiersDocument,
+  GetFormIdentifiersQuery,
+  GetFormIdentifiersQueryVariables,
 } from '@/types/gqlTypes';
 
 export type Row = NonNullable<
-  GetFormDefinitionsQuery['formDefinitions']
+  GetFormIdentifiersQuery['formIdentifiers']
 >['nodes'][0];
 
 const columns: ColumnDef<Row>[] = [
@@ -28,12 +28,12 @@ const columns: ColumnDef<Row>[] = [
   },
   {
     header: 'Applicability Rules',
-    render: ({ formRules }) => formRules.nodesCount,
+    render: ({ currentVersion }) => currentVersion.formRules.nodesCount,
   },
   {
     key: 'system',
-    render: ({ system }) =>
-      system && (
+    render: ({ currentVersion }) =>
+      currentVersion.system && (
         <Chip
           label='System'
           size='small'
@@ -49,24 +49,26 @@ const columns: ColumnDef<Row>[] = [
 ];
 
 interface Props {
-  queryVariables: GetFormDefinitionsQueryVariables;
+  queryVariables: GetFormIdentifiersQueryVariables;
 }
 const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
   return (
     <GenericTableWithData<
-      GetFormDefinitionsQuery,
-      GetFormDefinitionsQueryVariables,
+      GetFormIdentifiersQuery,
+      GetFormIdentifiersQueryVariables,
       Row
     >
       queryVariables={queryVariables}
-      queryDocument={GetFormDefinitionsDocument}
+      queryDocument={GetFormIdentifiersDocument}
       columns={columns}
-      pagePath='formDefinitions'
-      recordType='FormDefinition'
+      pagePath='formIdentifiers'
+      recordType='FormIdentifier'
       // TODO: add filter/sort capabilities
       paginationItemName='form'
       rowLinkTo={(row) =>
-        generatePath(AdminDashboardRoutes.VIEW_FORM, { formId: row.id })
+        generatePath(AdminDashboardRoutes.VIEW_FORM, {
+          formIdentifier: row.identifier,
+        })
       }
     />
   );

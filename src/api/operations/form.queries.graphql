@@ -75,6 +75,43 @@ query GetFormDefinitions(
   }
 }
 
+query GetFormIdentifierForEditor($identifier: String!) {
+  formIdentifier(identifier: $identifier) {
+    ...FormIdentifierMetadata
+    currentVersion {
+      ...FormDefinitionFieldsForEditor
+    }
+    draft {
+      ...FormDefinitionFieldsForEditor
+    }
+    retiredVersions {
+      ...FormDefinitionFieldsForEditor
+    }
+  }
+}
+
+query GetFormIdentifiers(
+  $limit: Int = 25
+  $offset: Int = 0
+  $filters: FormIdentifierFilterOptions
+) {
+  formIdentifiers(limit: $limit, offset: $offset, filters: $filters) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...FormIdentifierMetadata
+      currentVersion {
+        ...FormDefinitionMetadata
+        system
+        formRules(limit: 1) {
+          nodesCount
+        }
+      }
+    }
+  }
+}
+
 query GetParsedFormDefinition($input: String!) {
   parsedFormDefinition(input: $input) {
     definition {

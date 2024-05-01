@@ -4,33 +4,35 @@ import FormEditor from './FormEditor';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import {
-  useGetFormDefinitionForEditorQuery,
+  useGetFormIdentifierForEditorQuery,
   useUpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
 const UpdateFormDefinitionPage = () => {
-  const { formId } = useParams() as { formId: string };
+  const { formIdentifier: identifier } = useParams() as {
+    formIdentifier: string;
+  };
 
-  const { data: { formDefinition } = {}, error } =
-    useGetFormDefinitionForEditorQuery({
-      variables: { id: formId },
+  const { data: { formIdentifier } = {}, error } =
+    useGetFormIdentifierForEditorQuery({
+      variables: { identifier },
     });
 
   const [updateFormDefinition, { loading }] = useUpdateFormDefinitionMutation();
 
   if (error) throw error;
-  if (!formDefinition) return <Loading />;
+  if (!formIdentifier) return <Loading />;
 
   return (
     <>
-      <PageTitle title={`Edit Form: ${formDefinition?.title}`} />
-      {formDefinition && (
+      <PageTitle title={`Edit Form: ${formIdentifier.title}`} />
+      {formIdentifier.draft && (
         <FormEditor
-          definition={formDefinition?.rawDefinition}
+          definition={formIdentifier.draft.rawDefinition}
           onSave={(values) => {
             updateFormDefinition({
               variables: {
-                id: formId,
+                id: formIdentifier.currentVersion.id,
                 input: { definition: JSON.stringify(values) },
               },
             });
