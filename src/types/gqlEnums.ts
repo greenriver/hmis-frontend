@@ -913,6 +913,8 @@ export const HmisEnums = {
     ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
     ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ALL_UNIT_TYPES: 'All unit types.',
+    ASSESSMENT_NAMES:
+      'Assessment names, including custom assessments and assessments that are inactive. If a project is specified, the list is limited to assessments that exist in the project (both active and inactive).',
     AVAILABLE_BULK_SERVICE_TYPES: 'AVAILABLE_BULK_SERVICE_TYPES',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
@@ -932,6 +934,7 @@ export const HmisEnums = {
     EXTERNAL_FORM_TYPES_FOR_PROJECT: 'External form types for the project.',
     GEOCODE: 'GEOCODE',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
+    OPEN_PROJECTS: 'Open Projects that the user can see',
     ORGANIZATION: 'All Organizations that the User can see',
     POSSIBLE_UNIT_TYPES_FOR_PROJECT:
       'Unit types that are eligible to be added to project',

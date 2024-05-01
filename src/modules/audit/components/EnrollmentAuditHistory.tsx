@@ -8,6 +8,7 @@ import {
   AUDIT_HISTORY_USER_COLUMNS,
 } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   EnrollmentAuditEventFilterOptions,
   GetEnrollmentAuditEventsDocument,
@@ -29,6 +30,9 @@ const columns: ColumnDef<AuditHistoryType>[] = [
 
 const EnrollmentAuditHistory = () => {
   const { enrollmentId } = useSafeParams() as { enrollmentId: string };
+  const filters = useFilters({
+    type: 'EnrollmentAuditEventFilterOptions',
+  });
 
   return (
     <ContextualCollapsibleListsProvider>
@@ -54,8 +58,7 @@ const EnrollmentAuditHistory = () => {
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
           recordType='EnrollmentAuditEvent'
-          filterInputType='EnrollmentAuditEventFilterOptions'
-          showFilters
+          filters={filters}
         />
       </Paper>
     </ContextualCollapsibleListsProvider>

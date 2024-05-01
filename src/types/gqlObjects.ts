@@ -928,6 +928,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewClientPhoto',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewDob',
         type: {
           kind: 'NON_NULL',
@@ -2023,6 +2031,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'annualPercentAmi',
         type: { kind: 'ENUM', name: 'AnnualPercentAMI', ofType: null },
+      },
+      {
+        name: 'autoExited',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
       },
       {
         name: 'childWelfareMonths',
@@ -4735,11 +4751,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'geocode',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'geographyType',
@@ -5043,7 +5055,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewClientContactInfo',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewClientName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClientPhoto',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -5907,6 +5935,18 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentFilterOptions',
     args: [
       {
+        name: 'assessmentName',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          },
+        },
+      },
+      {
         name: 'project',
         type: {
           kind: 'LIST',
@@ -5927,18 +5967,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'NON_NULL',
             name: null,
             ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'type',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
           },
         },
       },
@@ -5997,14 +6025,14 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentsForEnrollmentFilterOptions',
     args: [
       {
-        name: 'type',
+        name: 'assessmentName',
         type: {
           kind: 'LIST',
           name: null,
           ofType: {
             kind: 'NON_NULL',
             name: null,
-            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
       },
@@ -6014,14 +6042,31 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentsForHouseholdFilterOptions',
     args: [
       {
-        name: 'type',
+        name: 'assessmentName',
         type: {
           kind: 'LIST',
           name: null,
           ofType: {
             kind: 'NON_NULL',
             name: null,
-            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'AssessmentsForProjectFilterOptions',
+    args: [
+      {
+        name: 'assessmentName',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
         },
       },

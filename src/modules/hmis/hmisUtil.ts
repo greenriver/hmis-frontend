@@ -21,6 +21,7 @@ import {
 } from '../form/util/formUtil';
 
 import { DashboardEnrollment } from './types';
+import { ClientAssessmentType } from '@/components/clientDashboard/enrollments/ClientAssessments';
 import { ColumnDef } from '@/components/elements/table/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
@@ -42,7 +43,6 @@ import {
   EnrollmentOccurrencePointFieldsFragment,
   EnrollmentSummaryFieldsFragment,
   EventFieldsFragment,
-  GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
   NoYes,
   NoYesMissing,
@@ -375,11 +375,7 @@ export const formRoleDisplay = (assessment: AssessmentFieldsFragment) => {
   return defaultTitle;
 };
 
-export const assessmentDescription = (
-  assessment: NonNullable<
-    NonNullable<GetClientAssessmentsQuery['client']>['assessments']
-  >['nodes'][0]
-) => {
+export const assessmentDescription = (assessment: ClientAssessmentType) => {
   const prefix = formRoleDisplay(assessment);
   const name = prefix ? `${prefix} assessment` : 'Assessment';
   return `${name} at ${assessment.enrollment.projectName} on ${

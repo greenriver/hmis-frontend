@@ -26,7 +26,7 @@ COPY . .
 
 RUN --mount=type=cache,target=/app/node_modules \
      corepack enable \
-     && yarn install --offline \
+     && yarn install \
      && yarn format:check \
      && yarn lint:check \
      && yarn build

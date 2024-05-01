@@ -1,5 +1,4 @@
 import { Chip, IconButton } from '@mui/material';
-import { omit } from 'lodash-es';
 import React, { useMemo, useState } from 'react';
 import { generatePath } from 'react-router-dom';
 import ProjectApplicabilitySummary from './ProjectApplicabilitySummary';
@@ -10,6 +9,7 @@ import { EditIcon } from '@/components/elements/SemanticIcons';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 
@@ -175,6 +175,11 @@ const FormRuleTable: React.FC<Props> = ({
     return cols;
   }, [formRole, openFormDialog, columnsOverride]);
 
+  const filters = useFilters({
+    type: 'FormRuleFilterOptions',
+    omit: ['definition', 'formType'],
+  });
+
   return (
     <>
       <GenericTableWithData<
@@ -187,11 +192,9 @@ const FormRuleTable: React.FC<Props> = ({
         columns={columns}
         pagePath='formRules'
         noData='No form rules'
-        showFilters
+        filters={filters}
         recordType='FormRule'
-        filterInputType='FormRuleFilterOptions'
         paginationItemName='rule'
-        filters={(filters) => omit(filters, 'definition', 'formType')}
         noSort
       />
       {renderFormDialog({

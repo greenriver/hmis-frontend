@@ -269,6 +269,8 @@ const ClientCardImage = ({
 
   if (!client) return <ClientCardImageElement />;
 
+  if (!client.access.canViewClientPhoto) return;
+
   const overlaySx: SxProps = {
     opacity: 0,
     display: 'flex',
@@ -287,54 +289,58 @@ const ClientCardImage = ({
         onClose={handleClose}
         clientId={client.id}
       />
-      <Link
-        component='button'
-        underline='none'
-        onClick={handleOpen}
-        ref={linkRef}
-        sx={{
-          position: 'relative',
-          width: size,
-          height: size,
-          '&:focus-within > .overlay': {
-            opacity: 1,
-          },
-          '&:hover > .overlay': {
-            opacity: 1,
-          },
-        }}
-      >
-        <ClientCardImageElement size={size} client={client} />
-        {client.image?.base64 ? (
-          // Has photo
-          <Box
-            className='overlay'
-            sx={{
-              ...overlaySx,
-              backgroundColor: 'rgba(0,0,0, 0.5)',
-            }}
-          >
-            <Chip
-              label='Update Photo'
-              icon={<EditIcon />}
+      {client.access.canEditClient ? (
+        <Link
+          component='button'
+          underline='none'
+          onClick={handleOpen}
+          ref={linkRef}
+          sx={{
+            position: 'relative',
+            width: size,
+            height: size,
+            '&:focus-within > .overlay': {
+              opacity: 1,
+            },
+            '&:hover > .overlay': {
+              opacity: 1,
+            },
+          }}
+        >
+          <ClientCardImageElement size={size} client={client} />
+          {client.image?.base64 ? (
+            // Has photo
+            <Box
+              className='overlay'
               sx={{
-                backgroundColor: (theme) => theme.palette.grey[200],
+                ...overlaySx,
+                backgroundColor: 'rgba(0,0,0, 0.5)',
               }}
-            />
-          </Box>
-        ) : (
-          // No photo
-          <Box
-            className='overlay'
-            sx={{
-              ...overlaySx,
-              backgroundColor: (theme) => theme.palette.grey[100],
-            }}
-          >
-            <Chip label='Add Client Photo' icon={<PhotoCameraIcon />} />
-          </Box>
-        )}
-      </Link>
+            >
+              <Chip
+                label='Update Photo'
+                icon={<EditIcon />}
+                sx={{
+                  backgroundColor: (theme) => theme.palette.grey[200],
+                }}
+              />
+            </Box>
+          ) : (
+            // No photo
+            <Box
+              className='overlay'
+              sx={{
+                ...overlaySx,
+                backgroundColor: (theme) => theme.palette.grey[100],
+              }}
+            >
+              <Chip label='Add Client Photo' icon={<PhotoCameraIcon />} />
+            </Box>
+          )}
+        </Link>
+      ) : (
+        <ClientCardImageElement size={size} client={client} />
+      )}
     </>
   );
 };
@@ -354,10 +360,14 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
     variables: { id: client.id },
   });
 
+  const [canViewClientPhoto] = useHasRootPermissions(['canViewClientPhoto']);
+
   const [canViewSsn] = useHasRootPermissions([
     'canViewFullSsn',
     'canViewPartialSsn',
   ]);
+
+  const size = 175;
 
   return (
     <Box>
@@ -373,21 +383,21 @@ const ClientProfileCard: React.FC<Props> = ({ client }) => {
             <Typography variant='h4'>{clientNameAllParts(client)}</Typography>
           </Grid>
           <Grid item xs={12} sx={{ display: 'flex', gap: 2 }}>
-            {imageLoading ? (
-              <Skeleton
-                variant='rectangular'
-                sx={{
-                  height: 150,
-                  width: 150,
-                  mr: 1,
-                }}
-              />
-            ) : (
-              <ClientCardImage
-                size={175}
-                client={clientImageData || undefined}
-              />
-            )}
+            {canViewClientPhoto &&
+              (imageLoading ? (
+                <Skeleton
+                  variant='rectangular'
+                  sx={{
+                    height: size,
+                    width: size,
+                  }}
+                />
+              ) : (
+                <ClientCardImage
+                  size={size}
+                  client={clientImageData || undefined}
+                />
+              ))}
             <Box
               sx={{
                 display: 'flex',

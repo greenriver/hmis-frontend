@@ -1892,6 +1892,26 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "assessmentName",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "project",
             "description": null,
             "type": {
@@ -1923,26 +1943,6 @@
                 "ofType": {
                   "kind": "ENUM",
                   "name": "ProjectType",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "type",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "AssessmentRole",
                   "ofType": null
                 }
               }
@@ -2208,7 +2208,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "type",
+            "name": "assessmentName",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -2217,8 +2217,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "AssessmentRole",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
@@ -2239,7 +2239,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "type",
+            "name": "assessmentName",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -2248,8 +2248,39 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "ENUM",
-                  "name": "AssessmentRole",
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "AssessmentsForProjectFilterOptions",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "assessmentName",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
@@ -5476,6 +5507,22 @@
           },
           {
             "name": "canViewClientName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewClientPhoto",
             "description": null,
             "args": [],
             "type": {
@@ -14642,6 +14689,22 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "EnrollmentAuditEventsPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "autoExited",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },
@@ -30080,6 +30143,12 @@
             "deprecationReason": null
           },
           {
+            "name": "ASSESSMENT_NAMES",
+            "description": "Assessment names, including custom assessments and assessments that are\ninactive. If a project is specified, the list is limited to assessments that\nexist in the project (both active and inactive).",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "AVAILABLE_BULK_SERVICE_TYPES",
             "description": null,
             "isDeprecated": false,
@@ -30172,6 +30241,12 @@
           {
             "name": "OPEN_HOH_ENROLLMENTS_FOR_PROJECT",
             "description": "Open HoH enrollments at the project.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OPEN_PROJECTS",
+            "description": "Open Projects that the user can see",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -32499,6 +32574,83 @@
             "deprecationReason": null
           },
           {
+            "name": "assessments",
+            "description": null,
+            "args": [
+              {
+                "name": "filters",
+                "description": null,
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "AssessmentsForProjectFilterOptions",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "inProgress",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "limit",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "sortOrder",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "AssessmentSortOption",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AssessmentsPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ceParticipations",
             "description": null,
             "args": [
@@ -33950,13 +34102,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -37237,7 +37385,39 @@
             "deprecationReason": null
           },
           {
+            "name": "canViewClientContactInfo",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "canViewClientName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewClientPhoto",
             "description": null,
             "args": [],
             "type": {

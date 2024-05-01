@@ -13,6 +13,7 @@ fragment RootPermissions on QueryAccess {
   canViewFullSsn
   canDeleteProject
   canViewPartialSsn
+  canViewClientPhoto
   canEnrollClients
   canEditEnrollments
   canViewEnrollmentDetails

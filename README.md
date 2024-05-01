@@ -72,9 +72,7 @@ SCHEMA_PATH=<path to schema.graphql> yarn graphql:codegen
 
 ### Upgrading NPM Packages
 
-To add or grade an NPM package, you can edit the `package.json` OR run `yarn add` OR run `yarn upgrade`.
-Tarballs of external packages are stored in an offline mirror, so that they do
-not need to be fetched from the yarn registry on every build.
+To add or grade an NPM package, you can edit the `package.json` OR run `yarn add` OR run `yarn upgrade` OR run `yarn upgrade-interactive`.
 
 ```sh
 # 1. edit package.json, or run yarn add/upgrade
@@ -83,7 +81,7 @@ yarn install
 # 3. remove duplicate packages
 yarn yarn-deduplicate
 # 4. always commit changes to these files
-git add yarn.lock package.json yarn/packages-cache
+git add yarn.lock package.json
 ```
 
 

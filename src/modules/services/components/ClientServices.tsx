@@ -6,8 +6,12 @@ import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { SERVICE_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
+import {
+  SERVICE_BASIC_COLUMNS,
+  SERVICE_COLUMNS,
+} from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetClientServicesDocument,
@@ -31,7 +35,8 @@ const ClientServices: React.FC<{
     () =>
       (
         [
-          ...SERVICE_COLUMNS,
+          SERVICE_BASIC_COLUMNS.dateProvided,
+          SERVICE_BASIC_COLUMNS.serviceType,
           {
             key: 'project',
             header: 'Project Name',
@@ -55,9 +60,15 @@ const ClientServices: React.FC<{
           {
             key: 'en-period',
             header: 'Enrollment Period',
+            optional: true,
             render: (row) => (
               <EnrollmentDateRangeWithStatus enrollment={row.enrollment} />
             ),
+          },
+          {
+            ...SERVICE_COLUMNS.serviceDetails,
+            optional: true,
+            defaultHidden: true,
           },
         ] as ColumnDef<ServiceType>[]
       ).filter((col) => {
@@ -68,6 +79,10 @@ const ClientServices: React.FC<{
     [clientId, omitColumns]
   );
 
+  const filters = useFilters({
+    type: 'ServiceFilterOptions',
+  });
+
   return (
     <>
       <PageTitle title='Services' />
@@ -77,7 +92,7 @@ const ClientServices: React.FC<{
           GetClientServicesQueryVariables,
           ServiceType
         >
-          showFilters
+          filters={filters}
           queryVariables={{ id: clientId }}
           queryDocument={GetClientServicesDocument}
           columns={columns}
@@ -87,6 +102,7 @@ const ClientServices: React.FC<{
           recordType='Service'
           defaultSortOption={ServiceSortOption.DateProvided}
           noSort
+          showOptionalColumns
         />
       </Paper>
     </>

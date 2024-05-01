@@ -72,6 +72,7 @@ const projectDashboardRoutes = {
   EDIT_PROJECT: 'overview/edit',
   // Enrollment-related
   PROJECT_ENROLLMENTS: 'enrollments',
+  PROJECT_ASSESSMENTS: 'assessments',
   PROJECT_SERVICES: 'services',
   BULK_BED_NIGHTS: 'bed-nights',
   BULK_ASSIGN_SERVICE: 'bulk-service',

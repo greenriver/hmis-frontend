@@ -8,6 +8,7 @@ import {
   ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
   HouseholdClientFieldsFragment,
+  ProjectEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
 type Colors =
   | 'disabled'
@@ -26,7 +27,8 @@ const EnrollmentStatus = ({
   enrollment:
     | EnrollmentFieldsFragment
     | HouseholdClientFieldsFragment['enrollment']
-    | ClientEnrollmentFieldsFragment;
+    | ClientEnrollmentFieldsFragment
+    | ProjectEnrollmentFieldsFragment;
   hideIcon?: boolean;
   withActiveRange?: boolean;
   activeColor?: Colors;
@@ -41,6 +43,8 @@ const EnrollmentStatus = ({
     Icon = ErrorOutlineIcon;
     text = 'Incomplete';
     textColor = 'error';
+  } else if (enrollment.autoExited) {
+    text = 'Auto-Exited';
   } else if (!enrollment.exitDate) {
     Icon = HistoryIcon;
     text = 'Open';

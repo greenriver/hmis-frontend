@@ -69,7 +69,7 @@ export const evaluateFormula = (
 
   try {
     const result = evaluate(parsedExpression, context);
-    return result ? result : undefined;
+    return result === undefined ? undefined : result;
   } catch (error) {
     if (error instanceof ExpressionEvaluationError) {
       return undefined;

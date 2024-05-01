@@ -1,4 +1,3 @@
-import { omit } from 'lodash-es';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { ServicePeriod } from '../../types';
 import AssignServiceButton from './AssignServiceButton';
@@ -68,7 +67,7 @@ const BulkServicesTable: React.FC<Props> = ({
         </NotCollectedText>
       );
       return [
-        { ...CLIENT_COLUMNS.id, header: 'ID' },
+        { ...CLIENT_COLUMNS.linkedId },
         CLIENT_COLUMNS.first,
         CLIENT_COLUMNS.last,
         CLIENT_COLUMNS.dobAge,
@@ -129,6 +128,7 @@ const BulkServicesTable: React.FC<Props> = ({
                     ? 'Deselect checkboxes to assign clients individually.'
                     : undefined
                 }
+                serviceTypeName={serviceTypeName}
               />
             );
           },
@@ -138,7 +138,7 @@ const BulkServicesTable: React.FC<Props> = ({
     [serviceDate, serviceTypeName, mutationQueryVariables, anyRowsSelected]
   );
 
-  const defaultFilters = useMemo(() => {
+  const defaultFilterValues = useMemo(() => {
     if (!servicePeriod) return;
 
     // If "service period" is selected, filter down Client results to
@@ -161,8 +161,8 @@ const BulkServicesTable: React.FC<Props> = ({
         BulkServicesClientSearchQueryVariables,
         RowType
       >
-        // remount when defaultFilters change
-        key={JSON.stringify(defaultFilters)}
+        // remount when defaultFilterValues change
+        key={JSON.stringify(defaultFilterValues)}
         queryVariables={{
           textSearch: searchTerm || '',
           serviceTypeId,
@@ -175,12 +175,9 @@ const BulkServicesTable: React.FC<Props> = ({
         queryDocument={BulkServicesClientSearchDocument}
         pagePath='clientSearch'
         getColumnDefs={getColumnDefs}
-        showFilters
         recordType='Client'
-        defaultFilters={defaultFilters}
         // TODO: add user-facing filter options for enrolled clients and bed night date. No filter options for now.
-        filters={(f) => omit(f, 'project', 'organization')}
-        filterInputType='ClientFilterOptions'
+        defaultFilterValues={defaultFilterValues}
         defaultSortOption={
           searchTerm
             ? ClientSortOption.BestMatch
