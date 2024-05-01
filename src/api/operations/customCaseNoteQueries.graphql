@@ -43,13 +43,7 @@ query GetClientCaseNotes(
       nodes {
         ...CustomCaseNoteFields
         enrollment {
-          id
-          lockVersion
-          projectName
-          projectType
-          entryDate
-          exitDate
-          inProgress
+          ...ClientEnrollmentFields
         }
       }
     }
