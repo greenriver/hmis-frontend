@@ -13,6 +13,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -43,6 +44,8 @@ const NewClientMerge = () => {
     onCompleted: (data) => {
       setCandidate(undefined);
       setSearchInput(undefined);
+      // If this client was merged INTO another client,
+      // we need to navigate to that client's page. Otherwise, stay here.
       const retainedClientId = data.mergeClients?.client?.id;
       if (retainedClientId && retainedClientId !== client.id) {
         navigate(
@@ -61,8 +64,6 @@ const NewClientMerge = () => {
       variables: { input: { clientIds: [client.id, candidate.id] } },
     });
   }, [candidate, client.id, mutation]);
-
-  if (error) throw error;
 
   const clientColumns: ColumnDef<ClientFieldsFragment>[] = useMemo(
     () => [
@@ -168,7 +169,9 @@ const NewClientMerge = () => {
                   queryDocument={SearchClientsDocument}
                   columns={columns}
                   pagePath='clientSearch'
-                  fetchPolicy='cache-and-network'
+                  // don't use cache for this search, to avoid scenarios where you try to merge someone
+                  // that no longer exists (e.g. has already been merged in)
+                  fetchPolicy='network-only'
                   filters={filters}
                   recordType='Client'
                   defaultSortOption={ClientSortOption.BestMatch}
@@ -195,6 +198,7 @@ const NewClientMerge = () => {
           </Box>
         </ConfirmationDialog>
       )}
+      {error && <ApolloErrorAlert error={error} />}
     </>
   );
 };

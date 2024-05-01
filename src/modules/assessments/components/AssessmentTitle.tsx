@@ -3,16 +3,24 @@ import { Stack } from '@mui/system';
 import { ReactNode, useState } from 'react';
 import { useRelatedAnnualAssessments } from '../hooks/useRelatedAnnualAssessments';
 import RouterLink from '@/components/elements/RouterLink';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDate,
+  parseAndFormatDateRange,
+} from '@/modules/hmis/hmisUtil';
+import { Routes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export interface AssessmentTitleProps {
   projectName: string;
   assessmentTitle?: ReactNode;
   assessmentRole: AssessmentRole;
   clientName: ReactNode;
+  clientId: string;
   assessmentId?: string;
   enrollmentId: string;
+  entryDate: string;
+  exitDate?: string | null;
   householdId: string;
   embeddedInWorkflow?: boolean;
   householdSize: number;
@@ -22,8 +30,11 @@ const AssessmentTitle = ({
   projectName,
   assessmentTitle,
   clientName,
+  clientId,
   householdId,
   enrollmentId,
+  entryDate,
+  exitDate,
   assessmentId,
   embeddedInWorkflow,
   assessmentRole,
@@ -81,7 +92,15 @@ const AssessmentTitle = ({
           {assessmentTitle}
           {': '}
         </b>
-        {projectName}
+        <RouterLink
+          to={generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
+            enrollmentId,
+            clientId,
+          })}
+          openInNew
+        >
+          {projectName} ({parseAndFormatDateRange(entryDate, exitDate)})
+        </RouterLink>
       </Typography>
       {subtitle}
     </Stack>
