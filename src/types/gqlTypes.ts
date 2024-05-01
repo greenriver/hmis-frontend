@@ -4478,6 +4478,8 @@ export enum PickListType {
   Geocode = 'GEOCODE',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
+  /** Open Projects that the user can see */
+  OpenProjects = 'OPEN_PROJECTS',
   /** All Organizations that the User can see */
   Organization = 'ORGANIZATION',
   /** Unit types that are eligible to be added to project */

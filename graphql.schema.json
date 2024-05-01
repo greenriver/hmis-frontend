@@ -30229,6 +30229,12 @@
             "deprecationReason": null
           },
           {
+            "name": "OPEN_PROJECTS",
+            "description": "Open Projects that the user can see",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ORGANIZATION",
             "description": "All Organizations that the User can see",
             "isDeprecated": false,
