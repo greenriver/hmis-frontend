@@ -41,12 +41,12 @@ const FormDefinitionDetailPage = () => {
     >({
       formRole: StaticFormRole.FormDefinition,
       initialValues: formIdentifier?.draft || {},
-      localConstants: { definitionId: formId },
+      localConstants: { definitionId: formIdentifier?.draft.id },
       mutationDocument: UpdateFormDefinitionDocument,
       getErrors: (data) => data.updateFormDefinition?.errors || [],
       getVariables: (values) => ({
         input: values as FormDefinitionInput,
-        id: formIdentifier.currentVersion.id,
+        id: formIdentifier?.draft.id,
       }),
     });
 
@@ -85,11 +85,11 @@ const FormDefinitionDetailPage = () => {
                 <CommonLabeledTextBlock title='Form Type'>
                   <HmisEnum
                     enumMap={HmisEnums.FormRole}
-                    value={formDefinition.role}
+                    value={formIdentifier.role}
                   />
                 </CommonLabeledTextBlock>
                 <CommonLabeledTextBlock title='Form Identifier'>
-                  {formDefinition.identifier}
+                  {formIdentifier.identifier}
                 </CommonLabeledTextBlock>
               </Stack>
             </CommonCard>
@@ -98,7 +98,9 @@ const FormDefinitionDetailPage = () => {
             <CommonCard title='Form Actions'>
               <Stack direction='row' gap={2}>
                 <ButtonLink
-                  to={generatePath(AdminDashboardRoutes.EDIT_FORM, { formId })}
+                  to={generatePath(AdminDashboardRoutes.EDIT_FORM, {
+                    identifier,
+                  })}
                   startIcon={<DashboardCustomizeIcon />}
                   variant='contained'
                   fullWidth
