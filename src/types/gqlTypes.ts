@@ -2756,6 +2756,7 @@ export type ExternalFormSubmission = {
 };
 
 export type ExternalFormSubmissionFilterOptions = {
+  includeSpam?: InputMaybe<Scalars['Boolean']['input']>;
   status?: InputMaybe<ExternalFormSubmissionStatus>;
   submittedDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
 };

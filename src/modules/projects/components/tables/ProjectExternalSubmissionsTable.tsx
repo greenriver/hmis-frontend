@@ -60,13 +60,24 @@ const ProjectExternalSubmissionsTable = ({
         render: (s: ExternalFormSubmissionFieldsFragment) => {
           const isNew = s.status === ExternalFormSubmissionStatus.New;
           return (
-            <Chip
-              label={capitalize(s.status)}
-              size='small'
-              color={isNew ? 'primary' : 'default'}
-              variant={isNew ? 'filled' : 'outlined'}
-              sx={isNew ? {} : { color: theme.palette.text.secondary }}
-            />
+            <>
+              <Chip
+                label={capitalize(s.status)}
+                size='small'
+                color={isNew ? 'primary' : 'default'}
+                variant={isNew ? 'filled' : 'outlined'}
+                sx={isNew ? {} : { color: theme.palette.text.secondary }}
+              />
+              {s.spam && (
+                <Chip
+                  label='Spam'
+                  size='small'
+                  color='error'
+                  variant='outlined'
+                  sx={{ ml: 1, color: theme.palette.error.dark }}
+                />
+              )}
+            </>
           );
         },
       },
