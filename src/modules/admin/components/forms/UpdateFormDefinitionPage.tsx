@@ -9,8 +9,8 @@ import {
 } from '@/types/gqlTypes';
 
 const UpdateFormDefinitionPage = () => {
-  const { formIdentifier: identifier } = useParams() as {
-    formIdentifier: string;
+  const { identifier } = useParams() as {
+    identifier: string;
   };
 
   const { data: { formIdentifier } = {}, error } =
@@ -25,21 +25,19 @@ const UpdateFormDefinitionPage = () => {
 
   return (
     <>
-      <PageTitle title={`Edit Form: ${formIdentifier.title}`} />
-      {formIdentifier.draft && (
-        <FormEditor
-          definition={formIdentifier.draft.rawDefinition}
-          onSave={(values) => {
-            updateFormDefinition({
-              variables: {
-                id: formIdentifier.currentVersion.id,
-                input: { definition: JSON.stringify(values) },
-              },
-            });
-          }}
-          saveLoading={loading}
-        />
-      )}
+      <PageTitle title={`Edit Form: ${formIdentifier.displayVersion.title}`} />
+      <FormEditor
+        definition={formIdentifier.displayVersion.rawDefinition}
+        onSave={(values) => {
+          updateFormDefinition({
+            variables: {
+              id: formIdentifier.displayVersion.id,
+              input: { definition: JSON.stringify(values) },
+            },
+          });
+        }}
+        saveLoading={loading}
+      />
     </>
   );
 };

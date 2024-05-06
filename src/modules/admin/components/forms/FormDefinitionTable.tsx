@@ -18,22 +18,22 @@ export type Row = NonNullable<
 const columns: ColumnDef<Row>[] = [
   {
     header: 'Form Title',
-    render: 'title',
+    render: ({ displayVersion }) => displayVersion.title,
     width: '300px',
     linkTreatment: true,
   },
   {
     header: 'Form Type',
-    render: ({ role }) => <FormTypeChip role={role} />,
+    render: ({ displayVersion }) => <FormTypeChip role={displayVersion.role} />,
   },
   {
     header: 'Applicability Rules',
-    render: ({ currentVersion }) => currentVersion.formRules.nodesCount,
+    render: ({ displayVersion }) => displayVersion.formRules.nodesCount,
   },
   {
     key: 'system',
-    render: ({ currentVersion }) =>
-      currentVersion.system && (
+    render: ({ displayVersion }) =>
+      displayVersion.system && (
         <Chip
           label='System'
           size='small'
@@ -67,7 +67,7 @@ const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
       paginationItemName='form'
       rowLinkTo={(row) =>
         generatePath(AdminDashboardRoutes.VIEW_FORM, {
-          formIdentifier: row.identifier,
+          identifier: row.identifier,
         })
       }
     />

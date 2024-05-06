@@ -77,15 +77,24 @@ query GetFormDefinitions(
 
 query GetFormIdentifierForEditor($identifier: String!) {
   formIdentifier(identifier: $identifier) {
-    ...FormIdentifierMetadata
-    currentVersion {
+    id
+    identifier
+    displayVersion {
+      ...FormDefinitionFieldsForEditor
+    }
+    published {
       ...FormDefinitionFieldsForEditor
     }
     draft {
       ...FormDefinitionFieldsForEditor
     }
-    retiredVersions {
-      ...FormDefinitionFieldsForEditor
+    allVersions {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FormDefinitionFieldsForEditor
+      }
     }
   }
 }
@@ -100,8 +109,9 @@ query GetFormIdentifiers(
     limit
     nodesCount
     nodes {
-      ...FormIdentifierMetadata
-      currentVersion {
+      id
+      identifier
+      displayVersion {
         ...FormDefinitionMetadata
         system
         formRules(limit: 1) {

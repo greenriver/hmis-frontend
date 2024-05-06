@@ -24,8 +24,8 @@ import {
 } from '@/types/gqlTypes';
 
 const FormDefinitionDetailPage = () => {
-  const { formIdentifier: identifier } = useSafeParams() as {
-    formIdentifier: string;
+  const { identifier } = useSafeParams() as {
+    identifier: string;
   };
 
   const { data: { formIdentifier } = {}, error } =
@@ -41,12 +41,12 @@ const FormDefinitionDetailPage = () => {
     >({
       formRole: StaticFormRole.FormDefinition,
       initialValues: formIdentifier?.draft || {},
-      localConstants: { definitionId: formIdentifier?.draft.id },
+      localConstants: { definitionId: formIdentifier?.displayVersion.id },
       mutationDocument: UpdateFormDefinitionDocument,
       getErrors: (data) => data.updateFormDefinition?.errors || [],
       getVariables: (values) => ({
         input: values as FormDefinitionInput,
-        id: formIdentifier?.draft.id,
+        id: formIdentifier?.displayVersion.id, // todo @martha - typescript not happy
       }),
     });
 
@@ -64,7 +64,9 @@ const FormDefinitionDetailPage = () => {
           Selected Form
         </Typography>
         <Stack direction='row' gap={1}>
-          <Typography variant='h3'>{formIdentifier.title}</Typography>
+          <Typography variant='h3'>
+            {formIdentifier.displayVersion.title}
+          </Typography>
           <ButtonTooltipContainer title='Edit Title'>
             <IconButton
               aria-label='edit title'
@@ -85,7 +87,7 @@ const FormDefinitionDetailPage = () => {
                 <CommonLabeledTextBlock title='Form Type'>
                   <HmisEnum
                     enumMap={HmisEnums.FormRole}
-                    value={formIdentifier.role}
+                    value={formIdentifier.displayVersion.role}
                   />
                 </CommonLabeledTextBlock>
                 <CommonLabeledTextBlock title='Form Identifier'>
@@ -113,9 +115,9 @@ const FormDefinitionDetailPage = () => {
           </Grid>
         </Grid>
         <FormRuleCard
-          formId={formIdentifier.currentVersion.id}
-          formTitle={formIdentifier.title}
-          formRole={formIdentifier.role}
+          formId={formIdentifier.displayVersion.id}
+          formTitle={formIdentifier.displayVersion.title}
+          formRole={formIdentifier.displayVersion.role}
         />
       </Stack>
       {renderEditDialog({ title: 'Edit Form Details' })}

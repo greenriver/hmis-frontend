@@ -3309,22 +3309,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
-      {
-        name: 'role',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
-        },
-      },
-      {
-        name: 'title',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
     ],
   },
   {
