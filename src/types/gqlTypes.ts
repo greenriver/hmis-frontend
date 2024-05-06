@@ -5824,6 +5824,7 @@ export type QueryAccess = {
   canManageClientAlerts: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
   canManageExternalFormSubmissions: Scalars['Boolean']['output'];
+  canManageForms: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
   canManageInventory: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
@@ -7718,6 +7719,7 @@ export type RootPermissionsFragment = {
   canTransferEnrollments: boolean;
   canSplitHouseholds: boolean;
   canConfigureDataCollection: boolean;
+  canManageForms: boolean;
   canViewClientAlerts: boolean;
   canManageExternalFormSubmissions: boolean;
 };
@@ -7831,6 +7833,7 @@ export type GetRootPermissionsQuery = {
     canTransferEnrollments: boolean;
     canSplitHouseholds: boolean;
     canConfigureDataCollection: boolean;
+    canManageForms: boolean;
     canViewClientAlerts: boolean;
     canManageExternalFormSubmissions: boolean;
   };
@@ -31191,6 +31194,7 @@ export const RootPermissionsFragmentDoc = gql`
     canTransferEnrollments
     canSplitHouseholds
     canConfigureDataCollection
+    canManageForms
     canViewClientAlerts
     canManageExternalFormSubmissions
   }

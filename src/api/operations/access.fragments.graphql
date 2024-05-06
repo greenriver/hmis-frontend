@@ -33,6 +33,7 @@ fragment RootPermissions on QueryAccess {
   canTransferEnrollments
   canSplitHouseholds
   canConfigureDataCollection
+  canManageForms
   canViewClientAlerts
   canManageExternalFormSubmissions
 }
