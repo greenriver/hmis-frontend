@@ -46,7 +46,7 @@ const FormDefinitionDetailPage = () => {
       getErrors: (data) => data.updateFormDefinition?.errors || [],
       getVariables: (values) => ({
         input: values as FormDefinitionInput,
-        id: formIdentifier?.displayVersion.id, // todo @martha - typescript not happy
+        id: formIdentifier?.displayVersion.id || '',
       }),
     });
 
