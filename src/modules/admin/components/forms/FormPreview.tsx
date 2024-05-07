@@ -22,7 +22,7 @@ import {
   getItemMap,
   getLeftNavItems,
 } from '@/modules/form/util/formUtil';
-import { useGetFormDefinitionForEditorQuery } from '@/types/gqlTypes';
+import { useGetFormDefinitionFieldsForEditorQuery } from '@/types/gqlTypes';
 
 const FormPreview = () => {
   const { formId } = useSafeParams() as { formId: string };
@@ -30,7 +30,7 @@ const FormPreview = () => {
     data: { formDefinition } = {},
     loading,
     error,
-  } = useGetFormDefinitionForEditorQuery({
+  } = useGetFormDefinitionFieldsForEditorQuery({
     variables: { id: formId },
   });
 
