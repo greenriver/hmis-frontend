@@ -3291,6 +3291,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
   },
   { name: 'FormDefinitionJson', fields: [] },
   {
+    name: 'FormIdentifier',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'identifier',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'FormItem',
     fields: [
       {
@@ -6880,6 +6901,15 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       { name: 'role', type: { kind: 'ENUM', name: 'FormRole', ofType: null } },
       { name: 'title', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
+    name: 'FormIdentifierFilterOptions',
+    args: [
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
     ],
   },
   {
