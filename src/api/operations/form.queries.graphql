@@ -50,52 +50,19 @@ query GetAssessmentFormDefinition(
   }
 }
 
-query GetFormDefinitionForEditor($id: ID!) {
-  formDefinition(id: $id) {
-    ...FormDefinitionFieldsForEditor
-  }
-}
-
-query GetFormDefinitions(
-  $filters: FormDefinitionFilterOptions
-  $limit: Int = 25
-  $offset: Int = 0
-) {
-  formDefinitions(filters: $filters, limit: $limit, offset: $offset) {
-    offset
-    limit
-    nodesCount
-    nodes {
-      ...FormDefinitionMetadata
-      system
-      formRules(limit: 1) {
-        nodesCount
-      }
-    }
-  }
-}
-
-query GetFormIdentifierForEditor($identifier: String!) {
+query GetFormIdentifierDetails($identifier: String!) {
   formIdentifier(identifier: $identifier) {
     id
     identifier
     displayVersion {
-      ...FormDefinitionFieldsForEditor
+      ...FormDefinitionMetadata
     }
-    published {
-      ...FormDefinitionFieldsForEditor
-    }
-    draft {
-      ...FormDefinitionFieldsForEditor
-    }
-    allVersions {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...FormDefinitionFieldsForEditor
-      }
-    }
+  }
+}
+
+query GetFormDefinitionFieldsForEditor($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFieldsForEditor
   }
 }
 

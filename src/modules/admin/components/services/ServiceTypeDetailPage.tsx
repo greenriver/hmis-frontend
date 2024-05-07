@@ -131,7 +131,7 @@ const ServiceTypeDetailPage = () => {
                   <li key={formDef.id}>
                     <RouterLink
                       to={generatePath(AdminDashboardRoutes.VIEW_FORM, {
-                        formId: formDef.id,
+                        identifier: formDef.identifier,
                       })}
                       openInNew
                     >

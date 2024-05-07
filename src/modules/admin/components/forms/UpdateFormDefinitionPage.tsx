@@ -1,37 +1,35 @@
 // eslint-disable-next-line no-restricted-imports
-import { useParams } from 'react-router-dom';
 import FormEditor from './FormEditor';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
+import useSafeParams from '@/hooks/useSafeParams';
 import {
-  useGetFormIdentifierForEditorQuery,
+  useGetFormDefinitionFieldsForEditorQuery,
   useUpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
 const UpdateFormDefinitionPage = () => {
-  const { identifier } = useParams() as {
-    identifier: string;
-  };
+  const { formId } = useSafeParams() as { formId: string };
 
-  const { data: { formIdentifier } = {}, error } =
-    useGetFormIdentifierForEditorQuery({
-      variables: { identifier },
+  const { data: { formDefinition } = {}, error } =
+    useGetFormDefinitionFieldsForEditorQuery({
+      variables: { id: formId },
     });
 
   const [updateFormDefinition, { loading }] = useUpdateFormDefinitionMutation();
 
   if (error) throw error;
-  if (!formIdentifier) return <Loading />;
+  if (!formDefinition) return <Loading />;
 
   return (
     <>
-      <PageTitle title={`Edit Form: ${formIdentifier.displayVersion.title}`} />
+      <PageTitle title={`Edit Form: ${formDefinition.title}`} />
       <FormEditor
-        definition={formIdentifier.displayVersion.rawDefinition}
+        definition={formDefinition.rawDefinition}
         onSave={(values) => {
           updateFormDefinition({
             variables: {
-              id: formIdentifier.displayVersion.id,
+              id: formDefinition.id,
               input: { definition: JSON.stringify(values) },
             },
           });

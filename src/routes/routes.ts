@@ -25,7 +25,7 @@ const adminDashboardRoutes = {
   CONFIGURE_SERVICE_TYPE: 'services/:serviceTypeId',
   FORMS: 'forms',
   VIEW_FORM: 'forms/:identifier',
-  EDIT_FORM: 'forms/:identifier/edit',
+  EDIT_FORM: 'forms/:identifier/:formId/edit',
   PROJECT_CONFIG: 'project-configs',
 };
 

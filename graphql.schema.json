@@ -20623,7 +20623,7 @@
       {
         "kind": "OBJECT",
         "name": "FormIdentifier",
-        "description": "FormIdentifier",
+        "description": "Type representing one form Identifier, which collects all versioned FormDefinitions for the same identifier",
         "fields": [
           {
             "name": "allVersions",
@@ -20668,7 +20668,7 @@
           },
           {
             "name": "displayVersion",
-            "description": null,
+            "description": "Form version to use for display in the configuration tool interface. The form itself may be draft, status, or retired.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -20683,7 +20683,7 @@
             "deprecationReason": null
           },
           {
-            "name": "draft",
+            "name": "draftVersion",
             "description": null,
             "args": [],
             "type": {
@@ -20727,7 +20727,7 @@
             "deprecationReason": null
           },
           {
-            "name": "published",
+            "name": "publishedVersion",
             "description": null,
             "args": [],
             "type": {
@@ -36078,8 +36078,8 @@
                 "ofType": null
               }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "replaced by FormIdentifiers query"
           },
           {
             "name": "formIdentifier",

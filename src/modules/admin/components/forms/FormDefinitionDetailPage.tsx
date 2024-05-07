@@ -20,7 +20,7 @@ import {
   StaticFormRole,
   UpdateFormDefinitionDocument,
   UpdateFormDefinitionMutation,
-  useGetFormIdentifierForEditorQuery,
+  useGetFormIdentifierDetailsQuery,
 } from '@/types/gqlTypes';
 
 const FormDefinitionDetailPage = () => {
@@ -29,7 +29,7 @@ const FormDefinitionDetailPage = () => {
   };
 
   const { data: { formIdentifier } = {}, error } =
-    useGetFormIdentifierForEditorQuery({
+    useGetFormIdentifierDetailsQuery({
       variables: { identifier },
     });
 
@@ -40,7 +40,7 @@ const FormDefinitionDetailPage = () => {
       MutationUpdateFormDefinitionArgs
     >({
       formRole: StaticFormRole.FormDefinition,
-      initialValues: formIdentifier?.draft || {},
+      initialValues: formIdentifier?.displayVersion || {},
       localConstants: { definitionId: formIdentifier?.displayVersion.id },
       mutationDocument: UpdateFormDefinitionDocument,
       getErrors: (data) => data.updateFormDefinition?.errors || [],
@@ -101,7 +101,8 @@ const FormDefinitionDetailPage = () => {
               <Stack direction='row' gap={2}>
                 <ButtonLink
                   to={generatePath(AdminDashboardRoutes.EDIT_FORM, {
-                    identifier,
+                    identifier: formIdentifier?.identifier,
+                    formId: formIdentifier?.displayVersion.id,
                   })}
                   startIcon={<DashboardCustomizeIcon />}
                   variant='contained'

@@ -35,6 +35,7 @@ fragment ServiceTypeConfigFields on ServiceType {
   ...ServiceTypeFields
   formDefinitions {
     id
+    identifier
     cacheKey
     title
   }
