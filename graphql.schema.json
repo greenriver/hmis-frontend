@@ -37811,6 +37811,12 @@
             "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "UNABLE_TO_LOCATE_CLIENT",
+            "description": "(3) Unable to locate client",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -39794,12 +39800,6 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "EMERGENCY_HOUSING_VOUCHER",
-            "description": "(436) Emergency Housing Voucher",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP",
             "description": "(437) Family Unification Program Voucher (FUP)",
             "isDeprecated": false,
@@ -39820,6 +39820,12 @@
           {
             "name": "HCV_VOUCHER",
             "description": "(433) HCV voucher (tenant or project based) (not dedicated)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOUSING_STABILITY_VOUCHER",
+            "description": "(436) Housing Stability Voucher",
             "isDeprecated": false,
             "deprecationReason": null
           },

@@ -1399,6 +1399,7 @@ export const HmisEnums = {
       'Client was found ineligible for PATH',
     CLIENT_WAS_NOT_ENROLLED_FOR_OTHER_REASON_S:
       'Client was not enrolled for other reason(s)',
+    UNABLE_TO_LOCATE_CLIENT: 'Unable to locate client',
   },
   ReasonNotInsured: {
     INVALID: 'Invalid Value',
@@ -1534,7 +1535,7 @@ export const HmisEnums = {
     RRH_OR_EQUIVALENT_SUBSIDY: 'RRH or equivalent subsidy',
     HCV_VOUCHER: 'HCV voucher (tenant or project based) (not dedicated)',
     PUBLIC_HOUSING_UNIT: 'Public housing unit',
-    EMERGENCY_HOUSING_VOUCHER: 'Emergency Housing Voucher',
+    HOUSING_STABILITY_VOUCHER: 'Housing Stability Voucher',
     FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP:
       'Family Unification Program Voucher (FUP)',
     FOSTER_YOUTH_TO_INDEPENDENCE_INITIATIVE_FYI:
