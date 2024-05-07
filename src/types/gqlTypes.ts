@@ -2867,7 +2867,6 @@ export type FormDefinition = {
   identifier: Scalars['String']['output'];
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
-  status: FormStatus;
   system: Scalars['Boolean']['output'];
   title: Scalars['String']['output'];
 };
@@ -3151,15 +3150,6 @@ export type FormRulesPaginated = {
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
 };
-
-export enum FormStatus {
-  /** 3 - Draft */
-  Draft = 'draft',
-  /** 2 - Published */
-  Published = 'published',
-  /** 1 - Retired */
-  Retired = 'retired',
-}
 
 export type Funder = {
   __typename?: 'Funder';

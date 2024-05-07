@@ -567,11 +567,6 @@ export const HmisEnums = {
     FORM_TITLE: 'Form Title',
     FORM_TYPE: 'Form Type',
   },
-  FormStatus: {
-    draft: '3 - Draft',
-    published: '2 - Published',
-    retired: '1 - Retired',
-  },
   FunderSortOption: { START_DATE: 'START_DATE' },
   FundingSource: {
     HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY:
