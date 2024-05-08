@@ -49,7 +49,6 @@ const InputGroup = ({
             pl: 1,
             pb: 0.5,
             pr: 0.5,
-            maxWidth: FIXED_WIDTH_X_LARGE,
             ...(viewOnly
               ? {
                   '.MuiFormLabel-root .MuiTypography-root': {
@@ -132,7 +131,7 @@ const InputGroup = ({
   let label = item.text;
   if (viewOnly && !isNil(item.readonlyText)) label = item.readonlyText;
   return (
-    <Box id={item.linkId} sx={{ mb: 2, maxWidth: '100%' }}>
+    <Box id={item.linkId} sx={{ mb: 2, maxWidth: FIXED_WIDTH_X_LARGE }}>
       {label && (
         <Typography
           id={groupLabelId}
