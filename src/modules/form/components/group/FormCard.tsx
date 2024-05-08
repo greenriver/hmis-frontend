@@ -43,7 +43,6 @@ const FormCard: React.FC<FormCardProps> = ({
   renderChildItem,
   anchor,
   values,
-  locked,
   debug,
   TitleIcon,
   helperTextProps,
@@ -138,7 +137,6 @@ const FormCard: React.FC<FormCardProps> = ({
                     <Button
                       data-testid='fillSectionButton'
                       onClick={() => setFillDialogOpen(true)}
-                      disabled={locked}
                       {...buttonProps}
                     >
                       Fill Section
@@ -147,7 +145,7 @@ const FormCard: React.FC<FormCardProps> = ({
                       data-testid='clearButton'
                       color='error'
                       onClick={() => setClearDialogOpen(true)}
-                      disabled={!hasAnyChildValues || locked}
+                      disabled={!hasAnyChildValues}
                       {...buttonProps}
                     >
                       Clear Section

@@ -80,6 +80,15 @@ import {
 // works in current versions of chrome as of 2023 but is not valid HTML.
 export const formAutoCompleteOff = 'do-not-autocomplete';
 
+export const invertDependencyMap = (depMap: LinkIdMap): LinkIdMap =>
+  Object.entries(depMap).reduce((acc, [linkId, childLinkIds]) => {
+    const result = { ...acc };
+    childLinkIds.forEach((childLinkId) => {
+      result[childLinkId] = [...(result[childLinkId] || []), linkId];
+    });
+    return result;
+  }, {} as LinkIdMap);
+
 export const isDataNotCollected = (val?: any): boolean => {
   if (typeof val === 'string') {
     return val.endsWith('_NOT_COLLECTED') || val.endsWith(' not collected');
@@ -834,14 +843,17 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
   return result;
 };
 
-export const getAllChildLinkIds = (item: FormItem): string[] => {
+export const getAllChildLinkIds = (
+  item: FormItem,
+  { onlyQuestions = true }: { onlyQuestions?: boolean } = {}
+): string[] => {
   function recursiveFind(items: FormItem[], ids: string[]) {
     items.forEach((item) => {
       if (Array.isArray(item.item)) {
         recursiveFind(item.item, ids);
       }
 
-      if (isQuestionItem(item)) {
+      if (onlyQuestions === false || (onlyQuestions && isQuestionItem(item))) {
         ids.push(item.linkId);
       }
     });
@@ -1304,7 +1316,7 @@ export const debugFormValues = (
 };
 
 type GetDependentItemsDisabledStatus = {
-  changedLinkIds: string[];
+  changedLinkIds?: string[];
   localValues: FormValues;
   enabledDependencyMap: LinkIdMap;
   itemMap: ItemMap;
@@ -1320,11 +1332,12 @@ export const getDependentItemsDisabledStatus = ({
 }: GetDependentItemsDisabledStatus) => {
   const enabledLinkIds: string[] = [];
   const disabledLinkIds: string[] = [];
+  const linkIds = changedLinkIds || Object.keys(itemMap);
   // If none of these are dependencies, return immediately
-  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id]))
+  if (!linkIds.find((id) => !!enabledDependencyMap[id]))
     return { enabledLinkIds, disabledLinkIds };
 
-  changedLinkIds.forEach((changedLinkId) => {
+  linkIds.forEach((changedLinkId) => {
     if (!enabledDependencyMap[changedLinkId]) return;
 
     // iterate through all items that are dependent on this item,

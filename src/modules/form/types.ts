@@ -106,11 +106,11 @@ export interface GroupItemComponentProps {
     props?: OverrideableDynamicFieldProps,
     renderFn?: (children: ReactNode) => ReactNode
   ) => ReactNode;
+  renderSummaryItem?: (item: FormItem, isCurrency: boolean) => ReactNode;
   values: Record<string, any>;
   itemChanged?: ItemChangedFn;
   severalItemsChanged?: SeveralItemsChangedFn;
   visible?: boolean;
-  locked?: boolean;
   viewOnly?: boolean;
   rowSx?: SxProps;
 }
@@ -125,7 +125,6 @@ export interface ViewGroupItemComponentProps {
   ) => ReactNode;
   values: Record<string, any>;
   visible?: boolean;
-  locked?: boolean;
 }
 
 export enum FormActionTypes {

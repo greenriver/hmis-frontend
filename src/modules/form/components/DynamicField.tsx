@@ -46,7 +46,13 @@ import Uploader from '@/components/elements/upload/UploaderBase';
 import MciClearance from '@/modules/external/mci/components/MciClearance';
 import SimpleAddressInput from '@/modules/form/components/client/addresses/SimpleAddressInput';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
-import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
+import {
+  Component,
+  DisabledDisplay,
+  FormItem,
+  InputSize,
+  ItemType,
+} from '@/types/gqlTypes';
 
 const getLabel = (
   item: FormItem,
@@ -70,7 +76,7 @@ const getLabel = (
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
-  value,
+  value: formValue,
   disabled = false,
   horizontal = false,
   errors,
@@ -81,6 +87,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   breakpoints,
 }) => {
   const { linkId } = item;
+  const value =
+    disabled && item.disabledDisplay !== DisabledDisplay.ProtectedWithValue
+      ? undefined
+      : formValue;
   const onChangeEvent = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) =>
       itemChanged({ linkId, value: e.target.value, type: ChangeType.User }),

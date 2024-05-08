@@ -5,6 +5,7 @@ import {
   buildEnabledDependencyMap,
   getDisabledLinkIds,
   getItemMap,
+  invertDependencyMap,
 } from '../util/formUtil';
 
 import { FormDefinitionJson } from '@/types/gqlTypes';
@@ -26,8 +27,13 @@ const useComputedData = ({
     const itemMap = definition ? getItemMap(definition) : {};
     // { linkId => array of Link IDs that depend on it for autofill }
     const autofillDependencyMap = buildAutofillDependencyMap(itemMap, viewOnly);
+    const autofillInvertedDependencyMap = invertDependencyMap(
+      autofillDependencyMap
+    );
     // { linkId => array of Link IDs that depend on it for enabled status }
     const enabledDependencyMap = buildEnabledDependencyMap(itemMap);
+    const disabledDependencyMap = invertDependencyMap(enabledDependencyMap);
+
     const initiallyDisabledLinkIds = getDisabledLinkIds({
       itemMap,
       values: initialValues || {},
@@ -37,8 +43,10 @@ const useComputedData = ({
     return {
       itemMap,
       autofillDependencyMap,
+      autofillInvertedDependencyMap,
       enabledDependencyMap,
       initiallyDisabledLinkIds,
+      disabledDependencyMap,
     };
   }, [definition, initialValues, viewOnly, localConstants]);
 };
