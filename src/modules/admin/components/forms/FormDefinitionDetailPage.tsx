@@ -12,6 +12,7 @@ import { EditIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -98,19 +99,30 @@ const FormDefinitionDetailPage = () => {
           </Grid>
           <Grid item xs={12} md={4}>
             <CommonCard title='Form Actions'>
-              <Stack direction='row' gap={2}>
+              <Stack gap={1}>
+                <RootPermissionsFilter permissions={'canManageForms'}>
+                  <ButtonLink
+                    to={generatePath(AdminDashboardRoutes.EDIT_FORM, {
+                      identifier: formIdentifier?.identifier,
+                      formId: formIdentifier?.displayVersion.id,
+                    })}
+                    startIcon={<DashboardCustomizeIcon />}
+                    variant='contained'
+                    fullWidth
+                  >
+                    Edit Form
+                  </ButtonLink>
+                </RootPermissionsFilter>
                 <ButtonLink
-                  to={generatePath(AdminDashboardRoutes.EDIT_FORM, {
+                  to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
                     identifier: formIdentifier?.identifier,
                     formId: formIdentifier?.displayVersion.id,
                   })}
-                  startIcon={<DashboardCustomizeIcon />}
-                  variant='contained'
+                  variant='outlined'
                   fullWidth
                 >
-                  Edit Form
+                  Preview Form
                 </ButtonLink>
-                {/* TODO add: preview */}
               </Stack>
             </CommonCard>
           </Grid>

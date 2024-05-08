@@ -6,7 +6,7 @@ import useFormDefinition from '../hooks/useFormDefinition';
 import { LocalConstants, SubmitFormAllowedTypes } from '../types';
 import {
   AlwaysPresentLocalConstants,
-  shouldEnableItem,
+  getFormStepperItems,
 } from '../util/formUtil';
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
@@ -22,7 +22,7 @@ import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import { FormInput, ItemType, RecordFormRole } from '@/types/gqlTypes';
+import { FormInput, RecordFormRole } from '@/types/gqlTypes';
 
 export interface Props<RecordType>
   extends Omit<
@@ -89,33 +89,23 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   useScrollToHash(definitionLoading, top);
 
   // Top-level items for the left nav (of >=3 groups)
-  const leftNavItems = useMemo(() => {
-    if (!formDefinition || !itemMap) return false;
-
-    let topLevelItems = formDefinition.definition.item.filter(
-      (i) => i.type === ItemType.Group && !i.hidden
-    );
-
-    if (topLevelItems.length < minGroupsForLeftNav) return false;
-
-    // Remove disabled groups
-    topLevelItems = topLevelItems.filter((item) =>
-      shouldEnableItem({
-        item,
-        values: initialValues,
+  const leftNavItems = useMemo(
+    () =>
+      getFormStepperItems(
+        formDefinition,
         itemMap,
-        localConstants: localConstants || {},
-      })
-    );
-    if (topLevelItems.length < 3) return false;
-    return topLevelItems;
-  }, [
-    itemMap,
-    formDefinition,
-    initialValues,
-    minGroupsForLeftNav,
-    localConstants,
-  ]);
+        initialValues,
+        localConstants,
+        minGroupsForLeftNav
+      ),
+    [
+      itemMap,
+      formDefinition,
+      initialValues,
+      minGroupsForLeftNav,
+      localConstants,
+    ]
+  );
 
   if (definitionLoading) return <Loading />;
   if (!formDefinition) return <NotFound text='Form definition not found.' />;
