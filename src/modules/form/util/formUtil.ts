@@ -1477,23 +1477,21 @@ export const parseOccurrencePointFormDefinition = (
   return { displayTitle, isEditable, readOnlyDefinition };
 };
 
-export const getLeftNavItems = (
+export const getFormStepperItems = (
   formDefinition: FormDefinitionFieldsFragment | undefined | null,
   itemMap: ItemMap | undefined | null,
   initialValues: Record<string, any>,
   localConstants: LocalConstants,
-  minGroupsForLeftNav: number = 3
+  minGroupsToDisplay: number = 3
 ) => {
   if (!formDefinition || !itemMap) return false;
 
-  let leftNavItems = formDefinition.definition.item.filter(
+  let items = formDefinition.definition.item.filter(
     (i) => i.type === ItemType.Group && !i.hidden
   );
 
-  if (leftNavItems.length < minGroupsForLeftNav) return false;
-
   // Remove disabled groups
-  leftNavItems = leftNavItems.filter((item) =>
+  items = items.filter((item) =>
     shouldEnableItem({
       item,
       values: initialValues,
@@ -1501,9 +1499,9 @@ export const getLeftNavItems = (
       localConstants: localConstants || {},
     })
   );
-  if (leftNavItems.length < 3) return false;
+  if (items.length < minGroupsToDisplay) return false;
 
-  return leftNavItems;
+  return items;
 };
 
 export const MAX_INPUT_AND_LABEL_WIDTH = 500;

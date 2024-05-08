@@ -4,7 +4,10 @@ import { ReactNode, Ref, useMemo } from 'react';
 import { useDynamicFormHandlersForRecord } from '../hooks/useDynamicFormHandlersForRecord';
 import useFormDefinition from '../hooks/useFormDefinition';
 import { LocalConstants, SubmitFormAllowedTypes } from '../types';
-import { AlwaysPresentLocalConstants, getLeftNavItems } from '../util/formUtil';
+import {
+  AlwaysPresentLocalConstants,
+  getFormStepperItems,
+} from '../util/formUtil';
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
@@ -88,7 +91,7 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   // Top-level items for the left nav (of >=3 groups)
   const leftNavItems = useMemo(
     () =>
-      getLeftNavItems(
+      getFormStepperItems(
         formDefinition,
         itemMap,
         initialValues,

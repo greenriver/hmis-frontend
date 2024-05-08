@@ -20,9 +20,23 @@ import {
   AlwaysPresentLocalConstants,
   getInitialValues,
   getItemMap,
-  getLeftNavItems,
+  getFormStepperItems,
 } from '@/modules/form/util/formUtil';
 import { useGetFormDefinitionFieldsForEditorQuery } from '@/types/gqlTypes';
+
+type PreviewMode = 'preview' | 'readOnly';
+const toggleItems: ToggleItem<PreviewMode>[] = [
+  {
+    value: 'preview',
+    label: 'Preview Form',
+    Icon: ListIcon,
+  },
+  {
+    value: 'readOnly',
+    label: 'Read Only View',
+    Icon: AccountBoxIcon,
+  },
+];
 
 const FormPreview = () => {
   const { formId } = useSafeParams() as { formId: string };
@@ -50,50 +64,47 @@ const FormPreview = () => {
   }, [formDefinition?.definition, localConstants]);
   const [formValues, setFormValues] = useState<object>(initialValues);
 
-  type PreviewMode = 'preview' | 'readOnly';
-  const toggleItems: ToggleItem<PreviewMode>[] = [
-    {
-      value: 'preview',
-      label: 'Preview Form',
-      Icon: ListIcon,
-    },
-    {
-      value: 'readOnly',
-      label: 'Read Only View',
-      Icon: AccountBoxIcon,
-    },
-  ];
   const [toggleValue, setToggleValue] = useState<PreviewMode>('preview');
+
   const itemMap = useMemo(
     () => formDefinition && getItemMap(formDefinition.definition),
     [formDefinition]
   );
-  const leftNavItems = useMemo(
+
+  const formStepperItems = useMemo(
     () =>
-      getLeftNavItems(formDefinition, itemMap, initialValues, localConstants),
+      getFormStepperItems(
+        formDefinition,
+        itemMap,
+        initialValues,
+        localConstants
+      ),
     [itemMap, formDefinition, initialValues, localConstants]
   );
 
-  const form =
-    formDefinition &&
-    (toggleValue === 'readOnly' ? (
-      <DynamicView
-        definition={formDefinition.definition}
-        localConstants={localConstants}
-        values={formValues}
-      />
-    ) : (
-      <DynamicForm
-        definition={formDefinition.definition}
-        onSubmit={() => {}}
-        onSaveDraft={(values) => setFormValues(values)}
-        errors={{ errors: [], warnings: [] }}
-        localConstants={localConstants}
-        initialValues={formValues}
-        FormActionProps={{ config: [] }}
-        ref={formRef}
-      />
-    ));
+  const form = useMemo(() => {
+    return (
+      formDefinition &&
+      (toggleValue === 'readOnly' ? (
+        <DynamicView
+          definition={formDefinition.definition}
+          localConstants={localConstants}
+          values={formValues}
+        />
+      ) : (
+        <DynamicForm
+          definition={formDefinition.definition}
+          onSubmit={() => {}}
+          onSaveDraft={(values) => setFormValues(values)}
+          errors={{ errors: [], warnings: [] }}
+          localConstants={localConstants}
+          initialValues={initialValues}
+          FormActionProps={{ config: [] }}
+          ref={formRef}
+        />
+      ))
+    );
+  }, [formDefinition, formValues, localConstants, toggleValue]);
 
   if (loading && !formDefinition) return <Loading />;
   if (error) throw error;
@@ -113,9 +124,9 @@ const FormPreview = () => {
         sx={{ mb: 4 }}
       />
 
-      {leftNavItems ? (
+      {formStepperItems ? (
         <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-          <FormNavigation items={leftNavItems}>{form}</FormNavigation>
+          <FormNavigation items={formStepperItems}>{form}</FormNavigation>
         </Grid>
       ) : (
         form
