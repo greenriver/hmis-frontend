@@ -104,7 +104,7 @@ const FormPreview = () => {
         />
       ))
     );
-  }, [formDefinition, formValues, localConstants, toggleValue]);
+  }, [formDefinition, formValues, initialValues, localConstants, toggleValue]);
 
   if (loading && !formDefinition) return <Loading />;
   if (error) throw error;
