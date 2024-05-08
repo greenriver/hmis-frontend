@@ -33,10 +33,10 @@ const FormDefinitionsPage = () => {
     getErrors: (data) => data.createFormDefinition?.errors || [],
     getVariables: (values) => ({ input: values as FormDefinitionInput }),
     onCompleted: (data) => {
-      const id = data?.createFormDefinition?.formDefinition?.id;
+      const identifier = data?.createFormDefinition?.formDefinition?.identifier;
       evictQuery('formDefinitions');
-      if (id)
-        navigate(generatePath(AdminDashboardRoutes.VIEW_FORM, { formId: id }));
+      if (identifier)
+        navigate(generatePath(AdminDashboardRoutes.VIEW_FORM, { identifier }));
     },
   });
   return (
