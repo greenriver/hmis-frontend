@@ -62,11 +62,13 @@ const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
   );
 };
 
-const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
+const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({
+  file: { url },
+}) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numPages, setNumPages] = useState<number | undefined>(undefined);
 
-  const fileProp = useMemo(() => ({ url: file?.url }), [file?.url]);
+  const fileProp = useMemo(() => (url ? { url } : null), [url]);
 
   return (
     <>
