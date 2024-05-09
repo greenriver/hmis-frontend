@@ -1476,6 +1476,34 @@ export const parseOccurrencePointFormDefinition = (
 
   return { displayTitle, isEditable, readOnlyDefinition };
 };
+
+export const getFormStepperItems = (
+  formDefinition: FormDefinitionFieldsFragment | undefined | null,
+  itemMap: ItemMap | undefined | null,
+  initialValues: Record<string, any>,
+  localConstants: LocalConstants,
+  minGroupsToDisplay: number = 3
+) => {
+  if (!formDefinition || !itemMap) return false;
+
+  let items = formDefinition.definition.item.filter(
+    (i) => i.type === ItemType.Group && !i.hidden
+  );
+
+  // Remove disabled groups
+  items = items.filter((item) =>
+    shouldEnableItem({
+      item,
+      values: initialValues,
+      itemMap,
+      localConstants: localConstants || {},
+    })
+  );
+  if (items.length < minGroupsToDisplay) return false;
+
+  return items;
+};
+
 export const MAX_INPUT_AND_LABEL_WIDTH = 500;
 export const FIXED_WIDTH_MEDIUM = 350;
 export const FIXED_WIDTH_SMALL = 200;

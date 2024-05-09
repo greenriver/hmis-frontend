@@ -2868,6 +2868,7 @@ export type FormDefinition = {
   identifier: Scalars['String']['output'];
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
+  status: FormStatus;
   system: Scalars['Boolean']['output'];
   title: Scalars['String']['output'];
 };
@@ -2909,6 +2910,39 @@ export type FormDefinitionsPaginated = {
   hasMoreBefore: Scalars['Boolean']['output'];
   limit: Scalars['Int']['output'];
   nodes: Array<FormDefinition>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
+};
+
+/** Type representing one form Identifier, which collects all versioned FormDefinitions for the same identifier */
+export type FormIdentifier = {
+  __typename?: 'FormIdentifier';
+  allVersions: FormDefinitionsPaginated;
+  /** Form version to use for display in the configuration tool interface. The form itself may be draft, status, or retired. */
+  displayVersion: FormDefinition;
+  draftVersion?: Maybe<FormDefinition>;
+  id: Scalars['String']['output'];
+  identifier: Scalars['String']['output'];
+  publishedVersion?: Maybe<FormDefinition>;
+};
+
+/** Type representing one form Identifier, which collects all versioned FormDefinitions for the same identifier */
+export type FormIdentifierAllVersionsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type FormIdentifierFilterOptions = {
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type FormIdentifiersPaginated = {
+  __typename?: 'FormIdentifiersPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<FormIdentifier>;
   nodesCount: Scalars['Int']['output'];
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
@@ -3118,6 +3152,15 @@ export type FormRulesPaginated = {
   offset: Scalars['Int']['output'];
   pagesCount: Scalars['Int']['output'];
 };
+
+export enum FormStatus {
+  /** Draft */
+  Draft = 'draft',
+  /** Published */
+  Published = 'published',
+  /** Retired */
+  Retired = 'retired',
+}
 
 export type Funder = {
   __typename?: 'Funder';
@@ -5565,7 +5608,10 @@ export type Query = {
   externalFormDefinition?: Maybe<FormDefinition>;
   file?: Maybe<File>;
   formDefinition?: Maybe<FormDefinition>;
+  /** @deprecated replaced by FormIdentifiers query */
   formDefinitions: FormDefinitionsPaginated;
+  formIdentifier?: Maybe<FormIdentifier>;
+  formIdentifiers: FormIdentifiersPaginated;
   formRule?: Maybe<FormRule>;
   formRules: FormRulesPaginated;
   /** Funder lookup */
@@ -5671,6 +5717,16 @@ export type QueryFormDefinitionArgs = {
 
 export type QueryFormDefinitionsArgs = {
   filters?: InputMaybe<FormDefinitionFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type QueryFormIdentifierArgs = {
+  identifier: Scalars['String']['input'];
+};
+
+export type QueryFormIdentifiersArgs = {
+  filters?: InputMaybe<FormIdentifierFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5825,6 +5881,7 @@ export type QueryAccess = {
   canManageClientAlerts: Scalars['Boolean']['output'];
   canManageDeniedReferrals: Scalars['Boolean']['output'];
   canManageExternalFormSubmissions: Scalars['Boolean']['output'];
+  canManageForms: Scalars['Boolean']['output'];
   canManageIncomingReferrals: Scalars['Boolean']['output'];
   canManageInventory: Scalars['Boolean']['output'];
   canManageOutgoingReferrals: Scalars['Boolean']['output'];
@@ -5923,6 +5980,8 @@ export enum ReasonNotEnrolled {
   ClientWasNotEnrolledForOtherReasonS = 'CLIENT_WAS_NOT_ENROLLED_FOR_OTHER_REASON_S',
   /** Invalid Value */
   Invalid = 'INVALID',
+  /** (3) Unable to locate client */
+  UnableToLocateClient = 'UNABLE_TO_LOCATE_CLIENT',
 }
 
 /** 4.04.A */
@@ -6289,8 +6348,6 @@ export type RenameServiceTypePayload = {
 
 /** 3.12.A */
 export enum RentalSubsidyType {
-  /** (436) Emergency Housing Voucher */
-  EmergencyHousingVoucher = 'EMERGENCY_HOUSING_VOUCHER',
   /** (437) Family Unification Program Voucher (FUP) */
   FamilyUnificationProgramVoucherFup = 'FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP',
   /** (438) Foster Youth to Independence Initiative (FYI) */
@@ -6299,6 +6356,8 @@ export enum RentalSubsidyType {
   GpdTipHousingSubsidy = 'GPD_TIP_HOUSING_SUBSIDY',
   /** (433) HCV voucher (tenant or project based) (not dedicated) */
   HcvVoucher = 'HCV_VOUCHER',
+  /** (436) Housing Stability Voucher */
+  HousingStabilityVoucher = 'HOUSING_STABILITY_VOUCHER',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (440) Other permanent housing dedicated for formerly homeless persons */
@@ -7719,6 +7778,7 @@ export type RootPermissionsFragment = {
   canTransferEnrollments: boolean;
   canSplitHouseholds: boolean;
   canConfigureDataCollection: boolean;
+  canManageForms: boolean;
   canViewClientAlerts: boolean;
   canManageExternalFormSubmissions: boolean;
 };
@@ -7832,6 +7892,7 @@ export type GetRootPermissionsQuery = {
     canTransferEnrollments: boolean;
     canSplitHouseholds: boolean;
     canConfigureDataCollection: boolean;
+    canManageForms: boolean;
     canViewClientAlerts: boolean;
     canManageExternalFormSubmissions: boolean;
   };
@@ -14899,6 +14960,7 @@ export type ServiceTypeConfigFieldsFragment = {
   formDefinitions: Array<{
     __typename?: 'FormDefinition';
     id: string;
+    identifier: string;
     cacheKey: string;
     title: string;
   }>;
@@ -15479,6 +15541,7 @@ export type GetServiceTypesQuery = {
       formDefinitions: Array<{
         __typename?: 'FormDefinition';
         id: string;
+        identifier: string;
         cacheKey: string;
         title: string;
       }>;
@@ -15534,6 +15597,7 @@ export type GetServiceTypeDetailsQuery = {
     formDefinitions: Array<{
       __typename?: 'FormDefinition';
       id: string;
+      identifier: string;
       cacheKey: string;
       title: string;
     }>;
@@ -24276,11 +24340,32 @@ export type GetAssessmentFormDefinitionQuery = {
   } | null;
 };
 
-export type GetFormDefinitionForEditorQueryVariables = Exact<{
+export type GetFormIdentifierDetailsQueryVariables = Exact<{
+  identifier: Scalars['String']['input'];
+}>;
+
+export type GetFormIdentifierDetailsQuery = {
+  __typename?: 'Query';
+  formIdentifier?: {
+    __typename?: 'FormIdentifier';
+    id: string;
+    identifier: string;
+    displayVersion: {
+      __typename?: 'FormDefinition';
+      id: string;
+      role: FormRole;
+      title: string;
+      cacheKey: string;
+      identifier: string;
+    };
+  } | null;
+};
+
+export type GetFormDefinitionFieldsForEditorQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
-export type GetFormDefinitionForEditorQuery = {
+export type GetFormDefinitionFieldsForEditorQuery = {
   __typename?: 'Query';
   formDefinition?: {
     __typename?: 'FormDefinition';
@@ -24766,28 +24851,33 @@ export type GetFormDefinitionForEditorQuery = {
   } | null;
 };
 
-export type GetFormDefinitionsQueryVariables = Exact<{
-  filters?: InputMaybe<FormDefinitionFilterOptions>;
+export type GetFormIdentifiersQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<FormIdentifierFilterOptions>;
 }>;
 
-export type GetFormDefinitionsQuery = {
+export type GetFormIdentifiersQuery = {
   __typename?: 'Query';
-  formDefinitions: {
-    __typename?: 'FormDefinitionsPaginated';
+  formIdentifiers: {
+    __typename?: 'FormIdentifiersPaginated';
     offset: number;
     limit: number;
     nodesCount: number;
     nodes: Array<{
-      __typename?: 'FormDefinition';
-      system: boolean;
+      __typename?: 'FormIdentifier';
       id: string;
-      role: FormRole;
-      title: string;
-      cacheKey: string;
       identifier: string;
-      formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
+      displayVersion: {
+        __typename?: 'FormDefinition';
+        system: boolean;
+        id: string;
+        role: FormRole;
+        title: string;
+        cacheKey: string;
+        identifier: string;
+        formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
+      };
     }>;
   };
 };
@@ -31192,6 +31282,7 @@ export const RootPermissionsFragmentDoc = gql`
     canTransferEnrollments
     canSplitHouseholds
     canConfigureDataCollection
+    canManageForms
     canViewClientAlerts
     canManageExternalFormSubmissions
   }
@@ -32121,6 +32212,7 @@ export const ServiceTypeConfigFieldsFragmentDoc = gql`
     ...ServiceTypeFields
     formDefinitions {
       id
+      identifier
       cacheKey
       title
     }
@@ -38578,8 +38670,71 @@ export type GetAssessmentFormDefinitionQueryResult = Apollo.QueryResult<
   GetAssessmentFormDefinitionQuery,
   GetAssessmentFormDefinitionQueryVariables
 >;
-export const GetFormDefinitionForEditorDocument = gql`
-  query GetFormDefinitionForEditor($id: ID!) {
+export const GetFormIdentifierDetailsDocument = gql`
+  query GetFormIdentifierDetails($identifier: String!) {
+    formIdentifier(identifier: $identifier) {
+      id
+      identifier
+      displayVersion {
+        ...FormDefinitionMetadata
+      }
+    }
+  }
+  ${FormDefinitionMetadataFragmentDoc}
+`;
+
+/**
+ * __useGetFormIdentifierDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetFormIdentifierDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormIdentifierDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFormIdentifierDetailsQuery({
+ *   variables: {
+ *      identifier: // value for 'identifier'
+ *   },
+ * });
+ */
+export function useGetFormIdentifierDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetFormIdentifierDetailsQuery,
+    GetFormIdentifierDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetFormIdentifierDetailsQuery,
+    GetFormIdentifierDetailsQueryVariables
+  >(GetFormIdentifierDetailsDocument, options);
+}
+export function useGetFormIdentifierDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFormIdentifierDetailsQuery,
+    GetFormIdentifierDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetFormIdentifierDetailsQuery,
+    GetFormIdentifierDetailsQueryVariables
+  >(GetFormIdentifierDetailsDocument, options);
+}
+export type GetFormIdentifierDetailsQueryHookResult = ReturnType<
+  typeof useGetFormIdentifierDetailsQuery
+>;
+export type GetFormIdentifierDetailsLazyQueryHookResult = ReturnType<
+  typeof useGetFormIdentifierDetailsLazyQuery
+>;
+export type GetFormIdentifierDetailsQueryResult = Apollo.QueryResult<
+  GetFormIdentifierDetailsQuery,
+  GetFormIdentifierDetailsQueryVariables
+>;
+export const GetFormDefinitionFieldsForEditorDocument = gql`
+  query GetFormDefinitionFieldsForEditor($id: ID!) {
     formDefinition(id: $id) {
       ...FormDefinitionFieldsForEditor
     }
@@ -38588,70 +38743,74 @@ export const GetFormDefinitionForEditorDocument = gql`
 `;
 
 /**
- * __useGetFormDefinitionForEditorQuery__
+ * __useGetFormDefinitionFieldsForEditorQuery__
  *
- * To run a query within a React component, call `useGetFormDefinitionForEditorQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFormDefinitionForEditorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetFormDefinitionFieldsForEditorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormDefinitionFieldsForEditorQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetFormDefinitionForEditorQuery({
+ * const { data, loading, error } = useGetFormDefinitionFieldsForEditorQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetFormDefinitionForEditorQuery(
+export function useGetFormDefinitionFieldsForEditorQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetFormDefinitionForEditorQuery,
-    GetFormDefinitionForEditorQueryVariables
+    GetFormDefinitionFieldsForEditorQuery,
+    GetFormDefinitionFieldsForEditorQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetFormDefinitionForEditorQuery,
-    GetFormDefinitionForEditorQueryVariables
-  >(GetFormDefinitionForEditorDocument, options);
+    GetFormDefinitionFieldsForEditorQuery,
+    GetFormDefinitionFieldsForEditorQueryVariables
+  >(GetFormDefinitionFieldsForEditorDocument, options);
 }
-export function useGetFormDefinitionForEditorLazyQuery(
+export function useGetFormDefinitionFieldsForEditorLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetFormDefinitionForEditorQuery,
-    GetFormDefinitionForEditorQueryVariables
+    GetFormDefinitionFieldsForEditorQuery,
+    GetFormDefinitionFieldsForEditorQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetFormDefinitionForEditorQuery,
-    GetFormDefinitionForEditorQueryVariables
-  >(GetFormDefinitionForEditorDocument, options);
+    GetFormDefinitionFieldsForEditorQuery,
+    GetFormDefinitionFieldsForEditorQueryVariables
+  >(GetFormDefinitionFieldsForEditorDocument, options);
 }
-export type GetFormDefinitionForEditorQueryHookResult = ReturnType<
-  typeof useGetFormDefinitionForEditorQuery
+export type GetFormDefinitionFieldsForEditorQueryHookResult = ReturnType<
+  typeof useGetFormDefinitionFieldsForEditorQuery
 >;
-export type GetFormDefinitionForEditorLazyQueryHookResult = ReturnType<
-  typeof useGetFormDefinitionForEditorLazyQuery
+export type GetFormDefinitionFieldsForEditorLazyQueryHookResult = ReturnType<
+  typeof useGetFormDefinitionFieldsForEditorLazyQuery
 >;
-export type GetFormDefinitionForEditorQueryResult = Apollo.QueryResult<
-  GetFormDefinitionForEditorQuery,
-  GetFormDefinitionForEditorQueryVariables
+export type GetFormDefinitionFieldsForEditorQueryResult = Apollo.QueryResult<
+  GetFormDefinitionFieldsForEditorQuery,
+  GetFormDefinitionFieldsForEditorQueryVariables
 >;
-export const GetFormDefinitionsDocument = gql`
-  query GetFormDefinitions(
-    $filters: FormDefinitionFilterOptions
+export const GetFormIdentifiersDocument = gql`
+  query GetFormIdentifiers(
     $limit: Int = 25
     $offset: Int = 0
+    $filters: FormIdentifierFilterOptions
   ) {
-    formDefinitions(filters: $filters, limit: $limit, offset: $offset) {
+    formIdentifiers(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount
       nodes {
-        ...FormDefinitionMetadata
-        system
-        formRules(limit: 1) {
-          nodesCount
+        id
+        identifier
+        displayVersion {
+          ...FormDefinitionMetadata
+          system
+          formRules(limit: 1) {
+            nodesCount
+          }
         }
       }
     }
@@ -38660,56 +38819,56 @@ export const GetFormDefinitionsDocument = gql`
 `;
 
 /**
- * __useGetFormDefinitionsQuery__
+ * __useGetFormIdentifiersQuery__
  *
- * To run a query within a React component, call `useGetFormDefinitionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFormDefinitionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetFormIdentifiersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormIdentifiersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetFormDefinitionsQuery({
+ * const { data, loading, error } = useGetFormIdentifiersQuery({
  *   variables: {
- *      filters: // value for 'filters'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
-export function useGetFormDefinitionsQuery(
+export function useGetFormIdentifiersQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetFormDefinitionsQuery,
-    GetFormDefinitionsQueryVariables
+    GetFormIdentifiersQuery,
+    GetFormIdentifiersQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetFormDefinitionsQuery,
-    GetFormDefinitionsQueryVariables
-  >(GetFormDefinitionsDocument, options);
+    GetFormIdentifiersQuery,
+    GetFormIdentifiersQueryVariables
+  >(GetFormIdentifiersDocument, options);
 }
-export function useGetFormDefinitionsLazyQuery(
+export function useGetFormIdentifiersLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetFormDefinitionsQuery,
-    GetFormDefinitionsQueryVariables
+    GetFormIdentifiersQuery,
+    GetFormIdentifiersQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetFormDefinitionsQuery,
-    GetFormDefinitionsQueryVariables
-  >(GetFormDefinitionsDocument, options);
+    GetFormIdentifiersQuery,
+    GetFormIdentifiersQueryVariables
+  >(GetFormIdentifiersDocument, options);
 }
-export type GetFormDefinitionsQueryHookResult = ReturnType<
-  typeof useGetFormDefinitionsQuery
+export type GetFormIdentifiersQueryHookResult = ReturnType<
+  typeof useGetFormIdentifiersQuery
 >;
-export type GetFormDefinitionsLazyQueryHookResult = ReturnType<
-  typeof useGetFormDefinitionsLazyQuery
+export type GetFormIdentifiersLazyQueryHookResult = ReturnType<
+  typeof useGetFormIdentifiersLazyQuery
 >;
-export type GetFormDefinitionsQueryResult = Apollo.QueryResult<
-  GetFormDefinitionsQuery,
-  GetFormDefinitionsQueryVariables
+export type GetFormIdentifiersQueryResult = Apollo.QueryResult<
+  GetFormIdentifiersQuery,
+  GetFormIdentifiersQueryVariables
 >;
 export const GetParsedFormDefinitionDocument = gql`
   query GetParsedFormDefinition($input: String!) {
