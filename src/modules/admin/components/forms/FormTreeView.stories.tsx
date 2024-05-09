@@ -20,7 +20,6 @@ export default {
 } as Meta<typeof FormTreeView>;
 
 const Template: StoryFn<typeof FormTreeView> = (args) => (
-  // eslint-disable-next-line no-console
   <FormTreeView {...args} />
 );
 
