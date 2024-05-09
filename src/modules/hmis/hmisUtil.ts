@@ -550,6 +550,8 @@ export const evaluateDataCollectedAbout = (
         relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold &&
         client.veteranStatus === NoYesReasonsForMissingData.Yes
       );
+    case DataCollectedAbout.AllVeterans:
+      return client.veteranStatus === NoYesReasonsForMissingData.Yes;
     default:
       throw new Error(
         `Unable to evaluate Data Collected About: ${dataCollectedAbout}`
