@@ -214,7 +214,7 @@
         {
           "type": "CHOICE",
           "component": "RADIO_BUTTONS",
-          "linkId": "radio-1",
+          "linkId": "radio-2",
           "text": "Choice Option as Radio that Repeats",
           "pickListReference": "NoYesReasonsForMissingData",
           "helperText": "This is helper text",
