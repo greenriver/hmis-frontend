@@ -4021,6 +4021,8 @@ export type Mutation = {
   deleteUnits?: Maybe<DeleteUnitsPayload>;
   mergeClients?: Maybe<MergeClientsPayload>;
   renameServiceCategory?: Maybe<RenameServiceCategoryPayload>;
+  /** @deprecated Renamed to updateServiceType */
+  renameServiceType?: Maybe<UpdateServiceTypePayload>;
   restoreScanCardCode?: Maybe<RestoreScanCardCodePayload>;
   /** Create/Save assessment as work-in-progress */
   saveAssessment?: Maybe<SaveAssessmentPayload>;
@@ -4217,6 +4219,12 @@ export type MutationMergeClientsArgs = {
 export type MutationRenameServiceCategoryArgs = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
+};
+
+export type MutationRenameServiceTypeArgs = {
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  supportsBulkAssignment: Scalars['Boolean']['input'];
 };
 
 export type MutationRestoreScanCardCodeArgs = {
