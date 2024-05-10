@@ -26,6 +26,7 @@ const adminDashboardRoutes = {
   FORMS: 'forms',
   VIEW_FORM: 'forms/:identifier',
   EDIT_FORM: 'forms/:identifier/:formId/edit',
+  JSON_EDIT_FORM: 'forms/:identifier/:formId/jsonEdit',
   PREVIEW_FORM: 'forms/:identifier/:formId/preview',
   PROJECT_CONFIG: 'project-configs',
 };

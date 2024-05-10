@@ -42,8 +42,9 @@ import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferr
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
+import FormEditorPage from '@/modules/admin/components/forms/FormEditorPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
-import FormEditorPage from '@/modules/admin/components/forms/UpdateFormDefinitionPage';
+import JsonFormEditorPage from '@/modules/admin/components/forms/JsonFormEditorPage';
 import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
 import ServiceTypeDetailPage from '@/modules/admin/components/services/ServiceTypeDetailPage';
@@ -755,6 +756,14 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <RootPermissionsFilter permissions='canManageForms'>
                 <FormEditorPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.JSON_EDIT_FORM,
+            element: (
+              <RootPermissionsFilter permissions='canManageForms'>
+                <JsonFormEditorPage />
               </RootPermissionsFilter>
             ),
           },
