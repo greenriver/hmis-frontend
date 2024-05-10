@@ -20363,6 +20363,7 @@ export type FormDefinitionFieldsFragment = {
 
 export type FormDefinitionFieldsForEditorFragment = {
   __typename?: 'FormDefinition';
+  status: FormStatus;
   rawDefinition: any;
   id: string;
   role: FormRole;
@@ -20855,6 +20856,7 @@ export type UpdateFormDefinitionMutation = {
     __typename?: 'UpdateFormDefinitionPayload';
     formDefinition?: {
       __typename?: 'FormDefinition';
+      status: FormStatus;
       rawDefinition: any;
       id: string;
       role: FormRole;
@@ -21362,6 +21364,7 @@ export type CreateFormDefinitionMutation = {
     __typename?: 'CreateFormDefinitionPayload';
     formDefinition?: {
       __typename?: 'FormDefinition';
+      status: FormStatus;
       rawDefinition: any;
       id: string;
       role: FormRole;
@@ -21869,6 +21872,7 @@ export type DeleteFormDefinitionMutation = {
     __typename?: 'DeleteFormDefinitionPayload';
     formDefinition?: {
       __typename?: 'FormDefinition';
+      status: FormStatus;
       rawDefinition: any;
       id: string;
       role: FormRole;
@@ -24379,6 +24383,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
   __typename?: 'Query';
   formDefinition?: {
     __typename?: 'FormDefinition';
+    status: FormStatus;
     rawDefinition: any;
     id: string;
     role: FormRole;
@@ -32685,6 +32690,7 @@ export const ValidationErrorFieldsFragmentDoc = gql`
 export const FormDefinitionFieldsForEditorFragmentDoc = gql`
   fragment FormDefinitionFieldsForEditor on FormDefinition {
     ...FormDefinitionFields
+    status
     rawDefinition
   }
   ${FormDefinitionFieldsFragmentDoc}
