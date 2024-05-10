@@ -152,6 +152,11 @@ const GenericTableWithData = <
     )
   );
 
+  // if the filters change, return to the first page
+  useEffect(() => {
+    setPage(0);
+  }, [filterValues]);
+
   const effectiveSortOrder = useMemo<typeof sortOrder>(() => {
     if (sortOrder) return sortOrder;
     if (defaultSortOptionProp) return defaultSortOptionProp;

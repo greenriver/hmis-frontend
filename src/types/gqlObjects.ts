@@ -6867,6 +6867,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ExternalFormSubmissionFilterOptions',
     args: [
       {
+        name: 'includeSpam',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'status',
         type: {
           kind: 'ENUM',
