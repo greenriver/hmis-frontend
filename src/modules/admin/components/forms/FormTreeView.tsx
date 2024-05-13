@@ -1,19 +1,4 @@
-import {
-  AttachMoney,
-  CheckBox,
-  DateRange,
-  FileUpload,
-  LineStyle,
-  RadioButtonChecked,
-  SelectAll,
-  Image,
-  PlusOne,
-  TextFields,
-  WrapText,
-  AccessTime,
-  Article,
-  SvgIconComponent,
-} from '@mui/icons-material';
+import { SvgIconComponent } from '@mui/icons-material';
 import { Badge, lighten, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import {
@@ -30,6 +15,21 @@ import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import React, { useMemo } from 'react';
 import Loading from '@/components/elements/Loading';
+import {
+  FormBooleanIcon,
+  FormChoiceIcon,
+  FormCurrencyIcon,
+  FormDateIcon,
+  FormDisplayIcon,
+  FormFileIcon,
+  FormGroupIcon,
+  FormImageIcon,
+  FormIntegerIcon,
+  FormObjectIcon,
+  FormStringIcon,
+  FormTextIcon,
+  FormTimeOfDayIcon,
+} from '@/components/elements/SemanticIcons';
 import theme from '@/config/theme';
 import { FormDefinitionJson, ItemType } from '@/types/gqlTypes';
 
@@ -44,34 +44,38 @@ const getItemDisplayAttrs = (type: string): FormItemDisplay => {
   // TODO - Show a different icon depending on both item type and component, e.g. dropdown vs. checkbox.
   switch (type) {
     case ItemType.Boolean:
-      return { icon: CheckBox, text: 'CheckBox', ...defaultQuestion };
+      return { icon: FormBooleanIcon, text: 'CheckBox', ...defaultQuestion };
     case ItemType.Choice:
     case ItemType.OpenChoice:
-      return { icon: RadioButtonChecked, text: 'Choice', ...defaultQuestion };
+      return { icon: FormChoiceIcon, text: 'Choice', ...defaultQuestion };
     case ItemType.Currency:
-      return { icon: AttachMoney, text: 'Currency', ...defaultQuestion };
+      return { icon: FormCurrencyIcon, text: 'Currency', ...defaultQuestion };
     case ItemType.Date:
-      return { icon: DateRange, text: 'Date', ...defaultQuestion };
+      return { icon: FormDateIcon, text: 'Date', ...defaultQuestion };
     case ItemType.Display:
-      return { icon: LineStyle, text: 'Display', ...defaultQuestion };
+      return { icon: FormDisplayIcon, text: 'Display', ...defaultQuestion };
     case ItemType.File:
-      return { icon: FileUpload, text: 'File Upload', ...defaultQuestion };
+      return { icon: FormFileIcon, text: 'File Upload', ...defaultQuestion };
     case ItemType.Group:
-      return { icon: SelectAll, text: 'Group', ...defaultQuestion };
+      return { icon: FormGroupIcon, text: 'Group', ...defaultQuestion };
     case ItemType.Image:
-      return { icon: Image, text: 'Image Upload', ...defaultQuestion };
+      return { icon: FormImageIcon, text: 'Image Upload', ...defaultQuestion };
     case ItemType.Integer:
-      return { icon: PlusOne, text: 'Number', ...defaultQuestion };
+      return { icon: FormIntegerIcon, text: 'Number', ...defaultQuestion };
     case ItemType.Object:
-      return { icon: Article, text: '', ...defaultQuestion }; // TODO - How should objects be displayed?
+      return { icon: FormObjectIcon, text: '', ...defaultQuestion }; // TODO - How should objects be displayed?
     case ItemType.String:
-      return { icon: TextFields, text: 'Text', ...defaultQuestion };
+      return { icon: FormStringIcon, text: 'Text', ...defaultQuestion };
     case ItemType.Text:
-      return { icon: WrapText, text: 'Paragraph', ...defaultQuestion };
+      return { icon: FormTextIcon, text: 'Paragraph', ...defaultQuestion };
     case ItemType.TimeOfDay:
-      return { icon: AccessTime, text: 'Time of Day', ...defaultQuestion };
+      return {
+        icon: FormTimeOfDayIcon,
+        text: 'Time of Day',
+        ...defaultQuestion,
+      };
     default:
-      return { icon: Article, text: '', ...defaultQuestion };
+      return { icon: FormObjectIcon, text: '', ...defaultQuestion };
   }
 };
 
