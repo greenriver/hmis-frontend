@@ -14,6 +14,7 @@ import ClientSearchTypeToggle, { SearchType } from './ClientSearchTypeToggle';
 import ClientTextSearchForm from './ClientTextSearchForm';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
+import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
@@ -28,6 +29,7 @@ import {
 } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SearchFormDefinition } from '@/modules/form/data';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
@@ -66,6 +68,19 @@ export const CLIENT_COLUMNS: {
   >;
 } = {
   id: { header: 'HMIS ID', render: 'id' },
+  linkedId: {
+    header: 'ID',
+    render: (client) => (
+      <RouterLink
+        openInNew={true}
+        to={generateSafePath(Routes.CLIENT_DASHBOARD, {
+          clientId: client.id,
+        })}
+      >
+        {client.id}
+      </RouterLink>
+    ),
+  },
   name: {
     header: 'Name',
     key: 'name',
@@ -241,6 +256,11 @@ const ClientSearch = () => {
     };
   }, [setSearchParams, setDerivedSearchParams]);
 
+  const filters = useFilters({
+    type: 'ClientFilterOptions',
+    omit: ['searchTerm'],
+  });
+
   return (
     <SsnDobShowContextProvider>
       <Stack
@@ -303,9 +323,8 @@ const ClientSearch = () => {
             columns={columns}
             pagePath='clientSearch'
             fetchPolicy='cache-and-network'
-            showFilters
+            filters={filters}
             recordType='Client'
-            filterInputType='ClientFilterOptions'
             defaultSortOption={
               searchType === 'broad'
                 ? ClientSortOption.BestMatch

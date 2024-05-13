@@ -1,6 +1,4 @@
 import { Paper } from '@mui/material';
-
-import { omit } from 'lodash-es';
 import { useMemo } from 'react';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -13,6 +11,7 @@ import {
 } from '@/modules/assessments/util';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   AssessmentSortOption,
   GetProjectAssessmentsDocument,
@@ -59,6 +58,11 @@ const ProjectAssessments = () => {
   const rowLinkTo = (record: ProjectAssessmentType) =>
     assessmentRowLinkTo(record, record.enrollment.client.id);
 
+  const filters = useFilters({
+    type: 'AssessmentsForProjectFilterOptions',
+    pickListArgs: { projectId },
+  });
+
   return (
     <>
       <PageTitle title='Assessments' />
@@ -76,8 +80,7 @@ const ProjectAssessments = () => {
           noData='No assessments'
           pagePath='project.assessments'
           recordType='Assessment'
-          showFilters
-          filters={(filters) => omit(filters, 'project', 'projectType')}
+          filters={filters}
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
       </Paper>

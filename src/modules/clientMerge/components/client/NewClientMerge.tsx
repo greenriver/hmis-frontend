@@ -16,6 +16,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import ClientTextSearchForm from '@/modules/search/components/ClientTextSearchForm';
 import { ClientDashboardRoutes, Routes } from '@/routes/routes';
@@ -97,6 +98,10 @@ const NewClientMerge = () => {
     [client.id]
   );
 
+  const filters = useFilters({
+    type: 'ClientFilterOptions',
+  });
+
   const columns = useMemo(() => {
     return [
       ...clientColumns,
@@ -167,9 +172,8 @@ const NewClientMerge = () => {
                   // don't use cache for this search, to avoid scenarios where you try to merge someone
                   // that no longer exists (e.g. has already been merged in)
                   fetchPolicy='network-only'
-                  showFilters
+                  filters={filters}
                   recordType='Client'
-                  filterInputType='ClientFilterOptions'
                   defaultSortOption={ClientSortOption.BestMatch}
                 />
               </SsnDobShowContextProvider>

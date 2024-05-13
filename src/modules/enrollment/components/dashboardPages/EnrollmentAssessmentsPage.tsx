@@ -75,10 +75,14 @@ const AssessmentsTable = () => {
         <EnrollmentAssessmentsTable
           enrollmentId={enrollmentId}
           clientId={clientId}
+          projectId={enrollment.project.id}
         />
       )}
       {mode === 'household' && (
-        <HouseholdAssessmentsTable householdId={enrollment.householdId} />
+        <HouseholdAssessmentsTable
+          householdId={enrollment.householdId}
+          projectId={enrollment.project.id}
+        />
       )}
     </TitleCard>
   );

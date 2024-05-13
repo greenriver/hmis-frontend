@@ -151,14 +151,14 @@ query GetAssessmentsForPopulation(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
-  $roles: [AssessmentRole!]
+  $roles: [String!]
 ) {
   client(id: $id) {
     id
     assessments(
       limit: $limit
       offset: $offset
-      filters: { type: $roles }
+      filters: { assessmentName: $roles }
       inProgress: false
       sortOrder: ASSESSMENT_DATE
     ) {

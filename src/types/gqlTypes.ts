@@ -282,9 +282,9 @@ export type AssessmentEligibility = {
 };
 
 export type AssessmentFilterOptions = {
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
   project?: InputMaybe<Array<Scalars['ID']['input']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
-  type?: InputMaybe<Array<AssessmentRole>>;
 };
 
 export type AssessmentInput = {
@@ -351,11 +351,15 @@ export enum AssessmentType {
 }
 
 export type AssessmentsForEnrollmentFilterOptions = {
-  type?: InputMaybe<Array<AssessmentRole>>;
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsForHouseholdFilterOptions = {
-  type?: InputMaybe<Array<AssessmentRole>>;
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type AssessmentsForProjectFilterOptions = {
+  assessmentName?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AssessmentsPaginated = {
@@ -2208,6 +2212,7 @@ export type Enrollment = {
   assessmentEligibilities: Array<AssessmentEligibility>;
   assessments: AssessmentsPaginated;
   auditHistory: EnrollmentAuditEventsPaginated;
+  autoExited: Scalars['Boolean']['output'];
   ceAssessments: CeAssessmentsPaginated;
   childWelfareMonths?: Maybe<Scalars['Int']['output']>;
   childWelfareYears?: Maybe<RhyNumberofYears>;
@@ -4445,6 +4450,12 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
+  /**
+   * Assessment names, including custom assessments and assessments that are
+   * inactive. If a project is specified, the list is limited to assessments that
+   * exist in the project (both active and inactive).
+   */
+  AssessmentNames = 'ASSESSMENT_NAMES',
   AvailableBulkServiceTypes = 'AVAILABLE_BULK_SERVICE_TYPES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
@@ -5269,7 +5280,7 @@ export type Project = {
 };
 
 export type ProjectAssessmentsArgs = {
-  filters?: InputMaybe<AssessmentFilterOptions>;
+  filters?: InputMaybe<AssessmentsForProjectFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -5381,7 +5392,7 @@ export type ProjectCoc = {
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
-  geocode: Scalars['String']['output'];
+  geocode?: Maybe<Scalars['String']['output']>;
   geographyType?: Maybe<GeographyType>;
   id: Scalars['ID']['output'];
   state?: Maybe<Scalars['String']['output']>;
@@ -10078,6 +10089,7 @@ export type GetClientAssessmentsQuery = {
           lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
+          autoExited: boolean;
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
@@ -11360,7 +11372,9 @@ export type GetAssessmentsForPopulationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  roles?: InputMaybe<Array<AssessmentRole> | AssessmentRole>;
+  roles?: InputMaybe<
+    Array<Scalars['String']['input']> | Scalars['String']['input']
+  >;
 }>;
 
 export type GetAssessmentsForPopulationQuery = {
@@ -12562,6 +12576,20 @@ export type BulkServicesClientSearchQuery = {
       age?: number | null;
       ssn?: string | null;
       gender: Array<Gender>;
+      alerts: Array<{
+        __typename?: 'ClientAlert';
+        id: string;
+        note: string;
+        expirationDate?: string | null;
+        createdAt: string;
+        priority: ClientAlertPriorityLevel;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }>;
       activeEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
@@ -13412,6 +13440,7 @@ export type GetClientEnrollmentsQuery = {
         lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
+        autoExited: boolean;
         moveInDate?: string | null;
         lastBedNightDate?: string | null;
         projectName: string;
@@ -13467,6 +13496,7 @@ export type GetClientServicesQuery = {
           lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
+          autoExited: boolean;
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
@@ -13821,6 +13851,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
+              autoExited: boolean;
               currentUnit?: {
                 __typename?: 'Unit';
                 id: string;
@@ -13914,6 +13945,7 @@ export type GetClientFilesQuery = {
           lockVersion: number;
           entryDate: string;
           exitDate?: string | null;
+          autoExited: boolean;
           moveInDate?: string | null;
           lastBedNightDate?: string | null;
           projectName: string;
@@ -15860,11 +15892,21 @@ export type GetClientCaseNotesQuery = {
           __typename?: 'Enrollment';
           id: string;
           lockVersion: number;
-          projectName: string;
-          projectType?: ProjectType | null;
           entryDate: string;
           exitDate?: string | null;
+          autoExited: boolean;
+          moveInDate?: string | null;
+          lastBedNightDate?: string | null;
+          projectName: string;
+          organizationName: string;
+          projectType?: ProjectType | null;
           inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canViewEnrollmentDetails: boolean;
+          };
         };
         user?: {
           __typename: 'ApplicationUser';
@@ -15998,6 +16040,7 @@ export type ProjectEnrollmentFieldsFragment = {
   lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
+  autoExited: boolean;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
@@ -16032,6 +16075,7 @@ export type ClientEnrollmentFieldsFragment = {
   lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
+  autoExited: boolean;
   moveInDate?: string | null;
   lastBedNightDate?: string | null;
   projectName: string;
@@ -16053,6 +16097,7 @@ export type EnrollmentFieldsFragment = {
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
+  autoExited: boolean;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
@@ -16094,6 +16139,7 @@ export type AllEnrollmentDetailsFragment = {
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
+  autoExited: boolean;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
@@ -16911,6 +16957,7 @@ export type SubmittedEnrollmentResultFieldsFragment = {
   entryDate: string;
   exitDate?: string | null;
   exitDestination?: Destination | null;
+  autoExited: boolean;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
@@ -17061,6 +17108,7 @@ export type GetEnrollmentQuery = {
     entryDate: string;
     exitDate?: string | null;
     exitDestination?: Destination | null;
+    autoExited: boolean;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
@@ -17168,6 +17216,7 @@ export type GetEnrollmentDetailsQuery = {
     entryDate: string;
     exitDate?: string | null;
     exitDestination?: Destination | null;
+    autoExited: boolean;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
@@ -17889,6 +17938,7 @@ export type GetEnrollmentWithHouseholdQuery = {
     entryDate: string;
     exitDate?: string | null;
     exitDestination?: Destination | null;
+    autoExited: boolean;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
@@ -17971,6 +18021,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          autoExited: boolean;
           currentUnit?: {
             __typename?: 'Unit';
             id: string;
@@ -25595,6 +25646,7 @@ export type SubmitFormMutation = {
           entryDate: string;
           exitDate?: string | null;
           exitDestination?: Destination | null;
+          autoExited: boolean;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
           enrollmentCoc?: string | null;
@@ -26060,7 +26112,7 @@ export type SubmitFormMutation = {
           dateCreated?: string | null;
           dateDeleted?: string | null;
           dateUpdated?: string | null;
-          geocode: string;
+          geocode?: string | null;
           geographyType?: GeographyType | null;
           state?: string | null;
           zip?: string | null;
@@ -26265,6 +26317,7 @@ export type HouseholdFieldsFragment = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      autoExited: boolean;
       currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     };
   }>;
@@ -26342,6 +26395,7 @@ export type HouseholdClientFieldsFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    autoExited: boolean;
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   };
 };
@@ -26381,6 +26435,7 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      autoExited: boolean;
     };
   }>;
 };
@@ -26415,6 +26470,7 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    autoExited: boolean;
   };
 };
 
@@ -26501,6 +26557,7 @@ export type GetHouseholdQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        autoExited: boolean;
         currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       };
     }>;
@@ -27765,7 +27822,7 @@ export type ProjectCocFieldsFragment = {
   dateCreated?: string | null;
   dateDeleted?: string | null;
   dateUpdated?: string | null;
-  geocode: string;
+  geocode?: string | null;
   geographyType?: GeographyType | null;
   state?: string | null;
   zip?: string | null;
@@ -27839,6 +27896,7 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
   lockVersion: number;
   entryDate: string;
   exitDate?: string | null;
+  autoExited: boolean;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
@@ -28083,6 +28141,7 @@ export type GetProjectEnrollmentsQuery = {
         lockVersion: number;
         entryDate: string;
         exitDate?: string | null;
+        autoExited: boolean;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
@@ -28172,6 +28231,7 @@ export type GetProjectHouseholdsQuery = {
             entryDate: string;
             exitDate?: string | null;
             inProgress: boolean;
+            autoExited: boolean;
           };
         }>;
       }>;
@@ -28240,7 +28300,7 @@ export type GetProjectAssessmentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
-  filters?: InputMaybe<AssessmentFilterOptions>;
+  filters?: InputMaybe<AssessmentsForProjectFilterOptions>;
 }>;
 
 export type GetProjectAssessmentsQuery = {
@@ -28271,6 +28331,7 @@ export type GetProjectAssessmentsQuery = {
           entryDate: string;
           exitDate?: string | null;
           exitDestination?: Destination | null;
+          autoExited: boolean;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
           enrollmentCoc?: string | null;
@@ -28476,7 +28537,7 @@ export type GetProjectCocQuery = {
     dateCreated?: string | null;
     dateDeleted?: string | null;
     dateUpdated?: string | null;
-    geocode: string;
+    geocode?: string | null;
     geographyType?: GeographyType | null;
     state?: string | null;
     zip?: string | null;
@@ -28744,7 +28805,7 @@ export type GetProjectProjectCocsQuery = {
         dateCreated?: string | null;
         dateDeleted?: string | null;
         dateUpdated?: string | null;
-        geocode: string;
+        geocode?: string | null;
         geographyType?: GeographyType | null;
         state?: string | null;
         zip?: string | null;
@@ -32110,6 +32171,7 @@ export const ClientEnrollmentFieldsFragmentDoc = gql`
     lockVersion
     entryDate
     exitDate
+    autoExited
     moveInDate
     lastBedNightDate
     projectName
@@ -32146,6 +32208,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     entryDate
     exitDate
     exitDestination
+    autoExited
     project {
       ...ProjectNameAndType
     }
@@ -32546,6 +32609,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       entryDate
       exitDate
       inProgress
+      autoExited
       currentUnit {
         id
         name
@@ -32584,6 +32648,7 @@ export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
       entryDate
       exitDate
       inProgress
+      autoExited
     }
   }
   ${ClientNameFragmentDoc}
@@ -32803,6 +32868,7 @@ export const ProjectEnrollmentFieldsFragmentDoc = gql`
     lockVersion
     entryDate
     exitDate
+    autoExited
     inProgress
     relationshipToHoH
     enrollmentCoc
@@ -33956,14 +34022,14 @@ export const GetAssessmentsForPopulationDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $roles: [AssessmentRole!]
+    $roles: [String!]
   ) {
     client(id: $id) {
       id
       assessments(
         limit: $limit
         offset: $offset
-        filters: { type: $roles }
+        filters: { assessmentName: $roles }
         inProgress: false
         sortOrder: ASSESSMENT_DATE
       ) {
@@ -34349,6 +34415,9 @@ export const BulkServicesClientSearchDocument = gql`
         id
         ...ClientName
         ...ClientIdentificationFields
+        alerts {
+          ...ClientAlertFields
+        }
         activeEnrollment(projectId: $projectId, openOnDate: $serviceDate) {
           id
           entryDate
@@ -34374,6 +34443,7 @@ export const BulkServicesClientSearchDocument = gql`
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientAlertFieldsFragmentDoc}
 `;
 
 /**
@@ -36935,19 +37005,14 @@ export const GetClientCaseNotesDocument = gql`
         nodes {
           ...CustomCaseNoteFields
           enrollment {
-            id
-            lockVersion
-            projectName
-            projectType
-            entryDate
-            exitDate
-            inProgress
+            ...ClientEnrollmentFields
           }
         }
       }
     }
   }
   ${CustomCaseNoteFieldsFragmentDoc}
+  ${ClientEnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -40073,7 +40138,7 @@ export const GetProjectAssessmentsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-    $filters: AssessmentFilterOptions = null
+    $filters: AssessmentsForProjectFilterOptions = null
   ) {
     project(id: $id) {
       id

@@ -8,6 +8,7 @@ import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import {
@@ -18,13 +19,15 @@ import {
   ServiceFieldsFragment,
 } from '@/types/gqlTypes';
 
-export const SERVICE_COLUMNS: ColumnDef<ServiceBasicFieldsFragment>[] = [
-  {
+export const SERVICE_BASIC_COLUMNS: {
+  [key: string]: ColumnDef<ServiceBasicFieldsFragment>;
+} = {
+  dateProvided: {
     header: 'Date Provided',
     linkTreatment: true,
-    render: (e) => parseAndFormatDate(e.dateProvided),
+    render: (s) => parseAndFormatDate(s.dateProvided),
   },
-  {
+  serviceType: {
     header: 'Service Type',
     render: (service) => {
       const { name, category } = service.serviceType;
@@ -32,7 +35,25 @@ export const SERVICE_COLUMNS: ColumnDef<ServiceBasicFieldsFragment>[] = [
       return `${category} - ${name}`;
     },
   },
-];
+};
+
+export const SERVICE_COLUMNS: {
+  [key: string]: ColumnDef<ServiceFieldsFragment>;
+} = {
+  serviceDetails: {
+    header: 'Service Details',
+    render: (service) => (
+      <Stack>
+        {serviceDetails(service).map((s, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <Typography key={i} variant='body2'>
+            {s}
+          </Typography>
+        ))}
+      </Stack>
+    ),
+  },
+};
 
 const EnrollmentServicesPage = () => {
   const { enrollment } = useEnrollmentDashboardContext();
@@ -48,25 +69,19 @@ const EnrollmentServicesPage = () => {
     service: viewingRecord,
     onClose: () => setViewingRecord(undefined),
   });
+
+  const filters = useFilters({
+    type: 'ServicesForEnrollmentFilterOptions',
+  });
+
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   const canEditServices = enrollment.access.canEditEnrollments;
 
   const columns = [
-    ...SERVICE_COLUMNS,
-    {
-      header: 'Service Details',
-      render: (e: ServiceFieldsFragment) => (
-        <Stack>
-          {serviceDetails(e).map((s, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Typography key={i} variant='body2'>
-              {s}
-            </Typography>
-          ))}
-        </Stack>
-      ),
-    },
+    SERVICE_BASIC_COLUMNS.dateProvided,
+    SERVICE_BASIC_COLUMNS.serviceType,
+    SERVICE_COLUMNS.serviceDetails,
   ];
 
   return (
@@ -105,8 +120,7 @@ const EnrollmentServicesPage = () => {
           pagePath='enrollment.services'
           noData='No services'
           recordType='Service'
-          showFilters
-          filterInputType='ServicesForEnrollmentFilterOptions'
+          filters={filters}
           headerCellSx={() => ({ color: 'text.secondary' })}
           noSort
         />

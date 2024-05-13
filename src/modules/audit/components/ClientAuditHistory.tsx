@@ -8,6 +8,7 @@ import {
   AUDIT_HISTORY_USER_COLUMNS,
 } from '@/modules/audit/components/auditHistoryColumnDefs';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { useFilters } from '@/modules/hmis/filterUtil';
 import {
   ClientAuditEventFilterOptions,
   GetClientAuditEventsDocument,
@@ -29,6 +30,9 @@ const columns: ColumnDef<AuditHistoryType>[] = [
 
 const ClientAuditHistory = () => {
   const { clientId } = useSafeParams() as { clientId: string };
+  const filters = useFilters({
+    type: 'ClientAuditEventFilterOptions',
+  });
 
   return (
     <ContextualCollapsibleListsProvider>
@@ -54,8 +58,7 @@ const ClientAuditHistory = () => {
           rowSx={() => ({ whiteSpace: 'nowrap' })}
           tableProps={{ sx: { tableLayout: 'fixed' } }}
           recordType='ClientAuditEvent'
-          filterInputType='ClientAuditEventFilterOptions'
-          showFilters
+          filters={filters}
         />
       </Paper>
     </ContextualCollapsibleListsProvider>

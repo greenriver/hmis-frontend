@@ -1,9 +1,10 @@
-import { isNil, startCase } from 'lodash-es';
+import { startCase } from 'lodash-es';
 
-import { getSchemaForInputType } from '../hmisUtil';
-
-import TableFilterItem from '@/components/elements/tableFilters/filters/FilterItem';
+import { useMemo } from 'react';
+import { TableFilterType } from '@/modules/dataFetching/components/GenericTableWithData';
 import { BaseFilter, FilterType } from '@/modules/dataFetching/types';
+import { PickListArgs } from '@/modules/form/types';
+import { getSchemaForInputType } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
 import {
@@ -13,20 +14,6 @@ import {
   PickListType,
   ProjectSortOption,
 } from '@/types/gqlTypes';
-
-/**
- * Component for dynamically displaying a filter
- * on an input type, according to its type
- * defined in the graphql schema.
- */
-
-interface Props {
-  recordType: string;
-  inputType: string;
-  fieldName: string;
-  value: any;
-  onChange: (value: any) => any;
-}
 
 const getType = (
   type: GqlInputObjectSchemaType
@@ -59,16 +46,11 @@ export const getDefaultSortOptionForType = (
   return null;
 };
 
-export const getInputTypeForRecordType = (
-  recordType: string
-): string | null => {
-  return `${recordType}FilterOptions`;
-};
-
 const FILTER_NAME_TO_PICK_LIST = {
   project: PickListType.Project,
   appliedToProject: PickListType.Project,
   organization: PickListType.Organization,
+  assessmentName: PickListType.AssessmentNames,
   serviceType: PickListType.AllServiceTypes,
   user: PickListType.Users,
   clientRecordType: PickListType.ClientAuditEventRecordTypes,
@@ -82,9 +64,9 @@ function isPicklistType(
 }
 
 const getFilterForType = (
-  recordType: string,
   fieldName: any,
-  type: GqlInputObjectSchemaType
+  type: GqlInputObjectSchemaType,
+  filterPickListArgs?: PickListArgs
 ): FilterType<any> | null => {
   const inputType = getType(type);
   if (!inputType) return null;
@@ -106,6 +88,7 @@ const getFilterForType = (
       ...baseFields,
       type: 'picklist',
       pickListReference: FILTER_NAME_TO_PICK_LIST[fieldName],
+      pickListArgs: filterPickListArgs,
     };
   }
 
@@ -123,38 +106,48 @@ const getFilterForType = (
 };
 
 export const getFilter = (
-  recordType: string,
   inputType: string,
-  fieldName: string
+  fieldName: string,
+  filterPickListArgs?: PickListArgs
 ) => {
   const fieldSchema = (getSchemaForInputType(inputType)?.args || []).find(
     (f) => f.name === fieldName
   );
   if (!fieldSchema) return null;
 
-  return getFilterForType(recordType, fieldName, fieldSchema.type);
+  return getFilterForType(fieldName, fieldSchema.type, filterPickListArgs);
 };
 
-const HmisFilter = ({
-  recordType,
-  inputType,
-  fieldName,
-  value,
-  onChange,
-}: Props) => {
-  if (isNil(value)) return null;
+interface FilterParams {
+  type?: string | null; // filter input type type for inferring filters if not provided
+  pickListArgs?: PickListArgs; // optional: pick list args to be applied to all PickList filter items
+  omit?: Array<string>; // optional: skip some filters
+}
+export function useFilters<T>({
+  type,
+  pickListArgs = {},
+  omit = [],
+}: FilterParams): TableFilterType<T> {
+  return useMemo(() => {
+    if (!type) return {};
 
-  const filter = getFilter(recordType, inputType, fieldName);
-  if (!filter) return null;
+    const schema = getSchemaForInputType(type);
+    if (!schema) return {};
 
-  return (
-    <TableFilterItem
-      filter={filter}
-      keyName={fieldName}
-      value={value}
-      onChange={onChange}
-    />
-  );
-};
+    const result: Partial<Record<keyof T, FilterType<T>>> = {};
 
-export default HmisFilter;
+    schema.args.forEach(({ name }) => {
+      if (omit.includes(name)) return;
+
+      const filter = getFilter(type, name, pickListArgs);
+
+      if (filter) {
+        result[name as keyof T] = filter;
+      } else {
+        console.error(`Unable to create filter for ${name}`);
+      }
+    });
+
+    return result;
+  }, [type, pickListArgs, omit]);
+}
