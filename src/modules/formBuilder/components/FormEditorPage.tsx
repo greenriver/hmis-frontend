@@ -21,7 +21,7 @@ import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer
 import Loading from '@/components/elements/Loading';
 import { EditIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
-import FormTreeView from '@/modules/admin/components/forms/FormTreeView';
+import FormTreeView from '@/modules/admin/components/forms/formEditor/FormTreeView';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import { useGetFormDefinitionFieldsForEditorQuery } from '@/types/gqlTypes';

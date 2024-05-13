@@ -42,7 +42,7 @@ import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferr
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
-import FormEditorPage from '@/modules/admin/components/forms/FormEditorPage';
+import FormEditorPage from '@/modules/admin/components/forms/formEditor/FormEditorPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
 import JsonFormEditorPage from '@/modules/admin/components/forms/JsonFormEditorPage';
 import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
