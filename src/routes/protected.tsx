@@ -42,6 +42,7 @@ import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferr
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
+import FormPreview from '@/modules/admin/components/forms/FormPreview';
 import FormEditorPage from '@/modules/admin/components/forms/UpdateFormDefinitionPage';
 import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
@@ -752,8 +753,16 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.EDIT_FORM,
             element: (
-              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+              <RootPermissionsFilter permissions='canManageForms'>
                 <FormEditorPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.PREVIEW_FORM,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <FormPreview />
               </RootPermissionsFilter>
             ),
           },

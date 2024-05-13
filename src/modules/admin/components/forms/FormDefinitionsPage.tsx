@@ -5,6 +5,7 @@ import FormDefinitionTable from './FormDefinitionTable';
 import PageTitle from '@/components/layout/PageTitle';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import CommonSearchInput from '@/modules/search/components/CommonSearchInput';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
@@ -33,10 +34,10 @@ const FormDefinitionsPage = () => {
     getErrors: (data) => data.createFormDefinition?.errors || [],
     getVariables: (values) => ({ input: values as FormDefinitionInput }),
     onCompleted: (data) => {
-      const id = data?.createFormDefinition?.formDefinition?.id;
+      const identifier = data?.createFormDefinition?.formDefinition?.identifier;
       evictQuery('formDefinitions');
-      if (id)
-        navigate(generatePath(AdminDashboardRoutes.VIEW_FORM, { formId: id }));
+      if (identifier)
+        navigate(generatePath(AdminDashboardRoutes.VIEW_FORM, { identifier }));
     },
   });
   return (
@@ -44,13 +45,15 @@ const FormDefinitionsPage = () => {
       <PageTitle
         title='Forms'
         actions={
-          <Button
-            startIcon={<AddIcon />}
-            variant='outlined'
-            onClick={() => openCreateDialog()}
-          >
-            New Form
-          </Button>
+          <RootPermissionsFilter permissions={'canManageForms'}>
+            <Button
+              startIcon={<AddIcon />}
+              variant='outlined'
+              onClick={() => openCreateDialog()}
+            >
+              New Form
+            </Button>
+          </RootPermissionsFilter>
         }
       />
       <Grid container gap={2}>

@@ -1,34 +1,23 @@
-import {
-  DialogActions,
-  DialogContent,
-  IconButton,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
-import DialogTitle from '@mui/material/DialogTitle';
+import { IconButton, Paper, Stack, Typography } from '@mui/material';
 import * as React from 'react';
 import { useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
-import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
-import TextInput from '@/components/elements/input/TextInput';
 import Loading from '@/components/elements/Loading';
 import RouterLink from '@/components/elements/RouterLink';
 import { EditIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import UpdateServiceTypeDialog from '@/modules/admin/components/services/UpdateServiceTypeDialog';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-import FormActions from '@/modules/form/components/FormActions';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   DeleteServiceTypeDocument,
   DeleteServiceTypeMutation,
   DeleteServiceTypeMutationVariables,
   useGetServiceTypeDetailsQuery,
-  useRenameServiceTypeMutation,
 } from '@/types/gqlTypes';
 import { evictQuery } from '@/utils/cacheUtil';
 import { generateSafePath } from '@/utils/pathEncoding';
@@ -44,19 +33,11 @@ const ServiceTypeDetailPage = () => {
 
   const navigate = useNavigate();
 
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editedName, setEditedName] = useState<string>();
-
-  const [renameServiceType, { error: renameError, loading: renameLoading }] =
-    useRenameServiceTypeMutation({
-      variables: { id: data?.serviceType?.id || '', name: editedName || '' },
-      onCompleted: () => setEditDialogOpen(false),
-    });
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
   if (error) throw error;
   if (!data && loading) return <Loading />;
   if (!data?.serviceType) return <NotFound />;
-  if (renameError) throw renameError;
 
   return (
     <>
@@ -68,7 +49,7 @@ const ServiceTypeDetailPage = () => {
             </Typography>
             <IconButton
               aria-label='edit title'
-              onClick={() => setEditDialogOpen(true)}
+              onClick={() => setUpdateDialogOpen(true)}
               size='small'
             >
               <EditIcon fontSize='inherit' />
@@ -95,27 +76,13 @@ const ServiceTypeDetailPage = () => {
           </DeleteMutationButton>
         }
       />
-      <CommonDialog open={editDialogOpen}>
-        <DialogTitle>Edit Service Type</DialogTitle>
-        <DialogContent sx={{ mt: 2 }}>
-          <TextInput
-            label='Name'
-            value={
-              editedName || editedName === ''
-                ? editedName
-                : data?.serviceType?.name
-            }
-            onChange={(e) => setEditedName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <FormActions
-            onSubmit={() => renameServiceType()}
-            loading={renameLoading}
-            onDiscard={() => setEditDialogOpen(false)}
-          />
-        </DialogActions>
-      </CommonDialog>
+      {data.serviceType && (
+        <UpdateServiceTypeDialog
+          serviceType={data.serviceType}
+          dialogOpen={updateDialogOpen}
+          closeDialog={() => setUpdateDialogOpen(!updateDialogOpen)}
+        />
+      )}
       <Stack gap={2}>
         <Paper sx={{ p: 2 }}>
           <Stack gap={1}>
@@ -125,13 +92,16 @@ const ServiceTypeDetailPage = () => {
             <CommonLabeledTextBlock title='Service Type'>
               {data.serviceType.name}
             </CommonLabeledTextBlock>
+            <CommonLabeledTextBlock title='Supports Bulk Assignment?'>
+              {data.serviceType.supportsBulkAssignment ? 'Yes' : 'No'}
+            </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Active Forms'>
               <CommonUnstyledList>
                 {data.serviceType.formDefinitions.map((formDef) => (
                   <li key={formDef.id}>
                     <RouterLink
                       to={generatePath(AdminDashboardRoutes.VIEW_FORM, {
-                        formId: formDef.id,
+                        identifier: formDef.identifier,
                       })}
                       openInNew
                     >

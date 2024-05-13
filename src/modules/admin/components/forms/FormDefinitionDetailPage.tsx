@@ -12,6 +12,7 @@ import { EditIcon } from '@/components/elements/SemanticIcons';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -20,15 +21,17 @@ import {
   StaticFormRole,
   UpdateFormDefinitionDocument,
   UpdateFormDefinitionMutation,
-  useGetFormDefinitionForEditorQuery,
+  useGetFormIdentifierDetailsQuery,
 } from '@/types/gqlTypes';
 
 const FormDefinitionDetailPage = () => {
-  const { formId } = useSafeParams() as { formId: string };
+  const { identifier } = useSafeParams() as {
+    identifier: string;
+  };
 
-  const { data: { formDefinition } = {}, error } =
-    useGetFormDefinitionForEditorQuery({
-      variables: { id: formId },
+  const { data: { formIdentifier } = {}, error } =
+    useGetFormIdentifierDetailsQuery({
+      variables: { identifier },
     });
 
   // Dialog for updating form definitions
@@ -38,18 +41,18 @@ const FormDefinitionDetailPage = () => {
       MutationUpdateFormDefinitionArgs
     >({
       formRole: StaticFormRole.FormDefinition,
-      initialValues: formDefinition || {},
-      localConstants: { definitionId: formId },
+      initialValues: formIdentifier?.displayVersion || {},
+      localConstants: { definitionId: formIdentifier?.displayVersion.id },
       mutationDocument: UpdateFormDefinitionDocument,
       getErrors: (data) => data.updateFormDefinition?.errors || [],
       getVariables: (values) => ({
         input: values as FormDefinitionInput,
-        id: formId,
+        id: formIdentifier?.displayVersion.id || '',
       }),
     });
 
   if (error) throw error;
-  if (!formDefinition) return <Loading />;
+  if (!formIdentifier) return <Loading />;
 
   return (
     <>
@@ -62,7 +65,9 @@ const FormDefinitionDetailPage = () => {
           Selected Form
         </Typography>
         <Stack direction='row' gap={1}>
-          <Typography variant='h3'>{formDefinition.title}</Typography>
+          <Typography variant='h3'>
+            {formIdentifier.displayVersion.title}
+          </Typography>
           <ButtonTooltipContainer title='Edit Title'>
             <IconButton
               aria-label='edit title'
@@ -83,35 +88,49 @@ const FormDefinitionDetailPage = () => {
                 <CommonLabeledTextBlock title='Form Type'>
                   <HmisEnum
                     enumMap={HmisEnums.FormRole}
-                    value={formDefinition.role}
+                    value={formIdentifier.displayVersion.role}
                   />
                 </CommonLabeledTextBlock>
                 <CommonLabeledTextBlock title='Form Identifier'>
-                  {formDefinition.identifier}
+                  {formIdentifier.identifier}
                 </CommonLabeledTextBlock>
               </Stack>
             </CommonCard>
           </Grid>
           <Grid item xs={12} md={4}>
             <CommonCard title='Form Actions'>
-              <Stack direction='row' gap={2}>
+              <Stack gap={1}>
+                <RootPermissionsFilter permissions={'canManageForms'}>
+                  <ButtonLink
+                    to={generatePath(AdminDashboardRoutes.EDIT_FORM, {
+                      identifier: formIdentifier?.identifier,
+                      formId: formIdentifier?.displayVersion.id,
+                    })}
+                    startIcon={<DashboardCustomizeIcon />}
+                    variant='contained'
+                    fullWidth
+                  >
+                    Edit Form
+                  </ButtonLink>
+                </RootPermissionsFilter>
                 <ButtonLink
-                  to={generatePath(AdminDashboardRoutes.EDIT_FORM, { formId })}
-                  startIcon={<DashboardCustomizeIcon />}
-                  variant='contained'
+                  to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
+                    identifier: formIdentifier?.identifier,
+                    formId: formIdentifier?.displayVersion.id,
+                  })}
+                  variant='outlined'
                   fullWidth
                 >
-                  Edit Form
+                  Preview Form
                 </ButtonLink>
-                {/* TODO add: preview */}
               </Stack>
             </CommonCard>
           </Grid>
         </Grid>
         <FormRuleCard
-          formId={formId}
-          formTitle={formDefinition.title}
-          formRole={formDefinition.role}
+          formId={formIdentifier.displayVersion.id}
+          formTitle={formIdentifier.displayVersion.title}
+          formRole={formIdentifier.displayVersion.role}
         />
       </Stack>
       {renderEditDialog({ title: 'Edit Form Details' })}
