@@ -113,6 +113,11 @@ const AdminDashboard: React.FC = () => {
   const breadCrumbConfig = useAdminBreadcrumbConfig();
   const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
 
+  const formEditorContentSx = {
+    px: 0,
+    py: 0,
+  };
+
   if (!access) return <NotFound />;
 
   return (
@@ -124,6 +129,12 @@ const AdminDashboard: React.FC = () => {
           items={navItems}
           access={access}
         />
+      }
+      contentSx={
+        // The form editor needs to take up the whole page because of its layout, so the parent box should have 0 padding
+        dashboardState.currentPath === '/admin/forms/:identifier/:formId/edit'
+          ? formEditorContentSx
+          : {}
       }
       {...dashboardState}
     >

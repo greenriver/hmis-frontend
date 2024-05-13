@@ -70,7 +70,7 @@ import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/E
 import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
-import FormEditorPage from '@/modules/formBuilder/components/FormEditorPage';
+import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -755,7 +755,7 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.EDIT_FORM,
             element: (
               <RootPermissionsFilter permissions='canManageForms'>
-                <FormEditorPage />
+                <FormBuilderPage />
               </RootPermissionsFilter>
             ),
           },

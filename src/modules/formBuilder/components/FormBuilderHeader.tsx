@@ -4,16 +4,16 @@ import { Stack } from '@mui/system';
 import React, { useMemo } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { EditIcon } from '@/components/elements/SemanticIcons';
+import FormOptionsMenu from '@/modules/formBuilder/components/FormOptionsMenu';
 import { HmisEnums } from '@/types/gqlEnums';
 import { FormDefinitionFieldsForEditorFragment } from '@/types/gqlTypes';
-import FormOptionsMenu from '@/modules/formBuilder/components/FormOptionsMenu';
 
 interface FormEditorHeaderProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
   lastUpdatedDate?: string | null;
 }
 
-const FormEditorHeader: React.FC<FormEditorHeaderProps> = ({
+const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
   formDefinition,
   lastUpdatedDate,
 }) => {
@@ -77,4 +77,4 @@ const FormEditorHeader: React.FC<FormEditorHeaderProps> = ({
   );
 };
 
-export default FormEditorHeader;
+export default FormBuilderHeader;
