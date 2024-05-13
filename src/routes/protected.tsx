@@ -42,7 +42,6 @@ import AdminReferralDenials from '@/modules/admin/components/denials/AdminReferr
 import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferralPosting';
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
-import FormEditorPage from '@/modules/admin/components/forms/formEditor/FormEditorPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
 import JsonFormEditorPage from '@/modules/admin/components/forms/JsonFormEditorPage';
 import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
@@ -71,6 +70,7 @@ import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/E
 import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+import FormEditorPage from '@/modules/formBuilder/components/FormEditorPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
