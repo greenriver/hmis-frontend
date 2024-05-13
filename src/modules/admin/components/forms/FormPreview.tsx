@@ -1,5 +1,3 @@
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import ListIcon from '@mui/icons-material/List';
 import { Grid } from '@mui/material';
 import React, { useMemo, useRef, useState } from 'react';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
@@ -24,17 +22,15 @@ import {
 } from '@/modules/form/util/formUtil';
 import { useGetFormDefinitionFieldsForEditorQuery } from '@/types/gqlTypes';
 
-type PreviewMode = 'preview' | 'readOnly';
+type PreviewMode = 'input' | 'readOnly';
 const toggleItems: ToggleItem<PreviewMode>[] = [
   {
-    value: 'preview',
-    label: 'Preview Form',
-    Icon: ListIcon,
+    value: 'input',
+    label: 'Input View',
   },
   {
     value: 'readOnly',
     label: 'Read Only View',
-    Icon: AccountBoxIcon,
   },
 ];
 
@@ -64,7 +60,7 @@ const FormPreview = () => {
   }, [formDefinition?.definition, localConstants]);
   const [formValues, setFormValues] = useState<object>(initialValues);
 
-  const [toggleValue, setToggleValue] = useState<PreviewMode>('preview');
+  const [toggleValue, setToggleValue] = useState<PreviewMode>('input');
 
   const itemMap = useMemo(
     () => formDefinition && getItemMap(formDefinition.definition),
