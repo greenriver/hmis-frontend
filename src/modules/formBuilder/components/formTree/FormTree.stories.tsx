@@ -1,14 +1,14 @@
 import { Box } from '@mui/material';
 import { Meta, StoryFn } from '@storybook/react';
-import FormTreeView from '@/modules/admin/components/forms/FormTreeView';
+import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import formData from '@/test/__mocks__/mockFormDefinition.json';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
 
 export default {
-  title: 'FormTreeView',
-  component: FormTreeView,
+  title: 'FormTree',
+  component: FormTree,
   argTypes: { label: { control: 'text' } },
   decorators: [
     (Story) => (
@@ -17,11 +17,9 @@ export default {
       </Box>
     ),
   ],
-} as Meta<typeof FormTreeView>;
+} as Meta<typeof FormTree>;
 
-const Template: StoryFn<typeof FormTreeView> = (args) => (
-  <FormTreeView {...args} />
-);
+const Template: StoryFn<typeof FormTree> = (args) => <FormTree {...args} />;
 
 export const Default = Template.bind({});
 Default.args = { definition: formDefinition };
