@@ -818,7 +818,7 @@ export type ClientAlert = {
   __typename?: 'ClientAlert';
   createdAt: Scalars['ISO8601DateTime']['output'];
   createdBy?: Maybe<ApplicationUser>;
-  expirationDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  expirationDate: Scalars['ISO8601Date']['output'];
   id: Scalars['ID']['output'];
   note: Scalars['String']['output'];
   priority: ClientAlertPriorityLevel;
@@ -7919,7 +7919,7 @@ export type ClientWithAlertFieldsFragment = {
     __typename?: 'ClientAlert';
     id: string;
     note: string;
-    expirationDate?: string | null;
+    expirationDate: string;
     createdAt: string;
     priority: ClientAlertPriorityLevel;
     createdBy?: {
@@ -7940,7 +7940,7 @@ export type ClientAlertFieldsFragment = {
   __typename?: 'ClientAlert';
   id: string;
   note: string;
-  expirationDate?: string | null;
+  expirationDate: string;
   createdAt: string;
   priority: ClientAlertPriorityLevel;
   createdBy?: {
@@ -7963,7 +7963,7 @@ export type CreateClientAlertMutation = {
       __typename?: 'ClientAlert';
       id: string;
       note: string;
-      expirationDate?: string | null;
+      expirationDate: string;
       createdAt: string;
       priority: ClientAlertPriorityLevel;
       createdBy?: {
@@ -8002,7 +8002,7 @@ export type DeleteClientAlertMutation = {
       __typename?: 'ClientAlert';
       id: string;
       note: string;
-      expirationDate?: string | null;
+      expirationDate: string;
       createdAt: string;
       priority: ClientAlertPriorityLevel;
       createdBy?: {
@@ -8051,7 +8051,7 @@ export type GetHouseholdClientAlertsQuery = {
           __typename?: 'ClientAlert';
           id: string;
           note: string;
-          expirationDate?: string | null;
+          expirationDate: string;
           createdAt: string;
           priority: ClientAlertPriorityLevel;
           createdBy?: {
@@ -12653,7 +12653,7 @@ export type BulkServicesClientSearchQuery = {
         __typename?: 'ClientAlert';
         id: string;
         note: string;
-        expirationDate?: string | null;
+        expirationDate: string;
         createdAt: string;
         priority: ClientAlertPriorityLevel;
         createdBy?: {
@@ -12791,7 +12791,7 @@ export type ClientSearchResultFieldsFragment = {
     __typename?: 'ClientAlert';
     id: string;
     note: string;
-    expirationDate?: string | null;
+    expirationDate: string;
     createdAt: string;
     priority: ClientAlertPriorityLevel;
     createdBy?: {
@@ -12980,7 +12980,7 @@ export type ClientFieldsFragment = {
     __typename?: 'ClientAlert';
     id: string;
     note: string;
-    expirationDate?: string | null;
+    expirationDate: string;
     createdAt: string;
     priority: ClientAlertPriorityLevel;
     createdBy?: {
@@ -13203,7 +13203,7 @@ export type SearchClientsQuery = {
         __typename?: 'ClientAlert';
         id: string;
         note: string;
-        expirationDate?: string | null;
+        expirationDate: string;
         createdAt: string;
         priority: ClientAlertPriorityLevel;
         createdBy?: {
@@ -13400,7 +13400,7 @@ export type GetClientQuery = {
       __typename?: 'ClientAlert';
       id: string;
       note: string;
-      expirationDate?: string | null;
+      expirationDate: string;
       createdAt: string;
       priority: ClientAlertPriorityLevel;
       createdBy?: {
@@ -13906,7 +13906,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 __typename?: 'ClientAlert';
                 id: string;
                 note: string;
-                expirationDate?: string | null;
+                expirationDate: string;
                 createdAt: string;
                 priority: ClientAlertPriorityLevel;
                 createdBy?: {
@@ -14851,7 +14851,7 @@ export type MergeClientsMutation = {
         __typename?: 'ClientAlert';
         id: string;
         note: string;
-        expirationDate?: string | null;
+        expirationDate: string;
         createdAt: string;
         priority: ClientAlertPriorityLevel;
         createdBy?: {
@@ -18080,7 +18080,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             __typename?: 'ClientAlert';
             id: string;
             note: string;
-            expirationDate?: string | null;
+            expirationDate: string;
             createdAt: string;
             priority: ClientAlertPriorityLevel;
             createdBy?: {
@@ -25602,7 +25602,7 @@ export type SubmitFormMutation = {
             __typename?: 'ClientAlert';
             id: string;
             note: string;
-            expirationDate?: string | null;
+            expirationDate: string;
             createdAt: string;
             priority: ClientAlertPriorityLevel;
             createdBy?: {
@@ -26402,7 +26402,7 @@ export type HouseholdFieldsFragment = {
         __typename?: 'ClientAlert';
         id: string;
         note: string;
-        expirationDate?: string | null;
+        expirationDate: string;
         createdAt: string;
         priority: ClientAlertPriorityLevel;
         createdBy?: {
@@ -26480,7 +26480,7 @@ export type HouseholdClientFieldsFragment = {
       __typename?: 'ClientAlert';
       id: string;
       note: string;
-      expirationDate?: string | null;
+      expirationDate: string;
       createdAt: string;
       priority: ClientAlertPriorityLevel;
       createdBy?: {
@@ -26642,7 +26642,7 @@ export type GetHouseholdQuery = {
           __typename?: 'ClientAlert';
           id: string;
           note: string;
-          expirationDate?: string | null;
+          expirationDate: string;
           createdAt: string;
           priority: ClientAlertPriorityLevel;
           createdBy?: {
