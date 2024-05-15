@@ -22,18 +22,21 @@ export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
   return FORM_ITEM_PALETTE[type];
 };
 
+export const TreeItemContext = React.createContext<{
+  onEditButtonClicked: (item: FormItem) => void;
+}>({ onEditButtonClicked: () => {} });
+
 interface FormTreeItemProps
   extends Omit<UseTreeItem2Parameters, 'rootRef'>,
-    Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {
-  onEditClicked: (item: FormItem) => void;
-}
+    Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {}
 
 const FormTreeItem = React.forwardRef(function FormTreeItem(
   props: FormTreeItemProps,
   ref: React.Ref<HTMLLIElement>
 ) {
-  const { id, itemId, label, disabled, children, onEditClicked, ...other } =
-    props;
+  const { id, itemId, label, disabled, children, ...other } = props;
+
+  const { onEditButtonClicked } = React.useContext(TreeItemContext);
 
   const {
     getRootProps,
@@ -87,7 +90,7 @@ const FormTreeItem = React.forwardRef(function FormTreeItem(
                   aria-label='edit item'
                   onClick={(e) => {
                     e.stopPropagation();
-                    onEditClicked(item);
+                    onEditButtonClicked(item);
                   }}
                   size='small'
                   sx={{ color: (theme) => theme.palette.links, p: 0 }}

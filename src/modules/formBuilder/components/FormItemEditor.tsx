@@ -24,7 +24,9 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
         },
       }}
     >
-      <Typography variant='cardTitle'>Edit Form Item</Typography>
+      <Typography variant='cardTitle'>
+        Edit Form Item: {selectedItem?.linkId}
+      </Typography>
     </Drawer>
   );
 };
