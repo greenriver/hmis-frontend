@@ -3,6 +3,7 @@ import { Button, Grid, IconButton, Paper, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useMemo } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { EditIcon } from '@/components/elements/SemanticIcons';
 import FormOptionsMenu from '@/modules/formBuilder/components/FormOptionsMenu';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -40,31 +41,19 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
         </ButtonTooltipContainer>
       </Stack>
       <Stack direction='row' sx={{ alignItems: 'center' }}>
-        <Grid container>
-          <Grid item xs={3}>
-            Form Identifier
-          </Grid>
-          <Grid item xs={3}>
-            Form Title (Role)
-          </Grid>
-          <Grid item xs={3}>
-            Last Updated
-          </Grid>
-          <Grid item xs={3}>
-            Status
-          </Grid>
-          <Grid item xs={3}>
+        <Grid container columnGap={4} rowGap={2}>
+          <CommonLabeledTextBlock title='Form Identifier'>
             {formDefinition.identifier}
-          </Grid>
-          <Grid item xs={3}>
+          </CommonLabeledTextBlock>
+          <CommonLabeledTextBlock title='Form Type'>
             {formRole}
-          </Grid>
-          <Grid item xs={3}>
+          </CommonLabeledTextBlock>
+          <CommonLabeledTextBlock title='Last Updated'>
             {lastUpdatedDate}
-          </Grid>
-          <Grid item xs={3}>
+          </CommonLabeledTextBlock>
+          <CommonLabeledTextBlock title='Status'>
             {formDefinition.status}
-          </Grid>
+          </CommonLabeledTextBlock>
         </Grid>
         <Stack direction='row' spacing={2}>
           <Button variant='outlined' startIcon={<VisibilityIcon />}>
