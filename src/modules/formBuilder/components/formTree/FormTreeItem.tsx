@@ -1,4 +1,4 @@
-import { lighten } from '@mui/material';
+import { IconButton, Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import {
   TreeItem2Content,
@@ -11,81 +11,29 @@ import {
 } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import React, { useMemo } from 'react';
-import {
-  FormBooleanIcon,
-  FormChoiceIcon,
-  FormCurrencyIcon,
-  FormDateIcon,
-  FormDisplayIcon,
-  FormFileIcon,
-  FormGroupIcon,
-  FormImageIcon,
-  FormIntegerIcon,
-  FormObjectIcon,
-  FormStringIcon,
-  FormTextIcon,
-  FormTimeOfDayIcon,
-} from '@/components/elements/SemanticIcons';
+import { EditIcon } from '@/components/elements/SemanticIcons';
 import theme from '@/config/theme';
+import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormTreeLabel from '@/modules/formBuilder/components/formTree/FormTreeLabel';
-import { FormItemDisplay } from '@/modules/formBuilder/components/formTree/types';
-import { ItemType } from '@/types/gqlTypes';
+import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
+import { FormItem, ItemType } from '@/types/gqlTypes';
 
-const getItemDisplayAttrs = (type: string): FormItemDisplay => {
-  const defaultQuestion = {
-    // TODO - adjust these colors and make hover color work correctly when designs are finalized
-    textColor: theme.palette.success.dark,
-    backgroundColor: lighten(theme.palette.success.light, 0.95),
-    hoverColor: '',
-  };
-
-  // TODO - Show a different icon depending on both item type and component, e.g. dropdown vs. checkbox.
-  switch (type) {
-    case ItemType.Boolean:
-      return { icon: FormBooleanIcon, text: 'CheckBox', ...defaultQuestion };
-    case ItemType.Choice:
-    case ItemType.OpenChoice:
-      return { icon: FormChoiceIcon, text: 'Choice', ...defaultQuestion };
-    case ItemType.Currency:
-      return { icon: FormCurrencyIcon, text: 'Currency', ...defaultQuestion };
-    case ItemType.Date:
-      return { icon: FormDateIcon, text: 'Date', ...defaultQuestion };
-    case ItemType.Display:
-      return { icon: FormDisplayIcon, text: 'Display', ...defaultQuestion };
-    case ItemType.File:
-      return { icon: FormFileIcon, text: 'File Upload', ...defaultQuestion };
-    case ItemType.Group:
-      return { icon: FormGroupIcon, text: 'Group', ...defaultQuestion };
-    case ItemType.Image:
-      return { icon: FormImageIcon, text: 'Image Upload', ...defaultQuestion };
-    case ItemType.Integer:
-      return { icon: FormIntegerIcon, text: 'Number', ...defaultQuestion };
-    case ItemType.Object:
-      return { icon: FormObjectIcon, text: '', ...defaultQuestion }; // TODO - How should objects be displayed?
-    case ItemType.String:
-      return { icon: FormStringIcon, text: 'Text', ...defaultQuestion };
-    case ItemType.Text:
-      return { icon: FormTextIcon, text: 'Paragraph', ...defaultQuestion };
-    case ItemType.TimeOfDay:
-      return {
-        icon: FormTimeOfDayIcon,
-        text: 'Time of Day',
-        ...defaultQuestion,
-      };
-    default:
-      return { icon: FormObjectIcon, text: '', ...defaultQuestion };
-  }
+export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
+  return FORM_ITEM_PALETTE[type];
 };
 
 interface FormTreeItemProps
   extends Omit<UseTreeItem2Parameters, 'rootRef'>,
-    Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {}
+    Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {
+  onEditClicked: (item: FormItem) => void;
+}
 
 const FormTreeItem = React.forwardRef(function FormTreeItem(
   props: FormTreeItemProps,
   ref: React.Ref<HTMLLIElement>
 ) {
-  const { id, itemId, label, disabled, children, ...other } = props;
+  const { id, itemId, label, disabled, children, onEditClicked, ...other } =
+    props;
 
   const {
     getRootProps,
@@ -98,7 +46,10 @@ const FormTreeItem = React.forwardRef(function FormTreeItem(
   } = useTreeItem2({ id, itemId, children, label, disabled, rootRef: ref });
 
   const item = publicAPI.getItem(itemId);
-  const question = useMemo(() => getItemDisplayAttrs(item.type), [item.type]);
+  const displayAttrs = useMemo(
+    () => getItemDisplayAttrs(item.type),
+    [item.type]
+  );
 
   // TODO: Add visual tree styling that groups the items together using grey bars (when design is finalized)
   // Should be possible, see example https://mui.com/x/react-tree-view/rich-tree-view/customization/#file-explorer
@@ -120,7 +71,7 @@ const FormTreeItem = React.forwardRef(function FormTreeItem(
         >
           <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>
             <FormTreeLabel
-              {...getLabelProps({ question })}
+              {...getLabelProps({ displayAttrs: displayAttrs })}
               required={item.required}
             />
             <TreeItem2IconContainer
@@ -128,10 +79,23 @@ const FormTreeItem = React.forwardRef(function FormTreeItem(
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                mr: 2,
+                mr: 4,
               }}
             >
-              <TreeItem2Icon status={status} />
+              <Stack direction='row'>
+                <IconButton
+                  aria-label='edit item'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditClicked(item);
+                  }}
+                  size='small'
+                  sx={{ color: (theme) => theme.palette.links, p: 0 }}
+                >
+                  <EditIcon fontSize='inherit' />
+                </IconButton>
+                <TreeItem2Icon status={status} />
+              </Stack>
             </TreeItem2IconContainer>
           </Box>
         </TreeItem2Content>

@@ -1,12 +1,17 @@
 import { Button, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
+import { useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import useSafeParams from '@/hooks/useSafeParams';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
-import FormItemPalette from '@/modules/formBuilder/components/FormItemPalette';
+import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
+import FormItemEditor from '@/modules/formBuilder/components/FormItemEditor';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
-import { useGetFormDefinitionFieldsForEditorQuery } from '@/types/gqlTypes';
+import {
+  FormItem,
+  useGetFormDefinitionFieldsForEditorQuery,
+} from '@/types/gqlTypes';
 
 const FormBuilderPage = () => {
   const { formId } = useSafeParams() as { formId: string };
@@ -20,12 +25,20 @@ const FormBuilderPage = () => {
   const lastUpdatedDate = formatDateForDisplay(new Date());
   const lastUpdatedBy = 'User Name';
 
+  const [selectedItem, setSelectedItem] = useState<FormItem | undefined>(
+    undefined
+  );
+
   if (error) throw error;
   if (!formDefinition) return <Loading />;
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <FormItemPalette />
+      <FormBuilderPalette />
+      <FormItemEditor
+        selectedItem={selectedItem}
+        handleClose={() => setSelectedItem(undefined)}
+      />
       <Box
         sx={
           // Padding matches the padding usually applied in DashboardContentContainer.
@@ -43,7 +56,10 @@ const FormBuilderPage = () => {
           lastUpdatedDate={lastUpdatedDate}
         />
         <Box sx={{ p: 4 }}>
-          <FormTree definition={formDefinition.definition} />
+          <FormTree
+            definition={formDefinition.definition}
+            setSelectedItem={(item: FormItem) => setSelectedItem(item)}
+          />
         </Box>
         <Paper sx={{ p: 4 }}>
           <Stack
