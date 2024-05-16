@@ -45,8 +45,19 @@ export const SERVICE_COLUMNS: {
     render: (service) => (
       <Stack>
         {serviceDetails(service).map((s, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Typography key={i} variant='body2'>
+          <Typography
+            // eslint-disable-next-line react/no-array-index-key
+            key={i}
+            variant='body2'
+            sx={{
+              whiteSpace: 'pre-wrap',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: '1',
+              overflow: 'hidden',
+              maxWidth: '300px',
+            }}
+          >
             {s}
           </Typography>
         ))}
