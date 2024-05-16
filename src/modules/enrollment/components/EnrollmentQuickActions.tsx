@@ -5,6 +5,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
 import { DashboardEnrollment } from '@/modules/hmis/types';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { DataCollectionFeatureRole } from '@/types/gqlTypes';
@@ -17,6 +18,7 @@ const EnrollmentQuickActions = ({
   enrollment: DashboardEnrollment;
   enabledFeatures: DataCollectionFeatureRole[];
 }) => {
+  const { globalFeatureFlags } = useHmisAppSettings();
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
     enrollment,
   });
@@ -33,7 +35,8 @@ const EnrollmentQuickActions = ({
   const canEditClient = enrollment.client.access.canEditClient;
 
   const canViewEsgFundingReport =
-    enrollment.project.access.canManageIncomingReferrals;
+    enrollment.project.access.canManageIncomingReferrals &&
+    globalFeatureFlags?.externalReferrals;
 
   if (
     ![canRecordService, canEditClient, canViewEsgFundingReport].some((b) => !!b)
