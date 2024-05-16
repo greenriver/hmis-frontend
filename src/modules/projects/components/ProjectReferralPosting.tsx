@@ -12,6 +12,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import ProjectReferralPostingDetails from '@/modules/projects/components/ReferralPostingDetails';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
 import { ProjectDashboardRoutes } from '@/routes/routes';
@@ -22,6 +23,8 @@ import {
 import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectReferralPosting: React.FC = () => {
+  const { globalFeatureFlags: { externalReferrals } = {} } =
+    useHmisAppSettings();
   const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
   const { data, loading, error } = useGetReferralPostingQuery({
     variables: { id: referralPostingId as any as string },
@@ -52,20 +55,28 @@ const ProjectReferralPosting: React.FC = () => {
       <Grid spacing={4} container>
         <Grid item lg={4} sm={12}>
           <TitleCard title='Referral Details' sx={{ mb: 2 }} padded>
-            <ProjectReferralPostingDetails referralPosting={referralPosting} />
+            <ProjectReferralPostingDetails
+              referralPosting={referralPosting}
+              externalReferrals={externalReferrals}
+            />
           </TitleCard>
           <Stack gap={2}>
-            <ButtonLink
-              fullWidth
-              variant='outlined'
-              color='secondary'
-              to={generateSafePath(ProjectDashboardRoutes.ESG_FUNDING_REPORT, {
-                projectId: referralPosting.project?.id,
-                referralPostingId,
-              })}
-            >
-              ESG Funding Report
-            </ButtonLink>
+            {externalReferrals && (
+              <ButtonLink
+                fullWidth
+                variant='outlined'
+                color='secondary'
+                to={generateSafePath(
+                  ProjectDashboardRoutes.ESG_FUNDING_REPORT,
+                  {
+                    projectId: referralPosting.project?.id,
+                    referralPostingId,
+                  }
+                )}
+              >
+                ESG Funding Report
+              </ButtonLink>
+            )}
             {referralPosting.referralIdentifier && (
               <Button
                 fullWidth

@@ -24,8 +24,12 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   referralPosting: ReferralPostingDetailFieldsFragment;
+  externalReferrals?: boolean;
 }
-const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
+const AdminReferralPostingDetails: React.FC<Props> = ({
+  referralPosting,
+  externalReferrals,
+}) => {
   const verb = useMemo<string>(() => {
     switch (referralPosting.status) {
       case ReferralPostingStatus.DeniedPendingStatus:
@@ -53,7 +57,7 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
           sx={{ mt: 0.5 }}
         />,
       ],
-      ['Referral ID', referralPosting.referralIdentifier || 'N/A'],
+      ['Referral ID', referralPosting.referralIdentifier],
       ['Referral Date', parseAndFormatDate(referralPosting.referralDate)],
       ['Referred From', referralPosting.referredFrom],
       ['Organization Name', referralPosting.organization?.organizationName],
@@ -110,7 +114,7 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
         </Stack>
       </TitleCard>
       <Stack gap={2}>
-        {referralPosting.referralIdentifier && (
+        {referralPosting.referralIdentifier && externalReferrals && (
           <ConsumerSummaryReportButton
             referralIdentifier={referralPosting.referralIdentifier}
           />

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -16,11 +16,7 @@ import {
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
-const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
-  {
-    header: 'Referral ID',
-    render: (row) => row.referralIdentifier || 'N/A',
-  },
+const defaultColumns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'Referral Date',
     render: (row: ReferralPostingFieldsFragment) =>
@@ -55,9 +51,13 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
 
 interface Props {
   projectId: string;
+  externalReferrals?: boolean;
 }
 
-const ProjectReferralPostingsTable: React.FC<Props> = ({ projectId }) => {
+const ProjectReferralPostingsTable: React.FC<Props> = ({
+  projectId,
+  externalReferrals,
+}) => {
   const rowLinkTo = useCallback(
     (row: ReferralPostingFieldsFragment): string => {
       return generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
@@ -67,6 +67,21 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({ projectId }) => {
     },
     [projectId]
   );
+
+  const columns = useMemo(() => {
+    if (externalReferrals) {
+      // external referrals have an ID from the sending system
+      return [
+        {
+          header: 'Referral ID',
+          render: (row) => row.referralIdentifier || 'N/A',
+        },
+        ...defaultColumns,
+      ];
+    }
+
+    return defaultColumns;
+  }, [externalReferrals]);
 
   return (
     <GenericTableWithData<
