@@ -3,15 +3,15 @@ import { Box, Stack } from '@mui/system';
 import { TreeItem2Label } from '@mui/x-tree-view';
 import React from 'react';
 import theme from '@/config/theme';
-import { FormItemDisplay } from '@/modules/formBuilder/components/formTree/types';
+import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
 
 interface FormTreeLabelProps {
   children?: React.ReactNode;
-  question?: FormItemDisplay;
+  displayAttrs?: FormItemPaletteType;
   required?: boolean;
 }
 const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
-  question,
+  displayAttrs,
   children,
   required,
   ...other
@@ -24,7 +24,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         alignItems: 'center',
       }}
     >
-      {question && (
+      {displayAttrs && (
         <Badge
           invisible={!required}
           badgeContent={'*'}
@@ -49,20 +49,22 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
             sx={{
               width: 90,
               alignItems: 'center',
-              color: question.textColor,
-              backgroundColor: question.backgroundColor,
+              color: displayAttrs.textColor,
+              backgroundColor: displayAttrs.backgroundColor,
               borderRadius: '4px 0 0 4px',
               mr: 2,
               p: 1, // TODO - This styling is inflexible, looks bad when the label text is long
             }}
           >
             <Box
-              component={question.icon}
+              component={displayAttrs.IconClass}
               className='labelIcon'
               color='inherit'
               sx={{ fontSize: '1.2rem' }}
             />
-            <Typography variant='caption'>{question.text}</Typography>
+            <Typography variant='caption'>
+              {displayAttrs.displayName}
+            </Typography>
           </Stack>
         </Badge>
       )}

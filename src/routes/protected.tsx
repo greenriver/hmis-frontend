@@ -1,4 +1,4 @@
-import { ReactNode, Suspense } from 'react';
+import React, { ReactNode, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import {
@@ -43,7 +43,7 @@ import AdminReferralPosting from '@/modules/admin/components/denials/AdminReferr
 import FormDefinitionDetailPage from '@/modules/admin/components/forms/FormDefinitionDetailPage';
 import FormDefinitionsPage from '@/modules/admin/components/forms/FormDefinitionsPage';
 import FormPreview from '@/modules/admin/components/forms/FormPreview';
-import FormEditorPage from '@/modules/admin/components/forms/UpdateFormDefinitionPage';
+import JsonFormEditorPage from '@/modules/admin/components/forms/JsonFormEditorPage';
 import ProjectConfigPage from '@/modules/admin/components/projectConfig/ProjectConfigPage';
 import ConfigureServicesPage from '@/modules/admin/components/services/ConfigureServicesPage';
 import ServiceTypeDetailPage from '@/modules/admin/components/services/ServiceTypeDetailPage';
@@ -70,6 +70,7 @@ import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/E
 import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
 import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+import FormBuilderPage from '@/modules/formBuilder/components/FormBuilderPage';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -754,7 +755,15 @@ export const protectedRoutes: RouteNode[] = [
             path: AdminDashboardRoutes.EDIT_FORM,
             element: (
               <RootPermissionsFilter permissions='canManageForms'>
-                <FormEditorPage />
+                <FormBuilderPage />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
+            path: AdminDashboardRoutes.JSON_EDIT_FORM,
+            element: (
+              <RootPermissionsFilter permissions='canManageForms'>
+                <JsonFormEditorPage />
               </RootPermissionsFilter>
             ),
           },

@@ -1,5 +1,6 @@
 import { Box, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { SxProps } from '@mui/system';
 import { ReactNode } from 'react';
 
 import { DESKTOP_NAV_SIDEBAR_WIDTH } from '../layoutConstants';
@@ -24,6 +25,7 @@ interface Props {
   handleOpenMobileMenu: VoidFunction;
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
+  contentSx?: SxProps;
 }
 
 const DashboardContentContainer: React.FC<Props> = ({
@@ -40,6 +42,7 @@ const DashboardContentContainer: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   navLabel,
+  contentSx,
 }) => {
   const theme = useTheme();
   const maxPageWidth = theme.breakpoints.values.xl;
@@ -115,16 +118,17 @@ const DashboardContentContainer: React.FC<Props> = ({
             </Paper>
           )}
           <Box
+            key='content'
+            component='main'
             sx={{
               pt: 2,
               pb: 8,
               px: { xs: 1, sm: 3, lg: 4 },
               maxWidth: `${maxPageWidth}px`,
+              ...contentSx,
             }}
           >
-            <Box key='content' component='main'>
-              <SentryErrorBoundary>{children}</SentryErrorBoundary>
-            </Box>
+            <SentryErrorBoundary>{children}</SentryErrorBoundary>
           </Box>
         </Box>
       </Box>
