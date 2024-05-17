@@ -380,12 +380,10 @@ const AssessmentForm: React.FC<Props> = ({
           onSelected={onSelectAutofillRecord}
           onCancel={() => setDialogOpen(false)}
           description={
-            // <Alert severity='info' icon={false} sx={{ mb: 2 }}>
-            <Typography variant='body2' sx={{ mb: 2 }}>
+            <Typography variant='body2' sx={{ my: 2 }}>
               Select a previous assessment to populate the current assessment.
               Any changes you have made will be overwritten.
             </Typography>
-            // </Alert>
           }
         />
       )}
