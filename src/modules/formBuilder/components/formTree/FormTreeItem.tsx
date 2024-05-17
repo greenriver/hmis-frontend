@@ -14,17 +14,14 @@ import React, { useMemo } from 'react';
 import { EditIcon } from '@/components/elements/SemanticIcons';
 import theme from '@/config/theme';
 import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
+import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
 import FormTreeLabel from '@/modules/formBuilder/components/formTree/FormTreeLabel';
 import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
-import { FormItem, ItemType } from '@/types/gqlTypes';
+import { ItemType } from '@/types/gqlTypes';
 
 export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
   return FORM_ITEM_PALETTE[type];
 };
-
-export const TreeItemContext = React.createContext<{
-  onEditButtonClicked: (item: FormItem) => void;
-}>({ onEditButtonClicked: () => {} });
 
 interface FormTreeItemProps
   extends Omit<UseTreeItem2Parameters, 'rootRef'>,
@@ -36,7 +33,7 @@ const FormTreeItem = React.forwardRef(function FormTreeItem(
 ) {
   const { id, itemId, label, disabled, children, ...other } = props;
 
-  const { onEditButtonClicked } = React.useContext(TreeItemContext);
+  const { onEditButtonClicked } = React.useContext(FormTreeContext);
 
   const {
     getRootProps,
