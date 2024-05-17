@@ -71,6 +71,8 @@ const RecordPickerDialog = ({
   }, [item]);
 
   // Need to set height on the dialog in order for the scrolling to work
+  // Columns are really rows here because this is a vertical table.
+  // The height should be between 550 and 850, with the # of columns determining where it falls within that.
   const height = `${Math.min(Math.max(columns.length * 60 + 250, 550), 850)}px`;
 
   const hudRoles = [
@@ -107,7 +109,6 @@ const RecordPickerDialog = ({
         sx={{
           pb: 6,
           my: 2,
-          overflow: 'hidden',
           height: '100%', // need for scrolling
         }}
       >
