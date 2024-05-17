@@ -1,9 +1,8 @@
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import React, { useMemo } from 'react';
 import Loading from '@/components/elements/Loading';
-import FormTreeItem, {
-  TreeItemContext,
-} from '@/modules/formBuilder/components/formTree/FormTreeItem';
+import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
+import FormTreeItem from '@/modules/formBuilder/components/formTree/FormTreeItem';
 import { getItemsForTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
 import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
@@ -27,7 +26,7 @@ const FormTree: React.FC<FormTreeProps> = ({ definition, setSelectedItem }) => {
   if (!definition) return <Loading />;
 
   return (
-    <TreeItemContext.Provider value={context}>
+    <FormTreeContext.Provider value={context}>
       <RichTreeView
         aria-label='form tree view'
         items={definitionForTree}
@@ -35,7 +34,7 @@ const FormTree: React.FC<FormTreeProps> = ({ definition, setSelectedItem }) => {
         getItemLabel={(item) => item.text || item.helperText || item.linkId}
         slots={{ item: FormTreeItem }}
       />
-    </TreeItemContext.Provider>
+    </FormTreeContext.Provider>
   );
 };
 
