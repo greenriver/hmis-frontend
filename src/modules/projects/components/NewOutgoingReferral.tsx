@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import ProjectOutgoingReferralForm from './ProjectOutgoingReferralForm';
 
-import { CommonCard } from '@/components/elements/CommonCard';
+import PageTitle from '@/components/layout/PageTitle';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -18,9 +18,10 @@ const NewOutgoingReferral: React.FC = () => {
     );
 
   return (
-    <CommonCard title='Create Referral' sx={{ mb: 2 }}>
+    <>
+      <PageTitle title='Create Referral' />
       <ProjectOutgoingReferralForm project={project} onComplete={onComplete} />
-    </CommonCard>
+    </>
   );
 };
 export default NewOutgoingReferral;

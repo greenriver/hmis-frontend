@@ -10,6 +10,7 @@ import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import {
   parseAndFormatDate,
   parseAndFormatDateTime,
+  customDataElementValueAsString,
 } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -84,9 +85,15 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
     ].filter((ary): ary is [string, ReactNode] => !!ary[1]);
   }, [externalReferrals, referralPosting]);
 
+  const customDetails: Array<[string, ReactNode]> = useMemo(() => {
+    return referralPosting.customDataElements.map((element) => [
+      element.label,
+      customDataElementValueAsString(element),
+    ]);
+  }, [referralPosting]);
   return (
     <Grid container columnSpacing={6} rowSpacing={2}>
-      {[standardDetails, externalDetails]
+      {[standardDetails, externalDetails, customDetails]
         .filter((list) => list.length > 0)
         .map((list) => (
           <Grid item key={list[0][0]}>

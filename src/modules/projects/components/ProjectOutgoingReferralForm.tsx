@@ -1,22 +1,19 @@
-import { LoadingButton } from '@mui/lab';
 import { Box, Stack } from '@mui/system';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import {
-  emptyErrorState,
-  hasAnyValue,
-  partitionValidations,
-} from '@/modules/errors/util';
+import { hasAnyValue } from '@/modules/errors/util';
 import DynamicField from '@/modules/form/components/DynamicField';
+import DynamicForm from '@/modules/form/components/DynamicForm';
+import { useDynamicFormHandlersForRecord } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
+import useFormDefinition from '@/modules/form/hooks/useFormDefinition';
 import { itemDefaults } from '@/modules/form/util/formUtil';
 import {
   ItemType,
   PickListOption,
   PickListType,
   ProjectAllFieldsFragment,
-  useCreateOutgoingReferralPostingMutation,
+  RecordFormRole,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -36,42 +33,57 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
   onComplete,
 }) => {
   const [formState, setFormState] = useState<FormState>({});
-  const [errors, setErrors] = useState(emptyErrorState);
-  const [mutate, { loading }] = useCreateOutgoingReferralPostingMutation({
-    onCompleted: (data) => {
-      const { errors: remoteErrors = [] } =
-        data.createOutgoingReferralPosting || {};
-      if (remoteErrors.length) {
-        setErrors(partitionValidations(remoteErrors));
-      } else {
-        onComplete();
-      }
-    },
-    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
+  const { formDefinition } = useFormDefinition({
+    role: RecordFormRole.Referral,
+    // form selection is based on the receiving proeject
+    projectId: formState.selectedProject?.code,
   });
+
+  const hookArgs = useMemo(() => {
+    // const localConstants = {
+    //   errorRef,
+    //   hudRecordType: serviceType?.hudRecordType,
+    //   hudTypeProvided: serviceType?.hudTypeProvided,
+    //   entryDate: enrollment?.entryDate,
+    //   exitDate: enrollment?.exitDate,
+    //   ...AlwaysPresentLocalConstants,
+    // };
+    return {
+      formDefinition,
+      record: {},
+      // localConstants,
+      inputVariables: {
+        projectId: formState.selectedProject?.code,
+        enrollmentId: formState?.selectedEnrollment?.code,
+      },
+      onCompleted: () => {
+        onComplete();
+        // cache.evict({
+        //   id: `Enrollment:${enrollmentId}`,
+        //   fieldName: 'services',
+        // });
+        // setFormState({});
+        // setDialogOpen(false);
+        // onClose();
+      },
+    };
+  }, [
+    formState,
+    formDefinition,
+    onComplete,
+    // service,
+    // enrollmentId,
+    // enrollment,
+    // onClose,
+  ]);
+
+  const { initialValues, errors, onSubmit, submitLoading } =
+    useDynamicFormHandlersForRecord(hookArgs);
 
   const pickListArgsForEnrollmentPicker = useMemo(
     () => ({ projectId: project.id }),
     [project]
   );
-  const pickListArgsForUnitPicker = useMemo(
-    () => ({ projectId: formState.selectedProject?.code }),
-    [formState]
-  );
-
-  const handleSubmit = useCallback(() => {
-    setErrors(emptyErrorState);
-    mutate({
-      variables: {
-        input: {
-          enrollmentId: formState.selectedEnrollment?.code,
-          projectId: formState.selectedProject?.code,
-          unitTypeId: formState.selectedUnitType?.code,
-          note: formState.note,
-        },
-      },
-    });
-  }, [mutate, formState]);
 
   // Note: we're not using DynamicForm here because of the need to use separate "pick list args"
   // for different elements based on selection: the unit type pick list depends on which project
@@ -81,7 +93,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
       {errors && hasAnyValue(errors) && (
         <Stack gap={1} sx={{ mt: 4 }}>
           <ApolloErrorAlert error={errors.apolloError} />
-          <ErrorAlert key='errors' errors={errors.errors} />
+          {/* <ErrorAlert key='errors' errors={errors.errors} /> */}
         </Stack>
       )}
       <Stack gap={2}>
@@ -118,51 +130,32 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
             }))
           }
         />
-        {formState.selectedProject && (
-          <DynamicField
-            value={formState.selectedUnitType}
-            item={{
-              ...itemDefaults,
-              type: ItemType.Choice,
-              required: true,
-              linkId: 'unitType',
-              text: 'Unit Type',
-              pickListReference: PickListType.AvailableUnitTypes,
-            }}
-            pickListArgs={pickListArgsForUnitPicker}
-            itemChanged={({ value }) =>
-              setFormState((old) => ({ ...old, selectedUnitType: value }))
-            }
-          />
+
+        {formState.selectedProject && formDefinition && (
+          <Box
+            // unset top-level card styling for form sections
+            sx={{ '.HmisForm-card': { px: 0, pt: 1, pb: 0, border: 'unset' } }}
+          >
+            <DynamicForm
+              key={formState.selectedProject?.code}
+              definition={formDefinition.definition}
+              onSubmit={onSubmit}
+              initialValues={initialValues}
+              loading={submitLoading}
+              errors={errors}
+              // ref={formRef}
+              // {...props}
+              pickListArgs={{ projectId: formState.selectedProject?.code }}
+              FormActionProps={{
+                submitButtonText: 'Refer Household',
+                discardButtonText: 'Cancel',
+              }}
+              // hideSubmit
+              // errorRef={errorRef}
+            />
+          </Box>
         )}
-        <DynamicField
-          value={formState.note}
-          item={{
-            ...itemDefaults,
-            type: ItemType.Text,
-            linkId: 'note',
-            text: 'Resource Coordinator Notes',
-          }}
-          itemChanged={({ value }) =>
-            setFormState((old) => ({ ...old, note: value }))
-          }
-        />
       </Stack>
-      <LoadingButton
-        type='submit'
-        variant='contained'
-        color='primary'
-        sx={{ mt: 3, mb: 2 }}
-        loading={loading}
-        onClick={handleSubmit}
-        disabled={
-          !formState.selectedEnrollment ||
-          !formState.selectedProject ||
-          !formState.selectedUnitType
-        }
-      >
-        Refer Household
-      </LoadingButton>
     </Box>
   );
 };
