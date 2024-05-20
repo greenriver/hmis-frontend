@@ -59,7 +59,7 @@ export interface DynamicFieldProps {
 
 export interface DynamicViewFieldProps {
   item: FormItem;
-  nestingLevel: number;
+  nestingLevel?: number;
   value: any;
   horizontal?: boolean;
   pickListArgs?: PickListArgs;
