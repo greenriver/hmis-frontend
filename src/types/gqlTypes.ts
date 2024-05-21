@@ -4479,6 +4479,8 @@ export enum PickListType {
   Geocode = 'GEOCODE',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
+  /** Open Projects that the user can see */
+  OpenProjects = 'OPEN_PROJECTS',
   /** All Organizations that the User can see */
   Organization = 'ORGANIZATION',
   /** Unit types that are eligible to be added to project */
@@ -5920,6 +5922,8 @@ export enum ReasonNotEnrolled {
   ClientWasNotEnrolledForOtherReasonS = 'CLIENT_WAS_NOT_ENROLLED_FOR_OTHER_REASON_S',
   /** Invalid Value */
   Invalid = 'INVALID',
+  /** (3) Unable to locate client */
+  UnableToLocateClient = 'UNABLE_TO_LOCATE_CLIENT',
 }
 
 /** 4.04.A */
@@ -6286,8 +6290,6 @@ export type RenameServiceTypePayload = {
 
 /** 3.12.A */
 export enum RentalSubsidyType {
-  /** (436) Emergency Housing Voucher */
-  EmergencyHousingVoucher = 'EMERGENCY_HOUSING_VOUCHER',
   /** (437) Family Unification Program Voucher (FUP) */
   FamilyUnificationProgramVoucherFup = 'FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP',
   /** (438) Foster Youth to Independence Initiative (FYI) */
@@ -6296,6 +6298,8 @@ export enum RentalSubsidyType {
   GpdTipHousingSubsidy = 'GPD_TIP_HOUSING_SUBSIDY',
   /** (433) HCV voucher (tenant or project based) (not dedicated) */
   HcvVoucher = 'HCV_VOUCHER',
+  /** (436) Housing Stability Voucher */
+  HousingStabilityVoucher = 'HOUSING_STABILITY_VOUCHER',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (440) Other permanent housing dedicated for formerly homeless persons */

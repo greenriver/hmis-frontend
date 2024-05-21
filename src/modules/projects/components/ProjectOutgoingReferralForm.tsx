@@ -108,7 +108,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
             required: true,
             linkId: 'project',
             text: 'Project',
-            pickListReference: PickListType.Project,
+            pickListReference: PickListType.OpenProjects,
           }}
           itemChanged={({ value }) =>
             setFormState((old) => ({
