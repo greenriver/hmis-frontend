@@ -1,7 +1,7 @@
 import { Divider, Drawer, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import FormEditorItemPreview from '@/modules/formBuilder/components/FormEditorItemPreview';
-import { FormItem } from '@/types/gqlTypes';
+import { FormItem, ItemType } from '@/types/gqlTypes';
 
 interface FormItemEditorProps {
   selectedItem?: FormItem;
@@ -36,12 +36,16 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
         <Typography variant='cardTitle'>
           Edit Form Item: {selectedItem.linkId}
         </Typography>
-        <Divider />
-        <FormEditorItemPreview
-          selectedItem={selectedItem}
-          value={value}
-          setValue={setValue}
-        />
+        {selectedItem.type !== ItemType.Group && (
+          <>
+            <Divider />
+            <FormEditorItemPreview
+              selectedItem={selectedItem}
+              value={value}
+              setValue={setValue}
+            />
+          </>
+        )}
         <Divider />
       </Stack>
     </Drawer>

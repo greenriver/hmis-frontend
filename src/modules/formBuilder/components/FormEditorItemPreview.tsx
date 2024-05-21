@@ -7,7 +7,7 @@ import {
 } from '@/modules/admin/components/forms/FormPreview';
 import DynamicField from '@/modules/form/components/DynamicField';
 import DynamicViewField from '@/modules/form/components/viewable/DynamicViewField';
-import { FormItem, ItemType } from '@/types/gqlTypes';
+import { FormItem } from '@/types/gqlTypes';
 
 interface FormEditorItemPreviewProps {
   selectedItem: FormItem;
@@ -21,8 +21,6 @@ const FormEditorItemPreview: React.FC<FormEditorItemPreviewProps> = ({
   setValue,
 }) => {
   const [toggleValue, setToggleValue] = useState<PreviewMode>('input');
-
-  if (selectedItem.type === ItemType.Group) return;
 
   return (
     <>
