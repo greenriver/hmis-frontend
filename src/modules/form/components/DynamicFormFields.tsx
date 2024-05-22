@@ -135,7 +135,6 @@ const DynamicFormFields: React.FC<Props> = ({
           item={item}
           value={values[item.linkId]}
           disabled={isDisabled}
-          nestingLevel={nestingLevel}
           horizontal={horizontal}
           pickListArgs={pickListArgs}
           // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
