@@ -38,6 +38,7 @@ const FormBuilderPage = () => {
       {selectedItem && (
         <FormItemEditor
           selectedItem={selectedItem}
+          definition={formDefinition}
           handleClose={() => setSelectedItem(undefined)}
         />
       )}
