@@ -150,7 +150,9 @@ mutation SubmitForm($input: SubmitFormInput!) {
       ... on HmisParticipation {
         ...HmisParticipationFields
       }
-      # TODO add referral
+      ... on ReferralPosting {
+        id
+      }
     }
     errors {
       ...ValidationErrorFields

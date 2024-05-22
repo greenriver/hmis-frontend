@@ -26248,7 +26248,7 @@ export type SubmitFormMutation = {
             email: string;
           } | null;
         }
-      | { __typename?: 'ReferralPosting' }
+      | { __typename?: 'ReferralPosting'; id: string }
       | {
           __typename?: 'ReferralRequest';
           id: string;
@@ -39037,6 +39037,9 @@ export const SubmitFormDocument = gql`
         }
         ... on HmisParticipation {
           ...HmisParticipationFields
+        }
+        ... on ReferralPosting {
+          id
         }
       }
       errors {

@@ -1,104 +1,42 @@
 import { Box, Stack } from '@mui/system';
 import { useMemo, useState } from 'react';
 
-import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { hasAnyValue } from '@/modules/errors/util';
+import { useNavigate } from 'react-router-dom';
+import ProjectOutgoingReferralDetailsSubForm from './ProjectOutgoingReferralDetailsSubForm';
+import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import DynamicField from '@/modules/form/components/DynamicField';
-import DynamicForm from '@/modules/form/components/DynamicForm';
-import { useDynamicFormHandlersForRecord } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
-import useFormDefinition from '@/modules/form/hooks/useFormDefinition';
 import { itemDefaults } from '@/modules/form/util/formUtil';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
-  Component,
   ItemType,
   PickListOption,
   PickListType,
   ProjectAllFieldsFragment,
-  RecordFormRole,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   project: ProjectAllFieldsFragment;
-  onComplete: VoidFunction;
 }
 
 type FormState = {
   selectedEnrollment?: PickListOption;
   selectedProject?: PickListOption;
-  selectedUnitType?: PickListOption;
-  nonContinuum?: boolean;
-  note?: string;
 };
 
-const ProjectOutgoingReferralForm: React.FC<Props> = ({
-  project,
-  onComplete,
-}) => {
+const ProjectOutgoingReferralForm: React.FC<Props> = ({ project }) => {
+  const navigate = useNavigate();
   const [formState, setFormState] = useState<FormState>({});
-  const { formDefinition, loading: formDefinitionLoading } = useFormDefinition({
-    role: RecordFormRole.Referral,
-    // form selection is based on the receiving proeject
-    projectId: formState.selectedProject?.code,
-  });
-
-  const hookArgs = useMemo(() => {
-    // const localConstants = {
-    //   errorRef,
-    //   hudRecordType: serviceType?.hudRecordType,
-    //   hudTypeProvided: serviceType?.hudTypeProvided,
-    //   entryDate: enrollment?.entryDate,
-    //   exitDate: enrollment?.exitDate,
-    //   ...AlwaysPresentLocalConstants,
-    // };
-    return {
-      formDefinition,
-      record: {},
-      // localConstants,
-      inputVariables: {
-        projectId: formState.selectedProject?.code,
-        enrollmentId: formState?.selectedEnrollment?.code,
-      },
-      onCompleted: () => {
-        onComplete();
-        // cache.evict({
-        //   id: `Enrollment:${enrollmentId}`,
-        //   fieldName: 'services',
-        // });
-        // setFormState({});
-        // setDialogOpen(false);
-        // onClose();
-      },
-    };
-  }, [
-    formState,
-    formDefinition,
-    onComplete,
-    // service,
-    // enrollmentId,
-    // enrollment,
-    // onClose,
-  ]);
-
-  const { initialValues, errors, onSubmit, submitLoading } =
-    useDynamicFormHandlersForRecord(hookArgs);
 
   const pickListArgsForEnrollmentPicker = useMemo(
     () => ({ projectId: project.id }),
     [project]
   );
 
-  // Note: we're not using DynamicForm here because of the need to use separate "pick list args"
-  // for different elements based on selection: the unit type pick list depends on which project
-  // is chosen. If DynamicForm is updated to support that, we could switch back to using it here.
   return (
     <Box>
-      {errors && hasAnyValue(errors) && (
-        <Stack gap={1} sx={{ mt: 4 }}>
-          <ApolloErrorAlert error={errors.apolloError} />
-          {/* <ErrorAlert key='errors' errors={errors.errors} /> */}
-        </Stack>
-      )}
       <Stack gap={2}>
+        {/* use DynamicField to get remote Pick list behavior */}
         <DynamicField
           value={formState.selectedEnrollment}
           item={{
@@ -114,103 +52,35 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
             setFormState((old) => ({ ...old, selectedEnrollment: value }))
           }
         />
-
-        {!formState.nonContinuum && (
-          <DynamicField
-            value={formState.selectedProject}
-            item={{
-              ...itemDefaults,
-              type: ItemType.Choice,
-              required: true,
-              linkId: 'project',
-              text: 'Project',
-              pickListReference: PickListType.OpenProjects,
-            }}
-            itemChanged={({ value }) =>
-              setFormState((old) => ({
-                ...old,
-                selectedProject: value,
-                selectedUnitType: undefined,
-              }))
-            }
-          />
-        )}
+        {/* use DynamicField to get remote Pick list behavior */}
         <DynamicField
-          value={formState.nonContinuum}
+          value={formState.selectedProject}
           item={{
             ...itemDefaults,
-            type: ItemType.Boolean,
-            component: Component.Checkbox,
-            required: false,
-            linkId: 'non-continuum',
-            text: 'Referral to Non-Continuum Project',
+            type: ItemType.Choice,
+            required: true,
+            linkId: 'project',
+            text: 'Project',
+            pickListReference: PickListType.OpenProjects,
           }}
           itemChanged={({ value }) =>
-            setFormState((old) => ({
-              ...old,
-              selectedProject: undefined,
-              selectedUnitType: undefined,
-              nonContinuum: value,
-            }))
+            setFormState((old) => ({ ...old, selectedProject: value }))
           }
         />
-        {formState.nonContinuum && (
-          <DynamicField
-            value={formState.nonContinuum}
-            item={{
-              ...itemDefaults,
-              type: ItemType.Choice,
-              component: Component.Dropdown,
-              required: false,
-              linkId: 'non-continuum-why',
-              text: 'Event Type',
-              pickListOptions: [
-                {
-                  code: 'one',
-                  label: 'Ineligible for continuum services',
-                },
-                {
-                  code: 'two',
-                  label: 'No availability in continuum services',
-                },
-              ],
-            }}
-            itemChanged={({ value }) =>
-              setFormState((old) => ({
-                ...old,
-                selectedProject: undefined,
-                selectedUnitType: undefined,
-                nonContinuum: value,
-              }))
-            }
-          />
-        )}
-        {formState.selectedProject && formDefinitionLoading && (
-          <>Loading details...</>
-        )}
-        {formState.selectedProject && formDefinition && (
-          <Box
-            // unset top-level card styling for form sections
-            sx={{ '.HmisForm-card': { px: 0, pt: 1, pb: 0, border: 'unset' } }}
-          >
-            <DynamicForm
-              key={formState.selectedProject?.code}
-              definition={formDefinition.definition}
-              onSubmit={onSubmit}
-              initialValues={initialValues}
-              loading={submitLoading}
-              errors={errors}
-              // ref={formRef}
-              // {...props}
-              pickListArgs={{ projectId: formState.selectedProject?.code }}
-              FormActionProps={{
-                submitButtonText: 'Refer Household',
-                discardButtonText: 'Cancel',
-              }}
-              // hideSubmit
-              // errorRef={errorRef}
+        {formState.selectedProject && formState.selectedEnrollment && (
+          <SentryErrorBoundary>
+            <ProjectOutgoingReferralDetailsSubForm
+              enrollmentId={formState.selectedEnrollment.code}
+              destinationProjectId={formState.selectedProject.code}
+              onSuccess={() =>
+                navigate(
+                  generateSafePath(ProjectDashboardRoutes.REFERRALS, {
+                    projectId: project.id,
+                  })
+                )
+              }
             />
-          </Box>
+          </SentryErrorBoundary>
         )}
       </Stack>
     </Box>
