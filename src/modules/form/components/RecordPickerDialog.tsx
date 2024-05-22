@@ -70,9 +70,6 @@ const RecordPickerDialog = ({
     return [...assessmentColumns, ...dataColumns];
   }, [item]);
 
-  // Need to set height on the dialog in order for the scrolling to work
-  const height = `${Math.min(Math.max(columns.length * 60 + 250, 550), 850)}px`;
-
   const hudRoles = [
     AssessmentRole.Intake,
     AssessmentRole.Update,
@@ -89,7 +86,7 @@ const RecordPickerDialog = ({
       fullWidth
       onClose={onCancel}
       sx={{
-        '.MuiDialog-paper': { overflow: 'hidden', height },
+        '.MuiDialog-paper': { overflow: 'hidden' },
       }}
       {...other}
     >
@@ -105,10 +102,8 @@ const RecordPickerDialog = ({
 
       <DialogContent
         sx={{
-          pb: 6,
-          my: 2,
-          overflow: 'hidden',
-          height: '100%', // need for scrolling
+          pb: 2,
+          my: 0,
         }}
       >
         {description}

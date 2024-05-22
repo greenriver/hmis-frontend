@@ -189,7 +189,7 @@ const IndividualAssessment = ({
 };
 
 const WrappedAssessment = (props: IndividualAssessmentProps) => (
-  <Box sx={{ mt: { xs: 0, lg: 2 } }}>
+  <Box sx={{ mt: 0 }}>
     <SentryErrorBoundary>
       <IndividualAssessment {...props} />
     </SentryErrorBoundary>
