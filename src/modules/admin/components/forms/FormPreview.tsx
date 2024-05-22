@@ -22,8 +22,8 @@ import {
 } from '@/modules/form/util/formUtil';
 import { useGetFormDefinitionFieldsForEditorQuery } from '@/types/gqlTypes';
 
-type PreviewMode = 'input' | 'readOnly';
-const toggleItems: ToggleItem<PreviewMode>[] = [
+export type PreviewMode = 'input' | 'readOnly';
+export const toggleItems: ToggleItem<PreviewMode>[] = [
   {
     value: 'input',
     label: 'Input View',

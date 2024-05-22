@@ -1,5 +1,7 @@
-import { Drawer, Typography } from '@mui/material';
-import { FormItem } from '@/types/gqlTypes';
+import { Divider, Drawer, Stack, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import FormEditorItemPreview from '@/modules/formBuilder/components/FormEditorItemPreview';
+import { FormItem, ItemType } from '@/types/gqlTypes';
 
 interface FormItemEditorProps {
   selectedItem?: FormItem;
@@ -10,10 +12,16 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
   selectedItem,
   handleClose,
 }) => {
+  const [value, setValue] = useState<any>(undefined);
+  if (!selectedItem) return;
+
   return (
     <Drawer
       open={!!selectedItem}
-      onClose={handleClose}
+      onClose={() => {
+        setValue(undefined);
+        handleClose();
+      }}
       anchor='right'
       sx={{
         width: '50vw',
@@ -24,9 +32,22 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
         },
       }}
     >
-      <Typography variant='cardTitle'>
-        Edit Form Item: {selectedItem?.linkId}
-      </Typography>
+      <Stack gap={2}>
+        <Typography variant='cardTitle'>
+          Edit Form Item: {selectedItem.linkId}
+        </Typography>
+        {selectedItem.type !== ItemType.Group && (
+          <>
+            <Divider />
+            <FormEditorItemPreview
+              selectedItem={selectedItem}
+              value={value}
+              setValue={setValue}
+            />
+          </>
+        )}
+        <Divider />
+      </Stack>
     </Drawer>
   );
 };

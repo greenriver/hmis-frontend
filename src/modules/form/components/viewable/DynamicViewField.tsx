@@ -52,7 +52,6 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 
 const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   item,
-  // nestingLevel,
   value,
   horizontal = false,
   pickListArgs,
