@@ -1,4 +1,5 @@
-import { Box, Stack } from '@mui/system';
+import { Paper } from '@mui/material';
+import { Stack } from '@mui/system';
 import { useMemo, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
@@ -34,7 +35,14 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({ project }) => {
   );
 
   return (
-    <Box>
+    <Paper
+      sx={{
+        py: 3,
+        px: 2.5,
+        pageBreakInside: 'avoid',
+        maxWidth: 500,
+      }}
+    >
       <Stack gap={2}>
         {/* use DynamicField to get remote Pick list behavior */}
         <DynamicField
@@ -83,7 +91,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({ project }) => {
           </SentryErrorBoundary>
         )}
       </Stack>
-    </Box>
+    </Paper>
   );
 };
 

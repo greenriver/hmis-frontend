@@ -60,7 +60,7 @@ const ProjectOutgoingReferralDetailsSubForm: React.FC<Props> = ({
   return (
     <Box>
       {formDefinitionLoading && (
-        <LoadingSkeleton width={500} count={1} sx={{ my: 2 }} />
+        <LoadingSkeleton width={'100%'} count={1} sx={{ my: 2 }} />
       )}
       {formDefinition && (
         <Box
