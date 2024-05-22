@@ -9,6 +9,7 @@ import { useDynamicFormHandlersForRecord } from '@/modules/form/hooks/useDynamic
 import useFormDefinition from '@/modules/form/hooks/useFormDefinition';
 import { itemDefaults } from '@/modules/form/util/formUtil';
 import {
+  Component,
   ItemType,
   PickListOption,
   PickListType,
@@ -25,6 +26,7 @@ type FormState = {
   selectedEnrollment?: PickListOption;
   selectedProject?: PickListOption;
   selectedUnitType?: PickListOption;
+  nonContinuum?: boolean;
   note?: string;
 };
 
@@ -33,7 +35,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
   onComplete,
 }) => {
   const [formState, setFormState] = useState<FormState>({});
-  const { formDefinition } = useFormDefinition({
+  const { formDefinition, loading: formDefinitionLoading } = useFormDefinition({
     role: RecordFormRole.Referral,
     // form selection is based on the receiving proeject
     projectId: formState.selectedProject?.code,
@@ -112,25 +114,80 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
             setFormState((old) => ({ ...old, selectedEnrollment: value }))
           }
         />
+
+        {!formState.nonContinuum && (
+          <DynamicField
+            value={formState.selectedProject}
+            item={{
+              ...itemDefaults,
+              type: ItemType.Choice,
+              required: true,
+              linkId: 'project',
+              text: 'Project',
+              pickListReference: PickListType.OpenProjects,
+            }}
+            itemChanged={({ value }) =>
+              setFormState((old) => ({
+                ...old,
+                selectedProject: value,
+                selectedUnitType: undefined,
+              }))
+            }
+          />
+        )}
         <DynamicField
-          value={formState.selectedProject}
+          value={formState.nonContinuum}
           item={{
             ...itemDefaults,
-            type: ItemType.Choice,
-            required: true,
-            linkId: 'project',
-            text: 'Project',
-            pickListReference: PickListType.OpenProjects,
+            type: ItemType.Boolean,
+            component: Component.Checkbox,
+            required: false,
+            linkId: 'non-continuum',
+            text: 'Referral to Non-Continuum Project',
           }}
           itemChanged={({ value }) =>
             setFormState((old) => ({
               ...old,
-              selectedProject: value,
+              selectedProject: undefined,
               selectedUnitType: undefined,
+              nonContinuum: value,
             }))
           }
         />
-
+        {formState.nonContinuum && (
+          <DynamicField
+            value={formState.nonContinuum}
+            item={{
+              ...itemDefaults,
+              type: ItemType.Choice,
+              component: Component.Dropdown,
+              required: false,
+              linkId: 'non-continuum-why',
+              text: 'Event Type',
+              pickListOptions: [
+                {
+                  code: 'one',
+                  label: 'Ineligible for continuum services',
+                },
+                {
+                  code: 'two',
+                  label: 'No availability in continuum services',
+                },
+              ],
+            }}
+            itemChanged={({ value }) =>
+              setFormState((old) => ({
+                ...old,
+                selectedProject: undefined,
+                selectedUnitType: undefined,
+                nonContinuum: value,
+              }))
+            }
+          />
+        )}
+        {formState.selectedProject && formDefinitionLoading && (
+          <>Loading details...</>
+        )}
         {formState.selectedProject && formDefinition && (
           <Box
             // unset top-level card styling for form sections
