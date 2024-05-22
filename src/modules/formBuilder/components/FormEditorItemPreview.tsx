@@ -10,13 +10,13 @@ import DynamicViewField from '@/modules/form/components/viewable/DynamicViewFiel
 import { FormItem } from '@/types/gqlTypes';
 
 interface FormEditorItemPreviewProps {
-  selectedItem: FormItem;
+  item: FormItem;
   value?: any;
   setValue: (value: any) => void;
 }
 
 const FormEditorItemPreview: React.FC<FormEditorItemPreviewProps> = ({
-  selectedItem,
+  item,
   value,
   setValue,
 }) => {
@@ -32,12 +32,12 @@ const FormEditorItemPreview: React.FC<FormEditorItemPreviewProps> = ({
         size='small'
         variant='gray'
       />
-      {toggleValue === 'readOnly' ? (
-        <DynamicViewField item={selectedItem} value={value} />
+      {toggleValue === 'readOnly' || item.readOnly ? (
+        <DynamicViewField item={item} value={value} />
       ) : (
         <DynamicField
           value={value}
-          item={selectedItem}
+          item={item}
           itemChanged={({ value }) => setValue(value)}
         />
       )}
