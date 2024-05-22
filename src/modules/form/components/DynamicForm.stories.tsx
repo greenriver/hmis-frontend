@@ -7,7 +7,8 @@ import { Default as ViewStory } from './viewable/DynamicView.stories';
 
 import { emptyErrorState } from '@/modules/errors/util';
 import formData from '@/test/__mocks__/mockFormDefinition.json';
-import { FormDefinitionJson } from '@/types/gqlTypes';
+import { generateMockValuesForDefinition } from '@/test/utils/testUtils';
+import { FormDefinitionJson, ItemType } from '@/types/gqlTypes';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
 
@@ -67,6 +68,32 @@ WithValuesAsReadOnly.args = {
   ),
   initialValues: ViewStory.args?.values,
   errors: emptyErrorState,
+};
+
+// Render a mini form that doesn't have a top-level group
+const miniForm = {
+  item: [
+    {
+      type: ItemType.String,
+      required: true,
+      linkId: 'name',
+      text: 'Staff name',
+    },
+    {
+      type: ItemType.Integer,
+      required: false,
+      readOnly: true,
+      linkId: 'age',
+      text: "Client's age (read-only)",
+    },
+  ],
+} as FormDefinitionJson;
+export const MiniForm = Template.bind({});
+MiniForm.args = {
+  definition: miniForm,
+  initialValues: generateMockValuesForDefinition(miniForm),
+  errors: emptyErrorState,
+  hideSubmit: true,
 };
 
 // Render the DynamicForm with all fields having extra long labels
