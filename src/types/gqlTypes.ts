@@ -6119,6 +6119,7 @@ export type ReferralPosting = {
   assignedDate: Scalars['ISO8601DateTime']['output'];
   chronic?: Maybe<Scalars['Boolean']['output']>;
   customDataElements: Array<CustomDataElement>;
+  /** Admin Note associated with the denial (entered from the Denial Screen) */
   denialNote?: Maybe<Scalars['String']['output']>;
   denialReason?: Maybe<ReferralPostingDenialReasonType>;
   hohClient?: Maybe<Client>;
@@ -6137,15 +6138,21 @@ export type ReferralPosting = {
   project?: Maybe<Project>;
   referralDate: Scalars['ISO8601DateTime']['output'];
   referralIdentifier?: Maybe<Scalars['ID']['output']>;
+  /** Note associated with the Referral that came from an External API */
   referralNotes?: Maybe<Scalars['String']['output']>;
   referralRequest?: Maybe<ReferralRequest>;
   referralResult?: Maybe<ReferralResult>;
   referredBy: Scalars['String']['output'];
   /** Name of project or external source that the referral originated from */
   referredFrom: Scalars['String']['output'];
+  /**
+   * Note associated with the Referral Posting that either came from the External
+   * API, or was entered when creating a referral within HMIS
+   */
   resourceCoordinatorNotes?: Maybe<Scalars['String']['output']>;
   score?: Maybe<Scalars['Int']['output']>;
   status: ReferralPostingStatus;
+  /** Note associated with the status (E.g. why it was accepted pending / denied pending) */
   statusNote?: Maybe<Scalars['String']['output']>;
   statusNoteUpdatedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   statusNoteUpdatedBy?: Maybe<Scalars['String']['output']>;
