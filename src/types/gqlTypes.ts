@@ -2305,6 +2305,8 @@ export type Enrollment = {
   sexualOrientation?: Maybe<SexualOrientation>;
   sexualOrientationOther?: Maybe<Scalars['String']['output']>;
   singleParent?: Maybe<NoYesMissing>;
+  /** Present if this household was enrolled as the result of a referral from another project. */
+  sourceReferralPosting?: Maybe<ReferralPosting>;
   status: EnrollmentStatus;
   subsidyAtRisk?: Maybe<NoYesMissing>;
   targetScreenReqd?: Maybe<NoYesMissing>;
@@ -16922,6 +16924,12 @@ export type AllEnrollmentDetailsFragment = {
     };
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   };
+  sourceReferralPosting?: {
+    __typename?: 'ReferralPosting';
+    id: string;
+    referredFrom: string;
+    referralDate: string;
+  } | null;
   access: {
     __typename?: 'EnrollmentAccess';
     id: string;
@@ -17999,6 +18007,12 @@ export type GetEnrollmentDetailsQuery = {
       };
       projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
     };
+    sourceReferralPosting?: {
+      __typename?: 'ReferralPosting';
+      id: string;
+      referredFrom: string;
+      referralDate: string;
+    } | null;
     access: {
       __typename?: 'EnrollmentAccess';
       id: string;
@@ -32627,6 +32641,11 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       access {
         ...ProjectAccessFields
       }
+    }
+    sourceReferralPosting {
+      id
+      referredFrom
+      referralDate
     }
   }
   ${EnrollmentFieldsFragmentDoc}

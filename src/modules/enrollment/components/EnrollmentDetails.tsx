@@ -1,5 +1,5 @@
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { Tooltip } from '@mui/material';
+import { Stack, Tooltip } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import EnrollmentOccurrencePointForm from './EnrollmentOccurrencePointForm';
 import EnrollmentSummaryCount from './EnrollmentSummaryCount';
@@ -11,16 +11,20 @@ import {
 import Loading from '@/components/elements/Loading';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 
+import RouterLink from '@/components/elements/RouterLink';
 import { parseOccurrencePointFormDefinition } from '@/modules/form/util/formUtil';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
   occurrencePointCollectedForEnrollment,
+  parseAndFormatDate,
   yesNo,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { Destination } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const EnrollmentDetails = ({
   enrollment,
@@ -89,6 +93,31 @@ const EnrollmentDetails = ({
 
     if (enrollment.client.hudChronic !== null) {
       content['HUD Chronic'] = yesNo(enrollment.client.hudChronic);
+    }
+    if (
+      enrollment.sourceReferralPosting &&
+      enrollment.project.access.canManageIncomingReferrals
+    ) {
+      // Basic details about the referral. If this section needs more customization, it could be implemented
+      // as a read-only occurrence point form.
+      content['Referral Details'] = (
+        <Stack direction='row' gap={1}>
+          {`Referred from ${
+            enrollment.sourceReferralPosting.referredFrom
+          } on ${parseAndFormatDate(
+            enrollment.sourceReferralPosting.referralDate
+          )}`}
+          <RouterLink
+            to={generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
+              projectId: enrollment.project.id,
+              referralPostingId: enrollment.sourceReferralPosting.id,
+            })}
+            openInNew
+          >
+            View Referral
+          </RouterLink>
+        </Stack>
+      );
     }
 
     const tooltips: Record<string, string> = {

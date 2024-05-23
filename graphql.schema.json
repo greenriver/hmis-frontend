@@ -16281,6 +16281,18 @@
             "deprecationReason": null
           },
           {
+            "name": "sourceReferralPosting",
+            "description": "Present if this household was enrolled as the result of a referral from another project.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ReferralPosting",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "args": [],
