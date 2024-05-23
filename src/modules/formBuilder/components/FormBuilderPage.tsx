@@ -35,10 +35,13 @@ const FormBuilderPage = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <FormBuilderPalette />
-      <FormItemEditor
-        selectedItem={selectedItem}
-        handleClose={() => setSelectedItem(undefined)}
-      />
+      {selectedItem && (
+        <FormItemEditor
+          selectedItem={selectedItem}
+          definition={formDefinition}
+          handleClose={() => setSelectedItem(undefined)}
+        />
+      )}
       <Box
         sx={
           // Padding matches the padding usually applied in DashboardContentContainer.
