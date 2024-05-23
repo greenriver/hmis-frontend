@@ -100,7 +100,7 @@ const EnrollmentDetails = ({
     ) {
       // Basic details about the referral. If this section needs more customization, it could be implemented
       // as a read-only occurrence point form.
-      content['Referral Details'] = (
+      content['Referral Source'] = (
         <Stack direction='row' gap={1}>
           {`Referred from ${
             enrollment.sourceReferralPosting.referredFrom
