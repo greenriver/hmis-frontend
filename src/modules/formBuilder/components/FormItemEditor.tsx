@@ -1,19 +1,27 @@
 import { Divider, Drawer, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import FormEditorItemPreview from '@/modules/formBuilder/components/FormEditorItemPreview';
-import { FormItem, ItemType } from '@/types/gqlTypes';
+import FormEditorItemProperties from '@/modules/formBuilder/components/FormEditorItemProperties';
+import {
+  FormDefinitionFieldsForEditorFragment,
+  FormItem,
+  ItemType,
+} from '@/types/gqlTypes';
 
 interface FormItemEditorProps {
-  selectedItem?: FormItem;
+  selectedItem: FormItem;
+  definition: FormDefinitionFieldsForEditorFragment;
   handleClose: () => void;
 }
 
 const FormItemEditor: React.FC<FormItemEditorProps> = ({
   selectedItem,
+  definition,
   handleClose,
 }) => {
   const [value, setValue] = useState<any>(undefined);
-  if (!selectedItem) return;
+
+  const [workingItem, setWorkingItem] = useState<FormItem>(selectedItem);
 
   return (
     <Drawer
@@ -40,13 +48,23 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
           <>
             <Divider />
             <FormEditorItemPreview
-              selectedItem={selectedItem}
+              item={workingItem}
               value={value}
               setValue={setValue}
             />
           </>
         )}
         <Divider />
+        <FormEditorItemProperties
+          item={workingItem}
+          definition={definition}
+          onChangeProperty={(attr, newProperty) => {
+            setWorkingItem({
+              ...workingItem,
+              [attr]: newProperty,
+            });
+          }}
+        />
       </Stack>
     </Drawer>
   );

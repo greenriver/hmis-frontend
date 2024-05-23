@@ -1,46 +1,34 @@
-import { Typography } from '@mui/material';
-import React, { useState } from 'react';
-import CommonToggle from '@/components/elements/CommonToggle';
-import {
-  PreviewMode,
-  toggleItems,
-} from '@/modules/admin/components/forms/FormPreview';
+import { Card, Typography } from '@mui/material';
+import theme from '@/config/theme';
 import DynamicField from '@/modules/form/components/DynamicField';
 import DynamicViewField from '@/modules/form/components/viewable/DynamicViewField';
 import { FormItem } from '@/types/gqlTypes';
 
 interface FormEditorItemPreviewProps {
-  selectedItem: FormItem;
+  item: FormItem;
   value?: any;
   setValue: (value: any) => void;
 }
 
 const FormEditorItemPreview: React.FC<FormEditorItemPreviewProps> = ({
-  selectedItem,
+  item,
   value,
   setValue,
 }) => {
-  const [toggleValue, setToggleValue] = useState<PreviewMode>('input');
-
   return (
     <>
       <Typography>Preview</Typography>
-      <CommonToggle
-        value={toggleValue}
-        onChange={setToggleValue}
-        items={toggleItems}
-        size='small'
-        variant='gray'
-      />
-      {toggleValue === 'readOnly' ? (
-        <DynamicViewField item={selectedItem} value={value} />
-      ) : (
-        <DynamicField
-          value={value}
-          item={selectedItem}
-          itemChanged={({ value }) => setValue(value)}
-        />
-      )}
+      <Card sx={{ p: 2, backgroundColor: theme.palette.background.default }}>
+        {item.readOnly ? (
+          <DynamicViewField item={item} value={value} />
+        ) : (
+          <DynamicField
+            value={value}
+            item={item}
+            itemChanged={({ value }) => setValue(value)}
+          />
+        )}
+      </Card>
     </>
   );
 };
