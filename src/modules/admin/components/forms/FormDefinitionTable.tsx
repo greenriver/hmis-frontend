@@ -6,34 +6,34 @@ import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
-  GetFormDefinitionsDocument,
-  GetFormDefinitionsQuery,
-  GetFormDefinitionsQueryVariables,
+  GetFormIdentifiersDocument,
+  GetFormIdentifiersQuery,
+  GetFormIdentifiersQueryVariables,
 } from '@/types/gqlTypes';
 
 export type Row = NonNullable<
-  GetFormDefinitionsQuery['formDefinitions']
+  GetFormIdentifiersQuery['formIdentifiers']
 >['nodes'][0];
 
 const columns: ColumnDef<Row>[] = [
   {
     header: 'Form Title',
-    render: 'title',
+    render: ({ displayVersion }) => displayVersion.title,
     width: '300px',
     linkTreatment: true,
   },
   {
     header: 'Form Type',
-    render: ({ role }) => <FormTypeChip role={role} />,
+    render: ({ displayVersion }) => <FormTypeChip role={displayVersion.role} />,
   },
   {
     header: 'Applicability Rules',
-    render: ({ formRules }) => formRules.nodesCount,
+    render: ({ displayVersion }) => displayVersion.formRules.nodesCount,
   },
   {
     key: 'system',
-    render: ({ system }) =>
-      system && (
+    render: ({ displayVersion }) =>
+      displayVersion.system && (
         <Chip
           label='System'
           size='small'
@@ -49,24 +49,26 @@ const columns: ColumnDef<Row>[] = [
 ];
 
 interface Props {
-  queryVariables: GetFormDefinitionsQueryVariables;
+  queryVariables: GetFormIdentifiersQueryVariables;
 }
 const FormDefinitionTable: React.FC<Props> = ({ queryVariables }) => {
   return (
     <GenericTableWithData<
-      GetFormDefinitionsQuery,
-      GetFormDefinitionsQueryVariables,
+      GetFormIdentifiersQuery,
+      GetFormIdentifiersQueryVariables,
       Row
     >
       queryVariables={queryVariables}
-      queryDocument={GetFormDefinitionsDocument}
+      queryDocument={GetFormIdentifiersDocument}
       columns={columns}
-      pagePath='formDefinitions'
-      recordType='FormDefinition'
+      pagePath='formIdentifiers'
+      recordType='FormIdentifier'
       // TODO: add filter/sort capabilities
       paginationItemName='form'
       rowLinkTo={(row) =>
-        generatePath(AdminDashboardRoutes.VIEW_FORM, { formId: row.id })
+        generatePath(AdminDashboardRoutes.VIEW_FORM, {
+          identifier: row.identifier,
+        })
       }
     />
   );
