@@ -86,4 +86,7 @@ fragment ReferralPostingDetailFields on ReferralPosting {
       }
     }
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }

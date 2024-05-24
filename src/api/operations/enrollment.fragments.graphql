@@ -115,6 +115,11 @@ fragment AllEnrollmentDetails on Enrollment {
       ...ProjectAccessFields
     }
   }
+  sourceReferralPosting {
+    id
+    referredFrom
+    referralDate
+  }
 }
 
 # Values that could possibly need to be displayed/edited on the Enrollment Details card

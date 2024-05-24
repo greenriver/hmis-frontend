@@ -10421,6 +10421,12 @@
             "deprecationReason": null
           },
           {
+            "name": "REFERRAL",
+            "description": "Referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "REFERRAL_REQUEST",
             "description": "Referral request",
             "isDeprecated": false,
@@ -16275,6 +16281,18 @@
             "deprecationReason": null
           },
           {
+            "name": "sourceReferralPosting",
+            "description": "Present if this household was enrolled as the result of a referral from another project.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ReferralPosting",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "args": [],
@@ -21675,6 +21693,12 @@
           {
             "name": "PROJECT_CONFIG",
             "description": "Project config",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL",
+            "description": "Referral",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -27903,8 +27927,8 @@
               "name": "CreateOutgoingReferralPostingPayload",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Moved to SubmitForm"
           },
           {
             "name": "createProjectConfig",
@@ -33123,6 +33147,47 @@
               "kind": "ENUM",
               "name": "NoYes",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "currentLivingSituations",
+            "description": null,
+            "args": [
+              {
+                "name": "limit",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CurrentLivingSituationsPaginated",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -38530,6 +38595,12 @@
             "deprecationReason": null
           },
           {
+            "name": "REFERRAL",
+            "description": "Referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "REFERRAL_REQUEST",
             "description": "Referral request",
             "isDeprecated": false,
@@ -38738,8 +38809,32 @@
             "deprecationReason": null
           },
           {
-            "name": "denialNote",
+            "name": "customDataElements",
             "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CustomDataElement",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "denialNote",
+            "description": "Admin Note associated with the denial (entered from the Denial Screen)",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -38959,7 +39054,7 @@
           },
           {
             "name": "referralNotes",
-            "description": null,
+            "description": "Note associated with the Referral that came from an External API",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -39027,7 +39122,7 @@
           },
           {
             "name": "resourceCoordinatorNotes",
-            "description": null,
+            "description": "Note associated with the Referral Posting that either came from the External\nAPI, or was entered when creating a referral within HMIS",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -39067,7 +39162,7 @@
           },
           {
             "name": "statusNote",
-            "description": null,
+            "description": "Note associated with the status (E.g. why it was accepted pending / denied pending)",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -39130,13 +39225,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "UnitTypeObject",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "UnitTypeObject",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -43672,6 +43763,11 @@
           {
             "kind": "OBJECT",
             "name": "ProjectCoc",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ReferralPosting",
             "ofType": null
           },
           {
