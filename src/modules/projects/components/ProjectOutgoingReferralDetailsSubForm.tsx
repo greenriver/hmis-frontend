@@ -63,25 +63,21 @@ const ProjectOutgoingReferralDetailsSubForm: React.FC<Props> = ({
         <LoadingSkeleton width={'100%'} count={1} sx={{ my: 2 }} />
       )}
       {formDefinition && (
-        <Box
-          // unset top-level card styling for form sections
-          sx={{ '.HmisForm-card': { px: 0, pt: 1, pb: 0, border: 'unset' } }}
-        >
-          <DynamicForm
-            definition={formDefinition.definition}
-            onSubmit={onSubmit}
-            initialValues={initialValues}
-            loading={submitLoading}
-            // validation errors are rendered above the form
-            errors={errors}
-            localConstants={localConstants}
-            pickListArgs={{ projectId: destinationProjectId }}
-            FormActionProps={{
-              submitButtonText: 'Refer Household',
-              discardButtonText: 'Cancel',
-            }}
-          />
-        </Box>
+        <DynamicForm
+          definition={formDefinition.definition}
+          onSubmit={onSubmit}
+          initialValues={initialValues}
+          loading={submitLoading}
+          // validation errors are rendered above the form
+          errors={errors}
+          localConstants={localConstants}
+          pickListArgs={{ projectId: destinationProjectId }}
+          variant='without_top_level_cards'
+          FormActionProps={{
+            submitButtonText: 'Refer Household',
+            discardButtonText: 'Cancel',
+          }}
+        />
       )}
     </Box>
   );
