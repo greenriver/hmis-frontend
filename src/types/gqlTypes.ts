@@ -4550,6 +4550,8 @@ export enum PickListType {
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   /** All Projects that the User can see */
   Project = 'PROJECT',
+  /** Open Projects that can receive referrals */
+  ProjectsReceivingReferrals = 'PROJECTS_RECEIVING_REFERRALS',
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Residential Projects */
   ResidentialProjects = 'RESIDENTIAL_PROJECTS',
