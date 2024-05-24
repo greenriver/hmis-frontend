@@ -30711,6 +30711,12 @@
             "deprecationReason": null
           },
           {
+            "name": "PROJECTS_RECEIVING_REFERRALS",
+            "description": "Open Projects that can receive referrals",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "REFERRAL_OUTCOME",
             "description": null,
             "isDeprecated": false,
