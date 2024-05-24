@@ -39039,7 +39039,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "ISO8601DateTime",
+                "name": "ISO8601Date",
                 "ofType": null
               }
             },
