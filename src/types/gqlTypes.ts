@@ -6140,7 +6140,7 @@ export type ReferralPosting = {
   postingIdentifier?: Maybe<Scalars['ID']['output']>;
   /** Project that household is being referred to */
   project?: Maybe<Project>;
-  referralDate: Scalars['ISO8601DateTime']['output'];
+  referralDate: Scalars['ISO8601Date']['output'];
   referralIdentifier?: Maybe<Scalars['ID']['output']>;
   /** Note associated with the Referral that came from an External API */
   referralNotes?: Maybe<Scalars['String']['output']>;
