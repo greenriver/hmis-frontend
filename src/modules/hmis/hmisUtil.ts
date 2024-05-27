@@ -181,8 +181,8 @@ export const parseAndFormatDate = (
   dateString: string | null | undefined
 ): string | null => {
   if (!dateString) return null;
-  // Trim string to date only
-  if (dateString.length > 10) dateString = dateString.slice(0, 10);
+  // remove time from ISO8601 date-time string
+  dateString = dateString.slice(0, 10);
 
   const parsed = parseHmisDateString(dateString);
   if (!parsed) return dateString;
