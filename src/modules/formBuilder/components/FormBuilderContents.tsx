@@ -77,7 +77,7 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
       <FormBuilderPalette
         onItemClick={(itemType) => {
           const newItem: FormItem = {
-            linkId: crypto.randomUUID(), // TODO - this will only work in localhost
+            linkId: crypto.randomUUID(), // TODO(#6083) - this is a placeholder, but right now will only work in localhost
             text: itemType.toString(),
             type: itemType,
             required: false,
