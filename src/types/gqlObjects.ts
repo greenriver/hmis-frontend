@@ -6924,6 +6924,48 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'FormDefinitionTypedInput',
+    args: [
+      {
+        name: 'item',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: {
+                kind: 'INPUT_OBJECT',
+                name: 'FormItemInput',
+                ofType: null,
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'FormFieldMappingInput',
+    args: [
+      {
+        name: 'customFieldKey',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'fieldName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'recordType',
+        type: { kind: 'ENUM', name: 'RelatedRecordType', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'FormIdentifierFilterOptions',
     args: [
       {
@@ -6969,6 +7011,110 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'values',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'FormItemInput',
+    args: [
+      {
+        name: 'assessmentDate',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'briefText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'component',
+        type: { kind: 'ENUM', name: 'Component', ofType: null },
+      },
+      {
+        name: 'dataCollectedAbout',
+        type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
+      },
+      {
+        name: 'disabledDisplay',
+        type: { kind: 'ENUM', name: 'DisabledDisplay', ofType: null },
+      },
+      {
+        name: 'enableBehavior',
+        type: { kind: 'ENUM', name: 'EnableBehavior', ofType: null },
+      },
+      {
+        name: 'helperText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'hidden',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'item',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'INPUT_OBJECT',
+              name: 'FormItemInput',
+              ofType: null,
+            },
+          },
+        },
+      },
+      {
+        name: 'linkId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'mapping',
+        type: {
+          kind: 'INPUT_OBJECT',
+          name: 'FormFieldMappingInput',
+          ofType: null,
+        },
+      },
+      {
+        name: 'pickListReference',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'prefill',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'prefix',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'readOnly',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'readonlyText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'repeats',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'required',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'serviceDetailType',
+        type: { kind: 'ENUM', name: 'ServiceDetailType', ofType: null },
+      },
+      { name: 'size', type: { kind: 'ENUM', name: 'InputSize', ofType: null } },
+      { name: 'text', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'type', type: { kind: 'ENUM', name: 'ItemType', ofType: null } },
+      {
+        name: 'warnIfEmpty',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
     ],
   },

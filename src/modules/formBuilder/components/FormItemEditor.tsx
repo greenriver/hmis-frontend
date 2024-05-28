@@ -10,14 +10,22 @@ import {
 
 interface FormItemEditorProps {
   selectedItem: FormItem;
+  originalLinkId: string;
   definition: FormDefinitionFieldsForEditorFragment;
-  handleClose: () => void;
+  handleClose?: () => void;
+  saveLoading: boolean;
+  onSave: (item: FormItem, originalLinkId: string) => void;
+  onDiscard: () => void;
 }
 
 const FormItemEditor: React.FC<FormItemEditorProps> = ({
   selectedItem,
+  originalLinkId,
   definition,
   handleClose,
+  saveLoading,
+  onSave,
+  onDiscard,
 }) => {
   const [value, setValue] = useState<any>(undefined);
 
@@ -28,7 +36,7 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
       open={!!selectedItem}
       onClose={() => {
         setValue(undefined);
-        handleClose();
+        if (handleClose) handleClose();
       }}
       anchor='right'
       sx={{
@@ -57,6 +65,7 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
         <Divider />
         <FormEditorItemProperties
           item={workingItem}
+          originalLinkId={originalLinkId}
           definition={definition}
           onChangeProperty={(attr, newProperty) => {
             setWorkingItem({
@@ -64,6 +73,9 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
               [attr]: newProperty,
             });
           }}
+          saveLoading={saveLoading}
+          onSave={onSave}
+          onDiscard={onDiscard}
         />
       </Stack>
     </Drawer>

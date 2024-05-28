@@ -63,11 +63,15 @@ import {
   FieldMapping,
   FormDefinitionFieldsFragment,
   FormDefinitionJson,
+  FormDefinitionTypedInput,
+  FormFieldMappingInput,
   FormItem,
+  FormItemInput,
   FullAssessmentFragment,
   InitialBehavior,
   InputSize,
   ItemType,
+  Maybe,
   NoYesReasonsForMissingData,
   PickListOption,
   RelatedRecordType,
@@ -268,6 +272,66 @@ export const modifyFormDefinition = (
   }
 
   recur(copy.item);
+  return copy;
+};
+
+const convertMapping = (mapping: FieldMapping): FormFieldMappingInput => {
+  //eslint-disable-next-line @typescript-eslint/naming-convention
+  const { __typename, ...inputMapping } = mapping;
+  return omitBy(inputMapping, isNil);
+};
+
+const convertFormItem = (item: FormItem): FormItemInput => {
+  //eslint-disable-next-line @typescript-eslint/naming-convention
+  const { __typename, ...rest } = item;
+  const convertedItem = rest as FormItemInput;
+
+  // Recurse to convert all child items
+  convertedItem.item = item.item ? item.item.map(convertFormItem) : undefined;
+
+  // Mapping also needs a special-case conversion to FormFieldMappingInput
+  convertedItem.mapping = item.mapping
+    ? convertMapping(item.mapping)
+    : undefined;
+
+  return omitBy(convertedItem, isNil);
+};
+
+export const convertFormDefinition = (
+  form: FormDefinitionJson
+): FormDefinitionTypedInput => {
+  return {
+    item: form.item.map(convertFormItem),
+  };
+};
+
+export const updateFormItem = (
+  formDefinition: FormDefinitionJson,
+  newItem: FormItem,
+  originalLinkId: string
+) => {
+  const copy = cloneDeep(formDefinition);
+
+  function recursiveReplace(items: Maybe<FormItem[]> | undefined): boolean {
+    if (!items) return false;
+
+    const index = items.findIndex((i) => i.linkId === originalLinkId);
+
+    if (index >= 0) {
+      items[index] = newItem;
+      return true; // Return true to stop further recursion
+    }
+
+    for (const item of items) {
+      if (recursiveReplace(item.item)) {
+        return true; // Early return if element is found in deeper recursion
+      }
+    }
+
+    throw new Error(`Link ID  ${newItem.linkId} not found`);
+  }
+
+  recursiveReplace(copy.item);
   return copy;
 };
 

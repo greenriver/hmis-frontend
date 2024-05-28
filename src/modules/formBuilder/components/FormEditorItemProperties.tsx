@@ -1,4 +1,5 @@
-import { Stack, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Button, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
@@ -23,14 +24,22 @@ const pickListTypesPickList = localResolvePickList('PickListType') || [];
 
 interface FormEditorItemPropertiesProps {
   item: FormItem;
+  originalLinkId: string;
   definition: FormDefinitionFieldsForEditorFragment;
   onChangeProperty: (attr: keyof FormItem, newProperty: any) => void;
+  saveLoading: boolean;
+  onSave: (item: FormItem, originalLinkId: string) => void;
+  onDiscard: () => void;
 }
 
 const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   item,
+  originalLinkId,
   definition,
   onChangeProperty,
+  saveLoading,
+  onSave,
+  onDiscard,
 }) => {
   const isAssessment = useMemo(
     () => (Object.values(AssessmentRole) as [string]).includes(definition.role),
@@ -206,6 +215,18 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             }}
           />
         )}
+        <Stack direction='row' gap={2}>
+          <LoadingButton
+            variant='outlined'
+            loading={saveLoading}
+            onClick={() => onSave(item, originalLinkId)}
+          >
+            Save Draft
+          </LoadingButton>
+          <Button variant='outlined' onClick={onDiscard}>
+            Discard
+          </Button>
+        </Stack>
       </Stack>
     </>
   );
