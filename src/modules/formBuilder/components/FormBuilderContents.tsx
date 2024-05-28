@@ -1,12 +1,10 @@
+import { FetchResult } from '@apollo/client';
 import { LoadingButton } from '@mui/lab';
 import { Button, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { isEqual } from 'lodash-es';
-import { useCallback, useEffect, useState } from 'react';
-import {
-  convertFormDefinition,
-  updateFormItem,
-} from '@/modules/form/util/formUtil';
+import { useEffect, useState } from 'react';
+import { updateFormItem } from '@/modules/form/util/formUtil';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormItemEditor from '@/modules/formBuilder/components/FormItemEditor';
@@ -17,27 +15,28 @@ import {
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionJson,
   FormItem,
-  useUpdateFormDefinitionTypedMutation,
+  UpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
 interface FormBuilderContentsProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
+  onSave: (
+    formDefinition: FormDefinitionJson
+  ) => Promise<FetchResult<UpdateFormDefinitionMutation>>;
+  saveLoading: boolean;
   lastUpdatedDate?: string;
   lastUpdatedBy?: string;
 }
 
 const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
   formDefinition,
+  onSave,
+  saveLoading,
   lastUpdatedDate,
   lastUpdatedBy,
 }) => {
   const [workingDefinition, setWorkingDefinition] =
     useState<FormDefinitionJson>(formDefinition.definition);
-
-  const [
-    updateFormDefinitionTyped,
-    { loading: updateLoading, error: updateError },
-  ] = useUpdateFormDefinitionTypedMutation();
 
   const [selectedItem, setSelectedItem] = useState<FormItem | undefined>(
     undefined
@@ -46,9 +45,13 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
     undefined
   );
 
+  const closeItemEditor = () => {
+    setSelectedItem(undefined);
+    setOriginalLinkId(undefined);
+  };
+
   const [dirty, setDirty] = useState(false);
 
-  // TODO - dirty/clean form logic not yet working
   useEffect(() => {
     if (isEqual(formDefinition.definition, workingDefinition)) {
       setDirty(false);
@@ -60,23 +63,9 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
       setDirty(true);
   }, [formDefinition.definition, workingDefinition, dirty]);
 
-  const saveForm = useCallback(
-    (newDefinition: FormDefinitionJson) => {
-      return updateFormDefinitionTyped({
-        variables: {
-          id: formDefinition.id,
-          definition: convertFormDefinition(newDefinition),
-        },
-      }).then((value) => {
-        // TODO - check for errors on the returned object
-        console.log(value);
-        setWorkingDefinition(newDefinition);
-      });
-    },
-    [updateFormDefinitionTyped, setWorkingDefinition, formDefinition.id]
-  );
-
-  if (updateError) throw updateError;
+  useEffect(() => {
+    setWorkingDefinition(formDefinition.definition);
+  }, [formDefinition.definition]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -109,7 +98,7 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
           selectedItem={selectedItem}
           originalLinkId={originalLinkId}
           definition={formDefinition}
-          saveLoading={updateLoading}
+          saveLoading={saveLoading}
           onSave={(item, originalLinkId) => {
             const newDefinition = updateFormItem(
               workingDefinition,
@@ -117,15 +106,9 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
               originalLinkId
             );
 
-            saveForm(newDefinition).then(() => {
-              setSelectedItem(undefined);
-              setOriginalLinkId(undefined);
-            });
+            onSave(newDefinition).then(closeItemEditor);
           }}
-          onDiscard={() => {
-            setSelectedItem(undefined);
-            setOriginalLinkId(undefined);
-          }}
+          onDiscard={closeItemEditor}
         />
       )}
       <Box
@@ -148,7 +131,7 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
           <FormTree
             definition={workingDefinition}
             onEditClick={(item: FormItem) => {
-              saveForm(workingDefinition);
+              onSave(workingDefinition);
               setSelectedItem(item);
               setOriginalLinkId(item.linkId);
             }}
@@ -164,9 +147,9 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
               <Stack direction='row' gap={2}>
                 <LoadingButton
                   variant='outlined'
-                  loading={updateLoading}
+                  loading={saveLoading}
                   onClick={() => {
-                    saveForm(workingDefinition);
+                    onSave(workingDefinition);
                   }}
                 >
                   Save Draft
