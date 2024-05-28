@@ -6,6 +6,7 @@ import {
   FormDefinitionFieldsForEditorFragment,
   FormItem,
   ItemType,
+  ValidationError,
 } from '@/types/gqlTypes';
 
 interface FormItemEditorProps {
@@ -14,6 +15,7 @@ interface FormItemEditorProps {
   definition: FormDefinitionFieldsForEditorFragment;
   handleClose?: () => void;
   saveLoading: boolean;
+  errors: ValidationError[];
   onSave: (item: FormItem, originalLinkId: string) => void;
   onDiscard: () => void;
 }
@@ -23,9 +25,10 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
   originalLinkId,
   definition,
   handleClose,
-  saveLoading,
   onSave,
   onDiscard,
+  saveLoading,
+  errors,
 }) => {
   const [value, setValue] = useState<any>(undefined);
 
@@ -75,6 +78,7 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
           }}
           saveLoading={saveLoading}
           onSave={onSave}
+          errors={errors}
           onDiscard={onDiscard}
         />
       </Stack>

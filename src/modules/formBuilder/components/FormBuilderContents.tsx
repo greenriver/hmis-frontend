@@ -4,6 +4,7 @@ import { Button, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { isEqual } from 'lodash-es';
 import { useEffect, useState } from 'react';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { updateFormItem } from '@/modules/form/util/formUtil';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
@@ -15,14 +16,15 @@ import {
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionJson,
   FormItem,
-  UpdateFormDefinitionMutation,
+  UpdateFormDefinitionTypedMutation,
+  ValidationError,
 } from '@/types/gqlTypes';
 
 interface FormBuilderContentsProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
   onSave: (
     formDefinition: FormDefinitionJson
-  ) => Promise<FetchResult<UpdateFormDefinitionMutation>>;
+  ) => Promise<FetchResult<UpdateFormDefinitionTypedMutation>>;
   saveLoading: boolean;
   lastUpdatedDate?: string;
   lastUpdatedBy?: string;
@@ -51,6 +53,9 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
   };
 
   const [dirty, setDirty] = useState(false);
+
+  const [itemErrors, setItemErrors] = useState<ValidationError[]>([]);
+  const [formErrors, setFormErrors] = useState<ValidationError[]>([]);
 
   useEffect(() => {
     if (isEqual(formDefinition.definition, workingDefinition)) {
@@ -99,6 +104,7 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
           originalLinkId={originalLinkId}
           definition={formDefinition}
           saveLoading={saveLoading}
+          errors={itemErrors}
           onSave={(item, originalLinkId) => {
             const newDefinition = updateFormItem(
               workingDefinition,
@@ -106,7 +112,14 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
               originalLinkId
             );
 
-            onSave(newDefinition).then(closeItemEditor);
+            onSave(newDefinition).then((values) => {
+              if (values.data?.updateFormDefinitionTyped?.errors) {
+                setItemErrors(values.data?.updateFormDefinitionTyped?.errors);
+              } else {
+                setItemErrors([]);
+                closeItemEditor();
+              }
+            });
           }}
           onDiscard={closeItemEditor}
         />
@@ -131,11 +144,19 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
           <FormTree
             definition={workingDefinition}
             onEditClick={(item: FormItem) => {
-              onSave(workingDefinition);
+              // todo @martha - this should NOT auto-save, it should instead prompt to save
+              // onSave(workingDefinition).then((values) => {
+              //   console.log(values);
+              // });
               setSelectedItem(item);
               setOriginalLinkId(item.linkId);
             }}
           />
+          {formErrors && formErrors.length > 0 && (
+            <Stack gap={1} sx={{ mt: 4 }}>
+              <ErrorAlert key='errors' errors={formErrors} />
+            </Stack>
+          )}
         </Box>
         {dirty && (
           <Paper sx={{ p: 4 }}>
@@ -149,7 +170,15 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
                   variant='outlined'
                   loading={saveLoading}
                   onClick={() => {
-                    onSave(workingDefinition);
+                    onSave(workingDefinition).then((values) => {
+                      if (values.data?.updateFormDefinitionTyped?.errors) {
+                        setFormErrors(
+                          values.data?.updateFormDefinitionTyped?.errors
+                        );
+                      } else {
+                        setFormErrors([]);
+                      }
+                    });
                   }}
                 >
                   Save Draft

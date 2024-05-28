@@ -3,6 +3,7 @@ import { Button, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { isPickListOption } from '@/modules/form/types';
 import {
@@ -14,6 +15,7 @@ import {
   FormDefinitionFieldsForEditorFragment,
   FormItem,
   ItemType,
+  ValidationError,
 } from '@/types/gqlTypes';
 
 const dataCollectedAboutPickList =
@@ -29,6 +31,7 @@ interface FormEditorItemPropertiesProps {
   onChangeProperty: (attr: keyof FormItem, newProperty: any) => void;
   saveLoading: boolean;
   onSave: (item: FormItem, originalLinkId: string) => void;
+  errors?: ValidationError[];
   onDiscard: () => void;
 }
 
@@ -38,6 +41,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   definition,
   onChangeProperty,
   saveLoading,
+  errors,
   onSave,
   onDiscard,
 }) => {
@@ -214,6 +218,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               );
             }}
           />
+        )}
+        {errors && errors.length > 0 && (
+          <Stack gap={1} sx={{ mt: 4 }}>
+            <ErrorAlert key='errors' errors={errors} />
+          </Stack>
         )}
         <Stack direction='row' gap={2}>
           <LoadingButton
