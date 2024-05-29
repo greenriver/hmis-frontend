@@ -1,9 +1,17 @@
+import { useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import FormBuilderContents from '@/modules/formBuilder/components/FormBuilderContents';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
+import FormBuilder from '@/modules/formBuilder/components/FormBuilder';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
 import {
+  FormDefinitionJson,
+  FormItem,
   useGetFormDefinitionFieldsForEditorQuery,
   useUpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
@@ -11,20 +19,64 @@ import {
 const FormBuilderPage = () => {
   const { formId } = useSafeParams() as { formId: string };
 
+  const [workingDefinition, setWorkingDefinition] = useState<
+    FormDefinitionJson | undefined
+  >();
+
   const {
-    data: { formDefinition } = {},
+    data: { formDefinition: initialFormDefinition } = {},
     loading: fetchLoading,
     error: fetchError,
   } = useGetFormDefinitionFieldsForEditorQuery({
     variables: { id: formId },
+    onCompleted: (data) => {
+      setWorkingDefinition(data.formDefinition?.definition);
+    },
   });
 
   // TODO(#6090) - update the API to return correct values
   const lastUpdatedDate = formatDateForDisplay(new Date());
   const lastUpdatedBy = 'User Name';
 
-  const [updateFormDefinition, { loading: saveLoading, error: saveError }] =
-    useUpdateFormDefinitionMutation();
+  const [selectedItem, setSelectedItem] = useState<FormItem | undefined>(
+    undefined
+  );
+  const [originalLinkId, setOriginalLinkId] = useState<string | undefined>(
+    undefined
+  );
+
+  const closeItemEditor = () => {
+    setSelectedItem(undefined);
+    setOriginalLinkId(undefined);
+  };
+
+  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
+
+  const [
+    updateFormDefinition,
+    { loading: saveLoading, error: saveError, data },
+  ] = useUpdateFormDefinitionMutation({
+    onCompleted: (data) => {
+      if (
+        data.updateFormDefinition?.errors &&
+        data.updateFormDefinition.errors.length > 0
+      ) {
+        setErrorState(partitionValidations(data.updateFormDefinition.errors));
+      } else {
+        setWorkingDefinition(
+          data.updateFormDefinition?.formDefinition?.definition
+        );
+        setErrorState(emptyErrorState);
+        closeItemEditor();
+      }
+    },
+  });
+
+  const formDefinition = useMemo(() => {
+    if (data && data.updateFormDefinition?.formDefinition)
+      return data.updateFormDefinition.formDefinition;
+    return initialFormDefinition;
+  }, [data, initialFormDefinition]);
 
   if (fetchError) throw fetchError;
   if (saveError) throw saveError;
@@ -34,11 +86,21 @@ const FormBuilderPage = () => {
     return <NotFound />;
   }
 
+  // TODO(#6094, #6083) Disable interaction with the form structure while the save mutation is loading
+
   return (
-    <FormBuilderContents
+    <FormBuilder
       formDefinition={formDefinition}
+      workingDefinition={workingDefinition}
+      setWorkingDefinition={setWorkingDefinition}
+      errorState={errorState}
       lastUpdatedDate={lastUpdatedDate || undefined}
       lastUpdatedBy={lastUpdatedBy}
+      selectedItem={selectedItem}
+      setSelectedItem={setSelectedItem}
+      originalLinkId={originalLinkId}
+      setOriginalLinkId={setOriginalLinkId}
+      closeItemEditor={closeItemEditor}
       onSave={(newDefinition) => {
         return updateFormDefinition({
           variables: {

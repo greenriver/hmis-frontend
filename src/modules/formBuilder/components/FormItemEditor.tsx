@@ -1,12 +1,12 @@
 import { Divider, Drawer, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { ErrorState } from '@/modules/errors/util';
 import FormEditorItemPreview from '@/modules/formBuilder/components/FormEditorItemPreview';
 import FormEditorItemProperties from '@/modules/formBuilder/components/FormEditorItemProperties';
 import {
   FormDefinitionFieldsForEditorFragment,
   FormItem,
   ItemType,
-  ValidationError,
 } from '@/types/gqlTypes';
 
 interface FormItemEditorProps {
@@ -15,9 +15,9 @@ interface FormItemEditorProps {
   definition: FormDefinitionFieldsForEditorFragment;
   handleClose?: () => void;
   saveLoading: boolean;
-  errors: ValidationError[];
   onSave: (item: FormItem, originalLinkId: string) => void;
   onDiscard: () => void;
+  errorState?: ErrorState;
 }
 
 const FormItemEditor: React.FC<FormItemEditorProps> = ({
@@ -28,7 +28,7 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
   onSave,
   onDiscard,
   saveLoading,
-  errors,
+  errorState,
 }) => {
   const [value, setValue] = useState<any>(undefined);
 
@@ -78,7 +78,7 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
           }}
           saveLoading={saveLoading}
           onSave={onSave}
-          errors={errors}
+          errorState={errorState}
           onDiscard={onDiscard}
         />
       </Stack>

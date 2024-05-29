@@ -3,8 +3,10 @@ import { LoadingButton } from '@mui/lab';
 import { Button, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { isEqual } from 'lodash-es';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo } from 'react';
+import Loading from '@/components/elements/Loading';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import { ErrorState } from '@/modules/errors/util';
 import { updateFormItem } from '@/modules/form/util/formUtil';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
@@ -17,60 +19,48 @@ import {
   FormDefinitionJson,
   FormItem,
   UpdateFormDefinitionMutation,
-  ValidationError,
 } from '@/types/gqlTypes';
 
-interface FormBuilderContentsProps {
+interface FormBuilderProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
+  workingDefinition?: FormDefinitionJson;
+  setWorkingDefinition?: Dispatch<
+    SetStateAction<FormDefinitionJson | undefined>
+  >;
+  errorState?: ErrorState;
   onSave: (
     formDefinition: FormDefinitionJson
   ) => Promise<FetchResult<UpdateFormDefinitionMutation>>;
   saveLoading: boolean;
   lastUpdatedDate?: string;
   lastUpdatedBy?: string;
+  selectedItem?: FormItem;
+  setSelectedItem: Dispatch<SetStateAction<FormItem | undefined>>;
+  originalLinkId?: string;
+  setOriginalLinkId: Dispatch<SetStateAction<string | undefined>>;
+  closeItemEditor: () => void;
 }
 
-const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
+const FormBuilder: React.FC<FormBuilderProps> = ({
   formDefinition,
+  workingDefinition,
+  setWorkingDefinition,
+  errorState,
   onSave,
   saveLoading,
   lastUpdatedDate,
   lastUpdatedBy,
+  selectedItem,
+  setSelectedItem,
+  originalLinkId,
+  setOriginalLinkId,
+  closeItemEditor,
 }) => {
-  const [workingDefinition, setWorkingDefinition] =
-    useState<FormDefinitionJson>(formDefinition.definition);
+  const dirty = useMemo(() => {
+    return !isEqual(workingDefinition, formDefinition.definition);
+  }, [workingDefinition, formDefinition.definition]);
 
-  const [selectedItem, setSelectedItem] = useState<FormItem | undefined>(
-    undefined
-  );
-  const [originalLinkId, setOriginalLinkId] = useState<string | undefined>(
-    undefined
-  );
-
-  const closeItemEditor = () => {
-    setSelectedItem(undefined);
-    setOriginalLinkId(undefined);
-  };
-
-  const [dirty, setDirty] = useState(false);
-
-  const [itemErrors, setItemErrors] = useState<ValidationError[]>([]);
-  const [formErrors, setFormErrors] = useState<ValidationError[]>([]);
-
-  useEffect(() => {
-    if (isEqual(formDefinition.definition, workingDefinition)) {
-      setDirty(false);
-    }
-  }, [formDefinition.definition, workingDefinition]);
-
-  useEffect(() => {
-    if (!dirty && !isEqual(formDefinition.definition, workingDefinition))
-      setDirty(true);
-  }, [formDefinition.definition, workingDefinition, dirty]);
-
-  useEffect(() => {
-    setWorkingDefinition(formDefinition.definition);
-  }, [formDefinition.definition]);
+  if (!workingDefinition || !setWorkingDefinition) return <Loading />;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -104,7 +94,7 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
           originalLinkId={originalLinkId}
           definition={formDefinition}
           saveLoading={saveLoading}
-          errors={itemErrors}
+          errorState={errorState}
           onSave={(item, originalLinkId) => {
             const newDefinition = updateFormItem(
               workingDefinition,
@@ -112,14 +102,7 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
               originalLinkId
             );
 
-            onSave(newDefinition).then((values) => {
-              if (values.data?.updateFormDefinition?.errors) {
-                setItemErrors(values.data?.updateFormDefinition?.errors);
-              } else {
-                setItemErrors([]);
-                closeItemEditor();
-              }
-            });
+            onSave(newDefinition);
           }}
           onDiscard={closeItemEditor}
         />
@@ -152,11 +135,13 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
               setOriginalLinkId(item.linkId);
             }}
           />
-          {formErrors && formErrors.length > 0 && (
-            <Stack gap={1} sx={{ mt: 4 }}>
-              <ErrorAlert key='errors' errors={formErrors} />
-            </Stack>
-          )}
+          {errorState?.errors &&
+            errorState.errors.length > 0 &&
+            !selectedItem && (
+              <Stack gap={1} sx={{ mt: 4 }}>
+                <ErrorAlert key='errors' errors={errorState.errors} />
+              </Stack>
+            )}
         </Box>
         {dirty && (
           <Paper sx={{ p: 4 }}>
@@ -169,17 +154,7 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
                 <LoadingButton
                   variant='outlined'
                   loading={saveLoading}
-                  onClick={() => {
-                    onSave(workingDefinition).then((values) => {
-                      if (values.data?.updateFormDefinition?.errors) {
-                        setFormErrors(
-                          values.data?.updateFormDefinition?.errors
-                        );
-                      } else {
-                        setFormErrors([]);
-                      }
-                    });
-                  }}
+                  onClick={() => onSave(workingDefinition)}
                 >
                   Save Draft
                 </LoadingButton>
@@ -196,4 +171,4 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
   );
 };
 
-export default FormBuilderContents;
+export default FormBuilder;
