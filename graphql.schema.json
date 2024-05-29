@@ -37090,7 +37090,7 @@
             "args": [
               {
                 "name": "projectId",
-                "description": "Optional Project to apply rule filtering (e.g. show/hide questions based on Project applicability)",
+                "description": "Optional Project to select the relevant form, and to apply rule filtering\n(e.g. show/hide questions based on Project applicability)",
                 "type": {
                   "kind": "SCALAR",
                   "name": "ID",
@@ -39020,7 +39020,7 @@
           },
           {
             "name": "project",
-            "description": "Project that household is being referred to",
+            "description": "Project that household is being referred to, if user can access it",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -39122,6 +39122,18 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referredTo",
+            "description": "Name of the Project that household is being referred to",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

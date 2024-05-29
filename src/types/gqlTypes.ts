@@ -6138,7 +6138,7 @@ export type ReferralPosting = {
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']['output']>;
   organization?: Maybe<Organization>;
   postingIdentifier?: Maybe<Scalars['ID']['output']>;
-  /** Project that household is being referred to */
+  /** Project that household is being referred to, if user can access it */
   project?: Maybe<Project>;
   referralDate: Scalars['ISO8601Date']['output'];
   referralIdentifier?: Maybe<Scalars['ID']['output']>;
@@ -6149,6 +6149,8 @@ export type ReferralPosting = {
   referredBy: Scalars['String']['output'];
   /** Name of project or external source that the referral originated from */
   referredFrom: Scalars['String']['output'];
+  /** Name of the Project that household is being referred to */
+  referredTo?: Maybe<Scalars['String']['output']>;
   /**
    * Note associated with the Referral Posting that either came from the External
    * API, or was entered when creating a referral within HMIS
@@ -28857,7 +28859,9 @@ export type GetProjectReferralPostingsQuery = {
         hohName: string;
         hohMciId?: string | null;
         householdSize: number;
+        referredFrom: string;
         referredBy: string;
+        referredTo?: string | null;
         status: ReferralPostingStatus;
         assignedDate: string;
         statusUpdatedAt?: string | null;
@@ -28902,7 +28906,9 @@ export type GetProjectOutgoingReferralPostingsQuery = {
         hohName: string;
         hohMciId?: string | null;
         householdSize: number;
+        referredFrom: string;
         referredBy: string;
+        referredTo?: string | null;
         status: ReferralPostingStatus;
         assignedDate: string;
         statusUpdatedAt?: string | null;
@@ -29446,6 +29452,7 @@ export type GetReferralPostingQuery = {
     referralResult?: ReferralResult | null;
     referredBy: string;
     referredFrom: string;
+    referredTo?: string | null;
     resourceCoordinatorNotes?: string | null;
     score?: number | null;
     status: ReferralPostingStatus;
@@ -29614,6 +29621,7 @@ export type UpdateReferralPostingMutation = {
       referralResult?: ReferralResult | null;
       referredBy: string;
       referredFrom: string;
+      referredTo?: string | null;
       resourceCoordinatorNotes?: string | null;
       score?: number | null;
       status: ReferralPostingStatus;
@@ -29792,7 +29800,9 @@ export type GetDeniedPendingReferralPostingsQuery = {
       hohName: string;
       hohMciId?: string | null;
       householdSize: number;
+      referredFrom: string;
       referredBy: string;
+      referredTo?: string | null;
       status: ReferralPostingStatus;
       assignedDate: string;
       statusUpdatedAt?: string | null;
@@ -29820,7 +29830,9 @@ export type ReferralPostingFieldsFragment = {
   hohName: string;
   hohMciId?: string | null;
   householdSize: number;
+  referredFrom: string;
   referredBy: string;
+  referredTo?: string | null;
   status: ReferralPostingStatus;
   assignedDate: string;
   statusUpdatedAt?: string | null;
@@ -29854,6 +29866,7 @@ export type ReferralPostingDetailFieldsFragment = {
   referralResult?: ReferralResult | null;
   referredBy: string;
   referredFrom: string;
+  referredTo?: string | null;
   resourceCoordinatorNotes?: string | null;
   score?: number | null;
   status: ReferralPostingStatus;
@@ -33083,7 +33096,9 @@ export const ReferralPostingFieldsFragmentDoc = gql`
     hohName
     hohMciId
     householdSize
+    referredFrom
     referredBy
+    referredTo
     status
     assignedDate
     statusUpdatedAt
@@ -33115,6 +33130,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     referralResult
     referredBy
     referredFrom
+    referredTo
     resourceCoordinatorNotes
     score
     status
