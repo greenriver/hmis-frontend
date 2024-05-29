@@ -4,6 +4,8 @@ import { Button, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { isEqual } from 'lodash-es';
 import { Dispatch, SetStateAction, useMemo } from 'react';
+import { useBlocker } from 'react-router-dom';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
@@ -60,114 +62,136 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
     return !isEqual(workingDefinition, formDefinition.definition);
   }, [workingDefinition, formDefinition.definition]);
 
+  const blocker = useBlocker(dirty);
+
   if (!workingDefinition || !setWorkingDefinition) return <Loading />;
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <FormBuilderPalette
-        onItemClick={(itemType) => {
-          const newItem: FormItem = {
-            linkId: crypto.randomUUID(), // TODO(#6083) - this is a placeholder, but right now will only work in localhost
-            text: itemType.toString(),
-            type: itemType,
-            required: false,
-            warnIfEmpty: false,
-            hidden: false,
-            readOnly: false,
-            repeats: false,
-            prefill: false,
-            disabledDisplay: DisabledDisplay.Hidden,
-            enableBehavior: EnableBehavior.Any,
-          };
-
-          const newDefinition: FormDefinitionJson = {
-            ...workingDefinition,
-            item: [...workingDefinition.item, newItem],
-          };
-
-          setWorkingDefinition(newDefinition);
-        }}
-      />
-      {selectedItem && originalLinkId && (
-        <FormItemEditor
-          selectedItem={selectedItem}
-          originalLinkId={originalLinkId}
-          definition={formDefinition}
-          saveLoading={saveLoading}
-          errorState={errorState}
-          onSave={(item, originalLinkId) => {
-            const newDefinition = updateFormItem(
-              workingDefinition,
-              item,
-              originalLinkId
-            );
-
-            onSave(newDefinition);
-          }}
-          onDiscard={closeItemEditor}
-        />
+    <>
+      {blocker.state === 'blocked' && (
+        <ConfirmationDialog
+          open={true}
+          loading={false}
+          confirmText='Discard changes'
+          cancelText='Continue editing'
+          title='Unsaved changes'
+          onConfirm={blocker.proceed}
+          onCancel={blocker.reset}
+          maxWidth='sm'
+          fullWidth
+          color='error'
+        >
+          <Typography>
+            You have unsaved changes. Are you sure you want to leave?
+          </Typography>
+        </ConfirmationDialog>
       )}
-      <Box
-        sx={
-          // Padding matches the padding usually applied in DashboardContentContainer.
-          // (It's moved in here because of the drawer)
-          {
-            flexGrow: 1,
-            pt: 2,
-            pb: 8,
-            px: { xs: 1, sm: 3, lg: 4 },
-          }
-        }
-      >
-        <FormBuilderHeader
-          formDefinition={formDefinition}
-          lastUpdatedDate={lastUpdatedDate}
+      <Box sx={{ display: 'flex' }}>
+        <FormBuilderPalette
+          onItemClick={(itemType) => {
+            const newItem: FormItem = {
+              linkId: crypto.randomUUID(), // TODO(#6083) - this is a placeholder, but right now will only work in localhost
+              text: itemType.toString(),
+              type: itemType,
+              required: false,
+              warnIfEmpty: false,
+              hidden: false,
+              readOnly: false,
+              repeats: false,
+              prefill: false,
+              disabledDisplay: DisabledDisplay.Hidden,
+              enableBehavior: EnableBehavior.Any,
+            };
+
+            const newDefinition: FormDefinitionJson = {
+              ...workingDefinition,
+              item: [...workingDefinition.item, newItem],
+            };
+
+            setWorkingDefinition(newDefinition);
+          }}
         />
-        <Box sx={{ p: 4 }}>
-          <FormTree
-            definition={workingDefinition}
-            onEditClick={(item: FormItem) => {
-              // todo @martha - this should NOT auto-save, it should instead prompt to save
-              // onSave(workingDefinition).then((values) => {
-              //   console.log(values);
-              // });
-              setSelectedItem(item);
-              setOriginalLinkId(item.linkId);
+        {selectedItem && originalLinkId && (
+          <FormItemEditor
+            selectedItem={selectedItem}
+            originalLinkId={originalLinkId}
+            definition={formDefinition}
+            saveLoading={saveLoading}
+            errorState={errorState}
+            onSave={(item, originalLinkId) => {
+              const newDefinition = updateFormItem(
+                workingDefinition,
+                item,
+                originalLinkId
+              );
+
+              onSave(newDefinition);
             }}
+            onDiscard={closeItemEditor}
           />
-          {errorState?.errors &&
-            errorState.errors.length > 0 &&
-            !selectedItem && (
-              <Stack gap={1} sx={{ mt: 4 }}>
-                <ErrorAlert key='errors' errors={errorState.errors} />
-              </Stack>
-            )}
-        </Box>
-        {dirty && (
-          <Paper sx={{ p: 4 }}>
-            <Stack
-              direction='row'
-              justifyContent='space-between'
-              sx={{ alignItems: 'center' }}
-            >
-              <Stack direction='row' gap={2}>
-                <LoadingButton
-                  variant='outlined'
-                  loading={saveLoading}
-                  onClick={() => onSave(workingDefinition)}
-                >
-                  Save Draft
-                </LoadingButton>
-                <Button>Publish</Button>
-              </Stack>
-              <Typography variant='body2'>
-                Last saved on {lastUpdatedDate} by {lastUpdatedBy}
-              </Typography>
-            </Stack>
-          </Paper>
         )}
+        <Box
+          sx={
+            // Padding matches the padding usually applied in DashboardContentContainer.
+            // (It's moved in here because of the drawer)
+            {
+              flexGrow: 1,
+              pt: 2,
+              pb: 8,
+              px: { xs: 1, sm: 3, lg: 4 },
+            }
+          }
+        >
+          <FormBuilderHeader
+            formDefinition={formDefinition}
+            lastUpdatedDate={lastUpdatedDate}
+          />
+          <Box sx={{ p: 4 }}>
+            <FormTree
+              definition={workingDefinition}
+              onEditClick={(item: FormItem) => {
+                // todo @martha - this should NOT auto-save, it should instead prompt to save
+                // onSave(workingDefinition).then((values) => {
+                //   console.log(values);
+                // });
+                setSelectedItem(item);
+                setOriginalLinkId(item.linkId);
+              }}
+            />
+            {errorState?.errors &&
+              errorState.errors.length > 0 &&
+              !selectedItem && (
+                <Stack gap={1} sx={{ mt: 4 }}>
+                  <ErrorAlert key='errors' errors={errorState.errors} />
+                </Stack>
+              )}
+          </Box>
+          {dirty && (
+            <Paper sx={{ p: 4 }}>
+              <Stack
+                direction='row'
+                justifyContent='space-between'
+                sx={{ alignItems: 'center' }}
+              >
+                <Stack direction='row' gap={2}>
+                  <LoadingButton
+                    variant='outlined'
+                    loading={saveLoading}
+                    onClick={() => onSave(workingDefinition)}
+                  >
+                    Save Draft
+                  </LoadingButton>
+                  <Button>Publish</Button>
+                </Stack>
+                <Typography variant='body2'>
+                  Last saved on {lastUpdatedDate} by {lastUpdatedBy}
+                </Typography>
+              </Stack>
+            </Paper>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
