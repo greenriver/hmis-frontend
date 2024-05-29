@@ -12,11 +12,13 @@ import { FormDefinitionFieldsForEditorFragment } from '@/types/gqlTypes';
 interface FormEditorHeaderProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
   lastUpdatedDate?: string | null;
+  onClickPreview: () => void;
 }
 
 const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
   formDefinition,
   lastUpdatedDate,
+  onClickPreview,
 }) => {
   const formRole = useMemo(
     () => (formDefinition?.role ? HmisEnums.FormRole[formDefinition.role] : ''),
@@ -56,7 +58,11 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
           </CommonLabeledTextBlock>
         </Grid>
         <Stack direction='row' spacing={2}>
-          <Button variant='outlined' startIcon={<VisibilityIcon />}>
+          <Button
+            variant='outlined'
+            startIcon={<VisibilityIcon />}
+            onClick={() => onClickPreview()}
+          >
             Preview
           </Button>
           <FormOptionsMenu />
