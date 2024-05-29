@@ -16,7 +16,7 @@ import {
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionJson,
   FormItem,
-  UpdateFormDefinitionTypedMutation,
+  UpdateFormDefinitionMutation,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -24,7 +24,7 @@ interface FormBuilderContentsProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
   onSave: (
     formDefinition: FormDefinitionJson
-  ) => Promise<FetchResult<UpdateFormDefinitionTypedMutation>>;
+  ) => Promise<FetchResult<UpdateFormDefinitionMutation>>;
   saveLoading: boolean;
   lastUpdatedDate?: string;
   lastUpdatedBy?: string;
@@ -113,8 +113,8 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
             );
 
             onSave(newDefinition).then((values) => {
-              if (values.data?.updateFormDefinitionTyped?.errors) {
-                setItemErrors(values.data?.updateFormDefinitionTyped?.errors);
+              if (values.data?.updateFormDefinition?.errors) {
+                setItemErrors(values.data?.updateFormDefinition?.errors);
               } else {
                 setItemErrors([]);
                 closeItemEditor();
@@ -171,9 +171,9 @@ const FormBuilderContents: React.FC<FormBuilderContentsProps> = ({
                   loading={saveLoading}
                   onClick={() => {
                     onSave(workingDefinition).then((values) => {
-                      if (values.data?.updateFormDefinitionTyped?.errors) {
+                      if (values.data?.updateFormDefinition?.errors) {
                         setFormErrors(
-                          values.data?.updateFormDefinitionTyped?.errors
+                          values.data?.updateFormDefinition?.errors
                         );
                       } else {
                         setFormErrors([]);

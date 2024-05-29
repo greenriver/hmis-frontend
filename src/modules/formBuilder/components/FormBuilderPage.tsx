@@ -1,12 +1,11 @@
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import { convertFormDefinition } from '@/modules/form/util/formUtil';
 import FormBuilderContents from '@/modules/formBuilder/components/FormBuilderContents';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
 import {
   useGetFormDefinitionFieldsForEditorQuery,
-  useUpdateFormDefinitionTypedMutation,
+  useUpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
 const FormBuilderPage = () => {
@@ -24,10 +23,8 @@ const FormBuilderPage = () => {
   const lastUpdatedDate = formatDateForDisplay(new Date());
   const lastUpdatedBy = 'User Name';
 
-  const [
-    updateFormDefinitionTyped,
-    { loading: saveLoading, error: saveError },
-  ] = useUpdateFormDefinitionTypedMutation();
+  const [updateFormDefinition, { loading: saveLoading, error: saveError }] =
+    useUpdateFormDefinitionMutation();
 
   if (fetchError) throw fetchError;
   if (saveError) throw saveError;
@@ -43,10 +40,10 @@ const FormBuilderPage = () => {
       lastUpdatedDate={lastUpdatedDate || undefined}
       lastUpdatedBy={lastUpdatedBy}
       onSave={(newDefinition) => {
-        return updateFormDefinitionTyped({
+        return updateFormDefinition({
           variables: {
             id: formDefinition.id,
-            definition: convertFormDefinition(newDefinition),
+            input: { definition: JSON.stringify(newDefinition) },
           },
         });
       }}
