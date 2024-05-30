@@ -41,14 +41,6 @@ const FormBuilderPage = () => {
   const [selectedItem, setSelectedItem] = useState<FormItem | undefined>(
     undefined
   );
-  const [originalLinkId, setOriginalLinkId] = useState<string | undefined>(
-    undefined
-  );
-
-  const closeItemEditor = () => {
-    setSelectedItem(undefined);
-    setOriginalLinkId(undefined);
-  };
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
@@ -67,7 +59,7 @@ const FormBuilderPage = () => {
           data.updateFormDefinition?.formDefinition?.definition
         );
         setErrorState(emptyErrorState);
-        closeItemEditor();
+        setSelectedItem(undefined);
       }
     },
   });
@@ -98,9 +90,7 @@ const FormBuilderPage = () => {
       lastUpdatedBy={lastUpdatedBy}
       selectedItem={selectedItem}
       setSelectedItem={setSelectedItem}
-      originalLinkId={originalLinkId}
-      setOriginalLinkId={setOriginalLinkId}
-      closeItemEditor={closeItemEditor}
+      closeItemEditor={() => setSelectedItem(undefined)}
       onSave={(newDefinition) => {
         return updateFormDefinition({
           variables: {

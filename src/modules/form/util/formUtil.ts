@@ -275,14 +275,14 @@ export const modifyFormDefinition = (
 export const updateFormItem = (
   formDefinition: FormDefinitionJson,
   newItem: FormItem,
-  originalLinkId: string
+  initialLinkId: string
 ) => {
   const copy = cloneDeep(formDefinition);
 
   function recursiveReplace(items: Maybe<FormItem[]> | undefined): boolean {
     if (!items) return false;
 
-    const index = items.findIndex((i) => i.linkId === originalLinkId);
+    const index = items.findIndex((i) => i.linkId === initialLinkId);
 
     if (index >= 0) {
       items[index] = newItem;

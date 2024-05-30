@@ -1,6 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { Button, Stack, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
@@ -26,18 +26,16 @@ const pickListTypesPickList = localResolvePickList('PickListType') || [];
 
 interface FormEditorItemPropertiesProps {
   item: FormItem;
-  originalLinkId: string;
   definition: FormDefinitionFieldsForEditorFragment;
   onChangeProperty: (attr: keyof FormItem, newProperty: any) => void;
   saveLoading: boolean;
-  onSave: (item: FormItem, originalLinkId: string) => void;
+  onSave: (item: FormItem, initialLinkId: string) => void;
   errorState?: ErrorState;
   onDiscard: () => void;
 }
 
 const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   item,
-  originalLinkId,
   definition,
   onChangeProperty,
   saveLoading,
@@ -49,6 +47,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     () => (Object.values(AssessmentRole) as [string]).includes(definition.role),
     [definition.role]
   );
+  const [initialLinkId] = useState<string>(item.linkId);
 
   return (
     <>
@@ -228,7 +227,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           <LoadingButton
             variant='outlined'
             loading={saveLoading}
-            onClick={() => onSave(item, originalLinkId)}
+            onClick={() => onSave(item, initialLinkId)}
           >
             Save Draft
           </LoadingButton>

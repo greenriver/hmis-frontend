@@ -43,9 +43,7 @@ interface FormBuilderProps {
   lastUpdatedBy?: string;
   selectedItem?: FormItem;
   setSelectedItem: Dispatch<SetStateAction<FormItem | undefined>>;
-  originalLinkId?: string;
-  setOriginalLinkId: Dispatch<SetStateAction<string | undefined>>;
-  closeItemEditor: () => void;
+  closeItemEditor: VoidFunction;
 }
 
 const FormBuilder: React.FC<FormBuilderProps> = ({
@@ -59,51 +57,49 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
   lastUpdatedBy,
   selectedItem,
   setSelectedItem,
-  originalLinkId,
-  setOriginalLinkId,
   closeItemEditor,
 }) => {
   const dirty = useMemo(() => {
     return !isEqual(workingDefinition, formDefinition.definition);
   }, [workingDefinition, formDefinition.definition]);
 
-  const [isBlocked, setIsBlocked] = useState(false);
-  const [unblockCallback, setUnblockCallback] = useState<
-    (() => void) | undefined
+  const [blockedActionFunction, setBlockedActionFunction] = useState<
+    VoidFunction | undefined
   >(undefined);
 
   const onClickPreview = useCallback(() => {
-    setIsBlocked(dirty);
-    // TODO(#6091) - add another action here and use setUnblockCallback if the form is dirty.
-    //  See example under FormTree's onEditClick below
-  }, [setIsBlocked, dirty]);
+    if (dirty) {
+      setBlockedActionFunction(() => undefined); // TODO(#6091)
+    }
+  }, [setBlockedActionFunction, dirty]);
+
+  const onConfirmSave = useCallback(() => {
+    if (!workingDefinition) return;
+
+    onSave(workingDefinition).then(() => {
+      if (blockedActionFunction) blockedActionFunction();
+      setBlockedActionFunction(undefined);
+    });
+  }, [workingDefinition]);
 
   if (!workingDefinition || !setWorkingDefinition) return <Loading />;
 
   return (
     <>
       <ConfirmationDialog
-        open={isBlocked}
+        open={!!blockedActionFunction}
         loading={saveLoading}
         confirmText='Save changes'
         cancelText='Continue editing'
         title='Unsaved changes'
-        onConfirm={() => {
-          onSave(workingDefinition).then(() => {
-            setIsBlocked(false);
-            if (unblockCallback) unblockCallback(); // todo @Martha typescript
-            setUnblockCallback(undefined);
-          });
-        }}
-        onCancel={() => {
-          setIsBlocked(false);
-          setUnblockCallback(undefined);
-        }}
+        onConfirm={onConfirmSave}
+        onCancel={() => setBlockedActionFunction(undefined)}
         maxWidth='sm'
         fullWidth
       >
         <Typography>
-          You have unsaved changes. Save before proceeding?
+          You have unsaved changes. Do you want to save your changes before
+          proceeding?
         </Typography>
       </ConfirmationDialog>
       <Box sx={{ display: 'flex' }}>
@@ -131,18 +127,17 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
             setWorkingDefinition(newDefinition);
           }}
         />
-        {selectedItem && originalLinkId && (
+        {selectedItem && (
           <FormItemEditor
             selectedItem={selectedItem}
-            originalLinkId={originalLinkId}
             definition={formDefinition}
             saveLoading={saveLoading}
             errorState={errorState}
-            onSave={(item, originalLinkId) => {
+            onSave={(item, initialLinkId) => {
               const newDefinition = updateFormItem(
                 workingDefinition,
                 item,
-                originalLinkId
+                initialLinkId
               );
 
               onSave(newDefinition);
@@ -171,16 +166,10 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
             <FormTree
               definition={workingDefinition}
               onEditClick={(item: FormItem) => {
-                function editItem() {
-                  setSelectedItem(item);
-                  setOriginalLinkId(item.linkId);
-                }
-
                 if (dirty) {
-                  setIsBlocked(true);
-                  setUnblockCallback(() => editItem);
+                  setBlockedActionFunction(() => setSelectedItem(item));
                 } else {
-                  editItem();
+                  setSelectedItem(item);
                 }
               }}
             />

@@ -12,7 +12,7 @@ import { FormDefinitionFieldsForEditorFragment } from '@/types/gqlTypes';
 interface FormEditorHeaderProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
   lastUpdatedDate?: string | null;
-  onClickPreview: () => void;
+  onClickPreview: VoidFunction;
 }
 
 const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
@@ -61,7 +61,7 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
           <Button
             variant='outlined'
             startIcon={<VisibilityIcon />}
-            onClick={() => onClickPreview()}
+            onClick={onClickPreview}
           >
             Preview
           </Button>

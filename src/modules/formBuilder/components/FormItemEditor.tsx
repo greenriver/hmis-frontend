@@ -11,18 +11,16 @@ import {
 
 interface FormItemEditorProps {
   selectedItem: FormItem;
-  originalLinkId: string;
   definition: FormDefinitionFieldsForEditorFragment;
   handleClose?: () => void;
   saveLoading: boolean;
-  onSave: (item: FormItem, originalLinkId: string) => void;
+  onSave: (item: FormItem, initialLinkId: string) => void;
   onDiscard: () => void;
   errorState?: ErrorState;
 }
 
 const FormItemEditor: React.FC<FormItemEditorProps> = ({
   selectedItem,
-  originalLinkId,
   definition,
   handleClose,
   onSave,
@@ -68,7 +66,6 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
         <Divider />
         <FormEditorItemProperties
           item={workingItem}
-          originalLinkId={originalLinkId}
           definition={definition}
           onChangeProperty={(attr, newProperty) => {
             setWorkingItem({
