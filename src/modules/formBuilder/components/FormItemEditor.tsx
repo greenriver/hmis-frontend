@@ -1,4 +1,4 @@
-import { Divider, Drawer, Stack, Typography } from '@mui/material';
+import { Button, Divider, Drawer, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import FormEditorItemPreview from '@/modules/formBuilder/components/FormEditorItemPreview';
 import FormEditorItemProperties from '@/modules/formBuilder/components/FormEditorItemProperties';
@@ -43,6 +43,15 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
       <Stack gap={2}>
         <Typography variant='cardTitle'>
           Edit Form Item: {selectedItem.linkId}
+          <Button
+            size='small'
+            variant='outlined'
+            // eslint-disable-next-line no-console
+            onClick={() => console.log(JSON.stringify(workingItem, null, 2))}
+            sx={{ float: 'right' }}
+          >
+            Debug
+          </Button>
         </Typography>
         {selectedItem.type !== ItemType.Group && (
           <>

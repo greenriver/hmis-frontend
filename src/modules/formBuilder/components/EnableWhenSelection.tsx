@@ -2,7 +2,9 @@ import { Stack } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 import CardGroup, { RemovableCard } from './CardGroup';
-import TextInput from '@/components/elements/input/TextInput';
+import DebouncedTextInput from '@/components/elements/input/DebouncedTextInput';
+import NumberInput from '@/components/elements/input/NumberInput';
+import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { ItemMap } from '@/modules/form/types';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -10,6 +12,7 @@ import {
   EnableBehavior,
   EnableOperator,
   EnableWhen,
+  ItemType,
   PickListOption,
 } from '@/types/gqlTypes';
 
@@ -27,29 +30,91 @@ const enableBehaviorPickList = Object.keys(HmisEnums.EnableBehavior).map(
 );
 
 interface EnableWhenConditionProps {
-  rule: EnableWhen;
-  onChange: (rule: EnableWhen) => void;
+  rule: Partial<EnableWhen>;
+  onChange: (rule: Partial<EnableWhen>) => void;
   itemPickList: PickListOption[];
+  itemMap: ItemMap;
 }
 const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
   rule,
   onChange,
   itemPickList,
+  itemMap,
 }) => {
-  //question or local_constant
-  //operator
-  //answer
+  const dependentItem = useMemo(
+    () => (rule.question ? itemMap[rule.question] : undefined),
+    [itemMap, rule.question]
+  );
+
+  const answerInputTypes = useMemo(() => {
+    // always boolean
+    if (rule.operator === EnableOperator.Exists) return ['answerBoolean'];
+    if (rule.operator === EnableOperator.Enabled) return ['answerBoolean'];
+
+    // string input
+    if (rule.localConstant) return ['answerCode'];
+
+    // not enough information
+    if (!dependentItem) return;
+
+    if (dependentItem.type === ItemType.Choice) {
+      // value in [x,y,z]
+      if (rule.operator === EnableOperator.In) return ['answerCodes'];
+      // value can be matched by code or group code
+      return ['answerCode', 'answerGroupCode'];
+    }
+
+    if (dependentItem.type === ItemType.Boolean) return ['answerBoolean'];
+    if (dependentItem.type === ItemType.Integer) return ['answerNumber'];
+    if (dependentItem.type === ItemType.Currency) return ['answerNumber'];
+    // not handled: compareQuestion
+    return ['answerCode'];
+  }, [dependentItem, rule.localConstant, rule.operator]);
+
+  const answerHelperText =
+    'Value to compare using the operator. If the expression evaluates to true, the condition is met.';
+  const answerValueLabel = 'Response Value';
+
+  const onChangeAnswerField = useCallback(
+    (field: string, value: any) => {
+      onChange({
+        ...rule,
+        // clear out all other fields, only one should be set
+        answerBoolean: null,
+        answerCode: null,
+        answerCodes: null,
+        answerGroupCode: null,
+        answerNumber: null,
+        [field]: value,
+      });
+    },
+    [onChange, rule]
+  );
 
   return (
-    <Stack gap={2} flex={1} direction='row'>
+    <Stack gap={2} flex={1}>
       <FormSelect<false>
-        label='Question'
+        label='Dependent Question'
         value={itemPickList.find((o) => o.code === rule.question) || undefined}
         options={itemPickList}
-        onChange={(_e, value) => {
-          if (value) onChange({ ...rule, question: value.code });
-        }}
-        helperText='Question whos value this condition depends on'
+        onChange={(_e, value) =>
+          value
+            ? onChange({ ...rule, localConstant: null, question: value.code })
+            : onChange({ ...rule, question: null })
+        }
+        helperText="Question who's response will determine whether the condition is met"
+        disabled={!!rule.localConstant}
+      />
+      <DebouncedTextInput
+        label='Local Constant'
+        value={rule.localConstant || ''}
+        onChange={(str) =>
+          str
+            ? onChange({ ...rule, question: null, localConstant: str })
+            : onChange({ ...rule, localConstant: null })
+        }
+        helperText="Local constant who's value will determine whether the condition is met"
+        disabled={!!rule.question}
       />
       <FormSelect<false>
         label='Operator'
@@ -59,21 +124,48 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
         }
         options={enableOperatorPickList}
         onChange={(_e, value) => {
-          if (value)
-            onChange({ ...rule, operator: value.code as EnableOperator });
+          onChange({
+            ...rule,
+            operator: value?.code as EnableOperator | undefined,
+          });
         }}
       />
-      <TextInput
-        label='Answer'
-        value={rule.answerCode}
-        // onChange={(e) => {
-        //   // Disallow typing invalid characters
-        //   const regex = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
-        //   if (regex.test(e.target.value))
-        //     onChangeProperty('linkId', e.target.value);
-        // }}
-        helperText='Response value to evaluate'
-      />
+
+      {answerInputTypes?.map((answerType) => {
+        switch (answerType) {
+          case 'answerBoolean':
+            return (
+              <YesNoRadio
+                name={answerValueLabel}
+                value={rule.answerBoolean}
+                onChange={(val) => onChangeAnswerField('answerBoolean', val)}
+              />
+            );
+          case 'answerCode': // fixme: should show a dropdown if we can resolve dependentItems pick list
+          case 'answerGroupCode': // fixme: same as above
+          case 'answerCodes': // fixme: should have its own multi-input
+            return (
+              <DebouncedTextInput
+                label={answerValueLabel}
+                value={(rule[answerType] || '') as string}
+                onChange={(val) => onChangeAnswerField(answerType, val)}
+                helperText={answerHelperText}
+              />
+            );
+
+          case 'answerNumber':
+            return (
+              <NumberInput
+                label={answerValueLabel}
+                value={rule.answerNumber}
+                onChange={(e) =>
+                  onChangeAnswerField(answerType, parseInt(e.target.value))
+                }
+                helperText={answerHelperText}
+              />
+            );
+        }
+      })}
     </Stack>
   );
 };
@@ -81,8 +173,8 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
 export interface EnableWhenSelectionProps {
   enableBehavior: EnableBehavior;
   onChangeEnableBehavior: (behavior: EnableBehavior) => void;
-  conditions: EnableWhen[];
-  onChange: (conditions: EnableWhen[]) => void;
+  conditions: Partial<EnableWhen>[];
+  onChange: (conditions: Partial<EnableWhen>[]) => void;
   itemMap: ItemMap;
 }
 
@@ -94,10 +186,7 @@ const EnableWhenSelection: React.FC<EnableWhenSelectionProps> = ({
   itemMap,
 }) => {
   const addItem = useCallback(() => {
-    const adjusted: EnableWhen[] = [
-      ...conditions,
-      { operator: EnableOperator.Equal },
-    ];
+    const adjusted: Partial<EnableWhen>[] = [...conditions, {}];
     onChange(adjusted);
   }, [conditions, onChange]);
 
@@ -106,7 +195,7 @@ const EnableWhenSelection: React.FC<EnableWhenSelectionProps> = ({
       Object.values(itemMap).map((item) => {
         return {
           code: item.linkId,
-          display: item.briefText || item.text,
+          label: item.briefText || item.text,
           secondaryLabel: item.linkId,
         };
       }),
@@ -143,6 +232,7 @@ const EnableWhenSelection: React.FC<EnableWhenSelectionProps> = ({
               onChange(adjusted);
             }}
             itemPickList={itemPickList}
+            itemMap={itemMap}
           />
         </RemovableCard>
       ))}
