@@ -5319,6 +5319,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'referredTo',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'resourceCoordinatorNotes',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
