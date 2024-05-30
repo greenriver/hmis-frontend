@@ -80,7 +80,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
       if (blockedActionFunction) blockedActionFunction();
       setBlockedActionFunction(undefined);
     });
-  }, [workingDefinition]);
+  }, [workingDefinition, blockedActionFunction, setBlockedActionFunction]);
 
   if (!workingDefinition || !setWorkingDefinition) return <Loading />;
 
@@ -166,8 +166,15 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
             <FormTree
               definition={workingDefinition}
               onEditClick={(item: FormItem) => {
+                function editItem() {
+                  setSelectedItem(item);
+                }
+
                 if (dirty) {
-                  setBlockedActionFunction(() => setSelectedItem(item));
+                  // React's useState accepts either a value or a function that yields a value.
+                  // In this case, we want the function itself to *be* the state value, which is the reason
+                  // for defining `editItem` above instead of simply using `() => setSelectedItem(item)` here.
+                  setBlockedActionFunction(() => editItem);
                 } else {
                   setSelectedItem(item);
                 }
