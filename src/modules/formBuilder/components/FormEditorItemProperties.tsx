@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import AutofillProperties from './AutofillProperties';
-import EnableWhenSelection from './EnableWhenSelection';
+import ConditionalProperties from './ConditionalProperties';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
 import FormSelect from '@/modules/form/components/FormSelect';
@@ -53,9 +53,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         onSubmit={() => {
           // TODO(#6103)
         }}
-        sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
+        sx={{
+          '.MuiFormControl-fullWidth': { maxWidth: MAX_INPUT_AND_LABEL_WIDTH },
+        }}
       >
-        <EnableWhenSelection
+        <ConditionalProperties
           enableBehavior={item.enableBehavior}
           onChangeEnableBehavior={(enableBehavior) =>
             onChangeProperty('enableBehavior', enableBehavior)

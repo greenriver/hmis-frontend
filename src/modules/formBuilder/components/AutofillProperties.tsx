@@ -1,7 +1,7 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useCallback } from 'react';
+import CardGroup, { RemovableCard } from './CardGroup';
 import EnableWhenSelection from './EnableWhenSelection';
-import { AddIcon } from '@/components/elements/SemanticIcons';
 import { ItemMap } from '@/modules/form/types';
 import {
   AutofillValue,
@@ -33,37 +33,38 @@ const AutofillProperties: React.FC<AutofillPropertiesProps> = ({
 
   return (
     <>
-      <Typography>Autofill</Typography>
-      <Box sx={{ border: '1px solid pink' }}>
-        <Stack gap={2} sx={{ pt: 1 }}>
+      <Typography variant='h5'>Autofill</Typography>
+      <Box sx={{ mb: 2 }}>
+        <CardGroup onAddItem={addItem} addItemText='Add Autofill Rule'>
           {values.map((value, index) => (
-            <EnableWhenSelection
-              enableBehavior={value.autofillBehavior}
-              onChangeEnableBehavior={(behavior) => {
+            <RemovableCard
+              onRemove={() => {
                 const adjusted = [...values];
-                adjusted[index].autofillBehavior = behavior;
+                adjusted.splice(index, 1);
                 onChange(adjusted);
               }}
-              conditions={value.autofillWhen}
-              onChange={(conditions) => {
-                const adjusted = [...values];
-                adjusted[index].autofillWhen = conditions;
-                onChange(adjusted);
-              }}
-              itemMap={itemMap}
-            />
+              removeTooltip={'Remove Autofill'}
+            >
+              <Typography>Rule {index + 1}</Typography>
+              <>TODO: VALUE TO AUTOFILL</>
+              <EnableWhenSelection
+                enableBehavior={value.autofillBehavior}
+                onChangeEnableBehavior={(behavior) => {
+                  const adjusted = [...values];
+                  adjusted[index].autofillBehavior = behavior;
+                  onChange(adjusted);
+                }}
+                conditions={value.autofillWhen}
+                onChange={(conditions) => {
+                  const adjusted = [...values];
+                  adjusted[index].autofillWhen = conditions;
+                  onChange(adjusted);
+                }}
+                itemMap={itemMap}
+              />
+            </RemovableCard>
           ))}
-        </Stack>
-
-        <Button
-          onClick={addItem}
-          color='secondary'
-          variant='text'
-          sx={{ width: 'fit-content', color: 'links', mb: 2 }}
-          startIcon={<AddIcon />}
-        >
-          Add Autofill
-        </Button>
+        </CardGroup>
       </Box>
     </>
   );
