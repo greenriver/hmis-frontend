@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react';
 import CardGroup, { RemovableCard } from './CardGroup';
 import DebouncedTextInput from '@/components/elements/input/DebouncedTextInput';
 import NumberInput from '@/components/elements/input/NumberInput';
+import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { ItemMap } from '@/modules/form/types';
@@ -17,12 +18,6 @@ import {
 } from '@/types/gqlTypes';
 
 const enableOperatorPickList = Object.keys(HmisEnums.EnableOperator).map(
-  (code) => ({
-    code,
-    label: startCase(code.toLowerCase()),
-  })
-);
-const enableBehaviorPickList = Object.keys(HmisEnums.EnableBehavior).map(
   (code) => ({
     code,
     label: startCase(code.toLowerCase()),
@@ -176,6 +171,7 @@ export interface EnableWhenSelectionProps {
   conditions: Partial<EnableWhen>[];
   onChange: (conditions: Partial<EnableWhen>[]) => void;
   itemMap: ItemMap;
+  variant?: 'enable' | 'autofill';
 }
 
 const EnableWhenSelection: React.FC<EnableWhenSelectionProps> = ({
@@ -184,6 +180,7 @@ const EnableWhenSelection: React.FC<EnableWhenSelectionProps> = ({
   conditions,
   onChange,
   itemMap,
+  variant = 'enable',
 }) => {
   const addItem = useCallback(() => {
     const adjusted: Partial<EnableWhen>[] = [...conditions, {}];
@@ -201,15 +198,29 @@ const EnableWhenSelection: React.FC<EnableWhenSelectionProps> = ({
       }),
     [itemMap]
   );
+
+  const enableBehaviorOptions = useMemo(() => {
+    const action =
+      variant === 'enable' ? 'Display this item' : 'Autofill this value';
+    return [
+      {
+        code: 'ALL',
+        label: `${action} if all of the below conditions are met (AND logic)`,
+      },
+      {
+        code: 'ANY',
+        label: `${action} if any of the below conditions are met (OR logic)`,
+      },
+    ];
+  }, [variant]);
   return (
     <CardGroup onAddItem={addItem} addItemText={'Add Condition'}>
       {conditions.length > 0 && (
-        <FormSelect<false>
-          maxWidth={150}
-          label='Enable Behavior'
-          value={enableBehaviorPickList.find((o) => o.code === enableBehavior)}
-          options={enableBehaviorPickList}
-          onChange={(_e, value) => {
+        <RadioGroupInput
+          label='Condition Behavior (AND/OR)'
+          value={enableBehaviorOptions.find((o) => o.code === enableBehavior)}
+          options={enableBehaviorOptions}
+          onChange={(value) => {
             if (value) onChangeEnableBehavior(value.code as EnableBehavior);
           }}
         />

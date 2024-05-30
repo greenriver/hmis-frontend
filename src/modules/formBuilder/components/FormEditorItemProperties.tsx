@@ -1,7 +1,8 @@
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import AutofillProperties from './AutofillProperties';
 import ConditionalProperties from './ConditionalProperties';
+import CollapsibleList from '@/components/elements/CollapsibleList';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
 import FormSelect from '@/modules/form/components/FormSelect';
@@ -57,20 +58,6 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           '.MuiFormControl-fullWidth': { maxWidth: MAX_INPUT_AND_LABEL_WIDTH },
         }}
       >
-        <ConditionalProperties
-          enableBehavior={item.enableBehavior}
-          onChangeEnableBehavior={(enableBehavior) =>
-            onChangeProperty('enableBehavior', enableBehavior)
-          }
-          conditions={item.enableWhen || []}
-          onChange={(conditions) => onChangeProperty('enableWhen', conditions)}
-          itemMap={itemMap}
-        />
-        <AutofillProperties
-          values={item.autofillValues || []}
-          onChange={(values) => onChangeProperty('autofillValues', values)}
-          itemMap={itemMap}
-        />
         <TextInput
           label='Link ID'
           value={item.linkId}
@@ -229,6 +216,33 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             }}
           />
         )}
+        <CollapsibleList
+          title='Advanced Properties'
+          sx={{
+            ' > .MuiListItemButton-root': { px: 0 },
+            '.MuiList-root': { pl: 0 },
+          }}
+        >
+          <Box py={2}>
+            <ConditionalProperties
+              enableBehavior={item.enableBehavior}
+              onChangeEnableBehavior={(enableBehavior) =>
+                onChangeProperty('enableBehavior', enableBehavior)
+              }
+              conditions={item.enableWhen || []}
+              onChange={(conditions) =>
+                onChangeProperty('enableWhen', conditions)
+              }
+              itemMap={itemMap}
+            />
+            <AutofillProperties
+              values={item.autofillValues || []}
+              itemType={item.type}
+              onChange={(values) => onChangeProperty('autofillValues', values)}
+              itemMap={itemMap}
+            />
+          </Box>
+        </CollapsibleList>
       </Stack>
     </>
   );
