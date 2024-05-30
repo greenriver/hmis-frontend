@@ -1,12 +1,15 @@
 import { Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
+import AutofillProperties from './AutofillProperties';
+import EnableWhenSelection from './EnableWhenSelection';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { isPickListOption } from '@/modules/form/types';
 import {
-  localResolvePickList,
   MAX_INPUT_AND_LABEL_WIDTH,
+  getItemMap,
+  localResolvePickList,
 } from '@/modules/form/util/formUtil';
 import {
   AssessmentRole,
@@ -36,6 +39,10 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     () => (Object.values(AssessmentRole) as [string]).includes(definition.role),
     [definition.role]
   );
+  const itemMap = useMemo(
+    () => getItemMap(definition.definition),
+    [definition.definition]
+  );
 
   return (
     <>
@@ -48,6 +55,20 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         }}
         sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
       >
+        <EnableWhenSelection
+          enableBehavior={item.enableBehavior}
+          onChangeEnableBehavior={(enableBehavior) =>
+            onChangeProperty('enableBehavior', enableBehavior)
+          }
+          conditions={item.enableWhen || []}
+          onChange={(conditions) => onChangeProperty('enableWhen', conditions)}
+          itemMap={itemMap}
+        />
+        <AutofillProperties
+          values={item.autofillValues || []}
+          onChange={(values) => onChangeProperty('autofillValues', values)}
+          itemMap={itemMap}
+        />
         <TextInput
           label='Link ID'
           value={item.linkId}
