@@ -65,6 +65,9 @@ const FormBuilderPage = () => {
   });
 
   const formDefinition = useMemo(() => {
+    // TODO - test this thoroughly around error cases.
+    // If the mutation fails, then `data` would be present but `data.updateFormDefinition?.formDefinition` would be null.
+    // In that case, it's not correct to use `initialFormDefinition` - we want the most recent successfully saved definition instead
     if (data && data.updateFormDefinition?.formDefinition)
       return data.updateFormDefinition.formDefinition;
     return initialFormDefinition;
