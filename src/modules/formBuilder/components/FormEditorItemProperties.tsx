@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material';
+import { startCase } from 'lodash-es';
 import { useMemo } from 'react';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
@@ -8,8 +9,10 @@ import {
   localResolvePickList,
   MAX_INPUT_AND_LABEL_WIDTH,
 } from '@/modules/form/util/formUtil';
+import { getComponents } from '@/modules/formBuilder/components/formBuilderUtil';
 import {
   AssessmentRole,
+  Component,
   FormDefinitionFieldsForEditorFragment,
   FormItem,
   ItemType,
@@ -37,6 +40,17 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     [definition.role]
   );
 
+  const components = useMemo(
+    () =>
+      getComponents(item.type).map((component) => {
+        return {
+          code: component,
+          label: startCase(component.toLowerCase()),
+        };
+      }),
+    [item.type]
+  );
+
   return (
     <>
       <Typography>Properties</Typography>
@@ -48,6 +62,19 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         }}
         sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
       >
+        {components.length > 0 && (
+          <FormSelect
+            label='Component'
+            value={item.component ? { code: item.component } : null}
+            options={components}
+            onChange={(_e, value) => {
+              onChangeProperty(
+                'component',
+                isPickListOption(value) ? value.code : null
+              );
+            }}
+          />
+        )}
         <TextInput
           label='Link ID'
           value={item.linkId}
@@ -189,22 +216,50 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             }}
           />
         )}
-        {[ItemType.Choice, ItemType.OpenChoice].includes(item.type) && (
-          <FormSelect
-            label='Pick list reference'
-            value={
-              pickListTypesPickList.find(
-                (o) => o.code === item.pickListReference
-              ) || undefined
-            }
-            options={pickListTypesPickList}
-            onChange={(_e, value) => {
+        {([ItemType.Choice, ItemType.OpenChoice].includes(item.type) ||
+          (item.type === ItemType.Object &&
+            item.component === Component.Address)) && (
+          <LabeledCheckbox
+            label='Repeats'
+            checked={item.repeats}
+            onChange={(e) =>
               onChangeProperty(
-                'pickListReference',
-                isPickListOption(value) ? value.code : undefined
-              );
-            }}
+                'repeats',
+                (e.target as HTMLInputElement).checked
+              )
+            }
           />
+        )}
+        {[ItemType.Choice, ItemType.OpenChoice].includes(item.type) && (
+          <>
+            <TextInput
+              label='Allowed Responses'
+              value={item.pickListOptions?.map((o) => o.code).join(',')}
+              onChange={(e) => {
+                onChangeProperty(
+                  'pickListOptions',
+                  e.target.value.split(',').map((o) => {
+                    return { code: o };
+                  })
+                );
+              }}
+            />
+            <FormSelect
+              label='Reference list for allowed responses'
+              value={
+                pickListTypesPickList.find(
+                  (o) => o.code === item.pickListReference
+                ) || undefined
+              }
+              options={pickListTypesPickList}
+              onChange={(_e, value) => {
+                onChangeProperty(
+                  'pickListReference',
+                  isPickListOption(value) ? value.code : undefined
+                );
+              }}
+            />
+          </>
         )}
       </Stack>
     </>
