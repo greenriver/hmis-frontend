@@ -1,5 +1,6 @@
 import { Divider, Drawer, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { ErrorState } from '@/modules/errors/util';
 import FormEditorItemPreview from '@/modules/formBuilder/components/FormEditorItemPreview';
 import FormEditorItemProperties from '@/modules/formBuilder/components/FormEditorItemProperties';
 import {
@@ -11,13 +12,21 @@ import {
 interface FormItemEditorProps {
   selectedItem: FormItem;
   definition: FormDefinitionFieldsForEditorFragment;
-  handleClose: () => void;
+  handleClose?: () => void;
+  saveLoading: boolean;
+  onSave: (item: FormItem, initialLinkId: string) => void;
+  onDiscard: () => void;
+  errorState?: ErrorState;
 }
 
 const FormItemEditor: React.FC<FormItemEditorProps> = ({
   selectedItem,
   definition,
   handleClose,
+  onSave,
+  onDiscard,
+  saveLoading,
+  errorState,
 }) => {
   const [value, setValue] = useState<any>(undefined);
 
@@ -28,7 +37,7 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
       open={!!selectedItem}
       onClose={() => {
         setValue(undefined);
-        handleClose();
+        if (handleClose) handleClose();
       }}
       anchor='right'
       sx={{
@@ -64,6 +73,10 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
               [attr]: newProperty,
             });
           }}
+          saveLoading={saveLoading}
+          onSave={onSave}
+          errorState={errorState}
+          onDiscard={onDiscard}
         />
       </Stack>
     </Drawer>
