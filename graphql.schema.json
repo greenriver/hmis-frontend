@@ -10421,6 +10421,12 @@
             "deprecationReason": null
           },
           {
+            "name": "REFERRAL",
+            "description": "Referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "REFERRAL_REQUEST",
             "description": "Referral request",
             "isDeprecated": false,
@@ -16275,6 +16281,18 @@
             "deprecationReason": null
           },
           {
+            "name": "sourceReferralPosting",
+            "description": "Present if this household was enrolled as the result of a referral from another project.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ReferralPosting",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "args": [],
@@ -21675,6 +21693,12 @@
           {
             "name": "PROJECT_CONFIG",
             "description": "Project config",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL",
+            "description": "Referral",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -27903,8 +27927,8 @@
               "name": "CreateOutgoingReferralPostingPayload",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Moved to SubmitForm"
           },
           {
             "name": "createProjectConfig",
@@ -30683,6 +30707,12 @@
           {
             "name": "PROJECT",
             "description": "All Projects that the User can see",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECTS_RECEIVING_REFERRALS",
+            "description": "Open Projects that can receive referrals",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -37060,7 +37090,7 @@
             "args": [
               {
                 "name": "projectId",
-                "description": "Optional Project to apply rule filtering (e.g. show/hide questions based on Project applicability)",
+                "description": "Optional Project to select the relevant form, and to apply rule filtering\n(e.g. show/hide questions based on Project applicability)",
                 "type": {
                   "kind": "SCALAR",
                   "name": "ID",
@@ -38571,6 +38601,12 @@
             "deprecationReason": null
           },
           {
+            "name": "REFERRAL",
+            "description": "Referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "REFERRAL_REQUEST",
             "description": "Referral request",
             "isDeprecated": false,
@@ -38779,8 +38815,32 @@
             "deprecationReason": null
           },
           {
-            "name": "denialNote",
+            "name": "customDataElements",
             "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CustomDataElement",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "denialNote",
+            "description": "Admin Note associated with the denial (entered from the Denial Screen)",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -38960,7 +39020,7 @@
           },
           {
             "name": "project",
-            "description": "Project that household is being referred to",
+            "description": "Project that household is being referred to, if user can access it",
             "args": [],
             "type": {
               "kind": "OBJECT",
@@ -38979,7 +39039,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "ISO8601DateTime",
+                "name": "ISO8601Date",
                 "ofType": null
               }
             },
@@ -39000,7 +39060,7 @@
           },
           {
             "name": "referralNotes",
-            "description": null,
+            "description": "Note associated with the Referral that came from an External API",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -39067,8 +39127,20 @@
             "deprecationReason": null
           },
           {
+            "name": "referredTo",
+            "description": "Name of the Project that household is being referred to",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "resourceCoordinatorNotes",
-            "description": null,
+            "description": "Note associated with the Referral Posting that either came from the External\nAPI, or was entered when creating a referral within HMIS",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -39108,7 +39180,7 @@
           },
           {
             "name": "statusNote",
-            "description": null,
+            "description": "Note associated with the status (E.g. why it was accepted pending / denied pending)",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -39171,13 +39243,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "UnitTypeObject",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "UnitTypeObject",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -41182,13 +41250,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "ServiceType",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "ServiceType",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -43713,6 +43777,11 @@
           {
             "kind": "OBJECT",
             "name": "ProjectCoc",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ReferralPosting",
             "ofType": null
           },
           {

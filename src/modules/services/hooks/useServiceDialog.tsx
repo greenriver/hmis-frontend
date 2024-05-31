@@ -53,27 +53,33 @@ const ServiceCategoryAndType = ({
   service,
 }: {
   service: ServiceFieldsFragment;
-}) => (
-  <>
-    {service.serviceType.category !== service.serviceType.name && (
+}) => {
+  return (
+    <>
+      {service.serviceType?.category !== service.serviceType?.name && (
+        <LabelWithContent
+          label='Service Category'
+          LabelProps={{ sx: { fontWeight: 600 } }}
+          sx={{ mb: 2 }}
+        >
+          <Typography variant='body2'>
+            {service.serviceType?.category || 'Unknown'}
+          </Typography>
+        </LabelWithContent>
+      )}
+
       <LabelWithContent
-        label='Service Category'
+        label='Service Type'
         LabelProps={{ sx: { fontWeight: 600 } }}
         sx={{ mb: 2 }}
       >
-        <Typography variant='body2'>{service.serviceType.category}</Typography>
+        <Typography variant='body2'>
+          {service.serviceType?.name || 'Unknown'}
+        </Typography>
       </LabelWithContent>
-    )}
-
-    <LabelWithContent
-      label='Service Type'
-      LabelProps={{ sx: { fontWeight: 600 } }}
-      sx={{ mb: 2 }}
-    >
-      <Typography variant='body2'>{service.serviceType.name}</Typography>
-    </LabelWithContent>
-  </>
-);
+    </>
+  );
+};
 
 export function useServiceDialog({
   enrollment,
@@ -94,7 +100,8 @@ export function useServiceDialog({
   );
 
   useEffect(() => {
-    if (service) setSelectedService({ code: service.serviceType.id });
+    if (service && service.serviceType)
+      setSelectedService({ code: service.serviceType.id });
   }, [service]);
 
   const { data: { serviceType } = {}, loading: serviceTypeLoading } =

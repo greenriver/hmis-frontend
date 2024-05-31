@@ -5287,7 +5287,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
       },
       {
@@ -5317,6 +5317,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
+      },
+      {
+        name: 'referredTo',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'resourceCoordinatorNotes',

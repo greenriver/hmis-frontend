@@ -8,7 +8,10 @@ import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { ReferralPostingDefinition } from '@/modules/form/data';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { SubmitFormAllowedTypes } from '@/modules/form/types';
-import { transformSubmitValues } from '@/modules/form/util/formUtil';
+import {
+  localResolvePickList,
+  transformSubmitValues,
+} from '@/modules/form/util/formUtil';
 import {
   ReferralPostingDetailFieldsFragment,
   ReferralPostingInput,
@@ -37,9 +40,16 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
   });
 
   const definition = useMemo(() => {
+    const definitionCopy = cloneDeep(ReferralPostingDefinition);
+    if (readOnly) {
+      // If this is a read-only view, we can show any status, so include them all in the "pick list" to resolve the correct labels.
+      definitionCopy.item[0].pickListOptions = localResolvePickList(
+        'ReferralPostingStatus'
+      );
+      return definitionCopy;
+    }
     // Hacky way to drop the "Assigned" option if this posting is in AcceptedPending status.
     // This lets user change from AcceptedPending=>DeniedPending which is sometimes necessary.
-    const definitionCopy = cloneDeep(ReferralPostingDefinition);
     if (
       referralPosting.status === ReferralPostingStatus.AcceptedPendingStatus &&
       definitionCopy.item[0].pickListOptions
@@ -50,7 +60,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
       );
     }
     return definitionCopy;
-  }, [referralPosting]);
+  }, [readOnly, referralPosting]);
 
   const handleSubmit: DynamicFormOnSubmit = useCallback(
     ({ values }) => {

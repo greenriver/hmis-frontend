@@ -67,7 +67,16 @@ const ProjectReferrals = () => {
                 <ProjectReferralRequestsTable project={project} />
               </TitleCard>
             )}
-            <TitleCard title='Active Referrals' headerVariant='border'>
+            <TitleCard
+              title={
+                // If user is seeing both Outgoing+Incoming, call this "Incoming" to make the difference more obvious.
+                // If user only sees incoming referrals (AC providers), leave it as "Active Referrals".
+                project.access.canManageOutgoingReferrals
+                  ? 'Incoming Referrals'
+                  : 'Active Referrals'
+              }
+              headerVariant='border'
+            >
               <ProjectReferralPostingsTable
                 projectId={project.id}
                 externalReferrals={externalReferrals}

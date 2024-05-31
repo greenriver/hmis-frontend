@@ -109,12 +109,18 @@ const ProjectReferralPosting: React.FC = () => {
               <TitleCard title='Referral Notes' padded>
                 <Stack spacing={4}>
                   {referralPosting.referralNotes && (
+                    // only present on externalReferrals
                     <CommonLabeledTextBlock title='Referral Notes'>
                       {referralPosting.referralNotes}
                     </CommonLabeledTextBlock>
                   )}
                   {referralPosting.resourceCoordinatorNotes && (
-                    <CommonLabeledTextBlock title='Resource Coordinator Notes'>
+                    // this label is specific to external referral integration. for other cases, just rely on card title
+                    <CommonLabeledTextBlock
+                      title={
+                        externalReferrals ? 'Resource Coordinator Notes' : ''
+                      }
+                    >
                       {referralPosting.resourceCoordinatorNotes}
                     </CommonLabeledTextBlock>
                   )}
