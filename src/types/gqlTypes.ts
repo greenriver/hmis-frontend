@@ -6535,7 +6535,7 @@ export type Service = {
   otherTypeProvided?: Maybe<Scalars['String']['output']>;
   recordType?: Maybe<RecordType>;
   referralOutcome?: Maybe<PathReferralOutcome>;
-  serviceType: ServiceType;
+  serviceType?: Maybe<ServiceType>;
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
   typeProvided?: Maybe<ServiceTypeProvided>;
   user?: Maybe<ApplicationUser>;
@@ -13619,7 +13619,7 @@ export type GetClientServicesQuery = {
           name: string;
           email: string;
         } | null;
-        serviceType: {
+        serviceType?: {
           __typename?: 'ServiceType';
           id: string;
           name: string;
@@ -13630,7 +13630,7 @@ export type GetClientServicesQuery = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
-        };
+        } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
@@ -26313,7 +26313,7 @@ export type SubmitFormMutation = {
             name: string;
             email: string;
           } | null;
-          serviceType: {
+          serviceType?: {
             __typename?: 'ServiceType';
             id: string;
             name: string;
@@ -26324,7 +26324,7 @@ export type SubmitFormMutation = {
             dateCreated?: string | null;
             dateUpdated?: string | null;
             supportsBulkAssignment: boolean;
-          };
+          } | null;
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
             id: string;
@@ -28429,7 +28429,7 @@ export type GetProjectServicesQuery = {
             nameSuffix?: string | null;
           };
         };
-        serviceType: {
+        serviceType?: {
           __typename?: 'ServiceType';
           id: string;
           name: string;
@@ -28440,7 +28440,7 @@ export type GetProjectServicesQuery = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
-        };
+        } | null;
       }>;
     };
   } | null;
@@ -30414,7 +30414,7 @@ export type ServiceBasicFieldsFragment = {
   __typename?: 'Service';
   id: string;
   dateProvided?: string | null;
-  serviceType: {
+  serviceType?: {
     __typename?: 'ServiceType';
     id: string;
     name: string;
@@ -30425,7 +30425,7 @@ export type ServiceBasicFieldsFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
-  };
+  } | null;
 };
 
 export type ServiceFieldsFragment = {
@@ -30448,7 +30448,7 @@ export type ServiceFieldsFragment = {
     name: string;
     email: string;
   } | null;
-  serviceType: {
+  serviceType?: {
     __typename?: 'ServiceType';
     id: string;
     name: string;
@@ -30459,7 +30459,7 @@ export type ServiceFieldsFragment = {
     dateCreated?: string | null;
     dateUpdated?: string | null;
     supportsBulkAssignment: boolean;
-  };
+  } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -30549,7 +30549,7 @@ export type GetServiceQuery = {
       name: string;
       email: string;
     } | null;
-    serviceType: {
+    serviceType?: {
       __typename?: 'ServiceType';
       id: string;
       name: string;
@@ -30560,7 +30560,7 @@ export type GetServiceQuery = {
       dateCreated?: string | null;
       dateUpdated?: string | null;
       supportsBulkAssignment: boolean;
-    };
+    } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -30660,7 +30660,7 @@ export type DeleteServiceMutation = {
         name: string;
         email: string;
       } | null;
-      serviceType: {
+      serviceType?: {
         __typename?: 'ServiceType';
         id: string;
         name: string;
@@ -30671,7 +30671,7 @@ export type DeleteServiceMutation = {
         dateCreated?: string | null;
         dateUpdated?: string | null;
         supportsBulkAssignment: boolean;
-      };
+      } | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
         id: string;
@@ -30774,7 +30774,7 @@ export type GetEnrollmentServicesQuery = {
           name: string;
           email: string;
         } | null;
-        serviceType: {
+        serviceType?: {
           __typename?: 'ServiceType';
           id: string;
           name: string;
@@ -30785,7 +30785,7 @@ export type GetEnrollmentServicesQuery = {
           dateCreated?: string | null;
           dateUpdated?: string | null;
           supportsBulkAssignment: boolean;
-        };
+        } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
           id: string;
