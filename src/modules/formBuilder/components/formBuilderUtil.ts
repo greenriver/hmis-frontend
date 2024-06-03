@@ -1,6 +1,11 @@
 import { ItemType, Component } from '@/types/gqlTypes';
 
-export const getComponents = (type: ItemType) => {
+export const validComponentsForType = (type: ItemType) => {
+  /**
+   * You can select a component override for some item types, but each item type
+   * also has a default component that it displays (Except for Object?).
+   * These are specified in code in the DynamicField/DynamicViewField.
+   */
   switch (type) {
     case ItemType.Object:
       return [
@@ -19,7 +24,6 @@ export const getComponents = (type: ItemType) => {
     case ItemType.Boolean:
       return [Component.Checkbox];
     case ItemType.Choice:
-    case ItemType.OpenChoice:
       return [
         Component.Dropdown,
         Component.RadioButtons,

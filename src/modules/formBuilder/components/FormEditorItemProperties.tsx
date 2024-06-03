@@ -12,7 +12,7 @@ import {
   localResolvePickList,
   MAX_INPUT_AND_LABEL_WIDTH,
 } from '@/modules/form/util/formUtil';
-import { getComponents } from '@/modules/formBuilder/components/formBuilderUtil';
+import { validComponentsForType } from '@/modules/formBuilder/components/formBuilderUtil';
 import {
   AssessmentRole,
   Component,
@@ -52,9 +52,9 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   );
   const [initialLinkId] = useState<string>(item.linkId);
 
-  const components = useMemo(
+  const componentOverridePicklist = useMemo(
     () =>
-      getComponents(item.type).map((component) => {
+      validComponentsForType(item.type).map((component) => {
         return {
           code: component,
           label: startCase(component.toLowerCase()),
@@ -74,11 +74,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         }}
         sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
       >
-        {components.length > 0 && (
+        {componentOverridePicklist.length > 0 && (
           <FormSelect
-            label='Component'
+            label='Component Override'
             value={item.component ? { code: item.component } : null}
-            options={components}
+            options={componentOverridePicklist}
             onChange={(_e, value) => {
               onChangeProperty(
                 'component',
@@ -232,7 +232,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           (item.type === ItemType.Object &&
             item.component === Component.Address)) && (
           <LabeledCheckbox
-            label='Repeats'
+            label='Allow multiple responses'
             checked={item.repeats}
             onChange={(e) =>
               onChangeProperty(
