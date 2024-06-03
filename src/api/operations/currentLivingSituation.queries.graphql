@@ -15,3 +15,22 @@ query GetEnrollmentCurrentLivingSituations(
     }
   }
 }
+
+query GetProjectCurrentLivingSituations(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    currentLivingSit
+    uations(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ProjectCurrentLivingSituationFields
+      }
+    }
+  }
+}
