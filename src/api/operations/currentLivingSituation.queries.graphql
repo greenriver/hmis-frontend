@@ -23,8 +23,7 @@ query GetProjectCurrentLivingSituations(
 ) {
   project(id: $id) {
     id
-    currentLivingSit
-    uations(limit: $limit, offset: $offset) {
+    currentLivingSituations(limit: $limit, offset: $offset) {
       offset
       limit
       nodesCount
