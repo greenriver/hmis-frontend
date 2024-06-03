@@ -1,7 +1,10 @@
-import { Stack, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { LoadingButton } from '@mui/lab';
+import { Button, Stack, Typography } from '@mui/material';
+import { useMemo, useState } from 'react';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import { ErrorState } from '@/modules/errors/util';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { isPickListOption } from '@/modules/form/types';
 import {
@@ -25,17 +28,26 @@ interface FormEditorItemPropertiesProps {
   item: FormItem;
   definition: FormDefinitionFieldsForEditorFragment;
   onChangeProperty: (attr: keyof FormItem, newProperty: any) => void;
+  saveLoading: boolean;
+  onSave: (item: FormItem, initialLinkId: string) => void;
+  errorState?: ErrorState;
+  onDiscard: () => void;
 }
 
 const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   item,
   definition,
   onChangeProperty,
+  saveLoading,
+  errorState,
+  onSave,
+  onDiscard,
 }) => {
   const isAssessment = useMemo(
     () => (Object.values(AssessmentRole) as [string]).includes(definition.role),
     [definition.role]
   );
+  const [initialLinkId] = useState<string>(item.linkId);
 
   return (
     <>
@@ -206,6 +218,23 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             }}
           />
         )}
+        {errorState?.errors && errorState.errors.length > 0 && (
+          <Stack gap={1} sx={{ mt: 4 }}>
+            <ErrorAlert key='errors' errors={errorState.errors} />
+          </Stack>
+        )}
+        <Stack direction='row' gap={2}>
+          <LoadingButton
+            variant='outlined'
+            loading={saveLoading}
+            onClick={() => onSave(item, initialLinkId)}
+          >
+            Save Draft
+          </LoadingButton>
+          <Button variant='outlined' onClick={onDiscard}>
+            Discard
+          </Button>
+        </Stack>
       </Stack>
     </>
   );
