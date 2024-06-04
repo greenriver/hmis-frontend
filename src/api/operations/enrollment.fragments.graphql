@@ -252,3 +252,9 @@ fragment EnrollmentSummaryFields on EnrollmentSummary {
   projectType
   canViewEnrollment
 }
+
+fragment EnrollmentRangeFields on Enrollment {
+  entryDate
+  exitDate
+  inProgress
+}

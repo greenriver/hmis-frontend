@@ -6,6 +6,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { baseColumns } from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectCurrentLivingSituationsDocument,
@@ -38,14 +39,17 @@ const ProjectCurrentLivingSituations = () => {
       },
       { ...baseColumns.informationDate, linkTreatment: false },
       baseColumns.livingSituation,
-      baseColumns.locationDetails,
+      {
+        header: 'Enrollment Period',
+        render: (cls: ProjectCurrentLivingSituationFieldsFragment) => (
+          <EnrollmentDateRangeWithStatus enrollment={cls.enrollment} />
+        ),
+      },
     ];
   }, []);
 
   const rowLinkTo = useCallback(
     (cls: ProjectCurrentLivingSituationFieldsFragment) => {
-      if (!cls) return;
-
       return generateSafePath(
         EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
         {

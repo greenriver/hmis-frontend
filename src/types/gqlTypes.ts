@@ -13908,10 +13908,10 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               __typename?: 'Enrollment';
               id: string;
               lockVersion: number;
+              autoExited: boolean;
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
-              autoExited: boolean;
               currentUnit?: {
                 __typename?: 'Unit';
                 id: string;
@@ -15693,7 +15693,13 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
     lastName?: string | null;
     nameSuffix?: string | null;
   };
-  enrollment: { __typename?: 'Enrollment'; id: string };
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+  };
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -15876,7 +15882,13 @@ export type GetProjectCurrentLivingSituationsQuery = {
           lastName?: string | null;
           nameSuffix?: string | null;
         };
-        enrollment: { __typename?: 'Enrollment'; id: string };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+        };
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17342,6 +17354,13 @@ export type EnrollmentSummaryFieldsFragment = {
   canViewEnrollment: boolean;
 };
 
+export type EnrollmentRangeFieldsFragment = {
+  __typename?: 'Enrollment';
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+};
+
 export type GetEnrollmentQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -18271,10 +18290,10 @@ export type GetEnrollmentWithHouseholdQuery = {
           __typename?: 'Enrollment';
           id: string;
           lockVersion: number;
+          autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
-          autoExited: boolean;
           currentUnit?: {
             __typename?: 'Unit';
             id: string;
@@ -26599,10 +26618,10 @@ export type HouseholdFieldsFragment = {
       __typename?: 'Enrollment';
       id: string;
       lockVersion: number;
+      autoExited: boolean;
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
-      autoExited: boolean;
       currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     };
   }>;
@@ -26677,10 +26696,10 @@ export type HouseholdClientFieldsFragment = {
     __typename?: 'Enrollment';
     id: string;
     lockVersion: number;
+    autoExited: boolean;
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
-    autoExited: boolean;
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   };
 };
@@ -26839,10 +26858,10 @@ export type GetHouseholdQuery = {
         __typename?: 'Enrollment';
         id: string;
         lockVersion: number;
+        autoExited: boolean;
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
-        autoExited: boolean;
         currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       };
     }>;
@@ -28551,6 +28570,7 @@ export type GetProjectServicesQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          inProgress: boolean;
           client: {
             __typename?: 'Client';
             dob?: string | null;
@@ -32428,6 +32448,13 @@ export const ServiceTypeConfigFieldsFragmentDoc = gql`
   }
   ${ServiceTypeFieldsFragmentDoc}
 `;
+export const EnrollmentRangeFieldsFragmentDoc = gql`
+  fragment EnrollmentRangeFields on Enrollment {
+    entryDate
+    exitDate
+    inProgress
+  }
+`;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
     id
@@ -32460,10 +32487,12 @@ export const ProjectCurrentLivingSituationFieldsFragmentDoc = gql`
     }
     enrollment {
       id
+      ...EnrollmentRangeFields
     }
     ...CurrentLivingSituationFields
   }
   ${ClientNameFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
   ${CurrentLivingSituationFieldsFragmentDoc}
 `;
 export const CustomCaseNoteFieldsFragmentDoc = gql`
@@ -32930,9 +32959,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
     enrollment {
       id
       lockVersion
-      entryDate
-      exitDate
-      inProgress
+      ...EnrollmentRangeFields
       autoExited
       currentUnit {
         id
@@ -32945,6 +32972,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
   ${ClientAccessFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${ClientAlertFieldsFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
 `;
 export const HouseholdFieldsFragmentDoc = gql`
   fragment HouseholdFields on Household {
@@ -40547,8 +40575,7 @@ export const GetProjectServicesDocument = gql`
           ...ServiceBasicFields
           enrollment {
             id
-            entryDate
-            exitDate
+            ...EnrollmentRangeFields
             client {
               ...ClientNameDobVet
             }
@@ -40558,6 +40585,7 @@ export const GetProjectServicesDocument = gql`
     }
   }
   ${ServiceBasicFieldsFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
 `;
 

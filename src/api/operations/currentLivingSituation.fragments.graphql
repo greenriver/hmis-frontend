@@ -26,6 +26,7 @@ fragment ProjectCurrentLivingSituationFields on CurrentLivingSituation {
   }
   enrollment {
     id
+    ...EnrollmentRangeFields
   }
   ...CurrentLivingSituationFields
 }
