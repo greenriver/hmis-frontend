@@ -1,16 +1,14 @@
 import { Divider, Drawer, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import { ErrorState } from '@/modules/errors/util';
-import FormEditorItemPreview from '@/modules/formBuilder/components/FormEditorItemPreview';
 import FormEditorItemProperties from '@/modules/formBuilder/components/FormEditorItemProperties';
 import {
   FormDefinitionFieldsForEditorFragment,
   FormItem,
-  ItemType,
 } from '@/types/gqlTypes';
 
 interface FormItemEditorProps {
-  selectedItem: FormItem;
+  item: FormItem;
   definition: FormDefinitionFieldsForEditorFragment;
   handleClose?: () => void;
   saveLoading: boolean;
@@ -20,7 +18,7 @@ interface FormItemEditorProps {
 }
 
 const FormItemEditor: React.FC<FormItemEditorProps> = ({
-  selectedItem,
+  item,
   definition,
   handleClose,
   onSave,
@@ -28,17 +26,10 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
   saveLoading,
   errorState,
 }) => {
-  const [value, setValue] = useState<any>(undefined);
-
-  const [workingItem, setWorkingItem] = useState<FormItem>(selectedItem);
-
   return (
     <Drawer
-      open={!!selectedItem}
-      onClose={() => {
-        setValue(undefined);
-        if (handleClose) handleClose();
-      }}
+      open={!!item}
+      onClose={handleClose}
       anchor='right'
       sx={{
         width: '50vw',
@@ -51,28 +42,12 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
     >
       <Stack gap={2}>
         <Typography variant='cardTitle'>
-          Edit Form Item: {selectedItem.linkId}
+          Edit Form Item: {item.linkId}
         </Typography>
-        {selectedItem.type !== ItemType.Group && (
-          <>
-            <Divider />
-            <FormEditorItemPreview
-              item={workingItem}
-              value={value}
-              setValue={setValue}
-            />
-          </>
-        )}
         <Divider />
         <FormEditorItemProperties
-          item={workingItem}
+          initialItem={item}
           definition={definition}
-          onChangeProperty={(attr, newProperty) => {
-            setWorkingItem({
-              ...workingItem,
-              [attr]: newProperty,
-            });
-          }}
           saveLoading={saveLoading}
           onSave={onSave}
           errorState={errorState}

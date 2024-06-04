@@ -134,14 +134,14 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         />
         {selectedItem && (
           <FormItemEditor
-            selectedItem={selectedItem}
+            item={selectedItem}
             definition={formDefinition}
             saveLoading={saveLoading}
             errorState={errorState}
-            onSave={(item, initialLinkId) => {
+            onSave={(updatedItem, initialLinkId) => {
               const newDefinition = updateFormItem(
                 workingDefinition,
-                item,
+                updatedItem,
                 initialLinkId
               );
 
