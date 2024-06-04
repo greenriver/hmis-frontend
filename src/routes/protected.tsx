@@ -86,6 +86,7 @@ import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferr
 import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
 import ProjectAssessments from '@/modules/projects/components/ProjectAssessments';
 import ProjectCoc from '@/modules/projects/components/ProjectCoc';
+import ProjectCurrentLivingSituations from '@/modules/projects/components/ProjectCurrentLivingSituations';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
 import ProjectEsgFundingReport from '@/modules/projects/components/ProjectEsgFundingReport';
@@ -163,6 +164,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.PROJECT_SERVICES,
             element: <ProjectServices />,
+          },
+          {
+            path: ProjectDashboardRoutes.PROJECT_CURRENT_LIVING_SITUATIONS,
+            element: <ProjectCurrentLivingSituations />,
           },
           {
             path: ProjectDashboardRoutes.BULK_BED_NIGHTS,
