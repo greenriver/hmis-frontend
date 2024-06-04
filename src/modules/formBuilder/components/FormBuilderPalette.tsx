@@ -11,6 +11,7 @@ import {
   FormGroupIcon,
   FormImageIcon,
   FormIntegerIcon,
+  FormObjectIcon,
   FormStringIcon,
   FormTextIcon,
   FormTimeOfDayIcon,
@@ -88,12 +89,11 @@ export const FORM_ITEM_PALETTE = {
     IconClass: FormFileIcon,
     displayName: 'File Upload',
   },
-  // TODO - Object is a special case, remove it from the list for now until we support it
-  // [ItemType.Object]: {
-  //   itemType: ItemType.Object,
-  //   IconClass: FormObjectIcon,
-  //   displayName: 'Object',
-  // },
+  [ItemType.Object]: {
+    itemType: ItemType.Object,
+    IconClass: FormObjectIcon,
+    displayName: 'Object',
+  },
 };
 
 const PaletteButton: React.FC<
@@ -134,13 +134,16 @@ const FormBuilderPalette: React.FC<FormBuilderPaletteType> = ({
       }}
     >
       <Stack gap={1}>
-        {Object.entries(FORM_ITEM_PALETTE).map(([key, paletteItem]) => (
-          <PaletteButton
-            key={key}
-            {...paletteItem}
-            onClick={() => onItemClick(paletteItem.itemType)}
-          />
-        ))}
+        {Object.entries(FORM_ITEM_PALETTE)
+          // TODO - Object is a special case, remove it from the list for now until we support it
+          .filter(([key]) => key !== ItemType.Object)
+          .map(([key, paletteItem]) => (
+            <PaletteButton
+              key={key}
+              {...paletteItem}
+              onClick={() => onItemClick(paletteItem.itemType)}
+            />
+          ))}
       </Stack>
     </Drawer>
   );
