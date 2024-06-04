@@ -28,9 +28,7 @@ fragment HouseholdClientFields on HouseholdClient {
   enrollment {
     id
     lockVersion
-    entryDate
-    exitDate
-    inProgress
+    ...EnrollmentRangeFields
     autoExited
     currentUnit {
       id
