@@ -80,7 +80,12 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
       if (blockedActionFunction) blockedActionFunction();
       setBlockedActionFunction(undefined);
     });
-  }, [workingDefinition, blockedActionFunction, setBlockedActionFunction]);
+  }, [
+    workingDefinition,
+    blockedActionFunction,
+    setBlockedActionFunction,
+    onSave,
+  ]);
 
   if (!workingDefinition || !setWorkingDefinition) return <Loading />;
 
