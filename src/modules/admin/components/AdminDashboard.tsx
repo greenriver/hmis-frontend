@@ -116,7 +116,10 @@ const AdminDashboard: React.FC = () => {
   const formEditorContentSx = {
     px: 0,
     py: 0,
+    maxWidth: '100%',
   };
+  const isFormEditor =
+    dashboardState.currentPath === '/admin/forms/:identifier/:formId/edit';
 
   if (!access) return <NotFound />;
 
@@ -131,14 +134,12 @@ const AdminDashboard: React.FC = () => {
         />
       }
       contentSx={
-        // The form editor needs to take up the whole page because of its layout, so the parent box should have 0 padding
-        dashboardState.currentPath === '/admin/forms/:identifier/:formId/edit'
-          ? formEditorContentSx
-          : {}
+        // The form editor needs to take up the whole page because of its layout, so the parent gets custom sx
+        isFormEditor ? formEditorContentSx : {}
       }
       {...dashboardState}
     >
-      <Container maxWidth='xl' disableGutters>
+      <Container maxWidth={isFormEditor ? false : 'xl'} disableGutters>
         <Outlet />
       </Container>
     </DashboardContentContainer>

@@ -1,5 +1,6 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArticleIcon from '@mui/icons-material/Article';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -52,6 +53,7 @@ export {
 
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
+  ArrowDropDownIcon as FormDropdownIcon,
   RadioButtonCheckedIcon as FormChoiceIcon,
   AttachMoneyIcon as FormCurrencyIcon,
   DateRangeIcon as FormDateIcon,
