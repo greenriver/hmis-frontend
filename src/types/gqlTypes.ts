@@ -1516,6 +1516,8 @@ export enum DataCollectionFeatureRole {
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** External form */
   ExternalForm = 'EXTERNAL_FORM',
+  /** Referral */
+  Referral = 'REFERRAL',
   /** Referral request */
   ReferralRequest = 'REFERRAL_REQUEST',
   /** Service */
@@ -2303,6 +2305,8 @@ export type Enrollment = {
   sexualOrientation?: Maybe<SexualOrientation>;
   sexualOrientationOther?: Maybe<Scalars['String']['output']>;
   singleParent?: Maybe<NoYesMissing>;
+  /** Present if this household was enrolled as the result of a referral from another project. */
+  sourceReferralPosting?: Maybe<ReferralPosting>;
   status: EnrollmentStatus;
   subsidyAtRisk?: Maybe<NoYesMissing>;
   targetScreenReqd?: Maybe<NoYesMissing>;
@@ -3080,6 +3084,8 @@ export enum FormRole {
   ProjectCoc = 'PROJECT_COC',
   /** Project config */
   ProjectConfig = 'PROJECT_CONFIG',
+  /** Referral */
+  Referral = 'REFERRAL',
   /** Referral request */
   ReferralRequest = 'REFERRAL_REQUEST',
   /** Service */
@@ -3988,7 +3994,10 @@ export type Mutation = {
   createDirectUpload?: Maybe<DirectUpload>;
   createFormDefinition?: Maybe<CreateFormDefinitionPayload>;
   createFormRule?: Maybe<CreateFormRulePayload>;
-  /** Create outgoing referral posting */
+  /**
+   * Create outgoing referral posting
+   * @deprecated Moved to SubmitForm
+   */
   createOutgoingReferralPosting?: Maybe<CreateOutgoingReferralPostingPayload>;
   createProjectConfig?: Maybe<CreateProjectConfigPayload>;
   createScanCardCode?: Maybe<CreateScanCardCodePayload>;
@@ -4541,6 +4550,8 @@ export enum PickListType {
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   /** All Projects that the User can see */
   Project = 'PROJECT',
+  /** Open Projects that can receive referrals */
+  ProjectsReceivingReferrals = 'PROJECTS_RECEIVING_REFERRALS',
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Residential Projects */
   ResidentialProjects = 'RESIDENTIAL_PROJECTS',
@@ -5293,6 +5304,7 @@ export type Project = {
   ceParticipations: CeParticipationsPaginated;
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
+  currentLivingSituations: CurrentLivingSituationsPaginated;
   customDataElements: Array<CustomDataElement>;
   /** Occurrence Point data collection features that are enabled for this Project (e.g. Current Living Situations, Events) */
   dataCollectionFeatures: Array<DataCollectionFeature>;
@@ -5343,6 +5355,11 @@ export type ProjectAssessmentsArgs = {
 };
 
 export type ProjectCeParticipationsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ProjectCurrentLivingSituationsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -6057,6 +6074,8 @@ export enum RecordFormRole {
   Project = 'PROJECT',
   /** Project CoC */
   ProjectCoc = 'PROJECT_COC',
+  /** Referral */
+  Referral = 'REFERRAL',
   /** Referral request */
   ReferralRequest = 'REFERRAL_REQUEST',
   /** Service */
@@ -6103,6 +6122,8 @@ export type ReferralPosting = {
   __typename?: 'ReferralPosting';
   assignedDate: Scalars['ISO8601DateTime']['output'];
   chronic?: Maybe<Scalars['Boolean']['output']>;
+  customDataElements: Array<CustomDataElement>;
+  /** Admin Note associated with the denial (entered from the Denial Screen) */
   denialNote?: Maybe<Scalars['String']['output']>;
   denialReason?: Maybe<ReferralPostingDenialReasonType>;
   hohClient?: Maybe<Client>;
@@ -6117,25 +6138,33 @@ export type ReferralPosting = {
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']['output']>;
   organization?: Maybe<Organization>;
   postingIdentifier?: Maybe<Scalars['ID']['output']>;
-  /** Project that household is being referred to */
+  /** Project that household is being referred to, if user can access it */
   project?: Maybe<Project>;
-  referralDate: Scalars['ISO8601DateTime']['output'];
+  referralDate: Scalars['ISO8601Date']['output'];
   referralIdentifier?: Maybe<Scalars['ID']['output']>;
+  /** Note associated with the Referral that came from an External API */
   referralNotes?: Maybe<Scalars['String']['output']>;
   referralRequest?: Maybe<ReferralRequest>;
   referralResult?: Maybe<ReferralResult>;
   referredBy: Scalars['String']['output'];
   /** Name of project or external source that the referral originated from */
   referredFrom: Scalars['String']['output'];
+  /** Name of the Project that household is being referred to */
+  referredTo?: Maybe<Scalars['String']['output']>;
+  /**
+   * Note associated with the Referral Posting that either came from the External
+   * API, or was entered when creating a referral within HMIS
+   */
   resourceCoordinatorNotes?: Maybe<Scalars['String']['output']>;
   score?: Maybe<Scalars['Int']['output']>;
   status: ReferralPostingStatus;
+  /** Note associated with the status (E.g. why it was accepted pending / denied pending) */
   statusNote?: Maybe<Scalars['String']['output']>;
   statusNoteUpdatedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   statusNoteUpdatedBy?: Maybe<Scalars['String']['output']>;
   statusUpdatedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   statusUpdatedBy?: Maybe<Scalars['String']['output']>;
-  unitType: UnitTypeObject;
+  unitType?: Maybe<UnitTypeObject>;
 };
 
 /** Referral Posting Denial Reason */
@@ -7010,6 +7039,7 @@ export type SubmitFormResult =
   | Organization
   | Project
   | ProjectCoc
+  | ReferralPosting
   | ReferralRequest
   | Service;
 
@@ -16898,6 +16928,12 @@ export type AllEnrollmentDetailsFragment = {
     };
     projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
   };
+  sourceReferralPosting?: {
+    __typename?: 'ReferralPosting';
+    id: string;
+    referredFrom: string;
+    referralDate: string;
+  } | null;
   access: {
     __typename?: 'EnrollmentAccess';
     id: string;
@@ -17975,6 +18011,12 @@ export type GetEnrollmentDetailsQuery = {
       };
       projectCocs: { __typename?: 'ProjectCocsPaginated'; nodesCount: number };
     };
+    sourceReferralPosting?: {
+      __typename?: 'ReferralPosting';
+      id: string;
+      referredFrom: string;
+      referralDate: string;
+    } | null;
     access: {
       __typename?: 'EnrollmentAccess';
       id: string;
@@ -20363,6 +20405,7 @@ export type FormDefinitionFieldsFragment = {
 
 export type FormDefinitionFieldsForEditorFragment = {
   __typename?: 'FormDefinition';
+  status: FormStatus;
   rawDefinition: any;
   id: string;
   role: FormRole;
@@ -20855,6 +20898,7 @@ export type UpdateFormDefinitionMutation = {
     __typename?: 'UpdateFormDefinitionPayload';
     formDefinition?: {
       __typename?: 'FormDefinition';
+      status: FormStatus;
       rawDefinition: any;
       id: string;
       role: FormRole;
@@ -21362,6 +21406,7 @@ export type CreateFormDefinitionMutation = {
     __typename?: 'CreateFormDefinitionPayload';
     formDefinition?: {
       __typename?: 'FormDefinition';
+      status: FormStatus;
       rawDefinition: any;
       id: string;
       role: FormRole;
@@ -21869,6 +21914,7 @@ export type DeleteFormDefinitionMutation = {
     __typename?: 'DeleteFormDefinitionPayload';
     formDefinition?: {
       __typename?: 'FormDefinition';
+      status: FormStatus;
       rawDefinition: any;
       id: string;
       role: FormRole;
@@ -24379,6 +24425,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
   __typename?: 'Query';
   formDefinition?: {
     __typename?: 'FormDefinition';
+    status: FormStatus;
     rawDefinition: any;
     id: string;
     role: FormRole;
@@ -26226,6 +26273,7 @@ export type SubmitFormMutation = {
             email: string;
           } | null;
         }
+      | { __typename?: 'ReferralPosting'; id: string }
       | {
           __typename?: 'ReferralRequest';
           id: string;
@@ -28811,7 +28859,9 @@ export type GetProjectReferralPostingsQuery = {
         hohName: string;
         hohMciId?: string | null;
         householdSize: number;
+        referredFrom: string;
         referredBy: string;
+        referredTo?: string | null;
         status: ReferralPostingStatus;
         assignedDate: string;
         statusUpdatedAt?: string | null;
@@ -28856,7 +28906,9 @@ export type GetProjectOutgoingReferralPostingsQuery = {
         hohName: string;
         hohMciId?: string | null;
         householdSize: number;
+        referredFrom: string;
         referredBy: string;
+        referredTo?: string | null;
         status: ReferralPostingStatus;
         assignedDate: string;
         statusUpdatedAt?: string | null;
@@ -29400,6 +29452,7 @@ export type GetReferralPostingQuery = {
     referralResult?: ReferralResult | null;
     referredBy: string;
     referredFrom: string;
+    referredTo?: string | null;
     resourceCoordinatorNotes?: string | null;
     score?: number | null;
     status: ReferralPostingStatus;
@@ -29420,11 +29473,11 @@ export type GetReferralPostingQuery = {
       id: string;
       organizationName: string;
     } | null;
-    unitType: {
+    unitType?: {
       __typename?: 'UnitTypeObject';
       id: string;
       description?: string | null;
-    };
+    } | null;
     hohEnrollment?: {
       __typename?: 'Enrollment';
       id: string;
@@ -29493,6 +29546,53 @@ export type GetReferralPostingQuery = {
         }>;
       };
     }>;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      displayHooks: Array<DisplayHook>;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -29521,6 +29621,7 @@ export type UpdateReferralPostingMutation = {
       referralResult?: ReferralResult | null;
       referredBy: string;
       referredFrom: string;
+      referredTo?: string | null;
       resourceCoordinatorNotes?: string | null;
       score?: number | null;
       status: ReferralPostingStatus;
@@ -29541,11 +29642,11 @@ export type UpdateReferralPostingMutation = {
         id: string;
         organizationName: string;
       } | null;
-      unitType: {
+      unitType?: {
         __typename?: 'UnitTypeObject';
         id: string;
         description?: string | null;
-      };
+      } | null;
       hohEnrollment?: {
         __typename?: 'Enrollment';
         id: string;
@@ -29614,140 +29715,52 @@ export type UpdateReferralPostingMutation = {
           }>;
         };
       }>;
-    } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type CreateOutgoingReferralPostingMutationVariables = Exact<{
-  input: OutgoingReferralPostingInput;
-}>;
-
-export type CreateOutgoingReferralPostingMutation = {
-  __typename?: 'Mutation';
-  createOutgoingReferralPosting?: {
-    __typename?: 'CreateOutgoingReferralPostingPayload';
-    record?: {
-      __typename?: 'ReferralPosting';
-      id: string;
-      assignedDate: string;
-      chronic?: boolean | null;
-      hudChronic?: boolean | null;
-      denialNote?: string | null;
-      denialReason?: ReferralPostingDenialReasonType | null;
-      needsWheelchairAccessibleUnit?: boolean | null;
-      postingIdentifier?: string | null;
-      referralDate: string;
-      referralIdentifier?: string | null;
-      referralNotes?: string | null;
-      referralResult?: ReferralResult | null;
-      referredBy: string;
-      referredFrom: string;
-      resourceCoordinatorNotes?: string | null;
-      score?: number | null;
-      status: ReferralPostingStatus;
-      statusNote?: string | null;
-      statusNoteUpdatedAt?: string | null;
-      statusNoteUpdatedBy?: string | null;
-      statusUpdatedAt?: string | null;
-      statusUpdatedBy?: string | null;
-      referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
-      project?: {
-        __typename?: 'Project';
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
         id: string;
-        projectType?: ProjectType | null;
-        projectName: string;
-      } | null;
-      organization?: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      } | null;
-      unitType: {
-        __typename?: 'UnitTypeObject';
-        id: string;
-        description?: string | null;
-      };
-      hohEnrollment?: {
-        __typename?: 'Enrollment';
-        id: string;
-        client: { __typename?: 'Client'; id: string };
-      } | null;
-      householdMembers: Array<{
-        __typename?: 'ReferralHouseholdMember';
-        id: string;
-        relationshipToHoH: RelationshipToHoH;
-        openEnrollmentSummary: Array<{
-          __typename?: 'EnrollmentSummary';
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        displayHooks: Array<DisplayHook>;
+        value?: {
+          __typename?: 'CustomDataElementValue';
           id: string;
-          entryDate: string;
-          inProgress: boolean;
-          moveInDate?: string | null;
-          projectId: string;
-          projectName: string;
-          projectType: ProjectType;
-          canViewEnrollment: boolean;
-        }>;
-        client: {
-          __typename?: 'Client';
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
           id: string;
-          veteranStatus: NoYesReasonsForMissingData;
-          gender: Array<Gender>;
-          lockVersion: number;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-          dob?: string | null;
-          age?: number | null;
-          ssn?: string | null;
-          access: {
-            __typename?: 'ClientAccess';
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+          user?: {
+            __typename: 'ApplicationUser';
             id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
-            canEditClient: boolean;
-            canDeleteClient: boolean;
-            canViewDob: boolean;
-            canViewClientName: boolean;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-            canViewEnrollmentDetails: boolean;
-            canDeleteAssessments: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canViewAnyConfidentialClientFiles: boolean;
-            canViewAnyNonconfidentialClientFiles: boolean;
-            canUploadClientFiles: boolean;
-            canViewAnyFiles: boolean;
-            canAuditClients: boolean;
-            canManageScanCards: boolean;
-            canMergeClients: boolean;
-            canViewClientAlerts: boolean;
-            canManageClientAlerts: boolean;
-          };
-          externalIds: Array<{
-            __typename?: 'ExternalIdentifier';
-            id: string;
-            identifier?: string | null;
-            url?: string | null;
-            label: string;
-            type: ExternalIdentifierType;
-          }>;
-        };
+            name: string;
+            email: string;
+          } | null;
+        }> | null;
       }>;
     } | null;
     errors: Array<{
@@ -29787,7 +29800,9 @@ export type GetDeniedPendingReferralPostingsQuery = {
       hohName: string;
       hohMciId?: string | null;
       householdSize: number;
+      referredFrom: string;
       referredBy: string;
+      referredTo?: string | null;
       status: ReferralPostingStatus;
       assignedDate: string;
       statusUpdatedAt?: string | null;
@@ -29815,7 +29830,9 @@ export type ReferralPostingFieldsFragment = {
   hohName: string;
   hohMciId?: string | null;
   householdSize: number;
+  referredFrom: string;
   referredBy: string;
+  referredTo?: string | null;
   status: ReferralPostingStatus;
   assignedDate: string;
   statusUpdatedAt?: string | null;
@@ -29849,6 +29866,7 @@ export type ReferralPostingDetailFieldsFragment = {
   referralResult?: ReferralResult | null;
   referredBy: string;
   referredFrom: string;
+  referredTo?: string | null;
   resourceCoordinatorNotes?: string | null;
   score?: number | null;
   status: ReferralPostingStatus;
@@ -29869,11 +29887,11 @@ export type ReferralPostingDetailFieldsFragment = {
     id: string;
     organizationName: string;
   } | null;
-  unitType: {
+  unitType?: {
     __typename?: 'UnitTypeObject';
     id: string;
     description?: string | null;
-  };
+  } | null;
   hohEnrollment?: {
     __typename?: 'Enrollment';
     id: string;
@@ -29941,6 +29959,53 @@ export type ReferralPostingDetailFieldsFragment = {
         type: ExternalIdentifierType;
       }>;
     };
+  }>;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    }> | null;
   }>;
 };
 
@@ -32592,6 +32657,11 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
         ...ProjectAccessFields
       }
     }
+    sourceReferralPosting {
+      id
+      referredFrom
+      referralDate
+    }
   }
   ${EnrollmentFieldsFragmentDoc}
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
@@ -32685,6 +32755,7 @@ export const ValidationErrorFieldsFragmentDoc = gql`
 export const FormDefinitionFieldsForEditorFragmentDoc = gql`
   fragment FormDefinitionFieldsForEditor on FormDefinition {
     ...FormDefinitionFields
+    status
     rawDefinition
   }
   ${FormDefinitionFieldsFragmentDoc}
@@ -33025,7 +33096,9 @@ export const ReferralPostingFieldsFragmentDoc = gql`
     hohName
     hohMciId
     householdSize
+    referredFrom
     referredBy
+    referredTo
     status
     assignedDate
     statusUpdatedAt
@@ -33057,6 +33130,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     referralResult
     referredBy
     referredFrom
+    referredTo
     resourceCoordinatorNotes
     score
     status
@@ -33107,12 +33181,16 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
         }
       }
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${EnrollmentSummaryFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const UnitTypeFieldsFragmentDoc = gql`
   fragment UnitTypeFields on UnitTypeObject {
@@ -39004,6 +39082,9 @@ export const SubmitFormDocument = gql`
         ... on HmisParticipation {
           ...HmisParticipationFields
         }
+        ... on ReferralPosting {
+          id
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -41899,66 +41980,6 @@ export type UpdateReferralPostingMutationOptions = Apollo.BaseMutationOptions<
   UpdateReferralPostingMutation,
   UpdateReferralPostingMutationVariables
 >;
-export const CreateOutgoingReferralPostingDocument = gql`
-  mutation CreateOutgoingReferralPosting(
-    $input: OutgoingReferralPostingInput!
-  ) {
-    createOutgoingReferralPosting(input: $input) {
-      record {
-        ...ReferralPostingDetailFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ReferralPostingDetailFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type CreateOutgoingReferralPostingMutationFn = Apollo.MutationFunction<
-  CreateOutgoingReferralPostingMutation,
-  CreateOutgoingReferralPostingMutationVariables
->;
-
-/**
- * __useCreateOutgoingReferralPostingMutation__
- *
- * To run a mutation, you first call `useCreateOutgoingReferralPostingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOutgoingReferralPostingMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createOutgoingReferralPostingMutation, { data, loading, error }] = useCreateOutgoingReferralPostingMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateOutgoingReferralPostingMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateOutgoingReferralPostingMutation,
-    CreateOutgoingReferralPostingMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateOutgoingReferralPostingMutation,
-    CreateOutgoingReferralPostingMutationVariables
-  >(CreateOutgoingReferralPostingDocument, options);
-}
-export type CreateOutgoingReferralPostingMutationHookResult = ReturnType<
-  typeof useCreateOutgoingReferralPostingMutation
->;
-export type CreateOutgoingReferralPostingMutationResult =
-  Apollo.MutationResult<CreateOutgoingReferralPostingMutation>;
-export type CreateOutgoingReferralPostingMutationOptions =
-  Apollo.BaseMutationOptions<
-    CreateOutgoingReferralPostingMutation,
-    CreateOutgoingReferralPostingMutationVariables
-  >;
 export const GetDeniedPendingReferralPostingsDocument = gql`
   query GetDeniedPendingReferralPostings($limit: Int = 10, $offset: Int = 0) {
     deniedPendingReferralPostings(limit: $limit, offset: $offset) {

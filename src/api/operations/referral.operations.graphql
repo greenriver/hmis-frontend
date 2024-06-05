@@ -26,17 +26,6 @@ mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {
   }
 }
 
-mutation CreateOutgoingReferralPosting($input: OutgoingReferralPostingInput!) {
-  createOutgoingReferralPosting(input: $input) {
-    record {
-      ...ReferralPostingDetailFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 query GetDeniedPendingReferralPostings($limit: Int = 10, $offset: Int = 0) {
   deniedPendingReferralPostings(limit: $limit, offset: $offset) {
     offset

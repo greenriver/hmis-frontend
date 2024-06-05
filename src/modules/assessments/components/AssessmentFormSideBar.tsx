@@ -90,7 +90,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
         p: 2,
         position: 'sticky',
         top: top + 16,
-        maxHeight: `calc(100vh - ${top}px)`,
+        maxHeight: `calc(100vh - ${top + 16 * 2}px)`,
         overflowY: 'auto',
       }}
     >

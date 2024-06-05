@@ -1,3 +1,4 @@
+import CodeIcon from '@mui/icons-material/Code';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { Grid, IconButton, Stack, Typography } from '@mui/material';
 
@@ -111,6 +112,17 @@ const FormDefinitionDetailPage = () => {
                     fullWidth
                   >
                     Edit Form
+                  </ButtonLink>
+                  <ButtonLink
+                    to={generatePath(AdminDashboardRoutes.JSON_EDIT_FORM, {
+                      identifier: formIdentifier?.identifier,
+                      formId: formIdentifier?.displayVersion.id,
+                    })}
+                    startIcon={<CodeIcon />}
+                    variant='contained'
+                    fullWidth
+                  >
+                    JSON Editor
                   </ButtonLink>
                 </RootPermissionsFilter>
                 <ButtonLink

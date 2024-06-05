@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material';
 import { pick } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
@@ -125,18 +126,22 @@ const DynamicFormFields: React.FC<Props> = ({
       );
     }
 
+    // Render question item as an input field or a read-only field.
+    // Note: DynamicField automatically wraps components in an InputContainer, which is a Grid item.
+    // DynamicViewField does not, so we wrap it in a grid  item here for consistency
     const itemComponent = item.readOnly ? (
-      <DynamicViewField
-        item={item}
-        value={values[item.linkId]}
-        disabled={isDisabled}
-        nestingLevel={nestingLevel}
-        horizontal={horizontal}
-        pickListArgs={pickListArgs}
-        // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
-        adjustValue={itemChanged}
-        {...props}
-      />
+      <Grid item key={item.linkId}>
+        <DynamicViewField
+          item={item}
+          value={values[item.linkId]}
+          disabled={isDisabled}
+          horizontal={horizontal}
+          pickListArgs={pickListArgs}
+          // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
+          adjustValue={itemChanged}
+          {...props}
+        />
+      </Grid>
     ) : (
       <DynamicField
         key={item.linkId}

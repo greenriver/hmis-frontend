@@ -26,6 +26,7 @@ const adminDashboardRoutes = {
   FORMS: 'forms',
   VIEW_FORM: 'forms/:identifier',
   EDIT_FORM: 'forms/:identifier/:formId/edit',
+  JSON_EDIT_FORM: 'forms/:identifier/:formId/jsonEdit',
   PREVIEW_FORM: 'forms/:identifier/:formId/preview',
   PROJECT_CONFIG: 'project-configs',
 };
@@ -149,9 +150,10 @@ export const AdminDashboardRoutes: {
   [k in AdminSubRoutesType]: string;
 } = adminDashboardRoutes;
 
-// Auto-hide left desktop nav for some routes (unused)
+// Auto-hide left desktop nav for some routes
 export const HIDE_NAV_ROUTES: string[] = [
   // EnrollmentDashboardRoutes.NEW_ASSESSMENT
+  AdminDashboardRoutes.EDIT_FORM,
 ];
 
 export const FOCUS_MODE_ROUTES = [

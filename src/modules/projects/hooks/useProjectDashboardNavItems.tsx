@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   DataCollectionFeatureRole,
@@ -13,8 +12,6 @@ import {
 export const useProjectDashboardNavItems = (
   project?: ProjectAllFieldsFragment
 ) => {
-  const { globalFeatureFlags } = useHmisAppSettings();
-
   const navItems: NavItem<ProjectAccessFieldsFragment>[] = useMemo(() => {
     if (!project) return [];
     const dataCollectionRoles = project.dataCollectionFeatures.map(
@@ -87,7 +84,6 @@ export const useProjectDashboardNavItems = (
               'canManageOutgoingReferrals',
             ],
             permissionMode: 'any',
-            hide: !globalFeatureFlags?.externalReferrals,
           },
         ],
       },
@@ -130,7 +126,7 @@ export const useProjectDashboardNavItems = (
         ],
       },
     ];
-  }, [globalFeatureFlags, project]);
+  }, [project]);
 
   return navItems;
 };

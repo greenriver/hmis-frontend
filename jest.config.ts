@@ -10,5 +10,5 @@ export default {
     '^lodash-es$': 'lodash',
   },
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
-  transformIgnorePatterns: ['/node_modules/(?!(@rails)/)'],
+  transformIgnorePatterns: ['/node_modules/(?!@mui/x-tree-view|@rails)/'],
 };

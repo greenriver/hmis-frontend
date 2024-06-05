@@ -181,6 +181,9 @@ export const parseAndFormatDate = (
   dateString: string | null | undefined
 ): string | null => {
   if (!dateString) return null;
+  // remove time from ISO8601 date-time string
+  dateString = dateString.slice(0, 10);
+
   const parsed = parseHmisDateString(dateString);
   if (!parsed) return dateString;
   return formatDateForDisplay(parsed) || dateString;

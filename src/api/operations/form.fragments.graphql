@@ -135,5 +135,6 @@ fragment FormDefinitionFields on FormDefinition {
 
 fragment FormDefinitionFieldsForEditor on FormDefinition {
   ...FormDefinitionFields
+  status
   rawDefinition
 }

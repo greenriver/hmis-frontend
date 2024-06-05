@@ -43,7 +43,7 @@ export interface FormEditorProps {
   saveLoading?: boolean;
 }
 
-const FormEditor: React.FC<FormEditorProps> = ({
+const JsonFormEditor: React.FC<FormEditorProps> = ({
   definition,
   onSave,
   saveLoading = false,
@@ -361,4 +361,4 @@ const FormEditor: React.FC<FormEditorProps> = ({
   );
 };
 
-export default FormEditor;
+export default JsonFormEditor;

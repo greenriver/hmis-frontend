@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import FormEditor from './FormEditor';
+import JsonFormEditor from './JsonFormEditor';
 import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -8,7 +8,7 @@ import {
   useUpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
-const UpdateFormDefinitionPage = () => {
+const JsonFormEditorPage = () => {
   const { formId } = useSafeParams() as { formId: string };
 
   const { data: { formDefinition } = {}, error } =
@@ -24,7 +24,7 @@ const UpdateFormDefinitionPage = () => {
   return (
     <>
       <PageTitle title={`Edit Form: ${formDefinition.title}`} />
-      <FormEditor
+      <JsonFormEditor
         definition={formDefinition.rawDefinition}
         onSave={(values) => {
           updateFormDefinition({
@@ -40,4 +40,4 @@ const UpdateFormDefinitionPage = () => {
   );
 };
 
-export default UpdateFormDefinitionPage;
+export default JsonFormEditorPage;

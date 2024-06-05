@@ -67,6 +67,7 @@ export interface DynamicFormProps
   hideSubmit?: boolean;
   localConstants?: LocalConstants;
   errorRef?: RefObject<HTMLDivElement>;
+  variant?: 'standard' | 'without_top_level_cards';
 }
 export interface DynamicFormRef {
   SaveIfDirty: VoidFunction;
@@ -97,6 +98,7 @@ const DynamicForm = forwardRef(
       localConstants,
       errorRef,
       onDirty,
+      variant = 'standard',
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
@@ -212,7 +214,16 @@ const DynamicForm = forwardRef(
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
         autoComplete={formAutoCompleteOff}
       >
-        <Grid container direction='column' spacing={2}>
+        <Grid
+          container
+          direction='column'
+          spacing={2}
+          sx={
+            variant === 'without_top_level_cards'
+              ? { '.HmisForm-card': { px: 0, pt: 1, pb: 0, border: 'unset' } }
+              : undefined
+          }
+        >
           <div ref={errorRef} />
           {hasErrors(errorState) && (
             <Grid item>
