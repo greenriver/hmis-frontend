@@ -68,7 +68,6 @@ import {
   InitialBehavior,
   InputSize,
   ItemType,
-  Maybe,
   NoYesReasonsForMissingData,
   PickListOption,
   RelatedRecordType,
@@ -269,41 +268,6 @@ export const modifyFormDefinition = (
   }
 
   recur(copy.item);
-  return copy;
-};
-
-export const updateFormItem = (
-  formDefinition: FormDefinitionJson,
-  newItem: FormItem,
-  initialLinkId: string
-) => {
-  const copy = cloneDeep(formDefinition);
-
-  function recursiveReplace(items: Maybe<FormItem[]> | undefined): boolean {
-    if (!items) return false;
-
-    const index = items.findIndex((i) => i.linkId === initialLinkId);
-
-    if (index >= 0) {
-      items[index] = newItem;
-      return true; // Return true to stop further recursion
-    }
-
-    for (const item of items) {
-      if (recursiveReplace(item.item)) {
-        return true; // Early return if element is found in deeper recursion
-      }
-    }
-
-    return false;
-  }
-
-  // Recurse through the item tree and replace the item
-  if (!recursiveReplace(copy.item)) {
-    // If recursiveReplace returns false, we didn't find the link ID, so this is a new element
-    copy.item = [...copy.item, newItem];
-  }
-
   return copy;
 };
 

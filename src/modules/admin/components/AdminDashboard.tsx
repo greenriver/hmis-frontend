@@ -13,6 +13,7 @@ import { firstNavItemWithAccess } from '@/components/layout/dashboard/sideNav/na
 import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import NotFound from '@/components/pages/NotFound';
+import useCurrentPath from '@/hooks/useCurrentPath';
 import { useDashboardState } from '@/hooks/useDashboardState';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { AdminDashboardRoutes } from '@/routes/routes';
@@ -118,8 +119,8 @@ const AdminDashboard: React.FC = () => {
     py: 0,
     maxWidth: '100%',
   };
-  const isFormEditor =
-    dashboardState.currentPath === '/admin/forms/:identifier/:formId/edit';
+
+  const currentPath = useCurrentPath();
 
   if (!access) return <NotFound />;
 
@@ -135,11 +136,16 @@ const AdminDashboard: React.FC = () => {
       }
       contentSx={
         // The form editor needs to take up the whole page because of its layout, so the parent gets custom sx
-        isFormEditor ? formEditorContentSx : {}
+        currentPath === AdminDashboardRoutes.EDIT_FORM
+          ? formEditorContentSx
+          : {}
       }
       {...dashboardState}
     >
-      <Container maxWidth={isFormEditor ? false : 'xl'} disableGutters>
+      <Container
+        maxWidth={currentPath === AdminDashboardRoutes.EDIT_FORM ? false : 'xl'}
+        disableGutters
+      >
         <Outlet />
       </Container>
     </DashboardContentContainer>

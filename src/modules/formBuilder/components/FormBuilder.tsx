@@ -10,16 +10,15 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { v4 } from 'uuid';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
 import theme from '@/config/theme';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
-import { updateFormItem } from '@/modules/form/util/formUtil';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
-import FormBuilderPalette, {
-  FORM_ITEM_PALETTE,
-} from '@/modules/formBuilder/components/FormBuilderPalette';
+import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
+import { updateFormItem } from '@/modules/formBuilder/components/formBuilderUtil';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
 import {
@@ -133,7 +132,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
             sx={{
               // Matches the styles usually applied in DashboardContentContainer.
               // (Moved in here because of the Palette drawer)
-              maxWidth: `${theme.breakpoints.values.xl}px`,
+              maxWidth: `${theme.breakpoints.values.lg}px`,
               pt: 2,
               pb: 8,
               px: { xs: 1, sm: 3, lg: 4 },
@@ -198,8 +197,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         <FormBuilderPalette
           onItemClick={(itemType) => {
             const newItem: FormItem = {
-              linkId: crypto.randomUUID(), // TODO(#6083) - this is a placeholder
-              text: FORM_ITEM_PALETTE[itemType].displayName,
+              linkId: v4().split('-')[0], // Randomly generate a placeholder link ID
+              text: undefined,
               type: itemType,
               required: false,
               warnIfEmpty: false,
