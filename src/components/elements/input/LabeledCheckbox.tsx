@@ -6,7 +6,13 @@ import {
   FormGroup,
   FormHelperText,
 } from '@mui/material';
-import { KeyboardEventHandler, Ref, SyntheticEvent, useCallback } from 'react';
+import {
+  KeyboardEventHandler,
+  Ref,
+  SyntheticEvent,
+  useCallback,
+  useMemo,
+} from 'react';
 
 import { horizontalInputSx } from './TextInput';
 
@@ -61,6 +67,17 @@ const LabeledCheckbox = ({
     [onChange]
   );
 
+  // Determine the checked state based on the value OR checked prop
+  const checked = useMemo(() => {
+    if (props.checked !== undefined) {
+      return props.checked;
+    }
+    if (props.value !== undefined) {
+      return !!props.value;
+    }
+    return;
+  }, [props.checked, props.value]);
+
   return (
     <FormControl>
       <FormGroup sx={horizontal ? horizontalInputSx : undefined}>
@@ -85,6 +102,7 @@ const LabeledCheckbox = ({
           }}
           onChange={onChange}
           {...props}
+          checked={checked}
         />
       </FormGroup>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
