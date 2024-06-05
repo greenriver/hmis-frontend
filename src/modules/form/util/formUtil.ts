@@ -295,10 +295,15 @@ export const updateFormItem = (
       }
     }
 
-    throw new Error(`Link ID  ${newItem.linkId} not found`);
+    return false;
   }
 
-  recursiveReplace(copy.item);
+  // Recurse through the item tree and replace the item
+  if (!recursiveReplace(copy.item)) {
+    // If recursiveReplace returns false, we didn't find the link ID, so this is a new element
+    copy.item = [...copy.item, newItem];
+  }
+
   return copy;
 };
 

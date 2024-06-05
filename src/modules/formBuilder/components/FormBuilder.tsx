@@ -17,7 +17,9 @@ import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
 import { updateFormItem } from '@/modules/form/util/formUtil';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
-import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
+import FormBuilderPalette, {
+  FORM_ITEM_PALETTE,
+} from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
 import {
@@ -197,7 +199,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
           onItemClick={(itemType) => {
             const newItem: FormItem = {
               linkId: crypto.randomUUID(), // TODO(#6083) - this is a placeholder
-              text: itemType.toString(),
+              text: FORM_ITEM_PALETTE[itemType].displayName,
               type: itemType,
               required: false,
               warnIfEmpty: false,
@@ -208,18 +210,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               disabledDisplay: DisabledDisplay.Hidden,
               enableBehavior: EnableBehavior.Any,
             };
-
-            // TODO(#6083) - once React Hook Forms is in place
-            //  Move the following commented-out functionality into its own callback
-            //  that gets called when the drawer contents are saved, if this is a new form element.
-            //  (Add new piece of state isSelectedItemNew ?)
-
-            // const newDefinition: FormDefinitionJson = {
-            //   ...workingDefinition,
-            //   item: [...workingDefinition.item, newItem],
-            // };
-            //
-            // setWorkingDefinition(newDefinition);
 
             setSelectedItem(newItem);
           }}
