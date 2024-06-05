@@ -14,8 +14,8 @@ import { ErrorState } from '@/modules/errors/util';
 import SaveSlide from '@/modules/form/components/SaveSlide';
 import {
   MAX_INPUT_AND_LABEL_WIDTH,
-  localResolvePickList,
   getItemMap,
+  localResolvePickList,
 } from '@/modules/form/util/formUtil';
 import {
   slugifyItemLabel,
