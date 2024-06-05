@@ -17,8 +17,8 @@ import { ErrorState } from '@/modules/errors/util';
 import { updateFormItem } from '@/modules/form/util/formUtil';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
-import FormItemEditor from '@/modules/formBuilder/components/FormItemEditor';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
+import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
 import {
   DisabledDisplay,
   EnableBehavior,
@@ -43,7 +43,6 @@ interface FormBuilderProps {
   lastUpdatedBy?: string;
   selectedItem?: FormItem;
   setSelectedItem: Dispatch<SetStateAction<FormItem | undefined>>;
-  closeItemEditor: VoidFunction;
 }
 
 const FormBuilder: React.FC<FormBuilderProps> = ({
@@ -57,7 +56,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
   lastUpdatedBy,
   selectedItem,
   setSelectedItem,
-  closeItemEditor,
 }) => {
   const dirty = useMemo(() => {
     return !isEqual(workingDefinition, formDefinition.definition);
@@ -147,7 +145,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
 
               onSave(newDefinition);
             }}
-            onDiscard={closeItemEditor}
+            onDiscard={() => setSelectedItem(undefined)}
+            onClose={() => setSelectedItem(undefined)}
           />
         )}
         <Box

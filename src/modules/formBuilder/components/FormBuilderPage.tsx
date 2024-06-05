@@ -93,7 +93,6 @@ const FormBuilderPage = () => {
       lastUpdatedBy={lastUpdatedBy}
       selectedItem={selectedItem}
       setSelectedItem={setSelectedItem}
-      closeItemEditor={() => setSelectedItem(undefined)}
       onSave={(newDefinition) => {
         return updateFormDefinition({
           variables: {
