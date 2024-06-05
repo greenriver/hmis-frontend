@@ -92,7 +92,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       // When the user edits the label, update the link ID to be a human-readable 'slugified' version of the label.
       // But, don't make an update to the link ID if it has been manually set.
-      if (!dirtyFields.linkId) {
+      if (!dirtyFields.linkId && event.target.value) {
         let newLinkId = slugifyItemLabel(event.target.value);
 
         if (Object.keys(itemMap).includes(newLinkId)) {
