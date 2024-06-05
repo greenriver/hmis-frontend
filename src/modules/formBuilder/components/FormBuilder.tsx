@@ -10,13 +10,15 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { v4 } from 'uuid';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
+import theme from '@/config/theme';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
-import { updateFormItem } from '@/modules/form/util/formUtil';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
+import { updateFormItem } from '@/modules/formBuilder/components/formBuilderUtil';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
 import {
@@ -105,12 +107,98 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
           proceeding?
         </Typography>
       </ConfirmationDialog>
-      <Box sx={{ display: 'flex' }}>
+      {selectedItem && (
+        <FormItemEditor
+          item={selectedItem}
+          definition={formDefinition}
+          saveLoading={saveLoading}
+          errorState={errorState}
+          onSave={(updatedItem, initialLinkId) => {
+            const newDefinition = updateFormItem(
+              workingDefinition,
+              updatedItem,
+              initialLinkId
+            );
+
+            onSave(newDefinition);
+          }}
+          onDiscard={() => setSelectedItem(undefined)}
+          onClose={() => setSelectedItem(undefined)}
+        />
+      )}
+      <Box display='flex'>
+        <Box sx={{ flexGrow: 1 }}>
+          <Box
+            sx={{
+              // Matches the styles usually applied in DashboardContentContainer.
+              // (Moved in here because of the Palette drawer)
+              maxWidth: `${theme.breakpoints.values.lg}px`,
+              pt: 2,
+              pb: 8,
+              px: { xs: 1, sm: 3, lg: 4 },
+            }}
+          >
+            <FormBuilderHeader
+              formDefinition={formDefinition}
+              lastUpdatedDate={lastUpdatedDate}
+              onClickPreview={onClickPreview}
+            />
+            <Box sx={{ p: 4 }}>
+              <FormTree
+                definition={workingDefinition}
+                onEditClick={(item: FormItem) => {
+                  function editItem() {
+                    setSelectedItem(item);
+                  }
+
+                  if (dirty) {
+                    // React's useState accepts either a value or a function that yields a value.
+                    // In this case, we want the function itself to *be* the state value, which is the reason
+                    // for defining `editItem` above instead of simply using `() => setSelectedItem(item)` here.
+                    setBlockedActionFunction(() => editItem);
+                  } else {
+                    setSelectedItem(item);
+                  }
+                }}
+              />
+              {errorState?.errors &&
+                errorState.errors.length > 0 &&
+                !selectedItem && (
+                  <Stack gap={1} sx={{ mt: 4 }}>
+                    <ErrorAlert key='errors' errors={errorState.errors} />
+                  </Stack>
+                )}
+            </Box>
+            {dirty && (
+              <Paper sx={{ p: 4 }}>
+                <Stack
+                  direction='row'
+                  justifyContent='space-between'
+                  sx={{ alignItems: 'center' }}
+                >
+                  <Stack direction='row' gap={2}>
+                    <LoadingButton
+                      variant='outlined'
+                      loading={saveLoading}
+                      onClick={() => onSave(workingDefinition)}
+                    >
+                      Save Draft
+                    </LoadingButton>
+                    <Button>Publish</Button>
+                  </Stack>
+                  <Typography variant='body2'>
+                    Last saved on {lastUpdatedDate} by {lastUpdatedBy}
+                  </Typography>
+                </Stack>
+              </Paper>
+            )}
+          </Box>
+        </Box>
         <FormBuilderPalette
           onItemClick={(itemType) => {
             const newItem: FormItem = {
-              linkId: crypto.randomUUID(), // TODO(#6083) - this is a placeholder, but right now will only work in localhost
-              text: itemType.toString(),
+              linkId: v4().split('-')[0], // Randomly generate a placeholder link ID
+              text: undefined,
               type: itemType,
               required: false,
               warnIfEmpty: false,
@@ -122,100 +210,9 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               enableBehavior: EnableBehavior.Any,
             };
 
-            const newDefinition: FormDefinitionJson = {
-              ...workingDefinition,
-              item: [...workingDefinition.item, newItem],
-            };
-
-            setWorkingDefinition(newDefinition);
+            setSelectedItem(newItem);
           }}
         />
-        {selectedItem && (
-          <FormItemEditor
-            item={selectedItem}
-            definition={formDefinition}
-            saveLoading={saveLoading}
-            errorState={errorState}
-            onSave={(updatedItem, initialLinkId) => {
-              const newDefinition = updateFormItem(
-                workingDefinition,
-                updatedItem,
-                initialLinkId
-              );
-
-              onSave(newDefinition);
-            }}
-            onDiscard={() => setSelectedItem(undefined)}
-            onClose={() => setSelectedItem(undefined)}
-          />
-        )}
-        <Box
-          sx={
-            // Padding matches the padding usually applied in DashboardContentContainer.
-            // (It's moved in here because of the drawer)
-            {
-              flexGrow: 1,
-              pt: 2,
-              pb: 8,
-              px: { xs: 1, sm: 3, lg: 4 },
-            }
-          }
-        >
-          <FormBuilderHeader
-            formDefinition={formDefinition}
-            lastUpdatedDate={lastUpdatedDate}
-            onClickPreview={onClickPreview}
-          />
-          <Box sx={{ p: 4 }}>
-            <FormTree
-              definition={workingDefinition}
-              onEditClick={(item: FormItem) => {
-                function editItem() {
-                  setSelectedItem(item);
-                }
-
-                if (dirty) {
-                  // React's useState accepts either a value or a function that yields a value.
-                  // In this case, we want the function itself to *be* the state value, which is the reason
-                  // for defining `editItem` above instead of simply using `() => setSelectedItem(item)` here.
-                  setBlockedActionFunction(() => editItem);
-                } else {
-                  setSelectedItem(item);
-                }
-              }}
-            />
-            {errorState?.errors &&
-              errorState.errors.length > 0 &&
-              !selectedItem && (
-                <Stack gap={1} sx={{ mt: 4 }}>
-                  <ErrorAlert key='errors' errors={errorState.errors} />
-                </Stack>
-              )}
-          </Box>
-          {dirty && (
-            <Paper sx={{ p: 4 }}>
-              <Stack
-                direction='row'
-                justifyContent='space-between'
-                sx={{ alignItems: 'center' }}
-              >
-                <Stack direction='row' gap={2}>
-                  <LoadingButton
-                    variant='outlined'
-                    loading={saveLoading}
-                    onClick={() => onSave(workingDefinition)}
-                  >
-                    Save Draft
-                  </LoadingButton>
-                  <Button>Publish</Button>
-                </Stack>
-                <Typography variant='body2'>
-                  Last saved on {lastUpdatedDate} by {lastUpdatedBy}
-                </Typography>
-              </Stack>
-            </Paper>
-          )}
-        </Box>
       </Box>
     </>
   );

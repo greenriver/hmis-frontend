@@ -49,8 +49,6 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
             sx={{
               width: 90,
               alignItems: 'center',
-              color: displayAttrs.textColor,
-              backgroundColor: displayAttrs.backgroundColor,
               borderRadius: '4px 0 0 4px',
               mr: 2,
               p: 1, // TODO - This styling is inflexible, looks bad when the label text is long
