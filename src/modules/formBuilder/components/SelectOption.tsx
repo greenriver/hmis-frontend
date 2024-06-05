@@ -7,7 +7,7 @@ import { renderOption } from '@/components/elements/input/ProjectSelect';
 import { getOptionLabelFromOptions } from '@/modules/form/components/FormSelect';
 import { PickListOption } from '@/types/gqlTypes';
 
-export type FormSelectStringProps = Omit<
+export type SelectOptionProps = Omit<
   GenericSelectProps<PickListOption, false, false>,
   'value' | 'onChange'
 > & {
@@ -15,9 +15,10 @@ export type FormSelectStringProps = Omit<
   onChange: (value: string | null) => void;
 };
 
-// simple wrapper around FormSelect that uses string as value, but PickListOption as option list
-// this should be renamed to something better. it's also duplicative with the filter select component
-const FormSelectString: React.FC<FormSelectStringProps> = ({
+// Simple wrapper around GenericSelect that uses string as value, but PickListOption as option list.
+// This is duplicative with TableFilterItemSelect which does something similar.
+// Should probably be refactored into a common input element.
+const SelectOption: React.FC<SelectOptionProps> = ({
   options,
   value,
   onChange,
@@ -57,4 +58,4 @@ const FormSelectString: React.FC<FormSelectStringProps> = ({
   );
 };
 
-export default FormSelectString;
+export default SelectOption;

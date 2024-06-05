@@ -9,11 +9,11 @@ import {
   useForm,
 } from 'react-hook-form';
 import FormEditorItemPreview from './FormEditorItemPreview';
+import SelectOption from './SelectOption';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
-import FormSelectString from '@/modules/form/components/FormSelectString';
 import {
   MAX_INPUT_AND_LABEL_WIDTH,
   localResolvePickList,
@@ -105,7 +105,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         <Typography>
           Properties
           {import.meta.env.MODE === 'development' && (
-            // Temp debug button to lgo form state
+            // Temp debug button to log form state
             <Button
               size='small'
               variant='outlined'
@@ -123,7 +123,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             control={control}
             // rules={{ required: 'need this' }}
             render={({ field: { ref, ...field }, fieldState: { error } }) => (
-              <FormSelectString
+              <SelectOption
                 label='Component Override'
                 options={componentOverridePicklist}
                 {...field}
@@ -262,7 +262,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             name='dataCollectedAbout'
             control={control}
             render={({ field: { ref, ...field }, fieldState: { error } }) => (
-              <FormSelectString
+              <SelectOption
                 label='Data collected about'
                 options={dataCollectedAboutPickList}
                 {...field}
@@ -279,7 +279,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           name='size'
           control={control}
           render={({ field: { ref, ...field }, fieldState: { error } }) => (
-            <FormSelectString
+            <SelectOption
               label='Input Size'
               options={inputSizePickList}
               {...field}
@@ -295,7 +295,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           name='disabledDisplay'
           control={control}
           render={({ field: { ref, ...field }, fieldState: { error } }) => (
-            <FormSelectString
+            <SelectOption
               label='Disabled Display'
               options={disabledDisplayPickList}
               {...field}
@@ -341,7 +341,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               name='pickListReference'
               control={control}
               render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                <FormSelectString
+                <SelectOption
                   label='Reference list for allowed responses'
                   options={pickListTypesPickList}
                   {...field}
