@@ -6,7 +6,7 @@ import {
   FormGroup,
   FormHelperText,
 } from '@mui/material';
-import { KeyboardEventHandler, SyntheticEvent, useCallback } from 'react';
+import { KeyboardEventHandler, Ref, SyntheticEvent, useCallback } from 'react';
 
 import { horizontalInputSx } from './TextInput';
 
@@ -16,6 +16,7 @@ export interface Props
   extends Omit<FormControlLabelProps, 'control' | 'label'> {
   name?: string;
   horizontal?: boolean;
+  inputRef?: Ref<HTMLInputElement>;
 }
 
 const LabeledCheckbox = ({
@@ -28,6 +29,7 @@ const LabeledCheckbox = ({
   ariaLabel,
   inputWidth,
   maxWidth,
+  inputRef,
   ...props
 }: Props & DynamicInputCommonProps) => {
   const labelSx = horizontal
@@ -68,6 +70,7 @@ const LabeledCheckbox = ({
               sx={{ width: inputWidth, ...checkboxSx }}
               onKeyDown={onKeyDown}
               aria-label={ariaLabel}
+              inputRef={inputRef}
             />
           }
           labelPlacement={horizontal ? 'start' : 'end'}
