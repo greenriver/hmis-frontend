@@ -106,11 +106,13 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
             <TextInput
               sx={disabled ? { display: 'none' } : undefined}
               label='Value (Formula)'
-              helperText="Formula to calculate the value to fill. Use 'value' to refer to the value of the current item."
+              helperText={
+                error?.message ||
+                "Formula to calculate the value to fill. Use 'value' to refer to the value of the current item."
+              }
               inputRef={ref}
               disabled={disabled}
               error={!!error}
-              helperText={error?.message}
               {...field}
             />
           )}
