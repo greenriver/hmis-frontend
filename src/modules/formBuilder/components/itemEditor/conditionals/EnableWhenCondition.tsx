@@ -88,8 +88,6 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     groupCode: !!state?.answerGroupCode,
   });
   return (
-    // max width needed to fix click target issue (clicking to the left to close the dropdown)
-    // sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
     <Stack>
       <Grid container gap={2}>
         {/* COLUMN 1: Select the dependent source */}
