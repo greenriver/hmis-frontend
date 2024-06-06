@@ -134,7 +134,8 @@ export const reorderFormItems = (
   function recurseFindAndMove(
     thisLayer: Maybe<FormItem[]> | undefined,
     parentLayer: Maybe<FormItem[]> | undefined,
-    indexInParent: number
+    indexInParent: number,
+    nestingDepth: number
   ): boolean {
     if (!thisLayer) return false;
 
@@ -149,9 +150,9 @@ export const reorderFormItems = (
           // This item isn't the first item in the list
           const prevItem = thisLayer[currentIndex - 1];
 
-          if (prevItem.type === ItemType.Group) {
+          if (prevItem.type === ItemType.Group && nestingDepth < 5) {
             toExpand.push(prevItem.linkId);
-            // If the previous item is a group, then move it into that group
+            // If the previous item is a group, and we haven't reached max nesting depth, then move it into the group
             return moveIntoGroup(
               itemToMove,
               prevItem,
@@ -160,7 +161,7 @@ export const reorderFormItems = (
               currentIndex
             );
           } else {
-            // If it's not a group, then simply swap it with the previous item
+            // Otherwise, simply swap it with the previous item
             return swapItems(currentIndex, currentIndex - 1, thisLayer);
           }
         }
@@ -180,7 +181,7 @@ export const reorderFormItems = (
         if (currentIndex < thisLayer.length - 1) {
           const nextItem = thisLayer[currentIndex + 1];
 
-          if (nextItem.type === ItemType.Group) {
+          if (nextItem.type === ItemType.Group && nestingDepth < 5) {
             toExpand.push(nextItem.linkId);
             return moveIntoGroup(
               itemToMove,
@@ -206,7 +207,9 @@ export const reorderFormItems = (
 
     // Didn't find the item in this layer; recurse through the child layers
     for (let i = 0; i < thisLayer.length; i++) {
-      if (recurseFindAndMove(thisLayer[i].item, thisLayer, i)) {
+      if (
+        recurseFindAndMove(thisLayer[i].item, thisLayer, i, nestingDepth + 1)
+      ) {
         return true; // Early return if element is found in recursion
       }
     }
@@ -214,7 +217,7 @@ export const reorderFormItems = (
     return false;
   }
 
-  recurseFindAndMove(copy.item, undefined, -1);
+  recurseFindAndMove(copy.item, undefined, -1, 1);
   return { definition: copy, toExpand };
 };
 
