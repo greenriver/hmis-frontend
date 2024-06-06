@@ -1,9 +1,9 @@
 import { cloneDeep, kebabCase } from 'lodash-es';
 import {
-  ItemType,
   Component,
   FormDefinitionJson,
   FormItem,
+  ItemType,
   Maybe,
 } from '@/types/gqlTypes';
 
@@ -87,6 +87,125 @@ export const updateFormItem = (
     copy.item = [...copy.item, newItem];
   }
 
+  return copy;
+};
+
+function moveIntoGroup(
+  itemToMove: FormItem,
+  group: FormItem,
+  addMethod: 'push' | 'unshift',
+  thisLayer: FormItem[],
+  currentIndex: number
+) {
+  if (!group.item) group.item = [];
+  group.item[addMethod](itemToMove);
+  thisLayer.splice(currentIndex, 1);
+  return true;
+}
+
+function swapItems(index1: number, index2: number, thisLayer: FormItem[]) {
+  [thisLayer[index1], thisLayer[index2]] = [
+    thisLayer[index2],
+    thisLayer[index1],
+  ];
+  return true;
+}
+
+function moveToParent(
+  itemToMove: FormItem,
+  parentLayer: FormItem[],
+  newIndex: number,
+  thisLayer: FormItem[],
+  currentIndex: number
+) {
+  parentLayer.splice(newIndex, 0, itemToMove);
+  thisLayer.splice(currentIndex, 1);
+  return true;
+}
+
+export const reorderFormItems = (
+  formDefinition: FormDefinitionJson,
+  itemToMove: FormItem,
+  direction: 'up' | 'down'
+) => {
+  const copy = cloneDeep(formDefinition);
+
+  function recurseFindAndMove(
+    thisLayer: Maybe<FormItem[]> | undefined,
+    parentLayer: Maybe<FormItem[]> | undefined,
+    indexInParent: number
+  ): boolean {
+    if (!thisLayer) return false;
+
+    const currentIndex = thisLayer.findIndex(
+      (i) => i.linkId === itemToMove.linkId
+    );
+
+    if (currentIndex >= 0) {
+      // Found the item in this layer
+      if (direction === 'up') {
+        if (currentIndex > 0) {
+          // If this item isn't the first item in the list, either swap it with the previous item,
+          // or, if the previous item is a group, then move it into that group.
+          const prevItem = thisLayer[currentIndex - 1];
+          return prevItem.type === ItemType.Group
+            ? moveIntoGroup(
+                itemToMove,
+                prevItem,
+                'push',
+                thisLayer,
+                currentIndex
+              )
+            : swapItems(currentIndex, currentIndex - 1, thisLayer);
+        }
+        // If this is the first item in the list, and there's no parent layer, then we have nothing to do
+        if (!parentLayer) return false;
+        // If this is the first item in the current layer, but there is a parent, then move up into the parent.
+        return moveToParent(
+          itemToMove,
+          parentLayer,
+          indexInParent,
+          thisLayer,
+          currentIndex
+        );
+      }
+
+      if (direction === 'down') {
+        if (currentIndex < thisLayer.length - 1) {
+          const nextItem = thisLayer[currentIndex + 1];
+          return nextItem.type === ItemType.Group
+            ? moveIntoGroup(
+                itemToMove,
+                nextItem,
+                'unshift',
+                thisLayer,
+                currentIndex
+              )
+            : swapItems(currentIndex, currentIndex + 1, thisLayer);
+        }
+        if (!parentLayer) return false;
+        return moveToParent(
+          itemToMove,
+          parentLayer,
+          indexInParent + 1,
+          thisLayer,
+          currentIndex
+        );
+      }
+    }
+    // TODO @martha - auto expand the group when you move something into it
+
+    // Didn't find the item in this layer; recurse through the child layers
+    for (let i = 0; i < thisLayer.length; i++) {
+      if (recurseFindAndMove(thisLayer[i].item, thisLayer, i)) {
+        return true; // Early return if element is found in recursion
+      }
+    }
+
+    return false;
+  }
+
+  recurseFindAndMove(copy.item, undefined, -1);
   return copy;
 };
 

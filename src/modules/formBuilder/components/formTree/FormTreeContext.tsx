@@ -3,4 +3,8 @@ import { FormItemForTree } from '@/modules/formBuilder/components/formTree/formT
 
 export const FormTreeContext = React.createContext<{
   onEditButtonClicked: (item: FormItemForTree) => void;
-}>({ onEditButtonClicked: () => {} });
+  onReorder: (item: FormItemForTree, direction: 'up' | 'down') => void;
+}>({
+  onEditButtonClicked: () => {},
+  onReorder: () => {},
+});

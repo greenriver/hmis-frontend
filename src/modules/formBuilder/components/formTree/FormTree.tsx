@@ -13,8 +13,13 @@ import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 interface FormTreeProps {
   definition: FormDefinitionJson;
   onEditClick: (item: FormItem) => void;
+  onReorder: (item: FormItem, direction: 'up' | 'down') => void;
 }
-const FormTree: React.FC<FormTreeProps> = ({ definition, onEditClick }) => {
+const FormTree: React.FC<FormTreeProps> = ({
+  definition,
+  onEditClick,
+  onReorder,
+}) => {
   const definitionForTree = useMemo(
     () => getItemsForTree(definition),
     [definition]
@@ -24,6 +29,9 @@ const FormTree: React.FC<FormTreeProps> = ({ definition, onEditClick }) => {
     () => ({
       onEditButtonClicked: (item: FormItemForTree) => {
         onEditClick(getItemFromTree(item));
+      },
+      onReorder: (item: FormItemForTree, direction: 'up' | 'down') => {
+        onReorder(getItemFromTree(item), direction);
       },
     }),
     [onEditClick]

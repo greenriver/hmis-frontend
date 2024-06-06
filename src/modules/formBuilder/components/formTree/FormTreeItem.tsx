@@ -11,7 +11,11 @@ import {
 } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import React, { useMemo } from 'react';
-import { EditIcon } from '@/components/elements/SemanticIcons';
+import {
+  DownIcon,
+  EditIcon,
+  UpIcon,
+} from '@/components/elements/SemanticIcons';
 import theme from '@/config/theme';
 import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
 import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
@@ -33,7 +37,7 @@ const FormTreeItem = React.forwardRef(function FormTreeItem(
 ) {
   const { id, itemId, label, disabled, children, ...other } = props;
 
-  const { onEditButtonClicked } = React.useContext(FormTreeContext);
+  const { onEditButtonClicked, onReorder } = React.useContext(FormTreeContext);
 
   const {
     getRootProps,
@@ -51,10 +55,10 @@ const FormTreeItem = React.forwardRef(function FormTreeItem(
     [item.type]
   );
 
-  // TODO: Add visual tree styling that groups the items together using grey bars (when design is finalized)
+  // TODO(#6093): Add visual tree styling that groups the items together using grey bars (when design is finalized)
   // Should be possible, see example https://mui.com/x/react-tree-view/rich-tree-view/customization/#file-explorer
 
-  // TODO: enable rich text in labels
+  // TODO(#6093): enable rich text in labels
 
   return (
     <TreeItem2Provider itemId={itemId}>
@@ -79,10 +83,28 @@ const FormTreeItem = React.forwardRef(function FormTreeItem(
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                mr: 4,
+                mr: 10,
               }}
             >
               <Stack direction='row'>
+                <Stack direction='column'>
+                  <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onReorder(item, 'up');
+                    }}
+                  >
+                    <UpIcon fontSize='small' />
+                  </IconButton>
+                  <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onReorder(item, 'down');
+                    }}
+                  >
+                    <DownIcon fontSize='small' />
+                  </IconButton>
+                </Stack>
                 <IconButton
                   aria-label='edit item'
                   onClick={(e) => {
