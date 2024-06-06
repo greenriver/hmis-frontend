@@ -154,7 +154,7 @@ export const AdminDashboardRoutes: {
 // Auto-hide left desktop nav for some routes
 export const HIDE_NAV_ROUTES: string[] = [
   // EnrollmentDashboardRoutes.NEW_ASSESSMENT
-  AdminDashboardRoutes.EDIT_FORM,
+  // AdminDashboardRoutes.EDIT_FORM,
 ];
 
 export const FOCUS_MODE_ROUTES = [

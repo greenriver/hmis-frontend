@@ -1,8 +1,9 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
-import { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
+import { v4 } from 'uuid';
 import FormEditorItemPreview from '../FormEditorItemPreview';
 import SelectOption from '../SelectOption';
 import AutofillProperties from './conditionals/AutofillProperties';
@@ -18,7 +19,10 @@ import {
   getItemMap,
   localResolvePickList,
 } from '@/modules/form/util/formUtil';
-import { validComponentsForType } from '@/modules/formBuilder/components/formBuilderUtil';
+import {
+  slugifyItemLabel,
+  validComponentsForType,
+} from '@/modules/formBuilder/components/formBuilderUtil';
 import {
   AssessmentRole,
   Component,
@@ -57,9 +61,10 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   const {
     control,
     getValues,
+    setValue,
     handleSubmit,
     watch,
-    formState: { isDirty },
+    formState: { isDirty, dirtyFields },
   } = handlers;
 
   // Item type is not allowed to change in this form
@@ -79,6 +84,29 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
       label: startCase(component.toLowerCase()),
     }));
   }, [itemTypeValue]);
+
+  const itemMap = useMemo(
+    () => getItemMap(definition.definition),
+    [definition.definition]
+  );
+
+  const onLabelBlur = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      // When the user edits the label, update the link ID to be a human-readable 'slugified' version of the label.
+      // But, don't make an update to the link ID if it has been manually set.
+      if (!dirtyFields.linkId && event.target.value) {
+        let newLinkId = slugifyItemLabel(event.target.value);
+
+        if (Object.keys(itemMap).includes(newLinkId)) {
+          // If the linkId based on the label isn't unique in the form, append a unique string
+          newLinkId += '_' + v4().split('-')[0];
+        }
+
+        setValue('linkId', newLinkId);
+      }
+    },
+    [dirtyFields, setValue, itemMap]
+  );
 
   return (
     <form
@@ -199,7 +227,12 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             name='text'
             control={control}
             render={({ field: { ref, ...field } }) => (
-              <TextInput label='Label' inputRef={ref} {...field} />
+              <TextInput
+                label='Label'
+                inputRef={ref}
+                {...field}
+                onBlur={onLabelBlur}
+              />
             )}
           />
           <Controller
