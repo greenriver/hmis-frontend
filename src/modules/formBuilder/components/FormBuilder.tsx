@@ -3,7 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import { Button, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { isEqual } from 'lodash-es';
-import {
+import React, {
   Dispatch,
   SetStateAction,
   useCallback,
@@ -90,6 +90,14 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
     onSave,
   ]);
 
+  const [expandedItems, setExpandedItems] = useState<string[]>([]);
+  const expand = useCallback(
+    (itemIds: string[]) => {
+      setExpandedItems([...expandedItems, ...itemIds]);
+    },
+    [expandedItems, setExpandedItems]
+  );
+
   if (!workingDefinition || !setWorkingDefinition) return <Loading />;
 
   return (
@@ -164,10 +172,16 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                   }
                 }}
                 onReorder={(item: FormItem, direction: 'up' | 'down') => {
-                  setWorkingDefinition(
-                    reorderFormItems(workingDefinition, item, direction)
+                  const { definition, toExpand } = reorderFormItems(
+                    workingDefinition,
+                    item,
+                    direction
                   );
+                  setWorkingDefinition(definition);
+                  expand(toExpand);
                 }}
+                expandedItems={expandedItems}
+                setExpandedItems={setExpandedItems}
               />
               {errorState?.errors &&
                 errorState.errors.length > 0 &&

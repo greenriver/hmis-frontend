@@ -14,11 +14,15 @@ interface FormTreeProps {
   definition: FormDefinitionJson;
   onEditClick: (item: FormItem) => void;
   onReorder: (item: FormItem, direction: 'up' | 'down') => void;
+  expandedItems: string[];
+  setExpandedItems: (itemIds: string[]) => void;
 }
 const FormTree: React.FC<FormTreeProps> = ({
   definition,
   onEditClick,
   onReorder,
+  expandedItems,
+  setExpandedItems,
 }) => {
   const definitionForTree = useMemo(
     () => getItemsForTree(definition),
@@ -34,7 +38,7 @@ const FormTree: React.FC<FormTreeProps> = ({
         onReorder(getItemFromTree(item), direction);
       },
     }),
-    [onEditClick]
+    [onEditClick, onReorder]
   );
 
   if (!definition) return <Loading />;
@@ -47,6 +51,8 @@ const FormTree: React.FC<FormTreeProps> = ({
         getItemId={(item) => item.linkId}
         getItemLabel={(item) => item.text || item.helperText || item.linkId}
         slots={{ item: FormTreeItem }}
+        expandedItems={expandedItems}
+        onExpandedItemsChange={(_event, itemIds) => setExpandedItems(itemIds)}
       />
     </FormTreeContext.Provider>
   );

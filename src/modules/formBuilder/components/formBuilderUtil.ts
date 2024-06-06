@@ -129,6 +129,7 @@ export const reorderFormItems = (
   direction: 'up' | 'down'
 ) => {
   const copy = cloneDeep(formDefinition);
+  const toExpand: string[] = [];
 
   function recurseFindAndMove(
     thisLayer: Maybe<FormItem[]> | undefined,
@@ -145,18 +146,23 @@ export const reorderFormItems = (
       // Found the item in this layer
       if (direction === 'up') {
         if (currentIndex > 0) {
-          // If this item isn't the first item in the list, either swap it with the previous item,
-          // or, if the previous item is a group, then move it into that group.
+          // This item isn't the first item in the list
           const prevItem = thisLayer[currentIndex - 1];
-          return prevItem.type === ItemType.Group
-            ? moveIntoGroup(
-                itemToMove,
-                prevItem,
-                'push',
-                thisLayer,
-                currentIndex
-              )
-            : swapItems(currentIndex, currentIndex - 1, thisLayer);
+
+          if (prevItem.type === ItemType.Group) {
+            // If the previous item is a group, then move it into that group
+            moveIntoGroup(
+              itemToMove,
+              prevItem,
+              'push',
+              thisLayer,
+              currentIndex
+            );
+            toExpand.push(prevItem.linkId);
+          } else {
+            // If it's not a group, then simply swap it with the previous item
+            swapItems(currentIndex, currentIndex - 1, thisLayer);
+          }
         }
         // If this is the first item in the list, and there's no parent layer, then we have nothing to do
         if (!parentLayer) return false;
@@ -173,15 +179,19 @@ export const reorderFormItems = (
       if (direction === 'down') {
         if (currentIndex < thisLayer.length - 1) {
           const nextItem = thisLayer[currentIndex + 1];
-          return nextItem.type === ItemType.Group
-            ? moveIntoGroup(
-                itemToMove,
-                nextItem,
-                'unshift',
-                thisLayer,
-                currentIndex
-              )
-            : swapItems(currentIndex, currentIndex + 1, thisLayer);
+
+          if (nextItem.type === ItemType.Group) {
+            moveIntoGroup(
+              itemToMove,
+              nextItem,
+              'unshift',
+              thisLayer,
+              currentIndex
+            );
+            toExpand.push(nextItem.linkId);
+          } else {
+            swapItems(currentIndex, currentIndex + 1, thisLayer);
+          }
         }
         if (!parentLayer) return false;
         return moveToParent(
@@ -193,7 +203,6 @@ export const reorderFormItems = (
         );
       }
     }
-    // TODO @martha - auto expand the group when you move something into it
 
     // Didn't find the item in this layer; recurse through the child layers
     for (let i = 0; i < thisLayer.length; i++) {
@@ -206,7 +215,7 @@ export const reorderFormItems = (
   }
 
   recurseFindAndMove(copy.item, undefined, -1);
-  return copy;
+  return { definition: copy, toExpand };
 };
 
 export const slugifyItemLabel = (label: string) => {
