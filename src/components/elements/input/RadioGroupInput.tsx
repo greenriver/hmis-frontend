@@ -145,7 +145,9 @@ const RadioGroupInput = ({
           <InvalidValueCheckbox control={<ControlComponent data-checked />} />
         )}
       </GroupComponent>
-      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+      {helperText && (
+        <FormHelperText error={error}>{helperText}</FormHelperText>
+      )}
     </FormControl>
   );
 };

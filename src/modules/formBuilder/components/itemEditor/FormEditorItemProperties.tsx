@@ -3,10 +3,10 @@ import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
-import AutofillProperties from '../AutofillProperties';
-import ConditionalProperties from '../ConditionalProperties';
 import FormEditorItemPreview from '../FormEditorItemPreview';
 import SelectOption from '../SelectOption';
+import AutofillProperties from './conditionals/AutofillProperties';
+import ConditionalProperties from './conditionals/ConditionalProperties';
 import { FormItemState } from './types';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
@@ -362,11 +362,9 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               />
             </>
           )}
-
           <Divider />
           <ConditionalProperties
             control={control}
-            initialItem={initialItem}
             itemMap={getItemMap(definition.definition)}
           />
           <Divider />
@@ -375,7 +373,6 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             itemMap={getItemMap(definition.definition)}
             itemType={itemTypeValue}
           />
-
           {errorState?.errors && errorState.errors.length > 0 && (
             <Stack gap={1} sx={{ mt: 4 }}>
               <ErrorAlert key='errors' errors={errorState.errors} />

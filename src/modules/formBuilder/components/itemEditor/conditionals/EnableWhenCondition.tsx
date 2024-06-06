@@ -1,24 +1,16 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { Controller, useFieldArray, useWatch } from 'react-hook-form';
-import { generateItemPickList } from '../formBuilderUtil';
-import CardGroup, { RemovableCard } from './CardGroup';
-import { FormItemControl } from './itemEditor/types';
-import SelectOption from './SelectOption';
+import { Controller, useWatch } from 'react-hook-form';
+import SelectOption from '../../SelectOption';
+import { FormItemControl } from '../types';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
-import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import { ItemMap } from '@/modules/form/types';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  EnableOperator,
-  FormItem,
-  ItemType,
-  PickListOption,
-} from '@/types/gqlTypes';
+import { EnableOperator, ItemType, PickListOption } from '@/types/gqlTypes';
 
 const enableOperatorPickList = Object.keys(HmisEnums.EnableOperator).map(
   (code) => ({
@@ -34,6 +26,8 @@ interface EnableWhenConditionProps {
   itemMap: ItemMap;
   enableWhenPath?: 'enableWhen' | `autofillValues.${number}.autofillWhen`; // path to enableWhen in form
 }
+
+// Component for managing a single EnableWhen condition
 const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
   control,
   index,
@@ -104,6 +98,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
             name={`${enableWhenPath}.${index}.question`}
             control={control}
             disabled={advanced.localConstant}
+            rules={{ required: 'Dependent Question is required' }}
             render={({
               field: { ref, disabled, ...field },
               fieldState: { error },
@@ -127,6 +122,9 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
             name={`${enableWhenPath}.${index}.localConstant`}
             control={control}
             disabled={!advanced.localConstant}
+            rules={{
+              required: 'Local Constant or Dependent Question is required',
+            }}
             render={({
               field: { ref, disabled, ...field },
               fieldState: { error },
@@ -152,6 +150,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           <Controller
             name={`${enableWhenPath}.${index}.operator`}
             control={control}
+            rules={{ required: 'Operator is required' }}
             render={({ field: { ref, ...field }, fieldState: { error } }) => (
               <SelectOption
                 label='Operator'
@@ -171,10 +170,17 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           <Controller
             name={`${enableWhenPath}.${index}.answerBoolean`}
             control={control}
+            rules={{ required: 'Yes/No Selection is Required' }}
             disabled={!answerInputTypes.includes('answerBoolean')}
-            render={({ field: { ref, disabled, ...field } }) => (
+            render={({
+              field: { ref, disabled, ...field },
+              fieldState: { error },
+            }) => (
               <YesNoRadio
-                sx={disabled ? { display: 'none' } : { mt: 3, ml: 2 }}
+                label='Value'
+                sx={disabled ? { display: 'none' } : {}}
+                error={!!error}
+                helperText={error?.message}
                 {...field}
               />
             )}
@@ -182,10 +188,14 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           <Controller
             name={`${enableWhenPath}.${index}.answerCode`}
             control={control}
+            rules={{ required: 'Response Value is Required' }}
             disabled={
               !answerInputTypes.includes('answerCode') || advanced.groupCode
             }
-            render={({ field: { ref, disabled, ...field } }) => (
+            render={({
+              field: { ref, disabled, ...field },
+              fieldState: { error },
+            }) => (
               <TextInput
                 sx={
                   disabled && answerInputTypes.length > 0
@@ -193,7 +203,8 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                     : undefined
                 }
                 label={answerValueLabel}
-                helperText={answerHelperText}
+                helperText={error?.message || answerHelperText}
+                error={!!error}
                 inputRef={ref}
                 disabled={disabled}
                 {...field}
@@ -203,12 +214,17 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           <Controller
             name={`${enableWhenPath}.${index}.answerCodes`}
             control={control}
+            rules={{ required: 'Response Value is Required' }}
             disabled={!answerInputTypes.includes('answerCodes')}
-            render={({ field: { ref, disabled, ...field } }) => (
+            render={({
+              field: { ref, disabled, ...field },
+              fieldState: { error },
+            }) => (
               <TextInput
                 sx={disabled ? { display: 'none' } : undefined}
                 label={answerValueLabel}
-                helperText={answerHelperText}
+                helperText={error?.message || answerHelperText}
+                error={!!error}
                 inputRef={ref}
                 {...field}
               />
@@ -217,12 +233,17 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           <Controller
             name={`${enableWhenPath}.${index}.answerNumber`}
             control={control}
+            rules={{ required: 'Response Value is Required' }}
             disabled={!answerInputTypes.includes('answerNumber')}
-            render={({ field: { ref, disabled, ...field } }) => (
+            render={({
+              field: { ref, disabled, ...field },
+              fieldState: { error },
+            }) => (
               <NumberInput
                 sx={disabled ? { display: 'none' } : undefined}
                 label={answerValueLabel}
-                helperText={answerHelperText}
+                helperText={error?.message || answerHelperText}
+                error={!!error}
                 inputRef={ref}
                 {...field}
               />
@@ -231,6 +252,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           <Controller
             name={`${enableWhenPath}.${index}.answerGroupCode`}
             control={control}
+            rules={{ required: 'Response Value is Required' }}
             disabled={!advanced.groupCode}
             render={({ field: { ref, disabled, ...field } }) => (
               <TextInput
@@ -277,83 +299,4 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     </Stack>
   );
 };
-
-export interface EnableWhenSelectionProps {
-  control: FormItemControl;
-  itemMap: ItemMap;
-  initialItem?: FormItem; // remove
-  enableWhenPath?: 'enableWhen' | `autofillValues.${number}.autofillWhen`; // path to enableWhen in form
-  enableBehaviorPath?:
-    | 'enableBehavior'
-    | `autofillValues.${number}.autofillBehavior`;
-}
-
-const EnableWhenSelection: React.FC<EnableWhenSelectionProps> = ({
-  control,
-  itemMap,
-  enableWhenPath = 'enableWhen',
-  enableBehaviorPath = 'enableBehavior',
-}) => {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: enableWhenPath,
-  });
-
-  const itemPickList = useMemo(() => generateItemPickList(itemMap), [itemMap]);
-
-  const enableBehaviorOptions = useMemo(() => {
-    const action = enableWhenPath.includes('autofillWhen')
-      ? 'Autofill this value'
-      : 'Display this item';
-    return [
-      {
-        code: 'ALL',
-        label: `${action} if all of the below conditions are met (AND logic)`,
-      },
-      {
-        code: 'ANY',
-        label: `${action} if any of the below conditions are met (OR logic)`,
-      },
-    ];
-  }, [enableWhenPath]);
-  return (
-    <CardGroup
-      onAddItem={() => {
-        append({}, { shouldFocus: false });
-      }}
-      addItemText='Add Condition'
-    >
-      <Controller
-        name={enableBehaviorPath}
-        control={control}
-        render={({ field: { ref, value, onChange, ...field } }) => (
-          <RadioGroupInput
-            options={enableBehaviorOptions}
-            label='Conditional Behavior (AND/OR)'
-            value={enableBehaviorOptions.find((o) => o.code === value)}
-            onChange={(option) => onChange(option?.code)}
-            {...field}
-          />
-        )}
-      />
-
-      {fields.map((condition, index) => (
-        <RemovableCard
-          key={JSON.stringify(condition)} // fixme could be non unique
-          onRemove={() => remove(index)}
-          removeTooltip={'Remove Condition'}
-        >
-          <EnableWhenCondition
-            control={control}
-            index={index}
-            enableWhenPath={enableWhenPath}
-            itemPickList={itemPickList}
-            itemMap={itemMap}
-          />
-        </RemovableCard>
-      ))}
-    </CardGroup>
-  );
-};
-
-export default EnableWhenSelection;
+export default EnableWhenCondition;

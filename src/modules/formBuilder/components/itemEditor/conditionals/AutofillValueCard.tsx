@@ -1,8 +1,7 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { Controller, useFieldArray } from 'react-hook-form';
-import CardGroup, { RemovableCard } from './CardGroup';
-import EnableWhenSelection from './EnableWhenSelection';
-import { FormItemControl } from './itemEditor/types';
+import { Stack, Typography } from '@mui/material';
+import { Controller } from 'react-hook-form';
+import { FormItemControl } from '../types';
+import ManageEnableWhen from './ManageEnableWhen';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import TextInput from '@/components/elements/input/TextInput';
@@ -17,6 +16,8 @@ interface AutofillValueCardProps {
   title: string;
   itemType: ItemType;
 }
+
+// Card for managing a single AutofillValue
 const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
   control,
   index,
@@ -38,17 +39,22 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
         <Controller
           name={`autofillValues.${index}.valueCode`}
           control={control}
-          disabled={
-            ![ItemType.Choice, ItemType.OpenChoice, ItemType.String].includes(
-              itemType
-            )
-          }
-          render={({ field: { ref, disabled, ...field } }) => (
+          disabled={[
+            ItemType.Boolean,
+            ItemType.Currency,
+            ItemType.Integer,
+          ].includes(itemType)}
+          render={({
+            field: { ref, disabled, ...field },
+            fieldState: { error },
+          }) => (
             <TextInput
               sx={disabled ? { display: 'none' } : undefined}
               label='Value (String / Code)'
               inputRef={ref}
               disabled={disabled}
+              error={!!error}
+              helperText={error?.message}
               {...field}
             />
           )}
@@ -57,10 +63,15 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           name={`autofillValues.${index}.valueBoolean`}
           control={control}
           disabled={itemType !== ItemType.Boolean}
-          render={({ field: { ref, disabled, ...field } }) => (
+          render={({
+            field: { ref, disabled, ...field },
+            fieldState: { error },
+          }) => (
             <YesNoRadio
               label='Value (Boolean)'
-              sx={disabled ? { display: 'none' } : { mt: 3, ml: 2 }}
+              sx={disabled ? { display: 'none' } : {}}
+              error={!!error}
+              helperText={error?.message}
               {...field}
             />
           )}
@@ -69,11 +80,16 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           name={`autofillValues.${index}.valueNumber`}
           control={control}
           disabled={![ItemType.Currency, ItemType.Integer].includes(itemType)}
-          render={({ field: { ref, disabled, ...field } }) => (
+          render={({
+            field: { ref, disabled, ...field },
+            fieldState: { error },
+          }) => (
             <NumberInput
               sx={disabled ? { display: 'none' } : undefined}
               label='Value (Numeric)'
               inputRef={ref}
+              error={!!error}
+              helperText={error?.message}
               {...field}
             />
           )}
@@ -83,13 +99,18 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           control={control}
           // TODO: validate formula
           // disabled={!answerInputTypes.includes('answerCode')}
-          render={({ field: { ref, disabled, ...field } }) => (
+          render={({
+            field: { ref, disabled, ...field },
+            fieldState: { error },
+          }) => (
             <TextInput
               sx={disabled ? { display: 'none' } : undefined}
               label='Value (Formula)'
               helperText="Formula to calculate the value to fill. Use 'value' to refer to the value of the current item."
               inputRef={ref}
               disabled={disabled}
+              error={!!error}
+              helperText={error?.message}
               {...field}
             />
           )}
@@ -107,7 +128,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           )}
         />
 
-        <EnableWhenSelection
+        <ManageEnableWhen
           enableWhenPath={`autofillValues.${index}.autofillWhen`}
           enableBehaviorPath={`autofillValues.${index}.autofillBehavior`}
           control={control}
@@ -118,48 +139,4 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
   );
 };
 
-interface AutofillPropertiesProps {
-  control: FormItemControl;
-  itemMap: ItemMap;
-  itemType: ItemType;
-}
-
-const AutofillProperties: React.FC<AutofillPropertiesProps> = ({
-  control,
-  itemType,
-  itemMap,
-}) => {
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'autofillValues',
-  });
-
-  return (
-    <>
-      <Typography variant='h5'>Autofill</Typography>
-      <Box sx={{ mb: 2 }}>
-        <CardGroup
-          onAddItem={() => append({})}
-          addItemText='Add Autofill Value'
-        >
-          {fields.map((value, index) => (
-            <RemovableCard
-              onRemove={() => remove(index)}
-              removeTooltip='Remove Autofill'
-            >
-              <AutofillValueCard
-                title={`Autofill Value ${index + 1}`}
-                index={index}
-                control={control}
-                itemMap={itemMap}
-                itemType={itemType}
-              />
-            </RemovableCard>
-          ))}
-        </CardGroup>
-      </Box>
-    </>
-  );
-};
-
-export default AutofillProperties;
+export default AutofillValueCard;
