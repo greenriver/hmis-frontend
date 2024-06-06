@@ -5319,6 +5319,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'referredTo',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'resourceCoordinatorNotes',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -6900,15 +6904,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'FormDefinitionFilterOptions',
-    args: [
-      {
-        name: 'searchTerm',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-    ],
-  },
-  {
     name: 'FormDefinitionInput',
     args: [
       {
@@ -7194,21 +7189,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'OutgoingReferralPostingInput',
-    args: [
-      {
-        name: 'enrollmentId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      { name: 'note', type: { kind: 'SCALAR', name: 'String', ofType: null } },
-      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
-      {
-        name: 'unitTypeId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
     ],
   },

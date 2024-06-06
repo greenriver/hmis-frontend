@@ -1,7 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
@@ -23,28 +22,29 @@ import {
   RecordFormRole,
 } from '@/types/gqlTypes';
 
-const baseColumns: ColumnDef<CurrentLivingSituationFieldsFragment>[] = [
-  {
+export const baseColumns = {
+  informationDate: {
     header: 'Information Date',
     width: '180px',
-    render: (e) => parseAndFormatDate(e.informationDate),
+    render: (e: CurrentLivingSituationFieldsFragment) =>
+      parseAndFormatDate(e.informationDate),
     linkTreatment: true,
   },
-  {
+  livingSituation: {
     header: 'Living Situation',
     width: '400px',
-    render: (e) => (
+    render: (e: CurrentLivingSituationFieldsFragment) => (
       <HmisEnum
         value={e.currentLivingSituation}
         enumMap={HmisEnums.CurrentLivingSituationOptions}
       />
     ),
   },
-  {
+  locationDetails: {
     header: 'Location Details',
-    render: (e) => e.locationDetails,
+    render: (e: CurrentLivingSituationFieldsFragment) => e.locationDetails,
   },
-];
+};
 
 const EnrollmentCurrentLivingSituationsPage = () => {
   const { enrollment } = useEnrollmentDashboardContext();
@@ -85,7 +85,12 @@ const EnrollmentCurrentLivingSituationsPage = () => {
   const getColumnDefs = useCallback(
     (rows: CurrentLivingSituationFieldsFragment[]) => {
       const customColumns = getCustomDataElementColumns(rows);
-      return [...baseColumns, ...customColumns];
+      return [
+        baseColumns.informationDate,
+        baseColumns.livingSituation,
+        baseColumns.locationDetails,
+        ...customColumns,
+      ];
     },
     []
   );

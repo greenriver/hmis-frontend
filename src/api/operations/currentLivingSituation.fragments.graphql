@@ -18,3 +18,15 @@ fragment CurrentLivingSituationFields on CurrentLivingSituation {
     ...CustomDataElementFields
   }
 }
+
+fragment ProjectCurrentLivingSituationFields on CurrentLivingSituation {
+  client {
+    id
+    ...ClientName
+  }
+  enrollment {
+    id
+    ...EnrollmentRangeFields
+  }
+  ...CurrentLivingSituationFields
+}

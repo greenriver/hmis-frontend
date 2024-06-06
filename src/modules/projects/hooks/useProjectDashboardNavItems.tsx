@@ -49,7 +49,15 @@ export const useProjectDashboardNavItems = (
               DataCollectionFeatureRole.Service
             ),
           },
-
+          {
+            id: 'current-living-situations',
+            title: 'Current Living Situations',
+            path: ProjectDashboardRoutes.PROJECT_CURRENT_LIVING_SITUATIONS,
+            permissions: ['canViewEnrollmentDetails'],
+            hide: !dataCollectionRoles.includes(
+              DataCollectionFeatureRole.CurrentLivingSituation
+            ),
+          },
           {
             id: 'externalForms',
             title: 'External Forms',
