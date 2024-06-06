@@ -150,18 +150,18 @@ export const reorderFormItems = (
           const prevItem = thisLayer[currentIndex - 1];
 
           if (prevItem.type === ItemType.Group) {
+            toExpand.push(prevItem.linkId);
             // If the previous item is a group, then move it into that group
-            moveIntoGroup(
+            return moveIntoGroup(
               itemToMove,
               prevItem,
               'push',
               thisLayer,
               currentIndex
             );
-            toExpand.push(prevItem.linkId);
           } else {
             // If it's not a group, then simply swap it with the previous item
-            swapItems(currentIndex, currentIndex - 1, thisLayer);
+            return swapItems(currentIndex, currentIndex - 1, thisLayer);
           }
         }
         // If this is the first item in the list, and there's no parent layer, then we have nothing to do
@@ -181,16 +181,16 @@ export const reorderFormItems = (
           const nextItem = thisLayer[currentIndex + 1];
 
           if (nextItem.type === ItemType.Group) {
-            moveIntoGroup(
+            toExpand.push(nextItem.linkId);
+            return moveIntoGroup(
               itemToMove,
               nextItem,
               'unshift',
               thisLayer,
               currentIndex
             );
-            toExpand.push(nextItem.linkId);
           } else {
-            swapItems(currentIndex, currentIndex + 1, thisLayer);
+            return swapItems(currentIndex, currentIndex + 1, thisLayer);
           }
         }
         if (!parentLayer) return false;
