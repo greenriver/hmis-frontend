@@ -1,9 +1,9 @@
 import { cloneDeep, kebabCase } from 'lodash-es';
 import {
+  ItemType,
   Component,
   FormDefinitionJson,
   FormItem,
-  ItemType,
   Maybe,
 } from '@/types/gqlTypes';
 

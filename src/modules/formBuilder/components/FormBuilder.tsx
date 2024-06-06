@@ -3,7 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import { Button, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { isEqual } from 'lodash-es';
-import React, {
+import {
   Dispatch,
   SetStateAction,
   useCallback,
