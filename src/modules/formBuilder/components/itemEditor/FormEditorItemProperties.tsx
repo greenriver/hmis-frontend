@@ -22,7 +22,7 @@ import {
 import {
   slugifyItemLabel,
   validComponentsForType,
-} from '@/modules/formBuilder/components/formBuilderUtil';
+} from '@/modules/formBuilder/formBuilderUtil';
 import {
   AssessmentRole,
   Component,

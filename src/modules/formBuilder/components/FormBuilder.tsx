@@ -18,9 +18,9 @@ import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
-import { updateFormItem } from '@/modules/formBuilder/components/formBuilderUtil';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
+import { updateFormItem } from '@/modules/formBuilder/formBuilderUtil';
 import {
   DisabledDisplay,
   EnableBehavior,
