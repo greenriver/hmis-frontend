@@ -14,7 +14,7 @@ interface AutofillValueCardProps {
   index: number;
   itemMap: ItemMap;
   title: string;
-  itemType: ItemType;
+  itemType: ItemType; // will be used to determine value type
 }
 
 // Card for managing a single AutofillValue
@@ -23,7 +23,6 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
   index,
   itemMap,
   title,
-  itemType,
 }) => {
   //TODO: also accept sum_questions for autofilling numeric fields using a sum of other questions
 
@@ -40,16 +39,16 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           name={`autofillValues.${index}.valueCode`}
           label='Value (String / Code)'
           control={control}
-          disabled={[
-            ItemType.Boolean,
-            ItemType.Currency,
-            ItemType.Integer,
-          ].includes(itemType)}
+          // disabled={[
+          //   ItemType.Boolean,
+          //   ItemType.Currency,
+          //   ItemType.Integer,
+          // ].includes(itemType)}
         />
         <Controller
           name={`autofillValues.${index}.valueBoolean`}
           control={control}
-          disabled={itemType !== ItemType.Boolean}
+          // disabled={itemType !== ItemType.Boolean}
           render={({
             field: { ref, disabled, ...field },
             fieldState: { error },
@@ -66,7 +65,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
         <Controller
           name={`autofillValues.${index}.valueNumber`}
           control={control}
-          disabled={![ItemType.Currency, ItemType.Integer].includes(itemType)}
+          // disabled={![ItemType.Currency, ItemType.Integer].includes(itemType)}
           render={({
             field: { ref, disabled, ...field },
             fieldState: { error },
