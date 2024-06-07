@@ -30,7 +30,6 @@ const ControlledTextInput: React.FC<ControlledTextInputProps> = ({
     shouldUnregister: true,
     rules: {
       required: props.required ? 'This field is required' : false,
-      pattern: props.type === 'number' ? /^(0|[1-9]\d*)(\.\d+)?$/ : undefined,
       ...rules,
     },
   });
