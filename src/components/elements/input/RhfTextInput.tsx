@@ -7,12 +7,13 @@ interface RhfTextInputProps extends Omit<TextInputProps, 'value' | 'onChange'> {
   name: string;
   control?: Control; // Optional when using FormProvider
   rules?: RhfRules;
+  numeric?: boolean;
 }
+
 const RhfTextInput: React.FC<RhfTextInputProps> = ({
   name,
   control,
   onBlur,
-  required,
   rules,
   ...props
 }) => {
@@ -22,10 +23,10 @@ const RhfTextInput: React.FC<RhfTextInputProps> = ({
   } = useController({
     name,
     control,
+    shouldUnregister: true,
     rules: {
-      // If field is marked as required, add a default rule and message
-      required: required ? 'This field is required' : false,
-      // Allow any additional rules, including overriding the 'required' rule/message
+      required: props.required ? 'This field is required' : false,
+      pattern: props.type === 'number' ? /^(0|[1-9]\d*)(\.\d+)?$/ : undefined,
       ...rules,
     },
   });
@@ -46,7 +47,6 @@ const RhfTextInput: React.FC<RhfTextInputProps> = ({
       name={field.name} // send down the input name
       inputRef={field.ref} // send input ref, so we can focus on input when error appear
       {...props}
-      required={required}
       error={!!error || props.error}
       helperText={error?.message || props.helperText}
     />

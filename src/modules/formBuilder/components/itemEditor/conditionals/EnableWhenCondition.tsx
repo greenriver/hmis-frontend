@@ -1,16 +1,15 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
-import SelectOption from '../../SelectOption';
 import { FormItemControl } from '../types';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
-import NumberInput from '@/components/elements/input/NumberInput';
-import TextInput from '@/components/elements/input/TextInput';
+import RhfSelect from '@/components/elements/input/RhfSelect';
+import RhfTextInput from '@/components/elements/input/RhfTextInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import { ItemMap } from '@/modules/form/types';
 import { HmisEnums } from '@/types/gqlEnums';
-import { EnableOperator, ItemType, PickListOption } from '@/types/gqlTypes';
+import { PickListOption } from '@/types/gqlTypes';
 
 const enableOperatorPickList = Object.keys(HmisEnums.EnableOperator).map(
   (code) => ({
@@ -27,25 +26,11 @@ interface EnableWhenConditionProps {
   enableWhenPath?: 'enableWhen' | `autofillValues.${number}.autofillWhen`; // path to enableWhen in form
 }
 
-/*
-Other RHF patterns
-
-1) Wrap each input component and re export
-2) Wrap each component in a ValueWrapper and pass a generic onChange(?)
-3) No change, a lot of repetition
-
-
-Question: will zach's approach let us to client-side valudation with RHF, or no? I think it could if it passed in the formstate erros with the ValueWrapper
-
-
-*/
-
 // Component for managing a single EnableWhen condition
 const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
   control,
   index,
   itemPickList,
-  itemMap,
   enableWhenPath = 'enableWhen',
 }) => {
   // Watch state of this condition
@@ -53,47 +38,46 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     control,
     name: `${enableWhenPath}.${index}`,
   });
-  // console.log(state);
 
-  const dependentItem = useMemo(
-    () => (state?.question ? itemMap[state?.question] : undefined),
-    [itemMap, state?.question]
-  );
+  // const dependentItem = useMemo(
+  //   () => (state?.question ? itemMap[state?.question] : undefined),
+  //   [itemMap, state?.question]
+  // );
 
-  // determine which type(s) are valid for the answer field
-  const answerInputTypes = useMemo(() => {
-    // We dont know the operator yet, so don't know which answer type to use
-    if (!state?.operator) return [];
+  // Commented out until we have a better way of doing this and a design pass
+  // // determine which type(s) are valid for the answer field
+  // const answerInputTypes = useMemo(() => {
+  //   // We dont know the operator yet, so don't know which answer type to use
+  //   if (!state?.operator) return [];
 
-    // We dont know the comparison type yet, so don't know which answer type to use
-    if (!dependentItem && !state?.localConstant) return [];
+  //   // We dont know the comparison type yet, so don't know which answer type to use
+  //   if (!dependentItem && !state?.localConstant) return [];
 
-    // Exists/Enabled are always boolean
-    if (state?.operator === EnableOperator.Exists) return ['answerBoolean'];
-    if (state?.operator === EnableOperator.Enabled) return ['answerBoolean'];
+  //   // Exists/Enabled are always boolean
+  //   if (state?.operator === EnableOperator.Exists) return ['answerBoolean'];
+  //   if (state?.operator === EnableOperator.Enabled) return ['answerBoolean'];
 
-    // String input uses answerCode
-    if (state?.localConstant) return ['answerCode'];
+  //   // String input uses answerCode
+  //   if (state?.localConstant) return ['answerCode'];
 
-    if (!dependentItem) return [];
+  //   if (!dependentItem) return [];
 
-    if (dependentItem.type === ItemType.Choice) {
-      // value in [x,y,z]
-      if (state?.operator === EnableOperator.In) return ['answerCodes'];
-      // value can be matched by code or group code
-      return ['answerCode', 'answerGroupCode'];
-    }
+  //   if (dependentItem.type === ItemType.Choice) {
+  //     // value in [x,y,z]
+  //     if (state?.operator === EnableOperator.In) return ['answerCodes'];
+  //     // value can be matched by code or group code
+  //     return ['answerCode', 'answerGroupCode'];
+  //   }
 
-    if (dependentItem.type === ItemType.Boolean) return ['answerBoolean'];
-    if (dependentItem.type === ItemType.Integer) return ['answerNumber'];
-    if (dependentItem.type === ItemType.Currency) return ['answerNumber'];
-    // not handled: compareQuestion
-    return ['answerCode'];
-  }, [dependentItem, state]);
+  //   if (dependentItem.type === ItemType.Boolean) return ['answerBoolean'];
+  //   if (dependentItem.type === ItemType.Integer) return ['answerNumber'];
+  //   if (dependentItem.type === ItemType.Currency) return ['answerNumber'];
+  //   // not handled: compareQuestion
+  //   return ['answerCode'];
+  // }, [dependentItem, state]);
 
   const answerHelperText =
     'Value to compare using the operator. If the expression evaluates to true, the condition is met.';
-  const answerValueLabel = 'Response Value';
 
   // Advanced behaviors that are toggled off by default, or on if either are set
   const [advanced, setAdvanced] = useState({
@@ -101,190 +85,88 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     groupCode: !!state?.answerGroupCode,
   });
 
-  // a better approach would be:
-  // 1. if any of those answer values are populated, show it
-  // 2. only show one input, and always save it into the "right" field
-  // answer_code,
-  // answer_codes,
-  // answer_group_code,
-  // answer_number, //
-  // answer_boolean,
-  // compare_question,
   return (
     <Stack>
       <Grid container gap={2}>
         {/* COLUMN 1: Select the dependent source */}
         <Grid item xs={4}>
-          <Controller
-            name={`${enableWhenPath}.${index}.question`}
-            control={control}
-            disabled={advanced.localConstant}
-            rules={{ required: 'Dependent Question is required' }}
-            render={({
-              field: { ref, disabled, ...field },
-              fieldState: { error },
-            }) => (
-              <SelectOption
+          <Stack gap={1}>
+            {!advanced.localConstant && (
+              <RhfSelect
+                name={`${enableWhenPath}.${index}.question`}
+                control={control}
                 label='Dependent Question'
                 options={itemPickList}
-                sx={disabled ? { display: 'none' } : undefined}
-                {...field}
-                textInputProps={{
-                  helperText:
-                    error?.message ||
-                    "Question who's response will determine whether the condition is met",
-                  error: !!error,
-                  inputRef: ref,
-                }}
+                helperText="Question who's response will determine whether the condition is met"
+                required
               />
             )}
-          />
-          <Controller
-            name={`${enableWhenPath}.${index}.localConstant`}
-            control={control}
-            disabled={!advanced.localConstant}
-            rules={{
-              required: 'Local Constant or Dependent Question is required',
-            }}
-            render={({
-              field: { ref, disabled, ...field },
-              fieldState: { error },
-            }) => (
-              <TextInput
+            {advanced.localConstant && (
+              <RhfTextInput
+                name={`${enableWhenPath}.${index}.localConstant`}
+                control={control}
+                rules={{
+                  required: 'Local Constant or Dependent Question is required',
+                }}
                 // FIXME should be a dropdown of available Local Constants for this Role
                 label='Local Constant'
-                helperText={
-                  error?.message ||
-                  "Local constant who's value will determine whether the condition is met"
-                }
-                sx={disabled ? { display: 'none' } : undefined}
-                error={!!error}
-                inputRef={ref}
-                {...field}
+                helperText="Local constant who's value will determine whether the condition is met"
               />
             )}
-          />
+          </Stack>
         </Grid>
         {/* COLUMN 2: Select the comparison operator */}
         {/* TOOD: the operator picklist should be conditional based on the type of the dependent item. For example, "Less Than" is only applicable to numbers */}
         <Grid item xs={3}>
-          <Controller
+          <RhfSelect
             name={`${enableWhenPath}.${index}.operator`}
             control={control}
-            rules={{ required: 'Operator is required' }}
-            render={({ field: { ref, ...field }, fieldState: { error } }) => (
-              <SelectOption
-                label='Operator'
-                options={enableOperatorPickList}
-                {...field}
-                textInputProps={{
-                  helperText: error?.message,
-                  error: !!error,
-                  inputRef: ref,
-                }}
-              />
-            )}
+            label='Operator'
+            options={enableOperatorPickList}
+            required
           />
         </Grid>
         {/* COLUMN 3: Select the comparison value */}
+        {/* FIXME this should validate, and only allow the correct input type for the operator+dependent item type. The backend should probably validate the "oneOf" logic (too?). */}
         <Grid item xs={4}>
-          <Controller
-            name={`${enableWhenPath}.${index}.answerBoolean`}
-            control={control}
-            rules={{ required: 'Yes/No Selection is Required' }}
-            disabled={!answerInputTypes.includes('answerBoolean')}
-            render={({
-              field: { ref, disabled, ...field },
-              fieldState: { error },
-            }) => (
-              <YesNoRadio
-                label='Value'
-                sx={disabled ? { display: 'none' } : {}}
-                error={!!error}
-                helperText={error?.message}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name={`${enableWhenPath}.${index}.answerCode`}
-            control={control}
-            rules={{ required: 'Response Value is Required' }}
-            disabled={
-              !answerInputTypes.includes('answerCode') || advanced.groupCode
-            }
-            render={({
-              field: { ref, disabled, ...field },
-              fieldState: { error },
-            }) => (
-              <TextInput
-                sx={
-                  disabled && answerInputTypes.length > 0
-                    ? { display: 'none' }
-                    : undefined
-                }
-                label={answerValueLabel}
-                helperText={error?.message || answerHelperText}
-                error={!!error}
-                inputRef={ref}
-                disabled={disabled}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name={`${enableWhenPath}.${index}.answerCodes`}
-            control={control}
-            rules={{ required: 'Response Value is Required' }}
-            disabled={!answerInputTypes.includes('answerCodes')}
-            render={({
-              field: { ref, disabled, ...field },
-              fieldState: { error },
-            }) => (
-              <TextInput
-                sx={disabled ? { display: 'none' } : undefined}
-                label={answerValueLabel}
-                helperText={error?.message || answerHelperText}
-                error={!!error}
-                inputRef={ref}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name={`${enableWhenPath}.${index}.answerNumber`}
-            control={control}
-            rules={{ required: 'Response Value is Required' }}
-            disabled={!answerInputTypes.includes('answerNumber')}
-            render={({
-              field: { ref, disabled, ...field },
-              fieldState: { error },
-            }) => (
-              <NumberInput
-                sx={disabled ? { display: 'none' } : undefined}
-                label={answerValueLabel}
-                helperText={error?.message || answerHelperText}
-                error={!!error}
-                inputRef={ref}
-                {...field}
-              />
-            )}
-          />
-          <Controller
-            name={`${enableWhenPath}.${index}.answerGroupCode`}
-            control={control}
-            rules={{ required: 'Response Value is Required' }}
-            disabled={!advanced.groupCode}
-            render={({ field: { ref, disabled, ...field } }) => (
-              <TextInput
-                sx={disabled ? { display: 'none' } : undefined}
-                label='Response Group'
-                helperText='If dependent item uses a grouped picklist, enter the name of a group to compare using the operator.'
-                inputRef={ref}
-                {...field}
-              />
-            )}
-          />
+          <Stack gap={1}>
+            <Controller
+              name={`${enableWhenPath}.${index}.answerBoolean`}
+              control={control}
+              render={({ field: { ref, ...field }, fieldState: { error } }) => (
+                <YesNoRadio
+                  label='Response Value (Boolean)'
+                  error={!!error}
+                  helperText={error?.message}
+                  {...field}
+                />
+              )}
+            />
+            <RhfTextInput
+              name={`${enableWhenPath}.${index}.answerCode`}
+              control={control}
+              label='Response Value (Code)'
+              helperText={answerHelperText}
+            />
+            <RhfTextInput
+              name={`${enableWhenPath}.${index}.answerCodes`}
+              control={control}
+              label='Response Value (Code List)'
+              helperText={answerHelperText}
+            />
+            <RhfTextInput
+              name={`${enableWhenPath}.${index}.answerNumber`}
+              control={control}
+              label='Response Value (Numeric)'
+              type='number' // ok? we use another approach in NumberInput
+            />
+            <RhfTextInput
+              name={`${enableWhenPath}.${index}.answerGroupCode`}
+              control={control}
+              label='Response Group'
+              helperText='If dependent item uses a grouped picklist, enter the name of a group to compare using the operator.'
+            />
+          </Stack>
         </Grid>
       </Grid>
       <Box
@@ -306,15 +188,6 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
               setAdvanced((old) => ({ ...old, localConstant: checked }))
             }
           />
-          {answerInputTypes.includes('answerGroupCode') && (
-            <LabeledCheckbox
-              label='Use Group Code for response value comparison'
-              checked={advanced.groupCode}
-              onChange={(evt, checked) =>
-                setAdvanced((old) => ({ ...old, groupCode: checked }))
-              }
-            />
-          )}
         </Stack>
       </Box>
     </Stack>

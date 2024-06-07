@@ -17,11 +17,10 @@ export type RhfSelectProps = Omit<
   control?: Control; // Optional when using FormProvider
   rules?: RhfRules;
   required?: boolean;
+  helperText?: string;
 };
 
-// Simple wrapper around GenericSelect that uses string as value, but PickListOption as option list.
-// This is duplicative with TableFilterItemSelect which does something similar.
-// Should probably be refactored into a common input element.
+// RHF wrapper wrapper around GenericSelect that uses string as value, but PickListOption as option list.
 const RhfSelect: React.FC<RhfSelectProps> = ({
   name,
   control,
@@ -30,6 +29,7 @@ const RhfSelect: React.FC<RhfSelectProps> = ({
   options,
   loading,
   placeholder,
+  helperText,
   ...props
 }) => {
   const {
@@ -38,16 +38,17 @@ const RhfSelect: React.FC<RhfSelectProps> = ({
   } = useController({
     name,
     control,
+    shouldUnregister: true,
     rules: {
-      // If field is marked as required, add a default rule and message
       required: required ? 'This field is required' : false,
-      // Allow any additional rules, including overriding the 'required' rule/message
       ...rules,
     },
   });
 
   const isGrouped = !!options[0]?.groupLabel;
 
+  // The 'value' thats stored in the form state is a string, but the value that gets
+  // passed to GenericSelect is a PickListOption
   const valueOption = useMemo(
     () => options.find(({ code }) => code === field.value) || null,
     [field.value, options]
@@ -70,7 +71,7 @@ const RhfSelect: React.FC<RhfSelectProps> = ({
       onChange={(_event, value) => field.onChange(value?.code || null)}
       textInputProps={{
         name: field.name,
-        helperText: error?.message,
+        helperText: error?.message || helperText,
         error: !!error,
         inputRef: field.ref, // send input ref, so we can focus on input when error appear
         required,

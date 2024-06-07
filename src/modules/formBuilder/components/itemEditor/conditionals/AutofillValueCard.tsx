@@ -2,9 +2,9 @@ import { Stack, Typography } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import ManageEnableWhen from './ManageEnableWhen';
-import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
-import TextInput from '@/components/elements/input/TextInput';
+import RhfCheckbox from '@/components/elements/input/RhfCheckbox';
+import RhfTextInput from '@/components/elements/input/RhfTextInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import { ItemMap } from '@/modules/form/types';
 import { ItemType } from '@/types/gqlTypes';
@@ -36,28 +36,15 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           Enter the value to autofill, or enter a formula to calculate it:
         </Typography>
 
-        <Controller
+        <RhfTextInput
           name={`autofillValues.${index}.valueCode`}
+          label='Value (String / Code)'
           control={control}
           disabled={[
             ItemType.Boolean,
             ItemType.Currency,
             ItemType.Integer,
           ].includes(itemType)}
-          render={({
-            field: { ref, disabled, ...field },
-            fieldState: { error },
-          }) => (
-            <TextInput
-              sx={disabled ? { display: 'none' } : undefined}
-              label='Value (String / Code)'
-              inputRef={ref}
-              disabled={disabled}
-              error={!!error}
-              helperText={error?.message}
-              {...field}
-            />
-          )}
         />
         <Controller
           name={`autofillValues.${index}.valueBoolean`}
@@ -94,42 +81,19 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
             />
           )}
         />
-        <Controller
+        <RhfTextInput
           name={`autofillValues.${index}.formula`}
           control={control}
           // TODO: validate formula
           // disabled={!answerInputTypes.includes('answerCode')}
-          render={({
-            field: { ref, disabled, ...field },
-            fieldState: { error },
-          }) => (
-            <TextInput
-              sx={disabled ? { display: 'none' } : undefined}
-              label='Value (Formula)'
-              helperText={
-                error?.message ||
-                "Formula to calculate the value to fill. Use 'value' to refer to the value of the current item."
-              }
-              inputRef={ref}
-              disabled={disabled}
-              error={!!error}
-              {...field}
-            />
-          )}
+          label='Value (Formula)'
+          helperText="Formula to calculate the value to fill. Use 'value' to refer to the value of the current item."
         />
-
-        <Controller
+        <RhfCheckbox
           name={`autofillValues.${index}.autofillReadonly`}
           control={control}
-          render={({ field: { ref, ...field } }) => (
-            <LabeledCheckbox
-              label='Autofill in read-only mode'
-              inputRef={ref}
-              {...field}
-            />
-          )}
+          label='Autofill in read-only mode'
         />
-
         <ManageEnableWhen
           enableWhenPath={`autofillValues.${index}.autofillWhen`}
           enableBehaviorPath={`autofillValues.${index}.autofillBehavior`}

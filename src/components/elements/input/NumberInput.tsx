@@ -33,35 +33,39 @@ const NumberInput = ({
       }
     : {};
 
-  const handleBlur = () => {
-    if (isNil(value) || value === '') {
-      setErrorMessage(null);
-      return;
-    }
+  const handleBlur = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>) => {
+      if (isNil(value) || value === '') {
+        setErrorMessage(null);
+        return;
+      }
 
-    let val: number;
+      let val: number;
 
-    if (typeof value === 'string') {
-      val = currency ? parseFloat(value) : parseInt(value);
-    } else if (typeof value === 'number') {
-      val = value;
-    } else {
-      setErrorMessage('Invalid Number');
-      return;
-    }
+      if (typeof value === 'string') {
+        val = currency ? parseFloat(value) : parseInt(value);
+      } else if (typeof value === 'number') {
+        val = value;
+      } else {
+        setErrorMessage('Invalid Number');
+        return;
+      }
 
-    if (!isFinite(val)) {
-      setErrorMessage('Invalid Number');
-    } else if (!isNil(min) && val < min) {
-      setErrorMessage(`Must be greater than or equal to ${min}`);
-    } else if (!isNil(max) && val > max) {
-      setErrorMessage(`Must be less than or equal to ${max}`);
-    } else {
-      setErrorMessage(null);
-    }
-  };
+      if (!isFinite(val)) {
+        setErrorMessage('Invalid Number');
+      } else if (!isNil(min) && val < min) {
+        setErrorMessage(`Must be greater than or equal to ${min}`);
+      } else if (!isNil(max) && val > max) {
+        setErrorMessage(`Must be less than or equal to ${max}`);
+      } else {
+        setErrorMessage(null);
+      }
+      if (props.onBlur) props.onBlur(event);
+    },
+    [currency, max, min, props, value]
+  );
 
-  // Prevent form submission on Enter. Enter should toggle the state.
+  // Prevent using arrow keys to increment/decrement the value
   const onKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
     if (e.key.match(/(ArrowDown|ArrowUp)/)) {
       e.preventDefault();
@@ -88,7 +92,7 @@ const NumberInput = ({
       type='text'
       inputProps={{
         inputMode: 'numeric',
-        pattern: '[0-9]*',
+        pattern: '[0-9]*', // what about decimals?
         min,
         max,
         onKeyDown: disableArrowKeys ? onKeyDown : undefined,
@@ -97,10 +101,10 @@ const NumberInput = ({
       }}
       onWheel={preventValueChangeOnScroll}
       InputProps={{ ...currencyInputProps, ...InputProps }}
-      onBlur={handleBlur}
       value={value}
       placeholder={currency ? '0' : undefined}
       {...props}
+      onBlur={handleBlur}
       error={error || !!errorMessage}
       // If there is a server error, show that instead of the local message
       helperText={error ? undefined : errorMessage || props.helperText}
