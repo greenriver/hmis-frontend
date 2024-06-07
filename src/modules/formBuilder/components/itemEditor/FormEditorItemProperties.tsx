@@ -276,14 +276,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             </>
           )}
           <Divider />
-          <ConditionalProperties
-            control={control}
-            itemMap={getItemMap(definition.definition)}
-          />
+          <ConditionalProperties control={control} itemMap={itemMap} />
           <Divider />
           <AutofillProperties
             control={control}
-            itemMap={getItemMap(definition.definition)}
+            itemMap={itemMap}
             itemType={itemTypeValue}
           />
           {errorState?.errors && errorState.errors.length > 0 && (
