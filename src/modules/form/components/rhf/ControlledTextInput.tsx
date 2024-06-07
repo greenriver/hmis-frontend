@@ -1,16 +1,20 @@
 import { useCallback } from 'react';
 import { Control, useController } from 'react-hook-form';
-import TextInput, { TextInputProps } from './TextInput';
+
+import TextInput, {
+  TextInputProps,
+} from '@/components/elements/input/TextInput';
 import { RhfRules } from '@/modules/form/types';
 
-interface RhfTextInputProps extends Omit<TextInputProps, 'value' | 'onChange'> {
+interface ControlledTextInputProps
+  extends Omit<TextInputProps, 'value' | 'onChange'> {
   name: string;
   control?: Control; // Optional when using FormProvider
   rules?: RhfRules;
-  numeric?: boolean;
 }
 
-const RhfTextInput: React.FC<RhfTextInputProps> = ({
+// React-Hook-Form wrapper around TextInput
+const ControlledTextInput: React.FC<ControlledTextInputProps> = ({
   name,
   control,
   onBlur,
@@ -53,4 +57,4 @@ const RhfTextInput: React.FC<RhfTextInputProps> = ({
   );
 };
 
-export default RhfTextInput;
+export default ControlledTextInput;

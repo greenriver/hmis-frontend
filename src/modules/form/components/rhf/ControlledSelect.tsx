@@ -9,7 +9,7 @@ import { getOptionLabelFromOptions } from '@/modules/form/components/FormSelect'
 import { RhfRules } from '@/modules/form/types';
 import { PickListOption } from '@/types/gqlTypes';
 
-export type RhfSelectProps = Omit<
+export type ControlledSelectProps = Omit<
   GenericSelectProps<PickListOption, false, false>,
   'value' | 'onChange'
 > & {
@@ -20,8 +20,9 @@ export type RhfSelectProps = Omit<
   helperText?: string;
 };
 
-// RHF wrapper wrapper around GenericSelect that uses string as value, but PickListOption as option list.
-const RhfSelect: React.FC<RhfSelectProps> = ({
+// React-Hook-Form wrapper around GenericSelect.
+// This component stores a string as the field value, but passes a PickListOption to the GenericSelect. (Logic that is redundant with TableFilterItemSelect, among others)
+const ControlledSelect: React.FC<ControlledSelectProps> = ({
   name,
   control,
   rules,
@@ -88,4 +89,4 @@ const RhfSelect: React.FC<RhfSelectProps> = ({
   );
 };
 
-export default RhfSelect;
+export default ControlledSelect;

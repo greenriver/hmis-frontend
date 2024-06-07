@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
-import RhfSelect from '@/components/elements/input/RhfSelect';
-import RhfTextInput from '@/components/elements/input/RhfTextInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
+import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
+import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { ItemMap } from '@/modules/form/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { PickListOption } from '@/types/gqlTypes';
@@ -92,7 +92,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
         <Grid item xs={4}>
           <Stack gap={1}>
             {!advanced.localConstant && (
-              <RhfSelect
+              <ControlledSelect
                 name={`${enableWhenPath}.${index}.question`}
                 control={control}
                 label='Dependent Question'
@@ -102,7 +102,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
               />
             )}
             {advanced.localConstant && (
-              <RhfTextInput
+              <ControlledTextInput
                 name={`${enableWhenPath}.${index}.localConstant`}
                 control={control}
                 rules={{
@@ -118,7 +118,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
         {/* COLUMN 2: Select the comparison operator */}
         {/* TOOD: the operator picklist should be conditional based on the type of the dependent item. For example, "Less Than" is only applicable to numbers */}
         <Grid item xs={3}>
-          <RhfSelect
+          <ControlledSelect
             name={`${enableWhenPath}.${index}.operator`}
             control={control}
             label='Operator'
@@ -142,25 +142,25 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 />
               )}
             />
-            <RhfTextInput
+            <ControlledTextInput
               name={`${enableWhenPath}.${index}.answerCode`}
               control={control}
               label='Response Value (Code)'
               helperText={answerHelperText}
             />
-            <RhfTextInput
+            <ControlledTextInput
               name={`${enableWhenPath}.${index}.answerCodes`}
               control={control}
               label='Response Value (Code List)'
               helperText={answerHelperText}
             />
-            <RhfTextInput
+            <ControlledTextInput
               name={`${enableWhenPath}.${index}.answerNumber`}
               control={control}
               label='Response Value (Numeric)'
               type='number' // ok? we use another approach in NumberInput
             />
-            <RhfTextInput
+            <ControlledTextInput
               name={`${enableWhenPath}.${index}.answerGroupCode`}
               control={control}
               label='Response Group'

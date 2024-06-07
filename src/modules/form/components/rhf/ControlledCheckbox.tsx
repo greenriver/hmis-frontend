@@ -1,16 +1,18 @@
 import { Control, useController } from 'react-hook-form';
 import LabeledCheckbox, {
   Props as LabeledCheckboxProps,
-} from './LabeledCheckbox';
+} from '@/components/elements/input/LabeledCheckbox';
 import { RhfRules } from '@/modules/form/types';
 
-interface RhfCheckboxProps
+interface ControlledCheckboxProps
   extends Omit<LabeledCheckboxProps, 'value' | 'onChange'> {
   name: string;
   control?: Control; // Optional when using FormProvider
   rules?: RhfRules;
 }
-const RhfCheckbox: React.FC<RhfCheckboxProps> = ({
+
+// React-Hook-Form wrapper around LabeledCheckbox
+const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
   name,
   control,
   onBlur,
@@ -40,4 +42,4 @@ const RhfCheckbox: React.FC<RhfCheckboxProps> = ({
   );
 };
 
-export default RhfCheckbox;
+export default ControlledCheckbox;

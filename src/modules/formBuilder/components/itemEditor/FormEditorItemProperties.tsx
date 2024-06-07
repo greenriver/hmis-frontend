@@ -8,11 +8,11 @@ import FormEditorItemPreview from '../FormEditorItemPreview';
 import AutofillProperties from './conditionals/AutofillProperties';
 import ConditionalProperties from './conditionals/ConditionalProperties';
 import { FormItemState } from './types';
-import RhfCheckbox from '@/components/elements/input/RhfCheckbox';
-import RhfSelect from '@/components/elements/input/RhfSelect';
-import RhfTextInput from '@/components/elements/input/RhfTextInput';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
+import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
+import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
+import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import SaveSlide from '@/modules/form/components/SaveSlide';
 import {
   MAX_INPUT_AND_LABEL_WIDTH,
@@ -150,14 +150,14 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             )}
           </Typography>
           {componentOverridePicklist.length > 0 && (
-            <RhfSelect
+            <ControlledSelect
               name='component'
               control={control}
               label='Component Override'
               options={componentOverridePicklist}
             />
           )}
-          <RhfTextInput
+          <ControlledTextInput
             control={control}
             name='linkId'
             helperText='Unique ID for this form item'
@@ -170,66 +170,74 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             // }}
           />
           {itemTypeValue === ItemType.Date && isAssessment && (
-            <RhfCheckbox
+            <ControlledCheckbox
               name='assessmentDate'
               control={control}
               label='Assessment Date'
               helperText='If checked, this date will be recorded as the Assessment Date on the assessment'
             />
           )}
-          <RhfCheckbox name='required' control={control} label='Required' />
-          <RhfCheckbox
+          <ControlledCheckbox
+            name='required'
+            control={control}
+            label='Required'
+          />
+          <ControlledCheckbox
             name='warnIfEmpty'
             control={control}
             label='Warn if empty'
             helperText="If checked, user will see a warning if they don't provide an answer to this question."
           />
-          <RhfTextInput
+          <ControlledTextInput
             control={control}
             name='text'
             label='Label'
             onBlur={onLabelBlur}
           />
-          <RhfTextInput
+          <ControlledTextInput
             control={control}
             name='helperText'
             label='Helper Text'
           />
-          <RhfTextInput
+          <ControlledTextInput
             control={control}
             name='briefText'
             label='Brief label'
             helperText="Label to display when the item is referenced briefly, such as in an Autofill dialog box. If not specified, the item's normal label text is shown."
           />
-          <RhfTextInput
+          <ControlledTextInput
             control={control}
             name='readonlyText'
             label='Read-only label'
             helperText="Label to display when the item is shown in a read-only form. If not specified, the item's normal label text is shown."
           />
-          <RhfCheckbox name='readOnly' control={control} label='Read-only' />
-          <RhfCheckbox name='hidden' control={control} label='Hidden' />
-          <RhfTextInput
+          <ControlledCheckbox
+            name='readOnly'
+            control={control}
+            label='Read-only'
+          />
+          <ControlledCheckbox name='hidden' control={control} label='Hidden' />
+          <ControlledTextInput
             control={control}
             // TODO(#5776)
             name='mapping.customFieldKey'
             label='Mapping for custom field key'
           />
           {isAssessment && (
-            <RhfSelect
+            <ControlledSelect
               name='dataCollectedAbout'
               control={control}
               label='Data collected about'
               options={dataCollectedAboutPickList}
             />
           )}
-          <RhfSelect
+          <ControlledSelect
             name='size'
             control={control}
             label='Input Size'
             options={inputSizePickList}
           />
-          <RhfSelect
+          <ControlledSelect
             name='disabledDisplay'
             control={control}
             label='Disabled Display'
@@ -238,7 +246,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           {([ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) ||
             (itemTypeValue === ItemType.Object &&
               itemComponentValue === Component.Address)) && (
-            <RhfCheckbox
+            <ControlledCheckbox
               name='repeats'
               label='Allow multiple responses'
               control={control}
@@ -259,7 +267,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               }}
             />
              */}
-              <RhfSelect
+              <ControlledSelect
                 name='pickListReference'
                 control={control}
                 label='Reference list for allowed responses'

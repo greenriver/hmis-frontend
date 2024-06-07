@@ -3,9 +3,9 @@ import { Controller } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import ManageEnableWhen from './ManageEnableWhen';
 import NumberInput from '@/components/elements/input/NumberInput';
-import RhfCheckbox from '@/components/elements/input/RhfCheckbox';
-import RhfTextInput from '@/components/elements/input/RhfTextInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
+import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
+import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { ItemMap } from '@/modules/form/types';
 import { ItemType } from '@/types/gqlTypes';
 
@@ -35,7 +35,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           Enter the value to autofill, or enter a formula to calculate it:
         </Typography>
 
-        <RhfTextInput
+        <ControlledTextInput
           name={`autofillValues.${index}.valueCode`}
           label='Value (String / Code)'
           control={control}
@@ -80,7 +80,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
             />
           )}
         />
-        <RhfTextInput
+        <ControlledTextInput
           name={`autofillValues.${index}.formula`}
           control={control}
           // TODO: validate formula
@@ -88,7 +88,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           label='Value (Formula)'
           helperText="Formula to calculate the value to fill. Use 'value' to refer to the value of the current item."
         />
-        <RhfCheckbox
+        <ControlledCheckbox
           name={`autofillValues.${index}.autofillReadonly`}
           control={control}
           label='Autofill in read-only mode'
