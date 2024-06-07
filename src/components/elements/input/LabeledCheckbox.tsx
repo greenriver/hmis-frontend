@@ -93,7 +93,6 @@ const LabeledCheckbox = ({
           }
           labelPlacement={horizontal ? 'start' : 'end'}
           label={label}
-          {...props}
           sx={{
             color: error ? 'error.main' : undefined,
             '.MuiCheckbox-root': {
@@ -101,14 +100,15 @@ const LabeledCheckbox = ({
             },
             maxWidth,
             ...labelSx,
-            ...props.sx,
           }}
           onChange={onChange}
+          {...props}
           checked={checked}
         />
       </FormGroup>
-      {/* error - didnt I do this already? */}
-      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+      {helperText && (
+        <FormHelperText error={!!error}>{helperText}</FormHelperText>
+      )}
     </FormControl>
   );
 };

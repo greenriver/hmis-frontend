@@ -1,26 +1,17 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import {
-  Collapse,
-  List,
-  ListItemButton,
-  ListItemText,
-  SxProps,
-} from '@mui/material';
-import { Theme } from '@mui/system';
+import { Collapse, List, ListItemButton, ListItemText } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';
 
 export interface CollapsibleListProps {
   title: ReactNode;
   children: ReactNode;
   open?: boolean;
-  sx?: SxProps<Theme>;
 }
 
 const CollapsibleList: React.FC<CollapsibleListProps> = ({
   title,
   children,
   open: initialOpen = false,
-  sx,
 }) => {
   const [open, setOpen] = useState(initialOpen);
 
@@ -33,7 +24,7 @@ const CollapsibleList: React.FC<CollapsibleListProps> = ({
     setOpen(!open);
   };
   return (
-    <List sx={{ p: 0, ...sx }} disablePadding>
+    <List sx={{ p: 0 }} disablePadding>
       <ListItemButton
         onClick={handleClick}
         sx={{ color: (theme) => theme.palette.links }}
