@@ -2,15 +2,15 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Controller, UseFormReturn } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 import { v4 } from 'uuid';
 import FormEditorItemPreview from '../FormEditorItemPreview';
-import SelectOption from '../SelectOption';
 import AutofillProperties from './conditionals/AutofillProperties';
 import ConditionalProperties from './conditionals/ConditionalProperties';
 import { FormItemState } from './types';
-import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
-import TextInput from '@/components/elements/input/TextInput';
+import RhfCheckbox from '@/components/elements/input/RhfCheckbox';
+import RhfSelect from '@/components/elements/input/RhfSelect';
+import RhfTextInput from '@/components/elements/input/RhfTextInput';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
 import SaveSlide from '@/modules/form/components/SaveSlide';
@@ -150,213 +150,98 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             )}
           </Typography>
           {componentOverridePicklist.length > 0 && (
-            <Controller
+            <RhfSelect
               name='component'
               control={control}
-              // rules={{ required: 'need this' }}
-              render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                <SelectOption
-                  label='Component Override'
-                  options={componentOverridePicklist}
-                  {...field}
-                  textInputProps={{
-                    helperText: error?.message,
-                    error: !!error,
-                    inputRef: ref,
-                  }}
-                />
-              )}
+              label='Component Override'
+              options={componentOverridePicklist}
             />
           )}
-          <Controller
-            name='linkId'
+          <RhfTextInput
             control={control}
-            rules={{
-              required: 'Link ID is required',
-              // TODO: add pattern validation once it is enforced
-              // https://github.com/greenriver/hmis-warehouse/pull/4424
-              // pattern: /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
-            }}
-            render={({ field: { ref, ...field }, fieldState: { error } }) => {
-              return (
-                <TextInput
-                  label='Link ID'
-                  helperText={error?.message || 'Unique ID for this form item'}
-                  inputRef={ref}
-                  {...field}
-                  error={!!error}
-                />
-              );
-            }}
+            name='linkId'
+            helperText='Unique ID for this form item'
+            label='Link ID'
+            required
+            // TODO: add pattern validation once it is enforced
+            // rules={{
+            // https://github.com/greenriver/hmis-warehouse/pull/4424
+            // pattern: /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
+            // }}
           />
-
           {itemTypeValue === ItemType.Date && isAssessment && (
-            <Controller
+            <RhfCheckbox
               name='assessmentDate'
               control={control}
-              render={({ field: { ref, ...field } }) => (
-                <LabeledCheckbox
-                  label='Assessment Date'
-                  helperText='If checked, this date will be recorded as the Assessment Date on the assessment'
-                  inputRef={ref}
-                  {...field}
-                />
-              )}
+              label='Assessment Date'
+              helperText='If checked, this date will be recorded as the Assessment Date on the assessment'
             />
           )}
-          <Controller
-            name='required'
-            control={control}
-            render={({ field: { ref, ...field } }) => (
-              <LabeledCheckbox label='Required' inputRef={ref} {...field} />
-            )}
-          />
-          <Controller
+          <RhfCheckbox name='required' control={control} label='Required' />
+          <RhfCheckbox
             name='warnIfEmpty'
             control={control}
-            render={({ field: { ref, ...field } }) => (
-              <LabeledCheckbox
-                label='Warn if empty'
-                helperText="If checked, user will see a warning if they don't provide an answer to this question."
-                inputRef={ref}
-                {...field}
-              />
-            )}
+            label='Warn if empty'
+            helperText="If checked, user will see a warning if they don't provide an answer to this question."
           />
-          <Controller
+          <RhfTextInput
+            control={control}
             name='text'
-            control={control}
-            render={({ field: { ref, ...field } }) => (
-              <TextInput
-                label='Label'
-                inputRef={ref}
-                {...field}
-                onBlur={onLabelBlur}
-              />
-            )}
+            label='Label'
+            onBlur={onLabelBlur}
           />
-          <Controller
+          <RhfTextInput
+            control={control}
             name='helperText'
-            control={control}
-            render={({ field: { ref, ...field } }) => (
-              <TextInput label='Helper Text' inputRef={ref} {...field} />
-            )}
+            label='Helper Text'
           />
-          <Controller
+          <RhfTextInput
+            control={control}
             name='briefText'
-            control={control}
-            render={({ field: { ref, ...field } }) => (
-              <TextInput
-                label='Brief label'
-                helperText="Label to display when the item is referenced briefly, such as in an Autofill dialog box. If not specified, the item's normal label text is shown."
-                inputRef={ref}
-                {...field}
-              />
-            )}
+            label='Brief label'
+            helperText="Label to display when the item is referenced briefly, such as in an Autofill dialog box. If not specified, the item's normal label text is shown."
           />
-          <Controller
+          <RhfTextInput
+            control={control}
             name='readonlyText'
-            control={control}
-            render={({ field: { ref, ...field } }) => (
-              <TextInput
-                label='Read-only label'
-                helperText="Label to display when the item is shown in a read-only form. If not specified, the item's normal label text is shown."
-                inputRef={ref}
-                {...field}
-              />
-            )}
+            label='Read-only label'
+            helperText="Label to display when the item is shown in a read-only form. If not specified, the item's normal label text is shown."
           />
-          <Controller
-            name='readOnly'
+          <RhfCheckbox name='readOnly' control={control} label='Read-only' />
+          <RhfCheckbox name='hidden' control={control} label='Hidden' />
+          <RhfTextInput
             control={control}
-            render={({ field: { ref, ...field } }) => (
-              <LabeledCheckbox label='Read-only' inputRef={ref} {...field} />
-            )}
-          />
-          <Controller
-            name='hidden'
-            control={control}
-            render={({ field: { ref, ...field } }) => (
-              <LabeledCheckbox label='Hidden' inputRef={ref} {...field} />
-            )}
-          />
-          <Controller
+            // TODO(#5776)
             name='mapping.customFieldKey'
-            control={control}
-            render={({ field: { ref, ...field }, fieldState: { error } }) => (
-              <TextInput
-                // TODO(#5776)
-                label='Mapping for custom field key'
-                inputRef={ref}
-                error={!!error}
-                helperText={error?.message}
-                {...field}
-              />
-            )}
+            label='Mapping for custom field key'
           />
           {isAssessment && (
-            <Controller
+            <RhfSelect
               name='dataCollectedAbout'
               control={control}
-              render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                <SelectOption
-                  label='Data collected about'
-                  options={dataCollectedAboutPickList}
-                  {...field}
-                  textInputProps={{
-                    helperText: error?.message,
-                    error: !!error,
-                    inputRef: ref,
-                  }}
-                />
-              )}
+              label='Data collected about'
+              options={dataCollectedAboutPickList}
             />
           )}
-          <Controller
+          <RhfSelect
             name='size'
             control={control}
-            render={({ field: { ref, ...field }, fieldState: { error } }) => (
-              <SelectOption
-                label='Input Size'
-                options={inputSizePickList}
-                {...field}
-                textInputProps={{
-                  helperText: error?.message,
-                  error: !!error,
-                  inputRef: ref,
-                }}
-              />
-            )}
+            label='Input Size'
+            options={inputSizePickList}
           />
-          <Controller
+          <RhfSelect
             name='disabledDisplay'
             control={control}
-            render={({ field: { ref, ...field }, fieldState: { error } }) => (
-              <SelectOption
-                label='Disabled Display'
-                options={disabledDisplayPickList}
-                {...field}
-                textInputProps={{
-                  helperText: error?.message,
-                  error: !!error,
-                  inputRef: ref,
-                }}
-              />
-            )}
+            label='Disabled Display'
+            options={disabledDisplayPickList}
           />
           {([ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) ||
             (itemTypeValue === ItemType.Object &&
               itemComponentValue === Component.Address)) && (
-            <Controller
+            <RhfCheckbox
               name='repeats'
+              label='Allow multiple responses'
               control={control}
-              render={({ field: { ref, ...field } }) => (
-                <LabeledCheckbox
-                  label='Allow multiple responses'
-                  inputRef={ref}
-                  {...field}
-                />
-              )}
             />
           )}
           {[ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) && (
@@ -374,24 +259,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               }}
             />
              */}
-              <Controller
+              <RhfSelect
                 name='pickListReference'
                 control={control}
-                render={({
-                  field: { ref, ...field },
-                  fieldState: { error },
-                }) => (
-                  <SelectOption
-                    label='Reference list for allowed responses'
-                    options={pickListTypesPickList}
-                    {...field}
-                    textInputProps={{
-                      helperText: error?.message,
-                      error: !!error,
-                      inputRef: ref,
-                    }}
-                  />
-                )}
+                label='Reference list for allowed responses'
+                options={pickListTypesPickList}
               />
             </>
           )}

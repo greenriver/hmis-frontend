@@ -27,6 +27,19 @@ interface EnableWhenConditionProps {
   enableWhenPath?: 'enableWhen' | `autofillValues.${number}.autofillWhen`; // path to enableWhen in form
 }
 
+/*
+Other RHF patterns
+
+1) Wrap each input component and re export
+2) Wrap each component in a ValueWrapper and pass a generic onChange(?)
+3) No change, a lot of repetition
+
+
+Question: will zach's approach let us to client-side valudation with RHF, or no? I think it could if it passed in the formstate erros with the ValueWrapper
+
+
+*/
+
 // Component for managing a single EnableWhen condition
 const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
   control,
@@ -87,6 +100,16 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     localConstant: !!state?.localConstant,
     groupCode: !!state?.answerGroupCode,
   });
+
+  // a better approach would be:
+  // 1. if any of those answer values are populated, show it
+  // 2. only show one input, and always save it into the "right" field
+  // answer_code,
+  // answer_codes,
+  // answer_group_code,
+  // answer_number, //
+  // answer_boolean,
+  // compare_question,
   return (
     <Stack>
       <Grid container gap={2}>

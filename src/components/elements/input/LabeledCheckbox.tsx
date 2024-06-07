@@ -19,7 +19,8 @@ import { horizontalInputSx } from './TextInput';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 
 export interface Props
-  extends Omit<FormControlLabelProps, 'control' | 'label'> {
+  extends Omit<FormControlLabelProps, 'control' | 'label'>,
+    DynamicInputCommonProps {
   name?: string;
   horizontal?: boolean;
   inputRef?: Ref<HTMLInputElement>;
@@ -37,7 +38,7 @@ const LabeledCheckbox = ({
   maxWidth,
   inputRef,
   ...props
-}: Props & DynamicInputCommonProps) => {
+}: Props) => {
   const labelSx = horizontal
     ? {
         justifyContent: 'space-between',
@@ -106,6 +107,7 @@ const LabeledCheckbox = ({
           checked={checked}
         />
       </FormGroup>
+      {/* error - didnt I do this already? */}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
