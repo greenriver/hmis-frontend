@@ -102,9 +102,6 @@ const RadioGroupInput = ({
           '&.Mui-focused': {
             color: 'text.primary',
           },
-          // match hard-coded labelSx in TextInput
-          typography: 'body2',
-          fontWeight: 600,
           ...labelSx,
         }}
       >
