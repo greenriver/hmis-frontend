@@ -7,18 +7,13 @@ import {
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
-import { onError } from '@apollo/client/link/error';
-import * as Sentry from '@sentry/react';
+import { SentryLink } from 'apollo-link-sentry';
 import fetch from 'cross-fetch';
-
 import { generatePath, matchRoutes } from 'react-router-dom';
 
-import {
-  HMIS_REMOTE_SESSION_UID_EVENT,
-  HMIS_SESSION_UID_HEADER,
-} from '@/modules/auth/api/constants';
-import { sentryUser } from '@/modules/auth/api/sessions';
-import { isServerError } from '@/modules/errors/util';
+import { dispatchSessionTrackingEvent } from '../modules/auth/events';
+import { HMIS_SESSION_UID_HEADER } from '@/modules/auth/api/constants';
+import apolloErrorLink from '@/providers/apolloErrorLink';
 import { allRoutes } from '@/routes/routes';
 import { getCsrfToken } from '@/utils/csrf';
 import { decodeParams } from '@/utils/pathEncoding';
@@ -86,12 +81,6 @@ const pathHeaderLink = setContext(
   }
 );
 
-const dispatchSessionTrackingEvent = (userId: string | undefined) => {
-  document.dispatchEvent(
-    new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail: userId })
-  );
-};
-
 const sessionExpiryLink = new ApolloLink((operation, forward) => {
   return forward(operation).map((response) => {
     const context = operation.getContext();
@@ -106,46 +95,10 @@ const sessionExpiryLink = new ApolloLink((operation, forward) => {
   });
 });
 
-/**
- * Handle errors on GraphQL chain.
- *
- * If unauthenticated, remove user info from storage and redirect to the login page.
- */
-const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    console.error('[GraphQL error]', graphQLErrors);
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      Sentry.captureException(new Error(message), {
-        extra: {
-          query: operation?.query?.loc?.source?.body,
-          locations,
-          path,
-        },
-        user: sentryUser(),
-      })
-    );
-  } else if (networkError) {
-    if (isServerError(networkError)) {
-      const { statusCode, result } = networkError;
-      console.error('[Server error]', statusCode, result);
-
-      if (statusCode === 401) {
-        // May mean that session was invalidated on the server. No need to send to Sentry.
-        dispatchSessionTrackingEvent(undefined);
-      } else {
-        // Other server error. We may not get to this code because
-        // 500s should appear as `graphQLErrors` with more context.
-        Sentry.captureException(statusCode, {
-          user: sentryUser(),
-          extra: { result },
-        });
-      }
-    } else {
-      // This is usually 504 or "Network request failed", track in Sentry
-      console.error('[Network error]', networkError);
-      Sentry.captureException(networkError, { user: sentryUser() });
-    }
-  }
+const sentryLink = new SentryLink({
+  attachBreadcrumbs: {
+    includeError: true,
+  },
 });
 
 export const cache = new InMemoryCache({
@@ -160,7 +113,8 @@ export const cache = new InMemoryCache({
 
 const apolloClient = new ApolloClient({
   link: from([
-    errorLink,
+    apolloErrorLink,
+    sentryLink,
     authLink,
     pathHeaderLink,
     sessionExpiryLink,
