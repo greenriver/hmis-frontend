@@ -113,8 +113,8 @@ export const cache = new InMemoryCache({
 
 const apolloClient = new ApolloClient({
   link: from([
-    apolloErrorLink,
-    sentryLink,
+    apolloErrorLink, // handle errors
+    sentryLink, // instrument graphql requests for sentry
     authLink,
     pathHeaderLink,
     sessionExpiryLink,

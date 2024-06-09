@@ -18,7 +18,7 @@ const environment = /\b(qa|training|staging)\b/.test(hostname)
 if (dsn) {
   Sentry.init({
     dsn,
-    beforeBreadcrumb: excludeGraphQLFetch,
+    beforeBreadcrumb: excludeGraphQLFetch, // filter redundant fetch breadcrumbs. See docs for apollo-link-sentry v4
     environment: environment,
     integrations: [
       Sentry.reactRouterV6BrowserTracingIntegration({

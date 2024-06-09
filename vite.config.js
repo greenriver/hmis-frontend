@@ -59,6 +59,10 @@ export default defineConfig(({ command, mode }) => {
               project: env.SENTRY_PROJECT,
               authToken: env.SENTRY_AUTH_TOKEN,
               release: {
+                uploadLegacySourcemaps: {
+                  paths: ['dist/assets/'],
+                  urlPrefix: '~/assets/',
+                },
                 name: env.PUBLIC_GIT_COMMIT_HASH,
                 setCommits: {
                   repo: 'greenriver/hmis-frontend',
