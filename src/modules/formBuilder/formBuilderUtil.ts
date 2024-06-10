@@ -9,6 +9,14 @@ import {
   Maybe,
 } from '@/types/gqlTypes';
 
+// Strip basic HTML tags from a string. This is not fool-proof. This is used to strip tags from form labels and display text,
+// so they can be shown as plain-text in the form builder.
+export const removeHtmlTags = (value?: string | null): string => {
+  if (!value) return '';
+
+  return value.replace(/<[^>]*>/g, '');
+};
+
 // Generate a list of Items to pick from. Used for picking dependent items for conditional logic.
 export const generateItemPickList = (
   itemMap: ItemMap,
@@ -18,7 +26,7 @@ export const generateItemPickList = (
   Object.values(itemMap).forEach((item) => {
     if (exclude.includes(item.linkId)) return;
 
-    let label = item.briefText || item.text || item.linkId;
+    let label = item.briefText || removeHtmlTags(item.text) || item.linkId;
     // ellipsize long labels
     if (label.length > 50) label = label.substring(0, 50) + '...';
 
@@ -116,5 +124,6 @@ export const updateFormItem = (
 };
 
 export const slugifyItemLabel = (label: string) => {
-  return kebabCase(label).toLowerCase().replace(/-/g, '_').slice(0, 40);
+  const cleanedLabel = removeHtmlTags(label);
+  return kebabCase(cleanedLabel).toLowerCase().replace(/-/g, '_').slice(0, 40);
 };
