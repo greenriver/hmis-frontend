@@ -31,9 +31,10 @@ const AutofillProperties: React.FC<AutofillPropertiesProps> = ({
           onAddItem={() => append({})}
           addItemText='Add Autofill Value'
         >
-          {fields.map((_value, index) => (
+          {fields.map((value, index) => (
             <RemovableCard
               onRemove={() => remove(index)}
+              key={JSON.stringify(value)}
               removeTooltip='Remove Autofill'
             >
               <AutofillValueCard

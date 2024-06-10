@@ -154,6 +154,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               name='component'
               control={control}
               label='Component Override'
+              placeholder='Select component'
               options={componentOverridePicklist}
             />
           )}
@@ -228,6 +229,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               name='dataCollectedAbout'
               control={control}
               label='Data collected about'
+              placeholder='Select data collected about'
               options={dataCollectedAboutPickList}
             />
           )}
@@ -235,12 +237,14 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             name='size'
             control={control}
             label='Input Size'
+            placeholder='Select input size'
             options={inputSizePickList}
           />
           <ControlledSelect
             name='disabledDisplay'
             control={control}
             label='Disabled Display'
+            placeholder='Select disabled display'
             options={disabledDisplayPickList}
           />
           {([ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) ||
@@ -271,6 +275,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
                 name='pickListReference'
                 control={control}
                 label='Reference list for allowed responses'
+                placeholder='Select pick list'
                 options={pickListTypesPickList}
               />
             </>

@@ -96,6 +96,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 name={`${enableWhenPath}.${index}.question`}
                 control={control}
                 label='Dependent Question'
+                placeholder='Select question'
                 options={itemPickList}
                 helperText='Question whose response will determine whether the condition is met'
                 required
@@ -122,6 +123,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
             name={`${enableWhenPath}.${index}.operator`}
             control={control}
             label='Operator'
+            placeholder='Select operator'
             options={enableOperatorPickList}
             required
           />
