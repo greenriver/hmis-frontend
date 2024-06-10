@@ -1,5 +1,6 @@
 import { Divider, Drawer, Typography } from '@mui/material';
-import React from 'react';
+import { startCase } from 'lodash-es';
+import React, { useMemo } from 'react';
 import { DeepPartial, useForm } from 'react-hook-form';
 import { ErrorState } from '@/modules/errors/util';
 import FormEditorItemProperties from '@/modules/formBuilder/components/itemEditor/FormEditorItemProperties';
@@ -39,6 +40,9 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
     // errors: errorState?.errors,
   });
 
+  // If typename is not present, then this is a new item that hasn't been saved yet.
+  const isNewItem = useMemo(() => !item.__typename, [item]);
+
   return (
     <Drawer
       open={!!item}
@@ -59,7 +63,9 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
       }}
     >
       <Typography variant='cardTitle' sx={{ p: 2 }}>
-        Edit Form Item: {item.linkId}
+        {isNewItem
+          ? `Add New ${startCase(item.type.toLowerCase())} Item`
+          : `Edit Form Item: ${item.linkId}`}
       </Typography>
       <Divider />
       {/** maybe just inline this component?  it gets basically the same props */}
@@ -71,6 +77,7 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
         errorState={errorState}
         onDiscard={onDiscard}
         handlers={handlers}
+        isNewItem={isNewItem}
       />
     </Drawer>
   );
