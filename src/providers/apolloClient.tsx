@@ -7,7 +7,7 @@ import {
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
-import { SentryLink } from 'apollo-link-sentry';
+import { SentryLink } from 'apollo-link-sentry/lib-esm';
 import fetch from 'cross-fetch';
 import { generatePath, matchRoutes } from 'react-router-dom';
 

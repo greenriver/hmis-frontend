@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react';
-import { excludeGraphQLFetch } from 'apollo-link-sentry';
+import { excludeGraphQLFetch } from 'apollo-link-sentry/lib-esm';
 import { useEffect } from 'react';
 
 import {
