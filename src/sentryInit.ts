@@ -32,15 +32,13 @@ if (dsn) {
     initialScope: {
       tags: { hostname: hostname },
     },
-    // beforeSend(event, hint) {
-    //   // attempt to skip double-reporting of unhandled errors
-    //   //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //   //@ts-ignore
-    //   //if (hint?.originalException.graphQLErrors) return null
-
-    //   console.info(JSON.stringify(event))
-    //   console.info(JSON.stringify(hint))
-    //   return event
-    // }
+    beforeSend(event, hint) {
+      // attempt to skip double-reporting of graphql errors
+      // prettier-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if ( hint?.originalException?.graphQLErrors || hint?.originalException?.networkError) return null;
+      return event;
+    },
   });
 }
