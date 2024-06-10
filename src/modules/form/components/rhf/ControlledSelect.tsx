@@ -60,11 +60,6 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
     [options]
   );
 
-  const isOptionEqualToValue = useCallback(
-    (option: PickListOption, val: PickListOption) => option.code === val.code,
-    []
-  );
-
   return (
     <GenericSelect<PickListOption, false, false>
       {...props}
@@ -85,7 +80,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
       getOptionLabel={getOptionLabel}
       renderOption={renderOption}
       groupBy={isGrouped ? (opt) => opt.groupLabel || '' : undefined}
-      isOptionEqualToValue={isOptionEqualToValue}
+      isOptionEqualToValue={(option, value) => option.code === value.code}
     />
   );
 };
