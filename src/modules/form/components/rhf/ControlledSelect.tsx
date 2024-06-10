@@ -5,13 +5,13 @@ import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
 import { renderOption } from '@/components/elements/input/ProjectSelect';
-import { getOptionLabelFromOptions } from '@/modules/form/components/FormSelect';
 import { RhfRules } from '@/modules/form/types';
+import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 export type ControlledSelectProps = Omit<
   GenericSelectProps<PickListOption, false, false>,
-  'value' | 'onChange'
+  'value' | 'onChange' | 'onBlur'
 > & {
   name: string;
   control?: Control; // Optional when using FormProvider
@@ -56,13 +56,8 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   );
 
   const getOptionLabel = useCallback(
-    (option: PickListOption) => getOptionLabelFromOptions(option, options),
+    (option: PickListOption) => findOptionLabel(option, options),
     [options]
-  );
-
-  const isOptionEqualToValue = useCallback(
-    (option: PickListOption, val: PickListOption) => option.code === val.code,
-    []
   );
 
   return (
@@ -78,13 +73,14 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
         required,
         ...props.textInputProps, // allow overriding any of the above
       }}
+      onBlur={field.onBlur}
       multiple={false}
       // fields for using PickListOoption as the option type
       options={options}
       getOptionLabel={getOptionLabel}
       renderOption={renderOption}
       groupBy={isGrouped ? (opt) => opt.groupLabel || '' : undefined}
-      isOptionEqualToValue={isOptionEqualToValue}
+      isOptionEqualToValue={(option, value) => option.code === value.code}
     />
   );
 };

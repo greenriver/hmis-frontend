@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
-import { getOptionLabelFromOptions } from '@/modules/form/components/FormSelect';
+import { findOptionLabel } from '@/modules/form/util/formUtil';
 import {
   PickListOption,
   PickListType,
@@ -50,8 +50,7 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
   if (error) console.error(error);
 
   const getOptionLabel = useCallback(
-    (option: Option) =>
-      getOptionLabelFromOptions(option, pickList as PickListOption[]),
+    (option: Option) => findOptionLabel(option, pickList as PickListOption[]),
     [pickList]
   );
 
