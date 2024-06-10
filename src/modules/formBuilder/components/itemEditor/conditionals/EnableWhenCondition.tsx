@@ -97,7 +97,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 control={control}
                 label='Dependent Question'
                 options={itemPickList}
-                helperText="Question whose response will determine whether the condition is met"
+                helperText='Question whose response will determine whether the condition is met'
                 required
               />
             )}
