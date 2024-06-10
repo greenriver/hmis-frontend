@@ -16,7 +16,8 @@ export interface ManageEnableWhenProps {
     | `autofillValues.${number}.autofillBehavior`;
 }
 
-// Component for managing a set of EnableWhen conditions, and the Enable Behavior (AND/OR)
+// Component for managing a set of EnableWhen conditions, and the Enable Behavior (AND/OR).
+// This is used both for managing visibility (item.enableWhen) and managing whether to autofill (item.autofillValues.0.autofillWhen).
 const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
   control,
   itemMap,

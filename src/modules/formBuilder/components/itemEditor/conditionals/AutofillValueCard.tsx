@@ -93,6 +93,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           control={control}
           label='Autofill in read-only mode'
         />
+        {/* The user can specify contitional rules for this Autofill value. For example: "Autofill to <true> only WHEN the answer to a previous question was >100". Those conditions use the same shape as EnableWhen visibility conditions, so we use the same component for managing them. */}
         <ManageEnableWhen
           enableWhenPath={`autofillValues.${index}.autofillWhen`}
           enableBehaviorPath={`autofillValues.${index}.autofillBehavior`}
