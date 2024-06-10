@@ -1,13 +1,14 @@
 import { Card, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Control, DeepPartial, useWatch } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
+import { FormItemControl } from './itemEditor/types';
 import theme from '@/config/theme';
 import DynamicField from '@/modules/form/components/DynamicField';
 import DynamicViewField from '@/modules/form/components/viewable/DynamicViewField';
 import { FormItem } from '@/types/gqlTypes';
 
 interface Props {
-  control: Control<DeepPartial<FormItem>>;
+  control: FormItemControl;
 }
 export const FormEditorItemPreview: React.FC<Props> = ({ control }) => {
   // watch whole form. probably doesn't need to watch everything (like enablewhen, etc). can pass `name` to specify fields to watch

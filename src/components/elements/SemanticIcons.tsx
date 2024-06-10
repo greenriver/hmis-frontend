@@ -1,4 +1,5 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArticleIcon from '@mui/icons-material/Article';
@@ -6,6 +7,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import ClearIcon from '@mui/icons-material/Clear';
+import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -30,7 +32,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import WrapTextIcon from '@mui/icons-material/WrapText';
-
 export {
   Person as ClientIcon,
   Home as EnrollmentIcon,
@@ -50,6 +51,8 @@ export {
   PeopleIcon as HouseholdIcon,
   ClearIcon as ClearIcon,
   ArrowBackIcon as BackIcon,
+  AddIcon as AddIcon,
+  CloseIcon as CloseIcon,
 
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,

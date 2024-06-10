@@ -71,6 +71,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
         error: !!error,
         inputRef: field.ref, // send input ref, so we can focus on input when error appear
         required,
+        placeholder,
         ...props.textInputProps, // allow overriding any of the above
       }}
       onBlur={field.onBlur}

@@ -5,6 +5,7 @@ import RadioGroupInput, {
   Props as RadioGroupInputProps,
 } from './RadioGroupInput';
 
+import { DynamicInputCommonProps } from '@/modules/form/types';
 import { PickListOption } from '@/types/gqlTypes';
 
 export const TRUE_OPT = { code: 'true', label: 'Yes' };
@@ -13,7 +14,8 @@ export const FALSE_OPT = { code: 'false', label: 'No' };
 type Props = { onChange: (val: boolean | null) => void } & Omit<
   RadioGroupInputProps,
   'options' | 'onChange'
->;
+> &
+  DynamicInputCommonProps;
 
 const YesNoRadio = ({ value, onChange, ...props }: Props) => {
   const toBoolean = useCallback((val?: PickListOption | null) => {
