@@ -1509,3 +1509,16 @@ export const FIXED_WIDTH_MEDIUM = 350;
 export const FIXED_WIDTH_SMALL = 200;
 export const FIXED_WIDTH_X_SMALL = 100;
 export const FIXED_WIDTH_X_LARGE = 800;
+
+export function findOptionLabel(
+  option: PickListOption, // select option, which may or may not have a label
+  options: readonly PickListOption[] // option picklist
+): string {
+  if (option.label) return option.label;
+  if (option.code === INVALID_ENUM) return 'Invalid Value';
+  if (options && options.length > 0) {
+    const found = options.find((opt) => opt.code === option.code);
+    if (found?.label) return found.label;
+  }
+  return option.code || '';
+}

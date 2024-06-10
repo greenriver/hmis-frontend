@@ -5,8 +5,8 @@ import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
 import { renderOption } from '@/components/elements/input/ProjectSelect';
-import { getOptionLabelFromOptions } from '@/modules/form/components/FormSelect';
 import { RhfRules } from '@/modules/form/types';
+import { findOptionLabel } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 export type ControlledSelectProps = Omit<
@@ -56,7 +56,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   );
 
   const getOptionLabel = useCallback(
-    (option: PickListOption) => getOptionLabelFromOptions(option, options),
+    (option: PickListOption) => findOptionLabel(option, options),
     [options]
   );
 
