@@ -11,7 +11,7 @@ import { PickListOption } from '@/types/gqlTypes';
 
 export type ControlledSelectProps = Omit<
   GenericSelectProps<PickListOption, false, false>,
-  'value' | 'onChange'
+  'value' | 'onChange' | 'onBlur'
 > & {
   name: string;
   control?: Control; // Optional when using FormProvider
@@ -78,6 +78,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
         required,
         ...props.textInputProps, // allow overriding any of the above
       }}
+      onBlur={field.onBlur}
       multiple={false}
       // fields for using PickListOoption as the option type
       options={options}
