@@ -8,6 +8,7 @@ import FormEditorItemPreview from '../FormEditorItemPreview';
 import AutofillProperties from './conditionals/AutofillProperties';
 import ConditionalProperties from './conditionals/ConditionalProperties';
 import { FormItemState } from './types';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
@@ -46,6 +47,7 @@ interface FormEditorItemPropertiesProps {
   onDiscard: () => void;
   // React Hook Form handlers
   handlers: UseFormReturn<FormItemState, any>;
+  isNewItem?: boolean;
 }
 
 const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
@@ -56,6 +58,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   onSave,
   onDiscard,
   handlers,
+  isNewItem,
 }) => {
   // React Hook Form handlers (useForm return object)
   const {
@@ -92,6 +95,8 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
 
   const onLabelBlur = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      if (!isNewItem) return; // Don't modify LinkID on persisted item
+
       // When the user edits the label, update the link ID to be a human-readable 'slugified' version of the label.
       // But, don't make an update to the link ID if it has been manually set.
       if (!dirtyFields.linkId && event.target.value) {
@@ -105,7 +110,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         setValue('linkId', newLinkId);
       }
     },
-    [dirtyFields, setValue, itemMap]
+    [dirtyFields, setValue, itemMap, isNewItem]
   );
 
   return (
@@ -149,6 +154,27 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               </Button>
             )}
           </Typography>
+          {isNewItem ? (
+            <ControlledTextInput
+              control={control}
+              name='linkId'
+              helperText='Unique ID for this form item'
+              label='Question ID'
+              disabled={!isNewItem}
+              required
+              rules={{
+                pattern: {
+                  value: /^[a-zA-Z_$][a-zA-Z0-9_$]*$/,
+                  message:
+                    'Must start with a letter and contain only letters, numbers, and underscores.',
+                },
+              }}
+            />
+          ) : (
+            <CommonLabeledTextBlock title='Question ID'>
+              {initialItem.linkId}
+            </CommonLabeledTextBlock>
+          )}
           {componentOverridePicklist.length > 0 && (
             <ControlledSelect
               name='component'
@@ -158,18 +184,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               options={componentOverridePicklist}
             />
           )}
-          <ControlledTextInput
-            control={control}
-            name='linkId'
-            helperText='Unique ID for this form item'
-            label='Link ID'
-            required
-            // TODO: add pattern validation once it is enforced
-            // rules={{
-            // https://github.com/greenriver/hmis-warehouse/pull/4424
-            // pattern: /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
-            // }}
-          />
+
           {itemTypeValue === ItemType.Date && isAssessment && (
             <ControlledCheckbox
               name='assessmentDate'
