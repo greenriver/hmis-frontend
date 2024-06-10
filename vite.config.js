@@ -109,6 +109,7 @@ export default defineConfig(({ command, mode }) => {
           defaultHandler(warning);
         },
       },
+      commonjsOptions: { transformMixedEsModules: true },
       sourcemap: true,
       minify: mode === 'development' ? false : 'esbuild',
     },
