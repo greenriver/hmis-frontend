@@ -32,7 +32,7 @@ const FormDefinitionDetailPage = () => {
     <>
       <Stack gap={2}>
         <Typography variant='h3'>
-          <Typography variant='overline' display='block'>
+          <Typography variant='overline' color='links' display='block'>
             Selected Form
           </Typography>
           {formIdentifier.displayVersion.title}

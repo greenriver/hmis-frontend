@@ -55,7 +55,7 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
       {renderEditDialog({ title: 'Edit Form Details' })}
       <Paper sx={{ p: 4 }}>
         <Typography sx={{ mb: 2 }} variant='h2'>
-          <Typography variant='overline' display='block'>
+          <Typography variant='overline' color='links' display='block'>
             Editing Form
           </Typography>
           {formDefinition.title}

@@ -64,7 +64,7 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
       }}
     >
       <Typography variant='cardTitle' component='h2' sx={{ p: 2 }}>
-        <Typography variant='overline' component='div'>
+        <Typography variant='overline' color='links' display='block'>
           {isNewItem ? 'Add New Form item' : 'Edit Form Item'}
         </Typography>
         {isNewItem
