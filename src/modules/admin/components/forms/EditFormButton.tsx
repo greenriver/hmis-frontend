@@ -28,8 +28,6 @@ const EditFormButton: React.FC<EditFormButtonProps> = ({
   Icon,
   editorRoute = FormEditorType.FormBuilder,
 }) => {
-  // todo @martha - question about what role this should have. remove the button role as in ButtonLink? other behaviors?
-
   const navigate = useNavigate();
 
   const goToEditor = useCallback(
@@ -74,6 +72,7 @@ const EditFormButton: React.FC<EditFormButtonProps> = ({
       onClick={() => onClick()}
       startIcon={Icon ? <Icon /> : <DashboardCustomizeIcon />}
       loading={loading}
+      role='link'
     >
       {text ? text : 'Edit Form'}
     </LoadingButton>
