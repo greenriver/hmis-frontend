@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { ReactNode, useCallback, useMemo } from 'react';
 
 import { Control, useController } from 'react-hook-form';
 import GenericSelect, {
@@ -17,7 +17,7 @@ export type ControlledSelectProps = Omit<
   control?: Control; // Optional when using FormProvider
   rules?: RhfRules;
   required?: boolean;
-  helperText?: string;
+  helperText?: ReactNode;
 };
 
 // React-Hook-Form wrapper around GenericSelect.

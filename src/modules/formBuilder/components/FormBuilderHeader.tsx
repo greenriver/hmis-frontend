@@ -54,21 +54,22 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
     <>
       {renderEditDialog({ title: 'Edit Form Details' })}
       <Paper sx={{ p: 4 }}>
-        <Stack direction='row' gap={1}>
-          <Typography sx={{ mb: 2 }} variant='h2'>
-            {formDefinition.title}
+        <Typography sx={{ mb: 2 }} variant='h2'>
+          <Typography variant='overline' display='block'>
+            Editing Form
           </Typography>
+          {formDefinition.title}
           <ButtonTooltipContainer title='Edit Title'>
             <IconButton
               aria-label='edit title'
               onClick={openEditDialog}
               size='small'
-              sx={{ color: (theme) => theme.palette.links, mt: 0.25 }}
+              sx={{ color: (theme) => theme.palette.links, ml: 2, mb: 0.5 }}
             >
               <EditIcon fontSize='small' />
             </IconButton>
           </ButtonTooltipContainer>
-        </Stack>
+        </Typography>
         <Stack direction='row' sx={{ alignItems: 'center' }}>
           <Grid container columnGap={4} rowGap={2}>
             <CommonLabeledTextBlock title='Form Identifier'>

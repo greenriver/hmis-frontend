@@ -181,6 +181,10 @@ const createThemeOptions = (theme: Theme) => ({
       fontSize: 18,
       fontWeight: 400,
     },
+    overline: {
+      color: '#1976D2',
+      fontSize: 12,
+    },
   },
 
   components: {
