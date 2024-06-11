@@ -340,11 +340,18 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             <InitialValue control={control} itemType={itemTypeValue} />
           </Section>
           <Divider />
-          {/* bounds supported by numbers and dates only */}
-          <Section title='Min/Max Bounds'>
-            <ValueBounds control={control} itemMap={itemMap} />
-          </Section>
-          <Divider />
+          {/* bounds are supported by numbers and dates only */}
+          {[ItemType.Integer, ItemType.Currency, ItemType.Date].includes(
+            itemTypeValue
+          ) && (
+            <>
+              <Section title='Min/Max Bounds'>
+                <ValueBounds control={control} itemMap={itemMap} />
+              </Section>
+              <Divider />
+            </>
+          )}
+
           <Section title='Autofill'>
             {/* initial value 
             
