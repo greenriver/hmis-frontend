@@ -7,6 +7,7 @@ import { v4 } from 'uuid';
 import FormEditorItemPreview from '../FormEditorItemPreview';
 import AutofillProperties from './conditionals/AutofillProperties';
 import ManageEnableWhen from './conditionals/ManageEnableWhen';
+import InitialValue from './InitialValue';
 import RequiredOptionalRadio from './RequiredOptionalRadio';
 import Section from './Section';
 import { FormItemState } from './types';
@@ -332,7 +333,20 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             <ManageEnableWhen control={control} itemMap={itemMap} />
           </Section>
           <Divider />
+          <Section title='Initial Value'>
+            <InitialValue control={control} itemType={itemTypeValue} />
+          </Section>
+          <Divider />
           <Section title='Autofill'>
+            {/* initial value 
+            
+            'initial.0'
+            initialBehavior
+            value_local_constant
+            value_code
+            value_number
+            value_boolean
+            */}
             <AutofillProperties
               control={control}
               itemMap={itemMap}
