@@ -69,9 +69,7 @@ export default defineConfig(({ command, mode }) => {
                   commit: env.FULL_GITHASH,
                 },
               },
-              reactComponentAnnotation: {
-                enabled: true,
-              },
+              // reactComponentAnnotation: { enabled: true, },
               telemetry: false,
               debug: false,
             }),
