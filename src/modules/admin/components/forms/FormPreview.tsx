@@ -1,6 +1,7 @@
-import { Grid } from '@mui/material';
-import React, { useMemo, useRef, useState } from 'react';
+import { Button, Grid } from '@mui/material';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -20,7 +21,12 @@ import {
   getItemMap,
   getFormStepperItems,
 } from '@/modules/form/util/formUtil';
-import { useGetFormDefinitionFieldsForEditorQuery } from '@/types/gqlTypes';
+import { cache } from '@/providers/apolloClient';
+import {
+  FormStatus,
+  useGetFormDefinitionFieldsForEditorQuery,
+  usePublishFormMutation,
+} from '@/types/gqlTypes';
 
 export type PreviewMode = 'input' | 'readOnly';
 export const toggleItems: ToggleItem<PreviewMode>[] = [
@@ -102,8 +108,26 @@ const FormPreview = () => {
     );
   }, [formDefinition, formValues, initialValues, localConstants, toggleValue]);
 
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [publishForm, { loading: publishLoading, error: publishError }] =
+    usePublishFormMutation();
+
+  const onPublish = useCallback(() => {
+    if (!formDefinition) return;
+
+    publishForm({
+      variables: {
+        id: formDefinition.id,
+      },
+      onCompleted: () => {
+        cache.evict({ id: `FormIdentifier:${formDefinition?.identifier}` });
+      },
+    });
+  }, [publishForm, formDefinition]);
+
   if (loading && !formDefinition) return <Loading />;
   if (error) throw error;
+  if (publishError) throw publishError;
 
   return (
     <>
@@ -119,6 +143,22 @@ const FormPreview = () => {
         variant='gray'
         sx={{ mb: 4 }}
       />
+
+      {formDefinition?.status === FormStatus.Draft && (
+        <>
+          <Button onClick={() => setConfirmOpen(true)}>Publish</Button>
+          <ConfirmationDialog
+            id='publish'
+            open={confirmOpen}
+            title='Confirm Publish'
+            onConfirm={onPublish}
+            onCancel={() => setConfirmOpen(false)}
+            loading={publishLoading}
+          >
+            <div>Are you sure you want to publish this form?</div>
+          </ConfirmationDialog>
+        </>
+      )}
 
       {formStepperItems ? (
         <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>

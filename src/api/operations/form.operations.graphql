@@ -30,3 +30,25 @@ mutation DeleteFormDefinition($id: ID!) {
     }
   }
 }
+
+mutation PublishForm($id: ID!) {
+  publishForm(id: $id) {
+    formDefinition {
+      ...FormDefinitionFieldsForEditor
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateDraftForm($identifier: String!) {
+  createDraftForm(identifier: $identifier) {
+    formIdentifier {
+      ...FormIdentifierDetails
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

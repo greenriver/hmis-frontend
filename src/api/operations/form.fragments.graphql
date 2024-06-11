@@ -124,6 +124,7 @@ fragment FormDefinitionMetadata on FormDefinition {
   title
   cacheKey
   identifier
+  status
 }
 
 fragment FormDefinitionFields on FormDefinition {
@@ -137,4 +138,15 @@ fragment FormDefinitionFieldsForEditor on FormDefinition {
   ...FormDefinitionFields
   status
   rawDefinition
+}
+
+fragment FormIdentifierDetails on FormIdentifier {
+  id
+  identifier
+  displayVersion {
+    ...FormDefinitionMetadata
+  }
+  draftVersion {
+    ...FormDefinitionMetadata
+  }
 }

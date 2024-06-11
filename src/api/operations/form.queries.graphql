@@ -52,11 +52,7 @@ query GetAssessmentFormDefinition(
 
 query GetFormIdentifierDetails($identifier: String!) {
   formIdentifier(identifier: $identifier) {
-    id
-    identifier
-    displayVersion {
-      ...FormDefinitionMetadata
-    }
+    ...FormIdentifierDetails
   }
 }
 
