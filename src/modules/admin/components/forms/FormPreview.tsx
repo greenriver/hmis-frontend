@@ -1,4 +1,5 @@
 import { Button, Grid } from '@mui/material';
+import { Stack } from '@mui/system';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
@@ -132,33 +133,34 @@ const FormPreview = () => {
   return (
     <>
       <PageTitle title={`Preview Form: ${formDefinition?.title}`} />
-      <CommonToggle
-        value={toggleValue}
-        onChange={(value) => {
-          setToggleValue(value);
-          formRef.current?.SaveIfDirty();
-        }}
-        items={toggleItems}
-        size='small'
-        variant='gray'
-        sx={{ mb: 4 }}
-      />
+      <Stack direction='row' justifyContent='space-between' sx={{ mb: 4 }}>
+        <CommonToggle
+          value={toggleValue}
+          onChange={(value) => {
+            setToggleValue(value);
+            formRef.current?.SaveIfDirty();
+          }}
+          items={toggleItems}
+          size='small'
+          variant='gray'
+        />
 
-      {formDefinition?.status === FormStatus.Draft && (
-        <>
-          <Button onClick={() => setConfirmOpen(true)}>Publish</Button>
-          <ConfirmationDialog
-            id='publish'
-            open={confirmOpen}
-            title='Confirm Publish'
-            onConfirm={onPublish}
-            onCancel={() => setConfirmOpen(false)}
-            loading={publishLoading}
-          >
-            <div>Are you sure you want to publish this form?</div>
-          </ConfirmationDialog>
-        </>
-      )}
+        {formDefinition?.status === FormStatus.Draft && (
+          <>
+            <Button onClick={() => setConfirmOpen(true)}>Publish</Button>
+            <ConfirmationDialog
+              id='publish'
+              open={confirmOpen}
+              title='Confirm Publish'
+              onConfirm={onPublish}
+              onCancel={() => setConfirmOpen(false)}
+              loading={publishLoading}
+            >
+              <div>Are you sure you want to publish this form?</div>
+            </ConfirmationDialog>
+          </>
+        )}
+      </Stack>
 
       {formStepperItems ? (
         <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
