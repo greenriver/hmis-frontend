@@ -207,7 +207,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               repeats: false,
               prefill: false,
               disabledDisplay: DisabledDisplay.Hidden,
-              enableBehavior: EnableBehavior.Any,
+              enableBehavior: EnableBehavior.All,
             };
 
             setSelectedItem(newItem);
