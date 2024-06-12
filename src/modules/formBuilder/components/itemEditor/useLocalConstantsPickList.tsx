@@ -12,7 +12,7 @@ export function useLocalConstantsPickList({ role }: Args = {}) {
     label: startCase(key),
   }));
 
-  // TODO include additional cosntants based on the role context
+  // TODO(#6212) include additional constants based on the role context
 
   return alwaysPresent;
 }
