@@ -351,17 +351,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               <Divider />
             </>
           )}
-
           <Section title='Autofill'>
-            {/* initial value 
-            
-            'initial.0'
-            initialBehavior
-            value_local_constant
-            value_code
-            value_number
-            value_boolean
-            */}
             <AutofillProperties
               control={control}
               itemMap={itemMap}

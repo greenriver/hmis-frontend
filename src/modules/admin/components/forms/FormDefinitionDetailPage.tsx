@@ -31,7 +31,7 @@ const FormDefinitionDetailPage = () => {
   return (
     <>
       <Stack gap={2}>
-        <Typography variant='h3'>
+        <Typography variant='h3' component='h1'>
           <Typography variant='overline' color='links' display='block'>
             Selected Form
           </Typography>
