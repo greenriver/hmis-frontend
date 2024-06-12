@@ -1,12 +1,14 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Divider, Stack } from '@mui/material';
 import { startCase } from 'lodash-es';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { v4 } from 'uuid';
 import FormEditorItemPreview from '../FormEditorItemPreview';
 import AutofillProperties from './conditionals/AutofillProperties';
+import InitialValue from './conditionals/InitialValue';
 import ManageEnableWhen from './conditionals/ManageEnableWhen';
+import ValueBounds from './conditionals/ValueBounds';
 import RequiredOptionalRadio from './RequiredOptionalRadio';
 import Section from './Section';
 import { FormItemState } from './types';
@@ -77,15 +79,14 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     formState: { isDirty, dirtyFields },
   } = handlers;
 
-  // Item type is not allowed to change in this form
-  const [itemTypeValue] = useState<ItemType>(initialItem.type);
+  const itemTypeValue = watch('type');
 
   // Monitor changes to the FormItem.component field
   const itemComponentValue = watch('component');
 
-  const isQuestionItem = ![ItemType.Group, ItemType.Display].includes(
-    itemTypeValue
-  );
+  const isQuestionItem =
+    itemTypeValue &&
+    ![ItemType.Group, ItemType.Display].includes(itemTypeValue);
   const isDisplayItem = itemTypeValue === ItemType.Display;
 
   const isAssessment = useMemo(
@@ -94,6 +95,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   );
 
   const componentOverridePicklist = useMemo(() => {
+    if (!itemTypeValue) return [];
     return validComponentsForType(itemTypeValue).map((component) => ({
       code: component,
       label: startCase(component.toLowerCase()),
@@ -132,6 +134,8 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
       scrollToElement(element);
     }
   }, [errorState]);
+
+  if (!itemTypeValue) throw Error('Item type must be defined');
 
   return (
     <form
@@ -332,6 +336,21 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             <ManageEnableWhen control={control} itemMap={itemMap} />
           </Section>
           <Divider />
+          <Section title='Initial Value'>
+            <InitialValue control={control} itemType={itemTypeValue} />
+          </Section>
+          <Divider />
+          {/* bounds are supported by numbers and dates only */}
+          {[ItemType.Integer, ItemType.Currency, ItemType.Date].includes(
+            itemTypeValue
+          ) && (
+            <>
+              <Section title='Min/Max Bounds'>
+                <ValueBounds control={control} itemMap={itemMap} />
+              </Section>
+              <Divider />
+            </>
+          )}
           <Section title='Autofill'>
             <AutofillProperties
               control={control}

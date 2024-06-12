@@ -1,11 +1,9 @@
 import { cloneDeep, kebabCase } from 'lodash-es';
-import { ItemMap } from '../form/types';
 import {
-  PickListOption,
-  ItemType,
   Component,
   FormDefinitionJson,
   FormItem,
+  ItemType,
   Maybe,
 } from '@/types/gqlTypes';
 
@@ -28,25 +26,6 @@ export const displayLabelForItem = (item: FormItem, ellipsize = true) => {
   if (ellipsize && label.length > 50) label = label.substring(0, 50) + '...';
 
   return label;
-};
-
-// Generate a list of Items to pick from. Used for picking dependent items for conditional logic.
-export const generateItemPickList = (
-  itemMap: ItemMap,
-  exclude: string[] = []
-) => {
-  const pickList: PickListOption[] = [];
-  Object.values(itemMap).forEach((item) => {
-    if (exclude.includes(item.linkId)) return;
-
-    pickList.push({ code: item.linkId, label: displayLabelForItem(item) });
-  });
-
-  return pickList.sort(function (a, b) {
-    return (a.label || a.code)
-      .toLowerCase()
-      .localeCompare((b.label || b.code).toLowerCase());
-  });
 };
 
 export const validComponentsForType = (type: ItemType) => {

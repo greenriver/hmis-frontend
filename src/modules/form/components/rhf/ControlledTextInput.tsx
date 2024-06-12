@@ -44,7 +44,12 @@ const ControlledTextInput: React.FC<ControlledTextInputProps> = ({
 
   return (
     <TextInput
-      onChange={field.onChange} // send value to hook form
+      onChange={(event) =>
+        field.onChange(
+          // if this is a number input, convert the value to a number
+          props.type === 'number' ? +event.target.value : event.target.value
+        )
+      }
       onBlur={wrappedOnBlur} // notify when input is touched/blur
       value={field.value} // input value
       name={field.name} // send down the input name

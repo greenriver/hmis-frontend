@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { Controller, useFieldArray } from 'react-hook-form';
-import { generateItemPickList } from '../../../formBuilderUtil';
 import { FormItemControl } from '../types';
 import CardGroup, { RemovableCard } from './CardGroup';
 import EnableWhenCondition from './EnableWhenCondition';
+import { useItemPickList } from './useItemPickList';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import { ItemMap } from '@/modules/form/types';
 
@@ -29,8 +29,7 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
     name: enableWhenPath,
   });
 
-  // Should probably exclude the current item
-  const itemPickList = useMemo(() => generateItemPickList(itemMap), [itemMap]);
+  const itemPickList = useItemPickList({ control, itemMap });
 
   const enableBehaviorOptions = useMemo(() => {
     const action = enableWhenPath.includes('autofillWhen')
