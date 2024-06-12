@@ -30,21 +30,13 @@ const FormDefinitionDetailPage = () => {
 
   return (
     <>
-      <Stack gap={0.5} sx={{ my: 2 }}>
-        <Typography
-          variant='caption'
-          color='links'
-          sx={{ textTransform: 'uppercase', fontWeight: 800 }}
-        >
-          Selected Form
-        </Typography>
-        <Stack direction='row' gap={1}>
-          <Typography variant='h3'>
-            {formIdentifier.displayVersion.title}
-          </Typography>
-        </Stack>
-      </Stack>
       <Stack gap={2}>
+        <Typography variant='h3' component='h1'>
+          <Typography variant='overline' color='links' display='block'>
+            Selected Form
+          </Typography>
+          {formIdentifier.displayVersion.title}
+        </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             <CommonCard title='Form Details'>

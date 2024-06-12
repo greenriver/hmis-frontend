@@ -1,4 +1,4 @@
-import { Card, Typography } from '@mui/material';
+import { Card } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useWatch } from 'react-hook-form';
 import { FormItemControl } from './itemEditor/types';
@@ -23,26 +23,23 @@ export const FormEditorItemPreview: React.FC<Props> = ({ control }) => {
   }, [item]);
 
   return (
-    <>
-      <Typography>Preview</Typography>
-      <Card
-        sx={{
-          p: 6,
-          backgroundColor: theme.palette.grey[100],
-          border: 'unset',
-        }}
-      >
-        {item.readOnly ? (
-          <DynamicViewField item={item} value={value} />
-        ) : (
-          <DynamicField
-            value={value}
-            item={item}
-            itemChanged={({ value }) => setValue(value)}
-          />
-        )}
-      </Card>
-    </>
+    <Card
+      sx={{
+        p: 6,
+        backgroundColor: theme.palette.grey[100],
+        border: 'unset',
+      }}
+    >
+      {item.readOnly ? (
+        <DynamicViewField item={item} value={value} />
+      ) : (
+        <DynamicField
+          value={value}
+          item={item}
+          itemChanged={({ value }) => setValue(value)}
+        />
+      )}
+    </Card>
   );
 };
 

@@ -2,6 +2,7 @@ import { Divider, Drawer, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import React, { useMemo } from 'react';
 import { DeepPartial, useForm } from 'react-hook-form';
+import { displayLabelForItem } from '../../formBuilderUtil';
 import { ErrorState } from '@/modules/errors/util';
 import FormEditorItemProperties from '@/modules/formBuilder/components/itemEditor/FormEditorItemProperties';
 import {
@@ -62,10 +63,13 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
         },
       }}
     >
-      <Typography variant='cardTitle' sx={{ p: 2 }}>
+      <Typography variant='cardTitle' component='h2' sx={{ p: 2 }}>
+        <Typography variant='overline' color='links' display='block'>
+          {isNewItem ? 'Add New Form item' : 'Edit Form Item'}
+        </Typography>
         {isNewItem
-          ? `Add New ${startCase(item.type.toLowerCase())} Item`
-          : `Edit Form Item: ${item.linkId}`}
+          ? `${startCase(item.type.toLowerCase())} Item`
+          : displayLabelForItem(item)}
       </Typography>
       <Divider />
       {/** maybe just inline this component?  it gets basically the same props */}

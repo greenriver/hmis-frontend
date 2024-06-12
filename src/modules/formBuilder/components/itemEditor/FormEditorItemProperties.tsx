@@ -1,16 +1,19 @@
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import { Box, Button, Divider, Stack } from '@mui/material';
 import { startCase } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { v4 } from 'uuid';
 import FormEditorItemPreview from '../FormEditorItemPreview';
 import AutofillProperties from './conditionals/AutofillProperties';
-import ConditionalProperties from './conditionals/ConditionalProperties';
+import ManageEnableWhen from './conditionals/ManageEnableWhen';
+import RequiredOptionalRadio from './RequiredOptionalRadio';
+import Section from './Section';
 import { FormItemState } from './types';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
+import { scrollToElement } from '@/hooks/useScrollToHash';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import { ErrorState } from '@/modules/errors/util';
+import { ErrorState, hasErrors } from '@/modules/errors/util';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
@@ -24,6 +27,7 @@ import {
   slugifyItemLabel,
   validComponentsForType,
 } from '@/modules/formBuilder/formBuilderUtil';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentRole,
   Component,
@@ -34,9 +38,12 @@ import {
 
 const dataCollectedAboutPickList =
   localResolvePickList('DataCollectedAbout') || [];
-const disabledDisplayPickList = localResolvePickList('DisabledDisplay') || [];
+const disabledDisplayPickList = Object.keys(HmisEnums.DisabledDisplay).map(
+  (key) => ({ code: key, label: startCase(key.toLowerCase()) })
+);
 const inputSizePickList = localResolvePickList('InputSize') || [];
 const pickListTypesPickList = localResolvePickList('PickListType') || [];
+const errorAlertId = 'formItemPropertyErrors';
 
 interface FormEditorItemPropertiesProps {
   initialItem: FormItem;
@@ -76,6 +83,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   // Monitor changes to the FormItem.component field
   const itemComponentValue = watch('component');
 
+  const isQuestionItem = ![ItemType.Group, ItemType.Display].includes(
+    itemTypeValue
+  );
+  const isDisplayItem = itemTypeValue === ItemType.Display;
+
   const isAssessment = useMemo(
     () => (Object.values(AssessmentRole) as [string]).includes(definition.role),
     [definition.role]
@@ -113,35 +125,37 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     [dirtyFields, setValue, itemMap, isNewItem]
   );
 
+  // Scroll up to Error Alert if there are validation errors from the backend
+  useEffect(() => {
+    const element = document.getElementById(errorAlertId);
+    if (errorState && hasErrors(errorState) && element) {
+      scrollToElement(element);
+    }
+  }, [errorState]);
+
   return (
     <form
       // handleSubmit validates input before calling onSubmit
       onSubmit={handleSubmit((item) =>
-        // FIXME: we cast to FormItem because of DeepPartial difference. is this safe?
         onSave(item as FormItem, initialItem.linkId)
       )}
     >
       <Box sx={{ p: 2 }}>
-        <Stack gap={2}>
-          {itemTypeValue !== ItemType.Group && (
+        {itemTypeValue !== ItemType.Group && (
+          <Section title='Preview'>
             <FormEditorItemPreview control={control} />
-          )}
-          <Divider />
-        </Stack>
-
-        <Stack
-          gap={2}
+          </Section>
+        )}
+        <Section
+          title='Properties'
           sx={{
             '.MuiFormControl-fullWidth': {
               maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
             },
             mt: 2,
           }}
-        >
-          {/* TODO standardize heading typography, use hX */}
-          <Typography>
-            Properties
-            {import.meta.env.MODE === 'development' && (
+          action={
+            import.meta.env.MODE === 'development' && (
               // Temp debug button to log form state
               <Button
                 size='small'
@@ -152,28 +166,13 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               >
                 debug
               </Button>
-            )}
-          </Typography>
-          {isNewItem ? (
-            <ControlledTextInput
-              control={control}
-              name='linkId'
-              helperText='Unique ID for this form item'
-              label='Question ID'
-              disabled={!isNewItem}
-              required
-              rules={{
-                pattern: {
-                  value: /^[a-zA-Z_$][a-zA-Z0-9_$]*$/,
-                  message:
-                    'Must start with a letter and contain only letters, numbers, and underscores.',
-                },
-              }}
-            />
-          ) : (
-            <CommonLabeledTextBlock title='Question ID'>
-              {initialItem.linkId}
-            </CommonLabeledTextBlock>
+            )
+          }
+        >
+          {errorState && hasErrors(errorState) && (
+            <Stack gap={1} id={errorAlertId}>
+              <ErrorAlert key='errors' errors={errorState.errors} />
+            </Stack>
           )}
           {componentOverridePicklist.length > 0 && (
             <ControlledSelect
@@ -193,22 +192,17 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               helperText='If checked, this date will be recorded as the Assessment Date on the assessment'
             />
           )}
-          <ControlledCheckbox
-            name='required'
-            control={control}
-            label='Required'
-          />
-          <ControlledCheckbox
-            name='warnIfEmpty'
-            control={control}
-            label='Warn if empty'
-            helperText="If checked, user will see a warning if they don't provide an answer to this question."
-          />
+          {isQuestionItem && <RequiredOptionalRadio control={control} />}
+
           <ControlledTextInput
+            required={isQuestionItem}
             control={control}
             name='text'
-            label='Label'
+            label={isDisplayItem ? 'Display Text' : 'Label'}
             onBlur={onLabelBlur}
+            // FIXME doesnt correctly support multi-line display text. Newlines need to be inserted.
+            multiline={isDisplayItem}
+            minRows={isDisplayItem ? 2 : undefined}
           />
           <ControlledTextInput
             control={control}
@@ -227,40 +221,12 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             label='Read-only label'
             helperText="Label to display when the item is shown in a read-only form. If not specified, the item's normal label text is shown."
           />
-          <ControlledCheckbox
-            name='readOnly'
-            control={control}
-            label='Read-only'
-          />
-          <ControlledCheckbox name='hidden' control={control} label='Hidden' />
-          <ControlledTextInput
-            control={control}
-            // TODO(#5776)
-            name='mapping.customFieldKey'
-            label='Mapping for custom field key'
-          />
-          {isAssessment && (
-            <ControlledSelect
-              name='dataCollectedAbout'
-              control={control}
-              label='Data collected about'
-              placeholder='Select data collected about'
-              options={dataCollectedAboutPickList}
-            />
-          )}
           <ControlledSelect
             name='size'
             control={control}
             label='Input Size'
             placeholder='Select input size'
             options={inputSizePickList}
-          />
-          <ControlledSelect
-            name='disabledDisplay'
-            control={control}
-            label='Disabled Display'
-            placeholder='Select disabled display'
-            options={disabledDisplayPickList}
           />
           {([ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) ||
             (itemTypeValue === ItemType.Object &&
@@ -296,19 +262,84 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             </>
           )}
           <Divider />
-          <ConditionalProperties control={control} itemMap={itemMap} />
+          <Section title='Advanced Properties'>
+            {isNewItem ? (
+              <ControlledTextInput
+                control={control}
+                name='linkId'
+                helperText='Unique ID for this form item'
+                label='Question ID'
+                disabled={!isNewItem}
+                required
+                rules={{
+                  pattern: {
+                    value: /^[a-zA-Z_$][a-zA-Z0-9_$]*$/,
+                    message:
+                      'Must start with a letter and contain only letters, numbers, and underscores.',
+                  },
+                }}
+              />
+            ) : (
+              <CommonLabeledTextBlock title='Question ID'>
+                {initialItem.linkId}
+              </CommonLabeledTextBlock>
+            )}
+            <ControlledTextInput
+              control={control}
+              // TODO(#5776)
+              name='mapping.customFieldKey'
+              label='Mapping for custom field key'
+            />
+          </Section>
           <Divider />
-          <AutofillProperties
-            control={control}
-            itemMap={itemMap}
-            itemType={itemTypeValue}
-          />
-          {errorState?.errors && errorState.errors.length > 0 && (
-            <Stack gap={1} sx={{ mt: 4 }}>
-              <ErrorAlert key='errors' errors={errorState.errors} />
-            </Stack>
-          )}
-        </Stack>
+          <Section title='Visibility'>
+            {isAssessment && (
+              <ControlledSelect
+                name='dataCollectedAbout'
+                control={control}
+                label='Client Applicability'
+                placeholder='Select client applicability'
+                options={dataCollectedAboutPickList}
+                helperText='Select the client(s) to which this item applies. If left blank, the item will be shown for all clients.'
+              />
+            )}
+            <ControlledCheckbox
+              name='hidden'
+              control={control}
+              label='Always Hide this Item'
+            />
+            <ControlledSelect
+              name='disabledDisplay'
+              control={control}
+              label='Disabled Display'
+              placeholder='Select disabled display'
+              options={disabledDisplayPickList}
+              helperText={
+                <>
+                  <b>Hidden</b>: When this item is disabled, it will be
+                  completely hidden from view.
+                  <br />
+                  {/* TODO: do we actually use  'protected' at all? can we remove it? */}
+                  <b>Protected</b>: When this item is disabled, it will still
+                  show up but not be interactable.
+                  <br />
+                  <b>Protected with Value</b>: When this item is disabled, it
+                  will still appear and its value will be visible but not
+                  interactible. It's value will be submitted.
+                </>
+              }
+            />
+            <ManageEnableWhen control={control} itemMap={itemMap} />
+          </Section>
+          <Divider />
+          <Section title='Autofill'>
+            <AutofillProperties
+              control={control}
+              itemMap={itemMap}
+              itemType={itemTypeValue}
+            />
+          </Section>
+        </Section>
       </Box>
       <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
         <Stack direction='row' gap={2}>

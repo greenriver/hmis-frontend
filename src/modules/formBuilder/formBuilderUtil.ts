@@ -17,6 +17,19 @@ export const removeHtmlTags = (value?: string | null): string => {
   return value.replace(/<[^>]*>/g, '');
 };
 
+export const displayLabelForItem = (item: FormItem, ellipsize = true) => {
+  let label =
+    item.readonlyText?.trim() ||
+    item.briefText?.trim() ||
+    removeHtmlTags(item.text)?.trim() ||
+    item.linkId;
+
+  // ellipsize long label
+  if (ellipsize && label.length > 50) label = label.substring(0, 50) + '...';
+
+  return label;
+};
+
 // Generate a list of Items to pick from. Used for picking dependent items for conditional logic.
 export const generateItemPickList = (
   itemMap: ItemMap,
@@ -26,11 +39,7 @@ export const generateItemPickList = (
   Object.values(itemMap).forEach((item) => {
     if (exclude.includes(item.linkId)) return;
 
-    let label = item.briefText || removeHtmlTags(item.text) || item.linkId;
-    // ellipsize long labels
-    if (label.length > 50) label = label.substring(0, 50) + '...';
-
-    pickList.push({ code: item.linkId, label });
+    pickList.push({ code: item.linkId, label: displayLabelForItem(item) });
   });
 
   return pickList.sort(function (a, b) {

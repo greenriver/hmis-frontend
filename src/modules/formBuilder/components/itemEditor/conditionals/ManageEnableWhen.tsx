@@ -55,20 +55,21 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
       }}
       addItemText='Add Condition'
     >
-      <Controller
-        name={enableBehaviorPath}
-        control={control}
-        render={({ field: { ref, value, onChange, ...field } }) => (
-          <RadioGroupInput
-            options={enableBehaviorOptions}
-            label='Conditional Behavior (AND/OR)'
-            value={enableBehaviorOptions.find((o) => o.code === value)}
-            onChange={(option) => onChange(option?.code)}
-            {...field}
-          />
-        )}
-      />
-
+      {fields.length > 0 && (
+        <Controller
+          name={enableBehaviorPath}
+          control={control}
+          render={({ field: { ref, value, onChange, ...field } }) => (
+            <RadioGroupInput
+              options={enableBehaviorOptions}
+              label='Conditional Behavior (AND/OR)'
+              value={enableBehaviorOptions.find((o) => o.code === value)}
+              onChange={(option) => onChange(option?.code)}
+              {...field}
+            />
+          )}
+        />
+      )}
       {fields.map((condition, index) => (
         <RemovableCard
           key={JSON.stringify(condition)} // fixme could be non unique
