@@ -777,7 +777,7 @@ export const getInitialValues = (
       if (Array.isArray(item.item)) {
         recursiveFillInValues(item.item, values);
       }
-      if (!item.initial || item.initial.length === 0) {
+      if (!item.initial) {
         // Make sure all linked fields are present in values to begin
         if (item.mapping && behavior !== InitialBehavior.Overwrite)
           values[item.linkId] = null;
