@@ -1,6 +1,7 @@
 import { Button, Grid } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
@@ -22,6 +23,7 @@ import {
   getItemMap,
   getFormStepperItems,
 } from '@/modules/form/util/formUtil';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormStatus,
   useGetFormDefinitionFieldsForEditorQuery,
@@ -112,6 +114,7 @@ const FormPreview = () => {
   const [publishForm, { loading: publishLoading, error: publishError }] =
     usePublishFormDefinitionMutation();
 
+  const navigate = useNavigate();
   const onPublish = useCallback(() => {
     if (!formDefinition) return;
 
@@ -119,11 +122,15 @@ const FormPreview = () => {
       variables: {
         id: formDefinition.id,
       },
-      onCompleted: (data) => {
-        console.log(data);
+      onCompleted: () => {
+        navigate(
+          generatePath(AdminDashboardRoutes.VIEW_FORM, {
+            identifier: formDefinition.identifier,
+          })
+        );
       },
     });
-  }, [publishForm, formDefinition]);
+  }, [formDefinition, publishForm, navigate]);
 
   if (loading && !formDefinition) return <Loading />;
   if (error) throw error;

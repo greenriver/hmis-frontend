@@ -34,25 +34,7 @@ mutation DeleteFormDefinition($id: ID!) {
 mutation PublishFormDefinition($id: ID!) {
   publishFormDefinition(id: $id) {
     formIdentifier {
-      id
-      identifier
-      draftVersion {
-        id
-        cacheKey
-        ...FormDefinitionFieldsForEditor
-      }
-      publishedVersion {
-        id
-        cacheKey
-        ...FormDefinitionFieldsForEditor
-      }
-      allVersions {
-        nodes {
-          id
-          cacheKey
-          ...FormDefinitionMetadata
-        }
-      }
+      ...FormIdentifierDetails
     }
   }
 }
@@ -63,9 +45,7 @@ mutation CreateNextDraftFormDefinition($identifier: String!) {
       id
       identifier
       draftVersion {
-        id
-        cacheKey
-        ...FormDefinitionFieldsForEditor
+        ...FormDefinitionMetadata
       }
     }
   }

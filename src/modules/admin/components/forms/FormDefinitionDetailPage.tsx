@@ -30,6 +30,7 @@ const FormDefinitionDetailPage = () => {
   if (error) throw error;
   if (!formIdentifier) return <Loading />;
 
+  console.log('page', identifier, formIdentifier);
   return (
     <>
       <Stack gap={2}>
