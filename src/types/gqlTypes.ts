@@ -5598,7 +5598,7 @@ export type PublishFormDefinitionPayload = {
   errors: Array<ValidationError>;
   formIdentifier: FormIdentifier;
   newlyPublished: FormDefinition;
-  newlyRetired: FormDefinition;
+  newlyRetired?: Maybe<FormDefinition>;
 };
 
 export type Query = {
@@ -23113,7 +23113,7 @@ export type PublishFormDefinitionMutation = {
         }>;
       };
     };
-    newlyRetired: {
+    newlyRetired?: {
       __typename?: 'FormDefinition';
       id: string;
       role: FormRole;
@@ -23121,7 +23121,7 @@ export type PublishFormDefinitionMutation = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
-    };
+    } | null;
     formIdentifier: {
       __typename?: 'FormIdentifier';
       id: string;
