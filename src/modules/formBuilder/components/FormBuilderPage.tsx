@@ -23,7 +23,6 @@ const FormBuilderPage = () => {
     FormDefinitionJson | undefined
   >();
 
-  // why is this fetching it should already be in the cache
   const {
     data: { formDefinition: initialFormDefinition } = {},
     loading: fetchLoading,
