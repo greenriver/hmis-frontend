@@ -58,18 +58,19 @@ const FormDefinitionDetailPage = () => {
           <Grid item xs={12} md={4}>
             <CommonCard title='Form Actions'>
               <Stack gap={1}>
-                <RootPermissionsFilter permissions={'canManageForms'}>
+                <RootPermissionsFilter permissions='canManageForms'>
                   <EditFormButton
                     formIdentifier={formIdentifier}
                     text={
                       formIdentifier.draftVersion ? 'Edit Draft' : 'Edit Form'
                     }
+                    editorType={FormEditorType.FormBuilder}
                   />
                   <EditFormButton
                     formIdentifier={formIdentifier}
                     text='JSON Editor'
                     Icon={CodeIcon}
-                    editorRoute={FormEditorType.JsonEditor}
+                    editorType={FormEditorType.JsonEditor}
                   />
                 </RootPermissionsFilter>
                 <ButtonLink

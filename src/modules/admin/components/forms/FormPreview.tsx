@@ -23,7 +23,7 @@ import {
   getInitialValues,
   getItemMap,
 } from '@/modules/form/util/formUtil';
-import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   FormStatus,
   useGetFormDefinitionFieldsForEditorQuery,
@@ -52,8 +52,6 @@ const FormPreview = () => {
   } = useGetFormDefinitionFieldsForEditorQuery({
     variables: { id: formId },
   });
-  const [rootAccess] = useRootPermissions();
-  const canManageForms = rootAccess?.canManageForms;
 
   const formRef = useRef<DynamicFormRef>(null);
 
@@ -138,8 +136,8 @@ const FormPreview = () => {
           variant='gray'
         />
 
-        {formDefinition?.status === FormStatus.Draft && canManageForms && (
-          <>
+        {formDefinition?.status === FormStatus.Draft && (
+          <RootPermissionsFilter permissions='canManageForms'>
             <Button onClick={() => setConfirmOpen(true)}>Publish</Button>
             <ConfirmationDialog
               id='publish'
@@ -151,7 +149,7 @@ const FormPreview = () => {
             >
               <div>Are you sure you want to publish this form?</div>
             </ConfirmationDialog>
-          </>
+          </RootPermissionsFilter>
         )}
       </Stack>
 

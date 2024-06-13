@@ -18,21 +18,21 @@ interface EditFormButtonProps {
   formIdentifier: FormIdentifierDetailsFragment;
   text?: string;
   Icon?: React.ComponentType;
-  editorRoute?: FormEditorType;
+  editorType?: FormEditorType;
 }
 
 const EditFormButton: React.FC<EditFormButtonProps> = ({
   formIdentifier,
   text,
   Icon,
-  editorRoute = FormEditorType.FormBuilder,
+  editorType = FormEditorType.FormBuilder,
 }) => {
   const navigate = useNavigate();
 
   const goToEditor = useCallback(
     (draftId: string) => {
       const route =
-        editorRoute === FormEditorType.JsonEditor
+        editorType === FormEditorType.JsonEditor
           ? AdminDashboardRoutes.JSON_EDIT_FORM
           : AdminDashboardRoutes.EDIT_FORM;
 
@@ -43,7 +43,7 @@ const EditFormButton: React.FC<EditFormButtonProps> = ({
         })
       );
     },
-    [formIdentifier, editorRoute, navigate]
+    [formIdentifier, editorType, navigate]
   );
 
   const [createDraftForm, { loading, error }] =
@@ -77,7 +77,7 @@ const EditFormButton: React.FC<EditFormButtonProps> = ({
       loading={loading}
       role='link'
     >
-      {text ? text : 'Edit Form'}
+      {text || 'Edit Form'}
     </LoadingButton>
   );
 };
