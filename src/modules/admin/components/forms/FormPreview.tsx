@@ -119,6 +119,9 @@ const FormPreview = () => {
       variables: {
         id: formDefinition.id,
       },
+      onCompleted: (data) => {
+        console.log(data);
+      },
     });
   }, [publishForm, formDefinition]);
 
