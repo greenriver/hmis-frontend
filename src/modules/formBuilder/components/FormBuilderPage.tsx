@@ -8,9 +8,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import FormBuilder from '@/modules/formBuilder/components/FormBuilder';
-import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
 import {
-  FormDefinitionJson,
   FormItem,
   useGetFormDefinitionFieldsForEditorQuery,
   useUpdateFormDefinitionMutation,
@@ -19,24 +17,13 @@ import {
 const FormBuilderPage = () => {
   const { formId } = useSafeParams() as { formId: string };
 
-  const [workingDefinition, setWorkingDefinition] = useState<
-    FormDefinitionJson | undefined
-  >();
-
   const {
     data: { formDefinition: initialFormDefinition } = {},
     loading: fetchLoading,
     error: fetchError,
   } = useGetFormDefinitionFieldsForEditorQuery({
     variables: { id: formId },
-    onCompleted: (data) => {
-      setWorkingDefinition(data.formDefinition?.definition);
-    },
   });
-
-  // TODO(#6090) - update the API to return correct values
-  const lastUpdatedDate = formatDateForDisplay(new Date());
-  const lastUpdatedBy = 'User Name';
 
   const [selectedItem, setSelectedItem] = useState<FormItem | undefined>(
     undefined
@@ -58,12 +45,10 @@ const FormBuilderPage = () => {
       ) {
         setErrorState(partitionValidations(data.updateFormDefinition.errors));
       } else {
-        setWorkingDefinition(
-          data.updateFormDefinition?.formDefinition?.definition
-        );
         setErrorState(emptyErrorState);
         setSelectedItem(undefined);
       }
+      // TODO(#6094) - Form needs to be reset at this point. It's still marked as 'dirty'
     },
   });
 
@@ -89,11 +74,7 @@ const FormBuilderPage = () => {
   return (
     <FormBuilder
       formDefinition={formDefinition}
-      workingDefinition={workingDefinition}
-      setWorkingDefinition={setWorkingDefinition}
       errorState={errorState}
-      lastUpdatedDate={lastUpdatedDate || undefined}
-      lastUpdatedBy={lastUpdatedBy}
       selectedItem={selectedItem}
       setSelectedItem={setSelectedItem}
       onSave={(newDefinition) => {

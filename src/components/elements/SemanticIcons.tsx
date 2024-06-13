@@ -2,6 +2,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArticleIcon from '@mui/icons-material/Article';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -69,4 +70,6 @@ export {
   TextFieldsIcon as FormStringIcon,
   WrapTextIcon as FormTextIcon,
   AccessTimeIcon as FormTimeOfDayIcon,
+  ArrowDropUpIcon as UpIcon,
+  ArrowDropDownIcon as DownIcon,
 };

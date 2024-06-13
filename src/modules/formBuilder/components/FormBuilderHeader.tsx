@@ -19,13 +19,11 @@ import {
 
 interface FormEditorHeaderProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
-  lastUpdatedDate?: string | null;
   onClickPreview: VoidFunction;
 }
 
 const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
   formDefinition,
-  lastUpdatedDate,
   onClickPreview,
 }) => {
   const formRole = useMemo(
@@ -77,9 +75,6 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Form Type'>
               {formRole}
-            </CommonLabeledTextBlock>
-            <CommonLabeledTextBlock title='Last Updated'>
-              {lastUpdatedDate}
             </CommonLabeledTextBlock>
             <CommonLabeledTextBlock title='Status'>
               {formDefinition.status}

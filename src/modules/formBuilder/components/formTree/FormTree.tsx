@@ -1,35 +1,33 @@
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import React, { useMemo } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import Loading from '@/components/elements/Loading';
 import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
 import FormTreeItem from '@/modules/formBuilder/components/formTree/FormTreeItem';
-import {
-  FormItemForTree,
-  getItemFromTree,
-  getItemsForTree,
-} from '@/modules/formBuilder/components/formTree/formTreeUtil';
-import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
+import { getItemsForTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
+import { FormItem } from '@/types/gqlTypes';
 
 interface FormTreeProps {
-  definition: FormDefinitionJson;
   onEditClick: (item: FormItem) => void;
+  itemIdMap: Record<string, string>;
 }
-const FormTree: React.FC<FormTreeProps> = ({ definition, onEditClick }) => {
-  const definitionForTree = useMemo(
-    () => getItemsForTree(definition),
-    [definition]
-  );
+const FormTree: React.FC<FormTreeProps> = ({ onEditClick, itemIdMap }) => {
+  const { control } = useFormContext();
+  const items = useWatch({ name: 'item', control });
+
+  const definitionForTree = useMemo(() => getItemsForTree(items), [items]);
 
   const context = React.useMemo(
     () => ({
-      onEditButtonClicked: (item: FormItemForTree) => {
-        onEditClick(getItemFromTree(item));
+      onEditButtonClicked: (item: FormItem) => {
+        onEditClick(item);
       },
+      itemIdMap,
     }),
-    [onEditClick]
+    [onEditClick, itemIdMap]
   );
 
-  if (!definition) return <Loading />;
+  if (!items) return <Loading />;
 
   return (
     <FormTreeContext.Provider value={context}>

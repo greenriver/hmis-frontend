@@ -115,3 +115,48 @@ export const slugifyItemLabel = (label: string) => {
   const cleanedLabel = removeHtmlTags(label);
   return kebabCase(cleanedLabel).toLowerCase().replace(/-/g, '_').slice(0, 40);
 };
+
+/**
+ * Maps the item's linkId to the string key that React Hook Forms's useArrayFields hook expects,
+ * which looks like: `item`, `item.0`, `item.0.item.1`, etc.
+ */
+export const getItemIdMap = (items: FormItem[]) => {
+  const map: Record<string, string> = {};
+
+  function recursiveMap(
+    items: Maybe<FormItem[]> | undefined,
+    parentKey: string
+  ) {
+    items?.forEach((item, i) => {
+      const key = `${parentKey && parentKey + '.'}${i}`;
+      map[item.linkId] = key;
+      recursiveMap(item.item, key);
+    });
+  }
+
+  recursiveMap(items, 'item');
+  return map;
+};
+
+/**
+ * Helper fn for interacting with the form tree structure as stored in React Hook Forms,
+ * which stores item paths like `item`, `item.0`, `item.0.item.1`, etc.
+ * Given a form path, return the path to its parent and the index in the parent.
+ * For example: if itemPath is `item.0.item.1`, then the parentPath is `item.0.item`
+ * and the index is 1.
+ */
+export const getPathContext = (
+  itemPath: string
+): { parentPath: string; index: number } => {
+  if (!itemPath || itemPath === 'item') {
+    return { parentPath: '', index: -1 };
+  }
+
+  const r = /\.(\d+)$/;
+  const matches = itemPath.match(r);
+
+  return {
+    parentPath: itemPath.replace(r, ''),
+    index: matches && matches[1] ? parseInt(matches[1]) : -1,
+  };
+};

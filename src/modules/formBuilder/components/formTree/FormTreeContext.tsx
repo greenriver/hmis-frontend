@@ -1,6 +1,10 @@
 import React from 'react';
-import { FormItemForTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
+import { FormItem } from '@/types/gqlTypes';
 
 export const FormTreeContext = React.createContext<{
-  onEditButtonClicked: (item: FormItemForTree) => void;
-}>({ onEditButtonClicked: () => {} });
+  onEditButtonClicked: (item: FormItem) => void;
+  itemIdMap: Record<string, string>;
+}>({
+  onEditButtonClicked: () => {},
+  itemIdMap: {},
+});

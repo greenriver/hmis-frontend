@@ -2,17 +2,16 @@ import { FetchResult } from '@apollo/client';
 import { LoadingButton } from '@mui/lab';
 import { Button, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { isEqual } from 'lodash-es';
-import {
+import React, {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
 } from 'react';
+import { useForm, useFormState, useWatch, FormProvider } from 'react-hook-form';
 import { v4 } from 'uuid';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
-import Loading from '@/components/elements/Loading';
 import theme from '@/config/theme';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { ErrorState } from '@/modules/errors/util';
@@ -20,7 +19,10 @@ import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeade
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
-import { updateFormItem } from '@/modules/formBuilder/formBuilderUtil';
+import {
+  getItemIdMap,
+  updateFormItem,
+} from '@/modules/formBuilder/formBuilderUtil';
 import {
   DisabledDisplay,
   EnableBehavior,
@@ -32,65 +34,60 @@ import {
 
 interface FormBuilderProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
-  workingDefinition?: FormDefinitionJson;
-  setWorkingDefinition?: Dispatch<
-    SetStateAction<FormDefinitionJson | undefined>
-  >;
   errorState?: ErrorState;
   onSave: (
     formDefinition: FormDefinitionJson
   ) => Promise<FetchResult<UpdateFormDefinitionMutation>>;
   saveLoading: boolean;
-  lastUpdatedDate?: string;
-  lastUpdatedBy?: string;
   selectedItem?: FormItem;
   setSelectedItem: Dispatch<SetStateAction<FormItem | undefined>>;
 }
 
 const FormBuilder: React.FC<FormBuilderProps> = ({
   formDefinition,
-  workingDefinition,
-  setWorkingDefinition,
   errorState,
   onSave,
   saveLoading,
-  lastUpdatedDate,
-  lastUpdatedBy,
   selectedItem,
   setSelectedItem,
 }) => {
-  const dirty = useMemo(() => {
-    return !isEqual(workingDefinition, formDefinition.definition);
-  }, [workingDefinition, formDefinition.definition]);
+  const rhfMethods = useForm<FormDefinitionJson>({
+    defaultValues: formDefinition.definition,
+  });
+
+  const { control, getValues } = rhfMethods;
+
+  const formWatch = useWatch({ control }) as FormItem;
+  const itemIdMap = useMemo(
+    () => getItemIdMap(getValues().item),
+    [formWatch, getValues]
+  );
+
+  const { isDirty } = useFormState({ control });
 
   const [blockedActionFunction, setBlockedActionFunction] = useState<
     VoidFunction | undefined
   >(undefined);
 
   const onClickPreview = useCallback(() => {
-    if (dirty) {
+    if (isDirty) {
       setBlockedActionFunction(() => undefined); // TODO(#6091)
     }
-  }, [setBlockedActionFunction, dirty]);
+  }, [setBlockedActionFunction, isDirty]);
 
   const onConfirmSave = useCallback(() => {
-    if (!workingDefinition) return;
-
-    onSave(workingDefinition).then(() => {
+    // RHF has its own submit hooks that include validation, but we aren't using them here,
+    // because reordering form items doesn't need validation.
+    // (We could change this once we implement deletion of form items)
+    onSave(getValues()).then(() => {
       if (blockedActionFunction) blockedActionFunction();
       setBlockedActionFunction(undefined);
     });
-  }, [
-    workingDefinition,
-    blockedActionFunction,
-    setBlockedActionFunction,
-    onSave,
-  ]);
-
-  if (!workingDefinition || !setWorkingDefinition) return <Loading />;
+  }, [getValues, blockedActionFunction, setBlockedActionFunction, onSave]);
 
   return (
-    <>
+    //value={{ control, itemIdMap, getValues }}
+    <FormProvider {...rhfMethods}>
       <ConfirmationDialog
         open={!!blockedActionFunction}
         loading={saveLoading}
@@ -114,8 +111,15 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
           saveLoading={saveLoading}
           errorState={errorState}
           onSave={(updatedItem, initialLinkId) => {
+            if (isDirty) {
+              // This should never happen
+              throw new Error(
+                "Can't save an individual item when the overall form structure has unsaved changes"
+              );
+            }
+
             const newDefinition = updateFormItem(
-              workingDefinition,
+              formDefinition.definition,
               updatedItem,
               initialLinkId
             );
@@ -140,18 +144,16 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
           >
             <FormBuilderHeader
               formDefinition={formDefinition}
-              lastUpdatedDate={lastUpdatedDate}
               onClickPreview={onClickPreview}
             />
             <Box sx={{ p: 4 }}>
               <FormTree
-                definition={workingDefinition}
                 onEditClick={(item: FormItem) => {
                   function editItem() {
                     setSelectedItem(item);
                   }
 
-                  if (dirty) {
+                  if (isDirty) {
                     // React's useState accepts either a value or a function that yields a value.
                     // In this case, we want the function itself to *be* the state value, which is the reason
                     // for defining `editItem` above instead of simply using `() => setSelectedItem(item)` here.
@@ -160,6 +162,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                     setSelectedItem(item);
                   }
                 }}
+                itemIdMap={itemIdMap}
               />
               {errorState?.errors &&
                 errorState.errors.length > 0 &&
@@ -169,7 +172,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                   </Stack>
                 )}
             </Box>
-            {dirty && (
+            {isDirty && (
               <Paper sx={{ p: 4 }}>
                 <Stack
                   direction='row'
@@ -180,15 +183,12 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                     <LoadingButton
                       variant='outlined'
                       loading={saveLoading}
-                      onClick={() => onSave(workingDefinition)}
+                      onClick={() => onSave(getValues())}
                     >
                       Save Draft
                     </LoadingButton>
                     <Button>Publish</Button>
                   </Stack>
-                  <Typography variant='body2'>
-                    Last saved on {lastUpdatedDate} by {lastUpdatedBy}
-                  </Typography>
                 </Stack>
               </Paper>
             )}
@@ -214,7 +214,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
           }}
         />
       </Box>
-    </>
+    </FormProvider>
   );
 };
 
