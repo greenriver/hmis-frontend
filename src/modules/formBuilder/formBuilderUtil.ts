@@ -1,11 +1,9 @@
 import { cloneDeep, kebabCase } from 'lodash-es';
-import { ItemMap } from '../form/types';
 import {
-  PickListOption,
-  ItemType,
   Component,
   FormDefinitionJson,
   FormItem,
+  ItemType,
   Maybe,
 } from '@/types/gqlTypes';
 
@@ -17,27 +15,17 @@ export const removeHtmlTags = (value?: string | null): string => {
   return value.replace(/<[^>]*>/g, '');
 };
 
-// Generate a list of Items to pick from. Used for picking dependent items for conditional logic.
-export const generateItemPickList = (
-  itemMap: ItemMap,
-  exclude: string[] = []
-) => {
-  const pickList: PickListOption[] = [];
-  Object.values(itemMap).forEach((item) => {
-    if (exclude.includes(item.linkId)) return;
+export const displayLabelForItem = (item: FormItem, ellipsize = true) => {
+  let label =
+    item.readonlyText?.trim() ||
+    item.briefText?.trim() ||
+    removeHtmlTags(item.text)?.trim() ||
+    item.linkId;
 
-    let label = item.briefText || removeHtmlTags(item.text) || item.linkId;
-    // ellipsize long labels
-    if (label.length > 50) label = label.substring(0, 50) + '...';
+  // ellipsize long label
+  if (ellipsize && label.length > 50) label = label.substring(0, 50) + '...';
 
-    pickList.push({ code: item.linkId, label });
-  });
-
-  return pickList.sort(function (a, b) {
-    return (a.label || a.code)
-      .toLowerCase()
-      .localeCompare((b.label || b.code).toLowerCase());
-  });
+  return label;
 };
 
 export const validComponentsForType = (type: ItemType) => {

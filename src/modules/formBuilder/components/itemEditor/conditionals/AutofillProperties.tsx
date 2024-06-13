@@ -1,4 +1,3 @@
-import { Box, Typography } from '@mui/material';
 import { useFieldArray } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import AutofillValueCard from './AutofillValueCard';
@@ -24,31 +23,23 @@ const AutofillProperties: React.FC<AutofillPropertiesProps> = ({
   });
 
   return (
-    <>
-      <Typography variant='h5'>Autofill</Typography>
-      <Box sx={{ mb: 2 }}>
-        <CardGroup
-          onAddItem={() => append({})}
-          addItemText='Add Autofill Value'
+    <CardGroup onAddItem={() => append({})} addItemText='Add Autofill Value'>
+      {fields.map((value, index) => (
+        <RemovableCard
+          onRemove={() => remove(index)}
+          key={JSON.stringify(value)}
+          removeTooltip='Remove Autofill'
         >
-          {fields.map((value, index) => (
-            <RemovableCard
-              onRemove={() => remove(index)}
-              key={JSON.stringify(value)}
-              removeTooltip='Remove Autofill'
-            >
-              <AutofillValueCard
-                title={`Autofill Value ${index + 1}`}
-                index={index}
-                control={control}
-                itemMap={itemMap}
-                itemType={itemType}
-              />
-            </RemovableCard>
-          ))}
-        </CardGroup>
-      </Box>
-    </>
+          <AutofillValueCard
+            title={`Autofill Value ${index + 1}`}
+            index={index}
+            control={control}
+            itemMap={itemMap}
+            itemType={itemType}
+          />
+        </RemovableCard>
+      ))}
+    </CardGroup>
   );
 };
 

@@ -212,7 +212,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         <FormBuilderPalette
           onItemClick={(itemType) => {
             const newItem: FormItem = {
-              linkId: v4().split('-')[0], // Randomly generate a placeholder link ID
+              linkId: `q_${v4().split('-')[0]}`, // Randomly generate a placeholder link ID
               text: undefined,
               type: itemType,
               required: false,
@@ -222,7 +222,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               repeats: false,
               prefill: false,
               disabledDisplay: DisabledDisplay.Hidden,
-              enableBehavior: EnableBehavior.Any,
+              enableBehavior: EnableBehavior.All,
             };
 
             setSelectedItem(newItem);

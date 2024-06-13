@@ -42,26 +42,31 @@ interface CardGroupProps {
   children: ReactNode;
   onAddItem: VoidFunction;
   addItemText: string;
+  maxItems?: number;
 }
 const CardGroup: React.FC<CardGroupProps> = ({
   children,
   onAddItem,
   addItemText,
+  maxItems,
 }) => {
   return (
     <Box>
       <Stack gap={2} sx={{ pt: 1 }}>
         {children}
       </Stack>
-      <Button
-        onClick={onAddItem}
-        color='secondary'
-        variant='text'
-        sx={{ width: 'fit-content', color: 'links' }}
-        startIcon={<AddIcon />}
-      >
-        {addItemText}
-      </Button>
+      {(!maxItems ||
+        (Array.isArray(children) && children.length < maxItems)) && (
+        <Button
+          onClick={onAddItem}
+          color='secondary'
+          variant='text'
+          sx={{ width: 'fit-content', color: 'links' }}
+          startIcon={<AddIcon />}
+        >
+          {addItemText}
+        </Button>
+      )}
     </Box>
   );
 };

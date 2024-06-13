@@ -3,6 +3,7 @@ import { startCase } from 'lodash-es';
 import { useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
+import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
@@ -85,6 +86,8 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     groupCode: !!state?.answerGroupCode,
   });
 
+  const localConstantsPickList = useLocalConstantsPickList();
+
   return (
     <Stack>
       <Grid container gap={2}>
@@ -103,14 +106,15 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
               />
             )}
             {advanced.localConstant && (
-              <ControlledTextInput
+              <ControlledSelect
                 name={`${enableWhenPath}.${index}.localConstant`}
                 control={control}
+                label='Local Constant'
+                placeholder='Select local constant'
                 rules={{
                   required: 'Local Constant or Dependent Question is required',
                 }}
-                // FIXME should be a dropdown of available Local Constants for this Role
-                label='Local Constant'
+                options={localConstantsPickList}
                 helperText="Local constant who's value will determine whether the condition is met"
               />
             )}
