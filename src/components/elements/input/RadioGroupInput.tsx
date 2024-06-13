@@ -98,6 +98,7 @@ const RadioGroupInput = ({
         disabled={props.disabled}
         component='legend'
         sx={{
+          float: 'left', //unsets default 'legend' styles
           color: props.disabled ? 'text.disabled' : 'text.primary',
           '&.Mui-focused': {
             color: 'text.primary',
@@ -109,14 +110,13 @@ const RadioGroupInput = ({
       </FormLabel>
       <GroupComponent
         row={row}
-        // value={value ? value.code : null}
         onChange={() => null}
         sx={{
           width: inputWidth,
           ...(!row && {
-            'label:first-of-type': { pt: 1 },
+            'label:first-of-type': { pt: 0.5 },
             // 'label:last-child': { pb: 1 },
-            'label .MuiRadio-root': { p: 1 },
+            'label .MuiRadio-root': { py: 0.5 },
           }),
           ...(warnIfEmptyTreatment && {
             '[data-checked="false"] svg': {
