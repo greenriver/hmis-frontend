@@ -3,10 +3,12 @@ import { Grid, Stack, Typography } from '@mui/material';
 
 import { generatePath } from 'react-router-dom';
 import FormRuleCard from '../formRules/FormRuleCard';
+import FormVersionTable from './FormVersionTable';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
+import TitleCard from '@/components/elements/TitleCard';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditFormButton, {
   FormEditorType,
@@ -92,6 +94,13 @@ const FormDefinitionDetailPage = () => {
           formTitle={formIdentifier.displayVersion.title}
           formRole={formIdentifier.displayVersion.role}
         />
+        <TitleCard
+          title='Version History'
+          headerVariant='border'
+          headerTypographyVariant='h5'
+        >
+          <FormVersionTable formIdentifier={formIdentifier.identifier} />
+        </TitleCard>
       </Stack>
     </>
   );
