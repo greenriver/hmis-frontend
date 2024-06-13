@@ -10,6 +10,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
@@ -21,6 +22,7 @@ import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPale
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
 import { updateFormItem } from '@/modules/formBuilder/formBuilderUtil';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   DisabledDisplay,
   EnableBehavior,
@@ -67,11 +69,24 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
     VoidFunction | undefined
   >(undefined);
 
+  const navigate = useNavigate();
+
+  const goToPreview = useCallback(() => {
+    navigate(
+      generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
+        identifier: formDefinition.identifier,
+        formId: formDefinition.id,
+      })
+    );
+  }, [navigate, formDefinition]);
+
   const onClickPreview = useCallback(() => {
     if (dirty) {
-      setBlockedActionFunction(() => undefined); // TODO(#6091)
+      setBlockedActionFunction(() => goToPreview);
+    } else {
+      goToPreview();
     }
-  }, [setBlockedActionFunction, dirty]);
+  }, [setBlockedActionFunction, dirty, goToPreview]);
 
   const onConfirmSave = useCallback(() => {
     if (!workingDefinition) return;
