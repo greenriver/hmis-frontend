@@ -30,7 +30,6 @@ const FormDefinitionDetailPage = () => {
   if (error) throw error;
   if (!formIdentifier) return <Loading />;
 
-  console.log('page', identifier, formIdentifier);
   return (
     <>
       <Stack gap={2}>
@@ -76,9 +75,7 @@ const FormDefinitionDetailPage = () => {
                 <ButtonLink
                   to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
                     identifier: formIdentifier?.identifier,
-                    formId:
-                      formIdentifier?.draftVersion?.id ||
-                      formIdentifier?.displayVersion.id,
+                    formId: formIdentifier?.displayVersion.id,
                   })}
                   variant='outlined'
                   fullWidth
