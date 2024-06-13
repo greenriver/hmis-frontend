@@ -22,11 +22,10 @@ import {
   getItemMap,
   getFormStepperItems,
 } from '@/modules/form/util/formUtil';
-import { cache } from '@/providers/apolloClient';
 import {
   FormStatus,
   useGetFormDefinitionFieldsForEditorQuery,
-  usePublishFormMutation,
+  usePublishFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
 export type PreviewMode = 'input' | 'readOnly';
@@ -111,7 +110,7 @@ const FormPreview = () => {
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [publishForm, { loading: publishLoading, error: publishError }] =
-    usePublishFormMutation();
+    usePublishFormDefinitionMutation();
 
   const onPublish = useCallback(() => {
     if (!formDefinition) return;
@@ -119,9 +118,6 @@ const FormPreview = () => {
     publishForm({
       variables: {
         id: formDefinition.id,
-      },
-      onCompleted: () => {
-        cache.evict({ id: `FormIdentifier:${formDefinition?.identifier}` });
       },
     });
   }, [publishForm, formDefinition]);

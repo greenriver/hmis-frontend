@@ -31,24 +31,30 @@ mutation DeleteFormDefinition($id: ID!) {
   }
 }
 
-mutation PublishForm($id: ID!) {
-  publishForm(id: $id) {
-    formDefinition {
+mutation PublishFormDefinition($id: ID!) {
+  publishFormDefinition(id: $id) {
+    newlyPublished {
       ...FormDefinitionFieldsForEditor
     }
-    errors {
-      ...ValidationErrorFields
+    newlyRetired {
+      ...FormDefinitionMetadata
+    }
+    formIdentifier {
+      ...FormIdentifierDetails
     }
   }
 }
 
-mutation CreateDraftForm($identifier: String!) {
-  createDraftForm(identifier: $identifier) {
+mutation CreateNextDraftFormDefinition($identifier: String!) {
+  createNextDraftFormDefinition(identifier: $identifier) {
     formIdentifier {
-      ...FormIdentifierDetails
-    }
-    errors {
-      ...ValidationErrorFields
+      id
+      identifier
+      draftVersion {
+        id
+        cacheKey
+        ...FormDefinitionFieldsForEditor
+      }
     }
   }
 }

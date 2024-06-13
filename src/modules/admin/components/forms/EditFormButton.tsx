@@ -2,11 +2,10 @@ import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { LoadingButton } from '@mui/lab';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { cache } from '@/providers/apolloClient';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormIdentifierDetailsFragment,
-  useCreateDraftFormMutation,
+  useCreateNextDraftFormDefinitionMutation,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -47,15 +46,19 @@ const EditFormButton: React.FC<EditFormButtonProps> = ({
     [formIdentifier, editorRoute, navigate]
   );
 
-  const [createDraftForm, { loading, error }] = useCreateDraftFormMutation({
-    variables: { identifier: formIdentifier.identifier },
-    onCompleted: (data) => {
-      if (data.createDraftForm?.formIdentifier?.draftVersion?.id) {
-        cache.evict({ id: `FormIdentifier:${formIdentifier.identifier}` });
-        goToEditor(data.createDraftForm?.formIdentifier?.draftVersion.id);
-      }
-    },
-  });
+  const [createDraftForm, { loading, error }] =
+    useCreateNextDraftFormDefinitionMutation({
+      variables: { identifier: formIdentifier.identifier },
+      onCompleted: (data) => {
+        if (
+          data.createNextDraftFormDefinition?.formIdentifier?.draftVersion?.id
+        ) {
+          goToEditor(
+            data.createNextDraftFormDefinition?.formIdentifier?.draftVersion.id
+          );
+        }
+      },
+    });
 
   const onClick = useCallback(() => {
     if (formIdentifier.draftVersion) {
