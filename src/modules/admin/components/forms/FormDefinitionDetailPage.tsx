@@ -1,5 +1,4 @@
 import CodeIcon from '@mui/icons-material/Code';
-import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { Grid, Stack, Typography } from '@mui/material';
 
 import { generatePath } from 'react-router-dom';
@@ -9,6 +8,9 @@ import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
 import useSafeParams from '@/hooks/useSafeParams';
+import EditFormButton, {
+  FormEditorType,
+} from '@/modules/admin/components/forms/EditFormButton';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
@@ -56,29 +58,20 @@ const FormDefinitionDetailPage = () => {
           <Grid item xs={12} md={4}>
             <CommonCard title='Form Actions'>
               <Stack gap={1}>
-                <RootPermissionsFilter permissions={'canManageForms'}>
-                  <ButtonLink
-                    to={generatePath(AdminDashboardRoutes.EDIT_FORM, {
-                      identifier: formIdentifier?.identifier,
-                      formId: formIdentifier?.displayVersion.id,
-                    })}
-                    startIcon={<DashboardCustomizeIcon />}
-                    variant='contained'
-                    fullWidth
-                  >
-                    Edit Form
-                  </ButtonLink>
-                  <ButtonLink
-                    to={generatePath(AdminDashboardRoutes.JSON_EDIT_FORM, {
-                      identifier: formIdentifier?.identifier,
-                      formId: formIdentifier?.displayVersion.id,
-                    })}
-                    startIcon={<CodeIcon />}
-                    variant='contained'
-                    fullWidth
-                  >
-                    JSON Editor
-                  </ButtonLink>
+                <RootPermissionsFilter permissions='canManageForms'>
+                  <EditFormButton
+                    formIdentifier={formIdentifier}
+                    text={
+                      formIdentifier.draftVersion ? 'Edit Draft' : 'Edit Form'
+                    }
+                    editorType={FormEditorType.FormBuilder}
+                  />
+                  <EditFormButton
+                    formIdentifier={formIdentifier}
+                    text='JSON Editor'
+                    Icon={CodeIcon}
+                    editorType={FormEditorType.JsonEditor}
+                  />
                 </RootPermissionsFilter>
                 <ButtonLink
                   to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
