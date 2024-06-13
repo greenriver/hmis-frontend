@@ -4,7 +4,7 @@ import Loading from '@/components/elements/Loading';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
-  useGetFormDefinitionFieldsForEditorQuery,
+  useGetFormDefinitionFieldsForJsonEditorQuery,
   useUpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
@@ -12,7 +12,7 @@ const JsonFormEditorPage = () => {
   const { formId } = useSafeParams() as { formId: string };
 
   const { data: { formDefinition } = {}, error } =
-    useGetFormDefinitionFieldsForEditorQuery({
+    useGetFormDefinitionFieldsForJsonEditorQuery({
       variables: { id: formId },
     });
 

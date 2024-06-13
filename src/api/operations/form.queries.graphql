@@ -62,6 +62,12 @@ query GetFormDefinitionFieldsForEditor($id: ID!) {
   }
 }
 
+query GetFormDefinitionFieldsForJsonEditor($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFieldsForJsonEditor
+  }
+}
+
 query GetFormIdentifiers(
   $limit: Int = 25
   $offset: Int = 0
@@ -85,6 +91,7 @@ query GetFormIdentifiers(
   }
 }
 
+# used for JSON editor
 query GetParsedFormDefinition($input: String!) {
   parsedFormDefinition(input: $input) {
     definition {
