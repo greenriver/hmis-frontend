@@ -56,18 +56,6 @@ query GetFormIdentifierDetails($identifier: String!) {
   }
 }
 
-query GetFormDefinitionFieldsForEditor($id: ID!) {
-  formDefinition(id: $id) {
-    ...FormDefinitionFieldsForEditor
-  }
-}
-
-query GetFormDefinitionFieldsForJsonEditor($id: ID!) {
-  formDefinition(id: $id) {
-    ...FormDefinitionFieldsForJsonEditor
-  }
-}
-
 query GetFormIdentifiers(
   $limit: Int = 25
   $offset: Int = 0
@@ -88,16 +76,6 @@ query GetFormIdentifiers(
         }
       }
     }
-  }
-}
-
-# used for JSON editor
-query GetParsedFormDefinition($input: String!) {
-  parsedFormDefinition(input: $input) {
-    definition {
-      ...FormDefinitionJsonFields
-    }
-    errors
   }
 }
 
@@ -160,5 +138,29 @@ mutation SubmitForm($input: SubmitFormInput!) {
     errors {
       ...ValidationErrorFields
     }
+  }
+}
+
+# Used for Form Builder editor
+query GetFormDefinitionFieldsForEditor($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFieldsForEditor
+  }
+}
+
+# Used for JSON editor
+query GetFormDefinitionFieldsForJsonEditor($id: ID!) {
+  formDefinition(id: $id) {
+    ...FormDefinitionFieldsForJsonEditor
+  }
+}
+
+# used for JSON editor
+query GetParsedFormDefinition($input: String!) {
+  parsedFormDefinition(input: $input) {
+    definition {
+      ...FormDefinitionJsonFields
+    }
+    errors
   }
 }
