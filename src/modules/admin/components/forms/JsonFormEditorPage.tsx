@@ -5,7 +5,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
   useGetFormDefinitionFieldsForJsonEditorQuery,
-  useUpdateFormDefinitionMutation,
+  useUpdateFormDefinitionFromJsonEditorMutation,
 } from '@/types/gqlTypes';
 
 const JsonFormEditorPage = () => {
@@ -16,7 +16,8 @@ const JsonFormEditorPage = () => {
       variables: { id: formId },
     });
 
-  const [updateFormDefinition, { loading }] = useUpdateFormDefinitionMutation();
+  const [updateFormDefinition, { loading }] =
+    useUpdateFormDefinitionFromJsonEditorMutation();
 
   if (error) throw error;
   if (!formDefinition) return <Loading />;

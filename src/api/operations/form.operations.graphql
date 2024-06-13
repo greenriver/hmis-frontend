@@ -1,3 +1,4 @@
+# used for updating title, role, and updating form content from Form Builder
 mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
   updateFormDefinition(id: $id, input: $input) {
     formDefinition {
@@ -9,10 +10,26 @@ mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {
   }
 }
 
+# used for updating form content from JSON Editor
+mutation UpdateFormDefinitionFromJsonEditor(
+  $id: ID!
+  $input: FormDefinitionInput!
+) {
+  updateFormDefinition(id: $id, input: $input) {
+    formDefinition {
+      ...FormDefinitionFieldsForJsonEditor
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+# used for creating an entirely new form (form submission of static form)
 mutation CreateFormDefinition($input: FormDefinitionInput!) {
   createFormDefinition(input: $input) {
     formDefinition {
-      ...FormDefinitionFieldsForEditor
+      ...FormDefinitionMetadata
     }
     errors {
       ...ValidationErrorFields
@@ -20,25 +37,7 @@ mutation CreateFormDefinition($input: FormDefinitionInput!) {
   }
 }
 
-mutation DeleteFormDefinition($id: ID!) {
-  deleteFormDefinition(id: $id) {
-    formDefinition {
-      ...FormDefinitionFieldsForEditor
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation PublishFormDefinition($id: ID!) {
-  publishFormDefinition(id: $id) {
-    formIdentifier {
-      ...FormIdentifierDetails
-    }
-  }
-}
-
+# used for creating a new Draft version of an existing form
 mutation CreateNextDraftFormDefinition($identifier: String!) {
   createNextDraftFormDefinition(identifier: $identifier) {
     formIdentifier {
@@ -47,6 +46,15 @@ mutation CreateNextDraftFormDefinition($identifier: String!) {
       draftVersion {
         ...FormDefinitionMetadata
       }
+    }
+  }
+}
+
+# publish a Draft version of a form
+mutation PublishFormDefinition($id: ID!) {
+  publishFormDefinition(id: $id) {
+    formIdentifier {
+      ...FormIdentifierDetails
     }
   }
 }
