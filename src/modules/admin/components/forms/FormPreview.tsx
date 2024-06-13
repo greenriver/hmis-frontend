@@ -1,7 +1,7 @@
 import { Button, Grid } from '@mui/material';
 import { Stack } from '@mui/system';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useMemo, useRef, useState } from 'react';
+import { usePublishForm } from './usePublishForm';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
@@ -19,15 +19,14 @@ import FormNavigation from '@/modules/form/components/FormNavigation';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import {
   AlwaysPresentLocalConstants,
+  getFormStepperItems,
   getInitialValues,
   getItemMap,
-  getFormStepperItems,
 } from '@/modules/form/util/formUtil';
-import { AdminDashboardRoutes } from '@/routes/routes';
+import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import {
   FormStatus,
   useGetFormDefinitionFieldsForEditorQuery,
-  usePublishFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
 export type PreviewMode = 'input' | 'readOnly';
@@ -42,6 +41,8 @@ export const toggleItems: ToggleItem<PreviewMode>[] = [
   },
 ];
 
+// Component for previewing a form, and optionally publishing it.
+// Publish is possible if it is a draft and user has appropriate permission.
 const FormPreview = () => {
   const { formId } = useSafeParams() as { formId: string };
   const {
@@ -51,10 +52,13 @@ const FormPreview = () => {
   } = useGetFormDefinitionFieldsForEditorQuery({
     variables: { id: formId },
   });
+  const [rootAccess] = useRootPermissions();
+  const canManageForms = rootAccess?.canManageForms;
 
   const formRef = useRef<DynamicFormRef>(null);
 
-  // This form preview is not client- or enrollment-specific, so just use the always-present local constants
+  // This form preview is not client- or enrollment-specific, so just use the always-present local constants.
+  // This could be adjusted to show fake constants depending on the form role.
   const localConstants = AlwaysPresentLocalConstants;
 
   useScrollToHash(loading, STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT);
@@ -111,30 +115,13 @@ const FormPreview = () => {
   }, [formDefinition, formValues, initialValues, localConstants, toggleValue]);
 
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [publishForm, { loading: publishLoading, error: publishError }] =
-    usePublishFormDefinitionMutation();
-
-  const navigate = useNavigate();
-  const onPublish = useCallback(() => {
-    if (!formDefinition) return;
-
-    publishForm({
-      variables: {
-        id: formDefinition.id,
-      },
-      onCompleted: () => {
-        navigate(
-          generatePath(AdminDashboardRoutes.VIEW_FORM, {
-            identifier: formDefinition.identifier,
-          })
-        );
-      },
-    });
-  }, [formDefinition, publishForm, navigate]);
+  const { publishLoading, onPublishForm } = usePublishForm({
+    formId: formDefinition?.id,
+    formIdentifier: formDefinition?.identifier,
+  });
 
   if (loading && !formDefinition) return <Loading />;
   if (error) throw error;
-  if (publishError) throw publishError;
 
   return (
     <>
@@ -151,14 +138,14 @@ const FormPreview = () => {
           variant='gray'
         />
 
-        {formDefinition?.status === FormStatus.Draft && (
+        {formDefinition?.status === FormStatus.Draft && canManageForms && (
           <>
             <Button onClick={() => setConfirmOpen(true)}>Publish</Button>
             <ConfirmationDialog
               id='publish'
               open={confirmOpen}
               title='Confirm Publish'
-              onConfirm={onPublish}
+              onConfirm={onPublishForm}
               onCancel={() => setConfirmOpen(false)}
               loading={publishLoading}
             >
