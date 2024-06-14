@@ -32,7 +32,6 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = (props) => {
   const { control, getValues } = useFormContext();
   const { isSubmitting } = useFormState({ control });
 
-  console.log('isSubmitting?', isSubmitting);
   const itemPath = itemIdMap[itemId];
 
   const { parentPath, index: thisIndex } = getPathContext(itemPath);
