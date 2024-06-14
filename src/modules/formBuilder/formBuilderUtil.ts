@@ -129,18 +129,8 @@ export const getItemIdMap = (items: FormItem[]) => {
   ) {
     items?.forEach((item, i) => {
       const key = `${parentKey && parentKey + '.'}${i}`;
-      // if (Array.isArray(item)) console.log('>>>', item);
-      // if (!item.linkId) return;
 
       map[item.linkId] = key;
-      // console.log(
-      //   'chose index ',
-      //   key,
-      //   'for',
-      //   item.linkId,
-      //   '. parentKey was',
-      //   parentKey
-      // );
       recursiveMap(item.item, key + '.item');
     });
   }

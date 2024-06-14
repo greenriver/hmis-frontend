@@ -31,12 +31,7 @@ export function useUpdateForm({ formId, onSuccess }: Args) {
           setErrorState(partitionValidations(data.updateFormDefinition.errors));
         } else if (data.updateFormDefinition?.formDefinition) {
           setErrorState(emptyErrorState);
-
           onSuccess(data.updateFormDefinition.formDefinition.definition);
-          // setSelectedItem(undefined);
-
-          // Reset the form. Use the returned definition as the defaultValues.
-          // rhfMethods.reset(data.updateFormDefinition.formDefinition.definition);
         } else {
           throw new Error('unexpected response');
         }

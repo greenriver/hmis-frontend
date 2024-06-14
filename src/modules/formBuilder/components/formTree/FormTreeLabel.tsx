@@ -94,6 +94,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = (props) => {
   // TODO(#6094) - Limit nesting depth to 5
   // TODO(#6094) - Auto open a group when an item is moved into it.
   //  This involves turning Mui Tree's expandedItems into a controlled prop - see https://github.com/greenriver/hmis-frontend/pull/797
+  // TODO figure out why there are empty keys being added to the form definition ''
   // TODO move to hook
   const onReorder = useCallback(
     (direction: 'up' | 'down') => {
