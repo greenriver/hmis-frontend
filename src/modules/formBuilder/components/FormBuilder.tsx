@@ -1,14 +1,7 @@
-import { FetchResult } from '@apollo/client';
 import { LoadingButton } from '@mui/lab';
 import { Button, Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { generatePath, useNavigate } from 'react-router-dom';
 
@@ -16,7 +9,11 @@ import { v4 } from 'uuid';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import theme from '@/config/theme';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import { ErrorState } from '@/modules/errors/util';
+import {
+  ErrorState,
+  emptyErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
@@ -35,27 +32,15 @@ import {
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionJson,
   FormItem,
-  UpdateFormDefinitionMutation,
+  useUpdateFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
 interface FormBuilderProps {
   formDefinition: FormDefinitionFieldsForEditorFragment;
-  errorState?: ErrorState;
-  onSave: (
-    formDefinition: FormDefinitionJson
-  ) => Promise<FetchResult<UpdateFormDefinitionMutation>>;
-  saveLoading: boolean;
-  selectedItem?: FormItem;
-  setSelectedItem: Dispatch<SetStateAction<FormItem | undefined>>;
 }
 
 const FormBuilder: React.FC<FormBuilderProps> = ({
-  formDefinition,
-  errorState,
-  onSave,
-  saveLoading,
-  selectedItem,
-  setSelectedItem,
+  formDefinition, // initial values for form definition
 }) => {
   const rhfMethods = useForm<FormDefinitionJson>({
     defaultValues: formDefinition.definition,
@@ -63,7 +48,50 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
 
   const { control, getValues } = rhfMethods;
 
-  // const formWatch = useWatch({ control }) as FormItem;
+  const [selectedItem, setSelectedItem] = useState<FormItem | undefined>(
+    undefined
+  );
+
+  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
+
+  useEffect(() => {
+    setErrorState(emptyErrorState);
+  }, [selectedItem, setErrorState]);
+
+  const [updateFormDefinition, { loading: saveLoading, error: saveError }] =
+    useUpdateFormDefinitionMutation({
+      onCompleted: (data) => {
+        if (
+          data.updateFormDefinition?.errors &&
+          data.updateFormDefinition.errors.length > 0
+        ) {
+          setErrorState(partitionValidations(data.updateFormDefinition.errors));
+        } else if (data.updateFormDefinition?.formDefinition) {
+          setErrorState(emptyErrorState);
+          setSelectedItem(undefined);
+
+          // Reset the form. Use the returned definition as the defaultValues.
+          rhfMethods.reset(data.updateFormDefinition.formDefinition.definition);
+        } else {
+          throw new Error('unexpected response');
+        }
+      },
+    });
+
+  if (saveError) throw saveError;
+
+  const onSave = useCallback(
+    (newDefinition: FormDefinitionJson) => {
+      return updateFormDefinition({
+        variables: {
+          id: formDefinition.id,
+          input: { definition: JSON.stringify(newDefinition) },
+        },
+      });
+    },
+    [formDefinition.id, updateFormDefinition]
+  );
+
   const itemIdMap = useMemo(() => getItemIdMap(getValues().item), [getValues]);
 
   const { isDirty } = useFormState({ control });
@@ -163,6 +191,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               onClickPreview={onClickPreview}
             />
             <Box sx={{ p: 4 }}>
+              <div>{isDirty ? 'DIRTY' : 'NOT DIRTY'}</div>
               <FormTree
                 onEditClick={(item: FormItem) => {
                   function editItem() {
