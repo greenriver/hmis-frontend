@@ -19,8 +19,6 @@ const FormBuilderPage = () => {
   if (!initialFormDefinition && fetchLoading) return <Loading />;
   if (!initialFormDefinition) return <NotFound />;
 
-  // TODO(#6094, #6083) Disable interaction with the form structure while the save mutation is loading
-
   return <FormBuilder formDefinition={initialFormDefinition} />;
 };
 

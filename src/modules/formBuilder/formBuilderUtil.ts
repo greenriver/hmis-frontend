@@ -1,4 +1,4 @@
-import { cloneDeep, kebabCase } from 'lodash-es';
+import { cloneDeep, get, kebabCase } from 'lodash-es';
 import {
   Component,
   FormDefinitionJson,
@@ -129,8 +129,19 @@ export const getItemIdMap = (items: FormItem[]) => {
   ) {
     items?.forEach((item, i) => {
       const key = `${parentKey && parentKey + '.'}${i}`;
+      // if (Array.isArray(item)) console.log('>>>', item);
+      // if (!item.linkId) return;
+
       map[item.linkId] = key;
-      recursiveMap(item.item, key);
+      // console.log(
+      //   'chose index ',
+      //   key,
+      //   'for',
+      //   item.linkId,
+      //   '. parentKey was',
+      //   parentKey
+      // );
+      recursiveMap(item.item, key + '.item');
     });
   }
 
@@ -152,11 +163,53 @@ export const getPathContext = (
     return { parentPath: '', index: -1 };
   }
 
-  const r = /\.(\d+)$/;
-  const matches = itemPath.match(r);
+  const components = itemPath.split('.');
+  const lastComponent = components[components.length - 1];
 
-  return {
-    parentPath: itemPath.replace(r, ''),
-    index: matches && matches[1] ? parseInt(matches[1]) : -1,
-  };
+  if (lastComponent !== 'item') {
+    const index = components.pop();
+    return {
+      parentPath: components.join('.'),
+      index: Number(index),
+    };
+  } else {
+    throw new Error('shouldnt happen');
+  }
+};
+
+// mutates definition
+export const removeItemFromDefinition = ({
+  removeFromPath,
+  removeFromIndex,
+  definition,
+}: {
+  removeFromPath: string;
+  removeFromIndex: number;
+
+  definition: FormDefinitionJson;
+}) => {
+  // Get the array
+  const oldParentArray = get(definition, removeFromPath);
+  // Drop the item at the specified index
+  const itemRemoved = oldParentArray.splice(removeFromIndex, 1)[0];
+
+  return itemRemoved;
+};
+
+// mutates definition
+export const insertItemToDefinition = ({
+  insertPath,
+  insertAtIndex,
+  definition,
+  item,
+}: {
+  insertPath: string;
+  insertAtIndex: number;
+  definition: FormDefinitionJson;
+  item?: FormItem;
+}) => {
+  // Get the array
+  const newParentArray = get(definition, insertPath);
+  // Insert the item
+  return newParentArray.splice(insertAtIndex, 0, item);
 };
