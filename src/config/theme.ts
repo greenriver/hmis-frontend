@@ -245,6 +245,21 @@ const createThemeOptions = (theme: Theme) => ({
         },
       },
     },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          typography: 'body2',
+          fontWeight: 600,
+        }),
+      },
+    },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: theme.unstable_sx({
+          typography: 'body2',
+        }),
+      },
+    },
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',

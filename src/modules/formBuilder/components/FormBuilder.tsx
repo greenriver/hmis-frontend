@@ -9,7 +9,9 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useForm, useFormState, useWatch, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm, useFormState } from 'react-hook-form';
+import { generatePath, useNavigate } from 'react-router-dom';
+
 import { v4 } from 'uuid';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import theme from '@/config/theme';
@@ -19,10 +21,14 @@ import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeade
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
+
 import {
   getItemIdMap,
   updateFormItem,
 } from '@/modules/formBuilder/formBuilderUtil';
+
+import { AdminDashboardRoutes } from '@/routes/routes';
+
 import {
   DisabledDisplay,
   EnableBehavior,
@@ -57,11 +63,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
 
   const { control, getValues } = rhfMethods;
 
-  const formWatch = useWatch({ control }) as FormItem;
-  const itemIdMap = useMemo(
-    () => getItemIdMap(getValues().item),
-    [formWatch, getValues]
-  );
+  // const formWatch = useWatch({ control }) as FormItem;
+  const itemIdMap = useMemo(() => getItemIdMap(getValues().item), [getValues]);
 
   const { isDirty } = useFormState({ control });
 
@@ -69,11 +72,24 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
     VoidFunction | undefined
   >(undefined);
 
+  const navigate = useNavigate();
+
+  const goToPreview = useCallback(() => {
+    navigate(
+      generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
+        identifier: formDefinition.identifier,
+        formId: formDefinition.id,
+      })
+    );
+  }, [navigate, formDefinition]);
+
   const onClickPreview = useCallback(() => {
     if (isDirty) {
-      setBlockedActionFunction(() => undefined); // TODO(#6091)
+      setBlockedActionFunction(() => goToPreview);
+    } else {
+      goToPreview();
     }
-  }, [setBlockedActionFunction, isDirty]);
+  }, [setBlockedActionFunction, isDirty, goToPreview]);
 
   const onConfirmSave = useCallback(() => {
     // RHF has its own submit hooks that include validation, but we aren't using them here,

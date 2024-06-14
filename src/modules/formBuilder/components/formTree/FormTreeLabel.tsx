@@ -96,8 +96,8 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = (props) => {
       if (direction === 'up') {
         if (thisIndex > 0) {
           const prevItem = thisLayer[thisIndex - 1];
-          console.log(thisLayer);
-          console.log(fields);
+          console.log('onReorder: this layer', thisLayer);
+          console.log('onReorder: fields', fields);
 
           if (prevItem.type === ItemType.Group) {
             // CASE 1: Move this item up into the Group above it
@@ -135,18 +135,17 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = (props) => {
       }
     },
     [
-      item,
       thisIndex,
       thisLayer,
-      parentIndex,
-      prevItem,
-      nextItem,
+      fields,
       remove,
-      swap,
-      insertInParent,
       appendToPrevious,
+      item,
+      swap,
+      parentIndex,
+      insertInParent,
+      nextItem,
       prependToNext,
-      getValues,
     ]
   );
 
