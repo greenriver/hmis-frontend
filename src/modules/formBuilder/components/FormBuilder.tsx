@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { Paper, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { useUpdateForm } from './useUpdateForm';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import theme from '@/config/theme';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import SaveSlide from '@/modules/form/components/SaveSlide';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
@@ -176,26 +177,27 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                   </Stack>
                 )}
             </Box>
-            {isDirty && (
-              <Paper sx={{ p: 4 }}>
-                <Stack
-                  direction='row'
-                  justifyContent='space-between'
-                  sx={{ alignItems: 'center' }}
-                >
-                  <Stack direction='row' gap={2}>
-                    <LoadingButton
-                      variant='outlined'
-                      loading={saveLoading}
-                      type='submit'
-                    >
-                      Save Draft
-                    </LoadingButton>
-                    {/* <Button>Publish</Button> */}
-                  </Stack>
+            <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
+              <Stack
+                direction='row'
+                justifyContent='space-between'
+                sx={{ alignItems: 'center' }}
+              >
+                <Stack direction='row' gap={2}>
+                  <Button variant='gray' onClick={() => reset()}>
+                    Discard
+                  </Button>
+                  <LoadingButton
+                    type='submit'
+                    variant='contained'
+                    loading={saveLoading}
+                  >
+                    Save
+                  </LoadingButton>
+                  {/* <Button>Publish</Button> */}
                 </Stack>
-              </Paper>
-            )}
+              </Stack>
+            </SaveSlide>
           </Box>
         </Box>
         <FormBuilderPalette
