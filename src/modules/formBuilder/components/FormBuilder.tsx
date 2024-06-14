@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { Button, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
@@ -130,7 +130,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
   }, [getValues, blockedActionFunction, setBlockedActionFunction, onSave]);
 
   return (
-    //value={{ control, itemIdMap, getValues }}
+    // its weird that this FormProvider wraps the FormItemEditor, it doesn't need to
     <FormProvider {...rhfMethods}>
       <ConfirmationDialog
         open={!!blockedActionFunction}
@@ -174,7 +174,12 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
           onClose={() => setSelectedItem(undefined)}
         />
       )}
-      <Box display='flex'>
+      <Box
+        display='flex'
+        component='form'
+        // does this need a confirmation modal?
+        onSubmit={rhfMethods.handleSubmit(onSave)}
+      >
         <Box sx={{ flexGrow: 1 }}>
           <Box
             sx={{
@@ -228,11 +233,11 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                     <LoadingButton
                       variant='outlined'
                       loading={saveLoading}
-                      onClick={() => onSave(getValues())}
+                      type='submit'
                     >
                       Save Draft
                     </LoadingButton>
-                    <Button>Publish</Button>
+                    {/* <Button>Publish</Button> */}
                   </Stack>
                 </Stack>
               </Paper>

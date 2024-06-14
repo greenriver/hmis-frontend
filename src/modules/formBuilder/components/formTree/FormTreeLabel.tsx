@@ -5,7 +5,7 @@ import { TreeItem2Label, UseTreeItem2Parameters } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
 import React, { useCallback, useMemo } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext, useFormState } from 'react-hook-form';
 import { DownIcon, UpIcon } from '@/components/elements/SemanticIcons';
 import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
 import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
@@ -30,7 +30,9 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = (props) => {
   const { onEditButtonClicked, itemIdMap } = React.useContext(FormTreeContext);
 
   const { control, getValues } = useFormContext();
+  const { isSubmitting } = useFormState({ control });
 
+  console.log('isSubmitting?', isSubmitting);
   const itemPath = itemIdMap[itemId];
 
   const { parentPath, index: thisIndex } = getPathContext(itemPath);
@@ -174,6 +176,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = (props) => {
               e.stopPropagation();
               onEditButtonClicked(item);
             }}
+            disabled={isSubmitting}
             size='small'
             sx={{ color: (theme) => theme.palette.links, p: 0 }}
           >
@@ -181,18 +184,22 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = (props) => {
           </IconButton>
           <Stack direction='column'>
             <IconButton
+              aria-label='move item up'
               onClick={(e) => {
                 e.stopPropagation();
                 onReorder('up');
               }}
+              disabled={isSubmitting}
             >
               <UpIcon fontSize='small' />
             </IconButton>
             <IconButton
+              aria-label='move item down'
               onClick={(e) => {
                 e.stopPropagation();
                 onReorder('down');
               }}
+              disabled={isSubmitting}
             >
               <DownIcon fontSize='small' />
             </IconButton>
