@@ -174,28 +174,25 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                   )}
               </Box>
             </Paper>
-            <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
-              <Stack
-                direction='row'
-                justifyContent='space-between'
-                sx={{ alignItems: 'center' }}
-              >
-                <Stack direction='row' gap={2}>
-                  <Button variant='gray' onClick={() => reset()}>
-                    Discard
-                  </Button>
-                  <LoadingButton
-                    type='submit'
-                    variant='contained'
-                    loading={saveLoading}
-                  >
-                    Save
-                  </LoadingButton>
-                  {/* <Button>Publish</Button> */}
-                </Stack>
-              </Stack>
-            </SaveSlide>
           </Box>
+          <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
+            <Stack direction='row' justifyContent='end' alignItems='center'>
+              <Stack direction='row' gap={2}>
+                <Button variant='gray' onClick={() => reset()}>
+                  Discard Changes
+                </Button>
+                <LoadingButton
+                  type='submit'
+                  variant='contained'
+                  loading={saveLoading}
+                  sx={{ px: 4 }}
+                >
+                  Save Draft
+                </LoadingButton>
+                {/* <Button>Publish</Button> */}
+              </Stack>
+            </Stack>
+          </SaveSlide>
         </Box>
         <FormBuilderPalette
           onItemClick={(itemType) => {
