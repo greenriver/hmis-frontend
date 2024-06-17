@@ -29,13 +29,12 @@ const VersionSummary: React.FC<{ row: RowType }> = ({ row }) => {
   const timestamp = parseAndFormatDateTime(row.dateUpdated);
   const byUser = row.updatedBy ? ` by ${row.updatedBy.name}` : '';
   return (
-    <Typography variant='body1'>
+    <Typography variant='body2'>
       <RouterLink
         to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
           identifier: row.identifier,
           formId: row.id,
         })}
-        variant='body1'
       >
         {verb}
       </RouterLink>
