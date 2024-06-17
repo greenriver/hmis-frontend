@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 
 import { useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -6,12 +6,14 @@ import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
+import { getReferralFilter } from '@/modules/referrals/referralUtil';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetDeniedPendingReferralPostingsDocument,
   GetDeniedPendingReferralPostingsQuery,
   GetDeniedPendingReferralPostingsQueryVariables,
   ReferralPostingFieldsFragment,
+  ReferralPostingStatus,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -39,6 +41,7 @@ const AdminReferralDenials = () => {
         render: (row: ReferralPostingFieldsFragment) =>
           parseAndFormatDate(row.referralDate),
       },
+
       {
         header: 'Project',
         render: (row: ReferralPostingFieldsFragment) =>
@@ -60,11 +63,21 @@ const AdminReferralDenials = () => {
       },
       {
         header: 'Denied By',
-        render: (row: ReferralPostingFieldsFragment) => row.statusUpdatedBy,
+        render: (row: ReferralPostingFieldsFragment) => {
+          return (
+            <Typography variant='body2'>
+              {row.status === ReferralPostingStatus.DeniedPendingStatus
+                ? 'Denied '
+                : 'Denial Approved '}
+              by {row.statusUpdatedBy}
+            </Typography>
+          );
+        },
       },
     ],
     [externalReferrals]
   );
+
   return (
     <>
       <PageTitle title='Denials' />
@@ -81,6 +94,15 @@ const AdminReferralDenials = () => {
           pagePath='deniedPendingReferralPostings'
           rowLinkTo={rowLinkTo}
           defaultPageSize={25}
+          filters={{
+            status: getReferralFilter([
+              ReferralPostingStatus.DeniedPendingStatus,
+              ReferralPostingStatus.DeniedStatus,
+            ]),
+          }}
+          defaultFilterValues={{
+            status: [ReferralPostingStatus.DeniedPendingStatus],
+          }}
         />
       </Paper>
     </>

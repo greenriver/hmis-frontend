@@ -4,6 +4,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
+import { getReferralFilter } from '@/modules/referrals/referralUtil';
 import {
   EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
@@ -13,6 +14,7 @@ import {
   GetProjectOutgoingReferralPostingsDocument,
   GetProjectOutgoingReferralPostingsQuery,
   GetProjectOutgoingReferralPostingsQueryVariables,
+  ReferralPostingStatus,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -107,6 +109,15 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
       columns={columns}
       noData='No referrals'
       pagePath='project.outgoingReferralPostings'
+      filters={{
+        status: getReferralFilter([
+          ReferralPostingStatus.AssignedStatus,
+          ReferralPostingStatus.AcceptedPendingStatus,
+          ReferralPostingStatus.DeniedPendingStatus,
+          ReferralPostingStatus.AcceptedStatus,
+        ]),
+      }}
+      defaultPageSize={15}
     />
   );
 };
