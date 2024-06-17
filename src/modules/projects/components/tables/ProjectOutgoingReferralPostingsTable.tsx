@@ -115,9 +115,11 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
           ReferralPostingStatus.AcceptedPendingStatus,
           ReferralPostingStatus.DeniedPendingStatus,
           ReferralPostingStatus.AcceptedStatus,
+          ReferralPostingStatus.DeniedStatus,
         ]),
       }}
       defaultPageSize={15}
+      paginationItemName='outgoing referral'
     />
   );
 };

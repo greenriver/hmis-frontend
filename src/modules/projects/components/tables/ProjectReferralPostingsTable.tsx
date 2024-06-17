@@ -111,6 +111,7 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
           ReferralPostingStatus.AcceptedPendingStatus,
         ],
       }}
+      paginationItemName='incoming referral'
     />
   );
 };
