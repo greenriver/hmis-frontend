@@ -112,13 +112,14 @@ export const FORM_ITEM_PALETTE = {
   },
 };
 
-const PaletteCard: React.FC<FormItemPaletteType> = ({
+const PaletteCard: React.FC<FormItemPaletteType & { onClick: () => void }> = ({
   displayName,
   IconClass,
   backgroundColor,
+  onClick,
 }) => {
   return (
-    <Card sx={{ p: 2, backgroundColor: backgroundColor }}>
+    <Card sx={{ p: 2, backgroundColor: backgroundColor }} onClick={onClick}>
       <Stack gap={1} direction='row'>
         <IconClass />
         {displayName}
@@ -127,7 +128,13 @@ const PaletteCard: React.FC<FormItemPaletteType> = ({
   );
 };
 
-const FormBuilderPalette = () => {
+interface FormBuilderPaletteType {
+  onItemClick: (itemType: ItemType) => void;
+}
+
+const FormBuilderPalette: React.FC<FormBuilderPaletteType> = ({
+  onItemClick,
+}) => {
   // TODO - control drawer open and close - TBD if we will just leave it open, discuss w/ design
   // const [drawerOpen, setDrawerOpen] = useState(true);
   const drawerWidth = 240;
@@ -164,7 +171,11 @@ const FormBuilderPalette = () => {
       </Tabs>
       <Stack gap={1}>
         {Object.entries(FORM_ITEM_PALETTE).map(([key, paletteItem]) => (
-          <PaletteCard key={key} {...paletteItem} />
+          <PaletteCard
+            key={key}
+            {...paletteItem}
+            onClick={() => onItemClick(paletteItem.itemType)}
+          />
         ))}
       </Stack>
     </Drawer>

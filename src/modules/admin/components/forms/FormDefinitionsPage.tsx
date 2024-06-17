@@ -15,7 +15,6 @@ import {
   MutationCreateFormDefinitionArgs,
   StaticFormRole,
 } from '@/types/gqlTypes';
-import { evictQuery } from '@/utils/cacheUtil';
 
 const FormDefinitionsPage = () => {
   const navigate = useNavigate();
@@ -35,7 +34,6 @@ const FormDefinitionsPage = () => {
     getVariables: (values) => ({ input: values as FormDefinitionInput }),
     onCompleted: (data) => {
       const identifier = data?.createFormDefinition?.formDefinition?.identifier;
-      evictQuery('formDefinitions');
       if (identifier)
         navigate(generatePath(AdminDashboardRoutes.VIEW_FORM, { identifier }));
     },

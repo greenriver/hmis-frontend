@@ -1,15 +1,21 @@
-import { Stack, Typography } from '@mui/material';
-import { useMemo } from 'react';
+import { LoadingButton } from '@mui/lab';
+import { Button, Stack, Typography } from '@mui/material';
+import { startCase } from 'lodash-es';
+import { useMemo, useState } from 'react';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import { ErrorState } from '@/modules/errors/util';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { isPickListOption } from '@/modules/form/types';
 import {
   localResolvePickList,
   MAX_INPUT_AND_LABEL_WIDTH,
 } from '@/modules/form/util/formUtil';
+import { validComponentsForType } from '@/modules/formBuilder/components/formBuilderUtil';
 import {
   AssessmentRole,
+  Component,
   FormDefinitionFieldsForEditorFragment,
   FormItem,
   ItemType,
@@ -25,16 +31,36 @@ interface FormEditorItemPropertiesProps {
   item: FormItem;
   definition: FormDefinitionFieldsForEditorFragment;
   onChangeProperty: (attr: keyof FormItem, newProperty: any) => void;
+  saveLoading: boolean;
+  onSave: (item: FormItem, initialLinkId: string) => void;
+  errorState?: ErrorState;
+  onDiscard: () => void;
 }
 
 const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   item,
   definition,
   onChangeProperty,
+  saveLoading,
+  errorState,
+  onSave,
+  onDiscard,
 }) => {
   const isAssessment = useMemo(
     () => (Object.values(AssessmentRole) as [string]).includes(definition.role),
     [definition.role]
+  );
+  const [initialLinkId] = useState<string>(item.linkId);
+
+  const componentOverridePicklist = useMemo(
+    () =>
+      validComponentsForType(item.type).map((component) => {
+        return {
+          code: component,
+          label: startCase(component.toLowerCase()),
+        };
+      }),
+    [item.type]
   );
 
   return (
@@ -48,6 +74,19 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         }}
         sx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
       >
+        {componentOverridePicklist.length > 0 && (
+          <FormSelect
+            label='Component Override'
+            value={item.component ? { code: item.component } : null}
+            options={componentOverridePicklist}
+            onChange={(_e, value) => {
+              onChangeProperty(
+                'component',
+                isPickListOption(value) ? value.code : null
+              );
+            }}
+          />
+        )}
         <TextInput
           label='Link ID'
           value={item.linkId}
@@ -189,23 +228,68 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             }}
           />
         )}
-        {[ItemType.Choice, ItemType.OpenChoice].includes(item.type) && (
-          <FormSelect
-            label='Pick list reference'
-            value={
-              pickListTypesPickList.find(
-                (o) => o.code === item.pickListReference
-              ) || undefined
-            }
-            options={pickListTypesPickList}
-            onChange={(_e, value) => {
+        {([ItemType.Choice, ItemType.OpenChoice].includes(item.type) ||
+          (item.type === ItemType.Object &&
+            item.component === Component.Address)) && (
+          <LabeledCheckbox
+            label='Allow multiple responses'
+            checked={item.repeats}
+            onChange={(e) =>
               onChangeProperty(
-                'pickListReference',
-                isPickListOption(value) ? value.code : undefined
-              );
-            }}
+                'repeats',
+                (e.target as HTMLInputElement).checked
+              )
+            }
           />
         )}
+        {[ItemType.Choice, ItemType.OpenChoice].includes(item.type) && (
+          <>
+            <TextInput
+              label='Allowed Responses'
+              value={item.pickListOptions?.map((o) => o.code).join(',')}
+              onChange={(e) => {
+                onChangeProperty(
+                  'pickListOptions',
+                  e.target.value.split(',').map((o) => {
+                    return { code: o };
+                  })
+                );
+              }}
+            />
+            <FormSelect
+              label='Reference list for allowed responses'
+              value={
+                pickListTypesPickList.find(
+                  (o) => o.code === item.pickListReference
+                ) || undefined
+              }
+              options={pickListTypesPickList}
+              onChange={(_e, value) => {
+                onChangeProperty(
+                  'pickListReference',
+                  isPickListOption(value) ? value.code : undefined
+                );
+              }}
+            />
+          </>
+        )}
+        {errorState?.errors && errorState.errors.length > 0 && (
+          <Stack gap={1} sx={{ mt: 4 }}>
+            <ErrorAlert key='errors' errors={errorState.errors} />
+          </Stack>
+        )}
+        <Stack direction='row' gap={2}>
+          <LoadingButton
+            variant='outlined'
+            loading={saveLoading}
+            onClick={() => onSave(item, initialLinkId)}
+          >
+            Save Draft
+          </LoadingButton>
+          <Button variant='outlined' onClick={onDiscard}>
+            Discard
+          </Button>
+        </Stack>
       </Stack>
     </>
   );

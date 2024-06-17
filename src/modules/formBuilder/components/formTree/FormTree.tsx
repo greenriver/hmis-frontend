@@ -3,14 +3,18 @@ import React, { useMemo } from 'react';
 import Loading from '@/components/elements/Loading';
 import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
 import FormTreeItem from '@/modules/formBuilder/components/formTree/FormTreeItem';
-import { getItemsForTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
+import {
+  FormItemForTree,
+  getItemFromTree,
+  getItemsForTree,
+} from '@/modules/formBuilder/components/formTree/formTreeUtil';
 import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
 interface FormTreeProps {
   definition: FormDefinitionJson;
-  setSelectedItem: (item: FormItem) => void;
+  onEditClick: (item: FormItem) => void;
 }
-const FormTree: React.FC<FormTreeProps> = ({ definition, setSelectedItem }) => {
+const FormTree: React.FC<FormTreeProps> = ({ definition, onEditClick }) => {
   const definitionForTree = useMemo(
     () => getItemsForTree(definition),
     [definition]
@@ -18,9 +22,11 @@ const FormTree: React.FC<FormTreeProps> = ({ definition, setSelectedItem }) => {
 
   const context = React.useMemo(
     () => ({
-      onEditButtonClicked: setSelectedItem,
+      onEditButtonClicked: (item: FormItemForTree) => {
+        onEditClick(getItemFromTree(item));
+      },
     }),
-    [setSelectedItem]
+    [onEditClick]
   );
 
   if (!definition) return <Loading />;
