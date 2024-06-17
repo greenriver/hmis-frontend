@@ -56,7 +56,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
 
   const labelProps = getLabelProps();
 
-  const { onReorder, itemPath, canMoveUp, canMoveDown } = useReorderItem(
+  const { onReorder, canMoveUp, canMoveDown } = useReorderItem(
     control,
     itemId,
     item
@@ -81,7 +81,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           <Typography>{displayAttrs.displayName}:</Typography>
           {labelProps.children}
           {item.required && <Typography color='red'>*</Typography>}
-          {<Typography sx={{ color: 'red' }}>{itemPath}</Typography>}
+          {/* {<Typography sx={{ color: 'red' }}>{itemPath}</Typography>} */}
           <IconButton
             aria-label='edit item'
             onClick={(e) => {
@@ -94,7 +94,10 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           >
             <EditIcon fontSize='inherit' />
           </IconButton>
-          <Stack direction='column'>
+          <Stack
+            direction='column'
+            sx={{ '.MuiIconButton-root': { height: '24px', width: '24px' } }}
+          >
             <IconButton
               aria-label='move item up'
               onClick={(e) => {
@@ -103,7 +106,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
               }}
               disabled={isSubmitting || !canMoveUp}
             >
-              <UpIcon fontSize='small' />
+              <UpIcon />
             </IconButton>
             <IconButton
               aria-label='move item down'
@@ -113,7 +116,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
               }}
               disabled={isSubmitting || !canMoveDown}
             >
-              <DownIcon fontSize='small' />
+              <DownIcon />
             </IconButton>
           </Stack>
         </Stack>
