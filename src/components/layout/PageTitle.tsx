@@ -25,7 +25,9 @@ const PageTitle = ({
       }}
     >
       {typeof title === 'string' ? (
-        <Typography variant='h3'>{title}</Typography>
+        <Typography variant='h3' component='h1'>
+          {title}
+        </Typography>
       ) : (
         title
       )}

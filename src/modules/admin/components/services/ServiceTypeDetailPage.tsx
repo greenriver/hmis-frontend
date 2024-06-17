@@ -44,7 +44,7 @@ const ServiceTypeDetailPage = () => {
       <PageTitle
         title={
           <Stack direction='row' gap={1} key={data.serviceType.name}>
-            <Typography variant='h3'>
+            <Typography variant='h3' component='h1'>
               Manage Service: <b>{data.serviceType.name}</b>
             </Typography>
             <IconButton
