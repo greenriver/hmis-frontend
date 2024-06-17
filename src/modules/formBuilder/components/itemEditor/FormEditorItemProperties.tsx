@@ -76,6 +76,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     setValue,
     handleSubmit,
     watch,
+    // TODO: disable interaction with form while formState.isSubmitting
     formState: { isDirty, dirtyFields },
   } = handlers;
 

@@ -1,72 +1,126 @@
-import { Badge, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import { IconButton, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { TreeItem2Label } from '@mui/x-tree-view';
-import React from 'react';
-import theme from '@/config/theme';
+import { TreeItem2Label, UseTreeItem2Parameters } from '@mui/x-tree-view';
+import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
+import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
+import React, { useMemo } from 'react';
+import { useFormContext, useFormState } from 'react-hook-form';
+import useReorderItem from './useReorderItem';
+import { DownIcon, UpIcon } from '@/components/elements/SemanticIcons';
+import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
+import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
+import { getItemFromTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
 import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
+import { ItemType } from '@/types/gqlTypes';
 
-interface FormTreeLabelProps {
-  children?: React.ReactNode;
-  displayAttrs?: FormItemPaletteType;
-  required?: boolean;
+export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
+  return FORM_ITEM_PALETTE[type];
+};
+
+export interface FormTreeLabelProps
+  extends UseTreeItem2LabelSlotProps,
+    Omit<UseTreeItem2Parameters, 'children'> {
+  itemId: string;
 }
+
 const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
-  displayAttrs,
+  id,
+  itemId,
+  label,
+  disabled,
   children,
-  required,
-  ...other
 }) => {
+  const { openFormItemEditor } = React.useContext(FormTreeContext);
+
+  const { control } = useFormContext();
+  const { isSubmitting } = useFormState({ control });
+
+  const { getLabelProps, publicAPI } = useTreeItem2({
+    id,
+    itemId,
+    children,
+    label,
+    disabled,
+  });
+
+  // we could get this from the form instead of from the tree api
+  const treeItem = publicAPI.getItem(itemId);
+  const item = useMemo(() => getItemFromTree(treeItem), [treeItem]);
+
+  const displayAttrs = useMemo(
+    () => getItemDisplayAttrs(item.type),
+    [item.type]
+  );
+
+  const labelProps = getLabelProps();
+
+  const { onReorder, canMoveUp, canMoveDown } = useReorderItem(
+    control,
+    itemId,
+    item
+  );
+
   return (
     <TreeItem2Label
-      {...other}
+      key={itemId}
       sx={{
         display: 'flex',
         alignItems: 'center',
+        fontWeight: 600,
       }}
     >
       {displayAttrs && (
-        <Badge
-          invisible={!required}
-          badgeContent={'*'}
-          sx={{
-            '& .MuiBadge-badge': {
-              fontWeight: 700,
-              color: theme.palette.error.main,
-              backgroundColor: theme.palette.background.default,
-              borderStyle: 'solid',
-              borderWidth: 1,
-              borderColor: theme.palette.borders.dark,
-              transform: 'scale(1) translate(-30%, -30%)',
-              // TODO: weird visual interaction with required badge when the Tree elements are expanded/contracted
-            },
-          }}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-        >
-          <Stack
-            sx={{
-              width: 90,
-              alignItems: 'center',
-              borderRadius: '4px 0 0 4px',
-              mr: 2,
-              p: 1, // TODO - This styling is inflexible, looks bad when the label text is long
+        <Stack direction='row' gap={1} alignItems='center'>
+          <Box
+            component={displayAttrs.IconClass}
+            className='labelIcon'
+            color='inherit'
+            sx={{ fontSize: '1.2rem' }}
+          />
+          <Typography>{displayAttrs.displayName}:</Typography>
+          {labelProps.children}
+          {item.required && <Typography color='red'>*</Typography>}
+          {/* {<Typography sx={{ color: 'red' }}>{itemPath}</Typography>} */}
+          <IconButton
+            aria-label='edit item'
+            onClick={(e) => {
+              e.stopPropagation();
+              openFormItemEditor(item);
             }}
+            disabled={isSubmitting}
+            size='small'
+            sx={{ ml: 2, color: (theme) => theme.palette.links }}
           >
-            <Box
-              component={displayAttrs.IconClass}
-              className='labelIcon'
-              color='inherit'
-              sx={{ fontSize: '1.2rem' }}
-            />
-            <Typography variant='caption'>
-              {displayAttrs.displayName}
-            </Typography>
+            <EditIcon fontSize='inherit' />
+          </IconButton>
+          <Stack
+            direction='column'
+            sx={{ '.MuiIconButton-root': { height: '24px', width: '24px' } }}
+          >
+            <IconButton
+              aria-label='move item up'
+              onClick={(e) => {
+                e.stopPropagation();
+                onReorder('up');
+              }}
+              disabled={isSubmitting || !canMoveUp}
+            >
+              <UpIcon />
+            </IconButton>
+            <IconButton
+              aria-label='move item down'
+              onClick={(e) => {
+                e.stopPropagation();
+                onReorder('down');
+              }}
+              disabled={isSubmitting || !canMoveDown}
+            >
+              <DownIcon />
+            </IconButton>
           </Stack>
-        </Badge>
+        </Stack>
       )}
-      {children}
     </TreeItem2Label>
   );
 };
