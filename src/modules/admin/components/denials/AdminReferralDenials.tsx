@@ -100,6 +100,7 @@ const AdminReferralDenials = () => {
           defaultFilterValues={{
             status: [ReferralPostingStatus.DeniedPendingStatus],
           }}
+          paginationItemName='denied referral'
         />
       </Paper>
     </>
