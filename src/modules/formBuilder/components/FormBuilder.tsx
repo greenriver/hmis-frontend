@@ -1,5 +1,7 @@
 import { LoadingButton } from '@mui/lab';
-import { Button, Typography } from '@mui/material';
+
+import { Button, Divider, Paper, Typography } from '@mui/material';
+
 import { Box, Stack } from '@mui/system';
 import React, { useCallback, useState } from 'react';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
@@ -137,36 +139,41 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               px: { xs: 1, sm: 3, lg: 4 },
             }}
           >
-            <FormBuilderHeader
-              formDefinition={formDefinition}
-              onClickPreview={onClickPreview}
-            />
-            <Box sx={{ p: 4 }}>
-              {/* <div>{isDirty ? 'DIRTY' : 'NOT DIRTY'}</div> */}
-              <FormTree
-                onEditClick={(item: FormItem) => {
-                  function editItem() {
-                    setSelectedItem(item);
-                  }
+            <Paper sx={{ p: 2 }}>
+              <Box sx={{ px: 2, pt: 1, pb: 4 }}>
+                <FormBuilderHeader
+                  formDefinition={formDefinition}
+                  onClickPreview={onClickPreview}
+                />
+              </Box>
+              <Divider />
+              <Box sx={{ p: 2 }}>
+                {/* <div>{isDirty ? 'DIRTY' : 'NOT DIRTY'}</div> */}
+                <FormTree
+                  onEditClick={(item: FormItem) => {
+                    function editItem() {
+                      setSelectedItem(item);
+                    }
 
-                  if (isDirty) {
-                    // React's useState accepts either a value or a function that yields a value.
-                    // In this case, we want the function itself to *be* the state value, which is the reason
-                    // for defining `editItem` above instead of simply using `() => setSelectedItem(item)` here.
-                    setBlockedActionFunction(() => editItem);
-                  } else {
-                    setSelectedItem(item);
-                  }
-                }}
-              />
-              {errorState?.errors &&
-                errorState.errors.length > 0 &&
-                !selectedItem && (
-                  <Stack gap={1} sx={{ mt: 4 }}>
-                    <ErrorAlert key='errors' errors={errorState.errors} />
-                  </Stack>
-                )}
-            </Box>
+                    if (isDirty) {
+                      // React's useState accepts either a value or a function that yields a value.
+                      // In this case, we want the function itself to *be* the state value, which is the reason
+                      // for defining `editItem` above instead of simply using `() => setSelectedItem(item)` here.
+                      setBlockedActionFunction(() => editItem);
+                    } else {
+                      setSelectedItem(item);
+                    }
+                  }}
+                />
+                {errorState?.errors &&
+                  errorState.errors.length > 0 &&
+                  !selectedItem && (
+                    <Stack gap={1} sx={{ mt: 4 }}>
+                      <ErrorAlert key='errors' errors={errorState.errors} />
+                    </Stack>
+                  )}
+              </Box>
+            </Paper>
             <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
               <Stack
                 direction='row'

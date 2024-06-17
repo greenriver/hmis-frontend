@@ -1,5 +1,5 @@
 import CodeIcon from '@mui/icons-material/Code';
-import { Grid, Stack, Typography } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 
 import { generatePath } from 'react-router-dom';
 import FormRuleCard from '../formRules/FormRuleCard';
@@ -7,6 +7,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
+import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditFormButton, {
   FormEditorType,
@@ -30,15 +31,14 @@ const FormDefinitionDetailPage = () => {
   if (error) throw error;
   if (!formIdentifier) return <Loading />;
 
+  //TODO show status
   return (
     <>
       <Stack gap={2}>
-        <Typography variant='h3' component='h1'>
-          <Typography variant='overline' color='links' display='block'>
-            Selected Form
-          </Typography>
-          {formIdentifier.displayVersion.title}
-        </Typography>
+        <PageTitle
+          overlineText='Selected Form'
+          title={formIdentifier.displayVersion.title}
+        />
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             <CommonCard title='Form Details'>

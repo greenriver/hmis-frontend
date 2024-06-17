@@ -10,6 +10,7 @@ import {
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
 import PageTitle from '@/components/layout/PageTitle';
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
@@ -121,9 +122,17 @@ const FormPreview = () => {
   if (loading && !formDefinition) return <Loading />;
   if (error) throw error;
 
+  if (!formDefinition) return <NotFound />;
   return (
     <>
-      <PageTitle title={`Preview Form: ${formDefinition?.title}`} />
+      <PageTitle
+        title={formDefinition.title}
+        overlineText={
+          formDefinition.status === FormStatus.Draft
+            ? 'Previewing Draft'
+            : 'Previewing Form'
+        }
+      />
       <Stack direction='row' justifyContent='space-between' sx={{ mb: 4 }}>
         <CommonToggle
           value={toggleValue}
@@ -136,7 +145,7 @@ const FormPreview = () => {
           variant='gray'
         />
 
-        {formDefinition?.status === FormStatus.Draft && (
+        {formDefinition.status === FormStatus.Draft && (
           <RootPermissionsFilter permissions='canManageForms'>
             <Button onClick={() => setConfirmOpen(true)}>Publish</Button>
             <ConfirmationDialog
