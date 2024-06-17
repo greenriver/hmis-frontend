@@ -1,13 +1,10 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Button, Grid, IconButton, Paper, Typography } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React, { useMemo } from 'react';
+import React from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { EditIcon } from '@/components/elements/SemanticIcons';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
-import FormOptionsMenu from '@/modules/formBuilder/components/FormOptionsMenu';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionInput,
@@ -26,11 +23,6 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
   formDefinition,
   onClickPreview,
 }) => {
-  const formRole = useMemo(
-    () => (formDefinition?.role ? HmisEnums.FormRole[formDefinition.role] : ''),
-    [formDefinition]
-  );
-
   // Dialog for updating form definitions
   const { openFormDialog: openEditDialog, renderFormDialog: renderEditDialog } =
     useStaticFormDialog<
@@ -51,10 +43,15 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
   return (
     <>
       {renderEditDialog({ title: 'Edit Form Details' })}
-      <Paper sx={{ p: 4 }}>
-        <Typography sx={{ mb: 2 }} variant='h2'>
+      <Stack
+        direction='row'
+        spacing={2}
+        justifyContent='space-between'
+        alignItems='end'
+      >
+        <Typography sx={{ mb: 2 }} variant='h2' component='h1'>
           <Typography variant='overline' color='links' display='block'>
-            Editing Form
+            Editing Draft
           </Typography>
           {formDefinition.title}
           <ButtonTooltipContainer title='Edit Title'>
@@ -68,30 +65,16 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
             </IconButton>
           </ButtonTooltipContainer>
         </Typography>
-        <Stack direction='row' sx={{ alignItems: 'center' }}>
-          <Grid container columnGap={4} rowGap={2}>
-            <CommonLabeledTextBlock title='Form Identifier'>
-              {formDefinition.identifier}
-            </CommonLabeledTextBlock>
-            <CommonLabeledTextBlock title='Form Type'>
-              {formRole}
-            </CommonLabeledTextBlock>
-            <CommonLabeledTextBlock title='Status'>
-              {formDefinition.status}
-            </CommonLabeledTextBlock>
-          </Grid>
-          <Stack direction='row' spacing={2}>
-            <Button
-              variant='outlined'
-              startIcon={<VisibilityIcon />}
-              onClick={onClickPreview}
-            >
-              Preview
-            </Button>
-            <FormOptionsMenu />
-          </Stack>
-        </Stack>
-      </Paper>
+
+        <Button
+          variant='text'
+          startIcon={<VisibilityIcon />}
+          onClick={onClickPreview}
+          sx={{ height: 'fit-content' }}
+        >
+          Preview / Publish
+        </Button>
+      </Stack>
     </>
   );
 };

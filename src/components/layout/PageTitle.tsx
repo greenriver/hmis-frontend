@@ -4,9 +4,11 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 
 const PageTitle = ({
   title,
+  overlineText,
   actions,
 }: {
   title: ReactNode;
+  overlineText?: string;
   actions?: ReactNode;
 }) => {
   const isTiny = useIsMobile('sm');
@@ -26,6 +28,11 @@ const PageTitle = ({
     >
       {typeof title === 'string' ? (
         <Typography variant='h3' component='h1'>
+          {overlineText ? (
+            <Typography variant='overline' color='links' display='block'>
+              {overlineText}
+            </Typography>
+          ) : null}
           {title}
         </Typography>
       ) : (
