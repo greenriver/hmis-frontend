@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@mui/material';
+import { Paper } from '@mui/material';
 
 import { useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -64,14 +64,11 @@ const AdminReferralDenials = () => {
       {
         header: 'Denied By',
         render: (row: ReferralPostingFieldsFragment) => {
-          return (
-            <Typography variant='body2'>
-              {row.status === ReferralPostingStatus.DeniedPendingStatus
-                ? 'Denied '
-                : 'Denial Approved '}
-              by {row.statusUpdatedBy}
-            </Typography>
-          );
+          const action =
+            row.status === ReferralPostingStatus.DeniedPendingStatus
+              ? 'Denied by '
+              : 'Denial Approved by ';
+          return `${action}${row.statusUpdatedBy}`;
         },
       },
     ],
