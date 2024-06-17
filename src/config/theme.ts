@@ -480,6 +480,17 @@ const createThemeOptions = (theme: Theme) => ({
         },
       },
     },
+    MuiTreeItem2: {
+      styleOverrides: {
+        root: {
+          '.MuiTreeItem-groupTransition': {
+            marginLeft: 15,
+            paddingLeft: 18,
+            borderLeft: `2px solid ${theme.palette.borders.dark}`,
+          },
+        },
+      },
+    },
   },
 });
 

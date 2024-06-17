@@ -71,7 +71,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
       key={itemId} // does this need to be path for remounting to work right?
     >
       {displayAttrs && (
-        <Stack direction='row' gap={1}>
+        <Stack direction='row' gap={1} alignItems='center'>
           <Box
             component={displayAttrs.IconClass}
             className='labelIcon'
@@ -90,7 +90,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
             }}
             disabled={isSubmitting}
             size='small'
-            sx={{ color: (theme) => theme.palette.links, p: 0 }}
+            sx={{ ml: 2, color: (theme) => theme.palette.links }}
           >
             <EditIcon fontSize='inherit' />
           </IconButton>
