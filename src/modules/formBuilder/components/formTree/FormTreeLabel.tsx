@@ -66,6 +66,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
       sx={{
         display: 'flex',
         alignItems: 'center',
+        fontWeight: 600,
       }}
       key={itemId} // does this need to be path for remounting to work right?
     >
