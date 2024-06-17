@@ -1,4 +1,4 @@
-import { cloneDeep, get, kebabCase } from 'lodash-es';
+import { cloneDeep, get, kebabCase, set } from 'lodash-es';
 import {
   Component,
   FormDefinitionJson,
@@ -200,6 +200,17 @@ export const insertItemToDefinition = ({
 }) => {
   // Get the array
   const newParentArray = get(definition, insertPath);
-  // Insert the item
-  return newParentArray.splice(insertAtIndex, 0, item);
+  if (!newParentArray) {
+    // If array doesn't exist, this might be a new Group item that doesn't have children yet.
+    // Raise unless its a Group item.
+    const parentItem = get(definition, insertPath.replace(/\.item$/, ''));
+    if (!parentItem || parentItem.type !== ItemType.Group) {
+      throw new Error('Can only insert item into a Group item');
+    }
+    // Insert the item into a new array
+    set(definition, insertPath, [item]);
+  } else {
+    // Insert the item
+    newParentArray.splice(insertAtIndex, 0, item);
+  }
 };

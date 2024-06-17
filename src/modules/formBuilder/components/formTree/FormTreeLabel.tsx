@@ -63,11 +63,12 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
 
   return (
     <TreeItem2Label
+      key={itemId}
       sx={{
         display: 'flex',
         alignItems: 'center',
+        fontWeight: 600,
       }}
-      key={itemId} // does this need to be path for remounting to work right?
     >
       {displayAttrs && (
         <Stack direction='row' gap={1} alignItems='center'>
