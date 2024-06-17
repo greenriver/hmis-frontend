@@ -73,7 +73,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
 
   const goToPreview = useCallback(() => {
     navigate(
-      generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
+      generatePath(AdminDashboardRoutes.PREVIEW_FORM_DRAFT, {
         identifier: formDefinition.identifier,
         formId: formDefinition.id,
       })
