@@ -1,9 +1,9 @@
-import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
+import { FormItem } from '@/types/gqlTypes';
 
 export type FormItemForTree = FormItem & { children: FormItemForTree[] };
 
-export const getItemsForTree = (definition: FormDefinitionJson) => {
-  if (!definition) return [];
+export const getItemsForTree = (items: FormItem[]) => {
+  if (!items) return [];
 
   // TODO(#6084): Consolidate functional groups that shouldn't appear as nested in the UI, like SSN
   function recur(items: FormItem[]): FormItemForTree[] {
@@ -20,7 +20,7 @@ export const getItemsForTree = (definition: FormDefinitionJson) => {
     return newItems;
   }
 
-  return recur(definition.item);
+  return recur(items);
 };
 
 export const getItemFromTree = (item: FormItemForTree): FormItem => {

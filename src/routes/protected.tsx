@@ -781,6 +781,14 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            path: AdminDashboardRoutes.PREVIEW_FORM_DRAFT,
+            element: (
+              <RootPermissionsFilter permissions='canConfigureDataCollection'>
+                <FormPreview />
+              </RootPermissionsFilter>
+            ),
+          },
+          {
             path: AdminDashboardRoutes.CONFIGURE_SERVICES,
             element: (
               <RootPermissionsFilter permissions='canConfigureDataCollection'>
