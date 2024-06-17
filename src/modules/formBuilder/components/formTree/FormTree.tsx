@@ -9,9 +9,8 @@ import { FormItem } from '@/types/gqlTypes';
 
 interface FormTreeProps {
   onEditClick: (item: FormItem) => void;
-  itemIdMap: Record<string, string>;
 }
-const FormTree: React.FC<FormTreeProps> = ({ onEditClick, itemIdMap }) => {
+const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
   const { control } = useFormContext();
   const items = useWatch({ name: 'item', control });
 
@@ -19,12 +18,11 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick, itemIdMap }) => {
 
   const context = React.useMemo(
     () => ({
-      onEditButtonClicked: (item: FormItem) => {
+      openFormItemEditor: (item: FormItem) => {
         onEditClick(item);
       },
-      itemIdMap,
     }),
-    [onEditClick, itemIdMap]
+    [onEditClick]
   );
 
   if (!items) return <Loading />;

@@ -1,7 +1,7 @@
 import { LoadingButton } from '@mui/lab';
 import { Button, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { generatePath, useNavigate } from 'react-router-dom';
 
@@ -15,8 +15,6 @@ import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeade
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
 import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
-
-import { getItemIdMap } from '@/modules/formBuilder/formBuilderUtil';
 
 import { AdminDashboardRoutes } from '@/routes/routes';
 
@@ -35,24 +33,36 @@ interface FormBuilderProps {
 const FormBuilder: React.FC<FormBuilderProps> = ({
   formDefinition, // initial values for form definition
 }) => {
+  const navigate = useNavigate();
+  // React-hook-forms method for the form structure (reordering items)
   const rhfMethods = useForm<FormDefinitionJson>({
     defaultValues: formDefinition.definition,
   });
-
-  const { control, getValues, reset } = rhfMethods;
+  const { control, reset } = rhfMethods;
+  const { isDirty } = useFormState({ control });
 
   // The selected item is the one that is open for editing in the drawer
   const [selectedItem, setSelectedItem] = useState<FormItem | undefined>(
     undefined
   );
 
+  // Function that is currently blocked from executing due to unsaved changes
+  const [blockedActionFunction, setBlockedActionFunction] = useState<
+    VoidFunction | undefined
+  >(undefined);
+
   // onSuccess callback used for both submissions (item drawer + form tree updates)
   const onSuccess = useCallback(
     (updatedForm: FormDefinitionJson) => {
+      // Reset form state to the updated form definition
       reset(updatedForm);
+      // De-select the current item. (Only relevant for item editor drawer)
       setSelectedItem(undefined);
+      // If there is a blocked action, execute it now. (Not relevant for item editor drawer)
+      if (blockedActionFunction) blockedActionFunction();
+      setBlockedActionFunction(undefined);
     },
-    [reset]
+    [reset, blockedActionFunction]
   );
 
   const {
@@ -60,16 +70,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
     loading: saveLoading,
     errorState,
   } = useUpdateForm({ formId: formDefinition.id, onSuccess });
-
-  const itemIdMap = useMemo(() => getItemIdMap(getValues().item), [getValues]);
-
-  const { isDirty } = useFormState({ control });
-
-  const [blockedActionFunction, setBlockedActionFunction] = useState<
-    VoidFunction | undefined
-  >(undefined);
-
-  const navigate = useNavigate();
 
   const goToPreview = useCallback(() => {
     navigate(
@@ -88,18 +88,10 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
     }
   }, [setBlockedActionFunction, isDirty, goToPreview]);
 
-  const onConfirmSave = useCallback(() => {
-    // RHF has its own submit hooks that include validation, but we aren't using them here,
-    // because reordering form items doesn't need validation.
-    // (We could change this once we implement deletion of form items)
-    updateForm(getValues()).then(() => {
-      if (blockedActionFunction) blockedActionFunction();
-      setBlockedActionFunction(undefined);
-    });
-  }, [getValues, blockedActionFunction, setBlockedActionFunction, updateForm]);
-
   return (
-    // its weird that this FormProvider wraps the FormItemEditor, it doesn't need to
+    // This FormProvider provides the form context for the Form Tree,
+    // which is modified by clicking up an down arrows to reorder items.
+    // It is NOT used by the Form Item Editor, which has its own separate form context and submission process.
     <FormProvider {...rhfMethods}>
       <ConfirmationDialog
         open={!!blockedActionFunction}
@@ -107,7 +99,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         confirmText='Save changes'
         cancelText='Continue editing'
         title='Unsaved changes'
-        onConfirm={onConfirmSave}
+        onConfirm={rhfMethods.handleSubmit(updateForm)}
         onCancel={() => setBlockedActionFunction(undefined)}
         maxWidth='sm'
         fullWidth
@@ -132,7 +124,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
       <Box
         display='flex'
         component='form'
-        // does this need a confirmation modal?
         onSubmit={rhfMethods.handleSubmit(updateForm)}
       >
         <Box sx={{ flexGrow: 1 }}>
@@ -151,7 +142,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               onClickPreview={onClickPreview}
             />
             <Box sx={{ p: 4 }}>
-              <div>{isDirty ? 'DIRTY' : 'NOT DIRTY'}</div>
+              {/* <div>{isDirty ? 'DIRTY' : 'NOT DIRTY'}</div> */}
               <FormTree
                 onEditClick={(item: FormItem) => {
                   function editItem() {
@@ -167,7 +158,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                     setSelectedItem(item);
                   }
                 }}
-                itemIdMap={itemIdMap}
               />
               {errorState?.errors &&
                 errorState.errors.length > 0 &&

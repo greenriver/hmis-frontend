@@ -31,8 +31,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   disabled,
   children,
 }) => {
-  // rename: to openEditItemDrawer
-  const { onEditButtonClicked } = React.useContext(FormTreeContext);
+  const { openFormItemEditor } = React.useContext(FormTreeContext);
 
   const { control } = useFormContext();
   const { isSubmitting } = useFormState({ control });
@@ -86,7 +85,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
             aria-label='edit item'
             onClick={(e) => {
               e.stopPropagation();
-              onEditButtonClicked(item);
+              openFormItemEditor(item);
             }}
             disabled={isSubmitting}
             size='small'
