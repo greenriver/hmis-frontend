@@ -56,6 +56,29 @@ query GetFormIdentifierDetails($identifier: String!) {
   }
 }
 
+query GetFormIdentifierVersions(
+  $identifier: String!
+  $limit: Int = 25
+  $offset: Int = 0
+) {
+  formIdentifier(identifier: $identifier) {
+    id
+    identifier
+    allVersions(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FormDefinitionMetadata
+        dateUpdated
+        updatedBy {
+          ...UserFields
+        }
+      }
+    }
+  }
+}
+
 query GetFormIdentifiers(
   $limit: Int = 25
   $offset: Int = 0

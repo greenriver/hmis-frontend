@@ -1,9 +1,8 @@
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button, IconButton, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { EditIcon } from '@/components/elements/SemanticIcons';
+import { DeleteIcon, EditIcon } from '@/components/elements/SemanticIcons';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import {
   FormDefinitionFieldsForEditorFragment,
@@ -66,14 +65,21 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
           </ButtonTooltipContainer>
         </Typography>
 
-        <Button
-          variant='text'
-          startIcon={<VisibilityIcon />}
-          onClick={onClickPreview}
-          sx={{ height: 'fit-content' }}
-        >
-          Preview / Publish
-        </Button>
+        <Stack direction='row' spacing={4} alignItems='center'>
+          <Button
+            variant='text'
+            onClick={onClickPreview}
+            sx={{ height: 'fit-content' }}
+          >
+            Preview / Publish
+          </Button>
+          <ButtonTooltipContainer title='Delete Draft'>
+            {/* TODO implement delete */}
+            <IconButton aria-label='delete draft' size='small'>
+              <DeleteIcon />
+            </IconButton>
+          </ButtonTooltipContainer>
+        </Stack>
       </Stack>
     </>
   );
