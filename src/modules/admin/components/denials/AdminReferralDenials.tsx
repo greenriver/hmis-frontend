@@ -6,7 +6,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { getReferralFilter } from '@/modules/referrals/referralUtil';
+import { useReferralFilter } from '@/modules/referrals/components/useReferralFilter';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetDeniedPendingReferralPostingsDocument,
@@ -75,6 +75,11 @@ const AdminReferralDenials = () => {
     [externalReferrals]
   );
 
+  const referralFilter = useReferralFilter([
+    ReferralPostingStatus.DeniedPendingStatus,
+    ReferralPostingStatus.DeniedStatus,
+  ]);
+
   return (
     <>
       <PageTitle title='Denials' />
@@ -91,12 +96,7 @@ const AdminReferralDenials = () => {
           pagePath='deniedPendingReferralPostings'
           rowLinkTo={rowLinkTo}
           defaultPageSize={25}
-          filters={{
-            status: getReferralFilter([
-              ReferralPostingStatus.DeniedPendingStatus,
-              ReferralPostingStatus.DeniedStatus,
-            ]),
-          }}
+          filters={{ status: referralFilter }}
           defaultFilterValues={{
             status: [ReferralPostingStatus.DeniedPendingStatus],
           }}

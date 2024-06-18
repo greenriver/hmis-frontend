@@ -7,7 +7,7 @@ import {
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { getReferralFilter } from '@/modules/referrals/referralUtil';
+import { useReferralFilter } from '@/modules/referrals/components/useReferralFilter';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectReferralPostingsDocument,
@@ -85,6 +85,12 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
     return cols;
   }, [externalReferrals]);
 
+  const referralFilter = useReferralFilter([
+    ReferralPostingStatus.AssignedStatus,
+    ReferralPostingStatus.AcceptedPendingStatus,
+    ReferralPostingStatus.AcceptedStatus,
+  ]);
+
   return (
     <GenericTableWithData<
       GetProjectReferralPostingsQuery,
@@ -98,13 +104,7 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
       pagePath='project.incomingReferralPostings'
       rowLinkTo={rowLinkTo}
       defaultPageSize={10}
-      filters={{
-        status: getReferralFilter([
-          ReferralPostingStatus.AssignedStatus,
-          ReferralPostingStatus.AcceptedPendingStatus,
-          ReferralPostingStatus.AcceptedStatus,
-        ]),
-      }}
+      filters={{ status: referralFilter }}
       defaultFilterValues={{
         status: [
           ReferralPostingStatus.AssignedStatus,
