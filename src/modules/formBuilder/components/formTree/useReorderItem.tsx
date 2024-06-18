@@ -1,11 +1,12 @@
 import { get } from 'lodash-es';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import {
   Control,
   useFieldArray,
   useFormContext,
   useWatch,
 } from 'react-hook-form';
+import { FormTreeContext } from './FormTreeContext';
 import {
   getItemIdMap,
   getPathContext,
@@ -15,8 +16,9 @@ import {
 import { FormDefinitionJson, FormItem, ItemType } from '@/types/gqlTypes';
 
 // TODO(#6094) - Limit nesting depth to 5
-// TODO(#6094) - Auto open a group when an item is moved into it.
-//  This involves turning Mui Tree's expandedItems into a controlled prop - see https://github.com/greenriver/hmis-frontend/pull/797
+// TODO(#6094) - Keep focus on element when it moves
+// TODO(#6094) - setSelected when you click an arrow
+
 export default function useReorderItem(
   control: Control,
   itemId: string,
@@ -24,7 +26,7 @@ export default function useReorderItem(
 ) {
   const values = useWatch({ control });
   const { reset } = useFormContext();
-
+  const { expandItem, collapseItem } = useContext(FormTreeContext);
   // Re-generate itemIdMap each time values change (linkId=>position)
   const itemIdMap = useMemo(() => getItemIdMap(values.item), [values]);
 
@@ -37,8 +39,9 @@ export default function useReorderItem(
   if (!itemPath) throw new Error(`No itemPath found for linkId ${itemId}`);
   const { parentPath: parentArrayPath, index: thisIndex } =
     getPathContext(itemPath);
+  const parentItemId = parentArrayPath.replace(/\.item$/, '');
   const { parentPath: grandParentArrayPath, index: parentIndex } =
-    getPathContext(parentArrayPath.replace(/\.item$/, ''));
+    getPathContext(parentItemId);
 
   // RHF swap is used for swapping items within an array
   const { swap } = useFieldArray({ control, name: parentArrayPath });
@@ -71,23 +74,27 @@ export default function useReorderItem(
             console.log('case 1');
             const prevLinkId = prevItem.linkId;
             const prevItemPath = itemIdMap[prevLinkId] + '.item';
-            reset(
-              (oldForm) => {
-                removeItemFromDefinition({
-                  removeFromPath: parentArrayPath,
-                  removeFromIndex: thisIndex,
-                  definition: oldForm as FormDefinitionJson,
-                });
-                insertItemToDefinition({
-                  insertPath: prevItemPath,
-                  insertAtIndex: get(oldForm, prevItemPath).length,
-                  definition: oldForm as FormDefinitionJson,
-                  item,
-                });
-                return oldForm;
-              },
-              { keepDefaultValues: true }
-            );
+            expandItem(prevLinkId);
+
+            const moveItem = () =>
+              reset(
+                (oldForm) => {
+                  removeItemFromDefinition({
+                    removeFromPath: parentArrayPath,
+                    removeFromIndex: thisIndex,
+                    definition: oldForm as FormDefinitionJson,
+                  });
+                  insertItemToDefinition({
+                    insertPath: prevItemPath,
+                    insertAtIndex: get(oldForm, prevItemPath).length,
+                    definition: oldForm as FormDefinitionJson,
+                    item,
+                  });
+                  return oldForm;
+                },
+                { keepDefaultValues: true }
+              );
+            setTimeout(() => moveItem()); // move on next render
           } else {
             // CASE 2: Swap this item with the (non-group) item above it
             console.log('case 2');
@@ -97,23 +104,32 @@ export default function useReorderItem(
           // CASE 3: This item is the first item in its group, so we need to move it "out"
           // of its group and insert it into it's parent array.
           console.log('case 3');
-          reset(
-            (oldForm) => {
-              removeItemFromDefinition({
-                removeFromPath: parentArrayPath,
-                removeFromIndex: 0,
-                definition: oldForm as FormDefinitionJson,
-              });
-              insertItemToDefinition({
-                insertPath: grandParentArrayPath,
-                insertAtIndex: parentIndex,
-                definition: oldForm as FormDefinitionJson,
-                item,
-              });
-              return oldForm;
-            },
-            { keepDefaultValues: true }
-          );
+          // Collapse the group that is no longer holding this item
+          const parentLinkId = Object.entries(itemIdMap).find(
+            ([, value]) => value === parentItemId
+          )?.[0];
+          if (parentLinkId) collapseItem(parentLinkId);
+
+          // Perform the change
+          const moveItem = () =>
+            reset(
+              (oldForm) => {
+                removeItemFromDefinition({
+                  removeFromPath: parentArrayPath,
+                  removeFromIndex: 0,
+                  definition: oldForm as FormDefinitionJson,
+                });
+                insertItemToDefinition({
+                  insertPath: grandParentArrayPath,
+                  insertAtIndex: parentIndex,
+                  definition: oldForm as FormDefinitionJson,
+                  item,
+                });
+                return oldForm;
+              },
+              { keepDefaultValues: true }
+            );
+          setTimeout(() => moveItem()); // move on next render
           // else, this is the first item in the top layer, so hitting the 'up' button does nothing.
         }
       } else if (direction === 'down') {
@@ -127,23 +143,26 @@ export default function useReorderItem(
             const nextLinkId = nextItem.linkId;
             const nextItemPath = itemIdMap[nextLinkId] + '.item';
 
-            reset(
-              (oldForm) => {
-                insertItemToDefinition({
-                  insertPath: nextItemPath,
-                  insertAtIndex: 0, // prepend to sibling below
-                  definition: oldForm as FormDefinitionJson,
-                  item,
-                });
-                removeItemFromDefinition({
-                  removeFromPath: parentArrayPath,
-                  removeFromIndex: thisIndex,
-                  definition: oldForm as FormDefinitionJson,
-                });
-                return oldForm;
-              },
-              { keepDefaultValues: true }
-            );
+            const moveItem = () =>
+              reset(
+                (oldForm) => {
+                  insertItemToDefinition({
+                    insertPath: nextItemPath,
+                    insertAtIndex: 0, // prepend to sibling below
+                    definition: oldForm as FormDefinitionJson,
+                    item,
+                  });
+                  removeItemFromDefinition({
+                    removeFromPath: parentArrayPath,
+                    removeFromIndex: thisIndex,
+                    definition: oldForm as FormDefinitionJson,
+                  });
+                  return oldForm;
+                },
+                { keepDefaultValues: true }
+              );
+            expandItem(nextLinkId);
+            setTimeout(() => moveItem()); // move on next render
           } else {
             // CASE 5: Swap this item with the (non-group) item below it
             console.log('case 5');
@@ -153,23 +172,33 @@ export default function useReorderItem(
           if (hasParent) {
             // CASE 6: This is the last item at this depth. Move into the parent layer
             console.log('case 6', parentIndex);
-            reset(
-              (oldForm) => {
-                insertItemToDefinition({
-                  insertPath: grandParentArrayPath,
-                  insertAtIndex: parentIndex + 1,
-                  definition: oldForm as FormDefinitionJson,
-                  item,
-                });
-                removeItemFromDefinition({
-                  removeFromPath: parentArrayPath,
-                  removeFromIndex: get(oldForm, parentArrayPath).length - 1, // remove the last item
-                  definition: oldForm as FormDefinitionJson,
-                });
-                return oldForm;
-              },
-              { keepDefaultValues: true }
-            );
+
+            // Collapse the group that is no longer holding this item
+            const parentLinkId = Object.entries(itemIdMap).find(
+              ([, value]) => value === parentItemId
+            )?.[0];
+            if (parentLinkId) collapseItem(parentLinkId);
+
+            // Perform the change
+            const moveItem = () =>
+              reset(
+                (oldForm) => {
+                  insertItemToDefinition({
+                    insertPath: grandParentArrayPath,
+                    insertAtIndex: parentIndex + 1,
+                    definition: oldForm as FormDefinitionJson,
+                    item,
+                  });
+                  removeItemFromDefinition({
+                    removeFromPath: parentArrayPath,
+                    removeFromIndex: get(oldForm, parentArrayPath).length - 1, // remove the last item
+                    definition: oldForm as FormDefinitionJson,
+                  });
+                  return oldForm;
+                },
+                { keepDefaultValues: true }
+              );
+            setTimeout(() => moveItem()); // move on next render
           } // else, this is the last item in the top layer, so hitting the 'down' button does nothing.
         }
       }
@@ -180,9 +209,12 @@ export default function useReorderItem(
       thisLayer,
       itemIdMap,
       reset,
+      expandItem,
       parentArrayPath,
       item,
       swap,
+      collapseItem,
+      parentItemId,
       grandParentArrayPath,
       parentIndex,
     ]

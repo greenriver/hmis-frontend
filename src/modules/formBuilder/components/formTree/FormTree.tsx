@@ -16,11 +16,25 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
 
   const definitionForTree = useMemo(() => getItemsForTree(items), [items]);
 
+  const [expandedItems, setExpandedItems] = React.useState<string[]>([]);
+
+  const handleExpandedItemsChange = (
+    event: React.SyntheticEvent,
+    itemIds: string[]
+  ) => {
+    setExpandedItems(itemIds);
+  };
+
   const context = React.useMemo(
     () => ({
-      openFormItemEditor: (item: FormItem) => {
-        onEditClick(item);
-      },
+      openFormItemEditor: (item: FormItem) => onEditClick(item),
+      expandItem: (itemId: string, callback?: VoidFunction) =>
+        setExpandedItems((prev) => [...prev, itemId], callback),
+      collapseItem: (itemId: string, callback?: VoidFunction) =>
+        setExpandedItems(
+          (prev) => prev.filter((id) => id !== itemId),
+          callback
+        ),
     }),
     [onEditClick]
   );
@@ -35,6 +49,8 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
         getItemId={(item) => item.linkId}
         getItemLabel={(item) => item.text || item.helperText || item.linkId}
         slots={{ item: FormTreeItem }}
+        expandedItems={expandedItems}
+        onExpandedItemsChange={handleExpandedItemsChange}
       />
     </FormTreeContext.Provider>
   );
