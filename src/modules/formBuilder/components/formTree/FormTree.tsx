@@ -28,13 +28,10 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
   const context = React.useMemo(
     () => ({
       openFormItemEditor: (item: FormItem) => onEditClick(item),
-      expandItem: (itemId: string, callback?: VoidFunction) =>
-        setExpandedItems((prev) => [...prev, itemId], callback),
-      collapseItem: (itemId: string, callback?: VoidFunction) =>
-        setExpandedItems(
-          (prev) => prev.filter((id) => id !== itemId),
-          callback
-        ),
+      expandItem: (itemId: string) =>
+        setExpandedItems((prev) => [...prev, itemId]),
+      collapseItem: (itemId: string) =>
+        setExpandedItems((prev) => prev.filter((id) => id !== itemId)),
     }),
     [onEditClick]
   );

@@ -110,7 +110,6 @@ export default function useReorderItem(
           )?.[0];
           if (parentLinkId) collapseItem(parentLinkId);
 
-          // Perform the change
           const moveItem = () =>
             reset(
               (oldForm) => {
@@ -179,7 +178,6 @@ export default function useReorderItem(
             )?.[0];
             if (parentLinkId) collapseItem(parentLinkId);
 
-            // Perform the change
             const moveItem = () =>
               reset(
                 (oldForm) => {
