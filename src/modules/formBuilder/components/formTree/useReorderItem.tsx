@@ -26,7 +26,7 @@ export default function useReorderItem(
 ) {
   const values = useWatch({ control });
   const { reset } = useFormContext();
-  const { expandItem, collapseItem } = useContext(FormTreeContext);
+  const { expandItem } = useContext(FormTreeContext);
   // Re-generate itemIdMap each time values change (linkId=>position)
   const itemIdMap = useMemo(() => getItemIdMap(values.item), [values]);
 
@@ -104,31 +104,25 @@ export default function useReorderItem(
           // CASE 3: This item is the first item in its group, so we need to move it "out"
           // of its group and insert it into it's parent array.
           console.log('case 3');
-          // Collapse the group that is no longer holding this item
-          const parentLinkId = Object.entries(itemIdMap).find(
-            ([, value]) => value === parentItemId
-          )?.[0];
-          if (parentLinkId) collapseItem(parentLinkId);
 
-          const moveItem = () =>
-            reset(
-              (oldForm) => {
-                removeItemFromDefinition({
-                  removeFromPath: parentArrayPath,
-                  removeFromIndex: 0,
-                  definition: oldForm as FormDefinitionJson,
-                });
-                insertItemToDefinition({
-                  insertPath: grandParentArrayPath,
-                  insertAtIndex: parentIndex,
-                  definition: oldForm as FormDefinitionJson,
-                  item,
-                });
-                return oldForm;
-              },
-              { keepDefaultValues: true }
-            );
-          setTimeout(() => moveItem()); // move on next render
+          reset(
+            (oldForm) => {
+              removeItemFromDefinition({
+                removeFromPath: parentArrayPath,
+                removeFromIndex: 0,
+                definition: oldForm as FormDefinitionJson,
+              });
+              insertItemToDefinition({
+                insertPath: grandParentArrayPath,
+                insertAtIndex: parentIndex,
+                definition: oldForm as FormDefinitionJson,
+                item,
+              });
+              return oldForm;
+            },
+            { keepDefaultValues: true }
+          );
+
           // else, this is the first item in the top layer, so hitting the 'up' button does nothing.
         }
       } else if (direction === 'down') {
@@ -172,31 +166,23 @@ export default function useReorderItem(
             // CASE 6: This is the last item at this depth. Move into the parent layer
             console.log('case 6', parentIndex);
 
-            // Collapse the group that is no longer holding this item
-            const parentLinkId = Object.entries(itemIdMap).find(
-              ([, value]) => value === parentItemId
-            )?.[0];
-            if (parentLinkId) collapseItem(parentLinkId);
-
-            const moveItem = () =>
-              reset(
-                (oldForm) => {
-                  insertItemToDefinition({
-                    insertPath: grandParentArrayPath,
-                    insertAtIndex: parentIndex + 1,
-                    definition: oldForm as FormDefinitionJson,
-                    item,
-                  });
-                  removeItemFromDefinition({
-                    removeFromPath: parentArrayPath,
-                    removeFromIndex: get(oldForm, parentArrayPath).length - 1, // remove the last item
-                    definition: oldForm as FormDefinitionJson,
-                  });
-                  return oldForm;
-                },
-                { keepDefaultValues: true }
-              );
-            setTimeout(() => moveItem()); // move on next render
+            reset(
+              (oldForm) => {
+                insertItemToDefinition({
+                  insertPath: grandParentArrayPath,
+                  insertAtIndex: parentIndex + 1,
+                  definition: oldForm as FormDefinitionJson,
+                  item,
+                });
+                removeItemFromDefinition({
+                  removeFromPath: parentArrayPath,
+                  removeFromIndex: get(oldForm, parentArrayPath).length - 1, // remove the last item
+                  definition: oldForm as FormDefinitionJson,
+                });
+                return oldForm;
+              },
+              { keepDefaultValues: true }
+            );
           } // else, this is the last item in the top layer, so hitting the 'down' button does nothing.
         }
       }
@@ -211,8 +197,6 @@ export default function useReorderItem(
       parentArrayPath,
       item,
       swap,
-      collapseItem,
-      parentItemId,
       grandParentArrayPath,
       parentIndex,
     ]
