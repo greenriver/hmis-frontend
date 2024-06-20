@@ -22698,6 +22698,36 @@ export type PublishFormDefinitionMutation = {
   } | null;
 };
 
+export type DeleteFormDefinitionDraftMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteFormDefinitionDraftMutation = {
+  __typename?: 'Mutation';
+  deleteFormDefinition?: {
+    __typename?: 'DeleteFormDefinitionPayload';
+    formDefinition?: {
+      __typename?: 'FormDefinition';
+      id: string;
+      cacheKey: string;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
 export type GetPickListQueryVariables = Exact<{
   pickListType: PickListType;
   projectId?: InputMaybe<Scalars['ID']['input']>;
@@ -39505,6 +39535,64 @@ export type PublishFormDefinitionMutationOptions = Apollo.BaseMutationOptions<
   PublishFormDefinitionMutation,
   PublishFormDefinitionMutationVariables
 >;
+export const DeleteFormDefinitionDraftDocument = gql`
+  mutation DeleteFormDefinitionDraft($id: ID!) {
+    deleteFormDefinition(id: $id) {
+      formDefinition {
+        id
+        cacheKey
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteFormDefinitionDraftMutationFn = Apollo.MutationFunction<
+  DeleteFormDefinitionDraftMutation,
+  DeleteFormDefinitionDraftMutationVariables
+>;
+
+/**
+ * __useDeleteFormDefinitionDraftMutation__
+ *
+ * To run a mutation, you first call `useDeleteFormDefinitionDraftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFormDefinitionDraftMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFormDefinitionDraftMutation, { data, loading, error }] = useDeleteFormDefinitionDraftMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteFormDefinitionDraftMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteFormDefinitionDraftMutation,
+    DeleteFormDefinitionDraftMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteFormDefinitionDraftMutation,
+    DeleteFormDefinitionDraftMutationVariables
+  >(DeleteFormDefinitionDraftDocument, options);
+}
+export type DeleteFormDefinitionDraftMutationHookResult = ReturnType<
+  typeof useDeleteFormDefinitionDraftMutation
+>;
+export type DeleteFormDefinitionDraftMutationResult =
+  Apollo.MutationResult<DeleteFormDefinitionDraftMutation>;
+export type DeleteFormDefinitionDraftMutationOptions =
+  Apollo.BaseMutationOptions<
+    DeleteFormDefinitionDraftMutation,
+    DeleteFormDefinitionDraftMutationVariables
+  >;
 export const GetPickListDocument = gql`
   query GetPickList(
     $pickListType: PickListType!

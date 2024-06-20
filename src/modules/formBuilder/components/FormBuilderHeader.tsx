@@ -1,10 +1,17 @@
 import { Button, IconButton, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React from 'react';
+import React, { useCallback } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { DeleteIcon, EditIcon } from '@/components/elements/SemanticIcons';
+import { EditIcon } from '@/components/elements/SemanticIcons';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
+import { cache } from '@/providers/apolloClient';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
+  DeleteFormDefinitionDraftDocument,
+  DeleteFormDefinitionDraftMutation,
+  DeleteFormDefinitionDraftMutationVariables,
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionInput,
   MutationUpdateFormDefinitionArgs,
@@ -22,6 +29,8 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
   formDefinition,
   onClickPreview,
 }) => {
+  const navigate = useNavigate();
+
   // Dialog for updating form definitions
   const { openFormDialog: openEditDialog, renderFormDialog: renderEditDialog } =
     useStaticFormDialog<
@@ -38,6 +47,16 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
         id: formDefinition.id || '',
       }),
     });
+
+  const onSuccessfulDelete = useCallback(() => {
+    // evict identifier so status updates
+    cache.evict({ id: `FormIdentifier:${formDefinition.identifier}` });
+    navigate(
+      generatePath(AdminDashboardRoutes.VIEW_FORM, {
+        identifier: formDefinition.identifier,
+      })
+    );
+  }, [navigate, formDefinition.identifier]);
 
   return (
     <>
@@ -73,12 +92,17 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
           >
             Preview / Publish
           </Button>
-          <ButtonTooltipContainer title='Delete Draft'>
-            {/* TODO implement delete */}
-            <IconButton aria-label='delete draft' size='small'>
-              <DeleteIcon />
-            </IconButton>
-          </ButtonTooltipContainer>
+          <DeleteMutationButton<
+            DeleteFormDefinitionDraftMutation,
+            DeleteFormDefinitionDraftMutationVariables
+          >
+            queryDocument={DeleteFormDefinitionDraftDocument}
+            variables={{ id: formDefinition.id }}
+            idPath='deleteFormDefinition.formDefinition.id'
+            recordName='draft'
+            onSuccess={onSuccessfulDelete}
+            onlyIcon
+          ></DeleteMutationButton>
         </Stack>
       </Stack>
     </>
