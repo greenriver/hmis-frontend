@@ -31,8 +31,8 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
       openFormItemEditor: (item: FormItem) => onEditClick(item),
       expandItem: (itemId: string) =>
         setExpandedItems((prev) => [...prev, itemId]),
-      // collapseItem: (itemId: string) =>
-      //   setExpandedItems((prev) => prev.filter((id) => id !== itemId)),
+      collapseItem: (itemId: string) =>
+        setExpandedItems((prev) => prev.filter((id) => id !== itemId)),
     }),
     [onEditClick]
   );
