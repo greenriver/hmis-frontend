@@ -52,7 +52,7 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
       >
         <PageTitle
           title={formDefinition.title}
-          overlineText='Editing Draft!'
+          overlineText='Editing Draft'
           endElement={
             <ButtonTooltipContainer title='Edit Title'>
               <IconButton
