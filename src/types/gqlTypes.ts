@@ -2866,6 +2866,8 @@ export type FilesPaginated = {
 export type FormDefinition = {
   __typename?: 'FormDefinition';
   cacheKey: Scalars['ID']['output'];
+  dateCreated: Scalars['ISO8601DateTime']['output'];
+  dateUpdated: Scalars['ISO8601DateTime']['output'];
   definition: FormDefinitionJson;
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
@@ -2875,6 +2877,7 @@ export type FormDefinition = {
   status: FormStatus;
   system: Scalars['Boolean']['output'];
   title: Scalars['String']['output'];
+  updatedBy?: Maybe<ApplicationUser>;
 };
 
 /** FormDefinition */
@@ -24714,6 +24717,43 @@ export type GetFormIdentifierDetailsQuery = {
   } | null;
 };
 
+export type GetFormIdentifierVersionsQueryVariables = Exact<{
+  identifier: Scalars['String']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetFormIdentifierVersionsQuery = {
+  __typename?: 'Query';
+  formIdentifier?: {
+    __typename?: 'FormIdentifier';
+    id: string;
+    identifier: string;
+    allVersions: {
+      __typename?: 'FormDefinitionsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'FormDefinition';
+        dateUpdated: string;
+        id: string;
+        role: FormRole;
+        title: string;
+        cacheKey: string;
+        identifier: string;
+        status: FormStatus;
+        updatedBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
 export type GetFormIdentifiersQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -39850,6 +39890,85 @@ export type GetFormIdentifierDetailsLazyQueryHookResult = ReturnType<
 export type GetFormIdentifierDetailsQueryResult = Apollo.QueryResult<
   GetFormIdentifierDetailsQuery,
   GetFormIdentifierDetailsQueryVariables
+>;
+export const GetFormIdentifierVersionsDocument = gql`
+  query GetFormIdentifierVersions(
+    $identifier: String!
+    $limit: Int = 25
+    $offset: Int = 0
+  ) {
+    formIdentifier(identifier: $identifier) {
+      id
+      identifier
+      allVersions(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...FormDefinitionMetadata
+          dateUpdated
+          updatedBy {
+            ...UserFields
+          }
+        }
+      }
+    }
+  }
+  ${FormDefinitionMetadataFragmentDoc}
+  ${UserFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetFormIdentifierVersionsQuery__
+ *
+ * To run a query within a React component, call `useGetFormIdentifierVersionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormIdentifierVersionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFormIdentifierVersionsQuery({
+ *   variables: {
+ *      identifier: // value for 'identifier'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetFormIdentifierVersionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetFormIdentifierVersionsQuery,
+    GetFormIdentifierVersionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetFormIdentifierVersionsQuery,
+    GetFormIdentifierVersionsQueryVariables
+  >(GetFormIdentifierVersionsDocument, options);
+}
+export function useGetFormIdentifierVersionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFormIdentifierVersionsQuery,
+    GetFormIdentifierVersionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetFormIdentifierVersionsQuery,
+    GetFormIdentifierVersionsQueryVariables
+  >(GetFormIdentifierVersionsDocument, options);
+}
+export type GetFormIdentifierVersionsQueryHookResult = ReturnType<
+  typeof useGetFormIdentifierVersionsQuery
+>;
+export type GetFormIdentifierVersionsLazyQueryHookResult = ReturnType<
+  typeof useGetFormIdentifierVersionsLazyQuery
+>;
+export type GetFormIdentifierVersionsQueryResult = Apollo.QueryResult<
+  GetFormIdentifierVersionsQuery,
+  GetFormIdentifierVersionsQueryVariables
 >;
 export const GetFormIdentifiersDocument = gql`
   query GetFormIdentifiers(

@@ -1,13 +1,12 @@
-import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { LoadingButton } from '@mui/lab';
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ButtonProps } from '@mui/material';
+import { generatePath, useNavigate } from 'react-router-dom';
+import ButtonLink from '@/components/elements/ButtonLink';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormIdentifierDetailsFragment,
   useCreateNextDraftFormDefinitionMutation,
 } from '@/types/gqlTypes';
-import { generateSafePath } from '@/utils/pathEncoding';
 
 export enum FormEditorType {
   FormBuilder,
@@ -19,63 +18,64 @@ interface EditFormButtonProps {
   text?: string;
   Icon?: React.ComponentType;
   editorType?: FormEditorType;
+  variant?: ButtonProps['variant'];
 }
 
 const EditFormButton: React.FC<EditFormButtonProps> = ({
   formIdentifier,
   text,
-  Icon,
   editorType = FormEditorType.FormBuilder,
+  variant,
 }) => {
   const navigate = useNavigate();
 
-  const goToEditor = useCallback(
-    (draftId: string) => {
-      const route =
-        editorType === FormEditorType.JsonEditor
-          ? AdminDashboardRoutes.JSON_EDIT_FORM
-          : AdminDashboardRoutes.EDIT_FORM;
-
-      navigate(
-        generateSafePath(route, {
-          identifier: formIdentifier.identifier,
-          formId: draftId,
-        })
-      );
-    },
-    [formIdentifier, editorType, navigate]
-  );
+  const editorRoute =
+    editorType === FormEditorType.JsonEditor
+      ? AdminDashboardRoutes.JSON_EDIT_FORM
+      : AdminDashboardRoutes.EDIT_FORM;
 
   const [createDraftForm, { loading, error }] =
     useCreateNextDraftFormDefinitionMutation({
       variables: { identifier: formIdentifier.identifier },
       onCompleted: (data) => {
-        if (
-          data.createNextDraftFormDefinition?.formIdentifier?.draftVersion?.id
-        ) {
-          goToEditor(
-            data.createNextDraftFormDefinition?.formIdentifier?.draftVersion.id
+        const draftFormId =
+          data.createNextDraftFormDefinition?.formIdentifier?.draftVersion?.id;
+        if (draftFormId) {
+          navigate(
+            generatePath(editorRoute, {
+              identifier: formIdentifier.identifier,
+              formId: draftFormId,
+            })
           );
         }
       },
     });
 
-  const onClick = useCallback(() => {
-    if (formIdentifier.draftVersion) {
-      goToEditor(formIdentifier.draftVersion.id);
-    } else {
-      createDraftForm();
-    }
-  }, [formIdentifier.draftVersion, goToEditor, createDraftForm]);
-
   if (error) throw error;
 
+  // If form already has a draft, just link to it
+  if (formIdentifier.draftVersion) {
+    return (
+      <ButtonLink
+        to={generatePath(editorRoute, {
+          identifier: formIdentifier.identifier,
+          formId: formIdentifier.draftVersion.id,
+        })}
+        variant={variant}
+        fullWidth
+      >
+        {text || 'Edit Form'}
+      </ButtonLink>
+    );
+  }
+
+  // If form does not have a draft yet, create one and then navigate
   return (
     <LoadingButton
-      onClick={() => onClick()}
-      startIcon={Icon ? <Icon /> : <DashboardCustomizeIcon />}
+      onClick={() => createDraftForm()}
       loading={loading}
       role='link'
+      variant={variant}
     >
       {text || 'Edit Form'}
     </LoadingButton>
