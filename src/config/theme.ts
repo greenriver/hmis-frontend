@@ -486,7 +486,7 @@ const createThemeOptions = (theme: Theme) => ({
           '.MuiTreeItem-groupTransition': {
             marginLeft: 15,
             paddingLeft: 18,
-            borderLeft: `2px solid ${theme.palette.borders.dark}`,
+            borderLeft: `1px solid ${theme.palette.borders.dark}`,
           },
         },
       },
