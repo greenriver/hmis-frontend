@@ -1209,7 +1209,7 @@ export const createInitialValuesFromRecord = (
  * Create initial form values based on saved assessment values.
  *
  * @param itemMap Map of linkId -> Item
- * @param values  Vaved value state
+ * @param values  Saved value state
  *
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */

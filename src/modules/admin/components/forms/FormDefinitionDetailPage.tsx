@@ -79,11 +79,11 @@ const FormDefinitionDetailPage = () => {
 
   return (
     <>
+      <PageTitle
+        overlineText='Selected Form'
+        title={formIdentifier.displayVersion.title}
+      />
       <Stack gap={2}>
-        <PageTitle
-          overlineText='Selected Form'
-          title={formIdentifier.displayVersion.title}
-        />
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             <CommonCard title='Details'>

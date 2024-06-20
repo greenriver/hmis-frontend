@@ -1,8 +1,10 @@
-import { Button, IconButton, Typography } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { Stack } from '@mui/system';
 import React from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+
 import { DeleteIcon, EditIcon } from '@/components/elements/SemanticIcons';
+import PageTitle from '@/components/layout/PageTitle';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import {
   FormDefinitionFieldsForEditorFragment,
@@ -48,22 +50,22 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
         justifyContent='space-between'
         alignItems='end'
       >
-        <Typography sx={{ mb: 2 }} variant='h2' component='h1'>
-          <Typography variant='overline' color='links' display='block'>
-            Editing Draft
-          </Typography>
-          {formDefinition.title}
-          <ButtonTooltipContainer title='Edit Title'>
-            <IconButton
-              aria-label='edit title'
-              onClick={openEditDialog}
-              size='small'
-              sx={{ color: (theme) => theme.palette.links, ml: 2, mb: 0.5 }}
-            >
-              <EditIcon fontSize='small' />
-            </IconButton>
-          </ButtonTooltipContainer>
-        </Typography>
+        <PageTitle
+          title={formDefinition.title}
+          overlineText='Editing Draft!'
+          endElement={
+            <ButtonTooltipContainer title='Edit Title'>
+              <IconButton
+                aria-label='edit title'
+                onClick={openEditDialog}
+                size='small'
+                sx={{ color: (theme) => theme.palette.links, ml: 1, mb: 0.5 }}
+              >
+                <EditIcon fontSize='small' />
+              </IconButton>
+            </ButtonTooltipContainer>
+          }
+        />
 
         <Stack direction='row' spacing={4} alignItems='center'>
           <Button
