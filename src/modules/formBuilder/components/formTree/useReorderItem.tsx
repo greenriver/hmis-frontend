@@ -15,10 +15,6 @@ import {
 } from '@/modules/formBuilder/formBuilderUtil';
 import { FormDefinitionJson, FormItem, ItemType } from '@/types/gqlTypes';
 
-// TODO(#6094) - Limit nesting depth to 5
-// TODO(#6094) - Keep focus on element when it moves
-// TODO(#6094) - setSelected when you click an arrow
-
 export default function useReorderItem(
   control: Control,
   itemId: string,
@@ -75,27 +71,24 @@ export default function useReorderItem(
             const prevLinkId = prevItem.linkId;
             const prevItemPath = itemIdMap[prevLinkId] + '.item';
 
-            const moveItem = () =>
-              reset(
-                (oldForm) => {
-                  removeItemFromDefinition({
-                    removeFromPath: parentArrayPath,
-                    removeFromIndex: thisIndex,
-                    definition: oldForm as FormDefinitionJson,
-                  });
-                  insertItemToDefinition({
-                    insertPath: prevItemPath,
-                    insertAtIndex: get(oldForm, prevItemPath).length,
-                    definition: oldForm as FormDefinitionJson,
-                    item,
-                  });
-                  return oldForm;
-                },
-                { keepDefaultValues: true }
-              );
-
             expandItem(prevLinkId); // expand the group it's moving into
-            setTimeout(() => moveItem()); // move on next render
+            reset(
+              (oldForm) => {
+                removeItemFromDefinition({
+                  removeFromPath: parentArrayPath,
+                  removeFromIndex: thisIndex,
+                  definition: oldForm as FormDefinitionJson,
+                });
+                insertItemToDefinition({
+                  insertPath: prevItemPath,
+                  insertAtIndex: get(oldForm, prevItemPath).length,
+                  definition: oldForm as FormDefinitionJson,
+                  item,
+                });
+                return oldForm;
+              },
+              { keepDefaultValues: true }
+            );
           } else {
             // CASE 2: Swap this item with the (non-group) item above it
             console.log('case 2');
@@ -137,26 +130,24 @@ export default function useReorderItem(
             const nextLinkId = nextItem.linkId;
             const nextItemPath = itemIdMap[nextLinkId] + '.item';
 
-            const moveItem = () =>
-              reset(
-                (oldForm) => {
-                  insertItemToDefinition({
-                    insertPath: nextItemPath,
-                    insertAtIndex: 0, // prepend to sibling below
-                    definition: oldForm as FormDefinitionJson,
-                    item,
-                  });
-                  removeItemFromDefinition({
-                    removeFromPath: parentArrayPath,
-                    removeFromIndex: thisIndex,
-                    definition: oldForm as FormDefinitionJson,
-                  });
-                  return oldForm;
-                },
-                { keepDefaultValues: true }
-              );
             expandItem(nextLinkId); // expand the group it's moving into
-            setTimeout(() => moveItem()); // move on next render
+            reset(
+              (oldForm) => {
+                insertItemToDefinition({
+                  insertPath: nextItemPath,
+                  insertAtIndex: 0, // prepend to sibling below
+                  definition: oldForm as FormDefinitionJson,
+                  item,
+                });
+                removeItemFromDefinition({
+                  removeFromPath: parentArrayPath,
+                  removeFromIndex: thisIndex,
+                  definition: oldForm as FormDefinitionJson,
+                });
+                return oldForm;
+              },
+              { keepDefaultValues: true }
+            );
           } else {
             // CASE 5: Swap this item with the (non-group) item below it
             console.log('case 5');
