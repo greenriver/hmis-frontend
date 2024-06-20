@@ -1,6 +1,7 @@
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import React, { useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { displayLabelForItem } from '../../formBuilderUtil';
 import Loading from '@/components/elements/Loading';
 import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
 import FormTreeItem from '@/modules/formBuilder/components/formTree/FormTreeItem';
@@ -44,10 +45,11 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
         aria-label='form tree view'
         items={definitionForTree}
         getItemId={(item) => item.linkId}
-        getItemLabel={(item) => item.text || item.helperText || item.linkId}
+        getItemLabel={(item) => displayLabelForItem(item, false)}
         slots={{ item: FormTreeItem }}
         expandedItems={expandedItems}
         onExpandedItemsChange={handleExpandedItemsChange}
+        disableSelection
       />
     </FormTreeContext.Provider>
   );

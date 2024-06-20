@@ -22,6 +22,8 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import Home from '@mui/icons-material/Home';
 import ImageIcon from '@mui/icons-material/Image';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
+import MediationRoundedIcon from '@mui/icons-material/MediationRounded';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import PeopleIcon from '@mui/icons-material/People';
 import Person from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -34,6 +36,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import SelectAllIcon from '@mui/icons-material/SelectAll';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import WrapTextIcon from '@mui/icons-material/WrapText';
+
 export {
   Person as ClientIcon,
   Home as EnrollmentIcon,
@@ -55,6 +58,7 @@ export {
   ArrowBackIcon as BackIcon,
   AddIcon as AddIcon,
   CloseIcon as CloseIcon,
+  MoreVertRoundedIcon as MoreMenuIcon,
 
   // Icons for Form Builder
   CheckBoxIcon as FormBooleanIcon,
@@ -73,4 +77,5 @@ export {
   AccessTimeIcon as FormTimeOfDayIcon,
   ArrowDropUpRoundedIcon as UpIcon,
   ArrowDropDownRoundedIcon as DownIcon,
+  MediationRoundedIcon as ConditionalIcon,
 };

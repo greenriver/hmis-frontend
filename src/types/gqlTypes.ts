@@ -5382,6 +5382,7 @@ export type ProjectHouseholdsArgs = {
 };
 
 export type ProjectIncomingReferralPostingsArgs = {
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5393,6 +5394,7 @@ export type ProjectInventoriesArgs = {
 };
 
 export type ProjectOutgoingReferralPostingsArgs = {
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5707,6 +5709,7 @@ export type QueryClientSearchArgs = {
 };
 
 export type QueryDeniedPendingReferralPostingsArgs = {
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -6168,6 +6171,10 @@ export enum ReferralPostingDenialReasonType {
   /** No longer interested in this program */
   NoLongerInterestedInThisProgram = 'NoLongerInterestedInThisProgram',
 }
+
+export type ReferralPostingFilterOptions = {
+  status?: InputMaybe<Array<ReferralPostingStatus>>;
+};
 
 export type ReferralPostingInput = {
   denialNote?: InputMaybe<Scalars['String']['input']>;
@@ -29662,6 +29669,7 @@ export type GetProjectReferralPostingsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
 }>;
 
 export type GetProjectReferralPostingsQuery = {
@@ -29709,6 +29717,7 @@ export type GetProjectOutgoingReferralPostingsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
 }>;
 
 export type GetProjectOutgoingReferralPostingsQuery = {
@@ -30606,6 +30615,7 @@ export type UpdateReferralPostingMutation = {
 export type GetDeniedPendingReferralPostingsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
 }>;
 
 export type GetDeniedPendingReferralPostingsQuery = {
@@ -42045,10 +42055,15 @@ export const GetProjectReferralPostingsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
+    $filters: ReferralPostingFilterOptions
   ) {
     project(id: $id) {
       id
-      incomingReferralPostings(limit: $limit, offset: $offset) {
+      incomingReferralPostings(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -42076,6 +42091,7 @@ export const GetProjectReferralPostingsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -42118,10 +42134,15 @@ export const GetProjectOutgoingReferralPostingsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
+    $filters: ReferralPostingFilterOptions
   ) {
     project(id: $id) {
       id
-      outgoingReferralPostings(limit: $limit, offset: $offset) {
+      outgoingReferralPostings(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -42155,6 +42176,7 @@ export const GetProjectOutgoingReferralPostingsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -43170,8 +43192,16 @@ export type UpdateReferralPostingMutationOptions = Apollo.BaseMutationOptions<
   UpdateReferralPostingMutationVariables
 >;
 export const GetDeniedPendingReferralPostingsDocument = gql`
-  query GetDeniedPendingReferralPostings($limit: Int = 10, $offset: Int = 0) {
-    deniedPendingReferralPostings(limit: $limit, offset: $offset) {
+  query GetDeniedPendingReferralPostings(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ReferralPostingFilterOptions
+  ) {
+    deniedPendingReferralPostings(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+    ) {
       offset
       limit
       nodesCount
@@ -43197,6 +43227,7 @@ export const GetDeniedPendingReferralPostingsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

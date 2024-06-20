@@ -1,6 +1,5 @@
-import EditIcon from '@mui/icons-material/Edit';
 import { IconButton, Typography } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { Box, Stack, Theme } from '@mui/system';
 import { TreeItem2Label, UseTreeItem2Parameters } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
@@ -8,7 +7,12 @@ import React, { useMemo } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
 import { FormTreeContext } from './FormTreeContext';
 import useReorderItem from './useReorderItem';
-import { DownIcon, UpIcon } from '@/components/elements/SemanticIcons';
+import CommonMenuButton from '@/components/elements/CommonMenuButton';
+import {
+  ConditionalIcon,
+  DownIcon,
+  UpIcon,
+} from '@/components/elements/SemanticIcons';
 import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
 import { getItemFromTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
 import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
@@ -61,6 +65,22 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     item
   );
 
+  const menuItems = useMemo(
+    () => [
+      {
+        key: 'edit',
+        title: 'Edit',
+        onClick: () => openFormItemEditor(item),
+      },
+      {
+        key: 'delete',
+        title: 'Delete',
+        to: '#', // TODO implement
+      },
+    ],
+    [item, openFormItemEditor]
+  );
+
   return (
     <TreeItem2Label
       key={itemId}
@@ -68,10 +88,19 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         display: 'flex',
         alignItems: 'center',
         fontWeight: 600,
+        height: '48px',
       }}
     >
       {displayAttrs && (
-        <Stack direction='row' gap={1} alignItems='center'>
+        <Stack
+          direction='row'
+          gap={1}
+          alignItems='center'
+          sx={{
+            width: '100%', // for text overflow to work for long labels
+            pr: 12, // to account for actions
+          }}
+        >
           <Box
             component={displayAttrs.IconClass}
             className='labelIcon'
@@ -79,45 +108,76 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
             sx={{ fontSize: '1.2rem' }}
           />
           <Typography>{displayAttrs.displayName}:</Typography>
-          {labelProps.children}
-          {item.required && <Typography color='red'>*</Typography>}
-          {/* {<Typography sx={{ color: 'red' }}>{itemPath}</Typography>} */}
-          <IconButton
-            aria-label='edit item'
-            onClick={(e) => {
-              e.stopPropagation();
-              openFormItemEditor(item);
+          <Box
+            component='span'
+            sx={{
+              // Truncate long labels
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
             }}
-            disabled={isSubmitting}
-            size='small'
-            sx={{ ml: 2, color: (theme) => theme.palette.links }}
           >
-            <EditIcon fontSize='inherit' />
-          </IconButton>
+            {labelProps.children}
+          </Box>
+
+          {item.required && <Typography color='red'>*</Typography>}
+          {item.enableWhen && item.enableWhen?.length > 0 && (
+            <ConditionalIcon
+              fontSize='inherit'
+              color='secondary'
+              sx={{ ml: 1, fontSize: '12' }}
+            />
+          )}
+
+          {/* {<Typography sx={{ color: 'red' }}>{itemPath}</Typography>} */}
           <Stack
-            direction='column'
-            sx={{ '.MuiIconButton-root': { height: '24px', width: '24px' } }}
+            sx={{ position: 'absolute', right: 0 }}
+            direction='row'
+            alignItems='center'
+            gap={1}
           >
-            <IconButton
-              aria-label='move item up'
-              onClick={(e) => {
-                e.stopPropagation();
-                onReorder('up');
+            <CommonMenuButton
+              title='Actions'
+              aria-label='item actions'
+              iconButton
+              items={menuItems}
+              variant='outlined'
+              sx={{
+                color: (theme: Theme) => theme.palette.links,
+                height: '28px',
+                width: '28px',
               }}
-              disabled={isSubmitting || !canMoveUp}
-            >
-              <UpIcon />
-            </IconButton>
-            <IconButton
-              aria-label='move item down'
-              onClick={(e) => {
-                e.stopPropagation();
-                onReorder('down');
+              MenuProps={{
+                sx: {
+                  '.MuiPopover-paper': { minWidth: '180px' },
+                },
               }}
-              disabled={isSubmitting || !canMoveDown}
+            />
+            <Stack
+              direction='column'
+              sx={{ '.MuiIconButton-root': { height: '24px', width: '24px' } }}
             >
-              <DownIcon />
-            </IconButton>
+              <IconButton
+                aria-label='move item up'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onReorder('up');
+                }}
+                disabled={isSubmitting || !canMoveUp}
+              >
+                <UpIcon />
+              </IconButton>
+              <IconButton
+                aria-label='move item down'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onReorder('down');
+                }}
+                disabled={isSubmitting || !canMoveDown}
+              >
+                <DownIcon />
+              </IconButton>
+            </Stack>
           </Stack>
         </Stack>
       )}

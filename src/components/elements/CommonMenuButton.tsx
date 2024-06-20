@@ -1,9 +1,18 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Button, ButtonProps, Divider, Menu, MenuItem } from '@mui/material';
+import {
+  Button,
+  ButtonProps,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+  MenuProps,
+} from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { To } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
+import { MoreMenuIcon } from './SemanticIcons';
 
 export type NavMenuItem = {
   key: string;
@@ -19,30 +28,58 @@ interface Props {
   items: NavMenuItem[];
   variant?: ButtonProps['variant'];
   disabled?: ButtonProps['disabled'];
+  iconButton?: boolean; // use an icon button instead of a text button
+  sx?: ButtonProps['sx'];
+  MenuProps?: Omit<MenuProps, 'open'>;
 }
 
-const CommonMenuButton = ({ title, items, ...buttonProps }: Props) => {
+const CommonMenuButton = ({
+  title,
+  items,
+  iconButton,
+  MenuProps,
+  ...buttonProps
+}: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
     setAnchorEl(null);
   };
+
   return (
     <>
-      <Button
-        id='menu-button'
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup='true'
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        endIcon={<ArrowDropDownIcon />}
-        {...buttonProps}
-      >
-        {title}
-      </Button>
+      {iconButton ? (
+        <IconButton
+          id='menu-button'
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup='true'
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          {...buttonProps}
+        >
+          <MoreMenuIcon fontSize='inherit' />
+        </IconButton>
+      ) : (
+        <Button
+          id='menu-button'
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup='true'
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          endIcon={<ArrowDropDownIcon />}
+          {...buttonProps}
+        >
+          {title}
+        </Button>
+      )}
+
       <Menu
         id='basic-menu'
         anchorEl={anchorEl}
@@ -59,6 +96,7 @@ const CommonMenuButton = ({ title, items, ...buttonProps }: Props) => {
           vertical: 'top',
           horizontal: 'right',
         }}
+        {...MenuProps}
       >
         {items.map(({ key, to, title, divider, onClick, disabled }) =>
           divider ? (
@@ -68,7 +106,17 @@ const CommonMenuButton = ({ title, items, ...buttonProps }: Props) => {
               {title}
             </MenuItem>
           ) : (
-            <MenuItem key={key} onClick={onClick} disabled={disabled}>
+            <MenuItem
+              key={key}
+              onClick={() => {
+                if (onClick) {
+                  // close menu before triggering onClick
+                  setAnchorEl(null);
+                  onClick();
+                }
+              }}
+              disabled={disabled}
+            >
               {title}
             </MenuItem>
           )

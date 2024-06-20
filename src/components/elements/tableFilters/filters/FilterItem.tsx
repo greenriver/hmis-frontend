@@ -5,7 +5,7 @@ import LabelWithContent from '../../LabelWithContent';
 
 import TableFilterItemCheckboxes from './items/Checkboxes';
 import PickListWrapper from './items/PickListWrapper';
-import TableFilterItemSelect from './items/Select';
+import TableFilterItemSelect from './items/TableFilterItemSelect';
 
 import { TableFilterItemSelectorProps } from './items/types';
 import { FilterType } from '@/modules/dataFetching/types';
@@ -69,7 +69,10 @@ const TableFilterItem = <T,>({
             : undefined;
 
         if (filter.type === 'enum') {
-          const options = localResolvePickList(filter.enumType, true) || [];
+          const options =
+            filter.pickListOptions ||
+            localResolvePickList(filter.enumType, true) ||
+            [];
           const variant =
             filter.variant ||
             (options.length < 3 && filter.multi ? 'checkboxes' : 'select');

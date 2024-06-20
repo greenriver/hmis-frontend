@@ -7341,6 +7341,27 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'ReferralPostingFilterOptions',
+    args: [
+      {
+        name: 'status',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'ReferralPostingStatus',
+              ofType: null,
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'ReferralPostingInput',
     args: [
       {

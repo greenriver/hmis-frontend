@@ -6,12 +6,14 @@ import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
+import { useReferralFilter } from '@/modules/referrals/components/useReferralFilter';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   GetDeniedPendingReferralPostingsDocument,
   GetDeniedPendingReferralPostingsQuery,
   GetDeniedPendingReferralPostingsQueryVariables,
   ReferralPostingFieldsFragment,
+  ReferralPostingStatus,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -39,6 +41,7 @@ const AdminReferralDenials = () => {
         render: (row: ReferralPostingFieldsFragment) =>
           parseAndFormatDate(row.referralDate),
       },
+
       {
         header: 'Project',
         render: (row: ReferralPostingFieldsFragment) =>
@@ -60,11 +63,23 @@ const AdminReferralDenials = () => {
       },
       {
         header: 'Denied By',
-        render: (row: ReferralPostingFieldsFragment) => row.statusUpdatedBy,
+        render: (row: ReferralPostingFieldsFragment) => {
+          const action =
+            row.status === ReferralPostingStatus.DeniedPendingStatus
+              ? 'Denied by '
+              : 'Denial Approved by ';
+          return `${action}${row.statusUpdatedBy}`;
+        },
       },
     ],
     [externalReferrals]
   );
+
+  const referralFilter = useReferralFilter([
+    ReferralPostingStatus.DeniedPendingStatus,
+    ReferralPostingStatus.DeniedStatus,
+  ]);
+
   return (
     <>
       <PageTitle title='Denials' />
@@ -81,6 +96,11 @@ const AdminReferralDenials = () => {
           pagePath='deniedPendingReferralPostings'
           rowLinkTo={rowLinkTo}
           defaultPageSize={25}
+          filters={{ status: referralFilter }}
+          defaultFilterValues={{
+            status: [ReferralPostingStatus.DeniedPendingStatus],
+          }}
+          paginationItemName='denied referral'
         />
       </Paper>
     </>
