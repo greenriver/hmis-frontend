@@ -29,7 +29,7 @@ const PageTitle = ({
       }}
     >
       {typeof title === 'string' ? (
-        <Typography variant='h3' component='h1' sx={{ mt: 0 }}>
+        <Typography variant='h3' component='h1'>
           {overlineText ? (
             <Typography variant='overline' color='links' display='block'>
               {overlineText}
