@@ -74,7 +74,6 @@ export default function useReorderItem(
             console.log('case 1');
             const prevLinkId = prevItem.linkId;
             const prevItemPath = itemIdMap[prevLinkId] + '.item';
-            expandItem(prevLinkId);
 
             const moveItem = () =>
               reset(
@@ -94,6 +93,8 @@ export default function useReorderItem(
                 },
                 { keepDefaultValues: true }
               );
+
+            expandItem(prevLinkId); // expand the group it's moving into
             setTimeout(() => moveItem()); // move on next render
           } else {
             // CASE 2: Swap this item with the (non-group) item above it
@@ -154,7 +155,7 @@ export default function useReorderItem(
                 },
                 { keepDefaultValues: true }
               );
-            expandItem(nextLinkId);
+            expandItem(nextLinkId); // expand the group it's moving into
             setTimeout(() => moveItem()); // move on next render
           } else {
             // CASE 5: Swap this item with the (non-group) item below it
