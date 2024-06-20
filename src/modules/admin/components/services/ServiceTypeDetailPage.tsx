@@ -1,12 +1,11 @@
-import { IconButton, Paper, Stack } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import { useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { CommonUnstyledList } from '@/components/CommonUnstyledList';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
+import EditIconButton from '@/components/elements/EditIconButton';
 import Loading from '@/components/elements/Loading';
 import RouterLink from '@/components/elements/RouterLink';
-import { EditIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -45,16 +44,11 @@ const ServiceTypeDetailPage = () => {
         overlineText='Manage Service'
         title={data.serviceType.name}
         endElement={
-          <ButtonTooltipContainer title='Edit Service Type'>
-            <IconButton
-              aria-label='edit service type'
-              onClick={() => setUpdateDialogOpen(true)}
-              size='small'
-              sx={{ color: (theme) => theme.palette.links, ml: 1, mb: 0.5 }}
-            >
-              <EditIcon fontSize='inherit' />
-            </IconButton>
-          </ButtonTooltipContainer>
+          <EditIconButton
+            title='Edit Service Type'
+            onClick={() => setUpdateDialogOpen(true)}
+            sx={{ ml: 1, mb: 0.5 }}
+          />
         }
         actions={
           <DeleteMutationButton<

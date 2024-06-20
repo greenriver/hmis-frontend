@@ -3,7 +3,8 @@ import { Stack } from '@mui/system';
 import React from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 
-import { DeleteIcon, EditIcon } from '@/components/elements/SemanticIcons';
+import EditIconButton from '@/components/elements/EditIconButton';
+import { DeleteIcon } from '@/components/elements/SemanticIcons';
 import PageTitle from '@/components/layout/PageTitle';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import {
@@ -54,16 +55,11 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
           title={formDefinition.title}
           overlineText='Editing Draft'
           endElement={
-            <ButtonTooltipContainer title='Edit Title'>
-              <IconButton
-                aria-label='edit title'
-                onClick={openEditDialog}
-                size='small'
-                sx={{ color: (theme) => theme.palette.links, ml: 1, mb: 0.5 }}
-              >
-                <EditIcon fontSize='small' />
-              </IconButton>
-            </ButtonTooltipContainer>
+            <EditIconButton
+              title='Edit Title'
+              onClick={openEditDialog}
+              sx={{ ml: 1, mb: 0.5 }}
+            />
           }
         />
 
