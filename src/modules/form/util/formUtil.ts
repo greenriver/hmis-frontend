@@ -795,7 +795,11 @@ export const getInitialValues = (
       } else if (!isNil(initial.valueNumber)) {
         values[item.linkId] = initial.valueNumber;
       } else if (initial.valueCode) {
-        values[item.linkId] = getOptionValue(initial.valueCode, item);
+        if ([ItemType.Choice, ItemType.OpenChoice].includes(item.type)) {
+          values[item.linkId] = getOptionValue(initial.valueCode, item);
+        } else {
+          values[item.linkId] = initial.valueCode; // set code directly for non-choice type (eg string)
+        }
       } else if (initial.valueLocalConstant) {
         const varName = initial.valueLocalConstant.replace(/^\$/, '');
         if (localConstants && varName in localConstants) {
