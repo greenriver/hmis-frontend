@@ -14,18 +14,22 @@ import Image from './item/Image';
 import TextContent from './item/TextContent';
 
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
 import ClientAddress from '@/modules/client/components/ClientAddress';
+import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
+import ClientName from '@/modules/client/components/ClientName';
 import {
   formatDateForDisplay,
   formatTimeOfDay,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import {
+  ClientContactPointSystem,
   Component,
   DisabledDisplay,
   FormItem,
@@ -184,9 +188,49 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       return <File id={value} />;
     case ItemType.Object:
       switch (item.component) {
-        case Component.Address:
+        case Component.Address: // Used in Move-in Date Display
           return ensureArray(value).map((address) => (
-            <ClientAddress address={address} key={JSON.stringify(address)} />
+            <CommonLabeledTextBlock title={label} key={JSON.stringify(address)}>
+              <ClientAddress address={address} />
+            </CommonLabeledTextBlock>
+          ));
+        case Component.Name:
+          // Only used for Form Preview as read-only
+          return ensureArray(value).map((name) => (
+            <CommonLabeledTextBlock title={label} key={JSON.stringify(name)}>
+              <ClientName
+                client={{
+                  firstName: name.first,
+                  middleName: name.middle,
+                  lastName: name.last,
+                  nameSuffix: name.suffix,
+                }}
+              />
+            </CommonLabeledTextBlock>
+          ));
+        case Component.Email:
+          // Only used for Form Preview as read-only
+          return ensureArray(value).map((email) => (
+            <CommonLabeledTextBlock title={label} key={JSON.stringify(email)}>
+              <ClientContactPoint
+                contactPoint={{
+                  ...email,
+                  system: ClientContactPointSystem.Email,
+                }}
+              />
+            </CommonLabeledTextBlock>
+          ));
+        case Component.Phone:
+          // Only used for Form Preview as read-only
+          return ensureArray(value).map((phone) => (
+            <CommonLabeledTextBlock title={label} key={JSON.stringify(phone)}>
+              <ClientContactPoint
+                contactPoint={{
+                  ...phone,
+                  system: ClientContactPointSystem.Phone,
+                }}
+              />
+            </CommonLabeledTextBlock>
           ));
         default:
           return (

@@ -1,7 +1,9 @@
 import { Button, Grid } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { generatePath } from 'react-router-dom';
 import { usePublishForm } from './usePublishForm';
+import ButtonLink from '@/components/elements/ButtonLink';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
@@ -18,13 +20,17 @@ import DynamicForm, {
 } from '@/modules/form/components/DynamicForm';
 import FormNavigation from '@/modules/form/components/FormNavigation';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
+import { FormValues } from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
+  createInitialValuesFromSavedValues,
   getFormStepperItems,
   getInitialValues,
   getItemMap,
+  createValuesForSubmit,
 } from '@/modules/form/util/formUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
   FormStatus,
   useGetFormDefinitionFieldsForEditorQuery,
@@ -46,6 +52,8 @@ export const toggleItems: ToggleItem<PreviewMode>[] = [
 // Publish is possible if it is a draft and user has appropriate permission.
 const FormPreview = () => {
   const { formId } = useSafeParams() as { formId: string };
+  const [toggleValue, setToggleValue] = useState<PreviewMode>('input');
+
   const {
     data: { formDefinition } = {},
     loading,
@@ -62,16 +70,15 @@ const FormPreview = () => {
 
   useScrollToHash(loading, STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT);
 
+  // Initial values based on item.initial properties
   const initialValues = useMemo(() => {
-    return formDefinition?.definition
-      ? {
-          ...getInitialValues(formDefinition?.definition, localConstants),
-        }
-      : {};
+    if (!formDefinition?.definition) return {};
+    return getInitialValues(formDefinition.definition, localConstants);
   }, [formDefinition?.definition, localConstants]);
-  const [formValues, setFormValues] = useState<object>(initialValues);
 
-  const [toggleValue, setToggleValue] = useState<PreviewMode>('input');
+  // Current form state, which updates when user toggles away from "input view" mode
+  // This has the same shape as WIP Values when saved (e.g. a map keyed by Link ID)
+  const [formValues, setFormValues] = useState<object>(initialValues);
 
   const itemMap = useMemo(
     () => formDefinition && getItemMap(formDefinition.definition),
@@ -89,29 +96,48 @@ const FormPreview = () => {
     [itemMap, formDefinition, initialValues, localConstants]
   );
 
+  const onSaveFormValues = useCallback(
+    (values: FormValues) =>
+      formDefinition &&
+      setFormValues(createValuesForSubmit(values, formDefinition.definition)),
+    [formDefinition]
+  );
+
   const form = useMemo(() => {
+    if (!itemMap) return;
+
+    // transformation to fill in pick list option labels, among other things
+    const formState = createInitialValuesFromSavedValues(itemMap, formValues);
+
     return (
       formDefinition &&
       (toggleValue === 'readOnly' ? (
         <DynamicView
           definition={formDefinition.definition}
           localConstants={localConstants}
-          values={formValues}
+          values={formState}
         />
       ) : (
         <DynamicForm
           definition={formDefinition.definition}
           onSubmit={() => {}}
-          onSaveDraft={(values) => setFormValues(values)}
+          onSaveDraft={onSaveFormValues}
           errors={{ errors: [], warnings: [] }}
           localConstants={localConstants}
-          initialValues={initialValues}
-          FormActionProps={{ config: [] }}
+          initialValues={formState}
+          hideSubmit
           ref={formRef}
         />
       ))
     );
-  }, [formDefinition, formValues, initialValues, localConstants, toggleValue]);
+  }, [
+    formDefinition,
+    formValues,
+    itemMap,
+    localConstants,
+    onSaveFormValues,
+    toggleValue,
+  ]);
 
   const [confirmOpen, setConfirmOpen] = useState(false);
   const { publishLoading, onPublishForm } = usePublishForm({
@@ -123,6 +149,7 @@ const FormPreview = () => {
   if (error) throw error;
 
   if (!formDefinition) return <NotFound />;
+
   return (
     <>
       <PageTitle
@@ -147,7 +174,22 @@ const FormPreview = () => {
 
         {formDefinition.status === FormStatus.Draft && (
           <RootPermissionsFilter permissions='canManageForms'>
-            <Button onClick={() => setConfirmOpen(true)}>Publish</Button>
+            <Stack direction='row' spacing={4}>
+              <ButtonLink
+                onClick={() => setConfirmOpen(true)}
+                variant='text'
+                sx={{ px: 4 }}
+                to={generatePath(AdminDashboardRoutes.EDIT_FORM, {
+                  identifier: formDefinition?.identifier,
+                  formId: formDefinition?.id,
+                })}
+              >
+                Edit Draft
+              </ButtonLink>
+              <Button onClick={() => setConfirmOpen(true)} sx={{ px: 6 }}>
+                Publish
+              </Button>
+            </Stack>
             <ConfirmationDialog
               id='publish'
               open={confirmOpen}

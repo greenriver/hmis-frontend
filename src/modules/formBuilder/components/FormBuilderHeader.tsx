@@ -1,10 +1,12 @@
-import { Button, IconButton, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { EditIcon } from '@/components/elements/SemanticIcons';
+
+import EditIconButton from '@/components/elements/EditIconButton';
+import PageTitle from '@/components/layout/PageTitle';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
+
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { cache } from '@/providers/apolloClient';
 import { AdminDashboardRoutes } from '@/routes/routes';
@@ -67,22 +69,17 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
         justifyContent='space-between'
         alignItems='end'
       >
-        <Typography sx={{ mb: 2 }} variant='h2' component='h1'>
-          <Typography variant='overline' color='links' display='block'>
-            Editing Draft
-          </Typography>
-          {formDefinition.title}
-          <ButtonTooltipContainer title='Edit Title'>
-            <IconButton
-              aria-label='edit title'
+        <PageTitle
+          title={formDefinition.title}
+          overlineText='Editing Draft'
+          endElement={
+            <EditIconButton
+              title='Edit Title'
               onClick={openEditDialog}
-              size='small'
-              sx={{ color: (theme) => theme.palette.links, ml: 2, mb: 0.5 }}
-            >
-              <EditIcon fontSize='small' />
-            </IconButton>
-          </ButtonTooltipContainer>
-        </Typography>
+              sx={{ ml: 1, mb: 0.5 }}
+            />
+          }
+        />
 
         <Stack direction='row' spacing={4} alignItems='center'>
           <Button
