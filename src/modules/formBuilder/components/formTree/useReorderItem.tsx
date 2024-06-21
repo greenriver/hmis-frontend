@@ -1,11 +1,12 @@
 import { get } from 'lodash-es';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import {
   Control,
   useFieldArray,
   useFormContext,
   useWatch,
 } from 'react-hook-form';
+import { FormTreeContext } from './FormTreeContext';
 import {
   getItemIdMap,
   getPathContext,
@@ -14,9 +15,6 @@ import {
 } from '@/modules/formBuilder/formBuilderUtil';
 import { FormDefinitionJson, FormItem, ItemType } from '@/types/gqlTypes';
 
-// TODO(#6094) - Limit nesting depth to 5
-// TODO(#6094) - Auto open a group when an item is moved into it.
-//  This involves turning Mui Tree's expandedItems into a controlled prop - see https://github.com/greenriver/hmis-frontend/pull/797
 export default function useReorderItem(
   control: Control,
   itemId: string,
@@ -24,7 +22,7 @@ export default function useReorderItem(
 ) {
   const values = useWatch({ control });
   const { reset } = useFormContext();
-
+  const { expandItem } = useContext(FormTreeContext);
   // Re-generate itemIdMap each time values change (linkId=>position)
   const itemIdMap = useMemo(() => getItemIdMap(values.item), [values]);
 
@@ -37,8 +35,9 @@ export default function useReorderItem(
   if (!itemPath) throw new Error(`No itemPath found for linkId ${itemId}`);
   const { parentPath: parentArrayPath, index: thisIndex } =
     getPathContext(itemPath);
+  const parentItemId = parentArrayPath.replace(/\.item$/, '');
   const { parentPath: grandParentArrayPath, index: parentIndex } =
-    getPathContext(parentArrayPath.replace(/\.item$/, ''));
+    getPathContext(parentItemId);
 
   // RHF swap is used for swapping items within an array
   const { swap } = useFieldArray({ control, name: parentArrayPath });
@@ -71,6 +70,8 @@ export default function useReorderItem(
             console.log('case 1');
             const prevLinkId = prevItem.linkId;
             const prevItemPath = itemIdMap[prevLinkId] + '.item';
+
+            expandItem(prevLinkId); // expand the group it's moving into
             reset(
               (oldForm) => {
                 removeItemFromDefinition({
@@ -97,6 +98,7 @@ export default function useReorderItem(
           // CASE 3: This item is the first item in its group, so we need to move it "out"
           // of its group and insert it into it's parent array.
           console.log('case 3');
+
           reset(
             (oldForm) => {
               removeItemFromDefinition({
@@ -114,6 +116,7 @@ export default function useReorderItem(
             },
             { keepDefaultValues: true }
           );
+
           // else, this is the first item in the top layer, so hitting the 'up' button does nothing.
         }
       } else if (direction === 'down') {
@@ -127,6 +130,7 @@ export default function useReorderItem(
             const nextLinkId = nextItem.linkId;
             const nextItemPath = itemIdMap[nextLinkId] + '.item';
 
+            expandItem(nextLinkId); // expand the group it's moving into
             reset(
               (oldForm) => {
                 insertItemToDefinition({
@@ -153,6 +157,7 @@ export default function useReorderItem(
           if (hasParent) {
             // CASE 6: This is the last item at this depth. Move into the parent layer
             console.log('case 6', parentIndex);
+
             reset(
               (oldForm) => {
                 insertItemToDefinition({
@@ -180,6 +185,7 @@ export default function useReorderItem(
       thisLayer,
       itemIdMap,
       reset,
+      expandItem,
       parentArrayPath,
       item,
       swap,
