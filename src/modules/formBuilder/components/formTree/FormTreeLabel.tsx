@@ -5,6 +5,7 @@ import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
 import React, { useMemo } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
+import { FormTreeContext } from './FormTreeContext';
 import useReorderItem from './useReorderItem';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
 import {
@@ -13,7 +14,6 @@ import {
   UpIcon,
 } from '@/components/elements/SemanticIcons';
 import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
-import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
 import { getItemFromTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
 import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
 import { ItemType } from '@/types/gqlTypes';
