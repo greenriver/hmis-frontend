@@ -1,5 +1,11 @@
 import { get } from 'lodash-es';
-import { useCallback, useContext, useMemo } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useMemo,
+} from 'react';
 import {
   Control,
   useFieldArray,
@@ -12,10 +18,11 @@ import {
   getPathContext,
   insertItemToDefinition,
   removeItemFromDefinition,
+  validateDeletion,
 } from '@/modules/formBuilder/formBuilderUtil';
 import { FormDefinitionJson, FormItem, ItemType } from '@/types/gqlTypes';
 
-export default function useReorderItem(
+export default function useUpdateFormStructure(
   control: Control,
   itemId: string,
   item: FormItem
@@ -32,7 +39,6 @@ export default function useReorderItem(
   // grandParentArrayPath:  item        (parentIndex=3)
 
   const itemPath = itemIdMap[itemId];
-  if (!itemPath) throw new Error(`No itemPath found for linkId ${itemId}`);
   const { parentPath: parentArrayPath, index: thisIndex } =
     getPathContext(itemPath);
   const parentItemId = parentArrayPath.replace(/\.item$/, '');
@@ -40,16 +46,13 @@ export default function useReorderItem(
     getPathContext(parentItemId);
 
   // RHF swap is used for swapping items within an array
-  const { swap } = useFieldArray({ control, name: parentArrayPath });
+  const { swap, remove } = useFieldArray({ control, name: parentArrayPath });
 
   const thisLayer = get(values, parentArrayPath);
-  if (!thisLayer)
-    throw new Error(`failed to find parentArrayPath: ${parentArrayPath}`);
-
   const hasParent = parentIndex !== -1;
 
   const canMoveDown = useMemo(() => {
-    const hasSiblingBelow = !!thisLayer[thisIndex + 1];
+    const hasSiblingBelow = thisLayer ? !!thisLayer[thisIndex + 1] : false;
     return hasSiblingBelow || hasParent;
   }, [hasParent, thisIndex, thisLayer]);
 
@@ -57,6 +60,25 @@ export default function useReorderItem(
     const hasSiblingAbove = thisIndex > 0;
     return hasSiblingAbove || hasParent;
   }, [hasParent, thisIndex]);
+
+  const onDelete = useCallback(
+    (onError: Dispatch<SetStateAction<string | undefined>>) => {
+      const { success, error } = validateDeletion({
+        toDelete: itemId,
+        definition: values as FormDefinitionJson,
+      });
+
+      if (error) {
+        onError(error);
+        return;
+      }
+
+      if (success) {
+        remove(thisIndex);
+      }
+    },
+    [values, itemId, thisIndex]
+  );
 
   const onReorder = useCallback(
     (direction: 'up' | 'down') => {
@@ -194,5 +216,5 @@ export default function useReorderItem(
     ]
   );
 
-  return { onReorder, itemPath, canMoveUp, canMoveDown };
+  return { onReorder, onDelete, itemPath, canMoveUp, canMoveDown };
 }

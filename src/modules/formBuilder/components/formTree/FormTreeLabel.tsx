@@ -3,20 +3,21 @@ import { Box, Stack, Theme } from '@mui/system';
 import { TreeItem2Label, UseTreeItem2Parameters } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
-import React, { useMemo } from 'react';
-import { useFormContext, useFormState } from 'react-hook-form';
+import React, { useMemo, useState } from 'react';
+import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { FormTreeContext } from './FormTreeContext';
-import useReorderItem from './useReorderItem';
+import useUpdateFormStructure from './useUpdateFormStructure';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import {
   ConditionalIcon,
   DownIcon,
   UpIcon,
 } from '@/components/elements/SemanticIcons';
+import { getItemMap } from '@/modules/form/util/formUtil';
 import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
-import { getItemFromTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
 import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
-import { ItemType } from '@/types/gqlTypes';
+import { FormDefinitionJson, ItemType } from '@/types/gqlTypes';
 
 export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
   return FORM_ITEM_PALETTE[type];
@@ -38,9 +39,11 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   const { openFormItemEditor } = React.useContext(FormTreeContext);
 
   const { control } = useFormContext();
+  const values = useWatch({ control });
+
   const { isSubmitting } = useFormState({ control });
 
-  const { getLabelProps, publicAPI } = useTreeItem2({
+  const { getLabelProps } = useTreeItem2({
     id,
     itemId,
     children,
@@ -48,22 +51,23 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     disabled,
   });
 
-  // we could get this from the form instead of from the tree api
-  const treeItem = publicAPI.getItem(itemId);
-  const item = useMemo(() => getItemFromTree(treeItem), [treeItem]);
+  const itemMap = useMemo(
+    () => getItemMap(values as FormDefinitionJson),
+    [values]
+  );
+  const item = useMemo(() => itemMap[itemId], [itemMap, itemId]);
 
   const displayAttrs = useMemo(
-    () => getItemDisplayAttrs(item.type),
-    [item.type]
+    () => getItemDisplayAttrs(item?.type),
+    [item?.type]
   );
 
   const labelProps = getLabelProps();
 
-  const { onReorder, canMoveUp, canMoveDown } = useReorderItem(
-    control,
-    itemId,
-    item
-  );
+  const { onReorder, onDelete, canMoveUp, canMoveDown } =
+    useUpdateFormStructure(control, itemId, item);
+
+  const [error, setError] = useState<string | undefined>();
 
   const menuItems = useMemo(
     () => [
@@ -75,10 +79,10 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
       {
         key: 'delete',
         title: 'Delete',
-        to: '#', // TODO implement
+        onClick: () => onDelete(setError),
       },
     ],
-    [item, openFormItemEditor]
+    [item, openFormItemEditor, onDelete]
   );
 
   return (
@@ -91,6 +95,16 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         height: '48px',
       }}
     >
+      <ConfirmationDialog
+        open={!!error}
+        title='Cannot delete'
+        onConfirm={() => {
+          setError(undefined);
+        }}
+        loading={false}
+      >
+        {error}
+      </ConfirmationDialog>
       {displayAttrs && (
         <Stack
           direction='row'

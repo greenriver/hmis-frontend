@@ -214,3 +214,74 @@ export const insertItemToDefinition = ({
     newParentArray.splice(insertAtIndex, 0, item);
   }
 };
+
+/**
+ * Validates that the attempted deletion action is allowed. It is allowed if the item
+ * the user is trying to delete doesn't have any other items that refer to it.
+ * If dependents exist, then the operation is not allowed and the function returns a user-facing error string.
+ *
+ * @param toDelete the linkId of the item the user is trying to delete
+ * @param definition the current form definition
+ */
+export const validateDeletion = ({
+  toDelete,
+  definition,
+}: {
+  toDelete: string;
+  definition: FormDefinitionJson;
+}): { success: boolean; error?: string } => {
+  // Mapping of linkId of the dependent question => an array of user-facing strings
+  // representing where the problematic dependency is located on that item, e.g. autofill or enableWhen
+  const errors: Record<string, string[]> = {};
+
+  function checkDependence(toDelete: string, toCheck: FormItem) {
+    toCheck.enableWhen?.forEach((enableWhen) => {
+      if (
+        enableWhen.question === toDelete ||
+        enableWhen.compareQuestion === toDelete
+      ) {
+        if (!errors[toCheck.linkId]) errors[toCheck.linkId] = [];
+        errors[toCheck.linkId] = [
+          ...errors[toCheck.linkId],
+          'conditional visibility',
+        ];
+      }
+    });
+
+    toCheck.autofillValues?.forEach((autofillValue) => {
+      if (
+        autofillValue.valueQuestion === toDelete ||
+        autofillValue.sumQuestions?.includes(toDelete)
+      ) {
+        if (!errors[toCheck.linkId]) errors[toCheck.linkId] = [];
+        errors[toCheck.linkId] = [...errors[toCheck.linkId], 'autofill'];
+      }
+    });
+
+    toCheck.bounds?.forEach((bound) => {
+      if (bound.question === toDelete) {
+        if (!errors[toCheck.linkId]) errors[toCheck.linkId] = [];
+        errors[toCheck.linkId] = [...errors[toCheck.linkId], 'bounds'];
+      }
+    });
+  }
+
+  function recurseCheckDependence(items: Maybe<FormItem[]> | undefined) {
+    items?.forEach((item) => {
+      checkDependence(toDelete, item);
+      recurseCheckDependence(item.item);
+    });
+  }
+
+  recurseCheckDependence(definition.item);
+
+  if (Object.keys(errors).length > 0) {
+    let s = 'Cannot delete this item, because another question depends on it.';
+    Object.keys(errors).forEach((key) => {
+      s += `\n\t- Question ${key}: ${errors[key].join(', ')}`;
+    });
+    return { success: false, error: s };
+  }
+
+  return { success: true };
+};
