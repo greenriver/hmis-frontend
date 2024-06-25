@@ -196,21 +196,29 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         </Box>
         <FormBuilderPalette
           onItemClick={(itemType) => {
-            const newItem: FormItem = {
-              linkId: `q_${v4().split('-')[0]}`, // Randomly generate a placeholder link ID
-              text: undefined,
-              type: itemType,
-              required: false,
-              warnIfEmpty: false,
-              hidden: false,
-              readOnly: false,
-              repeats: false,
-              prefill: false,
-              disabledDisplay: DisabledDisplay.Hidden,
-              enableBehavior: EnableBehavior.All,
-            };
+            function editNewItem() {
+              const newItem: FormItem = {
+                linkId: `q_${v4().split('-')[0]}`, // Randomly generate a placeholder link ID
+                text: undefined,
+                type: itemType,
+                required: false,
+                warnIfEmpty: false,
+                hidden: false,
+                readOnly: false,
+                repeats: false,
+                prefill: false,
+                disabledDisplay: DisabledDisplay.Hidden,
+                enableBehavior: EnableBehavior.All,
+              };
 
-            setSelectedItem(newItem);
+              setSelectedItem(newItem);
+            }
+
+            if (isDirty) {
+              setBlockedActionFunction(() => editNewItem);
+            } else {
+              editNewItem();
+            }
           }}
         />
       </Box>
