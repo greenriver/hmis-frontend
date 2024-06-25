@@ -76,6 +76,7 @@ const projectDashboardRoutes = {
   PROJECT_ENROLLMENTS: 'enrollments',
   PROJECT_ASSESSMENTS: 'assessments',
   PROJECT_SERVICES: 'services',
+  PROJECT_CURRENT_LIVING_SITUATIONS: 'current-living-situations',
   BULK_BED_NIGHTS: 'bed-nights',
   BULK_ASSIGN_SERVICE: 'bulk-service',
   BULK_BED_NIGHTS_NEW_HOUSEHOLD: 'bed-nights/new-household',
@@ -153,7 +154,7 @@ export const AdminDashboardRoutes: {
 // Auto-hide left desktop nav for some routes
 export const HIDE_NAV_ROUTES: string[] = [
   // EnrollmentDashboardRoutes.NEW_ASSESSMENT
-  AdminDashboardRoutes.EDIT_FORM,
+  // AdminDashboardRoutes.EDIT_FORM,
 ];
 
 export const FOCUS_MODE_ROUTES = [

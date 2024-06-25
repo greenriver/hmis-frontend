@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -44,6 +44,9 @@ const FormBuilderPage = () => {
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
+  useEffect(() => {
+    setErrorState(emptyErrorState);
+  }, [selectedItem, setErrorState]);
   const [
     updateFormDefinition,
     { loading: saveLoading, error: saveError, data },
@@ -93,7 +96,6 @@ const FormBuilderPage = () => {
       lastUpdatedBy={lastUpdatedBy}
       selectedItem={selectedItem}
       setSelectedItem={setSelectedItem}
-      closeItemEditor={() => setSelectedItem(undefined)}
       onSave={(newDefinition) => {
         return updateFormDefinition({
           variables: {

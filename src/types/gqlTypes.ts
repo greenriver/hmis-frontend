@@ -13908,10 +13908,10 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               __typename?: 'Enrollment';
               id: string;
               lockVersion: number;
+              autoExited: boolean;
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
-              autoExited: boolean;
               currentUnit?: {
                 __typename?: 'Unit';
                 id: string;
@@ -15670,6 +15670,91 @@ export type CurrentLivingSituationFieldsFragment = {
   }>;
 };
 
+export type ProjectCurrentLivingSituationFieldsFragment = {
+  __typename?: 'CurrentLivingSituation';
+  id: string;
+  clsSubsidyType?: RentalSubsidyType | null;
+  currentLivingSituation: CurrentLivingSituationOptions;
+  informationDate?: string | null;
+  leaseOwn60Day?: NoYesReasonsForMissingData | null;
+  leaveSituation14Days?: NoYesReasonsForMissingData | null;
+  locationDetails?: string | null;
+  movedTwoOrMore?: NoYesReasonsForMissingData | null;
+  resourcesToObtain?: NoYesReasonsForMissingData | null;
+  subsequentResidence?: NoYesReasonsForMissingData | null;
+  dateUpdated?: string | null;
+  dateCreated?: string | null;
+  client: {
+    __typename?: 'Client';
+    id: string;
+    lockVersion: number;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+  };
+  user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
+};
+
 export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -15700,6 +15785,110 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         subsequentResidence?: NoYesReasonsForMissingData | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          fieldType: CustomDataElementType;
+          repeats: boolean;
+          displayHooks: Array<DisplayHook>;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated?: string | null;
+            dateUpdated?: string | null;
+            user?: {
+              __typename: 'ApplicationUser';
+              id: string;
+              name: string;
+              email: string;
+            } | null;
+          }> | null;
+        }>;
+      }>;
+    };
+  } | null;
+};
+
+export type GetProjectCurrentLivingSituationsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetProjectCurrentLivingSituationsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    currentLivingSituations: {
+      __typename?: 'CurrentLivingSituationsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CurrentLivingSituation';
+        id: string;
+        clsSubsidyType?: RentalSubsidyType | null;
+        currentLivingSituation: CurrentLivingSituationOptions;
+        informationDate?: string | null;
+        leaseOwn60Day?: NoYesReasonsForMissingData | null;
+        leaveSituation14Days?: NoYesReasonsForMissingData | null;
+        locationDetails?: string | null;
+        movedTwoOrMore?: NoYesReasonsForMissingData | null;
+        resourcesToObtain?: NoYesReasonsForMissingData | null;
+        subsequentResidence?: NoYesReasonsForMissingData | null;
+        dateUpdated?: string | null;
+        dateCreated?: string | null;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          lockVersion: number;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+        };
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -17165,6 +17354,13 @@ export type EnrollmentSummaryFieldsFragment = {
   canViewEnrollment: boolean;
 };
 
+export type EnrollmentRangeFieldsFragment = {
+  __typename?: 'Enrollment';
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+};
+
 export type GetEnrollmentQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -18094,10 +18290,10 @@ export type GetEnrollmentWithHouseholdQuery = {
           __typename?: 'Enrollment';
           id: string;
           lockVersion: number;
+          autoExited: boolean;
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
-          autoExited: boolean;
           currentUnit?: {
             __typename?: 'Unit';
             id: string;
@@ -26422,10 +26618,10 @@ export type HouseholdFieldsFragment = {
       __typename?: 'Enrollment';
       id: string;
       lockVersion: number;
+      autoExited: boolean;
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
-      autoExited: boolean;
       currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
     };
   }>;
@@ -26500,10 +26696,10 @@ export type HouseholdClientFieldsFragment = {
     __typename?: 'Enrollment';
     id: string;
     lockVersion: number;
+    autoExited: boolean;
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
-    autoExited: boolean;
     currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
   };
 };
@@ -26662,10 +26858,10 @@ export type GetHouseholdQuery = {
         __typename?: 'Enrollment';
         id: string;
         lockVersion: number;
+        autoExited: boolean;
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
-        autoExited: boolean;
         currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
       };
     }>;
@@ -28374,6 +28570,7 @@ export type GetProjectServicesQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          inProgress: boolean;
           client: {
             __typename?: 'Client';
             dob?: string | null;
@@ -32251,6 +32448,13 @@ export const ServiceTypeConfigFieldsFragmentDoc = gql`
   }
   ${ServiceTypeFieldsFragmentDoc}
 `;
+export const EnrollmentRangeFieldsFragmentDoc = gql`
+  fragment EnrollmentRangeFields on Enrollment {
+    entryDate
+    exitDate
+    inProgress
+  }
+`;
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
     id
@@ -32274,6 +32478,22 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+`;
+export const ProjectCurrentLivingSituationFieldsFragmentDoc = gql`
+  fragment ProjectCurrentLivingSituationFields on CurrentLivingSituation {
+    client {
+      id
+      ...ClientName
+    }
+    enrollment {
+      id
+      ...EnrollmentRangeFields
+    }
+    ...CurrentLivingSituationFields
+  }
+  ${ClientNameFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
+  ${CurrentLivingSituationFieldsFragmentDoc}
 `;
 export const CustomCaseNoteFieldsFragmentDoc = gql`
   fragment CustomCaseNoteFields on CustomCaseNote {
@@ -32739,9 +32959,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
     enrollment {
       id
       lockVersion
-      entryDate
-      exitDate
-      inProgress
+      ...EnrollmentRangeFields
       autoExited
       currentUnit {
         id
@@ -32754,6 +32972,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
   ${ClientAccessFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${ClientAlertFieldsFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
 `;
 export const HouseholdFieldsFragmentDoc = gql`
   fragment HouseholdFields on Household {
@@ -37007,6 +37226,79 @@ export type GetEnrollmentCurrentLivingSituationsQueryResult =
     GetEnrollmentCurrentLivingSituationsQuery,
     GetEnrollmentCurrentLivingSituationsQueryVariables
   >;
+export const GetProjectCurrentLivingSituationsDocument = gql`
+  query GetProjectCurrentLivingSituations(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    project(id: $id) {
+      id
+      currentLivingSituations(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ProjectCurrentLivingSituationFields
+        }
+      }
+    }
+  }
+  ${ProjectCurrentLivingSituationFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectCurrentLivingSituationsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectCurrentLivingSituationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectCurrentLivingSituationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectCurrentLivingSituationsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProjectCurrentLivingSituationsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectCurrentLivingSituationsQuery,
+    GetProjectCurrentLivingSituationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectCurrentLivingSituationsQuery,
+    GetProjectCurrentLivingSituationsQueryVariables
+  >(GetProjectCurrentLivingSituationsDocument, options);
+}
+export function useGetProjectCurrentLivingSituationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectCurrentLivingSituationsQuery,
+    GetProjectCurrentLivingSituationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectCurrentLivingSituationsQuery,
+    GetProjectCurrentLivingSituationsQueryVariables
+  >(GetProjectCurrentLivingSituationsDocument, options);
+}
+export type GetProjectCurrentLivingSituationsQueryHookResult = ReturnType<
+  typeof useGetProjectCurrentLivingSituationsQuery
+>;
+export type GetProjectCurrentLivingSituationsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectCurrentLivingSituationsLazyQuery
+>;
+export type GetProjectCurrentLivingSituationsQueryResult = Apollo.QueryResult<
+  GetProjectCurrentLivingSituationsQuery,
+  GetProjectCurrentLivingSituationsQueryVariables
+>;
 export const GetEnrollmentCustomCaseNotesDocument = gql`
   query GetEnrollmentCustomCaseNotes(
     $id: ID!
@@ -40283,8 +40575,7 @@ export const GetProjectServicesDocument = gql`
           ...ServiceBasicFields
           enrollment {
             id
-            entryDate
-            exitDate
+            ...EnrollmentRangeFields
             client {
               ...ClientNameDobVet
             }
@@ -40294,6 +40585,7 @@ export const GetProjectServicesDocument = gql`
     }
   }
   ${ServiceBasicFieldsFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
 `;
 

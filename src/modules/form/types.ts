@@ -2,6 +2,7 @@ import { BreakpointOverrides, SxProps } from '@mui/system';
 import { isNil, isObject } from 'lodash-es';
 import { ReactNode } from 'react';
 
+import { RegisterOptions } from 'react-hook-form';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FormItem,
@@ -195,3 +196,8 @@ export const isTypedObjectWithId = (
 export type AssessmentForPopulation = NonNullable<
   GetAssessmentsForPopulationQuery['client']
 >['assessments']['nodes'][0];
+
+export type RhfRules = Omit<
+  RegisterOptions,
+  'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
+>;

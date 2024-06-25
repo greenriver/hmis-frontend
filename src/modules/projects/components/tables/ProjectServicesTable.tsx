@@ -1,17 +1,19 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { SERVICE_BASIC_COLUMNS } from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
+import EnrollmentDateRangeWithStatus from '@/modules/hmis/components/EnrollmentDateRangeWithStatus';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectServicesDocument,
   GetProjectServicesQuery,
   GetProjectServicesQueryVariables,
   ServicesForProjectFilterOptions,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 export type ServiceFields = NonNullable<
   GetProjectServicesQuery['project']
@@ -53,11 +55,9 @@ const ProjectServicesTable = ({
       SERVICE_BASIC_COLUMNS.serviceType,
       {
         header: 'Enrollment Period',
-        render: (s: ServiceFields) =>
-          parseAndFormatDateRange(
-            s.enrollment.entryDate,
-            s.enrollment.exitDate
-          ),
+        render: (s: ServiceFields) => (
+          <EnrollmentDateRangeWithStatus enrollment={s.enrollment} />
+        ),
       },
     ];
   }, [columns]);
@@ -65,6 +65,13 @@ const ProjectServicesTable = ({
   const filters = useFilters({
     type: 'ServicesForProjectFilterOptions',
   });
+
+  const rowLinkTo = useCallback((s: ServiceFields) => {
+    return generateSafePath(EnrollmentDashboardRoutes.SERVICES, {
+      clientId: s.enrollment.client.id,
+      enrollmentId: s.enrollment.id,
+    });
+  }, []);
 
   return (
     <GenericTableWithData<
@@ -82,6 +89,7 @@ const ProjectServicesTable = ({
       pagePath='project.services'
       recordType='Service'
       filters={filters}
+      rowLinkTo={rowLinkTo}
     />
   );
 };

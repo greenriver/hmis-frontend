@@ -6,16 +6,24 @@ import {
   FormGroup,
   FormHelperText,
 } from '@mui/material';
-import { KeyboardEventHandler, SyntheticEvent, useCallback } from 'react';
+import {
+  KeyboardEventHandler,
+  Ref,
+  SyntheticEvent,
+  useCallback,
+  useMemo,
+} from 'react';
 
 import { horizontalInputSx } from './TextInput';
 
 import { DynamicInputCommonProps } from '@/modules/form/types';
 
 export interface Props
-  extends Omit<FormControlLabelProps, 'control' | 'label'> {
+  extends Omit<FormControlLabelProps, 'control' | 'label'>,
+    DynamicInputCommonProps {
   name?: string;
   horizontal?: boolean;
+  inputRef?: Ref<HTMLInputElement>;
 }
 
 const LabeledCheckbox = ({
@@ -28,8 +36,9 @@ const LabeledCheckbox = ({
   ariaLabel,
   inputWidth,
   maxWidth,
+  inputRef,
   ...props
-}: Props & DynamicInputCommonProps) => {
+}: Props) => {
   const labelSx = horizontal
     ? {
         justifyContent: 'space-between',
@@ -59,6 +68,17 @@ const LabeledCheckbox = ({
     [onChange]
   );
 
+  // Determine the checked state based on the value OR checked prop
+  const checked = useMemo(() => {
+    if (props.checked !== undefined) {
+      return props.checked;
+    }
+    if (props.value !== undefined) {
+      return !!props.value;
+    }
+    return;
+  }, [props.checked, props.value]);
+
   return (
     <FormControl>
       <FormGroup sx={horizontal ? horizontalInputSx : undefined}>
@@ -68,6 +88,7 @@ const LabeledCheckbox = ({
               sx={{ width: inputWidth, ...checkboxSx }}
               onKeyDown={onKeyDown}
               aria-label={ariaLabel}
+              inputRef={inputRef}
             />
           }
           labelPlacement={horizontal ? 'start' : 'end'}
@@ -82,9 +103,12 @@ const LabeledCheckbox = ({
           }}
           onChange={onChange}
           {...props}
+          checked={checked}
         />
       </FormGroup>
-      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+      {helperText && (
+        <FormHelperText error={!!error}>{helperText}</FormHelperText>
+      )}
     </FormControl>
   );
 };
