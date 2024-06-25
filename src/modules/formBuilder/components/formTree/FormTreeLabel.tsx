@@ -7,6 +7,7 @@ import React, { useMemo, useState } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { FormTreeContext } from './FormTreeContext';
 import useUpdateFormStructure from './useUpdateFormStructure';
+import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import {
@@ -102,12 +103,14 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         onCancel={() => setErrors(undefined)}
         loading={false}
       >
-        Cannot delete this item, because one or more other questions depend on
-        it.
+        Cannot delete "{labelProps.children}," because one or more other
+        questions depend on it.
         <List>
           {errors &&
             [...errors].map((error) => (
-              <ListItem key={error}>{error}</ListItem>
+              <ListItem key={error}>
+                <CommonHtmlContent>{error}</CommonHtmlContent>
+              </ListItem>
             ))}
         </List>
       </ConfirmationDialog>

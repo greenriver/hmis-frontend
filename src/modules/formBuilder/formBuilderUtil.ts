@@ -234,40 +234,55 @@ export const validateDeletion = ({
   // representing where the problematic dependency is located on that item, e.g. autofill or enableWhen
   const errors = new Set<string>();
 
-  function checkDependence(toDelete: string, toCheck: FormItem) {
+  function checkDependence(
+    toDelete: string,
+    toCheck: FormItem,
+    parentPath: string
+  ) {
+    const label = displayLabelForItem(toCheck);
+    const prefix = parentPath ? `${parentPath} > ${label}` : label;
+
     toCheck.enableWhen?.forEach((enableWhen) => {
       if (
         enableWhen.question === toDelete ||
         enableWhen.compareQuestion === toDelete
       ) {
-        errors.add(`"${displayLabelForItem(toCheck)}": conditional visibility`);
+        errors.add(`${prefix}: <b>conditional visibility</b>`);
       }
     });
 
     toCheck.autofillValues?.forEach((autofillValue) => {
       if (
         autofillValue.valueQuestion === toDelete ||
-        autofillValue.sumQuestions?.includes(toDelete)
+        autofillValue.sumQuestions?.includes(toDelete) ||
+        autofillValue.autofillWhen?.filter(
+          (autofillWhen) => autofillWhen.question === toDelete
+        ).length > 0
       ) {
-        errors.add(`"${displayLabelForItem(toCheck)}": autofill`);
+        errors.add(`${prefix}: <b>autofill</b>`);
       }
     });
 
     toCheck.bounds?.forEach((bound) => {
       if (bound.question === toDelete) {
-        errors.add(`"${displayLabelForItem(toCheck)}": bounds`);
+        errors.add(`${prefix}: <b>bounds</b>`);
       }
     });
+
+    return prefix;
   }
 
-  function recurseCheckDependence(items: Maybe<FormItem[]> | undefined) {
+  function recurseCheckDependence(
+    items: Maybe<FormItem[]> | undefined,
+    parentPath: string
+  ) {
     items?.forEach((item) => {
-      checkDependence(toDelete, item);
-      recurseCheckDependence(item.item);
+      const thisPath = checkDependence(toDelete, item, parentPath);
+      recurseCheckDependence(item.item, thisPath);
     });
   }
 
-  recurseCheckDependence(definition.item);
+  recurseCheckDependence(definition.item, '');
 
   if (errors.size > 0) {
     return { success: false, errors };
