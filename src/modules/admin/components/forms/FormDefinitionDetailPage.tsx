@@ -1,7 +1,7 @@
 import { Chip, Grid, Stack, Typography } from '@mui/material';
 
 import { generatePath } from 'react-router-dom';
-import FormRuleCard from '../formRules/FormRuleCard';
+import FormRulesCard from '../formRules/FormRulesCard';
 import FormVersionTable from './FormVersionTable';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonCard } from '@/components/elements/CommonCard';
@@ -86,7 +86,13 @@ const FormDefinitionDetailPage = () => {
       <Stack gap={2}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
-            <CommonCard title='Details'>
+            <CommonCard
+              title={
+                <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
+                  Details
+                </Typography>
+              }
+            >
               <Stack gap={1}>
                 <CommonLabeledTextBlock title='Form ID'>
                   {formIdentifier.identifier}
@@ -110,7 +116,13 @@ const FormDefinitionDetailPage = () => {
             </CommonCard>
           </Grid>
           <Grid item xs={12} md={4}>
-            <CommonCard title='Actions'>
+            <CommonCard
+              title={
+                <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
+                  Actions
+                </Typography>
+              }
+            >
               <Stack gap={1.5}>
                 <RootPermissionsFilter permissions='canManageForms'>
                   <ButtonLink
@@ -152,7 +164,7 @@ const FormDefinitionDetailPage = () => {
             </CommonCard>
           </Grid>
         </Grid>
-        <FormRuleCard
+        <FormRulesCard
           formId={formIdentifier.displayVersion.id}
           formTitle={formIdentifier.displayVersion.title}
           formRole={formIdentifier.displayVersion.role}
@@ -160,7 +172,8 @@ const FormDefinitionDetailPage = () => {
         <TitleCard
           title='Version History'
           headerVariant='border'
-          headerTypographyVariant='h5'
+          headerTypographyVariant='h4'
+          headerComponent='h2'
         >
           <FormVersionTable formIdentifier={formIdentifier.identifier} />
         </TitleCard>

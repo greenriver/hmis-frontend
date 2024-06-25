@@ -7,7 +7,7 @@ import {
   Typography,
   TypographyVariant,
 } from '@mui/material';
-import { ReactNode } from 'react';
+import { ElementType, ReactNode } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface Props extends PaperProps {
@@ -16,6 +16,7 @@ interface Props extends PaperProps {
   actions?: ReactNode;
   headerVariant?: 'border';
   headerTypographyVariant?: TypographyVariant | 'cardTitle';
+  headerComponent?: ElementType<any>;
   'data-testid'?: string;
   headerSx?: SxProps;
   padded?: boolean;
@@ -27,6 +28,7 @@ const TitleCard: React.FC<Props> = ({
   children,
   actions,
   headerTypographyVariant = 'cardTitle',
+  headerComponent,
   headerVariant,
   headerSx,
   padded = false,
@@ -60,6 +62,7 @@ const TitleCard: React.FC<Props> = ({
         }}
       >
         <Typography
+          component={headerComponent || 'h1'} // https://mui.com/material-ui/guides/typescript/#complications-with-the-component-prop
           variant={headerTypographyVariant}
           sx={{ py: 1, flexGrow: 1 }}
         >

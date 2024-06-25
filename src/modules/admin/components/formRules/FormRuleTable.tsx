@@ -1,20 +1,9 @@
-import { Chip, IconButton } from '@mui/material';
-import React, { useMemo, useState } from 'react';
-import { generatePath } from 'react-router-dom';
-import ProjectApplicabilitySummary from './ProjectApplicabilitySummary';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import NotCollectedText from '@/components/elements/NotCollectedText';
-import RouterLink from '@/components/elements/RouterLink';
-import { EditIcon } from '@/components/elements/SemanticIcons';
-import { ColumnDef } from '@/components/elements/table/types';
+import { TableCell, TableRow } from '@mui/material';
+import React, { useState } from 'react';
+import FormRule from '@/modules/admin/components/formRules/FormRule';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
-import { useFilters } from '@/modules/hmis/filterUtil';
-import { AdminDashboardRoutes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
-
 import {
-  DataCollectedAbout,
   FormRole,
   FormRuleFieldsFragment,
   FormRuleInput,
@@ -27,85 +16,14 @@ import {
   UpdateFormRuleMutation,
 } from '@/types/gqlTypes';
 
-export const ActiveChip = ({ active }: { active: boolean }) => (
-  <Chip
-    label={active ? 'Active' : 'Inactive'}
-    size='small'
-    color={active ? 'success' : 'default'}
-    variant='outlined'
-    sx={{ width: 'fit-content' }}
-  />
-);
-
 type RowType = FormRuleFieldsFragment;
-
-export const FormRuleColumns: Record<string, ColumnDef<RowType>> = {
-  id: {
-    header: 'ID',
-    render: 'id',
-    linkTreatment: true,
-    width: '80px',
-  },
-  projectApplicability: {
-    header: 'Project Applicability',
-    render: (rule) => <ProjectApplicabilitySummary rule={rule} />,
-  },
-  serviceApplicability: {
-    header: 'Service Applicability',
-    render: ({ serviceType, serviceCategory }) => {
-      if (serviceType) return serviceType.name;
-      if (serviceCategory) return serviceCategory.name;
-      return <NotCollectedText>None</NotCollectedText>;
-    },
-  },
-  dataCollectedAbout: {
-    header: 'Client Applicability',
-    render: ({ dataCollectedAbout }) =>
-      HmisEnums.DataCollectedAbout[
-        dataCollectedAbout || DataCollectedAbout.AllClients
-      ],
-  },
-  activeStatus: {
-    header: 'Status',
-    render: ({ active }) => <ActiveChip active={active} />,
-  },
-  formDefinition: {
-    header: 'Form',
-    render: ({ definitionTitle, definitionId }) => (
-      <RouterLink
-        to={generatePath(AdminDashboardRoutes.VIEW_FORM, {
-          formId: definitionId,
-        })}
-        openInNew
-      >
-        {definitionTitle}
-      </RouterLink>
-    ),
-  },
-};
-
-const nonClientFormRoles = [
-  FormRole.CeParticipation,
-  FormRole.Funder,
-  FormRole.HmisParticipation,
-  FormRole.Inventory,
-  FormRole.Organization,
-  FormRole.Project,
-  FormRole.ProjectCoc,
-  FormRole.ReferralRequest,
-];
 
 interface Props {
   formRole: FormRole;
   queryVariables: GetFormRulesQueryVariables;
-  columns?: ColumnDef<RowType>[];
 }
 
-const FormRuleTable: React.FC<Props> = ({
-  formRole,
-  queryVariables,
-  columns: columnsOverride,
-}) => {
+const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
   // Currently selected rule for editing
   const [selectedRule, setSelectedRule] = useState<RowType | undefined>();
 
@@ -131,55 +49,6 @@ const FormRuleTable: React.FC<Props> = ({
     onClose: () => setSelectedRule(undefined),
   });
 
-  const columns: ColumnDef<RowType>[] = useMemo(() => {
-    if (columnsOverride) return columnsOverride;
-
-    const cols: ColumnDef<RowType>[] = [FormRuleColumns.id];
-    if (formRole === FormRole.Service) {
-      cols.push(FormRuleColumns.serviceApplicability);
-    }
-
-    const nonProjectFormRoles = [FormRole.Organization];
-    if (!nonProjectFormRoles.includes(formRole)) {
-      cols.push(FormRuleColumns.projectApplicability);
-    }
-
-    if (!nonClientFormRoles.includes(formRole)) {
-      cols.push(FormRuleColumns.dataCollectedAbout);
-    }
-
-    cols.push(FormRuleColumns.activeStatus);
-    cols.push({
-      key: 'action',
-      textAlign: 'right',
-      render: (row: RowType) => {
-        return (
-          <ButtonTooltipContainer
-            title={row.system ? 'System rule' : undefined}
-          >
-            <IconButton
-              aria-label='edit form rule'
-              disabled={row.system}
-              onClick={() => {
-                setSelectedRule(row);
-                openFormDialog();
-              }}
-              size='small'
-            >
-              <EditIcon fontSize='inherit' />
-            </IconButton>
-          </ButtonTooltipContainer>
-        );
-      },
-    });
-    return cols;
-  }, [formRole, openFormDialog, columnsOverride]);
-
-  const filters = useFilters({
-    type: 'FormRuleFilterOptions',
-    omit: ['definition', 'formType'],
-  });
-
   return (
     <>
       <GenericTableWithData<
@@ -189,13 +58,24 @@ const FormRuleTable: React.FC<Props> = ({
       >
         queryVariables={queryVariables}
         queryDocument={GetFormRulesDocument}
-        columns={columns}
+        columns={[]}
         pagePath='formRules'
         noData='No form rules'
-        filters={filters}
         recordType='FormRule'
         paginationItemName='rule'
         noSort
+        defaultPageSize={100} // Forms aren't expected to have 100s of rules, pagination is unlikely to show up
+        renderRow={(rule) => (
+          <TableRow key={rule.id}>
+            <TableCell sx={{ py: 1 }}>
+              <FormRule
+                rule={rule}
+                setSelectedRule={setSelectedRule}
+                openFormDialog={openFormDialog}
+              />
+            </TableCell>
+          </TableRow>
+        )}
       />
       {renderFormDialog({
         title: 'Edit Rule',

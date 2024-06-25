@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Stack } from '@mui/material';
+import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 
 import FormRuleTable from '../formRules/FormRuleTable';
 import TitleCard from '@/components/elements/TitleCard';
@@ -19,7 +19,7 @@ interface Props {
   formTitle: string;
   formRole: FormRole;
 }
-const FormRuleCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
+const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
   // Form dialog for adding new rules
   const { openFormDialog, renderFormDialog } = useStaticFormDialog<
     CreateFormRuleMutation,
@@ -38,9 +38,9 @@ const FormRuleCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
   return (
     <>
       <TitleCard
-        title='Form Rules'
-        headerVariant='border'
-        headerTypographyVariant='h5'
+        title='Form Applicability'
+        headerTypographyVariant='h4'
+        headerComponent='h2'
         actions={
           <Stack direction='row' gap={1}>
             <Button
@@ -53,10 +53,27 @@ const FormRuleCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
           </Stack>
         }
       >
+        <Box sx={{ px: 2, pb: 2 }}>
+          <Typography variant='h5' component='h3' sx={{ pb: 1 }}>
+            Rules
+          </Typography>
+          <Typography variant='body1'>
+            This form applies to projects that match any of the following rules.
+          </Typography>
+        </Box>
+        <Divider sx={{ borderWidth: 'inherit' }} />
         <FormRuleTable
           queryVariables={{ filters: { definition: formId } }}
           formRole={formRole}
         />
+        <Box padding={2}>
+          <Typography variant='h5' component='h3' sx={{ pb: 1 }}>
+            Projects
+          </Typography>
+          <Typography variant='body1'>
+            This form applies to x projects based on the current rules.
+          </Typography>
+        </Box>
       </TitleCard>
       {renderFormDialog({
         title: (
@@ -69,4 +86,4 @@ const FormRuleCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
   );
 };
 
-export default FormRuleCard;
+export default FormRulesCard;
