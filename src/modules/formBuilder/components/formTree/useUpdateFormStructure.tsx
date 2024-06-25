@@ -62,18 +62,15 @@ export default function useUpdateFormStructure(
   }, [hasParent, thisIndex]);
 
   const onDelete = useCallback(
-    (onError: Dispatch<SetStateAction<string | undefined>>) => {
-      const { success, error } = validateDeletion({
+    (onError: Dispatch<SetStateAction<Set<string> | undefined>>) => {
+      const { success, errors } = validateDeletion({
         toDelete: itemId,
         definition: values as FormDefinitionJson,
       });
 
-      if (error) {
-        onError(error);
-        return;
-      }
-
-      if (success) {
+      if (!success) {
+        onError(errors);
+      } else {
         remove(thisIndex);
       }
     },

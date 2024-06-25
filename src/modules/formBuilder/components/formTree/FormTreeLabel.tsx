@@ -1,4 +1,4 @@
-import { IconButton, Typography } from '@mui/material';
+import { IconButton, List, ListItem, Typography } from '@mui/material';
 import { Box, Stack, Theme } from '@mui/system';
 import { TreeItem2Label, UseTreeItem2Parameters } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
@@ -67,7 +67,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   const { onReorder, onDelete, canMoveUp, canMoveDown } =
     useUpdateFormStructure(control, itemId, item);
 
-  const [error, setError] = useState<string | undefined>();
+  const [errors, setErrors] = useState<Set<string> | undefined>(undefined);
 
   const menuItems = useMemo(
     () => [
@@ -79,7 +79,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
       {
         key: 'delete',
         title: 'Delete',
-        onClick: () => onDelete(setError),
+        onClick: () => onDelete(setErrors),
       },
     ],
     [item, openFormItemEditor, onDelete]
@@ -96,14 +96,20 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
       }}
     >
       <ConfirmationDialog
-        open={!!error}
+        open={!!errors}
         title='Cannot delete'
-        onConfirm={() => {
-          setError(undefined);
-        }}
+        onConfirm={() => setErrors(undefined)}
+        onCancel={() => setErrors(undefined)}
         loading={false}
       >
-        {error}
+        Cannot delete this item, because one or more other questions depend on
+        it.
+        <List>
+          {errors &&
+            [...errors].map((error) => (
+              <ListItem key={error}>{error}</ListItem>
+            ))}
+        </List>
       </ConfirmationDialog>
       {displayAttrs && (
         <Stack

@@ -229,10 +229,10 @@ export const validateDeletion = ({
 }: {
   toDelete: string;
   definition: FormDefinitionJson;
-}): { success: boolean; error?: string } => {
+}): { success: boolean; errors?: Set<string> } => {
   // Mapping of linkId of the dependent question => an array of user-facing strings
   // representing where the problematic dependency is located on that item, e.g. autofill or enableWhen
-  const errors: Record<string, string[]> = {};
+  const errors = new Set<string>();
 
   function checkDependence(toDelete: string, toCheck: FormItem) {
     toCheck.enableWhen?.forEach((enableWhen) => {
@@ -240,11 +240,7 @@ export const validateDeletion = ({
         enableWhen.question === toDelete ||
         enableWhen.compareQuestion === toDelete
       ) {
-        if (!errors[toCheck.linkId]) errors[toCheck.linkId] = [];
-        errors[toCheck.linkId] = [
-          ...errors[toCheck.linkId],
-          'conditional visibility',
-        ];
+        errors.add(`"${displayLabelForItem(toCheck)}": conditional visibility`);
       }
     });
 
@@ -253,15 +249,13 @@ export const validateDeletion = ({
         autofillValue.valueQuestion === toDelete ||
         autofillValue.sumQuestions?.includes(toDelete)
       ) {
-        if (!errors[toCheck.linkId]) errors[toCheck.linkId] = [];
-        errors[toCheck.linkId] = [...errors[toCheck.linkId], 'autofill'];
+        errors.add(`"${displayLabelForItem(toCheck)}": autofill`);
       }
     });
 
     toCheck.bounds?.forEach((bound) => {
       if (bound.question === toDelete) {
-        if (!errors[toCheck.linkId]) errors[toCheck.linkId] = [];
-        errors[toCheck.linkId] = [...errors[toCheck.linkId], 'bounds'];
+        errors.add(`"${displayLabelForItem(toCheck)}": bounds`);
       }
     });
   }
@@ -275,12 +269,8 @@ export const validateDeletion = ({
 
   recurseCheckDependence(definition.item);
 
-  if (Object.keys(errors).length > 0) {
-    let s = 'Cannot delete this item, because another question depends on it.';
-    Object.keys(errors).forEach((key) => {
-      s += `\n\t- Question ${key}: ${errors[key].join(', ')}`;
-    });
-    return { success: false, error: s };
+  if (errors.size > 0) {
+    return { success: false, errors };
   }
 
   return { success: true };
