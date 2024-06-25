@@ -100,7 +100,7 @@ export default function useUpdateFormStructure(
                 });
                 insertItemToDefinition({
                   insertPath: prevItemPath,
-                  insertAtIndex: get(oldForm, prevItemPath).length,
+                  insertAtIndex: get(oldForm, prevItemPath)?.length || 0,
                   definition: oldForm as FormDefinitionJson,
                   item,
                 });

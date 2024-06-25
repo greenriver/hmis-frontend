@@ -2,7 +2,10 @@ import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import FormBuilder from '@/modules/formBuilder/components/FormBuilder';
-import { useGetFormDefinitionFieldsForEditorQuery } from '@/types/gqlTypes';
+import {
+  FormStatus,
+  useGetFormDefinitionFieldsForEditorQuery,
+} from '@/types/gqlTypes';
 
 const FormBuilderPage = () => {
   const { formId } = useSafeParams() as { formId: string };
@@ -18,6 +21,8 @@ const FormBuilderPage = () => {
   if (fetchError) throw fetchError;
   if (!initialFormDefinition && fetchLoading) return <Loading />;
   if (!initialFormDefinition) return <NotFound />;
+
+  if (initialFormDefinition.status !== FormStatus.Draft) return <NotFound />;
 
   return <FormBuilder formDefinition={initialFormDefinition} />;
 };

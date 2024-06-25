@@ -289,12 +289,26 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
                 {initialItem.linkId}
               </CommonLabeledTextBlock>
             )}
-            <ControlledTextInput
-              control={control}
-              // TODO(#5776)
-              name='mapping.customFieldKey'
-              label='Mapping for custom field key'
-            />
+            {/* If this is a new item and it's a question, allow user to choose CustomDataElementDefinition key from existing keys. If left empty, a custom_field_key and CDED will be generated when the form is published */}
+            {/* {isNewItem && isQuestionItem && (
+              <ControlledSelect
+                control={control}
+                name='mapping.customFieldKey'
+                label='Field Override'
+                options={definition.eligibleCustomFieldKeyPickList}
+                placeholder='Select field override'
+                helperText='Leave blank to generate a new custom field for this question.'
+              />
+            )} */}
+            {/* If this is an existing item with a mapping, show mapping value as read-only */}
+            {!isNewItem &&
+              (initialItem.mapping?.customFieldKey ||
+                initialItem.mapping?.fieldName) && (
+                <CommonLabeledTextBlock title='Field Key'>
+                  {initialItem.mapping?.customFieldKey ||
+                    initialItem.mapping?.fieldName}
+                </CommonLabeledTextBlock>
+              )}
           </Section>
           <Divider />
           <Section title='Visibility'>
