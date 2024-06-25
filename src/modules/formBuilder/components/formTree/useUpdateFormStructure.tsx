@@ -77,7 +77,7 @@ export default function useUpdateFormStructure(
         remove(thisIndex);
       }
     },
-    [values, itemId, thisIndex]
+    [values, itemId, thisIndex, remove]
   );
 
   const onReorder = useCallback(

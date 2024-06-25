@@ -13,9 +13,12 @@ interface FormTreeProps {
 }
 const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
   const { control } = useFormContext();
-  const items = useWatch({ name: 'item', control });
+  const values = useWatch({ control });
 
-  const definitionForTree = useMemo(() => getItemsForTree(items), [items]);
+  const definitionForTree = useMemo(
+    () => getItemsForTree(values.item),
+    [values.item]
+  );
 
   const [expandedItems, setExpandedItems] = React.useState<string[]>([]);
 
@@ -37,7 +40,7 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
     [onEditClick]
   );
 
-  if (!items) return <Loading />;
+  if (!values.item) return <Loading />;
 
   return (
     <FormTreeContext.Provider value={context}>
