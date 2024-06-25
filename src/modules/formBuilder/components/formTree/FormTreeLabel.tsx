@@ -3,8 +3,8 @@ import { Box, Stack, Theme } from '@mui/system';
 import { TreeItem2Label, UseTreeItem2Parameters } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
-import React, { useMemo, useState } from 'react';
-import { useFormContext, useFormState, useWatch } from 'react-hook-form';
+import React, { useContext, useMemo, useState } from 'react';
+import { useFormContext, useFormState } from 'react-hook-form';
 import { FormTreeContext } from './FormTreeContext';
 import useUpdateFormStructure from './useUpdateFormStructure';
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
@@ -15,10 +15,9 @@ import {
   DownIcon,
   UpIcon,
 } from '@/components/elements/SemanticIcons';
-import { getItemMap } from '@/modules/form/util/formUtil';
 import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
 import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
-import { FormDefinitionJson, ItemType } from '@/types/gqlTypes';
+import { ItemType } from '@/types/gqlTypes';
 
 export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
   return FORM_ITEM_PALETTE[type];
@@ -40,7 +39,6 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   const { openFormItemEditor } = React.useContext(FormTreeContext);
 
   const { control } = useFormContext();
-  const values = useWatch({ control });
 
   const { isSubmitting } = useFormState({ control });
 
@@ -52,10 +50,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     disabled,
   });
 
-  const itemMap = useMemo(
-    () => getItemMap(values as FormDefinitionJson),
-    [values]
-  );
+  const { itemMap } = useContext(FormTreeContext);
   const item = useMemo(() => itemMap[itemId], [itemMap, itemId]);
 
   const displayAttrs = useMemo(

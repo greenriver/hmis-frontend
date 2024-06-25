@@ -3,10 +3,11 @@ import React, { useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { displayLabelForItem } from '../../formBuilderUtil';
 import Loading from '@/components/elements/Loading';
+import { getItemMap } from '@/modules/form/util/formUtil';
 import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
 import FormTreeItem from '@/modules/formBuilder/components/formTree/FormTreeItem';
 import { getItemsForTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
-import { FormItem } from '@/types/gqlTypes';
+import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
 interface FormTreeProps {
   onEditClick: (item: FormItem) => void;
@@ -18,6 +19,11 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
   const definitionForTree = useMemo(
     () => getItemsForTree(values.item),
     [values.item]
+  );
+
+  const itemMap = useMemo(
+    () => getItemMap(values as FormDefinitionJson),
+    [values]
   );
 
   const [expandedItems, setExpandedItems] = React.useState<string[]>([]);
@@ -36,8 +42,9 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
         setExpandedItems((prev) => [...prev, itemId]),
       collapseItem: (itemId: string) =>
         setExpandedItems((prev) => prev.filter((id) => id !== itemId)),
+      itemMap,
     }),
-    [onEditClick]
+    [onEditClick, itemMap]
   );
 
   if (!values.item) return <Loading />;
