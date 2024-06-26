@@ -7,9 +7,11 @@ export const FormTreeContext = React.createContext<{
   expandItem: (itemId: string) => void;
   collapseItem: (itemId: string) => void;
   itemMap: ItemMap;
+  rhfPathMap: Record<string, string>;
 }>({
   openFormItemEditor: () => {},
   expandItem: () => {},
   collapseItem: () => {},
   itemMap: {},
+  rhfPathMap: {},
 });

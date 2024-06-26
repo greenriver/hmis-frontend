@@ -50,7 +50,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     disabled,
   });
 
-  const { itemMap } = useContext(FormTreeContext);
+  const { itemMap, rhfPathMap } = useContext(FormTreeContext);
   const item = useMemo(() => itemMap[itemId], [itemMap, itemId]);
 
   const displayAttrs = useMemo(
@@ -61,7 +61,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   const labelProps = getLabelProps();
 
   const { onReorder, onDelete, canMoveUp, canMoveDown } =
-    useUpdateFormStructure(control, itemId, item);
+    useUpdateFormStructure(control, itemId, item, rhfPathMap);
 
   const [errors, setErrors] = useState<Set<string> | undefined>(undefined);
 

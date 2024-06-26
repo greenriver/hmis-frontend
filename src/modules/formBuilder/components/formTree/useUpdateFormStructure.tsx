@@ -14,7 +14,6 @@ import {
 } from 'react-hook-form';
 import { FormTreeContext } from './FormTreeContext';
 import {
-  getItemIdMap,
   getPathContext,
   insertItemToDefinition,
   removeItemFromDefinition,
@@ -25,20 +24,19 @@ import { FormDefinitionJson, FormItem, ItemType } from '@/types/gqlTypes';
 export default function useUpdateFormStructure(
   control: Control,
   itemId: string,
-  item: FormItem
+  item: FormItem,
+  rhfPathMap: Record<string, string>
 ) {
   const values = useWatch({ control });
   const { reset } = useFormContext();
   const { expandItem } = useContext(FormTreeContext);
-  // Re-generate itemIdMap each time values change (linkId=>position)
-  const itemIdMap = useMemo(() => getItemIdMap(values.item), [values]);
 
   // Example:
   // itemPath:              item.3.item.1
   // parentArrayPath:       item.3.item (thisIndex=1)
   // grandParentArrayPath:  item        (parentIndex=3)
 
-  const itemPath = itemIdMap[itemId];
+  const itemPath = rhfPathMap[itemId];
   const { parentPath: parentArrayPath, index: thisIndex } =
     getPathContext(itemPath);
   const parentItemId = parentArrayPath.replace(/\.item$/, '');
@@ -88,7 +86,7 @@ export default function useUpdateFormStructure(
             // append it to the "sibling" group above it
             console.log('case 1');
             const prevLinkId = prevItem.linkId;
-            const prevItemPath = itemIdMap[prevLinkId] + '.item';
+            const prevItemPath = rhfPathMap[prevLinkId] + '.item';
 
             expandItem(prevLinkId); // expand the group it's moving into
             reset(
@@ -147,7 +145,7 @@ export default function useUpdateFormStructure(
             // prepend it to the "sibling" group below it
             console.log('case 4');
             const nextLinkId = nextItem.linkId;
-            const nextItemPath = itemIdMap[nextLinkId] + '.item';
+            const nextItemPath = rhfPathMap[nextLinkId] + '.item';
 
             expandItem(nextLinkId); // expand the group it's moving into
             reset(
@@ -202,7 +200,7 @@ export default function useUpdateFormStructure(
       thisIndex,
       hasParent,
       thisLayer,
-      itemIdMap,
+      rhfPathMap,
       reset,
       expandItem,
       parentArrayPath,

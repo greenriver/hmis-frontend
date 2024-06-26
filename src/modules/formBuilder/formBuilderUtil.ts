@@ -120,7 +120,7 @@ export const slugifyItemLabel = (label: string) => {
  * Maps the item's linkId to the string key that React Hook Forms's useArrayFields hook expects,
  * which looks like: `item`, `item.0`, `item.0.item.1`, etc.
  */
-export const getItemIdMap = (items: FormItem[]) => {
+export const getRhfPathMap = (items: FormItem[]) => {
   const map: Record<string, string> = {};
 
   function recursiveMap(

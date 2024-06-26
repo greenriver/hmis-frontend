@@ -1,7 +1,7 @@
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import React, { useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { displayLabelForItem } from '../../formBuilderUtil';
+import { displayLabelForItem, getRhfPathMap } from '../../formBuilderUtil';
 import Loading from '@/components/elements/Loading';
 import { getItemMap } from '@/modules/form/util/formUtil';
 import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
@@ -26,6 +26,8 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
     [values]
   );
 
+  const rhfPathMap = useMemo(() => getRhfPathMap(values.item), [values]);
+
   const [expandedItems, setExpandedItems] = React.useState<string[]>([]);
 
   const handleExpandedItemsChange = (
@@ -43,6 +45,7 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
       collapseItem: (itemId: string) =>
         setExpandedItems((prev) => prev.filter((id) => id !== itemId)),
       itemMap,
+      rhfPathMap,
     }),
     [onEditClick, itemMap]
   );
