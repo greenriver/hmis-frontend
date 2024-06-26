@@ -47,6 +47,8 @@ export default function useUpdateFormStructure(
   const { swap, remove } = useFieldArray({ control, name: parentArrayPath });
 
   const thisLayer = get(values, parentArrayPath);
+  // `thisLayer` could be undefined if an item was just deleted. https://github.com/greenriver/hmis-frontend/pull/821#issue-2371078251
+
   const hasParent = parentIndex !== -1;
 
   const canMoveDown = useMemo(() => {
