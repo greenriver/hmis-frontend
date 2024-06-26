@@ -1,18 +1,11 @@
 import { get } from 'lodash-es';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useContext,
-  useMemo,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import {
   Control,
   useFieldArray,
   useFormContext,
   useWatch,
 } from 'react-hook-form';
-import { FormTreeContext } from './FormTreeContext';
 import {
   getPathContext,
   insertItemToDefinition,
@@ -25,11 +18,11 @@ export default function useUpdateFormStructure(
   control: Control,
   itemId: string,
   item: FormItem,
-  rhfPathMap: Record<string, string>
+  rhfPathMap: Record<string, string>,
+  expandItem: (itemId: string) => void
 ) {
   const values = useWatch({ control });
   const { reset } = useFormContext();
-  const { expandItem } = useContext(FormTreeContext);
 
   // Example:
   // itemPath:              item.3.item.1

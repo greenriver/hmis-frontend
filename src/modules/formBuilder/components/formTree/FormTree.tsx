@@ -37,6 +37,8 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
     setExpandedItems(itemIds);
   };
 
+  // Passing these values via FormTreeContext here enables us to easily pass props down
+  // to the FormTreeItem and FormTreeLabel components, avoiding slotProps and its typescript issues
   const context = React.useMemo(
     () => ({
       openFormItemEditor: (item: FormItem) => onEditClick(item),
@@ -51,7 +53,7 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
       itemMap,
       rhfPathMap,
     }),
-    [onEditClick, itemMap]
+    [onEditClick, itemMap, rhfPathMap]
   );
 
   if (!values.item) return <Loading />;

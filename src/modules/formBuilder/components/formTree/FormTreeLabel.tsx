@@ -36,7 +36,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   disabled,
   children,
 }) => {
-  const { openFormItemEditor, itemMap, rhfPathMap } =
+  const { openFormItemEditor, itemMap, rhfPathMap, expandItem } =
     useContext(FormTreeContext);
 
   const { control } = useFormContext();
@@ -61,7 +61,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   const labelProps = getLabelProps();
 
   const { onReorder, onDelete, canMoveUp, canMoveDown } =
-    useUpdateFormStructure(control, itemId, item, rhfPathMap);
+    useUpdateFormStructure(control, itemId, item, rhfPathMap, expandItem);
 
   const [errors, setErrors] = useState<Set<string> | undefined>(undefined);
 
