@@ -15,15 +15,16 @@ import {
   UpdateFormRuleDocument,
   UpdateFormRuleMutation,
 } from '@/types/gqlTypes';
+import { evictQuery } from '@/utils/cacheUtil';
 
 type RowType = FormRuleFieldsFragment;
 
 interface Props {
+  formId: string;
   formRole: FormRole;
-  queryVariables: GetFormRulesQueryVariables;
 }
 
-const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
+const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
   // Currently selected rule for editing
   const [selectedRule, setSelectedRule] = useState<RowType | undefined>();
 
@@ -45,7 +46,9 @@ const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
     getVariables: (values) => ({
       input: { input: values as FormRuleInput, id: selectedRule?.id || '' },
     }),
-    onCompleted: () => {},
+    onCompleted: () => {
+      evictQuery('formDefinition', { id: formId });
+    },
     onClose: () => setSelectedRule(undefined),
   });
 
@@ -56,7 +59,7 @@ const FormRuleTable: React.FC<Props> = ({ formRole, queryVariables }) => {
         GetFormRulesQueryVariables,
         RowType
       >
-        queryVariables={queryVariables}
+        queryVariables={{ filters: { definition: formId } }}
         queryDocument={GetFormRulesDocument}
         columns={[]}
         pagePath='formRules'

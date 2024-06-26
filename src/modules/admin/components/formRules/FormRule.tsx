@@ -7,7 +7,7 @@ import { FormRuleFieldsFragment } from '@/types/gqlTypes';
 
 const FormRuleChip: React.FC<{ label: string }> = ({ label }) => {
   // bottom margin puts the chip text in line with the body text
-  return <Chip sx={{ mb: 0.25 }} size='small' label={label} />;
+  return <Chip component='span' sx={{ mb: 0.25 }} size='small' label={label} />;
 };
 
 interface Props {
@@ -15,6 +15,16 @@ interface Props {
   setSelectedRule: Dispatch<SetStateAction<FormRuleFieldsFragment | undefined>>;
   openFormDialog: VoidFunction;
 }
+
+const ActiveChip = ({ active }: { active: boolean }) => (
+  <Chip
+    label={active ? 'Active' : 'Inactive'}
+    size='small'
+    color={active ? 'success' : 'default'}
+    variant='outlined'
+    sx={{ width: 'fit-content' }}
+  />
+);
 
 const FormRule: React.FC<Props> = ({
   rule,
@@ -28,6 +38,7 @@ const FormRule: React.FC<Props> = ({
     organization,
     funder,
     otherFunder,
+    active,
   } = rule;
 
   const appliesTo = (
@@ -71,7 +82,7 @@ const FormRule: React.FC<Props> = ({
   }
 
   return (
-    <Stack direction='row'>
+    <Stack direction='row' gap={2}>
       <Typography variant='body2' sx={{ flexGrow: 1 }}>
         Applies to {appliesTo}
         {conditions.length > 0 && (
@@ -80,15 +91,16 @@ const FormRule: React.FC<Props> = ({
             if{' '}
             {conditions.map((condition, i) => {
               return (
-                <>
+                <span key={condition.key}>
                   {condition}
                   {i < conditions.length - 1 && ' and '}
-                </>
+                </span>
               );
             })}
           </>
         )}
       </Typography>
+      <ActiveChip active={active} />
       <ButtonTooltipContainer title={rule.system ? 'System rule' : undefined}>
         <IconButton
           aria-label='edit form rule'

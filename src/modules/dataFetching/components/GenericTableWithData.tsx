@@ -61,6 +61,7 @@ export interface Props<
   defaultFilterValues?: Partial<FilterOptionsType>;
   showTopToolbar?: boolean;
   noSort?: boolean;
+  noPaginate?: boolean;
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -120,6 +121,7 @@ const GenericTableWithData = <
   fullHeight = false,
   showOptionalColumns = false,
   noSort,
+  noPaginate,
   header,
   toolbars = [],
   noData,
@@ -205,10 +207,11 @@ const GenericTableWithData = <
   if (error) throw error;
 
   const rows = useMemo<RowDataType[]>(() => {
-    const pageRows = (get(data, `${pagePath}.nodes`) || []) as RowDataType[];
+    const path = noPaginate ? pagePath : `${pagePath}.nodes`;
+    const pageRows = (get(data, path) || []) as RowDataType[];
     if (filterRows) return pageRows.filter(filterRows);
     return pageRows;
-  }, [data, pagePath, filterRows]);
+  }, [data, pagePath, filterRows, noPaginate]);
 
   const nodesCount = useMemo<number>(() => {
     return (get(data, `${pagePath}.nodesCount`) || 0) as number;

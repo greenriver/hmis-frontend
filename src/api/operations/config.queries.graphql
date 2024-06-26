@@ -19,6 +19,16 @@ query GetFormRules(
   }
 }
 
+query GetFormApplicableProjects($id: ID!) {
+  formDefinition(id: $id) {
+    id
+    cacheKey
+    applicableProjects {
+      ...FormApplicableProjectFields
+    }
+  }
+}
+
 query GetServiceCategoryRules(
   $id: ID!
   $limit: Int = 25

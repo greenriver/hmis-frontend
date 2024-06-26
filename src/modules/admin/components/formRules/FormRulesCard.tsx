@@ -3,6 +3,7 @@ import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 
 import FormRuleTable from '../formRules/FormRuleTable';
 import TitleCard from '@/components/elements/TitleCard';
+import FormApplicableProjectsTable from '@/modules/admin/components/formRules/FormApplicableProjectsTable';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import {
   CreateFormRuleDocument,
@@ -32,7 +33,10 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
     getVariables: (values) => ({
       input: { input: values as FormRuleInput, definitionId: formId },
     }),
-    onCompleted: () => evictQuery('formRules'),
+    onCompleted: () => {
+      evictQuery('formDefinition', { id: formId });
+      evictQuery('formRules');
+    },
   });
 
   return (
@@ -62,18 +66,17 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
           </Typography>
         </Box>
         <Divider sx={{ borderWidth: 'inherit' }} />
-        <FormRuleTable
-          queryVariables={{ filters: { definition: formId } }}
-          formRole={formRole}
-        />
+        <FormRuleTable formId={formId} formRole={formRole} />
         <Box padding={2}>
           <Typography variant='h5' component='h3' sx={{ pb: 1 }}>
             Projects
           </Typography>
           <Typography variant='body1'>
-            This form applies to x projects based on the current rules.
+            This form applies to the following projects based on the current
+            rules.
           </Typography>
         </Box>
+        <FormApplicableProjectsTable formId={formId} />
       </TitleCard>
       {renderFormDialog({
         title: (
