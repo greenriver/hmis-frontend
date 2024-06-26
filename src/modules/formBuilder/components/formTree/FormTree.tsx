@@ -44,6 +44,10 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
         setExpandedItems((prev) => [...prev, itemId]),
       collapseItem: (itemId: string) =>
         setExpandedItems((prev) => prev.filter((id) => id !== itemId)),
+      // `itemMap` and `rhfPathMap` are both regenerated on every change to the form, due to the `useWatch`.
+      // This shouldn't cause a perf issue right now, because this context is only consumed by the FormTreeLabel,
+      // which is already calling useWatch({ control }) anyway (inside the useUpdateFormStructure hook).
+      // But it could cause performance issues if other components consume this context.
       itemMap,
       rhfPathMap,
     }),
