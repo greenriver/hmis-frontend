@@ -286,7 +286,9 @@ const JsonFormEditor: React.FC<FormEditorProps> = ({
             {extraPanelTab === 'errors' && (
               <Stack height='200px' width='50vw' gap={1} p={1}>
                 {allErrors.map((err) => (
-                  <Alert severity='error'>{err}</Alert>
+                  <Alert severity='error' key={err}>
+                    {err}
+                  </Alert>
                 ))}
               </Stack>
             )}
