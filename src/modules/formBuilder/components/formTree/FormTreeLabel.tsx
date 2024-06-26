@@ -36,7 +36,8 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   disabled,
   children,
 }) => {
-  const { openFormItemEditor } = React.useContext(FormTreeContext);
+  const { openFormItemEditor, itemMap, rhfPathMap } =
+    useContext(FormTreeContext);
 
   const { control } = useFormContext();
 
@@ -50,7 +51,6 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     disabled,
   });
 
-  const { itemMap, rhfPathMap } = useContext(FormTreeContext);
   const item = useMemo(() => itemMap[itemId], [itemMap, itemId]);
 
   const displayAttrs = useMemo(
