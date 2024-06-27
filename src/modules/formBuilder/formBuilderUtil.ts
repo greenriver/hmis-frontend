@@ -255,3 +255,45 @@ export const getDependentItems = ({
       [],
   };
 };
+
+/**
+ * Given the form items, generates a map of linkIds to a list of all their
+ * ancestor linkIds in the form's nested structure, in order.
+ * For example, if the form structure is something like:
+ * item: {
+ *   linkId: grandparent,
+ *   type: group,
+ *   item: [
+ *     {
+ *       linkId: parent,
+ *       type: group,
+ *       item: [
+ *         { linkId: child }
+ *       ]
+ *     }
+ *   ]
+ * }
+ *
+ * then this ancestorLinkIdMap will look like:
+ * {
+ *   grandparent: [],
+ *   parent: [grandparent],
+ *   child: [grandparent, parent]
+ * }
+ */
+export const getAncestorLinkIdMap = (items: FormItem[]) => {
+  const map: Record<string, string[]> = {};
+
+  function recursiveMap(
+    items: Maybe<FormItem[]> | undefined,
+    ancestors: string[]
+  ) {
+    items?.forEach((item) => {
+      map[item.linkId] = ancestors;
+      recursiveMap(item.item, [...ancestors, item.linkId]);
+    });
+  }
+
+  recursiveMap(items, []);
+  return map;
+};

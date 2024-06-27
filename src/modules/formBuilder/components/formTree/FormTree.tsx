@@ -1,7 +1,11 @@
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import React, { useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { displayLabelForItem, getRhfPathMap } from '../../formBuilderUtil';
+import {
+  displayLabelForItem,
+  getAncestorLinkIdMap,
+  getRhfPathMap,
+} from '../../formBuilderUtil';
 import Loading from '@/components/elements/Loading';
 import { getItemMap } from '@/modules/form/util/formUtil';
 import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
@@ -28,6 +32,11 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
 
   const rhfPathMap = useMemo(() => getRhfPathMap(values.item), [values]);
 
+  const ancestorLinkIdMap = useMemo(
+    () => getAncestorLinkIdMap(values.item),
+    [values]
+  );
+
   const [expandedItems, setExpandedItems] = React.useState<string[]>([]);
 
   const handleExpandedItemsChange = (
@@ -46,14 +55,15 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
         setExpandedItems((prev) => [...prev, itemId]),
       collapseItem: (itemId: string) =>
         setExpandedItems((prev) => prev.filter((id) => id !== itemId)),
-      // `itemMap` and `rhfPathMap` are both regenerated on every change to the form, due to the `useWatch`.
+      // These maps are regenerated on every change to the form, due to the `useWatch`.
       // This shouldn't cause a perf issue right now, because this context is only consumed by the FormTreeLabel,
       // which is already calling useWatch({ control }) anyway (inside the useUpdateFormStructure hook).
       // But it could cause performance issues if other components consume this context.
       itemMap,
       rhfPathMap,
+      ancestorLinkIdMap,
     }),
-    [onEditClick, itemMap, rhfPathMap]
+    [onEditClick, itemMap, rhfPathMap, ancestorLinkIdMap]
   );
 
   if (!values.item) return <Loading />;

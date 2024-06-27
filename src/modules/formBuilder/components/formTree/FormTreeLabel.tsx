@@ -45,8 +45,13 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   disabled,
   children,
 }) => {
-  const { openFormItemEditor, itemMap, rhfPathMap, expandItem } =
-    useContext(FormTreeContext);
+  const {
+    openFormItemEditor,
+    itemMap,
+    rhfPathMap,
+    ancestorLinkIdMap,
+    expandItem,
+  } = useContext(FormTreeContext);
 
   const { control } = useFormContext();
 
@@ -114,9 +119,11 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     >
       {!!itemDependents && (
         <ConfirmationDialog
+          // todo @Martha - move into its own component?
           open={!!itemDependents}
           title='Cannot delete item'
           onConfirm={() => setItemDependents(undefined)}
+          confirmText='Close'
           loading={false}
           hideCancelButton={true}
         >
@@ -142,6 +149,10 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
                         }}
                         key={dep.linkId}
                       >
+                        {ancestorLinkIdMap[dep.linkId].map(
+                          (ancestor) =>
+                            `"${displayLabelForItem(itemMap[ancestor])}" > `
+                        )}
                         {`"${displayLabelForItem(dep)}"`}
                       </ListItem>
                     ))}
