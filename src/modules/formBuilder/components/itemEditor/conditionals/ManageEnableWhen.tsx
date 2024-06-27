@@ -64,13 +64,19 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
         <Controller
           name={enableBehaviorPath}
           control={control}
-          render={({ field: { ref, value, onChange, ...field } }) => (
+          rules={{ required: 'This field is required' }}
+          render={({
+            field: { ref, value, onChange, ...field },
+            fieldState: { error },
+          }) => (
             <RadioGroupInput
               options={enableBehaviorOptions}
               label='Conditional Behavior (AND/OR)'
               value={enableBehaviorOptions.find((o) => o.code === value)}
               onChange={(option) => onChange(option?.code)}
               {...field}
+              error={!!error}
+              helperText={error?.message}
             />
           )}
         />

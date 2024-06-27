@@ -21442,8 +21442,8 @@
               "name": "ServiceDetailType",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "from old bulk services implementation, no longer supported"
           },
           {
             "name": "size",

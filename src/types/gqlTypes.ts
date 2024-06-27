@@ -3013,7 +3013,10 @@ export type FormItem = {
   repeats?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the item must be included in data results */
   required?: Maybe<Scalars['Boolean']['output']>;
-  /** Whether to apply this field to all clients or a single client when bulk creating */
+  /**
+   * Whether to apply this field to all clients or a single client when bulk creating
+   * @deprecated from old bulk services implementation, no longer supported
+   */
   serviceDetailType?: Maybe<ServiceDetailType>;
   /** Size of the input element */
   size?: Maybe<InputSize>;

@@ -1,4 +1,11 @@
 import { cloneDeep, get, kebabCase, set } from 'lodash-es';
+import { ItemMap } from '@/modules/form/types';
+import {
+  buildAutofillDependencyMap,
+  buildBoundsDependencyMap,
+  buildEnabledDependencyMap,
+} from '@/modules/form/util/formUtil';
+import { ItemDependents } from '@/modules/formBuilder/types';
 import {
   Component,
   FormDefinitionJson,
@@ -120,7 +127,7 @@ export const slugifyItemLabel = (label: string) => {
  * Maps the item's linkId to the string key that React Hook Forms's useArrayFields hook expects,
  * which looks like: `item`, `item.0`, `item.0.item.1`, etc.
  */
-export const getItemIdMap = (items: FormItem[]) => {
+export const getRhfPathMap = (items: FormItem[]) => {
   const map: Record<string, string> = {};
 
   function recursiveMap(
@@ -213,4 +220,80 @@ export const insertItemToDefinition = ({
     // Insert the item
     newParentArray.splice(insertAtIndex, 0, item);
   }
+};
+
+/**
+ * Given a linkId, returns all other form items that depend on that linkId,
+ * organized by the reason for the dependence (autofill, bounds, or enableWhen).
+ * Deletion is only valid on items that have no dependents, so this function
+ * is used for validating that a deletion action is allowed.
+ *
+ * @param linkId the linkId of the item to check for dependencies
+ * @param itemMap the map of linkId => item in the current form
+ */
+export const getDependentItems = ({
+  linkId,
+  itemMap,
+}: {
+  linkId: string;
+  itemMap: ItemMap;
+}): ItemDependents => {
+  const autofillDependencyMap = buildAutofillDependencyMap(itemMap);
+  const enableWhenDependencyMap = buildEnabledDependencyMap(itemMap);
+  const boundDependencyMap = buildBoundsDependencyMap(itemMap);
+
+  return {
+    autofillDependents:
+      autofillDependencyMap[linkId]?.map((dependerId) => itemMap[dependerId]) ||
+      [],
+    enableWhenDependents:
+      enableWhenDependencyMap[linkId]?.map(
+        (dependerId) => itemMap[dependerId]
+      ) || [],
+    boundDependents:
+      boundDependencyMap[linkId]?.map((dependerId) => itemMap[dependerId]) ||
+      [],
+  };
+};
+
+/**
+ * Given the form items, generates a map of linkIds to a list of all their
+ * ancestor linkIds in the form's nested structure, in order.
+ * For example, if the form structure is something like:
+ * item: {
+ *   linkId: grandparent,
+ *   type: group,
+ *   item: [
+ *     {
+ *       linkId: parent,
+ *       type: group,
+ *       item: [
+ *         { linkId: child }
+ *       ]
+ *     }
+ *   ]
+ * }
+ *
+ * then this ancestorLinkIdMap will look like:
+ * {
+ *   grandparent: [],
+ *   parent: [grandparent],
+ *   child: [grandparent, parent]
+ * }
+ */
+export const getAncestorLinkIdMap = (items: FormItem[]) => {
+  const map: Record<string, string[]> = {};
+
+  function recursiveMap(
+    items: Maybe<FormItem[]> | undefined,
+    ancestors: string[]
+  ) {
+    items?.forEach((item) => {
+      map[item.linkId] = ancestors;
+      recursiveMap(item.item, [...ancestors, item.linkId]);
+    });
+  }
+
+  recursiveMap(items, []);
+  return map;
 };

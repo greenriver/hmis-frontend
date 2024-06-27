@@ -444,10 +444,16 @@ export const shouldEnableItem = ({
   );
 
   // console.debug(item.linkId, booleans);
-  if (item.enableBehavior === EnableBehavior.Any) {
-    return booleans.some(Boolean);
-  } else {
+  if (item.enableBehavior === EnableBehavior.All) {
+    // All conditions must be true.
     return booleans.every(Boolean);
+  } else {
+    // Any condition must be true.
+    //
+    // 'Any' is the default behavior, to match legacy API behavior which resolved ANY by default.
+    // Going forward once new validation is in place, we can expect that enable_behavior is always
+    // set if enable_when rules exist.
+    return booleans.some(Boolean);
   }
 };
 
@@ -948,6 +954,27 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
 };
 
 /**
+ * Map { linkId => array of Link IDs that depend on it for min/max bounds }
+ */
+export const buildBoundsDependencyMap = (itemMap: ItemMap): LinkIdMap => {
+  const deps: LinkIdMap = {};
+
+  function addBound(linkId: string, bound: ValueBound) {
+    if (bound.question && itemMap[bound.question]) {
+      if (!deps[bound.question]) deps[bound.question] = [];
+      deps[bound.question].push(linkId);
+    }
+  }
+
+  Object.values(itemMap).forEach((item) => {
+    if (!item.bounds) return;
+    item.bounds.forEach((bound) => addBound(item.linkId, bound));
+  });
+
+  return deps;
+};
+
+/**
  * List of link IDs that should be disabled, based on provided form values
  */
 export const getDisabledLinkIds = ({
@@ -1439,17 +1466,6 @@ export const getFieldOnAssessment = (
   }
 
   return { record, recordType, value };
-};
-
-export const itemDefaults = {
-  disabledDisplay: DisabledDisplay.Hidden,
-  enableBehavior: EnableBehavior.Any,
-  required: false,
-  prefill: false,
-  readOnly: false,
-  warnIfEmpty: false,
-  hidden: false,
-  repeats: false,
 };
 
 export const parseOccurrencePointFormDefinition = (
