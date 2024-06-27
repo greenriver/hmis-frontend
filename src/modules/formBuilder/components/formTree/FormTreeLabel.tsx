@@ -94,6 +94,9 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         key: 'delete',
         title: 'Delete',
         onClick: () => onDelete(setItemDependents),
+        // disable deletion for groups that contain items
+        disabled:
+          item.type === ItemType.Group && !!item.item && item.item.length > 0,
       },
     ],
     [item, openFormItemEditor, onDelete]
