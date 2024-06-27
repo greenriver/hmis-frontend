@@ -1,4 +1,4 @@
-import { IconButton, List, ListItem, Typography } from '@mui/material';
+import { Alert, IconButton, List, ListItem, Typography } from '@mui/material';
 import { Box, Stack, Theme } from '@mui/system';
 import { TreeItem2Label, UseTreeItem2Parameters } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
@@ -122,20 +122,34 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         >
           "{displayLabelForItem(item)}" cannot be deleted because it is
           referenced elsewhere.
-          {Object.entries(itemDependents).map(([key, val]) =>
-            val?.length > 0 ? (
-              <Box sx={{ mt: 1 }} key={key}>
-                {dependentLabelMap[key]}:
-                <List>
-                  {val.map((dep) => (
-                    <ListItem key={dep.linkId}>{`"${displayLabelForItem(
-                      dep
-                    )}"`}</ListItem>
-                  ))}
-                </List>
-              </Box>
-            ) : null
-          )}
+          <Alert
+            color='error'
+            icon={false}
+            sx={{ my: 2, '& .MuiAlert-message': { width: '100%' } }}
+          >
+            {Object.entries(itemDependents).map(([key, val]) =>
+              val?.length > 0 ? (
+                <Box key={key}>
+                  {dependentLabelMap[key]}:
+                  <List sx={{ listStyleType: 'disc', py: 0 }}>
+                    {val.map((dep) => (
+                      <ListItem
+                        sx={{
+                          display: 'list-item',
+                          ml: 4,
+                          px: 0,
+                          maxWidth: 'calc(100% - 32px)',
+                        }}
+                        key={dep.linkId}
+                      >
+                        {`"${displayLabelForItem(dep)}"`}
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              ) : null
+            )}
+          </Alert>
           All references to this item must be removed before it can be deleted.
         </ConfirmationDialog>
       )}
