@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Controller, useFieldArray } from 'react-hook-form';
+import { Controller, useController, useFieldArray } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import CardGroup, { RemovableCard } from './CardGroup';
 import EnableWhenCondition from './EnableWhenCondition';
@@ -27,6 +27,12 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
   const { fields, append, remove } = useFieldArray({
     control,
     name: enableWhenPath,
+  });
+  const {
+    field: { onChange: onChangeEnableBehavior },
+  } = useController({
+    control,
+    name: enableBehaviorPath,
   });
 
   const itemPickList = useItemPickList({ control, itemMap });
@@ -72,7 +78,11 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
       {fields.map((condition, index) => (
         <RemovableCard
           key={JSON.stringify(condition)} // fixme could be non unique
-          onRemove={() => remove(index)}
+          onRemove={() => {
+            const isLastCondition = fields.length === 1;
+            remove(index);
+            if (isLastCondition) onChangeEnableBehavior(null);
+          }}
           removeTooltip={'Remove Condition'}
         >
           <EnableWhenCondition

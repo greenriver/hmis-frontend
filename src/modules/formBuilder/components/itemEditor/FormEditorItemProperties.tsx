@@ -1,6 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Divider, Stack } from '@mui/material';
-import { startCase } from 'lodash-es';
+import { isNil, startCase, omitBy } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { v4 } from 'uuid';
@@ -59,6 +59,19 @@ interface FormEditorItemPropertiesProps {
   isNewItem?: boolean;
 }
 
+type ItemCategory = 'question' | 'display' | 'group';
+
+const textLabel = (category: ItemCategory) => {
+  switch (category) {
+    case 'question':
+      return 'Label';
+    case 'display':
+      return 'Display Text';
+    case 'group':
+      return 'Group Label';
+  }
+};
+
 const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   initialItem,
   definition,
@@ -84,11 +97,25 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
 
   // Monitor changes to the FormItem.component field
   const itemComponentValue = watch('component');
+  const hiddenValue = watch('hidden');
+
+  const itemCategory = useMemo<ItemCategory>(() => {
+    if (!itemTypeValue) return 'question';
+    switch (itemTypeValue) {
+      case ItemType.Display:
+        return 'display';
+      case ItemType.Group:
+        return 'group';
+      default:
+        return 'question';
+    }
+  }, [itemTypeValue]);
 
   const isQuestionItem =
     itemTypeValue &&
     ![ItemType.Group, ItemType.Display].includes(itemTypeValue);
   const isDisplayItem = itemTypeValue === ItemType.Display;
+  const isGroupItem = itemTypeValue === ItemType.Group;
 
   const isAssessment = useMemo(
     () => (Object.values(AssessmentRole) as [string]).includes(definition.role),
@@ -107,6 +134,15 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     () => getItemMap(definition.definition),
     [definition.definition]
   );
+
+  // If a field is marked as "always hidden", clear the enable_when conditions
+  useEffect(() => {
+    if (hiddenValue) {
+      setValue('enableWhen', null);
+      setValue('enableBehavior', null);
+      setValue('disabledDisplay', null);
+    }
+  }, [hiddenValue, setValue]);
 
   const onLabelBlur = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -166,8 +202,17 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
                 size='small'
                 variant='outlined'
                 sx={{ float: 'right', typography: 'body2' }}
-                // eslint-disable-next-line no-console
-                onClick={() => console.log(getValues())}
+                onClick={() => {
+                  // eslint-disable-next-line @typescript-eslint/naming-convention, prefer-const
+                  let { __typename, item, ...vals } = getValues();
+                  vals = omitBy(vals, isNil);
+                  vals = omitBy(
+                    vals,
+                    (v) => Array.isArray(v) && v.length === 0
+                  );
+                  // eslint-disable-next-line no-console
+                  console.log(vals);
+                }}
               >
                 debug
               </Button>
@@ -178,15 +223,6 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             <Stack gap={1} id={errorAlertId}>
               <ErrorAlert key='errors' errors={errorState.errors} />
             </Stack>
-          )}
-          {componentOverridePicklist.length > 0 && (
-            <ControlledSelect
-              name='component'
-              control={control}
-              label='Component Override'
-              placeholder='Select component'
-              options={componentOverridePicklist}
-            />
           )}
 
           {itemTypeValue === ItemType.Date && isAssessment && (
@@ -203,36 +239,48 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             required={isQuestionItem}
             control={control}
             name='text'
-            label={isDisplayItem ? 'Display Text' : 'Label'}
+            label={textLabel(itemCategory)}
             onBlur={onLabelBlur}
             // FIXME doesnt correctly support multi-line display text. Newlines need to be inserted.
             multiline={isDisplayItem}
             minRows={isDisplayItem ? 2 : undefined}
           />
-          <ControlledTextInput
-            control={control}
-            name='helperText'
-            label='Helper Text'
-          />
-          <ControlledTextInput
-            control={control}
-            name='briefText'
-            label='Brief label'
-            helperText="Label to display when the item is referenced briefly, such as in an Autofill dialog box. If not specified, the item's normal label text is shown."
-          />
-          <ControlledTextInput
-            control={control}
-            name='readonlyText'
-            label='Read-only label'
-            helperText="Label to display when the item is shown in a read-only form. If not specified, the item's normal label text is shown."
-          />
-          <ControlledSelect
-            name='size'
-            control={control}
-            label='Input Size'
-            placeholder='Select input size'
-            options={inputSizePickList}
-          />
+          {isQuestionItem && (
+            <ControlledTextInput
+              control={control}
+              name='helperText'
+              label='Helper Text'
+            />
+          )}
+          {isQuestionItem && (
+            <ControlledTextInput
+              control={control}
+              name='briefText'
+              label='Brief label'
+              helperText="Label to display when the item is referenced briefly, such as in an Autofill dialog box. If not specified, the item's normal label text is shown."
+            />
+          )}
+          {!isGroupItem && (
+            // Read-only text use cases:
+            // use-case for questions: "housing status" instead of "what is your housing status?"
+            // use-case for displays: hide instructional text only relevant when performing assessment
+            // use-case for groups: none, which is why its hidden
+            <ControlledTextInput
+              control={control}
+              name='readonlyText'
+              label={'Read-Only ' + textLabel(itemCategory)}
+              helperText="Label to display when the item is shown in a read-only form. If not specified, the item's normal label text is shown."
+            />
+          )}
+          {isQuestionItem && (
+            <ControlledSelect
+              name='size'
+              control={control}
+              label='Input Size'
+              placeholder='Select input size'
+              options={inputSizePickList}
+            />
+          )}
           {([ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) ||
             (itemTypeValue === ItemType.Object &&
               itemComponentValue === Component.Address)) && (
@@ -268,6 +316,15 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           )}
           <Divider />
           <Section title='Advanced Properties'>
+            {componentOverridePicklist.length > 0 && (
+              <ControlledSelect
+                name='component'
+                control={control}
+                label='Component Override'
+                placeholder='Select component'
+                options={componentOverridePicklist}
+              />
+            )}
             {isNewItem ? (
               <ControlledTextInput
                 control={control}
@@ -327,34 +384,45 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               control={control}
               label='Always Hide this Item'
             />
-            <ControlledSelect
-              name='disabledDisplay'
-              control={control}
-              label='Disabled Display'
-              placeholder='Select disabled display'
-              options={disabledDisplayPickList}
-              helperText={
-                <>
-                  <b>Hidden</b>: When this item is disabled, it will be
-                  completely hidden from view.
-                  <br />
-                  {/* TODO: do we actually use  'protected' at all? can we remove it? */}
-                  <b>Protected</b>: When this item is disabled, it will still
-                  show up but not be interactable.
-                  <br />
-                  <b>Protected with Value</b>: When this item is disabled, it
-                  will still appear and its value will be visible but not
-                  interactible. It's value will be submitted.
-                </>
-              }
-            />
-            <ManageEnableWhen control={control} itemMap={itemMap} />
+            {!hiddenValue && (
+              <>
+                <ControlledSelect
+                  name='disabledDisplay'
+                  control={control}
+                  label='Disabled Display'
+                  placeholder='Select disabled display'
+                  options={disabledDisplayPickList}
+                  helperText={
+                    <>
+                      <b>Hidden</b>: When this item is disabled, it will be
+                      completely hidden from view.
+                      <br />
+                      {/* TODO: do we actually use  'protected' at all? can we remove it? */}
+                      <b>Protected</b>: When this item is disabled, it will
+                      still show up but not be interactable.
+                      <br />
+                      <b>Protected with Value</b>: When this item is disabled,
+                      it will still appear and its value will be visible but not
+                      interactible. It's value will be submitted.
+                    </>
+                  }
+                />
+                <ManageEnableWhen control={control} itemMap={itemMap} />
+              </>
+            )}
           </Section>
           <Divider />
-          <Section title='Initial Value'>
-            <InitialValue control={control} itemType={itemTypeValue} />
-          </Section>
-          <Divider />
+
+          {isQuestionItem && (
+            // schema allows initial values for display items too, but we should get rid of that. not showing it in the ui. we can manage in json
+            <>
+              <Section title='Initial Value'>
+                <InitialValue control={control} itemType={itemTypeValue} />
+              </Section>
+              <Divider />
+            </>
+          )}
+
           {/* bounds are supported by numbers and dates only */}
           {[ItemType.Integer, ItemType.Currency, ItemType.Date].includes(
             itemTypeValue
@@ -366,13 +434,15 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               <Divider />
             </>
           )}
-          <Section title='Autofill'>
-            <AutofillProperties
-              control={control}
-              itemMap={itemMap}
-              itemType={itemTypeValue}
-            />
-          </Section>
+          {isQuestionItem && (
+            <Section title='Autofill'>
+              <AutofillProperties
+                control={control}
+                itemMap={itemMap}
+                itemType={itemTypeValue}
+              />
+            </Section>
+          )}
         </Section>
       </Box>
       <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
