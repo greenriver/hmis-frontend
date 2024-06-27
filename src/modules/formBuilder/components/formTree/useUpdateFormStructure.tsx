@@ -1,4 +1,4 @@
-import { get, some } from 'lodash-es';
+import { get } from 'lodash-es';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import {
   Control,
@@ -64,13 +64,13 @@ export default function useUpdateFormStructure(
         itemMap,
       });
 
-      if (some([Object.values(dependents)], (depList) => depList.length > 0)) {
+      if (Object.values(dependents).some((depList) => depList.length > 0)) {
         onError(dependents);
       } else {
         remove(thisIndex);
       }
     },
-    [values, itemId, thisIndex, remove, itemMap]
+    [itemId, thisIndex, remove, itemMap]
   );
 
   const onReorder = useCallback(

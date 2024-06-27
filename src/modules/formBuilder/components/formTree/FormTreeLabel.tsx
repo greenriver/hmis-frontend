@@ -115,11 +115,12 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           title='Cannot delete item'
           onConfirm={() => setItemDependents(undefined)}
           loading={false}
+          hideCancelButton={true}
         >
           "{displayLabelForItem(item)}" cannot be deleted because it is
           referenced elsewhere.
           {Object.entries(itemDependents).map(([key, val]) =>
-            val.length > 0 ? (
+            val?.length > 0 ? (
               <Box sx={{ mt: 1 }} key={key}>
                 {dependentLabelMap[key]}:
                 <List>

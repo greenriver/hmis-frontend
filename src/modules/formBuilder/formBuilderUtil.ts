@@ -250,8 +250,8 @@ export const getDependentItems = ({
       enableWhenDependencyMap[linkId]?.map(
         (dependerId) => itemMap[dependerId]
       ) || [],
-    boundDependents: boundDependencyMap[linkId]?.map(
-      (dependerId) => itemMap[dependerId]
-    ),
+    boundDependents:
+      boundDependencyMap[linkId]?.map((dependerId) => itemMap[dependerId]) ||
+      [],
   };
 };
