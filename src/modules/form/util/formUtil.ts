@@ -948,6 +948,27 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
 };
 
 /**
+ * Map { linkId => array of Link IDs that depend on it for min/max bounds }
+ */
+export const buildBoundsDependencyMap = (itemMap: ItemMap): LinkIdMap => {
+  const deps: LinkIdMap = {};
+
+  function addBound(linkId: string, bound: ValueBound) {
+    if (bound.question && itemMap[bound.question]) {
+      if (!deps[bound.question]) deps[bound.question] = [];
+      deps[bound.question].push(linkId);
+    }
+  }
+
+  Object.values(itemMap).forEach((item) => {
+    if (!item.bounds) return;
+    item.bounds.forEach((bound) => addBound(item.linkId, bound));
+  });
+
+  return deps;
+};
+
+/**
  * List of link IDs that should be disabled, based on provided form values
  */
 export const getDisabledLinkIds = ({
