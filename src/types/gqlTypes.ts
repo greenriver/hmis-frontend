@@ -146,15 +146,6 @@ export enum AnnualPercentAmi {
   Num_15_30OfAmiForHouseholdSize = 'NUM_15_30_OF_AMI_FOR_HOUSEHOLD_SIZE',
 }
 
-/** Applicable project for a form, including information about which clients in this project the form is applicable to. */
-export type ApplicableProject = {
-  __typename?: 'ApplicableProject';
-  dataCollectedAbout: DataCollectedAbout;
-  id: Scalars['ID']['output'];
-  organizationName: Scalars['String']['output'];
-  projectName: Scalars['String']['output'];
-};
-
 /** User account for a user of the system */
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
@@ -2874,7 +2865,6 @@ export type FilesPaginated = {
 /** FormDefinition */
 export type FormDefinition = {
   __typename?: 'FormDefinition';
-  applicableProjects: Array<ApplicableProject>;
   cacheKey: Scalars['ID']['output'];
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateUpdated: Scalars['ISO8601DateTime']['output'];
@@ -2882,6 +2872,7 @@ export type FormDefinition = {
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
   identifier: Scalars['String']['output'];
+  projectMatches: Array<FormProjectMatch>;
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
   status: FormStatus;
@@ -3032,6 +3023,15 @@ export type FormItem = {
   type: ItemType;
   /** Whether to show a warning if this question is unanswered */
   warnIfEmpty: Scalars['Boolean']['output'];
+};
+
+/** Project match for a form, including information about which clients in this project the form is applicable to. */
+export type FormProjectMatch = {
+  __typename?: 'FormProjectMatch';
+  dataCollectedAbout: DataCollectedAbout;
+  id: Scalars['ID']['output'];
+  organizationName: Scalars['String']['output'];
+  projectName: Scalars['String']['output'];
 };
 
 export enum FormRole {
@@ -14988,8 +14988,8 @@ export type FormRuleFieldsFragment = {
   } | null;
 };
 
-export type FormApplicableProjectFieldsFragment = {
-  __typename?: 'ApplicableProject';
+export type FormProjectMatchFieldsFragment = {
+  __typename?: 'FormProjectMatch';
   id: string;
   projectName: string;
   organizationName: string;
@@ -15287,18 +15287,18 @@ export type GetFormRulesQuery = {
   };
 };
 
-export type GetFormApplicableProjectsQueryVariables = Exact<{
+export type GetFormProjectMatchesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
-export type GetFormApplicableProjectsQuery = {
+export type GetFormProjectMatchesQuery = {
   __typename?: 'Query';
   formDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
     cacheKey: string;
-    applicableProjects: Array<{
-      __typename?: 'ApplicableProject';
+    projectMatches: Array<{
+      __typename?: 'FormProjectMatch';
       id: string;
       projectName: string;
       organizationName: string;
@@ -33183,8 +33183,8 @@ export const FormRuleFieldsFragmentDoc = gql`
   ${OrganizationNameFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
 `;
-export const FormApplicableProjectFieldsFragmentDoc = gql`
-  fragment FormApplicableProjectFields on ApplicableProject {
+export const FormProjectMatchFieldsFragmentDoc = gql`
+  fragment FormProjectMatchFields on FormProjectMatch {
     id
     projectName
     organizationName
@@ -37479,68 +37479,68 @@ export type GetFormRulesQueryResult = Apollo.QueryResult<
   GetFormRulesQuery,
   GetFormRulesQueryVariables
 >;
-export const GetFormApplicableProjectsDocument = gql`
-  query GetFormApplicableProjects($id: ID!) {
+export const GetFormProjectMatchesDocument = gql`
+  query GetFormProjectMatches($id: ID!) {
     formDefinition(id: $id) {
       id
       cacheKey
-      applicableProjects {
-        ...FormApplicableProjectFields
+      projectMatches {
+        ...FormProjectMatchFields
       }
     }
   }
-  ${FormApplicableProjectFieldsFragmentDoc}
+  ${FormProjectMatchFieldsFragmentDoc}
 `;
 
 /**
- * __useGetFormApplicableProjectsQuery__
+ * __useGetFormProjectMatchesQuery__
  *
- * To run a query within a React component, call `useGetFormApplicableProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFormApplicableProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetFormProjectMatchesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormProjectMatchesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetFormApplicableProjectsQuery({
+ * const { data, loading, error } = useGetFormProjectMatchesQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetFormApplicableProjectsQuery(
+export function useGetFormProjectMatchesQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetFormApplicableProjectsQuery,
-    GetFormApplicableProjectsQueryVariables
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetFormApplicableProjectsQuery,
-    GetFormApplicableProjectsQueryVariables
-  >(GetFormApplicableProjectsDocument, options);
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >(GetFormProjectMatchesDocument, options);
 }
-export function useGetFormApplicableProjectsLazyQuery(
+export function useGetFormProjectMatchesLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetFormApplicableProjectsQuery,
-    GetFormApplicableProjectsQueryVariables
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetFormApplicableProjectsQuery,
-    GetFormApplicableProjectsQueryVariables
-  >(GetFormApplicableProjectsDocument, options);
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >(GetFormProjectMatchesDocument, options);
 }
-export type GetFormApplicableProjectsQueryHookResult = ReturnType<
-  typeof useGetFormApplicableProjectsQuery
+export type GetFormProjectMatchesQueryHookResult = ReturnType<
+  typeof useGetFormProjectMatchesQuery
 >;
-export type GetFormApplicableProjectsLazyQueryHookResult = ReturnType<
-  typeof useGetFormApplicableProjectsLazyQuery
+export type GetFormProjectMatchesLazyQueryHookResult = ReturnType<
+  typeof useGetFormProjectMatchesLazyQuery
 >;
-export type GetFormApplicableProjectsQueryResult = Apollo.QueryResult<
-  GetFormApplicableProjectsQuery,
-  GetFormApplicableProjectsQueryVariables
+export type GetFormProjectMatchesQueryResult = Apollo.QueryResult<
+  GetFormProjectMatchesQuery,
+  GetFormProjectMatchesQueryVariables
 >;
 export const GetServiceCategoryRulesDocument = gql`
   query GetServiceCategoryRules(

@@ -3,13 +3,13 @@ import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  FormApplicableProjectFieldsFragment,
-  GetFormApplicableProjectsDocument,
-  GetFormApplicableProjectsQuery,
-  GetFormApplicableProjectsQueryVariables,
+  FormProjectMatchFieldsFragment,
+  GetFormProjectMatchesDocument,
+  GetFormProjectMatchesQuery,
+  GetFormProjectMatchesQueryVariables,
 } from '@/types/gqlTypes';
 
-const columns: ColumnDef<FormApplicableProjectFieldsFragment>[] = [
+const columns: ColumnDef<FormProjectMatchFieldsFragment>[] = [
   {
     header: 'Project',
     render: 'projectName',
@@ -28,23 +28,23 @@ interface Props {
   formId: string;
 }
 
-const FormApplicableProjectsTable: React.FC<Props> = ({ formId }) => {
+const FormProjectMatchTable: React.FC<Props> = ({ formId }) => {
   return (
     <GenericTableWithData<
-      GetFormApplicableProjectsQuery,
-      GetFormApplicableProjectsQueryVariables,
-      FormApplicableProjectFieldsFragment
+      GetFormProjectMatchesQuery,
+      GetFormProjectMatchesQueryVariables,
+      FormProjectMatchFieldsFragment
     >
       columns={columns}
       queryVariables={{ id: formId }}
-      queryDocument={GetFormApplicableProjectsDocument}
-      pagePath='formDefinition.applicableProjects'
+      queryDocument={GetFormProjectMatchesDocument}
+      pagePath='formDefinition.projectMatches'
       noData='No projects'
-      recordType='ApplicableProject'
+      recordType='FormProjectMatch'
       defaultPageSize={5}
       noPaginate
     />
   );
 };
 
-export default FormApplicableProjectsTable;
+export default FormProjectMatchTable;

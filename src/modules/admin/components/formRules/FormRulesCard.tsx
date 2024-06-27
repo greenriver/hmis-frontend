@@ -3,7 +3,7 @@ import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 
 import FormRuleTable from '../formRules/FormRuleTable';
 import TitleCard from '@/components/elements/TitleCard';
-import FormApplicableProjectsTable from '@/modules/admin/components/formRules/FormApplicableProjectsTable';
+import FormProjectMatchTable from '@/modules/admin/components/formRules/FormProjectMatchTable';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import {
   CreateFormRuleDocument,
@@ -76,7 +76,7 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
             rules.
           </Typography>
         </Box>
-        <FormApplicableProjectsTable formId={formId} />
+        <FormProjectMatchTable formId={formId} />
       </TitleCard>
       {renderFormDialog({
         title: (

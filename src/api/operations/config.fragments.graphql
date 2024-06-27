@@ -31,7 +31,7 @@ fragment FormRuleFields on FormRule {
   }
 }
 
-fragment FormApplicableProjectFields on ApplicableProject {
+fragment FormProjectMatchFields on FormProjectMatch {
   id
   projectName
   organizationName

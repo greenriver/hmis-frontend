@@ -19,12 +19,12 @@ query GetFormRules(
   }
 }
 
-query GetFormApplicableProjects($id: ID!) {
+query GetFormProjectMatches($id: ID!) {
   formDefinition(id: $id) {
     id
     cacheKey
-    applicableProjects {
-      ...FormApplicableProjectFields
+    projectMatches {
+      ...FormProjectMatchFields
     }
   }
 }
