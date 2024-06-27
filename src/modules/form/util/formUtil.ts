@@ -444,10 +444,16 @@ export const shouldEnableItem = ({
   );
 
   // console.debug(item.linkId, booleans);
-  if (item.enableBehavior === EnableBehavior.Any) {
-    return booleans.some(Boolean);
-  } else {
+  if (item.enableBehavior === EnableBehavior.All) {
+    // All conditions must be true.
     return booleans.every(Boolean);
+  } else {
+    // Any condition must be true.
+    //
+    // 'Any' is the default behavior, to match legacy API behavior which resolved ANY by default.
+    // Going forward once new validation is in place, we can expect that enable_behavior is always
+    // set if enable_when rules exist.
+    return booleans.some(Boolean);
   }
 };
 
