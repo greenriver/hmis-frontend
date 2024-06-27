@@ -14,7 +14,7 @@ import {
   UpIcon,
 } from '@/components/elements/SemanticIcons';
 import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
-import CannotDeleteItemModal from '@/modules/formBuilder/components/formTree/CannotDeleteItemModal';
+import CannotDeleteItemDialog from '@/modules/formBuilder/components/formTree/CannotDeleteItemDialog';
 import {
   FormItemPaletteType,
   ItemDependents,
@@ -77,7 +77,9 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
       expandItem
     );
 
-  const [itemDependents, setItemDependents] = useState<
+  // deletionBlockers contains the dependent items that block the deletion action currently being attempted.
+  // Gets reset to `undefined` when the user closes the error modal.
+  const [deletionBlockers, setDeletionBlockers] = useState<
     ItemDependents | undefined
   >(undefined);
 
@@ -91,7 +93,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
       {
         key: 'delete',
         title: 'Delete',
-        onClick: () => onDelete(setItemDependents),
+        onClick: () => onDelete(setDeletionBlockers),
         // disable deletion for groups that contain items
         disabled:
           item?.type === ItemType.Group && !!item?.item && item.item.length > 0,
@@ -110,12 +112,12 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         height: '48px',
       }}
     >
-      {!!itemDependents && (
-        <CannotDeleteItemModal
+      {!!deletionBlockers && (
+        <CannotDeleteItemDialog
           item={item}
           itemMap={itemMap}
-          itemDependents={itemDependents}
-          setItemDependents={setItemDependents}
+          deletionBlockers={deletionBlockers}
+          setDeletionBlockers={setDeletionBlockers}
           ancestorLinkIdMap={ancestorLinkIdMap}
         />
       )}

@@ -1,6 +1,7 @@
-import { Alert, List, ListItem } from '@mui/material';
+import { Alert } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { Dispatch, SetStateAction } from 'react';
+import { CommonUnorderedList } from '@/components/CommonUnorderedList';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ItemMap } from '@/modules/form/types';
 import { displayLabelForItem } from '@/modules/formBuilder/formBuilderUtil';
@@ -13,26 +14,26 @@ const dependentLabelMap: Record<string, string> = {
   boundDependents: 'Items with min/max bound(s)',
 };
 
-interface CannotDeleteItemModalProps {
+interface CannotDeleteItemDialogProps {
   item: FormItem;
   itemMap: ItemMap;
-  itemDependents: ItemDependents;
-  setItemDependents: Dispatch<SetStateAction<ItemDependents | undefined>>;
+  deletionBlockers: ItemDependents;
+  setDeletionBlockers: Dispatch<SetStateAction<ItemDependents | undefined>>;
   ancestorLinkIdMap: Record<string, string[]>;
 }
 
-const CannotDeleteItemModal: React.FC<CannotDeleteItemModalProps> = ({
+const CannotDeleteItemDialog: React.FC<CannotDeleteItemDialogProps> = ({
   item,
   itemMap,
-  itemDependents,
-  setItemDependents,
+  deletionBlockers,
+  setDeletionBlockers,
   ancestorLinkIdMap,
 }) => {
   return (
     <ConfirmationDialog
-      open={!!itemDependents}
+      open={!!deletionBlockers}
       title='Cannot delete item'
-      onConfirm={() => setItemDependents(undefined)}
+      onConfirm={() => setDeletionBlockers(undefined)}
       confirmText='Close'
       loading={false}
       hideCancelButton={true}
@@ -44,29 +45,21 @@ const CannotDeleteItemModal: React.FC<CannotDeleteItemModalProps> = ({
         icon={false}
         sx={{ my: 2, '& .MuiAlert-message': { width: '100%' } }}
       >
-        {Object.entries(itemDependents).map(([key, val]) =>
+        {Object.entries(deletionBlockers).map(([key, val]) =>
           val?.length > 0 ? (
             <Box key={key}>
               {dependentLabelMap[key]}:
-              <List sx={{ listStyleType: 'disc', py: 0 }}>
+              <CommonUnorderedList>
                 {val.map((dep) => (
-                  <ListItem
-                    sx={{
-                      display: 'list-item',
-                      ml: 4,
-                      px: 0,
-                      maxWidth: 'calc(100% - 32px)',
-                    }}
-                    key={dep.linkId}
-                  >
+                  <li key={dep.linkId}>
                     {ancestorLinkIdMap[dep.linkId].map(
                       (ancestor) =>
                         `"${displayLabelForItem(itemMap[ancestor])}" > `
                     )}
                     {`"${displayLabelForItem(dep)}"`}
-                  </ListItem>
+                  </li>
                 ))}
-              </List>
+              </CommonUnorderedList>
             </Box>
           ) : null
         )}
@@ -76,4 +69,4 @@ const CannotDeleteItemModal: React.FC<CannotDeleteItemModalProps> = ({
   );
 };
 
-export default CannotDeleteItemModal;
+export default CannotDeleteItemDialog;
