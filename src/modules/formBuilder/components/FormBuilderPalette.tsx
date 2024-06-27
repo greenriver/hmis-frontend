@@ -20,7 +20,7 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
+import { FormItemPaletteType } from '@/modules/formBuilder/types';
 import { ItemType } from '@/types/gqlTypes';
 
 export const FORM_ITEM_PALETTE = {
