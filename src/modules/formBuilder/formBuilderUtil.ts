@@ -2,6 +2,7 @@ import { cloneDeep, get, kebabCase, set } from 'lodash-es';
 import { ItemMap } from '@/modules/form/types';
 import {
   buildAutofillDependencyMap,
+  buildBoundsDependencyMap,
   buildEnabledDependencyMap,
 } from '@/modules/form/util/formUtil';
 import { ItemDependents } from '@/modules/formBuilder/types';
@@ -238,18 +239,19 @@ export const getDependentItems = ({
   itemMap: ItemMap;
 }): ItemDependents => {
   const autofillDependencyMap = buildAutofillDependencyMap(itemMap);
-  const autofillDependents =
-    autofillDependencyMap[linkId]?.map((dependerId) => itemMap[dependerId]) ||
-    [];
-
   const enableWhenDependencyMap = buildEnabledDependencyMap(itemMap);
-  const enableWhenDependents =
-    enableWhenDependencyMap[linkId]?.map((dependerId) => itemMap[dependerId]) ||
-    [];
+  const boundDependencyMap = buildBoundsDependencyMap(itemMap);
 
   return {
-    autofillDependents,
-    enableWhenDependents,
-    boundDependents: [], // todo @Martha
+    autofillDependents:
+      autofillDependencyMap[linkId]?.map((dependerId) => itemMap[dependerId]) ||
+      [],
+    enableWhenDependents:
+      enableWhenDependencyMap[linkId]?.map(
+        (dependerId) => itemMap[dependerId]
+      ) || [],
+    boundDependents: boundDependencyMap[linkId]?.map(
+      (dependerId) => itemMap[dependerId]
+    ),
   };
 };
