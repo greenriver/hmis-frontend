@@ -1,6 +1,6 @@
 import { LoadingButton } from '@mui/lab';
-import { Box, Button, Divider, Stack } from '@mui/material';
-import { isNil, startCase, omitBy } from 'lodash-es';
+import { Box, Button, Stack } from '@mui/material';
+import { isNil, omitBy, startCase } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { v4 } from 'uuid';
@@ -183,18 +183,22 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     >
       <Box sx={{ p: 2 }}>
         {itemTypeValue !== ItemType.Group && (
-          <Section title='Preview'>
+          <Section title='Preview' noDivider>
             <FormEditorItemPreview control={control} />
           </Section>
         )}
+      </Box>
+      <Box
+        sx={{
+          '.MuiFormControl-fullWidth': {
+            maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+          },
+          px: 2,
+          pb: 8,
+        }}
+      >
         <Section
           title='Properties'
-          sx={{
-            '.MuiFormControl-fullWidth': {
-              maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
-            },
-            mt: 2,
-          }}
           action={
             import.meta.env.MODE === 'development' && (
               // Temp debug button to log form state
@@ -224,7 +228,6 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               <ErrorAlert key='errors' errors={errorState.errors} />
             </Stack>
           )}
-
           {itemTypeValue === ItemType.Date && isAssessment && (
             <ControlledCheckbox
               name='assessmentDate'
@@ -234,7 +237,6 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             />
           )}
           {isQuestionItem && <RequiredOptionalRadio control={control} />}
-
           <ControlledTextInput
             required={isQuestionItem}
             control={control}
@@ -268,8 +270,15 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             <ControlledTextInput
               control={control}
               name='readonlyText'
-              label={'Read-Only ' + textLabel(itemCategory)}
-              helperText="Label to display when the item is shown in a read-only form. If not specified, the item's normal label text is shown."
+              label={textLabel(itemCategory) + ' for Read-Only View'}
+              helperText={`${textLabel(
+                itemCategory
+              )} to display when the item is shown in read-only view. If not specified, the item's ${textLabel(
+                itemCategory
+              )} is shown.`}
+              // FIXME doesnt correctly support multi-line display text. Newlines need to be inserted.
+              multiline={isDisplayItem}
+              minRows={isDisplayItem ? 2 : undefined}
             />
           )}
           {isQuestionItem && (
@@ -314,40 +323,107 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               />
             </>
           )}
-          <Divider />
-          <Section title='Advanced Properties'>
-            {componentOverridePicklist.length > 0 && (
+        </Section>
+        <Section title='Visibility'>
+          {isAssessment && (
+            <ControlledSelect
+              name='dataCollectedAbout'
+              control={control}
+              label='Client Applicability'
+              placeholder='Select client applicability'
+              options={dataCollectedAboutPickList}
+              helperText='Select the client(s) to which this item applies. If left blank, the item will be shown for all clients.'
+            />
+          )}
+          <ControlledCheckbox
+            name='hidden'
+            control={control}
+            label='Always Hide this Item'
+          />
+          {!hiddenValue && (
+            <>
               <ControlledSelect
-                name='component'
+                name='disabledDisplay'
                 control={control}
-                label='Component Override'
-                placeholder='Select component'
-                options={componentOverridePicklist}
+                label='Disabled Display'
+                placeholder='Select disabled display'
+                options={disabledDisplayPickList}
+                helperText={
+                  <>
+                    <b>Hidden</b>: When this item is disabled, it will be
+                    completely hidden from view.
+                    <br />
+                    {/* TODO: do we actually use  'protected' at all? can we remove it? */}
+                    <b>Protected</b>: When this item is disabled, it will still
+                    show up but not be interactable.
+                    <br />
+                    <b>Protected with Value</b>: When this item is disabled, it
+                    will still appear and its value will be visible but not
+                    interactible. It's value will be submitted.
+                  </>
+                }
               />
-            )}
-            {isNewItem ? (
-              <ControlledTextInput
-                control={control}
-                name='linkId'
-                helperText='Unique ID for this form item'
-                label='Question ID'
-                disabled={!isNewItem}
-                required
-                rules={{
-                  pattern: {
-                    value: /^[a-zA-Z_$][a-zA-Z0-9_$]*$/,
-                    message:
-                      'Must start with a letter and contain only letters, numbers, and underscores.',
-                  },
-                }}
-              />
-            ) : (
-              <CommonLabeledTextBlock title='Question ID'>
-                {initialItem.linkId}
-              </CommonLabeledTextBlock>
-            )}
-            {/* If this is a new item and it's a question, allow user to choose CustomDataElementDefinition key from existing keys. If left empty, a custom_field_key and CDED will be generated when the form is published */}
-            {/* {isNewItem && isQuestionItem && (
+              <ManageEnableWhen control={control} itemMap={itemMap} />
+            </>
+          )}
+        </Section>
+        <Section
+          title='Initial Value'
+          hidden={!isQuestionItem} //schema allows initial values for display items too, but we should  get rid of that. not showing it in the ui. we can manage in json
+        >
+          <InitialValue control={control} itemType={itemTypeValue} />
+        </Section>
+        <Section
+          title='Min/Max Bounds'
+          hidden={
+            // bounds are supported by numbers and dates only
+            ![ItemType.Integer, ItemType.Currency, ItemType.Date].includes(
+              itemTypeValue
+            )
+          }
+        >
+          <ValueBounds control={control} itemMap={itemMap} />
+        </Section>
+        <Section title='Autofill' hidden={!isQuestionItem}>
+          <AutofillProperties
+            control={control}
+            itemMap={itemMap}
+            itemType={itemTypeValue}
+          />
+        </Section>
+        <Section title='Advanced Properties' noDivider>
+          {componentOverridePicklist.length > 0 && (
+            <ControlledSelect
+              name='component'
+              control={control}
+              label='Component Override'
+              placeholder='Select component'
+              options={componentOverridePicklist}
+            />
+          )}
+          {isNewItem ? (
+            <ControlledTextInput
+              control={control}
+              name='linkId'
+              helperText='Unique ID for this form item'
+              label='Question ID'
+              disabled={!isNewItem}
+              required
+              rules={{
+                pattern: {
+                  value: /^[a-zA-Z_$][a-zA-Z0-9_$]*$/,
+                  message:
+                    'Must start with a letter and contain only letters, numbers, and underscores.',
+                },
+              }}
+            />
+          ) : (
+            <CommonLabeledTextBlock title='Question ID'>
+              {initialItem.linkId}
+            </CommonLabeledTextBlock>
+          )}
+          {/* If this is a new item and it's a question, allow user to choose CustomDataElementDefinition key from existing keys. If left empty, a custom_field_key and CDED will be generated when the form is published */}
+          {/* {isNewItem && isQuestionItem && (
               <ControlledSelect
                 control={control}
                 name='mapping.customFieldKey'
@@ -357,92 +433,15 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
                 helperText='Leave blank to generate a new custom field for this question.'
               />
             )} */}
-            {/* If this is an existing item with a mapping, show mapping value as read-only */}
-            {!isNewItem &&
-              (initialItem.mapping?.customFieldKey ||
-                initialItem.mapping?.fieldName) && (
-                <CommonLabeledTextBlock title='Field Key'>
-                  {initialItem.mapping?.customFieldKey ||
-                    initialItem.mapping?.fieldName}
-                </CommonLabeledTextBlock>
-              )}
-          </Section>
-          <Divider />
-          <Section title='Visibility'>
-            {isAssessment && (
-              <ControlledSelect
-                name='dataCollectedAbout'
-                control={control}
-                label='Client Applicability'
-                placeholder='Select client applicability'
-                options={dataCollectedAboutPickList}
-                helperText='Select the client(s) to which this item applies. If left blank, the item will be shown for all clients.'
-              />
+          {/* If this is an existing item with a mapping, show mapping value as read-only */}
+          {!isNewItem &&
+            (initialItem.mapping?.customFieldKey ||
+              initialItem.mapping?.fieldName) && (
+              <CommonLabeledTextBlock title='Field Key'>
+                {initialItem.mapping?.customFieldKey ||
+                  initialItem.mapping?.fieldName}
+              </CommonLabeledTextBlock>
             )}
-            <ControlledCheckbox
-              name='hidden'
-              control={control}
-              label='Always Hide this Item'
-            />
-            {!hiddenValue && (
-              <>
-                <ControlledSelect
-                  name='disabledDisplay'
-                  control={control}
-                  label='Disabled Display'
-                  placeholder='Select disabled display'
-                  options={disabledDisplayPickList}
-                  helperText={
-                    <>
-                      <b>Hidden</b>: When this item is disabled, it will be
-                      completely hidden from view.
-                      <br />
-                      {/* TODO: do we actually use  'protected' at all? can we remove it? */}
-                      <b>Protected</b>: When this item is disabled, it will
-                      still show up but not be interactable.
-                      <br />
-                      <b>Protected with Value</b>: When this item is disabled,
-                      it will still appear and its value will be visible but not
-                      interactible. It's value will be submitted.
-                    </>
-                  }
-                />
-                <ManageEnableWhen control={control} itemMap={itemMap} />
-              </>
-            )}
-          </Section>
-          <Divider />
-
-          {isQuestionItem && (
-            // schema allows initial values for display items too, but we should get rid of that. not showing it in the ui. we can manage in json
-            <>
-              <Section title='Initial Value'>
-                <InitialValue control={control} itemType={itemTypeValue} />
-              </Section>
-              <Divider />
-            </>
-          )}
-
-          {/* bounds are supported by numbers and dates only */}
-          {[ItemType.Integer, ItemType.Currency, ItemType.Date].includes(
-            itemTypeValue
-          ) && (
-            <>
-              <Section title='Min/Max Bounds'>
-                <ValueBounds control={control} itemMap={itemMap} />
-              </Section>
-              <Divider />
-            </>
-          )}
-          {isQuestionItem && (
-            <Section title='Autofill'>
-              <AutofillProperties
-                control={control}
-                itemMap={itemMap}
-                itemType={itemTypeValue}
-              />
-            </Section>
-          )}
         </Section>
       </Box>
       <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
