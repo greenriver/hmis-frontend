@@ -110,7 +110,6 @@ const FormRule: React.FC<Props> = ({
             openFormDialog();
           }}
           size='small'
-          sx={{ height: '28px' }} // to match width, otherwise the Stack will make the button full height.
         >
           <EditIcon fontSize='inherit' />
         </IconButton>

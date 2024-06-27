@@ -12,6 +12,7 @@ import {
   FormRuleInput,
   MutationCreateFormRuleArgs,
   StaticFormRole,
+  useGetFormProjectMatchesQuery,
 } from '@/types/gqlTypes';
 import { evictQuery } from '@/utils/cacheUtil';
 
@@ -38,6 +39,13 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
       evictQuery('formRules');
     },
   });
+
+  // Fetch here in order to display the total number of project matches outside of the table.
+  // FormProjectMatchTable also requests this, so it will fetch from the apollo cache.
+  const { data: fetchFormData } = useGetFormProjectMatchesQuery({
+    variables: { id: formId },
+  });
+  const matchCount = fetchFormData?.formDefinition?.projectMatches.length;
 
   return (
     <>
@@ -72,8 +80,9 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
             Projects
           </Typography>
           <Typography variant='body1'>
-            This form applies to the following projects based on the current
-            rules.
+            This form applies to the following{' '}
+            {matchCount ? matchCount + ' ' : ''}
+            projects based on the current rules.
           </Typography>
         </Box>
         <FormProjectMatchTable formId={formId} />
