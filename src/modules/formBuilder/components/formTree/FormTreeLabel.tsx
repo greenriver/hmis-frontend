@@ -7,7 +7,6 @@ import React, { useContext, useMemo, useState } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
 import { FormTreeContext } from './FormTreeContext';
 import useUpdateFormStructure from './useUpdateFormStructure';
-import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import CommonMenuButton from '@/components/elements/CommonMenuButton';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import {
@@ -16,7 +15,11 @@ import {
   UpIcon,
 } from '@/components/elements/SemanticIcons';
 import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
-import { FormItemPaletteType } from '@/modules/formBuilder/components/formTree/types';
+import { displayLabelForItem } from '@/modules/formBuilder/formBuilderUtil';
+import {
+  FormItemPaletteType,
+  ItemDependents,
+} from '@/modules/formBuilder/types';
 import { ItemType } from '@/types/gqlTypes';
 
 export const getItemDisplayAttrs = (type: ItemType): FormItemPaletteType => {
@@ -28,6 +31,12 @@ export interface FormTreeLabelProps
     Omit<UseTreeItem2Parameters, 'children'> {
   itemId: string;
 }
+
+const dependentLabelMap: Record<string, string> = {
+  autofillDependents: 'Items with autofill condition(s)',
+  enableWhenDependents: 'Items with visibility condition(s)',
+  boundDependents: 'Items with min/max bound(s)',
+};
 
 const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   id,
@@ -61,9 +70,18 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   const labelProps = getLabelProps();
 
   const { onReorder, onDelete, canMoveUp, canMoveDown } =
-    useUpdateFormStructure(control, itemId, item, rhfPathMap, expandItem);
+    useUpdateFormStructure(
+      control,
+      itemId,
+      item,
+      itemMap,
+      rhfPathMap,
+      expandItem
+    );
 
-  const [errors, setErrors] = useState<Set<string> | undefined>(undefined);
+  const [itemDependents, setItemDependents] = useState<
+    ItemDependents | undefined
+  >(undefined);
 
   const menuItems = useMemo(
     () => [
@@ -75,7 +93,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
       {
         key: 'delete',
         title: 'Delete',
-        onClick: () => onDelete(setErrors),
+        onClick: () => onDelete(setItemDependents),
       },
     ],
     [item, openFormItemEditor, onDelete]
@@ -91,24 +109,32 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         height: '48px',
       }}
     >
-      <ConfirmationDialog
-        open={!!errors}
-        title='Cannot delete'
-        onConfirm={() => setErrors(undefined)}
-        onCancel={() => setErrors(undefined)}
-        loading={false}
-      >
-        Cannot delete "{labelProps.children}," because one or more other
-        questions depend on it.
-        <List>
-          {errors &&
-            [...errors].map((error) => (
-              <ListItem key={error}>
-                <CommonHtmlContent>{error}</CommonHtmlContent>
-              </ListItem>
-            ))}
-        </List>
-      </ConfirmationDialog>
+      {!!itemDependents && (
+        <ConfirmationDialog
+          open={!!itemDependents}
+          title='Cannot delete item'
+          onConfirm={() => setItemDependents(undefined)}
+          loading={false}
+        >
+          "{displayLabelForItem(item)}" cannot be deleted because it is
+          referenced elsewhere.
+          {Object.entries(itemDependents).map(([key, val]) =>
+            val.length > 0 ? (
+              <Box sx={{ mt: 1 }} key={key}>
+                {dependentLabelMap[key]}:
+                <List>
+                  {val.map((dep) => (
+                    <ListItem key={dep.linkId}>{`"${displayLabelForItem(
+                      dep
+                    )}"`}</ListItem>
+                  ))}
+                </List>
+              </Box>
+            ) : null
+          )}
+          All references to this item must be removed before it can be deleted.
+        </ConfirmationDialog>
+      )}
       {displayAttrs && (
         <Stack
           direction='row'

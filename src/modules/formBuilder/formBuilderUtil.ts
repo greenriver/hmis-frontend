@@ -1,4 +1,10 @@
 import { cloneDeep, get, kebabCase, set } from 'lodash-es';
+import { ItemMap } from '@/modules/form/types';
+import {
+  buildAutofillDependencyMap,
+  buildEnabledDependencyMap,
+} from '@/modules/form/util/formUtil';
+import { ItemDependents } from '@/modules/formBuilder/types';
 import {
   Component,
   FormDefinitionJson,
@@ -216,77 +222,34 @@ export const insertItemToDefinition = ({
 };
 
 /**
- * Validates that the attempted deletion action is allowed. It is allowed if the item
- * the user is trying to delete doesn't have any other items that refer to it.
- * If dependents exist, then the operation is not allowed and the function returns a user-facing error string.
+ * Given a linkId, returns all other form items that depend on that linkId,
+ * organized by the reason for the dependence (autofill, bounds, or enableWhen).
+ * Deletion is only valid on items that have no dependents, so this function
+ * is used for validating that a deletion action is allowed.
  *
- * @param toDelete the linkId of the item the user is trying to delete
- * @param definition the current form definition
+ * @param linkId the linkId of the item to check for dependencies
+ * @param itemMap the map of linkId => item in the current form
  */
-export const validateDeletion = ({
-  toDelete,
-  definition,
+export const getDependentItems = ({
+  linkId,
+  itemMap,
 }: {
-  toDelete: string;
-  definition: FormDefinitionJson;
-}): { success: boolean; errors?: Set<string> } => {
-  // Mapping of linkId of the dependent question => an array of user-facing strings
-  // representing where the problematic dependency is located on that item, e.g. autofill or enableWhen
-  const errors = new Set<string>();
+  linkId: string;
+  itemMap: ItemMap;
+}): ItemDependents => {
+  const autofillDependencyMap = buildAutofillDependencyMap(itemMap);
+  const autofillDependents =
+    autofillDependencyMap[linkId]?.map((dependerId) => itemMap[dependerId]) ||
+    [];
 
-  function checkDependence(
-    toDelete: string,
-    toCheck: FormItem,
-    parentPath: string
-  ) {
-    const label = displayLabelForItem(toCheck);
-    const prefix = parentPath ? `${parentPath} > ${label}` : label;
+  const enableWhenDependencyMap = buildEnabledDependencyMap(itemMap);
+  const enableWhenDependents =
+    enableWhenDependencyMap[linkId]?.map((dependerId) => itemMap[dependerId]) ||
+    [];
 
-    toCheck.enableWhen?.forEach((enableWhen) => {
-      if (
-        enableWhen.question === toDelete ||
-        enableWhen.compareQuestion === toDelete
-      ) {
-        errors.add(`${prefix}: <b>conditional visibility</b>`);
-      }
-    });
-
-    toCheck.autofillValues?.forEach((autofillValue) => {
-      if (
-        autofillValue.valueQuestion === toDelete ||
-        autofillValue.sumQuestions?.includes(toDelete) ||
-        autofillValue.autofillWhen?.filter(
-          (autofillWhen) => autofillWhen.question === toDelete
-        ).length > 0
-      ) {
-        errors.add(`${prefix}: <b>autofill</b>`);
-      }
-    });
-
-    toCheck.bounds?.forEach((bound) => {
-      if (bound.question === toDelete) {
-        errors.add(`${prefix}: <b>bounds</b>`);
-      }
-    });
-
-    return prefix;
-  }
-
-  function recurseCheckDependence(
-    items: Maybe<FormItem[]> | undefined,
-    parentPath: string
-  ) {
-    items?.forEach((item) => {
-      const thisPath = checkDependence(toDelete, item, parentPath);
-      recurseCheckDependence(item.item, thisPath);
-    });
-  }
-
-  recurseCheckDependence(definition.item, '');
-
-  if (errors.size > 0) {
-    return { success: false, errors };
-  }
-
-  return { success: true };
+  return {
+    autofillDependents,
+    enableWhenDependents,
+    boundDependents: [], // todo @Martha
+  };
 };

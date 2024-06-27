@@ -1,4 +1,4 @@
-import { get } from 'lodash-es';
+import { get, some } from 'lodash-es';
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import {
   Control,
@@ -6,18 +6,21 @@ import {
   useFormContext,
   useWatch,
 } from 'react-hook-form';
+import { ItemMap } from '@/modules/form/types';
 import {
+  getDependentItems,
   getPathContext,
   insertItemToDefinition,
   removeItemFromDefinition,
-  validateDeletion,
 } from '@/modules/formBuilder/formBuilderUtil';
+import { ItemDependents } from '@/modules/formBuilder/types';
 import { FormDefinitionJson, FormItem, ItemType } from '@/types/gqlTypes';
 
 export default function useUpdateFormStructure(
   control: Control,
   itemId: string,
   item: FormItem,
+  itemMap: ItemMap,
   rhfPathMap: Record<string, string>,
   expandItem: (itemId: string) => void
 ) {
@@ -55,19 +58,19 @@ export default function useUpdateFormStructure(
   }, [hasParent, thisIndex]);
 
   const onDelete = useCallback(
-    (onError: Dispatch<SetStateAction<Set<string> | undefined>>) => {
-      const { success, errors } = validateDeletion({
-        toDelete: itemId,
-        definition: values as FormDefinitionJson,
+    (onError: Dispatch<SetStateAction<ItemDependents | undefined>>) => {
+      const dependents: ItemDependents = getDependentItems({
+        linkId: itemId,
+        itemMap,
       });
 
-      if (!success) {
-        onError(errors);
+      if (some([Object.values(dependents)], (depList) => depList.length > 0)) {
+        onError(dependents);
       } else {
         remove(thisIndex);
       }
     },
-    [values, itemId, thisIndex, remove]
+    [values, itemId, thisIndex, remove, itemMap]
   );
 
   const onReorder = useCallback(
