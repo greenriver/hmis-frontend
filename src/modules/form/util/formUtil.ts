@@ -1462,17 +1462,6 @@ export const getFieldOnAssessment = (
   return { record, recordType, value };
 };
 
-export const itemDefaults = {
-  disabledDisplay: DisabledDisplay.Hidden,
-  enableBehavior: EnableBehavior.Any,
-  required: false,
-  prefill: false,
-  readOnly: false,
-  warnIfEmpty: false,
-  hidden: false,
-  repeats: false,
-};
-
 export const parseOccurrencePointFormDefinition = (
   definition: FormDefinitionFieldsFragment
 ) => {
