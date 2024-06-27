@@ -62,7 +62,7 @@ const TitleCard: React.FC<Props> = ({
         }}
       >
         <Typography
-          component={headerComponent || 'h1'} // https://mui.com/material-ui/guides/typescript/#complications-with-the-component-prop
+          component={headerComponent || 'span'}
           variant={headerTypographyVariant}
           sx={{ py: 1, flexGrow: 1 }}
         >
