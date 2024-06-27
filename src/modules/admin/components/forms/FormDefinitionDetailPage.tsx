@@ -10,6 +10,7 @@ import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditFormButton, {
   FormEditorType,
@@ -65,13 +66,17 @@ const FormDefinitionDetailPage = () => {
     identifier: string;
   };
 
-  const { data: { formIdentifier } = {}, error } =
-    useGetFormIdentifierDetailsQuery({
-      variables: { identifier },
-    });
+  const {
+    data: { formIdentifier } = {},
+    error,
+    loading,
+  } = useGetFormIdentifierDetailsQuery({
+    variables: { identifier },
+  });
 
   if (error) throw error;
-  if (!formIdentifier) return <Loading />;
+  if (!formIdentifier && loading) return <Loading />;
+  if (!formIdentifier) return <NotFound />;
 
   const isPublished =
     formIdentifier.displayVersion.status === FormStatus.Published;
