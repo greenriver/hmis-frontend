@@ -45,7 +45,7 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
   const { data: fetchFormData } = useGetFormProjectMatchesQuery({
     variables: { id: formId },
   });
-  const matchCount = fetchFormData?.formDefinition?.projectMatches.length;
+  const matchCount = fetchFormData?.formDefinition?.projectMatches.nodesCount;
 
   return (
     <>

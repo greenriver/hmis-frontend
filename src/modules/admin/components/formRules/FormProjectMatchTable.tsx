@@ -40,9 +40,9 @@ const FormProjectMatchTable: React.FC<Props> = ({ formId }) => {
       queryDocument={GetFormProjectMatchesDocument}
       pagePath='formDefinition.projectMatches'
       noData='No projects'
+      paginationItemName='projects'
       recordType='FormProjectMatch'
       defaultPageSize={5}
-      noPaginate
     />
   );
 };

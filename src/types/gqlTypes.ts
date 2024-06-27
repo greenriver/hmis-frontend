@@ -2872,7 +2872,7 @@ export type FormDefinition = {
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
   identifier: Scalars['String']['output'];
-  projectMatches: Array<FormProjectMatch>;
+  projectMatches: FormProjectMatchesPaginated;
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
   status: FormStatus;
@@ -2887,6 +2887,12 @@ export type FormDefinitionFormRulesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<FormRuleSortOption>;
+};
+
+/** FormDefinition */
+export type FormDefinitionProjectMatchesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type FormDefinitionForJsonResult = {
@@ -3032,6 +3038,17 @@ export type FormProjectMatch = {
   id: Scalars['ID']['output'];
   organizationName: Scalars['String']['output'];
   projectName: Scalars['String']['output'];
+};
+
+export type FormProjectMatchesPaginated = {
+  __typename?: 'FormProjectMatchesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<FormProjectMatch>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export enum FormRole {
@@ -15289,6 +15306,8 @@ export type GetFormRulesQuery = {
 
 export type GetFormProjectMatchesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 export type GetFormProjectMatchesQuery = {
@@ -15297,13 +15316,19 @@ export type GetFormProjectMatchesQuery = {
     __typename?: 'FormDefinition';
     id: string;
     cacheKey: string;
-    projectMatches: Array<{
-      __typename?: 'FormProjectMatch';
-      id: string;
-      projectName: string;
-      organizationName: string;
-      dataCollectedAbout: DataCollectedAbout;
-    }>;
+    projectMatches: {
+      __typename?: 'FormProjectMatchesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'FormProjectMatch';
+        id: string;
+        projectName: string;
+        organizationName: string;
+        dataCollectedAbout: DataCollectedAbout;
+      }>;
+    };
   } | null;
 };
 
@@ -37480,12 +37505,17 @@ export type GetFormRulesQueryResult = Apollo.QueryResult<
   GetFormRulesQueryVariables
 >;
 export const GetFormProjectMatchesDocument = gql`
-  query GetFormProjectMatches($id: ID!) {
+  query GetFormProjectMatches($id: ID!, $limit: Int = 25, $offset: Int = 0) {
     formDefinition(id: $id) {
       id
       cacheKey
-      projectMatches {
-        ...FormProjectMatchFields
+      projectMatches(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...FormProjectMatchFields
+        }
       }
     }
   }
@@ -37505,6 +37535,8 @@ export const GetFormProjectMatchesDocument = gql`
  * const { data, loading, error } = useGetFormProjectMatchesQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
