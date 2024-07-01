@@ -41,9 +41,9 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
   });
 
   // Fetch here in order to display the total number of project matches outside of the table.
-  // FormProjectMatchTable also requests this, so it will fetch from the apollo cache.
+  // FormProjectMatchTable also requests this, but there is no easy way to get the data out of GenericTable
   const { data: fetchFormData } = useGetFormProjectMatchesQuery({
-    variables: { id: formId },
+    variables: { id: formId, limit: 0 },
   });
   const matchCount = fetchFormData?.formDefinition?.projectMatches.nodesCount;
 

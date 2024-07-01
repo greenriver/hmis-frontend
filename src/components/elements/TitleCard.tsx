@@ -38,6 +38,8 @@ const TitleCard: React.FC<Props> = ({
 }) => {
   const isMobile = useIsMobile(mobileBreakpoint);
 
+  const typographyProps = headerComponent ? { component: headerComponent } : {};
+
   return (
     <Paper data-testid={props['data-testid']} {...props}>
       <Stack
@@ -62,9 +64,9 @@ const TitleCard: React.FC<Props> = ({
         }}
       >
         <Typography
-          component={headerComponent || 'span'}
           variant={headerTypographyVariant}
           sx={{ py: 1, flexGrow: 1 }}
+          {...typographyProps}
         >
           {title}
         </Typography>
