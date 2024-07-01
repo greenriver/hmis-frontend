@@ -12,7 +12,7 @@ import {
 } from '@/types/gqlTypes';
 import React, { useMemo, useState } from 'react';
 import FormSelect from '@/modules/form/components/FormSelect';
-import { itemDefaults, localResolvePickList } from '@/modules/form/util/formUtil';
+import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { isPickListOption } from '@/modules/form/types';
 import { Stack } from '@mui/system';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -76,7 +76,6 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
 
   const { pickList: projectList } = usePickList({
     item: {
-      ...itemDefaults,
       linkId: 'fake',
       type: ItemType.Choice,
       pickListReference: PickListType.Project,
@@ -85,7 +84,6 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
 
   const { pickList: orgList } = usePickList({
     item: {
-      ...itemDefaults,
       linkId: 'fake',
       type: ItemType.Choice,
       pickListReference: PickListType.Organization,
