@@ -1,5 +1,5 @@
 import { Chip, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { HmisEnums } from '@/types/gqlEnums';
 import { FormRuleFieldsFragment } from '@/types/gqlTypes';
 
@@ -22,9 +22,7 @@ interface Props {
   rule: Partial<FormRuleFieldsFragment>;
 }
 
-const FormRule: React.FC<Props> = ({
-  rule,
-}) => {
+const FormRule: React.FC<Props> = ({ rule }) => {
   const {
     dataCollectedAbout,
     projectType,
@@ -45,49 +43,51 @@ const FormRule: React.FC<Props> = ({
     />
   );
 
-  const conditions = [];
+  const conditions: Record<string, ReactNode> = {};
 
   if (projectType)
-    conditions.push(
+    conditions.projectType = (
       <FormRuleChip
         label={`Project Type is ${HmisEnums.ProjectType[projectType]}`}
       />
     );
   if (project)
-    conditions.push(
+    conditions.project = (
       <FormRuleChip label={`Project is ${project.projectName}`} />
     );
   if (organization)
-    conditions.push(
+    conditions.organization = (
       <FormRuleChip
         label={`Organization is ${organization.organizationName}`}
       />
     );
   if (otherFunder) {
-    conditions.push(
+    conditions.otherFunder = (
       <FormRuleChip label={`Funding Source is ${otherFunder}`} />
     );
   } else if (funder) {
-    conditions.push(
+    conditions.funder = (
       <FormRuleChip
         label={`Funding Source is ${HmisEnums.FundingSource[funder]}`}
       />
     );
   }
 
+  const conditionCount = Object.keys(conditions).length;
+
   return (
     <Stack direction='row' gap={2}>
       <Typography variant='body2' sx={{ flexGrow: 1 }}>
         Applies to {appliesTo}
-        {conditions.length > 0 && (
+        {conditionCount > 0 && (
           <>
             {' '}
             if{' '}
-            {conditions.map((condition, i) => {
+            {Object.entries(conditions).map(([key, condition], i) => {
               return (
-                <span key={condition.key}>
+                <span key={key}>
                   {condition}
-                  {i < conditions.length - 1 && ' and '}
+                  {i < conditionCount - 1 && ' and '}
                 </span>
               );
             })}
