@@ -74,6 +74,7 @@ import {
   RelationshipToHoH,
   ValueBound,
 } from '@/types/gqlTypes';
+import { ensureArray } from '@/utils/arrays';
 
 // Chrome ignores autocomplete="off" in some cases, such street address fields. We use an
 // invalid value here that the browser doesn't understand to prevent this behavior. This
@@ -791,7 +792,7 @@ export const getInitialValues = (
         return;
       }
 
-      // TODO handle multiple initials for multi-select questions
+      // TODO handle multiple initials for multi-select questions. Only looking at first item in `initial` array for now.
       const initial = item.initial[0];
 
       if (behavior && initial.initialBehavior !== behavior) return;
@@ -818,6 +819,12 @@ export const getInitialValues = (
             values[item.linkId] = gqlValueToFormValue(value, item) || value;
           }
         }
+      }
+
+      // If this item repeats, it means that the value should be an array. Wrap the initial value in an array if not already.
+      // We may want to expand this to support setting multiple initial values in a multi-select, if needed.
+      if (item.repeats) {
+        values[item.linkId] = ensureArray(values[item.linkId]);
       }
     });
   }
