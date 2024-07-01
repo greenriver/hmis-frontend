@@ -1,7 +1,5 @@
-import { IconButton, Stack, Chip, Typography } from '@mui/material';
-import React, { Dispatch, SetStateAction } from 'react';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { EditIcon } from '@/components/elements/SemanticIcons';
+import { Chip, Stack, Typography } from '@mui/material';
+import React from 'react';
 import { HmisEnums } from '@/types/gqlEnums';
 import { FormRuleFieldsFragment } from '@/types/gqlTypes';
 
@@ -9,12 +7,6 @@ const FormRuleChip: React.FC<{ label: string }> = ({ label }) => {
   // bottom margin puts the chip text in line with the body text
   return <Chip component='span' sx={{ mb: 0.25 }} size='small' label={label} />;
 };
-
-interface Props {
-  rule: FormRuleFieldsFragment;
-  setSelectedRule: Dispatch<SetStateAction<FormRuleFieldsFragment | undefined>>;
-  openFormDialog: VoidFunction;
-}
 
 const ActiveChip = ({ active }: { active: boolean }) => (
   <Chip
@@ -26,10 +18,12 @@ const ActiveChip = ({ active }: { active: boolean }) => (
   />
 );
 
+interface Props {
+  rule: Partial<FormRuleFieldsFragment>;
+}
+
 const FormRule: React.FC<Props> = ({
   rule,
-  setSelectedRule,
-  openFormDialog,
 }) => {
   const {
     dataCollectedAbout,
@@ -100,20 +94,11 @@ const FormRule: React.FC<Props> = ({
           </>
         )}
       </Typography>
-      <ActiveChip active={active} />
-      <ButtonTooltipContainer title={rule.system ? 'System rule' : undefined}>
-        <IconButton
-          aria-label='edit form rule'
-          disabled={rule.system}
-          onClick={() => {
-            setSelectedRule(rule);
-            openFormDialog();
-          }}
-          size='small'
-        >
-          <EditIcon fontSize='inherit' />
-        </IconButton>
-      </ButtonTooltipContainer>
+      <ActiveChip
+        active={active || false}
+        // todo @martha - any other treatment style in the table for active rules?
+        // todo @martha - enable deactivation (not deletion)
+      />
     </Stack>
   );
 };

@@ -1,21 +1,14 @@
 import { TableCell, TableRow } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import FormRule from '@/modules/admin/components/formRules/FormRule';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import {
   FormRole,
   FormRuleFieldsFragment,
-  FormRuleInput,
   GetFormRulesDocument,
   GetFormRulesQuery,
   GetFormRulesQueryVariables,
-  MutationUpdateFormRuleArgs,
-  StaticFormRole,
-  UpdateFormRuleDocument,
-  UpdateFormRuleMutation,
 } from '@/types/gqlTypes';
-import { evictQuery } from '@/utils/cacheUtil';
 
 type RowType = FormRuleFieldsFragment;
 
@@ -24,34 +17,7 @@ interface Props {
   formRole: FormRole;
 }
 
-const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
-  // Currently selected rule for editing
-  const [selectedRule, setSelectedRule] = useState<RowType | undefined>();
-
-  // Form dialog for editing rules
-  const { openFormDialog, renderFormDialog } = useStaticFormDialog<
-    UpdateFormRuleMutation,
-    MutationUpdateFormRuleArgs
-  >({
-    formRole: StaticFormRole.FormRule,
-    initialValues: {
-      ...selectedRule,
-      // hack: pass service type ids as initial values. We should resolve these on FormRule instead
-      serviceTypeId: selectedRule?.serviceType?.id,
-      serviceCategoryId: selectedRule?.serviceCategory?.id,
-    },
-    mutationDocument: UpdateFormRuleDocument,
-    localConstants: { formRole },
-    getErrors: (data) => data.updateFormRule?.errors || [],
-    getVariables: (values) => ({
-      input: { input: values as FormRuleInput, id: selectedRule?.id || '' },
-    }),
-    onCompleted: () => {
-      evictQuery('formDefinition', { id: formId });
-    },
-    onClose: () => setSelectedRule(undefined),
-  });
-
+const FormRuleTable: React.FC<Props> = ({ formId, formRole: _formRole }) => {
   return (
     <>
       <GenericTableWithData<
@@ -71,19 +37,11 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
         renderRow={(rule) => (
           <TableRow key={rule.id}>
             <TableCell sx={{ py: 1 }}>
-              <FormRule
-                rule={rule}
-                setSelectedRule={setSelectedRule}
-                openFormDialog={openFormDialog}
-              />
+              <FormRule rule={rule} />
             </TableCell>
           </TableRow>
         )}
       />
-      {renderFormDialog({
-        title: 'Edit Rule',
-        DialogProps: { maxWidth: 'sm' },
-      })}
     </>
   );
 };

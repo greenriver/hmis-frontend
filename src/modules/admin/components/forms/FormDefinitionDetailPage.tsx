@@ -171,7 +171,6 @@ const FormDefinitionDetailPage = () => {
         </Grid>
         <FormRulesCard
           formId={formIdentifier.displayVersion.id}
-          formTitle={formIdentifier.displayVersion.title}
           formRole={formIdentifier.displayVersion.role}
         />
         <TitleCard

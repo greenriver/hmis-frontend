@@ -43,19 +43,21 @@ interface CardGroupProps {
   onAddItem: VoidFunction;
   addItemText: string;
   maxItems?: number;
+  disableAdd?: boolean;
 }
 const CardGroup: React.FC<CardGroupProps> = ({
   children,
   onAddItem,
   addItemText,
   maxItems,
+  disableAdd = false,
 }) => {
   return (
     <Box>
       <Stack gap={2} sx={{ pt: 1 }}>
         {children}
       </Stack>
-      {(!maxItems ||
+      {!disableAdd && (!maxItems ||
         (Array.isArray(children) && children.length < maxItems)) && (
         <Button
           onClick={onAddItem}
