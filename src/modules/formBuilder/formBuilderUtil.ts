@@ -1,4 +1,4 @@
-import { cloneDeep, kebabCase } from 'lodash-es';
+import { cloneDeep, get, kebabCase, set } from 'lodash-es';
 import {
   Component,
   FormDefinitionJson,
@@ -114,4 +114,103 @@ export const updateFormItem = (
 export const slugifyItemLabel = (label: string) => {
   const cleanedLabel = removeHtmlTags(label);
   return kebabCase(cleanedLabel).toLowerCase().replace(/-/g, '_').slice(0, 40);
+};
+
+/**
+ * Maps the item's linkId to the string key that React Hook Forms's useArrayFields hook expects,
+ * which looks like: `item`, `item.0`, `item.0.item.1`, etc.
+ */
+export const getItemIdMap = (items: FormItem[]) => {
+  const map: Record<string, string> = {};
+
+  function recursiveMap(
+    items: Maybe<FormItem[]> | undefined,
+    parentKey: string
+  ) {
+    items?.forEach((item, i) => {
+      const key = `${parentKey && parentKey + '.'}${i}`;
+
+      map[item.linkId] = key;
+      recursiveMap(item.item, key + '.item');
+    });
+  }
+
+  recursiveMap(items, 'item');
+  return map;
+};
+
+/**
+ * Helper fn for interacting with the form tree structure as stored in React Hook Forms,
+ * which stores item paths like `item`, `item.0`, `item.0.item.1`, etc.
+ * Given a form path, return the path to its parent and the index in the parent.
+ * For example: if itemPath is `item.0.item.1`, then the parentPath is `item.0.item`
+ * and the index is 1.
+ */
+export const getPathContext = (
+  itemPath: string
+): { parentPath: string; index: number } => {
+  if (!itemPath || itemPath === 'item') {
+    return { parentPath: '', index: -1 };
+  }
+
+  const components = itemPath.split('.');
+  const lastComponent = components[components.length - 1];
+
+  if (lastComponent !== 'item') {
+    const index = components.pop();
+    return {
+      parentPath: components.join('.'),
+      index: Number(index),
+    };
+  } else {
+    throw new Error('shouldnt happen');
+  }
+};
+
+// mutates definition
+export const removeItemFromDefinition = ({
+  removeFromPath,
+  removeFromIndex,
+  definition,
+}: {
+  removeFromPath: string;
+  removeFromIndex: number;
+
+  definition: FormDefinitionJson;
+}) => {
+  // Get the array
+  const oldParentArray = get(definition, removeFromPath);
+  // Drop the item at the specified index
+  const itemRemoved = oldParentArray.splice(removeFromIndex, 1)[0];
+
+  return itemRemoved;
+};
+
+// mutates definition
+export const insertItemToDefinition = ({
+  insertPath,
+  insertAtIndex,
+  definition,
+  item,
+}: {
+  insertPath: string;
+  insertAtIndex: number;
+  definition: FormDefinitionJson;
+  item?: FormItem;
+}) => {
+  // Get the array
+  const newParentArray = get(definition, insertPath);
+  if (!newParentArray) {
+    // If array doesn't exist, this might be a new Group item that doesn't have children yet.
+    // Raise unless its a Group item.
+    const parentItem = get(definition, insertPath.replace(/\.item$/, ''));
+    if (!parentItem || parentItem.type !== ItemType.Group) {
+      throw new Error('Can only insert item into a Group item');
+    }
+    // Insert the item into a new array
+    set(definition, insertPath, [item]);
+  } else {
+    // Insert the item
+    newParentArray.splice(insertAtIndex, 0, item);
+  }
 };

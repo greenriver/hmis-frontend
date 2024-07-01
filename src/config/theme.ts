@@ -245,6 +245,21 @@ const createThemeOptions = (theme: Theme) => ({
         },
       },
     },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          typography: 'body2',
+          fontWeight: 600,
+        }),
+      },
+    },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: theme.unstable_sx({
+          typography: 'body2',
+        }),
+      },
+    },
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',
@@ -462,6 +477,17 @@ const createThemeOptions = (theme: Theme) => ({
       styleOverrides: {
         tooltip: {
           fontSize: '1em',
+        },
+      },
+    },
+    MuiTreeItem2: {
+      styleOverrides: {
+        root: {
+          '.MuiTreeItem-groupTransition': {
+            marginLeft: 15,
+            paddingLeft: 18,
+            borderLeft: `1px solid ${theme.palette.borders.dark}`,
+          },
         },
       },
     },

@@ -1,12 +1,16 @@
-import { Grid } from '@mui/material';
-import React, { useMemo, useRef, useState } from 'react';
+import { Button, Grid } from '@mui/material';
+import { Stack } from '@mui/system';
+import { useMemo, useRef, useState } from 'react';
+import { usePublishForm } from './usePublishForm';
 import CommonToggle, { ToggleItem } from '@/components/elements/CommonToggle';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
 import PageTitle from '@/components/layout/PageTitle';
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
@@ -16,11 +20,15 @@ import FormNavigation from '@/modules/form/components/FormNavigation';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import {
   AlwaysPresentLocalConstants,
+  getFormStepperItems,
   getInitialValues,
   getItemMap,
-  getFormStepperItems,
 } from '@/modules/form/util/formUtil';
-import { useGetFormDefinitionFieldsForEditorQuery } from '@/types/gqlTypes';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import {
+  FormStatus,
+  useGetFormDefinitionFieldsForEditorQuery,
+} from '@/types/gqlTypes';
 
 export type PreviewMode = 'input' | 'readOnly';
 export const toggleItems: ToggleItem<PreviewMode>[] = [
@@ -34,6 +42,8 @@ export const toggleItems: ToggleItem<PreviewMode>[] = [
   },
 ];
 
+// Component for previewing a form, and optionally publishing it.
+// Publish is possible if it is a draft and user has appropriate permission.
 const FormPreview = () => {
   const { formId } = useSafeParams() as { formId: string };
   const {
@@ -46,7 +56,8 @@ const FormPreview = () => {
 
   const formRef = useRef<DynamicFormRef>(null);
 
-  // This form preview is not client- or enrollment-specific, so just use the always-present local constants
+  // This form preview is not client- or enrollment-specific, so just use the always-present local constants.
+  // This could be adjusted to show fake constants depending on the form role.
   const localConstants = AlwaysPresentLocalConstants;
 
   useScrollToHash(loading, STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT);
@@ -102,23 +113,54 @@ const FormPreview = () => {
     );
   }, [formDefinition, formValues, initialValues, localConstants, toggleValue]);
 
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const { publishLoading, onPublishForm } = usePublishForm({
+    formId: formDefinition?.id,
+    formIdentifier: formDefinition?.identifier,
+  });
+
   if (loading && !formDefinition) return <Loading />;
   if (error) throw error;
 
+  if (!formDefinition) return <NotFound />;
   return (
     <>
-      <PageTitle title={`Preview Form: ${formDefinition?.title}`} />
-      <CommonToggle
-        value={toggleValue}
-        onChange={(value) => {
-          setToggleValue(value);
-          formRef.current?.SaveIfDirty();
-        }}
-        items={toggleItems}
-        size='small'
-        variant='gray'
-        sx={{ mb: 4 }}
+      <PageTitle
+        title={formDefinition.title}
+        overlineText={
+          formDefinition.status === FormStatus.Draft
+            ? 'Previewing Draft'
+            : 'Previewing Form'
+        }
       />
+      <Stack direction='row' justifyContent='space-between' sx={{ mb: 4 }}>
+        <CommonToggle
+          value={toggleValue}
+          onChange={(value) => {
+            setToggleValue(value);
+            formRef.current?.SaveIfDirty();
+          }}
+          items={toggleItems}
+          size='small'
+          variant='gray'
+        />
+
+        {formDefinition.status === FormStatus.Draft && (
+          <RootPermissionsFilter permissions='canManageForms'>
+            <Button onClick={() => setConfirmOpen(true)}>Publish</Button>
+            <ConfirmationDialog
+              id='publish'
+              open={confirmOpen}
+              title='Confirm Publish'
+              onConfirm={onPublishForm}
+              onCancel={() => setConfirmOpen(false)}
+              loading={publishLoading}
+            >
+              <div>Are you sure you want to publish this form?</div>
+            </ConfirmationDialog>
+          </RootPermissionsFilter>
+        )}
+      </Stack>
 
       {formStepperItems ? (
         <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>

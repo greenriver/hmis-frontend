@@ -92,7 +92,6 @@ const RequiredOptionalRadio: React.FC<Props> = ({ control }) => {
       label='Response Validation'
       value={options.find((o) => o.code === radioValue)}
       onChange={handleChange}
-      labelSx={{ typography: 'body2', color: 'text.secondary', pt: 1 }}
       helperText={
         <>
           <b>Required</b>: Users cannot submit the form without providing an

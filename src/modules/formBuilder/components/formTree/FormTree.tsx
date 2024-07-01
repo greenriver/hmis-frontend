@@ -1,35 +1,32 @@
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import React, { useMemo } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { displayLabelForItem } from '../../formBuilderUtil';
 import Loading from '@/components/elements/Loading';
 import { FormTreeContext } from '@/modules/formBuilder/components/formTree/FormTreeContext';
 import FormTreeItem from '@/modules/formBuilder/components/formTree/FormTreeItem';
-import {
-  FormItemForTree,
-  getItemFromTree,
-  getItemsForTree,
-} from '@/modules/formBuilder/components/formTree/formTreeUtil';
-import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
+import { getItemsForTree } from '@/modules/formBuilder/components/formTree/formTreeUtil';
+import { FormItem } from '@/types/gqlTypes';
 
 interface FormTreeProps {
-  definition: FormDefinitionJson;
   onEditClick: (item: FormItem) => void;
 }
-const FormTree: React.FC<FormTreeProps> = ({ definition, onEditClick }) => {
-  const definitionForTree = useMemo(
-    () => getItemsForTree(definition),
-    [definition]
-  );
+const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
+  const { control } = useFormContext();
+  const items = useWatch({ name: 'item', control });
+
+  const definitionForTree = useMemo(() => getItemsForTree(items), [items]);
 
   const context = React.useMemo(
     () => ({
-      onEditButtonClicked: (item: FormItemForTree) => {
-        onEditClick(getItemFromTree(item));
+      openFormItemEditor: (item: FormItem) => {
+        onEditClick(item);
       },
     }),
     [onEditClick]
   );
 
-  if (!definition) return <Loading />;
+  if (!items) return <Loading />;
 
   return (
     <FormTreeContext.Provider value={context}>
@@ -37,8 +34,9 @@ const FormTree: React.FC<FormTreeProps> = ({ definition, onEditClick }) => {
         aria-label='form tree view'
         items={definitionForTree}
         getItemId={(item) => item.linkId}
-        getItemLabel={(item) => item.text || item.helperText || item.linkId}
+        getItemLabel={(item) => displayLabelForItem(item, false)}
         slots={{ item: FormTreeItem }}
+        disableSelection
       />
     </FormTreeContext.Provider>
   );
