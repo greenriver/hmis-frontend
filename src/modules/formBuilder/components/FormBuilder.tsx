@@ -21,8 +21,6 @@ import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItem
 import { AdminDashboardRoutes } from '@/routes/routes';
 
 import {
-  DisabledDisplay,
-  EnableBehavior,
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionJson,
   FormItem,
@@ -201,14 +199,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                 linkId: `q_${v4().split('-')[0]}`, // Randomly generate a placeholder link ID
                 text: undefined,
                 type: itemType,
-                required: false,
-                warnIfEmpty: false,
-                hidden: false,
-                readOnly: false,
-                repeats: false,
-                prefill: false,
-                disabledDisplay: DisabledDisplay.Hidden,
-                enableBehavior: EnableBehavior.All,
               };
 
               setSelectedItem(newItem);
