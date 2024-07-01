@@ -16,9 +16,9 @@ const FormRulesCard: React.FC<Props> = ({ formId, formRole }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   // Fetch here in order to display the total number of project matches outside of the table.
-  // FormProjectMatchTable also requests this, so it will fetch from the apollo cache.
+  // FormProjectMatchTable also requests this, but there is no easy way to get the data out of GenericTable
   const { data: fetchFormData } = useGetFormProjectMatchesQuery({
-    variables: { id: formId },
+    variables: { id: formId, limit: 0 },
   });
   const matchCount = fetchFormData?.formDefinition?.projectMatches.nodesCount;
 
@@ -26,7 +26,7 @@ const FormRulesCard: React.FC<Props> = ({ formId, formRole }) => {
     <>
       <TitleCard
         title='Form Applicability'
-        headerTypographyVariant='h4'
+        headerTypographyVariant='h5'
         headerComponent='h2'
         actions={
           <Button
@@ -39,7 +39,7 @@ const FormRulesCard: React.FC<Props> = ({ formId, formRole }) => {
         }
       >
         <Box sx={{ px: 2, pb: 2 }}>
-          <Typography variant='h5' component='h3' sx={{ pb: 1 }}>
+          <Typography variant='h6' component='h3' sx={{ pb: 1 }}>
             Rules
           </Typography>
           <Typography variant='body1'>
@@ -49,7 +49,7 @@ const FormRulesCard: React.FC<Props> = ({ formId, formRole }) => {
         <Divider sx={{ borderWidth: 'inherit' }} />
         <FormRuleTable formId={formId} formRole={formRole} />
         <Box padding={2}>
-          <Typography variant='h5' component='h3' sx={{ pb: 1 }}>
+          <Typography variant='h6' component='h3' sx={{ pb: 1 }}>
             Projects
           </Typography>
           <Typography variant='body1'>

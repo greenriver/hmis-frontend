@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import ProjectOutgoingReferralDetailsSubForm from './ProjectOutgoingReferralDetailsSubForm';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import DynamicField from '@/modules/form/components/DynamicField';
-import { itemDefaults } from '@/modules/form/util/formUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   ItemType,
@@ -48,7 +47,6 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({ project }) => {
         <DynamicField
           value={formState.selectedEnrollment}
           item={{
-            ...itemDefaults,
             type: ItemType.Choice,
             required: true,
             linkId: 'enrollment',
@@ -64,7 +62,6 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({ project }) => {
         <DynamicField
           value={formState.selectedProject}
           item={{
-            ...itemDefaults,
             type: ItemType.Choice,
             required: true,
             linkId: 'project',
