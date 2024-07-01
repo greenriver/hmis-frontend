@@ -96,8 +96,7 @@ const FormRule: React.FC<Props> = ({ rule }) => {
       </Typography>
       <ActiveChip
         active={active || false}
-        // todo @martha - any other treatment style in the table for active rules?
-        // todo @martha - enable deactivation (not deletion)
+        // TODO(#6289) - Deletion should deactivate. Inactive rules should not be shown/returned
       />
     </Stack>
   );

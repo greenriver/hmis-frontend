@@ -1,4 +1,4 @@
-import { DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
+import { Card, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import CommonDialog from '@/components/elements/CommonDialog';
 import CardGroup, { RemovableCard } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
@@ -6,6 +6,7 @@ import {
   ActiveStatus,
   DataCollectedAbout,
   FormRuleInput,
+  FundingSource,
   ItemType, PickListOption,
   PickListType,
   useCreateFormRuleMutation,
@@ -16,6 +17,7 @@ import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { isPickListOption } from '@/modules/form/types';
 import { Stack } from '@mui/system';
 import { usePickList } from '@/modules/form/hooks/usePickList';
+import TextInput from '@/components/elements/input/TextInput';
 
 const dataCollectedAboutPickList =
   localResolvePickList('DataCollectedAbout') || [];
@@ -30,6 +32,8 @@ const conditionPickList: PickListOption[] = [
   {code: 'funder', label: 'Funding Source'},
 ];
 
+// `otherFunder` is also a condition type, of a sort, but it's left off here because
+// it's dependent on `funder` and it's a TextInput instead of a Select
 type ConditionType = 'projectId' | 'projectType' | 'organizationId' | 'funder';
 
 interface Props {
@@ -64,14 +68,13 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
       'projectId': rule.projectId,
       'organizationId': rule.organizationId,
       'funder': rule.funder,
-      // 'otherFunder': rule.otherFunder,  // todo @Martha - need to add otherFunder back and make it depend on fundingSource
     }
   }, [rule]);
 
   const conditionsAvailable: ConditionType[] = useMemo(() =>
     Object.entries(conditionsMap)
-      .filter(([_key, value]) => !value)
-      .map(([key, _value]) => key as ConditionType),
+      .map(([key, value]) => !value ? key : undefined)
+      .filter(key => !!key) as ConditionType[],
     [conditionsMap]);
 
   const { pickList: projectList } = usePickList({
@@ -110,7 +113,7 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
           sx={{width: 300}}
           value={{code: rule.dataCollectedAbout || DataCollectedAbout.AllClients}}
           options={dataCollectedAboutPickList}
-          onChange={(_, option) => {
+          onChange={(_event, option) => {
             if (isPickListOption(option)) {
               setRule({...rule, dataCollectedAbout: option.code as DataCollectedAbout});
             }
@@ -131,10 +134,10 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
         addItemText='Add Condition'
         disableAdd={conditionsAvailable.length === 0}
       >
-        {Object.entries(conditionsMap)
-          .filter(([_key, value]) => !!value)
-          .map(([key, value], index) => {
-            const condition = key as ConditionType
+        {Object.entries(conditionsMap).map(([key, value], index) => {
+            if (!value) return;
+
+            const condition = key as ConditionType;
 
             return <RemovableCard
               key={condition}
@@ -178,6 +181,19 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
             </RemovableCard>
           })
         }
+
+        {rule.funder === FundingSource.LocalOrOtherFundingSource &&
+          <Card sx={{p: 2}}>
+            <Stack direction='row' sx={{my: 2}} gap={2}>
+              and funding source is
+              <TextInput
+                value={rule.otherFunder || ''}
+                onChange={(e) => setRule({...rule, otherFunder: e.target.value})}
+              />
+            </Stack>
+          </Card>
+        }
+
       </CardGroup>
 
     </DialogContent>
