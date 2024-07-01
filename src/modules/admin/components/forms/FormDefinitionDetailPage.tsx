@@ -91,13 +91,7 @@ const FormDefinitionDetailPage = () => {
       <Stack gap={2}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
-            <CommonCard
-              title={
-                <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
-                  Details
-                </Typography>
-              }
-            >
+            <CommonCard title='Details' titleComponent='h5'>
               <Stack gap={1}>
                 <CommonLabeledTextBlock title='Form ID'>
                   {formIdentifier.identifier}
@@ -121,13 +115,7 @@ const FormDefinitionDetailPage = () => {
             </CommonCard>
           </Grid>
           <Grid item xs={12} md={4}>
-            <CommonCard
-              title={
-                <Typography variant='h4' component='h2' sx={{ mb: 2 }}>
-                  Actions
-                </Typography>
-              }
-            >
+            <CommonCard title='Actions' titleComponent='h5'>
               <Stack gap={1.5}>
                 <RootPermissionsFilter permissions='canManageForms'>
                   <ButtonLink
@@ -177,7 +165,7 @@ const FormDefinitionDetailPage = () => {
         <TitleCard
           title='Version History'
           headerVariant='border'
-          headerTypographyVariant='h4'
+          headerTypographyVariant='h5'
           headerComponent='h2'
         >
           <FormVersionTable formIdentifier={formIdentifier.identifier} />

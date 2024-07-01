@@ -51,7 +51,7 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
     <>
       <TitleCard
         title='Form Applicability'
-        headerTypographyVariant='h4'
+        headerTypographyVariant='h5'
         headerComponent='h2'
         actions={
           <Stack direction='row' gap={1}>
@@ -66,7 +66,7 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
         }
       >
         <Box sx={{ px: 2, pb: 2 }}>
-          <Typography variant='h5' component='h3' sx={{ pb: 1 }}>
+          <Typography variant='h6' component='h3' sx={{ pb: 1 }}>
             Rules
           </Typography>
           <Typography variant='body1'>
@@ -76,7 +76,7 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
         <Divider sx={{ borderWidth: 'inherit' }} />
         <FormRuleTable formId={formId} formRole={formRole} />
         <Box padding={2}>
-          <Typography variant='h5' component='h3' sx={{ pb: 1 }}>
+          <Typography variant='h6' component='h3' sx={{ pb: 1 }}>
             Projects
           </Typography>
           <Typography variant='body1'>
