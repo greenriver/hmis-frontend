@@ -62,20 +62,20 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
     }
   })
 
-  const conditionsMap: Record<ConditionType, any> = useMemo(() => {
-    return {
-      'projectType': rule.projectType,
-      'projectId': rule.projectId,
-      'organizationId': rule.organizationId,
-      'funder': rule.funder,
-    }
+  const conditions = useMemo(() => {
+    return (['projectType', 'projectId', 'organizationId', 'funder'] as ConditionType[])
+      .map(conditionType => {
+        return {
+          'conditionType': conditionType,
+          'value': rule[conditionType]
+        }
+      });
   }, [rule]);
 
   const conditionsAvailable: ConditionType[] = useMemo(() =>
-    Object.entries(conditionsMap)
-      .map(([key, value]) => !value ? key : undefined)
-      .filter(key => !!key) as ConditionType[],
-    [conditionsMap]);
+    conditions.filter(condition => !condition.value)
+      .map(condition => condition.conditionType),
+  [conditions]);
 
   const { pickList: projectList } = usePickList({
     item: {
@@ -134,30 +134,28 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
         addItemText='Add Condition'
         disableAdd={conditionsAvailable.length === 0}
       >
-        {Object.entries(conditionsMap).map(([key, value], index) => {
-            if (!value) return;
-
-            const condition = key as ConditionType;
+        {conditions.filter(condition => !!condition.value)
+          .map(({conditionType, value}, index) => {
 
             return <RemovableCard
-              key={condition}
+              key={conditionType}
               onRemove={() => {
                 // setting this condition's value to undefined will remove it from the modal
-                setRule({...rule, [condition]: undefined});
+                setRule({...rule, [conditionType]: undefined});
               }}
               removeTooltip={'Remove Condition'}
             >
               <Stack direction='row' sx={{my: 2}} gap={2}>
                 {index === 0 ? 'If' : 'and'}
                 <FormSelect
-                  value={{code: condition}}
+                  value={{code: conditionType}}
                   options={conditionPickList}
                   onChange={(_event, option) => {
                     if (isPickListOption(option)) {
                       const newCondition = option.code as ConditionType
                       setRule({
                         ...rule,
-                        [condition]: undefined,
+                        [conditionType]: undefined,
                         [option.code]: pickListMap[newCondition][0].code
                       });
                     }
@@ -169,10 +167,10 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
                   // disable clearing the input because we expect users to remove the whole condition
                   disableClearable={true}
                   value={value ? {code: value} : undefined}
-                  options={pickListMap[condition]}
+                  options={pickListMap[conditionType]}
                   onChange={(_event, option) => {
                     if (isPickListOption(option)) {
-                      setRule({ ...rule, [key]: option.code });
+                      setRule({ ...rule, [conditionType]: option.code });
                     }
                   }}
                   sx={{width: 300}}
