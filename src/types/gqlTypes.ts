@@ -2872,6 +2872,7 @@ export type FormDefinition = {
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
   identifier: Scalars['String']['output'];
+  projectMatches: FormProjectMatchesPaginated;
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
   status: FormStatus;
@@ -2886,6 +2887,12 @@ export type FormDefinitionFormRulesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<FormRuleSortOption>;
+};
+
+/** FormDefinition */
+export type FormDefinitionProjectMatchesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type FormDefinitionForJsonResult = {
@@ -3025,6 +3032,26 @@ export type FormItem = {
   type: ItemType;
   /** Whether to show a warning if this question is unanswered */
   warnIfEmpty?: Maybe<Scalars['Boolean']['output']>;
+};
+
+/** Project match for a form, including information about which clients in this project the form is applicable to. */
+export type FormProjectMatch = {
+  __typename?: 'FormProjectMatch';
+  dataCollectedAbout: DataCollectedAbout;
+  id: Scalars['ID']['output'];
+  organizationName: Scalars['String']['output'];
+  projectName: Scalars['String']['output'];
+};
+
+export type FormProjectMatchesPaginated = {
+  __typename?: 'FormProjectMatchesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<FormProjectMatch>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export enum FormRole {
@@ -14981,6 +15008,14 @@ export type FormRuleFieldsFragment = {
   } | null;
 };
 
+export type FormProjectMatchFieldsFragment = {
+  __typename?: 'FormProjectMatch';
+  id: string;
+  projectName: string;
+  organizationName: string;
+  dataCollectedAbout: DataCollectedAbout;
+};
+
 export type ServiceTypeConfigFieldsFragment = {
   __typename?: 'ServiceType';
   id: string;
@@ -15270,6 +15305,34 @@ export type GetFormRulesQuery = {
       } | null;
     }>;
   };
+};
+
+export type GetFormProjectMatchesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetFormProjectMatchesQuery = {
+  __typename?: 'Query';
+  formDefinition?: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    projectMatches: {
+      __typename?: 'FormProjectMatchesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'FormProjectMatch';
+        id: string;
+        projectName: string;
+        organizationName: string;
+        dataCollectedAbout: DataCollectedAbout;
+      }>;
+    };
+  } | null;
 };
 
 export type GetServiceCategoryRulesQueryVariables = Exact<{
@@ -33148,6 +33211,14 @@ export const FormRuleFieldsFragmentDoc = gql`
   ${OrganizationNameFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
 `;
+export const FormProjectMatchFieldsFragmentDoc = gql`
+  fragment FormProjectMatchFields on FormProjectMatch {
+    id
+    projectName
+    organizationName
+    dataCollectedAbout
+  }
+`;
 export const ServiceTypeConfigFieldsFragmentDoc = gql`
   fragment ServiceTypeConfigFields on ServiceType {
     ...ServiceTypeFields
@@ -37435,6 +37506,76 @@ export type GetFormRulesLazyQueryHookResult = ReturnType<
 export type GetFormRulesQueryResult = Apollo.QueryResult<
   GetFormRulesQuery,
   GetFormRulesQueryVariables
+>;
+export const GetFormProjectMatchesDocument = gql`
+  query GetFormProjectMatches($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+    formDefinition(id: $id) {
+      id
+      cacheKey
+      projectMatches(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...FormProjectMatchFields
+        }
+      }
+    }
+  }
+  ${FormProjectMatchFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetFormProjectMatchesQuery__
+ *
+ * To run a query within a React component, call `useGetFormProjectMatchesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormProjectMatchesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFormProjectMatchesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetFormProjectMatchesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >(GetFormProjectMatchesDocument, options);
+}
+export function useGetFormProjectMatchesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >(GetFormProjectMatchesDocument, options);
+}
+export type GetFormProjectMatchesQueryHookResult = ReturnType<
+  typeof useGetFormProjectMatchesQuery
+>;
+export type GetFormProjectMatchesLazyQueryHookResult = ReturnType<
+  typeof useGetFormProjectMatchesLazyQuery
+>;
+export type GetFormProjectMatchesQueryResult = Apollo.QueryResult<
+  GetFormProjectMatchesQuery,
+  GetFormProjectMatchesQueryVariables
 >;
 export const GetServiceCategoryRulesDocument = gql`
   query GetServiceCategoryRules(
