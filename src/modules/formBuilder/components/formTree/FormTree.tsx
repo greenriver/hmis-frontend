@@ -39,6 +39,11 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
 
   const [expandedItems, setExpandedItems] = React.useState<string[]>([]);
 
+  // For a better ux when reordering form items, we hijack control of the focused button. See useEffect in FormTreeLabel
+  const [focusedTreeButton, setFocusedTreeButton] = React.useState<
+    string | null
+  >(null);
+
   const handleExpandedItemsChange = (
     event: React.SyntheticEvent,
     itemIds: string[]
@@ -62,6 +67,8 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
       itemMap,
       rhfPathMap,
       ancestorLinkIdMap,
+      focusedTreeButton,
+      setFocusedTreeButton,
     }),
     [onEditClick, itemMap, rhfPathMap, ancestorLinkIdMap]
   );
