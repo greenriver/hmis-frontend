@@ -257,7 +257,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
                     </Grid>
                     <Grid item xs={9} sm={4}>
                       <FormSelect
-                        disableClearable={true}
+                        disableClearable
                         value={{ code: conditionType }}
                         options={conditionPickList}
                         onChange={(_event, option) => {
@@ -282,7 +282,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
                     <Grid item xs={10} sm={5}>
                       <FormSelect
                         // disable clearing the input because we expect users to remove the whole condition
-                        disableClearable={true}
+                        disableClearable
                         value={value ? { code: value } : undefined}
                         options={pickListMap[conditionType]}
                         onChange={(_event, option) => {

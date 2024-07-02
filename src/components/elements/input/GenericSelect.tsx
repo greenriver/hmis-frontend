@@ -33,7 +33,6 @@ const GenericSelect = <
   textInputProps,
   options,
   ariaLabel,
-  disableClearable,
   ...rest
 }: GenericSelectProps<T, Multiple, Creatable>) => {
   const { placeholder, ...inputProps } = textInputProps || {};
@@ -49,7 +48,6 @@ const GenericSelect = <
     <Autocomplete
       options={options}
       value={value}
-      disableClearable={disableClearable}
       renderInput={(params) => (
         <TextInput
           {...params}
