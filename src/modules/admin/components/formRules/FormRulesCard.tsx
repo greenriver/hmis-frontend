@@ -64,6 +64,7 @@ const FormRulesCard: React.FC<Props> = ({ formId, formTitle, formRole }) => {
       <NewFormRuleDialog
         formId={formId}
         formTitle={formTitle}
+        formRole={formRole}
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
       />

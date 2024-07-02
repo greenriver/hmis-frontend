@@ -23,6 +23,7 @@ import CardGroup, {
 import {
   ActiveStatus,
   DataCollectedAbout,
+  FormRole,
   FormRuleInput,
   FundingSource,
   ItemType,
@@ -38,13 +39,6 @@ const dataCollectedAboutPickList =
 const projectTypePickList = localResolvePickList('ProjectType');
 const funderPickList = localResolvePickList('FundingSource');
 
-const conditionPickList: PickListOption[] = [
-  { code: 'projectId', label: 'Project' },
-  { code: 'projectType', label: 'Project Type' },
-  { code: 'organizationId', label: 'Organization' },
-  { code: 'funder', label: 'Funding Source' },
-];
-
 const defaultRule: FormRuleInput = {
   activeStatus: ActiveStatus.Active,
   dataCollectedAbout: DataCollectedAbout.AllClients,
@@ -52,7 +46,13 @@ const defaultRule: FormRuleInput = {
 
 // `otherFunder` is also a condition type, of a sort, but it's left off here because
 // it's dependent on `funder` and it's a TextInput instead of a Select
-type ConditionType = 'projectId' | 'projectType' | 'organizationId' | 'funder';
+type ConditionType =
+  | 'projectId'
+  | 'projectType'
+  | 'organizationId'
+  | 'funder'
+  | 'serviceTypeId'
+  | 'serviceCategoryId';
 
 const FormRuleLabelTypography = ({
   sx,
@@ -74,6 +74,7 @@ interface Props {
   onClose: VoidFunction;
   formId: string;
   formTitle: string;
+  formRole: FormRole;
 }
 
 const NewFormRuleDialog: React.FC<Props> = ({
@@ -81,6 +82,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
   onClose,
   formId,
   formTitle,
+  formRole, // todo @Martha ??
 }) => {
   const [rule, setRule] = useState<FormRuleInput>(defaultRule);
 
@@ -103,15 +105,31 @@ const NewFormRuleDialog: React.FC<Props> = ({
     },
   });
 
+  // TODO @MARTHA - cleanup and memoize after discussing
+  const conditionTypesForRole = [
+    'projectType',
+    'projectId',
+    'organizationId',
+    'funder',
+  ] as ConditionType[];
+
+  const conditionPickList: PickListOption[] = [
+    { code: 'projectId', label: 'Project' },
+    { code: 'projectType', label: 'Project Type' },
+    { code: 'organizationId', label: 'Organization' },
+    { code: 'funder', label: 'Funding Source' },
+  ];
+
+  if (formRole === FormRole.Service) {
+    conditionTypesForRole.push('serviceTypeId', 'serviceCategoryId');
+    conditionPickList.push(
+      { code: 'serviceTypeId', label: 'Service Type' },
+      { code: 'serviceCategoryId', label: 'Service Category' }
+    );
+  }
+
   const conditions = useMemo(() => {
-    return (
-      [
-        'projectType',
-        'projectId',
-        'organizationId',
-        'funder',
-      ] as ConditionType[]
-    ).map((conditionType) => {
+    return conditionTypesForRole.map((conditionType) => {
       return {
         conditionType: conditionType,
         value: rule[conditionType],
@@ -143,11 +161,29 @@ const NewFormRuleDialog: React.FC<Props> = ({
     },
   });
 
+  const { pickList: serviceTypePickList } = usePickList({
+    item: {
+      linkId: 'fake',
+      type: ItemType.Choice,
+      pickListReference: PickListType.AllServiceTypes,
+    },
+  });
+
+  const { pickList: serviceCategoryPickList } = usePickList({
+    item: {
+      linkId: 'fake',
+      type: ItemType.Choice,
+      pickListReference: PickListType.AllServiceCategories,
+    },
+  });
+
   const pickListMap: Record<ConditionType, PickListOption[]> = {
     projectType: projectTypePickList || [],
     funder: funderPickList || [],
     organizationId: orgList || [],
     projectId: projectList || [],
+    serviceTypeId: serviceTypePickList || [],
+    serviceCategoryId: serviceCategoryPickList || [],
   };
 
   const isTiny = useIsMobile('sm');

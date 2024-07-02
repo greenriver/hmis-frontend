@@ -17,7 +17,7 @@ interface Props {
   formRole: FormRole;
 }
 
-const FormRuleTable: React.FC<Props> = ({ formId, formRole: _formRole }) => {
+const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
   return (
     <>
       <GenericTableWithData<
@@ -37,7 +37,7 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole: _formRole }) => {
         renderRow={(rule) => (
           <TableRow key={rule.id}>
             <TableCell sx={{ py: 1 }}>
-              <FormRule rule={rule} />
+              <FormRule rule={rule} formRole={formRole} />
             </TableCell>
           </TableRow>
         )}
