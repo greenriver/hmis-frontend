@@ -19,7 +19,7 @@ const ActiveChip = ({ active }: { active: boolean }) => (
 );
 
 interface Props {
-  rule: Partial<FormRuleFieldsFragment>;
+  rule: FormRuleFieldsFragment;
 }
 
 const FormRule: React.FC<Props> = ({ rule }) => {
