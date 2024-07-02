@@ -283,7 +283,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           <LabeledCheckbox
             label='Compare with a Local Constant instead of a Dependent Question'
             checked={advanced.localConstant}
-            sx={{ typography: { variant: 'body2' } }}
+            sx={{ width: 'fit-content' }}
             onChange={(evt, checked) =>
               setAdvanced((old) => ({ ...old, localConstant: checked }))
             }

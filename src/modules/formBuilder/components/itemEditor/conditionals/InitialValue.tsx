@@ -155,7 +155,7 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
                   <LabeledCheckbox
                     label='Initialize using a Local Constant'
                     checked={advanced.localConstant}
-                    sx={{ typography: { variant: 'body2' } }}
+                    sx={{ width: 'fit-content' }}
                     onChange={(evt, checked) =>
                       setAdvanced((old) => ({ ...old, localConstant: checked }))
                     }

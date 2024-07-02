@@ -27,6 +27,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   ItemCategory,
+  determineAutofillField,
   getItemCategory,
   slugifyItemLabel,
   validComponentsForType,
@@ -381,7 +382,10 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         >
           <ValueBounds control={control} itemMap={itemMap} />
         </Section>
-        <Section title='Autofill' hidden={!isQuestionItem}>
+        <Section
+          title='Autofill'
+          hidden={!isQuestionItem || !determineAutofillField(itemTypeValue)}
+        >
           <AutofillProperties
             control={control}
             itemMap={itemMap}

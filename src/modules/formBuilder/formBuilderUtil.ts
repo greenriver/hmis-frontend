@@ -82,6 +82,23 @@ export const validComponentsForType = (type: ItemType) => {
       return [];
   }
 };
+export const determineAutofillField = (itemType: ItemType) => {
+  switch (itemType) {
+    case ItemType.Boolean:
+      return 'valueBoolean';
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+    case ItemType.String:
+    case ItemType.Text:
+      return 'valueCode';
+    case ItemType.Integer:
+    case ItemType.Currency:
+      return 'valueNumber';
+    default:
+      // other item types do not yet supports autofilling (e.g. Dates)
+      return;
+  }
+};
 
 export const updateFormItem = (
   formDefinition: FormDefinitionJson,
