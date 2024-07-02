@@ -11,6 +11,7 @@ import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
+import { determineInitialValueField } from '@/modules/formBuilder/formBuilderUtil';
 import { InitialBehavior, ItemType, PickListOption } from '@/types/gqlTypes';
 
 interface Props {
@@ -61,6 +62,7 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
     localConstant: hasLocalConstant || itemType === ItemType.Date,
   });
 
+  const valueField = determineInitialValueField(itemType);
   return (
     <>
       <CardGroup
@@ -94,7 +96,7 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
               />
               {!advanced.localConstant && (
                 <>
-                  {[ItemType.Integer, ItemType.Currency].includes(itemType) && (
+                  {valueField === 'valueNumber' && (
                     <ControlledTextInput
                       name='initial.0.valueNumber'
                       control={control}
@@ -102,7 +104,7 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
                       type='number'
                     />
                   )}
-                  {itemType === ItemType.Boolean && (
+                  {valueField === 'valueBoolean' && (
                     <Controller
                       name='initial.0.valueBoolean'
                       control={control}
@@ -120,20 +122,24 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
                       )}
                     />
                   )}
-                  {pickList && pickList.length > 0 ? (
-                    <ControlledSelect
-                      name='initial.0.valueCode'
-                      control={control}
-                      label='Initial Value (Pick List)'
-                      options={pickList}
-                      placeholder='Select an option'
-                    />
-                  ) : (
-                    <ControlledTextInput
-                      name='initial.0.valueCode'
-                      control={control}
-                      label='Initial Value'
-                    />
+                  {valueField === 'valueCode' && (
+                    <>
+                      {pickList && pickList.length > 0 ? (
+                        <ControlledSelect
+                          name='initial.0.valueCode'
+                          control={control}
+                          label='Initial Value'
+                          options={pickList}
+                          placeholder='Select an option'
+                        />
+                      ) : (
+                        <ControlledTextInput
+                          name='initial.0.valueCode'
+                          control={control}
+                          label='Initial Value'
+                        />
+                      )}
+                    </>
                   )}
                 </>
               )}

@@ -46,7 +46,11 @@ const dataCollectedAboutPickList =
 const disabledDisplayPickList = Object.keys(HmisEnums.DisabledDisplay).map(
   (key) => ({ code: key, label: startCase(key.toLowerCase()) })
 );
-const inputSizePickList = localResolvePickList('InputSize') || [];
+
+const inputSizePickList = Object.keys(HmisEnums.InputSize).map((key) => ({
+  code: key,
+  label: startCase(key.toLowerCase()),
+}));
 const pickListTypesPickList = localResolvePickList('PickListType') || [];
 const errorAlertId = 'formItemPropertyErrors';
 
@@ -91,10 +95,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     handleSubmit,
     watch,
     // TODO: disable interaction with form while formState.isSubmitting
-    formState: { isDirty, dirtyFields, errors },
+    // TODO: show formState.errors (they show up in fields if configured correctly, but we should also show them at the top)
+    formState: { isDirty, dirtyFields },
   } = handlers;
 
-  if (errors) console.log(errors);
+  // console.log(errors);
   const itemTypeValue = watch('type');
 
   // Monitor changes to the FormItem.component field
@@ -334,7 +339,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           <ControlledCheckbox
             name='hidden'
             control={control}
-            label='Always Hide this Item'
+            label='Always hide this item'
           />
           {!hiddenValue && (
             <>

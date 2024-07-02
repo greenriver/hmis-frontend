@@ -99,6 +99,22 @@ export const determineAutofillField = (itemType: ItemType) => {
       return;
   }
 };
+export const determineInitialValueField = (itemType: ItemType) => {
+  switch (itemType) {
+    case ItemType.Boolean:
+      return 'valueBoolean';
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+    case ItemType.String:
+    case ItemType.Text:
+      return 'valueCode';
+    case ItemType.Integer:
+    case ItemType.Currency:
+      return 'valueNumber';
+    default:
+      return;
+  }
+};
 
 export const updateFormItem = (
   formDefinition: FormDefinitionJson,
