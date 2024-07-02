@@ -56,6 +56,10 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
   return (
     <CardGroup
       onAddItem={() => {
+        if (fields.length === 0) {
+          // when adding first condition, set default enable behavior
+          onChangeEnableBehavior('ALL');
+        }
         append({}, { shouldFocus: false });
       }}
       addItemText='Add Condition'
@@ -65,6 +69,7 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
           name={enableBehaviorPath}
           control={control}
           rules={{ required: 'This field is required' }}
+          shouldUnregister // clear value when unmounted
           render={({
             field: { ref, value, onChange, ...field },
             fieldState: { error },

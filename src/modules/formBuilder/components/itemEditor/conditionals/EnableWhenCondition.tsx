@@ -109,6 +109,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     if (!dependentItem) return;
     if (dependentItem.pickListOptions) return dependentItem.pickListOptions;
     if (dependentItem.pickListReference) {
+      // TODO: could use usePickList to fetch remote pick list. This will only resolve local enums.
       return localResolvePickList(dependentItem.pickListReference);
     }
   }, [dependentItem]);
@@ -274,19 +275,13 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           </Stack>
         </Grid>
       </Grid>
-      <Box
-        sx={{
-          mt: 2,
-          '.MuiFormControlLabel-label': {
-            fontSize: (theme) => theme.typography.body2.fontSize,
-          },
-          '.MuiCheckbox-root': { py: 0.5 },
-        }}
-      >
-        <Typography sx={{ mb: 1 }}>Advanced Options</Typography>
+      <Box sx={{ mt: 2 }}>
+        <Typography typography='body2' fontWeight={600}>
+          Advanced Options
+        </Typography>
         <Stack>
           <LabeledCheckbox
-            label='Compare with a Local Constant instead of dependent Question'
+            label='Compare with a Local Constant instead of a Dependent Question'
             checked={advanced.localConstant}
             sx={{ typography: { variant: 'body2' } }}
             onChange={(evt, checked) =>

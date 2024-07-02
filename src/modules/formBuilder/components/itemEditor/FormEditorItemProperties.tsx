@@ -90,14 +90,16 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     handleSubmit,
     watch,
     // TODO: disable interaction with form while formState.isSubmitting
-    formState: { isDirty, dirtyFields },
+    formState: { isDirty, dirtyFields, errors },
   } = handlers;
 
+  if (errors) console.log(errors);
   const itemTypeValue = watch('type');
 
   // Monitor changes to the FormItem.component field
   const itemComponentValue = watch('component');
   const hiddenValue = watch('hidden');
+  const hasEnableWhen = !!watch('enableWhen.0');
 
   const itemCategory = useMemo<ItemCategory>(() => {
     if (!itemTypeValue) return 'question';
@@ -335,28 +337,30 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           />
           {!hiddenValue && (
             <>
-              <ControlledSelect
-                name='disabledDisplay'
-                control={control}
-                label='Disabled Display'
-                placeholder='Select disabled display'
-                options={disabledDisplayPickList}
-                helperText={
-                  <>
-                    <b>Hidden</b>: When this item is disabled, it will be
-                    completely hidden from view.
-                    <br />
-                    {/* TODO: do we actually use  'protected' at all? can we remove it? */}
-                    <b>Protected</b>: When this item is disabled, it will still
-                    show up but not be interactable.
-                    <br />
-                    <b>Protected with Value</b>: When this item is disabled, it
-                    will still appear and its value will be visible but not
-                    interactible. It's value will be submitted.
-                  </>
-                }
-              />
               <ManageEnableWhen control={control} itemMap={itemMap} />
+              {hasEnableWhen && (
+                <ControlledSelect
+                  name='disabledDisplay'
+                  control={control}
+                  label='Disabled Display'
+                  placeholder='Select disabled display'
+                  options={disabledDisplayPickList}
+                  helperText={
+                    <>
+                      <b>Hidden</b>: When this item is disabled, it will be
+                      completely hidden from view.
+                      <br />
+                      {/* TODO: do we actually use  'protected' at all? can we remove it? */}
+                      <b>Protected</b>: When this item is disabled, it will
+                      still show up but not be interactable.
+                      <br />
+                      <b>Protected with Value</b>: When this item is disabled,
+                      it will still appear and its value will be visible but not
+                      interactible. It's value will be submitted.
+                    </>
+                  }
+                />
+              )}
             </>
           )}
         </Section>
