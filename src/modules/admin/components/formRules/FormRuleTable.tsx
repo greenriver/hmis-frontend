@@ -3,6 +3,7 @@ import React from 'react';
 import FormRule from '@/modules/admin/components/formRules/FormRule';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
+  ActiveStatus,
   FormRole,
   FormRuleFieldsFragment,
   GetFormRulesDocument,
@@ -26,6 +27,7 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
         RowType
       >
         queryVariables={{ filters: { definition: formId } }}
+        defaultFilterValues={{ activeStatus: ActiveStatus.Active }}
         queryDocument={GetFormRulesDocument}
         columns={[]}
         pagePath='formRules'
@@ -37,7 +39,7 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
         renderRow={(rule) => (
           <TableRow key={rule.id}>
             <TableCell sx={{ py: 1 }}>
-              <FormRule rule={rule} formRole={formRole} />
+              <FormRule rule={rule} formRole={formRole} formId={formId} />
             </TableCell>
           </TableRow>
         )}

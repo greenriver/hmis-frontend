@@ -83,7 +83,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
   onClose,
   formId,
   formTitle,
-  formRole, // todo @Martha ??
+  formRole,
 }) => {
   const [rule, setRule] = useState<FormRuleInput>(defaultRule);
 

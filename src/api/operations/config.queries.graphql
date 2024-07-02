@@ -89,6 +89,19 @@ mutation UpdateFormRule($input: UpdateFormRuleInput!) {
   }
 }
 
+mutation DeactivateFormRule($id: ID!) {
+  updateFormRule(input: { id: $id, input: { activeStatus: INACTIVE } }) {
+    clientMutationId
+    formRule {
+      id
+      active
+    }
+    errors {
+      message
+    }
+  }
+}
+
 query GetServiceTypes(
   $filters: ServiceTypeFilterOptions
   $limit: Int = 25

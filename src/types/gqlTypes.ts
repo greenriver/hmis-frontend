@@ -15613,6 +15613,20 @@ export type UpdateFormRuleMutation = {
   } | null;
 };
 
+export type DeactivateFormRuleMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeactivateFormRuleMutation = {
+  __typename?: 'Mutation';
+  updateFormRule?: {
+    __typename?: 'UpdateFormRulePayload';
+    clientMutationId?: string | null;
+    formRule: { __typename?: 'FormRule'; id: string; active: boolean };
+    errors: Array<{ __typename?: 'ValidationError'; message: string }>;
+  } | null;
+};
+
 export type GetServiceTypesQueryVariables = Exact<{
   filters?: InputMaybe<ServiceTypeFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -37831,6 +37845,63 @@ export type UpdateFormRuleMutationResult =
 export type UpdateFormRuleMutationOptions = Apollo.BaseMutationOptions<
   UpdateFormRuleMutation,
   UpdateFormRuleMutationVariables
+>;
+export const DeactivateFormRuleDocument = gql`
+  mutation DeactivateFormRule($id: ID!) {
+    updateFormRule(input: { id: $id, input: { activeStatus: INACTIVE } }) {
+      clientMutationId
+      formRule {
+        id
+        active
+      }
+      errors {
+        message
+      }
+    }
+  }
+`;
+export type DeactivateFormRuleMutationFn = Apollo.MutationFunction<
+  DeactivateFormRuleMutation,
+  DeactivateFormRuleMutationVariables
+>;
+
+/**
+ * __useDeactivateFormRuleMutation__
+ *
+ * To run a mutation, you first call `useDeactivateFormRuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeactivateFormRuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deactivateFormRuleMutation, { data, loading, error }] = useDeactivateFormRuleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeactivateFormRuleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeactivateFormRuleMutation,
+    DeactivateFormRuleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeactivateFormRuleMutation,
+    DeactivateFormRuleMutationVariables
+  >(DeactivateFormRuleDocument, options);
+}
+export type DeactivateFormRuleMutationHookResult = ReturnType<
+  typeof useDeactivateFormRuleMutation
+>;
+export type DeactivateFormRuleMutationResult =
+  Apollo.MutationResult<DeactivateFormRuleMutation>;
+export type DeactivateFormRuleMutationOptions = Apollo.BaseMutationOptions<
+  DeactivateFormRuleMutation,
+  DeactivateFormRuleMutationVariables
 >;
 export const GetServiceTypesDocument = gql`
   query GetServiceTypes(

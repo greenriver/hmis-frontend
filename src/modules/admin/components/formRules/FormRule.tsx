@@ -1,22 +1,18 @@
-import { Chip, Stack, Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Chip, IconButton, Stack, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 import { HmisEnums } from '@/types/gqlEnums';
-import { FormRole, FormRuleFieldsFragment } from '@/types/gqlTypes';
+import {
+  FormRole,
+  FormRuleFieldsFragment,
+  useDeactivateFormRuleMutation,
+} from '@/types/gqlTypes';
+import { evictQuery } from '@/utils/cacheUtil';
 
 const FormRuleChip: React.FC<{ label: string }> = ({ label }) => {
   // bottom margin puts the chip text in line with the body text
   return <Chip component='span' sx={{ mb: 0.25 }} size='small' label={label} />;
 };
-
-const ActiveChip = ({ active }: { active: boolean }) => (
-  <Chip
-    label={active ? 'Active' : 'Inactive'}
-    size='small'
-    color={active ? 'success' : 'default'}
-    variant='outlined'
-    sx={{ width: 'fit-content' }}
-  />
-);
 
 const nonClientFormRoles = [
   FormRole.CeParticipation,
@@ -34,9 +30,22 @@ const nonProjectFormRoles = [FormRole.Organization];
 interface Props {
   rule: FormRuleFieldsFragment;
   formRole: FormRole;
+  formId: string;
 }
 
-const FormRule: React.FC<Props> = ({ rule, formRole }) => {
+const FormRule: React.FC<Props> = ({ rule, formRole, formId }) => {
+  // TODO - This duplicates some functionality from ProjectApplicabilitySummary used in the Project config table.
+
+  const [deactivate, { loading, error }] = useDeactivateFormRuleMutation({
+    variables: {
+      id: rule.id,
+    },
+    onCompleted: () => {
+      evictQuery('formRules');
+      evictQuery('formDefinition', { id: formId });
+    },
+  });
+
   const {
     dataCollectedAbout,
     projectType,
@@ -44,7 +53,6 @@ const FormRule: React.FC<Props> = ({ rule, formRole }) => {
     organization,
     funder,
     otherFunder,
-    active,
     serviceCategory,
     serviceType,
   } = rule;
@@ -107,6 +115,8 @@ const FormRule: React.FC<Props> = ({ rule, formRole }) => {
 
   const conditionCount = Object.keys(conditions).length;
 
+  if (error) throw error;
+
   return (
     <Stack direction='row' gap={2}>
       <Typography variant='body2' sx={{ flexGrow: 1 }}>
@@ -130,10 +140,14 @@ const FormRule: React.FC<Props> = ({ rule, formRole }) => {
           </>
         )}
       </Typography>
-      <ActiveChip
-        active={active || false}
-        // TODO(#6289) - Deletion should deactivate. Inactive rules should not be shown/returned
-      />
+      <IconButton
+        onClick={() => deactivate()}
+        size='small'
+        sx={{ height: '28px' }}
+        disabled={loading}
+      >
+        <DeleteIcon fontSize='small' />
+      </IconButton>
     </Stack>
   );
 };
