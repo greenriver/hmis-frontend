@@ -82,8 +82,6 @@ const FormDefinitionDetailPage = () => {
     formIdentifier.displayVersion.status === FormStatus.Published;
   const hasDraft = !!formIdentifier.draftVersion;
 
-  console.log(formIdentifier.displayVersion.title);
-
   return (
     <>
       <PageTitle
