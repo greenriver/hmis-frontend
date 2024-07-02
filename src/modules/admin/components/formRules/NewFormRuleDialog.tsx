@@ -73,9 +73,15 @@ interface Props {
   open: boolean;
   onClose: VoidFunction;
   formId: string;
+  formTitle: string;
 }
 
-const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
+const NewFormRuleDialog: React.FC<Props> = ({
+  open,
+  onClose,
+  formId,
+  formTitle,
+}) => {
   const [rule, setRule] = useState<FormRuleInput>(defaultRule);
 
   const onCloseDialog = useCallback(() => {
@@ -155,7 +161,9 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
       fullScreen={isTiny}
       onClose={onCloseDialog}
     >
-      <DialogTitle>New Rule</DialogTitle>
+      <DialogTitle>
+        New rule for: <b>{formTitle}</b>
+      </DialogTitle>
       <DialogContent>
         <Stack gap={2} direction='row' sx={{ mt: 2, mb: 1, display: 'flex' }}>
           <FormRuleLabelTypography>Applies to</FormRuleLabelTypography>

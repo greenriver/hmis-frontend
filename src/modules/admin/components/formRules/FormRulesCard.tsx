@@ -1,18 +1,19 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, Divider, Typography } from '@mui/material';
 
+import { useState } from 'react';
 import FormRuleTable from '../formRules/FormRuleTable';
 import TitleCard from '@/components/elements/TitleCard';
 import FormProjectMatchTable from '@/modules/admin/components/formRules/FormProjectMatchTable';
-import { FormRole, useGetFormProjectMatchesQuery } from '@/types/gqlTypes';
 import NewFormRuleDialog from '@/modules/admin/components/formRules/NewFormRuleDialog';
-import { useState } from 'react';
+import { FormRole, useGetFormProjectMatchesQuery } from '@/types/gqlTypes';
 
 interface Props {
   formId: string;
+  formTitle: string;
   formRole: FormRole;
 }
-const FormRulesCard: React.FC<Props> = ({ formId, formRole }) => {
+const FormRulesCard: React.FC<Props> = ({ formId, formTitle, formRole }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   // Fetch here in order to display the total number of project matches outside of the table.
@@ -62,6 +63,7 @@ const FormRulesCard: React.FC<Props> = ({ formId, formRole }) => {
       </TitleCard>
       <NewFormRuleDialog
         formId={formId}
+        formTitle={formTitle}
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
       />

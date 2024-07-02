@@ -82,6 +82,8 @@ const FormDefinitionDetailPage = () => {
     formIdentifier.displayVersion.status === FormStatus.Published;
   const hasDraft = !!formIdentifier.draftVersion;
 
+  console.log(formIdentifier.displayVersion.title);
+
   return (
     <>
       <PageTitle
@@ -159,6 +161,7 @@ const FormDefinitionDetailPage = () => {
         </Grid>
         <FormRulesCard
           formId={formIdentifier.displayVersion.id}
+          formTitle={formIdentifier.displayVersion.title}
           formRole={formIdentifier.displayVersion.role}
         />
         <TitleCard
