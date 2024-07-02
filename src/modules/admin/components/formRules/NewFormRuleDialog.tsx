@@ -105,45 +105,40 @@ const NewFormRuleDialog: React.FC<Props> = ({
     },
   });
 
-  // TODO @MARTHA - cleanup and memoize after discussing
-  const conditionTypesForRole = [
-    'projectType',
-    'projectId',
-    'organizationId',
-    'funder',
-  ] as ConditionType[];
+  const { conditionTypePickList, conditions, conditionsAvailable } =
+    useMemo(() => {
+      const pickList: PickListOption[] = [
+        { code: 'projectId', label: 'Project' },
+        { code: 'projectType', label: 'Project Type' },
+        { code: 'organizationId', label: 'Organization' },
+        { code: 'funder', label: 'Funding Source' },
+      ];
 
-  const conditionPickList: PickListOption[] = [
-    { code: 'projectId', label: 'Project' },
-    { code: 'projectType', label: 'Project Type' },
-    { code: 'organizationId', label: 'Organization' },
-    { code: 'funder', label: 'Funding Source' },
-  ];
+      if (formRole === FormRole.Service) {
+        pickList.push(
+          { code: 'serviceTypeId', label: 'Service Type' },
+          { code: 'serviceCategoryId', label: 'Service Category' }
+        );
+      }
 
-  if (formRole === FormRole.Service) {
-    conditionTypesForRole.push('serviceTypeId', 'serviceCategoryId');
-    conditionPickList.push(
-      { code: 'serviceTypeId', label: 'Service Type' },
-      { code: 'serviceCategoryId', label: 'Service Category' }
-    );
-  }
+      const conditions = pickList.map((conditionOption) => {
+        const conditionType = conditionOption.code as ConditionType;
+        return {
+          conditionType,
+          value: rule[conditionType],
+        };
+      });
 
-  const conditions = useMemo(() => {
-    return conditionTypesForRole.map((conditionType) => {
+      const conditionsAvailable: ConditionType[] = conditions
+        .filter((condition) => condition.value === undefined)
+        .map((condition) => condition.conditionType);
+
       return {
-        conditionType: conditionType,
-        value: rule[conditionType],
+        conditionTypePickList: pickList,
+        conditions,
+        conditionsAvailable,
       };
-    });
-  }, [rule]);
-
-  const conditionsAvailable: ConditionType[] = useMemo(
-    () =>
-      conditions
-        .filter((condition) => !condition.value)
-        .map((condition) => condition.conditionType),
-    [conditions]
-  );
+    }, [formRole, rule]);
 
   const { pickList: projectList } = usePickList({
     item: {
@@ -223,8 +218,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
           onAddItem={() => {
             if (conditionsAvailable.length > 0) {
               const conditionType = conditionsAvailable[0];
-              const defaultValue = '';
-              setRule({ ...rule, [conditionType]: defaultValue });
+              setRule({ ...rule, [conditionType]: '' });
             }
           }}
           addItemText='Add Condition'
@@ -257,7 +251,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
                       <FormSelect
                         disableClearable
                         value={{ code: conditionType }}
-                        options={conditionPickList}
+                        options={conditionTypePickList}
                         onChange={(_event, option) => {
                           if (isPickListOption(option)) {
                             const newCondition = option.code as ConditionType;
