@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Stack, SxProps } from '@mui/system';
+import { startCase } from 'lodash-es';
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import TextInput from '@/components/elements/input/TextInput';
@@ -254,11 +255,10 @@ const NewFormRuleDialog: React.FC<Props> = ({
                         options={conditionTypePickList}
                         onChange={(_event, option) => {
                           if (isPickListOption(option)) {
-                            const newCondition = option.code as ConditionType;
                             setRule({
                               ...rule,
                               [conditionType]: undefined,
-                              [option.code]: pickListMap[newCondition][0].code,
+                              [option.code]: '',
                             });
                           }
                         }}
@@ -273,13 +273,16 @@ const NewFormRuleDialog: React.FC<Props> = ({
                     </Grid>
                     <Grid item xs={10} sm={5}>
                       <FormSelect
-                        // disable clearing the input because we expect users to remove the whole condition
-                        disableClearable
                         value={value ? { code: value } : null}
+                        placeholder={`Select ${startCase(
+                          conditionType.replace(/Id$/, '')
+                        )}`}
                         options={pickListMap[conditionType]}
                         onChange={(_event, option) => {
                           if (isPickListOption(option)) {
                             setRule({ ...rule, [conditionType]: option.code });
+                          } else {
+                            setRule({ ...rule, [conditionType]: '' });
                           }
                         }}
                       />
