@@ -223,9 +223,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
           onAddItem={() => {
             if (conditionsAvailable.length > 0) {
               const conditionType = conditionsAvailable[0];
-              const defaultValue = pickListMap[conditionType][0].code;
-              // We display all conditions with a non-null value, so setting this condition's value
-              // to some default value for its type (e.g. the first Project in the list) causes it to appear.
+              const defaultValue = '';
               setRule({ ...rule, [conditionType]: defaultValue });
             }
           }}
@@ -233,7 +231,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
           disableAdd={conditionsAvailable.length === 0}
         >
           {conditions
-            .filter((condition) => !!condition.value)
+            .filter((condition) => condition.value !== undefined)
             .map(({ conditionType, value }, index) => {
               return (
                 <RemovableCard
@@ -283,7 +281,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
                       <FormSelect
                         // disable clearing the input because we expect users to remove the whole condition
                         disableClearable
-                        value={value ? { code: value } : undefined}
+                        value={value ? { code: value } : null}
                         options={pickListMap[conditionType]}
                         onChange={(_event, option) => {
                           if (isPickListOption(option)) {
