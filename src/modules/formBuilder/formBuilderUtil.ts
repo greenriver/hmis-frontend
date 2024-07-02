@@ -297,3 +297,20 @@ export const getAncestorLinkIdMap = (items: FormItem[]) => {
   recursiveMap(items, []);
   return map;
 };
+
+export type ItemCategory = 'question' | 'display' | 'group';
+export const getItemCategory = (itemTypeValue: ItemType): ItemCategory => {
+  switch (itemTypeValue) {
+    case ItemType.Display:
+      return 'display';
+    case ItemType.Group:
+      return 'group';
+    default:
+      return 'question';
+  }
+};
+export const COMPARABLE_ITEM_TYPES = [
+  ItemType.Integer,
+  ItemType.Currency,
+  ItemType.Date,
+];

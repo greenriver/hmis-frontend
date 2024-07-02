@@ -26,6 +26,8 @@ import {
   localResolvePickList,
 } from '@/modules/form/util/formUtil';
 import {
+  ItemCategory,
+  getItemCategory,
   slugifyItemLabel,
   validComponentsForType,
 } from '@/modules/formBuilder/formBuilderUtil';
@@ -58,8 +60,6 @@ interface FormEditorItemPropertiesProps {
   handlers: UseFormReturn<FormItemState, any>;
   isNewItem?: boolean;
 }
-
-type ItemCategory = 'question' | 'display' | 'group';
 
 const textLabel = (category: ItemCategory) => {
   switch (category) {
@@ -101,14 +101,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
 
   const itemCategory = useMemo<ItemCategory>(() => {
     if (!itemTypeValue) return 'question';
-    switch (itemTypeValue) {
-      case ItemType.Display:
-        return 'display';
-      case ItemType.Group:
-        return 'group';
-      default:
-        return 'question';
-    }
+    return getItemCategory(itemTypeValue);
   }, [itemTypeValue]);
 
   const isQuestionItem =

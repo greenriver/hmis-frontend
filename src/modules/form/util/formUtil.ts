@@ -491,7 +491,13 @@ export const getAutofillComparisonValue = (
   // Choose first present value from Boolean, Number, and Code attributes
   if (!isNil(av.valueBoolean)) return av.valueBoolean;
   if (!isNil(av.valueNumber)) return av.valueNumber;
-  if (!isNil(av.valueCode)) return getOptionValue(av.valueCode, targetItem);
+  if (!isNil(av.valueCode)) {
+    // If the item we're comparing to is a choice item, convert the valueCode to a pick list option.
+    // If it's not, use it as-is (as a string)
+    return [ItemType.Choice, ItemType.OpenChoice].includes(targetItem.type)
+      ? getOptionValue(av.valueCode, targetItem)
+      : av.valueCode;
+  }
   if (!isNil(av.valueQuestion)) return values[av.valueQuestion];
 };
 
