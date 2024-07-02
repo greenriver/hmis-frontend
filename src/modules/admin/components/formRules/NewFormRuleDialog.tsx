@@ -3,12 +3,15 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
   Typography,
 } from '@mui/material';
-import { Stack } from '@mui/system';
-import React, { useMemo, useState } from 'react';
+import { Stack, SxProps } from '@mui/system';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import TextInput from '@/components/elements/input/TextInput';
+import theme from '@/config/theme';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -42,7 +45,7 @@ const conditionPickList: PickListOption[] = [
   { code: 'funder', label: 'Funding Source' },
 ];
 
-const defaultRule = {
+const defaultRule: FormRuleInput = {
   activeStatus: ActiveStatus.Active,
   dataCollectedAbout: DataCollectedAbout.AllClients,
 };
@@ -50,6 +53,21 @@ const defaultRule = {
 // `otherFunder` is also a condition type, of a sort, but it's left off here because
 // it's dependent on `funder` and it's a TextInput instead of a Select
 type ConditionType = 'projectId' | 'projectType' | 'organizationId' | 'funder';
+
+const FormRuleLabelTypography = ({
+  sx,
+  children,
+}: {
+  sx?: SxProps;
+  children: ReactNode;
+}) => (
+  <Typography
+    variant='body2'
+    sx={{ pt: 1, fontWeight: theme.typography.fontWeightBold, ...sx }}
+  >
+    {children}
+  </Typography>
+);
 
 interface Props {
   open: boolean;
@@ -60,14 +78,18 @@ interface Props {
 const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
   const [rule, setRule] = useState<FormRuleInput>(defaultRule);
 
+  const onCloseDialog = useCallback(() => {
+    onClose();
+    setRule(defaultRule); // clear out the form
+  }, [onClose]);
+
   const [createFormRule, { loading, error }] = useCreateFormRuleMutation({
     variables: {
       input: { input: rule, definitionId: formId },
     },
     onCompleted: (data) => {
       if (data.createFormRule?.formRule) {
-        onClose();
-        setRule(defaultRule); // clear out the form
+        onCloseDialog();
         // clear the cache so that applicability gets updated
         evictQuery('formDefinition', { id: formId }); // todo @martha - evict specifically projectMatches?
         evictQuery('formRules');
@@ -122,16 +144,23 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
     projectId: projectList || [],
   };
 
+  const isTiny = useIsMobile('sm');
+
   if (error) throw error;
 
   return (
-    <CommonDialog open={open} fullWidth onClose={onClose}>
+    <CommonDialog
+      open={open}
+      fullWidth
+      fullScreen={isTiny}
+      onClose={onCloseDialog}
+    >
       <DialogTitle>New Rule</DialogTitle>
       <DialogContent>
-        <Stack direction='row' sx={{ my: 2 }} gap={2}>
-          <Typography>Applies to</Typography>
+        <Stack gap={2} direction='row' sx={{ mt: 2, mb: 1, display: 'flex' }}>
+          <FormRuleLabelTypography>Applies to</FormRuleLabelTypography>
           <FormSelect
-            sx={{ width: 300 }}
+            sx={{ flexGrow: 1 }}
             value={{
               code: rule.dataCollectedAbout || DataCollectedAbout.AllClients,
             }}
@@ -146,14 +175,13 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
             }}
           />
         </Stack>
-
         <CardGroup
           onAddItem={() => {
             if (conditionsAvailable.length > 0) {
               const conditionType = conditionsAvailable[0];
               const defaultValue = pickListMap[conditionType][0].code;
-              // setting this condition's value to some default value for its type
-              // (e.g. the first Project in the list) causes it to appear in the list
+              // We display all conditions with a non-null value, so setting this condition's value
+              // to some default value for its type (e.g. the first Project in the list) causes it to appear.
               setRule({ ...rule, [conditionType]: defaultValue });
             }
           }}
@@ -171,61 +199,93 @@ const NewFormRuleDialog: React.FC<Props> = ({ open, onClose, formId }) => {
                     setRule({ ...rule, [conditionType]: undefined });
                   }}
                   removeTooltip={'Remove Condition'}
+                  sx={{
+                    backgroundColor: theme.palette.grey[100],
+                    border: 0,
+                    py: 1,
+                  }}
                 >
-                  <Stack direction='row' sx={{ my: 2 }} gap={2}>
-                    {index === 0 ? 'If' : 'and'}
-                    <FormSelect
-                      value={{ code: conditionType }}
-                      options={conditionPickList}
-                      onChange={(_event, option) => {
-                        if (isPickListOption(option)) {
-                          const newCondition = option.code as ConditionType;
-                          setRule({
-                            ...rule,
-                            [conditionType]: undefined,
-                            [option.code]: pickListMap[newCondition][0].code,
-                          });
-                        }
-                      }}
-                      sx={{ width: 300 }}
-                    />
-                    is
-                    <FormSelect
-                      // disable clearing the input because we expect users to remove the whole condition
-                      disableClearable={true}
-                      value={value ? { code: value } : undefined}
-                      options={pickListMap[conditionType]}
-                      onChange={(_event, option) => {
-                        if (isPickListOption(option)) {
-                          setRule({ ...rule, [conditionType]: option.code });
-                        }
-                      }}
-                      sx={{ width: 300 }}
-                    />
-                  </Stack>
+                  <Grid container spacing={1}>
+                    <Grid item xs={2} sm={1}>
+                      <FormRuleLabelTypography>
+                        {index === 0 ? 'If' : 'And'}
+                      </FormRuleLabelTypography>
+                    </Grid>
+                    <Grid item xs={9} sm={4}>
+                      <FormSelect
+                        disableClearable={true}
+                        value={{ code: conditionType }}
+                        options={conditionPickList}
+                        onChange={(_event, option) => {
+                          if (isPickListOption(option)) {
+                            const newCondition = option.code as ConditionType;
+                            setRule({
+                              ...rule,
+                              [conditionType]: undefined,
+                              [option.code]: pickListMap[newCondition][0].code,
+                            });
+                          }
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={2} sm={1}>
+                      <FormRuleLabelTypography
+                        sx={isTiny ? {} : { textAlign: 'center' }}
+                      >
+                        is
+                      </FormRuleLabelTypography>
+                    </Grid>
+                    <Grid item xs={10} sm={5}>
+                      <FormSelect
+                        // disable clearing the input because we expect users to remove the whole condition
+                        disableClearable={true}
+                        value={value ? { code: value } : undefined}
+                        options={pickListMap[conditionType]}
+                        onChange={(_event, option) => {
+                          if (isPickListOption(option)) {
+                            setRule({ ...rule, [conditionType]: option.code });
+                          }
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
                 </RemovableCard>
               );
             })}
 
           {rule.funder === FundingSource.LocalOrOtherFundingSource && (
-            <Card sx={{ p: 2 }}>
-              <Stack direction='row' sx={{ my: 2 }} gap={2}>
-                and funding source is
-                <TextInput
-                  value={rule.otherFunder || ''}
-                  onChange={(e) =>
-                    setRule({ ...rule, otherFunder: e.target.value })
-                  }
-                />
-              </Stack>
+            <Card
+              sx={{
+                backgroundColor: theme.palette.grey[100],
+                border: 0,
+                px: 2,
+                py: 1,
+              }}
+            >
+              <Grid container spacing={1}>
+                <Grid item xs={4}>
+                  <FormRuleLabelTypography>
+                    And funding source is
+                  </FormRuleLabelTypography>
+                </Grid>
+                <Grid item xs={8}>
+                  <TextInput
+                    value={rule.otherFunder || ''}
+                    onChange={(e) =>
+                      setRule({ ...rule, otherFunder: e.target.value })
+                    }
+                  />
+                </Grid>
+              </Grid>
             </Card>
           )}
         </CardGroup>
       </DialogContent>
       <DialogActions>
         <FormDialogActionContent
+          submitButtonText='Create Rule'
           onSubmit={() => createFormRule()}
-          onDiscard={onClose}
+          onDiscard={onCloseDialog}
           submitLoading={loading}
         />
       </DialogActions>

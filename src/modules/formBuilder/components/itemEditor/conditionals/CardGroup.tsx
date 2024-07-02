@@ -1,5 +1,5 @@
 import { Button, IconButton } from '@mui/material';
-import { Box, Stack } from '@mui/system';
+import { Box, Stack, SxProps } from '@mui/system';
 import React, { ReactNode } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { AddIcon, CloseIcon } from '@/components/elements/SemanticIcons';
@@ -8,11 +8,13 @@ interface RemovableCardProps {
   children: ReactNode;
   onRemove: VoidFunction;
   removeTooltip?: string;
+  sx?: SxProps;
 }
 export const RemovableCard: React.FC<RemovableCardProps> = ({
   children,
   onRemove,
   removeTooltip,
+  sx,
 }) => {
   return (
     <Box
@@ -21,8 +23,8 @@ export const RemovableCard: React.FC<RemovableCardProps> = ({
         border: '1px solid white',
         borderRadius: 1,
         borderColor: 'borders.light',
-        mb: 1,
         position: 'relative',
+        ...sx,
       }}
       p={2}
     >
@@ -56,19 +58,20 @@ const CardGroup: React.FC<CardGroupProps> = ({
     <Box>
       <Stack gap={2} sx={{ pt: 1 }}>
         {children}
+        {!disableAdd &&
+          (!maxItems ||
+            (Array.isArray(children) && children.length < maxItems)) && (
+            <Button
+              onClick={onAddItem}
+              color='secondary'
+              variant='text'
+              sx={{ width: 'fit-content', color: 'links' }}
+              startIcon={<AddIcon />}
+            >
+              {addItemText}
+            </Button>
+          )}
       </Stack>
-      {!disableAdd && (!maxItems ||
-        (Array.isArray(children) && children.length < maxItems)) && (
-        <Button
-          onClick={onAddItem}
-          color='secondary'
-          variant='text'
-          sx={{ width: 'fit-content', color: 'links' }}
-          startIcon={<AddIcon />}
-        >
-          {addItemText}
-        </Button>
-      )}
     </Box>
   );
 };
