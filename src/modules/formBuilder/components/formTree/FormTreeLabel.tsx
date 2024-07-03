@@ -80,7 +80,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     } else if (focusedTreeButton === `${itemId}-down`) {
       downRef.current?.focus();
     }
-  }, [upRef, downRef, focusedTreeButton]);
+  }, [itemId, upRef, downRef, focusedTreeButton]);
 
   const { onReorder, onDelete, canMoveUp, canMoveDown } =
     useUpdateFormStructure(

@@ -70,7 +70,14 @@ const FormTree: React.FC<FormTreeProps> = ({ onEditClick }) => {
       focusedTreeButton,
       setFocusedTreeButton,
     }),
-    [onEditClick, itemMap, rhfPathMap, ancestorLinkIdMap]
+    [
+      onEditClick,
+      itemMap,
+      rhfPathMap,
+      ancestorLinkIdMap,
+      focusedTreeButton,
+      setFocusedTreeButton,
+    ]
   );
 
   if (!values.item) return <Loading />;

@@ -213,6 +213,7 @@ export default function useUpdateFormStructure(
       swap,
       grandParentArrayPath,
       parentIndex,
+      isMaxDepth,
     ]
   );
 
