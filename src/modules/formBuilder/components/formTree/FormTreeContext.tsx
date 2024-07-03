@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { ItemMap } from '@/modules/form/types';
 import { FormItem } from '@/types/gqlTypes';
 
@@ -9,6 +9,8 @@ export const FormTreeContext = React.createContext<{
   itemMap: ItemMap;
   rhfPathMap: Record<string, string>;
   ancestorLinkIdMap: Record<string, string[]>;
+  focusedTreeButton: string | null;
+  setFocusedTreeButton: Dispatch<SetStateAction<string | null>>;
 }>({
   openFormItemEditor: () => {},
   expandItem: () => {},
@@ -16,4 +18,6 @@ export const FormTreeContext = React.createContext<{
   itemMap: {},
   rhfPathMap: {},
   ancestorLinkIdMap: {},
+  focusedTreeButton: null,
+  setFocusedTreeButton: () => {},
 });
