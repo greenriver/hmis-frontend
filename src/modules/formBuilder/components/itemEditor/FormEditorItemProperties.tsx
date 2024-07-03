@@ -339,6 +339,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             name='hidden'
             control={control}
             label='Always hide this item'
+            sx={{ width: 'fit-content' }}
           />
           {!hiddenValue && (
             <>
