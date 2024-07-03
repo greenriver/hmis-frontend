@@ -112,11 +112,9 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     return getItemCategory(itemTypeValue);
   }, [itemTypeValue]);
 
-  const isQuestionItem =
-    itemTypeValue &&
-    ![ItemType.Group, ItemType.Display].includes(itemTypeValue);
-  const isDisplayItem = itemTypeValue === ItemType.Display;
-  const isGroupItem = itemTypeValue === ItemType.Group;
+  const isQuestionItem = itemCategory === 'question';
+  const isDisplayItem = itemCategory === 'display';
+  const isGroupItem = itemCategory === 'group';
 
   const isAssessment = useMemo(
     () => (Object.values(AssessmentRole) as [string]).includes(definition.role),
