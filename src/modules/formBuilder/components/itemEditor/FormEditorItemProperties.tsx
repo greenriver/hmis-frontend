@@ -26,6 +26,7 @@ import {
   localResolvePickList,
 } from '@/modules/form/util/formUtil';
 import {
+  COMPARABLE_ITEM_TYPES,
   ItemCategory,
   determineAutofillField,
   getItemCategory,
@@ -354,7 +355,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
                       <b>Hidden</b>: When this item is disabled, it will be
                       completely hidden from view.
                       <br />
-                      {/* TODO: do we actually use  'protected' at all? can we remove it? */}
+                      {/* TODO: Protected is only used in a few instances (Disability and some others). Should we hide it from the UI (or hide DIsabledDisplay altogether) since it's an advanced feature? */}
                       <b>Protected</b>: When this item is disabled, it will
                       still appear but not be interactable.
                       <br />
@@ -378,9 +379,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           title='Min/Max Bounds'
           hidden={
             // bounds are supported by numbers and dates only
-            ![ItemType.Integer, ItemType.Currency, ItemType.Date].includes(
-              itemTypeValue
-            )
+            !COMPARABLE_ITEM_TYPES.includes(itemTypeValue)
           }
         >
           <ValueBounds control={control} itemMap={itemMap} />
