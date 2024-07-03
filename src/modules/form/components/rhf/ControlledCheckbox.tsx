@@ -31,7 +31,7 @@ const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
     <LabeledCheckbox
       onChange={field.onChange} // send value to hook form
       onBlur={field.onBlur} // notify when input is touched/blur
-      value={field.value} // input value
+      value={field.value || false} // input value
       name={field.name} // send down the input name
       inputRef={field.ref} // send input ref, so we can focus on input when error appear
       {...props}

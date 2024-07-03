@@ -1,6 +1,6 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
@@ -9,15 +9,19 @@ import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { ItemMap } from '@/modules/form/types';
+import { localResolvePickList } from '@/modules/form/util/formUtil';
+import {
+  COMPARABLE_ITEM_TYPES,
+  getItemCategory,
+} from '@/modules/formBuilder/formBuilderUtil';
 import { HmisEnums } from '@/types/gqlEnums';
-import { PickListOption } from '@/types/gqlTypes';
-
-const enableOperatorPickList = Object.keys(HmisEnums.EnableOperator).map(
-  (code) => ({
-    code,
-    label: startCase(code.toLowerCase()),
-  })
-);
+import {
+  EnableOperator,
+  EnableWhen,
+  FormItem,
+  ItemType,
+  PickListOption,
+} from '@/types/gqlTypes';
 
 interface EnableWhenConditionProps {
   control: FormItemControl;
@@ -27,11 +31,68 @@ interface EnableWhenConditionProps {
   enableWhenPath?: 'enableWhen' | `autofillValues.${number}.autofillWhen`; // path to enableWhen in form
 }
 
+const validOperatorsForType = (type: ItemType, repeats: boolean) => {
+  const operators = [];
+
+  if (getItemCategory(type) === 'question') {
+    if (repeats) {
+      // this question has multiple answers, so we use "includes" to evaluate whether the list includes the comparison value
+      operators.push(EnableOperator.Includes);
+    } else {
+      // compare if answer is equal to comparison value
+      operators.push(EnableOperator.Equal);
+    }
+    // "exists" evaluates whether the question has a current value or not. Doesn't really make sense for boolean, since you would just use value=true
+    if (type !== ItemType.Boolean) operators.push(EnableOperator.Exists);
+  }
+  if (type === ItemType.Choice) {
+    // compare this question's answer to a list of `answerCodes`
+    operators.push(EnableOperator.In);
+  }
+
+  if (COMPARABLE_ITEM_TYPES.includes(type)) {
+    operators.push(EnableOperator.GreaterThan);
+    operators.push(EnableOperator.LessThan);
+    operators.push(EnableOperator.GreaterThanEqual);
+    operators.push(EnableOperator.LessThanEqual);
+  }
+
+  // any item type supports enableWhen, so we can always evaluate the condition of whether the item is enabled or not
+  operators.push(EnableOperator.Enabled);
+  return operators;
+};
+
+export const determineEnableWhenComparisonField = (
+  dependentItem: FormItem, // the item to compare to
+  operator: EnableOperator // the comparison operator
+):
+  | Omit<keyof EnableWhen, 'operator' | 'localConstant' | 'question'>
+  | undefined => {
+  switch (dependentItem.type) {
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+      // value in [x,y,z]
+      if (operator === EnableOperator.In) return 'answerCodes';
+      // value can be matched by code or group code.
+      // answerGroupCode should probably be supported too. not turned on in the ui because it has one specific use case currently.
+      return 'answerCode';
+    case ItemType.Boolean:
+      return 'answerBoolean';
+    case ItemType.Integer:
+    case ItemType.Currency:
+      return 'answerNumber';
+    default:
+      // not handled: compareQuestion
+      return 'answerCode';
+  }
+};
+
 // Component for managing a single EnableWhen condition
 const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
   control,
   index,
   itemPickList,
+  itemMap,
   enableWhenPath = 'enableWhen',
 }) => {
   // Watch state of this condition
@@ -40,42 +101,57 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     name: `${enableWhenPath}.${index}`,
   });
 
-  // const dependentItem = useMemo(
-  //   () => (state?.question ? itemMap[state?.question] : undefined),
-  //   [itemMap, state?.question]
-  // );
+  const dependentItem = useMemo(
+    () => (state?.question ? itemMap[state?.question] : undefined),
+    [itemMap, state?.question]
+  );
+  const dependentItemPickList = useMemo(() => {
+    if (!dependentItem) return;
+    if (dependentItem.pickListOptions) return dependentItem.pickListOptions;
+    if (dependentItem.pickListReference) {
+      // TODO: could use usePickList to fetch remote pick list. This will only resolve local enums.
+      return localResolvePickList(dependentItem.pickListReference);
+    }
+  }, [dependentItem]);
 
-  // Commented out until we have a better way of doing this and a design pass
-  // // determine which type(s) are valid for the answer field
-  // const answerInputTypes = useMemo(() => {
-  //   // We dont know the operator yet, so don't know which answer type to use
-  //   if (!state?.operator) return [];
+  const enableOperatorPickList = useMemo(() => {
+    // TODO handle local constant instead of dependentItem
+    const validOperators = validOperatorsForType(
+      dependentItem?.type || ItemType.Choice,
+      dependentItem?.repeats || false
+    );
+    return Object.keys(HmisEnums.EnableOperator)
+      .filter(
+        (op) =>
+          validOperators.includes(op as EnableOperator) ||
+          state?.operator === op
+      )
+      .map((code) => ({
+        code,
+        label: startCase(code.toLowerCase()),
+      }));
+  }, [dependentItem, state?.operator]);
 
-  //   // We dont know the comparison type yet, so don't know which answer type to use
-  //   if (!dependentItem && !state?.localConstant) return [];
+  const answerInputType = useMemo(() => {
+    // We dont know the operator yet, so don't know which answer type to use
+    if (!state?.operator) return;
 
-  //   // Exists/Enabled are always boolean
-  //   if (state?.operator === EnableOperator.Exists) return ['answerBoolean'];
-  //   if (state?.operator === EnableOperator.Enabled) return ['answerBoolean'];
+    // We dont know the comparison type yet, so don't know which answer type to use
+    if (!dependentItem && !state?.localConstant) return;
 
-  //   // String input uses answerCode
-  //   if (state?.localConstant) return ['answerCode'];
+    // Exists/Enabled are always boolean
+    if (
+      [EnableOperator.Exists, EnableOperator.Enabled].includes(state.operator)
+    ) {
+      return 'answerBoolean';
+    }
 
-  //   if (!dependentItem) return [];
-
-  //   if (dependentItem.type === ItemType.Choice) {
-  //     // value in [x,y,z]
-  //     if (state?.operator === EnableOperator.In) return ['answerCodes'];
-  //     // value can be matched by code or group code
-  //     return ['answerCode', 'answerGroupCode'];
-  //   }
-
-  //   if (dependentItem.type === ItemType.Boolean) return ['answerBoolean'];
-  //   if (dependentItem.type === ItemType.Integer) return ['answerNumber'];
-  //   if (dependentItem.type === ItemType.Currency) return ['answerNumber'];
-  //   // not handled: compareQuestion
-  //   return ['answerCode'];
-  // }, [dependentItem, state]);
+    // String input uses answerCode
+    // TODO: handle based on selected Local Constant's type
+    if (state.localConstant) return 'answerCode';
+    if (!dependentItem) return;
+    return determineEnableWhenComparisonField(dependentItem, state.operator);
+  }, [dependentItem, state]);
 
   const answerHelperText =
     'Value to compare using the operator. If the expression evaluates to true, the condition is met.';
@@ -102,7 +178,9 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 placeholder='Select question'
                 options={itemPickList}
                 helperText='Question whose response will determine whether the condition is met'
-                required
+                rules={{
+                  required: 'Local Constant or Dependent Question is required',
+                }}
               />
             )}
             {advanced.localConstant && (
@@ -121,7 +199,6 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           </Stack>
         </Grid>
         {/* COLUMN 2: Select the comparison operator */}
-        {/* TOOD: the operator picklist should be conditional based on the type of the dependent item. For example, "Less Than" is only applicable to numbers */}
         <Grid item xs={3}>
           <ControlledSelect
             name={`${enableWhenPath}.${index}.operator`}
@@ -133,63 +210,80 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           />
         </Grid>
         {/* COLUMN 3: Select the comparison value */}
-        {/* FIXME this should validate, and only allow the correct input type for the operator+dependent item type. The backend should probably validate the "oneOf" logic (too?). */}
         <Grid item xs={4}>
           <Stack gap={1}>
-            <Controller
-              name={`${enableWhenPath}.${index}.answerBoolean`}
-              control={control}
-              render={({ field: { ref, ...field }, fieldState: { error } }) => (
-                <YesNoRadio
-                  label='Response Value (Boolean)'
-                  error={!!error}
-                  helperText={error?.message}
-                  {...field}
+            {answerInputType === 'answerBoolean' && (
+              <Controller
+                name={`${enableWhenPath}.${index}.answerBoolean`}
+                control={control}
+                shouldUnregister // clear value when un-mounted
+                render={({
+                  field: { ref, ...field },
+                  fieldState: { error },
+                }) => (
+                  <YesNoRadio
+                    label='Value'
+                    error={!!error}
+                    helperText={error?.message}
+                    {...field}
+                  />
+                )}
+              />
+            )}
+            {answerInputType === 'answerCode' &&
+              (dependentItemPickList ? (
+                <ControlledSelect
+                  name={`${enableWhenPath}.${index}.answerCode`}
+                  control={control}
+                  label='Response Value'
+                  options={dependentItemPickList}
+                  helperText={answerHelperText}
                 />
-              )}
-            />
-            <ControlledTextInput
-              name={`${enableWhenPath}.${index}.answerCode`}
-              control={control}
-              label='Response Value (Code)'
-              helperText={answerHelperText}
-            />
-            <ControlledTextInput
-              name={`${enableWhenPath}.${index}.answerCodes`}
-              control={control}
-              label='Response Value (Code List)'
-              helperText={answerHelperText}
-            />
-            <ControlledTextInput
-              name={`${enableWhenPath}.${index}.answerNumber`}
-              control={control}
-              label='Response Value (Numeric)'
-              type='number' // ok? we use another approach in NumberInput
-            />
-            <ControlledTextInput
-              name={`${enableWhenPath}.${index}.answerGroupCode`}
-              control={control}
-              label='Response Group'
-              helperText='If dependent item uses a grouped picklist, enter the name of a group to compare using the operator.'
-            />
+              ) : (
+                <ControlledTextInput
+                  name={`${enableWhenPath}.${index}.answerCode`}
+                  control={control}
+                  label='Response Value (Code)'
+                  helperText={answerHelperText}
+                />
+              ))}
+            {answerInputType === 'answerCodes' && (
+              <ControlledTextInput
+                name={`${enableWhenPath}.${index}.answerCodes`}
+                control={control}
+                label='Response Value (Code List)'
+                helperText={answerHelperText}
+              />
+            )}
+            {answerInputType === 'answerNumber' && (
+              <ControlledTextInput
+                name={`${enableWhenPath}.${index}.answerNumber`}
+                control={control}
+                label='Response Value (Numeric)'
+                type='number'
+                helperText={answerHelperText}
+              />
+            )}
+            {state?.answerGroupCode && (
+              <ControlledTextInput
+                name={`${enableWhenPath}.${index}.answerGroupCode`}
+                control={control}
+                label='Response Group'
+                helperText='If dependent item uses a grouped picklist, enter the name of a group to compare using the operator.'
+              />
+            )}
           </Stack>
         </Grid>
       </Grid>
-      <Box
-        sx={{
-          mt: 2,
-          '.MuiFormControlLabel-label': {
-            fontSize: (theme) => theme.typography.body2.fontSize,
-          },
-          '.MuiCheckbox-root': { py: 0.5 },
-        }}
-      >
-        <Typography sx={{ mb: 1 }}>Advanced Options</Typography>
+      <Box sx={{ mt: 2 }}>
+        <Typography typography='body2' fontWeight={600}>
+          Advanced Options
+        </Typography>
         <Stack>
           <LabeledCheckbox
-            label='Compare with a Local Constant instead of dependent Question'
+            label='Compare with a Local Constant instead of a Dependent Question'
             checked={advanced.localConstant}
-            sx={{ typography: { variant: 'body2' } }}
+            sx={{ width: 'fit-content' }}
             onChange={(evt, checked) =>
               setAdvanced((old) => ({ ...old, localConstant: checked }))
             }

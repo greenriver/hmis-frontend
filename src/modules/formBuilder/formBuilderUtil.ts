@@ -82,6 +82,39 @@ export const validComponentsForType = (type: ItemType) => {
       return [];
   }
 };
+export const determineAutofillField = (itemType: ItemType) => {
+  switch (itemType) {
+    case ItemType.Boolean:
+      return 'valueBoolean';
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+    case ItemType.String:
+    case ItemType.Text:
+      return 'valueCode';
+    case ItemType.Integer:
+    case ItemType.Currency:
+      return 'valueNumber';
+    default:
+      // other item types do not yet supports autofilling (e.g. Dates)
+      return;
+  }
+};
+export const determineInitialValueField = (itemType: ItemType) => {
+  switch (itemType) {
+    case ItemType.Boolean:
+      return 'valueBoolean';
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+    case ItemType.String:
+    case ItemType.Text:
+      return 'valueCode';
+    case ItemType.Integer:
+    case ItemType.Currency:
+      return 'valueNumber';
+    default:
+      return;
+  }
+};
 
 export const updateFormItem = (
   formDefinition: FormDefinitionJson,
@@ -297,3 +330,20 @@ export const getAncestorLinkIdMap = (items: FormItem[]) => {
   recursiveMap(items, []);
   return map;
 };
+
+export type ItemCategory = 'question' | 'display' | 'group';
+export const getItemCategory = (itemTypeValue: ItemType): ItemCategory => {
+  switch (itemTypeValue) {
+    case ItemType.Display:
+      return 'display';
+    case ItemType.Group:
+      return 'group';
+    default:
+      return 'question';
+  }
+};
+export const COMPARABLE_ITEM_TYPES = [
+  ItemType.Integer,
+  ItemType.Currency,
+  ItemType.Date,
+];
