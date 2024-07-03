@@ -1,13 +1,13 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Chip, IconButton, Stack, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
+import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FormRole,
   FormRuleFieldsFragment,
   useDeactivateFormRuleMutation,
 } from '@/types/gqlTypes';
-import { evictQuery } from '@/utils/cacheUtil';
 
 const FormRuleChip: React.FC<{ label: string }> = ({ label }) => {
   // bottom margin puts the chip text in line with the body text
@@ -30,19 +30,22 @@ const nonProjectFormRoles = [FormRole.Organization];
 interface Props {
   rule: FormRuleFieldsFragment;
   formRole: FormRole;
-  formId: string;
+  formCacheKey: string;
 }
 
-const FormRule: React.FC<Props> = ({ rule, formRole, formId }) => {
+const FormRule: React.FC<Props> = ({ rule, formRole, formCacheKey }) => {
   // TODO - This duplicates some functionality from ProjectApplicabilitySummary used in the Project config table.
 
   const [deactivate, { loading, error }] = useDeactivateFormRuleMutation({
     variables: {
       id: rule.id,
     },
-    onCompleted: () => {
-      evictQuery('formRules');
-      evictQuery('formDefinition', { id: formId });
+    onCompleted: (data) => {
+      cache.evict({ id: `FormRule:${data.updateFormRule?.formRule.id}` });
+      cache.evict({
+        id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
+        fieldName: 'projectMatches',
+      });
     },
   });
 

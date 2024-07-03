@@ -21,6 +21,7 @@ import { localResolvePickList } from '@/modules/form/util/formUtil';
 import CardGroup, {
   RemovableCard,
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
+import { cache } from '@/providers/apolloClient';
 import {
   ActiveStatus,
   DataCollectedAbout,
@@ -32,7 +33,6 @@ import {
   PickListType,
   useCreateFormRuleMutation,
 } from '@/types/gqlTypes';
-import { evictQuery } from '@/utils/cacheUtil';
 
 const dataCollectedAboutPickList =
   localResolvePickList('DataCollectedAbout') || [];
@@ -76,6 +76,7 @@ interface Props {
   formId: string;
   formTitle: string;
   formRole: FormRole;
+  formCacheKey: string;
 }
 
 const NewFormRuleDialog: React.FC<Props> = ({
@@ -84,6 +85,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
   formId,
   formTitle,
   formRole,
+  formCacheKey,
 }) => {
   const [rule, setRule] = useState<FormRuleInput>(defaultRule);
 
@@ -99,9 +101,29 @@ const NewFormRuleDialog: React.FC<Props> = ({
     onCompleted: (data) => {
       if (data.createFormRule?.formRule) {
         onCloseDialog();
-        // clear the cache so that applicability gets updated
-        evictQuery('formDefinition', { id: formId }); // todo @martha - evict specifically projectMatches?
-        evictQuery('formRules');
+
+        // Apollo has now already added the new rule to the cache, but here we add it to the cached result of the
+        // `formRules` query (by reference), so that it's reflected in the FormRuleTable
+        cache.modify({
+          fields: {
+            formRules(existingRules = {}) {
+              return {
+                ...existingRules,
+                nodesCount: existingRules.nodesCount + 1, // this isn't used, but update it anyway to avoid inconsistency
+                nodes: [
+                  ...existingRules.nodes,
+                  { __ref: `FormRule:${data.createFormRule?.formRule.id}` },
+                ],
+              };
+            },
+          },
+        });
+
+        // Evict the existing `projectMatches` for this form, so that they are re-fetched and reflect the new rule
+        cache.evict({
+          id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
+          fieldName: 'projectMatches',
+        });
       }
     },
   });

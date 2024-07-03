@@ -16,9 +16,10 @@ type RowType = FormRuleFieldsFragment;
 interface Props {
   formId: string;
   formRole: FormRole;
+  formCacheKey: string;
 }
 
-const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
+const FormRuleTable: React.FC<Props> = ({ formId, formRole, formCacheKey }) => {
   return (
     <>
       <GenericTableWithData<
@@ -39,7 +40,11 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
         renderRow={(rule) => (
           <TableRow key={rule.id}>
             <TableCell sx={{ py: 1 }}>
-              <FormRule rule={rule} formRole={formRole} formId={formId} />
+              <FormRule
+                rule={rule}
+                formRole={formRole}
+                formCacheKey={formCacheKey}
+              />
             </TableCell>
           </TableRow>
         )}
