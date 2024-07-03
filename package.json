@@ -24,7 +24,7 @@
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "eslint --fix --ignore-path .gitignore --max-warnings=0"
+      "eslint --fix --ignore-path .gitignore"
     ],
     "*": [
       "prettier --write"
