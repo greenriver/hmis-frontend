@@ -358,7 +358,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
                       <br />
                       {/* TODO: do we actually use  'protected' at all? can we remove it? */}
                       <b>Protected</b>: When this item is disabled, it will
-                      still show up but not be interactable.
+                      still appear but not be interactable.
                       <br />
                       <b>Protected with Value</b>: When this item is disabled,
                       it will still appear and its value will be visible but not
