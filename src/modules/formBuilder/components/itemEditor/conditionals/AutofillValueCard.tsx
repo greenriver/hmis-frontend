@@ -1,12 +1,16 @@
 import { Stack, Typography } from '@mui/material';
-import { Controller } from 'react-hook-form';
+import Box from '@mui/system/Box/Box';
+import { useMemo, useState } from 'react';
+import { Controller, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import ManageEnableWhen from './ManageEnableWhen';
+import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { ItemMap } from '@/modules/form/types';
+import { determineAutofillField } from '@/modules/formBuilder/formBuilderUtil';
 import { ItemType } from '@/types/gqlTypes';
 
 interface AutofillValueCardProps {
@@ -23,8 +27,19 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
   index,
   itemMap,
   title,
+  itemType,
 }) => {
   //TODO: also accept sum_questions for autofilling numeric fields using a sum of other questions
+  const formulaValue = useWatch({
+    control,
+    name: `autofillValues.${index}.formula`,
+  });
+  const fieldType = useMemo(() => determineAutofillField(itemType), [itemType]);
+
+  // Advanced behaviors that are toggled off by default, or on if either are set
+  const [advanced, setAdvanced] = useState({
+    useFormula: !!formulaValue,
+  });
 
   return (
     <>
@@ -35,64 +50,89 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           Enter the value to autofill, or enter a formula to calculate it:
         </Typography>
 
-        <ControlledTextInput
-          name={`autofillValues.${index}.valueCode`}
-          label='Value (String / Code)'
-          control={control}
-          // disabled={[
-          //   ItemType.Boolean,
-          //   ItemType.Currency,
-          //   ItemType.Integer,
-          // ].includes(itemType)}
-        />
-        <Controller
-          name={`autofillValues.${index}.valueBoolean`}
-          control={control}
-          // disabled={itemType !== ItemType.Boolean}
-          render={({
-            field: { ref, disabled, ...field },
-            fieldState: { error },
-          }) => (
-            <YesNoRadio
-              label='Value (Boolean)'
-              sx={disabled ? { display: 'none' } : {}}
-              error={!!error}
-              helperText={error?.message}
-              {...field}
+        {!advanced.useFormula && (
+          <>
+            {fieldType === 'valueCode' && (
+              <ControlledTextInput
+                name={`autofillValues.${index}.valueCode`}
+                label='Value'
+                control={control}
+              />
+            )}
+            {fieldType === 'valueBoolean' && (
+              <Controller
+                name={`autofillValues.${index}.valueBoolean`}
+                control={control}
+                shouldUnregister
+                render={({
+                  field: { ref, disabled, ...field },
+                  fieldState: { error },
+                }) => (
+                  <YesNoRadio
+                    label='Yes/No Value'
+                    sx={disabled ? { display: 'none' } : {}}
+                    error={!!error}
+                    helperText={error?.message}
+                    {...field}
+                  />
+                )}
+              />
+            )}
+            {fieldType === 'valueNumber' && (
+              <Controller
+                name={`autofillValues.${index}.valueNumber`}
+                control={control}
+                shouldUnregister
+                render={({
+                  field: { ref, disabled, ...field },
+                  fieldState: { error },
+                }) => (
+                  <NumberInput
+                    sx={disabled ? { display: 'none' } : undefined}
+                    label='Value'
+                    inputRef={ref}
+                    error={!!error}
+                    helperText={error?.message}
+                    {...field}
+                  />
+                )}
+              />
+            )}
+          </>
+        )}
+
+        {advanced.useFormula && (
+          <ControlledTextInput
+            name={`autofillValues.${index}.formula`}
+            control={control}
+            // TODO: validate formula
+            label='Formula'
+            helperText="Formula to calculate the value to fill. Use 'value' to refer to the value of the current item."
+          />
+        )}
+
+        <Box sx={{ mt: 2 }}>
+          <Typography typography='body2' fontWeight={600}>
+            Advanced Options
+          </Typography>
+          <Stack>
+            <LabeledCheckbox
+              label='Use a formula'
+              checked={advanced.useFormula}
+              sx={{ width: 'fit-content' }}
+              onChange={(evt, checked) =>
+                setAdvanced((old) => ({ ...old, useFormula: checked }))
+              }
             />
-          )}
-        />
-        <Controller
-          name={`autofillValues.${index}.valueNumber`}
-          control={control}
-          // disabled={![ItemType.Currency, ItemType.Integer].includes(itemType)}
-          render={({
-            field: { ref, disabled, ...field },
-            fieldState: { error },
-          }) => (
-            <NumberInput
-              sx={disabled ? { display: 'none' } : undefined}
-              label='Value (Numeric)'
-              inputRef={ref}
-              error={!!error}
-              helperText={error?.message}
-              {...field}
+            <ControlledCheckbox
+              name={`autofillValues.${index}.autofillReadonly`}
+              control={control}
+              label='Autofill in read-only mode'
+              sx={{ width: 'fit-content' }}
             />
-          )}
-        />
-        <ControlledTextInput
-          name={`autofillValues.${index}.formula`}
-          control={control}
-          // TODO: validate formula
-          // disabled={!answerInputTypes.includes('answerCode')}
-          label='Value (Formula)'
-          helperText="Formula to calculate the value to fill. Use 'value' to refer to the value of the current item."
-        />
-        <ControlledCheckbox
-          name={`autofillValues.${index}.autofillReadonly`}
-          control={control}
-          label='Autofill in read-only mode'
-        />
+          </Stack>
+        </Box>
+
         {/* The user can specify contitional rules for this Autofill value. For example: "Autofill to <true> only WHEN the answer to a previous question was >100". Those conditions use the same shape as EnableWhen visibility conditions, so we use the same component for managing them. */}
         <ManageEnableWhen
           enableWhenPath={`autofillValues.${index}.autofillWhen`}
