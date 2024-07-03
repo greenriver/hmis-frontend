@@ -159,7 +159,7 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
                 </Typography>
                 <Stack>
                   <LabeledCheckbox
-                    label='Initialize using a Local Constant'
+                    label='Set initial value based on a local constant'
                     checked={advanced.localConstant}
                     sx={{ width: 'fit-content' }}
                     onChange={(evt, checked) =>
