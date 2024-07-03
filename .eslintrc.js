@@ -113,6 +113,7 @@ module.exports = {
     'react/display-name': 'off',
     'react/no-children-prop': 'error',
     'react/no-danger-with-children': 'error',
+    'react-hooks/exhaustive-deps': 'error',
     'no-restricted-imports': [
       'warn',
       {
