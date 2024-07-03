@@ -1,7 +1,9 @@
-import { TableCell, TableRow } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton, TableCell, TableRow } from '@mui/material';
 import React from 'react';
 import FormRule from '@/modules/admin/components/formRules/FormRule';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { cache } from '@/providers/apolloClient';
 import {
   ActiveStatus,
   FormRole,
@@ -9,6 +11,7 @@ import {
   GetFormRulesDocument,
   GetFormRulesQuery,
   GetFormRulesQueryVariables,
+  useDeactivateFormRuleMutation,
 } from '@/types/gqlTypes';
 
 type RowType = FormRuleFieldsFragment;
@@ -20,6 +23,18 @@ interface Props {
 }
 
 const FormRuleTable: React.FC<Props> = ({ formId, formRole, formCacheKey }) => {
+  const [deactivate, { loading, error }] = useDeactivateFormRuleMutation({
+    onCompleted: (data) => {
+      cache.evict({ id: `FormRule:${data.updateFormRule?.formRule.id}` });
+      cache.evict({
+        id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
+        fieldName: 'projectMatches',
+      });
+    },
+  });
+
+  if (error) throw error;
+
   return (
     <>
       <GenericTableWithData<
@@ -43,7 +58,16 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole, formCacheKey }) => {
               <FormRule
                 rule={rule}
                 formRole={formRole}
-                formCacheKey={formCacheKey}
+                actionButtons={
+                  <IconButton
+                    onClick={() => deactivate({ variables: { id: rule.id } })}
+                    size='small'
+                    sx={{ height: '28px' }}
+                    disabled={loading}
+                  >
+                    <DeleteIcon fontSize='small' />
+                  </IconButton>
+                }
               />
             </TableCell>
           </TableRow>

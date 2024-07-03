@@ -1,13 +1,7 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Chip, IconButton, Stack, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
-import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  FormRole,
-  FormRuleFieldsFragment,
-  useDeactivateFormRuleMutation,
-} from '@/types/gqlTypes';
+import { FormRole, FormRuleFieldsFragment } from '@/types/gqlTypes';
 
 const FormRuleChip: React.FC<{ label: string }> = ({ label }) => {
   // bottom margin puts the chip text in line with the body text
@@ -30,24 +24,11 @@ const nonProjectFormRoles = [FormRole.Organization];
 interface Props {
   rule: FormRuleFieldsFragment;
   formRole: FormRole;
-  formCacheKey: string;
+  actionButtons: ReactNode;
 }
 
-const FormRule: React.FC<Props> = ({ rule, formRole, formCacheKey }) => {
+const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
   // TODO - This duplicates some functionality from ProjectApplicabilitySummary used in the Project config table.
-
-  const [deactivate, { loading, error }] = useDeactivateFormRuleMutation({
-    variables: {
-      id: rule.id,
-    },
-    onCompleted: (data) => {
-      cache.evict({ id: `FormRule:${data.updateFormRule?.formRule.id}` });
-      cache.evict({
-        id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
-        fieldName: 'projectMatches',
-      });
-    },
-  });
 
   const {
     dataCollectedAbout,
@@ -118,8 +99,6 @@ const FormRule: React.FC<Props> = ({ rule, formRole, formCacheKey }) => {
 
   const conditionCount = Object.keys(conditions).length;
 
-  if (error) throw error;
-
   return (
     <Stack direction='row' gap={2}>
       <Typography variant='body2' sx={{ flexGrow: 1 }}>
@@ -143,14 +122,7 @@ const FormRule: React.FC<Props> = ({ rule, formRole, formCacheKey }) => {
           </>
         )}
       </Typography>
-      <IconButton
-        onClick={() => deactivate()}
-        size='small'
-        sx={{ height: '28px' }}
-        disabled={loading}
-      >
-        <DeleteIcon fontSize='small' />
-      </IconButton>
+      {actionButtons}
     </Stack>
   );
 };
