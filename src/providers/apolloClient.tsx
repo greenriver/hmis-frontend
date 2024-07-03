@@ -18,6 +18,17 @@ import { allRoutes } from '@/routes/routes';
 import { getCsrfToken } from '@/utils/csrf';
 import { decodeParams } from '@/utils/pathEncoding';
 
+// adds explicit network status code
+export class CustomFetchNetworkError extends Error {
+  statusCode: number;
+
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.statusCode = statusCode;
+    this.name = 'CustomFetchNetworkError';
+  }
+}
+
 // https://github.com/apollographql/apollo-feature-requests/issues/153#issuecomment-476832408
 const customFetch: HttpOptions['fetch'] = (uri, options) => {
   return fetch(uri, options).then((response) => {
@@ -25,7 +36,9 @@ const customFetch: HttpOptions['fetch'] = (uri, options) => {
     // This gives us cleaner sentry errors because the error will actually say "504" instead of "unable to parse html"
     // For 500 and under, we expect the response to be JSON.
     if (response.status > 500) {
-      return Promise.reject(new Error(response.status.toString()));
+      return Promise.reject(
+        new CustomFetchNetworkError(response.status.toString(), response.status)
+      );
     }
     return response;
   });
