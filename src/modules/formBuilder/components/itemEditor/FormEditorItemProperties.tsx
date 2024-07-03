@@ -362,7 +362,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
                       <br />
                       <b>Protected with Value</b>: When this item is disabled,
                       it will still appear and its value will be visible but not
-                      interactible. It's value will be submitted.
+                      interactible. Its value will be submitted.
                     </>
                   }
                 />
