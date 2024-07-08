@@ -1,56 +1,40 @@
-import { TableCell, TableRow } from '@mui/material';
-import React, { useState } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton, TableCell, TableRow } from '@mui/material';
+import React from 'react';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import FormRule from '@/modules/admin/components/formRules/FormRule';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
+import { cache } from '@/providers/apolloClient';
 import {
+  ActiveStatus,
   FormRole,
   FormRuleFieldsFragment,
-  FormRuleInput,
   GetFormRulesDocument,
   GetFormRulesQuery,
   GetFormRulesQueryVariables,
-  MutationUpdateFormRuleArgs,
-  StaticFormRole,
-  UpdateFormRuleDocument,
-  UpdateFormRuleMutation,
+  useDeactivateFormRuleMutation,
 } from '@/types/gqlTypes';
-import { evictQuery } from '@/utils/cacheUtil';
 
 type RowType = FormRuleFieldsFragment;
 
 interface Props {
   formId: string;
   formRole: FormRole;
+  formCacheKey: string;
 }
 
-const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
-  // Currently selected rule for editing
-  const [selectedRule, setSelectedRule] = useState<RowType | undefined>();
-
-  // Form dialog for editing rules
-  const { openFormDialog, renderFormDialog } = useStaticFormDialog<
-    UpdateFormRuleMutation,
-    MutationUpdateFormRuleArgs
-  >({
-    formRole: StaticFormRole.FormRule,
-    initialValues: {
-      ...selectedRule,
-      // hack: pass service type ids as initial values. We should resolve these on FormRule instead
-      serviceTypeId: selectedRule?.serviceType?.id,
-      serviceCategoryId: selectedRule?.serviceCategory?.id,
+const FormRuleTable: React.FC<Props> = ({ formId, formRole, formCacheKey }) => {
+  const [deactivate, { loading, error }] = useDeactivateFormRuleMutation({
+    onCompleted: (data) => {
+      cache.evict({ id: `FormRule:${data.updateFormRule?.formRule.id}` });
+      cache.evict({
+        id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
+        fieldName: 'projectMatches',
+      });
     },
-    mutationDocument: UpdateFormRuleDocument,
-    localConstants: { formRole },
-    getErrors: (data) => data.updateFormRule?.errors || [],
-    getVariables: (values) => ({
-      input: { input: values as FormRuleInput, id: selectedRule?.id || '' },
-    }),
-    onCompleted: () => {
-      evictQuery('formDefinition', { id: formId });
-    },
-    onClose: () => setSelectedRule(undefined),
   });
+
+  if (error) throw error;
 
   return (
     <>
@@ -60,6 +44,7 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
         RowType
       >
         queryVariables={{ filters: { definition: formId } }}
+        defaultFilterValues={{ activeStatus: ActiveStatus.Active }}
         queryDocument={GetFormRulesDocument}
         columns={[]}
         pagePath='formRules'
@@ -73,17 +58,26 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole }) => {
             <TableCell sx={{ py: 1 }}>
               <FormRule
                 rule={rule}
-                setSelectedRule={setSelectedRule}
-                openFormDialog={openFormDialog}
+                formRole={formRole}
+                actionButtons={
+                  <ButtonTooltipContainer
+                    title={rule.system ? 'System rule cannot be removed' : ''}
+                  >
+                    <IconButton
+                      onClick={() => deactivate({ variables: { id: rule.id } })}
+                      size='small'
+                      sx={{ height: '28px' }}
+                      disabled={rule.system || loading}
+                    >
+                      <DeleteIcon fontSize='small' />
+                    </IconButton>
+                  </ButtonTooltipContainer>
+                }
               />
             </TableCell>
           </TableRow>
         )}
       />
-      {renderFormDialog({
-        title: 'Edit Rule',
-        DialogProps: { maxWidth: 'sm' },
-      })}
     </>
   );
 };

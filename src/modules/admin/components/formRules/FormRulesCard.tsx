@@ -1,44 +1,26 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import { Box, Button, Divider, Typography } from '@mui/material';
 
+import { useState } from 'react';
 import FormRuleTable from '../formRules/FormRuleTable';
 import TitleCard from '@/components/elements/TitleCard';
 import FormProjectMatchTable from '@/modules/admin/components/formRules/FormProjectMatchTable';
-import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
-import {
-  CreateFormRuleDocument,
-  CreateFormRuleMutation,
-  FormRole,
-  FormRuleInput,
-  MutationCreateFormRuleArgs,
-  StaticFormRole,
-  useGetFormProjectMatchesQuery,
-} from '@/types/gqlTypes';
-import { evictQuery } from '@/utils/cacheUtil';
+import NewFormRuleDialog from '@/modules/admin/components/formRules/NewFormRuleDialog';
+import { FormRole, useGetFormProjectMatchesQuery } from '@/types/gqlTypes';
 
 interface Props {
   formId: string;
   formTitle: string;
   formRole: FormRole;
+  formCacheKey: string;
 }
-const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
-  // Form dialog for adding new rules
-  const { openFormDialog, renderFormDialog } = useStaticFormDialog<
-    CreateFormRuleMutation,
-    MutationCreateFormRuleArgs
-  >({
-    formRole: StaticFormRole.FormRule,
-    mutationDocument: CreateFormRuleDocument,
-    localConstants: { formRole },
-    getErrors: (data) => data.createFormRule?.errors || [],
-    getVariables: (values) => ({
-      input: { input: values as FormRuleInput, definitionId: formId },
-    }),
-    onCompleted: () => {
-      evictQuery('formDefinition', { id: formId });
-      evictQuery('formRules');
-    },
-  });
+const FormRulesCard: React.FC<Props> = ({
+  formId,
+  formTitle,
+  formRole,
+  formCacheKey,
+}) => {
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   // Fetch here in order to display the total number of project matches outside of the table.
   // FormProjectMatchTable also requests this, but there is no easy way to get the data out of GenericTable
@@ -54,15 +36,13 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
         headerTypographyVariant='h5'
         headerComponent='h2'
         actions={
-          <Stack direction='row' gap={1}>
-            <Button
-              onClick={() => openFormDialog()}
-              startIcon={<AddIcon />}
-              variant='outlined'
-            >
-              New Rule
-            </Button>
-          </Stack>
+          <Button
+            onClick={() => setDialogOpen(true)}
+            startIcon={<AddIcon />}
+            variant='text'
+          >
+            New Rule
+          </Button>
         }
       >
         <Box sx={{ px: 2, pb: 2 }}>
@@ -74,7 +54,11 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
           </Typography>
         </Box>
         <Divider sx={{ borderWidth: 'inherit' }} />
-        <FormRuleTable formId={formId} formRole={formRole} />
+        <FormRuleTable
+          formId={formId}
+          formRole={formRole}
+          formCacheKey={formCacheKey}
+        />
         <Box padding={2}>
           <Typography variant='h6' component='h3' sx={{ pb: 1 }}>
             Projects
@@ -87,13 +71,14 @@ const FormRulesCard: React.FC<Props> = ({ formTitle, formId, formRole }) => {
         </Box>
         <FormProjectMatchTable formId={formId} />
       </TitleCard>
-      {renderFormDialog({
-        title: (
-          <span>
-            New rule for Form: <b>{formTitle}</b>
-          </span>
-        ),
-      })}
+      <NewFormRuleDialog
+        formId={formId}
+        formTitle={formTitle}
+        formRole={formRole}
+        formCacheKey={formCacheKey}
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+      />
     </>
   );
 };

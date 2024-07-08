@@ -161,6 +161,7 @@ const FormDefinitionDetailPage = () => {
           formId={formIdentifier.displayVersion.id}
           formTitle={formIdentifier.displayVersion.title}
           formRole={formIdentifier.displayVersion.role}
+          formCacheKey={formIdentifier.displayVersion.cacheKey}
         />
         <TitleCard
           title='Version History'

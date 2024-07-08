@@ -1,36 +1,35 @@
-import { IconButton, Stack, Chip, Typography } from '@mui/material';
-import React, { Dispatch, SetStateAction } from 'react';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { EditIcon } from '@/components/elements/SemanticIcons';
+import { Chip, Stack, Typography } from '@mui/material';
+import React, { ReactNode } from 'react';
 import { HmisEnums } from '@/types/gqlEnums';
-import { FormRuleFieldsFragment } from '@/types/gqlTypes';
+import { FormRole, FormRuleFieldsFragment } from '@/types/gqlTypes';
 
 const FormRuleChip: React.FC<{ label: string }> = ({ label }) => {
   // bottom margin puts the chip text in line with the body text
   return <Chip component='span' sx={{ mb: 0.25 }} size='small' label={label} />;
 };
 
+const nonClientFormRoles = [
+  FormRole.CeParticipation,
+  FormRole.Funder,
+  FormRole.HmisParticipation,
+  FormRole.Inventory,
+  FormRole.Organization,
+  FormRole.Project,
+  FormRole.ProjectCoc,
+  FormRole.ReferralRequest,
+];
+
+const nonProjectFormRoles = [FormRole.Organization];
+
 interface Props {
   rule: FormRuleFieldsFragment;
-  setSelectedRule: Dispatch<SetStateAction<FormRuleFieldsFragment | undefined>>;
-  openFormDialog: VoidFunction;
+  formRole: FormRole;
+  actionButtons: ReactNode;
 }
 
-const ActiveChip = ({ active }: { active: boolean }) => (
-  <Chip
-    label={active ? 'Active' : 'Inactive'}
-    size='small'
-    color={active ? 'success' : 'default'}
-    variant='outlined'
-    sx={{ width: 'fit-content' }}
-  />
-);
+const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
+  // TODO - This duplicates some functionality from ProjectApplicabilitySummary used in the Project config table.
 
-const FormRule: React.FC<Props> = ({
-  rule,
-  setSelectedRule,
-  openFormDialog,
-}) => {
   const {
     dataCollectedAbout,
     projectType,
@@ -38,82 +37,94 @@ const FormRule: React.FC<Props> = ({
     organization,
     funder,
     otherFunder,
-    active,
+    serviceCategory,
+    serviceType,
   } = rule;
 
-  const appliesTo = (
-    <FormRuleChip
-      label={
-        dataCollectedAbout
-          ? HmisEnums.DataCollectedAbout[dataCollectedAbout]
-          : 'All Clients'
-      }
-    />
-  );
+  const conditions: Record<string, ReactNode> = {};
 
-  const conditions = [];
-
-  if (projectType)
-    conditions.push(
-      <FormRuleChip
-        label={`Project Type is ${HmisEnums.ProjectType[projectType]}`}
-      />
-    );
-  if (project)
-    conditions.push(
-      <FormRuleChip label={`Project is ${project.projectName}`} />
-    );
-  if (organization)
-    conditions.push(
-      <FormRuleChip
-        label={`Organization is ${organization.organizationName}`}
-      />
-    );
-  if (otherFunder) {
-    conditions.push(
-      <FormRuleChip label={`Funding Source is ${otherFunder}`} />
-    );
-  } else if (funder) {
-    conditions.push(
-      <FormRuleChip
-        label={`Funding Source is ${HmisEnums.FundingSource[funder]}`}
-      />
-    );
+  if (!nonProjectFormRoles.includes(formRole)) {
+    if (projectType)
+      conditions.projectType = (
+        <FormRuleChip
+          label={`Project Type is ${HmisEnums.ProjectType[projectType]}`}
+        />
+      );
+    if (project)
+      conditions.project = (
+        <FormRuleChip label={`Project is ${project.projectName}`} />
+      );
+    if (organization)
+      conditions.organization = (
+        <FormRuleChip
+          label={`Organization is ${organization.organizationName}`}
+        />
+      );
+    if (otherFunder) {
+      conditions.otherFunder = (
+        <FormRuleChip label={`Funding Source is ${otherFunder}`} />
+      );
+    } else if (funder) {
+      conditions.funder = (
+        <FormRuleChip
+          label={`Funding Source is ${HmisEnums.FundingSource[funder]}`}
+        />
+      );
+    }
   }
+
+  const isServiceForm =
+    formRole === FormRole.Service && (serviceType || serviceCategory);
+
+  const isClientForm = !nonClientFormRoles.includes(formRole);
+
+  const conditionCount = Object.keys(conditions).length;
 
   return (
     <Stack direction='row' gap={2}>
       <Typography variant='body2' sx={{ flexGrow: 1 }}>
-        Applies to {appliesTo}
-        {conditions.length > 0 && (
+        {isServiceForm ? (
           <>
-            {' '}
-            if{' '}
-            {conditions.map((condition, i) => {
+            Collects{' '}
+            <FormRuleChip
+              label={serviceType?.name || serviceCategory?.name || 'Service'}
+            />{' '}
+            for{' '}
+          </>
+        ) : (
+          'Applies to '
+        )}
+        {isClientForm && (
+          <>
+            <FormRuleChip
+              label={
+                dataCollectedAbout
+                  ? HmisEnums.DataCollectedAbout[dataCollectedAbout]
+                  : HmisEnums.DataCollectedAbout.ALL_CLIENTS
+              }
+            />{' '}
+          </>
+        )}
+        {conditionCount === 0 && (
+          <>
+            in <FormRuleChip label='All Projects' />
+          </>
+        )}
+        {conditionCount > 0 && (
+          <>
+            {' if '}
+            {Object.entries(conditions).map(([key, condition], i) => {
               return (
-                <span key={condition.key}>
+                <span key={key}>
                   {condition}
-                  {i < conditions.length - 1 && ' and '}
+                  {i < conditionCount - 1 && ' and '}
                 </span>
               );
             })}
           </>
         )}
       </Typography>
-      <ActiveChip active={active} />
-      <ButtonTooltipContainer title={rule.system ? 'System rule' : undefined}>
-        <IconButton
-          aria-label='edit form rule'
-          disabled={rule.system}
-          onClick={() => {
-            setSelectedRule(rule);
-            openFormDialog();
-          }}
-          size='small'
-        >
-          <EditIcon fontSize='inherit' />
-        </IconButton>
-      </ButtonTooltipContainer>
+      {actionButtons}
     </Stack>
   );
 };
