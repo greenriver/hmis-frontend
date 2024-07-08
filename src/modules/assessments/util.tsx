@@ -27,13 +27,14 @@ export type AssessmentLocalConstants = {
   entryDate?: string;
   exitDate?: string;
   projectName?: string;
-  clientFirstName?: string;
-  clientMiddleInitial?: string;
-  clientLastName?: string;
+  clientName?: string;
   clientDob?: string;
   clientSsn?: string;
   clientAge?: number | null;
   clientRaceEthnicity?: string;
+  clientFirstName?: string; // backwards compatibility
+  clientMiddleInitial?: string; // backwards compatibility
+  clientLastName?: string; // backwards compatibility
 } & typeof AlwaysPresentLocalConstants;
 
 export const generateAssessmentPath = (

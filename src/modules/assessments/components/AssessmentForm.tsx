@@ -43,7 +43,11 @@ import {
   getItemMap,
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
-import { age, raceEthnicityDisplayString } from '@/modules/hmis/hmisUtil';
+import {
+  age,
+  clientNameAllParts,
+  raceEthnicityDisplayString,
+} from '@/modules/hmis/hmisUtil';
 import {
   AssessedClientFieldsFragment,
   EnrollmentFieldsFragment,
@@ -151,6 +155,7 @@ const AssessmentForm: React.FC<Props> = ({
       entryDate: enrollment.entryDate || undefined,
       exitDate: enrollment.exitDate || undefined,
       projectName: enrollment.project.projectName || undefined,
+      clientName: clientNameAllParts(client),
       clientFirstName: client.firstName || undefined,
       clientMiddleInitial: client.middleName ? client.middleName[0] : '',
       clientLastName: client.lastName || undefined,
