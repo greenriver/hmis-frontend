@@ -1,6 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, TableCell, TableRow } from '@mui/material';
 import React from 'react';
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import FormRule from '@/modules/admin/components/formRules/FormRule';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { cache } from '@/providers/apolloClient';
@@ -59,14 +60,18 @@ const FormRuleTable: React.FC<Props> = ({ formId, formRole, formCacheKey }) => {
                 rule={rule}
                 formRole={formRole}
                 actionButtons={
-                  <IconButton
-                    onClick={() => deactivate({ variables: { id: rule.id } })}
-                    size='small'
-                    sx={{ height: '28px' }}
-                    disabled={loading}
+                  <ButtonTooltipContainer
+                    title={rule.system ? 'System rule cannot be removed' : ''}
                   >
-                    <DeleteIcon fontSize='small' />
-                  </IconButton>
+                    <IconButton
+                      onClick={() => deactivate({ variables: { id: rule.id } })}
+                      size='small'
+                      sx={{ height: '28px' }}
+                      disabled={rule.system || loading}
+                    >
+                      <DeleteIcon fontSize='small' />
+                    </IconButton>
+                  </ButtonTooltipContainer>
                 }
               />
             </TableCell>

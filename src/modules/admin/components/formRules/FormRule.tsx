@@ -53,18 +53,6 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
 
   const conditions: Record<string, ReactNode> = {};
 
-  if (formRole === FormRole.Service) {
-    if (serviceType) {
-      conditions.serviceType = (
-        <FormRuleChip label={`Service is ${serviceType.name}`} />
-      );
-    } else if (serviceCategory) {
-      conditions.serviceCategory = (
-        <FormRuleChip label={`Service is ${serviceCategory.name}`} />
-      );
-    }
-  }
-
   if (!nonProjectFormRoles.includes(formRole)) {
     if (projectType)
       conditions.projectType = (
@@ -95,6 +83,16 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
     }
   }
 
+  const serviceCollected =
+    formRole === FormRole.Service && (serviceType || serviceCategory) ? (
+      <>
+        Collects{' '}
+        <FormRuleChip
+          label={serviceType?.name || serviceCategory?.name || 'Service'}
+        />
+      </>
+    ) : null;
+
   const nonClient = nonClientFormRoles.includes(formRole);
 
   const conditionCount = Object.keys(conditions).length;
@@ -102,12 +100,23 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
   return (
     <Stack direction='row' gap={2}>
       <Typography variant='body2' sx={{ flexGrow: 1 }}>
-        {!nonClient && <>Applies to {appliesTo}</>}
-        {nonClient && conditionCount === 0 && (
+        {serviceCollected}
+        {!nonClient && (
           <>
-            Applies to <FormRuleChip label='All Projects' />
+            {serviceCollected ? ' for' : 'Applies to'} {appliesTo}
           </>
         )}
+        {conditionCount === 0 &&
+          (nonClient ? (
+            <>
+              Applies to <FormRuleChip label='All Projects' />
+            </>
+          ) : (
+            <>
+              {' '}
+              in <FormRuleChip label='All Projects' />
+            </>
+          ))}
         {conditionCount > 0 && (
           <>
             {nonClient ? 'If ' : ' if '}
