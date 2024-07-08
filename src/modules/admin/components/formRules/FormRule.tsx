@@ -41,16 +41,6 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
     serviceType,
   } = rule;
 
-  const appliesTo = (
-    <FormRuleChip
-      label={
-        dataCollectedAbout
-          ? HmisEnums.DataCollectedAbout[dataCollectedAbout]
-          : 'All Clients'
-      }
-    />
-  );
-
   const conditions: Record<string, ReactNode> = {};
 
   if (!nonProjectFormRoles.includes(formRole)) {
@@ -83,43 +73,46 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
     }
   }
 
-  const serviceCollected =
-    formRole === FormRole.Service && (serviceType || serviceCategory) ? (
-      <>
-        Collects{' '}
-        <FormRuleChip
-          label={serviceType?.name || serviceCategory?.name || 'Service'}
-        />
-      </>
-    ) : null;
+  const isServiceForm =
+    formRole === FormRole.Service && (serviceType || serviceCategory);
 
-  const nonClient = nonClientFormRoles.includes(formRole);
+  const isClientForm = !nonClientFormRoles.includes(formRole);
 
   const conditionCount = Object.keys(conditions).length;
 
   return (
     <Stack direction='row' gap={2}>
       <Typography variant='body2' sx={{ flexGrow: 1 }}>
-        {serviceCollected}
-        {!nonClient && (
+        {isServiceForm ? (
           <>
-            {serviceCollected ? ' for' : 'Applies to'} {appliesTo}
+            Collects{' '}
+            <FormRuleChip
+              label={serviceType?.name || serviceCategory?.name || 'Service'}
+            />{' '}
+            for{' '}
+          </>
+        ) : (
+          'Applies to '
+        )}
+        {isClientForm && (
+          <>
+            <FormRuleChip
+              label={
+                dataCollectedAbout
+                  ? HmisEnums.DataCollectedAbout[dataCollectedAbout]
+                  : HmisEnums.DataCollectedAbout.ALL_CLIENTS
+              }
+            />{' '}
           </>
         )}
-        {conditionCount === 0 &&
-          (nonClient ? (
-            <>
-              Applies to <FormRuleChip label='All Projects' />
-            </>
-          ) : (
-            <>
-              {' '}
-              in <FormRuleChip label='All Projects' />
-            </>
-          ))}
+        {conditionCount === 0 && (
+          <>
+            in <FormRuleChip label='All Projects' />
+          </>
+        )}
         {conditionCount > 0 && (
           <>
-            {nonClient ? 'If ' : ' if '}
+            {' if '}
             {Object.entries(conditions).map(([key, condition], i) => {
               return (
                 <span key={key}>
