@@ -23,10 +23,13 @@ export const assessmentPrefix = (role: AssessmentRole) => {
   }
 };
 
+// Local Constants that can be referenced from HUD or Custom Assessments
 export type AssessmentLocalConstants = {
+  // Enrollment attributes
   entryDate?: string;
   exitDate?: string;
   projectName?: string;
+  // Client attributes from AssessedClientFieldsFragment
   clientName?: string;
   clientDob?: string;
   clientSsn?: string;
