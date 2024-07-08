@@ -49,6 +49,7 @@ import {
   NoYesReasonsForMissingData,
   OccurrencePointFormFieldsFragment,
   ProjectType,
+  Race,
   RelationshipToHoH,
   ServiceFieldsFragment,
   ServiceTypeFieldsFragment,
@@ -654,3 +655,9 @@ export function getCustomDataElementColumns<
     .sort()
     .map((key) => columnsByKey[key]);
 }
+
+export const raceEthnicityDisplayString = (race?: Race[]) => {
+  if (!race) return;
+
+  return race.map((r) => HmisEnums.Race[r]).join(', ');
+};

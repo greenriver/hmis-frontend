@@ -62,6 +62,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   noLabel = false,
   adjustValue = () => {},
   disabled = false,
+  localConstants,
 }) => {
   const label = noLabel ? null : getLabel(item, horizontal);
 
@@ -101,7 +102,14 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   }
   switch (item.type) {
     case ItemType.Display:
-      return <DynamicDisplay item={item} viewOnly value={value} />;
+      return (
+        <DynamicDisplay
+          item={item}
+          viewOnly
+          value={value}
+          localConstants={localConstants}
+        />
+      );
     case ItemType.Boolean:
       return (
         <TextContent

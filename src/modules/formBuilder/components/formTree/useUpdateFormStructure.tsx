@@ -82,7 +82,7 @@ export default function useUpdateFormStructure(
           if (prevItem.type === ItemType.Group) {
             // CASE 1: If the item above it is a group, we remove this item and
             // append it to the "sibling" group above it
-            console.log('case 1');
+            // console.log('case 1');
             const prevLinkId = prevItem.linkId;
             const prevItemPath = rhfPathMap[prevLinkId] + '.item';
 
@@ -106,13 +106,13 @@ export default function useUpdateFormStructure(
             );
           } else {
             // CASE 2: Swap this item with the (non-group) item above it
-            console.log('case 2');
+            // console.log('case 2');
             swap(thisIndex, thisIndex - 1);
           }
         } else if (hasParent) {
           // CASE 3: This item is the first item in its group, so we need to move it "out"
           // of its group and insert it into it's parent array.
-          console.log('case 3');
+          // console.log('case 3');
 
           reset(
             (oldForm) => {
@@ -141,7 +141,7 @@ export default function useUpdateFormStructure(
           if (nextItem.type === ItemType.Group) {
             // CASE 4: If the item below it is a group, we remove this item and
             // prepend it to the "sibling" group below it
-            console.log('case 4');
+            // console.log('case 4');
             const nextLinkId = nextItem.linkId;
             const nextItemPath = rhfPathMap[nextLinkId] + '.item';
 
@@ -165,13 +165,13 @@ export default function useUpdateFormStructure(
             );
           } else {
             // CASE 5: Swap this item with the (non-group) item below it
-            console.log('case 5');
+            // console.log('case 5');
             swap(thisIndex, thisIndex + 1);
           }
         } else {
           if (hasParent) {
             // CASE 6: This is the last item at this depth. Move into the parent layer
-            console.log('case 6', parentIndex);
+            // console.log('case 6', parentIndex);
 
             reset(
               (oldForm) => {

@@ -24,8 +24,8 @@ import { featureEnabledForEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardEnrollment } from '@/modules/hmis/types';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
-  ClientNameDobVetFragment,
   DataCollectionFeatureRole,
+  EnrolledClientFieldsFragment,
 } from '@/types/gqlTypes';
 
 const EnrollmentDashboard: React.FC = () => {
@@ -124,7 +124,7 @@ const EnrollmentDashboard: React.FC = () => {
 };
 
 export type EnrollmentDashboardContext = {
-  client: ClientNameDobVetFragment;
+  client: EnrolledClientFieldsFragment;
   enrollment?: DashboardEnrollment;
   enrollmentLoading?: boolean; // this would indicate a re-loading, not the initial load
   overrideBreadcrumbTitles: (crumbs: any) => void;

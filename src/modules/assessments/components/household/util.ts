@@ -1,6 +1,6 @@
 import {
+  AssessedClientFieldsFragment,
   AssessmentRole,
-  ClientNameDobVetFragment,
   FormRole,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
@@ -36,7 +36,7 @@ export function isHouseholdAssesmentRole(
 export type TabDefinition = {
   id: string;
   clientName: string;
-  client: ClientNameDobVetFragment;
+  client: AssessedClientFieldsFragment;
   clientId: string;
   enrollmentId: string;
   entryOrExitCompleted?: boolean;

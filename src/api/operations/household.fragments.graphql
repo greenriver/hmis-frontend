@@ -14,7 +14,7 @@ fragment HouseholdClientFields on HouseholdClient {
     id
     ...ClientName
     ...ClientIdentificationFields
-    veteranStatus
+    ...AssessedClientFields
     access {
       ...ClientAccessFields
     }

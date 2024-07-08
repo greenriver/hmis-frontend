@@ -79,6 +79,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   noLabel = false,
   warnIfEmpty = false,
   breakpoints,
+  localConstants,
 }) => {
   const { linkId } = item;
   const onChangeEvent = useCallback(
@@ -176,6 +177,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             width={width}
             item={item}
             value={value}
+            localConstants={localConstants}
           />
         </InputContainer>
       );

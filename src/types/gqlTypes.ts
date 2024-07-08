@@ -13884,7 +13884,6 @@ export type GetClientHouseholdMemberCandidatesQuery = {
             client: {
               __typename?: 'Client';
               id: string;
-              veteranStatus: NoYesReasonsForMissingData;
               lockVersion: number;
               firstName?: string | null;
               middleName?: string | null;
@@ -13894,6 +13893,8 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               age?: number | null;
               ssn?: string | null;
               gender: Array<Gender>;
+              race: Array<Race>;
+              veteranStatus: NoYesReasonsForMissingData;
               access: {
                 __typename?: 'ClientAccess';
                 id: string;
@@ -16423,6 +16424,107 @@ export type EnrollmentFieldsFragment = {
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
 
+export type AssessedClientFieldsFragment = {
+  __typename?: 'Client';
+  ssn?: string | null;
+  race: Array<Race>;
+  dob?: string | null;
+  veteranStatus: NoYesReasonsForMissingData;
+  id: string;
+  lockVersion: number;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+};
+
+export type EnrolledClientFieldsFragment = {
+  __typename?: 'Client';
+  hudChronic?: boolean | null;
+  ssn?: string | null;
+  race: Array<Race>;
+  dob?: string | null;
+  veteranStatus: NoYesReasonsForMissingData;
+  id: string;
+  lockVersion: number;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
+  access: {
+    __typename?: 'ClientAccess';
+    id: string;
+    canEditClient: boolean;
+    canDeleteClient: boolean;
+    canViewDob: boolean;
+    canViewFullSsn: boolean;
+    canViewPartialSsn: boolean;
+    canViewClientName: boolean;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+    canViewEnrollmentDetails: boolean;
+    canDeleteAssessments: boolean;
+    canManageAnyClientFiles: boolean;
+    canManageOwnClientFiles: boolean;
+    canViewAnyConfidentialClientFiles: boolean;
+    canViewAnyNonconfidentialClientFiles: boolean;
+    canUploadClientFiles: boolean;
+    canViewAnyFiles: boolean;
+    canAuditClients: boolean;
+    canManageScanCards: boolean;
+    canMergeClients: boolean;
+    canViewClientAlerts: boolean;
+    canManageClientAlerts: boolean;
+  };
+};
+
 export type AllEnrollmentDetailsFragment = {
   __typename?: 'Enrollment';
   numUnitsAssignedToHousehold: number;
@@ -16500,9 +16602,10 @@ export type AllEnrollmentDetailsFragment = {
   client: {
     __typename?: 'Client';
     hudChronic?: boolean | null;
-    ssn?: string | null;
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
+    ssn?: string | null;
+    race: Array<Race>;
     id: string;
     lockVersion: number;
     firstName?: string | null;
@@ -17591,9 +17694,10 @@ export type GetEnrollmentDetailsQuery = {
     client: {
       __typename?: 'Client';
       hudChronic?: boolean | null;
-      ssn?: string | null;
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
+      ssn?: string | null;
+      race: Array<Race>;
       id: string;
       lockVersion: number;
       firstName?: string | null;
@@ -18269,7 +18373,6 @@ export type GetEnrollmentWithHouseholdQuery = {
         client: {
           __typename?: 'Client';
           id: string;
-          veteranStatus: NoYesReasonsForMissingData;
           lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
@@ -18279,6 +18382,8 @@ export type GetEnrollmentWithHouseholdQuery = {
           age?: number | null;
           ssn?: string | null;
           gender: Array<Gender>;
+          race: Array<Race>;
+          veteranStatus: NoYesReasonsForMissingData;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -27264,7 +27369,6 @@ export type HouseholdFieldsFragment = {
     client: {
       __typename?: 'Client';
       id: string;
-      veteranStatus: NoYesReasonsForMissingData;
       lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
@@ -27274,6 +27378,8 @@ export type HouseholdFieldsFragment = {
       age?: number | null;
       ssn?: string | null;
       gender: Array<Gender>;
+      race: Array<Race>;
+      veteranStatus: NoYesReasonsForMissingData;
       access: {
         __typename?: 'ClientAccess';
         id: string;
@@ -27342,7 +27448,6 @@ export type HouseholdClientFieldsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
-    veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
@@ -27352,6 +27457,8 @@ export type HouseholdClientFieldsFragment = {
     age?: number | null;
     ssn?: string | null;
     gender: Array<Gender>;
+    race: Array<Race>;
+    veteranStatus: NoYesReasonsForMissingData;
     access: {
       __typename?: 'ClientAccess';
       id: string;
@@ -27504,7 +27611,6 @@ export type GetHouseholdQuery = {
       client: {
         __typename?: 'Client';
         id: string;
-        veteranStatus: NoYesReasonsForMissingData;
         lockVersion: number;
         firstName?: string | null;
         middleName?: string | null;
@@ -27514,6 +27620,8 @@ export type GetHouseholdQuery = {
         age?: number | null;
         ssn?: string | null;
         gender: Array<Gender>;
+        race: Array<Race>;
+        veteranStatus: NoYesReasonsForMissingData;
         access: {
           __typename?: 'ClientAccess';
           id: string;
@@ -33315,6 +33423,29 @@ export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
   }
   ${ClientAddressFieldsFragmentDoc}
 `;
+export const AssessedClientFieldsFragmentDoc = gql`
+  fragment AssessedClientFields on Client {
+    ...ClientNameDobVet
+    ssn
+    race
+  }
+  ${ClientNameDobVetFragmentDoc}
+`;
+export const EnrolledClientFieldsFragmentDoc = gql`
+  fragment EnrolledClientFields on Client {
+    ...AssessedClientFields
+    hudChronic
+    customDataElements {
+      ...CustomDataElementFields
+    }
+    access {
+      ...ClientAccessFields
+    }
+  }
+  ${AssessedClientFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
+`;
 export const EnrollmentSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentSummaryFields on EnrollmentSummary {
     id
@@ -33520,15 +33651,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       ...CustomDataElementFields
     }
     client {
-      hudChronic
-      ...ClientNameDobVet
-      ssn
-      customDataElements {
-        ...CustomDataElementFields
-      }
-      access {
-        ...ClientAccessFields
-      }
+      ...EnrolledClientFields
     }
     openEnrollmentSummary {
       ...EnrollmentSummaryFields
@@ -33556,8 +33679,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   ${EnrollmentFieldsFragmentDoc}
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-  ${ClientNameDobVetFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
+  ${EnrolledClientFieldsFragmentDoc}
   ${EnrollmentSummaryFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectCocCountFragmentDoc}
@@ -33677,7 +33799,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       id
       ...ClientName
       ...ClientIdentificationFields
-      veteranStatus
+      ...AssessedClientFields
       access {
         ...ClientAccessFields
       }
@@ -33701,6 +33823,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
+  ${AssessedClientFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${ClientAlertFieldsFragmentDoc}

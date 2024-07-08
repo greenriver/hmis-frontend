@@ -98,6 +98,7 @@ const HouseholdAssessments: React.FC<Props> = ({
 
   const hasInflights = Object.values(formStates).some(({ saving }) => saving);
 
+  // Note: this query fetches more data than is probably necessary per client (for example it fetches alerts on all clients, and assigned units). This could be improved by using a query that only fetches the necessary data.
   const [householdMembers, fetchMembersStatus] = useHouseholdMembers(
     enrollment.id
   );

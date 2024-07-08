@@ -10,6 +10,7 @@ import {
   useState,
 } from 'react';
 
+import { AssessmentLocalConstants } from '../util';
 import AssessmentAlert from './alerts/AssessmentAlert';
 
 import FormContainer from '@/components/layout/FormContainer';
@@ -24,7 +25,7 @@ import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
-import { ClientNameDobSsn } from '@/modules/assessments/components/IndividualAssessment';
+
 import { ErrorState, hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
@@ -42,7 +43,9 @@ import {
   getItemMap,
   initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
+import { age, raceEthnicityDisplayString } from '@/modules/hmis/hmisUtil';
 import {
+  AssessedClientFieldsFragment,
   EnrollmentFieldsFragment,
   FormDefinitionFieldsFragment,
   FormRole,
@@ -52,7 +55,7 @@ import {
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
-  client: ClientNameDobSsn;
+  client: AssessedClientFieldsFragment;
   formRole?: FormRole;
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
@@ -143,16 +146,18 @@ const AssessmentForm: React.FC<Props> = ({
   );
 
   // Local values that may be referenced by the FormDefinition
-  const localConstants = useMemo(
+  const localConstants: AssessmentLocalConstants = useMemo(
     () => ({
-      entryDate: enrollment.entryDate,
-      exitDate: enrollment.exitDate,
-      projectName: enrollment.project.projectName,
-      clientFirstName: client.firstName,
+      entryDate: enrollment.entryDate || undefined,
+      exitDate: enrollment.exitDate || undefined,
+      projectName: enrollment.project.projectName || undefined,
+      clientFirstName: client.firstName || undefined,
       clientMiddleInitial: client.middleName ? client.middleName[0] : '',
-      clientLastName: client.lastName,
-      clientDob: client.dob,
-      clientSsn: client.ssn,
+      clientLastName: client.lastName || undefined,
+      clientDob: client.dob || undefined,
+      clientSsn: client.ssn || undefined,
+      clientAge: age(client),
+      clientRaceEthnicity: raceEthnicityDisplayString(client.race),
       ...AlwaysPresentLocalConstants,
     }),
     [enrollment, client]
@@ -338,6 +343,7 @@ const AssessmentForm: React.FC<Props> = ({
               values={initialValuesFromAssessment(itemMap, assessment)}
               definition={definition.definition}
               pickListArgs={pickListArgs}
+              localConstants={localConstants}
             />
           </FormContainer>
         ) : (

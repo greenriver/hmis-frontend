@@ -2,6 +2,7 @@ import { Alert, AlertColor } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
 
+import { LocalConstants } from '../types';
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { evaluateTemplate } from '@/modules/form/util/expressions/template';
 import { Component, FormItem } from '@/types/gqlTypes';
@@ -12,6 +13,7 @@ interface Props {
   width?: number;
   viewOnly?: boolean;
   value: any;
+  localConstants?: LocalConstants;
 }
 
 const SeverityMap: Record<string, AlertColor> = {
@@ -25,6 +27,7 @@ const DynamicDisplay: React.FC<Props> = ({
   item,
   width,
   maxWidth,
+  localConstants,
   value = 'N/A',
   viewOnly = false,
 }) => {
@@ -32,8 +35,12 @@ const DynamicDisplay: React.FC<Props> = ({
     let displayValue = item.text;
     if (viewOnly && !isNil(item.readonlyText)) displayValue = item.readonlyText;
     if (isNil(displayValue)) return undefined;
-    return evaluateTemplate(displayValue, new Map([['value', value]]));
-  }, [item, viewOnly, value]);
+    // pass local constants to eval context
+    return evaluateTemplate(
+      displayValue,
+      new Map([['value', value], ...Object.entries(localConstants || {})])
+    );
+  }, [item.text, item.readonlyText, viewOnly, value, localConstants]);
 
   if (!html) return null;
 

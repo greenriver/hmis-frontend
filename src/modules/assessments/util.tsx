@@ -1,3 +1,4 @@
+import { AlwaysPresentLocalConstants } from '../form/util/formUtil';
 import { ClientAssessmentType } from '@/components/clientDashboard/enrollments/ClientAssessments';
 import { ColumnDef } from '@/components/elements/table/types';
 import { HhmAssessmentType } from '@/modules/enrollment/components/HouseholdAssessmentsTable';
@@ -21,6 +22,19 @@ export const assessmentPrefix = (role: AssessmentRole) => {
       return 'Assessment for';
   }
 };
+
+export type AssessmentLocalConstants = {
+  entryDate?: string;
+  exitDate?: string;
+  projectName?: string;
+  clientFirstName?: string;
+  clientMiddleInitial?: string;
+  clientLastName?: string;
+  clientDob?: string;
+  clientSsn?: string;
+  clientAge?: number | null;
+  clientRaceEthnicity?: string;
+} & typeof AlwaysPresentLocalConstants;
 
 export const generateAssessmentPath = (
   assessment: AssessmentFieldsFragment,
