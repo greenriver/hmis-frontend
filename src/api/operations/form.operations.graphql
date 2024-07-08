@@ -58,3 +58,16 @@ mutation PublishFormDefinition($id: ID!) {
     }
   }
 }
+
+# used for creating an entirely new form (form submission of static form)
+mutation DeleteFormDefinitionDraft($id: ID!) {
+  deleteFormDefinition(id: $id) {
+    formDefinition {
+      id
+      cacheKey
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

@@ -5382,6 +5382,7 @@ export type ProjectHouseholdsArgs = {
 };
 
 export type ProjectIncomingReferralPostingsArgs = {
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5393,6 +5394,7 @@ export type ProjectInventoriesArgs = {
 };
 
 export type ProjectOutgoingReferralPostingsArgs = {
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5707,6 +5709,7 @@ export type QueryClientSearchArgs = {
 };
 
 export type QueryDeniedPendingReferralPostingsArgs = {
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -6168,6 +6171,10 @@ export enum ReferralPostingDenialReasonType {
   /** No longer interested in this program */
   NoLongerInterestedInThisProgram = 'NoLongerInterestedInThisProgram',
 }
+
+export type ReferralPostingFilterOptions = {
+  status?: InputMaybe<Array<ReferralPostingStatus>>;
+};
 
 export type ReferralPostingInput = {
   denialNote?: InputMaybe<Scalars['String']['input']>;
@@ -22691,6 +22698,36 @@ export type PublishFormDefinitionMutation = {
   } | null;
 };
 
+export type DeleteFormDefinitionDraftMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeleteFormDefinitionDraftMutation = {
+  __typename?: 'Mutation';
+  deleteFormDefinition?: {
+    __typename?: 'DeleteFormDefinitionPayload';
+    formDefinition?: {
+      __typename?: 'FormDefinition';
+      id: string;
+      cacheKey: string;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
 export type GetPickListQueryVariables = Exact<{
   pickListType: PickListType;
   projectId?: InputMaybe<Scalars['ID']['input']>;
@@ -29662,6 +29699,7 @@ export type GetProjectReferralPostingsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
 }>;
 
 export type GetProjectReferralPostingsQuery = {
@@ -29709,6 +29747,7 @@ export type GetProjectOutgoingReferralPostingsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
 }>;
 
 export type GetProjectOutgoingReferralPostingsQuery = {
@@ -30606,6 +30645,7 @@ export type UpdateReferralPostingMutation = {
 export type GetDeniedPendingReferralPostingsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  filters?: InputMaybe<ReferralPostingFilterOptions>;
 }>;
 
 export type GetDeniedPendingReferralPostingsQuery = {
@@ -39495,6 +39535,64 @@ export type PublishFormDefinitionMutationOptions = Apollo.BaseMutationOptions<
   PublishFormDefinitionMutation,
   PublishFormDefinitionMutationVariables
 >;
+export const DeleteFormDefinitionDraftDocument = gql`
+  mutation DeleteFormDefinitionDraft($id: ID!) {
+    deleteFormDefinition(id: $id) {
+      formDefinition {
+        id
+        cacheKey
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteFormDefinitionDraftMutationFn = Apollo.MutationFunction<
+  DeleteFormDefinitionDraftMutation,
+  DeleteFormDefinitionDraftMutationVariables
+>;
+
+/**
+ * __useDeleteFormDefinitionDraftMutation__
+ *
+ * To run a mutation, you first call `useDeleteFormDefinitionDraftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFormDefinitionDraftMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFormDefinitionDraftMutation, { data, loading, error }] = useDeleteFormDefinitionDraftMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteFormDefinitionDraftMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteFormDefinitionDraftMutation,
+    DeleteFormDefinitionDraftMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteFormDefinitionDraftMutation,
+    DeleteFormDefinitionDraftMutationVariables
+  >(DeleteFormDefinitionDraftDocument, options);
+}
+export type DeleteFormDefinitionDraftMutationHookResult = ReturnType<
+  typeof useDeleteFormDefinitionDraftMutation
+>;
+export type DeleteFormDefinitionDraftMutationResult =
+  Apollo.MutationResult<DeleteFormDefinitionDraftMutation>;
+export type DeleteFormDefinitionDraftMutationOptions =
+  Apollo.BaseMutationOptions<
+    DeleteFormDefinitionDraftMutation,
+    DeleteFormDefinitionDraftMutationVariables
+  >;
 export const GetPickListDocument = gql`
   query GetPickList(
     $pickListType: PickListType!
@@ -42045,10 +42143,15 @@ export const GetProjectReferralPostingsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
+    $filters: ReferralPostingFilterOptions
   ) {
     project(id: $id) {
       id
-      incomingReferralPostings(limit: $limit, offset: $offset) {
+      incomingReferralPostings(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -42076,6 +42179,7 @@ export const GetProjectReferralPostingsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -42118,10 +42222,15 @@ export const GetProjectOutgoingReferralPostingsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
+    $filters: ReferralPostingFilterOptions
   ) {
     project(id: $id) {
       id
-      outgoingReferralPostings(limit: $limit, offset: $offset) {
+      outgoingReferralPostings(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -42155,6 +42264,7 @@ export const GetProjectOutgoingReferralPostingsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -43170,8 +43280,16 @@ export type UpdateReferralPostingMutationOptions = Apollo.BaseMutationOptions<
   UpdateReferralPostingMutationVariables
 >;
 export const GetDeniedPendingReferralPostingsDocument = gql`
-  query GetDeniedPendingReferralPostings($limit: Int = 10, $offset: Int = 0) {
-    deniedPendingReferralPostings(limit: $limit, offset: $offset) {
+  query GetDeniedPendingReferralPostings(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ReferralPostingFilterOptions
+  ) {
+    deniedPendingReferralPostings(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+    ) {
       offset
       limit
       nodesCount
@@ -43197,6 +43315,7 @@ export const GetDeniedPendingReferralPostingsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

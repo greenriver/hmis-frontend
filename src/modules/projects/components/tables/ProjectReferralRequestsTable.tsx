@@ -111,6 +111,7 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
       columns={columns}
       noData='No referral requests'
       pagePath='project.referralRequests'
+      paginationItemName='referral request'
     />
   );
 };

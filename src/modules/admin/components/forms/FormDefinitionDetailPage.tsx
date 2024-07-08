@@ -10,6 +10,7 @@ import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditFormButton, {
   FormEditorType,
@@ -65,13 +66,17 @@ const FormDefinitionDetailPage = () => {
     identifier: string;
   };
 
-  const { data: { formIdentifier } = {}, error } =
-    useGetFormIdentifierDetailsQuery({
-      variables: { identifier },
-    });
+  const {
+    data: { formIdentifier } = {},
+    error,
+    loading,
+  } = useGetFormIdentifierDetailsQuery({
+    variables: { identifier },
+  });
 
   if (error) throw error;
-  if (!formIdentifier) return <Loading />;
+  if (!formIdentifier && loading) return <Loading />;
+  if (!formIdentifier) return <NotFound />;
 
   const isPublished =
     formIdentifier.displayVersion.status === FormStatus.Published;
@@ -79,11 +84,11 @@ const FormDefinitionDetailPage = () => {
 
   return (
     <>
+      <PageTitle
+        overlineText='Selected Form'
+        title={formIdentifier.displayVersion.title}
+      />
       <Stack gap={2}>
-        <PageTitle
-          overlineText='Selected Form'
-          title={formIdentifier.displayVersion.title}
-        />
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             <CommonCard title='Details'>

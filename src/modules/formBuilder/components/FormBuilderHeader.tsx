@@ -1,10 +1,19 @@
-import { Button, IconButton, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
-import React from 'react';
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { DeleteIcon, EditIcon } from '@/components/elements/SemanticIcons';
+import React, { useCallback } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
+
+import EditIconButton from '@/components/elements/EditIconButton';
+import PageTitle from '@/components/layout/PageTitle';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
+
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
+import { cache } from '@/providers/apolloClient';
+import { AdminDashboardRoutes } from '@/routes/routes';
 import {
+  DeleteFormDefinitionDraftDocument,
+  DeleteFormDefinitionDraftMutation,
+  DeleteFormDefinitionDraftMutationVariables,
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionInput,
   MutationUpdateFormDefinitionArgs,
@@ -22,6 +31,8 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
   formDefinition,
   onClickPreview,
 }) => {
+  const navigate = useNavigate();
+
   // Dialog for updating form definitions
   const { openFormDialog: openEditDialog, renderFormDialog: renderEditDialog } =
     useStaticFormDialog<
@@ -39,6 +50,16 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
       }),
     });
 
+  const onSuccessfulDelete = useCallback(() => {
+    // evict identifier so status updates
+    cache.evict({ id: `FormIdentifier:${formDefinition.identifier}` });
+    navigate(
+      generatePath(AdminDashboardRoutes.VIEW_FORM, {
+        identifier: formDefinition.identifier,
+      })
+    );
+  }, [navigate, formDefinition.identifier]);
+
   return (
     <>
       {renderEditDialog({ title: 'Edit Form Details' })}
@@ -48,22 +69,17 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
         justifyContent='space-between'
         alignItems='end'
       >
-        <Typography sx={{ mb: 2 }} variant='h2' component='h1'>
-          <Typography variant='overline' color='links' display='block'>
-            Editing Draft
-          </Typography>
-          {formDefinition.title}
-          <ButtonTooltipContainer title='Edit Title'>
-            <IconButton
-              aria-label='edit title'
+        <PageTitle
+          title={formDefinition.title}
+          overlineText='Editing Draft'
+          endElement={
+            <EditIconButton
+              title='Edit Title'
               onClick={openEditDialog}
-              size='small'
-              sx={{ color: (theme) => theme.palette.links, ml: 2, mb: 0.5 }}
-            >
-              <EditIcon fontSize='small' />
-            </IconButton>
-          </ButtonTooltipContainer>
-        </Typography>
+              sx={{ ml: 1, mb: 0.5 }}
+            />
+          }
+        />
 
         <Stack direction='row' spacing={4} alignItems='center'>
           <Button
@@ -73,12 +89,17 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
           >
             Preview / Publish
           </Button>
-          <ButtonTooltipContainer title='Delete Draft'>
-            {/* TODO implement delete */}
-            <IconButton aria-label='delete draft' size='small'>
-              <DeleteIcon />
-            </IconButton>
-          </ButtonTooltipContainer>
+          <DeleteMutationButton<
+            DeleteFormDefinitionDraftMutation,
+            DeleteFormDefinitionDraftMutationVariables
+          >
+            queryDocument={DeleteFormDefinitionDraftDocument}
+            variables={{ id: formDefinition.id }}
+            idPath='deleteFormDefinition.formDefinition.id'
+            recordName='draft'
+            onSuccess={onSuccessfulDelete}
+            onlyIcon
+          ></DeleteMutationButton>
         </Stack>
       </Stack>
     </>

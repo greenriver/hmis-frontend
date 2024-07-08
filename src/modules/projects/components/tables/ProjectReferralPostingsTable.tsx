@@ -7,12 +7,14 @@ import {
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
+import { useReferralFilter } from '@/modules/referrals/components/useReferralFilter';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectReferralPostingsDocument,
   GetProjectReferralPostingsQuery,
   GetProjectReferralPostingsQueryVariables,
   ReferralPostingFieldsFragment,
+  ReferralPostingStatus,
 } from '@/types/gqlTypes';
 import { generateSafePath } from '@/utils/pathEncoding';
 
@@ -83,6 +85,12 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
     return cols;
   }, [externalReferrals]);
 
+  const referralFilter = useReferralFilter([
+    ReferralPostingStatus.AssignedStatus,
+    ReferralPostingStatus.AcceptedPendingStatus,
+    ReferralPostingStatus.AcceptedStatus,
+  ]);
+
   return (
     <GenericTableWithData<
       GetProjectReferralPostingsQuery,
@@ -95,7 +103,15 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({
       noData='No referrals'
       pagePath='project.incomingReferralPostings'
       rowLinkTo={rowLinkTo}
-      defaultPageSize={25}
+      defaultPageSize={10}
+      filters={{ status: referralFilter }}
+      defaultFilterValues={{
+        status: [
+          ReferralPostingStatus.AssignedStatus,
+          ReferralPostingStatus.AcceptedPendingStatus,
+        ],
+      }}
+      paginationItemName='incoming referral'
     />
   );
 };

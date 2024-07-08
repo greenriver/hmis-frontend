@@ -6,10 +6,12 @@ const PageTitle = ({
   title,
   overlineText,
   actions,
+  endElement,
 }: {
   title: ReactNode;
   overlineText?: string;
-  actions?: ReactNode;
+  endElement?: ReactNode; // element to appear directly to the right of the title
+  actions?: ReactNode; // element to float to the right (e.g. action button)
 }) => {
   const isTiny = useIsMobile('sm');
 
@@ -22,8 +24,8 @@ const PageTitle = ({
       sx={{
         mb: isTiny ? 1 : 3,
         alignItems: isTiny ? 'left' : 'center',
-        // fixed height (if not mobile), so height is the same whether there are actions or not
-        height: isTiny ? '' : '40px',
+        // fixed min height (if not mobile), so height is the same whether there are actions or not
+        minHeight: isTiny ? '' : '40px',
       }}
     >
       {typeof title === 'string' ? (
@@ -34,9 +36,13 @@ const PageTitle = ({
             </Typography>
           ) : null}
           {title}
+          {endElement}
         </Typography>
       ) : (
-        title
+        <>
+          {title}
+          {endElement}
+        </>
       )}
       {actions}
     </Stack>

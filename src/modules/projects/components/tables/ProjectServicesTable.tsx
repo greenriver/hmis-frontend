@@ -33,22 +33,14 @@ const ProjectServicesTable = ({
         header: 'First Name',
         linkTreatment: true,
         render: (s: ServiceFields) => (
-          <ClientName
-            client={s.enrollment.client}
-            linkToEnrollmentId={s.enrollment.id}
-            nameParts='first_only'
-          />
+          <ClientName client={s.enrollment.client} nameParts='first_only' />
         ),
       },
       {
         header: 'Last Name',
         linkTreatment: true,
         render: (s: ServiceFields) => (
-          <ClientName
-            client={s.enrollment.client}
-            linkToEnrollmentId={s.enrollment.id}
-            nameParts='last_only'
-          />
+          <ClientName client={s.enrollment.client} nameParts='last_only' />
         ),
       },
       { ...SERVICE_BASIC_COLUMNS.dateProvided, linkTreatment: false },
