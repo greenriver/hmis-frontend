@@ -19,6 +19,21 @@ query GetFormRules(
   }
 }
 
+query GetFormProjectMatches($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+  formDefinition(id: $id) {
+    id
+    cacheKey
+    projectMatches(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FormProjectMatchFields
+      }
+    }
+  }
+}
+
 query GetServiceCategoryRules(
   $id: ID!
   $limit: Int = 25

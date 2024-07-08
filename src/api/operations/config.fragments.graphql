@@ -31,6 +31,13 @@ fragment FormRuleFields on FormRule {
   }
 }
 
+fragment FormProjectMatchFields on FormProjectMatch {
+  id
+  projectName
+  organizationName
+  dataCollectedAbout
+}
+
 fragment ServiceTypeConfigFields on ServiceType {
   ...ServiceTypeFields
   formDefinitions {

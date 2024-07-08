@@ -3,7 +3,7 @@ import { Box, Stack, Theme } from '@mui/system';
 import { TreeItem2Label, UseTreeItem2Parameters } from '@mui/x-tree-view';
 import { useTreeItem2 } from '@mui/x-tree-view/useTreeItem2/useTreeItem2';
 import { UseTreeItem2LabelSlotProps } from '@mui/x-tree-view/useTreeItem2/useTreeItem2.types';
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
 import { FormTreeContext } from './FormTreeContext';
 import useUpdateFormStructure from './useUpdateFormStructure';
@@ -44,6 +44,8 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
     rhfPathMap,
     ancestorLinkIdMap,
     expandItem,
+    focusedTreeButton,
+    setFocusedTreeButton,
   } = useContext(FormTreeContext);
 
   const { control } = useFormContext();
@@ -66,6 +68,19 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   );
 
   const labelProps = getLabelProps();
+
+  const upRef = useRef<HTMLButtonElement | null>(null);
+  const downRef = useRef<HTMLButtonElement | null>(null);
+
+  // When the user reorders form items, we want to maintain focus on the up/down button in question. But, since some
+  // form reorder actions use rhf's `reset` on the whole structure, this refocus lives here in this useEffect.
+  useEffect(() => {
+    if (focusedTreeButton === `${itemId}-up`) {
+      upRef.current?.focus();
+    } else if (focusedTreeButton === `${itemId}-down`) {
+      downRef.current?.focus();
+    }
+  }, [itemId, upRef, downRef, focusedTreeButton]);
 
   const { onReorder, onDelete, canMoveUp, canMoveDown } =
     useUpdateFormStructure(
@@ -192,8 +207,10 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   onReorder('up');
+                  setFocusedTreeButton(`${itemId}-up`);
                 }}
                 disabled={isSubmitting || !canMoveUp}
+                ref={upRef}
               >
                 <UpIcon />
               </IconButton>
@@ -202,8 +219,10 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   onReorder('down');
+                  setFocusedTreeButton(`${itemId}-down`);
                 }}
                 disabled={isSubmitting || !canMoveDown}
+                ref={downRef}
               >
                 <DownIcon />
               </IconButton>

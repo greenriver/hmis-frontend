@@ -16,6 +16,8 @@ import {
 import { ItemDependents } from '@/modules/formBuilder/types';
 import { FormDefinitionJson, FormItem, ItemType } from '@/types/gqlTypes';
 
+const MAX_NESTING_DEPTH = 5;
+
 export default function useUpdateFormStructure(
   control: Control,
   itemId: string,
@@ -33,8 +35,11 @@ export default function useUpdateFormStructure(
   // grandParentArrayPath:  item        (parentIndex=3)
 
   const itemPath = rhfPathMap[itemId];
-  const { parentPath: parentArrayPath, index: thisIndex } =
-    getPathContext(itemPath);
+  const {
+    parentPath: parentArrayPath,
+    index: thisIndex,
+    nestingDepth,
+  } = getPathContext(itemPath);
   const parentItemId = parentArrayPath.replace(/\.item$/, '');
   const { parentPath: grandParentArrayPath, index: parentIndex } =
     getPathContext(parentItemId);
@@ -73,16 +78,23 @@ export default function useUpdateFormStructure(
     [itemId, thisIndex, remove, itemMap]
   );
 
+  // This restriction prevents nesting a Group beyond MAX_NESTING_DEPTH - 1.
+  // This way regular (non-group) items can't ever be nested beyond MAX_NESTING_DEPTH.
+  const isMaxDepth = useMemo(
+    () =>
+      item.type === ItemType.Group && nestingDepth === MAX_NESTING_DEPTH - 1,
+    [item.type, nestingDepth]
+  );
+
   const onReorder = useCallback(
     (direction: 'up' | 'down') => {
       if (direction === 'up') {
         // If index > 0, we can move this item up within its existing "layer"
         if (thisIndex > 0) {
           const prevItem = thisLayer[thisIndex - 1]; // sibling above current item
-          if (prevItem.type === ItemType.Group) {
+          if (prevItem.type === ItemType.Group && !isMaxDepth) {
             // CASE 1: If the item above it is a group, we remove this item and
-            // append it to the "sibling" group above it
-            // console.log('case 1');
+            // append it to the "sibling" group above it, as long as we haven't reached max depth
             const prevLinkId = prevItem.linkId;
             const prevItemPath = rhfPathMap[prevLinkId] + '.item';
 
@@ -105,14 +117,12 @@ export default function useUpdateFormStructure(
               { keepDefaultValues: true }
             );
           } else {
-            // CASE 2: Swap this item with the (non-group) item above it
-            // console.log('case 2');
+            // CASE 2: Swap this item with the item above it
             swap(thisIndex, thisIndex - 1);
           }
         } else if (hasParent) {
           // CASE 3: This item is the first item in its group, so we need to move it "out"
-          // of its group and insert it into it's parent array.
-          // console.log('case 3');
+          // of its group and insert it into its parent array.
 
           reset(
             (oldForm) => {
@@ -132,16 +142,15 @@ export default function useUpdateFormStructure(
             { keepDefaultValues: true }
           );
 
-          // else, this is the first item in the top layer, so hitting the 'up' button does nothing.
+          // else, this is the first item in the top layer, so no action can be taken
         }
       } else if (direction === 'down') {
         const nextItem = thisLayer[thisIndex + 1]; // sibling below current item
 
         if (nextItem) {
-          if (nextItem.type === ItemType.Group) {
+          if (nextItem.type === ItemType.Group && !isMaxDepth) {
             // CASE 4: If the item below it is a group, we remove this item and
-            // prepend it to the "sibling" group below it
-            // console.log('case 4');
+            // prepend it to the "sibling" group below it, as long as we haven't reached max depth
             const nextLinkId = nextItem.linkId;
             const nextItemPath = rhfPathMap[nextLinkId] + '.item';
 
@@ -164,14 +173,12 @@ export default function useUpdateFormStructure(
               { keepDefaultValues: true }
             );
           } else {
-            // CASE 5: Swap this item with the (non-group) item below it
-            // console.log('case 5');
+            // CASE 5: Swap this item with the item below it
             swap(thisIndex, thisIndex + 1);
           }
         } else {
           if (hasParent) {
             // CASE 6: This is the last item at this depth. Move into the parent layer
-            // console.log('case 6', parentIndex);
 
             reset(
               (oldForm) => {
@@ -190,7 +197,7 @@ export default function useUpdateFormStructure(
               },
               { keepDefaultValues: true }
             );
-          } // else, this is the last item in the top layer, so hitting the 'down' button does nothing.
+          } // else, this is the last item in the top layer, so no action can be taken
         }
       }
     },
@@ -206,6 +213,7 @@ export default function useUpdateFormStructure(
       swap,
       grandParentArrayPath,
       parentIndex,
+      isMaxDepth,
     ]
   );
 
