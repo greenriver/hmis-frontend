@@ -5642,6 +5642,7 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
+  canProjectAcceptReferral: Scalars['Boolean']['output'];
   /** Client lookup */
   client?: Maybe<Client>;
   /** Custom forms for collecting and/or displaying custom details for a Client (outside of the Client demographics form) */
@@ -5716,6 +5717,11 @@ export type QueryAssessmentFormDefinitionArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   projectId: Scalars['ID']['input'];
   role?: InputMaybe<AssessmentRole>;
+};
+
+export type QueryCanProjectAcceptReferralArgs = {
+  projectId: Scalars['ID']['input'];
+  referrerEnrollmentId: Scalars['ID']['input'];
 };
 
 export type QueryClientArgs = {
@@ -30480,172 +30486,6 @@ export type VoidReferralRequestMutation = {
   } | null;
 };
 
-export type GetReferralPostingQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type GetReferralPostingQuery = {
-  __typename?: 'Query';
-  referralPosting?: {
-    __typename?: 'ReferralPosting';
-    id: string;
-    assignedDate: string;
-    chronic?: boolean | null;
-    hudChronic?: boolean | null;
-    denialNote?: string | null;
-    denialReason?: ReferralPostingDenialReasonType | null;
-    needsWheelchairAccessibleUnit?: boolean | null;
-    postingIdentifier?: string | null;
-    referralDate: string;
-    referralIdentifier?: string | null;
-    referralNotes?: string | null;
-    referralResult?: ReferralResult | null;
-    referredBy: string;
-    referredFrom: string;
-    referredTo?: string | null;
-    resourceCoordinatorNotes?: string | null;
-    score?: number | null;
-    status: ReferralPostingStatus;
-    statusNote?: string | null;
-    statusNoteUpdatedAt?: string | null;
-    statusNoteUpdatedBy?: string | null;
-    statusUpdatedAt?: string | null;
-    statusUpdatedBy?: string | null;
-    referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
-    project?: {
-      __typename?: 'Project';
-      id: string;
-      projectType?: ProjectType | null;
-      projectName: string;
-    } | null;
-    organization?: {
-      __typename?: 'Organization';
-      id: string;
-      organizationName: string;
-    } | null;
-    unitType?: {
-      __typename?: 'UnitTypeObject';
-      id: string;
-      description?: string | null;
-    } | null;
-    hohEnrollment?: {
-      __typename?: 'Enrollment';
-      id: string;
-      client: { __typename?: 'Client'; id: string };
-    } | null;
-    householdMembers: Array<{
-      __typename?: 'ReferralHouseholdMember';
-      id: string;
-      relationshipToHoH: RelationshipToHoH;
-      openEnrollmentSummary: Array<{
-        __typename?: 'EnrollmentSummary';
-        id: string;
-        entryDate: string;
-        inProgress: boolean;
-        moveInDate?: string | null;
-        projectId: string;
-        projectName: string;
-        projectType: ProjectType;
-        canViewEnrollment: boolean;
-      }>;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        veteranStatus: NoYesReasonsForMissingData;
-        gender: Array<Gender>;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-        dob?: string | null;
-        age?: number | null;
-        ssn?: string | null;
-        access: {
-          __typename?: 'ClientAccess';
-          id: string;
-          canViewFullSsn: boolean;
-          canViewPartialSsn: boolean;
-          canEditClient: boolean;
-          canDeleteClient: boolean;
-          canViewDob: boolean;
-          canViewClientName: boolean;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-          canViewEnrollmentDetails: boolean;
-          canDeleteAssessments: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canViewAnyConfidentialClientFiles: boolean;
-          canViewAnyNonconfidentialClientFiles: boolean;
-          canUploadClientFiles: boolean;
-          canViewAnyFiles: boolean;
-          canAuditClients: boolean;
-          canManageScanCards: boolean;
-          canMergeClients: boolean;
-          canViewClientAlerts: boolean;
-          canManageClientAlerts: boolean;
-        };
-        externalIds: Array<{
-          __typename?: 'ExternalIdentifier';
-          id: string;
-          identifier?: string | null;
-          url?: string | null;
-          label: string;
-          type: ExternalIdentifierType;
-        }>;
-      };
-    }>;
-    customDataElements: Array<{
-      __typename?: 'CustomDataElement';
-      id: string;
-      key: string;
-      label: string;
-      fieldType: CustomDataElementType;
-      repeats: boolean;
-      displayHooks: Array<DisplayHook>;
-      value?: {
-        __typename?: 'CustomDataElementValue';
-        id: string;
-        valueBoolean?: boolean | null;
-        valueDate?: string | null;
-        valueFloat?: number | null;
-        valueInteger?: number | null;
-        valueJson?: any | null;
-        valueString?: string | null;
-        valueText?: string | null;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-        user?: {
-          __typename: 'ApplicationUser';
-          id: string;
-          name: string;
-          email: string;
-        } | null;
-      } | null;
-      values?: Array<{
-        __typename?: 'CustomDataElementValue';
-        id: string;
-        valueBoolean?: boolean | null;
-        valueDate?: string | null;
-        valueFloat?: number | null;
-        valueInteger?: number | null;
-        valueJson?: any | null;
-        valueString?: string | null;
-        valueText?: string | null;
-        dateCreated?: string | null;
-        dateUpdated?: string | null;
-        user?: {
-          __typename: 'ApplicationUser';
-          id: string;
-          name: string;
-          email: string;
-        } | null;
-      }> | null;
-    }>;
-  } | null;
-};
-
 export type UpdateReferralPostingMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   input: ReferralPostingInput;
@@ -30826,6 +30666,182 @@ export type UpdateReferralPostingMutation = {
       linkId?: string | null;
       section?: string | null;
       data?: any | null;
+    }>;
+  } | null;
+};
+
+export type GetCanProjectAcceptReferralQueryVariables = Exact<{
+  projectId: Scalars['ID']['input'];
+  referrerEnrollmentId: Scalars['ID']['input'];
+}>;
+
+export type GetCanProjectAcceptReferralQuery = {
+  __typename?: 'Query';
+  canProjectAcceptReferral: boolean;
+};
+
+export type GetReferralPostingQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetReferralPostingQuery = {
+  __typename?: 'Query';
+  referralPosting?: {
+    __typename?: 'ReferralPosting';
+    id: string;
+    assignedDate: string;
+    chronic?: boolean | null;
+    hudChronic?: boolean | null;
+    denialNote?: string | null;
+    denialReason?: ReferralPostingDenialReasonType | null;
+    needsWheelchairAccessibleUnit?: boolean | null;
+    postingIdentifier?: string | null;
+    referralDate: string;
+    referralIdentifier?: string | null;
+    referralNotes?: string | null;
+    referralResult?: ReferralResult | null;
+    referredBy: string;
+    referredFrom: string;
+    referredTo?: string | null;
+    resourceCoordinatorNotes?: string | null;
+    score?: number | null;
+    status: ReferralPostingStatus;
+    statusNote?: string | null;
+    statusNoteUpdatedAt?: string | null;
+    statusNoteUpdatedBy?: string | null;
+    statusUpdatedAt?: string | null;
+    statusUpdatedBy?: string | null;
+    referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
+    project?: {
+      __typename?: 'Project';
+      id: string;
+      projectType?: ProjectType | null;
+      projectName: string;
+    } | null;
+    organization?: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+    } | null;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    } | null;
+    hohEnrollment?: {
+      __typename?: 'Enrollment';
+      id: string;
+      client: { __typename?: 'Client'; id: string };
+    } | null;
+    householdMembers: Array<{
+      __typename?: 'ReferralHouseholdMember';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      openEnrollmentSummary: Array<{
+        __typename?: 'EnrollmentSummary';
+        id: string;
+        entryDate: string;
+        inProgress: boolean;
+        moveInDate?: string | null;
+        projectId: string;
+        projectName: string;
+        projectType: ProjectType;
+        canViewEnrollment: boolean;
+      }>;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        veteranStatus: NoYesReasonsForMissingData;
+        gender: Array<Gender>;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+        dob?: string | null;
+        age?: number | null;
+        ssn?: string | null;
+        access: {
+          __typename?: 'ClientAccess';
+          id: string;
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
+          canEditClient: boolean;
+          canDeleteClient: boolean;
+          canViewDob: boolean;
+          canViewClientName: boolean;
+          canEditEnrollments: boolean;
+          canDeleteEnrollments: boolean;
+          canViewEnrollmentDetails: boolean;
+          canDeleteAssessments: boolean;
+          canManageAnyClientFiles: boolean;
+          canManageOwnClientFiles: boolean;
+          canViewAnyConfidentialClientFiles: boolean;
+          canViewAnyNonconfidentialClientFiles: boolean;
+          canUploadClientFiles: boolean;
+          canViewAnyFiles: boolean;
+          canAuditClients: boolean;
+          canManageScanCards: boolean;
+          canMergeClients: boolean;
+          canViewClientAlerts: boolean;
+          canManageClientAlerts: boolean;
+        };
+        externalIds: Array<{
+          __typename?: 'ExternalIdentifier';
+          id: string;
+          identifier?: string | null;
+          url?: string | null;
+          label: string;
+          type: ExternalIdentifierType;
+        }>;
+      };
+    }>;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      fieldType: CustomDataElementType;
+      repeats: boolean;
+      displayHooks: Array<DisplayHook>;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+        user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+      }> | null;
     }>;
   } | null;
 };
@@ -43500,6 +43516,127 @@ export type VoidReferralRequestMutationOptions = Apollo.BaseMutationOptions<
   VoidReferralRequestMutation,
   VoidReferralRequestMutationVariables
 >;
+export const UpdateReferralPostingDocument = gql`
+  mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {
+    updateReferralPosting(id: $id, input: $input) {
+      record {
+        ...ReferralPostingDetailFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ReferralPostingDetailFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateReferralPostingMutationFn = Apollo.MutationFunction<
+  UpdateReferralPostingMutation,
+  UpdateReferralPostingMutationVariables
+>;
+
+/**
+ * __useUpdateReferralPostingMutation__
+ *
+ * To run a mutation, you first call `useUpdateReferralPostingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateReferralPostingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateReferralPostingMutation, { data, loading, error }] = useUpdateReferralPostingMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateReferralPostingMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateReferralPostingMutation,
+    UpdateReferralPostingMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateReferralPostingMutation,
+    UpdateReferralPostingMutationVariables
+  >(UpdateReferralPostingDocument, options);
+}
+export type UpdateReferralPostingMutationHookResult = ReturnType<
+  typeof useUpdateReferralPostingMutation
+>;
+export type UpdateReferralPostingMutationResult =
+  Apollo.MutationResult<UpdateReferralPostingMutation>;
+export type UpdateReferralPostingMutationOptions = Apollo.BaseMutationOptions<
+  UpdateReferralPostingMutation,
+  UpdateReferralPostingMutationVariables
+>;
+export const GetCanProjectAcceptReferralDocument = gql`
+  query GetCanProjectAcceptReferral(
+    $projectId: ID!
+    $referrerEnrollmentId: ID!
+  ) {
+    canProjectAcceptReferral(
+      projectId: $projectId
+      referrerEnrollmentId: $referrerEnrollmentId
+    )
+  }
+`;
+
+/**
+ * __useGetCanProjectAcceptReferralQuery__
+ *
+ * To run a query within a React component, call `useGetCanProjectAcceptReferralQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCanProjectAcceptReferralQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCanProjectAcceptReferralQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      referrerEnrollmentId: // value for 'referrerEnrollmentId'
+ *   },
+ * });
+ */
+export function useGetCanProjectAcceptReferralQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCanProjectAcceptReferralQuery,
+    GetCanProjectAcceptReferralQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCanProjectAcceptReferralQuery,
+    GetCanProjectAcceptReferralQueryVariables
+  >(GetCanProjectAcceptReferralDocument, options);
+}
+export function useGetCanProjectAcceptReferralLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCanProjectAcceptReferralQuery,
+    GetCanProjectAcceptReferralQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCanProjectAcceptReferralQuery,
+    GetCanProjectAcceptReferralQueryVariables
+  >(GetCanProjectAcceptReferralDocument, options);
+}
+export type GetCanProjectAcceptReferralQueryHookResult = ReturnType<
+  typeof useGetCanProjectAcceptReferralQuery
+>;
+export type GetCanProjectAcceptReferralLazyQueryHookResult = ReturnType<
+  typeof useGetCanProjectAcceptReferralLazyQuery
+>;
+export type GetCanProjectAcceptReferralQueryResult = Apollo.QueryResult<
+  GetCanProjectAcceptReferralQuery,
+  GetCanProjectAcceptReferralQueryVariables
+>;
 export const GetReferralPostingDocument = gql`
   query GetReferralPosting($id: ID!) {
     referralPosting(id: $id) {
@@ -43558,64 +43695,6 @@ export type GetReferralPostingLazyQueryHookResult = ReturnType<
 export type GetReferralPostingQueryResult = Apollo.QueryResult<
   GetReferralPostingQuery,
   GetReferralPostingQueryVariables
->;
-export const UpdateReferralPostingDocument = gql`
-  mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {
-    updateReferralPosting(id: $id, input: $input) {
-      record {
-        ...ReferralPostingDetailFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ReferralPostingDetailFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type UpdateReferralPostingMutationFn = Apollo.MutationFunction<
-  UpdateReferralPostingMutation,
-  UpdateReferralPostingMutationVariables
->;
-
-/**
- * __useUpdateReferralPostingMutation__
- *
- * To run a mutation, you first call `useUpdateReferralPostingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateReferralPostingMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateReferralPostingMutation, { data, loading, error }] = useUpdateReferralPostingMutation({
- *   variables: {
- *      id: // value for 'id'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateReferralPostingMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateReferralPostingMutation,
-    UpdateReferralPostingMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateReferralPostingMutation,
-    UpdateReferralPostingMutationVariables
-  >(UpdateReferralPostingDocument, options);
-}
-export type UpdateReferralPostingMutationHookResult = ReturnType<
-  typeof useUpdateReferralPostingMutation
->;
-export type UpdateReferralPostingMutationResult =
-  Apollo.MutationResult<UpdateReferralPostingMutation>;
-export type UpdateReferralPostingMutationOptions = Apollo.BaseMutationOptions<
-  UpdateReferralPostingMutation,
-  UpdateReferralPostingMutationVariables
 >;
 export const GetDeniedPendingReferralPostingsDocument = gql`
   query GetDeniedPendingReferralPostings(
