@@ -1,6 +1,11 @@
+import { isNil } from 'lodash-es';
 import ExpressionEvaluationError from './ExpressionEvaluationError';
 import { parseExpression } from './parser';
 import displayFunctions from './templateFunctions';
+import {
+  formatDateForDisplay,
+  safeParseDateOrString,
+} from '@/modules/hmis/hmisUtil';
 
 type EvalContext = Map<string, any>;
 const evaluate = (ast: any, context: EvalContext): number | undefined => {
@@ -35,8 +40,14 @@ const evaluateTemplateVariable = (
 
   try {
     const result = evaluate(parsedExpression, context);
-    // test for undefined so 0 doesn't end up as falsy
-    return result === undefined ? undefined : result + '';
+    // test using isNil so 0 doesn't end up as falsy
+    if (isNil(result)) return undefined;
+
+    // If result is a date or a date string (YYYY-MM-DD), format it for display
+    const resultAsDate = safeParseDateOrString(result);
+    if (resultAsDate) return formatDateForDisplay(resultAsDate) || result + '';
+
+    return result + '';
   } catch (error) {
     if (error instanceof ExpressionEvaluationError) {
       return undefined;

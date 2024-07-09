@@ -70,6 +70,26 @@ fragment EnrollmentFields on Enrollment {
   }
 }
 
+# Fragment to resolve on client when performing an Assessment
+fragment AssessedClientFields on Client {
+  ...ClientNameDobVet
+  ssn # To provide to Assessment LocalConstants
+  race # To provide to Assessment LocalConstants
+}
+
+# Fragment to resolve for main client on Enrollment dashboard
+fragment EnrolledClientFields on Client {
+  ...AssessedClientFields
+  hudChronic # Shown on Enrollment Dashboard
+  customDataElements {
+    # Shown on Enrollment Dashboard
+    ...CustomDataElementFields
+  }
+  access {
+    ...ClientAccessFields
+  }
+}
+
 # Fields when you're resolving an individual Enrollment and all its details
 # FIXME: stop resolving client/project access objects. Instead, put what we need to know
 # inside of the Enrollment access obj
@@ -86,17 +106,8 @@ fragment AllEnrollmentDetails on Enrollment {
   customDataElements {
     ...CustomDataElementFields
   }
-  # Need to resolve CDEs on Client too, so they can be shown on enrollment dash.
   client {
-    hudChronic
-    ...ClientNameDobVet
-    ssn
-    customDataElements {
-      ...CustomDataElementFields
-    }
-    access {
-      ...ClientAccessFields
-    }
+    ...EnrolledClientFields
   }
   openEnrollmentSummary {
     ...EnrollmentSummaryFields

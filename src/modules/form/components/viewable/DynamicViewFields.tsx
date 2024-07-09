@@ -5,6 +5,7 @@ import {
   FormValues,
   ItemChangedFn,
   ItemMap,
+  LocalConstants,
   OverrideableDynamicFieldProps,
   PickListArgs,
 } from '../../types';
@@ -32,6 +33,7 @@ export interface Props {
   itemChanged: ItemChangedFn;
   itemMap: ItemMap;
   disabledLinkIds: string[];
+  localConstants?: LocalConstants;
 }
 
 const DynamicViewFields: React.FC<Props> = ({
@@ -42,6 +44,7 @@ const DynamicViewFields: React.FC<Props> = ({
   values,
   disabledLinkIds,
   itemChanged,
+  localConstants,
   ...fieldsProps
 }) => {
   // Recursively render an item
@@ -83,6 +86,7 @@ const DynamicViewFields: React.FC<Props> = ({
           disabled={isDisabled}
           horizontal={horizontal}
           pickListArgs={pickListArgs}
+          localConstants={localConstants}
           // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
           adjustValue={itemChanged}
           {...props}
