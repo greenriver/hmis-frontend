@@ -39615,12 +39615,6 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "accepted_by_other_program_status",
-            "description": "Accepted By Other Program",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "accepted_pending_status",
             "description": "Accepted Pending",
             "isDeprecated": false,
@@ -39639,12 +39633,6 @@
             "deprecationReason": null
           },
           {
-            "name": "assigned_to_other_program_status",
-            "description": "Assigned To Other Program",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "closed_status",
             "description": "Closed",
             "isDeprecated": false,
@@ -39659,24 +39647,6 @@
           {
             "name": "denied_status",
             "description": "Denied",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "new_status",
-            "description": "New",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "not_selected_status",
-            "description": "Not Selected",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "void_status",
-            "description": "Void",
             "isDeprecated": false,
             "deprecationReason": null
           }
