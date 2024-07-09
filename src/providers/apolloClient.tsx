@@ -7,6 +7,7 @@ import {
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
+import { RetryLink } from '@apollo/client/link/retry';
 import { SentryLink } from 'apollo-link-sentry';
 import fetch from 'cross-fetch';
 import { generatePath, matchRoutes } from 'react-router-dom';
@@ -124,10 +125,33 @@ export const cache = new InMemoryCache({
   },
 });
 
+// catch 500's inserted by mysterious intermediary
+const retryLink = new RetryLink({
+  delay: {
+    initial: 800,
+    max: 2400,
+    jitter: true,
+  },
+  attempts: {
+    max: 3,
+    retryIf: (error: CustomFetchNetworkError) => {
+      switch (error?.statusCode) {
+        case 401:
+        case 403:
+        case 404:
+        case 500:
+          return false;
+      }
+      return !!error;
+    },
+  },
+});
+
 const apolloClient = new ApolloClient({
   link: from([
     apolloErrorLink, // handle errors
     sentryLink, // instrument graphql requests for sentry
+    retryLink,
     authLink,
     pathHeaderLink,
     sessionExpiryLink,
