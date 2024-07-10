@@ -40412,7 +40412,7 @@ export const GetFormIdentifiersDocument = gql`
         displayVersion {
           ...FormDefinitionMetadata
           system
-          formRules(limit: 1) {
+          formRules(limit: 1, filters: { activeStatus: ACTIVE }) {
             nodesCount
           }
         }
