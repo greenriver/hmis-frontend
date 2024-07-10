@@ -4399,6 +4399,13 @@ export enum NoYesReasonsForMissingData {
   Yes = 'YES',
 }
 
+export enum NonAdminFormRole {
+  /** Custom assessment */
+  CustomAssessment = 'CUSTOM_ASSESSMENT',
+  /** Service */
+  Service = 'SERVICE',
+}
+
 /** HUD NotEmployedReason (R6.B) */
 export enum NotEmployedReason {
   /** (99) Data not collected */
@@ -5672,6 +5679,7 @@ export type Query = {
   inventory?: Maybe<Inventory>;
   mergeAuditHistory: MergeAuditEventsPaginated;
   mergeCandidates: ClientMergeCandidatesPaginated;
+  nonAdminFormRole: NonAdminFormRole;
   /** Organization lookup */
   organization?: Maybe<Organization>;
   organizations: OrganizationsPaginated;
@@ -5905,6 +5913,7 @@ export type QueryUserArgs = {
 export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean']['output'];
+  canAdministrateConfig: Scalars['Boolean']['output'];
   canAuditClients: Scalars['Boolean']['output'];
   canAuditEnrollments: Scalars['Boolean']['output'];
   canAuditUsers: Scalars['Boolean']['output'];
@@ -7839,6 +7848,7 @@ export type RootPermissionsFragment = {
   canSplitHouseholds: boolean;
   canConfigureDataCollection: boolean;
   canManageForms: boolean;
+  canAdministrateConfig: boolean;
   canViewClientAlerts: boolean;
   canManageExternalFormSubmissions: boolean;
 };
@@ -7953,6 +7963,7 @@ export type GetRootPermissionsQuery = {
     canSplitHouseholds: boolean;
     canConfigureDataCollection: boolean;
     canManageForms: boolean;
+    canAdministrateConfig: boolean;
     canViewClientAlerts: boolean;
     canManageExternalFormSubmissions: boolean;
   };
@@ -32409,6 +32420,7 @@ export const RootPermissionsFragmentDoc = gql`
     canSplitHouseholds
     canConfigureDataCollection
     canManageForms
+    canAdministrateConfig
     canViewClientAlerts
     canManageExternalFormSubmissions
   }

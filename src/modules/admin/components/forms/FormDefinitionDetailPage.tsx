@@ -135,12 +135,14 @@ const FormDefinitionDetailPage = () => {
                     editorType={FormEditorType.FormBuilder}
                     variant='outlined'
                   />
-                  <EditFormButton
-                    formIdentifier={formIdentifier}
-                    text={hasDraft ? 'Edit Draft (JSON)' : 'New Draft (JSON)'}
-                    editorType={FormEditorType.JsonEditor}
-                    variant='outlined'
-                  />
+                  <RootPermissionsFilter permissions='canAdministrateConfig'>
+                    <EditFormButton
+                      formIdentifier={formIdentifier}
+                      text={hasDraft ? 'Edit Draft (JSON)' : 'New Draft (JSON)'}
+                      editorType={FormEditorType.JsonEditor}
+                      variant='outlined'
+                    />
+                  </RootPermissionsFilter>
                 </RootPermissionsFilter>
                 <ButtonLink
                   to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {

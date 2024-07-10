@@ -890,6 +890,10 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  NonAdminFormRole: {
+    CUSTOM_ASSESSMENT: 'Custom assessment',
+    SERVICE: 'Service',
+  },
   NotEmployedReason: {
     INVALID: 'Invalid Value',
     LOOKING_FOR_WORK: 'Looking for work',

@@ -29907,6 +29907,29 @@
       },
       {
         "kind": "ENUM",
+        "name": "NonAdminFormRole",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CUSTOM_ASSESSMENT",
+            "description": "Custom assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SERVICE",
+            "description": "Service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "NotEmployedReason",
         "description": "HUD NotEmployedReason (R6.B)",
         "fields": null,
@@ -36892,6 +36915,22 @@
             "deprecationReason": null
           },
           {
+            "name": "nonAdminFormRole",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "NonAdminFormRole",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "organization",
             "description": "Organization lookup",
             "args": [
@@ -37638,6 +37677,22 @@
         "fields": [
           {
             "name": "canAdministerHmis",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canAdministrateConfig",
             "description": null,
             "args": [],
             "type": {
