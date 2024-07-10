@@ -127,8 +127,8 @@ export const cache = new InMemoryCache({
 
 const retryLink = new RetryLink({
   delay: {
-    initial: 800,
-    max: 2400,
+    initial: 800, // Wait 800ms before the first retry after a failed request
+    max: 1200, // Maximum wait time between retries
     jitter: true,
   },
   attempts: {
