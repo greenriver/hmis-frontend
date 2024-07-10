@@ -125,7 +125,6 @@ export const cache = new InMemoryCache({
   },
 });
 
-// catch 500's inserted by mysterious intermediary
 const retryLink = new RetryLink({
   delay: {
     initial: 800,
@@ -134,7 +133,12 @@ const retryLink = new RetryLink({
   },
   attempts: {
     max: 3,
-    retryIf: (error: CustomFetchNetworkError) => {
+    retryIf: (error: CustomFetchNetworkError, operation) => {
+      // Only retry operations that seem to be queries, like "GetWidgets"
+      // Avoid retries on mutations as they may not be idempotent
+      if (!operation?.operationName?.match(/^(Get)/)) {
+        return false;
+      }
       switch (error?.statusCode) {
         case 401:
         case 403:
