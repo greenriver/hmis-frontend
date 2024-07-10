@@ -82,12 +82,14 @@ export default function useUpdateFormStructure(
   // This way regular (non-group) items can't ever be nested beyond MAX_NESTING_DEPTH.
   const isMaxDepth = useMemo(
     () =>
-      item.type === ItemType.Group && nestingDepth === MAX_NESTING_DEPTH - 1,
-    [item.type, nestingDepth]
+      item?.type === ItemType.Group && nestingDepth === MAX_NESTING_DEPTH - 1,
+    [item, nestingDepth]
   );
 
   const onReorder = useCallback(
     (direction: 'up' | 'down') => {
+      if (!thisLayer) return;
+
       if (direction === 'up') {
         // If index > 0, we can move this item up within its existing "layer"
         if (thisIndex > 0) {
