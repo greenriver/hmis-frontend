@@ -62,7 +62,7 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
           fullWidth
         />
       </Stack>
-      <Typography>
+      <Typography variant='body2'>
         Enter <b>one</b> of the below fields to specify the{' '}
         {labelPrefix.toLowerCase()} value:
       </Typography>
@@ -111,7 +111,7 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
         />
       )}
 
-      <Typography>
+      <Typography variant='body2'>
         Optionally specify an offset for the bound. For example, specifying a
         maximum with value "Today" with offset "3" will set the maximum bound to
         3 days in the future.

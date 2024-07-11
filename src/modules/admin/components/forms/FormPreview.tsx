@@ -15,6 +15,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import DynamicForm, {
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
@@ -204,13 +205,15 @@ const FormPreview = () => {
         )}
       </Stack>
 
-      {formStepperItems ? (
-        <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-          <FormNavigation items={formStepperItems}>{form}</FormNavigation>
-        </Grid>
-      ) : (
-        form
-      )}
+      <SentryErrorBoundary>
+        {formStepperItems ? (
+          <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
+            <FormNavigation items={formStepperItems}>{form}</FormNavigation>
+          </Grid>
+        ) : (
+          form
+        )}
+      </SentryErrorBoundary>
     </>
   );
 };

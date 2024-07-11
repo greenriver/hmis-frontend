@@ -17,7 +17,7 @@ export type Option = PickListOption;
 export const renderOption = (props: object, option: Option) => (
   <li {...props} key={option.code}>
     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
-      <Typography variant='body2'>{option.label}</Typography>
+      <Typography variant='body2'>{option.label || option.code}</Typography>
       {option.secondaryLabel && (
         <Typography
           variant='body2'

@@ -4,6 +4,7 @@ import { FormItemControl } from '../types';
 import CardGroup, { RemovableCard } from './CardGroup';
 import ValueBoundCard from './ValueBoundCard';
 import { ItemMap } from '@/modules/form/types';
+import { BoundType, ValidationSeverity } from '@/types/gqlTypes';
 interface Props {
   control: FormItemControl;
   itemMap: ItemMap;
@@ -18,7 +19,14 @@ const ValueBounds: React.FC<Props> = ({ control, itemMap }) => {
   return (
     <CardGroup
       onAddItem={() => {
-        append({ id: `bound_${v4().split('-')[0]}` }, { shouldFocus: false });
+        append(
+          {
+            id: `bound_${v4().split('-')[0]}`,
+            type: BoundType.Max,
+            severity: ValidationSeverity.Error,
+          },
+          { shouldFocus: false }
+        );
       }}
       addItemText='Add Bound'
     >

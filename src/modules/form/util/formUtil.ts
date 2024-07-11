@@ -74,6 +74,7 @@ import {
   RelationshipToHoH,
   ValueBound,
 } from '@/types/gqlTypes';
+import { ensureArray } from '@/utils/arrays';
 
 // Chrome ignores autocomplete="off" in some cases, such street address fields. We use an
 // invalid value here that the browser doesn't understand to prevent this behavior. This
@@ -444,10 +445,16 @@ export const shouldEnableItem = ({
   );
 
   // console.debug(item.linkId, booleans);
-  if (item.enableBehavior === EnableBehavior.Any) {
-    return booleans.some(Boolean);
-  } else {
+  if (item.enableBehavior === EnableBehavior.All) {
+    // All conditions must be true.
     return booleans.every(Boolean);
+  } else {
+    // Any condition must be true.
+    //
+    // 'Any' is the default behavior, to match legacy API behavior which resolved ANY by default.
+    // Going forward once new validation is in place, we can expect that enable_behavior is always
+    // set if enable_when rules exist.
+    return booleans.some(Boolean);
   }
 };
 
@@ -484,7 +491,13 @@ export const getAutofillComparisonValue = (
   // Choose first present value from Boolean, Number, and Code attributes
   if (!isNil(av.valueBoolean)) return av.valueBoolean;
   if (!isNil(av.valueNumber)) return av.valueNumber;
-  if (!isNil(av.valueCode)) return getOptionValue(av.valueCode, targetItem);
+  if (!isNil(av.valueCode)) {
+    // If the item we're comparing to is a choice item, convert the valueCode to a pick list option.
+    // If it's not, use it as-is (as a string)
+    return [ItemType.Choice, ItemType.OpenChoice].includes(targetItem.type)
+      ? getOptionValue(av.valueCode, targetItem)
+      : av.valueCode;
+  }
   if (!isNil(av.valueQuestion)) return values[av.valueQuestion];
 };
 
@@ -785,7 +798,7 @@ export const getInitialValues = (
         return;
       }
 
-      // TODO handle multiple initials for multi-select questions
+      // TODO handle multiple initials for multi-select questions. Only looking at first item in `initial` array for now.
       const initial = item.initial[0];
 
       if (behavior && initial.initialBehavior !== behavior) return;
@@ -812,6 +825,12 @@ export const getInitialValues = (
             values[item.linkId] = gqlValueToFormValue(value, item) || value;
           }
         }
+      }
+
+      // If this item repeats, it means that the value should be an array. Wrap the initial value in an array if not already.
+      // We may want to expand this to support setting multiple initial values in a multi-select, if needed.
+      if (item.repeats) {
+        values[item.linkId] = ensureArray(values[item.linkId]);
       }
     });
   }
@@ -944,6 +963,27 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
     });
     deps[id] = uniq(deps[id]);
   });
+  return deps;
+};
+
+/**
+ * Map { linkId => array of Link IDs that depend on it for min/max bounds }
+ */
+export const buildBoundsDependencyMap = (itemMap: ItemMap): LinkIdMap => {
+  const deps: LinkIdMap = {};
+
+  function addBound(linkId: string, bound: ValueBound) {
+    if (bound.question && itemMap[bound.question]) {
+      if (!deps[bound.question]) deps[bound.question] = [];
+      deps[bound.question].push(linkId);
+    }
+  }
+
+  Object.values(itemMap).forEach((item) => {
+    if (!item.bounds) return;
+    item.bounds.forEach((bound) => addBound(item.linkId, bound));
+  });
+
   return deps;
 };
 
@@ -1439,17 +1479,6 @@ export const getFieldOnAssessment = (
   }
 
   return { record, recordType, value };
-};
-
-export const itemDefaults = {
-  disabledDisplay: DisabledDisplay.Hidden,
-  enableBehavior: EnableBehavior.Any,
-  required: false,
-  prefill: false,
-  readOnly: false,
-  warnIfEmpty: false,
-  hidden: false,
-  repeats: false,
 };
 
 export const parseOccurrencePointFormDefinition = (

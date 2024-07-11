@@ -1,38 +1,38 @@
 import { get } from 'lodash-es';
-import { useCallback, useContext, useMemo } from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import {
   Control,
   useFieldArray,
   useFormContext,
   useWatch,
 } from 'react-hook-form';
-import { FormTreeContext } from './FormTreeContext';
+import { ItemMap } from '@/modules/form/types';
 import {
-  getItemIdMap,
+  getDependentItems,
   getPathContext,
   insertItemToDefinition,
   removeItemFromDefinition,
 } from '@/modules/formBuilder/formBuilderUtil';
+import { ItemDependents } from '@/modules/formBuilder/types';
 import { FormDefinitionJson, FormItem, ItemType } from '@/types/gqlTypes';
 
-export default function useReorderItem(
+export default function useUpdateFormStructure(
   control: Control,
   itemId: string,
-  item: FormItem
+  item: FormItem,
+  itemMap: ItemMap,
+  rhfPathMap: Record<string, string>,
+  expandItem: (itemId: string) => void
 ) {
   const values = useWatch({ control });
   const { reset } = useFormContext();
-  const { expandItem } = useContext(FormTreeContext);
-  // Re-generate itemIdMap each time values change (linkId=>position)
-  const itemIdMap = useMemo(() => getItemIdMap(values.item), [values]);
 
   // Example:
   // itemPath:              item.3.item.1
   // parentArrayPath:       item.3.item (thisIndex=1)
   // grandParentArrayPath:  item        (parentIndex=3)
 
-  const itemPath = itemIdMap[itemId];
-  if (!itemPath) throw new Error(`No itemPath found for linkId ${itemId}`);
+  const itemPath = rhfPathMap[itemId];
   const { parentPath: parentArrayPath, index: thisIndex } =
     getPathContext(itemPath);
   const parentItemId = parentArrayPath.replace(/\.item$/, '');
@@ -40,16 +40,15 @@ export default function useReorderItem(
     getPathContext(parentItemId);
 
   // RHF swap is used for swapping items within an array
-  const { swap } = useFieldArray({ control, name: parentArrayPath });
+  const { swap, remove } = useFieldArray({ control, name: parentArrayPath });
 
   const thisLayer = get(values, parentArrayPath);
-  if (!thisLayer)
-    throw new Error(`failed to find parentArrayPath: ${parentArrayPath}`);
+  // `thisLayer` could be undefined if an item was just deleted. https://github.com/greenriver/hmis-frontend/pull/821#issue-2371078251
 
   const hasParent = parentIndex !== -1;
 
   const canMoveDown = useMemo(() => {
-    const hasSiblingBelow = !!thisLayer[thisIndex + 1];
+    const hasSiblingBelow = thisLayer ? !!thisLayer[thisIndex + 1] : false;
     return hasSiblingBelow || hasParent;
   }, [hasParent, thisIndex, thisLayer]);
 
@@ -57,6 +56,22 @@ export default function useReorderItem(
     const hasSiblingAbove = thisIndex > 0;
     return hasSiblingAbove || hasParent;
   }, [hasParent, thisIndex]);
+
+  const onDelete = useCallback(
+    (onError: Dispatch<SetStateAction<ItemDependents | undefined>>) => {
+      const dependents: ItemDependents = getDependentItems({
+        linkId: itemId,
+        itemMap,
+      });
+
+      if (Object.values(dependents).some((depList) => depList.length > 0)) {
+        onError(dependents);
+      } else {
+        remove(thisIndex);
+      }
+    },
+    [itemId, thisIndex, remove, itemMap]
+  );
 
   const onReorder = useCallback(
     (direction: 'up' | 'down') => {
@@ -69,7 +84,7 @@ export default function useReorderItem(
             // append it to the "sibling" group above it
             console.log('case 1');
             const prevLinkId = prevItem.linkId;
-            const prevItemPath = itemIdMap[prevLinkId] + '.item';
+            const prevItemPath = rhfPathMap[prevLinkId] + '.item';
 
             expandItem(prevLinkId); // expand the group it's moving into
             reset(
@@ -128,7 +143,7 @@ export default function useReorderItem(
             // prepend it to the "sibling" group below it
             console.log('case 4');
             const nextLinkId = nextItem.linkId;
-            const nextItemPath = itemIdMap[nextLinkId] + '.item';
+            const nextItemPath = rhfPathMap[nextLinkId] + '.item';
 
             expandItem(nextLinkId); // expand the group it's moving into
             reset(
@@ -183,7 +198,7 @@ export default function useReorderItem(
       thisIndex,
       hasParent,
       thisLayer,
-      itemIdMap,
+      rhfPathMap,
       reset,
       expandItem,
       parentArrayPath,
@@ -194,5 +209,5 @@ export default function useReorderItem(
     ]
   );
 
-  return { onReorder, itemPath, canMoveUp, canMoveDown };
+  return { onReorder, onDelete, itemPath, canMoveUp, canMoveDown };
 }
