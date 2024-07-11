@@ -5642,7 +5642,6 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Get the correct Form Definition to use for an assessment, by Role or FormDefinition ID */
   assessmentFormDefinition?: Maybe<FormDefinition>;
-  canProjectAcceptReferral: Scalars['Boolean']['output'];
   /** Client lookup */
   client?: Maybe<Client>;
   /** Custom forms for collecting and/or displaying custom details for a Client (outside of the Client demographics form) */
@@ -5681,6 +5680,8 @@ export type Query = {
   pickList: Array<PickListOption>;
   /** Project lookup */
   project?: Maybe<Project>;
+  /** Whether the destination project is able to accept a referral for the client(s) belonging to the source enrollment */
+  projectCanAcceptReferral: Scalars['Boolean']['output'];
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
   projectConfigs: ProjectConfigsPaginated;
@@ -5717,11 +5718,6 @@ export type QueryAssessmentFormDefinitionArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   projectId: Scalars['ID']['input'];
   role?: InputMaybe<AssessmentRole>;
-};
-
-export type QueryCanProjectAcceptReferralArgs = {
-  projectId: Scalars['ID']['input'];
-  referrerEnrollmentId: Scalars['ID']['input'];
 };
 
 export type QueryClientArgs = {
@@ -5845,6 +5841,11 @@ export type QueryPickListArgs = {
 
 export type QueryProjectArgs = {
   id: Scalars['ID']['input'];
+};
+
+export type QueryProjectCanAcceptReferralArgs = {
+  destinationProjectId: Scalars['ID']['input'];
+  sourceEnrollmentId: Scalars['ID']['input'];
 };
 
 export type QueryProjectCocArgs = {
@@ -6223,28 +6224,18 @@ export type ReferralPostingInput = {
 
 /** Referral Posting Status */
 export enum ReferralPostingStatus {
-  /** Accepted By Other Program */
-  AcceptedByOtherProgramStatus = 'accepted_by_other_program_status',
   /** Accepted Pending */
   AcceptedPendingStatus = 'accepted_pending_status',
   /** Accepted */
   AcceptedStatus = 'accepted_status',
   /** Assigned */
   AssignedStatus = 'assigned_status',
-  /** Assigned To Other Program */
-  AssignedToOtherProgramStatus = 'assigned_to_other_program_status',
   /** Closed */
   ClosedStatus = 'closed_status',
   /** Denied Pending */
   DeniedPendingStatus = 'denied_pending_status',
   /** Denied */
   DeniedStatus = 'denied_status',
-  /** New */
-  NewStatus = 'new_status',
-  /** Not Selected */
-  NotSelectedStatus = 'not_selected_status',
-  /** Void */
-  VoidStatus = 'void_status',
 }
 
 export type ReferralPostingsPaginated = {
@@ -30670,14 +30661,14 @@ export type UpdateReferralPostingMutation = {
   } | null;
 };
 
-export type GetCanProjectAcceptReferralQueryVariables = Exact<{
-  projectId: Scalars['ID']['input'];
-  referrerEnrollmentId: Scalars['ID']['input'];
+export type GetProjectCanAcceptReferralQueryVariables = Exact<{
+  sourceEnrollmentId: Scalars['ID']['input'];
+  destinationProjectId: Scalars['ID']['input'];
 }>;
 
-export type GetCanProjectAcceptReferralQuery = {
+export type GetProjectCanAcceptReferralQuery = {
   __typename?: 'Query';
-  canProjectAcceptReferral: boolean;
+  projectCanAcceptReferral: boolean;
 };
 
 export type GetReferralPostingQueryVariables = Exact<{
@@ -43574,68 +43565,68 @@ export type UpdateReferralPostingMutationOptions = Apollo.BaseMutationOptions<
   UpdateReferralPostingMutation,
   UpdateReferralPostingMutationVariables
 >;
-export const GetCanProjectAcceptReferralDocument = gql`
-  query GetCanProjectAcceptReferral(
-    $projectId: ID!
-    $referrerEnrollmentId: ID!
+export const GetProjectCanAcceptReferralDocument = gql`
+  query GetProjectCanAcceptReferral(
+    $sourceEnrollmentId: ID!
+    $destinationProjectId: ID!
   ) {
-    canProjectAcceptReferral(
-      projectId: $projectId
-      referrerEnrollmentId: $referrerEnrollmentId
+    projectCanAcceptReferral(
+      sourceEnrollmentId: $sourceEnrollmentId
+      destinationProjectId: $destinationProjectId
     )
   }
 `;
 
 /**
- * __useGetCanProjectAcceptReferralQuery__
+ * __useGetProjectCanAcceptReferralQuery__
  *
- * To run a query within a React component, call `useGetCanProjectAcceptReferralQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCanProjectAcceptReferralQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetProjectCanAcceptReferralQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectCanAcceptReferralQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCanProjectAcceptReferralQuery({
+ * const { data, loading, error } = useGetProjectCanAcceptReferralQuery({
  *   variables: {
- *      projectId: // value for 'projectId'
- *      referrerEnrollmentId: // value for 'referrerEnrollmentId'
+ *      sourceEnrollmentId: // value for 'sourceEnrollmentId'
+ *      destinationProjectId: // value for 'destinationProjectId'
  *   },
  * });
  */
-export function useGetCanProjectAcceptReferralQuery(
+export function useGetProjectCanAcceptReferralQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetCanProjectAcceptReferralQuery,
-    GetCanProjectAcceptReferralQueryVariables
+    GetProjectCanAcceptReferralQuery,
+    GetProjectCanAcceptReferralQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetCanProjectAcceptReferralQuery,
-    GetCanProjectAcceptReferralQueryVariables
-  >(GetCanProjectAcceptReferralDocument, options);
+    GetProjectCanAcceptReferralQuery,
+    GetProjectCanAcceptReferralQueryVariables
+  >(GetProjectCanAcceptReferralDocument, options);
 }
-export function useGetCanProjectAcceptReferralLazyQuery(
+export function useGetProjectCanAcceptReferralLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetCanProjectAcceptReferralQuery,
-    GetCanProjectAcceptReferralQueryVariables
+    GetProjectCanAcceptReferralQuery,
+    GetProjectCanAcceptReferralQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetCanProjectAcceptReferralQuery,
-    GetCanProjectAcceptReferralQueryVariables
-  >(GetCanProjectAcceptReferralDocument, options);
+    GetProjectCanAcceptReferralQuery,
+    GetProjectCanAcceptReferralQueryVariables
+  >(GetProjectCanAcceptReferralDocument, options);
 }
-export type GetCanProjectAcceptReferralQueryHookResult = ReturnType<
-  typeof useGetCanProjectAcceptReferralQuery
+export type GetProjectCanAcceptReferralQueryHookResult = ReturnType<
+  typeof useGetProjectCanAcceptReferralQuery
 >;
-export type GetCanProjectAcceptReferralLazyQueryHookResult = ReturnType<
-  typeof useGetCanProjectAcceptReferralLazyQuery
+export type GetProjectCanAcceptReferralLazyQueryHookResult = ReturnType<
+  typeof useGetProjectCanAcceptReferralLazyQuery
 >;
-export type GetCanProjectAcceptReferralQueryResult = Apollo.QueryResult<
-  GetCanProjectAcceptReferralQuery,
-  GetCanProjectAcceptReferralQueryVariables
+export type GetProjectCanAcceptReferralQueryResult = Apollo.QueryResult<
+  GetProjectCanAcceptReferralQuery,
+  GetProjectCanAcceptReferralQueryVariables
 >;
 export const GetReferralPostingDocument = gql`
   query GetReferralPosting($id: ID!) {

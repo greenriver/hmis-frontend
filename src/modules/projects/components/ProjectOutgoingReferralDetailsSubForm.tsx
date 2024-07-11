@@ -10,7 +10,7 @@ import { SubmitFormAllowedTypes } from '@/modules/form/types';
 import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
 import {
   RecordFormRole,
-  useGetCanProjectAcceptReferralQuery,
+  useGetProjectCanAcceptReferralQuery,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -61,10 +61,10 @@ const ProjectOutgoingReferralDetailsSubForm: React.FC<Props> = ({
     );
   }
 
-  const { data: receivingProject } = useGetCanProjectAcceptReferralQuery({
+  const { data } = useGetProjectCanAcceptReferralQuery({
     variables: {
-      projectId: destinationProjectId,
-      referrerEnrollmentId: enrollmentId,
+      destinationProjectId: destinationProjectId,
+      sourceEnrollmentId: enrollmentId,
     },
   });
 
@@ -73,8 +73,8 @@ const ProjectOutgoingReferralDetailsSubForm: React.FC<Props> = ({
       {formDefinitionLoading && (
         <LoadingSkeleton width={'100%'} count={1} sx={{ my: 2 }} />
       )}
-      {receivingProject && !receivingProject.canProjectAcceptReferral && (
-        <Alert color='warning' sx={{ mb: 2 }}>
+      {data && !data.projectCanAcceptReferral && (
+        <Alert severity='warning' sx={{ mb: 2 }}>
           At least one client in the household already has an open enrollment in
           this project.
         </Alert>

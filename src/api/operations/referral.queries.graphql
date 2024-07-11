@@ -1,7 +1,10 @@
-query GetCanProjectAcceptReferral($projectId: ID!, $referrerEnrollmentId: ID!) {
-  canProjectAcceptReferral(
-    projectId: $projectId
-    referrerEnrollmentId: $referrerEnrollmentId
+query GetProjectCanAcceptReferral(
+  $sourceEnrollmentId: ID!
+  $destinationProjectId: ID!
+) {
+  projectCanAcceptReferral(
+    sourceEnrollmentId: $sourceEnrollmentId
+    destinationProjectId: $destinationProjectId
   )
 }
 
