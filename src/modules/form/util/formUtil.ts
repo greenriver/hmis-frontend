@@ -531,26 +531,25 @@ export const autofillValues = ({
     // Skip autofills that should not run on read-only views
     if (viewOnly && !av.autofillReadonly) return false;
 
-    // Evaluate all enableWhen conditions
-    const booleans = av.autofillWhen.map((en) =>
-      evaluateEnableWhen({
-        en,
-        values,
-        itemMap,
-        shouldEnableFn: shouldEnableItem,
-        localConstants,
-      })
-    );
+    // Evaluate enableWhen conditions, if present
+    if (av.autofillWhen && av.autofillWhen.length > 0) {
+      const booleans = av.autofillWhen.map((en) =>
+        evaluateEnableWhen({
+          en,
+          values,
+          itemMap,
+          shouldEnableFn: shouldEnableItem,
+          localConstants,
+        })
+      );
 
-    // If there were no conditions specify, it should always be autofilled
-    if (booleans.length === 0) booleans.push(true);
+      const shouldAutofillValue =
+        av.autofillBehavior === EnableBehavior.Any
+          ? booleans.some(Boolean)
+          : booleans.every(Boolean);
 
-    const shouldAutofillValue =
-      av.autofillBehavior === EnableBehavior.Any
-        ? booleans.some(Boolean)
-        : booleans.every(Boolean);
-
-    if (!shouldAutofillValue) return false;
+      if (!shouldAutofillValue) return false;
+    }
 
     const newValue = getAutofillComparisonValue(av, values, item);
 
@@ -564,7 +563,7 @@ export const autofillValues = ({
       values[item.linkId] = newValue;
     }
 
-    // Stop iterating through enable when conditions
+    // Stop iterating through autofill values
     return true;
   });
 };
