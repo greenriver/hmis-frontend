@@ -1,3 +1,4 @@
+import { Alert } from '@mui/material';
 import { Box } from '@mui/system';
 import { useMemo } from 'react';
 
@@ -7,7 +8,10 @@ import { useDynamicFormHandlersForRecord } from '@/modules/form/hooks/useDynamic
 import useFormDefinition from '@/modules/form/hooks/useFormDefinition';
 import { SubmitFormAllowedTypes } from '@/modules/form/types';
 import { AlwaysPresentLocalConstants } from '@/modules/form/util/formUtil';
-import { RecordFormRole } from '@/types/gqlTypes';
+import {
+  RecordFormRole,
+  useGetProjectCanAcceptReferralQuery,
+} from '@/types/gqlTypes';
 
 interface Props {
   enrollmentId: string; // HoH enrollment that is being referred
@@ -57,10 +61,23 @@ const ProjectOutgoingReferralDetailsSubForm: React.FC<Props> = ({
     );
   }
 
+  const { data } = useGetProjectCanAcceptReferralQuery({
+    variables: {
+      destinationProjectId: destinationProjectId,
+      sourceEnrollmentId: enrollmentId,
+    },
+  });
+
   return (
     <Box>
       {formDefinitionLoading && (
         <LoadingSkeleton width={'100%'} count={1} sx={{ my: 2 }} />
+      )}
+      {data && !data.projectCanAcceptReferral && (
+        <Alert severity='warning' sx={{ mb: 2 }}>
+          At least one client in the household already has an open enrollment in
+          this project.
+        </Alert>
       )}
       {formDefinition && (
         <DynamicForm
