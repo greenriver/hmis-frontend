@@ -7,6 +7,7 @@ import {
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
+import { RetryLink } from '@apollo/client/link/retry';
 import { SentryLink } from 'apollo-link-sentry';
 import fetch from 'cross-fetch';
 import { generatePath, matchRoutes } from 'react-router-dom';
@@ -124,10 +125,36 @@ export const cache = new InMemoryCache({
   },
 });
 
+const retryLink = new RetryLink({
+  delay: {
+    initial: 800, // Wait 800ms before the first retry after a failed request
+    jitter: true,
+  },
+  attempts: {
+    max: 3,
+    retryIf: (error: CustomFetchNetworkError, operation) => {
+      // Only retry operations that seem to be queries, like "GetWidgets"
+      // Avoid retries on mutations as they may not be idempotent
+      if (!operation?.operationName?.match(/^(Get)/)) {
+        return false;
+      }
+      switch (error?.statusCode) {
+        case 401:
+        case 403:
+        case 404:
+        case 500:
+          return false;
+      }
+      return !!error;
+    },
+  },
+});
+
 const apolloClient = new ApolloClient({
   link: from([
     apolloErrorLink, // handle errors
     sentryLink, // instrument graphql requests for sentry
+    retryLink,
     authLink,
     pathHeaderLink,
     sessionExpiryLink,
