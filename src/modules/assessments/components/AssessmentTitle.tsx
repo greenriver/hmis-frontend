@@ -87,7 +87,7 @@ const AssessmentTitle = ({
   return (
     <Stack sx={{ mb: 1 }} gap={1}>
       <Typography variant='h4'>{clientName}</Typography>
-      <Typography variant='body1'>
+      <Typography variant='body1' component='div'>
         <b>
           {assessmentTitle}
           {': '}
