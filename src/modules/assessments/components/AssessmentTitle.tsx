@@ -2,6 +2,7 @@ import { Alert, AlertTitle, Skeleton, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { ReactNode, useState } from 'react';
 import { useRelatedAnnualAssessments } from '../hooks/useRelatedAnnualAssessments';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import RouterLink from '@/components/elements/RouterLink';
 import {
   parseAndFormatDate,
@@ -85,13 +86,14 @@ const AssessmentTitle = ({
   }
 
   return (
-    <Stack sx={{ mb: 1 }} gap={1}>
+    <>
       <Typography variant='h4'>{clientName}</Typography>
-      <Typography variant='body1' component='div'>
-        <b>
-          {assessmentTitle}
-          {': '}
-        </b>
+
+      <CommonLabeledTextBlock
+        title={assessmentTitle + ':'}
+        horizontal
+        variant='body1'
+      >
         <RouterLink
           to={generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
             enrollmentId,
@@ -101,9 +103,9 @@ const AssessmentTitle = ({
         >
           {projectName} ({parseAndFormatDateRange(entryDate, exitDate)})
         </RouterLink>
-      </Typography>
+      </CommonLabeledTextBlock>
       {subtitle}
-    </Stack>
+    </>
   );
 };
 

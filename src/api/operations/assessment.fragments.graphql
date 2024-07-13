@@ -12,6 +12,9 @@ fragment AssessmentFields on Assessment {
   user {
     ...UserFields
   }
+  createdBy {
+    ...UserFields
+  }
   definition {
     id
     cacheKey
