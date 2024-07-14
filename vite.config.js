@@ -35,10 +35,6 @@ export default defineConfig(({ command, mode }) => {
     target: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
     xfwd: true,
     changeOrigin: true, // sets Host header
-    headers: {
-      Origin: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
-      'X-Proxy-Secret': env.HMIS_PROXY_SECRET,
-    },
     secure: false,
   };
 
