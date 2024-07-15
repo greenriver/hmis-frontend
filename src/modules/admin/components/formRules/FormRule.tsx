@@ -1,7 +1,11 @@
 import { Chip, Stack, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 import { HmisEnums } from '@/types/gqlEnums';
-import { FormRole, FormRuleFieldsFragment } from '@/types/gqlTypes';
+import {
+  FormRole,
+  FormRuleFieldsFragment,
+  ProjectConfigFieldsFragment,
+} from '@/types/gqlTypes';
 
 const FormRuleChip: React.FC<{ label: string }> = ({ label }) => {
   // bottom margin puts the chip text in line with the body text
@@ -22,28 +26,38 @@ const nonClientFormRoles = [
 const nonProjectFormRoles = [FormRole.Organization];
 
 interface Props {
-  rule: FormRuleFieldsFragment;
-  formRole: FormRole;
-  actionButtons: ReactNode;
+  rule: FormRuleFieldsFragment | ProjectConfigFieldsFragment;
+  formRole?: FormRole;
+  actionButtons?: ReactNode;
+}
+
+function isFormRuleFragment(
+  obj: FormRuleFieldsFragment | ProjectConfigFieldsFragment
+): obj is FormRuleFieldsFragment {
+  return obj && obj.hasOwnProperty('funder');
 }
 
 const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
-  // TODO - This duplicates some functionality from ProjectApplicabilitySummary used in the Project config table.
+  // Fields that are shared across Project Configs and Form Rules
+  const { projectType, project, organization } = rule;
 
-  const {
-    dataCollectedAbout,
-    projectType,
-    project,
-    organization,
-    funder,
-    otherFunder,
-    serviceCategory,
-    serviceType,
-  } = rule;
+  // Fields that are specific to Form Rules
+  let dataCollectedAbout;
+  let funder;
+  let otherFunder;
+  let serviceCategory;
+  let serviceType;
+  if (isFormRuleFragment(rule)) {
+    dataCollectedAbout = rule.dataCollectedAbout;
+    funder = rule.funder;
+    otherFunder = rule.otherFunder;
+    serviceCategory = rule.serviceCategory;
+    serviceType = rule.serviceType;
+  }
 
   const conditions: Record<string, ReactNode> = {};
 
-  if (!nonProjectFormRoles.includes(formRole)) {
+  if (!formRole || !nonProjectFormRoles.includes(formRole)) {
     if (projectType)
       conditions.projectType = (
         <FormRuleChip
@@ -76,7 +90,7 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
   const isServiceForm =
     formRole === FormRole.Service && (serviceType || serviceCategory);
 
-  const isClientForm = !nonClientFormRoles.includes(formRole);
+  const isClientForm = formRole && !nonClientFormRoles.includes(formRole);
 
   const conditionCount = Object.keys(conditions).length;
 
@@ -92,7 +106,7 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
             for{' '}
           </>
         ) : (
-          'Applies to '
+          `Applies ${isClientForm ? 'to ' : ''}`
         )}
         {isClientForm && (
           <>

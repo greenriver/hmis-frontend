@@ -2,7 +2,8 @@ import { Box } from '@mui/material';
 
 import { Stack } from '@mui/system';
 import { capitalize } from 'lodash-es';
-import ProjectApplicabilitySummary from '../formRules/ProjectApplicabilitySummary';
+import FormRule from '../formRules/FormRule';
+import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -16,6 +17,7 @@ import {
   GetProjectConfigsQuery,
   GetProjectConfigsQueryVariables,
   ProjectConfigFieldsFragment,
+  ProjectConfigType,
 } from '@/types/gqlTypes';
 import { evictProjectConfigs } from '@/utils/cacheUtil';
 
@@ -27,12 +29,15 @@ const columns: ColumnDef<ProjectConfigFieldsFragment>[] = [
     ),
   },
   {
-    header: 'Project Applicability',
-    render: (config) => <ProjectApplicabilitySummary rule={config} />,
+    header: 'Applicability Rule',
+    render: (config) => <FormRule rule={config} />,
   },
   {
-    header: 'Config Options',
-    render: ({ configOptions }) => {
+    header: 'Options',
+    render: ({ configOptions, configType }) => {
+      if (configType === ProjectConfigType.AutoEnter) {
+        return <NotCollectedText>N/A</NotCollectedText>;
+      }
       if (!configOptions) return;
       const parsedOptions = JSON.parse(configOptions);
 
@@ -83,6 +88,7 @@ const ProjectConfigTable = ({
                   idPath={'deleteProjectConfig.projectConfig.id'}
                   recordName='Project Config'
                   onSuccess={() => evictProjectConfigs()}
+                  onlyIcon
                 >
                   Delete
                 </DeleteMutationButton>
