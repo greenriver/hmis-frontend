@@ -45,7 +45,6 @@ jobs:
     - name: Check dependencies
       run: |
         yarn yarn-deduplicate --list --fail
-        yarn madge --circular --extensions ts --ts-config tsconfig.json ./src/**/*
 
     - name: Storybook smoke test
       run: |

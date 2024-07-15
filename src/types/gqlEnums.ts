@@ -1466,17 +1466,12 @@ export const HmisEnums = {
     NoLongerInterestedInThisProgram: 'No longer interested in this program',
   },
   ReferralPostingStatus: {
-    accepted_by_other_program_status: 'Accepted By Other Program',
     accepted_pending_status: 'Accepted Pending',
     accepted_status: 'Accepted',
     assigned_status: 'Assigned',
-    assigned_to_other_program_status: 'Assigned To Other Program',
     closed_status: 'Closed',
     denied_pending_status: 'Denied Pending',
     denied_status: 'Denied',
-    new_status: 'New',
-    not_selected_status: 'Not Selected',
-    void_status: 'Void',
   },
   ReferralResult: {
     INVALID: 'Invalid Value',
