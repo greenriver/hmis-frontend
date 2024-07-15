@@ -4399,13 +4399,6 @@ export enum NoYesReasonsForMissingData {
   Yes = 'YES',
 }
 
-export enum NonAdminFormRole {
-  /** Custom assessment */
-  CustomAssessment = 'CUSTOM_ASSESSMENT',
-  /** Service */
-  Service = 'SERVICE',
-}
-
 /** HUD NotEmployedReason (R6.B) */
 export enum NotEmployedReason {
   /** (99) Data not collected */
@@ -4560,6 +4553,8 @@ export enum PickListType {
   EnrollmentAuditEventRecordTypes = 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
   /** External form types for the project. */
   ExternalFormTypesForProject = 'EXTERNAL_FORM_TYPES_FOR_PROJECT',
+  /** Form Types */
+  FormTypes = 'FORM_TYPES',
   Geocode = 'GEOCODE',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
@@ -5679,7 +5674,6 @@ export type Query = {
   inventory?: Maybe<Inventory>;
   mergeAuditHistory: MergeAuditEventsPaginated;
   mergeCandidates: ClientMergeCandidatesPaginated;
-  nonAdminFormRole: NonAdminFormRole;
   /** Organization lookup */
   organization?: Maybe<Organization>;
   organizations: OrganizationsPaginated;

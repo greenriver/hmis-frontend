@@ -29907,29 +29907,6 @@
       },
       {
         "kind": "ENUM",
-        "name": "NonAdminFormRole",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "CUSTOM_ASSESSMENT",
-            "description": "Custom assessment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SERVICE",
-            "description": "Service",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
         "name": "NotEmployedReason",
         "description": "HUD NotEmployedReason (R6.B)",
         "fields": null,
@@ -30837,6 +30814,12 @@
           {
             "name": "EXTERNAL_FORM_TYPES_FOR_PROJECT",
             "description": "External form types for the project.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FORM_TYPES",
+            "description": "Form Types",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -36908,22 +36891,6 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "ClientMergeCandidatesPaginated",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "nonAdminFormRole",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "NonAdminFormRole",
                 "ofType": null
               }
             },
