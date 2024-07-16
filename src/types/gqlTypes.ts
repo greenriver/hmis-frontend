@@ -4553,6 +4553,8 @@ export enum PickListType {
   EnrollmentAuditEventRecordTypes = 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
   /** External form types for the project. */
   ExternalFormTypesForProject = 'EXTERNAL_FORM_TYPES_FOR_PROJECT',
+  /** Form Types */
+  FormTypes = 'FORM_TYPES',
   Geocode = 'GEOCODE',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
@@ -5912,6 +5914,7 @@ export type QueryUserArgs = {
 export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean']['output'];
+  canAdministrateConfig: Scalars['Boolean']['output'];
   canAuditClients: Scalars['Boolean']['output'];
   canAuditEnrollments: Scalars['Boolean']['output'];
   canAuditUsers: Scalars['Boolean']['output'];
@@ -7836,6 +7839,7 @@ export type RootPermissionsFragment = {
   canSplitHouseholds: boolean;
   canConfigureDataCollection: boolean;
   canManageForms: boolean;
+  canAdministrateConfig: boolean;
   canViewClientAlerts: boolean;
   canManageExternalFormSubmissions: boolean;
 };
@@ -7950,6 +7954,7 @@ export type GetRootPermissionsQuery = {
     canSplitHouseholds: boolean;
     canConfigureDataCollection: boolean;
     canManageForms: boolean;
+    canAdministrateConfig: boolean;
     canViewClientAlerts: boolean;
     canManageExternalFormSubmissions: boolean;
   };
@@ -32416,6 +32421,7 @@ export const RootPermissionsFragmentDoc = gql`
     canSplitHouseholds
     canConfigureDataCollection
     canManageForms
+    canAdministrateConfig
     canViewClientAlerts
     canManageExternalFormSubmissions
   }

@@ -935,6 +935,7 @@ export const HmisEnums = {
       'Enrollments for the client, including WIP and Exited.',
     ENROLLMENT_AUDIT_EVENT_RECORD_TYPES: 'ENROLLMENT_AUDIT_EVENT_RECORD_TYPES',
     EXTERNAL_FORM_TYPES_FOR_PROJECT: 'External form types for the project.',
+    FORM_TYPES: 'Form Types',
     GEOCODE: 'GEOCODE',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     OPEN_PROJECTS: 'Open Projects that the user can see',

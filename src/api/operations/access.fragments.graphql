@@ -34,6 +34,7 @@ fragment RootPermissions on QueryAccess {
   canSplitHouseholds
   canConfigureDataCollection
   canManageForms
+  canAdministrateConfig
   canViewClientAlerts
   canManageExternalFormSubmissions
 }

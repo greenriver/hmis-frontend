@@ -30818,6 +30818,12 @@
             "deprecationReason": null
           },
           {
+            "name": "FORM_TYPES",
+            "description": "Form Types",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "GEOCODE",
             "description": null,
             "isDeprecated": false,
@@ -37687,6 +37693,22 @@
         "fields": [
           {
             "name": "canAdministerHmis",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canAdministrateConfig",
             "description": null,
             "args": [],
             "type": {

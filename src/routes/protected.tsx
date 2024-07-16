@@ -767,7 +767,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: AdminDashboardRoutes.JSON_EDIT_FORM,
             element: (
-              <RootPermissionsFilter permissions='canManageForms'>
+              <RootPermissionsFilter permissions='canAdministrateConfig'>
                 <JsonFormEditorPage />
               </RootPermissionsFilter>
             ),
