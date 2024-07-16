@@ -290,7 +290,8 @@ const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
     );
 
     const mciFields = pick(byKey, MCI_CLEARANCE_FIELDS);
-    return [byKey.id, values['current-mci-id'], mciFields];
+    // Check Link ID 'current_mci_id' in values to see if we already have an MCI ID
+    return [byKey.id, values.current_mci_id, mciFields];
   }, [getCleanedValues, definition]);
 
   const previousMciAttributes = usePrevious(currentMciAttributes);
