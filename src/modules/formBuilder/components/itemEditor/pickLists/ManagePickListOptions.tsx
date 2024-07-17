@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useController, useFieldArray, useWatch } from 'react-hook-form';
 import PickListOption from './PickListOption';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
@@ -26,11 +26,17 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
   });
 
   const {
-    field: { onChange: onChangePickListReference },
+    field: { onChange: onChangePickListReference, value: pickListReference },
   } = useController({
     control,
     name: 'pickListReference',
   });
+
+  useEffect(() => {
+    if (pickListReference) {
+      replace([]);
+    }
+  }, [pickListReference, replace]);
 
   // `fields` above contains the defaultValues, so we also useWatch to get recent updates
   const fieldsWatch = useWatch({
@@ -38,7 +44,8 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
     name: 'pickListOptions',
   });
 
-  const setPickListInitialSelected = useCallback(
+  // TODO @MARTHA not working causes infinite loop
+  const onChangeInitialSelected = useCallback(
     (code: string) => {
       if (!fieldsWatch) return;
       const newFields = fieldsWatch.map((field) => {
@@ -81,7 +88,7 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
               control={control}
               index={index}
               formItemComponent={formItemComponent}
-              setPickListInitialSelected={setPickListInitialSelected}
+              onChangeInitialSelected={onChangeInitialSelected}
               isCodeUnique={isCodeUnique}
             />
           </RemovableCard>
@@ -93,9 +100,6 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
         label='Or, use a reference list for choices'
         placeholder='Select list'
         options={pickListTypesPickList}
-        onChange={(value) => {
-          if (value) replace([]);
-        }}
       />
     </>
   );

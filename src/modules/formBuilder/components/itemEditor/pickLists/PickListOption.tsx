@@ -1,5 +1,6 @@
 import { Stack } from '@mui/material';
-import { useCallback } from 'react';
+import { useEffect } from 'react';
+import { useWatch } from 'react-hook-form';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { FormItemControl } from '@/modules/formBuilder/components/itemEditor/types';
@@ -9,7 +10,7 @@ interface PickListOptionProps {
   control: FormItemControl;
   index: number;
   formItemComponent: Component;
-  setPickListInitialSelected: (code: string) => void;
+  onChangeInitialSelected: (code: string) => void;
   isCodeUnique: (coe: string) => boolean;
   code?: string;
 }
@@ -20,16 +21,19 @@ const PickListOption: React.FC<PickListOptionProps> = ({
   index,
   formItemComponent,
   isCodeUnique,
-  setPickListInitialSelected,
+  onChangeInitialSelected,
 }) => {
-  const onChangeInitialSelected = useCallback(
-    (value: boolean) => {
-      // Even though it's a controlled RHF checkbox, we still provide an onChange callback
-      // in order to set all the other pick list options' `initialSelected` values to false when this one is set to true.
-      if (value && code) setPickListInitialSelected(code);
-    },
-    [setPickListInitialSelected, code]
-  );
+  // Listen for changes to the initialSelected value in order to set all the other
+  // pick list options' `initialSelected` values to false when this one is set to true.
+  const initialSelected = useWatch({
+    control,
+    name: `pickListOptions.${index}.initialSelected`,
+  });
+  useEffect(() => {
+    if (initialSelected && code) {
+      onChangeInitialSelected(code);
+    }
+  }, [onChangeInitialSelected, code, initialSelected]);
 
   return (
     <Stack gap={2}>
@@ -55,7 +59,6 @@ const PickListOption: React.FC<PickListOptionProps> = ({
         control={control}
         label='Initially selected'
         helperText='Whether this choice is selected by default'
-        onChange={onChangeInitialSelected}
       />
 
       {formItemComponent !== Component.Dropdown && (
@@ -64,7 +67,7 @@ const PickListOption: React.FC<PickListOptionProps> = ({
           control={control}
           name={`pickListOptions.${index}.helperText`}
           label='Helper text'
-          helperText='Helper text, including html'
+          helperText='Helper text (may contain HTML)'
         />
       )}
 
@@ -100,9 +103,7 @@ const PickListOption: React.FC<PickListOptionProps> = ({
         name={`pickListOptions.${index}.numericValue`}
         label='Numeric value'
         helperText='Numeric value, such as a score, used for comparison in conditional logic'
-        rules={{
-          validate: (input) => !input || /^-?\d+$/.test(input),
-        }}
+        type='number'
       />
     </Stack>
   );

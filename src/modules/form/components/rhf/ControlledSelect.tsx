@@ -18,7 +18,6 @@ export type ControlledSelectProps = Omit<
   rules?: RhfRules;
   required?: boolean;
   helperText?: ReactNode;
-  onChange?: (value: PickListOption | null) => void;
 };
 
 // React-Hook-Form wrapper around GenericSelect.
@@ -32,7 +31,6 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   loading,
   placeholder,
   helperText,
-  onChange,
   ...props
 }) => {
   const {
@@ -66,10 +64,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
     <GenericSelect<PickListOption, false, false>
       {...props}
       value={valueOption}
-      onChange={(_event, value) => {
-        field.onChange(value?.code || null);
-        if (onChange) onChange(value);
-      }}
+      onChange={(_event, value) => field.onChange(value?.code || null)}
       textInputProps={{
         name: field.name,
         helperText: error?.message || helperText,
