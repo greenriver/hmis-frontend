@@ -32,6 +32,7 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
     // TODO: can transform server errors into RHF FieldErrors so they get inlined into the form
     // https://react-hook-form.com/ts#FieldErrors
     // errors: errorState?.errors,
+    mode: 'onChange', // allows custom RHF validator functions to run when fields change
   });
 
   const {

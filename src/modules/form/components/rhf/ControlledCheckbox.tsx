@@ -9,6 +9,7 @@ interface ControlledCheckboxProps
   name: string;
   control?: Control; // Optional when using FormProvider
   rules?: RhfRules;
+  onChange?: (value: boolean) => void;
 }
 
 // React-Hook-Form wrapper around LabeledCheckbox
@@ -16,6 +17,7 @@ const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
   name,
   control,
   rules,
+  onChange,
   ...props
 }) => {
   const {
@@ -29,7 +31,10 @@ const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
 
   return (
     <LabeledCheckbox
-      onChange={field.onChange} // send value to hook form
+      onChange={(_event, value) => {
+        field.onChange(_event, value); // send value to hook form
+        if (onChange) onChange(value); // call onChange callback passed down from the parent, if provided
+      }}
       onBlur={field.onBlur} // notify when input is touched/blur
       value={field.value || false} // input value
       name={field.name} // send down the input name

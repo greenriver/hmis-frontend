@@ -136,6 +136,7 @@ const RadioGroupInput = ({
             onChange={onClickOption}
             variant={checkbox ? 'checkbox' : 'radio'}
             value={value?.code}
+            row={row}
           />
         ))}
         {value?.code === INVALID_ENUM && (

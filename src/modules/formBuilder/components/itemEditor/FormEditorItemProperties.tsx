@@ -24,7 +24,9 @@ import {
   MAX_INPUT_AND_LABEL_WIDTH,
   getItemMap,
   localResolvePickList,
+  chooseSelectComponentType,
 } from '@/modules/form/util/formUtil';
+import ManagePickListOptions from '@/modules/formBuilder/components/itemEditor/pickLists/ManagePickListOptions';
 import {
   COMPARABLE_ITEM_TYPES,
   ItemCategory,
@@ -52,7 +54,6 @@ const inputSizePickList = Object.keys(HmisEnums.InputSize).map((key) => ({
   code: key,
   label: startCase(key.toLowerCase()),
 }));
-const pickListTypesPickList = localResolvePickList('PickListType') || [];
 const errorAlertId = 'formItemPropertyErrors';
 
 interface FormEditorItemPropertiesProps {
@@ -105,8 +106,35 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
 
   // Monitor changes to the FormItem.component field
   const itemComponentValue = watch('component');
+  const repeatsValue = watch('repeats');
   const hiddenValue = watch('hidden');
+  const pickListOptionsValue = watch('pickListOptions');
+  const pickListReferenceValue = watch('pickListReference');
   const hasEnableWhen = !!watch('enableWhen.0');
+
+  // Whereas `itemComponentValue` above contains the user-provided component override (null if not specified),
+  // `realItemComponent` is the actual component for the item. It's used specifically for Choice/Open Choice types,
+  // which have their own rules for whether to show a dropdown or radio if the user hasn't specified anything.
+  // If needed, we could support other components here, but right now this will be undefined for non-Choice types.
+  const realItemComponent = useMemo(() => {
+    if (
+      itemTypeValue &&
+      [ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue)
+    ) {
+      return chooseSelectComponentType(
+        itemComponentValue,
+        repeatsValue,
+        pickListOptionsValue?.length,
+        !pickListReferenceValue
+      );
+    }
+  }, [
+    itemTypeValue,
+    itemComponentValue,
+    repeatsValue,
+    pickListOptionsValue,
+    pickListReferenceValue,
+  ]);
 
   const itemCategory = useMemo<ItemCategory>(() => {
     if (!itemTypeValue) return 'question';
@@ -299,31 +327,16 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               control={control}
             />
           )}
-          {[ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) && (
-            <>
-              {/* <TextInput
-              label='Allowed Responses'
-              value={item.pickListOptions?.map((o) => o.code).join(',')}
-              onChange={(e) => {
-                onChangeProperty(
-                  'pickListOptions',
-                  e.target.value.split(',').map((o) => {
-                    return { code: o };
-                  })
-                );
-              }}
-            />
-             */}
-              <ControlledSelect
-                name='pickListReference'
-                control={control}
-                label='Reference list for allowed responses'
-                placeholder='Select pick list'
-                options={pickListTypesPickList}
-              />
-            </>
-          )}
         </Section>
+        {[ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) &&
+          realItemComponent && (
+            <Section title='Choices'>
+              <ManagePickListOptions
+                control={control}
+                formItemComponent={realItemComponent}
+              />
+            </Section>
+          )}
         <Section title='Visibility'>
           {isAssessment && (
             <ControlledSelect

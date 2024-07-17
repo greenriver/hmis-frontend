@@ -336,8 +336,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       const currentValue = value ? value : item.repeats ? [] : null;
 
       const componentType = chooseSelectComponentType(
-        item,
-        options?.length || 0,
+        item.component,
+        item.repeats,
+        options?.length,
         isLocalPickList
       );
 
