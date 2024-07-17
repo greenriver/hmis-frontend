@@ -1,5 +1,4 @@
 import { Stack } from '@mui/material';
-import { useCallback } from 'react';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { FormItemControl } from '@/modules/formBuilder/components/itemEditor/types';
@@ -9,28 +8,17 @@ interface PickListOptionProps {
   control: FormItemControl;
   index: number;
   formItemComponent: Component;
-  setPickListInitialSelected: (code: string) => void;
   isCodeUnique: (code: string) => boolean;
-  code?: string;
+  isInitialSelectedUnique: (checked: boolean) => boolean;
 }
 
 const PickListOption: React.FC<PickListOptionProps> = ({
   control,
-  code,
   index,
   formItemComponent,
   isCodeUnique,
-  setPickListInitialSelected,
+  isInitialSelectedUnique,
 }) => {
-  const updateInitialSelected = useCallback(
-    (value: boolean) => {
-      // Even though it's a controlled RHF checkbox, we still provide an onChange callback
-      // in order to set all the other pick list options' `initialSelected` values to false when this one is set to true.
-      if (value && code) setPickListInitialSelected(code);
-    },
-    [setPickListInitialSelected, code]
-  );
-
   return (
     <Stack gap={2}>
       <ControlledTextInput
@@ -39,9 +27,7 @@ const PickListOption: React.FC<PickListOptionProps> = ({
         label='Code'
         helperText='Must be unique'
         required={true}
-        rules={{
-          validate: (input) => isCodeUnique(input),
-        }}
+        rules={{ validate: (input) => isCodeUnique(input) }}
       />
       <ControlledTextInput
         control={control}
@@ -54,8 +40,8 @@ const PickListOption: React.FC<PickListOptionProps> = ({
         name={`pickListOptions.${index}.initialSelected`}
         control={control}
         label='Initially selected'
-        helperText='Whether this choice is selected by default'
-        afterChange={updateInitialSelected}
+        helperText='Whether this choice is selected by default. Only one choice may be initially selected.'
+        rules={{ validate: (input) => isInitialSelectedUnique(input) }}
       />
 
       {formItemComponent !== Component.Dropdown && (

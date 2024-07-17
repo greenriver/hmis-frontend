@@ -77,21 +77,19 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
     name: 'pickListOptions',
   });
 
-  const setPickListInitialSelected = useCallback(
-    (code: string) => {
-      if (!fieldsWatch) return;
-      const newFields = fieldsWatch.map((field) => {
-        return { ...field, initialSelected: field?.code === code };
-      });
-      replace(newFields);
-    },
-    [replace, fieldsWatch]
-  );
-
   const isCodeUnique = useCallback(
     (code: string) => {
       if (!fieldsWatch) return true;
       return fieldsWatch.filter((field) => field?.code === code).length <= 1;
+    },
+    [fieldsWatch]
+  );
+
+  const isInitialSelectedUnique = useCallback(
+    (checked: boolean) => {
+      if (!fieldsWatch) return true;
+      if (!checked) return true;
+      return fieldsWatch.filter((field) => field?.initialSelected).length <= 1;
     },
     [fieldsWatch]
   );
@@ -114,16 +112,11 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
             removeTooltip={'Remove Choice'}
           >
             <PickListOption
-              code={
-                fieldsWatch && fieldsWatch[index]
-                  ? fieldsWatch[index]?.code
-                  : ''
-              }
               control={control}
               index={index}
               formItemComponent={formItemComponent}
-              setPickListInitialSelected={setPickListInitialSelected}
               isCodeUnique={isCodeUnique}
+              isInitialSelectedUnique={isInitialSelectedUnique}
             />
           </RemovableCard>
         ))}
