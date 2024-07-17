@@ -77,8 +77,7 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
     name: 'pickListOptions',
   });
 
-  // TODO @MARTHA not working causes infinite loop
-  const onChangeInitialSelected = useCallback(
+  const setPickListInitialSelected = useCallback(
     (code: string) => {
       if (!fieldsWatch) return;
       const newFields = fieldsWatch.map((field) => {
@@ -123,7 +122,7 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
               control={control}
               index={index}
               formItemComponent={formItemComponent}
-              onChangeInitialSelected={onChangeInitialSelected}
+              setPickListInitialSelected={setPickListInitialSelected}
               isCodeUnique={isCodeUnique}
             />
           </RemovableCard>

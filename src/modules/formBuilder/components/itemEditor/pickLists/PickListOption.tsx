@@ -1,6 +1,5 @@
 import { Stack } from '@mui/material';
-import { useEffect } from 'react';
-import { useWatch } from 'react-hook-form';
+import { useCallback } from 'react';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { FormItemControl } from '@/modules/formBuilder/components/itemEditor/types';
@@ -10,7 +9,7 @@ interface PickListOptionProps {
   control: FormItemControl;
   index: number;
   formItemComponent: Component;
-  onChangeInitialSelected: (code: string) => void;
+  setPickListInitialSelected: (code: string) => void;
   isCodeUnique: (code: string) => boolean;
   code?: string;
 }
@@ -21,19 +20,16 @@ const PickListOption: React.FC<PickListOptionProps> = ({
   index,
   formItemComponent,
   isCodeUnique,
-  onChangeInitialSelected,
+  setPickListInitialSelected,
 }) => {
-  // Listen for changes to the initialSelected value in order to set all the other
-  // pick list options' `initialSelected` values to false when this one is set to true.
-  const initialSelected = useWatch({
-    control,
-    name: `pickListOptions.${index}.initialSelected`,
-  });
-  useEffect(() => {
-    if (initialSelected && code) {
-      onChangeInitialSelected(code);
-    }
-  }, [onChangeInitialSelected, code, initialSelected]);
+  const updateInitialSelected = useCallback(
+    (value: boolean) => {
+      // Even though it's a controlled RHF checkbox, we still provide an onChange callback
+      // in order to set all the other pick list options' `initialSelected` values to false when this one is set to true.
+      if (value && code) setPickListInitialSelected(code);
+    },
+    [setPickListInitialSelected, code]
+  );
 
   return (
     <Stack gap={2}>
@@ -59,6 +55,7 @@ const PickListOption: React.FC<PickListOptionProps> = ({
         control={control}
         label='Initially selected'
         helperText='Whether this choice is selected by default'
+        afterChange={updateInitialSelected}
       />
 
       {formItemComponent !== Component.Dropdown && (
