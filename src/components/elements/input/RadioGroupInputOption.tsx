@@ -1,9 +1,4 @@
-import {
-  Checkbox,
-  FormControlLabel,
-  FormHelperText,
-  Radio,
-} from '@mui/material';
+import { Checkbox, FormControlLabel, Radio } from '@mui/material';
 import { KeyboardEventHandler, useCallback, useId } from 'react';
 
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
@@ -15,7 +10,6 @@ interface Props {
   onChange: (option: PickListOption) => void;
   variant: 'checkbox' | 'radio';
   value: string | undefined;
-  row?: boolean;
 }
 
 const RadioGroupInputOption: React.FC<Props> = ({
@@ -24,7 +18,6 @@ const RadioGroupInputOption: React.FC<Props> = ({
   onChange,
   variant,
   value,
-  row,
 }) => {
   const descriptionId = useId();
   const labelId = useId();
@@ -87,22 +80,9 @@ const RadioGroupInputOption: React.FC<Props> = ({
         }}
       />
       {helperText && (
-        <FormHelperText
-          component={'div'}
-          sx={{
-            mt: 0,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <CommonHtmlContent
-            sx={row ? {} : { ml: 4 }}
-            variant='body2'
-            id={descriptionId}
-          >
-            {helperText}
-          </CommonHtmlContent>
-        </FormHelperText>
+        <CommonHtmlContent variant='body2' sx={{ ml: 4 }} id={descriptionId}>
+          {helperText}
+        </CommonHtmlContent>
       )}
     </>
   );
