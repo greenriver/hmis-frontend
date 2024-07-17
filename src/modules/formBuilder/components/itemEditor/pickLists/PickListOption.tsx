@@ -1,5 +1,5 @@
-import { ArrowDownward, ArrowUpward } from '@mui/icons-material';
-import { Button, Collapse, Stack } from '@mui/material';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
+import { Box, Collapse, IconButton, Stack, Tooltip } from '@mui/material';
 import React, { useState } from 'react';
 import ControlledCheckbox from '@/modules/form/components/rhf/ControlledCheckbox';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
@@ -24,25 +24,29 @@ const PickListOption: React.FC<PickListOptionProps> = ({
   const [advancedOpen, setAdvancedOpen] = useState(false);
 
   return (
-    <Stack gap={2}>
-      <ControlledTextInput
-        control={control}
-        name={`pickListOptions.${index}.code`}
-        label='Code'
-        helperText='Must be unique'
-        required={true}
-        rules={{ validate: (input) => isCodeUnique(input) }}
-      />
-      <Button
-        fullWidth
-        variant='text'
-        onClick={() => setAdvancedOpen(!advancedOpen)}
-        endIcon={advancedOpen ? <ArrowUpward /> : <ArrowDownward />}
-      >
-        Advanced
-      </Button>
+    <>
+      <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
+        <ControlledTextInput
+          control={control}
+          name={`pickListOptions.${index}.code`}
+          label='Code'
+          helperText='Must be unique'
+          required={true}
+          rules={{ validate: (input) => isCodeUnique(input) }}
+        />
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Tooltip title='Advanced' arrow placement='top'>
+            <IconButton
+              onClick={() => setAdvancedOpen(!advancedOpen)}
+              size='small'
+            >
+              {advancedOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Stack>
 
-      <Collapse in={advancedOpen}>
+      <Collapse in={advancedOpen} sx={{ mt: 2 }}>
         <Stack gap={2}>
           <ControlledTextInput
             control={control}
@@ -105,7 +109,7 @@ const PickListOption: React.FC<PickListOptionProps> = ({
           />
         </Stack>
       </Collapse>
-    </Stack>
+    </>
   );
 };
 
