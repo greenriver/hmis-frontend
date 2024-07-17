@@ -31,6 +31,7 @@ import {
   determineAutofillField,
   getItemCategory,
   slugifyItemLabel,
+  supportedPickListReferencesOptions,
   validComponentsForType,
 } from '@/modules/formBuilder/formBuilderUtil';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -52,7 +53,7 @@ const inputSizePickList = Object.keys(HmisEnums.InputSize).map((key) => ({
   code: key,
   label: startCase(key.toLowerCase()),
 }));
-const pickListTypesPickList = localResolvePickList('PickListType') || [];
+
 const errorAlertId = 'formItemPropertyErrors';
 
 interface FormEditorItemPropertiesProps {
@@ -319,7 +320,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
                 control={control}
                 label='Reference list for allowed responses'
                 placeholder='Select pick list'
-                options={pickListTypesPickList}
+                options={supportedPickListReferencesOptions}
               />
             </>
           )}
