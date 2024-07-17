@@ -11,7 +11,7 @@ interface PickListOptionProps {
   index: number;
   formItemComponent: Component;
   onChangeInitialSelected: (code: string) => void;
-  isCodeUnique: (coe: string) => boolean;
+  isCodeUnique: (code: string) => boolean;
   code?: string;
 }
 

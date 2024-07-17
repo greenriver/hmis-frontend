@@ -1,23 +1,56 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useController, useFieldArray, useWatch } from 'react-hook-form';
 import PickListOption from './PickListOption';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
-import { localResolvePickList } from '@/modules/form/util/formUtil';
+import {
+  chooseSelectComponentType,
+  localResolvePickList,
+} from '@/modules/form/util/formUtil';
 import CardGroup, {
   RemovableCard,
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
 import { FormItemControl } from '@/modules/formBuilder/components/itemEditor/types';
-import { Component } from '@/types/gqlTypes';
+import { ItemType } from '@/types/gqlTypes';
 
 export interface ManagePickListOptionsProps {
   control: FormItemControl;
-  formItemComponent: Component;
 }
 
 const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
   control,
-  formItemComponent,
 }) => {
+  const itemTypeValue = useWatch({ control, name: 'type' });
+  const itemComponentValue = useWatch({ control, name: 'component' });
+  const repeatsValue = useWatch({ control, name: 'repeats' });
+  const pickListOptionsValue = useWatch({ control, name: 'pickListOptions' });
+  const pickListReferenceValue = useWatch({
+    control,
+    name: 'pickListReference',
+  });
+
+  // Whereas `itemComponentValue` above contains the user-provided component override (null if not specified),
+  // `realItemComponent` is the actual component for the item, since Choice/Open Choice types
+  // have their own rules for whether to show a dropdown or radio if the user hasn't specified anything.
+  const formItemComponent = useMemo(() => {
+    if (
+      itemTypeValue &&
+      [ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue)
+    ) {
+      return chooseSelectComponentType(
+        itemComponentValue,
+        repeatsValue,
+        pickListOptionsValue?.length,
+        !pickListReferenceValue
+      );
+    }
+  }, [
+    itemTypeValue,
+    itemComponentValue,
+    repeatsValue,
+    pickListOptionsValue,
+    pickListReferenceValue,
+  ]);
+
   const pickListTypesPickList = localResolvePickList('PickListType') || [];
 
   const { fields, append, remove, replace } = useFieldArray({
@@ -63,6 +96,8 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
     },
     [fieldsWatch]
   );
+
+  if (!formItemComponent) return;
 
   return (
     <>

@@ -24,7 +24,6 @@ import {
   MAX_INPUT_AND_LABEL_WIDTH,
   getItemMap,
   localResolvePickList,
-  chooseSelectComponentType,
 } from '@/modules/form/util/formUtil';
 import ManagePickListOptions from '@/modules/formBuilder/components/itemEditor/pickLists/ManagePickListOptions';
 import {
@@ -101,40 +100,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     formState: { isDirty, dirtyFields },
   } = handlers;
 
-  // console.log(errors);
+  // Monitor changes to FormItem fields
   const itemTypeValue = watch('type');
-
-  // Monitor changes to the FormItem.component field
   const itemComponentValue = watch('component');
-  const repeatsValue = watch('repeats');
   const hiddenValue = watch('hidden');
-  const pickListOptionsValue = watch('pickListOptions');
-  const pickListReferenceValue = watch('pickListReference');
   const hasEnableWhen = !!watch('enableWhen.0');
-
-  // Whereas `itemComponentValue` above contains the user-provided component override (null if not specified),
-  // `realItemComponent` is the actual component for the item. It's used specifically for Choice/Open Choice types,
-  // which have their own rules for whether to show a dropdown or radio if the user hasn't specified anything.
-  // If needed, we could support other components here, but right now this will be undefined for non-Choice types.
-  const realItemComponent = useMemo(() => {
-    if (
-      itemTypeValue &&
-      [ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue)
-    ) {
-      return chooseSelectComponentType(
-        itemComponentValue,
-        repeatsValue,
-        pickListOptionsValue?.length,
-        !pickListReferenceValue
-      );
-    }
-  }, [
-    itemTypeValue,
-    itemComponentValue,
-    repeatsValue,
-    pickListOptionsValue,
-    pickListReferenceValue,
-  ]);
 
   const itemCategory = useMemo<ItemCategory>(() => {
     if (!itemTypeValue) return 'question';
@@ -328,15 +298,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             />
           )}
         </Section>
-        {[ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) &&
-          realItemComponent && (
-            <Section title='Choices'>
-              <ManagePickListOptions
-                control={control}
-                formItemComponent={realItemComponent}
-              />
-            </Section>
-          )}
+        {[ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) && (
+          <Section title='Choices'>
+            <ManagePickListOptions control={control} />
+          </Section>
+        )}
         <Section title='Visibility'>
           {isAssessment && (
             <ControlledSelect
