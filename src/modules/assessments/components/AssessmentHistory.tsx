@@ -18,7 +18,7 @@ const AssessmentHistoryInfo: React.FC<{
     // this case probably doesn't occur in practice, we should always have dates
     content = user.name;
   } else if (fmtDate) {
-    content = `System User at ${formatDateTimeForDisplay(fmtDate)}`;
+    content = `Unknown User at ${formatDateTimeForDisplay(fmtDate)}`;
   }
 
   if (content) {

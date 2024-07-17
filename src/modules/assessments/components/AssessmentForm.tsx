@@ -65,6 +65,7 @@ interface Props {
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
   assessmentTitle?: ReactNode;
+  alerts?: ReactNode;
   top?: number;
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
@@ -86,6 +87,7 @@ const AssessmentForm: React.FC<Props> = ({
   assessment,
   client,
   assessmentTitle,
+  alerts,
   formRole,
   definition,
   navigationTitle,
@@ -328,6 +330,7 @@ const AssessmentForm: React.FC<Props> = ({
             </>
           )}
         </Stack>
+        {alerts}
         {!isPrintView && (
           <AssessmentAlert
             assessment={assessment}
