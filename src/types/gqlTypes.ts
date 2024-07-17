@@ -243,6 +243,7 @@ export type Assessment = {
   assessmentDate: Scalars['ISO8601Date']['output'];
   ceAssessment?: Maybe<CeAssessment>;
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   customDataElements: Array<CustomDataElement>;
   dataCollectionStage?: Maybe<DataCollectionStage>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -478,6 +479,7 @@ export type CeAssessment = {
   assessmentLocation: Scalars['String']['output'];
   assessmentType?: Maybe<AssessmentType>;
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -503,6 +505,7 @@ export type CeParticipation = {
   accessPoint?: Maybe<NoYes>;
   ceParticipationStatusEndDate?: Maybe<Scalars['ISO8601Date']['output']>;
   ceParticipationStatusStartDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  createdBy?: Maybe<ApplicationUser>;
   crisisAssessment?: Maybe<NoYes>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -561,6 +564,7 @@ export type Client = {
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
+  createdBy?: Maybe<ApplicationUser>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
   customCaseNotes: CustomCaseNotesPaginated;
   customDataElements: Array<CustomDataElement>;
@@ -773,6 +777,7 @@ export type ClientAddress = {
   city?: Maybe<Scalars['String']['output']>;
   client: Client;
   country?: Maybe<Scalars['String']['output']>;
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -879,6 +884,7 @@ export type ClientAuditEventsPaginated = {
 export type ClientContactPoint = {
   __typename?: 'ClientContactPoint';
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -961,6 +967,7 @@ export type ClientMergeInput = {
 export type ClientName = {
   __typename?: 'ClientName';
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -1288,6 +1295,7 @@ export type CurrentLivingSituation = {
   __typename?: 'CurrentLivingSituation';
   client: Client;
   clsSubsidyType?: Maybe<RentalSubsidyType>;
+  createdBy?: Maybe<ApplicationUser>;
   currentLivingSituation: CurrentLivingSituationOptions;
   customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -1397,6 +1405,7 @@ export type CustomCaseNote = {
   __typename?: 'CustomCaseNote';
   client: Client;
   content: Scalars['String']['output'];
+  createdBy?: Maybe<ApplicationUser>;
   customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -1454,6 +1463,7 @@ export enum CustomDataElementType {
 
 export type CustomDataElementValue = {
   __typename?: 'CustomDataElementValue';
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -1994,6 +2004,7 @@ export type Disability = {
   __typename?: 'Disability';
   antiRetroviral?: Maybe<NoYesReasonsForMissingData>;
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   dataCollectionStage: DataCollectionStage;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -2121,6 +2132,7 @@ export enum DisplayHook {
 export type EmploymentEducation = {
   __typename?: 'EmploymentEducation';
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   dataCollectionStage: DataCollectionStage;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -2223,6 +2235,7 @@ export type Enrollment = {
   clientLeaseholder?: Maybe<NoYesMissing>;
   cocPrioritized?: Maybe<NoYesMissing>;
   countOutreachReferralApproaches?: Maybe<Scalars['Int']['output']>;
+  createdBy?: Maybe<ApplicationUser>;
   criminalRecord?: Maybe<NoYesMissing>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
   currentPregnant?: Maybe<NoYesMissing>;
@@ -2598,6 +2611,7 @@ export type EsgFundingService = {
 export type Event = {
   __typename?: 'Event';
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -2698,6 +2712,7 @@ export type Exit = {
   counselingMethods?: Maybe<Array<CounselingMethod>>;
   counselingReceived?: Maybe<NoYesMissing>;
   countOfExchangeForSex?: Maybe<CountExchangeForSex>;
+  createdBy?: Maybe<ApplicationUser>;
   customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3200,6 +3215,7 @@ export enum FormStatus {
 export type Funder = {
   __typename?: 'Funder';
   active: Scalars['Boolean']['output'];
+  createdBy?: Maybe<ApplicationUser>;
   customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3404,6 +3420,7 @@ export enum HopwaMedAssistedLivingFac {
 export type HealthAndDv = {
   __typename?: 'HealthAndDv';
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   currentlyFleeing?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3457,6 +3474,7 @@ export enum HealthStatus {
 
 export type HmisParticipation = {
   __typename?: 'HmisParticipation';
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3617,6 +3635,7 @@ export type IncomeBenefit = {
   client: Client;
   cobra?: Maybe<NoYesMissing>;
   connectionWithSoar?: Maybe<NoYesReasonsForMissingData>;
+  createdBy?: Maybe<ApplicationUser>;
   customDataElements: Array<CustomDataElement>;
   dataCollectionStage: DataCollectionStage;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -3746,6 +3765,7 @@ export type Inventory = {
   chVetBedInventory?: Maybe<Scalars['Int']['output']>;
   chYouthBedInventory?: Maybe<Scalars['Int']['output']>;
   cocCode?: Maybe<Scalars['String']['output']>;
+  createdBy?: Maybe<ApplicationUser>;
   customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -4427,6 +4447,7 @@ export type Organization = {
   __typename?: 'Organization';
   access: OrganizationAccess;
   contactInformation?: Maybe<Scalars['String']['output']>;
+  createdBy?: Maybe<ApplicationUser>;
   customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -5321,6 +5342,7 @@ export type Project = {
   ceParticipations: CeParticipationsPaginated;
   contactInformation?: Maybe<Scalars['String']['output']>;
   continuumProject?: Maybe<NoYes>;
+  createdBy?: Maybe<ApplicationUser>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
   customDataElements: Array<CustomDataElement>;
   /** Occurrence Point data collection features that are enabled for this Project (e.g. Current Living Situations, Events) */
@@ -5480,6 +5502,7 @@ export type ProjectCoc = {
   address2?: Maybe<Scalars['String']['output']>;
   city?: Maybe<Scalars['String']['output']>;
   cocCode?: Maybe<Scalars['String']['output']>;
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -5633,7 +5656,7 @@ export type ProjectsPaginated = {
 export type PublishFormDefinitionPayload = {
   __typename?: 'PublishFormDefinitionPayload';
   errors: Array<ValidationError>;
-  formIdentifier: FormIdentifier;
+  formIdentifier?: Maybe<FormIdentifier>;
 };
 
 export type Query = {
@@ -6542,6 +6565,7 @@ export enum SchoolStatus {
 export type Service = {
   __typename?: 'Service';
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   customDataElements: Array<CustomDataElement>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -6575,6 +6599,7 @@ export type ServiceCategoriesPaginated = {
 
 export type ServiceCategory = {
   __typename?: 'ServiceCategory';
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -6704,6 +6729,7 @@ export enum ServiceSubTypeProvided {
 export type ServiceType = {
   __typename?: 'ServiceType';
   category: Scalars['String']['output'];
+  createdBy?: Maybe<ApplicationUser>;
   dateCreated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
@@ -7778,6 +7804,7 @@ export enum WorkerResponse {
 export type YouthEducationStatus = {
   __typename?: 'YouthEducationStatus';
   client: Client;
+  createdBy?: Maybe<ApplicationUser>;
   currentEdStatus?: Maybe<CurrentEdStatus>;
   currentSchoolAttend?: Maybe<CurrentSchoolAttended>;
   dataCollectionStage: DataCollectionStage;
@@ -22859,7 +22886,7 @@ export type PublishFormDefinitionMutation = {
   __typename?: 'Mutation';
   publishFormDefinition?: {
     __typename?: 'PublishFormDefinitionPayload';
-    formIdentifier: {
+    formIdentifier?: {
       __typename?: 'FormIdentifier';
       id: string;
       identifier: string;
@@ -22881,7 +22908,21 @@ export type PublishFormDefinitionMutation = {
         identifier: string;
         status: FormStatus;
       } | null;
-    };
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
@@ -39839,9 +39880,13 @@ export const PublishFormDefinitionDocument = gql`
       formIdentifier {
         ...FormIdentifierDetails
       }
+      errors {
+        ...ValidationErrorFields
+      }
     }
   }
   ${FormIdentifierDetailsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
 `;
 export type PublishFormDefinitionMutationFn = Apollo.MutationFunction<
   PublishFormDefinitionMutation,

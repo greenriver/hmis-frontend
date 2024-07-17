@@ -141,7 +141,7 @@ const FormPreview = () => {
   ]);
 
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const { publishLoading, onPublishForm } = usePublishForm({
+  const { publishLoading, onPublishForm, publishErrorState } = usePublishForm({
     formId: formDefinition?.id,
     formIdentifier: formDefinition?.identifier,
   });
@@ -198,6 +198,7 @@ const FormPreview = () => {
               onConfirm={onPublishForm}
               onCancel={() => setConfirmOpen(false)}
               loading={publishLoading}
+              errorState={publishErrorState}
             >
               <div>Are you sure you want to publish this form?</div>
             </ConfirmationDialog>

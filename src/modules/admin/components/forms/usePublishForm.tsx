@@ -1,5 +1,10 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
+import {
+  ErrorState,
+  emptyErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { usePublishFormDefinitionMutation } from '@/types/gqlTypes';
 
@@ -10,33 +15,39 @@ export function usePublishForm({
   formId?: string;
   formIdentifier?: string;
 }) {
-  const [publishForm, { loading: publishLoading, error: publishError }] =
-    usePublishFormDefinitionMutation();
-
+  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const navigate = useNavigate();
+  const [publishForm, { loading: publishLoading }] =
+    usePublishFormDefinitionMutation({
+      onError: (e) => setErrorState({ ...emptyErrorState, apolloError: e }),
+      onCompleted: (data) => {
+        if (
+          data.publishFormDefinition?.errors &&
+          data.publishFormDefinition.errors.length > 0
+        ) {
+          setErrorState(
+            partitionValidations(data.publishFormDefinition.errors)
+          );
+        } else if (data.publishFormDefinition?.formIdentifier) {
+          navigate(
+            generatePath(AdminDashboardRoutes.VIEW_FORM, {
+              identifier: formIdentifier,
+            })
+          );
+        }
+      },
+    });
 
   const onPublishForm = useCallback(() => {
     if (!formId || !formIdentifier) return;
 
     // Mutation will fail if user lacks canManageForms (and button is hidden), no need to check here
-    publishForm({
-      variables: {
-        id: formId,
-      },
-      onCompleted: () => {
-        navigate(
-          generatePath(AdminDashboardRoutes.VIEW_FORM, {
-            identifier: formIdentifier,
-          })
-        );
-      },
-    });
-  }, [formId, formIdentifier, publishForm, navigate]);
-
-  if (publishError) throw publishError;
+    publishForm({ variables: { id: formId } });
+  }, [formId, formIdentifier, publishForm]);
 
   return {
     publishLoading,
     onPublishForm,
+    publishErrorState: errorState,
   } as const;
 }
