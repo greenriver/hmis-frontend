@@ -316,7 +316,7 @@ const AssessmentForm: React.FC<Props> = ({
         <Stack sx={{ mb: 1 }} gap={1}>
           {assessmentTitle}
           {locked && (
-            <>
+            <Stack gap={0.5}>
               <AssessmentHistoryInfo
                 label='Created by:'
                 user={assessment?.createdBy}
@@ -327,7 +327,7 @@ const AssessmentForm: React.FC<Props> = ({
                 user={assessment?.user}
                 date={assessment?.dateUpdated}
               />
-            </>
+            </Stack>
           )}
         </Stack>
         {alerts}
