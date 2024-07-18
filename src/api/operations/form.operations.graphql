@@ -56,6 +56,9 @@ mutation PublishFormDefinition($id: ID!) {
     formIdentifier {
       ...FormIdentifierDetails
     }
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }
 
