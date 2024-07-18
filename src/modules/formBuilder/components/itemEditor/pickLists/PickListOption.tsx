@@ -29,7 +29,7 @@ const PickListOption: React.FC<PickListOptionProps> = ({
         <ControlledTextInput
           control={control}
           name={`pickListOptions.${index}.code`}
-          label='Code'
+          label={`Choice ${index + 1}`}
           helperText='Must be unique'
           required={true}
           rules={{ validate: (input) => isCodeUnique(input) }}

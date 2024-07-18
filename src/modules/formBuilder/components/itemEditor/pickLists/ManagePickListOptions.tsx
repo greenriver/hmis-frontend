@@ -2,14 +2,12 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { useController, useFieldArray, useWatch } from 'react-hook-form';
 import PickListOption from './PickListOption';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
-import {
-  chooseSelectComponentType,
-  localResolvePickList,
-} from '@/modules/form/util/formUtil';
+import { chooseSelectComponentType } from '@/modules/form/util/formUtil';
 import CardGroup, {
   RemovableCard,
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
 import { FormItemControl } from '@/modules/formBuilder/components/itemEditor/types';
+import { supportedPickListReferencesOptions } from '@/modules/formBuilder/formBuilderUtil';
 import { ItemType } from '@/types/gqlTypes';
 
 export interface ManagePickListOptionsProps {
@@ -50,8 +48,6 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
     pickListOptionsValue,
     pickListReferenceValue,
   ]);
-
-  const pickListTypesPickList = localResolvePickList('PickListType') || [];
 
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -100,7 +96,7 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
     <>
       <CardGroup
         onAddItem={() => {
-          append({}, { shouldFocus: false });
+          append({});
           onChangePickListReference(null);
         }}
         addItemText='Add Choice'
@@ -126,7 +122,7 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
         control={control}
         label='Or, use a reference list for choices'
         placeholder='Select list'
-        options={pickListTypesPickList}
+        options={supportedPickListReferencesOptions}
       />
     </>
   );
