@@ -8168,6 +8168,12 @@ export type AssessmentFieldsFragment = {
     name: string;
     email: string;
   } | null;
+  createdBy?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
+  } | null;
   definition: {
     __typename?: 'FormDefinition';
     id: string;
@@ -8675,6 +8681,12 @@ export type AssessmentWithRecordsFragment = {
     name: string;
     email: string;
   } | null;
+  createdBy?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
+  } | null;
   definition: {
     __typename?: 'FormDefinition';
     id: string;
@@ -8696,6 +8708,12 @@ export type AssessmentWithValuesFragment = {
   dateDeleted?: string | null;
   role: AssessmentRole;
   user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+  createdBy?: {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
@@ -9204,6 +9222,12 @@ export type FullAssessmentFragment = {
     canEditEnrollments: boolean;
   };
   user?: {
+    __typename: 'ApplicationUser';
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+  createdBy?: {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
@@ -10205,6 +10229,12 @@ export type GetAssessmentQuery = {
       name: string;
       email: string;
     } | null;
+    createdBy?: {
+      __typename: 'ApplicationUser';
+      id: string;
+      name: string;
+      email: string;
+    } | null;
   } | null;
 };
 
@@ -10263,6 +10293,12 @@ export type GetClientAssessmentsQuery = {
           name: string;
           email: string;
         } | null;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
         definition: {
           __typename?: 'FormDefinition';
           id: string;
@@ -10305,6 +10341,12 @@ export type GetEnrollmentAssessmentsQuery = {
         dateDeleted?: string | null;
         role: AssessmentRole;
         user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+        createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
@@ -10371,6 +10413,12 @@ export type GetHouseholdAssessmentsQuery = {
           name: string;
           email: string;
         } | null;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
         definition: {
           __typename?: 'FormDefinition';
           id: string;
@@ -10431,6 +10479,12 @@ export type SaveAssessmentMutation = {
       dateDeleted?: string | null;
       role: AssessmentRole;
       user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+      createdBy?: {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
@@ -10967,6 +11021,12 @@ export type SubmitAssessmentMutation = {
         name: string;
         email: string;
       } | null;
+      createdBy?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
       definition: {
         __typename?: 'FormDefinition';
         id: string;
@@ -11493,6 +11553,12 @@ export type SubmitHouseholdAssessmentsMutation = {
         canEditEnrollments: boolean;
       };
       user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+      createdBy?: {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
@@ -12041,6 +12107,12 @@ export type GetAssessmentsForPopulationQuery = {
           canEditEnrollments: boolean;
         };
         user?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
+        createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
@@ -29616,6 +29688,12 @@ export type GetProjectAssessmentsQuery = {
           name: string;
           email: string;
         } | null;
+        createdBy?: {
+          __typename: 'ApplicationUser';
+          id: string;
+          name: string;
+          email: string;
+        } | null;
         definition: {
           __typename?: 'FormDefinition';
           id: string;
@@ -32531,6 +32609,9 @@ export const AssessmentFieldsFragmentDoc = gql`
     dateDeleted
     role
     user {
+      ...UserFields
+    }
+    createdBy {
       ...UserFields
     }
     definition {
