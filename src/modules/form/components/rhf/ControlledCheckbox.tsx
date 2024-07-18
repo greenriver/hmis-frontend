@@ -29,7 +29,7 @@ const ControlledCheckbox: React.FC<ControlledCheckboxProps> = ({
 
   return (
     <LabeledCheckbox
-      onChange={field.onChange} // send value to hook form
+      onChange={field.onChange}
       onBlur={field.onBlur} // notify when input is touched/blur
       value={field.value || false} // input value
       name={field.name} // send down the input name

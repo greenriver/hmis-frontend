@@ -25,6 +25,7 @@ import {
   getItemMap,
   localResolvePickList,
 } from '@/modules/form/util/formUtil';
+import ManagePickListOptions from '@/modules/formBuilder/components/itemEditor/pickLists/ManagePickListOptions';
 import {
   COMPARABLE_ITEM_TYPES,
   ItemCategory,
@@ -52,7 +53,6 @@ const inputSizePickList = Object.keys(HmisEnums.InputSize).map((key) => ({
   code: key,
   label: startCase(key.toLowerCase()),
 }));
-const pickListTypesPickList = localResolvePickList('PickListType') || [];
 const errorAlertId = 'formItemPropertyErrors';
 
 interface FormEditorItemPropertiesProps {
@@ -100,10 +100,8 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     formState: { isDirty, dirtyFields },
   } = handlers;
 
-  // console.log(errors);
+  // Monitor changes to FormItem fields
   const itemTypeValue = watch('type');
-
-  // Monitor changes to the FormItem.component field
   const itemComponentValue = watch('component');
   const hiddenValue = watch('hidden');
   const hasEnableWhen = !!watch('enableWhen.0');
@@ -299,31 +297,12 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               control={control}
             />
           )}
-          {[ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) && (
-            <>
-              {/* <TextInput
-              label='Allowed Responses'
-              value={item.pickListOptions?.map((o) => o.code).join(',')}
-              onChange={(e) => {
-                onChangeProperty(
-                  'pickListOptions',
-                  e.target.value.split(',').map((o) => {
-                    return { code: o };
-                  })
-                );
-              }}
-            />
-             */}
-              <ControlledSelect
-                name='pickListReference'
-                control={control}
-                label='Reference list for allowed responses'
-                placeholder='Select pick list'
-                options={pickListTypesPickList}
-              />
-            </>
-          )}
         </Section>
+        {[ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) && (
+          <Section title='Choices'>
+            <ManagePickListOptions control={control} />
+          </Section>
+        )}
         <Section title='Visibility'>
           {isAssessment && (
             <ControlledSelect
