@@ -78,9 +78,7 @@ const ClientTextSearchForm: React.FC<Props> = ({
         onChange={setValue}
         onKeyUp={(e) => e.key === 'Enter' && handleSearch()}
         error={tooShort}
-        errorMessage={
-          tooShort ? t<string>('clientSearch.inputTooShort') : undefined
-        }
+        errorMessage={tooShort ? t('clientSearch.inputTooShort') : undefined}
         onClearSearch={onClearSearch}
         {...props}
       />

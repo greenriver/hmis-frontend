@@ -87,7 +87,7 @@ const OmniSearch: React.FC = () => {
 
     return {
       recentItems: recentItems.map(
-        (item) => ({ id: item.id, item, __typename: 'RecentItem' } as const)
+        (item) => ({ id: item.id, item, __typename: 'RecentItem' }) as const
       ),
       clients,
       seeMoreOptions: numClients > MAX_CLIENT_RESULTS ? [seeMoreOption] : [],
@@ -356,7 +356,6 @@ const OmniSearch: React.FC = () => {
                           {optionGroup.map((option) => {
                             return (
                               <MenuItem
-                                key={`${option.__typename}:${option.id}`}
                                 selected={
                                   option.__typename !== 'SeeMore' &&
                                   getOptionTargetPath(option) ===
