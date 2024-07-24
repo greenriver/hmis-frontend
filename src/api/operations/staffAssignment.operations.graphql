@@ -1,0 +1,22 @@
+mutation AssignStaff($householdId: ID!, $assignmentTypeId: ID!, $userId: ID!) {
+  assignStaff(
+    householdId: $householdId
+    assignmentTypeId: $assignmentTypeId
+    userId: $userId
+  ) {
+    staffAssignment {
+      ...StaffAssignmentDetails
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UnassignStaff($staffAssignmentId: ID!) {
+  unassignStaff(id: $staffAssignmentId) {
+    staffAssignment {
+      ...StaffAssignmentDetails
+    }
+  }
+}

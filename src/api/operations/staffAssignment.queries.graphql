@@ -1,0 +1,17 @@
+query GetHouseholdStaffAssignments($id: ID!) {
+  household(id: $id) {
+    ...HouseholdWithStaffAssignments
+  }
+}
+
+query GetHouseholdStaffAssignmentHistory($id: ID!) {
+  household(id: $id) {
+    id
+    staffAssignments(isCurrentlyAssigned: false) {
+      nodesCount
+      nodes {
+        ...StaffAssignmentDetails
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+fragment HouseholdWithStaffAssignments on Household {
+  id
+  householdClients {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+    }
+  }
+  staffAssignments {
+    nodesCount
+    nodes {
+      ...StaffAssignmentDetails
+    }
+  }
+}
+
+fragment StaffAssignmentDetails on StaffAssignment {
+  id
+  user {
+    id
+    name
+  }
+  staffAssignmentType
+  assignedAt
+  unassignedAt
+  household {
+    id
+  }
+}

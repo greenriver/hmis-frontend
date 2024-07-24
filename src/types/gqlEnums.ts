@@ -918,6 +918,7 @@ export const HmisEnums = {
     ALL_UNIT_TYPES: 'All unit types.',
     ASSESSMENT_NAMES:
       'Assessment names, including custom assessments and assessments that are inactive. If a project is specified, the list is limited to assessments that exist in the project (both active and inactive).',
+    AUDITABLE_USERS: 'Current and historical user accounts',
     AVAILABLE_BULK_SERVICE_TYPES: 'AVAILABLE_BULK_SERVICE_TYPES',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
@@ -930,6 +931,8 @@ export const HmisEnums = {
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     DESTINATION: 'DESTINATION',
+    ELIGIBLE_STAFF_ASSIGNMENT_USERS:
+      'Current users who are eligible for staff assignment',
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
     ENROLLMENTS_FOR_CLIENT:
       'Enrollments for the client, including WIP and Exited.',
@@ -947,11 +950,12 @@ export const HmisEnums = {
     PROJECTS_RECEIVING_REFERRALS: 'Open Projects that can receive referrals',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     RESIDENTIAL_PROJECTS: 'Residential Projects',
+    STAFF_ASSIGNMENT_TYPES: 'Staff Assignment Types',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
-    USERS: 'User Accounts',
+    USERS: 'User accounts. Deprecated in favor of AUDITABLE_USERS',
   },
   PreferredLanguage: {
     INVALID: 'Invalid Value',
@@ -1342,7 +1346,11 @@ export const HmisEnums = {
     CLIENT_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT:
       'Client was expelled or otherwise involuntarily discharged from project',
   },
-  ProjectConfigType: { AUTO_ENTER: 'Auto Enter', AUTO_EXIT: 'Auto Exit' },
+  ProjectConfigType: {
+    AUTO_ENTER: 'Auto Enter',
+    AUTO_EXIT: 'Auto Exit',
+    STAFF_ASSIGNMENT: 'Staff Assignment',
+  },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
   ProjectSortOption: {
     NAME: 'Name',

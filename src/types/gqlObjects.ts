@@ -4633,6 +4633,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'RRHSubType', ofType: null },
       },
       {
+        name: 'staffAssignmentsEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'targetPopulation',
         type: { kind: 'ENUM', name: 'TargetPopulation', ofType: null },
       },
@@ -5693,6 +5701,39 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
+      },
+    ],
+  },
+  {
+    name: 'StaffAssignment',
+    fields: [
+      {
+        name: 'assignedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'staffAssignmentType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'unassignedAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
     ],
   },
