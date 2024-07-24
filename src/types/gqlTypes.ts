@@ -162,6 +162,7 @@ export type ApplicationUser = {
   lastName?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   recentItems: Array<OmnisearchResult>;
+  staffAssignments?: Maybe<StaffAssignmentsPaginated>;
 };
 
 /** User account for a user of the system */
@@ -187,6 +188,12 @@ export type ApplicationUserClientAccessSummariesArgs = {
 /** User account for a user of the system */
 export type ApplicationUserEnrollmentAccessSummariesArgs = {
   filters?: InputMaybe<EnrollmentAccessSummaryFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** User account for a user of the system */
+export type ApplicationUserStaffAssignmentsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -32191,6 +32198,102 @@ export type StaffAssignmentDetailsFragment = {
   household: { __typename?: 'Household'; id: string };
 };
 
+export type StaffAssignmentWithClientsFragment = {
+  __typename?: 'StaffAssignment';
+  id: string;
+  staffAssignmentType: string;
+  assignedAt: string;
+  unassignedAt?: string | null;
+  user: { __typename?: 'ApplicationUser'; id: string; name: string };
+  household: {
+    __typename?: 'Household';
+    id: string;
+    householdClients: Array<{
+      __typename?: 'HouseholdClient';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      enrollment: {
+        __typename?: 'Enrollment';
+        id: string;
+        lockVersion: number;
+        autoExited: boolean;
+        entryDate: string;
+        exitDate?: string | null;
+        inProgress: boolean;
+        project: {
+          __typename?: 'Project';
+          id: string;
+          projectName: string;
+          projectType?: ProjectType | null;
+        };
+        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+      };
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+        dob?: string | null;
+        age?: number | null;
+        ssn?: string | null;
+        gender: Array<Gender>;
+        race: Array<Race>;
+        veteranStatus: NoYesReasonsForMissingData;
+        access: {
+          __typename?: 'ClientAccess';
+          id: string;
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
+          canEditClient: boolean;
+          canDeleteClient: boolean;
+          canViewDob: boolean;
+          canViewClientName: boolean;
+          canEditEnrollments: boolean;
+          canDeleteEnrollments: boolean;
+          canViewEnrollmentDetails: boolean;
+          canDeleteAssessments: boolean;
+          canManageAnyClientFiles: boolean;
+          canManageOwnClientFiles: boolean;
+          canViewAnyConfidentialClientFiles: boolean;
+          canViewAnyNonconfidentialClientFiles: boolean;
+          canUploadClientFiles: boolean;
+          canViewAnyFiles: boolean;
+          canAuditClients: boolean;
+          canManageScanCards: boolean;
+          canMergeClients: boolean;
+          canViewClientAlerts: boolean;
+          canManageClientAlerts: boolean;
+        };
+        externalIds: Array<{
+          __typename?: 'ExternalIdentifier';
+          id: string;
+          identifier?: string | null;
+          url?: string | null;
+          label: string;
+          type: ExternalIdentifierType;
+        }>;
+        alerts: Array<{
+          __typename?: 'ClientAlert';
+          id: string;
+          note: string;
+          expirationDate?: string | null;
+          createdAt: string;
+          priority: ClientAlertPriorityLevel;
+          createdBy?: {
+            __typename: 'ApplicationUser';
+            id: string;
+            name: string;
+            email: string;
+          } | null;
+        }>;
+      };
+    }>;
+  };
+};
+
 export type AssignStaffMutationVariables = Exact<{
   input: AssignStaffInput;
 }>;
@@ -32736,6 +32839,125 @@ export type GetUserEnrollmentSummariesQuery = {
         projectName?: string | null;
       }>;
     };
+  } | null;
+};
+
+export type GetUserStaffAssignmentsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetUserStaffAssignmentsQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    staffAssignments?: {
+      __typename?: 'StaffAssignmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'StaffAssignment';
+        id: string;
+        staffAssignmentType: string;
+        assignedAt: string;
+        unassignedAt?: string | null;
+        user: { __typename?: 'ApplicationUser'; id: string; name: string };
+        household: {
+          __typename?: 'Household';
+          id: string;
+          householdClients: Array<{
+            __typename?: 'HouseholdClient';
+            id: string;
+            relationshipToHoH: RelationshipToHoH;
+            enrollment: {
+              __typename?: 'Enrollment';
+              id: string;
+              lockVersion: number;
+              autoExited: boolean;
+              entryDate: string;
+              exitDate?: string | null;
+              inProgress: boolean;
+              project: {
+                __typename?: 'Project';
+                id: string;
+                projectName: string;
+                projectType?: ProjectType | null;
+              };
+              currentUnit?: {
+                __typename?: 'Unit';
+                id: string;
+                name: string;
+              } | null;
+            };
+            client: {
+              __typename?: 'Client';
+              id: string;
+              lockVersion: number;
+              firstName?: string | null;
+              middleName?: string | null;
+              lastName?: string | null;
+              nameSuffix?: string | null;
+              dob?: string | null;
+              age?: number | null;
+              ssn?: string | null;
+              gender: Array<Gender>;
+              race: Array<Race>;
+              veteranStatus: NoYesReasonsForMissingData;
+              access: {
+                __typename?: 'ClientAccess';
+                id: string;
+                canViewFullSsn: boolean;
+                canViewPartialSsn: boolean;
+                canEditClient: boolean;
+                canDeleteClient: boolean;
+                canViewDob: boolean;
+                canViewClientName: boolean;
+                canEditEnrollments: boolean;
+                canDeleteEnrollments: boolean;
+                canViewEnrollmentDetails: boolean;
+                canDeleteAssessments: boolean;
+                canManageAnyClientFiles: boolean;
+                canManageOwnClientFiles: boolean;
+                canViewAnyConfidentialClientFiles: boolean;
+                canViewAnyNonconfidentialClientFiles: boolean;
+                canUploadClientFiles: boolean;
+                canViewAnyFiles: boolean;
+                canAuditClients: boolean;
+                canManageScanCards: boolean;
+                canMergeClients: boolean;
+                canViewClientAlerts: boolean;
+                canManageClientAlerts: boolean;
+              };
+              externalIds: Array<{
+                __typename?: 'ExternalIdentifier';
+                id: string;
+                identifier?: string | null;
+                url?: string | null;
+                label: string;
+                type: ExternalIdentifierType;
+              }>;
+              alerts: Array<{
+                __typename?: 'ClientAlert';
+                id: string;
+                note: string;
+                expirationDate?: string | null;
+                createdAt: string;
+                priority: ClientAlertPriorityLevel;
+                createdBy?: {
+                  __typename: 'ApplicationUser';
+                  id: string;
+                  name: string;
+                  email: string;
+                } | null;
+              }>;
+            };
+          }>;
+        };
+      }>;
+    } | null;
   } | null;
 };
 
@@ -34858,6 +35080,32 @@ export const HouseholdWithStaffAssignmentsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
   ${StaffAssignmentDetailsFragmentDoc}
+`;
+export const StaffAssignmentWithClientsFragmentDoc = gql`
+  fragment StaffAssignmentWithClients on StaffAssignment {
+    id
+    user {
+      id
+      name
+    }
+    staffAssignmentType
+    assignedAt
+    unassignedAt
+    household {
+      id
+      householdClients {
+        ...HouseholdClientFields
+        enrollment {
+          id
+          project {
+            ...ProjectNameAndType
+          }
+        }
+      }
+    }
+  }
+  ${HouseholdClientFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
 `;
 export const UnitTypeCapacityFieldsFragmentDoc = gql`
   fragment UnitTypeCapacityFields on UnitTypeCapacity {
@@ -45777,4 +46025,73 @@ export type GetUserEnrollmentSummariesLazyQueryHookResult = ReturnType<
 export type GetUserEnrollmentSummariesQueryResult = Apollo.QueryResult<
   GetUserEnrollmentSummariesQuery,
   GetUserEnrollmentSummariesQueryVariables
+>;
+export const GetUserStaffAssignmentsDocument = gql`
+  query GetUserStaffAssignments($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+    user(id: $id) {
+      id
+      staffAssignments(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...StaffAssignmentWithClients
+        }
+      }
+    }
+  }
+  ${StaffAssignmentWithClientsFragmentDoc}
+`;
+
+/**
+ * __useGetUserStaffAssignmentsQuery__
+ *
+ * To run a query within a React component, call `useGetUserStaffAssignmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserStaffAssignmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserStaffAssignmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetUserStaffAssignmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetUserStaffAssignmentsQuery,
+    GetUserStaffAssignmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserStaffAssignmentsQuery,
+    GetUserStaffAssignmentsQueryVariables
+  >(GetUserStaffAssignmentsDocument, options);
+}
+export function useGetUserStaffAssignmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserStaffAssignmentsQuery,
+    GetUserStaffAssignmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserStaffAssignmentsQuery,
+    GetUserStaffAssignmentsQueryVariables
+  >(GetUserStaffAssignmentsDocument, options);
+}
+export type GetUserStaffAssignmentsQueryHookResult = ReturnType<
+  typeof useGetUserStaffAssignmentsQuery
+>;
+export type GetUserStaffAssignmentsLazyQueryHookResult = ReturnType<
+  typeof useGetUserStaffAssignmentsLazyQuery
+>;
+export type GetUserStaffAssignmentsQueryResult = Apollo.QueryResult<
+  GetUserStaffAssignmentsQuery,
+  GetUserStaffAssignmentsQueryVariables
 >;

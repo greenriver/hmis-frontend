@@ -57,6 +57,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         return 'project';
       case 'admin':
         return 'admin';
+      case 'my-dashboard':
+        return 'my-dashboard';
       default:
         return null;
     }
@@ -131,6 +133,16 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             {appName || 'Open Path HMIS'}
           </RouterLink>
           <Box display='flex' sx={{ flexGrow: 1 }}></Box>
+          <RootPermissionsFilter permissions={'canEditEnrollments'}>
+            <ButtonLink
+              variant='text'
+              to={Routes.MY_DASHBOARD}
+              data-testid='navToMyDashboard'
+              sx={navItemSx(activeItem === 'my-dashboard')}
+            >
+              My Dashboard
+            </ButtonLink>
+          </RootPermissionsFilter>
           <RootPermissionsFilter permissions={'canViewClients'}>
             <ButtonLink
               variant='text'

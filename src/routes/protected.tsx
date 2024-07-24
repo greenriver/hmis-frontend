@@ -25,6 +25,7 @@ import PathHandler from '@/components/elements/PathHandler';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
 import ClientDashboard from '@/components/pages/ClientDashboard';
+import ClientSearchPage from '@/components/pages/ClientSearchPage';
 import CreateClient from '@/components/pages/CreateClient';
 import CreateOrganization from '@/components/pages/CreateOrganization';
 import CreateProject from '@/components/pages/CreateProject';
@@ -33,7 +34,7 @@ import EnrollmentDashboard from '@/components/pages/EnrollmentDashboard';
 import File from '@/components/pages/File';
 import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
-import Dashboard from '@/components/pages/UserDashboard';
+import UserDashboard from '@/components/pages/UserDashboard';
 import AdminDashboard, {
   AdminLandingPage,
 } from '@/modules/admin/components/AdminDashboard';
@@ -134,6 +135,7 @@ export const protectedRoutes: RouteNode[] = [
     element: <App />,
     children: [
       { path: Routes.ALL_PROJECTS, element: <AllProjects /> },
+      { path: Routes.MY_DASHBOARD, element: <UserDashboard /> },
       {
         path: Routes.PROJECT,
         element: <ProjectDashboard />,
@@ -814,7 +816,7 @@ export const protectedRoutes: RouteNode[] = [
           },
         ],
       },
-      { path: '/', element: <Dashboard /> },
+      { path: '/', element: <ClientSearchPage /> },
       {
         path: '*',
         element: (
