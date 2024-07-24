@@ -1,18 +1,15 @@
 import {
-  Box,
   Button,
   Card,
-  Collapse,
   DialogActions,
   DialogContent,
   DialogTitle,
   Stack,
   Typography,
 } from '@mui/material';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
-import ExpandInfoButton from '@/components/elements/ExpandInfoButton';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -71,7 +68,6 @@ interface EditStaffAssignmentDialogProps {
   onClose: VoidFunction;
 }
 
-// todo @martha - this shouldnt render and make all its requests unless the edit dialog actually is open
 const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
   household,
   enrollment,
@@ -85,8 +81,6 @@ const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
   }, [household.householdClients]);
 
   const isTiny = useIsMobile('sm');
-
-  const [historyExpanded, setHistoryExpanded] = useState(false);
 
   if (!headOfHousehold) return;
 
@@ -131,17 +125,7 @@ const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
               tableProps={{ 'aria-label': 'Current staff assignments' }}
             />
           </Card>
-          <Box>
-            <ExpandInfoButton
-              expanded={historyExpanded}
-              onClick={() => setHistoryExpanded(!historyExpanded)}
-            >
-              Show staff assignment history
-            </ExpandInfoButton>
-            <Collapse in={historyExpanded}>
-              <StaffAssignmentHistory householdId={household.id} />
-            </Collapse>
-          </Box>
+          <StaffAssignmentHistory householdId={household.id} />
         </Stack>
       </DialogContent>
       <DialogActions sx={{ gap: 2 }}>
