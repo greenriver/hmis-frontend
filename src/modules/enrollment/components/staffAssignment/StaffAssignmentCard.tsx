@@ -68,7 +68,8 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
         title='Staff Assignment'
         actions={
           enrollment.relationshipToHoH ===
-            RelationshipToHoH.SelfHeadOfHousehold && (
+            RelationshipToHoH.SelfHeadOfHousehold &&
+          enrollment?.access?.canEditEnrollments && (
             <IconButtonContainer
               onClick={() => setEditDialogOpen(true)}
               Icon={EditIcon}
