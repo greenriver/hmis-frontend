@@ -7,7 +7,7 @@ query GetHouseholdStaffAssignments($id: ID!) {
 query GetHouseholdStaffAssignmentHistory($id: ID!) {
   household(id: $id) {
     id
-    staffAssignments(isCurrentlyAssigned: false) {
+    staffAssignments(isCurrentlyAssigned: false, limit: 100) {
       nodesCount
       nodes {
         ...StaffAssignmentDetails

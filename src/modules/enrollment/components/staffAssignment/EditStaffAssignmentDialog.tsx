@@ -53,10 +53,7 @@ export const STAFF_ASSIGNMENT_COLUMNS: Record<
   action: {
     header: 'Action',
     render: (assignment) => (
-      <UnassignStaffButton
-        staffAssignmentId={assignment.id}
-        householdId={assignment.household.id}
-      />
+      <UnassignStaffButton staffAssignmentId={assignment.id} />
     ),
   },
 };

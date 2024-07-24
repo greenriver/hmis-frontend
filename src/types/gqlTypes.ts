@@ -34853,7 +34853,7 @@ export const HouseholdWithStaffAssignmentsFragmentDoc = gql`
         ...ClientName
       }
     }
-    staffAssignments {
+    staffAssignments(limit: 100) {
       nodesCount
       nodes {
         ...StaffAssignmentDetails
@@ -45042,7 +45042,7 @@ export const GetHouseholdStaffAssignmentHistoryDocument = gql`
   query GetHouseholdStaffAssignmentHistory($id: ID!) {
     household(id: $id) {
       id
-      staffAssignments(isCurrentlyAssigned: false) {
+      staffAssignments(isCurrentlyAssigned: false, limit: 100) {
         nodesCount
         nodes {
           ...StaffAssignmentDetails

@@ -11,8 +11,8 @@ import {
 } from '@/modules/errors/util';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { isPickListOption } from '@/modules/form/types';
-import { cache } from '@/providers/apolloClient';
 import {
+  GetHouseholdStaffAssignmentsDocument,
   PickListType,
   useAssignStaffMutation,
   useGetPickListQuery,
@@ -60,6 +60,8 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
         assignmentTypeId: assignmentTypeId || '',
         userId: assigneeId || '',
       },
+      refetchQueries: [GetHouseholdStaffAssignmentsDocument],
+      awaitRefetchQueries: true,
       onCompleted: (data) => {
         if (data.assignStaff?.errors?.length) {
           setErrors(partitionValidations(data.assignStaff.errors));
@@ -67,31 +69,6 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
           setErrors(emptyErrorState);
           setAssigneeId(null);
           setAssignmentTypeId(null);
-
-          // cache.evict is simpler than cache.modify, but causes is a visual delay
-          // cache.evict({ id: `Household:${householdId}`, fieldName: 'staffAssignments' });
-          cache.modify({
-            id: `Household:${householdId}`,
-            fields: {
-              staffAssignments(existingStaffAssignments, { storeFieldName }) {
-                // storeFieldName contains the arguments passed to the query
-                if (!storeFieldName.includes('{"isCurrentlyAssigned":false}')) {
-                  return {
-                    ...existingStaffAssignments,
-                    nodesCount: existingStaffAssignments.nodesCount + 1,
-                    nodes: [
-                      {
-                        __ref: `StaffAssignment:${data.assignStaff?.staffAssignment?.id}`,
-                      },
-                      ...existingStaffAssignments.nodes,
-                    ],
-                  };
-                } else {
-                  return existingStaffAssignments;
-                }
-              },
-            },
-          });
         }
       },
     });

@@ -8,7 +8,7 @@ fragment HouseholdWithStaffAssignments on Household {
       ...ClientName
     }
   }
-  staffAssignments {
+  staffAssignments(limit: 100) {
     nodesCount
     nodes {
       ...StaffAssignmentDetails
