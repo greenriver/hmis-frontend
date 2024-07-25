@@ -1,9 +1,5 @@
-mutation AssignStaff($householdId: ID!, $assignmentTypeId: ID!, $userId: ID!) {
-  assignStaff(
-    householdId: $householdId
-    assignmentTypeId: $assignmentTypeId
-    userId: $userId
-  ) {
+mutation AssignStaff($input: AssignStaffInput!) {
+  assignStaff(input: $input) {
     staffAssignment {
       ...StaffAssignmentDetails
     }

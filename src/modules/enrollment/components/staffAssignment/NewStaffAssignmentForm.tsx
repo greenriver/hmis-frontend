@@ -56,9 +56,11 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
   const [assignStaff, { error: assignmentError, loading: assignmentLoading }] =
     useAssignStaffMutation({
       variables: {
-        householdId: householdId,
-        assignmentTypeId: assignmentTypeId || '',
-        userId: assigneeId || '',
+        input: {
+          householdId: householdId,
+          assignmentTypeId: assignmentTypeId || '',
+          userId: assigneeId || '',
+        },
       },
       refetchQueries: [GetHouseholdStaffAssignmentsDocument],
       awaitRefetchQueries: true,
