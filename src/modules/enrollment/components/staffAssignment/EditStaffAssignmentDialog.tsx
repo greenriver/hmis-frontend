@@ -12,6 +12,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import NewStaffAssignmentForm from '@/modules/enrollment/components/staffAssignment/NewStaffAssignmentForm';
 import StaffAssignmentHistory from '@/modules/enrollment/components/staffAssignment/StaffAssignmentHistory';
@@ -23,7 +24,6 @@ import {
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
 import {
-  AllEnrollmentDetailsFragment,
   HouseholdWithStaffAssignmentsFragment,
   RelationshipToHoH,
   StaffAssignmentDetailsFragment,
@@ -60,25 +60,26 @@ export const STAFF_ASSIGNMENT_COLUMNS: Record<
 
 interface EditStaffAssignmentDialogProps {
   household: HouseholdWithStaffAssignmentsFragment;
-  enrollment: AllEnrollmentDetailsFragment;
   open: boolean;
   onClose: VoidFunction;
 }
 
 const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
   household,
-  enrollment,
   open,
   onClose,
 }) => {
+  const isTiny = useIsMobile('sm');
+
   const headOfHousehold = useMemo(() => {
     return household.householdClients.find(
       (c) => c.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
     );
   }, [household.householdClients]);
 
-  const isTiny = useIsMobile('sm');
+  const { enrollment } = useEnrollmentDashboardContext();
 
+  if (!enrollment) return;
   if (!headOfHousehold) return;
 
   return (

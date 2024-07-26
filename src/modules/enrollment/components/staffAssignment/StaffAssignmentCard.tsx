@@ -50,7 +50,6 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const { enrollment } = useEnrollmentDashboardContext();
-
   if (!enrollment) return;
   if (error) throw error;
 
@@ -59,7 +58,6 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
       {household && editDialogOpen && (
         <EditStaffAssignmentDialog
           household={household}
-          enrollment={enrollment}
           open={editDialogOpen}
           onClose={() => setEditDialogOpen(false)}
         />
