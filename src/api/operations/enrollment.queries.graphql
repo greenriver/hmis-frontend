@@ -22,19 +22,6 @@ query GetEnrollmentWithHousehold($id: ID!) {
       householdClients {
         ...HouseholdClientFields
       }
-      staffAssignments {
-        nodesCount
-        nodes {
-          id
-          user {
-            id
-            name
-          }
-          staffAssignmentType
-          assignedAt
-          unassignedAt
-        }
-      }
     }
   }
 }

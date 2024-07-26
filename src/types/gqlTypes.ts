@@ -18699,18 +18699,6 @@ export type GetEnrollmentWithHouseholdQuery = {
           } | null;
         };
       }>;
-      staffAssignments?: {
-        __typename?: 'StaffAssignmentsPaginated';
-        nodesCount: number;
-        nodes: Array<{
-          __typename?: 'StaffAssignment';
-          id: string;
-          staffAssignmentType: string;
-          assignedAt: string;
-          unassignedAt?: string | null;
-          user: { __typename?: 'ApplicationUser'; id: string; name: string };
-        }>;
-      } | null;
     };
     project: {
       __typename?: 'Project';
@@ -39123,19 +39111,6 @@ export const GetEnrollmentWithHouseholdDocument = gql`
         shortId
         householdClients {
           ...HouseholdClientFields
-        }
-        staffAssignments {
-          nodesCount
-          nodes {
-            id
-            user {
-              id
-              name
-            }
-            staffAssignmentType
-            assignedAt
-            unassignedAt
-          }
         }
       }
     }
