@@ -23,16 +23,18 @@ interface StaffAssignmentCardProps {
 const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
   householdId,
 }) => {
+  const { enrollment } = useEnrollmentDashboardContext();
+
   const {
     data: { household } = {},
     loading,
     error,
   } = useGetHouseholdStaffAssignmentsQuery({
     variables: { id: householdId },
-  }); // todo @Martha - why is this query repeated twice?
+  }); // fixme - this query gets repeated twice with the same variables; why?
 
   const assignmentsByType = useMemo(() => {
-    if (!household || !household.staffAssignments) return {};
+    if (!household?.staffAssignments) return {};
 
     return household.staffAssignments.nodes.reduce(
       (
@@ -45,11 +47,10 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
       },
       {}
     );
-  }, [household]);
+  }, [household?.staffAssignments]);
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-  const { enrollment } = useEnrollmentDashboardContext();
   if (!enrollment) return;
   if (error) throw error;
 
