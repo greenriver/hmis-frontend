@@ -12,8 +12,8 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "eslint --fix --ext js,ts,jsx,tsx --ignore-pattern .gitignore .",
-    "lint:check": "eslint --ext js,ts,jsx,tsx --ignore-pattern .gitignore .",
+    "lint": "eslint --fix --ext js,ts,jsx,tsx --ignore-path .gitignore .",
+    "lint:check": "eslint --ext js,ts,jsx,tsx --ignore-path .gitignore .",
     "test": "NODE_ENV=test jest",
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'hmis.dev.test'",
     "dedup": "yarn-deduplicate -s highest yarn.lock",
@@ -24,7 +24,7 @@
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "eslint --fix --ignore-pattern .gitignore"
+      "eslint --fix --ignore-path .gitignore"
     ],
     "*": [
       "prettier --write"
@@ -128,7 +128,7 @@
     "@typescript-eslint/eslint-plugin": "^7.17.0",
     "@typescript-eslint/parser": "^7.17.0",
     "cross-env": "^7.0.3",
-    "eslint": "^9.8.0",
+    "eslint": "^8.46.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^9.1.0",
