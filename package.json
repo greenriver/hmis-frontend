@@ -42,6 +42,13 @@
       "last 1 safari version"
     ]
   },
+  "resolutions": {
+    "json5": "^2.2.2",
+    "semver": "^7.5.3",
+    "@babel/traverse": "^7.23.2",
+    "@types/react": "18.2.39",
+    "ws": "^8.17.1"
+  },
   "dependencies": {
     "@apollo/client": "^3.11.1",
     "@emotion/react": "^11.13.0",
@@ -92,7 +99,7 @@
     "react-hook-form": "^7.52.1",
     "react-i18next": "^15.0.0",
     "react-imask": "^7.6.1",
-    "react-pdf": "^8.0.2",
+    "react-pdf": "^9.1.0",
     "react-router-dom": "^6.25.1",
     "storybook-addon-state": "^1.0.3",
     "typescript": "^5.5.4",
