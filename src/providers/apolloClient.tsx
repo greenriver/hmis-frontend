@@ -50,23 +50,6 @@ const batchLink = new BatchHttpLink({
   fetch: customFetch,
 });
 
-/*
-const authLink = setContext(
-  (
-    _request,
-    // { headers }: { headers: { [key: string]: string } }
-    previousContext
-  ): { headers: Record<string, string> } => {
-    return {
-      headers: {
-        ...headers,
-        'X-CSRF-Token': getCsrfToken(),
-      },
-    };
-  }
-);
-*/
-
 const authLink = setContext((_request, previousContext) => {
   return {
     headers: {
