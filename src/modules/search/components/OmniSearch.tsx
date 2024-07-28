@@ -354,6 +354,17 @@ const OmniSearch: React.FC = () => {
                             <Divider />
                           </Box>
                           {optionGroup.map((option) => {
+                            // it's a run-time error pass key in through spread
+                            const { key, ...optionProps } =
+                              values.getOptionProps({
+                                option,
+                                index: options.findIndex((e) => {
+                                  return (
+                                    getKeyForOption(e) ===
+                                    getKeyForOption(option)
+                                  );
+                                }),
+                              });
                             return (
                               <MenuItem
                                 selected={
@@ -361,15 +372,8 @@ const OmniSearch: React.FC = () => {
                                   getOptionTargetPath(option) ===
                                     location.pathname
                                 }
-                                {...values.getOptionProps({
-                                  option,
-                                  index: options.findIndex((e) => {
-                                    return (
-                                      getKeyForOption(e) ===
-                                      getKeyForOption(option)
-                                    );
-                                  }),
-                                })}
+                                key={key}
+                                {...optionProps}
                               >
                                 {getOptionLabel(option)}
                               </MenuItem>
