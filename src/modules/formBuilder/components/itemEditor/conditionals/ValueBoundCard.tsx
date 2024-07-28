@@ -24,8 +24,8 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
     boundTypeValue === BoundType.Max
       ? 'Maximum'
       : boundTypeValue === BoundType.Min
-      ? 'Minimum'
-      : 'Bound';
+        ? 'Minimum'
+        : 'Bound';
 
   const localConstantsPickList = useLocalConstantsPickList();
   const itemPickList = useItemPickList({

@@ -41,7 +41,7 @@ interface Args<TData, TVariables> {
 }
 export function useStaticFormDialog<
   TData extends { __typename?: 'Mutation' },
-  TVariables extends { input: { [key: string]: any } }
+  TVariables extends { input: { [key: string]: any } },
 >({
   formRole,
   onClose,

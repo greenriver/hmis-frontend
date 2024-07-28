@@ -111,24 +111,21 @@ const projectDashboardRoutes = {
 type ClientSubRoutesType = keyof typeof clientDashboardRoutes;
 let key: ClientSubRoutesType;
 for (key in clientDashboardRoutes) {
-  clientDashboardRoutes[
-    key
-  ] = `${Routes.CLIENT_DASHBOARD}/${clientDashboardRoutes[key]}`;
+  clientDashboardRoutes[key] =
+    `${Routes.CLIENT_DASHBOARD}/${clientDashboardRoutes[key]}`;
 }
 type EnrollmentSubRoutesType = keyof typeof enrollmentDashboardRoutes;
 let key2: EnrollmentSubRoutesType;
 for (key2 in enrollmentDashboardRoutes) {
-  enrollmentDashboardRoutes[
-    key2
-  ] = `${Routes.ENROLLMENT_DASHBOARD}/${enrollmentDashboardRoutes[key2]}`;
+  enrollmentDashboardRoutes[key2] =
+    `${Routes.ENROLLMENT_DASHBOARD}/${enrollmentDashboardRoutes[key2]}`;
 }
 
 type ProjectSubRoutesType = keyof typeof projectDashboardRoutes;
 let key3: ProjectSubRoutesType;
 for (key3 in projectDashboardRoutes) {
-  projectDashboardRoutes[
-    key3
-  ] = `${Routes.PROJECT}/${projectDashboardRoutes[key3]}`;
+  projectDashboardRoutes[key3] =
+    `${Routes.PROJECT}/${projectDashboardRoutes[key3]}`;
 }
 
 type AdminSubRoutesType = keyof typeof adminDashboardRoutes;

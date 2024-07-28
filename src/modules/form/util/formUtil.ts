@@ -301,8 +301,8 @@ const evaluateEnableWhen = ({
   let currentValue = en.question
     ? values[en.question]
     : en.localConstant
-    ? localConstants[en.localConstant.replace('$', '')]
-    : null;
+      ? localConstants[en.localConstant.replace('$', '')]
+      : null;
   if (isPickListOption(currentValue)) {
     currentValue = en.answerGroupCode
       ? currentValue.groupCode

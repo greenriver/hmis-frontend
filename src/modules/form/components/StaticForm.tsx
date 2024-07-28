@@ -40,7 +40,7 @@ interface Props<TData, TVariables> {
 
 const StaticForm = <
   TData extends { __typename?: 'Mutation' },
-  TVariables extends { input: { [key: string]: any } }
+  TVariables extends { input: { [key: string]: any } },
 >({
   role,
   initialValues,

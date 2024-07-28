@@ -57,8 +57,8 @@ const reminderDesciption = (
       return reminder.overdue && isToday(dueDate)
         ? `Annual assessment is due today.`
         : reminder.overdue
-        ? `Annual was due ${lowerCase(formatRelativeDate(dueDate))}.`
-        : `Annual is due ${lowerCase(formatRelativeDate(dueDate))}.`;
+          ? `Annual was due ${lowerCase(formatRelativeDate(dueDate))}.`
+          : `Annual is due ${lowerCase(formatRelativeDate(dueDate))}.`;
     case ReminderTopic.AgedIntoAdulthood:
       return notCurrentClient
         ? `${clientName} turned 18.`
@@ -67,14 +67,14 @@ const reminderDesciption = (
       return multiple
         ? `${reminder.count} intake assessments have not been submitted.`
         : notCurrentClient
-        ? `${clientName}'s intake assessment has not been submitted.`
-        : null;
+          ? `${clientName}'s intake assessment has not been submitted.`
+          : null;
     case ReminderTopic.ExitIncomplete:
       return multiple
         ? `${reminder.count} exit assessments have been started.`
         : notCurrentClient
-        ? `${clientName}'s exit assessment has been started.`
-        : null;
+          ? `${clientName}'s exit assessment has been started.`
+          : null;
     case ReminderTopic.CurrentLivingSituation:
       return notCurrentClient
         ? `Due for ${clientName}.`

@@ -50,7 +50,7 @@ export interface DynamicFormHandlerArgs<T> {
 }
 
 export function useDynamicFormHandlersForRecord<
-  T extends SubmitFormAllowedTypes
+  T extends SubmitFormAllowedTypes,
 >({
   formDefinition,
   record,

@@ -622,7 +622,7 @@ export const dataUrlForClientImage = (
 // are present on the records.
 //services
 export function getCustomDataElementColumns<
-  RowType extends { customDataElements: CustomDataElementFieldsFragment[] }
+  RowType extends { customDataElements: CustomDataElementFieldsFragment[] },
 >(rows: RowType[]) {
   if (!rows || rows.length === 0) return [];
 
