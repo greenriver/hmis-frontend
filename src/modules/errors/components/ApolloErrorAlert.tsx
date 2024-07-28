@@ -7,7 +7,7 @@ import {
   Button,
   Snackbar,
 } from '@mui/material';
-import { isString } from 'imask/esm/core/utils';
+import isString from 'lodash-es/isString';
 
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 
