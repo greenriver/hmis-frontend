@@ -9,13 +9,11 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.js?url';
 import React, { useMemo, useState } from 'react';
 import { pdfjs, Document, Page } from 'react-pdf';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url
-).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 import useSafeParams from '@/hooks/useSafeParams';
 import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
