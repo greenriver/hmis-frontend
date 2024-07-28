@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { ChangeEvent, useCallback } from 'react';
 import { Control, useController } from 'react-hook-form';
 
 import TextInput, {
@@ -34,23 +34,32 @@ const ControlledTextInput: React.FC<ControlledTextInputProps> = ({
     },
   });
 
-  const wrappedOnBlur = useCallback(
+  const { onChange: formOnChange, onBlur: formOnBlur } = field;
+  const handleBlur = useCallback(
     (event: React.FocusEvent<HTMLInputElement>) => {
       if (onBlur) onBlur(event); // call custom onBlur
-      field.onBlur(); // notify form
+      formOnBlur(); // notify form
     },
-    [field, onBlur]
+    [formOnBlur, onBlur]
+  );
+
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      const value = event.target.value;
+      if (props.type === 'number') {
+        // if this is a number input, convert the value to a number
+        formOnChange(value === '' ? '' : Number(value));
+      } else {
+        formOnChange(value);
+      }
+    },
+    [formOnChange, props.type]
   );
 
   return (
     <TextInput
-      onChange={(event) =>
-        field.onChange(
-          // if this is a number input, convert the value to a number
-          props.type === 'number' ? +event.target.value : event.target.value
-        )
-      }
-      onBlur={wrappedOnBlur} // notify when input is touched/blur
+      onChange={handleChange}
+      onBlur={handleBlur} // notify when input is touched/blur
       value={field.value} // input value
       name={field.name} // send down the input name
       inputRef={field.ref} // send input ref, so we can focus on input when error appear
