@@ -8,11 +8,18 @@ import {
 } from '@mui/material';
 import { Stack, SxProps } from '@mui/system';
 import { startCase } from 'lodash-es';
-import React, { ReactNode, useCallback, useMemo, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import TextInput from '@/components/elements/input/TextInput';
 import theme from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import FormRuleServiceTypeField from '@/modules/admin/components/formRules/FormRuleServiceTypeField';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -88,6 +95,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
   formCacheKey,
 }) => {
   const [rule, setRule] = useState<FormRuleInput>(defaultRule);
+  useEffect(() => console.info('rule', rule), [rule]);
 
   const onCloseDialog = useCallback(() => {
     onClose();
@@ -137,13 +145,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
         { code: 'funder', label: 'Funding Source' },
       ];
 
-      if (formRole === FormRole.Service) {
-        pickList.push(
-          { code: 'serviceTypeId', label: 'Service Type' },
-          { code: 'serviceCategoryId', label: 'Service Category' }
-        );
-      }
-
       const conditions = pickList.map((conditionOption) => {
         const conditionType = conditionOption.code as ConditionType;
         return {
@@ -161,7 +162,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
         conditions,
         conditionsAvailable,
       };
-    }, [formRole, rule]);
+    }, [rule]);
 
   const { pickList: projectList } = usePickList({
     item: {
@@ -208,6 +209,17 @@ const NewFormRuleDialog: React.FC<Props> = ({
 
   if (error) throw error;
 
+  const onChangeRule = (
+    conditionType: ConditionType,
+    option: PickListOption | PickListOption[] | null
+  ) => {
+    if (isPickListOption(option)) {
+      setRule({ ...rule, [conditionType]: option.code });
+    } else {
+      setRule({ ...rule, [conditionType]: '' });
+    }
+  };
+
   return (
     <CommonDialog
       open={open}
@@ -219,9 +231,17 @@ const NewFormRuleDialog: React.FC<Props> = ({
         New rule for: <b>{formTitle}</b>
       </DialogTitle>
       <DialogContent>
-        <Stack gap={2} direction='row' sx={{ mt: 2, mb: 1, display: 'flex' }}>
-          <FormRuleLabelTypography>Applies to</FormRuleLabelTypography>
+        <Stack gap={2} sx={{ mt: 2 }}>
+          {formRole === FormRole.Service && (
+            <>
+              <FormRuleServiceTypeField
+                rule={rule}
+                onChange={(option) => onChangeRule('serviceTypeId', option)}
+              />
+            </>
+          )}
           <FormSelect
+            label='Applies to'
             sx={{ flexGrow: 1 }}
             value={{
               code: rule.dataCollectedAbout || DataCollectedAbout.AllClients,
@@ -300,13 +320,9 @@ const NewFormRuleDialog: React.FC<Props> = ({
                           conditionType.replace(/Id$/, '')
                         )}`}
                         options={pickListMap[conditionType]}
-                        onChange={(_event, option) => {
-                          if (isPickListOption(option)) {
-                            setRule({ ...rule, [conditionType]: option.code });
-                          } else {
-                            setRule({ ...rule, [conditionType]: '' });
-                          }
-                        }}
+                        onChange={(_, option) =>
+                          onChangeRule(conditionType, option)
+                        }
                       />
                     </Grid>
                   </Grid>
