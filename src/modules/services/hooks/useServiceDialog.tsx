@@ -135,6 +135,12 @@ export function useServiceDialog({
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'services',
         });
+        // evict lock_version to freshen the enrollment
+        // avoids stale object error when editing occurrence point form from dash after adding service
+        cache.evict({
+          id: `Enrollment:${enrollmentId}`,
+          fieldName: 'lockVersion',
+        });
         setSelectedService(null);
         setDialogOpen(false);
         onClose();
