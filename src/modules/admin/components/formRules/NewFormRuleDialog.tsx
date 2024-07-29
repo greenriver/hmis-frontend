@@ -1,4 +1,5 @@
 import {
+  Alert,
   Card,
   DialogActions,
   DialogContent,
@@ -8,13 +9,7 @@ import {
 } from '@mui/material';
 import { Stack, SxProps } from '@mui/system';
 import { startCase } from 'lodash-es';
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import TextInput from '@/components/elements/input/TextInput';
 import theme from '@/config/theme';
@@ -95,7 +90,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
   formCacheKey,
 }) => {
   const [rule, setRule] = useState<FormRuleInput>(defaultRule);
-  useEffect(() => console.info('rule', rule), [rule]);
 
   const onCloseDialog = useCallback(() => {
     onClose();
@@ -135,6 +129,25 @@ const NewFormRuleDialog: React.FC<Props> = ({
       }
     },
   });
+
+  // This would be better handled with real form validation
+  const [validationError, setValidationError] = useState<string>();
+  const handleSubmit = () => {
+    let error: string | undefined = undefined;
+    if (formRole === FormRole.Service) {
+      if (rule.serviceCategoryId && rule.serviceTypeId) {
+        error =
+          'You cannot choose both Service Category and Service Type. Please only choose one';
+      } else if (!(rule.serviceCategoryId || rule.serviceTypeId)) {
+        error = 'One of either Service Category or Service Type are required';
+      }
+    }
+
+    setValidationError(error);
+    if (!error) {
+      createFormRule();
+    }
+  };
 
   const { conditionTypePickList, conditions, conditionsAvailable } =
     useMemo(() => {
@@ -232,6 +245,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
       </DialogTitle>
       <DialogContent>
         <Stack gap={2} sx={{ my: 2 }}>
+          {validationError && <Alert severity='error'>{validationError}</Alert>}
           {formRole === FormRole.Service && (
             <>
               <FormRuleSelectField
@@ -371,7 +385,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
       <DialogActions>
         <FormDialogActionContent
           submitButtonText='Create Rule'
-          onSubmit={() => createFormRule()}
+          onSubmit={handleSubmit}
           onDiscard={onCloseDialog}
           submitLoading={loading}
         />
