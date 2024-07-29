@@ -86,7 +86,7 @@ const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
     <CommonDialog fullWidth open={open} onClose={onClose} maxWidth='md'>
       <DialogTitle>Manage Staff Assignments</DialogTitle>
       <DialogContent>
-        <Stack gap={2} sx={{ mt: 2 }}>
+        <Stack gap={3} sx={{ mt: 2 }}>
           <Stack direction={isTiny ? 'column' : 'row'} gap={isTiny ? 2 : 4}>
             <CommonLabeledTextBlock title='Head of Household'>
               {clientBriefName(headOfHousehold.client)}
