@@ -30,8 +30,8 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
 
   return (
     <TitleCard title={title} headerVariant='border'>
+      {loading && <Loading />}
       <Box sx={{ m: 2 }}>
-        {loading && <Loading />}
         {!loading && clientAlerts.length === 0 && (
           <Stack
             direction='row'

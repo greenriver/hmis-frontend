@@ -31,7 +31,7 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
     error,
   } = useGetHouseholdStaffAssignmentsQuery({
     variables: { id: householdId },
-  }); // fixme - this query gets repeated twice with the same variables; why?
+  });
 
   const assignmentsByType = useMemo(() => {
     if (!household?.staffAssignments) return {};

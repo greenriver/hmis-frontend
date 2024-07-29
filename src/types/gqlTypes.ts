@@ -8189,8 +8189,10 @@ export type GetHouseholdClientAlertsQuery = {
   __typename?: 'Query';
   household?: {
     __typename?: 'Household';
+    id: string;
     householdClients: Array<{
       __typename?: 'HouseholdClient';
+      id: string;
       client: {
         __typename?: 'Client';
         id: string;
@@ -35089,7 +35091,9 @@ export type DeleteClientAlertMutationOptions = Apollo.BaseMutationOptions<
 export const GetHouseholdClientAlertsDocument = gql`
   query GetHouseholdClientAlerts($id: ID!) {
     household(id: $id) {
+      id
       householdClients {
+        id
         client {
           ...ClientWithAlertFields
         }
