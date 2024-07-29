@@ -27,6 +27,10 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
   householdId,
   projectId,
 }) => {
+  const [assigneeId, setAssigneeId] = useState<string | null>(null);
+  const [assignmentTypeId, setAssignmentTypeId] = useState<string | null>(null);
+  const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
+
   const {
     data: { pickList: staffPickList } = {},
     loading: staffPickListLoading,
@@ -47,11 +51,12 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
       pickListType: PickListType.StaffAssignmentTypes,
       projectId: projectId,
     },
+    onCompleted: (data) => {
+      if (data.pickList?.length === 1) {
+        setAssignmentTypeId(data.pickList[0].code);
+      }
+    },
   });
-
-  const [assigneeId, setAssigneeId] = useState<string | null>(null);
-  const [assignmentTypeId, setAssignmentTypeId] = useState<string | null>(null);
-  const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const [assignStaff, { error: assignmentError, loading: assignmentLoading }] =
     useAssignStaffMutation({
