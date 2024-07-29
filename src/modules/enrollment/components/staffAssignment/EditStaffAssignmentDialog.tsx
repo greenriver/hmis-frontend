@@ -83,7 +83,7 @@ const EditStaffAssignmentDialog: React.FC<EditStaffAssignmentDialogProps> = ({
   if (!headOfHousehold) return;
 
   return (
-    <CommonDialog fullWidth open={open} onClose={onClose}>
+    <CommonDialog fullWidth open={open} onClose={onClose} maxWidth='md'>
       <DialogTitle>Manage Staff Assignments</DialogTitle>
       <DialogContent>
         <Stack gap={2} sx={{ mt: 2 }}>
