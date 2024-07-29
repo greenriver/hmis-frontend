@@ -19,7 +19,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import TextInput from '@/components/elements/input/TextInput';
 import theme from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import FormRuleServiceTypeField from '@/modules/admin/components/formRules/FormRuleServiceTypeField';
+import FormRuleSelectField from '@/modules/admin/components/formRules/FormRuleSelectField';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -231,17 +231,27 @@ const NewFormRuleDialog: React.FC<Props> = ({
         New rule for: <b>{formTitle}</b>
       </DialogTitle>
       <DialogContent>
-        <Stack gap={2} sx={{ mt: 2 }}>
+        <Stack gap={2} sx={{ my: 2 }}>
           {formRole === FormRole.Service && (
             <>
-              <FormRuleServiceTypeField
+              <FormRuleSelectField
                 rule={rule}
+                label='Applies to Service Category'
+                name='serviceCategoryId'
+                onChange={(option) => onChangeRule('serviceCategoryId', option)}
+                options={pickListMap.serviceCategoryId}
+              />
+              <FormRuleSelectField
+                rule={rule}
+                label='Applies to Service Type'
+                name='serviceTypeId'
                 onChange={(option) => onChangeRule('serviceTypeId', option)}
+                options={pickListMap.serviceTypeId}
               />
             </>
           )}
           <FormSelect
-            label='Applies to'
+            label='Applies to client type'
             sx={{ flexGrow: 1 }}
             value={{
               code: rule.dataCollectedAbout || DataCollectedAbout.AllClients,
