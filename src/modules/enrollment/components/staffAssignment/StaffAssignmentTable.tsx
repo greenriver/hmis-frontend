@@ -2,14 +2,19 @@ import { Card } from '@mui/material';
 import React from 'react';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
-import UnassignStaffButton from '@/modules/enrollment/components/staffAssignment/UnassignStaffButton';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import {
   parseAndFormatDate,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
 import {
+  GetHouseholdStaffAssignmentHistoryDocument,
+  GetHouseholdStaffAssignmentsDocument,
   HouseholdWithStaffAssignmentsFragment,
   StaffAssignmentDetailsFragment,
+  UnassignStaffDocument,
+  UnassignStaffMutation,
+  UnassignStaffMutationVariables,
 } from '@/types/gqlTypes';
 
 export const STAFF_ASSIGNMENT_COLUMNS: Record<
@@ -36,7 +41,26 @@ export const STAFF_ASSIGNMENT_COLUMNS: Record<
   action: {
     header: 'Action',
     render: (assignment) => (
-      <UnassignStaffButton staffAssignmentId={assignment.id} />
+      <DeleteMutationButton<
+        UnassignStaffMutation,
+        UnassignStaffMutationVariables
+      >
+        queryDocument={UnassignStaffDocument}
+        variables={{ staffAssignmentId: assignment.id }}
+        recordName='user'
+        idPath={'unassignStaff.staffAssignment.id'}
+        refetchQueries={[
+          GetHouseholdStaffAssignmentsDocument,
+          GetHouseholdStaffAssignmentHistoryDocument,
+        ]}
+        awaitRefetchQueries={true}
+        verb='unassign'
+        ButtonProps={{
+          color: 'secondary',
+        }}
+      >
+        Unassign
+      </DeleteMutationButton>
     ),
   },
 };
