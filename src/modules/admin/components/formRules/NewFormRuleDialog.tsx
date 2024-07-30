@@ -1,28 +1,19 @@
-import {
-  Alert,
-  Card,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Typography,
-} from '@mui/material';
-import { Stack, SxProps } from '@mui/system';
-import { startCase } from 'lodash-es';
-import React, { ReactNode, useCallback, useMemo, useState } from 'react';
+import { Alert, Card, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material';
+import { Stack } from '@mui/system';
+import { pick } from 'lodash-es';
+import React, { useCallback, useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import TextInput from '@/components/elements/input/TextInput';
 import theme from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import FormRuleCondition, { FormRuleLabelTypography } from '@/modules/admin/components/formRules/FormRuleCondition';
 import FormRuleSelectField from '@/modules/admin/components/formRules/FormRuleSelectField';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { usePickList } from '@/modules/form/hooks/usePickList';
 import { isPickListOption } from '@/modules/form/types';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
-import CardGroup, {
-  RemovableCard,
-} from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
+import CardGroup, { RemovableCard } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
 import { cache } from '@/providers/apolloClient';
 import {
   ActiveStatus,
@@ -49,28 +40,13 @@ const defaultRule: FormRuleInput = {
 
 // `otherFunder` is also a condition type, of a sort, but it's left off here because
 // it's dependent on `funder` and it's a TextInput instead of a Select
-type ConditionType =
+export type ConditionType =
   | 'projectId'
   | 'projectType'
   | 'organizationId'
   | 'funder'
   | 'serviceTypeId'
   | 'serviceCategoryId';
-
-const FormRuleLabelTypography = ({
-  sx,
-  children,
-}: {
-  sx?: SxProps;
-  children: ReactNode;
-}) => (
-  <Typography
-    variant='body2'
-    sx={{ pt: 1, fontWeight: theme.typography.fontWeightBold, ...sx }}
-  >
-    {children}
-  </Typography>
-);
 
 interface Props {
   open: boolean;
@@ -177,6 +153,13 @@ const NewFormRuleDialog: React.FC<Props> = ({
       };
     }, [rule]);
 
+  const servicePickList = useMemo(() => {
+    return [
+      { code: 'serviceTypeId', label: 'Service Type' },
+      { code: 'serviceCategoryId', label: 'Service Category' }
+    ]
+  }, []);
+
   const { pickList: projectList } = usePickList({
     item: {
       linkId: 'fake',
@@ -248,20 +231,32 @@ const NewFormRuleDialog: React.FC<Props> = ({
           {validationError && <Alert severity='error'>{validationError}</Alert>}
           {formRole === FormRole.Service && (
             <>
-              <FormRuleSelectField
+
+              <FormRuleCondition
+                conditionType={rule.serviceTypeId ? 'serviceTypeId' : 'serviceCategoryId'}
+                conditionTypePickList={servicePickList}
+                conditionAriaLabel={'Form Rule Applicability'}
+                setRule={setRule}
+                value={rule.serviceTypeId ? rule.serviceTypeId : rule.serviceCategoryId}
+                valuePickList={rule.serviceTypeId ? pickListMap.serviceTypeId : pickListMap.serviceCategoryId}
+                onChangeRule={onChangeRule}
                 rule={rule}
-                label='Applies to Service Category'
-                name='serviceCategoryId'
-                onChange={(option) => onChangeRule('serviceCategoryId', option)}
-                options={pickListMap.serviceCategoryId}
               />
-              <FormRuleSelectField
-                rule={rule}
-                label='Applies to Service Type'
-                name='serviceTypeId'
-                onChange={(option) => onChangeRule('serviceTypeId', option)}
-                options={pickListMap.serviceTypeId}
-              />
+
+              {/*<FormRuleSelectField*/}
+              {/*  rule={rule}*/}
+              {/*  label='Applies to Service Category'*/}
+              {/*  name='serviceCategoryId'*/}
+              {/*  onChange={(option) => onChangeRule('serviceCategoryId', option)}*/}
+              {/*  options={pickListMap.serviceCategoryId}*/}
+              {/*/>*/}
+              {/*<FormRuleSelectField*/}
+              {/*  rule={rule}*/}
+              {/*  label='Applies to Service Type'*/}
+              {/*  name='serviceTypeId'*/}
+              {/*  onChange={(option) => onChangeRule('serviceTypeId', option)}*/}
+              {/*  options={pickListMap.serviceTypeId}*/}
+              {/*/>*/}
             </>
           )}
           <FormSelect
@@ -308,48 +303,16 @@ const NewFormRuleDialog: React.FC<Props> = ({
                     py: 1,
                   }}
                 >
-                  <Grid container spacing={1}>
-                    <Grid item xs={2} sm={1}>
-                      <FormRuleLabelTypography>
-                        {index === 0 ? 'If' : 'And'}
-                      </FormRuleLabelTypography>
-                    </Grid>
-                    <Grid item xs={9} sm={4}>
-                      <FormSelect
-                        disableClearable
-                        value={{ code: conditionType }}
-                        options={conditionTypePickList}
-                        onChange={(_event, option) => {
-                          if (isPickListOption(option)) {
-                            setRule({
-                              ...rule,
-                              [conditionType]: undefined,
-                              [option.code]: '',
-                            });
-                          }
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={2} sm={1}>
-                      <FormRuleLabelTypography
-                        sx={isTiny ? {} : { textAlign: 'center' }}
-                      >
-                        is
-                      </FormRuleLabelTypography>
-                    </Grid>
-                    <Grid item xs={10} sm={5}>
-                      <FormSelect
-                        value={value ? { code: value } : null}
-                        placeholder={`Select ${startCase(
-                          conditionType.replace(/Id$/, '')
-                        )}`}
-                        options={pickListMap[conditionType]}
-                        onChange={(_, option) =>
-                          onChangeRule(conditionType, option)
-                        }
-                      />
-                    </Grid>
-                  </Grid>
+                  <FormRuleCondition
+                    startLabel={index === 0 ? 'If' : 'And'}
+                    conditionType={conditionType}
+                    conditionTypePickList={conditionTypePickList}
+                    setRule={setRule}
+                    value={value}
+                    valuePickList={pickListMap[conditionType]}
+                    onChangeRule={onChangeRule}
+                    rule={rule}
+                  />
                 </RemovableCard>
               );
             })}
@@ -363,6 +326,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
                 py: 1,
               }}
             >
+              {/* todo @martha - move this in as well */}
               <Grid container spacing={1}>
                 <Grid item xs={4}>
                   <FormRuleLabelTypography>
