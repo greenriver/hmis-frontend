@@ -47,7 +47,6 @@ export const STAFF_ASSIGNMENT_COLUMNS: Record<
       >
         queryDocument={UnassignStaffDocument}
         variables={{ staffAssignmentId: assignment.id }}
-        recordName='user'
         idPath={'unassignStaff.staffAssignment.id'}
         refetchQueries={[
           GetHouseholdStaffAssignmentsDocument,
@@ -55,6 +54,8 @@ export const STAFF_ASSIGNMENT_COLUMNS: Record<
         ]}
         awaitRefetchQueries={true}
         verb='unassign'
+        recordName='user'
+        confirmationDialogContent={`Are you sure you want to unassign ${assignment.user.name}?`}
         ButtonProps={{
           color: 'secondary',
         }}
