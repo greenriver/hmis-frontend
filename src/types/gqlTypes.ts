@@ -27832,6 +27832,19 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       autoExited: boolean;
     };
   }>;
+  staffAssignments?: {
+    __typename?: 'StaffAssignmentsPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'StaffAssignment';
+      id: string;
+      staffAssignmentType: string;
+      assignedAt: string;
+      unassignedAt?: string | null;
+      user: { __typename?: 'ApplicationUser'; id: string; name: string };
+      household: { __typename?: 'Household'; id: string };
+    }>;
+  } | null;
 };
 
 export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
@@ -29304,6 +29317,37 @@ export type ProjectEnrollmentQueryEnrollmentFieldsFragment = {
     id: string;
     informationDate?: string | null;
   } | null;
+  household?: {
+    __typename?: 'Household';
+    id: string;
+    householdClients: Array<{
+      __typename?: 'HouseholdClient';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+    }>;
+    staffAssignments?: {
+      __typename?: 'StaffAssignmentsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'StaffAssignment';
+        id: string;
+        staffAssignmentType: string;
+        assignedAt: string;
+        unassignedAt?: string | null;
+        user: { __typename?: 'ApplicationUser'; id: string; name: string };
+        household: { __typename?: 'Household'; id: string };
+      }>;
+    } | null;
+  };
   client: {
     __typename?: 'Client';
     id: string;
@@ -29519,6 +29563,7 @@ export type GetProjectEnrollmentsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   includeCls?: InputMaybe<Scalars['Boolean']['input']>;
+  includeStaffAssignment?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetProjectEnrollmentsQuery = {
@@ -29549,6 +29594,41 @@ export type GetProjectEnrollmentsQuery = {
           id: string;
           informationDate?: string | null;
         } | null;
+        household?: {
+          __typename?: 'Household';
+          id: string;
+          householdClients: Array<{
+            __typename?: 'HouseholdClient';
+            id: string;
+            relationshipToHoH: RelationshipToHoH;
+            client: {
+              __typename?: 'Client';
+              id: string;
+              lockVersion: number;
+              firstName?: string | null;
+              middleName?: string | null;
+              lastName?: string | null;
+              nameSuffix?: string | null;
+            };
+          }>;
+          staffAssignments?: {
+            __typename?: 'StaffAssignmentsPaginated';
+            nodesCount: number;
+            nodes: Array<{
+              __typename?: 'StaffAssignment';
+              id: string;
+              staffAssignmentType: string;
+              assignedAt: string;
+              unassignedAt?: string | null;
+              user: {
+                __typename?: 'ApplicationUser';
+                id: string;
+                name: string;
+              };
+              household: { __typename?: 'Household'; id: string };
+            }>;
+          } | null;
+        };
         client: {
           __typename?: 'Client';
           id: string;
@@ -29580,6 +29660,7 @@ export type GetProjectHouseholdsQueryVariables = Exact<{
   sortOrder?: InputMaybe<HouseholdSortOption>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
+  includeStaffAssignment?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 export type GetProjectHouseholdsQuery = {
@@ -29630,6 +29711,19 @@ export type GetProjectHouseholdsQuery = {
             autoExited: boolean;
           };
         }>;
+        staffAssignments?: {
+          __typename?: 'StaffAssignmentsPaginated';
+          nodesCount: number;
+          nodes: Array<{
+            __typename?: 'StaffAssignment';
+            id: string;
+            staffAssignmentType: string;
+            assignedAt: string;
+            unassignedAt?: string | null;
+            user: { __typename?: 'ApplicationUser'; id: string; name: string };
+            household: { __typename?: 'Household'; id: string };
+          }>;
+        } | null;
       }>;
     };
   } | null;
@@ -34540,6 +34634,42 @@ export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
 `;
+export const StaffAssignmentDetailsFragmentDoc = gql`
+  fragment StaffAssignmentDetails on StaffAssignment {
+    id
+    user {
+      id
+      name
+    }
+    staffAssignmentType
+    assignedAt
+    unassignedAt
+    household {
+      id
+    }
+  }
+`;
+export const HouseholdWithStaffAssignmentsFragmentDoc = gql`
+  fragment HouseholdWithStaffAssignments on Household {
+    id
+    householdClients {
+      id
+      relationshipToHoH
+      client {
+        id
+        ...ClientName
+      }
+    }
+    staffAssignments(limit: 100) {
+      nodesCount
+      nodes {
+        ...StaffAssignmentDetails
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${StaffAssignmentDetailsFragmentDoc}
+`;
 export const ProjectEnrollmentsHouseholdFieldsFragmentDoc = gql`
   fragment ProjectEnrollmentsHouseholdFields on Household {
     id
@@ -34548,8 +34678,10 @@ export const ProjectEnrollmentsHouseholdFieldsFragmentDoc = gql`
     householdClients {
       ...ProjectEnrollmentsHouseholdClientFields
     }
+    ...HouseholdWithStaffAssignments @include(if: $includeStaffAssignment)
   }
   ${ProjectEnrollmentsHouseholdClientFieldsFragmentDoc}
+  ${HouseholdWithStaffAssignmentsFragmentDoc}
 `;
 export const InventoryFieldsFragmentDoc = gql`
   fragment InventoryFields on Inventory {
@@ -34777,8 +34909,13 @@ export const ProjectEnrollmentQueryEnrollmentFieldsFragmentDoc = gql`
       id
       informationDate
     }
+    household @include(if: $includeStaffAssignment) {
+      id
+      ...HouseholdWithStaffAssignments
+    }
   }
   ${ProjectEnrollmentFieldsFragmentDoc}
+  ${HouseholdWithStaffAssignmentsFragmentDoc}
 `;
 export const ProjectConfigFieldsFragmentDoc = gql`
   fragment ProjectConfigFields on ProjectConfig {
@@ -35044,42 +35181,6 @@ export const ServiceCategoryFieldsFragmentDoc = gql`
       }
     }
   }
-`;
-export const StaffAssignmentDetailsFragmentDoc = gql`
-  fragment StaffAssignmentDetails on StaffAssignment {
-    id
-    user {
-      id
-      name
-    }
-    staffAssignmentType
-    assignedAt
-    unassignedAt
-    household {
-      id
-    }
-  }
-`;
-export const HouseholdWithStaffAssignmentsFragmentDoc = gql`
-  fragment HouseholdWithStaffAssignments on Household {
-    id
-    householdClients {
-      id
-      relationshipToHoH
-      client {
-        id
-        ...ClientName
-      }
-    }
-    staffAssignments(limit: 100) {
-      nodesCount
-      nodes {
-        ...StaffAssignmentDetails
-      }
-    }
-  }
-  ${ClientNameFragmentDoc}
-  ${StaffAssignmentDetailsFragmentDoc}
 `;
 export const StaffAssignmentWithClientsFragmentDoc = gql`
   fragment StaffAssignmentWithClients on StaffAssignment {
@@ -42432,6 +42533,7 @@ export const GetProjectEnrollmentsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $includeCls: Boolean = false
+    $includeStaffAssignment: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -42471,6 +42573,7 @@ export const GetProjectEnrollmentsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      includeCls: // value for 'includeCls'
+ *      includeStaffAssignment: // value for 'includeStaffAssignment'
  *   },
  * });
  */
@@ -42515,6 +42618,7 @@ export const GetProjectHouseholdsDocument = gql`
     $sortOrder: HouseholdSortOption
     $limit: Int = 10
     $offset: Int = 0
+    $includeStaffAssignment: Boolean = false
   ) {
     project(id: $id) {
       id
@@ -42553,6 +42657,7 @@ export const GetProjectHouseholdsDocument = gql`
  *      sortOrder: // value for 'sortOrder'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      includeStaffAssignment: // value for 'includeStaffAssignment'
  *   },
  * });
  */

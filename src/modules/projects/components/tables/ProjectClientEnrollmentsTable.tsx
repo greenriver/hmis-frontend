@@ -1,7 +1,7 @@
 import { Stack, Tooltip, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 
-import { ColumnDef } from '@/components/elements/table/types';
+import { ColumnDef, isRenderFunction } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -17,13 +17,14 @@ import {
   formatDateForGql,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
+import { ASSIGNED_STAFF_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   ClientEnrollmentFieldsFragment,
   EnrollmentFieldsFragment,
-  EnrollmentSortOption,
   EnrollmentsForProjectFilterOptions,
+  EnrollmentSortOption,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
@@ -146,6 +147,15 @@ export const ENROLLMENT_COLUMNS: {
       return null;
     },
   },
+  assignedStaff: {
+    ...ASSIGNED_STAFF_COL,
+    render: (e) => {
+      if ('household' in e && isRenderFunction(ASSIGNED_STAFF_COL.render)) {
+        return ASSIGNED_STAFF_COL.render(e.household);
+      }
+      return null;
+    },
+  },
 };
 
 const ProjectClientEnrollmentsTable = ({
@@ -186,6 +196,7 @@ const ProjectClientEnrollmentsTable = ({
         ENROLLMENT_COLUMNS.enrollmentStatus,
         ENROLLMENT_COLUMNS.enrollmentPeriod,
         ENROLLMENT_COLUMNS.lastClsDate,
+        ENROLLMENT_COLUMNS.assignedStaff,
       ];
     }, []);
 
@@ -227,6 +238,9 @@ const ProjectClientEnrollmentsTable = ({
 
           if (cols.includes(ENROLLMENT_COLUMNS.lastClsDate.key || ''))
             result.includeCls = true;
+
+          if (cols.includes(ENROLLMENT_COLUMNS.assignedStaff.key || ''))
+            result.includeStaffAssignment = true;
 
           return result;
         }}

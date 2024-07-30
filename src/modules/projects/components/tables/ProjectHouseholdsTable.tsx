@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
@@ -19,6 +19,7 @@ import {
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
   HouseholdFilterOptions,
+  HouseholdWithStaffAssignmentsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
@@ -31,6 +32,27 @@ const TableCellContainer = ({ children }: { children: ReactNode }) => (
     {children}
   </Stack>
 );
+
+export const ASSIGNED_STAFF_COL = {
+  header: 'Assigned Staff',
+  optional: true,
+  defaultHidden: true,
+  render: (hh: HouseholdWithStaffAssignmentsFragment) => {
+    if (!hh?.staffAssignments || hh.staffAssignments.nodes.length === 0) return;
+
+    const first = hh.staffAssignments.nodes[0].user.name;
+    const rest = hh.staffAssignments?.nodesCount - 1;
+
+    return (
+      <>
+        {first}{' '}
+        {rest > 0 && (
+          <Chip sx={{ mb: 0.5 }} size='small' label={`+${rest} more`} />
+        )}
+      </>
+    );
+  },
+};
 
 export const HOUSEHOLD_COLUMNS: {
   [key: string]: ColumnDef<HouseholdFields>;
@@ -124,6 +146,7 @@ export const HOUSEHOLD_COLUMNS: {
       </Typography>
     ),
   },
+  assignedStaff: ASSIGNED_STAFF_COL,
 };
 
 const defaultColumns: ColumnDef<HouseholdFields>[] = [
@@ -133,6 +156,7 @@ const defaultColumns: ColumnDef<HouseholdFields>[] = [
   HOUSEHOLD_COLUMNS.status,
   HOUSEHOLD_COLUMNS.enrollmentPeriod,
   HOUSEHOLD_COLUMNS.householdId,
+  HOUSEHOLD_COLUMNS.assignedStaff,
 ];
 
 const ProjectHouseholdsTable = ({
@@ -180,6 +204,15 @@ const ProjectHouseholdsTable = ({
       pagePath='project.households'
       filters={filters}
       recordType='Household'
+      showOptionalColumns
+      applyOptionalColumns={(cols) => {
+        const result: Partial<GetProjectHouseholdsQueryVariables> = {};
+
+        if (cols.includes(HOUSEHOLD_COLUMNS.assignedStaff.key || ''))
+          result.includeStaffAssignment = true;
+
+        return result;
+      }}
     />
   );
 };

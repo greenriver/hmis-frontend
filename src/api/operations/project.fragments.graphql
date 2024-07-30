@@ -133,4 +133,8 @@ fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
     id
     informationDate
   }
+  household @include(if: $includeStaffAssignment) {
+    id
+    ...HouseholdWithStaffAssignments
+  }
 }
