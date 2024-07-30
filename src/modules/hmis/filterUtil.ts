@@ -55,6 +55,7 @@ const FILTER_NAME_TO_PICK_LIST = {
   user: PickListType.Users,
   clientRecordType: PickListType.ClientAuditEventRecordTypes,
   enrollmentRecordType: PickListType.EnrollmentAuditEventRecordTypes,
+  assignedStaff: PickListType.EligibleStaffAssignmentUsers,
 };
 
 function isPicklistType(

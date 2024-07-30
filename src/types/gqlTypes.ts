@@ -2593,6 +2593,7 @@ export type EnrollmentsForClientFilterOptions = {
 };
 
 export type EnrollmentsForProjectFilterOptions = {
+  assignedStaff?: InputMaybe<Scalars['ID']['input']>;
   bedNightOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
   householdTasks?: InputMaybe<Array<EnrollmentFilterOptionHouseholdTask>>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
@@ -3554,6 +3555,7 @@ export type HouseholdClient = {
 };
 
 export type HouseholdFilterOptions = {
+  assignedStaff?: InputMaybe<Scalars['ID']['input']>;
   hohAgeRange?: InputMaybe<AgeRange>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
   searchTerm?: InputMaybe<Scalars['String']['input']>;

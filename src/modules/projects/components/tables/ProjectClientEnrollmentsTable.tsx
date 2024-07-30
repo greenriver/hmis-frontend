@@ -203,6 +203,7 @@ const ProjectClientEnrollmentsTable = ({
   const filters = useFilters({
     type: 'EnrollmentsForProjectFilterOptions',
     omit: ['searchTerm', 'bedNightOnDate'],
+    pickListArgs: { projectId: projectId },
   });
 
   return (

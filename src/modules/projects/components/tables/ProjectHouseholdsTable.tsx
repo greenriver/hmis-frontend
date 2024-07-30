@@ -178,6 +178,7 @@ const ProjectHouseholdsTable = ({
   const filters = useFilters({
     type: 'HouseholdFilterOptions',
     omit: ['searchTerm'],
+    pickListArgs: { projectId: projectId },
   });
 
   return (
