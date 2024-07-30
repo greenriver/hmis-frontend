@@ -25922,6 +25922,7 @@ export type SubmitFormMutation = {
           residentialAffiliation?: NoYes | null;
           residentialAffiliationProjectIds: Array<string>;
           rrhSubType?: RrhSubType | null;
+          staffAssignmentsEnabled: boolean;
           targetPopulation?: TargetPopulation | null;
           projectName: string;
           projectType?: ProjectType | null;
@@ -28622,6 +28623,7 @@ export type ProjectAllFieldsFragment = {
   residentialAffiliation?: NoYes | null;
   residentialAffiliationProjectIds: Array<string>;
   rrhSubType?: RrhSubType | null;
+  staffAssignmentsEnabled: boolean;
   targetPopulation?: TargetPopulation | null;
   projectName: string;
   projectType?: ProjectType | null;
@@ -29421,6 +29423,7 @@ export type GetProjectQuery = {
     residentialAffiliation?: NoYes | null;
     residentialAffiliationProjectIds: Array<string>;
     rrhSubType?: RrhSubType | null;
+    staffAssignmentsEnabled: boolean;
     targetPopulation?: TargetPopulation | null;
     projectName: string;
     projectType?: ProjectType | null;
@@ -34781,6 +34784,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
     residentialAffiliation
     residentialAffiliationProjectIds
     rrhSubType
+    staffAssignmentsEnabled
     targetPopulation
     organization {
       ...OrganizationNameFields

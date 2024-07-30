@@ -13,6 +13,7 @@ import {
   formatDateForDisplay,
   formatDateForGql,
 } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectHouseholdsDocument,
@@ -149,16 +150,6 @@ export const HOUSEHOLD_COLUMNS: {
   assignedStaff: ASSIGNED_STAFF_COL,
 };
 
-const defaultColumns: ColumnDef<HouseholdFields>[] = [
-  HOUSEHOLD_COLUMNS.hohIndicator,
-  HOUSEHOLD_COLUMNS.clients,
-  HOUSEHOLD_COLUMNS.relationshipToHoH,
-  HOUSEHOLD_COLUMNS.status,
-  HOUSEHOLD_COLUMNS.enrollmentPeriod,
-  HOUSEHOLD_COLUMNS.householdId,
-  HOUSEHOLD_COLUMNS.assignedStaff,
-];
-
 const ProjectHouseholdsTable = ({
   projectId,
   columns,
@@ -166,7 +157,7 @@ const ProjectHouseholdsTable = ({
   searchTerm,
 }: {
   projectId: string;
-  columns?: typeof defaultColumns;
+  columns?: ColumnDef<HouseholdFields>[];
   openOnDate?: Date;
   searchTerm?: string;
 }) => {
@@ -175,9 +166,28 @@ const ProjectHouseholdsTable = ({
     [openOnDate]
   );
 
+  const {
+    project: { staffAssignmentsEnabled },
+  } = useProjectDashboardContext();
+
+  const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(() => {
+    const c: ColumnDef<HouseholdFields>[] = [
+      HOUSEHOLD_COLUMNS.hohIndicator,
+      HOUSEHOLD_COLUMNS.clients,
+      HOUSEHOLD_COLUMNS.relationshipToHoH,
+      HOUSEHOLD_COLUMNS.status,
+      HOUSEHOLD_COLUMNS.enrollmentPeriod,
+      HOUSEHOLD_COLUMNS.householdId,
+    ];
+
+    if (staffAssignmentsEnabled) c.push(HOUSEHOLD_COLUMNS.assignedStaff);
+
+    return c;
+  }, [staffAssignmentsEnabled]);
+
   const filters = useFilters({
     type: 'HouseholdFilterOptions',
-    omit: ['searchTerm'],
+    omit: ['searchTerm', staffAssignmentsEnabled ? '' : 'assignedStaff'],
     pickListArgs: { projectId: projectId },
   });
 

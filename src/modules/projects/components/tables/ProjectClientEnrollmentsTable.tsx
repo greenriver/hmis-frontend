@@ -17,6 +17,7 @@ import {
   formatDateForGql,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ASSIGNED_STAFF_COL } from '@/modules/projects/components/tables/ProjectHouseholdsTable';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
@@ -188,21 +189,32 @@ const ProjectClientEnrollmentsTable = ({
     [openOnDate]
   );
 
+  const {
+    project: { staffAssignmentsEnabled },
+  } = useProjectDashboardContext();
+
   const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
     useMemo(() => {
-      return [
+      const c = [
         ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
         CLIENT_COLUMNS.dobAge,
         ENROLLMENT_COLUMNS.enrollmentStatus,
         ENROLLMENT_COLUMNS.enrollmentPeriod,
         ENROLLMENT_COLUMNS.lastClsDate,
-        ENROLLMENT_COLUMNS.assignedStaff,
       ];
-    }, []);
+
+      if (staffAssignmentsEnabled) c.push(ENROLLMENT_COLUMNS.assignedStaff);
+
+      return c;
+    }, [staffAssignmentsEnabled]);
 
   const filters = useFilters({
     type: 'EnrollmentsForProjectFilterOptions',
-    omit: ['searchTerm', 'bedNightOnDate'],
+    omit: [
+      'searchTerm',
+      'bedNightOnDate',
+      staffAssignmentsEnabled ? '' : 'assignedStaff',
+    ],
     pickListArgs: { projectId: projectId },
   });
 

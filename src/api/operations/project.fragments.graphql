@@ -28,6 +28,7 @@ fragment ProjectAllFields on Project {
   residentialAffiliation
   residentialAffiliationProjectIds
   rrhSubType
+  staffAssignmentsEnabled
   targetPopulation
   organization {
     ...OrganizationNameFields
