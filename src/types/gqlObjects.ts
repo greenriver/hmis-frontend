@@ -6921,10 +6921,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'EnrollmentsForProjectFilterOptions',
     args: [
       {
-        name: 'assignedStaff',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
         name: 'bedNightOnDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
@@ -7172,10 +7168,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'HouseholdFilterOptions',
     args: [
-      {
-        name: 'assignedStaff',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
       {
         name: 'hohAgeRange',
         type: { kind: 'ENUM', name: 'AgeRange', ofType: null },
