@@ -28,7 +28,7 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
   projectId,
 }) => {
   const [assigneeId, setAssigneeId] = useState<string | null>(null);
-  const [assignmentTypeId, setAssignmentTypeId] = useState<string | null>(null);
+  const [relationshipId, setRelationshipId] = useState<string | null>(null);
   const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const {
@@ -43,17 +43,17 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
   });
 
   const {
-    data: { pickList: typePickList } = {},
-    loading: typePickListLoading,
-    error: typePickListError,
+    data: { pickList: relationshipPickList } = {},
+    loading: relationshipPickListLoading,
+    error: relationshipPickListError,
   } = useGetPickListQuery({
     variables: {
-      pickListType: PickListType.StaffAssignmentTypes,
+      pickListType: PickListType.StaffAssignmentRelationships,
       projectId: projectId,
     },
     onCompleted: (data) => {
       if (data.pickList?.length === 1) {
-        setAssignmentTypeId(data.pickList[0].code);
+        setRelationshipId(data.pickList[0].code);
       }
     },
   });
@@ -63,7 +63,7 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
       variables: {
         input: {
           householdId: householdId,
-          assignmentTypeId: assignmentTypeId || '',
+          assignmentRelationshipId: relationshipId || '',
           userId: assigneeId || '',
         },
       },
@@ -75,21 +75,21 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
         } else if (data.assignStaff?.staffAssignment) {
           setErrors(emptyErrorState);
           setAssigneeId(null);
-          setAssignmentTypeId(null);
+          setRelationshipId(null);
         }
       },
     });
 
   const handleSubmit = useCallback(() => {
-    if (assigneeId && assignmentTypeId) {
+    if (assigneeId && relationshipId) {
       assignStaff();
     }
-  }, [assignStaff, assigneeId, assignmentTypeId]);
+  }, [assignStaff, assigneeId, relationshipId]);
 
   const isTiny = useIsMobile('sm');
 
   if (staffPickListError) throw staffPickListError;
-  if (typePickListError) throw typePickListError;
+  if (relationshipPickListError) throw relationshipPickListError;
   if (assignmentError) throw assignmentError;
 
   return (
@@ -133,14 +133,14 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
             </Grid>
             <Grid item xs={12} sm={5}>
               <FormSelect
-                value={assignmentTypeId ? { code: assignmentTypeId } : null}
+                value={relationshipId ? { code: relationshipId } : null}
                 placeholder={'Select Role'}
                 label='Role'
-                loading={typePickListLoading}
-                options={typePickList || []}
+                loading={relationshipPickListLoading}
+                options={relationshipPickList || []}
                 onChange={(_event, option) => {
                   if (isPickListOption(option)) {
-                    setAssignmentTypeId(option.code);
+                    setRelationshipId(option.code);
                   }
                 }}
               />
@@ -149,7 +149,7 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
               <LoadingButton
                 loading={assignmentLoading}
                 type='submit'
-                disabled={!assignmentTypeId || !assigneeId}
+                disabled={!relationshipId || !assigneeId}
                 sx={isTiny ? {} : { mt: '26px' }}
               >
                 Assign
