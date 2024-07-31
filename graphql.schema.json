@@ -2444,8 +2444,8 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "assignmentTypeId",
-            "description": "Assignment type ID",
+            "name": "assignmentRelationshipId",
+            "description": "Assignment relationship ID",
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -31361,8 +31361,8 @@
             "deprecationReason": null
           },
           {
-            "name": "STAFF_ASSIGNMENT_TYPES",
-            "description": "Staff Assignment Types",
+            "name": "STAFF_ASSIGNMENT_RELATIONSHIPS",
+            "description": "Staff Assignment Relationships",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -44293,7 +44293,7 @@
             "deprecationReason": null
           },
           {
-            "name": "staffAssignmentType",
+            "name": "staffAssignmentRelationship",
             "description": null,
             "args": [],
             "type": {

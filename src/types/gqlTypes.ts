@@ -376,8 +376,8 @@ export type AssessmentsPaginated = {
 
 /** Input for AssignStaff mutation */
 export type AssignStaffInput = {
-  /** Assignment type ID */
-  assignmentTypeId: Scalars['ID']['input'];
+  /** Assignment relationship ID */
+  assignmentRelationshipId: Scalars['ID']['input'];
   /** Household ID */
   householdId: Scalars['ID']['input'];
   /** User ID */
@@ -4631,8 +4631,8 @@ export enum PickListType {
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Residential Projects */
   ResidentialProjects = 'RESIDENTIAL_PROJECTS',
-  /** Staff Assignment Types */
-  StaffAssignmentTypes = 'STAFF_ASSIGNMENT_TYPES',
+  /** Staff Assignment Relationships */
+  StaffAssignmentRelationships = 'STAFF_ASSIGNMENT_RELATIONSHIPS',
   State = 'STATE',
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
@@ -7069,7 +7069,7 @@ export type StaffAssignment = {
   assignedAt: Scalars['ISO8601DateTime']['output'];
   household: Household;
   id: Scalars['ID']['output'];
-  staffAssignmentType: Scalars['String']['output'];
+  staffAssignmentRelationship: Scalars['String']['output'];
   unassignedAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   user: ApplicationUser;
 };
@@ -32172,7 +32172,7 @@ export type HouseholdWithStaffAssignmentsFragment = {
     nodes: Array<{
       __typename?: 'StaffAssignment';
       id: string;
-      staffAssignmentType: string;
+      staffAssignmentRelationship: string;
       assignedAt: string;
       unassignedAt?: string | null;
       user: { __typename?: 'ApplicationUser'; id: string; name: string };
@@ -32184,7 +32184,7 @@ export type HouseholdWithStaffAssignmentsFragment = {
 export type StaffAssignmentDetailsFragment = {
   __typename?: 'StaffAssignment';
   id: string;
-  staffAssignmentType: string;
+  staffAssignmentRelationship: string;
   assignedAt: string;
   unassignedAt?: string | null;
   user: { __typename?: 'ApplicationUser'; id: string; name: string };
@@ -32202,7 +32202,7 @@ export type AssignStaffMutation = {
     staffAssignment?: {
       __typename?: 'StaffAssignment';
       id: string;
-      staffAssignmentType: string;
+      staffAssignmentRelationship: string;
       assignedAt: string;
       unassignedAt?: string | null;
       user: { __typename?: 'ApplicationUser'; id: string; name: string };
@@ -32236,7 +32236,7 @@ export type UnassignStaffMutation = {
     staffAssignment?: {
       __typename?: 'StaffAssignment';
       id: string;
-      staffAssignmentType: string;
+      staffAssignmentRelationship: string;
       assignedAt: string;
       unassignedAt?: string | null;
       user: { __typename?: 'ApplicationUser'; id: string; name: string };
@@ -32274,7 +32274,7 @@ export type GetHouseholdStaffAssignmentsQuery = {
       nodes: Array<{
         __typename?: 'StaffAssignment';
         id: string;
-        staffAssignmentType: string;
+        staffAssignmentRelationship: string;
         assignedAt: string;
         unassignedAt?: string | null;
         user: { __typename?: 'ApplicationUser'; id: string; name: string };
@@ -32299,7 +32299,7 @@ export type GetHouseholdStaffAssignmentHistoryQuery = {
       nodes: Array<{
         __typename?: 'StaffAssignment';
         id: string;
-        staffAssignmentType: string;
+        staffAssignmentRelationship: string;
         assignedAt: string;
         unassignedAt?: string | null;
         user: { __typename?: 'ApplicationUser'; id: string; name: string };
@@ -34830,7 +34830,7 @@ export const StaffAssignmentDetailsFragmentDoc = gql`
       id
       name
     }
-    staffAssignmentType
+    staffAssignmentRelationship
     assignedAt
     unassignedAt
     household {

@@ -68,15 +68,17 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
                 No Staff Assigned
               </Typography>
             )}
-            <StaffAssignmentTable
-              household={household}
-              columns={[
-                STAFF_ASSIGNMENT_COLUMNS.staffName,
-                STAFF_ASSIGNMENT_COLUMNS.role,
-                STAFF_ASSIGNMENT_COLUMNS.assignmentDate,
-              ]}
-              cardSx={{ border: 'none' }}
-            />
+            {household.staffAssignments.nodesCount > 0 && (
+              <StaffAssignmentTable
+                household={household}
+                columns={[
+                  STAFF_ASSIGNMENT_COLUMNS.staffName,
+                  STAFF_ASSIGNMENT_COLUMNS.role,
+                  STAFF_ASSIGNMENT_COLUMNS.assignmentDate,
+                ]}
+                cardSx={{ border: 'none' }}
+              />
+            )}
           </>
         )}
       </TitleCard>

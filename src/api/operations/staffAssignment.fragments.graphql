@@ -22,7 +22,7 @@ fragment StaffAssignmentDetails on StaffAssignment {
     id
     name
   }
-  staffAssignmentType
+  staffAssignmentRelationship
   assignedAt
   unassignedAt
   household {

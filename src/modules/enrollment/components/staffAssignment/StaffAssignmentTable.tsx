@@ -28,7 +28,7 @@ export const STAFF_ASSIGNMENT_COLUMNS: Record<
   },
   role: {
     header: 'Role',
-    render: (assignment) => assignment.staffAssignmentType,
+    render: (assignment) => assignment.staffAssignmentRelationship,
   },
   assignmentDate: {
     header: 'Assignment Date',
