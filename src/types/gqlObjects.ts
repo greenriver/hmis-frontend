@@ -5724,7 +5724,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'staffAssignmentType',
+        name: 'staffAssignmentRelationship',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -6187,7 +6187,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssignStaffInput',
     args: [
       {
-        name: 'assignmentTypeId',
+        name: 'assignmentRelationshipId',
         type: {
           kind: 'NON_NULL',
           name: null,

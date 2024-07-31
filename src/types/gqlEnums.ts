@@ -950,7 +950,7 @@ export const HmisEnums = {
     PROJECTS_RECEIVING_REFERRALS: 'Open Projects that can receive referrals',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     RESIDENTIAL_PROJECTS: 'Residential Projects',
-    STAFF_ASSIGNMENT_TYPES: 'Staff Assignment Types',
+    STAFF_ASSIGNMENT_RELATIONSHIPS: 'Staff Assignment Relationships',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
