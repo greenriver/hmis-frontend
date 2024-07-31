@@ -125,6 +125,7 @@ fragment AllEnrollmentDetails on Enrollment {
     access {
       ...ProjectAccessFields
     }
+    staffAssignmentsEnabled
   }
   sourceReferralPosting {
     id

@@ -13,6 +13,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { ClientAlertHouseholdWrapper } from '@/modules/client/components/clientAlerts/ClientAlertWrappers';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
+import StaffAssignmentCard from '@/modules/enrollment/components/staffAssignment/StaffAssignmentCard';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable, {
   HOUSEHOLD_MEMBER_COLUMNS,
@@ -79,6 +80,9 @@ const EnrollmentOverview = () => {
             >
               <EnrollmentDetails enrollment={enrollment} />
             </TitleCard>
+            {enrollment.project.staffAssignmentsEnabled && (
+              <StaffAssignmentCard householdId={enrollment.householdId} />
+            )}
           </Stack>
         </Grid>
         <Grid item md={4} xs={12}>

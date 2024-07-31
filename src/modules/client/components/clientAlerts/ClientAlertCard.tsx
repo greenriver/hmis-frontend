@@ -30,32 +30,34 @@ const ClientAlertCard: React.FC<ClientAlertCardProps> = ({
 
   return (
     <TitleCard title={title} headerVariant='border'>
-      <Box sx={{ m: 2 }}>
-        {loading && <Loading />}
-        {!loading && clientAlerts.length === 0 && (
-          <Stack
-            direction='row'
-            justifyContent='space-between'
-            alignItems='center'
-            p={1}
-            sx={{
-              backgroundColor: (theme) => theme.palette.grey[50],
-              color: 'text.secondary',
-              borderRadius: 1,
-            }}
-          >
-            <Typography variant='body2'>
-              {alertContext} has no alerts at this time
-            </Typography>
-            {children}
-          </Stack>
-        )}
-        {clientAlerts.length > 0 && (
-          <ClientAlertStack clientAlerts={clientAlerts}>
-            {children}
-          </ClientAlertStack>
-        )}
-      </Box>
+      {loading && <Loading />}
+      {!loading && (
+        <Box sx={{ m: 2 }}>
+          {clientAlerts.length === 0 && (
+            <Stack
+              direction='row'
+              justifyContent='space-between'
+              alignItems='center'
+              p={1}
+              sx={{
+                backgroundColor: (theme) => theme.palette.grey[50],
+                color: 'text.secondary',
+                borderRadius: 1,
+              }}
+            >
+              <Typography variant='body2'>
+                {alertContext} has no alerts at this time
+              </Typography>
+              {children}
+            </Stack>
+          )}
+          {clientAlerts.length > 0 && (
+            <ClientAlertStack clientAlerts={clientAlerts}>
+              {children}
+            </ClientAlertStack>
+          )}
+        </Box>
+      )}
     </TitleCard>
   );
 };

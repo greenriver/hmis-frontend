@@ -1,4 +1,4 @@
-import { TypedDocumentNode, useMutation } from '@apollo/client';
+import { DocumentNode, TypedDocumentNode, useMutation } from '@apollo/client';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, ButtonProps, IconButton, Typography } from '@mui/material';
 import { camelCase, capitalize, get } from 'lodash-es';
@@ -30,6 +30,8 @@ interface DeleteMutationButtonProps<MutationVariables> {
   deleteIcon?: boolean;
   onlyIcon?: boolean;
   className?: string;
+  refetchQueries?: DocumentNode[];
+  awaitRefetchQueries?: boolean;
 }
 
 const DeleteMutationButton = <Mutation, MutationVariables>({
@@ -46,6 +48,8 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   deleteIcon = false,
   onlyIcon = false,
   className,
+  refetchQueries,
+  awaitRefetchQueries,
 }: DeleteMutationButtonProps<MutationVariables>) => {
   const [showDialog, setShowDialog] = useState(false);
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
@@ -65,6 +69,8 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
       },
       onError: (apolloError) =>
         setErrorState({ ...emptyErrorState, apolloError }),
+      refetchQueries,
+      awaitRefetchQueries,
     }
   );
   const handleDelete = useCallback(() => {

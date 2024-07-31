@@ -10,6 +10,7 @@ const ExpandInfoButton: React.FC<Props> = ({ expanded, ...props }) => {
   return (
     <Button
       variant='text'
+      aria-expanded={expanded}
       size='large'
       endIcon={
         expanded ? <CollapseIcon key='expand' /> : <ExpandIcon key='collapse' />
