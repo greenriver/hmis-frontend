@@ -22,7 +22,9 @@ const PageContainer = ({
         sx={{ mb: { xs: actions ? 2 : 0, sm: 4 } }}
         alignItems={isTiny ? 'left' : 'center'}
       >
-        <Typography variant='h3'>{title}</Typography>
+        <Typography component='h1' variant='h3'>
+          {title}
+        </Typography>
         <Box sx={{ width: 'fit-content' }}>{actions}</Box>
       </Stack>
 

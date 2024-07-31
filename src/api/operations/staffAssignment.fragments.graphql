@@ -29,3 +29,26 @@ fragment StaffAssignmentDetails on StaffAssignment {
     id
   }
 }
+
+fragment StaffAssignmentWithClients on StaffAssignment {
+  id
+  user {
+    id
+    name
+  }
+  staffAssignmentRelationship
+  assignedAt
+  unassignedAt
+  household {
+    id
+    householdClients {
+      ...HouseholdClientFields
+      enrollment {
+        id
+        project {
+          ...ProjectNameAndType
+        }
+      }
+    }
+  }
+}
