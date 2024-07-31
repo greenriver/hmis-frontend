@@ -35214,6 +35214,32 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
   ${HouseholdClientFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
+export const StaffAssignmentWithClientsFragmentDoc = gql`
+  fragment StaffAssignmentWithClients on StaffAssignment {
+    id
+    user {
+      id
+      name
+    }
+    staffAssignmentRelationship
+    assignedAt
+    unassignedAt
+    household {
+      id
+      householdClients {
+        ...HouseholdClientFields
+        enrollment {
+          id
+          project {
+            ...ProjectNameAndType
+          }
+        }
+      }
+    }
+  }
+  ${HouseholdClientFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+`;
 export const UnitTypeCapacityFieldsFragmentDoc = gql`
   fragment UnitTypeCapacityFields on UnitTypeCapacity {
     id
