@@ -1336,6 +1336,7 @@ export type CurrentLivingSituation = {
   subsequentResidence?: Maybe<NoYesReasonsForMissingData>;
   user?: Maybe<ApplicationUser>;
   verifiedBy?: Maybe<Scalars['String']['output']>;
+  verifiedByProjectId?: Maybe<Scalars['ID']['output']>;
 };
 
 /** HUD CurrentLivingSituation (4.12) */
@@ -4608,6 +4609,8 @@ export enum PickListType {
   CeEvents = 'CE_EVENTS',
   ClientAuditEventRecordTypes = 'CLIENT_AUDIT_EVENT_RECORD_TYPES',
   Coc = 'COC',
+  /** Continuum Projects */
+  ContinuumProjects = 'CONTINUUM_PROJECTS',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   Destination = 'DESTINATION',
   /** Current users who are eligible for staff assignment */
@@ -15914,6 +15917,7 @@ export type CurrentLivingSituationFieldsFragment = {
   subsequentResidence?: NoYesReasonsForMissingData | null;
   dateUpdated?: string | null;
   dateCreated?: string | null;
+  verifiedByProjectId?: string | null;
   user?: {
     __typename: 'ApplicationUser';
     id: string;
@@ -15983,6 +15987,7 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
   subsequentResidence?: NoYesReasonsForMissingData | null;
   dateUpdated?: string | null;
   dateCreated?: string | null;
+  verifiedByProjectId?: string | null;
   client: {
     __typename?: 'Client';
     id: string;
@@ -16084,6 +16089,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
         subsequentResidence?: NoYesReasonsForMissingData | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
+        verifiedByProjectId?: string | null;
         user?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -16172,6 +16178,7 @@ export type GetProjectCurrentLivingSituationsQuery = {
         subsequentResidence?: NoYesReasonsForMissingData | null;
         dateUpdated?: string | null;
         dateCreated?: string | null;
+        verifiedByProjectId?: string | null;
         client: {
           __typename?: 'Client';
           id: string;
@@ -25449,6 +25456,7 @@ export type SubmitFormMutation = {
           subsequentResidence?: NoYesReasonsForMissingData | null;
           dateUpdated?: string | null;
           dateCreated?: string | null;
+          verifiedByProjectId?: string | null;
           user?: {
             __typename: 'ApplicationUser';
             id: string;
@@ -33967,6 +33975,7 @@ export const CurrentLivingSituationFieldsFragmentDoc = gql`
     subsequentResidence
     dateUpdated
     dateCreated
+    verifiedByProjectId
     user {
       ...UserFields
     }
