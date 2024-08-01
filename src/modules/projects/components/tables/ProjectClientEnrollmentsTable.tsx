@@ -1,7 +1,7 @@
 import { Stack, Tooltip, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 
-import { ColumnDef, isRenderFunction } from '@/components/elements/table/types';
+import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import { SsnDobShowContextProvider } from '@/modules/client/providers/ClientSsnDobVisibility';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -29,6 +29,7 @@ import {
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
+  HouseholdWithStaffAssignmentsFragment,
   ProjectEnrollmentFieldsFragment,
   ProjectEnrollmentQueryEnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
@@ -57,6 +58,13 @@ export const ENROLLMENT_PERIOD_COL: ColumnDef<
     <EnrollmentDateRangeWithStatus enrollment={e} treatIncompleteAsActive />
   ),
 };
+
+const isHouseholdWithStaff = (
+  e: any
+): e is { household: HouseholdWithStaffAssignmentsFragment } => {
+  return 'household' in e && 'staffAssignments' in e.household;
+};
+
 export const ENROLLMENT_COLUMNS: {
   [key: string]: ColumnDef<
     | EnrollmentFieldsFragment
@@ -151,10 +159,9 @@ export const ENROLLMENT_COLUMNS: {
   assignedStaff: {
     ...ASSIGNED_STAFF_COL,
     render: (e) => {
-      if ('household' in e && isRenderFunction(ASSIGNED_STAFF_COL.render)) {
-        return ASSIGNED_STAFF_COL.render(e.household);
-      }
-      return null;
+      return isHouseholdWithStaff(e)
+        ? ASSIGNED_STAFF_COL.render(e.household)
+        : null;
     },
   },
 };
@@ -195,7 +202,7 @@ const ProjectClientEnrollmentsTable = ({
 
   const defaultColumns: ColumnDef<ProjectEnrollmentQueryEnrollmentFieldsFragment>[] =
     useMemo(() => {
-      const c = [
+      const cols = [
         ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
         CLIENT_COLUMNS.dobAge,
         ENROLLMENT_COLUMNS.enrollmentStatus,
@@ -203,9 +210,9 @@ const ProjectClientEnrollmentsTable = ({
         ENROLLMENT_COLUMNS.lastClsDate,
       ];
 
-      if (staffAssignmentsEnabled) c.push(ENROLLMENT_COLUMNS.assignedStaff);
+      if (staffAssignmentsEnabled) cols.push(ENROLLMENT_COLUMNS.assignedStaff);
 
-      return c;
+      return cols;
     }, [staffAssignmentsEnabled]);
 
   const filters = useFilters({
