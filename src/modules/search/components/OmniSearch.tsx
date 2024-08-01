@@ -19,6 +19,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientName from '@/modules/client/components/ClientName';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { Routes } from '@/routes/routes';
@@ -41,6 +42,7 @@ const MIN_CHAR_LENGTH_FOR_SEE_MORE = 3;
 const OmniSearch: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   const [value, setValue, debouncedSearch] = useDebouncedState<
     string | undefined
@@ -240,7 +242,10 @@ const OmniSearch: React.FC = () => {
           open={values.popupOpen}
           anchorEl={values.anchorEl}
           placement='bottom-end'
-          sx={{ zIndex: (theme) => theme.zIndex.modal, minWidth: '350px' }}
+          sx={{
+            zIndex: (theme) => theme.zIndex.modal,
+            minWidth: isMobile ? '' : '350px',
+          }}
         >
           <Paper
             sx={{
@@ -391,7 +396,9 @@ const OmniSearch: React.FC = () => {
   return (
     <>
       <ApolloErrorAlert error={error} />
-      <Box sx={{ mx: 2, height: '44px', div: { height: '100%' } }}>
+      <Box
+        sx={{ px: { md: 1, lg: 2 }, height: '44px', div: { height: '100%' } }}
+      >
         {content}
       </Box>
     </>
