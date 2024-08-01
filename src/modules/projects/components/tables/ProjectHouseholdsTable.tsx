@@ -39,10 +39,10 @@ export const ASSIGNED_STAFF_COL = {
   optional: true,
   defaultHidden: true,
   render: (hh: HouseholdWithStaffAssignmentsFragment) => {
-    if (!hh?.staffAssignments || hh.staffAssignments.nodes.length === 0) return;
+    if (!hh.staffAssignments?.nodes.length) return;
 
     const first = hh.staffAssignments.nodes[0].user.name;
-    const rest = hh.staffAssignments?.nodesCount - 1;
+    const rest = hh.staffAssignments.nodesCount - 1;
 
     return (
       <>
