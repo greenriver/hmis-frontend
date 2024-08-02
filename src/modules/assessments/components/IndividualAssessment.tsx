@@ -24,17 +24,12 @@ import {
 } from '@/modules/form/components/DynamicForm';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
+  AssessedClientFieldsFragment,
   AssessmentRole,
-  ClientNameFragment,
   FormDefinitionFieldsFragment,
   FormRole,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
-
-export type ClientNameDobSsn = ClientNameFragment & {
-  ssn?: string;
-  dob?: string | null;
-};
 
 export interface IndividualAssessmentProps {
   // FormDefiniton to use for rendering the assessment
@@ -47,7 +42,7 @@ export interface IndividualAssessmentProps {
   formRole?: FormRole;
   // Whether the assessment is embedded in a household workflow
   embeddedInWorkflow?: boolean;
-  client: ClientNameDobSsn;
+  client: AssessedClientFieldsFragment;
   // Assessment status to use for indicator
   assessmentStatus?: AssessmentStatus;
   // Whether the form is currently visible on the page. Used for household workflow when the assessment is on an inactive tab.

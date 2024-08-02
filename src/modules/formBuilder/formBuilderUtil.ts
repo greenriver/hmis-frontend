@@ -182,29 +182,37 @@ export const getRhfPathMap = (items: FormItem[]) => {
 /**
  * Helper fn for interacting with the form tree structure as stored in React Hook Forms,
  * which stores item paths like `item`, `item.0`, `item.0.item.1`, etc.
- * Given a form path, return the path to its parent and the index in the parent.
- * For example: if itemPath is `item.0.item.1`, then the parentPath is `item.0.item`
- * and the index is 1.
+ * Given a form path, return the path to its parent, the index in the parent, and nesting depth
+ * For example: if itemPath is `item.0.item.1`
+ * - the parentPath is `item.0.item`
+ * - the index is 1
+ * - the nesting depth is 2 (nesting depth is 1-indexed, not 0-indexed)
  */
 export const getPathContext = (
   itemPath: string
-): { parentPath: string; index: number } => {
+): { parentPath: string; index: number; nestingDepth: number } => {
   if (!itemPath || itemPath === 'item') {
-    return { parentPath: '', index: -1 };
+    return { parentPath: '', index: -1, nestingDepth: 0 };
   }
 
   const components = itemPath.split('.');
   const lastComponent = components[components.length - 1];
 
-  if (lastComponent !== 'item') {
-    const index = components.pop();
-    return {
-      parentPath: components.join('.'),
-      index: Number(index),
-    };
-  } else {
-    throw new Error('shouldnt happen');
+  if (lastComponent === 'item') {
+    throw new Error(
+      '`getPathContext` accepts an item path, such as `item.0.item.1`. It should end in an index, not `item`.'
+    );
   }
+
+  // calculate the nesting depth by how many times 'item' appears in the path
+  const nestingDepth = components.filter((c) => c === 'item').length;
+
+  const index = components.pop();
+  return {
+    parentPath: components.join('.'),
+    index: Number(index),
+    nestingDepth: nestingDepth,
+  };
 };
 
 // mutates definition

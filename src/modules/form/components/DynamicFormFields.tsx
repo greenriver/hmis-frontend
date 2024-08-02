@@ -139,6 +139,8 @@ const DynamicFormFields: React.FC<Props> = ({
           pickListArgs={pickListArgs}
           // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
           adjustValue={itemChanged}
+          // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
+          localConstants={localConstants}
           {...props}
         />
       </Grid>
@@ -157,6 +159,8 @@ const DynamicFormFields: React.FC<Props> = ({
         horizontal={horizontal}
         pickListArgs={pickListArgs}
         warnIfEmpty={warnIfEmpty}
+        // Needed to support referencing local constants in expression evaluation (DynamicDisplay)
+        localConstants={localConstants}
         {...props}
         inputProps={{
           ...props?.inputProps,

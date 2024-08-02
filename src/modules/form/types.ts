@@ -56,6 +56,7 @@ export interface DynamicFieldProps {
   noLabel?: boolean;
   warnIfEmpty?: boolean;
   breakpoints?: BreakpointOverrides;
+  localConstants?: LocalConstants;
 }
 
 export interface DynamicViewFieldProps {
@@ -66,6 +67,7 @@ export interface DynamicViewFieldProps {
   noLabel?: boolean;
   adjustValue?: ItemChangedFn;
   disabled?: boolean;
+  localConstants?: LocalConstants;
 }
 
 // Props accepted by all input components

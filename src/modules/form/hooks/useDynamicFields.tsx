@@ -246,11 +246,12 @@ const useDynamicFields = ({
           itemMap,
           disabledLinkIds,
           values,
-          itemChanged: itemChanged,
+          itemChanged,
+          localConstants,
         }}
       />
     ),
-    [definition, itemMap, disabledLinkIds, values, itemChanged]
+    [definition, itemMap, localConstants, disabledLinkIds, values, itemChanged]
   );
 
   return useMemo(

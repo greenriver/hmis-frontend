@@ -11,7 +11,7 @@ import { DashboardEnrollment } from '@/modules/hmis/types';
 import { cache } from '@/providers/apolloClient';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
-  ClientNameDobVetFragment,
+  EnrolledClientFieldsFragment,
   FormDefinitionFieldsFragment,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
@@ -19,7 +19,7 @@ import { generateSafePath } from '@/utils/pathEncoding';
 
 interface Props {
   enrollment: DashboardEnrollment;
-  client: ClientNameDobVetFragment;
+  client: EnrolledClientFieldsFragment;
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
 }

@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react';
 
 import { sentryUser } from '@/modules/auth/api/sessions';
 import { dispatchSessionTrackingEvent } from '@/modules/auth/events';
-import { isServerError } from '@/modules/errors/util';
+import { hasStatusCode } from '@/modules/errors/util';
 
 /**
  * Handle errors on GraphQL chain.
@@ -25,7 +25,7 @@ function safeStringify(obj: any) {
 
 const apolloErrorLink = onError(
   ({ operation, graphQLErrors, networkError }) => {
-    Sentry.withScope((scope) => {
+    Sentry.withScope((scope): void => {
       scope.setExtra('apolloGraphQLOperation', {
         operationName: operation.operationName,
         // truncate query so as to not exceed Sentry's size limit
@@ -52,25 +52,25 @@ const apolloErrorLink = onError(
       });
 
       if (networkError) {
-        // Not a server error. This is usually 504 or "Network request failed", track in Sentry
-        if (!isServerError(networkError)) {
-          if (recordedErrors === 0) Sentry.captureException(networkError);
-          return;
+        if (hasStatusCode(networkError)) {
+          scope.setTag('status_code', networkError.statusCode);
+          // Not a server error. This is usually 504 or "Network request failed", track in Sentry and group the errors together
+          if (networkError.statusCode > 500) {
+            scope.setTag('errorType', 'ApolloNetworkError');
+            scope.setFingerprint(['hmis-fe-network-errors']);
+            Sentry.captureException(networkError);
+            return;
+          }
+          // session may be invalid on the server. No need to send to Sentry.
+          if (networkError.statusCode === 401) {
+            dispatchSessionTrackingEvent(undefined);
+            return;
+          }
         }
 
-        // session may be invalid on the server. No need to send to Sentry.
-        if (networkError.statusCode === 401) {
-          dispatchSessionTrackingEvent(undefined);
-          return;
-        }
-
+        // this is probably a server error (500)
         if (recordedErrors === 0) {
-          Sentry.captureMessage(networkError.message, {
-            level: 'error',
-            extra: {
-              result: networkError.result,
-            },
-          });
+          Sentry.captureException(networkError);
         }
       }
     });

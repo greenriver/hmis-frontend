@@ -1,4 +1,5 @@
 import { evaluateTemplate } from '@/modules/form/util/expressions/template';
+import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 
 function context(
   obj: Record<string, string | undefined>
@@ -35,5 +36,20 @@ describe('evaluateTemplate', () => {
     expect(evaluateTemplate('{literalBraces}', context({}))).toBe(
       '{literalBraces}'
     );
+  });
+  it('handles date strings', () => {
+    expect(
+      evaluateTemplate('date is ${dateStr}', context({ dateStr: '2020-12-04' }))
+    ).toBe('date is 12/04/2020');
+  });
+  it('handles dates', () => {
+    expect(
+      evaluateTemplate(
+        'date is ${date}',
+        context({
+          date: parseHmisDateString('2020-12-04') as unknown as string,
+        })
+      )
+    ).toBe('date is 12/04/2020');
   });
 });

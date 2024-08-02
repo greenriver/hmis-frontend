@@ -2872,6 +2872,7 @@ export type FormDefinition = {
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
   identifier: Scalars['String']['output'];
+  projectMatches: FormProjectMatchesPaginated;
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
   status: FormStatus;
@@ -2886,6 +2887,12 @@ export type FormDefinitionFormRulesArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   sortOrder?: InputMaybe<FormRuleSortOption>;
+};
+
+/** FormDefinition */
+export type FormDefinitionProjectMatchesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type FormDefinitionForJsonResult = {
@@ -3025,6 +3032,26 @@ export type FormItem = {
   type: ItemType;
   /** Whether to show a warning if this question is unanswered */
   warnIfEmpty?: Maybe<Scalars['Boolean']['output']>;
+};
+
+/** Project match for a form, including information about which clients in this project the form is applicable to. */
+export type FormProjectMatch = {
+  __typename?: 'FormProjectMatch';
+  dataCollectedAbout: DataCollectedAbout;
+  id: Scalars['ID']['output'];
+  organizationName: Scalars['String']['output'];
+  projectName: Scalars['String']['output'];
+};
+
+export type FormProjectMatchesPaginated = {
+  __typename?: 'FormProjectMatchesPaginated';
+  hasMoreAfter: Scalars['Boolean']['output'];
+  hasMoreBefore: Scalars['Boolean']['output'];
+  limit: Scalars['Int']['output'];
+  nodes: Array<FormProjectMatch>;
+  nodesCount: Scalars['Int']['output'];
+  offset: Scalars['Int']['output'];
+  pagesCount: Scalars['Int']['output'];
 };
 
 export enum FormRole {
@@ -13884,7 +13911,6 @@ export type GetClientHouseholdMemberCandidatesQuery = {
             client: {
               __typename?: 'Client';
               id: string;
-              veteranStatus: NoYesReasonsForMissingData;
               lockVersion: number;
               firstName?: string | null;
               middleName?: string | null;
@@ -13894,6 +13920,8 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               age?: number | null;
               ssn?: string | null;
               gender: Array<Gender>;
+              race: Array<Race>;
+              veteranStatus: NoYesReasonsForMissingData;
               access: {
                 __typename?: 'ClientAccess';
                 id: string;
@@ -14981,6 +15009,14 @@ export type FormRuleFieldsFragment = {
   } | null;
 };
 
+export type FormProjectMatchFieldsFragment = {
+  __typename?: 'FormProjectMatch';
+  id: string;
+  projectName: string;
+  organizationName: string;
+  dataCollectedAbout: DataCollectedAbout;
+};
+
 export type ServiceTypeConfigFieldsFragment = {
   __typename?: 'ServiceType';
   id: string;
@@ -15272,6 +15308,34 @@ export type GetFormRulesQuery = {
   };
 };
 
+export type GetFormProjectMatchesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetFormProjectMatchesQuery = {
+  __typename?: 'Query';
+  formDefinition?: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    projectMatches: {
+      __typename?: 'FormProjectMatchesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'FormProjectMatch';
+        id: string;
+        projectName: string;
+        organizationName: string;
+        dataCollectedAbout: DataCollectedAbout;
+      }>;
+    };
+  } | null;
+};
+
 export type GetServiceCategoryRulesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -15547,6 +15611,20 @@ export type UpdateFormRuleMutation = {
       section?: string | null;
       data?: any | null;
     }>;
+  } | null;
+};
+
+export type DeactivateFormRuleMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type DeactivateFormRuleMutation = {
+  __typename?: 'Mutation';
+  updateFormRule?: {
+    __typename?: 'UpdateFormRulePayload';
+    clientMutationId?: string | null;
+    formRule: { __typename?: 'FormRule'; id: string; active: boolean };
+    errors: Array<{ __typename?: 'ValidationError'; message: string }>;
   } | null;
 };
 
@@ -16423,6 +16501,107 @@ export type EnrollmentFieldsFragment = {
   currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
 };
 
+export type AssessedClientFieldsFragment = {
+  __typename?: 'Client';
+  ssn?: string | null;
+  race: Array<Race>;
+  dob?: string | null;
+  veteranStatus: NoYesReasonsForMissingData;
+  id: string;
+  lockVersion: number;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+};
+
+export type EnrolledClientFieldsFragment = {
+  __typename?: 'Client';
+  hudChronic?: boolean | null;
+  ssn?: string | null;
+  race: Array<Race>;
+  dob?: string | null;
+  veteranStatus: NoYesReasonsForMissingData;
+  id: string;
+  lockVersion: number;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    fieldType: CustomDataElementType;
+    repeats: boolean;
+    displayHooks: Array<DisplayHook>;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+      user?: {
+        __typename: 'ApplicationUser';
+        id: string;
+        name: string;
+        email: string;
+      } | null;
+    }> | null;
+  }>;
+  access: {
+    __typename?: 'ClientAccess';
+    id: string;
+    canEditClient: boolean;
+    canDeleteClient: boolean;
+    canViewDob: boolean;
+    canViewFullSsn: boolean;
+    canViewPartialSsn: boolean;
+    canViewClientName: boolean;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+    canViewEnrollmentDetails: boolean;
+    canDeleteAssessments: boolean;
+    canManageAnyClientFiles: boolean;
+    canManageOwnClientFiles: boolean;
+    canViewAnyConfidentialClientFiles: boolean;
+    canViewAnyNonconfidentialClientFiles: boolean;
+    canUploadClientFiles: boolean;
+    canViewAnyFiles: boolean;
+    canAuditClients: boolean;
+    canManageScanCards: boolean;
+    canMergeClients: boolean;
+    canViewClientAlerts: boolean;
+    canManageClientAlerts: boolean;
+  };
+};
+
 export type AllEnrollmentDetailsFragment = {
   __typename?: 'Enrollment';
   numUnitsAssignedToHousehold: number;
@@ -16500,9 +16679,10 @@ export type AllEnrollmentDetailsFragment = {
   client: {
     __typename?: 'Client';
     hudChronic?: boolean | null;
-    ssn?: string | null;
     dob?: string | null;
     veteranStatus: NoYesReasonsForMissingData;
+    ssn?: string | null;
+    race: Array<Race>;
     id: string;
     lockVersion: number;
     firstName?: string | null;
@@ -17591,9 +17771,10 @@ export type GetEnrollmentDetailsQuery = {
     client: {
       __typename?: 'Client';
       hudChronic?: boolean | null;
-      ssn?: string | null;
       dob?: string | null;
       veteranStatus: NoYesReasonsForMissingData;
+      ssn?: string | null;
+      race: Array<Race>;
       id: string;
       lockVersion: number;
       firstName?: string | null;
@@ -18269,7 +18450,6 @@ export type GetEnrollmentWithHouseholdQuery = {
         client: {
           __typename?: 'Client';
           id: string;
-          veteranStatus: NoYesReasonsForMissingData;
           lockVersion: number;
           firstName?: string | null;
           middleName?: string | null;
@@ -18279,6 +18459,8 @@ export type GetEnrollmentWithHouseholdQuery = {
           age?: number | null;
           ssn?: string | null;
           gender: Array<Gender>;
+          race: Array<Race>;
+          veteranStatus: NoYesReasonsForMissingData;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -27264,7 +27446,6 @@ export type HouseholdFieldsFragment = {
     client: {
       __typename?: 'Client';
       id: string;
-      veteranStatus: NoYesReasonsForMissingData;
       lockVersion: number;
       firstName?: string | null;
       middleName?: string | null;
@@ -27274,6 +27455,8 @@ export type HouseholdFieldsFragment = {
       age?: number | null;
       ssn?: string | null;
       gender: Array<Gender>;
+      race: Array<Race>;
+      veteranStatus: NoYesReasonsForMissingData;
       access: {
         __typename?: 'ClientAccess';
         id: string;
@@ -27342,7 +27525,6 @@ export type HouseholdClientFieldsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
-    veteranStatus: NoYesReasonsForMissingData;
     lockVersion: number;
     firstName?: string | null;
     middleName?: string | null;
@@ -27352,6 +27534,8 @@ export type HouseholdClientFieldsFragment = {
     age?: number | null;
     ssn?: string | null;
     gender: Array<Gender>;
+    race: Array<Race>;
+    veteranStatus: NoYesReasonsForMissingData;
     access: {
       __typename?: 'ClientAccess';
       id: string;
@@ -27504,7 +27688,6 @@ export type GetHouseholdQuery = {
       client: {
         __typename?: 'Client';
         id: string;
-        veteranStatus: NoYesReasonsForMissingData;
         lockVersion: number;
         firstName?: string | null;
         middleName?: string | null;
@@ -27514,6 +27697,8 @@ export type GetHouseholdQuery = {
         age?: number | null;
         ssn?: string | null;
         gender: Array<Gender>;
+        race: Array<Race>;
+        veteranStatus: NoYesReasonsForMissingData;
         access: {
           __typename?: 'ClientAccess';
           id: string;
@@ -33148,6 +33333,14 @@ export const FormRuleFieldsFragmentDoc = gql`
   ${OrganizationNameFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
 `;
+export const FormProjectMatchFieldsFragmentDoc = gql`
+  fragment FormProjectMatchFields on FormProjectMatch {
+    id
+    projectName
+    organizationName
+    dataCollectedAbout
+  }
+`;
 export const ServiceTypeConfigFieldsFragmentDoc = gql`
   fragment ServiceTypeConfigFields on ServiceType {
     ...ServiceTypeFields
@@ -33314,6 +33507,29 @@ export const EnrollmentOccurrencePointFieldsFragmentDoc = gql`
     }
   }
   ${ClientAddressFieldsFragmentDoc}
+`;
+export const AssessedClientFieldsFragmentDoc = gql`
+  fragment AssessedClientFields on Client {
+    ...ClientNameDobVet
+    ssn
+    race
+  }
+  ${ClientNameDobVetFragmentDoc}
+`;
+export const EnrolledClientFieldsFragmentDoc = gql`
+  fragment EnrolledClientFields on Client {
+    ...AssessedClientFields
+    hudChronic
+    customDataElements {
+      ...CustomDataElementFields
+    }
+    access {
+      ...ClientAccessFields
+    }
+  }
+  ${AssessedClientFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
 `;
 export const EnrollmentSummaryFieldsFragmentDoc = gql`
   fragment EnrollmentSummaryFields on EnrollmentSummary {
@@ -33520,15 +33736,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       ...CustomDataElementFields
     }
     client {
-      hudChronic
-      ...ClientNameDobVet
-      ssn
-      customDataElements {
-        ...CustomDataElementFields
-      }
-      access {
-        ...ClientAccessFields
-      }
+      ...EnrolledClientFields
     }
     openEnrollmentSummary {
       ...EnrollmentSummaryFields
@@ -33556,8 +33764,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   ${EnrollmentFieldsFragmentDoc}
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-  ${ClientNameDobVetFragmentDoc}
-  ${ClientAccessFieldsFragmentDoc}
+  ${EnrolledClientFieldsFragmentDoc}
   ${EnrollmentSummaryFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectCocCountFragmentDoc}
@@ -33677,7 +33884,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       id
       ...ClientName
       ...ClientIdentificationFields
-      veteranStatus
+      ...AssessedClientFields
       access {
         ...ClientAccessFields
       }
@@ -33701,6 +33908,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
+  ${AssessedClientFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${ClientAlertFieldsFragmentDoc}
@@ -37436,6 +37644,76 @@ export type GetFormRulesQueryResult = Apollo.QueryResult<
   GetFormRulesQuery,
   GetFormRulesQueryVariables
 >;
+export const GetFormProjectMatchesDocument = gql`
+  query GetFormProjectMatches($id: ID!, $limit: Int = 25, $offset: Int = 0) {
+    formDefinition(id: $id) {
+      id
+      cacheKey
+      projectMatches(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...FormProjectMatchFields
+        }
+      }
+    }
+  }
+  ${FormProjectMatchFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetFormProjectMatchesQuery__
+ *
+ * To run a query within a React component, call `useGetFormProjectMatchesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormProjectMatchesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFormProjectMatchesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetFormProjectMatchesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >(GetFormProjectMatchesDocument, options);
+}
+export function useGetFormProjectMatchesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetFormProjectMatchesQuery,
+    GetFormProjectMatchesQueryVariables
+  >(GetFormProjectMatchesDocument, options);
+}
+export type GetFormProjectMatchesQueryHookResult = ReturnType<
+  typeof useGetFormProjectMatchesQuery
+>;
+export type GetFormProjectMatchesLazyQueryHookResult = ReturnType<
+  typeof useGetFormProjectMatchesLazyQuery
+>;
+export type GetFormProjectMatchesQueryResult = Apollo.QueryResult<
+  GetFormProjectMatchesQuery,
+  GetFormProjectMatchesQueryVariables
+>;
 export const GetServiceCategoryRulesDocument = gql`
   query GetServiceCategoryRules(
     $id: ID!
@@ -37690,6 +37968,63 @@ export type UpdateFormRuleMutationResult =
 export type UpdateFormRuleMutationOptions = Apollo.BaseMutationOptions<
   UpdateFormRuleMutation,
   UpdateFormRuleMutationVariables
+>;
+export const DeactivateFormRuleDocument = gql`
+  mutation DeactivateFormRule($id: ID!) {
+    updateFormRule(input: { id: $id, input: { activeStatus: INACTIVE } }) {
+      clientMutationId
+      formRule {
+        id
+        active
+      }
+      errors {
+        message
+      }
+    }
+  }
+`;
+export type DeactivateFormRuleMutationFn = Apollo.MutationFunction<
+  DeactivateFormRuleMutation,
+  DeactivateFormRuleMutationVariables
+>;
+
+/**
+ * __useDeactivateFormRuleMutation__
+ *
+ * To run a mutation, you first call `useDeactivateFormRuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeactivateFormRuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deactivateFormRuleMutation, { data, loading, error }] = useDeactivateFormRuleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeactivateFormRuleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeactivateFormRuleMutation,
+    DeactivateFormRuleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeactivateFormRuleMutation,
+    DeactivateFormRuleMutationVariables
+  >(DeactivateFormRuleDocument, options);
+}
+export type DeactivateFormRuleMutationHookResult = ReturnType<
+  typeof useDeactivateFormRuleMutation
+>;
+export type DeactivateFormRuleMutationResult =
+  Apollo.MutationResult<DeactivateFormRuleMutation>;
+export type DeactivateFormRuleMutationOptions = Apollo.BaseMutationOptions<
+  DeactivateFormRuleMutation,
+  DeactivateFormRuleMutationVariables
 >;
 export const GetServiceTypesDocument = gql`
   query GetServiceTypes(
