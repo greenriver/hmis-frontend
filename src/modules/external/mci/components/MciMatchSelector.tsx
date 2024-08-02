@@ -141,8 +141,8 @@ const MciMatchSelector = ({
               alreadyInHmis
                 ? 'Client is already in HMIS. Click the link to go to their client record.'
                 : autocleared
-                ? 'Client auto-cleared'
-                : null
+                  ? 'Client auto-cleared'
+                  : null
             }
           >
             <Switch

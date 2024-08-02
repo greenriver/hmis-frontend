@@ -45,8 +45,8 @@ export default function useClientAlerts(params: ClientAlertParams) {
     const clients = household
       ? household.householdClients.map((c) => c.client)
       : params.client
-      ? [params.client]
-      : [];
+        ? [params.client]
+        : [];
 
     const clientAlerts = clients.flatMap((client) =>
       client.alerts.map((alert) => ({

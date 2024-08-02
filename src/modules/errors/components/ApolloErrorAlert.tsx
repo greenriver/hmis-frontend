@@ -7,6 +7,7 @@ import {
   Button,
   Snackbar,
 } from '@mui/material';
+import isString from 'lodash-es/isString';
 
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 
@@ -113,7 +114,7 @@ const ApolloErrorAlert: React.FC<Props> = ({
       if (Array.isArray(result)) {
         return result[0]?.errors || [];
       }
-      return result?.errors || [];
+      return isString(result) ? [result] : result?.errors || [];
     }
     // don't show graphql errors to user in prod
     if (showDeveloperInfo) {

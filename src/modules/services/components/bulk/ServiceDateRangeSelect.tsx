@@ -84,31 +84,34 @@ const ServiceDateRangeSelect: React.FC<Props> = ({
     }
   }, [selected]);
 
-  const renderOption: GenericSelectProps<Option, false, false>['renderOption'] =
-    useCallback(
-      (props: React.HTMLAttributes<HTMLLIElement>, option: Option) => {
-        if (option.id === CustomOption.id) {
-          return (
-            <li {...props}>
-              <Link
-                component='button'
-                variant='body1'
-                onClick={() => setOpen(true)}
-                sx={{
-                  width: '100%',
-                  textAlign: 'left',
-                }}
-              >
-                {option.label}
-              </Link>
-            </li>
-          );
-        }
+  const renderOption: GenericSelectProps<
+    Option,
+    false,
+    undefined
+  >['renderOption'] = useCallback(
+    (props: React.HTMLAttributes<HTMLLIElement>, option: Option) => {
+      if (option.id === CustomOption.id) {
+        return (
+          <li {...props}>
+            <Link
+              component='button'
+              variant='body1'
+              onClick={() => setOpen(true)}
+              sx={{
+                width: '100%',
+                textAlign: 'left',
+              }}
+            >
+              {option.label}
+            </Link>
+          </li>
+        );
+      }
 
-        return <li {...props}>{option.label}</li>;
-      },
-      []
-    );
+      return <li {...props}>{option.label}</li>;
+    },
+    []
+  );
 
   return (
     <>

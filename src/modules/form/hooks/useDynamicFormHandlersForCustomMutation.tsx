@@ -28,7 +28,7 @@ export interface GenericFormHandlerArgs<TData, TVariables> {
 // usage of SubmitForm, it uses the specified mutation.
 export function useDynamicFormHandlersForCustomMutation<
   TData extends { __typename?: 'Mutation' },
-  TVariables extends { input: { [key: string]: any } }
+  TVariables extends { input: { [key: string]: any } },
 >({
   mutationDocument,
   getErrors,
