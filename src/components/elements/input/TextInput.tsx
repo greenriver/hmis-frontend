@@ -67,7 +67,7 @@ const TextInput = ({
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
       autoComplete={formAutoCompleteOff}
-      value={value || ''} // always used as controlled input, so don't pass null or undefined
+      value={value === null ? '' : value} // always used as controlled input, so don't pass null or undefined. Note, value may be a number, such as 0, which is falsy
       {...props}
       sx={{ maxWidth, ...sx }}
       inputProps={{

@@ -22,14 +22,13 @@ export default {
 
 const Template =
   <T extends { id: string }>(): StoryFn<GenericTableProps<T>> =>
-  (args) =>
-    (
-      <Paper>
-        <SsnDobShowContextProvider>
-          <GenericTable<T> {...args} />
-        </SsnDobShowContextProvider>
-      </Paper>
-    );
+  (args) => (
+    <Paper>
+      <SsnDobShowContextProvider>
+        <GenericTable<T> {...args} />
+      </SsnDobShowContextProvider>
+    </Paper>
+  );
 
 const clientColumns = [
   CLIENT_COLUMNS.id,

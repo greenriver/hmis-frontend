@@ -50,50 +50,40 @@ const batchLink = new BatchHttpLink({
   fetch: customFetch,
 });
 
-const authLink = setContext(
-  (
-    _,
-    { headers }: { headers: { [key: string]: string } }
-  ): { headers: Record<string, string> } => {
-    return {
-      headers: {
-        ...headers,
-        'X-CSRF-Token': getCsrfToken(),
-      },
-    };
-  }
-);
+const authLink = setContext((_request, previousContext) => {
+  return {
+    headers: {
+      ...previousContext.headers,
+      'X-CSRF-Token': getCsrfToken(),
+    },
+  };
+});
 
 // Add headers to provide more information about the route that the request is coming from
-const pathHeaderLink = setContext(
-  (
-    _,
-    { headers }: { headers: { [key: string]: string } }
-  ): { headers: Record<string, string> } => {
-    const modifiedHeaders: typeof headers = {
-      ...headers,
-      'X-Hmis-Path': window.location.pathname,
-    };
+const pathHeaderLink = setContext((_request, previousContext) => {
+  const modifiedHeaders = {
+    ...previousContext.headers,
+    'X-Hmis-Path': window.location.pathname,
+  };
 
-    // Find the Route that matches the current location
-    const matches = matchRoutes(allRoutes, window.location);
-    if (!matches || matches.length === 0) return { headers: modifiedHeaders };
+  // Find the Route that matches the current location
+  const matches = matchRoutes(allRoutes, window.location);
+  if (!matches || matches.length === 0) return { headers: modifiedHeaders };
 
-    const { params, route } = matches[0];
-    // Decode params
-    const decodedParams = decodeParams(params);
-    // Construct path with decoded params, add it to header
-    const decodedPath = generatePath(route.path, decodedParams);
-    modifiedHeaders['X-Hmis-Path'] = decodedPath; // /client/1/enrollments
+  const { params, route } = matches[0];
+  // Decode params
+  const decodedParams = decodeParams(params);
+  // Construct path with decoded params, add it to header
+  const decodedPath = generatePath(route.path, decodedParams);
+  modifiedHeaders['X-Hmis-Path'] = decodedPath; // /client/1/enrollments
 
-    // Add header for applicable params, if present
-    const { clientId, enrollmentId, projectId } = decodedParams;
-    if (clientId) modifiedHeaders['X-Hmis-Client-Id'] = clientId;
-    if (enrollmentId) modifiedHeaders['X-Hmis-Enrollment-Id'] = enrollmentId;
-    if (projectId) modifiedHeaders['X-Hmis-Project-Id'] = projectId;
-    return { headers: modifiedHeaders };
-  }
-);
+  // Add header for applicable params, if present
+  const { clientId, enrollmentId, projectId } = decodedParams;
+  if (clientId) modifiedHeaders['X-Hmis-Client-Id'] = clientId;
+  if (enrollmentId) modifiedHeaders['X-Hmis-Enrollment-Id'] = enrollmentId;
+  if (projectId) modifiedHeaders['X-Hmis-Project-Id'] = projectId;
+  return { headers: modifiedHeaders };
+});
 
 const sessionExpiryLink = new ApolloLink((operation, forward) => {
   return forward(operation).map((response) => {

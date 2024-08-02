@@ -13,7 +13,7 @@ import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 export interface GenericSelectProps<
   T,
   Multiple extends boolean | undefined,
-  Creatable extends boolean | undefined
+  Creatable extends boolean | undefined,
 > extends Omit<
     AutocompleteProps<T, Multiple, boolean, Creatable, React.ElementType>,
     'renderInput'
@@ -26,7 +26,7 @@ export interface GenericSelectProps<
 const GenericSelect = <
   T extends string | object,
   Multiple extends boolean | undefined,
-  Creatable extends boolean | undefined
+  Creatable extends boolean | undefined,
 >({
   value,
   label,

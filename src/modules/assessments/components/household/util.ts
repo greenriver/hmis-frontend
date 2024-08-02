@@ -89,6 +89,6 @@ export const useAssessmentStatus = ({
   return submitted
     ? AssessmentStatus.Submitted
     : assessmentId
-    ? AssessmentStatus.Started
-    : AssessmentStatus.NotStarted;
+      ? AssessmentStatus.Started
+      : AssessmentStatus.NotStarted;
 };

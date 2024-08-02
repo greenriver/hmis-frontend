@@ -44,10 +44,10 @@ export const SummaryTabLabel = ({ role }: { role: HouseholdAssesmentRole }) => (
       {role === AssessmentRole.Intake
         ? 'Complete Intake'
         : role === AssessmentRole.Exit
-        ? 'Complete Exit'
-        : role === AssessmentRole.Annual
-        ? 'Complete Annual'
-        : 'Submit Assessments'}
+          ? 'Complete Exit'
+          : role === AssessmentRole.Annual
+            ? 'Complete Annual'
+            : 'Submit Assessments'}
     </Typography>
   </Stack>
 );
