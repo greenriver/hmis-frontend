@@ -129,7 +129,7 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
                 // Dashboards render their own Mobile Menus with additional nav elements inside.
                 <MobileMenu
                   mobileNavIsOpen={mobileNavIsOpen}
-                  handleCloseMobileMenu={handleCloseMobileMenu}
+                  onCloseMobileMenu={handleCloseMobileMenu}
                 />
               )}
             </>

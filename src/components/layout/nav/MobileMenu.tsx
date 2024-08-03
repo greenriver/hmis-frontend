@@ -1,15 +1,27 @@
 import { Close } from '@mui/icons-material';
-import { Box, Drawer, IconButton, Stack, Typography } from '@mui/material';
-import React, { ReactNode } from 'react';
-import UserMenu from './UserMenu';
-import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
+import {
+  Box,
+  Drawer,
+  IconButton,
+  List,
+  Stack,
+  Typography,
+} from '@mui/material';
+import React, { ReactNode, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
+import MobileUserMenu from '@/components/layout/nav/MobileUserMenu';
+import {
+  TOOLBAR_MENU_ITEMS,
+  useActiveNaveItem,
+} from '@/components/layout/nav/ToolbarMenu';
 import OmniSearch from '@/modules/search/components/OmniSearch';
 
 interface Props {
   window?: () => Window;
   children?: ReactNode;
   mobileNavIsOpen: boolean;
-  handleCloseMobileMenu: VoidFunction;
+  onCloseMobileMenu: VoidFunction;
   navHeader?: ReactNode;
   label?: string;
 }
@@ -18,12 +30,43 @@ const MobileMenu: React.FC<Props> = ({
   window,
   children,
   mobileNavIsOpen,
-  handleCloseMobileMenu,
+  onCloseMobileMenu,
   label,
 }) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
+  // close the menu on nav
+  const { pathname } = useLocation();
+  useEffect(() => {
+    onCloseMobileMenu();
+  }, [pathname, onCloseMobileMenu]);
+
+  // also need hook to scroll to top of menu on open
+
+  const activeNavItem = useActiveNaveItem();
+  const nav = (
+    <List>
+      {TOOLBAR_MENU_ITEMS.map(({ path, id, activeItemPathIncludes, title }) => {
+        const active = activeNavItem === activeItemPathIncludes;
+
+        // fixme
+        //if (! hasPermissionsOnObject([permissions], permissionMode )) {
+        //  return  null
+        //}
+
+        return (
+          <MobileMenuItem
+            key={id}
+            title={title as string}
+            selected={active}
+            path={path}
+          />
+        );
+      })}
+      <MobileUserMenu />
+    </List>
+  );
   return (
     <Drawer
       data-testid='mobileNav'
@@ -31,35 +74,35 @@ const MobileMenu: React.FC<Props> = ({
       container={container}
       variant='temporary'
       open={mobileNavIsOpen}
-      onClose={handleCloseMobileMenu}
+      onClose={onCloseMobileMenu}
       ModalProps={{
         keepMounted: true, // Better open performance on mobile.
       }}
       sx={({ zIndex }) => ({
         zIndex: zIndex.modal,
         display: { md: 'block', lg: 'none' },
-        minWidth: '320px',
         overflow: 'hidden',
         height: '100%',
       })}
     >
       <Stack
         direction='row'
-        sx={({ shadows, zIndex }) => ({
-          boxShadow: shadows[2],
+        sx={({ zIndex }) => ({
+          boxShadow: children ? 2 : undefined,
           zIndex: zIndex.appBar,
+          minWidth: '320px',
         })}
       >
         <Typography
           component='h2'
           variant='overline'
-          sx={{ ml: 2, mr: 'auto', mt: 1 }}
+          sx={{ ml: 2, mr: 'auto', mt: 0.5 }}
         >
-          Site Navigation
+          {label || 'Site Navigation'}
         </Typography>
         <IconButton
           aria-label='close'
-          onClick={handleCloseMobileMenu}
+          onClick={onCloseMobileMenu}
           sx={{ fontSize: 'inherit' }}
           size='large'
         >
@@ -67,34 +110,35 @@ const MobileMenu: React.FC<Props> = ({
         </IconButton>
       </Stack>
 
-      <Box sx={{ flex: '1', overflowY: 'scroll', maxHeight: '100vh', pt: 2 }}>
-        <Box sx={{ mx: 2, mb: 2 }}>
-          <OmniSearch />
-        </Box>
-
-        <ToolbarMenu />
-
-        {children && (
-          <Box
-            sx={{
-              m: 2,
-              pt: 2,
-              borderRadius: 1,
-              border: (theme) => `1px solid ${theme.palette.grey[200]}`,
-            }}
-          >
-            <Typography component='h2' variant='h5' sx={{ px: 3 }}>
-              {label}
-            </Typography>
-            {children}
+      {children && (
+        <>
+          <Box sx={{ flex: '1', overflowY: 'scroll' }}>
+            <Box sx={({ palette }) => ({ background: palette.grey[100] })}>
+              {children}
+            </Box>
           </Box>
-        )}
-
-        <Typography component='h2' variant='overline' sx={{ px: 3 }}>
-          User
-        </Typography>
-        <UserMenu />
-      </Box>
+          <Box
+            sx={({ palette }) => ({
+              flex: '1',
+              pt: 2,
+              borderTop: `1px solid ${palette.divider}`,
+            })}
+          >
+            <Box sx={{ mx: 2, mb: 0 }}>
+              <OmniSearch />
+            </Box>
+            {nav}
+          </Box>
+        </>
+      )}
+      {!children && (
+        <>
+          <Box sx={{ mx: 2, mb: 0, mt: 2 }}>
+            <OmniSearch />
+          </Box>
+          {nav}
+        </>
+      )}
     </Drawer>
   );
 };
