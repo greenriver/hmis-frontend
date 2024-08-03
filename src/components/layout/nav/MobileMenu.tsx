@@ -1,5 +1,5 @@
 import { Close } from '@mui/icons-material';
-import { Box, Drawer, IconButton, Typography } from '@mui/material';
+import { Box, Drawer, IconButton, Stack, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 import UserMenu from './UserMenu';
 import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
@@ -35,32 +35,44 @@ const MobileMenu: React.FC<Props> = ({
       ModalProps={{
         keepMounted: true, // Better open performance on mobile.
       }}
-      sx={{
-        zIndex: 1300,
+      sx={({ zIndex }) => ({
+        zIndex: zIndex.modal,
         display: { md: 'block', lg: 'none' },
         minWidth: '320px',
-      }}
+        overflow: 'hidden',
+        height: '100%',
+      })}
     >
-      <Box component='span' sx={{ position: 'absolute', right: 4, top: 4 }}>
+      <Stack
+        direction='row'
+        sx={({ shadows, zIndex }) => ({
+          boxShadow: shadows[2],
+          zIndex: zIndex.appBar,
+        })}
+      >
+        <Typography
+          component='h2'
+          variant='overline'
+          sx={{ ml: 2, mr: 'auto', mt: 1 }}
+        >
+          Site Navigation
+        </Typography>
         <IconButton
-          aria-label='copy'
+          aria-label='close'
           onClick={handleCloseMobileMenu}
           sx={{ fontSize: 'inherit' }}
           size='large'
         >
           <Close fontSize='inherit' />
         </IconButton>
-      </Box>
+      </Stack>
 
-      <Box>
-        <Typography component='h2' variant='overline' sx={{ px: 3, mt: 2 }}>
-          Site Navigation
-        </Typography>
-        <ToolbarMenu />
-
-        <Box sx={{ p: 2 }}>
+      <Box sx={{ flex: '1', overflowY: 'scroll', maxHeight: '100vh', pt: 2 }}>
+        <Box sx={{ mx: 2, mb: 2 }}>
           <OmniSearch />
         </Box>
+
+        <ToolbarMenu />
 
         {children && (
           <Box
