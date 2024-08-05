@@ -45,7 +45,8 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
         staff[staffAssignmentRelationship].push(user.name);
       }
     );
-    return Object.entries(staff);
+    // sort by relationship alphabetically
+    return Object.entries(staff).sort(([a], [b]) => a.localeCompare(b));
   }, [household]);
 
   if (!enrollment) return;
