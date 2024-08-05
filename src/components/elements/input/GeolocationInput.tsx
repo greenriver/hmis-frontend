@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useGeolocation } from '../../../hooks/useGeolocation';
 import LoadingButton from '../LoadingButton';
 
@@ -8,13 +8,18 @@ import LoadingButton from '../LoadingButton';
  * - Needs to be wired up with Props to be used as an Input component.
  * - Likely needs to use a mapping API to display the coordinates on a map.
  */
-const GeolocationInput = () => {
+
+interface GeolocationInputProps {
+  children?: ReactNode;
+}
+
+const GeolocationInput: React.FC<GeolocationInputProps> = ({ children }) => {
   const { coordinates, requestCoordinates, loading, error } = useGeolocation();
 
   return (
     <>
       <LoadingButton onClick={requestCoordinates} loading={loading}>
-        Request Location
+        {children || 'Request Location'}
       </LoadingButton>
       {error && <Typography color='error'>{error}</Typography>}
       <div>
