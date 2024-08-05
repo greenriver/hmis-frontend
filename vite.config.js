@@ -113,10 +113,8 @@ export default defineConfig(({ command, mode }) => {
     },
     ...(command !== 'build' && {
       preview: {
-        // don't try to open a browser
         open: false,
-        // cypress expects on 5173
-        port: 5173,
+        port: 5173, // expected in capybara system test instructions
         strictPort: true,
       },
       server: {

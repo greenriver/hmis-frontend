@@ -85,13 +85,9 @@ git add yarn.lock package.json
 ```
 
 
-### Cypress E2E tests
+### E2E tests
 
-These tests run against a real warehouse backend. Make sure you have the backend running at `https://hmis-warehouse.dev.test`.
-
-1. Run `rails driver:hmis:seed_e2e` in the warehouse repo
-2. Run `yarn cypress open` in the frontend repo
-
+See the [HMIS README](https://github.com/greenriver/hmis-warehouse/blob/stable/drivers/hmis/README.md) in the Warehouse repo for instructions on running end-to-end tests.
 
 ## Backend configuration
 

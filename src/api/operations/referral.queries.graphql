@@ -1,0 +1,34 @@
+query GetProjectCanAcceptReferral(
+  $sourceEnrollmentId: ID!
+  $destinationProjectId: ID!
+) {
+  projectCanAcceptReferral(
+    sourceEnrollmentId: $sourceEnrollmentId
+    destinationProjectId: $destinationProjectId
+  )
+}
+
+query GetReferralPosting($id: ID!) {
+  referralPosting(id: $id) {
+    ...ReferralPostingDetailFields
+  }
+}
+
+query GetDeniedPendingReferralPostings(
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ReferralPostingFilterOptions
+) {
+  deniedPendingReferralPostings(
+    limit: $limit
+    offset: $offset
+    filters: $filters
+  ) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...ReferralPostingFields
+    }
+  }
+}
