@@ -5,7 +5,7 @@ import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
+import { HouseholdStatus } from '@/modules/hmis/components/HouseholdStatus';
 import {
   clientBriefName,
   parseAndFormatDateRange,
@@ -61,7 +61,7 @@ const MY_CLIENTS_COLUMNS: ColumnDef<StaffAssignmentWithClientsFragment>[] = [
   {
     header: 'Status',
     render: (assignment) => (
-      <EnrollmentStatus enrollment={memoizedHoh(assignment).enrollment} />
+      <HouseholdStatus household={assignment.household} />
     ),
   },
 ];
