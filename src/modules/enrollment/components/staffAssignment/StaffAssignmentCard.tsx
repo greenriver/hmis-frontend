@@ -39,7 +39,7 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
 
     // { relationship => [user1, user2] }
     const staff: Record<string, string[]> = {};
-    household.staffAssignments.nodes.map(
+    household.staffAssignments.nodes.forEach(
       ({ staffAssignmentRelationship, user }) => {
         staff[staffAssignmentRelationship] ||= [];
         staff[staffAssignmentRelationship].push(user.name);
