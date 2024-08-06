@@ -1,14 +1,15 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Divider, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import {
+  CommonDetailGridContainer,
+  CommonDetailGridItem,
+} from '@/components/elements/CommonDetailGrid';
 import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import IconButtonContainer from '@/modules/enrollment/components/IconButtonContainer';
 import EditStaffAssignmentDialog from '@/modules/enrollment/components/staffAssignment/EditStaffAssignmentDialog';
-import StaffAssignmentTable, {
-  STAFF_ASSIGNMENT_COLUMNS,
-} from '@/modules/enrollment/components/staffAssignment/StaffAssignmentTable';
 import {
   RelationshipToHoH,
   useGetHouseholdStaffAssignmentsQuery,
@@ -32,6 +33,21 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
   });
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+  const staffAssignmentRows = useMemo(() => {
+    if (!household?.staffAssignments?.nodesCount) return;
+
+    // { relationship => [user1, user2] }
+    const staff: Record<string, string[]> = {};
+    household.staffAssignments.nodes.forEach(
+      ({ staffAssignmentRelationship, user }) => {
+        staff[staffAssignmentRelationship] ||= [];
+        staff[staffAssignmentRelationship].push(user.name);
+      }
+    );
+    // sort by relationship alphabetically
+    return Object.entries(staff).sort(([a], [b]) => a.localeCompare(b));
+  }, [household]);
 
   if (!enrollment) return;
   if (error) throw error;
@@ -68,16 +84,16 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
                 No staff assigned
               </Typography>
             )}
-            {household.staffAssignments.nodesCount > 0 && (
-              <StaffAssignmentTable
-                household={household}
-                columns={[
-                  STAFF_ASSIGNMENT_COLUMNS.staffName,
-                  STAFF_ASSIGNMENT_COLUMNS.role,
-                  STAFF_ASSIGNMENT_COLUMNS.assignmentDate,
-                ]}
-                cardSx={{ border: 'none' }}
-              />
+            {staffAssignmentRows && (
+              <CommonDetailGridContainer>
+                {staffAssignmentRows.map(([relationship, users]) => (
+                  <CommonDetailGridItem label={relationship} key={relationship}>
+                    {users.map((user) => (
+                      <div key={user}>{user}</div>
+                    ))}
+                  </CommonDetailGridItem>
+                ))}
+              </CommonDetailGridContainer>
             )}
           </>
         )}
