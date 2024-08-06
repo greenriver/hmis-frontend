@@ -13,7 +13,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 };
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never };
 export type Incremental<T> =
   | T
@@ -3523,10 +3523,13 @@ export type HmisParticipationsPaginated = {
 
 export type Household = {
   __typename?: 'Household';
+  anyInProgress: Scalars['Boolean']['output'];
   assessments: AssessmentsPaginated;
+  earliestEntryDate: Scalars['ISO8601Date']['output'];
   householdClients: Array<HouseholdClient>;
   householdSize: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
+  latestExitDate?: Maybe<Scalars['ISO8601Date']['output']>;
   shortId: Scalars['ID']['output'];
   staffAssignments?: Maybe<StaffAssignmentsPaginated>;
 };
@@ -32849,15 +32852,23 @@ export type StaffAssignmentWithClientsFragment = {
   household: {
     __typename?: 'Household';
     id: string;
+    anyInProgress: boolean;
+    latestExitDate?: string | null;
     householdClients: Array<{
       __typename?: 'HouseholdClient';
-      id: string;
       relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        lockVersion: number;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
-        lockVersion: number;
-        autoExited: boolean;
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
@@ -32867,71 +32878,6 @@ export type StaffAssignmentWithClientsFragment = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
-      };
-      client: {
-        __typename?: 'Client';
-        id: string;
-        lockVersion: number;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-        dob?: string | null;
-        age?: number | null;
-        ssn?: string | null;
-        gender: Array<Gender>;
-        race: Array<Race>;
-        veteranStatus: NoYesReasonsForMissingData;
-        access: {
-          __typename?: 'ClientAccess';
-          id: string;
-          canViewFullSsn: boolean;
-          canViewPartialSsn: boolean;
-          canEditClient: boolean;
-          canDeleteClient: boolean;
-          canViewDob: boolean;
-          canViewClientName: boolean;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-          canViewEnrollmentDetails: boolean;
-          canDeleteAssessments: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canViewAnyConfidentialClientFiles: boolean;
-          canViewAnyNonconfidentialClientFiles: boolean;
-          canUploadClientFiles: boolean;
-          canViewAnyFiles: boolean;
-          canAuditClients: boolean;
-          canManageScanCards: boolean;
-          canMergeClients: boolean;
-          canViewClientAlerts: boolean;
-          canManageClientAlerts: boolean;
-        };
-        externalIds: Array<{
-          __typename?: 'ExternalIdentifier';
-          id: string;
-          identifier?: string | null;
-          url?: string | null;
-          label: string;
-          type: ExternalIdentifierType;
-        }>;
-        alerts: Array<{
-          __typename?: 'ClientAlert';
-          id: string;
-          note: string;
-          expirationDate?: string | null;
-          createdAt: string;
-          priority: ClientAlertPriorityLevel;
-          createdBy?: {
-            __typename: 'ApplicationUser';
-            id: string;
-            name: string;
-            firstName?: string | null;
-            lastName?: string | null;
-            email: string;
-          } | null;
-        }>;
       };
     }>;
   };
@@ -33517,15 +33463,23 @@ export type GetUserStaffAssignmentsQuery = {
         household: {
           __typename?: 'Household';
           id: string;
+          anyInProgress: boolean;
+          latestExitDate?: string | null;
           householdClients: Array<{
             __typename?: 'HouseholdClient';
-            id: string;
             relationshipToHoH: RelationshipToHoH;
+            client: {
+              __typename?: 'Client';
+              id: string;
+              lockVersion: number;
+              firstName?: string | null;
+              middleName?: string | null;
+              lastName?: string | null;
+              nameSuffix?: string | null;
+            };
             enrollment: {
               __typename?: 'Enrollment';
               id: string;
-              lockVersion: number;
-              autoExited: boolean;
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
@@ -33535,75 +33489,6 @@ export type GetUserStaffAssignmentsQuery = {
                 projectName: string;
                 projectType?: ProjectType | null;
               };
-              currentUnit?: {
-                __typename?: 'Unit';
-                id: string;
-                name: string;
-              } | null;
-            };
-            client: {
-              __typename?: 'Client';
-              id: string;
-              lockVersion: number;
-              firstName?: string | null;
-              middleName?: string | null;
-              lastName?: string | null;
-              nameSuffix?: string | null;
-              dob?: string | null;
-              age?: number | null;
-              ssn?: string | null;
-              gender: Array<Gender>;
-              race: Array<Race>;
-              veteranStatus: NoYesReasonsForMissingData;
-              access: {
-                __typename?: 'ClientAccess';
-                id: string;
-                canViewFullSsn: boolean;
-                canViewPartialSsn: boolean;
-                canEditClient: boolean;
-                canDeleteClient: boolean;
-                canViewDob: boolean;
-                canViewClientName: boolean;
-                canEditEnrollments: boolean;
-                canDeleteEnrollments: boolean;
-                canViewEnrollmentDetails: boolean;
-                canDeleteAssessments: boolean;
-                canManageAnyClientFiles: boolean;
-                canManageOwnClientFiles: boolean;
-                canViewAnyConfidentialClientFiles: boolean;
-                canViewAnyNonconfidentialClientFiles: boolean;
-                canUploadClientFiles: boolean;
-                canViewAnyFiles: boolean;
-                canAuditClients: boolean;
-                canManageScanCards: boolean;
-                canMergeClients: boolean;
-                canViewClientAlerts: boolean;
-                canManageClientAlerts: boolean;
-              };
-              externalIds: Array<{
-                __typename?: 'ExternalIdentifier';
-                id: string;
-                identifier?: string | null;
-                url?: string | null;
-                label: string;
-                type: ExternalIdentifierType;
-              }>;
-              alerts: Array<{
-                __typename?: 'ClientAlert';
-                id: string;
-                note: string;
-                expirationDate?: string | null;
-                createdAt: string;
-                priority: ClientAlertPriorityLevel;
-                createdBy?: {
-                  __typename: 'ApplicationUser';
-                  id: string;
-                  name: string;
-                  firstName?: string | null;
-                  lastName?: string | null;
-                  email: string;
-                } | null;
-              }>;
             };
           }>;
         };
@@ -35754,10 +35639,17 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
     unassignedAt
     household {
       id
+      anyInProgress
+      latestExitDate
       householdClients {
-        ...HouseholdClientFields
+        relationshipToHoH
+        client {
+          id
+          ...ClientName
+        }
         enrollment {
           id
+          ...EnrollmentRangeFields
           project {
             ...ProjectNameAndType
           }
@@ -35765,7 +35657,8 @@ export const StaffAssignmentWithClientsFragmentDoc = gql`
       }
     }
   }
-  ${HouseholdClientFieldsFragmentDoc}
+  ${ClientNameFragmentDoc}
+  ${EnrollmentRangeFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
 export const UnitTypeCapacityFieldsFragmentDoc = gql`
