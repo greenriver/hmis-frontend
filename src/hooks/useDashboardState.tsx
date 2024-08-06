@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-
 import useCurrentPath from './useCurrentPath';
-
+import { useMobileMenu } from '@/components/layout/nav/useMobileMenuContext';
 import { FOCUS_MODE_ROUTES, HIDE_NAV_ROUTES } from '@/routes/routes';
 
 export function useDashboardState() {
   const currentPath = useCurrentPath();
 
+  const { mobileNavIsOpen, handleCloseMobileMenu, handleOpenMobileMenu } =
+    useMobileMenu();
+
   const [desktopNavIsOpen, setDesktopNavState] = useState(true);
-  const [mobileNavIsOpen, setMobileNavState] = useState(false);
   const [focusMode, setFocusMode] = useState<string | undefined>();
 
   useEffect(() => {
@@ -30,12 +31,6 @@ export function useDashboardState() {
     }
   }, [currentPath]);
 
-  const handleCloseMobileMenu = useCallback(() => {
-    setMobileNavState(false);
-  }, []);
-  const handleOpenMobileMenu = useCallback(() => {
-    setMobileNavState(true);
-  }, []);
   const handleCloseDesktopMenu = useCallback(() => {
     setDesktopNavState(false);
   }, []);

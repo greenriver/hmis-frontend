@@ -23,6 +23,10 @@ import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import PathHandler from '@/components/elements/PathHandler';
 import MainLayout from '@/components/layout/MainLayout';
+import {
+  MobileMenuContext,
+  useMobileMenuContext,
+} from '@/components/layout/nav/useMobileMenuContext';
 import AllProjects from '@/components/pages/AllProjects';
 import ClientDashboard from '@/components/pages/ClientDashboard';
 import ClientSearchPage from '@/components/pages/ClientSearchPage';
@@ -104,11 +108,22 @@ import SystemStatus from '@/modules/systemStatus/components/SystemStatus';
 import Units from '@/modules/units/components/Units';
 
 const App = () => {
+  // Setup mobile menu context - open/closed state and handlers
+  const mobileMenuContext = useMobileMenuContext();
+
   return (
-    <MainLayout>
+    <MainLayout
+      // Provide mobile menu context directly to the Main Layout for rendering the non-Dashboard nav.
+      // Can't use `useMobileMenu` hook for the context provided by the Outlet, since this is outside the Outlet.
+      mobileMenuContext={mobileMenuContext}
+    >
       <Suspense fallback={<Loading />}>
         <SentryErrorBoundary>
-          <Outlet />
+          <Outlet
+            // Provide mobile menu context to the children via Outlet so that Dashboard components
+            // can use the same menu component but inject their own navigational elements
+            context={mobileMenuContext satisfies MobileMenuContext}
+          />
         </SentryErrorBoundary>
       </Suspense>
     </MainLayout>

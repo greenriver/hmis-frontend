@@ -8,8 +8,6 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '../../layoutConstants';
-
-import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
@@ -34,6 +32,7 @@ export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
     sx={{
       borderTop: 'unset',
       borderLeft: 'unset',
+      borderRight: 'unset',
       height: CONTEXT_HEADER_HEIGHT,
       alignItems: 'stretch',
       justifyContent: 'center',
@@ -56,7 +55,6 @@ const ContextHeader: React.FC<Props> = ({
   isOpen,
   handleOpenMenu,
 }) => {
-  const isMobile = useIsMobile();
   const { clientId, enrollmentId } = useSafeParams();
   const { client } = useClientName(clientId);
   const navigate = useNavigate();
@@ -117,7 +115,7 @@ const ContextHeader: React.FC<Props> = ({
         </Box>
       ) : (
         <Box display='flex' alignItems='stretch' width='100%' flex={1}>
-          {(!isOpen || isMobile) && (
+          {!isOpen && (
             <Box
               sx={{
                 display: 'flex',
