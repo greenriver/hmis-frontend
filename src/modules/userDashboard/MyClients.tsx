@@ -5,7 +5,7 @@ import React from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { HouseholdStatus } from '@/modules/hmis/components/HouseholdStatus';
+import { HouseholdStatus } from '@/modules/hmis/components/EnrollmentStatus';
 import {
   clientBriefName,
   parseAndFormatDateRange,

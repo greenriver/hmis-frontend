@@ -67,6 +67,8 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
 
 fragment HouseholdWithEnrollmentFields on Household {
   id
+  anyInProgress
+  latestExitDate
   householdClients {
     ...ProjectEnrollmentsHouseholdClientFields
   }
