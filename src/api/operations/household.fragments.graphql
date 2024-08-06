@@ -64,12 +64,3 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
     autoExited
   }
 }
-
-fragment HouseholdWithEnrollmentFields on Household {
-  id
-  anyInProgress
-  latestExitDate
-  householdClients {
-    ...ProjectEnrollmentsHouseholdClientFields
-  }
-}

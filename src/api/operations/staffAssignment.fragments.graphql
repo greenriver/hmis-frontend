@@ -40,9 +40,18 @@ fragment StaffAssignmentWithClients on StaffAssignment {
   assignedAt
   unassignedAt
   household {
-    ...HouseholdWithEnrollmentFields
+    id
+    anyInProgress
+    latestExitDate
     householdClients {
+      relationshipToHoH
+      client {
+        id
+        ...ClientName
+      }
       enrollment {
+        id
+        ...EnrollmentRangeFields
         project {
           ...ProjectNameAndType
         }

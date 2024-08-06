@@ -3,14 +3,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import TimerIcon from '@mui/icons-material/Timer';
 import { Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
-
-import {
-  ClientEnrollmentFieldsFragment,
-  EnrollmentFieldsFragment,
-  HouseholdClientFieldsFragment,
-  HouseholdWithEnrollmentFieldsFragment,
-  ProjectEnrollmentFieldsFragment,
-} from '@/types/gqlTypes';
+import { Enrollment, Household } from '@/types/gqlTypes';
 
 interface CommonStatusProps {
   variant: 'inProgress' | 'open' | 'autoExited' | 'exited';
@@ -64,11 +57,7 @@ const CommonStatus: React.FC<CommonStatusProps> = ({ variant }) => {
 const EnrollmentStatus = ({
   enrollment,
 }: {
-  enrollment:
-    | EnrollmentFieldsFragment
-    | HouseholdClientFieldsFragment['enrollment']
-    | ClientEnrollmentFieldsFragment
-    | ProjectEnrollmentFieldsFragment;
+  enrollment: Pick<Enrollment, 'inProgress' | 'autoExited' | 'exitDate'>;
 }) => {
   if (enrollment.inProgress) return <CommonStatus variant='inProgress' />;
   if (enrollment.autoExited) return <CommonStatus variant='autoExited' />;
@@ -79,7 +68,7 @@ const EnrollmentStatus = ({
 export const HouseholdStatus = ({
   household,
 }: {
-  household: HouseholdWithEnrollmentFieldsFragment;
+  household: Pick<Household, 'anyInProgress' | 'latestExitDate'>;
 }) => {
   if (household.anyInProgress) return <CommonStatus variant='inProgress' />;
   if (!household.latestExitDate) return <CommonStatus variant='open' />;
