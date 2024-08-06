@@ -10,7 +10,7 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import { Routes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
 
-const TOOLBAR_MENU_ITEMS: (NavItem<RootPermissionsFragment> & {
+export const TOOLBAR_MENU_ITEMS: (NavItem<RootPermissionsFragment> & {
   activeItemPathIncludes: string;
 })[] = [
   {
@@ -43,9 +43,9 @@ const TOOLBAR_MENU_ITEMS: (NavItem<RootPermissionsFragment> & {
   },
 ];
 
-const ToolbarMenu: React.FC = () => {
+export const useActiveNaveItem = () => {
   const { pathname } = useLocation();
-  const activeItem = React.useMemo(() => {
+  return React.useMemo(() => {
     const val = pathname.split('/').find((s) => !!s);
     switch (val) {
       case undefined:
@@ -62,7 +62,10 @@ const ToolbarMenu: React.FC = () => {
         return null;
     }
   }, [pathname]);
+};
 
+const ToolbarMenu: React.FC = () => {
+  const activeItem = useActiveNaveItem();
   const isMobile = useIsMobile();
 
   const navItemSx = useCallback(

@@ -68,13 +68,14 @@ const DashboardContentNav: React.FC<Props> = ({
 }) => {
   const headerHeight = `${STICKY_BAR_HEIGHT}px`;
   const height = `calc(100vh - ${headerHeight})`;
+
   return (
     <Box
       sx={{ display: 'flex', top: headerHeight, position: 'sticky', height }}
     >
       <MobileMenu
         mobileNavIsOpen={mobileNavIsOpen}
-        handleCloseMobileMenu={handleCloseMobileMenu}
+        onCloseMobileMenu={handleCloseMobileMenu}
         label={label}
       >
         {children}
