@@ -64,8 +64,8 @@ const StaffAssignmentCard: React.FC<StaffAssignmentCardProps> = ({
           <>
             <Divider />
             {household.staffAssignments.nodesCount === 0 && (
-              <Typography sx={{ p: 2 }} color='text.secondary'>
-                No Staff Assigned
+              <Typography variant='body2' sx={{ p: 2 }} color='text.secondary'>
+                No staff assigned
               </Typography>
             )}
             {household.staffAssignments.nodesCount > 0 && (
