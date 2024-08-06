@@ -13,7 +13,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 };
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T,
+  K extends keyof T
 > = { [_ in K]?: never };
 export type Incremental<T> =
   | T
@@ -8087,6 +8087,8 @@ export type ClientWithAlertFieldsFragment = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   }>;
@@ -8108,6 +8110,8 @@ export type ClientAlertFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -8131,6 +8135,8 @@ export type CreateClientAlertMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -8170,6 +8176,8 @@ export type DeleteClientAlertMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -8221,6 +8229,8 @@ export type GetHouseholdClientAlertsQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }>;
@@ -8249,12 +8259,16 @@ export type AssessmentFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   definition: {
@@ -8366,6 +8380,8 @@ export type AssessmentWithRecordsFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -8385,6 +8401,8 @@ export type AssessmentWithRecordsFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -8406,6 +8424,8 @@ export type AssessmentWithRecordsFragment = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   } | null;
@@ -8426,6 +8446,8 @@ export type AssessmentWithRecordsFragment = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   } | null;
@@ -8528,6 +8550,8 @@ export type AssessmentWithRecordsFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -8547,6 +8571,8 @@ export type AssessmentWithRecordsFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -8655,6 +8681,8 @@ export type AssessmentWithRecordsFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -8674,6 +8702,8 @@ export type AssessmentWithRecordsFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -8728,6 +8758,8 @@ export type AssessmentWithRecordsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -8747,6 +8779,8 @@ export type AssessmentWithRecordsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -8762,12 +8796,16 @@ export type AssessmentWithRecordsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   definition: {
@@ -8794,12 +8832,16 @@ export type AssessmentWithValuesFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   definition: {
@@ -8912,6 +8954,8 @@ export type FullAssessmentFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -8931,6 +8975,8 @@ export type FullAssessmentFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -8952,6 +8998,8 @@ export type FullAssessmentFragment = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   } | null;
@@ -8972,6 +9020,8 @@ export type FullAssessmentFragment = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   } | null;
@@ -9074,6 +9124,8 @@ export type FullAssessmentFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -9093,6 +9145,8 @@ export type FullAssessmentFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -9201,6 +9255,8 @@ export type FullAssessmentFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -9220,6 +9276,8 @@ export type FullAssessmentFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -9274,6 +9332,8 @@ export type FullAssessmentFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -9293,6 +9353,8 @@ export type FullAssessmentFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -9308,12 +9370,16 @@ export type FullAssessmentFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   createdBy?: {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   definition: {
@@ -9914,6 +9980,8 @@ export type GetAssessmentQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -9933,6 +10001,8 @@ export type GetAssessmentQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -9954,6 +10024,8 @@ export type GetAssessmentQuery = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -9974,6 +10046,8 @@ export type GetAssessmentQuery = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -10076,6 +10150,8 @@ export type GetAssessmentQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -10095,6 +10171,8 @@ export type GetAssessmentQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -10203,6 +10281,8 @@ export type GetAssessmentQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -10222,6 +10302,8 @@ export type GetAssessmentQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -10276,6 +10358,8 @@ export type GetAssessmentQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -10295,6 +10379,8 @@ export type GetAssessmentQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -10310,12 +10396,16 @@ export type GetAssessmentQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
     createdBy?: {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   } | null;
@@ -10374,12 +10464,16 @@ export type GetClientAssessmentsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         definition: {
@@ -10427,12 +10521,16 @@ export type GetEnrollmentAssessmentsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         definition: {
@@ -10494,12 +10592,16 @@ export type GetHouseholdAssessmentsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         definition: {
@@ -10565,12 +10667,16 @@ export type SaveAssessmentMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       createdBy?: {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       definition: {
@@ -10706,6 +10812,8 @@ export type SubmitAssessmentMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -10725,6 +10833,8 @@ export type SubmitAssessmentMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -10746,6 +10856,8 @@ export type SubmitAssessmentMutation = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -10766,6 +10878,8 @@ export type SubmitAssessmentMutation = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -10868,6 +10982,8 @@ export type SubmitAssessmentMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -10887,6 +11003,8 @@ export type SubmitAssessmentMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -10995,6 +11113,8 @@ export type SubmitAssessmentMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -11014,6 +11134,8 @@ export type SubmitAssessmentMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -11068,6 +11190,8 @@ export type SubmitAssessmentMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -11087,6 +11211,8 @@ export type SubmitAssessmentMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -11102,12 +11228,16 @@ export type SubmitAssessmentMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       createdBy?: {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       definition: {
@@ -11243,6 +11373,8 @@ export type SubmitHouseholdAssessmentsMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -11262,6 +11394,8 @@ export type SubmitHouseholdAssessmentsMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -11283,6 +11417,8 @@ export type SubmitHouseholdAssessmentsMutation = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -11303,6 +11439,8 @@ export type SubmitHouseholdAssessmentsMutation = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -11405,6 +11543,8 @@ export type SubmitHouseholdAssessmentsMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -11424,6 +11564,8 @@ export type SubmitHouseholdAssessmentsMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -11532,6 +11674,8 @@ export type SubmitHouseholdAssessmentsMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -11551,6 +11695,8 @@ export type SubmitHouseholdAssessmentsMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -11605,6 +11751,8 @@ export type SubmitHouseholdAssessmentsMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -11624,6 +11772,8 @@ export type SubmitHouseholdAssessmentsMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -11639,12 +11789,16 @@ export type SubmitHouseholdAssessmentsMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       createdBy?: {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       definition: {
@@ -11797,6 +11951,8 @@ export type GetAssessmentsForPopulationQuery = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -11816,6 +11972,8 @@ export type GetAssessmentsForPopulationQuery = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -11837,6 +11995,8 @@ export type GetAssessmentsForPopulationQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -11857,6 +12017,8 @@ export type GetAssessmentsForPopulationQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -11959,6 +12121,8 @@ export type GetAssessmentsForPopulationQuery = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -11978,6 +12142,8 @@ export type GetAssessmentsForPopulationQuery = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -12086,6 +12252,8 @@ export type GetAssessmentsForPopulationQuery = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -12105,6 +12273,8 @@ export type GetAssessmentsForPopulationQuery = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -12159,6 +12329,8 @@ export type GetAssessmentsForPopulationQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -12178,6 +12350,8 @@ export type GetAssessmentsForPopulationQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -12193,12 +12367,16 @@ export type GetAssessmentsForPopulationQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         definition: {
@@ -12310,6 +12488,8 @@ export type EnrollmentFieldsFromAssessmentFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   project: {
@@ -12481,6 +12661,8 @@ export type IncomeBenefitFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   enrollment: {
@@ -12549,6 +12731,8 @@ export type DisabilityGroupFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   enrollment: {
@@ -12601,6 +12785,8 @@ export type HealthAndDvFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   enrollment: {
@@ -12896,6 +13082,8 @@ export type BulkServicesClientSearchQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -13034,6 +13222,8 @@ export type ClientSearchResultFieldsFragment = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   }>;
@@ -13088,6 +13278,8 @@ export type ClientFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   access: {
@@ -13139,6 +13331,8 @@ export type ClientFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -13158,6 +13352,8 @@ export type ClientFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -13223,6 +13419,8 @@ export type ClientFieldsFragment = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   }>;
@@ -13446,6 +13644,8 @@ export type SearchClientsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -13508,6 +13708,8 @@ export type GetClientQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
     access: {
@@ -13559,6 +13761,8 @@ export type GetClientQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -13578,6 +13782,8 @@ export type GetClientQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -13643,6 +13849,8 @@ export type GetClientQuery = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }>;
@@ -13823,6 +14031,8 @@ export type GetClientServicesQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         serviceType?: {
@@ -13861,6 +14071,8 @@ export type GetClientServicesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -13880,6 +14092,8 @@ export type GetClientServicesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -14012,6 +14226,8 @@ export type DeleteClientFileMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -14150,6 +14366,8 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                   __typename: 'ApplicationUser';
                   id: string;
                   name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
                   email: string;
                 } | null;
               }>;
@@ -14212,6 +14430,8 @@ export type GetFileQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   } | null;
@@ -14283,6 +14503,8 @@ export type GetClientFilesQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -14792,6 +15014,8 @@ export type MergeAuditEventFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -14860,6 +15084,8 @@ export type ClientMergeHistoryQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -14898,6 +15124,8 @@ export type GlobalClientMergeHistoryQuery = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }>;
@@ -14961,6 +15189,8 @@ export type MergeClientsMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       access: {
@@ -15012,6 +15242,8 @@ export type MergeClientsMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -15031,6 +15263,8 @@ export type MergeClientsMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -15096,6 +15330,8 @@ export type MergeClientsMutation = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -15920,6 +16156,8 @@ export type CurrentLivingSituationFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   customDataElements: Array<{
@@ -15946,6 +16184,8 @@ export type CurrentLivingSituationFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -15965,6 +16205,8 @@ export type CurrentLivingSituationFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -16005,6 +16247,8 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   customDataElements: Array<{
@@ -16031,6 +16275,8 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -16050,6 +16296,8 @@ export type ProjectCurrentLivingSituationFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -16090,6 +16338,8 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         customDataElements: Array<{
@@ -16116,6 +16366,8 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -16135,6 +16387,8 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -16194,6 +16448,8 @@ export type GetProjectCurrentLivingSituationsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         customDataElements: Array<{
@@ -16220,6 +16476,8 @@ export type GetProjectCurrentLivingSituationsQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -16239,6 +16497,8 @@ export type GetProjectCurrentLivingSituationsQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -16259,6 +16519,8 @@ export type CustomCaseNoteFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   customDataElements: Array<{
@@ -16285,6 +16547,8 @@ export type CustomCaseNoteFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -16304,6 +16568,8 @@ export type CustomCaseNoteFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -16338,6 +16604,8 @@ export type GetEnrollmentCustomCaseNotesQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         customDataElements: Array<{
@@ -16364,6 +16632,8 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -16383,6 +16653,8 @@ export type GetEnrollmentCustomCaseNotesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -16466,6 +16738,8 @@ export type GetClientCaseNotesQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         customDataElements: Array<{
@@ -16492,6 +16766,8 @@ export type GetClientCaseNotesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -16511,6 +16787,8 @@ export type GetClientCaseNotesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -16536,6 +16814,8 @@ export type CustomDataElementValueFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -16564,6 +16844,8 @@ export type CustomDataElementFieldsFragment = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   } | null;
@@ -16583,6 +16865,8 @@ export type CustomDataElementFieldsFragment = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   }> | null;
@@ -16736,6 +17020,8 @@ export type EnrolledClientFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -16755,6 +17041,8 @@ export type EnrolledClientFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -16837,6 +17125,8 @@ export type AllEnrollmentDetailsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -16856,6 +17146,8 @@ export type AllEnrollmentDetailsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -16897,6 +17189,8 @@ export type AllEnrollmentDetailsFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -16916,6 +17210,8 @@ export type AllEnrollmentDetailsFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -17662,6 +17958,8 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -17681,6 +17979,8 @@ export type SubmittedEnrollmentResultFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -17743,6 +18043,8 @@ export type CeAssessmentFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -17930,6 +18232,8 @@ export type GetEnrollmentDetailsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -17949,6 +18253,8 @@ export type GetEnrollmentDetailsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -17990,6 +18296,8 @@ export type GetEnrollmentDetailsQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -18009,6 +18317,8 @@ export type GetEnrollmentDetailsQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -18691,6 +19001,8 @@ export type GetEnrollmentWithHouseholdQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }>;
@@ -18773,6 +19085,8 @@ export type GetEnrollmentEventsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -18811,6 +19125,8 @@ export type GetEnrollmentCeAssessmentsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -19023,6 +19339,8 @@ export type EventFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -19063,6 +19381,8 @@ export type ExternalFormSubmissionFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -19082,6 +19402,8 @@ export type ExternalFormSubmissionFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -19133,6 +19455,8 @@ export type UpdateExternalFormSubmissionMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -19152,6 +19476,8 @@ export type UpdateExternalFormSubmissionMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -19218,6 +19544,8 @@ export type DeleteExternalFormSubmissionMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -19237,6 +19565,8 @@ export type DeleteExternalFormSubmissionMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -19313,6 +19643,8 @@ export type GetProjectExternalFormSubmissionsQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -19332,6 +19664,8 @@ export type GetProjectExternalFormSubmissionsQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -19862,6 +20196,8 @@ export type FileFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -25162,6 +25498,8 @@ export type GetFormIdentifierVersionsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -25226,6 +25564,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }
@@ -25246,6 +25586,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }
@@ -25298,6 +25640,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
           access: {
@@ -25349,6 +25693,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -25368,6 +25714,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -25433,6 +25781,8 @@ export type SubmitFormMutation = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }>;
@@ -25455,6 +25805,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
           customDataElements: Array<{
@@ -25481,6 +25833,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -25500,6 +25854,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -25516,6 +25872,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
           customDataElements: Array<{
@@ -25542,6 +25900,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -25561,6 +25921,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -25614,6 +25976,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -25633,6 +25997,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -25700,6 +26066,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }
@@ -25734,6 +26102,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }
@@ -25752,6 +26122,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }
@@ -25767,6 +26139,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }
@@ -25795,6 +26169,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
           customDataElements: Array<{
@@ -25821,6 +26197,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -25840,6 +26218,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -25860,6 +26240,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
           customDataElements: Array<{
@@ -25886,6 +26268,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -25905,6 +26289,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -25957,6 +26343,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
           customDataElements: Array<{
@@ -25983,6 +26371,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -26002,6 +26392,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -26048,6 +26440,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }
@@ -26089,6 +26483,8 @@ export type SubmitFormMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
           serviceType?: {
@@ -26127,6 +26523,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             } | null;
@@ -26146,6 +26544,8 @@ export type SubmitFormMutation = {
                 __typename: 'ApplicationUser';
                 id: string;
                 name: string;
+                firstName?: string | null;
+                lastName?: string | null;
                 email: string;
               } | null;
             }> | null;
@@ -27702,6 +28102,8 @@ export type HouseholdFieldsFragment = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -27781,6 +28183,8 @@ export type HouseholdClientFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }>;
@@ -27957,6 +28361,8 @@ export type GetHouseholdQuery = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }>;
@@ -28046,6 +28452,8 @@ export type InventoryFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   customDataElements: Array<{
@@ -28072,6 +28480,8 @@ export type InventoryFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -28091,6 +28501,8 @@ export type InventoryFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -28318,6 +28730,8 @@ export type OrganizationDetailFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   customDataElements: Array<{
@@ -28344,6 +28758,8 @@ export type OrganizationDetailFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -28363,6 +28779,8 @@ export type OrganizationDetailFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -28384,6 +28802,8 @@ export type OrganizationFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   customDataElements: Array<{
@@ -28410,6 +28830,8 @@ export type OrganizationFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -28429,6 +28851,8 @@ export type OrganizationFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -28483,6 +28907,8 @@ export type GetOrganizationQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
     customDataElements: Array<{
@@ -28509,6 +28935,8 @@ export type GetOrganizationQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -28528,6 +28956,8 @@ export type GetOrganizationQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -28658,6 +29088,8 @@ export type ProjectAllFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   customDataElements: Array<{
@@ -28684,6 +29116,8 @@ export type ProjectAllFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -28703,6 +29137,8 @@ export type ProjectAllFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -29243,6 +29679,8 @@ export type ProjectCocFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -29262,6 +29700,8 @@ export type FunderFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -29283,6 +29723,8 @@ export type CeParticipationFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -29299,6 +29741,8 @@ export type HmisParticipationFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -29458,6 +29902,8 @@ export type GetProjectQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
     customDataElements: Array<{
@@ -29484,6 +29930,8 @@ export type GetProjectQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -29503,6 +29951,8 @@ export type GetProjectQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -29868,12 +30318,16 @@ export type GetProjectAssessmentsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         createdBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         definition: {
@@ -29935,6 +30389,8 @@ export type GetFunderQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   } | null;
@@ -29971,6 +30427,8 @@ export type GetInventoryQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
     customDataElements: Array<{
@@ -29997,6 +30455,8 @@ export type GetInventoryQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -30016,6 +30476,8 @@ export type GetInventoryQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -30047,6 +30509,8 @@ export type GetProjectCocQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
   } | null;
@@ -30093,6 +30557,8 @@ export type GetProjectInventoriesQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         customDataElements: Array<{
@@ -30119,6 +30585,8 @@ export type GetProjectInventoriesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -30138,6 +30606,8 @@ export type GetProjectInventoriesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -30321,6 +30791,8 @@ export type GetProjectProjectCocsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -30359,6 +30831,8 @@ export type GetProjectFundersQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -30399,6 +30873,8 @@ export type GetProjectCeParticipationsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -30434,6 +30910,8 @@ export type GetProjectHmisParticipationsQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -30926,6 +31404,8 @@ export type UpdateReferralPostingMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -30945,6 +31425,8 @@ export type UpdateReferralPostingMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -31117,6 +31599,8 @@ export type GetReferralPostingQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -31136,6 +31620,8 @@ export type GetReferralPostingQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -31348,6 +31834,8 @@ export type ReferralPostingDetailFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -31367,6 +31855,8 @@ export type ReferralPostingDetailFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -31467,6 +31957,8 @@ export type EsgFundingServiceFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -31486,6 +31978,8 @@ export type EsgFundingServiceFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -31544,6 +32038,8 @@ export type GetEsgFundingReportQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -31563,6 +32059,8 @@ export type GetEsgFundingReportQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -31580,12 +32078,16 @@ export type ScanCardFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   deletedBy?: {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -31616,12 +32118,16 @@ export type GetClientScanCardCodesQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         deletedBy?: {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }>;
@@ -31647,12 +32153,16 @@ export type CreateScanCardMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       deletedBy?: {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -31691,12 +32201,16 @@ export type DeleteScanCardMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       deletedBy?: {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -31735,12 +32249,16 @@ export type RestoreScanCardMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       deletedBy?: {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -31810,6 +32328,8 @@ export type ServiceFieldsFragment = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
   serviceType?: {
@@ -31848,6 +32368,8 @@ export type ServiceFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     } | null;
@@ -31867,6 +32389,8 @@ export type ServiceFieldsFragment = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
     }> | null;
@@ -31911,6 +32435,8 @@ export type GetServiceQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     } | null;
     serviceType?: {
@@ -31949,6 +32475,8 @@ export type GetServiceQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       } | null;
@@ -31968,6 +32496,8 @@ export type GetServiceQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
       }> | null;
@@ -32022,6 +32552,8 @@ export type DeleteServiceMutation = {
         __typename: 'ApplicationUser';
         id: string;
         name: string;
+        firstName?: string | null;
+        lastName?: string | null;
         email: string;
       } | null;
       serviceType?: {
@@ -32060,6 +32592,8 @@ export type DeleteServiceMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         } | null;
@@ -32079,6 +32613,8 @@ export type DeleteServiceMutation = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }> | null;
@@ -32136,6 +32672,8 @@ export type GetEnrollmentServicesQuery = {
           __typename: 'ApplicationUser';
           id: string;
           name: string;
+          firstName?: string | null;
+          lastName?: string | null;
           email: string;
         } | null;
         serviceType?: {
@@ -32174,6 +32712,8 @@ export type GetEnrollmentServicesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           } | null;
@@ -32193,6 +32733,8 @@ export type GetEnrollmentServicesQuery = {
               __typename: 'ApplicationUser';
               id: string;
               name: string;
+              firstName?: string | null;
+              lastName?: string | null;
               email: string;
             } | null;
           }> | null;
@@ -32385,6 +32927,8 @@ export type StaffAssignmentWithClientsFragment = {
             __typename: 'ApplicationUser';
             id: string;
             name: string;
+            firstName?: string | null;
+            lastName?: string | null;
             email: string;
           } | null;
         }>;
@@ -32781,6 +33325,8 @@ export type UserFieldsFragment = {
   __typename: 'ApplicationUser';
   id: string;
   name: string;
+  firstName?: string | null;
+  lastName?: string | null;
   email: string;
 };
 
@@ -32832,6 +33378,8 @@ export type GetApplicationUsersQuery = {
       __typename: 'ApplicationUser';
       id: string;
       name: string;
+      firstName?: string | null;
+      lastName?: string | null;
       email: string;
     }>;
   };
@@ -32847,6 +33395,8 @@ export type GetUserQuery = {
     __typename: 'ApplicationUser';
     id: string;
     name: string;
+    firstName?: string | null;
+    lastName?: string | null;
     email: string;
   } | null;
 };
@@ -33049,6 +33599,8 @@ export type GetUserStaffAssignmentsQuery = {
                   __typename: 'ApplicationUser';
                   id: string;
                   name: string;
+                  firstName?: string | null;
+                  lastName?: string | null;
                   email: string;
                 } | null;
               }>;
@@ -33124,6 +33676,8 @@ export const UserFieldsFragmentDoc = gql`
     __typename
     id
     name
+    firstName
+    lastName
     email
   }
 `;
