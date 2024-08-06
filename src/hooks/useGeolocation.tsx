@@ -10,7 +10,7 @@ export function useGeolocation() {
   const requestCoordinates = useCallback(() => {
     setError('');
     setCoordinates(null);
-    const handleSuccess = (position) => {
+    const handleSuccess = (position: { coords: GeolocationCoordinates }) => {
       setCoordinates(position.coords);
       setLoading(false);
     };
