@@ -38,7 +38,7 @@ const MobileMenu: React.FC<Props> = ({
     onCloseMobileMenu();
   }, [pathname, onCloseMobileMenu]);
 
-  // also need hook to scroll to top of menu on open
+  // TODO: hook to scroll to top of menu on open
 
   const nav = (
     <List>
