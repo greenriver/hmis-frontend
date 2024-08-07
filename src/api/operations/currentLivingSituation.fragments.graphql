@@ -11,6 +11,7 @@ fragment CurrentLivingSituationFields on CurrentLivingSituation {
   subsequentResidence
   dateUpdated
   dateCreated
+  verifiedByProjectId
   user {
     ...UserFields
   }

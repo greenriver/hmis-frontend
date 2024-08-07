@@ -1406,6 +1406,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'verifiedBy',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
+      {
+        name: 'verifiedByProjectId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
     ],
   },
   {
