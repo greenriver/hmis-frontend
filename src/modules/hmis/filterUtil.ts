@@ -26,7 +26,7 @@ export const getSortOptionForType = (
   recordType: string
 ): Record<string, string> | null => {
   const expectedName = `${recordType}SortOption`;
-  if (Object.hasOwn(HmisEnums, expectedName)) {
+  if (expectedName in HmisEnums) {
     const key = expectedName as keyof typeof HmisEnums;
     return HmisEnums[key];
   }
