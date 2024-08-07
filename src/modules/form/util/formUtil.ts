@@ -528,7 +528,7 @@ export const autofillValues = ({
   if (!item.autofillValues) return false;
 
   // use `some` to stop iterating when true is returned
-  return item.autofillValues.some((av) => {
+  const autofilled = item.autofillValues.some((av) => {
     // Skip autofills that should not run on read-only views
     if (viewOnly && !av.autofillReadonly) return false;
 
@@ -567,6 +567,17 @@ export const autofillValues = ({
     // Stop iterating through autofill values
     return true;
   });
+
+  // For readonly items, if no autofill condition matched, clear out the item's value.
+  // Don't make any changes if the whole form is in viewOnly mode, though, because
+  // in that case this is being called on form load (not on change of an autofill condition),
+  // so we don't want to clear any form values.
+  if (!autofilled && item.readOnly && !viewOnly) {
+    values[item.linkId] = undefined;
+    return true;
+  }
+
+  return autofilled;
 };
 
 const getBoundValue = (
