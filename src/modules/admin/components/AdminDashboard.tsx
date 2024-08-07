@@ -142,6 +142,8 @@ const AdminDashboard: React.FC = () => {
           ? formEditorContentSx
           : {}
       }
+      // On desktop, 'Admin' appears in the ProjectNavHeader, so omit it from the nav label.
+      // On mobile, include it. We can remove this special case if we add the ProjectNavHeader info back on mobile.
       navLabel={isMobile ? 'Admin' : ''}
       {...dashboardState}
     >
