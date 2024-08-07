@@ -64,7 +64,7 @@ const RadioGroupInput = ({
   value,
   error,
   warnIfEmptyTreatment,
-  row,
+  row, // Not supported by dynamic forms anymore, but used internally by YesNoRadio. Support is partial (e.g. helper text is not supported)
   sx,
   clearable,
   helperText,

@@ -1162,7 +1162,10 @@ export enum Component {
   Phone = 'PHONE',
   /** Render a choice input item as radio buttons */
   RadioButtons = 'RADIO_BUTTONS',
-  /** Render a choice input item as vertical radio buttons */
+  /**
+   * Render a choice input item as vertical radio buttons
+   * @deprecated All radio buttons are now vertical
+   */
   RadioButtonsVertical = 'RADIO_BUTTONS_VERTICAL',
   /** Signature input component */
   Signature = 'SIGNATURE',

@@ -19,7 +19,7 @@ export interface Props {
   name?: string;
   options: Option[];
   onChange: (value?: Option[] | null) => void;
-  row?: boolean;
+  row?: boolean; // Not supported by dynamic forms anymore, but used internally in TableFilterItemCheckboxes
   sx?: SxProps;
   labelSx?: SxProps;
 }
