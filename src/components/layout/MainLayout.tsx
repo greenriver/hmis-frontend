@@ -133,7 +133,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             {appName || 'Open Path HMIS'}
           </RouterLink>
           <Box display='flex' sx={{ flexGrow: 1 }}></Box>
-          <RootPermissionsFilter permissions={'canEditEnrollments'}>
+          <RootPermissionsFilter permissions={'canViewMyDashboard'}>
             <ButtonLink
               variant='text'
               to={Routes.MY_DASHBOARD}
