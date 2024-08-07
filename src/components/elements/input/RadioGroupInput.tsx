@@ -64,7 +64,6 @@ const RadioGroupInput = ({
   value,
   error,
   warnIfEmptyTreatment,
-  row, // Not supported by dynamic forms anymore, but used internally by YesNoRadio. Support is partial (e.g. helper text is not supported)
   sx,
   clearable,
   helperText,
@@ -109,15 +108,11 @@ const RadioGroupInput = ({
         {label}
       </FormLabel>
       <GroupComponent
-        row={row}
         onChange={() => null}
         sx={{
           width: inputWidth,
-          ...(!row && {
-            'label:first-of-type': { pt: 0.5 },
-            // 'label:last-child': { pb: 1 },
-            'label .MuiRadio-root': { py: 0.5 },
-          }),
+          'label:first-of-type': { pt: 0.5 },
+          'label .MuiRadio-root': { py: 0.5 },
           ...(warnIfEmptyTreatment && {
             '[data-checked="false"] svg': {
               backgroundColor: 'alerts.low.background',
