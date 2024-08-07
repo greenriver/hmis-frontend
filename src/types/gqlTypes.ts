@@ -6033,6 +6033,7 @@ export type QueryAccess = {
   canViewFullSsn: Scalars['Boolean']['output'];
   canViewHudChronicStatus: Scalars['Boolean']['output'];
   canViewLimitedEnrollmentDetails: Scalars['Boolean']['output'];
+  canViewMyDashboard: Scalars['Boolean']['output'];
   canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
   canViewProject: Scalars['Boolean']['output'];
@@ -7932,6 +7933,7 @@ export type RootPermissionsFragment = {
   canViewClientPhoto: boolean;
   canEnrollClients: boolean;
   canEditEnrollments: boolean;
+  canViewMyDashboard: boolean;
   canViewEnrollmentDetails: boolean;
   canViewOpenEnrollmentSummary: boolean;
   canDeleteEnrollments: boolean;
@@ -8047,6 +8049,7 @@ export type GetRootPermissionsQuery = {
     canViewClientPhoto: boolean;
     canEnrollClients: boolean;
     canEditEnrollments: boolean;
+    canViewMyDashboard: boolean;
     canViewEnrollmentDetails: boolean;
     canViewOpenEnrollmentSummary: boolean;
     canDeleteEnrollments: boolean;
@@ -33516,6 +33519,7 @@ export const RootPermissionsFragmentDoc = gql`
     canViewClientPhoto
     canEnrollClients
     canEditEnrollments
+    canViewMyDashboard
     canViewEnrollmentDetails
     canViewOpenEnrollmentSummary
     canDeleteEnrollments
