@@ -568,11 +568,14 @@ export const autofillValues = ({
     return true;
   });
 
-  // For readonly items, if no autofill condition matched, clear out the item's value.
-  // Don't make any changes if the whole form is in viewOnly mode, though, because
-  // in that case this is being called on form load (not on change of an autofill condition),
-  // so we don't want to clear any form values.
-  if (!autofilled && item.readOnly && !viewOnly) {
+  // For read-only items that are displayed on editable forms, the autofill value should nullify when its conditions are no longer met.
+  // For example, a read-only field showing the sum of 2 input fields should be cleared if the inputs are cleared.
+  // (In that example, we assume the autofill rule for summing has an autofill_when condition requiring the inputs to be present)
+  if (
+    !autofilled &&
+    (item.readOnly || item.type === ItemType.Display) &&
+    !viewOnly
+  ) {
     values[item.linkId] = undefined;
     return true;
   }
