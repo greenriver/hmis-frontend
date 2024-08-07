@@ -14,7 +14,7 @@ export const TOOLBAR_MENU_ITEMS: (NavItem<RootPermissionsFragment> & {
   activeItemPathIncludes: string;
 })[] = [
   {
-    permissions: ['canEditEnrollments'],
+    permissions: ['canViewMyDashboard'],
     path: Routes.MY_DASHBOARD,
     id: 'navToMyDashboard',
     activeItemPathIncludes: 'my-dashboard',
