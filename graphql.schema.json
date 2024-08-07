@@ -8472,8 +8472,8 @@
           {
             "name": "RADIO_BUTTONS_VERTICAL",
             "description": "Render a choice input item as vertical radio buttons",
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "All radio buttons are now vertical"
           },
           {
             "name": "SIGNATURE",

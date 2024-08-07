@@ -43,7 +43,6 @@ const YesNoRadio = ({ value, onChange, ...props }: Props) => {
       value={fromBoolean(value)}
       onChange={handleChange}
       options={[FALSE_OPT, TRUE_OPT]}
-      row
       clearable
       checkbox
       {...props}

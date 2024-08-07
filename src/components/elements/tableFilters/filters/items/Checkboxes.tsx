@@ -15,7 +15,6 @@ const TableFilterItemCheckboxes: React.FC<
       options={options}
       value={selectedOptions}
       onChange={(opt) => onChange(opt?.map((o) => o.code))}
-      row
     />
   );
 };

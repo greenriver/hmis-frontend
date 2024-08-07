@@ -64,11 +64,7 @@ export const validComponentsForType = (type: ItemType) => {
     case ItemType.Boolean:
       return [Component.Checkbox];
     case ItemType.Choice:
-      return [
-        Component.Dropdown,
-        Component.RadioButtons,
-        Component.RadioButtonsVertical,
-      ];
+      return [Component.Dropdown, Component.RadioButtons];
     case ItemType.Group:
       return [
         Component.HorizontalGroup,
