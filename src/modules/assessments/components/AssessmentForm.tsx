@@ -62,7 +62,6 @@ import {
 interface Props {
   enrollment: EnrollmentFieldsFragment;
   client: AssessedClientFieldsFragment;
-  formRole?: FormRole;
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
   assessmentTitle?: ReactNode;
@@ -89,7 +88,6 @@ const AssessmentForm: React.FC<Props> = ({
   client,
   assessmentTitle,
   alerts,
-  formRole,
   definition: definitionProp,
   navigationTitle,
   enrollment,
@@ -138,7 +136,7 @@ const AssessmentForm: React.FC<Props> = ({
 
   // Most recently selected "source" assessment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
-    FullAssessmentFragment | undefined
+    FullAssessmentFragment | AssessmentForPopulation | undefined
   >();
   // Trigger for reloading initial values and form if a source assessment is chosen for autofill.
   // This is needed to support re-selecting the same assessment (which should clear and reload the form again)
@@ -304,7 +302,7 @@ const AssessmentForm: React.FC<Props> = ({
     handleUnlock,
   ]);
 
-  const isCustomAssessment = formRole === FormRole.CustomAssessment;
+  const isCustomAssessment = definition.role === FormRole.CustomAssessment;
   const showAutofill = !isCustomAssessment && !assessment && canEdit;
 
   const navigation = (
@@ -421,7 +419,7 @@ const AssessmentForm: React.FC<Props> = ({
           id='assessmentPickerDialog'
           clientId={client.id}
           open={dialogOpen}
-          role={formRole}
+          role={definition.role}
           onSelected={onSelectAutofillRecord}
           onCancel={() => setDialogOpen(false)}
           description={

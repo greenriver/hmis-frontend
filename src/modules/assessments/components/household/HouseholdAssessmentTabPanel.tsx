@@ -245,7 +245,6 @@ const HouseholdAssessmentTabPanel = memo(
             enrollmentId={enrollmentId}
             assessment={assessment}
             assessmentStatus={assessmentStatus}
-            formRole={definition.role}
             FormActionProps={FormActionProps}
             visible={active}
             formRef={formRef}

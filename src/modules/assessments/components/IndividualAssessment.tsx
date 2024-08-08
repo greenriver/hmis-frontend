@@ -28,7 +28,6 @@ import {
   AssessedClientFieldsFragment,
   AssessmentRole,
   FormDefinitionFieldsFragment,
-  FormRole,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
 
@@ -39,8 +38,6 @@ export interface IndividualAssessmentProps {
   assessment?: FullAssessmentFragment;
   title: string;
   enrollmentId: string;
-  // Assessment Role (Intake, Exit, etc.)
-  formRole?: FormRole;
   // Whether the assessment is embedded in a household workflow
   embeddedInWorkflow?: boolean;
   client: AssessedClientFieldsFragment;
@@ -83,7 +80,6 @@ const IndividualAssessment = ({
   definition,
   title,
   assessment,
-  formRole,
   embeddedInWorkflow = false,
   client,
   FormActionProps,
@@ -140,7 +136,7 @@ const IndividualAssessment = ({
 
   if (enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
-  if (!formRole && !assessment) return <NotFound />;
+  if (!definition && !assessment) return <NotFound />;
 
   const titleNode = (
     <AssessmentTitle
@@ -158,7 +154,7 @@ const IndividualAssessment = ({
     <AssessmentRelatedAnnualsAlert
       enrollmentId={enrollment.id}
       householdId={enrollment.householdId}
-      assessmentRole={formRole as unknown as AssessmentRole}
+      assessmentRole={definition.role as unknown as AssessmentRole}
       embeddedInWorkflow={embeddedInWorkflow}
       assessmentId={assessment?.id}
       householdSize={enrollment.householdSize}
@@ -172,7 +168,6 @@ const IndividualAssessment = ({
       client={client}
       navigationTitle={navigationTitle}
       key={assessment?.id}
-      formRole={formRole}
       definition={definition}
       assessment={assessment}
       enrollment={enrollment}
