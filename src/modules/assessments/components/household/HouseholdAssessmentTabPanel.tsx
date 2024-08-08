@@ -249,7 +249,6 @@ const HouseholdAssessmentTabPanel = memo(
             visible={active}
             formRef={formRef}
             onFormStateChange={onFormStateChange}
-            title={definition.title}
             onSubmit={submitHandler}
             onSaveDraft={saveDraftHandler}
             errors={errors}

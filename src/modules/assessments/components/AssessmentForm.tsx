@@ -13,6 +13,7 @@ import {
 import { AssessmentLocalConstants } from '../util';
 import AssessmentAlert from './alerts/AssessmentAlert';
 
+import AssessmentTitle from './AssessmentTitle';
 import FormContainer from '@/components/layout/FormContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -47,6 +48,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   age,
+  clientBriefName,
   clientNameAllParts,
   raceEthnicityDisplayString,
 } from '@/modules/hmis/hmisUtil';
@@ -64,7 +66,6 @@ interface Props {
   client: AssessedClientFieldsFragment;
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
-  assessmentTitle?: ReactNode;
   alerts?: ReactNode;
   top?: number;
   navigationTitle: ReactNode;
@@ -86,7 +87,6 @@ interface Props {
 const AssessmentForm: React.FC<Props> = ({
   assessment,
   client,
-  assessmentTitle,
   alerts,
   definition: definitionProp,
   navigationTitle,
@@ -305,6 +305,18 @@ const AssessmentForm: React.FC<Props> = ({
   const isCustomAssessment = definition.role === FormRole.CustomAssessment;
   const showAutofill = !isCustomAssessment && !assessment && canEdit;
 
+  const titleNode = (
+    <AssessmentTitle
+      assessmentTitle={definition.title}
+      clientName={clientBriefName(client)}
+      clientId={client.id}
+      projectName={enrollment.project.projectName}
+      enrollmentId={enrollment.id}
+      entryDate={enrollment.entryDate}
+      exitDate={enrollment.exitDate}
+    />
+  );
+
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
       <AssessmentFormSideBar
@@ -329,7 +341,7 @@ const AssessmentForm: React.FC<Props> = ({
       {showNavigation && navigation}
       <Grid item xs={showNavigation ? 9.5 : 12} sx={{ pt: '0 !important' }}>
         <Stack sx={{ mb: 1 }} gap={1}>
-          {assessmentTitle}
+          {titleNode}
           {locked && (
             <Stack gap={0.5}>
               <AssessmentHistoryInfo

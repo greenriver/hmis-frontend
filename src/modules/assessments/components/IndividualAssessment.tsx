@@ -1,8 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { Ref, useMemo } from 'react';
 
-import AssessmentTitle from './AssessmentTitle';
-
 import Loading from '@/components/elements/Loading';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -78,7 +76,6 @@ const IndividualAssessment = ({
   enrollmentId,
   assessmentStatus,
   definition,
-  title,
   assessment,
   embeddedInWorkflow = false,
   client,
@@ -119,6 +116,7 @@ const IndividualAssessment = ({
         </Typography>
         <Stack gap={1}>
           <Typography variant='body2' component='div'>
+            {/* this will be the legacy title. movie this to its own component too */}
             <b>{`${definition.title}: `}</b>
             {enrollment.project.projectName}
           </Typography>
@@ -138,18 +136,6 @@ const IndividualAssessment = ({
   if (!enrollment) return <NotFound />;
   if (!definition && !assessment) return <NotFound />;
 
-  const titleNode = (
-    <AssessmentTitle
-      assessmentTitle={title}
-      clientName={clientBriefName(client)}
-      clientId={client.id}
-      projectName={enrollment.project.projectName}
-      enrollmentId={enrollment.id}
-      entryDate={enrollment.entryDate}
-      exitDate={enrollment.exitDate}
-    />
-  );
-
   const alertNode = (
     <AssessmentRelatedAnnualsAlert
       enrollmentId={enrollment.id}
@@ -163,7 +149,6 @@ const IndividualAssessment = ({
 
   return (
     <AssessmentForm
-      assessmentTitle={titleNode}
       alerts={alertNode}
       client={client}
       navigationTitle={navigationTitle}
