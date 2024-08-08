@@ -6,7 +6,7 @@ import {
   Grid,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import TextInput from '@/components/elements/input/TextInput';
 import theme from '@/config/theme';
@@ -32,6 +32,7 @@ import {
   ItemType,
   PickListOption,
   PickListType,
+  ProjectType,
   useCreateFormRuleMutation,
 } from '@/types/gqlTypes';
 
@@ -73,8 +74,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
   formRole,
   formCacheKey,
 }) => {
-  const [rule, setRule] = useState<FormRuleInput>({});
-
   // Form state for the rule
   const [dataCollectedAbout, setDataCollectedAbout] =
     useState<DataCollectedAbout>(DataCollectedAbout.AllClients);
@@ -86,22 +85,22 @@ const NewFormRuleDialog: React.FC<Props> = ({
   const [serviceConditionValue, setServiceConditionValue] =
     useState<string>('');
 
-  // Use an effect to update the rule to match the form state, so we can display the current rule
-  useEffect(() => {
-    const conditions: Partial<FormRuleInput> = ruleConditions.reduce(
-      (accumulator, { conditionType, value }) => {
-        if (conditionType && value) {
-          accumulator[conditionType] = value; // todo @martha - typescript is not happy
-        }
-        return accumulator;
-      },
-      {} as Partial<FormRuleInput>
+  // The form rule input itself is derived from form state
+  const rule: FormRuleInput = useMemo(() => {
+    const conditions: Partial<Record<ConditionType, string>> = {};
+    ruleConditions.forEach(
+      ({ conditionType, value }) => (conditions[conditionType] = value)
     );
 
-    setRule({
+    const newRule: FormRuleInput = {
       activeStatus: ActiveStatus.Active,
       dataCollectedAbout: dataCollectedAbout,
-      ...conditions,
+      projectId: conditions.projectId,
+      projectType: conditions.projectType as ProjectType,
+      organizationId: conditions.organizationId,
+      funder: conditions.funder as FundingSource,
+      serviceTypeId: conditions.serviceTypeId,
+      serviceCategoryId: conditions.serviceCategoryId,
       ...(formRole === FormRole.Service
         ? { [serviceConditionType]: serviceConditionValue }
         : {}),
@@ -109,7 +108,8 @@ const NewFormRuleDialog: React.FC<Props> = ({
       otherFundingSource
         ? { otherFunder: otherFundingSource }
         : {}),
-    });
+    };
+    return newRule;
   }, [
     dataCollectedAbout,
     ruleConditions,
