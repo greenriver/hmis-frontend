@@ -12,6 +12,7 @@ import {
 import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
+import AssessmentRelatedAnnualsAlert from '@/modules/assessments/components/AssessmentRelatedAnnualsAlert';
 import AssessmentStatusIndicator from '@/modules/assessments/components/AssessmentStatusIndicator';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
 import { AssessmentStatus } from '@/modules/assessments/components/household/util';
@@ -150,6 +151,12 @@ const IndividualAssessment = ({
       enrollmentId={enrollment.id}
       entryDate={enrollment.entryDate}
       exitDate={enrollment.exitDate}
+    />
+  );
+
+  const alertNode = (
+    <AssessmentRelatedAnnualsAlert
+      enrollmentId={enrollment.id}
       householdId={enrollment.householdId}
       assessmentRole={formRole as unknown as AssessmentRole}
       embeddedInWorkflow={embeddedInWorkflow}
@@ -161,6 +168,7 @@ const IndividualAssessment = ({
   return (
     <AssessmentForm
       assessmentTitle={titleNode}
+      alerts={alertNode}
       client={client}
       navigationTitle={navigationTitle}
       key={assessment?.id}

@@ -49,11 +49,16 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   const isGrouped = !!options[0]?.groupLabel;
 
   // The 'value' thats stored in the form state is a string, but the value that gets
-  // passed to GenericSelect is a PickListOption
-  const valueOption = useMemo(
-    () => options.find(({ code }) => code === field.value) || null,
-    [field.value, options]
-  );
+  // passed to GenericSelect is a PickListOption. If the value is not found,
+  // display it anyway as the selected option. This could occur if there is a value
+  // set that is not in the options list.
+  const valueOption = useMemo(() => {
+    if (!field.value) return null;
+
+    return (
+      options.find(({ code }) => code === field.value) || { code: field.value }
+    );
+  }, [field.value, options]);
 
   const getOptionLabel = useCallback(
     (option: PickListOption) => findOptionLabel(option, options),

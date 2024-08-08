@@ -68,6 +68,7 @@ import {
   InitialBehavior,
   InputSize,
   ItemType,
+  Maybe,
   NoYesReasonsForMissingData,
   PickListOption,
   RelatedRecordType,
@@ -1426,12 +1427,13 @@ export const dropUnderscorePrefixedKeys = (
 };
 
 export const chooseSelectComponentType = (
-  item: FormItem,
-  picklistLength: number,
-  isLocalPickList: boolean
+  component?: Maybe<Component>,
+  repeats?: Maybe<boolean>,
+  picklistLength: number = 0,
+  isLocalPickList?: boolean
 ): Component => {
-  if (item.component) return item.component;
-  if (item.repeats) return Component.Dropdown;
+  if (component) return component;
+  if (repeats) return Component.Dropdown;
   if (picklistLength === 0) return Component.Dropdown;
   if (picklistLength < 4 && isLocalPickList) return Component.RadioButtons;
   return Component.Dropdown;

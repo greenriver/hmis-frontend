@@ -1,5 +1,5 @@
 import UnlockIcon from '@mui/icons-material/Lock';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import {
   ReactNode,
@@ -24,6 +24,7 @@ import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import AssessmentFormSideBar from '@/modules/assessments/components/AssessmentFormSideBar';
+import AssessmentHistoryInfo from '@/modules/assessments/components/AssessmentHistory';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
 
 import { ErrorState, hasAnyValue } from '@/modules/errors/util';
@@ -64,6 +65,7 @@ interface Props {
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
   assessmentTitle?: ReactNode;
+  alerts?: ReactNode;
   top?: number;
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
@@ -85,6 +87,7 @@ const AssessmentForm: React.FC<Props> = ({
   assessment,
   client,
   assessmentTitle,
+  alerts,
   formRole,
   definition,
   navigationTitle,
@@ -310,7 +313,24 @@ const AssessmentForm: React.FC<Props> = ({
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
       {showNavigation && navigation}
       <Grid item xs={showNavigation ? 9.5 : 12} sx={{ pt: '0 !important' }}>
-        {assessmentTitle}
+        <Stack sx={{ mb: 1 }} gap={1}>
+          {assessmentTitle}
+          {locked && (
+            <Stack gap={0.5}>
+              <AssessmentHistoryInfo
+                label='Created by:'
+                user={assessment?.createdBy}
+                date={assessment?.dateCreated}
+              />
+              <AssessmentHistoryInfo
+                label='Last Edited by:'
+                user={assessment?.user}
+                date={assessment?.dateUpdated}
+              />
+            </Stack>
+          )}
+        </Stack>
+        {alerts}
         {!isPrintView && (
           <AssessmentAlert
             assessment={assessment}

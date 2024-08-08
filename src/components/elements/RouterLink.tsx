@@ -19,6 +19,7 @@ const RouterLink = forwardRef<RouterLinkProps, any>(
       component={ReactRouterLink}
       ref={ref}
       underline={plain ? 'none' : undefined}
+      variant='inherit'
       {...props}
       sx={plain ? { color: 'inherit', ...props.sx } : props.sx}
       target={openInNew ? '_blank' : undefined}

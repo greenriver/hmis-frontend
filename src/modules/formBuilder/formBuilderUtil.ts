@@ -1,4 +1,4 @@
-import { cloneDeep, get, kebabCase, set } from 'lodash-es';
+import { cloneDeep, get, kebabCase, set, startCase } from 'lodash-es';
 import { ItemMap } from '@/modules/form/types';
 import {
   buildAutofillDependencyMap,
@@ -34,6 +34,11 @@ export const displayLabelForItem = (item: FormItem, ellipsize = true) => {
 
   return label;
 };
+
+export const supportedPickListReferencesOptions = [
+  'NoYesMissing',
+  'NoYesReasonsForMissingData',
+].map((enumName) => ({ code: enumName, label: startCase(enumName) }));
 
 export const validComponentsForType = (type: ItemType) => {
   /**
