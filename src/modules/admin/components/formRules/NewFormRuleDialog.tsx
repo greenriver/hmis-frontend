@@ -92,7 +92,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
       ({ conditionType, value }) => (conditions[conditionType] = value)
     );
 
-    const newRule: FormRuleInput = {
+    return {
       activeStatus: ActiveStatus.Active,
       dataCollectedAbout: dataCollectedAbout,
       projectId: conditions.projectId,
@@ -109,7 +109,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
         ? { otherFunder: otherFundingSource }
         : {}),
     };
-    return newRule;
   }, [
     dataCollectedAbout,
     ruleConditions,
