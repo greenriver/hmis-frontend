@@ -1,9 +1,9 @@
-import { alpha, lighten, MenuItem, SxProps, Theme } from '@mui/material';
-import React, { useCallback } from 'react';
+import { alpha, Theme } from '@mui/material';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
-import RouterLink from '@/components/elements/RouterLink';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
+import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS } from '@/modules/admin/components/AdminDashboard';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -43,7 +43,7 @@ export const TOOLBAR_MENU_ITEMS: (NavItem<RootPermissionsFragment> & {
   },
 ];
 
-export const useActiveNaveItem = () => {
+export const useActiveNavItem = () => {
   const { pathname } = useLocation();
   return React.useMemo(() => {
     const val = pathname.split('/').find((s) => !!s);
@@ -65,60 +65,33 @@ export const useActiveNaveItem = () => {
 };
 
 const ToolbarMenu: React.FC = () => {
-  const activeItem = useActiveNaveItem();
+  const activeItem = useActiveNavItem();
   const isMobile = useIsMobile();
-
-  const navItemSx = useCallback(
-    (selected: boolean): SxProps<Theme> => {
-      return isMobile
-        ? {
-            py: 1,
-            px: 3,
-            textDecoration: 'none',
-            textOverflow: 'ellipsis',
-            overflowX: 'hidden',
-            whiteSpace: 'nowrap',
-            display: 'block',
-            color: selected ? 'primary.main' : 'text.primary',
-            fontWeight: selected ? 600 : 400,
-            '&.Mui-focusVisible': {
-              outlineOffset: '-2px',
-            },
-            backgroundColor: selected
-              ? (theme: Theme) => lighten(theme.palette.primary.light, 0.9)
-              : undefined,
-            border: '2px solid transparent',
-          }
-        : {
-            fontWeight: 600,
-            fontSize: 14,
-            px: { xs: 0.5, lg: 2 },
-            color: 'text.primary',
-            backgroundColor: selected
-              ? (theme: Theme) => alpha(theme.palette.primary.light, 0.12)
-              : undefined,
-          };
-    },
-    [isMobile]
-  );
 
   return TOOLBAR_MENU_ITEMS.map((item) => {
     let navItem = isMobile ? (
-      <MenuItem
-        component={RouterLink}
-        to={item.path}
-        sx={navItemSx(activeItem === item.activeItemPathIncludes)}
-        data-testid={item.id}
-        key={item.id}
-      >
-        {item.title}
-      </MenuItem>
+      <li key={item.id}>
+        <MobileMenuItem
+          title={item.title as string}
+          selected={activeItem === item.activeItemPathIncludes}
+          path={item.path}
+        />
+      </li>
     ) : (
       <ButtonLink
         variant='text'
         to={item.path}
         data-testid={item.id}
-        sx={navItemSx(activeItem === item.activeItemPathIncludes)}
+        sx={{
+          fontWeight: 600, // FIXME custom typography, should standardize
+          fontSize: 14,
+          px: { xs: 0.5, lg: 2 },
+          color: 'text.primary',
+          backgroundColor:
+            activeItem === item.activeItemPathIncludes
+              ? (theme: Theme) => alpha(theme.palette.primary.light, 0.12)
+              : undefined,
+        }}
         key={item.id}
       >
         {item.title}

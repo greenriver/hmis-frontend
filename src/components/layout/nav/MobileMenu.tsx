@@ -9,12 +9,8 @@ import {
 } from '@mui/material';
 import React, { ReactNode, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
 import MobileUserMenu from '@/components/layout/nav/MobileUserMenu';
-import {
-  TOOLBAR_MENU_ITEMS,
-  useActiveNaveItem,
-} from '@/components/layout/nav/ToolbarMenu';
+import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
 import OmniSearch from '@/modules/search/components/OmniSearch';
 
 interface Props {
@@ -42,28 +38,11 @@ const MobileMenu: React.FC<Props> = ({
     onCloseMobileMenu();
   }, [pathname, onCloseMobileMenu]);
 
-  // also need hook to scroll to top of menu on open
+  // TODO: hook to scroll to top of menu on open
 
-  const activeNavItem = useActiveNaveItem();
   const nav = (
     <List>
-      {TOOLBAR_MENU_ITEMS.map(({ path, id, activeItemPathIncludes, title }) => {
-        const active = activeNavItem === activeItemPathIncludes;
-
-        // fixme
-        //if (! hasPermissionsOnObject([permissions], permissionMode )) {
-        //  return  null
-        //}
-
-        return (
-          <MobileMenuItem
-            key={id}
-            title={title as string}
-            selected={active}
-            path={path}
-          />
-        );
-      })}
+      <ToolbarMenu />
       <MobileUserMenu />
     </List>
   );
