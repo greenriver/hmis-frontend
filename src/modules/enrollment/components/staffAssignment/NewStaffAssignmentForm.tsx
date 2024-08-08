@@ -75,7 +75,7 @@ const NewStaffAssignmentForm: React.FC<NewStaffAssignmentFormProps> = ({
         } else if (data.assignStaff?.staffAssignment) {
           setErrors(emptyErrorState);
           setAssigneeId(null);
-          setRelationshipId(null);
+          if (relationshipPickList.length > 1) setRelationshipId(null);
         }
       },
     });
