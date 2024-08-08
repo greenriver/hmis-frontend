@@ -89,7 +89,7 @@ const AssessmentForm: React.FC<Props> = ({
   assessmentTitle,
   alerts,
   formRole,
-  definition,
+  definition: definitionProp,
   navigationTitle,
   enrollment,
   embeddedInWorkflow,
@@ -118,6 +118,15 @@ const AssessmentForm: React.FC<Props> = ({
     if (!canEdit) return;
     if (assessment && !assessment.inProgress) setLocked(true);
   }, [assessment, canEdit]);
+
+  const definition = useMemo(() => {
+    if (locked) {
+      return definitionProp;
+    } else if (assessment?.upgradedDefinitionForEditing) {
+      return assessment.upgradedDefinitionForEditing;
+    }
+    return definitionProp;
+  }, [definitionProp, locked, assessment]);
 
   // Most recently selected "source" assessment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<

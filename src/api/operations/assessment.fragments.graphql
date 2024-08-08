@@ -82,4 +82,12 @@ fragment AssessmentWithValues on Assessment {
 fragment FullAssessment on Assessment {
   ...AssessmentWithRecords
   ...AssessmentWithValues
+  # Definition to use for viewing/editing the assessment
+  definition {
+    ...FormDefinitionFields
+  }
+  # Definition to use for editing. Only present if the previous definition is retired.
+  upgradedDefinitionForEditing {
+    ...FormDefinitionFields
+  }
 }

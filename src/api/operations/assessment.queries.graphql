@@ -1,9 +1,6 @@
 query GetAssessment($id: ID!) {
   assessment(id: $id) {
     ...FullAssessment
-    definition {
-      ...FormDefinitionFields
-    }
   }
 }
 

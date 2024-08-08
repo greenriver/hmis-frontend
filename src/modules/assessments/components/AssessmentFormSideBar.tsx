@@ -1,4 +1,4 @@
-import { Box, Divider, Paper, Stack, Typography } from '@mui/material';
+import { Box, Divider, Paper, Stack } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -82,7 +82,6 @@ const AssessmentFormSideBar: React.FC<Props> = ({
   }, [assessment]);
 
   const showPrintViewButton = !isPrintView && locked && assessment;
-  const showAssessmentId = assessment && import.meta.env.MODE === 'development';
 
   return (
     <Paper
@@ -105,10 +104,7 @@ const AssessmentFormSideBar: React.FC<Props> = ({
         scrollOffset={top}
         useUrlHash={!embeddedInWorkflow}
       />
-      {(showAutofill ||
-        showPrintViewButton ||
-        showDeleteAssessmentButton ||
-        showAssessmentId) && (
+      {(showAutofill || showPrintViewButton || showDeleteAssessmentButton) && (
         <>
           <Divider sx={{ my: 2, mx: -2 }} />
           <Stack gap={2} sx={{ mt: 2 }}>
@@ -135,11 +131,6 @@ const AssessmentFormSideBar: React.FC<Props> = ({
                 enrollmentId={enrollment.id}
                 onSuccess={navigateToEnrollment}
               />
-            )}
-            {showAssessmentId && (
-              <Typography variant='body2'>
-                <b>Assessment ID:</b> {assessment.id}
-              </Typography>
             )}
           </Stack>
         </>
