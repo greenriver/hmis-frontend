@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { getItemMap } from '../../form/util/formUtil';
+import { getItemMap } from '@/modules/form/util/formUtil';
 
 import {
   AssessmentRole,
