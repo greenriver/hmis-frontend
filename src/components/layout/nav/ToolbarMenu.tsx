@@ -70,19 +70,20 @@ const ToolbarMenu: React.FC = () => {
 
   return TOOLBAR_MENU_ITEMS.map((item) => {
     let navItem = isMobile ? (
-      <MobileMenuItem
-        key={item.id}
-        title={item.title as string}
-        selected={activeItem === item.activeItemPathIncludes}
-        path={item.path}
-      />
+      <li key={item.id}>
+        <MobileMenuItem
+          title={item.title as string}
+          selected={activeItem === item.activeItemPathIncludes}
+          path={item.path}
+        />
+      </li>
     ) : (
       <ButtonLink
         variant='text'
         to={item.path}
         data-testid={item.id}
         sx={{
-          fontWeight: 600,
+          fontWeight: 600, // FIXME custom typography, should standardize
           fontSize: 14,
           px: { xs: 0.5, lg: 2 },
           color: 'text.primary',
