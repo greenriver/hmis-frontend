@@ -25,54 +25,43 @@ const nonClientFormRoles = [
 
 const nonProjectFormRoles = [FormRole.Organization];
 
-interface Props {
-  rule: FormRuleFieldsFragment | ProjectConfigFieldsFragment;
+interface BaseFormRuleProps {
+  projectType?: string;
+  project?: string;
+  organization?: string;
+  dataCollectedAbout?: string;
+  funder?: string;
+  otherFunder?: string | null;
+  serviceCategory?: string;
+  serviceType?: string;
   formRole?: FormRole;
   actionButtons?: ReactNode;
 }
 
-function isFormRuleFragment(
-  obj: FormRuleFieldsFragment | ProjectConfigFieldsFragment
-): obj is FormRuleFieldsFragment {
-  return obj && obj.hasOwnProperty('funder');
-}
-
-const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
-  // Fields that are shared across Project Configs and Form Rules
-  const { projectType, project, organization } = rule;
-
-  // Fields that are specific to Form Rules
-  let dataCollectedAbout;
-  let funder;
-  let otherFunder;
-  let serviceCategory;
-  let serviceType;
-  if (isFormRuleFragment(rule)) {
-    dataCollectedAbout = rule.dataCollectedAbout;
-    funder = rule.funder;
-    otherFunder = rule.otherFunder;
-    serviceCategory = rule.serviceCategory;
-    serviceType = rule.serviceType;
-  }
-
+export const BaseFormRule: React.FC<BaseFormRuleProps> = ({
+  projectType,
+  project,
+  organization,
+  dataCollectedAbout = HmisEnums.DataCollectedAbout.ALL_CLIENTS,
+  funder,
+  otherFunder,
+  serviceCategory,
+  serviceType,
+  formRole,
+  actionButtons,
+}) => {
   const conditions: Record<string, ReactNode> = {};
 
   if (!formRole || !nonProjectFormRoles.includes(formRole)) {
     if (projectType)
       conditions.projectType = (
-        <FormRuleChip
-          label={`Project Type is ${HmisEnums.ProjectType[projectType]}`}
-        />
+        <FormRuleChip label={`Project Type is ${projectType}`} />
       );
     if (project)
-      conditions.project = (
-        <FormRuleChip label={`Project is ${project.projectName}`} />
-      );
+      conditions.project = <FormRuleChip label={`Project is ${project}`} />;
     if (organization)
       conditions.organization = (
-        <FormRuleChip
-          label={`Organization is ${organization.organizationName}`}
-        />
+        <FormRuleChip label={`Organization is ${organization}`} />
       );
     if (otherFunder) {
       conditions.otherFunder = (
@@ -80,9 +69,7 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
       );
     } else if (funder) {
       conditions.funder = (
-        <FormRuleChip
-          label={`Funding Source is ${HmisEnums.FundingSource[funder]}`}
-        />
+        <FormRuleChip label={`Funding Source is ${funder}`} />
       );
     }
   }
@@ -100,9 +87,7 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
         {isServiceForm ? (
           <>
             Collects{' '}
-            <FormRuleChip
-              label={serviceType?.name || serviceCategory?.name || 'Service'}
-            />{' '}
+            <FormRuleChip label={serviceType || serviceCategory || 'Service'} />{' '}
             for{' '}
           </>
         ) : (
@@ -110,13 +95,7 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
         )}
         {isClientForm && (
           <>
-            <FormRuleChip
-              label={
-                dataCollectedAbout
-                  ? HmisEnums.DataCollectedAbout[dataCollectedAbout]
-                  : HmisEnums.DataCollectedAbout.ALL_CLIENTS
-              }
-            />{' '}
+            <FormRuleChip label={dataCollectedAbout} />{' '}
           </>
         )}
         {conditionCount === 0 && (
@@ -143,4 +122,57 @@ const FormRule: React.FC<Props> = ({ rule, formRole, actionButtons }) => {
   );
 };
 
-export default FormRule;
+interface FormRuleProps {
+  rule: FormRuleFieldsFragment;
+  formRole?: FormRole;
+  actionButtons?: ReactNode;
+}
+export const FormRule: React.FC<FormRuleProps> = ({
+  rule,
+  formRole,
+  actionButtons,
+}) => {
+  return (
+    <BaseFormRule
+      project={rule.project?.projectName}
+      projectType={
+        rule.projectType ? HmisEnums.ProjectType[rule.projectType] : ''
+      }
+      organization={rule.organization?.organizationName}
+      dataCollectedAbout={
+        rule.dataCollectedAbout
+          ? HmisEnums.DataCollectedAbout[rule.dataCollectedAbout]
+          : HmisEnums.DataCollectedAbout.ALL_CLIENTS
+      }
+      funder={rule.funder ? HmisEnums.FundingSource[rule.funder] : ''}
+      otherFunder={rule.otherFunder}
+      serviceCategory={rule.serviceCategory?.name}
+      serviceType={rule.serviceType?.name}
+      formRole={formRole}
+      actionButtons={actionButtons}
+    />
+  );
+};
+
+interface ProjectConfigFormRuleProps {
+  rule: ProjectConfigFieldsFragment;
+  formRole?: FormRole;
+  actionButtons?: ReactNode;
+}
+export const ProjectConfigFormRule: React.FC<ProjectConfigFormRuleProps> = ({
+  rule,
+  formRole,
+  actionButtons,
+}) => {
+  return (
+    <BaseFormRule
+      project={rule.project?.projectName}
+      projectType={
+        rule.projectType ? HmisEnums.ProjectType[rule.projectType] : ''
+      }
+      organization={rule.organization?.organizationName}
+      formRole={formRole}
+      actionButtons={actionButtons}
+    />
+  );
+};

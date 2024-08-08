@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 
 import { Stack } from '@mui/system';
 import { capitalize } from 'lodash-es';
-import FormRule from '../formRules/FormRule';
+import { ProjectConfigFormRule } from '../formRules/FormRule';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
@@ -30,7 +30,7 @@ const columns: ColumnDef<ProjectConfigFieldsFragment>[] = [
   },
   {
     header: 'Applicability Rule',
-    render: (config) => <FormRule rule={config} />,
+    render: (config) => <ProjectConfigFormRule rule={config} />,
   },
   {
     header: 'Options',
