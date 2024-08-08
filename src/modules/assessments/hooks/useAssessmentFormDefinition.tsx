@@ -1,14 +1,9 @@
 import { useMemo } from 'react';
 
-import {
-  applyDefinitionRulesForClient,
-  getItemMap,
-} from '../../form/util/formUtil';
+import { getItemMap } from '../../form/util/formUtil';
 
 import {
   AssessmentRole,
-  ClientNameDobVetFragment,
-  RelationshipToHoH,
   useGetAssessmentFormDefinitionQuery,
 } from '@/types/gqlTypes';
 
@@ -21,10 +16,6 @@ interface Args {
   role?: AssessmentRole;
   // Assessment date, for rule filtering
   assessmentDate?: string | null;
-  // Optional, to apply "Data Collected About" rules
-  client?: ClientNameDobVetFragment;
-  // Optional, to apply "Data Collected About" rules
-  relationshipToHoH?: RelationshipToHoH;
 }
 
 /**
@@ -35,8 +26,6 @@ const useAssessmentFormDefinition = ({
   formDefinitionId,
   role,
   assessmentDate,
-  client,
-  relationshipToHoH,
 }: Args) => {
   // Note: since there are 2 ways of looking up a form definition for an assessment
   // (by role or by ID), we don't get effective cacheing here. In some cases we will
@@ -55,24 +44,15 @@ const useAssessmentFormDefinition = ({
 
   const { formDefinition, itemMap } = useMemo(() => {
     // Find the definition that we actually have
-    let formDefinition = data?.assessmentFormDefinition;
+    const formDefinition = data?.assessmentFormDefinition;
     if (!formDefinition) return {};
-
-    // If we have a Client, apply the DataCollectedAbout rules
-    if (client) {
-      formDefinition = applyDefinitionRulesForClient(
-        formDefinition,
-        client,
-        relationshipToHoH || RelationshipToHoH.DataNotCollected
-      );
-    }
 
     return {
       formDefinition,
       // Generate ItemMap for convenience
       itemMap: getItemMap(formDefinition.definition, false),
     };
-  }, [data, client, relationshipToHoH]);
+  }, [data]);
 
   if (error)
     throw new Error(

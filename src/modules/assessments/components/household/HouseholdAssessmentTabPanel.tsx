@@ -21,7 +21,6 @@ import {
 import { DynamicFormRef } from '@/modules/form/components/DynamicForm';
 import { FormActionProps } from '@/modules/form/components/FormActions';
 import { FormActionTypes } from '@/modules/form/types';
-import { applyDefinitionRulesForClient } from '@/modules/form/util/formUtil';
 import { FormDefinitionFieldsFragment } from '@/types/gqlTypes';
 
 interface HouseholdAssessmentTabPanelProps extends TabDefinition {
@@ -51,7 +50,6 @@ const HouseholdAssessmentTabPanel = memo(
     enrollmentId,
     assessmentId,
     client,
-    relationshipToHoH,
     nextTab,
     previousTab,
     navigateToTab,
@@ -105,22 +103,8 @@ const HouseholdAssessmentTabPanel = memo(
       // the FormDefinition that was resolved on the Assessment. This could
       // be important if it's an older WIP assessment that was saved using a certain
       // form. (It should be re-opened using the same form).
-      const chosenDefinition = assessment?.definition || mainFormDefinition;
-
-      // Apply client-specific transformation to FormDefinition. For example,
-      // removing questions that are only for the HoH.
-      return applyDefinitionRulesForClient(
-        chosenDefinition,
-        client,
-        relationshipToHoH
-      );
-    }, [
-      assessment,
-      assessmentId,
-      client,
-      mainFormDefinition,
-      relationshipToHoH,
-    ]);
+      return assessment?.definition || mainFormDefinition;
+    }, [assessment, assessmentId, mainFormDefinition]);
 
     const onCompletedMutation = useCallback(
       (status: AssessmentResponseStatus) => {

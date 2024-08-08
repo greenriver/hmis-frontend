@@ -39,6 +39,7 @@ import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
+  applyDefinitionRulesForClient,
   createInitialValuesFromRecord,
   getInitialValues,
   getItemMap,
@@ -119,14 +120,21 @@ const AssessmentForm: React.FC<Props> = ({
     if (assessment && !assessment.inProgress) setLocked(true);
   }, [assessment, canEdit]);
 
+  // Choose the FormDefiniton to use for rendering, and filter it down based on client attributes (Data Collected About rules).
   const definition = useMemo(() => {
-    if (locked) {
-      return definitionProp;
-    } else if (assessment?.upgradedDefinitionForEditing) {
-      return assessment.upgradedDefinitionForEditing;
+    // Choosing a definition:
+    //   - When viewing an assessment ("locked"), we use the Form Definition that was most recently used to
+    //     submit the assessment. That gets passed in as the definition prop.
+    //   - When editing an assessment, we use the most recent version of the Form Definition. If this differs
+    //     from the other definition, then 'upgradedDefinitionForEditing' is present on the Assessment.
+    let fd = definitionProp;
+    if (!locked && assessment?.upgradedDefinitionForEditing) {
+      fd = assessment.upgradedDefinitionForEditing;
     }
-    return definitionProp;
-  }, [definitionProp, locked, assessment]);
+    // Apply "data collected about" rules to filter down the definition to relevant items
+    const relationshipToHoH = enrollment.relationshipToHoH;
+    return applyDefinitionRulesForClient(fd, client, relationshipToHoH);
+  }, [definitionProp, locked, assessment, client, enrollment]);
 
   // Most recently selected "source" assessment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
