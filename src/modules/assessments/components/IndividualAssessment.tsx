@@ -34,7 +34,6 @@ export interface IndividualAssessmentProps {
   definition: FormDefinitionFieldsFragment;
   // Assessment to render. Omit if starting a new assessment.
   assessment?: FullAssessmentFragment;
-  title: string;
   enrollmentId: string;
   // Whether the assessment is embedded in a household workflow
   embeddedInWorkflow?: boolean;
