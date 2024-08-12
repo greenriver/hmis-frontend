@@ -7,6 +7,7 @@ import {
   Alert,
   AlertTitle,
   Button,
+  IconButton,
   Link,
   ListItemIcon,
   ListItemText,
@@ -23,18 +24,21 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
-const UserMenu: React.FC = () => {
+interface UserMenuProps {
+  hideName?: boolean;
+}
+const UserMenu: React.FC<UserMenuProps> = ({ hideName }) => {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
   const { user, logoutUser } = useAuth();
   const { manageAccountUrl, warehouseUrl, warehouseName } =
     useHmisAppSettings();
-  const isMobile = useIsMobile();
+  const isTiny = useIsMobile('sm');
 
   const menuItems = useMemo(() => {
     const items: ReactNode[] = [];
     if (!user || user.impersonating) return items;
 
-    const sx = isMobile
+    const sx = isTiny
       ? {
           py: 1,
           px: 3,
@@ -83,14 +87,7 @@ const UserMenu: React.FC = () => {
       </MenuItem>
     );
     return items;
-  }, [
-    isMobile,
-    logoutUser,
-    manageAccountUrl,
-    user,
-    warehouseName,
-    warehouseUrl,
-  ]);
+  }, [isTiny, logoutUser, manageAccountUrl, user, warehouseName, warehouseUrl]);
 
   if (!user) return null;
 
@@ -116,23 +113,34 @@ const UserMenu: React.FC = () => {
     );
   }
 
-  if (isMobile) {
+  if (isTiny) {
     return menuItems;
   }
 
   return (
     <>
-      <Button
-        startIcon={
-          user.impersonating ? <ImpersonatedIcon /> : <PersonPinIcon />
-        }
-        variant='text'
-        sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
-        id='userMenuToggle'
-        {...bindTrigger(popupState)}
-      >
-        {user.name}
-      </Button>
+      {hideName ? (
+        <IconButton
+          id='userMenuToggle'
+          {...bindTrigger(popupState)}
+          sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
+        >
+          {user.impersonating ? <ImpersonatedIcon /> : <PersonPinIcon />}
+        </IconButton>
+      ) : (
+        <Button
+          startIcon={
+            user.impersonating ? <ImpersonatedIcon /> : <PersonPinIcon />
+          }
+          variant='text'
+          sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
+          id='userMenuToggle'
+          {...bindTrigger(popupState)}
+        >
+          {user.name}
+        </Button>
+      )}
+
       <Menu
         anchorOrigin={{
           vertical: 48,

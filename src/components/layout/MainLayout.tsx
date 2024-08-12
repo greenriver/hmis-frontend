@@ -40,7 +40,9 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
     error,
   } = useGetRootPermissionsQuery();
 
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile('md');
+  const isTiny = useIsMobile('sm');
+
   const { mobileNavIsOpen, handleOpenMobileMenu, handleCloseMobileMenu } =
     mobileMenuContext;
   const isDashboard = useIsDashboard();
@@ -94,7 +96,10 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
           },
         }}
       >
-        <Toolbar sx={{ px: 3, minHeight: APP_BAR_HEIGHT }}>
+        <Toolbar
+          sx={{ px: isMobile ? 1 : 3, minHeight: APP_BAR_HEIGHT }}
+          disableGutters={isMobile}
+        >
           <RouterLink
             variant='h1'
             noWrap
@@ -109,14 +114,14 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
             {appName || 'Open Path HMIS'}
           </RouterLink>
           <Box display='flex' sx={{ flexGrow: 1 }}></Box>
-          {!isMobile && (
+          {!isTiny && (
             <Stack direction='row' spacing={{ md: 0.5, lg: 2 }}>
               <ToolbarMenu />
               <OmniSearch />
-              <UserMenu />
+              <UserMenu hideName={isMobile} />
             </Stack>
           )}
-          {isMobile && (
+          {isTiny && (
             <>
               <IconButton
                 aria-label='Navigation'

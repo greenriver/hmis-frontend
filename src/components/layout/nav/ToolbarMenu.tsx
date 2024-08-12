@@ -1,4 +1,4 @@
-import { alpha, Theme } from '@mui/material';
+import { Theme } from '@mui/material';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -66,10 +66,10 @@ export const useActiveNavItem = () => {
 
 const ToolbarMenu: React.FC = () => {
   const activeItem = useActiveNavItem();
-  const isMobile = useIsMobile();
+  const isTiny = useIsMobile('sm');
 
   return TOOLBAR_MENU_ITEMS.map((item) => {
-    let navItem = isMobile ? (
+    let navItem = isTiny ? (
       <li key={item.id}>
         <MobileMenuItem
           title={item.title as string}
@@ -89,7 +89,8 @@ const ToolbarMenu: React.FC = () => {
           color: 'text.primary',
           backgroundColor:
             activeItem === item.activeItemPathIncludes
-              ? (theme: Theme) => alpha(theme.palette.primary.light, 0.12)
+              ? // adjust hover too to match previous designs?
+                (theme: Theme) => theme.palette.grey[100]
               : undefined,
         }}
         key={item.id}
