@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   DialogActions,
   DialogContent,
@@ -22,7 +23,6 @@ import CardGroup, {
   RemovableCard,
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
 import { cache } from '@/providers/apolloClient';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   ActiveStatus,
   DataCollectedAbout,
@@ -272,25 +272,26 @@ const NewFormRuleDialog: React.FC<Props> = ({
             sx={{ backgroundColor: theme.palette.background.default, p: 2 }}
           >
             <BaseFormRule
-              dataCollectedAbout={
-                rule.dataCollectedAbout
-                  ? HmisEnums.DataCollectedAbout[rule.dataCollectedAbout]
-                  : HmisEnums.DataCollectedAbout.ALL_CLIENTS
-              }
-              projectType={
-                rule.projectType ? HmisEnums.ProjectType[rule.projectType] : ''
-              }
-              funder={rule.funder ? HmisEnums.FundingSource[rule.funder] : ''}
-              otherFunder={rule.otherFunder || ''}
-              project={projectName || ''}
-              organization={organizationName || ''}
-              serviceType={serviceTypeName || ''}
-              serviceCategory={serviceCategoryName || ''}
+              dataCollectedAbout={rule.dataCollectedAbout || undefined}
+              projectType={rule.projectType || undefined}
+              funder={rule.funder || undefined}
+              otherFunder={rule.otherFunder || undefined}
+              projectName={projectName || undefined}
+              organizationName={organizationName || undefined}
+              serviceTypeName={serviceTypeName || undefined}
+              serviceCategoryName={serviceCategoryName || undefined}
               formRole={formRole}
             />
           </Card>
           {formRole === FormRole.Service && (
-            <>
+            <Box
+              sx={{
+                backgroundColor: theme.palette.grey[100],
+                borderRadius: 1,
+                py: 1,
+                px: 2,
+              }}
+            >
               <FormRuleCondition
                 prefixText='Collects'
                 joiningText={'of'}
@@ -309,7 +310,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
                 }
                 valuePickList={pickListMap[serviceConditionType]}
               />
-            </>
+            </Box>
           )}
           <FormSelect
             label={

@@ -15,7 +15,7 @@ const FormRuleLabelTypography = ({
   sx?: SxProps;
   children: ReactNode;
 }) => (
-  <Typography variant='body2' sx={{ pt: 4.25, ...sx }}>
+  <Typography variant='body2' sx={{ py: 1, fontWeight: 600, ...sx }}>
     {children}
   </Typography>
 );
@@ -46,7 +46,7 @@ const FormRuleCondition: React.FC<Props> = ({
   const conditionTypeLabel = startCase(conditionType.replace(/Id$/, ''));
 
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={1} sx={{ alignItems: 'flex-end' }}>
       <Grid item xs={2} sm={1}>
         <FormRuleLabelTypography>{prefixText}</FormRuleLabelTypography>
       </Grid>
