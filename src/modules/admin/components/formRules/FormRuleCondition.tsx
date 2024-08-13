@@ -30,6 +30,7 @@ interface Props {
   value: string | null;
   valuePickList: PickListOption[];
   setValue: (value: string) => void;
+  valueError?: boolean;
 }
 const FormRuleCondition: React.FC<Props> = ({
   prefixText,
@@ -41,6 +42,7 @@ const FormRuleCondition: React.FC<Props> = ({
   valuePickList,
   setValue,
   joiningText = 'is',
+  valueError = false,
 }) => {
   const isTiny = useIsMobile('sm');
   const conditionTypeLabel = startCase(conditionType.replace(/Id$/, ''));
@@ -70,6 +72,7 @@ const FormRuleCondition: React.FC<Props> = ({
       </Grid>
       <Grid item xs={10} sm={5}>
         <FormSelect
+          error={valueError}
           label={conditionTypeLabel}
           value={value ? { code: value } : null}
           placeholder={`Select ${conditionTypeLabel}`}

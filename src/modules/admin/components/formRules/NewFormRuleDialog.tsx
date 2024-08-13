@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Card,
   DialogActions,
@@ -160,6 +161,22 @@ const NewFormRuleDialog: React.FC<Props> = ({
     },
   });
 
+  // This would be better handled with real form validation
+  const [validationError, setValidationError] = useState<string>();
+  const handleSubmit = () => {
+    let error: string | undefined = undefined;
+    if (formRole === FormRole.Service) {
+      if (!(rule.serviceCategoryId || rule.serviceTypeId)) {
+        error = 'One of either Service Category or Service Type is required';
+      }
+    }
+
+    setValidationError(error);
+    if (!error) {
+      createFormRule();
+    }
+  };
+
   const serviceConditionTypePickList = [
     { code: 'serviceTypeId', label: 'Service Type' },
     { code: 'serviceCategoryId', label: 'Service Category' },
@@ -283,6 +300,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
               formRole={formRole}
             />
           </Card>
+          {validationError && <Alert severity='error'>{validationError}</Alert>}
           {formRole === FormRole.Service && (
             <Box
               sx={{
@@ -309,6 +327,11 @@ const NewFormRuleDialog: React.FC<Props> = ({
                   setServiceConditionValue(conditionValue)
                 }
                 valuePickList={pickListMap[serviceConditionType]}
+                valueError={
+                  !!validationError &&
+                  !rule.serviceCategoryId &&
+                  !rule.serviceTypeId
+                }
               />
             </Box>
           )}
@@ -442,7 +465,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
       <DialogActions>
         <FormDialogActionContent
           submitButtonText='Create Rule'
-          onSubmit={() => createFormRule()}
+          onSubmit={handleSubmit}
           onDiscard={onCloseDialog}
           submitLoading={loading}
         />
