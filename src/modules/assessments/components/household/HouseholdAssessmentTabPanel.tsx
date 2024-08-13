@@ -56,7 +56,6 @@ const HouseholdAssessmentTabPanel = memo(
     refetch,
     updateTabStatus,
     assessmentSubmitted,
-    assessmentStatus,
     onFormStateChange,
     formState,
     formDefinition: mainFormDefinition,
@@ -244,7 +243,6 @@ const HouseholdAssessmentTabPanel = memo(
             embeddedInWorkflow
             enrollmentId={enrollmentId}
             assessment={assessment}
-            assessmentStatus={assessmentStatus}
             FormActionProps={FormActionProps}
             visible={active}
             formRef={formRef}

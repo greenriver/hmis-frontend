@@ -14,7 +14,6 @@ import { AssessmentLocalConstants } from '../util';
 import AssessmentAlert from './alerts/AssessmentAlert';
 
 import AssessmentTitle from './AssessmentTitle';
-import { AssessmentStatus } from './household/util';
 import FormContainer from '@/components/layout/FormContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -69,7 +68,6 @@ interface Props {
   assessment?: FullAssessmentFragment;
   alerts?: ReactNode;
   top?: number;
-  navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
   FormActionProps?: DynamicFormProps['FormActionProps'];
   onSubmit: DynamicFormProps['onSubmit'];
@@ -83,7 +81,6 @@ interface Props {
     enrollmentId: string,
     value: HouseholdAssessmentFormAction
   ) => void;
-  assessmentStatus?: AssessmentStatus;
 }
 
 const AssessmentForm: React.FC<Props> = ({
@@ -91,7 +88,6 @@ const AssessmentForm: React.FC<Props> = ({
   client,
   alerts,
   definition: definitionProp,
-  assessmentStatus,
   enrollment,
   embeddedInWorkflow,
   FormActionProps,
@@ -330,7 +326,6 @@ const AssessmentForm: React.FC<Props> = ({
         enrollment={enrollment}
         definition={definition}
         assessment={assessment}
-        assessmentStatus={assessmentStatus}
         isPrintView={isPrintView}
         locked={locked}
         embeddedInWorkflow={embeddedInWorkflow}

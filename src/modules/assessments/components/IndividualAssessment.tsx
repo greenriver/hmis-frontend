@@ -1,5 +1,5 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { Ref, useMemo } from 'react';
+import { Box } from '@mui/material';
+import { Ref } from 'react';
 
 import Loading from '@/components/elements/Loading';
 import {
@@ -11,9 +11,7 @@ import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import AssessmentRelatedAnnualsAlert from '@/modules/assessments/components/AssessmentRelatedAnnualsAlert';
-import AssessmentStatusIndicator from '@/modules/assessments/components/AssessmentStatusIndicator';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
-import { AssessmentStatus } from '@/modules/assessments/components/household/util';
 import { useBasicEnrollment } from '@/modules/enrollment/hooks/useBasicEnrollment';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { ErrorState } from '@/modules/errors/util';
@@ -21,7 +19,6 @@ import {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   AssessedClientFieldsFragment,
   AssessmentRole,
@@ -38,8 +35,6 @@ export interface IndividualAssessmentProps {
   // Whether the assessment is embedded in a household workflow
   embeddedInWorkflow?: boolean;
   client: AssessedClientFieldsFragment;
-  // Assessment status to use for indicator
-  assessmentStatus?: AssessmentStatus;
   // Whether the form is currently visible on the page. Used for household workflow when the assessment is on an inactive tab.
   visible?: boolean;
   // Reference to the form element
@@ -73,7 +68,6 @@ export interface IndividualAssessmentProps {
  */
 const IndividualAssessment = ({
   enrollmentId,
-  assessmentStatus,
   definition,
   assessment,
   embeddedInWorkflow = false,
@@ -99,38 +93,6 @@ const IndividualAssessment = ({
 
   useScrollToHash(enrollmentLoading, topOffsetHeight);
 
-  const navigationTitle = useMemo(() => {
-    if (!enrollment) return;
-    if (!embeddedInWorkflow) {
-      return (
-        <Typography variant='body2' component='div'>
-          Assessment Sections
-        </Typography>
-      );
-    }
-    return (
-      <Box>
-        <Typography variant='h5' sx={{ mb: 2 }}>
-          {clientBriefName(client)}
-        </Typography>
-        <Stack gap={1}>
-          <Typography variant='body2' component='div'>
-            {/* this will be the legacy title. movie this to its own component too */}
-            <b>{`${definition.title}: `}</b>
-            {enrollment.project.projectName}
-          </Typography>
-          <AssessmentStatusIndicator status={assessmentStatus} />
-        </Stack>
-      </Box>
-    );
-  }, [
-    assessmentStatus,
-    client,
-    definition.title,
-    embeddedInWorkflow,
-    enrollment,
-  ]);
-
   if (enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
   if (!definition && !assessment) return <NotFound />;
@@ -150,7 +112,6 @@ const IndividualAssessment = ({
     <AssessmentForm
       alerts={alertNode}
       client={client}
-      navigationTitle={navigationTitle}
       key={assessment?.id}
       definition={definition}
       assessment={assessment}
@@ -166,7 +127,6 @@ const IndividualAssessment = ({
       errors={errors}
       mutationLoading={mutationLoading}
       onCancelValidations={onCancelValidations}
-      assessmentStatus={assessmentStatus}
     />
   );
 };
