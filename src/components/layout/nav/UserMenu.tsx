@@ -32,13 +32,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ hideName }) => {
   const { user, logoutUser } = useAuth();
   const { manageAccountUrl, warehouseUrl, warehouseName } =
     useHmisAppSettings();
-  const isTiny = useIsMobile('sm');
+  const isMobile = useIsMobile();
 
   const menuItems = useMemo(() => {
     const items: ReactNode[] = [];
     if (!user || user.impersonating) return items;
 
-    const sx = isTiny
+    const sx = isMobile
       ? {
           py: 1,
           px: 3,
@@ -87,7 +87,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ hideName }) => {
       </MenuItem>
     );
     return items;
-  }, [isTiny, logoutUser, manageAccountUrl, user, warehouseName, warehouseUrl]);
+  }, [
+    isMobile,
+    logoutUser,
+    manageAccountUrl,
+    user,
+    warehouseName,
+    warehouseUrl,
+  ]);
 
   if (!user) return null;
 
@@ -113,7 +120,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ hideName }) => {
     );
   }
 
-  if (isTiny) {
+  if (isMobile) {
     return menuItems;
   }
 

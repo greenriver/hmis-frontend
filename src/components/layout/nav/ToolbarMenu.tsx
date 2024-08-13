@@ -66,10 +66,10 @@ export const useActiveNavItem = () => {
 
 const ToolbarMenu: React.FC = () => {
   const activeItem = useActiveNavItem();
-  const isTiny = useIsMobile('sm');
+  const isMobile = useIsMobile();
 
   return TOOLBAR_MENU_ITEMS.map((item) => {
-    let navItem = isTiny ? (
+    let navItem = isMobile ? (
       <li key={item.id}>
         <MobileMenuItem
           title={item.title as string}

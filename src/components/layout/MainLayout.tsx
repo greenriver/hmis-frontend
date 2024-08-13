@@ -40,8 +40,7 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
     error,
   } = useGetRootPermissionsQuery();
 
-  const isMobile = useIsMobile('md');
-  const isTiny = useIsMobile('sm');
+  const isMobile = useIsMobile();
 
   const { mobileNavIsOpen, handleOpenMobileMenu, handleCloseMobileMenu } =
     mobileMenuContext;
@@ -114,7 +113,7 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
             {appName || 'Open Path HMIS'}
           </RouterLink>
           <Box display='flex' sx={{ flexGrow: 1 }}></Box>
-          {!isTiny && (
+          {!isMobile && (
             <Stack
               direction='row'
               alignItems='center'
@@ -125,7 +124,7 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
               <UserMenu hideName={isMobile} />
             </Stack>
           )}
-          {isTiny && (
+          {isMobile && (
             <>
               <IconButton
                 aria-label='Navigation'

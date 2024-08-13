@@ -56,8 +56,7 @@ const ContextHeader: React.FC<Props> = ({
   isOpen,
   handleOpenMenu,
 }) => {
-  const isMobile = useIsMobile('md'); // if medium, show menu button and set closed
-  const isTiny = useIsMobile('sm'); // if tiny, hide because we use the rightside manu
+  const isMobile = useIsMobile();
   const { clientId, enrollmentId } = useSafeParams();
   const { client } = useClientName(clientId);
   const navigate = useNavigate();
@@ -118,7 +117,7 @@ const ContextHeader: React.FC<Props> = ({
         </Box>
       ) : (
         <Box display='flex' alignItems='stretch' width='100%' flex={1}>
-          {(!isOpen || (isMobile && !isTiny)) && (
+          {!isOpen && !isMobile && (
             <Box
               sx={{
                 display: 'flex',
