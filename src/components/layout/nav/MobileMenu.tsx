@@ -121,7 +121,7 @@ const MobileMenu: React.FC<Props> = ({
         })}
       >
         <List disablePadding>
-          <ToolbarMenu />
+          <ToolbarMenu mobile />
           <MobileUserMenu />
         </List>
       </Box>
