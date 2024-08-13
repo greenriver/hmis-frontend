@@ -7,7 +7,6 @@ import {
   Alert,
   AlertTitle,
   Button,
-  IconButton,
   Link,
   ListItemIcon,
   ListItemText,
@@ -24,10 +23,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
-interface UserMenuProps {
-  hideName?: boolean;
-}
-const UserMenu: React.FC<UserMenuProps> = ({ hideName }) => {
+const UserMenu: React.FC = () => {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
   const { user, logoutUser } = useAuth();
   const { manageAccountUrl, warehouseUrl, warehouseName } =
@@ -126,28 +122,17 @@ const UserMenu: React.FC<UserMenuProps> = ({ hideName }) => {
 
   return (
     <>
-      {hideName ? (
-        <IconButton
-          id='userMenuToggle'
-          {...bindTrigger(popupState)}
-          sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
-        >
-          {user.impersonating ? <ImpersonatedIcon /> : <PersonPinIcon />}
-        </IconButton>
-      ) : (
-        <Button
-          startIcon={
-            user.impersonating ? <ImpersonatedIcon /> : <PersonPinIcon />
-          }
-          variant='text'
-          sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
-          id='userMenuToggle'
-          {...bindTrigger(popupState)}
-        >
-          {user.name}
-        </Button>
-      )}
-
+      <Button
+        startIcon={
+          user.impersonating ? <ImpersonatedIcon /> : <PersonPinIcon />
+        }
+        variant='text'
+        sx={{ fontSize: 14, fontWeight: 600, color: 'text.primary' }}
+        id='userMenuToggle'
+        {...bindTrigger(popupState)}
+      >
+        {user.name}
+      </Button>
       <Menu
         anchorOrigin={{
           vertical: 48,

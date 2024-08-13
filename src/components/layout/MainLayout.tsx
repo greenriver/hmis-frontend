@@ -121,7 +121,7 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
             >
               <ToolbarMenu />
               <OmniSearch />
-              <UserMenu hideName={isMobile} />
+              <UserMenu />
             </Stack>
           )}
           {isMobile && (
