@@ -115,7 +115,11 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
           </RouterLink>
           <Box display='flex' sx={{ flexGrow: 1 }}></Box>
           {!isTiny && (
-            <Stack direction='row' spacing={{ md: 0.5, lg: 2 }}>
+            <Stack
+              direction='row'
+              alignItems='center'
+              spacing={{ md: 0.5, lg: 2 }}
+            >
               <ToolbarMenu />
               <OmniSearch />
               <UserMenu hideName={isMobile} />

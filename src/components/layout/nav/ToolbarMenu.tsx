@@ -1,4 +1,4 @@
-import { Theme } from '@mui/material';
+import { alpha, Theme } from '@mui/material';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -89,8 +89,7 @@ const ToolbarMenu: React.FC = () => {
           color: 'text.primary',
           backgroundColor:
             activeItem === item.activeItemPathIncludes
-              ? // adjust hover too to match previous designs?
-                (theme: Theme) => theme.palette.grey[100]
+              ? (theme: Theme) => alpha(theme.palette.links, 0.1)
               : undefined,
         }}
         key={item.id}

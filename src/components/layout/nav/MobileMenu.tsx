@@ -11,7 +11,8 @@ import React, { ReactNode, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import MobileUserMenu from '@/components/layout/nav/MobileUserMenu';
 import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
-import OmniSearch from '@/modules/search/components/OmniSearch';
+import { scrollToElement } from '@/hooks/useScrollToHash';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 interface Props {
   window?: () => Window;
@@ -19,7 +20,6 @@ interface Props {
   mobileNavIsOpen: boolean;
   onCloseMobileMenu: VoidFunction;
   navHeader?: ReactNode;
-  label?: string;
 }
 
 const MobileMenu: React.FC<Props> = ({
@@ -27,8 +27,9 @@ const MobileMenu: React.FC<Props> = ({
   children,
   mobileNavIsOpen,
   onCloseMobileMenu,
-  label,
+  navHeader,
 }) => {
+  const { appName } = useHmisAppSettings();
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
@@ -38,14 +39,14 @@ const MobileMenu: React.FC<Props> = ({
     onCloseMobileMenu();
   }, [pathname, onCloseMobileMenu]);
 
-  // TODO: hook to scroll to top of menu on open
+  // if there is a child menu for dashboard nav items, scroll to top of it on open
+  useEffect(() => {
+    setTimeout(() => {
+      const element = document.getElementById('dashboard-nav-menu');
+      scrollToElement(element, 0);
+    }, 0);
+  }, [pathname]);
 
-  const nav = (
-    <List>
-      <ToolbarMenu />
-      <MobileUserMenu />
-    </List>
-  );
   return (
     <Drawer
       data-testid='mobileNav'
@@ -77,7 +78,7 @@ const MobileMenu: React.FC<Props> = ({
           variant='overline'
           sx={{ ml: 2, mr: 'auto', mt: 0.5 }}
         >
-          {label || 'Site Navigation'}
+          {appName || 'Open Path HMIS'}
         </Typography>
         <IconButton
           aria-label='close'
@@ -88,36 +89,42 @@ const MobileMenu: React.FC<Props> = ({
           <Close fontSize='inherit' />
         </IconButton>
       </Stack>
+      {navHeader && (
+        <Box
+          sx={({ palette }) => ({
+            px: 3,
+            py: 2,
+            borderBottom: `1px solid ${palette.divider}`,
+          })}
+        >
+          {navHeader}
+        </Box>
+      )}
 
+      {/* If we child nav items for a dashboard, render them in a scrollable area */}
       {children && (
-        <>
-          <Box sx={{ flex: '1', overflowY: 'scroll' }}>
-            <Box sx={({ palette }) => ({ background: palette.grey[100] })}>
-              {children}
-            </Box>
-          </Box>
+        <Box sx={{ flex: '1', overflowY: 'scroll' }}>
           <Box
-            sx={({ palette }) => ({
-              flex: '1',
-              pt: 2,
-              borderTop: `1px solid ${palette.divider}`,
-            })}
+            id='dashboard-nav-menu'
+            sx={({ palette }) => ({ background: palette.grey[100] })}
           >
-            <Box sx={{ mx: 2, mb: 0 }}>
-              <OmniSearch />
-            </Box>
-            {nav}
+            {children}
           </Box>
-        </>
+        </Box>
       )}
-      {!children && (
-        <>
-          <Box sx={{ mx: 2, mb: 0, mt: 2 }}>
-            <OmniSearch />
-          </Box>
-          {nav}
-        </>
-      )}
+
+      {/* Navigation for top-level items (Clients, Projects, Admin) */}
+      <Box
+        sx={({ palette }) => ({
+          flex: '1',
+          borderTop: `1px solid ${palette.divider}`,
+        })}
+      >
+        <List disablePadding>
+          <ToolbarMenu />
+          <MobileUserMenu />
+        </List>
+      </Box>
     </Drawer>
   );
 };
