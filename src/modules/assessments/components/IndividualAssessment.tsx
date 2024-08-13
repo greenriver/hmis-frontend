@@ -166,6 +166,7 @@ const IndividualAssessment = ({
       errors={errors}
       mutationLoading={mutationLoading}
       onCancelValidations={onCancelValidations}
+      assessmentStatus={assessmentStatus}
     />
   );
 };

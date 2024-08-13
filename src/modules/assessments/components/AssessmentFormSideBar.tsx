@@ -1,9 +1,11 @@
-import { Box, Divider, Paper, Stack } from '@mui/material';
-import { ReactNode, useMemo } from 'react';
+import { Box, Divider, Paper, Stack, Typography } from '@mui/material';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import AssessmentStatusIndicator from './AssessmentStatusIndicator';
 import DeleteAssessmentButton from './DeleteAssessmentButton';
 
+import { AssessmentStatus } from './household/util';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -12,6 +14,7 @@ import PrintViewButton from '@/components/layout/PrintViewButton';
 import AssessmentAutofillButton from '@/modules/assessments/components/AssessmentAutofillButton';
 import FormStepper from '@/modules/form/components/FormStepper';
 
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
@@ -25,7 +28,6 @@ interface Props {
   enrollment: EnrollmentFieldsFragment;
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
-  title: ReactNode;
   embeddedInWorkflow?: boolean;
   onAutofill: VoidFunction;
   printPath?: string;
@@ -33,19 +35,20 @@ interface Props {
   locked: boolean;
   top?: number;
   showAutofill?: boolean;
+  assessmentStatus?: AssessmentStatus;
 }
 
 const AssessmentFormSideBar: React.FC<Props> = ({
   enrollment,
   definition,
   assessment,
-  title,
   embeddedInWorkflow,
   onAutofill,
   isPrintView,
   locked,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   showAutofill = true,
+  assessmentStatus,
 }) => {
   const navigate = useNavigate();
   const navigateToEnrollment = useMemo(
@@ -83,6 +86,31 @@ const AssessmentFormSideBar: React.FC<Props> = ({
 
   const showPrintViewButton = !isPrintView && locked && assessment;
 
+  const header = useMemo(() => {
+    if (!embeddedInWorkflow) {
+      return (
+        <Typography variant='body2' component='div'>
+          Assessment Sections
+        </Typography>
+      );
+    }
+
+    return (
+      <Box>
+        <Typography variant='h5' sx={{ mb: 2 }}>
+          {clientBriefName(enrollment.client)}
+        </Typography>
+        <Stack gap={1}>
+          <Typography variant='body2' component='div'>
+            <b>{`${definition.title}: `}</b>
+            {enrollment.project.projectName}
+          </Typography>
+          <AssessmentStatusIndicator status={assessmentStatus} />
+        </Stack>
+      </Box>
+    );
+  }, [assessmentStatus, definition.title, embeddedInWorkflow, enrollment]);
+
   return (
     <Paper
       sx={{
@@ -93,12 +121,10 @@ const AssessmentFormSideBar: React.FC<Props> = ({
         overflowY: 'auto',
       }}
     >
-      {title && (
-        <Box>
-          {title}
-          <Divider sx={{ my: 2, mx: -2 }} />
-        </Box>
-      )}
+      <Box>
+        {header}
+        <Divider sx={{ my: 2, mx: -2 }} />
+      </Box>
       <FormStepper
         items={definition.definition.item}
         scrollOffset={top}

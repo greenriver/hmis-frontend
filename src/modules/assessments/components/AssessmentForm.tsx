@@ -14,6 +14,7 @@ import { AssessmentLocalConstants } from '../util';
 import AssessmentAlert from './alerts/AssessmentAlert';
 
 import AssessmentTitle from './AssessmentTitle';
+import { AssessmentStatus } from './household/util';
 import FormContainer from '@/components/layout/FormContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -82,6 +83,7 @@ interface Props {
     enrollmentId: string,
     value: HouseholdAssessmentFormAction
   ) => void;
+  assessmentStatus?: AssessmentStatus;
 }
 
 const AssessmentForm: React.FC<Props> = ({
@@ -89,7 +91,7 @@ const AssessmentForm: React.FC<Props> = ({
   client,
   alerts,
   definition: definitionProp,
-  navigationTitle,
+  assessmentStatus,
   enrollment,
   embeddedInWorkflow,
   FormActionProps,
@@ -328,7 +330,7 @@ const AssessmentForm: React.FC<Props> = ({
         enrollment={enrollment}
         definition={definition}
         assessment={assessment}
-        title={navigationTitle}
+        assessmentStatus={assessmentStatus}
         isPrintView={isPrintView}
         locked={locked}
         embeddedInWorkflow={embeddedInWorkflow}
