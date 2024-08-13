@@ -120,13 +120,18 @@ const AssessmentForm: React.FC<Props> = ({
 
   // Choose the FormDefiniton to use for rendering, and filter it down based on client attributes (Data Collected About rules).
   const definition = useMemo(() => {
-    // Choosing a definition:
+    // Logic for choosing a definition:
     //   - When viewing an assessment ("locked"), we use the Form Definition that was most recently used to
     //     submit the assessment. That gets passed in as the definition prop.
-    //   - When editing an assessment, we use the most recent version of the Form Definition. If this differs
+    //   - When editing a WIP assessment, we also use the same Form Definition that was used to create it.
+    //   - When editing a non-WIP assessment, we use the most recent version of the Form Definition. If this differs
     //     from the other definition, then 'upgradedDefinitionForEditing' is present on the Assessment.
     let fd = definitionProp;
-    if (!locked && assessment?.upgradedDefinitionForEditing) {
+    if (
+      !locked &&
+      !assessment?.inProgress &&
+      assessment?.upgradedDefinitionForEditing
+    ) {
       fd = assessment.upgradedDefinitionForEditing;
     }
     // Apply "data collected about" rules to filter down the definition to relevant items
