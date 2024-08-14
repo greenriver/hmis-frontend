@@ -324,7 +324,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           {!hiddenValue && (
             <>
               <ManageEnableWhen control={control} itemMap={itemMap} />
-              {hasEnableWhen && (
+              {hasEnableWhen && !(itemTypeValue === ItemType.Group) && (
                 <ControlledSelect
                   name='disabledDisplay'
                   control={control}
@@ -393,7 +393,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             <ControlledTextInput
               control={control}
               name='linkId'
-              helperText='Unique ID for this form item'
+              helperText='Unique ID for this form item. Must start with a letter and contain only letters, numbers, and underscores.'
               label='Question ID'
               disabled={!isNewItem}
               required
