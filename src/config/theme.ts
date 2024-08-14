@@ -82,6 +82,15 @@ export const baseThemeDef: ThemeOptions = {
     fontFamily: '"Open Sans", sans-serif',
     fontWeightBold: 600,
   },
+  breakpoints: {
+    values: {
+      xs: 0, // MUI default
+      sm: 600, // MUI default
+      md: 768, // Custom (Tablet) - MUI default is 900
+      lg: 1200, // MUI default
+      xl: 1536, // MUI default
+    },
+  },
   palette: {
     primary: {
       main: '#1976D2',
