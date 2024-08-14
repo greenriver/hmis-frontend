@@ -7,6 +7,8 @@ interface RenderRouteWithOutletContextProps<T = any> {
   children: ReactNode;
 }
 
+// Helper for mocking Client/Enrollment/Project Dashboard contexts in stories.
+// This uses React Router Outlet to mimic the dashboard behavior closely
 export const RenderRouteWithOutletContext = <T,>({
   context,
   children,

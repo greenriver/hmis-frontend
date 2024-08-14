@@ -1,4 +1,5 @@
 import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import { MockedProvider } from '@apollo/client/testing';
 import { ThemeProvider } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -8,10 +9,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import theme from '../src/config/theme';
 import '../src/index.css';
-import mocks, {
-  fakeEnrollment,
-  RITA_ACKROYD,
-} from '../src/test/__mocks__/requests';
+import { fakeEnrollment, RITA_ACKROYD } from '../src/test/__mocks__/requests';
 import { RenderRouteWithOutletContext } from './components/RenderRouteWithOutletContext';
 
 export const parameters = {
@@ -38,7 +36,7 @@ export const decorators = [
     switch (dashboardContext) {
       case 'enrollment':
         return (
-          <RenderRouteWithOutletContext
+          <RenderRouteWithOutletContext<EnrollmentDashboardContext>
             context={{
               // data doesn't exactly match the fragment type that is used for Enrollment Dashboard, could be improved
               client: client || RITA_ACKROYD,
