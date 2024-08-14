@@ -5,7 +5,7 @@ import { useState } from 'react';
 import ProjectSelect, { Option } from './ProjectSelect';
 
 export default {
-  title: 'ProjectSelect',
+  title: 'Input Elements/ProjectSelect',
   component: ProjectSelect,
   decorators: [
     (Story) => (

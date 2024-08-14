@@ -1,11 +1,10 @@
-import { ComponentStory, Meta } from '@storybook/react';
-import { useEffect } from 'react';
-import useState from 'storybook-addon-state';
+import { useArgs } from '@storybook/preview-api';
+import { Meta, StoryObj } from '@storybook/react';
 
 import SsnInput from './SsnInput';
 
 export default {
-  title: 'SsnInput',
+  title: 'Input Elements/SsnInput',
   component: SsnInput,
   argTypes: {
     label: { control: 'text' },
@@ -14,16 +13,17 @@ export default {
   },
 } as Meta<typeof SsnInput>;
 
-const Template: ComponentStory<typeof SsnInput> = (args) => {
-  const [value, setValue] = useState('ssnInputValue', args.value);
+type Story = StoryObj<typeof SsnInput>;
 
-  useEffect(() => setValue(args.value), [args.value]);
-
-  return <SsnInput {...args} value={value} onChange={setValue} />;
+const renderStory = (args: any) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [{ value }, updateArgs] = useArgs();
+  const onChange = (value: any) => updateArgs({ value });
+  return <SsnInput {...args} onChange={onChange} value={value} />;
 };
-export const Default = Template.bind({});
-export const Labeled = Template.bind({});
-Labeled.args = {
-  label: 'Social Security Number',
-  helperText: 'Helper text here',
+
+export const Default: Story = { render: renderStory };
+export const Labeled: Story = {
+  render: renderStory,
+  args: { label: 'Social Security Number', helperText: 'Helper text here' },
 };

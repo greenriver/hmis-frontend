@@ -1,37 +1,47 @@
-import { ComponentStory, Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import ClientSearchResultCard from './ClientSearchResultCard';
 
-import { RITA_ACKROYD } from '@/test/__mocks__/requests';
+import {
+  getClientPermissionMocks,
+  RITA_ACKROYD,
+} from '@/test/__mocks__/requests';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export default {
   title: 'ClientSearchResultCard',
   component: ClientSearchResultCard,
+  parameters: {
+    apolloClient: {
+      mocks: [getClientPermissionMocks],
+    },
+  },
 } as Meta<typeof ClientSearchResultCard>;
 
-const Template: ComponentStory<typeof ClientSearchResultCard> = (args) => (
-  <ClientSearchResultCard {...args} />
-);
+type Story = StoryObj<typeof ClientSearchResultCard>;
 
-export const Default = Template.bind({});
-Default.args = {
-  client: RITA_ACKROYD as ClientFieldsFragment,
+// FIXME: image does not appear in story
+export const Default: Story = {
+  args: {
+    client: RITA_ACKROYD as ClientFieldsFragment,
+  },
 };
 
-export const WithoutImage = Template.bind({});
-WithoutImage.args = {
-  client: RITA_ACKROYD as ClientFieldsFragment,
-  hideImage: true,
+export const WithoutImage: Story = {
+  args: {
+    client: RITA_ACKROYD as ClientFieldsFragment,
+    hideImage: true,
+  },
 };
 
-export const WithFewerDetails = Template.bind({});
-WithFewerDetails.args = {
-  client: {
-    ...RITA_ACKROYD,
-    pronouns: [],
-    ssn: null,
-    dob: null,
-  } as ClientFieldsFragment,
-  hideImage: true,
+export const WithFewerDetails: Story = {
+  args: {
+    client: {
+      ...RITA_ACKROYD,
+      pronouns: [],
+      ssn: null,
+      dob: null,
+    } as ClientFieldsFragment,
+    hideImage: true,
+  },
 };

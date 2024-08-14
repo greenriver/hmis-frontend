@@ -44,7 +44,7 @@ const ENROLLMENT_ACCESS_MOCK = {
   id: '9999:1',
 } as EnrollmentAccess;
 
-const fakeEnrollment = () => {
+export const fakeEnrollment = () => {
   return {
     __typename: 'Enrollment',
     id: v4(),
@@ -313,7 +313,7 @@ const clientImageLookupMock = {
   },
 };
 
-const clientWithEnrollmentsMock = {
+export const clientWithEnrollmentsMock = {
   request: {
     query: GetClientEnrollmentsDocument,
     variables: {
@@ -329,7 +329,7 @@ const clientWithEnrollmentsMock = {
   },
 };
 
-const clientWithoutEnrollmentsMock = {
+export const clientWithoutEnrollmentsMock = {
   request: {
     query: GetClientEnrollmentsDocument,
     variables: {
@@ -345,7 +345,7 @@ const clientWithoutEnrollmentsMock = {
   },
 };
 
-const enrollmentWithHoHMock = {
+export const enrollmentWithHoHMock = {
   request: {
     query: GetEnrollmentWithHouseholdDocument,
     variables: { id: '5' },
@@ -446,7 +446,7 @@ const getFileMock = {
   },
 };
 
-const getClientPermissionMocks = {
+export const getClientPermissionMocks = {
   request: {
     query: GetClientPermissionsDocument,
     variables: {
@@ -464,7 +464,7 @@ const getClientPermissionMocks = {
   },
 };
 
-const clientDetailFormsMock = {
+export const clientDetailFormsMock = {
   request: {
     query: ClientDetailFormsDocument,
     variables: {},
@@ -480,21 +480,12 @@ const mocks: any[] = [
   clientSearchMockNextPage,
   clientLookupMock,
   clientImageLookupMock,
-  clientImageLookupMock,
-  clientWithEnrollmentsMock,
-  clientWithEnrollmentsMock,
-  clientWithEnrollmentsMock,
-  clientWithEnrollmentsMock,
-  clientWithEnrollmentsMock,
   clientWithEnrollmentsMock,
   clientWithoutEnrollmentsMock,
   enrollmentWithHoHMock,
   createDirectUploadMock,
   getFileMock,
   getClientPermissionMocks,
-  getClientPermissionMocks,
-  getClientPermissionMocks,
-  clientDetailFormsMock,
   clientDetailFormsMock,
 ];
 
