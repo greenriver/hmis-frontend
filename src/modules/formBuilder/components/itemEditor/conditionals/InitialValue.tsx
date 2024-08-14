@@ -84,12 +84,20 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
                 control={control}
                 defaultValue={InitialBehavior.IfEmpty}
                 shouldUnregister
-                render={({ field: { ref, value, onChange, ...field } }) => (
+                rules={{ required: true }}
+                render={({
+                  field: { ref, value, onChange, ...field },
+                  fieldState: { error },
+                }) => (
                   <RadioGroupInput
                     options={initialBehaviorOptions}
                     label='Initial Behavior'
                     value={initialBehaviorOptions.find((o) => o.code === value)}
                     onChange={(option) => onChange(option?.code)}
+                    error={!!error}
+                    helperText={
+                      error?.type === 'required' ? 'Required' : undefined
+                    }
                     {...field}
                   />
                 )}

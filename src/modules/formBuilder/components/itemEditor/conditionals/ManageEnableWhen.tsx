@@ -89,11 +89,7 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
       {fields.map((condition, index) => (
         <RemovableCard
           key={JSON.stringify(condition)} // fixme could be non unique
-          onRemove={() => {
-            const isLastCondition = fields.length === 1;
-            remove(index);
-            if (isLastCondition) onChangeEnableBehavior(null);
-          }}
+          onRemove={() => remove(index)}
           removeTooltip={'Remove Condition'}
         >
           <EnableWhenCondition

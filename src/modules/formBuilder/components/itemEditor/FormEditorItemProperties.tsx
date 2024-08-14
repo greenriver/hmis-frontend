@@ -142,6 +142,12 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
     }
   }, [hiddenValue, setValue]);
 
+  useEffect(() => {
+    if (!hasEnableWhen) {
+      setValue('enableBehavior', null);
+    }
+  }, [hasEnableWhen, setValue]);
+
   const onLabelBlur = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       if (!isNewItem) return; // Don't modify LinkID on persisted item
