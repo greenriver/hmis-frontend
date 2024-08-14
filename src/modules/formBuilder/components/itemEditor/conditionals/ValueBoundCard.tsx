@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import React, { useMemo } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
@@ -21,7 +22,14 @@ interface Props {
 
 const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
   const fieldType = useWatch({ control, name: 'type' });
-  const boundTypeValue = useWatch({ control, name: `bounds.${index}.type` });
+  const bound = useWatch({ control, name: `bounds.${index}` });
+  const {
+    type: boundTypeValue,
+    offset,
+    question: dependentQuestion,
+    valueLocalConstant,
+  } = bound || {};
+
   const labelPrefix =
     boundTypeValue === BoundType.Max
       ? 'Maximum'
@@ -40,6 +48,15 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
   const [canAdministrateConfig] = useHasRootPermissions([
     'canAdministrateConfig',
   ]);
+
+  const isBoundValueRequired = useMemo(() => {
+    // Require the simple bound value field only if the user is NOT a super-admin
+    // AND none of the advanced features have already been selected by another user.
+    return (
+      !canAdministrateConfig &&
+      !(offset || dependentQuestion || valueLocalConstant)
+    );
+  }, [canAdministrateConfig, offset, dependentQuestion, valueLocalConstant]);
 
   return (
     <Stack gap={2}>
@@ -81,7 +98,7 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
         <Controller
           name={`bounds.${index}.valueDate`}
           control={control}
-          rules={{ required: !canAdministrateConfig }}
+          rules={{ required: isBoundValueRequired }}
           render={({ field: { ref, ...field }, fieldState: { error } }) => (
             <DatePicker
               {...field}
@@ -101,22 +118,26 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
         [ItemType.Integer, ItemType.Currency].includes(fieldType) && (
           <ControlledTextInput
             control={control}
-            rules={{ required: !canAdministrateConfig }}
+            rules={{ required: isBoundValueRequired }}
             name={`bounds.${index}.valueNumber`}
             type='number'
             label={`${labelPrefix} Value`}
           />
         )}
 
-      <RootPermissionsFilter permissions='canAdministrateConfig'>
+      {(canAdministrateConfig || !!valueLocalConstant) && (
         <ControlledSelect
           name={`bounds.${index}.valueLocalConstant`}
           control={control}
           label={`Local Constant for ${labelPrefix} Value`}
           placeholder='Select local constant'
           options={localConstantsPickList}
+          disabled={!canAdministrateConfig}
         />
-        {itemPickList.length > 0 && (
+      )}
+
+      {(canAdministrateConfig || !!dependentQuestion) &&
+        itemPickList.length > 0 && (
           <ControlledSelect
             name={`bounds.${index}.question`}
             control={control}
@@ -124,26 +145,31 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
             placeholder='Select question'
             helperText='The response to this question will be the bound value'
             options={itemPickList}
+            disabled={!canAdministrateConfig}
           />
         )}
 
-        <Typography variant='body2'>
-          Optionally specify an offset for the bound. For example, specifying a
-          maximum with value "Today" with offset "3" will set the maximum bound
-          to 3 days in the future.
-        </Typography>
-        <ControlledTextInput
-          control={control}
-          name={`bounds.${index}.offset`}
-          type='number'
-          label='Offset'
-          helperText={
-            fieldType === ItemType.Date
-              ? 'Number of days to offset the bound value'
-              : 'Number to offset the bound value'
-          }
-        />
-      </RootPermissionsFilter>
+      {(canAdministrateConfig || offset) && (
+        <>
+          <Typography variant='body2'>
+            Optionally specify an offset for the bound. For example, specifying
+            a maximum with value "Today" with offset "3" will set the maximum
+            bound to 3 days in the future.
+          </Typography>
+          <ControlledTextInput
+            control={control}
+            name={`bounds.${index}.offset`}
+            type='number'
+            label='Offset'
+            helperText={
+              fieldType === ItemType.Date
+                ? 'Number of days to offset the bound value'
+                : 'Number to offset the bound value'
+            }
+            disabled={!canAdministrateConfig}
+          />
+        </>
+      )}
     </Stack>
   );
 };
