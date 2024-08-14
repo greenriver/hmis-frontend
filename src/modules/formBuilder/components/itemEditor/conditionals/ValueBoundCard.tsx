@@ -1,15 +1,13 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React, { useMemo } from 'react';
-import { Controller, useWatch } from 'react-hook-form';
+import React from 'react';
+import { useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
 import { useItemPickList } from './useItemPickList';
-import DatePicker from '@/components/elements/input/DatePicker';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { ItemMap } from '@/modules/form/types';
-import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { BoundType, ItemType, ValidationSeverity } from '@/types/gqlTypes';
@@ -49,15 +47,6 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
     'canAdministrateConfig',
   ]);
 
-  const isBoundValueRequired = useMemo(() => {
-    // Require the simple bound value field only if the user is NOT a super-admin
-    // AND none of the advanced features have already been selected by another user.
-    return (
-      !canAdministrateConfig &&
-      !(offset || dependentQuestion || valueLocalConstant)
-    );
-  }, [canAdministrateConfig, offset, dependentQuestion, valueLocalConstant]);
-
   return (
     <Stack gap={2}>
       <Stack direction='row' gap={2}>
@@ -94,31 +83,17 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
         </Typography>
       </RootPermissionsFilter>
 
-      {fieldType === ItemType.Date && (
-        <Controller
-          name={`bounds.${index}.valueDate`}
-          control={control}
-          rules={{ required: isBoundValueRequired }}
-          render={({ field: { ref, ...field }, fieldState: { error } }) => (
-            <DatePicker
-              {...field}
-              textInputProps={{ inputRef: ref }}
-              value={parseHmisDateString(field.value)}
-              onChange={(date) =>
-                field.onChange(date ? formatDateForGql(date) : '')
-              }
-              label={`${labelPrefix} Date`}
-              error={!!error}
-              helperText={error?.type === 'required' ? 'Required' : undefined}
-            />
-          )}
-        />
-      )}
       {fieldType &&
         [ItemType.Integer, ItemType.Currency].includes(fieldType) && (
           <ControlledTextInput
             control={control}
-            rules={{ required: isBoundValueRequired }}
+            // Require this "simple" bound field only if the user is NOT a super-admin
+            // AND none of the "advanced" bound features have already been set.
+            rules={{
+              required:
+                !canAdministrateConfig &&
+                !(offset || dependentQuestion || valueLocalConstant),
+            }}
             name={`bounds.${index}.valueNumber`}
             type='number'
             label={`${labelPrefix} Value`}
