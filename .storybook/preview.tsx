@@ -27,6 +27,8 @@ export const parameters = {
   },
 };
 
+export const tags = ['autodocs'];
+
 export const decorators = [
   (Story, { parameters }) => {
     // React Router decorator can optionally provide a dashboard context if `dashboardContext` is passed.
@@ -68,4 +70,3 @@ export const decorators = [
     </ThemeProvider>
   ),
 ];
-export const tags = ['autodocs'];

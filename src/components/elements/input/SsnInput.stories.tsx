@@ -11,19 +11,17 @@ export default {
     onlylast4: { control: 'boolean' },
     value: { control: 'text' },
   },
+  render: (args: any) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [{ value }, updateArgs] = useArgs();
+    const onChange = (value: any) => updateArgs({ value });
+    return <SsnInput {...args} onChange={onChange} value={value} />;
+  },
 } as Meta<typeof SsnInput>;
 
 type Story = StoryObj<typeof SsnInput>;
 
-const renderStory = (args: any) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [{ value }, updateArgs] = useArgs();
-  const onChange = (value: any) => updateArgs({ value });
-  return <SsnInput {...args} onChange={onChange} value={value} />;
-};
-
-export const Default: Story = { render: renderStory };
+export const Default: Story = {};
 export const Labeled: Story = {
-  render: renderStory,
   args: { label: 'Social Security Number', helperText: 'Helper text here' },
 };

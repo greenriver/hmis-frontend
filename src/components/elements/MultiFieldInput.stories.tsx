@@ -8,19 +8,17 @@ import MultiFieldInput, { MultiFieldInputProps } from './MultiFieldInput';
 export default {
   title: 'Input Elements/MultiFieldInput',
   component: MultiFieldInput,
+  render: (args: MultiFieldInputProps<any>) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [{ values }, updateArgs] = useArgs();
+    const onChange = (values: any) => updateArgs({ values: values });
+    return <MultiFieldInput {...args} onChange={onChange} values={values} />;
+  },
 } as Meta<typeof MultiFieldInput>;
 
 type Story = StoryObj<typeof MultiFieldInput>;
 
-const renderStory = (args: MultiFieldInputProps<any>) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [{ values }, updateArgs] = useArgs();
-  const onChange = (values: any) => updateArgs({ values: values });
-  return <MultiFieldInput {...args} onChange={onChange} values={values} />;
-};
-
 export const BasicInputs: Story = {
-  render: renderStory,
   args: {
     values: {
       areaCode: '',
@@ -53,7 +51,6 @@ export const BasicInputs: Story = {
 };
 
 export const TextFields: Story = {
-  render: renderStory,
   args: {
     values: {
       areaCode: '',
