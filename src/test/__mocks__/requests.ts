@@ -9,39 +9,51 @@ import {
   DobDataQuality,
   EnrollmentAccess,
   Gender,
-  GetClientDocument,
   GetClientEnrollmentsDocument,
   GetClientImageDocument,
   GetClientPermissionsDocument,
   GetEnrollmentWithHouseholdDocument,
   GetFileDocument,
   GetPickListDocument,
+  GetRootPermissionsDocument,
   NameDataQuality,
   NoYesReasonsForMissingData,
   PickListOption,
   ProjectType,
   Race,
   RelationshipToHoH,
-  SearchClientsDocument,
   SsnDataQuality,
 } from '@/types/gqlTypes';
 
-const CLIENT_ACCESS_MOCK = {
+/**
+ * Mocked requests to use with Apollo MockedProvider in Storybook stories
+ */
+
+const clientAccessMock = {
   ...Object.fromEntries(
     HmisObjectSchemas.find((obj) => obj.name === 'ClientAccess')?.fields.map(
       (f) => [f.name, true]
     ) || []
   ),
-  id: '9999:1',
+  id: '9999:1', // <client id>:<user id>
 } as ClientAccess;
 
-const ENROLLMENT_ACCESS_MOCK = {
+const rootAccessMock = {
+  ...Object.fromEntries(
+    HmisObjectSchemas.find((obj) => obj.name === 'QueryAccess')?.fields.map(
+      (f) => [f.name, true]
+    ) || []
+  ),
+  id: '1', // user id
+} as ClientAccess;
+
+const enrollmentAccessMock = {
   ...Object.fromEntries(
     HmisObjectSchemas.find(
       (obj) => obj.name === 'EnrollmentAccess'
     )?.fields.map((f) => [f.name, true]) || []
   ),
-  id: '9999:1',
+  id: '9999:1', // <enrollment id>:<user id>
 } as EnrollmentAccess;
 
 export const fakeEnrollment = () => {
@@ -52,7 +64,7 @@ export const fakeEnrollment = () => {
     inProgress: false,
     entryDate: '2022-06-18',
     exitDate: null,
-    access: ENROLLMENT_ACCESS_MOCK,
+    access: enrollmentAccessMock,
     householdSize: 1,
     projectName: 'White Pine',
     projectType: ProjectType.EsNbn,
@@ -60,6 +72,7 @@ export const fakeEnrollment = () => {
     lastBedNightDate: '2022-06-18',
     moveInDate: null,
     lockVersion: '1',
+    autoExited: false,
     project: {
       id: '1',
       projectName: 'White Pine',
@@ -79,7 +92,7 @@ export const RITA_ACKROYD = {
   dob: '1980-03-20',
   age: 43,
   nameSuffix: null,
-  access: CLIENT_ACCESS_MOCK,
+  access: clientAccessMock,
   customDataElements: [],
   names: [],
   addresses: [],
@@ -137,7 +150,7 @@ export const RITA_ACKROYD_WITHOUT_ENROLLMENTS = {
   enrollments: [],
 };
 
-const projectsForSelectMock = {
+export const projectsForSelectMock = {
   request: {
     query: GetPickListDocument,
     variables: {
@@ -195,102 +208,105 @@ const projectsForSelectMock = {
         p.__typename = 'PickListOption';
         p.initialSelected = false;
         p.groupCode = null;
+        p.helperText = null;
+        p.numericValue = null;
         return p;
       }),
     },
   },
 };
 
-const clientSearchMock = {
-  request: {
-    query: SearchClientsDocument,
-    variables: {
-      offset: 0,
-      input: { textSearch: 'ack' },
-      limit: 3,
-    },
-  },
-  result: {
-    data: {
-      offset: 0,
-      limit: 3,
-      hasMoreAfter: true,
-      hasMoreBefore: false,
-      nodesCount: 4,
-      pagesCount: 2,
-      nodes: [
-        RITA_ACKROYD,
-        {
-          id: '9998',
-          personalId: '9999',
-          ssnSerial: '0002',
-          firstName: 'Lennart',
-          lastName: 'Acker',
-          dob: '1980-03-20',
-          dateUpdated: '2022-07-27T15:14:29.062',
-        },
-        {
-          id: '9997',
-          personalId: '9999',
-          ssnSerial: '0003',
-          firstName: 'Jane',
-          lastName: 'Ackman',
-          dob: '1980-03-20',
-          dateUpdated: '2022-07-27T15:14:29.062',
-        },
-      ],
-    },
-  },
-};
+// Not used-- keeping around in case we add a storybook story with client search?
+// const clientSearchMock = {
+//   request: {
+//     query: SearchClientsDocument,
+//     variables: {
+//       offset: 0,
+//       input: { textSearch: 'ack' },
+//       limit: 3,
+//     },
+//   },
+//   result: {
+//     data: {
+//       offset: 0,
+//       limit: 3,
+//       hasMoreAfter: true,
+//       hasMoreBefore: false,
+//       nodesCount: 4,
+//       pagesCount: 2,
+//       nodes: [
+//         RITA_ACKROYD,
+//         {
+//           id: '9998',
+//           personalId: '9999',
+//           ssnSerial: '0002',
+//           firstName: 'Lennart',
+//           lastName: 'Acker',
+//           dob: '1980-03-20',
+//           dateUpdated: '2022-07-27T15:14:29.062',
+//         },
+//         {
+//           id: '9997',
+//           personalId: '9999',
+//           ssnSerial: '0003',
+//           firstName: 'Jane',
+//           lastName: 'Ackman',
+//           dob: '1980-03-20',
+//           dateUpdated: '2022-07-27T15:14:29.062',
+//         },
+//       ],
+//     },
+//   },
+// };
 
-const clientSearchMockNextPage = {
-  request: {
-    query: SearchClientsDocument,
-    variables: {
-      input: { textSearch: 'ack' },
-      limit: 3,
-      offset: 3,
-    },
-  },
-  result: {
-    data: {
-      offset: 4,
-      limit: 3,
-      hasMoreAfter: true,
-      hasMoreBefore: false,
-      nodesCount: 4,
-      pagesCount: 2,
-      nodes: [
-        {
-          id: '9996',
-          personalId: '9999',
-          ssnSerial: '0004',
-          firstName: 'Rita',
-          lastName: 'Acker',
-          dob: '1980-03-20',
-          enrollments: null,
-          dateUpdated: '2022-07-27T15:14:29.062',
-        },
-      ],
-    },
-  },
-};
+// const clientSearchMockNextPage = {
+//   request: {
+//     query: SearchClientsDocument,
+//     variables: {
+//       input: { textSearch: 'ack' },
+//       limit: 3,
+//       offset: 3,
+//     },
+//   },
+//   result: {
+//     data: {
+//       offset: 4,
+//       limit: 3,
+//       hasMoreAfter: true,
+//       hasMoreBefore: false,
+//       nodesCount: 4,
+//       pagesCount: 2,
+//       nodes: [
+//         {
+//           id: '9996',
+//           personalId: '9999',
+//           ssnSerial: '0004',
+//           firstName: 'Rita',
+//           lastName: 'Acker',
+//           dob: '1980-03-20',
+//           enrollments: null,
+//           dateUpdated: '2022-07-27T15:14:29.062',
+//         },
+//       ],
+//     },
+//   },
+// };
 
-const clientLookupMock = {
-  request: {
-    query: GetClientDocument,
-    variables: {
-      id: '9999',
-    },
-  },
-  result: {
-    data: {
-      client: RITA_ACKROYD,
-    },
-  },
-};
+// const clientLookupMock = {
+//   request: {
+//     query: GetClientDocument,
+//     variables: {
+//       id: '9999',
+//     },
+//   },
+//   result: {
+//     data: {
+//       client: RITA_ACKROYD,
+//     },
+//   },
+// };
 
-const clientImageLookupMock = {
+export const clientImageLookupMock = {
   request: {
     query: GetClientImageDocument,
     variables: {
@@ -307,6 +323,10 @@ const clientImageLookupMock = {
           id: 1,
           contentType: 'image/jpeg',
           base64: MOCK_IMAGE,
+        },
+        access: {
+          canEditClient: true,
+          canViewClientPhoto: true,
         },
       },
     },
@@ -386,7 +406,7 @@ export const enrollmentWithHoHMock = {
   },
 };
 
-const createDirectUploadMock = {
+export const createDirectUploadMock = {
   request: {
     query: CreateDirectUploadMutationDocument,
     variables: {
@@ -412,7 +432,7 @@ const createDirectUploadMock = {
   },
 };
 
-const getFileMock = {
+export const getFileMock = {
   request: {
     query: GetFileDocument,
     variables: {
@@ -458,7 +478,7 @@ export const getClientPermissionMocks = {
       client: {
         __typename: 'Client',
         id: RITA_ACKROYD.id,
-        access: CLIENT_ACCESS_MOCK,
+        access: clientAccessMock,
       },
     },
   },
@@ -474,19 +494,14 @@ export const clientDetailFormsMock = {
   },
 };
 
-const mocks: any[] = [
-  projectsForSelectMock,
-  clientSearchMock,
-  clientSearchMockNextPage,
-  clientLookupMock,
-  clientImageLookupMock,
-  clientWithEnrollmentsMock,
-  clientWithoutEnrollmentsMock,
-  enrollmentWithHoHMock,
-  createDirectUploadMock,
-  getFileMock,
-  getClientPermissionMocks,
-  clientDetailFormsMock,
-];
-
-export default mocks;
+export const getRootPermissionsMock = {
+  request: {
+    query: GetRootPermissionsDocument,
+    variables: {},
+  },
+  result: {
+    data: {
+      access: rootAccessMock,
+    },
+  },
+};

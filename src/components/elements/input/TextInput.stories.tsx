@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { ComponentStory, Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import TextInput from './TextInput';
 
@@ -16,17 +16,20 @@ export default {
   ],
 } as Meta<typeof TextInput>;
 
-const Template: ComponentStory<typeof TextInput> = (args) => (
-  <TextInput {...args} />
-);
-export const Default = Template.bind({});
-export const Labeled = Template.bind({});
-Labeled.args = { label: 'Label', helperText: 'Helper text here' };
+type Story = StoryObj<typeof TextInput>;
 
-export const LabeledWithElement = Template.bind({});
-LabeledWithElement.args = {
-  label: <Typography variant='h4'>H4 label</Typography>,
+export const Default: Story = {};
+export const Labeled: Story = {
+  args: {
+    label: 'Label',
+    helperText: 'Helper text here',
+  },
 };
-
-export const MaxLength = Template.bind({});
-MaxLength.args = { label: 'Max string length', max: 6 };
+export const LabeledWithElement: Story = {
+  args: {
+    label: <Typography variant='h4'>H4 label</Typography>,
+  },
+};
+export const MaxLength: Story = {
+  args: { label: 'Max string length', max: 6 },
+};

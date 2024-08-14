@@ -24,8 +24,7 @@ export const parameters = {
   },
   apolloClient: {
     MockedProvider,
-    mocks: [], // add to stories
-    // mocks, // this
+    mocks: [], // mocks are passed in each story
     addTypename: false,
   },
 };

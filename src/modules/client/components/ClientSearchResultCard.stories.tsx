@@ -3,6 +3,8 @@ import { Meta, StoryObj } from '@storybook/react';
 import ClientSearchResultCard from './ClientSearchResultCard';
 
 import {
+  clientImageLookupMock,
+  clientWithEnrollmentsMock,
   getClientPermissionMocks,
   RITA_ACKROYD,
 } from '@/test/__mocks__/requests';
@@ -13,7 +15,11 @@ export default {
   component: ClientSearchResultCard,
   parameters: {
     apolloClient: {
-      mocks: [getClientPermissionMocks],
+      mocks: [
+        getClientPermissionMocks,
+        clientWithEnrollmentsMock,
+        clientImageLookupMock,
+      ],
     },
   },
 } as Meta<typeof ClientSearchResultCard>;
