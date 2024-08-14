@@ -34,6 +34,7 @@ import {
   slugifyItemLabel,
   validComponentsForType,
 } from '@/modules/formBuilder/formBuilderUtil';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentRole,
@@ -349,12 +350,14 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             </>
           )}
         </Section>
-        <Section
-          title='Initial Value'
-          hidden={!isQuestionItem} //schema allows initial values for display items too, but we should  get rid of that. not showing it in the ui. we can manage in json
-        >
-          <InitialValue control={control} itemType={itemTypeValue} />
-        </Section>
+        <RootPermissionsFilter permissions='canAdministrateConfig'>
+          <Section
+            title='Initial Value'
+            hidden={!isQuestionItem} //schema allows initial values for display items too, but we should  get rid of that. not showing it in the ui. we can manage in json
+          >
+            <InitialValue control={control} itemType={itemTypeValue} />
+          </Section>
+        </RootPermissionsFilter>
         <Section
           title='Min/Max Bounds'
           hidden={
@@ -364,16 +367,18 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         >
           <ValueBounds control={control} itemMap={itemMap} />
         </Section>
-        <Section
-          title='Autofill'
-          hidden={!isQuestionItem || !determineAutofillField(itemTypeValue)}
-        >
-          <AutofillProperties
-            control={control}
-            itemMap={itemMap}
-            itemType={itemTypeValue}
-          />
-        </Section>
+        <RootPermissionsFilter permissions='canAdministrateConfig'>
+          <Section
+            title='Autofill'
+            hidden={!isQuestionItem || !determineAutofillField(itemTypeValue)}
+          >
+            <AutofillProperties
+              control={control}
+              itemMap={itemMap}
+              itemType={itemTypeValue}
+            />
+          </Section>
+        </RootPermissionsFilter>
         <Section title='Advanced Properties' noDivider>
           {componentOverridePicklist.length > 0 && (
             <ControlledSelect

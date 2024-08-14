@@ -9,6 +9,8 @@ import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { ItemMap } from '@/modules/form/types';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { BoundType, ItemType, ValidationSeverity } from '@/types/gqlTypes';
 
 interface Props {
@@ -34,6 +36,11 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
     // you can only use another question as a bound if it has the same type
     filterItems: (item) => item.type === fieldType,
   });
+
+  const [canAdministrateConfig] = useHasRootPermissions([
+    'canAdministrateConfig',
+  ]);
+
   return (
     <Stack gap={2}>
       <Stack direction='row' gap={2}>
@@ -62,15 +69,20 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
           fullWidth
         />
       </Stack>
-      <Typography variant='body2'>
-        Enter <b>one</b> of the below fields to specify the{' '}
-        {labelPrefix.toLowerCase()} value:
-      </Typography>
+
+      <RootPermissionsFilter permissions='canAdministrateConfig'>
+        <Typography variant='body2'>
+          Enter <b>one</b> of the below fields to specify the{' '}
+          {labelPrefix.toLowerCase()} value:
+        </Typography>
+      </RootPermissionsFilter>
+
       {fieldType === ItemType.Date && (
         <Controller
           name={`bounds.${index}.valueDate`}
           control={control}
-          render={({ field: { ref, ...field } }) => (
+          rules={{ required: !canAdministrateConfig }}
+          render={({ field: { ref, ...field }, fieldState: { error } }) => (
             <DatePicker
               {...field}
               textInputProps={{ inputRef: ref }}
@@ -79,6 +91,8 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
                 field.onChange(date ? formatDateForGql(date) : '')
               }
               label={`${labelPrefix} Date`}
+              error={!!error}
+              helperText={error?.type === 'required' ? 'Required' : undefined}
             />
           )}
         />
@@ -87,46 +101,49 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
         [ItemType.Integer, ItemType.Currency].includes(fieldType) && (
           <ControlledTextInput
             control={control}
+            rules={{ required: !canAdministrateConfig }}
             name={`bounds.${index}.valueNumber`}
             type='number'
             label={`${labelPrefix} Value`}
           />
         )}
 
-      <ControlledSelect
-        name={`bounds.${index}.valueLocalConstant`}
-        control={control}
-        label={`Local Constant for ${labelPrefix} Value`}
-        placeholder='Select local constant'
-        options={localConstantsPickList}
-      />
-      {itemPickList.length > 0 && (
+      <RootPermissionsFilter permissions='canAdministrateConfig'>
         <ControlledSelect
-          name={`bounds.${index}.question`}
+          name={`bounds.${index}.valueLocalConstant`}
           control={control}
-          label={`Dependent Question for ${labelPrefix} Value`}
-          placeholder='Select question'
-          helperText='The response to this question will be the bound value'
-          options={itemPickList}
+          label={`Local Constant for ${labelPrefix} Value`}
+          placeholder='Select local constant'
+          options={localConstantsPickList}
         />
-      )}
+        {itemPickList.length > 0 && (
+          <ControlledSelect
+            name={`bounds.${index}.question`}
+            control={control}
+            label={`Dependent Question for ${labelPrefix} Value`}
+            placeholder='Select question'
+            helperText='The response to this question will be the bound value'
+            options={itemPickList}
+          />
+        )}
 
-      <Typography variant='body2'>
-        Optionally specify an offset for the bound. For example, specifying a
-        maximum with value "Today" with offset "3" will set the maximum bound to
-        3 days in the future.
-      </Typography>
-      <ControlledTextInput
-        control={control}
-        name={`bounds.${index}.offset`}
-        type='number'
-        label='Offset'
-        helperText={
-          fieldType === ItemType.Date
-            ? 'Number of days to offset the bound value'
-            : 'Number to offset the bound value'
-        }
-      />
+        <Typography variant='body2'>
+          Optionally specify an offset for the bound. For example, specifying a
+          maximum with value "Today" with offset "3" will set the maximum bound
+          to 3 days in the future.
+        </Typography>
+        <ControlledTextInput
+          control={control}
+          name={`bounds.${index}.offset`}
+          type='number'
+          label='Offset'
+          helperText={
+            fieldType === ItemType.Date
+              ? 'Number of days to offset the bound value'
+              : 'Number to offset the bound value'
+          }
+        />
+      </RootPermissionsFilter>
     </Stack>
   );
 };
