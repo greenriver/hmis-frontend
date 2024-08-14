@@ -19,7 +19,7 @@ interface Args {
 }
 
 /**
- * Fetch FormDefinition to use for an Assessment.
+ * Fetch the FormDefinition to use for performing a NEW Assessment.
  */
 const useAssessmentFormDefinition = ({
   projectId,
