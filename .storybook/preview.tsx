@@ -10,7 +10,6 @@ import '../src/index.css';
 import theme from '../src/config/theme';
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
   layout: 'padded',
   controls: {
     matchers: {
@@ -35,3 +34,4 @@ export const decorators = [
     </ThemeProvider>
   ),
 ];
+export const tags = ['autodocs'];
