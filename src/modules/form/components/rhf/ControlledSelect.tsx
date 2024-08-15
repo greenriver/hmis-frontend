@@ -23,7 +23,7 @@ export type ControlledSelectProps = Omit<
 
 interface Props extends ControlledSelectProps {
   placeholder?: string;
-  afterChange?: VoidFunction;
+  onChange?: (option: PickListOption | null) => void;
   setValueAs?: (option: PickListOption | null) => any; // allow transform PickListOption to desired value (to support boolean)
 }
 
@@ -38,7 +38,7 @@ const ControlledSelect: React.FC<Props> = ({
   loading,
   placeholder,
   helperText,
-  afterChange,
+  onChange,
   setValueAs,
   ...props
 }) => {
@@ -84,7 +84,7 @@ const ControlledSelect: React.FC<Props> = ({
       onChange={(_event, option) => {
         const val = setValueAs ? setValueAs(option) : option?.code || null;
         field.onChange(val);
-        if (afterChange) afterChange();
+        if (onChange) onChange(value || null);
       }}
       textInputProps={{
         name: field.name,

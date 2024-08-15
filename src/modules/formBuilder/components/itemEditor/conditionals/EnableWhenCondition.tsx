@@ -206,7 +206,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 rules={{
                   required: 'Local Constant or Dependent Question is required',
                 }}
-                afterChange={() => onChangeOperator(null)}
+                onChange={() => onChangeOperator(null)}
               />
             )}
             {advanced.localConstant && (
@@ -220,7 +220,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 }}
                 options={localConstantsPickList}
                 helperText="Local constant who's value will determine whether the condition is met"
-                afterChange={() => onChangeOperator(null)}
+                onChange={() => onChangeOperator(null)}
               />
             )}
           </Stack>
