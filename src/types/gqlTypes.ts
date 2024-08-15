@@ -257,8 +257,8 @@ export type Assessment = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated?: Maybe<Scalars['ISO8601DateTime']['output']>;
   /**
-   * Definition to use for viewing the FormDefinition. If
-   * upgraded_definition_for_editing is nil, then it can also be used for editing.
+   * Definition to use for viewing the assessment. If upgradedDefinitionForEditing
+   * is nil, then it should also be used for editing.
    */
   definition: FormDefinition;
   disabilityGroup?: Maybe<DisabilityGroup>;
@@ -273,7 +273,7 @@ export type Assessment = {
   lockVersion: Scalars['Int']['output'];
   role: AssessmentRole;
   /**
-   * Most recent published Definition to use for Editing the FormDefinition. Only
+   * Most recent published Definition to use for editing the assessment. Only
    * present if the original form definition was retired.
    */
   upgradedDefinitionForEditing?: Maybe<FormDefinition>;
@@ -6432,8 +6432,6 @@ export enum RelatedRecordType {
   EmploymentEducation = 'EMPLOYMENT_EDUCATION',
   /** Enrollment */
   Enrollment = 'ENROLLMENT',
-  /** EnrollmentCoc */
-  EnrollmentCoc = 'ENROLLMENT_COC',
   /** Event */
   Event = 'EVENT',
   /** Exit */
