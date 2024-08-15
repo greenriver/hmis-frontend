@@ -10,7 +10,6 @@ import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { usePickList } from '@/modules/form/hooks/usePickList';
 import { ItemMap } from '@/modules/form/types';
-import { localResolvePickList } from '@/modules/form/util/formUtil';
 import {
   COMPARABLE_ITEM_TYPES,
   getItemCategory,
@@ -114,30 +113,10 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     [itemMap, state?.question]
   );
 
-  const localPickList = useMemo(() => {
-    if (dependentItem?.pickListReference)
-      return localResolvePickList(dependentItem?.pickListReference);
-  }, [dependentItem]);
-
-  const { pickList: remotePickList, loading: remotePickListLoading } =
+  const { pickList: dependentItemPickList = [], loading: pickListLoading } =
     usePickList({
-      item: {
-        linkId: 'fake',
-        type: ItemType.Choice,
-        pickListReference: dependentItem?.pickListReference,
-      },
-      fetchOptions: {
-        skip:
-          !dependentItem || !dependentItem.pickListReference || !!localPickList,
-      },
+      item: dependentItem || { linkId: 'fake', type: ItemType.Choice },
     });
-
-  const dependentItemPickList = useMemo(() => {
-    if (!dependentItem) return;
-    if (dependentItem.pickListOptions) return dependentItem.pickListOptions;
-    if (localPickList && localPickList.length > 0) return localPickList;
-    if (remotePickList && remotePickList.length > 0) return remotePickList;
-  }, [dependentItem, localPickList, remotePickList]);
 
   const enableOperatorPickList = useMemo(() => {
     // TODO handle local constant instead of dependentItem
@@ -261,9 +240,9 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
               />
             )}
             {answerInputType === 'answerCode' &&
-              (dependentItemPickList || remotePickListLoading ? (
+              (dependentItemPickList || pickListLoading ? (
                 <ControlledSelect
-                  loading={remotePickListLoading}
+                  loading={pickListLoading}
                   name={`${enableWhenPath}.${index}.answerCode`}
                   control={control}
                   label='Response Value'
