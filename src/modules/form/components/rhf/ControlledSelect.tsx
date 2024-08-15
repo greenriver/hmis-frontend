@@ -1,3 +1,4 @@
+import { isNil } from 'lodash-es';
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
 import { Control, useController } from 'react-hook-form';
@@ -23,6 +24,7 @@ export type ControlledSelectProps = Omit<
 interface Props extends ControlledSelectProps {
   placeholder?: string;
   onChange?: (option: PickListOption | null) => void;
+  setValueAs?: (option: PickListOption | null) => any; // allow transform PickListOption to desired value (to support boolean)
 }
 
 // React-Hook-Form wrapper around GenericSelect.
@@ -37,6 +39,7 @@ const ControlledSelect: React.FC<Props> = ({
   placeholder,
   helperText,
   onChange,
+  setValueAs,
   ...props
 }) => {
   const {
@@ -59,10 +62,13 @@ const ControlledSelect: React.FC<Props> = ({
   // display it anyway as the selected option. This could occur if there is a value
   // set that is not in the options list.
   const valueOption = useMemo(() => {
-    if (!field.value) return null;
+    if (isNil(field.value) || field.value === '') return null;
 
     return (
-      options.find(({ code }) => code === field.value) || { code: field.value }
+      // Find the option with the same code as the field value. Use toString() to handle boolean values
+      options.find(({ code }) => code === field.value.toString()) || {
+        code: field.value,
+      }
     );
   }, [field.value, options]);
 
@@ -75,8 +81,9 @@ const ControlledSelect: React.FC<Props> = ({
     <GenericSelect<PickListOption, false, false>
       {...props}
       value={valueOption}
-      onChange={(_event, value) => {
-        field.onChange(value?.code || null);
+      onChange={(_event, option) => {
+        const val = setValueAs ? setValueAs(option) : option?.code || null;
+        field.onChange(val);
         if (onChange) onChange(value || null);
       }}
       textInputProps={{

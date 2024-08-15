@@ -1,11 +1,11 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { Controller, useController, useWatch } from 'react-hook-form';
+import { useController, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
-import YesNoRadio from '@/components/elements/input/YesNoRadio';
+import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -240,24 +240,17 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
         <Grid item xs={4}>
           <Stack gap={1}>
             {answerInputType === 'answerBoolean' && (
-              <Controller
+              <ControlledSelect
                 name={`${enableWhenPath}.${index}.answerBoolean`}
                 control={control}
-                shouldUnregister // clear value when un-mounted
-                rules={{ required: true }}
-                render={({
-                  field: { ref, ...field },
-                  fieldState: { error },
-                }) => (
-                  <YesNoRadio
-                    label='Value'
-                    error={!!error}
-                    helperText={
-                      error?.type === 'required' ? 'Required' : undefined
-                    }
-                    {...field}
-                  />
-                )}
+                label='Value'
+                options={[TRUE_OPT, FALSE_OPT]}
+                setValueAs={(option) => {
+                  if (option?.code === 'true') return true;
+                  if (option?.code === 'false') return false;
+                  return null;
+                }}
+                required
               />
             )}
             {answerInputType === 'answerCode' &&
