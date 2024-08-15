@@ -43,6 +43,7 @@
     ]
   },
   "resolutions": {
+    "jose": "^4.15.5",
     "ws": "^8.17.1"
   },
   "dependencies": {
