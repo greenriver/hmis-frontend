@@ -23,7 +23,7 @@ const ControlledRadioGroupInput: React.FC<Props> = ({
       name={name}
       control={control}
       shouldUnregister
-      rules={required ? { required: true } : {}}
+      rules={required ? { required: 'This field is required' } : {}}
       render={({
         field: { ref, value, onChange, ...field },
         fieldState: { error },
@@ -34,7 +34,7 @@ const ControlledRadioGroupInput: React.FC<Props> = ({
           value={options.find((o) => o.code === value)}
           onChange={(option) => onChange(option?.code)}
           error={!!error}
-          helperText={error?.type === 'required' ? 'Required' : undefined}
+          helperText={error?.message}
           {...field}
         />
       )}
