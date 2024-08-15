@@ -1,20 +1,25 @@
-import { ComponentStory, Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import HouseholdMemberTable from './HouseholdMemberTable';
 
-import { RITA_ACKROYD } from '@/test/__mocks__/requests';
+import { enrollmentWithHoHMock, RITA_ACKROYD } from '@/test/__mocks__/requests';
 
 export default {
   title: 'HouseholdMemberTable',
   component: HouseholdMemberTable,
+  parameters: {
+    dashboardContext: 'enrollment',
+    apolloClient: {
+      mocks: [enrollmentWithHoHMock],
+    },
+  },
 } as Meta<typeof HouseholdMemberTable>;
 
-const Template: ComponentStory<typeof HouseholdMemberTable> = (args) => (
-  <HouseholdMemberTable {...args} />
-);
+type Story = StoryObj<typeof HouseholdMemberTable>;
 
-export const Default = Template.bind({});
-Default.args = {
-  clientId: RITA_ACKROYD.id,
-  enrollmentId: '5',
+export const Default: Story = {
+  args: {
+    clientId: RITA_ACKROYD.id,
+    enrollmentId: '5',
+  },
 };

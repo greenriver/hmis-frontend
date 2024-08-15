@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import MobileMenuItem from '@/components/layout/nav/MobileMenuItem';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS } from '@/modules/admin/components/AdminDashboard';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
@@ -64,12 +63,14 @@ export const useActiveNavItem = () => {
   }, [pathname]);
 };
 
-const ToolbarMenu: React.FC = () => {
+interface ToolbarMenuProps {
+  mobile?: boolean;
+}
+const ToolbarMenu: React.FC<ToolbarMenuProps> = ({ mobile }) => {
   const activeItem = useActiveNavItem();
-  const isMobile = useIsMobile();
 
   return TOOLBAR_MENU_ITEMS.map((item) => {
-    let navItem = isMobile ? (
+    let navItem = mobile ? (
       <li key={item.id}>
         <MobileMenuItem
           title={item.title as string}
@@ -89,7 +90,7 @@ const ToolbarMenu: React.FC = () => {
           color: 'text.primary',
           backgroundColor:
             activeItem === item.activeItemPathIncludes
-              ? (theme: Theme) => alpha(theme.palette.primary.light, 0.12)
+              ? (theme: Theme) => alpha(theme.palette.links, 0.1)
               : undefined,
         }}
         key={item.id}

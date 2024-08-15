@@ -76,7 +76,7 @@ const DashboardContentNav: React.FC<Props> = ({
       <MobileMenu
         mobileNavIsOpen={mobileNavIsOpen}
         onCloseMobileMenu={handleCloseMobileMenu}
-        label={label}
+        navHeader={navHeader}
       >
         {children}
       </MobileMenu>
