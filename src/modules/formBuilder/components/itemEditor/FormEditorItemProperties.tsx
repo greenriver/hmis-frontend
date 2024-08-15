@@ -21,19 +21,20 @@ import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import SaveSlide from '@/modules/form/components/SaveSlide';
 import {
-  MAX_INPUT_AND_LABEL_WIDTH,
   getItemMap,
   localResolvePickList,
+  MAX_INPUT_AND_LABEL_WIDTH,
 } from '@/modules/form/util/formUtil';
 import ManagePickListOptions from '@/modules/formBuilder/components/itemEditor/pickLists/ManagePickListOptions';
 import {
-  COMPARABLE_ITEM_TYPES,
-  ItemCategory,
+  BOUNDABLE_ITEM_TYPES,
   determineAutofillField,
   getItemCategory,
+  ItemCategory,
   slugifyItemLabel,
   validComponentsForType,
 } from '@/modules/formBuilder/formBuilderUtil';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentRole,
@@ -349,31 +350,35 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             </>
           )}
         </Section>
-        <Section
-          title='Initial Value'
-          hidden={!isQuestionItem} //schema allows initial values for display items too, but we should  get rid of that. not showing it in the ui. we can manage in json
-        >
-          <InitialValue control={control} itemType={itemTypeValue} />
-        </Section>
+        <RootPermissionsFilter permissions='canAdministrateConfig'>
+          <Section
+            title='Initial Value'
+            hidden={!isQuestionItem} //schema allows initial values for display items too, but we should  get rid of that. not showing it in the ui. we can manage in json
+          >
+            <InitialValue control={control} itemType={itemTypeValue} />
+          </Section>
+        </RootPermissionsFilter>
         <Section
           title='Min/Max Bounds'
           hidden={
             // bounds are supported by numbers and dates only
-            !COMPARABLE_ITEM_TYPES.includes(itemTypeValue)
+            !BOUNDABLE_ITEM_TYPES.includes(itemTypeValue)
           }
         >
           <ValueBounds control={control} itemMap={itemMap} />
         </Section>
-        <Section
-          title='Autofill'
-          hidden={!isQuestionItem || !determineAutofillField(itemTypeValue)}
-        >
-          <AutofillProperties
-            control={control}
-            itemMap={itemMap}
-            itemType={itemTypeValue}
-          />
-        </Section>
+        <RootPermissionsFilter permissions='canAdministrateConfig'>
+          <Section
+            title='Autofill'
+            hidden={!isQuestionItem || !determineAutofillField(itemTypeValue)}
+          >
+            <AutofillProperties
+              control={control}
+              itemMap={itemMap}
+              itemType={itemTypeValue}
+            />
+          </Section>
+        </RootPermissionsFilter>
         <Section title='Advanced Properties' noDivider>
           {componentOverridePicklist.length > 0 && (
             <ControlledSelect

@@ -135,8 +135,14 @@ const FormBuilderPalette: React.FC<FormBuilderPaletteType> = ({
     >
       <Stack gap={1}>
         {Object.entries(FORM_ITEM_PALETTE)
-          // TODO - Object is a special case, remove it from the list for now until we support it
-          .filter(([key]) => key !== ItemType.Object)
+          // Remove Image, File, and Object from the list for now until we add support
+          // https://github.com/open-path/Green-River/issues/6401
+          .filter(
+            ([key]) =>
+              ![ItemType.Object, ItemType.Image, ItemType.File].includes(
+                key as ItemType
+              )
+          )
           .map(([key, paletteItem]) => (
             <PaletteButton
               key={key}

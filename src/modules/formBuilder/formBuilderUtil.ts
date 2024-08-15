@@ -356,3 +356,11 @@ export const COMPARABLE_ITEM_TYPES = [
   ItemType.Currency,
   ItemType.Date,
 ];
+
+export const BOUNDABLE_ITEM_TYPES = [
+  ItemType.String, // bound sets min/max chars
+  ItemType.Text, // bound sets min/max chars
+  ItemType.Integer,
+  ItemType.Currency,
+  ItemType.Date,
+];
