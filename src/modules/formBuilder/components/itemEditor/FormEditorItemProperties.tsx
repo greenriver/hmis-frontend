@@ -181,9 +181,10 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
   return (
     <form
       // handleSubmit validates input before calling onSubmit
-      onSubmit={handleSubmit((item) =>
-        onSave(item as FormItem, initialItem.linkId)
-      )}
+      onSubmit={handleSubmit((item) => {
+        // console.log(item);
+        return onSave(item as FormItem, initialItem.linkId);
+      })}
     >
       <Box sx={{ p: 2 }}>
         {itemTypeValue !== ItemType.Group && (
