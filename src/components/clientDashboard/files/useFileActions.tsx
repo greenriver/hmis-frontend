@@ -97,7 +97,7 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
     () =>
       ({
         getActionsForFile,
-      } as const),
+      }) as const,
     [getActionsForFile]
   );
 };

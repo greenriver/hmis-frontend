@@ -39,49 +39,48 @@ const InputGroup = ({
   );
 
   const childRenderFunc = useCallback(
-    (item: FormItem, index: number) => (children: ReactNode) =>
-      (
-        <Box
-          key={item.linkId}
-          sx={{
-            backgroundColor: (theme) =>
-              index & 1 ? undefined : theme.palette.grey[100],
-            pl: 1,
-            pb: 0.5,
-            pr: 0.5,
-            ...(viewOnly
-              ? {
-                  '.MuiFormLabel-root .MuiTypography-root': {
-                    textWrap: 'wrap',
+    (item: FormItem, index: number) => (children: ReactNode) => (
+      <Box
+        key={item.linkId}
+        sx={{
+          backgroundColor: (theme) =>
+            index & 1 ? undefined : theme.palette.grey[100],
+          pl: 1,
+          pb: 0.5,
+          pr: 0.5,
+          ...(viewOnly
+            ? {
+                '.MuiFormLabel-root .MuiTypography-root': {
+                  textWrap: 'wrap',
+                },
+                '.MuiTypography-root.HmisForm-notCollectedText': {
+                  textWrap: 'nowrap',
+                },
+              }
+            : {
+                // full width so entire label area is clickable for checkboxes
+                '.MuiFormControl-root': { width: '100%' },
+                '.MuiFormControlLabel-root': {
+                  width: '100%',
+                  '.MuiTypography-root': {
+                    py: 0.3,
                   },
-                  '.MuiTypography-root.HmisForm-notCollectedText': {
-                    textWrap: 'nowrap',
-                  },
-                }
-              : {
-                  // full width so entire label area is clickable for checkboxes
-                  '.MuiFormControl-root': { width: '100%' },
-                  '.MuiFormControlLabel-root': {
-                    width: '100%',
-                    '.MuiTypography-root': {
-                      py: 0.3,
-                    },
-                  },
-                }),
-            ...(item.type === ItemType.String && !viewOnly
-              ? {
-                  pt: 0.5,
-                  label: {
-                    width: '100%',
-                  },
-                }
-              : undefined),
-            ...rowSx,
-          }}
-        >
-          {children}
-        </Box>
-      ),
+                },
+              }),
+          ...(item.type === ItemType.String && !viewOnly
+            ? {
+                pt: 0.5,
+                label: {
+                  width: '100%',
+                },
+              }
+            : undefined),
+          ...rowSx,
+        }}
+      >
+        {children}
+      </Box>
+    ),
     [rowSx, viewOnly]
   );
 

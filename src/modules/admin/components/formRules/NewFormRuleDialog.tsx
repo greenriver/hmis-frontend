@@ -1,4 +1,5 @@
 import {
+  Alert,
   Card,
   DialogActions,
   DialogContent,
@@ -13,6 +14,7 @@ import CommonDialog from '@/components/elements/CommonDialog';
 import TextInput from '@/components/elements/input/TextInput';
 import theme from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import FormRuleSelectField from '@/modules/admin/components/formRules/FormRuleSelectField';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -128,6 +130,25 @@ const NewFormRuleDialog: React.FC<Props> = ({
     },
   });
 
+  // This would be better handled with real form validation
+  const [validationError, setValidationError] = useState<string>();
+  const handleSubmit = () => {
+    let error: string | undefined = undefined;
+    if (formRole === FormRole.Service) {
+      if (rule.serviceCategoryId && rule.serviceTypeId) {
+        error =
+          'You cannot choose both Service Category and Service Type. Please only choose one';
+      } else if (!(rule.serviceCategoryId || rule.serviceTypeId)) {
+        error = 'One of either Service Category or Service Type are required';
+      }
+    }
+
+    setValidationError(error);
+    if (!error) {
+      createFormRule();
+    }
+  };
+
   const { conditionTypePickList, conditions, conditionsAvailable } =
     useMemo(() => {
       const pickList: PickListOption[] = [
@@ -136,13 +157,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
         { code: 'organizationId', label: 'Organization' },
         { code: 'funder', label: 'Funding Source' },
       ];
-
-      if (formRole === FormRole.Service) {
-        pickList.push(
-          { code: 'serviceTypeId', label: 'Service Type' },
-          { code: 'serviceCategoryId', label: 'Service Category' }
-        );
-      }
 
       const conditions = pickList.map((conditionOption) => {
         const conditionType = conditionOption.code as ConditionType;
@@ -161,7 +175,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
         conditions,
         conditionsAvailable,
       };
-    }, [formRole, rule]);
+    }, [rule]);
 
   const { pickList: projectList } = usePickList({
     item: {
@@ -208,6 +222,17 @@ const NewFormRuleDialog: React.FC<Props> = ({
 
   if (error) throw error;
 
+  const onChangeRule = (
+    conditionType: ConditionType,
+    option: PickListOption | PickListOption[] | null
+  ) => {
+    if (isPickListOption(option)) {
+      setRule({ ...rule, [conditionType]: option.code });
+    } else {
+      setRule({ ...rule, [conditionType]: '' });
+    }
+  };
+
   return (
     <CommonDialog
       open={open}
@@ -219,9 +244,28 @@ const NewFormRuleDialog: React.FC<Props> = ({
         New rule for: <b>{formTitle}</b>
       </DialogTitle>
       <DialogContent>
-        <Stack gap={2} direction='row' sx={{ mt: 2, mb: 1, display: 'flex' }}>
-          <FormRuleLabelTypography>Applies to</FormRuleLabelTypography>
+        <Stack gap={2} sx={{ my: 2 }}>
+          {validationError && <Alert severity='error'>{validationError}</Alert>}
+          {formRole === FormRole.Service && (
+            <>
+              <FormRuleSelectField
+                rule={rule}
+                label='Applies to Service Category'
+                name='serviceCategoryId'
+                onChange={(option) => onChangeRule('serviceCategoryId', option)}
+                options={pickListMap.serviceCategoryId}
+              />
+              <FormRuleSelectField
+                rule={rule}
+                label='Applies to Service Type'
+                name='serviceTypeId'
+                onChange={(option) => onChangeRule('serviceTypeId', option)}
+                options={pickListMap.serviceTypeId}
+              />
+            </>
+          )}
           <FormSelect
+            label='Applies to client type'
             sx={{ flexGrow: 1 }}
             value={{
               code: rule.dataCollectedAbout || DataCollectedAbout.AllClients,
@@ -300,13 +344,9 @@ const NewFormRuleDialog: React.FC<Props> = ({
                           conditionType.replace(/Id$/, '')
                         )}`}
                         options={pickListMap[conditionType]}
-                        onChange={(_event, option) => {
-                          if (isPickListOption(option)) {
-                            setRule({ ...rule, [conditionType]: option.code });
-                          } else {
-                            setRule({ ...rule, [conditionType]: '' });
-                          }
-                        }}
+                        onChange={(_, option) =>
+                          onChangeRule(conditionType, option)
+                        }
                       />
                     </Grid>
                   </Grid>
@@ -345,7 +385,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
       <DialogActions>
         <FormDialogActionContent
           submitButtonText='Create Rule'
-          onSubmit={() => createFormRule()}
+          onSubmit={handleSubmit}
           onDiscard={onCloseDialog}
           submitLoading={loading}
         />

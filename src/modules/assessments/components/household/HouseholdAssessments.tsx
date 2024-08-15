@@ -131,8 +131,8 @@ const HouseholdAssessments: React.FC<Props> = ({
             role === AssessmentRole.Intake
               ? !enrollment.inProgress
               : role === AssessmentRole.Exit
-              ? !!enrollment.exitDate
-              : undefined;
+                ? !!enrollment.exitDate
+                : undefined;
 
           const status = calculateAssessmentStatus(assessment);
           const tabData: TabDefinition = {

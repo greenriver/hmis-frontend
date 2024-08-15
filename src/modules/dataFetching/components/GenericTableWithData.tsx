@@ -1,4 +1,5 @@
 import {
+  OperationVariables,
   TypedDocumentNode,
   useQuery,
   WatchQueryFetchPolicy,
@@ -46,7 +47,7 @@ export interface Props<
   QueryVariables,
   RowDataType,
   FilterOptionsType = Record<string, any>,
-  SortOptionsType = Record<string, string>
+  SortOptionsType = Record<string, string>,
 > extends Omit<
     GenericTableProps<RowDataType>,
     'rows' | 'tablePaginationProps' | 'loading' | 'paginated' | 'noData'
@@ -98,10 +99,10 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
 
 const GenericTableWithData = <
   Query,
-  QueryVariables,
+  QueryVariables extends OperationVariables,
   RowDataType extends { id: string },
   FilterOptionsType extends Record<string, any> = Record<string, any>,
-  SortOptionsType extends Record<string, string> = Record<string, string>
+  SortOptionsType extends Record<string, string> = Record<string, string>,
 >({
   filters,
   defaultFilterValues = {},

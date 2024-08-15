@@ -87,7 +87,7 @@ const OmniSearch: React.FC = () => {
 
     return {
       recentItems: recentItems.map(
-        (item) => ({ id: item.id, item, __typename: 'RecentItem' } as const)
+        (item) => ({ id: item.id, item, __typename: 'RecentItem' }) as const
       ),
       clients,
       seeMoreOptions: numClients > MAX_CLIENT_RESULTS ? [seeMoreOption] : [],
@@ -354,23 +354,26 @@ const OmniSearch: React.FC = () => {
                             <Divider />
                           </Box>
                           {optionGroup.map((option) => {
+                            // it's a run-time error pass key in through spread
+                            const { key, ...optionProps } =
+                              values.getOptionProps({
+                                option,
+                                index: options.findIndex((e) => {
+                                  return (
+                                    getKeyForOption(e) ===
+                                    getKeyForOption(option)
+                                  );
+                                }),
+                              });
                             return (
                               <MenuItem
-                                key={`${option.__typename}:${option.id}`}
                                 selected={
                                   option.__typename !== 'SeeMore' &&
                                   getOptionTargetPath(option) ===
                                     location.pathname
                                 }
-                                {...values.getOptionProps({
-                                  option,
-                                  index: options.findIndex((e) => {
-                                    return (
-                                      getKeyForOption(e) ===
-                                      getKeyForOption(option)
-                                    );
-                                  }),
-                                })}
+                                key={key}
+                                {...optionProps}
                               >
                                 {getOptionLabel(option)}
                               </MenuItem>

@@ -36,7 +36,7 @@ const RelationshipToHohSelect = ({
         ({
           value,
           label,
-        } as Option)
+        }) as Option
     );
     return options;
   }, [showDataNotCollected]);
