@@ -22,6 +22,7 @@ const config = {
     '@storybook/addon-interactions',
     '@storybook/addon-mdx-gfm',
     'storybook-addon-apollo-client',
+    '@chromatic-com/storybook',
   ],
   framework: {
     name: '@storybook/react-vite',
@@ -47,11 +48,6 @@ const config = {
       },
     },
   },
-  features: {
-    storyStoreV7: true,
-  },
-  docs: {
-    autodocs: true,
-  },
+  docs: {},
 };
 export default config;

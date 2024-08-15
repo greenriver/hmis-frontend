@@ -1,4 +1,4 @@
-import { StoryFn, Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import ClientSsn from './ClientSsn';
 
@@ -9,9 +9,10 @@ export default {
   component: ClientSsn,
 } as Meta<typeof ClientSsn>;
 
-const Template: StoryFn<typeof ClientSsn> = (args) => <ClientSsn {...args} />;
+type Story = StoryObj<typeof ClientSsn>;
 
-export const Default = Template.bind({});
-Default.args = {
-  client: { ssn: '000112222' } as ClientFieldsFragment,
+export const Default: Story = {
+  args: {
+    client: { ssn: '000112222' } as ClientFieldsFragment,
+  },
 };
