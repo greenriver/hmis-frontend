@@ -19,17 +19,14 @@ export type ControlledSelectProps = Omit<
   rules?: RhfRules;
   required?: boolean;
   helperText?: ReactNode;
-};
-
-interface Props extends ControlledSelectProps {
   placeholder?: string;
   onChange?: (option: PickListOption | null) => void;
   setValueAs?: (option: PickListOption | null) => any; // allow transform PickListOption to desired value (to support boolean)
-}
+};
 
 // React-Hook-Form wrapper around GenericSelect.
 // This component stores a string as the field value, but passes a PickListOption to the GenericSelect. (Logic that is redundant with TableFilterItemSelect, among others)
-const ControlledSelect: React.FC<Props> = ({
+const ControlledSelect: React.FC<ControlledSelectProps> = ({
   name,
   control,
   rules,
