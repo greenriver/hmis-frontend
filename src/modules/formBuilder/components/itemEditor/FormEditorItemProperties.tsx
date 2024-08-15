@@ -27,7 +27,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import ManagePickListOptions from '@/modules/formBuilder/components/itemEditor/pickLists/ManagePickListOptions';
 import {
-  COMPARABLE_ITEM_TYPES,
+  BOUNDABLE_ITEM_TYPES,
   determineAutofillField,
   getItemCategory,
   ItemCategory,
@@ -35,7 +35,6 @@ import {
   validComponentsForType,
 } from '@/modules/formBuilder/formBuilderUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentRole,
@@ -171,10 +170,6 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
       scrollToElement(element);
     }
   }, [errorState]);
-
-  const [canAdministrateConfig] = useHasRootPermissions([
-    'canAdministrateConfig',
-  ]);
 
   if (!itemTypeValue) throw Error('Item type must be defined');
 
@@ -366,10 +361,8 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         <Section
           title='Min/Max Bounds'
           hidden={
-            // "simple" bounds are supported for numbers only.
-            // For super admins only, "advanced" bounds on dates are also supported.
-            !COMPARABLE_ITEM_TYPES.includes(itemTypeValue) ||
-            (itemTypeValue === ItemType.Date && !canAdministrateConfig)
+            // bounds are supported by numbers and dates only
+            !BOUNDABLE_ITEM_TYPES.includes(itemTypeValue)
           }
         >
           <ValueBounds control={control} itemMap={itemMap} />
