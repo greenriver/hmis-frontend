@@ -1,7 +1,5 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { Ref, useMemo } from 'react';
-
-import AssessmentTitle from './AssessmentTitle';
+import { Box } from '@mui/material';
+import { Ref } from 'react';
 
 import Loading from '@/components/elements/Loading';
 import {
@@ -13,9 +11,7 @@ import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import AssessmentRelatedAnnualsAlert from '@/modules/assessments/components/AssessmentRelatedAnnualsAlert';
-import AssessmentStatusIndicator from '@/modules/assessments/components/AssessmentStatusIndicator';
 import { HouseholdAssessmentFormAction } from '@/modules/assessments/components/household/formState';
-import { AssessmentStatus } from '@/modules/assessments/components/household/util';
 import { useBasicEnrollment } from '@/modules/enrollment/hooks/useBasicEnrollment';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { ErrorState } from '@/modules/errors/util';
@@ -23,12 +19,10 @@ import {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   AssessedClientFieldsFragment,
   AssessmentRole,
   FormDefinitionFieldsFragment,
-  FormRole,
   FullAssessmentFragment,
 } from '@/types/gqlTypes';
 
@@ -37,15 +31,10 @@ export interface IndividualAssessmentProps {
   definition: FormDefinitionFieldsFragment;
   // Assessment to render. Omit if starting a new assessment.
   assessment?: FullAssessmentFragment;
-  title: string;
   enrollmentId: string;
-  // Assessment Role (Intake, Exit, etc.)
-  formRole?: FormRole;
   // Whether the assessment is embedded in a household workflow
   embeddedInWorkflow?: boolean;
   client: AssessedClientFieldsFragment;
-  // Assessment status to use for indicator
-  assessmentStatus?: AssessmentStatus;
   // Whether the form is currently visible on the page. Used for household workflow when the assessment is on an inactive tab.
   visible?: boolean;
   // Reference to the form element
@@ -79,11 +68,8 @@ export interface IndividualAssessmentProps {
  */
 const IndividualAssessment = ({
   enrollmentId,
-  assessmentStatus,
   definition,
-  title,
   assessment,
-  formRole,
   embeddedInWorkflow = false,
   client,
   FormActionProps,
@@ -107,58 +93,15 @@ const IndividualAssessment = ({
 
   useScrollToHash(enrollmentLoading, topOffsetHeight);
 
-  const navigationTitle = useMemo(() => {
-    if (!enrollment) return;
-    if (!embeddedInWorkflow) {
-      return (
-        <Typography variant='body2' component='div'>
-          Assessment Sections
-        </Typography>
-      );
-    }
-    return (
-      <Box>
-        <Typography variant='h5' sx={{ mb: 2 }}>
-          {clientBriefName(client)}
-        </Typography>
-        <Stack gap={1}>
-          <Typography variant='body2' component='div'>
-            <b>{`${definition.title}: `}</b>
-            {enrollment.project.projectName}
-          </Typography>
-          <AssessmentStatusIndicator status={assessmentStatus} />
-        </Stack>
-      </Box>
-    );
-  }, [
-    assessmentStatus,
-    client,
-    definition.title,
-    embeddedInWorkflow,
-    enrollment,
-  ]);
-
   if (enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
-  if (!formRole && !assessment) return <NotFound />;
-
-  const titleNode = (
-    <AssessmentTitle
-      assessmentTitle={title}
-      clientName={clientBriefName(client)}
-      clientId={client.id}
-      projectName={enrollment.project.projectName}
-      enrollmentId={enrollment.id}
-      entryDate={enrollment.entryDate}
-      exitDate={enrollment.exitDate}
-    />
-  );
+  if (!definition && !assessment) return <NotFound />;
 
   const alertNode = (
     <AssessmentRelatedAnnualsAlert
       enrollmentId={enrollment.id}
       householdId={enrollment.householdId}
-      assessmentRole={formRole as unknown as AssessmentRole}
+      assessmentRole={definition.role as unknown as AssessmentRole}
       embeddedInWorkflow={embeddedInWorkflow}
       assessmentId={assessment?.id}
       householdSize={enrollment.householdSize}
@@ -167,12 +110,9 @@ const IndividualAssessment = ({
 
   return (
     <AssessmentForm
-      assessmentTitle={titleNode}
       alerts={alertNode}
       client={client}
-      navigationTitle={navigationTitle}
       key={assessment?.id}
-      formRole={formRole}
       definition={definition}
       assessment={assessment}
       enrollment={enrollment}

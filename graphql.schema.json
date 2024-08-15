@@ -1591,7 +1591,7 @@
           },
           {
             "name": "definition",
-            "description": null,
+            "description": "Definition to use for viewing the FormDefinition. If\nupgraded_definition_for_editing is nil, then it can also be used for editing.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1753,6 +1753,18 @@
                 "name": "AssessmentRole",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "upgradedDefinitionForEditing",
+            "description": "Most recent published Definition to use for Editing the FormDefinition. Only\npresent if the original form definition was retired.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FormDefinition",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -20999,6 +21011,22 @@
               "kind": "OBJECT",
               "name": "ApplicationUser",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "version",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

@@ -1285,7 +1285,10 @@ export const createInitialValuesFromSavedValues = (
 
 export const initialValuesFromAssessment = (
   itemMap: ItemMap,
-  assessment: FullAssessmentFragment
+  assessment: Omit<
+    FullAssessmentFragment,
+    'definition' | 'upgradedDefinitionForEditing'
+  >
 ) => {
   // If non-WIP, construct based on related records
   if (!assessment.inProgress) {

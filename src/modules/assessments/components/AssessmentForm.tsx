@@ -13,6 +13,7 @@ import {
 import { AssessmentLocalConstants } from '../util';
 import AssessmentAlert from './alerts/AssessmentAlert';
 
+import AssessmentTitle from './AssessmentTitle';
 import FormContainer from '@/components/layout/FormContainer';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -39,6 +40,7 @@ import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import { AssessmentForPopulation, FormActionTypes } from '@/modules/form/types';
 import {
   AlwaysPresentLocalConstants,
+  applyDefinitionRulesForClient,
   createInitialValuesFromRecord,
   getInitialValues,
   getItemMap,
@@ -46,6 +48,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   age,
+  clientBriefName,
   clientNameAllParts,
   raceEthnicityDisplayString,
 } from '@/modules/hmis/hmisUtil';
@@ -61,13 +64,10 @@ import {
 interface Props {
   enrollment: EnrollmentFieldsFragment;
   client: AssessedClientFieldsFragment;
-  formRole?: FormRole;
   definition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
-  assessmentTitle?: ReactNode;
   alerts?: ReactNode;
   top?: number;
-  navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
   FormActionProps?: DynamicFormProps['FormActionProps'];
   onSubmit: DynamicFormProps['onSubmit'];
@@ -86,11 +86,8 @@ interface Props {
 const AssessmentForm: React.FC<Props> = ({
   assessment,
   client,
-  assessmentTitle,
   alerts,
-  formRole,
-  definition,
-  navigationTitle,
+  definition: definitionProp,
   enrollment,
   embeddedInWorkflow,
   FormActionProps,
@@ -117,11 +114,24 @@ const AssessmentForm: React.FC<Props> = ({
   useEffect(() => {
     if (!canEdit) return;
     if (assessment && !assessment.inProgress) setLocked(true);
-  }, [assessment, canEdit]);
+  }, [assessment, canEdit]); // re-runs after assessment is refetched, which leads to assessment re-locking after submit
+
+  // Choose the FormDefiniton to use for rendering, and filter it down based on client attributes (Data Collected About rules).
+  const definition = useMemo(() => {
+    let fd = definitionProp;
+    if (!locked && assessment && !assessment.inProgress) {
+      // When editing a non-WIP assessment, we want to use the most recent version of the Form Definition.
+      // If the most recent version differs from the version that was most recently used to updated it, then 'upgradedDefinitionForEditing' is present.
+      fd = assessment.upgradedDefinitionForEditing || fd;
+    }
+    // Apply "data collected about" rules to filter down the definition to relevant items
+    const relationshipToHoH = enrollment.relationshipToHoH;
+    return applyDefinitionRulesForClient(fd, client, relationshipToHoH);
+  }, [definitionProp, locked, assessment, client, enrollment]);
 
   // Most recently selected "source" assessment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
-    FullAssessmentFragment | undefined
+    FullAssessmentFragment | AssessmentForPopulation | undefined
   >();
   // Trigger for reloading initial values and form if a source assessment is chosen for autofill.
   // This is needed to support re-selecting the same assessment (which should clear and reload the form again)
@@ -287,8 +297,20 @@ const AssessmentForm: React.FC<Props> = ({
     handleUnlock,
   ]);
 
-  const isCustomAssessment = formRole === FormRole.CustomAssessment;
+  const isCustomAssessment = definition.role === FormRole.CustomAssessment;
   const showAutofill = !isCustomAssessment && !assessment && canEdit;
+
+  const titleNode = (
+    <AssessmentTitle
+      assessmentTitle={definition.title}
+      clientName={clientBriefName(client)}
+      clientId={client.id}
+      projectName={enrollment.project.projectName}
+      enrollmentId={enrollment.id}
+      entryDate={enrollment.entryDate}
+      exitDate={enrollment.exitDate}
+    />
+  );
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
@@ -296,7 +318,6 @@ const AssessmentForm: React.FC<Props> = ({
         enrollment={enrollment}
         definition={definition}
         assessment={assessment}
-        title={navigationTitle}
         isPrintView={isPrintView}
         locked={locked}
         embeddedInWorkflow={embeddedInWorkflow}
@@ -314,7 +335,7 @@ const AssessmentForm: React.FC<Props> = ({
       {showNavigation && navigation}
       <Grid item xs={showNavigation ? 9.5 : 12} sx={{ pt: '0 !important' }}>
         <Stack sx={{ mb: 1 }} gap={1}>
-          {assessmentTitle}
+          {titleNode}
           {locked && (
             <Stack gap={0.5}>
               <AssessmentHistoryInfo
@@ -404,7 +425,7 @@ const AssessmentForm: React.FC<Props> = ({
           id='assessmentPickerDialog'
           clientId={client.id}
           open={dialogOpen}
-          role={formRole}
+          role={definition.role}
           onSelected={onSelectAutofillRecord}
           onCancel={() => setDialogOpen(false)}
           description={
