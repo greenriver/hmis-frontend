@@ -1,4 +1,4 @@
-import { Meta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import ClientName from './ClientName';
 
@@ -7,35 +7,36 @@ export default {
   component: ClientName,
 } as Meta<typeof ClientName>;
 
-const Template: ComponentStory<typeof ClientName> = (args) => (
-  <ClientName {...args} />
-);
+type Story = StoryObj<typeof ClientName>;
 
-export const Default = Template.bind({});
-Default.args = {
-  client: {
-    firstName: 'Rita',
-    middleName: 'Jane',
-    lastName: 'Ackroyd',
+export const Default: Story = {
+  args: {
+    client: {
+      firstName: 'Rita',
+      middleName: 'Jane',
+      lastName: 'Ackroyd',
+    },
   },
 };
 
-export const WithAllNameComponents = Template.bind({});
-WithAllNameComponents.args = {
-  client: {
-    firstName: 'Rita',
-    middleName: 'Jane',
-    lastName: 'Ackroyd',
-    nameSuffix: 'Jr',
+export const WithAllNameComponents: Story = {
+  args: {
+    client: {
+      firstName: 'Rita',
+      middleName: 'Jane',
+      lastName: 'Ackroyd',
+      nameSuffix: 'Jr',
+    },
   },
 };
 
-export const WithLink = Template.bind({});
-WithLink.args = {
-  client: {
-    id: 5,
-    firstName: 'Rita',
-    lastName: 'Ackroyd',
+export const WithLink: Story = {
+  args: {
+    client: {
+      id: 5,
+      firstName: 'Rita',
+      lastName: 'Ackroyd',
+    },
+    linkToProfile: true,
   },
-  linkToProfile: true,
 };

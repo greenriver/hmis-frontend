@@ -41,6 +41,7 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
   } = useGetRootPermissionsQuery();
 
   const isMobile = useIsMobile();
+
   const { mobileNavIsOpen, handleOpenMobileMenu, handleCloseMobileMenu } =
     mobileMenuContext;
   const isDashboard = useIsDashboard();
@@ -94,7 +95,10 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
           },
         }}
       >
-        <Toolbar sx={{ px: 3, minHeight: APP_BAR_HEIGHT }}>
+        <Toolbar
+          sx={{ px: isMobile ? 1 : 3, minHeight: APP_BAR_HEIGHT }}
+          disableGutters={isMobile}
+        >
           <RouterLink
             variant='h1'
             noWrap
@@ -110,7 +114,11 @@ const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
           </RouterLink>
           <Box display='flex' sx={{ flexGrow: 1 }}></Box>
           {!isMobile && (
-            <Stack direction='row' spacing={{ md: 0.5, lg: 2 }}>
+            <Stack
+              direction='row'
+              alignItems='center'
+              spacing={{ md: 0.5, lg: 2 }}
+            >
               <ToolbarMenu />
               <OmniSearch />
               <UserMenu />

@@ -1,17 +1,21 @@
-import { Typography, Link, Alert } from '@mui/material';
+import { Alert, Link, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { ComponentStory, Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import MOCK_IMAGE from './MOCK_IMAGE';
 import Uploader from './UploaderBase';
 
+import { createDirectUploadMock, getFileMock } from '@/test/__mocks__/requests';
+
 export default {
   title: 'Uploader',
   component: Uploader,
-} as Meta<typeof Uploader>;
-
-const Template: ComponentStory<typeof Uploader> = (args) => {
-  return (
+  parameters: {
+    apolloClient: {
+      mocks: [getFileMock, createDirectUploadMock],
+    },
+  },
+  render: (args) => (
     <>
       <Uploader
         {...args}
@@ -44,13 +48,15 @@ const Template: ComponentStory<typeof Uploader> = (args) => {
         </Typography>
       </Box>
     </>
-  );
-};
+  ),
+} as Meta<typeof Uploader>;
 
-export const Default = Template.bind({});
-Default.args = {
-  onUpload: async (upload, file) => {
-    // eslint-disable-next-line no-console
-    console.log({ upload, file });
+type Story = StoryObj<typeof Uploader>;
+export const Default: Story = {
+  args: {
+    onUpload: async (upload: any, file: any) => {
+      // eslint-disable-next-line no-console
+      console.log({ upload, file });
+    },
   },
 };

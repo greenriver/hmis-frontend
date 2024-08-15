@@ -1,20 +1,20 @@
 import {
   Alert,
+  Box,
   Card,
   DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
-  Typography,
 } from '@mui/material';
-import { Stack, SxProps } from '@mui/system';
-import { startCase } from 'lodash-es';
-import React, { ReactNode, useCallback, useMemo, useState } from 'react';
+import { Stack } from '@mui/system';
+import React, { useCallback, useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import TextInput from '@/components/elements/input/TextInput';
 import theme from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import FormRuleSelectField from '@/modules/admin/components/formRules/FormRuleSelectField';
+import { BaseFormRule } from '@/modules/admin/components/formRules/FormRule';
+import FormRuleCondition from '@/modules/admin/components/formRules/FormRuleCondition';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import FormSelect from '@/modules/form/components/FormSelect';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -33,6 +33,7 @@ import {
   ItemType,
   PickListOption,
   PickListType,
+  ProjectType,
   useCreateFormRuleMutation,
 } from '@/types/gqlTypes';
 
@@ -42,35 +43,20 @@ const dataCollectedAboutPickList =
 const projectTypePickList = localResolvePickList('ProjectType');
 const funderPickList = localResolvePickList('FundingSource');
 
-const defaultRule: FormRuleInput = {
-  activeStatus: ActiveStatus.Active,
-  dataCollectedAbout: DataCollectedAbout.AllClients,
-};
+export interface RuleCondition {
+  conditionType: ConditionType;
+  value: string;
+}
 
 // `otherFunder` is also a condition type, of a sort, but it's left off here because
 // it's dependent on `funder` and it's a TextInput instead of a Select
-type ConditionType =
+export type ConditionType =
   | 'projectId'
   | 'projectType'
   | 'organizationId'
   | 'funder'
   | 'serviceTypeId'
   | 'serviceCategoryId';
-
-const FormRuleLabelTypography = ({
-  sx,
-  children,
-}: {
-  sx?: SxProps;
-  children: ReactNode;
-}) => (
-  <Typography
-    variant='body2'
-    sx={{ pt: 1, fontWeight: theme.typography.fontWeightBold, ...sx }}
-  >
-    {children}
-  </Typography>
-);
 
 interface Props {
   open: boolean;
@@ -89,11 +75,56 @@ const NewFormRuleDialog: React.FC<Props> = ({
   formRole,
   formCacheKey,
 }) => {
-  const [rule, setRule] = useState<FormRuleInput>(defaultRule);
+  // Form state for the rule
+  const [dataCollectedAbout, setDataCollectedAbout] =
+    useState<DataCollectedAbout>(DataCollectedAbout.AllClients);
+  const [ruleConditions, setRuleConditions] = useState<RuleCondition[]>([]);
+  const [otherFundingSource, setOtherFundingSource] = useState<string>('');
+  const [serviceConditionType, setServiceConditionType] = useState<
+    'serviceCategoryId' | 'serviceTypeId'
+  >('serviceCategoryId');
+  const [serviceConditionValue, setServiceConditionValue] =
+    useState<string>('');
+
+  // The form rule input itself is derived from form state
+  const rule: FormRuleInput = useMemo(() => {
+    const conditions: Partial<Record<ConditionType, string>> = {};
+    ruleConditions.forEach(
+      ({ conditionType, value }) => (conditions[conditionType] = value)
+    );
+
+    return {
+      activeStatus: ActiveStatus.Active,
+      dataCollectedAbout: dataCollectedAbout,
+      projectId: conditions.projectId,
+      projectType: conditions.projectType as ProjectType,
+      organizationId: conditions.organizationId,
+      funder: conditions.funder as FundingSource,
+      serviceTypeId: conditions.serviceTypeId,
+      serviceCategoryId: conditions.serviceCategoryId,
+      ...(formRole === FormRole.Service
+        ? { [serviceConditionType]: serviceConditionValue }
+        : {}),
+      ...(conditions.funder === FundingSource.LocalOrOtherFundingSource &&
+      otherFundingSource
+        ? { otherFunder: otherFundingSource }
+        : {}),
+    };
+  }, [
+    dataCollectedAbout,
+    ruleConditions,
+    otherFundingSource,
+    serviceConditionType,
+    serviceConditionValue,
+    formRole,
+  ]);
 
   const onCloseDialog = useCallback(() => {
     onClose();
-    setRule(defaultRule); // clear out the form
+    // Null out the form values
+    setDataCollectedAbout(DataCollectedAbout.AllClients);
+    setRuleConditions([]);
+    setOtherFundingSource('');
   }, [onClose]);
 
   const [createFormRule, { loading, error }] = useCreateFormRuleMutation({
@@ -135,11 +166,8 @@ const NewFormRuleDialog: React.FC<Props> = ({
   const handleSubmit = () => {
     let error: string | undefined = undefined;
     if (formRole === FormRole.Service) {
-      if (rule.serviceCategoryId && rule.serviceTypeId) {
-        error =
-          'You cannot choose both Service Category and Service Type. Please only choose one';
-      } else if (!(rule.serviceCategoryId || rule.serviceTypeId)) {
-        error = 'One of either Service Category or Service Type are required';
+      if (!(rule.serviceCategoryId || rule.serviceTypeId)) {
+        error = 'One of either Service Category or Service Type is required';
       }
     }
 
@@ -149,33 +177,33 @@ const NewFormRuleDialog: React.FC<Props> = ({
     }
   };
 
-  const { conditionTypePickList, conditions, conditionsAvailable } =
-    useMemo(() => {
-      const pickList: PickListOption[] = [
-        { code: 'projectId', label: 'Project' },
-        { code: 'projectType', label: 'Project Type' },
-        { code: 'organizationId', label: 'Organization' },
-        { code: 'funder', label: 'Funding Source' },
-      ];
+  const serviceConditionTypePickList = [
+    { code: 'serviceTypeId', label: 'Service Type' },
+    { code: 'serviceCategoryId', label: 'Service Category' },
+  ];
 
-      const conditions = pickList.map((conditionOption) => {
-        const conditionType = conditionOption.code as ConditionType;
-        return {
-          conditionType,
-          value: rule[conditionType],
-        };
-      });
+  const { conditionTypePickList, conditionsAvailable } = useMemo(() => {
+    const pickList: PickListOption[] = [
+      { code: 'projectId', label: 'Project' },
+      { code: 'projectType', label: 'Project Type' },
+      { code: 'organizationId', label: 'Organization' },
+      { code: 'funder', label: 'Funding Source' },
+    ];
 
-      const conditionsAvailable: ConditionType[] = conditions
-        .filter((condition) => condition.value === undefined)
-        .map((condition) => condition.conditionType);
+    const conditionsAlreadyInUse = ruleConditions.map(
+      (condition) => condition.conditionType
+    );
+    const conditionsAvailable: ConditionType[] = pickList
+      .map((option) => option.code as ConditionType)
+      .filter(
+        (conditionType) => !conditionsAlreadyInUse.includes(conditionType)
+      );
 
-      return {
-        conditionTypePickList: pickList,
-        conditions,
-        conditionsAvailable,
-      };
-    }, [rule]);
+    return {
+      conditionTypePickList: pickList,
+      conditionsAvailable,
+    };
+  }, [ruleConditions]);
 
   const { pickList: projectList } = usePickList({
     item: {
@@ -218,24 +246,36 @@ const NewFormRuleDialog: React.FC<Props> = ({
     serviceCategoryId: serviceCategoryPickList || [],
   };
 
+  // Store the strings corresponding to the current project/org/etc. so we can display in the FormRule chip
+  const projectName = useMemo(() => {
+    if (!projectList || !rule.projectId) return;
+    return projectList.find((option) => option.code === rule.projectId)?.label;
+  }, [projectList, rule.projectId]);
+  const organizationName = useMemo(() => {
+    if (!orgList || !rule.organizationId) return;
+    return orgList.find((option) => option.code === rule.organizationId)?.label;
+  }, [orgList, rule.organizationId]);
+  const serviceTypeName = useMemo(() => {
+    if (!serviceTypePickList || !rule.serviceTypeId) return;
+    return serviceTypePickList.find(
+      (option) => option.code === rule.serviceTypeId
+    )?.label;
+  }, [serviceTypePickList, rule.serviceTypeId]);
+  const serviceCategoryName = useMemo(() => {
+    if (!serviceCategoryPickList || !rule.serviceCategoryId) return;
+    return serviceCategoryPickList.find(
+      (option) => option.code === rule.serviceCategoryId
+    )?.label;
+  }, [serviceCategoryPickList, rule.serviceCategoryId]);
+
   const isTiny = useIsMobile('sm');
 
   if (error) throw error;
 
-  const onChangeRule = (
-    conditionType: ConditionType,
-    option: PickListOption | PickListOption[] | null
-  ) => {
-    if (isPickListOption(option)) {
-      setRule({ ...rule, [conditionType]: option.code });
-    } else {
-      setRule({ ...rule, [conditionType]: '' });
-    }
-  };
-
   return (
     <CommonDialog
       open={open}
+      maxWidth='md'
       fullWidth
       fullScreen={isTiny}
       onClose={onCloseDialog}
@@ -245,38 +285,68 @@ const NewFormRuleDialog: React.FC<Props> = ({
       </DialogTitle>
       <DialogContent>
         <Stack gap={2} sx={{ my: 2 }}>
+          <Card
+            sx={{ backgroundColor: theme.palette.background.default, p: 2 }}
+          >
+            <BaseFormRule
+              dataCollectedAbout={rule.dataCollectedAbout || undefined}
+              projectType={rule.projectType || undefined}
+              funder={rule.funder || undefined}
+              otherFunder={rule.otherFunder || undefined}
+              projectName={projectName || undefined}
+              organizationName={organizationName || undefined}
+              serviceTypeName={serviceTypeName || undefined}
+              serviceCategoryName={serviceCategoryName || undefined}
+              formRole={formRole}
+            />
+          </Card>
           {validationError && <Alert severity='error'>{validationError}</Alert>}
           {formRole === FormRole.Service && (
-            <>
-              <FormRuleSelectField
-                rule={rule}
-                label='Applies to Service Category'
-                name='serviceCategoryId'
-                onChange={(option) => onChangeRule('serviceCategoryId', option)}
-                options={pickListMap.serviceCategoryId}
+            <Box
+              sx={{
+                backgroundColor: theme.palette.grey[100],
+                borderRadius: 1,
+                py: 1,
+                px: 2,
+              }}
+            >
+              <FormRuleCondition
+                prefixText='Collects'
+                joiningText={'of'}
+                index={ruleConditions.length > 0 ? 1 : undefined}
+                conditionType={serviceConditionType}
+                conditionTypePickList={serviceConditionTypePickList}
+                setConditionType={(conditionType) => {
+                  setServiceConditionType(
+                    conditionType as 'serviceTypeId' | 'serviceCategoryId'
+                  );
+                  setServiceConditionValue('');
+                }}
+                value={serviceConditionValue || ''}
+                setValue={(conditionValue) =>
+                  setServiceConditionValue(conditionValue)
+                }
+                valuePickList={pickListMap[serviceConditionType]}
+                valueError={
+                  !!validationError &&
+                  !rule.serviceCategoryId &&
+                  !rule.serviceTypeId
+                }
               />
-              <FormRuleSelectField
-                rule={rule}
-                label='Applies to Service Type'
-                name='serviceTypeId'
-                onChange={(option) => onChangeRule('serviceTypeId', option)}
-                options={pickListMap.serviceTypeId}
-              />
-            </>
+            </Box>
           )}
           <FormSelect
-            label='Applies to client type'
+            label={
+              formRole === FormRole.Service
+                ? 'For client type'
+                : 'Applies to client type'
+            }
             sx={{ flexGrow: 1 }}
-            value={{
-              code: rule.dataCollectedAbout || DataCollectedAbout.AllClients,
-            }}
+            value={{ code: dataCollectedAbout }}
             options={dataCollectedAboutPickList}
             onChange={(_event, option) => {
               if (isPickListOption(option)) {
-                setRule({
-                  ...rule,
-                  dataCollectedAbout: option.code as DataCollectedAbout,
-                });
+                setDataCollectedAbout(option.code as DataCollectedAbout);
               }
             }}
           />
@@ -284,75 +354,89 @@ const NewFormRuleDialog: React.FC<Props> = ({
         <CardGroup
           onAddItem={() => {
             if (conditionsAvailable.length > 0) {
-              const conditionType = conditionsAvailable[0];
-              setRule({ ...rule, [conditionType]: '' });
+              setRuleConditions([
+                ...ruleConditions,
+                {
+                  conditionType: conditionsAvailable[0],
+                  value: '',
+                },
+              ]);
             }
           }}
           addItemText='Add Condition'
           disableAdd={conditionsAvailable.length === 0}
         >
-          {conditions
-            .filter((condition) => condition.value !== undefined)
-            .map(({ conditionType, value }, index) => {
-              return (
-                <RemovableCard
-                  key={conditionType}
-                  onRemove={() => {
-                    // setting this condition's value to undefined will remove it from the modal
-                    setRule({ ...rule, [conditionType]: undefined });
-                  }}
-                  removeTooltip={'Remove Condition'}
-                  sx={{
-                    backgroundColor: theme.palette.grey[100],
-                    border: 0,
-                    py: 1,
-                  }}
-                >
-                  <Grid container spacing={1}>
-                    <Grid item xs={2} sm={1}>
-                      <FormRuleLabelTypography>
-                        {index === 0 ? 'If' : 'And'}
-                      </FormRuleLabelTypography>
-                    </Grid>
-                    <Grid item xs={9} sm={4}>
-                      <FormSelect
-                        disableClearable
-                        value={{ code: conditionType }}
-                        options={conditionTypePickList}
-                        onChange={(_event, option) => {
-                          if (isPickListOption(option)) {
-                            setRule({
-                              ...rule,
-                              [conditionType]: undefined,
-                              [option.code]: '',
-                            });
-                          }
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={2} sm={1}>
-                      <FormRuleLabelTypography
-                        sx={isTiny ? {} : { textAlign: 'center' }}
-                      >
-                        is
-                      </FormRuleLabelTypography>
-                    </Grid>
-                    <Grid item xs={10} sm={5}>
-                      <FormSelect
-                        value={value ? { code: value } : null}
-                        placeholder={`Select ${startCase(
-                          conditionType.replace(/Id$/, '')
-                        )}`}
-                        options={pickListMap[conditionType]}
-                        onChange={(_, option) =>
-                          onChangeRule(conditionType, option)
+          {ruleConditions.map((condition, index) => {
+            const { conditionType, value } = condition;
+
+            let conditionTypeIndex;
+            if (formRole === FormRole.Service) {
+              conditionTypeIndex = index + 2;
+            } else if (ruleConditions.length > 1) {
+              conditionTypeIndex = index + 1;
+            }
+
+            return (
+              <RemovableCard
+                key={conditionType}
+                onRemove={() => {
+                  setRuleConditions(
+                    ruleConditions.filter(
+                      (condition) => condition.conditionType !== conditionType
+                    )
+                  );
+                }}
+                removeTooltip={'Remove Condition'}
+                sx={{
+                  backgroundColor: theme.palette.grey[100],
+                  border: 0,
+                  py: 1,
+                }}
+              >
+                <FormRuleCondition
+                  prefixText={index === 0 ? 'If' : 'And'}
+                  index={conditionTypeIndex}
+                  conditionType={conditionType}
+                  conditionTypePickList={conditionTypePickList.filter(
+                    (option) =>
+                      conditionsAvailable.includes(
+                        option.code as ConditionType
+                      ) || option.code === conditionType
+                  )}
+                  setConditionType={(newConditionType: ConditionType) => {
+                    setRuleConditions(
+                      ruleConditions.map((condition) => {
+                        if (condition.conditionType === conditionType) {
+                          return {
+                            conditionType: newConditionType,
+                            value: '',
+                          };
+                        } else {
+                          return condition;
                         }
-                      />
-                    </Grid>
-                  </Grid>
-                </RemovableCard>
-              );
-            })}
+                      })
+                    );
+                  }}
+                  value={value || ''}
+                  valuePickList={pickListMap[conditionType]}
+                  setValue={(conditionValue) => {
+                    setRuleConditions(
+                      ruleConditions.map((condition) => {
+                        if (condition.conditionType === conditionType) {
+                          return {
+                            ...condition,
+                            value: conditionValue,
+                          };
+                        } else {
+                          return condition;
+                        }
+                      })
+                    );
+                  }}
+                />
+              </RemovableCard>
+            );
+          })}
 
           {rule.funder === FundingSource.LocalOrOtherFundingSource && (
             <Card
@@ -364,17 +448,13 @@ const NewFormRuleDialog: React.FC<Props> = ({
               }}
             >
               <Grid container spacing={1}>
-                <Grid item xs={4}>
-                  <FormRuleLabelTypography>
-                    And funding source is
-                  </FormRuleLabelTypography>
-                </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={12}>
                   <TextInput
+                    label='And funding source is'
                     value={rule.otherFunder || ''}
-                    onChange={(e) =>
-                      setRule({ ...rule, otherFunder: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setOtherFundingSource(e.target.value);
+                    }}
                   />
                 </Grid>
               </Grid>
