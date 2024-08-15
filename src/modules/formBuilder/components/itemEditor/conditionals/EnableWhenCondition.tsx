@@ -1,8 +1,8 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { useController, useWatch } from 'react-hook-form';
-import { FormItemControl } from '../types';
+import { UseFormSetValue, useWatch } from 'react-hook-form';
+import { FormItemControl, FormItemState } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
@@ -28,6 +28,7 @@ interface EnableWhenConditionProps {
   index: number;
   itemPickList: PickListOption[];
   itemMap: ItemMap;
+  setValue: UseFormSetValue<FormItemState>;
   enableWhenPath?: 'enableWhen' | `autofillValues.${number}.autofillWhen`; // path to enableWhen in form
 }
 
@@ -93,19 +94,13 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
   index,
   itemPickList,
   itemMap,
+  setValue,
   enableWhenPath = 'enableWhen',
 }) => {
   // Watch state of this condition
   const state = useWatch({
     control,
     name: `${enableWhenPath}.${index}`,
-  });
-
-  const {
-    field: { onChange: onChangeOperator },
-  } = useController({
-    control,
-    name: `${enableWhenPath}.${index}.operator`,
   });
 
   const dependentItem = useMemo(
@@ -185,7 +180,9 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 rules={{
                   required: 'Local Constant or Dependent Question is required',
                 }}
-                onChange={() => onChangeOperator(null)}
+                onChange={() =>
+                  setValue(`${enableWhenPath}.${index}.operator`, undefined)
+                }
               />
             )}
             {advanced.localConstant && (
@@ -198,8 +195,10 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   required: 'Local Constant or Dependent Question is required',
                 }}
                 options={localConstantsPickList}
-                helperText="Local constant who's value will determine whether the condition is met"
-                onChange={() => onChangeOperator(null)}
+                helperText='Local constant whose value will determine whether the condition is met'
+                onChange={() =>
+                  setValue(`${enableWhenPath}.${index}.operator`, undefined)
+                }
               />
             )}
           </Stack>

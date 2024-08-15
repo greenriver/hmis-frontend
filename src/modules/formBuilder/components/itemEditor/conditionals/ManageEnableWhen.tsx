@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useController, useFieldArray, UseFormSetValue } from 'react-hook-form';
+import { useFieldArray, UseFormSetValue } from 'react-hook-form';
 import { FormItemControl, FormItemState } from '../types';
 import CardGroup, { RemovableCard } from './CardGroup';
 import EnableWhenCondition from './EnableWhenCondition';
@@ -25,7 +25,6 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
   itemMap,
   enableWhenPath = 'enableWhen',
   enableBehaviorPath = 'enableBehavior',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setValue,
 }) => {
   const { fields, append, remove } = useFieldArray({
@@ -51,20 +50,12 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
     ];
   }, [enableWhenPath]);
 
-  const {
-    field: { onChange: onChangeEnableBehavior },
-  } = useController({
-    control,
-    name: enableBehaviorPath,
-  });
-
   return (
     <CardGroup
       onAddItem={() => {
-        // setValue(enableBehaviorPath, EnableBehavior.All);
         if (fields.length === 0) {
           // when adding first condition, set default enable behavior
-          onChangeEnableBehavior('ALL');
+          setValue(enableBehaviorPath, EnableBehavior.All);
         }
         append({}, { shouldFocus: false });
       }}
@@ -91,6 +82,7 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
             enableWhenPath={enableWhenPath}
             itemPickList={itemPickList}
             itemMap={itemMap}
+            setValue={setValue}
           />
         </RemovableCard>
       ))}

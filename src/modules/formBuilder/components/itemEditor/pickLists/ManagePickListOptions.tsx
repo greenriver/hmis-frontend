@@ -1,21 +1,26 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { useController, useFieldArray, useWatch } from 'react-hook-form';
+import React, { useCallback, useMemo } from 'react';
+import { useFieldArray, UseFormSetValue, useWatch } from 'react-hook-form';
 import PickListOption from './PickListOption';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import { chooseSelectComponentType } from '@/modules/form/util/formUtil';
 import CardGroup, {
   RemovableCard,
 } from '@/modules/formBuilder/components/itemEditor/conditionals/CardGroup';
-import { FormItemControl } from '@/modules/formBuilder/components/itemEditor/types';
+import {
+  FormItemControl,
+  FormItemState,
+} from '@/modules/formBuilder/components/itemEditor/types';
 import { supportedPickListReferencesOptions } from '@/modules/formBuilder/formBuilderUtil';
 import { ItemType } from '@/types/gqlTypes';
 
 export interface ManagePickListOptionsProps {
   control: FormItemControl;
+  setValue: UseFormSetValue<FormItemState>;
 }
 
 const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
   control,
+  setValue,
 }) => {
   const itemTypeValue = useWatch({ control, name: 'type' });
   const itemComponentValue = useWatch({ control, name: 'component' });
@@ -49,50 +54,38 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
     pickListReferenceValue,
   ]);
 
-  const { fields, append, remove, replace } = useFieldArray({
-    control,
-    name: 'pickListOptions',
-  });
-
-  const {
-    field: { onChange: onChangePickListReference, value: pickListReference },
-  } = useController({
-    control,
-    name: 'pickListReference',
-  });
-
-  useEffect(() => {
-    if (pickListReference) {
-      replace([]);
-    }
-  }, [pickListReference, replace]);
-
-  // `fields` above contains the defaultValues, so we also useWatch to get recent updates
-  const fieldsWatch = useWatch({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'pickListOptions',
   });
 
   const isCodeUnique = useCallback(
     (code: string) => {
-      if (!fieldsWatch) return true;
-      return fieldsWatch.filter((field) => field?.code === code).length <= 1;
+      if (!pickListOptionsValue) return true;
+      return (
+        pickListOptionsValue.filter((field) => field?.code === code).length <= 1
+      );
     },
-    [fieldsWatch]
+    [pickListOptionsValue]
   );
 
   const isInitialSelectedUnique = useCallback(
     (checked: boolean) => {
-      if (!fieldsWatch) return true;
+      if (!pickListOptionsValue) return true;
       if (!checked) return true;
-      return fieldsWatch.filter((field) => field?.initialSelected).length <= 1;
+      return (
+        pickListOptionsValue.filter((field) => field?.initialSelected).length <=
+        1
+      );
     },
-    [fieldsWatch]
+    [pickListOptionsValue]
   );
 
   const eitherOptionsOrReferenceProvided = useMemo(
-    () => !!pickListReference || (fieldsWatch && fieldsWatch.length > 0),
-    [pickListReference, fieldsWatch]
+    () =>
+      !!pickListReferenceValue ||
+      (pickListOptionsValue && pickListOptionsValue.length > 0),
+    [pickListReferenceValue, pickListOptionsValue]
   );
 
   if (!formItemComponent) return;
@@ -102,7 +95,7 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
       <CardGroup
         onAddItem={() => {
           append({});
-          onChangePickListReference(null);
+          setValue('pickListReference', null);
         }}
         addItemText='Add Choice'
       >
@@ -132,6 +125,9 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
           validate: () =>
             eitherOptionsOrReferenceProvided ||
             'Required: Either choose a reference list or Add Choice above',
+        }}
+        onChange={(code) => {
+          if (!!code) setValue('pickListOptions', []);
         }}
       />
     </>

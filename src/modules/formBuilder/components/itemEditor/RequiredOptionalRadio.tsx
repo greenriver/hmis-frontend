@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
-import { useController, useWatch } from 'react-hook-form';
-import { FormItemControl } from './types';
+import { UseFormSetValue, useWatch } from 'react-hook-form';
+import { FormItemControl, FormItemState } from './types';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import { PickListOption } from '@/types/gqlTypes';
 
@@ -25,25 +25,10 @@ const options = [
 
 interface Props {
   control: FormItemControl;
+  setValue: UseFormSetValue<FormItemState>;
 }
 
-const RequiredOptionalRadio: React.FC<Props> = ({ control }) => {
-  const { field: requiredField } = useController({
-    name: 'required',
-    control,
-    defaultValue: false,
-  });
-  const { field: warnIfEmptyField } = useController({
-    name: 'warnIfEmpty',
-    control,
-    defaultValue: false,
-  });
-  const { field: readOnlyField } = useController({
-    name: 'readOnly',
-    control,
-    defaultValue: false,
-  });
-
+const RequiredOptionalRadio: React.FC<Props> = ({ control, setValue }) => {
   const [required, warnIfEmpty, readOnly] = useWatch({
     control,
     name: ['required', 'warnIfEmpty', 'readOnly'],
@@ -66,24 +51,24 @@ const RequiredOptionalRadio: React.FC<Props> = ({ control }) => {
       if (!option) return;
 
       if (option.code === 'required') {
-        requiredField.onChange(true);
-        warnIfEmptyField.onChange(false);
-        readOnlyField.onChange(false);
+        setValue('required', true);
+        setValue('warnIfEmpty', false);
+        setValue('readOnly', false);
       } else if (option.code === 'warnIfEmpty') {
-        requiredField.onChange(false);
-        warnIfEmptyField.onChange(true);
-        readOnlyField.onChange(false);
+        setValue('required', false);
+        setValue('warnIfEmpty', true);
+        setValue('readOnly', false);
       } else if (option.code === 'readOnly') {
-        requiredField.onChange(false);
-        warnIfEmptyField.onChange(false);
-        readOnlyField.onChange(true);
+        setValue('required', false);
+        setValue('warnIfEmpty', false);
+        setValue('readOnly', true);
       } else if (option.code === 'optional') {
-        requiredField.onChange(false);
-        warnIfEmptyField.onChange(false);
-        readOnlyField.onChange(false);
+        setValue('required', false);
+        setValue('warnIfEmpty', false);
+        setValue('readOnly', false);
       }
     },
-    [readOnlyField, requiredField, warnIfEmptyField]
+    [setValue]
   );
 
   return (

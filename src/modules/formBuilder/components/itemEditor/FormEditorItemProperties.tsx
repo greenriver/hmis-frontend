@@ -172,12 +172,12 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
 
   if (!itemTypeValue) throw Error('Item type must be defined');
 
+  // todo @martha - new text item condition type is dropdown
   return (
     <form
       // handleSubmit validates input before calling onSubmit
-      onSubmit={handleSubmit(
-        (item) => console.log(item)
-        // onSave(item as FormItem, initialItem.linkId)
+      onSubmit={handleSubmit((item) =>
+        onSave(item as FormItem, initialItem.linkId)
       )}
     >
       <Box sx={{ p: 2 }}>
@@ -235,7 +235,9 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
               helperText='If checked, this date will be recorded as the Assessment Date on the assessment'
             />
           )}
-          {isQuestionItem && <RequiredOptionalRadio control={control} />}
+          {isQuestionItem && (
+            <RequiredOptionalRadio control={control} setValue={setValue} />
+          )}
           <ControlledTextInput
             required={isQuestionItem}
             control={control}
@@ -301,7 +303,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
         </Section>
         {[ItemType.Choice, ItemType.OpenChoice].includes(itemTypeValue) && (
           <Section title='Choices'>
-            <ManagePickListOptions control={control} />
+            <ManagePickListOptions control={control} setValue={setValue} />
           </Section>
         )}
         <Section title='Visibility'>
