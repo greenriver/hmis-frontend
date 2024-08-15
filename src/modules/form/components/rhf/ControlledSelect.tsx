@@ -84,7 +84,7 @@ const ControlledSelect: React.FC<Props> = ({
       onChange={(_event, option) => {
         const val = setValueAs ? setValueAs(option) : option?.code || null;
         field.onChange(val);
-        if (onChange) onChange(value || null);
+        if (onChange) onChange(val);
       }}
       textInputProps={{
         name: field.name,

@@ -250,7 +250,14 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   if (option?.code === 'false') return false;
                   return null;
                 }}
-                required
+                rules={{
+                  validate: (value) => {
+                    if (value === null) {
+                      return 'Required';
+                    }
+                    return true;
+                  },
+                }}
               />
             )}
             {answerInputType === 'answerCode' &&
