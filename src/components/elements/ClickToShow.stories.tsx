@@ -1,4 +1,4 @@
-import { ComponentStory, Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import ClickToShow from './ClickToShow';
 
@@ -7,9 +7,6 @@ export default {
   component: ClickToShow,
 } as Meta<typeof ClickToShow>;
 
-const Template: ComponentStory<typeof ClickToShow> = (args) => (
-  <ClickToShow {...args}>hidden value</ClickToShow>
-);
+type Story = StoryObj<typeof ClickToShow>;
 
-export const Default = Template.bind({});
-Default.args = {};
+export const Default: Story = { args: { children: 'Hidden Value' } };

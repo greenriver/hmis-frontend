@@ -70,6 +70,14 @@ Use the `graphql:codegen` script to update generated types.
 SCHEMA_PATH=<path to schema.graphql> yarn graphql:codegen
 ```
 
+### Upgrading Yarn
+
+If you used `corepack` to install yarn, you can also upgrade it using corepack. The Yarn version is not pinned in the repo.
+
+```sh
+corepack prepare yarn@<version> --activate
+```
+
 ### Upgrading NPM Packages
 
 To add or grade an NPM package, you can edit the `package.json` OR run `yarn add` OR run `yarn upgrade` OR run `yarn upgrade-interactive`.
