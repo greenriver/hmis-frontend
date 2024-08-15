@@ -21,16 +21,16 @@ import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import SaveSlide from '@/modules/form/components/SaveSlide';
 import {
-  MAX_INPUT_AND_LABEL_WIDTH,
   getItemMap,
   localResolvePickList,
+  MAX_INPUT_AND_LABEL_WIDTH,
 } from '@/modules/form/util/formUtil';
 import ManagePickListOptions from '@/modules/formBuilder/components/itemEditor/pickLists/ManagePickListOptions';
 import {
   COMPARABLE_ITEM_TYPES,
-  ItemCategory,
   determineAutofillField,
   getItemCategory,
+  ItemCategory,
   slugifyItemLabel,
   validComponentsForType,
 } from '@/modules/formBuilder/formBuilderUtil';
@@ -141,12 +141,6 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
       setValue('disabledDisplay', null);
     }
   }, [hiddenValue, setValue]);
-
-  useEffect(() => {
-    if (!hasEnableWhen) {
-      setValue('enableBehavior', null);
-    }
-  }, [hasEnableWhen, setValue]);
 
   const onLabelBlur = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -328,7 +322,11 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
           />
           {!hiddenValue && (
             <>
-              <ManageEnableWhen control={control} itemMap={itemMap} />
+              <ManageEnableWhen
+                control={control}
+                itemMap={itemMap}
+                setValue={setValue}
+              />
               {hasEnableWhen && (
                 <ControlledSelect
                   name='disabledDisplay'
@@ -378,6 +376,7 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
             control={control}
             itemMap={itemMap}
             itemType={itemTypeValue}
+            setValue={setValue}
           />
         </Section>
         <Section title='Advanced Properties' noDivider>
