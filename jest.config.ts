@@ -5,10 +5,13 @@ export default {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$':
       '<rootDir>/src/test/__mocks__/fileTransformer.js',
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
-    '\\.worker.js.*': '<rootDir>/src/test/__mocks__/workerMock.js',
+    '\\pdf.worker.*': '<rootDir>/src/test/__mocks__/workerMock.js',
+    // moduleNameMapper: { '^react-pdf$': '<rootDir>/__mocks__/react-pdf.js',
     // replace lodash-es with the commonjs version during testing runtime
     '^lodash-es$': 'lodash',
   },
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
-  transformIgnorePatterns: ['/node_modules/(?!@mui/x-tree-view|@rails)/'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!react-pdf|@mui/x-tree-view|@rails|react-pdf|pdfjs-dist)/',
+  ],
 };
