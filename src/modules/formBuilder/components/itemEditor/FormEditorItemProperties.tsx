@@ -173,7 +173,6 @@ const FormEditorItemProperties: React.FC<FormEditorItemPropertiesProps> = ({
 
   if (!itemTypeValue) throw Error('Item type must be defined');
 
-  // todo @martha - new text item condition type is dropdown
   return (
     <form
       // handleSubmit validates input before calling onSubmit

@@ -80,7 +80,7 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
           >
             <Stack gap={2}>
               <ControlledRadioGroupInput
-                name={'initial.0.initialBehavior'}
+                name='initial.0.initialBehavior'
                 control={control}
                 required={true}
                 options={initialBehaviorOptions}

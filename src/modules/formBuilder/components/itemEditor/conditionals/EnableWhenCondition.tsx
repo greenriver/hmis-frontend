@@ -229,17 +229,13 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   return null;
                 }}
                 rules={{
-                  validate: (value) => {
-                    if (value === null) {
-                      return 'Required';
-                    }
-                    return true;
-                  },
+                  required: 'This field is required',
                 }}
               />
             )}
             {answerInputType === 'answerCode' &&
-              (dependentItemPickList || pickListLoading ? (
+              ((dependentItemPickList && dependentItemPickList.length > 0) ||
+              pickListLoading ? (
                 <ControlledSelect
                   loading={pickListLoading}
                   name={`${enableWhenPath}.${index}.answerCode`}
