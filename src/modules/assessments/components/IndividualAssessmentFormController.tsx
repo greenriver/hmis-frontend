@@ -102,9 +102,7 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
     <IndividualAssessment
       definition={definition}
       assessment={assessment}
-      formRole={definition.role}
       enrollmentId={enrollment.id}
-      title={definition.title}
       client={client}
       onSubmit={submitHandler}
       onSaveDraft={saveDraftHandler}

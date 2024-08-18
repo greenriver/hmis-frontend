@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import React from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
@@ -9,6 +10,8 @@ import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { ItemMap } from '@/modules/form/types';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { BoundType, ItemType, ValidationSeverity } from '@/types/gqlTypes';
 
 interface Props {
@@ -19,7 +22,14 @@ interface Props {
 
 const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
   const fieldType = useWatch({ control, name: 'type' });
-  const boundTypeValue = useWatch({ control, name: `bounds.${index}.type` });
+  const bound = useWatch({ control, name: `bounds.${index}` });
+  const {
+    type: boundTypeValue,
+    offset,
+    question: dependentQuestion,
+    valueLocalConstant,
+  } = bound || {};
+
   const labelPrefix =
     boundTypeValue === BoundType.Max
       ? 'Maximum'
@@ -34,6 +44,11 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
     // you can only use another question as a bound if it has the same type
     filterItems: (item) => item.type === fieldType,
   });
+
+  const [canAdministrateConfig] = useHasRootPermissions([
+    'canAdministrateConfig',
+  ]);
+
   return (
     <Stack gap={2}>
       <Stack direction='row' gap={2}>
@@ -62,11 +77,22 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
           fullWidth
         />
       </Stack>
-      <Typography variant='body2'>
-        Enter <b>one</b> of the below fields to specify the{' '}
-        {labelPrefix.toLowerCase()} value:
-      </Typography>
-      {fieldType === ItemType.Date && (
+
+      {fieldType && [ItemType.Text, ItemType.String].includes(fieldType) ? (
+        <Typography variant='body2'>
+          Specify the {labelPrefix.toLowerCase()} number of characters for this
+          input.
+        </Typography>
+      ) : (
+        <RootPermissionsFilter permissions='canAdministrateConfig'>
+          <Typography variant='body2'>
+            Enter <b>one</b> of the below fields to specify the{' '}
+            {labelPrefix.toLowerCase()} value:
+          </Typography>
+        </RootPermissionsFilter>
+      )}
+
+      {fieldType === ItemType.Date ? (
         <Controller
           name={`bounds.${index}.valueDate`}
           control={control}
@@ -82,51 +108,71 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
             />
           )}
         />
-      )}
-      {fieldType &&
-        [ItemType.Integer, ItemType.Currency].includes(fieldType) && (
-          <ControlledTextInput
-            control={control}
-            name={`bounds.${index}.valueNumber`}
-            type='number'
-            label={`${labelPrefix} Value`}
-          />
-        )}
-
-      <ControlledSelect
-        name={`bounds.${index}.valueLocalConstant`}
-        control={control}
-        label={`Local Constant for ${labelPrefix} Value`}
-        placeholder='Select local constant'
-        options={localConstantsPickList}
-      />
-      {itemPickList.length > 0 && (
-        <ControlledSelect
-          name={`bounds.${index}.question`}
+      ) : (
+        <ControlledTextInput
           control={control}
-          label={`Dependent Question for ${labelPrefix} Value`}
-          placeholder='Select question'
-          helperText='The response to this question will be the bound value'
-          options={itemPickList}
+          // Require this "simple" bound field only if the user is NOT a super-admin
+          // AND none of the "advanced" bound features have already been set.
+          rules={{
+            required:
+              !canAdministrateConfig &&
+              !(offset || dependentQuestion || valueLocalConstant),
+          }}
+          name={`bounds.${index}.valueNumber`}
+          type='number'
+          label={`${labelPrefix} Value`}
         />
       )}
 
-      <Typography variant='body2'>
-        Optionally specify an offset for the bound. For example, specifying a
-        maximum with value "Today" with offset "3" will set the maximum bound to
-        3 days in the future.
-      </Typography>
-      <ControlledTextInput
-        control={control}
-        name={`bounds.${index}.offset`}
-        type='number'
-        label='Offset'
-        helperText={
-          fieldType === ItemType.Date
-            ? 'Number of days to offset the bound value'
-            : 'Number to offset the bound value'
-        }
-      />
+      {fieldType && ![ItemType.Text, ItemType.String].includes(fieldType) && (
+        <>
+          {(canAdministrateConfig || !!valueLocalConstant) && (
+            <ControlledSelect
+              name={`bounds.${index}.valueLocalConstant`}
+              control={control}
+              label={`Local Constant for ${labelPrefix} Value`}
+              placeholder='Select local constant'
+              options={localConstantsPickList}
+              disabled={!canAdministrateConfig}
+            />
+          )}
+
+          {(canAdministrateConfig || !!dependentQuestion) &&
+            itemPickList.length > 0 && (
+              <ControlledSelect
+                name={`bounds.${index}.question`}
+                control={control}
+                label={`Dependent Question for ${labelPrefix} Value`}
+                placeholder='Select question'
+                helperText='The response to this question will be the bound value'
+                options={itemPickList}
+                disabled={!canAdministrateConfig}
+              />
+            )}
+
+          {(canAdministrateConfig || offset) && (
+            <>
+              <Typography variant='body2'>
+                Optionally specify an offset for the bound. For example,
+                specifying a maximum with value "Today" with offset "3" will set
+                the maximum bound to 3 days in the future.
+              </Typography>
+              <ControlledTextInput
+                control={control}
+                name={`bounds.${index}.offset`}
+                type='number'
+                label='Offset'
+                helperText={
+                  fieldType === ItemType.Date
+                    ? 'Number of days to offset the bound value'
+                    : 'Number to offset the bound value'
+                }
+                disabled={!canAdministrateConfig}
+              />
+            </>
+          )}
+        </>
+      )}
     </Stack>
   );
 };
