@@ -65,14 +65,6 @@ const inputSizePickList = Object.keys(HmisEnums.InputSize).map((key) => ({
 }));
 const errorAlertId = 'formItemPropertyErrors';
 
-interface Props {
-  initialItem: FormItem;
-  definition: FormDefinitionFieldsForEditorFragment;
-  onSuccess: (updatedForm: FormDefinitionJson) => void;
-  onDiscard: () => void;
-  setDirty: Dispatch<SetStateAction<boolean>>;
-}
-
 const textLabel = (category: ItemCategory) => {
   switch (category) {
     case 'question':
@@ -83,6 +75,14 @@ const textLabel = (category: ItemCategory) => {
       return 'Group Label';
   }
 };
+
+interface Props {
+  initialItem: FormItem;
+  definition: FormDefinitionFieldsForEditorFragment;
+  onSuccess: (updatedForm: FormDefinitionJson) => void;
+  onDiscard: () => void;
+  setDirty: Dispatch<SetStateAction<boolean>>;
+}
 
 // todo @Martha - still want to rename
 const FormEditorItemProperties: React.FC<Props> = ({
