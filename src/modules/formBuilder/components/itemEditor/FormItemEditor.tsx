@@ -84,8 +84,7 @@ interface Props {
   setDirty: Dispatch<SetStateAction<boolean>>;
 }
 
-// todo @Martha - still want to rename
-const FormEditorItemProperties: React.FC<Props> = ({
+const FormItemEditor: React.FC<Props> = ({
   initialItem,
   definition,
   onDiscard,
@@ -485,4 +484,4 @@ const FormEditorItemProperties: React.FC<Props> = ({
   );
 };
 
-export default FormEditorItemProperties;
+export default FormItemEditor;

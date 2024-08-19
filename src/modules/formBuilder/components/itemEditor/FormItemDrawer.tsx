@@ -1,6 +1,6 @@
 import { Drawer } from '@mui/material';
 import React, { useState } from 'react';
-import FormEditorItemProperties from '@/modules/formBuilder/components/itemEditor/FormEditorItemProperties';
+import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
 import {
   FormDefinitionFieldsForEditorFragment,
   FormDefinitionJson,
@@ -49,7 +49,7 @@ const FormItemDrawer: React.FC<Props> = ({
       }}
     >
       {item && (
-        <FormEditorItemProperties
+        <FormItemEditor
           initialItem={item}
           definition={definition}
           onDiscard={onDiscard}
