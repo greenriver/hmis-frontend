@@ -67,7 +67,7 @@ export const FORM_ITEM_PALETTE = {
   [ItemType.Boolean]: {
     itemType: ItemType.Boolean,
     IconClass: FormBooleanIcon,
-    displayName: 'CheckBox',
+    displayName: 'Checkbox',
   },
   [ItemType.Choice]: {
     itemType: ItemType.Choice,

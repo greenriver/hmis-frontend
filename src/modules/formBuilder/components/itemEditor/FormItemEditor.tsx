@@ -1,9 +1,9 @@
 import { Divider, Drawer, Typography } from '@mui/material';
-import { startCase } from 'lodash-es';
 import React, { useCallback, useMemo } from 'react';
 import { DeepPartial, useForm } from 'react-hook-form';
 import { displayLabelForItem, updateFormItem } from '../../formBuilderUtil';
 import { useUpdateForm } from '../useUpdateForm';
+import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormEditorItemProperties from '@/modules/formBuilder/components/itemEditor/FormEditorItemProperties';
 import {
   FormDefinitionFieldsForEditorFragment,
@@ -79,7 +79,8 @@ const FormItemEditor: React.FC<FormItemEditorProps> = ({
           {isNewItem ? 'Add New Form item' : 'Edit Form Item'}
         </Typography>
         {isNewItem
-          ? `${startCase(item.type.toLowerCase())} Item`
+          ? // todo @Martha - any change here will cause merge conflicts
+            `${FORM_ITEM_PALETTE[item.type].displayName} Item`
           : displayLabelForItem(item)}
       </Typography>
       <Divider />
