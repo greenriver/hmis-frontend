@@ -122,6 +122,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   return (
     <TreeItem2Label
       key={itemId}
+      aria-label={`item ${itemId}`}
       sx={{
         display: 'flex',
         alignItems: 'center',
