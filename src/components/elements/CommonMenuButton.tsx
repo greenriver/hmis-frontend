@@ -21,6 +21,7 @@ export type NavMenuItem = {
   title?: ReactNode;
   divider?: boolean;
   disabled?: boolean;
+  ariaLabel?: string;
 };
 
 interface Props {
@@ -98,28 +99,30 @@ const CommonMenuButton = ({
         }}
         {...MenuProps}
       >
-        {items.map(({ key, to, title, divider, onClick, disabled }) =>
-          divider ? (
-            <Divider key={key} />
-          ) : to ? (
-            <MenuItem key={key} component={RouterLink} to={to}>
-              {title}
-            </MenuItem>
-          ) : (
-            <MenuItem
-              key={key}
-              onClick={() => {
-                if (onClick) {
-                  // close menu before triggering onClick
-                  setAnchorEl(null);
-                  onClick();
-                }
-              }}
-              disabled={disabled}
-            >
-              {title}
-            </MenuItem>
-          )
+        {items.map(
+          ({ key, to, title, divider, onClick, disabled, ariaLabel }) =>
+            divider ? (
+              <Divider key={key} />
+            ) : to ? (
+              <MenuItem key={key} component={RouterLink} to={to}>
+                {title}
+              </MenuItem>
+            ) : (
+              <MenuItem
+                key={key}
+                onClick={() => {
+                  if (onClick) {
+                    // close menu before triggering onClick
+                    setAnchorEl(null);
+                    onClick();
+                  }
+                }}
+                disabled={disabled}
+                aria-label={ariaLabel}
+              >
+                {title}
+              </MenuItem>
+            )
         )}
       </Menu>
     </>

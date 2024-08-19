@@ -104,6 +104,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         key: 'edit',
         title: 'Edit',
         onClick: () => openFormItemEditor(item),
+        ariaLabel: `edit ${itemId}`,
       },
       {
         key: 'delete',
@@ -112,9 +113,10 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         // disable deletion for groups that contain items
         disabled:
           item?.type === ItemType.Group && !!item?.item && item.item.length > 0,
+        ariaLabel: `delete ${itemId}`,
       },
     ],
-    [item, openFormItemEditor, onDelete]
+    [item, openFormItemEditor, onDelete, itemId]
   );
 
   return (
@@ -203,7 +205,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
               sx={{ '.MuiIconButton-root': { height: '24px', width: '24px' } }}
             >
               <IconButton
-                aria-label='move item up'
+                aria-label={`${itemId} move up`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onReorder('up');
@@ -215,7 +217,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
                 <UpIcon />
               </IconButton>
               <IconButton
-                aria-label='move item down'
+                aria-label={`${itemId} move down`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onReorder('down');
