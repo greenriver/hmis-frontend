@@ -16,7 +16,7 @@ import SaveSlide from '@/modules/form/components/SaveSlide';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
 import FormBuilderPalette from '@/modules/formBuilder/components/FormBuilderPalette';
 import FormTree from '@/modules/formBuilder/components/formTree/FormTree';
-import FormItemEditor from '@/modules/formBuilder/components/itemEditor/FormItemEditor';
+import FormItemDrawer from '@/modules/formBuilder/components/itemEditor/FormItemDrawer';
 
 import { AdminDashboardRoutes } from '@/routes/routes';
 
@@ -109,18 +109,16 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
           proceeding?
         </Typography>
       </ConfirmationDialog>
-      {selectedItem && (
-        <FormItemEditor
-          item={selectedItem}
-          definition={formDefinition}
-          // If form item changes were discarded, just close the drawer
-          onDiscard={() => setSelectedItem(undefined)}
-          // If form was successfully updated, reset this "tree form" and close the drawer
-          onSuccess={onSuccess}
-          // Form can be closed without any changes made
-          onClose={() => setSelectedItem(undefined)}
-        />
-      )}
+      <FormItemDrawer
+        item={selectedItem}
+        definition={formDefinition}
+        // If form item changes were discarded, just close the drawer
+        onDiscard={() => setSelectedItem(undefined)}
+        // If form was successfully updated, reset this "tree form" and close the drawer
+        onSuccess={onSuccess}
+        // Form can be closed without any changes made
+        onClose={() => setSelectedItem(undefined)}
+      />
       <Box
         display='flex'
         component='form'
