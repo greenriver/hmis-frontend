@@ -101,7 +101,11 @@ const PaletteButton: React.FC<
 > = ({ displayName, IconClass, onClick }) => {
   return (
     <Tooltip placement='left' title={displayName}>
-      <IconButton size='small' onClick={onClick}>
+      <IconButton
+        size='small'
+        onClick={onClick}
+        aria-label={`Add ${displayName} item`}
+      >
         <IconClass />
       </IconButton>
     </Tooltip>
