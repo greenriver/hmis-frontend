@@ -183,7 +183,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           >
             <CommonMenuButton
               title='Actions'
-              aria-label='item actions'
+              aria-label={`${itemId} item actions`}
               iconButton
               items={menuItems}
               variant='outlined'
