@@ -1,9 +1,10 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { UseFormSetValue, useWatch } from 'react-hook-form';
+import { Controller, UseFormSetValue, useWatch } from 'react-hook-form';
 import { FormItemControl, FormItemState } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
+import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
@@ -14,6 +15,7 @@ import {
   COMPARABLE_ITEM_TYPES,
   getItemCategory,
 } from '@/modules/formBuilder/formBuilderUtil';
+import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   EnableOperator,
@@ -82,6 +84,8 @@ export const determineEnableWhenComparisonField = (
     case ItemType.Integer:
     case ItemType.Currency:
       return 'answerNumber';
+    case ItemType.Date:
+      return 'answerDate'; // fake type for rendering a different component, but gets returned as answerCode in the end.
     default:
       // not handled: compareQuestion
       return 'answerCode';
@@ -254,6 +258,21 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   required
                 />
               ))}
+            {answerInputType === 'answerDate' && (
+              <Controller
+                name={`${enableWhenPath}.${index}.answerCode`}
+                control={control}
+                render={({ field: { ref, ...field } }) => (
+                  <DatePicker
+                    value={parseHmisDateString(field.value)}
+                    onChange={(date) =>
+                      field.onChange(date ? formatDateForGql(date) : '')
+                    }
+                    label={`Response Value (Date)`}
+                  />
+                )}
+              />
+            )}
             {answerInputType === 'answerCodes' && (
               <ControlledTextInput
                 name={`${enableWhenPath}.${index}.answerCodes`}
