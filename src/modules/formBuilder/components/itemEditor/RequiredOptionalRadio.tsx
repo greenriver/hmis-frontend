@@ -49,26 +49,27 @@ const RequiredOptionalRadio: React.FC<Props> = ({ control, setValue }) => {
   const handleChange = useCallback(
     (option?: PickListOption | null) => {
       if (!option) return;
+      if (option.code === radioValue) return;
 
       if (option.code === 'required') {
-        setValue('required', true);
-        setValue('warnIfEmpty', false);
-        setValue('readOnly', false);
+        setValue('required', true, { shouldDirty: true });
+        setValue('warnIfEmpty', false, { shouldDirty: true });
+        setValue('readOnly', false, { shouldDirty: true });
       } else if (option.code === 'warnIfEmpty') {
-        setValue('required', false);
-        setValue('warnIfEmpty', true);
-        setValue('readOnly', false);
+        setValue('required', false, { shouldDirty: true });
+        setValue('warnIfEmpty', true, { shouldDirty: true });
+        setValue('readOnly', false, { shouldDirty: true });
       } else if (option.code === 'readOnly') {
-        setValue('required', false);
-        setValue('warnIfEmpty', false);
-        setValue('readOnly', true);
+        setValue('required', false, { shouldDirty: true });
+        setValue('warnIfEmpty', false, { shouldDirty: true });
+        setValue('readOnly', true, { shouldDirty: true });
       } else if (option.code === 'optional') {
-        setValue('required', false);
-        setValue('warnIfEmpty', false);
-        setValue('readOnly', false);
+        setValue('required', false, { shouldDirty: true });
+        setValue('warnIfEmpty', false, { shouldDirty: true });
+        setValue('readOnly', false, { shouldDirty: true });
       }
     },
-    [setValue]
+    [setValue, radioValue]
   );
 
   return (
