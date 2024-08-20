@@ -6,8 +6,8 @@ import { FormItemControl } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
 import CardGroup, { RemovableCard } from './CardGroup';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
-import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
+import ControlledRadioGroupInput from '@/modules/form/components/rhf/ControlledRadioGroupInput';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
 import { localResolvePickList } from '@/modules/form/util/formUtil';
@@ -79,20 +79,12 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
             removeTooltip={'Remove Initial Value'}
           >
             <Stack gap={2}>
-              <Controller
+              <ControlledRadioGroupInput
                 name='initial.0.initialBehavior'
                 control={control}
-                defaultValue={InitialBehavior.IfEmpty}
-                shouldUnregister
-                render={({ field: { ref, value, onChange, ...field } }) => (
-                  <RadioGroupInput
-                    options={initialBehaviorOptions}
-                    label='Initial Behavior'
-                    value={initialBehaviorOptions.find((o) => o.code === value)}
-                    onChange={(option) => onChange(option?.code)}
-                    {...field}
-                  />
-                )}
+                required={true}
+                options={initialBehaviorOptions}
+                label={'Initial Behavior'}
               />
               {!advanced.localConstant && (
                 <>
