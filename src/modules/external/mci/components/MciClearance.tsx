@@ -109,6 +109,8 @@ const MciClearance = ({
         let status: ClearanceStatus;
         if (matches.length === 0) {
           status = 'no_matches';
+        } else if (matches[0].score >= 97 && !!matches[0].existingClientId) {
+          status = 'auto_cleared_existing_client';
         } else if (matches[0].score >= 97) {
           status = 'auto_cleared';
         } else if (matches.length === 1) {
@@ -159,8 +161,9 @@ const MciClearance = ({
       getClearanceAlertText({
         status,
         candidates,
+        existingClient,
       }),
-    [status, candidates]
+    [status, candidates, existingClient]
   );
 
   const searchButton = buttonText ? (
@@ -177,15 +180,29 @@ const MciClearance = ({
     </LoadingButton>
   ) : null;
 
+  const errorMsg = useMemo(() => {
+    // We assume this error boolean means that MCI clearance is required.
+    // Note: Clearance is only required in SOME cases, but we don't need to worry about that here,
+    // that logic is captured in HmisExternalApis ClientExtension validation methods.
+    if (!hasValidationError) return;
+    if (value) return; // user has made a selection
+
+    // User has not performed the clearance yet
+    if (status === 'initial') return CLEARANCE_REQUIRED_MSG;
+
+    // User has performed the clearance but has not selected a match, AND
+    // the match list includes 1 or more existing clients
+    if (candidates.find((c) => !!c.existingClientId)) {
+      return `${CLEARANCE_REQUIRED_MSG}. If an existing client is a match, please cancel and search for the existing client record.`;
+    }
+
+    // User has performed the clearance but has not yet selected a match.
+    return 'Please make a selection';
+  }, [candidates, hasValidationError, status, value]);
+
   return (
     <>
-      {hasValidationError && !value && (
-        <Alert severity='error'>
-          {status === 'initial'
-            ? CLEARANCE_REQUIRED_MSG
-            : 'Please make a selection.'}
-        </Alert>
-      )}
+      {errorMsg && <Alert severity='error'>{errorMsg}</Alert>}
       {errorState && hasErrors(errorState) && (
         <Stack gap={1}>
           <ApolloErrorAlert error={errorState.apolloError} />
@@ -218,9 +235,11 @@ const MciClearance = ({
           value={value}
           onChange={onChange}
           matches={candidates}
-          autocleared={status === 'auto_cleared'}
-          // Only allow them to link a duplicate if this client has already been saved.
-          allowSelectingExistingClient={existingClient}
+          status={status}
+          // Allow them to link to a duplicate MCI ID only if this client has already been saved.
+          // That could happen if client was first created as Uncleared, and now they are clearing
+          // and realizing that they should get the same MCI ID as an existing Client record.
+          allowSelectingExistingClient={true}
         />
       )}
     </>
