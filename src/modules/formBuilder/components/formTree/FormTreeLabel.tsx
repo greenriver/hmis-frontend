@@ -120,6 +120,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
   return (
     <TreeItem2Label
       key={itemId}
+      aria-label={`item ${itemId}`}
       sx={{
         display: 'flex',
         alignItems: 'center',
@@ -183,7 +184,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           >
             <CommonMenuButton
               title='Actions'
-              aria-label='item actions'
+              aria-label={`${itemId} item actions`}
               iconButton
               items={menuItems}
               variant='outlined'
@@ -203,7 +204,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
               sx={{ '.MuiIconButton-root': { height: '24px', width: '24px' } }}
             >
               <IconButton
-                aria-label='move item up'
+                aria-label={`${itemId} move up`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onReorder('up');
@@ -215,7 +216,7 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
                 <UpIcon />
               </IconButton>
               <IconButton
-                aria-label='move item down'
+                aria-label={`${itemId} move down`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onReorder('down');

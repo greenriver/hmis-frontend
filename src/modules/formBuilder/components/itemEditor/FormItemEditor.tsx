@@ -30,6 +30,7 @@ import {
   localResolvePickList,
   MAX_INPUT_AND_LABEL_WIDTH,
 } from '@/modules/form/util/formUtil';
+import { FORM_ITEM_PALETTE } from '@/modules/formBuilder/components/FormBuilderPalette';
 import ManagePickListOptions from '@/modules/formBuilder/components/itemEditor/pickLists/ManagePickListOptions';
 import { useUpdateForm } from '@/modules/formBuilder/components/useUpdateForm';
 import {
@@ -214,7 +215,7 @@ const FormItemEditor: React.FC<Props> = ({
           {isNewItem ? 'Add New Form item' : 'Edit Form Item'}
         </Typography>
         {isNewItem
-          ? `${startCase(initialItem.type.toLowerCase())} Item`
+          ? `${FORM_ITEM_PALETTE[initialItem.type].displayName} Item`
           : displayLabelForItem(initialItem)}
       </Typography>
       <Divider />
