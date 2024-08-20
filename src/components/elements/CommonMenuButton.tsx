@@ -99,30 +99,29 @@ const CommonMenuButton = ({
         }}
         {...MenuProps}
       >
-        {items.map(
-          ({ key, to, title, divider, onClick, disabled, ariaLabel }) =>
-            divider ? (
-              <Divider key={key} />
-            ) : to ? (
-              <MenuItem key={key} component={RouterLink} to={to}>
-                {title}
-              </MenuItem>
-            ) : (
-              <MenuItem
-                key={key}
-                onClick={() => {
-                  if (onClick) {
-                    // close menu before triggering onClick
-                    setAnchorEl(null);
-                    onClick();
-                  }
-                }}
-                disabled={disabled}
-                aria-label={ariaLabel}
-              >
-                {title}
-              </MenuItem>
-            )
+        {items.map(({ key, to, title, divider, onClick, disabled }) =>
+          divider ? (
+            <Divider key={key} />
+          ) : to ? (
+            <MenuItem key={key} component={RouterLink} to={to}>
+              {title}
+            </MenuItem>
+          ) : (
+            <MenuItem
+              key={key}
+              onClick={() => {
+                if (onClick) {
+                  // close menu before triggering onClick
+                  setAnchorEl(null);
+                  onClick();
+                }
+              }}
+              disabled={disabled}
+              // aria-label={ariaLabel}  // todo @Martha - fix
+            >
+              {title}
+            </MenuItem>
+          )
         )}
       </Menu>
     </>
