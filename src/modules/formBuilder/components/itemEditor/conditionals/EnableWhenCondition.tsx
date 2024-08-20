@@ -1,15 +1,15 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { Controller, useWatch } from 'react-hook-form';
-import { FormItemControl } from '../types';
+import { UseFormSetValue, useWatch } from 'react-hook-form';
+import { FormItemControl, FormItemState } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
-import YesNoRadio from '@/components/elements/input/YesNoRadio';
+import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
+import { usePickList } from '@/modules/form/hooks/usePickList';
 import { ItemMap } from '@/modules/form/types';
-import { localResolvePickList } from '@/modules/form/util/formUtil';
 import {
   COMPARABLE_ITEM_TYPES,
   getItemCategory,
@@ -28,6 +28,7 @@ interface EnableWhenConditionProps {
   index: number;
   itemPickList: PickListOption[];
   itemMap: ItemMap;
+  setValue: UseFormSetValue<FormItemState>;
   enableWhenPath?: 'enableWhen' | `autofillValues.${number}.autofillWhen`; // path to enableWhen in form
 }
 
@@ -93,6 +94,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
   index,
   itemPickList,
   itemMap,
+  setValue,
   enableWhenPath = 'enableWhen',
 }) => {
   // Watch state of this condition
@@ -105,14 +107,11 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     () => (state?.question ? itemMap[state?.question] : undefined),
     [itemMap, state?.question]
   );
-  const dependentItemPickList = useMemo(() => {
-    if (!dependentItem) return;
-    if (dependentItem.pickListOptions) return dependentItem.pickListOptions;
-    if (dependentItem.pickListReference) {
-      // TODO: could use usePickList to fetch remote pick list. This will only resolve local enums.
-      return localResolvePickList(dependentItem.pickListReference);
-    }
-  }, [dependentItem]);
+
+  const { pickList: dependentItemPickList = [], loading: pickListLoading } =
+    usePickList({
+      item: dependentItem || { linkId: 'fake', type: ItemType.Choice },
+    });
 
   const enableOperatorPickList = useMemo(() => {
     // TODO handle local constant instead of dependentItem
@@ -181,6 +180,9 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 rules={{
                   required: 'Local Constant or Dependent Question is required',
                 }}
+                onChange={() =>
+                  setValue(`${enableWhenPath}.${index}.operator`, undefined)
+                }
               />
             )}
             {advanced.localConstant && (
@@ -193,7 +195,10 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   required: 'Local Constant or Dependent Question is required',
                 }}
                 options={localConstantsPickList}
-                helperText="Local constant who's value will determine whether the condition is met"
+                helperText='Local constant whose value will determine whether the condition is met'
+                onChange={() =>
+                  setValue(`${enableWhenPath}.${index}.operator`, undefined)
+                }
               />
             )}
           </Stack>
@@ -213,31 +218,32 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
         <Grid item xs={4}>
           <Stack gap={1}>
             {answerInputType === 'answerBoolean' && (
-              <Controller
+              <ControlledSelect
                 name={`${enableWhenPath}.${index}.answerBoolean`}
                 control={control}
-                shouldUnregister // clear value when un-mounted
-                render={({
-                  field: { ref, ...field },
-                  fieldState: { error },
-                }) => (
-                  <YesNoRadio
-                    label='Value'
-                    error={!!error}
-                    helperText={error?.message}
-                    {...field}
-                  />
-                )}
+                label='Value'
+                options={[TRUE_OPT, FALSE_OPT]}
+                setValueAs={(option) => {
+                  if (option?.code === 'true') return true;
+                  if (option?.code === 'false') return false;
+                  return null;
+                }}
+                rules={{
+                  required: 'This field is required',
+                }}
               />
             )}
             {answerInputType === 'answerCode' &&
-              (dependentItemPickList ? (
+              ((dependentItemPickList && dependentItemPickList.length > 0) ||
+              pickListLoading ? (
                 <ControlledSelect
+                  loading={pickListLoading}
                   name={`${enableWhenPath}.${index}.answerCode`}
                   control={control}
                   label='Response Value'
-                  options={dependentItemPickList}
+                  options={dependentItemPickList || []}
                   helperText={answerHelperText}
+                  required
                 />
               ) : (
                 <ControlledTextInput
@@ -245,6 +251,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   control={control}
                   label='Response Value (Code)'
                   helperText={answerHelperText}
+                  required
                 />
               ))}
             {answerInputType === 'answerCodes' && (
@@ -253,6 +260,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 control={control}
                 label='Response Value (Code List)'
                 helperText={answerHelperText}
+                required
               />
             )}
             {answerInputType === 'answerNumber' && (
@@ -262,6 +270,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 label='Response Value (Numeric)'
                 type='number'
                 helperText={answerHelperText}
+                required
               />
             )}
             {state?.answerGroupCode && (
@@ -270,6 +279,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 control={control}
                 label='Response Group'
                 helperText='If dependent item uses a grouped picklist, enter the name of a group to compare using the operator.'
+                required
               />
             )}
           </Stack>

@@ -1,5 +1,5 @@
-import { useFieldArray } from 'react-hook-form';
-import { FormItemControl } from '../types';
+import { useFieldArray, UseFormSetValue } from 'react-hook-form';
+import { FormItemControl, FormItemState } from '../types';
 import AutofillValueCard from './AutofillValueCard';
 import CardGroup, { RemovableCard } from './CardGroup';
 import { ItemMap } from '@/modules/form/types';
@@ -9,6 +9,7 @@ interface AutofillPropertiesProps {
   control: FormItemControl;
   itemMap: ItemMap;
   itemType: ItemType;
+  setValue: UseFormSetValue<FormItemState>;
 }
 
 // Component for managing a set of AutofillValues
@@ -16,6 +17,7 @@ const AutofillProperties: React.FC<AutofillPropertiesProps> = ({
   control,
   itemType,
   itemMap,
+  setValue,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -36,6 +38,7 @@ const AutofillProperties: React.FC<AutofillPropertiesProps> = ({
             control={control}
             itemMap={itemMap}
             itemType={itemType}
+            setValue={setValue}
           />
         </RemovableCard>
       ))}
