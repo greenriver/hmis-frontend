@@ -21,7 +21,6 @@ export type NavMenuItem = {
   title?: ReactNode;
   divider?: boolean;
   disabled?: boolean;
-  ariaLabel?: string;
 };
 
 interface Props {
@@ -117,7 +116,6 @@ const CommonMenuButton = ({
                 }
               }}
               disabled={disabled}
-              // aria-label={ariaLabel}  // todo @Martha - fix
             >
               {title}
             </MenuItem>

@@ -104,7 +104,6 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         key: 'edit',
         title: 'Edit',
         onClick: () => openFormItemEditor(item),
-        ariaLabel: `edit ${itemId}`,
       },
       {
         key: 'delete',
@@ -113,10 +112,9 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
         // disable deletion for groups that contain items
         disabled:
           item?.type === ItemType.Group && !!item?.item && item.item.length > 0,
-        ariaLabel: `delete ${itemId}`,
       },
     ],
-    [item, openFormItemEditor, onDelete, itemId]
+    [item, openFormItemEditor, onDelete]
   );
 
   return (
@@ -186,7 +184,6 @@ const FormTreeLabel: React.FC<FormTreeLabelProps> = ({
           >
             <CommonMenuButton
               title='Actions'
-              aria-label={`${itemId} item actions`}
               iconButton
               items={menuItems}
               variant='outlined'
