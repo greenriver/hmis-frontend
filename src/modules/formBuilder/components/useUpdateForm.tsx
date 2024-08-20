@@ -17,7 +17,7 @@ interface Args {
 // This hook has the logic for submitting a FormDefinition using the UpdateFormDefinition mutation.
 // This is to handle form submission in 2 components:
 // - FormBuilder: the main form editor page where items can be re-ordered
-// - FormItemEditor: the drawer that pops up when editing an individual item
+// - FormItemEditor: the editor in the drawer that pops open when editing an individual item
 export function useUpdateForm({ formId, onSuccess }: Args) {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
