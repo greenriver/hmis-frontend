@@ -15,6 +15,8 @@ import {
 import {
   addDescendants,
   autofillValues,
+  createHudValuesForSubmit,
+  createValuesForSubmit,
   dropUnderscorePrefixedKeys,
   getDependentItemsDisabledStatus,
   isShown,
@@ -69,6 +71,14 @@ const useDynamicFields = ({
     const cleaned = omit(values, excluded);
     return dropUnderscorePrefixedKeys(cleaned);
   }, [definition, disabledLinkIds, itemMap, values]);
+
+  const getValusForSubmit = useCallback(() => {
+    const cleaned = getCleanedValues();
+    return {
+      values: createValuesForSubmit(cleaned, definition),
+      hudValues: createHudValuesForSubmit(cleaned, definition),
+    };
+  }, [definition, getCleanedValues]);
 
   const shouldShowItem = useCallback(
     (item: FormItem) => isShown(item, disabledLinkIds),
@@ -258,6 +268,7 @@ const useDynamicFields = ({
     () => ({
       renderFields: viewOnly ? renderViewFields : renderFormFields,
       values,
+      getValusForSubmit,
       getCleanedValues,
       shouldShowItem,
     }),
@@ -266,6 +277,7 @@ const useDynamicFields = ({
       viewOnly,
       renderFormFields,
       renderViewFields,
+      getValusForSubmit,
       getCleanedValues,
       shouldShowItem,
     ]

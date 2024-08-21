@@ -47,7 +47,7 @@ export interface IndividualAssessmentProps {
   // Props to pass to the FormActions component to specify button layout and actions
   FormActionProps?: DynamicFormProps['FormActionProps'];
   // Submit handler
-  onSubmit: DynamicFormProps['onSubmit'];
+  onSubmit: (formDefinitionId: string) => DynamicFormProps['onSubmit'];
   // Save handler (unsubmitted assessments only)
   onSaveDraft?: DynamicFormProps['onSaveDraft'];
   // Error state

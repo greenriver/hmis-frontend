@@ -70,7 +70,7 @@ interface Props {
   top?: number;
   embeddedInWorkflow?: boolean;
   FormActionProps?: DynamicFormProps['FormActionProps'];
-  onSubmit: DynamicFormProps['onSubmit'];
+  onSubmit: (formDefinitionId: string) => DynamicFormProps['onSubmit'];
   onSaveDraft?: DynamicFormProps['onSaveDraft'];
   errors: ErrorState;
   onCancelValidations?: VoidFunction;
@@ -395,7 +395,7 @@ const AssessmentForm: React.FC<Props> = ({
             key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
             definition={definition.definition}
             ref={formRef}
-            onSubmit={onSubmit}
+            onSubmit={onSubmit(definition.id)}
             onSaveDraft={
               assessment && !assessment.inProgress ? undefined : onSaveDraft
             }

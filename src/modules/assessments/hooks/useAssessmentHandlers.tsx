@@ -11,10 +11,7 @@ import {
 } from '@/modules/errors/util';
 import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
 import { FormValues } from '@/modules/form/types';
-import {
-  debugFormValues,
-  transformSubmitValues,
-} from '@/modules/form/util/formUtil';
+import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import {
   AssessmentInput,
   FormDefinitionFieldsFragment,
@@ -71,8 +68,6 @@ export function useAssessmentHandlers({
   assessmentLockVersion,
   onCompletedMutation = () => null,
 }: Args) {
-  const formDefinitionId = definition?.id;
-
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const onCompleted = useCallback(
@@ -124,58 +119,48 @@ export function useAssessmentHandlers({
   const [submitAssessmentMutation, { loading: submitLoading }] =
     useSubmitAssessmentMutation({ onError });
 
-  const submitHandler: DynamicFormOnSubmit = useCallback(
-    ({ event, values, confirmed = false, onSuccess }) => {
-      if (!definition || !formDefinitionId) return;
-      if (
-        event &&
-        debugFormValues(
-          event,
-          values,
-          definition.definition,
-          createValuesForSubmit,
-          createHudValuesForSubmit
-        )
-      )
-        return;
-
-      const input = {
-        assessmentId,
-        enrollmentId,
-        formDefinitionId,
-        values: createValuesForSubmit(values, definition.definition),
-        hudValues: createHudValuesForSubmit(values, definition.definition),
-        confirmed,
-      };
-      void submitAssessmentMutation({
-        variables: { input: { input, assessmentLockVersion } },
-        onCompleted: (data) => {
-          onCompleted(data);
-          if (data.submitAssessment?.assessment && onSuccess) {
-            onSuccess();
-          }
+  // wrap in form definition id becuse we need it to submit assessments,
+  // but its down in the AssessmentForm. spaghetti
+  const submitHandler: (formDefinitionId: string) => DynamicFormOnSubmit =
+    useCallback(
+      (formDefinitionId: string) =>
+        ({ values, hudValues, confirmed = false, onSuccess }) => {
+          const input = {
+            assessmentId,
+            enrollmentId,
+            formDefinitionId,
+            values,
+            hudValues,
+            confirmed,
+          };
+          void submitAssessmentMutation({
+            variables: { input: { input, assessmentLockVersion } },
+            onCompleted: (data) => {
+              onCompleted(data);
+              if (data.submitAssessment?.assessment && onSuccess) {
+                onSuccess();
+              }
+            },
+          });
         },
-      });
-    },
-    [
-      submitAssessmentMutation,
-      assessmentId,
-      assessmentLockVersion,
-      definition,
-      formDefinitionId,
-      enrollmentId,
-      onCompleted,
-    ]
-  );
+      [
+        submitAssessmentMutation,
+        assessmentId,
+        assessmentLockVersion,
+
+        enrollmentId,
+        onCompleted,
+      ]
+    );
 
   const saveDraftHandler = useCallback(
     (values: FormValues, onSuccessCallback?: VoidFunction) => {
-      if (!definition || !formDefinitionId) return;
+      if (!definition) return;
 
       const input: AssessmentInput = {
         assessmentId,
         enrollmentId,
-        formDefinitionId,
+        formDefinitionId: definition.id, // ok because it shouldn't have changed in AssessmentForm
         values: createValuesForSubmit(values, definition.definition),
         hudValues: createHudValuesForSubmit(values, definition.definition),
       };
@@ -194,7 +179,6 @@ export function useAssessmentHandlers({
       assessmentId,
       assessmentLockVersion,
       definition,
-      formDefinitionId,
       enrollmentId,
       onCompleted,
     ]

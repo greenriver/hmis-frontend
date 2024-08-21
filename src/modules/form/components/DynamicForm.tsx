@@ -27,9 +27,10 @@ import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
-  values: FormValues;
-  confirmed?: boolean;
-  event?: React.MouseEvent<HTMLButtonElement>;
+  values: FormValues; // submittable form values keyed by Link ID
+  hudValues: FormValues; // submittable form values keyed by field name
+  confirmed?: boolean; // whether warning modal has been confirmed
+  event?: React.MouseEvent<HTMLButtonElement>; // submission event
   onSuccess?: VoidFunction;
   onError?: VoidFunction;
 }
@@ -115,12 +116,13 @@ const DynamicForm = forwardRef(
       }
     }, []);
 
-    const { renderFields, getCleanedValues } = useDynamicFields({
-      definition,
-      initialValues,
-      localConstants,
-      onFieldChange,
-    });
+    const { renderFields, getCleanedValues, getValusForSubmit } =
+      useDynamicFields({
+        definition,
+        initialValues,
+        localConstants,
+        onFieldChange,
+      });
 
     const saveButtonsRef = React.createRef<HTMLDivElement>();
     const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
@@ -133,13 +135,13 @@ const DynamicForm = forwardRef(
     const handleSubmit = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onSubmit({
-          values: getCleanedValues(),
+          ...getValusForSubmit(),
           confirmed: false,
           event,
           onSuccess: () => setDirty(false),
         });
       },
-      [onSubmit, getCleanedValues]
+      [onSubmit, getValusForSubmit]
     );
 
     // Expose handle for parent components to initiate a background save (used for household workflow tabs)
@@ -148,7 +150,7 @@ const DynamicForm = forwardRef(
       () => ({
         SubmitForm: () => {
           onSubmit({
-            values: getCleanedValues(),
+            ...getValusForSubmit(),
             confirmed: false,
           });
         },
@@ -159,13 +161,13 @@ const DynamicForm = forwardRef(
         SubmitIfDirty: (ignoreWarnings: boolean) => {
           if (!onSubmit || !dirty || locked) return;
           onSubmit({
-            values: getCleanedValues(),
+            ...getValusForSubmit(),
             confirmed: ignoreWarnings,
             onSuccess: () => setDirty(false),
           });
         },
       }),
-      [onSubmit, getCleanedValues, dirty, locked, handleSaveDraft]
+      [onSubmit, getValusForSubmit, dirty, locked, handleSaveDraft]
     );
 
     useEffect(() => {
@@ -177,13 +179,13 @@ const DynamicForm = forwardRef(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         onSubmit({
-          values: getCleanedValues(),
+          ...getValusForSubmit(),
           confirmed: true,
           event,
           onSuccess: () => setDirty(false),
         });
       },
-      [onSubmit, getCleanedValues]
+      [onSubmit, getValusForSubmit]
     );
 
     const { renderValidationDialog, validationDialogVisible } =
