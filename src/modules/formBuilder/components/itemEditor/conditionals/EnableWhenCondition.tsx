@@ -229,7 +229,13 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   return null;
                 }}
                 rules={{
-                  required: 'This field is required',
+                  validate: (value) => {
+                    if (value === null) {
+                      // Requires custom validation to accommodate the valid value `false`
+                      return 'This field is required';
+                    }
+                    return true;
+                  },
                 }}
               />
             )}
