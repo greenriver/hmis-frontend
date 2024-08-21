@@ -155,7 +155,7 @@ const MciMatchSelector = ({
             title={status === 'auto_cleared' ? 'Client auto-cleared' : null}
           >
             <Switch
-              inputProps={{ 'aria-label': 'controlled' }}
+              inputProps={{ 'aria-label': `MCI ID ${m.mciId}` }}
               checked={value === m.mciId}
               onChange={handleChange(m.mciId)}
               disabled={status === 'auto_cleared'}
@@ -205,7 +205,7 @@ const MciMatchSelector = ({
               <TableRow>
                 <TableCell>
                   <Switch
-                    inputProps={{ 'aria-label': 'controlled' }}
+                    inputProps={{ 'aria-label': 'New MCI ID' }}
                     checked={value === NEW_MCI_STRING}
                     onChange={handleChange(NEW_MCI_STRING)}
                     disabled={value === NEW_MCI_STRING && matches.length === 0}
