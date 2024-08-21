@@ -21,6 +21,7 @@ export type ControlledSelectProps = Omit<
   helperText?: ReactNode;
   placeholder?: string;
   onChange?: (option: PickListOption | null) => void;
+  shouldUnregister?: boolean;
   setValueAs?: (option: PickListOption | null) => any; // allow transform PickListOption to desired value (to support boolean)
 };
 
@@ -37,6 +38,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   helperText,
   onChange,
   setValueAs,
+  shouldUnregister = true,
   ...props
 }) => {
   const {
@@ -45,7 +47,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
   } = useController({
     name,
     control,
-    shouldUnregister: true,
+    shouldUnregister: shouldUnregister,
     rules: {
       required: required ? 'This field is required' : false,
       ...rules,
@@ -88,7 +90,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
         helperText: error?.message || helperText,
         error: !!error,
         inputRef: field.ref, // send input ref, so we can focus on input when error appear
-        required,
+        // required,  // Instead of passing `required` to the input, rely on RHF's required rule, which uses nicer formatting
         placeholder,
         ...props.textInputProps, // allow overriding any of the above
       }}

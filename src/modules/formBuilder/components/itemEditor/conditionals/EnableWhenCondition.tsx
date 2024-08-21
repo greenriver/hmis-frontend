@@ -1,6 +1,6 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { UseFormSetValue, useWatch } from 'react-hook-form';
 import { FormItemControl, FormItemState } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
@@ -163,6 +163,22 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
 
   const localConstantsPickList = useLocalConstantsPickList();
 
+  const clearAnswer = useCallback(() => {
+    setValue(`${enableWhenPath}.${index}.answerCode`, null);
+    setValue(`${enableWhenPath}.${index}.answerCodes`, null);
+    setValue(`${enableWhenPath}.${index}.answerBoolean`, null);
+    setValue(`${enableWhenPath}.${index}.answerNumber`, null);
+    setValue(`${enableWhenPath}.${index}.answerGroupCode`, null);
+  }, [setValue, enableWhenPath, index]);
+
+  const onChangeDependentQuestion = useCallback(() => {
+    // todo @Martha - fix typescript's unhappiness
+    // - by making this not a ControlledSelect after all, so that we can have more granular control?
+    // - by changing the schema so that null is acceptable here?
+    setValue(`${enableWhenPath}.${index}.operator`, null);
+    clearAnswer();
+  }, [setValue, enableWhenPath, index, clearAnswer]);
+
   return (
     <Stack>
       <Grid container gap={2}>
@@ -173,32 +189,26 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
               <ControlledSelect
                 name={`${enableWhenPath}.${index}.question`}
                 control={control}
+                shouldUnregister={false}
                 label='Dependent Question'
                 placeholder='Select question'
                 options={itemPickList}
                 helperText='Question whose response will determine whether the condition is met'
-                rules={{
-                  required: 'Local Constant or Dependent Question is required',
-                }}
-                onChange={() =>
-                  setValue(`${enableWhenPath}.${index}.operator`, undefined)
-                }
+                onChange={onChangeDependentQuestion}
+                required
               />
             )}
             {advanced.localConstant && (
               <ControlledSelect
                 name={`${enableWhenPath}.${index}.localConstant`}
                 control={control}
+                shouldUnregister={false}
                 label='Local Constant'
                 placeholder='Select local constant'
-                rules={{
-                  required: 'Local Constant or Dependent Question is required',
-                }}
                 options={localConstantsPickList}
                 helperText='Local constant whose value will determine whether the condition is met'
-                onChange={() =>
-                  setValue(`${enableWhenPath}.${index}.operator`, undefined)
-                }
+                onChange={onChangeDependentQuestion}
+                required
               />
             )}
           </Stack>
@@ -208,9 +218,11 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           <ControlledSelect
             name={`${enableWhenPath}.${index}.operator`}
             control={control}
+            shouldUnregister={false}
             label='Operator'
             placeholder='Select operator'
             options={enableOperatorPickList}
+            onChange={clearAnswer}
             required
           />
         </Grid>
@@ -221,6 +233,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
               <ControlledSelect
                 name={`${enableWhenPath}.${index}.answerBoolean`}
                 control={control}
+                shouldUnregister={false}
                 label='Value'
                 options={[TRUE_OPT, FALSE_OPT]}
                 setValueAs={(option) => {
