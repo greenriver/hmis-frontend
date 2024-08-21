@@ -7,6 +7,7 @@ import IndividualAssessmentFormController from '@/modules/assessments/components
 import MissingDefinitionAlert from '@/modules/assessments/components/MissingDefinitionAlert';
 import useAssessmentFormDefinition from '@/modules/assessments/hooks/useAssessmentFormDefinition';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import { FormStatus } from '@/types/gqlTypes';
 
 /**
  * Renders a blank assessment for an individual.
@@ -37,6 +38,8 @@ const NewIndividualAssessmentPage = () => {
   if (!enrollment) return <NotFound />;
   if (loading && !formDefinition) return <Loading />;
   if (!formDefinition) return <MissingDefinitionAlert />;
+  if ([FormStatus.Draft, FormStatus.Retired].includes(formDefinition.status))
+    return <NotFound />;
 
   return (
     <IndividualAssessmentFormController
