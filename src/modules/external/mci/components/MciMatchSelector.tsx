@@ -155,7 +155,10 @@ const MciMatchSelector = ({
             title={status === 'auto_cleared' ? 'Client auto-cleared' : null}
           >
             <Switch
-              inputProps={{ 'aria-label': `MCI ID ${m.mciId}` }}
+              inputProps={{
+                'aria-label': `MCI ID ${m.mciId}`,
+                id: `select_mci_${m.mciId}`, // used in capybara tests
+              }}
               checked={value === m.mciId}
               onChange={handleChange(m.mciId)}
               disabled={status === 'auto_cleared'}
@@ -205,7 +208,10 @@ const MciMatchSelector = ({
               <TableRow>
                 <TableCell>
                   <Switch
-                    inputProps={{ 'aria-label': 'New MCI ID' }}
+                    inputProps={{
+                      'aria-label': 'New MCI ID',
+                      id: `select_create_new_mci`, // used in capybara tests
+                    }}
                     checked={value === NEW_MCI_STRING}
                     onChange={handleChange(NEW_MCI_STRING)}
                     disabled={value === NEW_MCI_STRING && matches.length === 0}
