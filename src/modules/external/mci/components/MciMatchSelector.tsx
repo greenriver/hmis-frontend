@@ -125,7 +125,6 @@ const MciMatchSelector = ({
   status: ClearanceStatus;
   allowSelectingExistingClient?: boolean;
 }) => {
-  console.log(status);
   const autocleared =
     status === 'auto_cleared' || status === 'auto_cleared_existing_client';
 

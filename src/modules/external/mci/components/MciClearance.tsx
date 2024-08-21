@@ -239,7 +239,7 @@ const MciClearance = ({
           // Allow them to link to a duplicate MCI ID only if this client has already been saved.
           // That could happen if client was first created as Uncleared, and now they are clearing
           // and realizing that they should get the same MCI ID as an existing Client record.
-          allowSelectingExistingClient={true}
+          allowSelectingExistingClient={existingClient}
         />
       )}
     </>
