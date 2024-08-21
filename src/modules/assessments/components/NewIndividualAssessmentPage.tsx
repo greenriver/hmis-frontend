@@ -38,7 +38,9 @@ const NewIndividualAssessmentPage = () => {
   if (!enrollment) return <NotFound />;
   if (loading && !formDefinition) return <Loading />;
   if (!formDefinition) return <MissingDefinitionAlert />;
-  if ([FormStatus.Draft, FormStatus.Retired].includes(formDefinition.status))
+  if (
+    ![FormStatus.Published, FormStatus.Retired].includes(formDefinition.status)
+  )
     return <NotFound />;
 
   return (
