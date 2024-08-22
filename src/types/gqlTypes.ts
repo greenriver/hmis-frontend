@@ -2925,6 +2925,7 @@ export type FormDefinition = {
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
   identifier: Scalars['String']['output'];
+  isFirstDraft: Scalars['Boolean']['output'];
   projectMatches: FormProjectMatchesPaginated;
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
@@ -8892,6 +8893,7 @@ export type FullAssessmentFragment = {
     role: FormRole;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -9374,6 +9376,7 @@ export type FullAssessmentFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -10394,6 +10397,7 @@ export type GetAssessmentQuery = {
       role: FormRole;
       identifier: string;
       status: FormStatus;
+      isFirstDraft: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -10876,6 +10880,7 @@ export type GetAssessmentQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      isFirstDraft: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -15988,6 +15993,7 @@ export type ClientDetailFormsQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      isFirstDraft: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -18743,6 +18749,7 @@ export type AllEnrollmentDetailsFragment = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        isFirstDraft: boolean;
         definition: {
           __typename?: 'FormDefinitionJson';
           item: Array<{
@@ -19850,6 +19857,7 @@ export type GetEnrollmentDetailsQuery = {
           cacheKey: string;
           identifier: string;
           status: FormStatus;
+          isFirstDraft: boolean;
           definition: {
             __typename?: 'FormDefinitionJson';
             item: Array<{
@@ -21153,6 +21161,7 @@ export type GetExternalFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -22283,6 +22292,7 @@ export type FormDefinitionMetadataFragment = {
   cacheKey: string;
   identifier: string;
   status: FormStatus;
+  isFirstDraft: boolean;
 };
 
 export type FormDefinitionFieldsFragment = {
@@ -22293,6 +22303,7 @@ export type FormDefinitionFieldsFragment = {
   cacheKey: string;
   identifier: string;
   status: FormStatus;
+  isFirstDraft: boolean;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -22777,6 +22788,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
   title: string;
   cacheKey: string;
   identifier: string;
+  isFirstDraft: boolean;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -23260,6 +23272,7 @@ export type FormDefinitionFieldsForEditorFragment = {
   cacheKey: string;
   identifier: string;
   status: FormStatus;
+  isFirstDraft: boolean;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -23747,6 +23760,7 @@ export type FormIdentifierDetailsFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
   };
   draftVersion?: {
     __typename?: 'FormDefinition';
@@ -23756,6 +23770,7 @@ export type FormIdentifierDetailsFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
   } | null;
 };
 
@@ -23776,6 +23791,7 @@ export type UpdateFormDefinitionMutation = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      isFirstDraft: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -24285,6 +24301,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
       title: string;
       cacheKey: string;
       identifier: string;
+      isFirstDraft: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -24792,6 +24809,7 @@ export type CreateFormDefinitionMutation = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      isFirstDraft: boolean;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -24830,6 +24848,7 @@ export type CreateNextDraftFormDefinitionMutation = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        isFirstDraft: boolean;
       } | null;
     } | null;
   } | null;
@@ -24855,6 +24874,7 @@ export type PublishFormDefinitionMutation = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        isFirstDraft: boolean;
       };
       draftVersion?: {
         __typename?: 'FormDefinition';
@@ -24864,6 +24884,7 @@ export type PublishFormDefinitionMutation = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        isFirstDraft: boolean;
       } | null;
     } | null;
     errors: Array<{
@@ -24951,6 +24972,7 @@ export type GetFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25441,6 +25463,7 @@ export type GetStaticFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25932,6 +25955,7 @@ export type GetServiceFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -26425,6 +26449,7 @@ export type GetAssessmentFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -26919,6 +26944,7 @@ export type GetFormIdentifierDetailsQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      isFirstDraft: boolean;
     };
     draftVersion?: {
       __typename?: 'FormDefinition';
@@ -26928,6 +26954,7 @@ export type GetFormIdentifierDetailsQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      isFirstDraft: boolean;
     } | null;
   } | null;
 };
@@ -26958,6 +26985,7 @@ export type GetFormIdentifierVersionsQuery = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        isFirstDraft: boolean;
         updatedBy?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -26997,6 +27025,7 @@ export type GetFormIdentifiersQuery = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        isFirstDraft: boolean;
         formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
       };
     }>;
@@ -28048,6 +28077,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -28539,6 +28569,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
     title: string;
     cacheKey: string;
     identifier: string;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -30650,6 +30681,7 @@ export type OccurrencePointFormFieldsFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    isFirstDraft: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -35500,6 +35532,7 @@ export const FormDefinitionMetadataFragmentDoc = gql`
     cacheKey
     identifier
     status
+    isFirstDraft
   }
 `;
 export const PickListOptionFieldsFragmentDoc = gql`

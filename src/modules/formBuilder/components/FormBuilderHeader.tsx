@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
@@ -53,12 +53,18 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
   const onSuccessfulDelete = useCallback(() => {
     // evict identifier so status updates
     cache.evict({ id: `FormIdentifier:${formDefinition.identifier}` });
-    navigate(
-      generatePath(AdminDashboardRoutes.VIEW_FORM, {
-        identifier: formDefinition.identifier,
-      })
-    );
-  }, [navigate, formDefinition.identifier]);
+    if (formDefinition.isFirstDraft) {
+      // If this is the first draft (aka only version of this identifier),
+      // it's been deleted entirely, so navigate back to the forms list
+      navigate(generatePath(AdminDashboardRoutes.FORMS));
+    } else {
+      navigate(
+        generatePath(AdminDashboardRoutes.VIEW_FORM, {
+          identifier: formDefinition.identifier,
+        })
+      );
+    }
+  }, [navigate, formDefinition.identifier, formDefinition.isFirstDraft]);
 
   return (
     <>
@@ -98,6 +104,22 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
             idPath='deleteFormDefinition.formDefinition.id'
             recordName='draft'
             onSuccess={onSuccessfulDelete}
+            confirmationDialogContent={
+              <Box>
+                <Typography variant='body1'>
+                  Are you sure you want to delete this draft?
+                </Typography>
+                <Typography variant='body1'>
+                  This action cannot be undone.
+                </Typography>
+                {formDefinition.isFirstDraft && (
+                  <Typography variant='body1' sx={{ mt: 2 }}>
+                    This form has no previously published versions, so
+                    proceeding will delete the form completely.
+                  </Typography>
+                )}
+              </Box>
+            }
             onlyIcon
           ></DeleteMutationButton>
         </Stack>

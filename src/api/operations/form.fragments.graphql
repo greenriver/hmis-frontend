@@ -125,6 +125,7 @@ fragment FormDefinitionMetadata on FormDefinition {
   cacheKey
   identifier
   status
+  isFirstDraft
 }
 
 # FormDefinition to use for rendering a dynamic form
