@@ -52,10 +52,12 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
       }),
     });
 
+  const isFirstDraft = formDefinition.version === '0';
+
   const onSuccessfulDelete = useCallback(() => {
     // evict identifier so status updates
     cache.evict({ id: `FormIdentifier:${formDefinition.identifier}` });
-    if (formDefinition.isFirstDraft) {
+    if (isFirstDraft) {
       // If this is the first draft (aka only version of this identifier),
       // it's been deleted entirely, so navigate back to the forms list
       navigate(generatePath(AdminDashboardRoutes.FORMS));
@@ -66,7 +68,7 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
         })
       );
     }
-  }, [navigate, formDefinition.identifier, formDefinition.isFirstDraft]);
+  }, [navigate, formDefinition.identifier, isFirstDraft]);
 
   return (
     <>
@@ -125,7 +127,7 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
                 <Typography variant='body1'>
                   This action cannot be undone.
                 </Typography>
-                {formDefinition.isFirstDraft && (
+                {isFirstDraft && (
                   <Typography variant='body1' sx={{ mt: 2 }}>
                     This form has no previously published versions, so
                     proceeding will delete the form completely.

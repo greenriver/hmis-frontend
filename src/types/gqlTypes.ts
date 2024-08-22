@@ -2925,7 +2925,6 @@ export type FormDefinition = {
   formRules: FormRulesPaginated;
   id: Scalars['ID']['output'];
   identifier: Scalars['String']['output'];
-  isFirstDraft: Scalars['Boolean']['output'];
   projectMatches: FormProjectMatchesPaginated;
   rawDefinition: Scalars['JsonObject']['output'];
   role: FormRole;
@@ -23277,7 +23276,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
 
 export type FormDefinitionFieldsForEditorFragment = {
   __typename?: 'FormDefinition';
-  isFirstDraft: boolean;
+  version: string;
   id: string;
   role: FormRole;
   title: string;
@@ -23800,7 +23799,7 @@ export type UpdateFormDefinitionMutation = {
     __typename?: 'UpdateFormDefinitionPayload';
     formDefinition?: {
       __typename?: 'FormDefinition';
-      isFirstDraft: boolean;
+      version: string;
       id: string;
       role: FormRole;
       title: string;
@@ -28100,7 +28099,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
   __typename?: 'Query';
   formDefinition?: {
     __typename?: 'FormDefinition';
-    isFirstDraft: boolean;
+    version: string;
     id: string;
     role: FormRole;
     title: string;
@@ -36532,7 +36531,7 @@ export const FormDefinitionFieldsForJsonEditorFragmentDoc = gql`
 export const FormDefinitionFieldsForEditorFragmentDoc = gql`
   fragment FormDefinitionFieldsForEditor on FormDefinition {
     ...FormDefinitionFields
-    isFirstDraft
+    version
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
