@@ -143,7 +143,7 @@ const FormDefinitionDetailPage = () => {
                   View Published Form
                 </ButtonLink>
                 {isPublished && (
-                  <Typography variant='body2'>
+                  <Typography variant='caption'>
                     Published on {parseAndFormatDate(publishedOn)}{' '}
                     {publishedBy && `by ${publishedBy.name}`}
                   </Typography>
@@ -170,7 +170,7 @@ const FormDefinitionDetailPage = () => {
                       >
                         Preview / Publish Draft
                       </ButtonLink>
-                      <Typography variant='body2'>
+                      <Typography variant='caption'>
                         Last edited on {parseAndFormatDate(draftUpdatedOn)}{' '}
                         {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
                       </Typography>
