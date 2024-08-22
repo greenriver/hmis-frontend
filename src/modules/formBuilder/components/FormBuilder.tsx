@@ -124,7 +124,15 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
         component='form'
         onSubmit={rhfMethods.handleSubmit(updateForm)}
       >
-        <Box sx={{ flexGrow: 1 }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            // Can't exceed 100% width of the container minus width of the Palette
+            maxWidth: 'calc(100% - 52px)',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <Box
             sx={{
               // Matches the styles usually applied in DashboardContentContainer.
@@ -133,6 +141,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               pt: 2,
               pb: 8,
               px: { xs: 1, sm: 3, lg: 4 },
+              flexGrow: 1,
             }}
           >
             <Paper sx={{ p: 2 }}>
@@ -185,7 +194,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
                 >
                   Save Draft
                 </LoadingButton>
-                {/* <Button>Publish</Button> */}
               </Stack>
             </Stack>
           </SaveSlide>
