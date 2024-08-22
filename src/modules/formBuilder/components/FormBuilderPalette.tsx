@@ -123,14 +123,14 @@ const FormBuilderPalette: React.FC<FormBuilderPaletteType> = ({
 
   return (
     <Paper
+      square
       sx={{
         height: `calc(100vh - ${top}px)`,
-        // position: 'fixed',
-        right: 0,
-        top: top,
+        position: 'sticky',
         left: 'auto',
+        top: top,
         borderTop: 0,
-        borderRadius: 0,
+        borderRight: 0,
         boxSizing: 'border-box',
         p: 1,
         pt: 2,

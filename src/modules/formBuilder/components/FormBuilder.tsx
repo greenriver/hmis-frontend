@@ -10,7 +10,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { useUpdateForm } from './useUpdateForm';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
-import theme from '@/config/theme';
+import useMaxPageWidth from '@/hooks/useMaxPageWidth';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import SaveSlide from '@/modules/form/components/SaveSlide';
 import FormBuilderHeader from '@/modules/formBuilder/components/FormBuilderHeader';
@@ -34,6 +34,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
   formDefinition, // initial values for form definition
 }) => {
   const navigate = useNavigate();
+  const maxPageWidth = useMaxPageWidth();
+
   // React-hook-forms method for the form structure (reordering items)
   const rhfMethods = useForm<FormDefinitionJson>({
     defaultValues: formDefinition.definition,
@@ -137,7 +139,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
             sx={{
               // Matches the styles usually applied in DashboardContentContainer.
               // (Moved in here because of the Palette drawer)
-              maxWidth: `${theme.breakpoints.values.lg}px`,
+              maxWidth: `${maxPageWidth}px`,
               pt: 2,
               pb: 8,
               px: { xs: 1, sm: 3, lg: 4 },
@@ -180,7 +182,12 @@ const FormBuilder: React.FC<FormBuilderProps> = ({
               </Box>
             </Paper>
           </Box>
-          <SaveSlide in={isDirty} direction='up' loading={saveLoading}>
+          <SaveSlide
+            in={isDirty}
+            direction='up'
+            loading={saveLoading}
+            unmountOnExit
+          >
             <Stack direction='row' justifyContent='end' alignItems='center'>
               <Stack direction='row' gap={2}>
                 <Button variant='gray' onClick={() => reset()}>
