@@ -26978,6 +26978,7 @@ export type GetFormIdentifierVersionsQuery = {
       nodesCount: number;
       nodes: Array<{
         __typename?: 'FormDefinition';
+        version: string;
         dateUpdated: string;
         id: string;
         role: FormRole;
@@ -44037,6 +44038,7 @@ export const GetFormIdentifierVersionsDocument = gql`
         nodesCount
         nodes {
           ...FormDefinitionMetadata
+          version
           dateUpdated
           updatedBy {
             ...UserFields
