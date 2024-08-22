@@ -1,5 +1,6 @@
-import { Chip, Grid, Stack, Typography } from '@mui/material';
+import { Chip, Divider, Grid, Stack, Typography } from '@mui/material';
 
+import React from 'react';
 import { generatePath } from 'react-router-dom';
 import FormRulesCard from '../formRules/FormRulesCard';
 import FormVersionTable from './FormVersionTable';
@@ -117,44 +118,49 @@ const FormDefinitionDetailPage = () => {
           <Grid item xs={12} md={4}>
             <CommonCard title='Actions' titleComponent='h5'>
               <Stack gap={1.5}>
+                <ButtonLink
+                  to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
+                    identifier: formIdentifier.identifier,
+                    formId: formIdentifier.displayVersion.id,
+                  })}
+                  variant={hasDraft ? 'outlined' : 'contained'}
+                  fullWidth
+                  disabled={!isPublished}
+                >
+                  View Published Form
+                </ButtonLink>
                 <RootPermissionsFilter permissions='canManageForms'>
-                  <ButtonLink
-                    to={generatePath(AdminDashboardRoutes.PREVIEW_FORM_DRAFT, {
-                      identifier: formIdentifier.identifier,
-                      formId: formIdentifier.draftVersion?.id || '',
-                    })}
-                    variant='contained'
-                    fullWidth
-                    disabled={!hasDraft}
-                  >
-                    Preview / Publish Draft
-                  </ButtonLink>
+                  <Divider />
                   <EditFormButton
                     formIdentifier={formIdentifier}
-                    text={hasDraft ? 'Edit Draft' : 'New Draft'}
+                    text={'Edit Draft'}
                     editorType={FormEditorType.FormBuilder}
                     variant='outlined'
                   />
                   <RootPermissionsFilter permissions='canAdministrateConfig'>
                     <EditFormButton
                       formIdentifier={formIdentifier}
-                      text={hasDraft ? 'Edit Draft (JSON)' : 'New Draft (JSON)'}
+                      text={'Edit Draft (JSON)'}
                       editorType={FormEditorType.JsonEditor}
                       variant='outlined'
                     />
                   </RootPermissionsFilter>
+                  {hasDraft && (
+                    <ButtonLink
+                      to={generatePath(
+                        AdminDashboardRoutes.PREVIEW_FORM_DRAFT,
+                        {
+                          identifier: formIdentifier.identifier,
+                          formId: formIdentifier.draftVersion?.id || '',
+                        }
+                      )}
+                      variant='contained'
+                      fullWidth
+                    >
+                      Preview / Publish Draft
+                    </ButtonLink>
+                  )}
                 </RootPermissionsFilter>
-                <ButtonLink
-                  to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
-                    identifier: formIdentifier.identifier,
-                    formId: formIdentifier.displayVersion.id,
-                  })}
-                  variant='outlined'
-                  fullWidth
-                  disabled={!isPublished}
-                >
-                  Preview Published
-                </ButtonLink>
               </Stack>
             </CommonCard>
           </Grid>
