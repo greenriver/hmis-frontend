@@ -13,17 +13,15 @@ import PageTitle from '@/components/layout/PageTitle';
 
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import EditFormButton, {
-  FormEditorType,
-} from '@/modules/admin/components/forms/EditFormButton';
+import EditFormButton from '@/modules/admin/components/forms/EditFormButton';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  FormIdentifierDetailsFragment,
   FormStatus,
   useGetFormIdentifierDetailsQuery,
-  FormIdentifierDetailsFragment,
 } from '@/types/gqlTypes';
 
 const FormStatusText: React.FC<{
@@ -134,17 +132,8 @@ const FormDefinitionDetailPage = () => {
                   <EditFormButton
                     formIdentifier={formIdentifier}
                     text={'Edit Draft'}
-                    editorType={FormEditorType.FormBuilder}
                     variant='outlined'
                   />
-                  <RootPermissionsFilter permissions='canAdministrateConfig'>
-                    <EditFormButton
-                      formIdentifier={formIdentifier}
-                      text={'Edit Draft (JSON)'}
-                      editorType={FormEditorType.JsonEditor}
-                      variant='outlined'
-                    />
-                  </RootPermissionsFilter>
                   {hasDraft && (
                     <ButtonLink
                       to={generatePath(

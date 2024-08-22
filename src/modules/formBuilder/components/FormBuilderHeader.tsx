@@ -3,11 +3,13 @@ import { Stack } from '@mui/system';
 import React, { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import EditIconButton from '@/components/elements/EditIconButton';
 import PageTitle from '@/components/layout/PageTitle';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
@@ -88,6 +90,17 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
         />
 
         <Stack direction='row' spacing={4} alignItems='center'>
+          <RootPermissionsFilter permissions='canAdministrateConfig'>
+            <ButtonLink
+              to={generatePath(AdminDashboardRoutes.JSON_EDIT_FORM, {
+                identifier: formDefinition.identifier,
+                formId: formDefinition.id,
+              })}
+              variant='text'
+            >
+              Edit JSON
+            </ButtonLink>
+          </RootPermissionsFilter>
           <Button
             variant='text'
             onClick={onClickPreview}
