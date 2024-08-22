@@ -97,6 +97,36 @@ fragment ItemFields on FormItem {
       ...EnableWhenFields
     }
   }
+  rule {
+    ...FormItemRuleWithParts
+  }
+  customRule {
+    ...FormItemRuleWithParts
+  }
+}
+
+# See comment below about recursive fragments
+fragment FormItemRuleWithParts on FormItemRule {
+  ...FormItemRuleFields
+  parts {
+    ...FormItemRuleFields
+    parts {
+      ...FormItemRuleFields
+      parts {
+        ...FormItemRuleFields
+        parts {
+          ...FormItemRuleFields
+        }
+      }
+    }
+  }
+}
+
+fragment FormItemRuleFields on FormItemRule {
+  variable
+  operator
+  value
+  _comment
 }
 
 # GQL doesnt allow recursive fragments, so we have a max nesting level here

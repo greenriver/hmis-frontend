@@ -3439,6 +3439,24 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'FormItemRule',
+    fields: [
+      {
+        name: '_comment',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'operator',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'value', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'variable',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'FormProjectMatch',
     fields: [
       {
