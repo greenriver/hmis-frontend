@@ -1996,6 +1996,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'answerDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'answerGroupCode',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
