@@ -16,6 +16,7 @@ import {
   getItemCategory,
 } from '@/modules/formBuilder/formBuilderUtil';
 import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   EnableOperator,
@@ -304,21 +305,26 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
           </Stack>
         </Grid>
       </Grid>
-      <Box sx={{ mt: 2 }}>
-        <Typography typography='body2' fontWeight={600}>
-          Advanced Options
-        </Typography>
-        <Stack>
-          <LabeledCheckbox
-            label='Compare with a Local Constant instead of a Dependent Question'
-            checked={advanced.localConstant}
-            sx={{ width: 'fit-content' }}
-            onChange={(evt, checked) =>
-              setAdvanced((old) => ({ ...old, localConstant: checked }))
-            }
-          />
-        </Stack>
-      </Box>
+      {/* TODO: Add typing for local constants (treat `today` as a date)
+      and add other useful local constants such as project ID.
+      Hiding this behind a super-admin-only curtain for now.*/}
+      <RootPermissionsFilter permissions='canAdministrateConfig'>
+        <Box sx={{ mt: 2 }}>
+          <Typography typography='body2' fontWeight={600}>
+            Advanced Options
+          </Typography>
+          <Stack>
+            <LabeledCheckbox
+              label='Compare with a Local Constant instead of a Dependent Question'
+              checked={advanced.localConstant}
+              sx={{ width: 'fit-content' }}
+              onChange={(evt, checked) =>
+                setAdvanced((old) => ({ ...old, localConstant: checked }))
+              }
+            />
+          </Stack>
+        </Box>
+      </RootPermissionsFilter>
     </Stack>
   );
 };
