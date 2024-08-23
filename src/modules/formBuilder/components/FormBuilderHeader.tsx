@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Alert, Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
@@ -120,20 +120,18 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
             recordName='draft'
             onSuccess={onSuccessfulDelete}
             confirmationDialogContent={
-              <Box>
+              <Stack gap={2}>
                 <Typography variant='body1'>
                   Are you sure you want to delete this draft?
-                </Typography>
-                <Typography variant='body1'>
+                  <br />
                   This action cannot be undone.
                 </Typography>
                 {isFirstDraft && (
-                  <Typography variant='body1' sx={{ mt: 2 }}>
-                    This form has no previously published versions, so
-                    proceeding will delete the form completely.
-                  </Typography>
+                  <Alert severity='error'>
+                    Deleting this draft will delete the entire form.
+                  </Alert>
                 )}
-              </Box>
+              </Stack>
             }
             onlyIcon
           ></DeleteMutationButton>
