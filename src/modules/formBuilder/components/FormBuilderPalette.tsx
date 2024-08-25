@@ -67,7 +67,7 @@ export const FORM_ITEM_PALETTE = {
   [ItemType.Boolean]: {
     itemType: ItemType.Boolean,
     IconClass: FormBooleanIcon,
-    displayName: 'CheckBox',
+    displayName: 'Checkbox',
   },
   [ItemType.Choice]: {
     itemType: ItemType.Choice,
@@ -101,7 +101,11 @@ const PaletteButton: React.FC<
 > = ({ displayName, IconClass, onClick }) => {
   return (
     <Tooltip placement='left' title={displayName}>
-      <IconButton size='small' onClick={onClick}>
+      <IconButton
+        size='small'
+        onClick={onClick}
+        aria-label={`Add ${displayName} item`}
+      >
         <IconClass />
       </IconButton>
     </Tooltip>
