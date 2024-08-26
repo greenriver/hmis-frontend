@@ -8893,6 +8893,7 @@ export type FullAssessmentFragment = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -9377,6 +9378,7 @@ export type FullAssessmentFragment = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -10399,6 +10401,7 @@ export type GetAssessmentQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      system: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -10883,6 +10886,7 @@ export type GetAssessmentQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      system: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -15997,6 +16001,7 @@ export type ClientDetailFormsQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      system: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -18754,6 +18759,7 @@ export type AllEnrollmentDetailsFragment = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        system: boolean;
         definition: {
           __typename?: 'FormDefinitionJson';
           item: Array<{
@@ -19863,6 +19869,7 @@ export type GetEnrollmentDetailsQuery = {
           identifier: string;
           status: FormStatus;
           dateUpdated: string;
+          system: boolean;
           definition: {
             __typename?: 'FormDefinitionJson';
             item: Array<{
@@ -21168,6 +21175,7 @@ export type GetExternalFormDefinitionQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -22300,6 +22308,7 @@ export type FormDefinitionMetadataFragment = {
   identifier: string;
   status: FormStatus;
   dateUpdated: string;
+  system: boolean;
   updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
@@ -22312,6 +22321,7 @@ export type FormDefinitionFieldsFragment = {
   identifier: string;
   status: FormStatus;
   dateUpdated: string;
+  system: boolean;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -22798,6 +22808,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
   cacheKey: string;
   identifier: string;
   dateUpdated: string;
+  system: boolean;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -23284,6 +23295,7 @@ export type FormDefinitionFieldsForEditorFragment = {
   identifier: string;
   status: FormStatus;
   dateUpdated: string;
+  system: boolean;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -23773,6 +23785,7 @@ export type FormIdentifierDetailsFragment = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
   draftVersion?: {
@@ -23784,6 +23797,7 @@ export type FormIdentifierDetailsFragment = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
@@ -23807,6 +23821,7 @@ export type UpdateFormDefinitionMutation = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      system: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -24318,6 +24333,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
       cacheKey: string;
       identifier: string;
       dateUpdated: string;
+      system: boolean;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -24827,6 +24843,7 @@ export type CreateFormDefinitionMutation = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      system: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     errors: Array<{
@@ -24867,6 +24884,7 @@ export type CreateNextDraftFormDefinitionMutation = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        system: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       } | null;
     } | null;
@@ -24894,6 +24912,7 @@ export type PublishFormDefinitionMutation = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        system: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
       draftVersion?: {
@@ -24905,6 +24924,7 @@ export type PublishFormDefinitionMutation = {
         identifier: string;
         status: FormStatus;
         dateUpdated: string;
+        system: boolean;
         updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       } | null;
     } | null;
@@ -24994,6 +25014,7 @@ export type GetFormDefinitionQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25486,6 +25507,7 @@ export type GetStaticFormDefinitionQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25979,6 +26001,7 @@ export type GetServiceFormDefinitionQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -26474,6 +26497,7 @@ export type GetAssessmentFormDefinitionQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -26970,6 +26994,7 @@ export type GetFormIdentifierDetailsQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      system: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
     draftVersion?: {
@@ -26981,6 +27006,7 @@ export type GetFormIdentifierDetailsQuery = {
       identifier: string;
       status: FormStatus;
       dateUpdated: string;
+      system: boolean;
       updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
   } | null;
@@ -27013,6 +27039,7 @@ export type GetFormIdentifierVersionsQuery = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        system: boolean;
         updatedBy?: {
           __typename: 'ApplicationUser';
           id: string;
@@ -28107,6 +28134,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -28600,6 +28628,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
     cacheKey: string;
     identifier: string;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -30713,6 +30742,7 @@ export type OccurrencePointFormFieldsFragment = {
     identifier: string;
     status: FormStatus;
     dateUpdated: string;
+    system: boolean;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -35568,6 +35598,7 @@ export const FormDefinitionMetadataFragmentDoc = gql`
       name
     }
     dateUpdated
+    system
   }
 `;
 export const PickListOptionFieldsFragmentDoc = gql`

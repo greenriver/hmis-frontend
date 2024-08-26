@@ -129,6 +129,7 @@ fragment FormDefinitionMetadata on FormDefinition {
     name
   }
   dateUpdated
+  system
 }
 
 # FormDefinition to use for rendering a dynamic form

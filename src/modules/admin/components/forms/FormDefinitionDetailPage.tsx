@@ -144,7 +144,7 @@ const FormDefinitionDetailPage = () => {
                 >
                   View Published Form
                 </ButtonLink>
-                {isPublished && (
+                {isPublished && !formIdentifier.displayVersion.system && (
                   <Typography variant='caption'>
                     Published{' '}
                     {publishedOn ? formatRelativeDateTime(publishedOn) : ''}{' '}
@@ -158,7 +158,7 @@ const FormDefinitionDetailPage = () => {
                     text={'Edit Draft'}
                     variant='outlined'
                   />
-                  {hasDraft && (
+                  {hasDraft && !formIdentifier.draftVersion?.system && (
                     <>
                       <ButtonLink
                         to={generatePath(
