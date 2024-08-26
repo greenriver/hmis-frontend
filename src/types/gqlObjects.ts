@@ -3736,6 +3736,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Household',
     fields: [
       {
+        name: 'anyInProgress',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'earliestEntryDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
         name: 'householdSize',
         type: {
           kind: 'NON_NULL',
@@ -3750,6 +3766,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
+      },
+      {
+        name: 'latestExitDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
         name: 'shortId',
@@ -4633,6 +4653,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'RRHSubType', ofType: null },
       },
       {
+        name: 'staffAssignmentsEnabled',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'targetPopulation',
         type: { kind: 'ENUM', name: 'TargetPopulation', ofType: null },
       },
@@ -5193,6 +5221,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewMyDashboard',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewOpenEnrollmentSummary',
         type: {
           kind: 'NON_NULL',
@@ -5697,6 +5733,39 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'StaffAssignment',
+    fields: [
+      {
+        name: 'assignedAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'staffAssignmentRelationship',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'unassignedAt',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'Unit',
     fields: [
       {
@@ -6138,6 +6207,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             name: null,
             ofType: { kind: 'SCALAR', name: 'String', ofType: null },
           },
+        },
+      },
+    ],
+  },
+  {
+    name: 'AssignStaffInput',
+    args: [
+      {
+        name: 'assignmentRelationshipId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'householdId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'userId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
     ],
@@ -6851,6 +6949,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'EnrollmentsForProjectFilterOptions',
     args: [
       {
+        name: 'assignedStaff',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'bedNightOnDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
@@ -7098,6 +7200,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'HouseholdFilterOptions',
     args: [
+      {
+        name: 'assignedStaff',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
       {
         name: 'hohAgeRange',
         type: { kind: 'ENUM', name: 'AgeRange', ofType: null },

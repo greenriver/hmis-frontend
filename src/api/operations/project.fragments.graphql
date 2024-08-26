@@ -28,6 +28,7 @@ fragment ProjectAllFields on Project {
   residentialAffiliation
   residentialAffiliationProjectIds
   rrhSubType
+  staffAssignmentsEnabled
   targetPopulation
   organization {
     ...OrganizationNameFields
@@ -132,5 +133,9 @@ fragment ProjectEnrollmentQueryEnrollmentFields on Enrollment {
   lastCurrentLivingSituation @include(if: $includeCls) {
     id
     informationDate
+  }
+  household @include(if: $includeStaffAssignment) {
+    id
+    ...HouseholdWithStaffAssignments
   }
 }

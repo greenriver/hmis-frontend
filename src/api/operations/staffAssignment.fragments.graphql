@@ -1,0 +1,61 @@
+fragment HouseholdWithStaffAssignments on Household {
+  id
+  householdClients {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+    }
+  }
+  staffAssignments(limit: 100) {
+    nodesCount
+    nodes {
+      ...StaffAssignmentDetails
+    }
+  }
+}
+
+fragment StaffAssignmentDetails on StaffAssignment {
+  id
+  user {
+    id
+    name
+  }
+  staffAssignmentRelationship
+  assignedAt
+  unassignedAt
+  household {
+    id
+  }
+}
+
+fragment StaffAssignmentWithClients on StaffAssignment {
+  id
+  user {
+    id
+    name
+  }
+  staffAssignmentRelationship
+  assignedAt
+  unassignedAt
+  household {
+    id
+    anyInProgress
+    latestExitDate
+    householdClients {
+      relationshipToHoH
+      client {
+        id
+        ...ClientName
+      }
+      enrollment {
+        id
+        ...EnrollmentRangeFields
+        project {
+          ...ProjectNameAndType
+        }
+      }
+    }
+  }
+}
