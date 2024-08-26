@@ -1,4 +1,4 @@
-import { Drawer, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Paper, Tooltip } from '@mui/material';
 import { Stack } from '@mui/system';
 import {
   FormBooleanIcon,
@@ -119,22 +119,21 @@ interface FormBuilderPaletteType {
 const FormBuilderPalette: React.FC<FormBuilderPaletteType> = ({
   onItemClick,
 }) => {
+  const top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT;
+
   return (
-    <Drawer
-      variant='persistent'
-      open={true}
+    <Paper
+      square
       sx={{
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          height: `calc(100vh - ${
-            STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT
-          }px)`,
-          position: 'static',
-          borderTop: 'none',
-          boxSizing: 'border-box',
-          p: 1,
-          pt: 2,
-        },
+        height: `calc(100vh - ${top}px)`,
+        position: 'sticky',
+        left: 'auto',
+        top: top,
+        borderTop: 0,
+        borderRight: 0,
+        boxSizing: 'border-box',
+        p: 1,
+        pt: 2,
       }}
     >
       <Stack gap={1}>
@@ -155,7 +154,7 @@ const FormBuilderPalette: React.FC<FormBuilderPaletteType> = ({
             />
           ))}
       </Stack>
-    </Drawer>
+    </Paper>
   );
 };
 
