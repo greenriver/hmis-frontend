@@ -95,14 +95,21 @@ const HouseholdAssessmentTabPanel = memo(
     const { assessment, loading: assessmentLoading } =
       useAssessment(assessmentId);
 
-    const definition = useMemo(() => {
-      if (assessmentId && !assessment) return;
+    const [viewingDefinition, editingDefinition] = useMemo(() => {
+      if (assessmentId && !assessment) return [];
 
-      // If we are loading an existing Assessment, always prefer to use
-      // the FormDefinition that was resolved on the Assessment. This could
-      // be important if it's an older WIP assessment that was saved using a certain
-      // form. (It should be re-opened using the same form).
-      return assessment?.definition || mainFormDefinition;
+      if (assessment) {
+        // If we are loading an existing Assessment, always prefer to use
+        // the FormDefinition that was resolved on the Assessment. This could
+        // be important if it's an older WIP assessment that was saved using a certain
+        // form. (It should be re-opened using the same form).
+        return [
+          assessment.definition,
+          assessment.upgradedDefinitionForEditing || assessment.definition,
+        ];
+      }
+
+      return [mainFormDefinition, mainFormDefinition];
     }, [assessment, assessmentId, mainFormDefinition]);
 
     const onCompletedMutation = useCallback(
@@ -134,7 +141,7 @@ const HouseholdAssessmentTabPanel = memo(
 
     const { submitHandler, saveDraftHandler, mutationLoading, errors } =
       useAssessmentHandlers({
-        definition,
+        definition: editingDefinition,
         enrollmentId,
         assessmentId,
         assessmentLockVersion: assessment?.lockVersion,
@@ -234,11 +241,12 @@ const HouseholdAssessmentTabPanel = memo(
       >
         {assessmentLoading ? (
           <Loading />
-        ) : !definition ? (
+        ) : !viewingDefinition || !editingDefinition ? (
           <MissingDefinitionAlert />
         ) : (
           <IndividualAssessment
-            definition={definition}
+            viewingDefinition={viewingDefinition}
+            editingDefinition={editingDefinition}
             client={client}
             embeddedInWorkflow
             enrollmentId={enrollmentId}

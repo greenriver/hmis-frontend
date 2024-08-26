@@ -1132,12 +1132,13 @@ type TransformSubmitValuesParams = {
  */
 export const transformSubmitValues = ({
   definition,
-  values,
+  values, // should error if values has any keys that are not linkids?
   includeMissingKeys,
   autofillBooleans = false,
   autofillNotCollected = false,
   keyByFieldName = false,
 }: TransformSubmitValuesParams) => {
+  const seenLinkIds = new Set();
   // Recursive helper for traversing the FormDefinition
   function rescursiveFillMap(
     items: FormItem[],
@@ -1145,6 +1146,8 @@ export const transformSubmitValues = ({
     parentRecordType?: string
   ) {
     items.forEach((item: FormItem) => {
+      seenLinkIds.add(item.linkId);
+
       const mapping = item.mapping || {};
       const recordType = mapping.recordType
         ? HmisEnums.RelatedRecordType[mapping.recordType]
@@ -1205,6 +1208,18 @@ export const transformSubmitValues = ({
 
   const result: Record<string, any> = {};
   rescursiveFillMap(definition.item, result);
+
+  // can't actually do this because I think we expect it in some cases? check mci and addresses
+  // const unrecognizedKeys = Object.keys(values).filter(
+  //   (linkId) => !seenLinkIds.has(linkId)
+  // );
+  // if (unrecognizedKeys.length > 0) {
+  //   throw new Error(
+  //     'Failed to submit form, form values had unrecognized keys: ' +
+  //       unrecognizedKeys.join(', ')
+  //   );
+  // }
+
   return result;
 };
 

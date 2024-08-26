@@ -45,7 +45,10 @@ const IndividualAssessmentPage = () => {
     <IndividualAssessmentFormController
       enrollment={enrollment}
       client={client}
-      definition={assessment.definition}
+      viewingDefinition={assessment.definition}
+      editingDefinition={
+        assessment.upgradedDefinitionForEditing || assessment.definition
+      }
       assessment={assessment}
     />
   );

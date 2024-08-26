@@ -64,13 +64,16 @@ import {
 interface Props {
   enrollment: EnrollmentFieldsFragment;
   client: AssessedClientFieldsFragment;
-  definition: FormDefinitionFieldsFragment;
+  // FormDefiniton to use for rendering the assessment in read-only mode
+  viewingDefinition: FormDefinitionFieldsFragment;
+  // FormDefiniton to use for rendering the assessment for editing
+  editingDefinition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
   alerts?: ReactNode;
   top?: number;
   embeddedInWorkflow?: boolean;
   FormActionProps?: DynamicFormProps['FormActionProps'];
-  onSubmit: (formDefinitionId: string) => DynamicFormProps['onSubmit'];
+  onSubmit: DynamicFormProps['onSubmit'];
   onSaveDraft?: DynamicFormProps['onSaveDraft'];
   errors: ErrorState;
   onCancelValidations?: VoidFunction;
@@ -87,7 +90,8 @@ const AssessmentForm: React.FC<Props> = ({
   assessment,
   client,
   alerts,
-  definition: definitionProp,
+  viewingDefinition,
+  editingDefinition,
   enrollment,
   embeddedInWorkflow,
   FormActionProps,
@@ -118,16 +122,17 @@ const AssessmentForm: React.FC<Props> = ({
 
   // Choose the FormDefiniton to use for rendering, and filter it down based on client attributes (Data Collected About rules).
   const definition = useMemo(() => {
-    let fd = definitionProp;
-    if (!locked && assessment && !assessment.inProgress) {
-      // When editing a non-WIP assessment, we want to use the most recent version of the Form Definition.
-      // If the most recent version differs from the version that was most recently used to updated it, then 'upgradedDefinitionForEditing' is present.
-      fd = assessment.upgradedDefinitionForEditing || fd;
-    }
+    const fd = locked ? viewingDefinition : editingDefinition;
     // Apply "data collected about" rules to filter down the definition to relevant items
     const relationshipToHoH = enrollment.relationshipToHoH;
     return applyDefinitionRulesForClient(fd, client, relationshipToHoH);
-  }, [definitionProp, locked, assessment, client, enrollment]);
+  }, [
+    locked,
+    viewingDefinition,
+    editingDefinition,
+    enrollment.relationshipToHoH,
+    client,
+  ]);
 
   // Most recently selected "source" assessment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
@@ -395,7 +400,7 @@ const AssessmentForm: React.FC<Props> = ({
             key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
             definition={definition.definition}
             ref={formRef}
-            onSubmit={onSubmit(definition.id)}
+            onSubmit={onSubmit}
             onSaveDraft={
               assessment && !assessment.inProgress ? undefined : onSaveDraft
             }
