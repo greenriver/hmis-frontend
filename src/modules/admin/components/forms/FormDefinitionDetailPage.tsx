@@ -15,7 +15,10 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditFormButton from '@/modules/admin/components/forms/EditFormButton';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  formatRelativeDateTime,
+  parseHmisDateString,
+} from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -28,7 +31,6 @@ import {
 const FormStatusText: React.FC<{
   identifier: FormIdentifierDetailsFragment;
 }> = ({ identifier }) => {
-  console.log(identifier);
   const isPublished = identifier.displayVersion.status === FormStatus.Published;
   const hasDraft = !!identifier.draftVersion;
   const isRetired = identifier.displayVersion.status === FormStatus.Retired;
@@ -85,7 +87,7 @@ const FormDefinitionDetailPage = () => {
     ? formIdentifier.displayVersion.updatedBy
     : undefined;
   const publishedOn = isPublished
-    ? formIdentifier.displayVersion.dateUpdated
+    ? parseHmisDateString(formIdentifier.displayVersion.dateUpdated)
     : undefined;
 
   const hasDraft = !!formIdentifier.draftVersion;
@@ -93,7 +95,7 @@ const FormDefinitionDetailPage = () => {
     ? formIdentifier.draftVersion?.updatedBy
     : undefined;
   const draftUpdatedOn = hasDraft
-    ? formIdentifier.draftVersion?.dateUpdated
+    ? parseHmisDateString(formIdentifier.draftVersion?.dateUpdated)
     : undefined;
 
   return (
@@ -144,7 +146,8 @@ const FormDefinitionDetailPage = () => {
                 </ButtonLink>
                 {isPublished && (
                   <Typography variant='caption'>
-                    Published on {parseAndFormatDate(publishedOn)}{' '}
+                    Published{' '}
+                    {publishedOn ? formatRelativeDateTime(publishedOn) : ''}{' '}
                     {publishedBy && `by ${publishedBy.name}`}
                   </Typography>
                 )}
@@ -171,7 +174,10 @@ const FormDefinitionDetailPage = () => {
                         Preview / Publish Draft
                       </ButtonLink>
                       <Typography variant='caption'>
-                        Last edited on {parseAndFormatDate(draftUpdatedOn)}{' '}
+                        Last edited{' '}
+                        {draftUpdatedOn
+                          ? formatRelativeDateTime(draftUpdatedOn)
+                          : ''}{' '}
                         {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
                       </Typography>
                     </>
