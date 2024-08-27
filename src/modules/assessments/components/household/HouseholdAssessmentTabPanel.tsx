@@ -98,11 +98,11 @@ const HouseholdAssessmentTabPanel = memo(
     const [viewingDefinition, editingDefinition] = useMemo(() => {
       if (assessmentId && !assessment) return [];
 
+      // If we are loading an existing Assessment, always prefer to use
+      // the FormDefinition that was resolved on the Assessment. This could
+      // be important if it's an older WIP assessment that was saved using a certain
+      // form. (It should be re-opened using the same form).
       if (assessment) {
-        // If we are loading an existing Assessment, always prefer to use
-        // the FormDefinition that was resolved on the Assessment. This could
-        // be important if it's an older WIP assessment that was saved using a certain
-        // form. (It should be re-opened using the same form).
         return [
           assessment.definition,
           assessment.upgradedDefinitionForEditing || assessment.definition,

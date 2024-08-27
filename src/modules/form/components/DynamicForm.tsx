@@ -27,9 +27,9 @@ import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
-  rawValues: FormValues; // { 'favorite_color': { code: 'light_blue', label: 'Light Blue' }
-  valuesByLinkId: FormValues; // { 'favorite_color': 'light_blue' }
-  valuesByFieldName: FormValues; // { 'Client.favorite_color_field_key': 'light_blue' }
+  rawValues: FormValues; // // Example: { 'favorite_color': { code: 'light_blue', label: 'Light Blue' }, 'assessment_date': <JS Date Object> }
+  valuesByLinkId: FormValues; // Example: { 'favorite_color': 'light_blue', 'assessment_date': '2020-09-01' }
+  valuesByFieldName: FormValues; // Example: { 'Client.favorite_color_field_key': 'light_blue', 'assessmentDate': '2020-09-01', 'someOtherHiddenField': '_HIDDEN' }
   confirmed?: boolean;
   event?: React.MouseEvent<HTMLButtonElement>;
   onSuccess?: VoidFunction;
@@ -37,9 +37,9 @@ interface DynamicFormSubmitInput {
 }
 
 interface DynamicFormSaveDraftInput {
-  rawValues: FormValues; // { 'favorite_color': { code: 'light_blue', label: 'Light Blue' }
-  valuesByLinkId: FormValues; // { 'favorite_color': 'light_blue' }
-  valuesByFieldName: FormValues; // { 'Client.favorite_color_field_key': 'light_blue' }
+  rawValues: FormValues;
+  valuesByLinkId: FormValues;
+  valuesByFieldName: FormValues;
   onSuccess?: VoidFunction;
   onError?: VoidFunction;
 }

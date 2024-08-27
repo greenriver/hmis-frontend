@@ -75,8 +75,13 @@ const useDynamicFields = ({
   const getValuesForSubmit = useCallback(() => {
     const cleanedValues = getCleanedValues();
     return {
+      // Example: { 'favorite_color': { code: 'light_blue', label: 'Light Blue' }, 'assessment_date': <JS Date Object> }
       rawValues: cleanedValues,
+      // Example: { 'favorite_color': 'light_blue', 'assessment_date': '2020-09-01' }
+      // Stored as "values" in FormProcessor, for dynamic form submission
       valuesByLinkId: createValuesForSubmit(cleanedValues, definition),
+      // Example: { 'Client.favorite_color_field_key': 'light_blue', 'assessmentDate': '2020-09-01', 'someOtherHiddenField': '_HIDDEN' }
+      // Stored as "hud_values" in FormProcessor, for dynamic form submission
       valuesByFieldName: createHudValuesForSubmit(cleanedValues, definition),
     };
   }, [definition, getCleanedValues]);
