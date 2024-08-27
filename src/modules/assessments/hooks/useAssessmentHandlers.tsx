@@ -15,7 +15,6 @@ import {
 } from '@/modules/form/components/DynamicForm';
 import {
   AssessmentInput,
-  FormDefinitionFieldsFragment,
   SaveAssessmentMutation,
   SubmitAssessmentMutation,
   useSaveAssessmentMutation,
@@ -29,7 +28,7 @@ export type AssessmentResponseStatus =
   | 'warning';
 
 type Args = {
-  definition?: FormDefinitionFieldsFragment;
+  formDefinitionId: string;
   enrollmentId: string;
   assessmentId?: string;
   assessmentLockVersion?: number;
@@ -46,14 +45,12 @@ function isSaveMutation(
 }
 
 export function useAssessmentHandlers({
-  definition,
+  formDefinitionId,
   enrollmentId,
   assessmentId,
   assessmentLockVersion,
   onCompletedMutation = () => null,
 }: Args) {
-  const formDefinitionId = definition?.id;
-
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const onCompleted = useCallback(
@@ -107,8 +104,6 @@ export function useAssessmentHandlers({
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
     ({ valuesByLinkId, valuesByFieldName, confirmed = false, onSuccess }) => {
-      if (!definition || !formDefinitionId) return;
-
       const input = {
         assessmentId,
         enrollmentId,
@@ -131,7 +126,6 @@ export function useAssessmentHandlers({
       submitAssessmentMutation,
       assessmentId,
       assessmentLockVersion,
-      definition,
       formDefinitionId,
       enrollmentId,
       onCompleted,
@@ -140,8 +134,6 @@ export function useAssessmentHandlers({
 
   const saveDraftHandler: DynamicFormOnSaveDraft = useCallback(
     ({ valuesByLinkId, valuesByFieldName, onSuccess }) => {
-      if (!definition || !formDefinitionId) return;
-
       const input: AssessmentInput = {
         assessmentId,
         enrollmentId,
@@ -163,7 +155,6 @@ export function useAssessmentHandlers({
       saveAssessmentMutation,
       assessmentId,
       assessmentLockVersion,
-      definition,
       formDefinitionId,
       enrollmentId,
       onCompleted,

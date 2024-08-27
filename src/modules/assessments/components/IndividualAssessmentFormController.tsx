@@ -62,7 +62,7 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
 
   const { submitHandler, saveDraftHandler, mutationLoading, errors } =
     useAssessmentHandlers({
-      definition: editingDefinition,
+      formDefinitionId: editingDefinition.id,
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
       assessmentLockVersion: assessment?.lockVersion,

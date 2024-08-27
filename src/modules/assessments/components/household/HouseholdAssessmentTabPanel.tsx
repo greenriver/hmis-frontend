@@ -141,7 +141,7 @@ const HouseholdAssessmentTabPanel = memo(
 
     const { submitHandler, saveDraftHandler, mutationLoading, errors } =
       useAssessmentHandlers({
-        definition: editingDefinition,
+        formDefinitionId: editingDefinition?.id || mainFormDefinition.id,
         enrollmentId,
         assessmentId,
         assessmentLockVersion: assessment?.lockVersion,
