@@ -3041,7 +3041,7 @@ export type FormItem = {
   briefText?: Maybe<Scalars['String']['output']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
-  customRule?: Maybe<FormItemRule>;
+  customRule?: Maybe<Scalars['JSON']['output']>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
@@ -3075,7 +3075,7 @@ export type FormItem = {
   repeats?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the item must be included in data results */
   required?: Maybe<Scalars['Boolean']['output']>;
-  rule?: Maybe<FormItemRule>;
+  rule?: Maybe<Scalars['JSON']['output']>;
   /**
    * Whether to apply this field to all clients or a single client when bulk creating
    * @deprecated from old bulk services implementation, no longer supported
@@ -3088,16 +3088,6 @@ export type FormItem = {
   type: ItemType;
   /** Whether to show a warning if this question is unanswered */
   warnIfEmpty?: Maybe<Scalars['Boolean']['output']>;
-};
-
-export type FormItemRule = {
-  __typename?: 'FormItemRule';
-  _comment?: Maybe<Scalars['String']['output']>;
-  operator?: Maybe<Scalars['String']['output']>;
-  /** Parts that make up this rule */
-  parts?: Maybe<Array<FormItemRule>>;
-  value?: Maybe<Scalars['String']['output']>;
-  variable?: Maybe<Scalars['String']['output']>;
 };
 
 /** Project match for a form, including information about which clients in this project the form is applicable to. */
@@ -8928,6 +8918,8 @@ export type FullAssessmentFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -8950,6 +8942,8 @@ export type FullAssessmentFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -8972,6 +8966,8 @@ export type FullAssessmentFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -8994,6 +8990,8 @@ export type FullAssessmentFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -9016,6 +9014,8 @@ export type FullAssessmentFragment = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -9087,76 +9087,6 @@ export type FullAssessmentFragment = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -9229,76 +9159,6 @@ export type FullAssessmentFragment = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -9371,76 +9231,6 @@ export type FullAssessmentFragment = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -9513,76 +9303,6 @@ export type FullAssessmentFragment = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -9655,76 +9375,6 @@ export type FullAssessmentFragment = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   };
@@ -9760,6 +9410,8 @@ export type FullAssessmentFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -9782,6 +9434,8 @@ export type FullAssessmentFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -9804,6 +9458,8 @@ export type FullAssessmentFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -9826,6 +9482,8 @@ export type FullAssessmentFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -9848,6 +9506,8 @@ export type FullAssessmentFragment = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -9919,76 +9579,6 @@ export type FullAssessmentFragment = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -10061,76 +9651,6 @@ export type FullAssessmentFragment = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -10203,76 +9723,6 @@ export type FullAssessmentFragment = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -10345,76 +9795,6 @@ export type FullAssessmentFragment = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -10487,76 +9867,6 @@ export type FullAssessmentFragment = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   } | null;
@@ -11130,6 +10440,8 @@ export type GetAssessmentQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -11152,6 +10464,8 @@ export type GetAssessmentQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -11174,6 +10488,8 @@ export type GetAssessmentQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -11196,6 +10512,8 @@ export type GetAssessmentQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -11218,6 +10536,8 @@ export type GetAssessmentQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -11289,76 +10609,6 @@ export type GetAssessmentQuery = {
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
-                  rule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
-                  customRule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
                 }> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
@@ -11431,76 +10681,6 @@ export type GetAssessmentQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -11573,76 +10753,6 @@ export type GetAssessmentQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -11715,76 +10825,6 @@ export type GetAssessmentQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -11857,76 +10897,6 @@ export type GetAssessmentQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }>;
       };
     };
@@ -11962,6 +10932,8 @@ export type GetAssessmentQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -11984,6 +10956,8 @@ export type GetAssessmentQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -12006,6 +10980,8 @@ export type GetAssessmentQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -12028,6 +11004,8 @@ export type GetAssessmentQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -12050,6 +11028,8 @@ export type GetAssessmentQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -12121,76 +11101,6 @@ export type GetAssessmentQuery = {
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
-                  rule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
-                  customRule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
                 }> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
@@ -12263,76 +11173,6 @@ export type GetAssessmentQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -12405,76 +11245,6 @@ export type GetAssessmentQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -12547,76 +11317,6 @@ export type GetAssessmentQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -12689,76 +11389,6 @@ export type GetAssessmentQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }>;
       };
     } | null;
@@ -17424,6 +16054,8 @@ export type ClientDetailFormsQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -17446,6 +16078,8 @@ export type ClientDetailFormsQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -17468,6 +16102,8 @@ export type ClientDetailFormsQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -17490,6 +16126,8 @@ export type ClientDetailFormsQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -17512,6 +16150,8 @@ export type ClientDetailFormsQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -17583,76 +16223,6 @@ export type ClientDetailFormsQuery = {
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
-                  rule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
-                  customRule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
                 }> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
@@ -17725,76 +16295,6 @@ export type ClientDetailFormsQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -17867,76 +16367,6 @@ export type ClientDetailFormsQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -18009,76 +16439,6 @@ export type ClientDetailFormsQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -18151,76 +16511,6 @@ export type ClientDetailFormsQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }>;
       };
     };
@@ -20529,6 +18819,8 @@ export type AllEnrollmentDetailsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -20551,6 +18843,8 @@ export type AllEnrollmentDetailsFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -20573,6 +18867,8 @@ export type AllEnrollmentDetailsFragment = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -20595,6 +18891,8 @@ export type AllEnrollmentDetailsFragment = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   item?: Array<{
                     __typename: 'FormItem';
                     linkId: string;
@@ -20617,6 +18915,8 @@ export type AllEnrollmentDetailsFragment = {
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
+                    rule?: any | null;
+                    customRule?: any | null;
                     mapping?: {
                       __typename?: 'FieldMapping';
                       recordType?: RelatedRecordType | null;
@@ -20688,76 +18988,6 @@ export type AllEnrollmentDetailsFragment = {
                         compareQuestion?: string | null;
                       }>;
                     }> | null;
-                    rule?: {
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                            parts?: Array<{
-                              __typename?: 'FormItemRule';
-                              variable?: string | null;
-                              operator?: string | null;
-                              value?: string | null;
-                              _comment?: string | null;
-                            }> | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    } | null;
-                    customRule?: {
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                            parts?: Array<{
-                              __typename?: 'FormItemRule';
-                              variable?: string | null;
-                              operator?: string | null;
-                              value?: string | null;
-                              _comment?: string | null;
-                            }> | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    } | null;
                   }> | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
@@ -20830,76 +19060,6 @@ export type AllEnrollmentDetailsFragment = {
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
-                  rule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
-                  customRule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
                 }> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
@@ -20972,76 +19132,6 @@ export type AllEnrollmentDetailsFragment = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -21114,76 +19204,6 @@ export type AllEnrollmentDetailsFragment = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -21256,76 +19276,6 @@ export type AllEnrollmentDetailsFragment = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }>;
         };
       };
@@ -21986,6 +19936,8 @@ export type GetEnrollmentDetailsQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -22008,6 +19960,8 @@ export type GetEnrollmentDetailsQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -22030,6 +19984,8 @@ export type GetEnrollmentDetailsQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   item?: Array<{
                     __typename: 'FormItem';
                     linkId: string;
@@ -22052,6 +20008,8 @@ export type GetEnrollmentDetailsQuery = {
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
+                    rule?: any | null;
+                    customRule?: any | null;
                     item?: Array<{
                       __typename: 'FormItem';
                       linkId: string;
@@ -22074,6 +20032,8 @@ export type GetEnrollmentDetailsQuery = {
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
                       enableBehavior?: EnableBehavior | null;
+                      rule?: any | null;
+                      customRule?: any | null;
                       mapping?: {
                         __typename?: 'FieldMapping';
                         recordType?: RelatedRecordType | null;
@@ -22145,76 +20105,6 @@ export type GetEnrollmentDetailsQuery = {
                           compareQuestion?: string | null;
                         }>;
                       }> | null;
-                      rule?: {
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                            parts?: Array<{
-                              __typename?: 'FormItemRule';
-                              variable?: string | null;
-                              operator?: string | null;
-                              value?: string | null;
-                              _comment?: string | null;
-                              parts?: Array<{
-                                __typename?: 'FormItemRule';
-                                variable?: string | null;
-                                operator?: string | null;
-                                value?: string | null;
-                                _comment?: string | null;
-                              }> | null;
-                            }> | null;
-                          }> | null;
-                        }> | null;
-                      } | null;
-                      customRule?: {
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                            parts?: Array<{
-                              __typename?: 'FormItemRule';
-                              variable?: string | null;
-                              operator?: string | null;
-                              value?: string | null;
-                              _comment?: string | null;
-                              parts?: Array<{
-                                __typename?: 'FormItemRule';
-                                variable?: string | null;
-                                operator?: string | null;
-                                value?: string | null;
-                                _comment?: string | null;
-                              }> | null;
-                            }> | null;
-                          }> | null;
-                        }> | null;
-                      } | null;
                     }> | null;
                     mapping?: {
                       __typename?: 'FieldMapping';
@@ -22287,76 +20177,6 @@ export type GetEnrollmentDetailsQuery = {
                         compareQuestion?: string | null;
                       }>;
                     }> | null;
-                    rule?: {
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                            parts?: Array<{
-                              __typename?: 'FormItemRule';
-                              variable?: string | null;
-                              operator?: string | null;
-                              value?: string | null;
-                              _comment?: string | null;
-                            }> | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    } | null;
-                    customRule?: {
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                            parts?: Array<{
-                              __typename?: 'FormItemRule';
-                              variable?: string | null;
-                              operator?: string | null;
-                              value?: string | null;
-                              _comment?: string | null;
-                            }> | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    } | null;
                   }> | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
@@ -22429,76 +20249,6 @@ export type GetEnrollmentDetailsQuery = {
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
-                  rule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
-                  customRule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
                 }> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
@@ -22571,76 +20321,6 @@ export type GetEnrollmentDetailsQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -22713,76 +20393,6 @@ export type GetEnrollmentDetailsQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }>;
           };
         };
@@ -23639,6 +21249,8 @@ export type GetExternalFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -23661,6 +21273,8 @@ export type GetExternalFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -23683,6 +21297,8 @@ export type GetExternalFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -23705,6 +21321,8 @@ export type GetExternalFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -23727,6 +21345,8 @@ export type GetExternalFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -23798,76 +21418,6 @@ export type GetExternalFormDefinitionQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -23940,76 +21490,6 @@ export type GetExternalFormDefinitionQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -24082,76 +21562,6 @@ export type GetExternalFormDefinitionQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -24224,76 +21634,6 @@ export type GetExternalFormDefinitionQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -24366,76 +21706,6 @@ export type GetExternalFormDefinitionQuery = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   } | null;
@@ -24540,6 +21810,8 @@ export type ItemFieldsFragment = {
   dataCollectedAbout?: DataCollectedAbout | null;
   disabledDisplay?: DisabledDisplay | null;
   enableBehavior?: EnableBehavior | null;
+  rule?: any | null;
+  customRule?: any | null;
   mapping?: {
     __typename?: 'FieldMapping';
     recordType?: RelatedRecordType | null;
@@ -24611,120 +21883,6 @@ export type ItemFieldsFragment = {
       compareQuestion?: string | null;
     }>;
   }> | null;
-  rule?: {
-    __typename?: 'FormItemRule';
-    variable?: string | null;
-    operator?: string | null;
-    value?: string | null;
-    _comment?: string | null;
-    parts?: Array<{
-      __typename?: 'FormItemRule';
-      variable?: string | null;
-      operator?: string | null;
-      value?: string | null;
-      _comment?: string | null;
-      parts?: Array<{
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-          }> | null;
-        }> | null;
-      }> | null;
-    }> | null;
-  } | null;
-  customRule?: {
-    __typename?: 'FormItemRule';
-    variable?: string | null;
-    operator?: string | null;
-    value?: string | null;
-    _comment?: string | null;
-    parts?: Array<{
-      __typename?: 'FormItemRule';
-      variable?: string | null;
-      operator?: string | null;
-      value?: string | null;
-      _comment?: string | null;
-      parts?: Array<{
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-          }> | null;
-        }> | null;
-      }> | null;
-    }> | null;
-  } | null;
-};
-
-export type FormItemRuleWithPartsFragment = {
-  __typename?: 'FormItemRule';
-  variable?: string | null;
-  operator?: string | null;
-  value?: string | null;
-  _comment?: string | null;
-  parts?: Array<{
-    __typename?: 'FormItemRule';
-    variable?: string | null;
-    operator?: string | null;
-    value?: string | null;
-    _comment?: string | null;
-    parts?: Array<{
-      __typename?: 'FormItemRule';
-      variable?: string | null;
-      operator?: string | null;
-      value?: string | null;
-      _comment?: string | null;
-      parts?: Array<{
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-        }> | null;
-      }> | null;
-    }> | null;
-  }> | null;
-};
-
-export type FormItemRuleFieldsFragment = {
-  __typename?: 'FormItemRule';
-  variable?: string | null;
-  operator?: string | null;
-  value?: string | null;
-  _comment?: string | null;
 };
 
 export type FormDefinitionJsonFieldsFragment = {
@@ -24751,6 +21909,8 @@ export type FormDefinitionJsonFieldsFragment = {
     dataCollectedAbout?: DataCollectedAbout | null;
     disabledDisplay?: DisabledDisplay | null;
     enableBehavior?: EnableBehavior | null;
+    rule?: any | null;
+    customRule?: any | null;
     item?: Array<{
       __typename: 'FormItem';
       linkId: string;
@@ -24773,6 +21933,8 @@ export type FormDefinitionJsonFieldsFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -24795,6 +21957,8 @@ export type FormDefinitionJsonFieldsFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -24817,6 +21981,8 @@ export type FormDefinitionJsonFieldsFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -24839,6 +22005,8 @@ export type FormDefinitionJsonFieldsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             mapping?: {
               __typename?: 'FieldMapping';
               recordType?: RelatedRecordType | null;
@@ -24910,76 +22078,6 @@ export type FormDefinitionJsonFieldsFragment = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -25052,76 +22150,6 @@ export type FormDefinitionJsonFieldsFragment = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -25194,76 +22222,6 @@ export type FormDefinitionJsonFieldsFragment = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }> | null;
       mapping?: {
         __typename?: 'FieldMapping';
@@ -25336,76 +22294,6 @@ export type FormDefinitionJsonFieldsFragment = {
           compareQuestion?: string | null;
         }>;
       }> | null;
-      rule?: {
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      } | null;
-      customRule?: {
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      } | null;
     }> | null;
     mapping?: {
       __typename?: 'FieldMapping';
@@ -25478,76 +22366,6 @@ export type FormDefinitionJsonFieldsFragment = {
         compareQuestion?: string | null;
       }>;
     }> | null;
-    rule?: {
-      __typename?: 'FormItemRule';
-      variable?: string | null;
-      operator?: string | null;
-      value?: string | null;
-      _comment?: string | null;
-      parts?: Array<{
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      }> | null;
-    } | null;
-    customRule?: {
-      __typename?: 'FormItemRule';
-      variable?: string | null;
-      operator?: string | null;
-      value?: string | null;
-      _comment?: string | null;
-      parts?: Array<{
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      }> | null;
-    } | null;
   }>;
 };
 
@@ -25593,6 +22411,8 @@ export type FormDefinitionFieldsFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -25615,6 +22435,8 @@ export type FormDefinitionFieldsFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -25637,6 +22459,8 @@ export type FormDefinitionFieldsFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -25659,6 +22483,8 @@ export type FormDefinitionFieldsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -25681,6 +22507,8 @@ export type FormDefinitionFieldsFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -25752,76 +22580,6 @@ export type FormDefinitionFieldsFragment = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -25894,76 +22652,6 @@ export type FormDefinitionFieldsFragment = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -26036,76 +22724,6 @@ export type FormDefinitionFieldsFragment = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -26178,76 +22796,6 @@ export type FormDefinitionFieldsFragment = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }> | null;
       mapping?: {
         __typename?: 'FieldMapping';
@@ -26320,76 +22868,6 @@ export type FormDefinitionFieldsFragment = {
           compareQuestion?: string | null;
         }>;
       }> | null;
-      rule?: {
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      } | null;
-      customRule?: {
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      } | null;
     }>;
   };
 };
@@ -26427,6 +22905,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -26449,6 +22929,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -26471,6 +22953,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -26493,6 +22977,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -26515,6 +23001,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -26586,76 +23074,6 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -26728,76 +23146,6 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -26870,76 +23218,6 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -27012,76 +23290,6 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }> | null;
       mapping?: {
         __typename?: 'FieldMapping';
@@ -27154,76 +23362,6 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           compareQuestion?: string | null;
         }>;
       }> | null;
-      rule?: {
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      } | null;
-      customRule?: {
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      } | null;
     }>;
   };
 };
@@ -27260,6 +23398,8 @@ export type FormDefinitionFieldsForEditorFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -27282,6 +23422,8 @@ export type FormDefinitionFieldsForEditorFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -27304,6 +23446,8 @@ export type FormDefinitionFieldsForEditorFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -27326,6 +23470,8 @@ export type FormDefinitionFieldsForEditorFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -27348,6 +23494,8 @@ export type FormDefinitionFieldsForEditorFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -27419,76 +23567,6 @@ export type FormDefinitionFieldsForEditorFragment = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -27561,76 +23639,6 @@ export type FormDefinitionFieldsForEditorFragment = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -27703,76 +23711,6 @@ export type FormDefinitionFieldsForEditorFragment = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -27845,76 +23783,6 @@ export type FormDefinitionFieldsForEditorFragment = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }> | null;
       mapping?: {
         __typename?: 'FieldMapping';
@@ -27987,76 +23855,6 @@ export type FormDefinitionFieldsForEditorFragment = {
           compareQuestion?: string | null;
         }>;
       }> | null;
-      rule?: {
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      } | null;
-      customRule?: {
-        __typename?: 'FormItemRule';
-        variable?: string | null;
-        operator?: string | null;
-        value?: string | null;
-        _comment?: string | null;
-        parts?: Array<{
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        }> | null;
-      } | null;
     }>;
   };
 };
@@ -28126,6 +23924,8 @@ export type UpdateFormDefinitionMutation = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -28148,6 +23948,8 @@ export type UpdateFormDefinitionMutation = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -28170,6 +23972,8 @@ export type UpdateFormDefinitionMutation = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -28192,6 +23996,8 @@ export type UpdateFormDefinitionMutation = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -28214,6 +24020,8 @@ export type UpdateFormDefinitionMutation = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -28285,76 +24093,6 @@ export type UpdateFormDefinitionMutation = {
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
-                  rule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
-                  customRule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
                 }> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
@@ -28427,76 +24165,6 @@ export type UpdateFormDefinitionMutation = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -28569,76 +24237,6 @@ export type UpdateFormDefinitionMutation = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -28711,76 +24309,6 @@ export type UpdateFormDefinitionMutation = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -28853,76 +24381,6 @@ export type UpdateFormDefinitionMutation = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }>;
       };
     } | null;
@@ -28985,6 +24443,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -29007,6 +24467,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -29029,6 +24491,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -29051,6 +24515,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -29073,6 +24539,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -29144,76 +24612,6 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
-                  rule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
-                  customRule?: {
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                          parts?: Array<{
-                            __typename?: 'FormItemRule';
-                            variable?: string | null;
-                            operator?: string | null;
-                            value?: string | null;
-                            _comment?: string | null;
-                          }> | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  } | null;
                 }> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
@@ -29286,76 +24684,6 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -29428,76 +24756,6 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -29570,76 +24828,6 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -29712,76 +24900,6 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }>;
       };
     } | null;
@@ -30001,6 +25119,8 @@ export type GetFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -30023,6 +25143,8 @@ export type GetFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -30045,6 +25167,8 @@ export type GetFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -30067,6 +25191,8 @@ export type GetFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -30089,6 +25215,8 @@ export type GetFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -30160,76 +25288,6 @@ export type GetFormDefinitionQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -30302,76 +25360,6 @@ export type GetFormDefinitionQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -30444,76 +25432,6 @@ export type GetFormDefinitionQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -30586,76 +25504,6 @@ export type GetFormDefinitionQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -30728,76 +25576,6 @@ export type GetFormDefinitionQuery = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   } | null;
@@ -30841,6 +25619,8 @@ export type GetStaticFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -30863,6 +25643,8 @@ export type GetStaticFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -30885,6 +25667,8 @@ export type GetStaticFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -30907,6 +25691,8 @@ export type GetStaticFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -30929,6 +25715,8 @@ export type GetStaticFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -31000,76 +25788,6 @@ export type GetStaticFormDefinitionQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -31142,76 +25860,6 @@ export type GetStaticFormDefinitionQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -31284,76 +25932,6 @@ export type GetStaticFormDefinitionQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -31426,76 +26004,6 @@ export type GetStaticFormDefinitionQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -31568,76 +26076,6 @@ export type GetStaticFormDefinitionQuery = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   };
@@ -31682,6 +26120,8 @@ export type GetServiceFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -31704,6 +26144,8 @@ export type GetServiceFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -31726,6 +26168,8 @@ export type GetServiceFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -31748,6 +26192,8 @@ export type GetServiceFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -31770,6 +26216,8 @@ export type GetServiceFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -31841,76 +26289,6 @@ export type GetServiceFormDefinitionQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -31983,76 +26361,6 @@ export type GetServiceFormDefinitionQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -32125,76 +26433,6 @@ export type GetServiceFormDefinitionQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -32267,76 +26505,6 @@ export type GetServiceFormDefinitionQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -32409,76 +26577,6 @@ export type GetServiceFormDefinitionQuery = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   } | null;
@@ -32525,6 +26623,8 @@ export type GetAssessmentFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -32547,6 +26647,8 @@ export type GetAssessmentFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -32569,6 +26671,8 @@ export type GetAssessmentFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -32591,6 +26695,8 @@ export type GetAssessmentFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -32613,6 +26719,8 @@ export type GetAssessmentFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -32684,76 +26792,6 @@ export type GetAssessmentFormDefinitionQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -32826,76 +26864,6 @@ export type GetAssessmentFormDefinitionQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -32968,76 +26936,6 @@ export type GetAssessmentFormDefinitionQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -33110,76 +27008,6 @@ export type GetAssessmentFormDefinitionQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -33252,76 +27080,6 @@ export type GetAssessmentFormDefinitionQuery = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   } | null;
@@ -34498,6 +28256,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -34520,6 +28280,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -34542,6 +28304,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -34564,6 +28328,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -34586,6 +28352,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -34657,76 +28425,6 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -34799,76 +28497,6 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -34941,76 +28569,6 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -35083,76 +28641,6 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -35225,76 +28713,6 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   } | null;
@@ -35339,6 +28757,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -35361,6 +28781,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -35383,6 +28805,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -35405,6 +28829,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -35427,6 +28853,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -35498,76 +28926,6 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -35640,76 +28998,6 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -35782,76 +29070,6 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -35924,76 +29142,6 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -36066,76 +29214,6 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   } | null;
@@ -36174,6 +29252,8 @@ export type GetParsedFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -36196,6 +29276,8 @@ export type GetParsedFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -36218,6 +29300,8 @@ export type GetParsedFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -36240,6 +29324,8 @@ export type GetParsedFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -36262,6 +29348,8 @@ export type GetParsedFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -36333,76 +29421,6 @@ export type GetParsedFormDefinitionQuery = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -36475,76 +29493,6 @@ export type GetParsedFormDefinitionQuery = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -36617,76 +29565,6 @@ export type GetParsedFormDefinitionQuery = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -36759,76 +29637,6 @@ export type GetParsedFormDefinitionQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -36901,76 +29709,6 @@ export type GetParsedFormDefinitionQuery = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     } | null;
   } | null;
@@ -38150,6 +30888,8 @@ export type OccurrencePointFormFieldsFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -38172,6 +30912,8 @@ export type OccurrencePointFormFieldsFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -38194,6 +30936,8 @@ export type OccurrencePointFormFieldsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -38216,6 +30960,8 @@ export type OccurrencePointFormFieldsFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -38238,6 +30984,8 @@ export type OccurrencePointFormFieldsFragment = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -38309,76 +31057,6 @@ export type OccurrencePointFormFieldsFragment = {
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
-                rule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
-                customRule?: {
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                        parts?: Array<{
-                          __typename?: 'FormItemRule';
-                          variable?: string | null;
-                          operator?: string | null;
-                          value?: string | null;
-                          _comment?: string | null;
-                        }> | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                } | null;
               }> | null;
               mapping?: {
                 __typename?: 'FieldMapping';
@@ -38451,76 +31129,6 @@ export type OccurrencePointFormFieldsFragment = {
                   compareQuestion?: string | null;
                 }>;
               }> | null;
-              rule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
-              customRule?: {
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                      parts?: Array<{
-                        __typename?: 'FormItemRule';
-                        variable?: string | null;
-                        operator?: string | null;
-                        value?: string | null;
-                        _comment?: string | null;
-                      }> | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              } | null;
             }> | null;
             mapping?: {
               __typename?: 'FieldMapping';
@@ -38593,76 +31201,6 @@ export type OccurrencePointFormFieldsFragment = {
                 compareQuestion?: string | null;
               }>;
             }> | null;
-            rule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
-            customRule?: {
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                    parts?: Array<{
-                      __typename?: 'FormItemRule';
-                      variable?: string | null;
-                      operator?: string | null;
-                      value?: string | null;
-                      _comment?: string | null;
-                    }> | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            } | null;
           }> | null;
           mapping?: {
             __typename?: 'FieldMapping';
@@ -38735,76 +31273,6 @@ export type OccurrencePointFormFieldsFragment = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-          rule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
-          customRule?: {
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                  parts?: Array<{
-                    __typename?: 'FormItemRule';
-                    variable?: string | null;
-                    operator?: string | null;
-                    value?: string | null;
-                    _comment?: string | null;
-                  }> | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          } | null;
         }> | null;
         mapping?: {
           __typename?: 'FieldMapping';
@@ -38877,76 +31345,6 @@ export type OccurrencePointFormFieldsFragment = {
             compareQuestion?: string | null;
           }>;
         }> | null;
-        rule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
-        customRule?: {
-          __typename?: 'FormItemRule';
-          variable?: string | null;
-          operator?: string | null;
-          value?: string | null;
-          _comment?: string | null;
-          parts?: Array<{
-            __typename?: 'FormItemRule';
-            variable?: string | null;
-            operator?: string | null;
-            value?: string | null;
-            _comment?: string | null;
-            parts?: Array<{
-              __typename?: 'FormItemRule';
-              variable?: string | null;
-              operator?: string | null;
-              value?: string | null;
-              _comment?: string | null;
-              parts?: Array<{
-                __typename?: 'FormItemRule';
-                variable?: string | null;
-                operator?: string | null;
-                value?: string | null;
-                _comment?: string | null;
-                parts?: Array<{
-                  __typename?: 'FormItemRule';
-                  variable?: string | null;
-                  operator?: string | null;
-                  value?: string | null;
-                  _comment?: string | null;
-                }> | null;
-              }> | null;
-            }> | null;
-          }> | null;
-        } | null;
       }>;
     };
   };
@@ -43353,32 +35751,6 @@ export const EnableWhenFieldsFragmentDoc = gql`
     compareQuestion
   }
 `;
-export const FormItemRuleFieldsFragmentDoc = gql`
-  fragment FormItemRuleFields on FormItemRule {
-    variable
-    operator
-    value
-    _comment
-  }
-`;
-export const FormItemRuleWithPartsFragmentDoc = gql`
-  fragment FormItemRuleWithParts on FormItemRule {
-    ...FormItemRuleFields
-    parts {
-      ...FormItemRuleFields
-      parts {
-        ...FormItemRuleFields
-        parts {
-          ...FormItemRuleFields
-          parts {
-            ...FormItemRuleFields
-          }
-        }
-      }
-    }
-  }
-  ${FormItemRuleFieldsFragmentDoc}
-`;
 export const ItemFieldsFragmentDoc = gql`
   fragment ItemFields on FormItem {
     __typename
@@ -43443,16 +35815,11 @@ export const ItemFieldsFragmentDoc = gql`
         ...EnableWhenFields
       }
     }
-    rule {
-      ...FormItemRuleWithParts
-    }
-    customRule {
-      ...FormItemRuleWithParts
-    }
+    rule
+    customRule
   }
   ${PickListOptionFieldsFragmentDoc}
   ${EnableWhenFieldsFragmentDoc}
-  ${FormItemRuleWithPartsFragmentDoc}
 `;
 export const FormDefinitionJsonFieldsFragmentDoc = gql`
   fragment FormDefinitionJsonFields on FormDefinitionJson {

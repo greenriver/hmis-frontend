@@ -3363,6 +3363,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'Component', ofType: null },
       },
       {
+        name: 'customRule',
+        type: { kind: 'SCALAR', name: 'JSON', ofType: null },
+      },
+      {
         name: 'dataCollectedAbout',
         type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
       },
@@ -3418,6 +3422,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'required',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
+      { name: 'rule', type: { kind: 'SCALAR', name: 'JSON', ofType: null } },
       {
         name: 'serviceDetailType',
         type: { kind: 'ENUM', name: 'ServiceDetailType', ofType: null },
@@ -3435,24 +3440,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'warnIfEmpty',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'FormItemRule',
-    fields: [
-      {
-        name: '_comment',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'operator',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      { name: 'value', type: { kind: 'SCALAR', name: 'String', ofType: null } },
-      {
-        name: 'variable',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },
