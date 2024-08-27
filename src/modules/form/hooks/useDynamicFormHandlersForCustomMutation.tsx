@@ -3,7 +3,6 @@ import { RefObject, useCallback, useState } from 'react';
 
 import { DynamicFormOnSubmit } from '../components/DynamicForm';
 import { FormValues } from '../types';
-import { transformSubmitValues } from '../util/formUtil';
 
 import {
   emptyErrorState,
@@ -67,15 +66,10 @@ export function useDynamicFormHandlersForCustomMutation<
   });
 
   const onSubmit: DynamicFormOnSubmit = useCallback(
-    ({ values, confirmed = false }) => {
+    ({ valuesByFieldName, confirmed = false }) => {
       if (!formDefinition) return;
 
-      const input = transformSubmitValues({
-        values,
-        definition: formDefinition.definition,
-        keyByFieldName: true,
-      });
-      const variables = getVariables(input, confirmed);
+      const variables = getVariables(valuesByFieldName, confirmed);
       setErrors(emptyErrorState);
       void mutateFunction({ variables });
     },

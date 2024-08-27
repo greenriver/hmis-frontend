@@ -1133,7 +1133,7 @@ type TransformSubmitValuesParams = {
 export const transformSubmitValues = ({
   definition,
   values, // should error if values has any keys that are not linkids?
-  includeMissingKeys,
+  includeMissingKeys, // check this could be causing issues for DCA rules if the form were transforming on hasnt dropped them yet
   autofillBooleans = false,
   autofillNotCollected = false,
   keyByFieldName = false,
@@ -1331,53 +1331,6 @@ export const createHudValuesForSubmit = (
     keyByFieldName: true,
     includeMissingKeys: 'AS_HIDDEN',
   });
-
-export const debugFormValues = (
-  event: React.MouseEvent<HTMLButtonElement>,
-  values: FormValues,
-  definition: FormDefinitionJson,
-  transformValuesFn?: (
-    values: FormValues,
-    definition: FormDefinitionJson
-  ) => FormValues,
-  transformHudValuesFn?: (
-    values: FormValues,
-    definition: FormDefinitionJson
-  ) => FormValues
-) => {
-  if (import.meta.env.MODE === 'production') return false;
-  if (!event.ctrlKey && !event.metaKey) return false;
-
-  // eslint-disable-next-line no-console
-  console.debug('%c FORM STATE:', 'color: #BB7AFF');
-  if (transformValuesFn) {
-    // eslint-disable-next-line no-console
-    console.debug(transformValuesFn(values, definition));
-  } else {
-    // eslint-disable-next-line no-console
-    console.debug(values);
-  }
-
-  let hudValues = transformSubmitValues({
-    definition,
-    values,
-    autofillNotCollected: true,
-    includeMissingKeys: 'AS_NULL',
-    keyByFieldName: true,
-  });
-
-  if (transformHudValuesFn) {
-    hudValues = transformHudValuesFn(values, definition);
-  }
-
-  window.debug = { hudValues };
-  // eslint-disable-next-line no-console
-  console.debug('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
-  // eslint-disable-next-line no-console
-  console.debug(hudValues);
-
-  return true;
-};
 
 type GetDependentItemsDisabledStatus = {
   changedLinkIds: string[];

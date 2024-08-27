@@ -8,13 +8,9 @@ import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { ReferralPostingDefinition } from '@/modules/form/data';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { SubmitFormAllowedTypes } from '@/modules/form/types';
-import {
-  localResolvePickList,
-  transformSubmitValues,
-} from '@/modules/form/util/formUtil';
+import { localResolvePickList } from '@/modules/form/util/formUtil';
 import {
   ReferralPostingDetailFieldsFragment,
-  ReferralPostingInput,
   ReferralPostingStatus,
   useUpdateReferralPostingMutation,
 } from '@/types/gqlTypes';
@@ -63,22 +59,16 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
   }, [readOnly, referralPosting]);
 
   const handleSubmit: DynamicFormOnSubmit = useCallback(
-    ({ values }) => {
+    ({ valuesByFieldName }) => {
       setErrors(emptyErrorState);
-      const input = transformSubmitValues({
-        definition,
-        values,
-        keyByFieldName: true,
-      }) as ReferralPostingInput;
-
       mutate({
         variables: {
           id: referralPosting.id,
-          input,
+          input: valuesByFieldName,
         },
       });
     },
-    [mutate, definition, referralPosting.id]
+    [mutate, referralPosting.id]
   );
 
   const initialValues = useInitialFormValues({

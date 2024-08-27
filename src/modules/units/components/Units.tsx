@@ -28,7 +28,6 @@ import DynamicForm, {
 } from '@/modules/form/components/DynamicForm';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import { UnitsDefinition } from '@/modules/form/data';
-import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { evictUnitsQuery } from '@/modules/units/util';
 import { CreateUnitsInput, useCreateUnitsMutation } from '@/types/gqlTypes';
@@ -57,12 +56,8 @@ const Units = () => {
   );
 
   const handleCreateUnits: DynamicFormOnSubmit = useCallback(
-    ({ values }) => {
-      const input = transformSubmitValues({
-        definition: UnitsDefinition,
-        values,
-        keyByFieldName: true,
-      });
+    ({ valuesByFieldName }) => {
+      const input = valuesByFieldName;
       input.projectId = project.id;
       if (!input.prefix) input.prefix = 'Unit';
       createUnits({ variables: { input: { input } as CreateUnitsInput } });

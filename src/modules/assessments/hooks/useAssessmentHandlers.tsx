@@ -9,16 +9,13 @@ import {
   hasOnlyWarnings,
   partitionValidations,
 } from '@/modules/errors/util';
-import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
-import { FormValues } from '@/modules/form/types';
 import {
-  debugFormValues,
-  transformSubmitValues,
-} from '@/modules/form/util/formUtil';
+  DynamicFormOnSaveDraft,
+  DynamicFormOnSubmit,
+} from '@/modules/form/components/DynamicForm';
 import {
   AssessmentInput,
   FormDefinitionFieldsFragment,
-  FormDefinitionJson,
   SaveAssessmentMutation,
   SubmitAssessmentMutation,
   useSaveAssessmentMutation,
@@ -47,22 +44,6 @@ function isSaveMutation(
 ): data is SaveAssessmentMutation {
   return data && data.hasOwnProperty('saveAssessment');
 }
-
-export const createValuesForSubmit = (
-  values: FormValues,
-  definition: FormDefinitionJson
-) => transformSubmitValues({ definition, values });
-
-export const createHudValuesForSubmit = (
-  values: FormValues,
-  definition: FormDefinitionJson
-) =>
-  transformSubmitValues({
-    definition,
-    values,
-    keyByFieldName: true,
-    includeMissingKeys: 'AS_HIDDEN',
-  });
 
 export function useAssessmentHandlers({
   definition,
@@ -125,26 +106,15 @@ export function useAssessmentHandlers({
     useSubmitAssessmentMutation({ onError });
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
-    ({ event, values, confirmed = false, onSuccess }) => {
+    ({ valuesByLinkId, valuesByFieldName, confirmed = false, onSuccess }) => {
       if (!definition || !formDefinitionId) return;
-      if (
-        event &&
-        debugFormValues(
-          event,
-          values,
-          definition.definition,
-          createValuesForSubmit,
-          createHudValuesForSubmit
-        )
-      )
-        return;
 
       const input = {
         assessmentId,
         enrollmentId,
         formDefinitionId,
-        values: createValuesForSubmit(values, definition.definition),
-        hudValues: createHudValuesForSubmit(values, definition.definition),
+        values: valuesByLinkId,
+        hudValues: valuesByFieldName,
         confirmed,
       };
       void submitAssessmentMutation({
@@ -168,23 +138,23 @@ export function useAssessmentHandlers({
     ]
   );
 
-  const saveDraftHandler = useCallback(
-    (values: FormValues, onSuccessCallback?: VoidFunction) => {
+  const saveDraftHandler: DynamicFormOnSaveDraft = useCallback(
+    ({ valuesByLinkId, valuesByFieldName, onSuccess }) => {
       if (!definition || !formDefinitionId) return;
 
       const input: AssessmentInput = {
         assessmentId,
         enrollmentId,
         formDefinitionId,
-        values: createValuesForSubmit(values, definition.definition),
-        hudValues: createHudValuesForSubmit(values, definition.definition),
+        values: valuesByLinkId,
+        hudValues: valuesByFieldName,
       };
       void saveAssessmentMutation({
         variables: { input: { input, assessmentLockVersion } },
         onCompleted: (data) => {
           onCompleted(data);
-          if (data.saveAssessment?.assessment && onSuccessCallback) {
-            onSuccessCallback();
+          if (data.saveAssessment?.assessment && onSuccess) {
+            onSuccess();
           }
         },
       });
