@@ -64,12 +64,12 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
 
   const handleSubmit: DynamicFormOnSubmit = useCallback(
     ({ rawValues }) => {
+      setErrors(emptyErrorState);
       const input = transformSubmitValues({
         definition,
         values: rawValues,
         keyByFieldName: true,
       }) as ReferralPostingInput;
-      setErrors(emptyErrorState);
       mutate({
         variables: {
           id: referralPosting.id,
@@ -77,7 +77,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
         },
       });
     },
-    [definition, mutate, referralPosting.id]
+    [mutate, definition, referralPosting.id]
   );
 
   const initialValues = useInitialFormValues({
