@@ -2,12 +2,7 @@ import { RefObject, useCallback, useMemo, useState } from 'react';
 
 import { DynamicFormOnSubmit } from '../components/DynamicForm';
 import { LocalConstants, SubmitFormAllowedTypes } from '../types';
-import {
-  createHudValuesForSubmit,
-  createValuesForSubmit,
-  debugFormValues,
-  getItemMap,
-} from '../util/formUtil';
+import { getItemMap } from '../util/formUtil';
 
 import useInitialFormValues from './useInitialFormValues';
 
@@ -98,24 +93,13 @@ export function useDynamicFormHandlersForRecord<
   });
 
   const onSubmit: DynamicFormOnSubmit = useCallback(
-    ({ event, values, confirmed = false }) => {
+    ({ valuesByLinkId, valuesByFieldName, confirmed = false }) => {
       if (!formDefinition) return;
-      if (
-        event &&
-        debugFormValues(
-          event,
-          values,
-          formDefinition.definition,
-          createValuesForSubmit,
-          createHudValuesForSubmit
-        )
-      )
-        return;
 
       const input = {
         formDefinitionId: formDefinition.id,
-        values: createValuesForSubmit(values, formDefinition.definition),
-        hudValues: createHudValuesForSubmit(values, formDefinition.definition),
+        values: valuesByLinkId,
+        hudValues: valuesByFieldName,
         recordId: record?.id,
         confirmed,
         ...inputVariables,

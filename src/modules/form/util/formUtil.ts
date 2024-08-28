@@ -1144,6 +1144,7 @@ export const transformSubmitValues = ({
   autofillNotCollected = false,
   keyByFieldName = false,
 }: TransformSubmitValuesParams) => {
+  const allLinkIds = new Set();
   // Recursive helper for traversing the FormDefinition
   function rescursiveFillMap(
     items: FormItem[],
@@ -1151,6 +1152,8 @@ export const transformSubmitValues = ({
     parentRecordType?: string
   ) {
     items.forEach((item: FormItem) => {
+      allLinkIds.add(item.linkId);
+
       const mapping = item.mapping || {};
       const recordType = mapping.recordType
         ? HmisEnums.RelatedRecordType[mapping.recordType]
@@ -1211,6 +1214,18 @@ export const transformSubmitValues = ({
 
   const result: Record<string, any> = {};
   rescursiveFillMap(definition.item, result);
+
+  const unrecognizedKeys = Object.keys(values).filter(
+    (linkId) => !allLinkIds.has(linkId)
+  );
+
+  if (unrecognizedKeys.length > 0) {
+    throw new Error(
+      'Failed to transform form values. Unrecognized Keys: ' +
+        unrecognizedKeys.join(', ')
+    );
+  }
+
   return result;
 };
 
@@ -1322,53 +1337,6 @@ export const createHudValuesForSubmit = (
     keyByFieldName: true,
     includeMissingKeys: 'AS_HIDDEN',
   });
-
-export const debugFormValues = (
-  event: React.MouseEvent<HTMLButtonElement>,
-  values: FormValues,
-  definition: FormDefinitionJson,
-  transformValuesFn?: (
-    values: FormValues,
-    definition: FormDefinitionJson
-  ) => FormValues,
-  transformHudValuesFn?: (
-    values: FormValues,
-    definition: FormDefinitionJson
-  ) => FormValues
-) => {
-  if (import.meta.env.MODE === 'production') return false;
-  if (!event.ctrlKey && !event.metaKey) return false;
-
-  // eslint-disable-next-line no-console
-  console.debug('%c FORM STATE:', 'color: #BB7AFF');
-  if (transformValuesFn) {
-    // eslint-disable-next-line no-console
-    console.debug(transformValuesFn(values, definition));
-  } else {
-    // eslint-disable-next-line no-console
-    console.debug(values);
-  }
-
-  let hudValues = transformSubmitValues({
-    definition,
-    values,
-    autofillNotCollected: true,
-    includeMissingKeys: 'AS_NULL',
-    keyByFieldName: true,
-  });
-
-  if (transformHudValuesFn) {
-    hudValues = transformHudValuesFn(values, definition);
-  }
-
-  window.debug = { hudValues };
-  // eslint-disable-next-line no-console
-  console.debug('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
-  // eslint-disable-next-line no-console
-  console.debug(hudValues);
-
-  return true;
-};
 
 type GetDependentItemsDisabledStatus = {
   changedLinkIds: string[];

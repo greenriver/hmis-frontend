@@ -47,7 +47,8 @@ const NewIndividualAssessmentPage = () => {
     <IndividualAssessmentFormController
       enrollment={enrollment}
       client={client}
-      definition={formDefinition}
+      viewingDefinition={formDefinition}
+      editingDefinition={formDefinition}
     />
   );
 };

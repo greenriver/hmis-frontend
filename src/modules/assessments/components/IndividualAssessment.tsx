@@ -27,8 +27,10 @@ import {
 } from '@/types/gqlTypes';
 
 export interface IndividualAssessmentProps {
-  // FormDefiniton to use for rendering the assessment
-  definition: FormDefinitionFieldsFragment;
+  // FormDefiniton to use for rendering the assessment in read-only mode
+  viewingDefinition: FormDefinitionFieldsFragment;
+  // FormDefiniton to use for rendering the assessment for editing
+  editingDefinition: FormDefinitionFieldsFragment;
   // Assessment to render. Omit if starting a new assessment.
   assessment?: FullAssessmentFragment;
   enrollmentId: string;
@@ -68,7 +70,8 @@ export interface IndividualAssessmentProps {
  */
 const IndividualAssessment = ({
   enrollmentId,
-  definition,
+  viewingDefinition,
+  editingDefinition,
   assessment,
   embeddedInWorkflow = false,
   client,
@@ -95,13 +98,13 @@ const IndividualAssessment = ({
 
   if (enrollmentLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
-  if (!definition && !assessment) return <NotFound />;
+  if (!viewingDefinition || !editingDefinition) return <NotFound />;
 
   const alertNode = (
     <AssessmentRelatedAnnualsAlert
       enrollmentId={enrollment.id}
       householdId={enrollment.householdId}
-      assessmentRole={definition.role as unknown as AssessmentRole}
+      assessmentRole={viewingDefinition.role as unknown as AssessmentRole}
       embeddedInWorkflow={embeddedInWorkflow}
       assessmentId={assessment?.id}
       householdSize={enrollment.householdSize}
@@ -113,7 +116,8 @@ const IndividualAssessment = ({
       alerts={alertNode}
       client={client}
       key={assessment?.id}
-      definition={definition}
+      viewingDefinition={viewingDefinition}
+      editingDefinition={editingDefinition}
       assessment={assessment}
       enrollment={enrollment}
       top={topOffsetHeight}
