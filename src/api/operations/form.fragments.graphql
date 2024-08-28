@@ -32,6 +32,7 @@ fragment EnableWhenFields on EnableWhen {
   answerNumber
   answerBoolean
   answerGroupCode
+  answerDate
   compareQuestion
 }
 fragment ItemFields on FormItem {

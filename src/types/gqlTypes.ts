@@ -2240,6 +2240,8 @@ export type EnableWhen = {
   answerCode?: Maybe<Scalars['String']['output']>;
   /** If question is choice type, and operator is IN, values for comparison */
   answerCodes?: Maybe<Array<Scalars['String']['output']>>;
+  /** If question is date type, value for comparison */
+  answerDate?: Maybe<Scalars['ISO8601Date']['output']>;
   /** If question is choice type and has grouped options, value for comparison */
   answerGroupCode?: Maybe<Scalars['String']['output']>;
   /** If question is numeric, value for comparison */
@@ -9051,6 +9053,7 @@ export type FullAssessmentFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -9073,6 +9076,7 @@ export type FullAssessmentFragment = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -9123,6 +9127,7 @@ export type FullAssessmentFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -9145,6 +9150,7 @@ export type FullAssessmentFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -9195,6 +9201,7 @@ export type FullAssessmentFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -9217,6 +9224,7 @@ export type FullAssessmentFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -9267,6 +9275,7 @@ export type FullAssessmentFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -9289,6 +9298,7 @@ export type FullAssessmentFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -9339,6 +9349,7 @@ export type FullAssessmentFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -9361,6 +9372,7 @@ export type FullAssessmentFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -9535,6 +9547,7 @@ export type FullAssessmentFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -9557,6 +9570,7 @@ export type FullAssessmentFragment = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -9607,6 +9621,7 @@ export type FullAssessmentFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -9629,6 +9644,7 @@ export type FullAssessmentFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -9679,6 +9695,7 @@ export type FullAssessmentFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -9701,6 +9718,7 @@ export type FullAssessmentFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -9751,6 +9769,7 @@ export type FullAssessmentFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -9773,6 +9792,7 @@ export type FullAssessmentFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -9823,6 +9843,7 @@ export type FullAssessmentFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -9845,6 +9866,7 @@ export type FullAssessmentFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -10557,6 +10579,7 @@ export type GetAssessmentQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -10579,6 +10602,7 @@ export type GetAssessmentQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -10629,6 +10653,7 @@ export type GetAssessmentQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -10651,6 +10676,7 @@ export type GetAssessmentQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -10701,6 +10727,7 @@ export type GetAssessmentQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -10723,6 +10750,7 @@ export type GetAssessmentQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -10773,6 +10801,7 @@ export type GetAssessmentQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -10795,6 +10824,7 @@ export type GetAssessmentQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -10845,6 +10875,7 @@ export type GetAssessmentQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -10867,6 +10898,7 @@ export type GetAssessmentQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -11041,6 +11073,7 @@ export type GetAssessmentQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -11063,6 +11096,7 @@ export type GetAssessmentQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -11113,6 +11147,7 @@ export type GetAssessmentQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -11135,6 +11170,7 @@ export type GetAssessmentQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -11185,6 +11221,7 @@ export type GetAssessmentQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -11207,6 +11244,7 @@ export type GetAssessmentQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -11257,6 +11295,7 @@ export type GetAssessmentQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -11279,6 +11318,7 @@ export type GetAssessmentQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -11329,6 +11369,7 @@ export type GetAssessmentQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -11351,6 +11392,7 @@ export type GetAssessmentQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -16155,6 +16197,7 @@ export type ClientDetailFormsQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -16177,6 +16220,7 @@ export type ClientDetailFormsQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -16227,6 +16271,7 @@ export type ClientDetailFormsQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -16249,6 +16294,7 @@ export type ClientDetailFormsQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -16299,6 +16345,7 @@ export type ClientDetailFormsQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -16321,6 +16368,7 @@ export type ClientDetailFormsQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -16371,6 +16419,7 @@ export type ClientDetailFormsQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -16393,6 +16442,7 @@ export type ClientDetailFormsQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -16443,6 +16493,7 @@ export type ClientDetailFormsQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -16465,6 +16516,7 @@ export type ClientDetailFormsQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -18912,6 +18964,7 @@ export type AllEnrollmentDetailsFragment = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }> | null;
                     autofillValues?: Array<{
@@ -18934,6 +18987,7 @@ export type AllEnrollmentDetailsFragment = {
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
                         answerGroupCode?: string | null;
+                        answerDate?: string | null;
                         compareQuestion?: string | null;
                       }>;
                     }> | null;
@@ -18984,6 +19038,7 @@ export type AllEnrollmentDetailsFragment = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -19006,6 +19061,7 @@ export type AllEnrollmentDetailsFragment = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -19056,6 +19112,7 @@ export type AllEnrollmentDetailsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -19078,6 +19135,7 @@ export type AllEnrollmentDetailsFragment = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -19128,6 +19186,7 @@ export type AllEnrollmentDetailsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -19150,6 +19209,7 @@ export type AllEnrollmentDetailsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -19200,6 +19260,7 @@ export type AllEnrollmentDetailsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -19222,6 +19283,7 @@ export type AllEnrollmentDetailsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -20021,6 +20083,7 @@ export type GetEnrollmentDetailsQuery = {
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
                         answerGroupCode?: string | null;
+                        answerDate?: string | null;
                         compareQuestion?: string | null;
                       }> | null;
                       autofillValues?: Array<{
@@ -20043,6 +20106,7 @@ export type GetEnrollmentDetailsQuery = {
                           answerNumber?: number | null;
                           answerBoolean?: boolean | null;
                           answerGroupCode?: string | null;
+                          answerDate?: string | null;
                           compareQuestion?: string | null;
                         }>;
                       }> | null;
@@ -20093,6 +20157,7 @@ export type GetEnrollmentDetailsQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }> | null;
                     autofillValues?: Array<{
@@ -20115,6 +20180,7 @@ export type GetEnrollmentDetailsQuery = {
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
                         answerGroupCode?: string | null;
+                        answerDate?: string | null;
                         compareQuestion?: string | null;
                       }>;
                     }> | null;
@@ -20165,6 +20231,7 @@ export type GetEnrollmentDetailsQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -20187,6 +20254,7 @@ export type GetEnrollmentDetailsQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -20237,6 +20305,7 @@ export type GetEnrollmentDetailsQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -20259,6 +20328,7 @@ export type GetEnrollmentDetailsQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -20309,6 +20379,7 @@ export type GetEnrollmentDetailsQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -20331,6 +20402,7 @@ export type GetEnrollmentDetailsQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -21326,6 +21398,7 @@ export type GetExternalFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -21348,6 +21421,7 @@ export type GetExternalFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -21398,6 +21472,7 @@ export type GetExternalFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -21420,6 +21495,7 @@ export type GetExternalFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -21470,6 +21546,7 @@ export type GetExternalFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -21492,6 +21569,7 @@ export type GetExternalFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -21542,6 +21620,7 @@ export type GetExternalFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -21564,6 +21643,7 @@ export type GetExternalFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -21614,6 +21694,7 @@ export type GetExternalFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -21636,6 +21717,7 @@ export type GetExternalFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -21719,6 +21801,7 @@ export type EnableWhenFieldsFragment = {
   answerNumber?: number | null;
   answerBoolean?: boolean | null;
   answerGroupCode?: string | null;
+  answerDate?: string | null;
   compareQuestion?: string | null;
 };
 
@@ -21790,6 +21873,7 @@ export type ItemFieldsFragment = {
     answerNumber?: number | null;
     answerBoolean?: boolean | null;
     answerGroupCode?: string | null;
+    answerDate?: string | null;
     compareQuestion?: string | null;
   }> | null;
   autofillValues?: Array<{
@@ -21812,6 +21896,7 @@ export type ItemFieldsFragment = {
       answerNumber?: number | null;
       answerBoolean?: boolean | null;
       answerGroupCode?: string | null;
+      answerDate?: string | null;
       compareQuestion?: string | null;
     }>;
   }> | null;
@@ -21975,6 +22060,7 @@ export type FormDefinitionJsonFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -21997,6 +22083,7 @@ export type FormDefinitionJsonFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -22047,6 +22134,7 @@ export type FormDefinitionJsonFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -22069,6 +22157,7 @@ export type FormDefinitionJsonFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -22119,6 +22208,7 @@ export type FormDefinitionJsonFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -22141,6 +22231,7 @@ export type FormDefinitionJsonFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -22191,6 +22282,7 @@ export type FormDefinitionJsonFieldsFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }> | null;
       autofillValues?: Array<{
@@ -22213,6 +22305,7 @@ export type FormDefinitionJsonFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }>;
       }> | null;
@@ -22263,6 +22356,7 @@ export type FormDefinitionJsonFieldsFragment = {
       answerNumber?: number | null;
       answerBoolean?: boolean | null;
       answerGroupCode?: string | null;
+      answerDate?: string | null;
       compareQuestion?: string | null;
     }> | null;
     autofillValues?: Array<{
@@ -22285,6 +22379,7 @@ export type FormDefinitionJsonFieldsFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }>;
     }> | null;
@@ -22470,6 +22565,7 @@ export type FormDefinitionFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -22492,6 +22588,7 @@ export type FormDefinitionFieldsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -22542,6 +22639,7 @@ export type FormDefinitionFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -22564,6 +22662,7 @@ export type FormDefinitionFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -22614,6 +22713,7 @@ export type FormDefinitionFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -22636,6 +22736,7 @@ export type FormDefinitionFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -22686,6 +22787,7 @@ export type FormDefinitionFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -22708,6 +22810,7 @@ export type FormDefinitionFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -22758,6 +22861,7 @@ export type FormDefinitionFieldsFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }> | null;
       autofillValues?: Array<{
@@ -22780,6 +22884,7 @@ export type FormDefinitionFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }>;
       }> | null;
@@ -22956,6 +23061,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -22978,6 +23084,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -23028,6 +23135,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -23050,6 +23158,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -23100,6 +23209,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -23122,6 +23232,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -23172,6 +23283,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -23194,6 +23306,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -23244,6 +23357,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }> | null;
       autofillValues?: Array<{
@@ -23266,6 +23380,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }>;
       }> | null;
@@ -23442,6 +23557,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -23464,6 +23580,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -23514,6 +23631,7 @@ export type FormDefinitionFieldsForEditorFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -23536,6 +23654,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -23586,6 +23705,7 @@ export type FormDefinitionFieldsForEditorFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -23608,6 +23728,7 @@ export type FormDefinitionFieldsForEditorFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -23658,6 +23779,7 @@ export type FormDefinitionFieldsForEditorFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -23680,6 +23802,7 @@ export type FormDefinitionFieldsForEditorFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -23730,6 +23853,7 @@ export type FormDefinitionFieldsForEditorFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }> | null;
       autofillValues?: Array<{
@@ -23752,6 +23876,7 @@ export type FormDefinitionFieldsForEditorFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }>;
       }> | null;
@@ -23965,6 +24090,7 @@ export type UpdateFormDefinitionMutation = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -23987,6 +24113,7 @@ export type UpdateFormDefinitionMutation = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -24037,6 +24164,7 @@ export type UpdateFormDefinitionMutation = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -24059,6 +24187,7 @@ export type UpdateFormDefinitionMutation = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -24109,6 +24238,7 @@ export type UpdateFormDefinitionMutation = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -24131,6 +24261,7 @@ export type UpdateFormDefinitionMutation = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -24181,6 +24312,7 @@ export type UpdateFormDefinitionMutation = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -24203,6 +24335,7 @@ export type UpdateFormDefinitionMutation = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -24253,6 +24386,7 @@ export type UpdateFormDefinitionMutation = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -24275,6 +24409,7 @@ export type UpdateFormDefinitionMutation = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -24476,6 +24611,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -24498,6 +24634,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -24548,6 +24685,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -24570,6 +24708,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -24620,6 +24759,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -24642,6 +24782,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -24692,6 +24833,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -24714,6 +24856,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -24764,6 +24907,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -24786,6 +24930,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -25152,6 +25297,7 @@ export type GetFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -25174,6 +25320,7 @@ export type GetFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -25224,6 +25371,7 @@ export type GetFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -25246,6 +25394,7 @@ export type GetFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -25296,6 +25445,7 @@ export type GetFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -25318,6 +25468,7 @@ export type GetFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -25368,6 +25519,7 @@ export type GetFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -25390,6 +25542,7 @@ export type GetFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -25440,6 +25593,7 @@ export type GetFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -25462,6 +25616,7 @@ export type GetFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -25644,6 +25799,7 @@ export type GetStaticFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -25666,6 +25822,7 @@ export type GetStaticFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -25716,6 +25873,7 @@ export type GetStaticFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -25738,6 +25896,7 @@ export type GetStaticFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -25788,6 +25947,7 @@ export type GetStaticFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -25810,6 +25970,7 @@ export type GetStaticFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -25860,6 +26021,7 @@ export type GetStaticFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -25882,6 +26044,7 @@ export type GetStaticFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -25932,6 +26095,7 @@ export type GetStaticFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -25954,6 +26118,7 @@ export type GetStaticFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -26137,6 +26302,7 @@ export type GetServiceFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -26159,6 +26325,7 @@ export type GetServiceFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -26209,6 +26376,7 @@ export type GetServiceFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -26231,6 +26399,7 @@ export type GetServiceFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -26281,6 +26450,7 @@ export type GetServiceFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -26303,6 +26473,7 @@ export type GetServiceFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -26353,6 +26524,7 @@ export type GetServiceFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -26375,6 +26547,7 @@ export type GetServiceFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -26425,6 +26598,7 @@ export type GetServiceFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -26447,6 +26621,7 @@ export type GetServiceFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -26632,6 +26807,7 @@ export type GetAssessmentFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -26654,6 +26830,7 @@ export type GetAssessmentFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -26704,6 +26881,7 @@ export type GetAssessmentFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -26726,6 +26904,7 @@ export type GetAssessmentFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -26776,6 +26955,7 @@ export type GetAssessmentFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -26798,6 +26978,7 @@ export type GetAssessmentFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -26848,6 +27029,7 @@ export type GetAssessmentFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -26870,6 +27052,7 @@ export type GetAssessmentFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -26920,6 +27103,7 @@ export type GetAssessmentFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -26942,6 +27126,7 @@ export type GetAssessmentFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -28265,6 +28450,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -28287,6 +28473,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -28337,6 +28524,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -28359,6 +28547,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -28409,6 +28598,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -28431,6 +28621,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -28481,6 +28672,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -28503,6 +28695,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -28553,6 +28746,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -28575,6 +28769,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -28758,6 +28953,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -28780,6 +28976,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -28830,6 +29027,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -28852,6 +29050,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -28902,6 +29101,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -28924,6 +29124,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -28974,6 +29175,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -28996,6 +29198,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -29046,6 +29249,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -29068,6 +29272,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -29244,6 +29449,7 @@ export type GetParsedFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -29266,6 +29472,7 @@ export type GetParsedFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -29316,6 +29523,7 @@ export type GetParsedFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -29338,6 +29546,7 @@ export type GetParsedFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -29388,6 +29597,7 @@ export type GetParsedFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -29410,6 +29620,7 @@ export type GetParsedFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -29460,6 +29671,7 @@ export type GetParsedFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -29482,6 +29694,7 @@ export type GetParsedFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -29532,6 +29745,7 @@ export type GetParsedFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -29554,6 +29768,7 @@ export type GetParsedFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -30871,6 +31086,7 @@ export type OccurrencePointFormFieldsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -30893,6 +31109,7 @@ export type OccurrencePointFormFieldsFragment = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -30943,6 +31160,7 @@ export type OccurrencePointFormFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -30965,6 +31183,7 @@ export type OccurrencePointFormFieldsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -31015,6 +31234,7 @@ export type OccurrencePointFormFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -31037,6 +31257,7 @@ export type OccurrencePointFormFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -31087,6 +31308,7 @@ export type OccurrencePointFormFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -31109,6 +31331,7 @@ export type OccurrencePointFormFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -31159,6 +31382,7 @@ export type OccurrencePointFormFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -31181,6 +31405,7 @@ export type OccurrencePointFormFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -35592,6 +35817,7 @@ export const EnableWhenFieldsFragmentDoc = gql`
     answerNumber
     answerBoolean
     answerGroupCode
+    answerDate
     compareQuestion
   }
 `;
