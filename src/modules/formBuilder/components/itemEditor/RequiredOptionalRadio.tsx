@@ -51,6 +51,7 @@ const RequiredOptionalRadio: React.FC<Props> = ({ control, setValue }) => {
       if (!option) return;
       if (option.code === radioValue) return;
 
+      // setValue doesn't dirty the form by default because it's not usually called in response to user input
       if (option.code === 'required') {
         setValue('required', true, { shouldDirty: true });
         setValue('warnIfEmpty', false, { shouldDirty: true });
