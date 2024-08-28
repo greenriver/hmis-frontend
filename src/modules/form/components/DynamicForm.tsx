@@ -126,13 +126,14 @@ const DynamicForm = forwardRef(
       }
     }, []);
 
-    const { renderFields, getCleanedValues, getValuesForSubmit } =
-      useDynamicFields({
-        definition,
-        initialValues,
-        localConstants,
-        onFieldChange,
-      });
+    // getValues: returns form state (used by some nested components, like MciClearance)
+    // getValuesForSubmit: returns submittable form state (used for onSubmit/onSaveDraft)
+    const { renderFields, getValues, getValuesForSubmit } = useDynamicFields({
+      definition,
+      initialValues,
+      localConstants,
+      onFieldChange,
+    });
 
     const saveButtonsRef = React.createRef<HTMLDivElement>();
     const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
@@ -245,7 +246,7 @@ const DynamicForm = forwardRef(
               </Stack>
             </Grid>
           )}
-          <DynamicFormContext.Provider value={{ getCleanedValues, definition }}>
+          <DynamicFormContext.Provider value={{ getValues, definition }}>
             {renderFields({
               itemChanged: handleChangeCallback,
               severalItemsChanged: handleChangeCallback,
