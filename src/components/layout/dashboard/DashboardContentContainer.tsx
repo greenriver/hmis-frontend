@@ -9,6 +9,7 @@ import ContextHeader from './contextHeader/ContextHeader';
 import DashboardContentNav from './DashboardContentNav';
 
 import { useIsMobile } from '@/hooks/useIsMobile';
+import useMaxPageWidth from '@/hooks/useMaxPageWidth';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 
 interface Props {
@@ -45,7 +46,7 @@ const DashboardContentContainer: React.FC<Props> = ({
   contentSx,
 }) => {
   const theme = useTheme();
-  const maxPageWidth = theme.breakpoints.values.xl;
+  const maxPageWidth = useMaxPageWidth();
 
   const desktopContainerWidth = desktopNavIsOpen
     ? // FIXME using vw causes horizontal scrollbar when vertical scroll is present

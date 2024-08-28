@@ -8892,6 +8892,7 @@ export type FullAssessmentFragment = {
     role: FormRole;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -9365,6 +9366,7 @@ export type FullAssessmentFragment = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
   upgradedDefinitionForEditing?: {
     __typename?: 'FormDefinition';
@@ -9374,6 +9376,7 @@ export type FullAssessmentFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -9847,6 +9850,7 @@ export type FullAssessmentFragment = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
   enrollment: {
     __typename?: 'Enrollment';
@@ -10394,6 +10398,7 @@ export type GetAssessmentQuery = {
       role: FormRole;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -10867,6 +10872,7 @@ export type GetAssessmentQuery = {
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
     upgradedDefinitionForEditing?: {
       __typename?: 'FormDefinition';
@@ -10876,6 +10882,7 @@ export type GetAssessmentQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -11349,6 +11356,7 @@ export type GetAssessmentQuery = {
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     enrollment: {
       __typename?: 'Enrollment';
@@ -15988,6 +15996,7 @@ export type ClientDetailFormsQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -16461,6 +16470,7 @@ export type ClientDetailFormsQuery = {
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
   }>;
 };
@@ -18743,6 +18753,7 @@ export type AllEnrollmentDetailsFragment = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
         definition: {
           __typename?: 'FormDefinitionJson';
           item: Array<{
@@ -19216,6 +19227,7 @@ export type AllEnrollmentDetailsFragment = {
             }> | null;
           }>;
         };
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
     }>;
     access: {
@@ -19850,6 +19862,7 @@ export type GetEnrollmentDetailsQuery = {
           cacheKey: string;
           identifier: string;
           status: FormStatus;
+          dateUpdated: string;
           definition: {
             __typename?: 'FormDefinitionJson';
             item: Array<{
@@ -20323,6 +20336,7 @@ export type GetEnrollmentDetailsQuery = {
               }> | null;
             }>;
           };
+          updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
         };
       }>;
       access: {
@@ -21153,6 +21167,7 @@ export type GetExternalFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -21626,6 +21641,7 @@ export type GetExternalFormDefinitionQuery = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -22283,6 +22299,8 @@ export type FormDefinitionMetadataFragment = {
   cacheKey: string;
   identifier: string;
   status: FormStatus;
+  dateUpdated: string;
+  updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
 export type FormDefinitionFieldsFragment = {
@@ -22293,6 +22311,7 @@ export type FormDefinitionFieldsFragment = {
   cacheKey: string;
   identifier: string;
   status: FormStatus;
+  dateUpdated: string;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -22766,6 +22785,7 @@ export type FormDefinitionFieldsFragment = {
       }> | null;
     }>;
   };
+  updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
 export type FormDefinitionFieldsForJsonEditorFragment = {
@@ -22777,6 +22797,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
   title: string;
   cacheKey: string;
   identifier: string;
+  dateUpdated: string;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -23250,16 +23271,19 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
       }> | null;
     }>;
   };
+  updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
 export type FormDefinitionFieldsForEditorFragment = {
   __typename?: 'FormDefinition';
+  version: string;
   id: string;
   role: FormRole;
   title: string;
   cacheKey: string;
   identifier: string;
   status: FormStatus;
+  dateUpdated: string;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -23733,6 +23757,7 @@ export type FormDefinitionFieldsForEditorFragment = {
       }> | null;
     }>;
   };
+  updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
 export type FormIdentifierDetailsFragment = {
@@ -23747,6 +23772,8 @@ export type FormIdentifierDetailsFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
   draftVersion?: {
     __typename?: 'FormDefinition';
@@ -23756,6 +23783,8 @@ export type FormIdentifierDetailsFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -23770,12 +23799,14 @@ export type UpdateFormDefinitionMutation = {
     __typename?: 'UpdateFormDefinitionPayload';
     formDefinition?: {
       __typename?: 'FormDefinition';
+      version: string;
       id: string;
       role: FormRole;
       title: string;
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -24249,6 +24280,7 @@ export type UpdateFormDefinitionMutation = {
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -24285,6 +24317,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
       title: string;
       cacheKey: string;
       identifier: string;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -24758,6 +24791,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -24792,6 +24826,8 @@ export type CreateFormDefinitionMutation = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -24830,6 +24866,8 @@ export type CreateNextDraftFormDefinitionMutation = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       } | null;
     } | null;
   } | null;
@@ -24855,6 +24893,8 @@ export type PublishFormDefinitionMutation = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
       draftVersion?: {
         __typename?: 'FormDefinition';
@@ -24864,6 +24904,8 @@ export type PublishFormDefinitionMutation = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       } | null;
     } | null;
     errors: Array<{
@@ -24951,6 +24993,7 @@ export type GetFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25424,6 +25467,7 @@ export type GetFormDefinitionQuery = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -25441,6 +25485,7 @@ export type GetStaticFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25914,6 +25959,7 @@ export type GetStaticFormDefinitionQuery = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
 };
 
@@ -25932,6 +25978,7 @@ export type GetServiceFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -26405,6 +26452,7 @@ export type GetServiceFormDefinitionQuery = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -26425,6 +26473,7 @@ export type GetAssessmentFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -26898,6 +26947,7 @@ export type GetAssessmentFormDefinitionQuery = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -26919,6 +26969,8 @@ export type GetFormIdentifierDetailsQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
     draftVersion?: {
       __typename?: 'FormDefinition';
@@ -26928,6 +26980,8 @@ export type GetFormIdentifierDetailsQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
   } | null;
 };
@@ -26951,6 +27005,7 @@ export type GetFormIdentifierVersionsQuery = {
       nodesCount: number;
       nodes: Array<{
         __typename?: 'FormDefinition';
+        version: string;
         dateUpdated: string;
         id: string;
         role: FormRole;
@@ -26997,7 +27052,9 @@ export type GetFormIdentifiersQuery = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
         formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
     }>;
   };
@@ -28042,12 +28099,14 @@ export type GetFormDefinitionFieldsForEditorQuery = {
   __typename?: 'Query';
   formDefinition?: {
     __typename?: 'FormDefinition';
+    version: string;
     id: string;
     role: FormRole;
     title: string;
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -28521,6 +28580,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -28539,6 +28599,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
     title: string;
     cacheKey: string;
     identifier: string;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -29012,6 +29073,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -30650,6 +30712,7 @@ export type OccurrencePointFormFieldsFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -31123,6 +31186,7 @@ export type OccurrencePointFormFieldsFragment = {
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
 };
 
@@ -35500,6 +35564,10 @@ export const FormDefinitionMetadataFragmentDoc = gql`
     cacheKey
     identifier
     status
+    updatedBy {
+      name
+    }
+    dateUpdated
   }
 `;
 export const PickListOptionFieldsFragmentDoc = gql`
@@ -36463,6 +36531,7 @@ export const FormDefinitionFieldsForJsonEditorFragmentDoc = gql`
 export const FormDefinitionFieldsForEditorFragmentDoc = gql`
   fragment FormDefinitionFieldsForEditor on FormDefinition {
     ...FormDefinitionFields
+    version
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
@@ -44004,6 +44073,7 @@ export const GetFormIdentifierVersionsDocument = gql`
         nodesCount
         nodes {
           ...FormDefinitionMetadata
+          version
           dateUpdated
           updatedBy {
             ...UserFields

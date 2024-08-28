@@ -8,31 +8,21 @@ import {
   useCreateNextDraftFormDefinitionMutation,
 } from '@/types/gqlTypes';
 
-export enum FormEditorType {
-  FormBuilder,
-  JsonEditor,
-}
-
 interface EditFormButtonProps {
   formIdentifier: FormIdentifierDetailsFragment;
   text?: string;
   Icon?: React.ComponentType;
-  editorType?: FormEditorType;
   variant?: ButtonProps['variant'];
 }
 
 const EditFormButton: React.FC<EditFormButtonProps> = ({
   formIdentifier,
   text,
-  editorType = FormEditorType.FormBuilder,
   variant,
 }) => {
   const navigate = useNavigate();
 
-  const editorRoute =
-    editorType === FormEditorType.JsonEditor
-      ? AdminDashboardRoutes.JSON_EDIT_FORM
-      : AdminDashboardRoutes.EDIT_FORM;
+  const editorRoute = AdminDashboardRoutes.EDIT_FORM;
 
   const [createDraftForm, { loading, error }] =
     useCreateNextDraftFormDefinitionMutation({
