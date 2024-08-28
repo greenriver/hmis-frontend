@@ -20,7 +20,8 @@ import { generateSafePath } from '@/utils/pathEncoding';
 interface Props {
   enrollment: DashboardEnrollment;
   client: EnrolledClientFieldsFragment;
-  definition: FormDefinitionFieldsFragment;
+  viewingDefinition: FormDefinitionFieldsFragment;
+  editingDefinition: FormDefinitionFieldsFragment;
   assessment?: FullAssessmentFragment;
 }
 
@@ -31,7 +32,8 @@ interface Props {
 const IndividualAssessmentFormController: React.FC<Props> = ({
   client,
   enrollment,
-  definition,
+  viewingDefinition,
+  editingDefinition,
   assessment,
 }) => {
   const navigate = useNavigate();
@@ -60,7 +62,7 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
 
   const { submitHandler, saveDraftHandler, mutationLoading, errors } =
     useAssessmentHandlers({
-      definition,
+      formDefinitionId: editingDefinition.id,
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
       assessmentLockVersion: assessment?.lockVersion,
@@ -100,7 +102,8 @@ const IndividualAssessmentFormController: React.FC<Props> = ({
 
   return (
     <IndividualAssessment
-      definition={definition}
+      viewingDefinition={viewingDefinition}
+      editingDefinition={editingDefinition}
       assessment={assessment}
       enrollmentId={enrollment.id}
       client={client}

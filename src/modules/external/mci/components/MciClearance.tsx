@@ -296,12 +296,12 @@ const MciClearanceWrapper = ({
  * Wrapper to show existing MCI ID if client already has one.
  */
 const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
-  const { getCleanedValues, definition } = useDynamicFormContext();
+  const { getValues, definition } = useDynamicFormContext();
 
   // currentMciAttributes gets re-calculated any time one of the dependent values changes (because of enableWhen dependency)
   const [clientId, externalIds, currentMciAttributes] = useMemo(() => {
-    if (!getCleanedValues || !definition) return [];
-    const values = getCleanedValues();
+    if (!getValues || !definition) return [];
+    const values = getValues();
     let byKey = createHudValuesForSubmit(values, definition);
     byKey = transform(
       byKey,
@@ -312,7 +312,7 @@ const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
     // Check Link ID 'current_mci_id' in values to see if we already have an MCI ID
     // eslint-disable-next-line @typescript-eslint/dot-notation
     return [byKey.id, values['current_mci_id'], mciFields];
-  }, [getCleanedValues, definition]);
+  }, [getValues, definition]);
 
   const previousMciAttributes = usePrevious(currentMciAttributes);
 
@@ -324,7 +324,7 @@ const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
     if (changed) setHasChanged(true);
   }, [currentMciAttributes, previousMciAttributes]);
 
-  if (!getCleanedValues) return null;
+  if (!getValues) return null;
 
   // If client already has an MCI ID, just show that.
   // Post-MVP: allow re-clear
