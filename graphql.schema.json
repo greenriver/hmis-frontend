@@ -14901,6 +14901,18 @@
             "deprecationReason": null
           },
           {
+            "name": "answerDate",
+            "description": "If question is date type, value for comparison",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "answerGroupCode",
             "description": "If question is choice type and has grouped options, value for comparison",
             "args": [],
