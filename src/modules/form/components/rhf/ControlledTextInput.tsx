@@ -19,7 +19,6 @@ const ControlledTextInput: React.FC<ControlledTextInputProps> = ({
   control,
   onBlur,
   rules,
-  required,
   ...props
 }) => {
   const {
@@ -30,7 +29,7 @@ const ControlledTextInput: React.FC<ControlledTextInputProps> = ({
     control,
     shouldUnregister: true,
     rules: {
-      required: required ? 'This field is required' : false,
+      required: props.required ? 'This field is required' : false,
       ...rules,
     },
   });
