@@ -74,7 +74,7 @@ const InitialValue: React.FC<Props> = ({ itemType, control }) => {
       >
         {fields.map((initial, index) => (
           <RemovableCard
-            key={JSON.stringify(initial)} // fixme could be non unique
+            key={initial.id}
             onRemove={() => remove(index)}
             removeTooltip={'Remove Initial Value'}
           >
