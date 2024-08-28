@@ -186,7 +186,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   required: 'Local Constant or Dependent Question is required',
                 }}
                 onChange={() =>
-                  setValue(`${enableWhenPath}.${index}.operator`, undefined)
+                  setValue(`${enableWhenPath}.${index}.operator`, null as any)
                 }
               />
             )}
@@ -202,7 +202,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 options={localConstantsPickList}
                 helperText='Local constant whose value will determine whether the condition is met'
                 onChange={() =>
-                  setValue(`${enableWhenPath}.${index}.operator`, undefined)
+                  setValue(`${enableWhenPath}.${index}.operator`, null as any)
                 }
               />
             )}
