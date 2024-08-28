@@ -269,13 +269,18 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
               <Controller
                 name={`${enableWhenPath}.${index}.answerDate`}
                 control={control}
-                render={({ field: { ref, ...field } }) => (
+                rules={{ required: 'This field is required' }}
+                render={({
+                  field: { ref, ...field },
+                  fieldState: { error },
+                }) => (
                   <DatePicker
                     value={parseHmisDateString(field.value)}
                     onChange={(date) =>
                       field.onChange(date ? formatDateForGql(date) : '')
                     }
                     label={`Response Value (Date)`}
+                    error={!!error}
                   />
                 )}
               />
