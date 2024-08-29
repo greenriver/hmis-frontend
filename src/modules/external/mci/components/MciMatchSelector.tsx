@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   lighten,
   Stack,
@@ -10,6 +11,7 @@ import {
 import pluralize from 'pluralize';
 import { ReactNode, useMemo } from 'react';
 
+import { ClearanceStatus } from '../types';
 import { NEW_MCI_STRING } from '../util';
 
 import { MciClearanceProps } from './types';
@@ -63,14 +65,18 @@ const MciScoreInfo = ({ match }: { match: MciMatchFieldsFragment }) => {
         {match.mciId}
       </Typography>
       {match.existingClientId && (
-        <RouterLink
-          to={generateSafePath(Routes.CLIENT_DASHBOARD, {
-            clientId: match.existingClientId,
-          })}
-          openInNew
-        >
-          <Typography variant='inherit'>Already in HMIS</Typography>
-        </RouterLink>
+        <Alert severity='warning' sx={{ py: 1, my: 1, maxWidth: 500 }}>
+          Client already exists in HMIS. If this is a match, please cancel and
+          use the{' '}
+          <RouterLink
+            to={generateSafePath(Routes.CLIENT_DASHBOARD, {
+              clientId: match.existingClientId,
+            })}
+            openInNew
+          >
+            <Typography variant='inherit'>existing client record</Typography>
+          </RouterLink>
+        </Alert>
       )}
     </Stack>
   );
@@ -112,13 +118,16 @@ const MciMatchSelector = ({
   value,
   onChange,
   matches,
-  autocleared = false,
+  status,
   allowSelectingExistingClient = false,
 }: Pick<MciClearanceProps, 'value' | 'onChange'> & {
   matches: MciMatchFieldsFragment[];
-  autocleared?: boolean;
+  status: ClearanceStatus;
   allowSelectingExistingClient?: boolean;
 }) => {
+  const autocleared =
+    status === 'auto_cleared' || status === 'auto_cleared_existing_client';
+
   const handleChange =
     (id: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.checked) {
@@ -133,23 +142,25 @@ const MciMatchSelector = ({
       key: 'toggle',
       width: '10%',
       render: (m) => {
-        const alreadyInHmis =
-          !!m.existingClientId && !allowSelectingExistingClient;
+        if (m.existingClientId && !allowSelectingExistingClient) {
+          return (
+            <Typography color='text.secondary' variant='body2'>
+              Client {m.existingClientId}
+            </Typography>
+          );
+        }
         return (
           <ButtonTooltipContainer
-            title={
-              alreadyInHmis
-                ? 'Client is already in HMIS. Click the link to go to their client record.'
-                : autocleared
-                  ? 'Client auto-cleared'
-                  : null
-            }
+            title={status === 'auto_cleared' ? 'Client auto-cleared' : null}
           >
             <Switch
-              inputProps={{ 'aria-label': 'controlled' }}
+              inputProps={{
+                'aria-label': `MCI ID ${m.mciId}`,
+                id: `select_mci_${m.mciId}`, // used in capybara tests
+              }}
               checked={value === m.mciId}
               onChange={handleChange(m.mciId)}
-              disabled={autocleared || alreadyInHmis}
+              disabled={status === 'auto_cleared'}
             />
           </ButtonTooltipContainer>
         );
@@ -196,7 +207,10 @@ const MciMatchSelector = ({
               <TableRow>
                 <TableCell>
                   <Switch
-                    inputProps={{ 'aria-label': 'controlled' }}
+                    inputProps={{
+                      'aria-label': 'New MCI ID',
+                      id: `select_create_new_mci`, // used in capybara tests
+                    }}
                     checked={value === NEW_MCI_STRING}
                     onChange={handleChange(NEW_MCI_STRING)}
                     disabled={value === NEW_MCI_STRING && matches.length === 0}

@@ -15,6 +15,8 @@ import {
 import {
   addDescendants,
   autofillValues,
+  createHudValuesForSubmit,
+  createValuesForSubmit,
   dropUnderscorePrefixedKeys,
   getDependentItemsDisabledStatus,
   isShown,
@@ -57,7 +59,7 @@ const useDynamicFields = ({
   );
 
   // Get form state, with "hidden" fields (and their children) removed
-  const getCleanedValues = useCallback(() => {
+  const getValues = useCallback(() => {
     if (!definition) return values;
 
     // Retain disabled fields that are displayed with a value
@@ -69,6 +71,20 @@ const useDynamicFields = ({
     const cleaned = omit(values, excluded);
     return dropUnderscorePrefixedKeys(cleaned);
   }, [definition, disabledLinkIds, itemMap, values]);
+
+  const getValuesForSubmit = useCallback(() => {
+    const vals = getValues();
+    return {
+      // Example: { 'favorite_color': { code: 'light_blue', label: 'Light Blue' }, 'assessment_date': <JS Date Object> }
+      rawValues: vals,
+      // Example: { 'favorite_color': 'light_blue', 'assessment_date': '2020-09-01' }
+      // Stored as "values" in FormProcessor, for dynamic form submission
+      valuesByLinkId: createValuesForSubmit(vals, definition),
+      // Example: { 'Client.favorite_color_field_key': 'light_blue', 'assessmentDate': '2020-09-01', 'someOtherHiddenField': '_HIDDEN' }
+      // Stored as "hud_values" in FormProcessor, for dynamic form submission
+      valuesByFieldName: createHudValuesForSubmit(vals, definition),
+    };
+  }, [definition, getValues]);
 
   const shouldShowItem = useCallback(
     (item: FormItem) => isShown(item, disabledLinkIds),
@@ -258,16 +274,18 @@ const useDynamicFields = ({
     () => ({
       renderFields: viewOnly ? renderViewFields : renderFormFields,
       values,
-      getCleanedValues,
+      getValues,
       shouldShowItem,
+      getValuesForSubmit,
     }),
     [
       values,
       viewOnly,
       renderFormFields,
       renderViewFields,
-      getCleanedValues,
+      getValues,
       shouldShowItem,
+      getValuesForSubmit,
     ]
   );
 };

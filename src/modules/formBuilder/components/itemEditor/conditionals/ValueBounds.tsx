@@ -32,7 +32,7 @@ const ValueBounds: React.FC<Props> = ({ control, itemMap }) => {
     >
       {fields.map((bound, index) => (
         <RemovableCard
-          key={JSON.stringify(bound)} // fixme could be non unique
+          key={bound.id}
           onRemove={() => remove(index)}
           removeTooltip={'Remove Bound'}
         >

@@ -57,10 +57,10 @@ const Units = () => {
   );
 
   const handleCreateUnits: DynamicFormOnSubmit = useCallback(
-    ({ values }) => {
+    ({ rawValues }) => {
       const input = transformSubmitValues({
         definition: UnitsDefinition,
-        values,
+        values: rawValues,
         keyByFieldName: true,
       });
       input.projectId = project.id;

@@ -88,7 +88,7 @@ const ControlledSelect: React.FC<ControlledSelectProps> = ({
         helperText: error?.message || helperText,
         error: !!error,
         inputRef: field.ref, // send input ref, so we can focus on input when error appear
-        required,
+        // required, // Instead of passing `required` to the input, rely on RHF's required rule, which uses nicer formatting
         placeholder,
         ...props.textInputProps, // allow overriding any of the above
       }}
