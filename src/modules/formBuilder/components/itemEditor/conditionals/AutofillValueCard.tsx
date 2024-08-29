@@ -59,6 +59,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
                 name={`autofillValues.${index}.valueCode`}
                 label='Value'
                 control={control}
+                required
               />
             )}
             {fieldType === 'valueBoolean' && (
@@ -66,6 +67,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
                 name={`autofillValues.${index}.valueBoolean`}
                 control={control}
                 shouldUnregister
+                rules={{ required: 'This field is required' }}
                 render={({
                   field: { ref, disabled, ...field },
                   fieldState: { error },
@@ -85,6 +87,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
                 name={`autofillValues.${index}.valueNumber`}
                 control={control}
                 shouldUnregister
+                rules={{ required: 'This field is required' }}
                 render={({
                   field: { ref, disabled, ...field },
                   fieldState: { error },
@@ -110,6 +113,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
             // TODO: validate formula
             label='Formula'
             helperText="Formula to calculate the value to fill. Use 'value' to refer to the value of the current item."
+            required
           />
         )}
 
