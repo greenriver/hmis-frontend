@@ -528,7 +528,7 @@ export const autofillValues = ({
   if (!item.autofillValues) return false;
 
   // use `some` to stop iterating when true is returned
-  return item.autofillValues.some((av) => {
+  const autofilled = item.autofillValues.some((av) => {
     // Skip autofills that should not run on read-only views
     if (viewOnly && !av.autofillReadonly) return false;
 
@@ -567,6 +567,20 @@ export const autofillValues = ({
     // Stop iterating through autofill values
     return true;
   });
+
+  // For read-only items that are displayed on editable forms, the autofill value should nullify when its conditions are no longer met.
+  // For example, a read-only field showing the sum of 2 input fields should be cleared if the inputs are cleared.
+  // (In that example, we assume the autofill rule for summing has an autofill_when condition requiring the inputs to be present)
+  if (
+    !autofilled &&
+    (item.readOnly || item.type === ItemType.Display) &&
+    !viewOnly
+  ) {
+    values[item.linkId] = undefined;
+    return true;
+  }
+
+  return autofilled;
 };
 
 const getBoundValue = (

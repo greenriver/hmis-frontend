@@ -364,7 +364,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             value={currentValue}
             onChange={onChangeValue}
             options={options || []}
-            row={componentType === Component.RadioButtons}
             {...commonInputProps}
             maxWidth='100%'
             labelSx={{ maxWidth: MAX_INPUT_AND_LABEL_WIDTH }}
@@ -374,7 +373,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             value={currentValue}
             onChange={onChangeValue}
             options={options || []}
-            row={componentType === Component.RadioButtons}
             clearable
             {...commonInputProps}
             maxWidth='100%'

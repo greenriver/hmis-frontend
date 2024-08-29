@@ -1,15 +1,7 @@
-import {
-  AppBar,
-  Box,
-  CssBaseline,
-  SxProps,
-  Theme,
-  Toolbar,
-} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { AppBar, Box, CssBaseline, IconButton, Toolbar } from '@mui/material';
+import { Stack } from '@mui/system';
 import * as React from 'react';
-
-import { useLocation } from 'react-router-dom';
-import ButtonLink from '../elements/ButtonLink';
 import RouterLink from '../elements/RouterLink';
 
 import {
@@ -17,24 +9,27 @@ import {
   OP_LINK_BAR_HEIGHT,
   SHOW_OP_LINK_BAR,
 } from './layoutConstants';
+import UserMenu from './nav/UserMenu';
 import PrintViewButton from './PrintViewButton';
-import UserMenu from './UserMenu';
 import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
+import MobileMenu from '@/components/layout/nav/MobileMenu';
+import ToolbarMenu from '@/components/layout/nav/ToolbarMenu';
+import { useIsDashboard } from '@/components/layout/nav/useIsDashboard';
+import { MobileMenuContext } from '@/components/layout/nav/useMobileMenuContext';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import useIsPrintView from '@/hooks/useIsPrintView';
-import { PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS } from '@/modules/admin/components/AdminDashboard';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import OmniSearch from '@/modules/search/components/OmniSearch';
-import { Routes } from '@/routes/routes';
 import { useGetRootPermissionsQuery } from '@/types/gqlTypes';
 
 interface Props {
+  mobileMenuContext: MobileMenuContext;
   children: React.ReactNode;
 }
 
-const MainLayout: React.FC<Props> = ({ children }) => {
+const MainLayout: React.FC<Props> = ({ mobileMenuContext, children }) => {
   const { appName } = useHmisAppSettings();
   const isPrint = useIsPrintView();
 
@@ -45,24 +40,11 @@ const MainLayout: React.FC<Props> = ({ children }) => {
     error,
   } = useGetRootPermissionsQuery();
 
-  const { pathname } = useLocation();
-  const activeItem = React.useMemo(() => {
-    const val = pathname.split('/').find((s) => !!s);
-    switch (val) {
-      case undefined:
-      case 'client':
-        return 'client';
-      case 'projects':
-      case 'organizations':
-        return 'project';
-      case 'admin':
-        return 'admin';
-      case 'my-dashboard':
-        return 'my-dashboard';
-      default:
-        return null;
-    }
-  }, [pathname]);
+  const isMobile = useIsMobile();
+
+  const { mobileNavIsOpen, handleOpenMobileMenu, handleCloseMobileMenu } =
+    mobileMenuContext;
+  const isDashboard = useIsDashboard();
 
   if (error) throw error;
 
@@ -94,15 +76,6 @@ const MainLayout: React.FC<Props> = ({ children }) => {
       </>
     );
 
-  const navItemSx = (enabled: boolean): SxProps<Theme> => ({
-    fontWeight: 600,
-    fontSize: 14,
-    px: 2,
-    ml: 1,
-    color: 'text.primary',
-    backgroundColor: enabled ? (theme) => theme.palette.grey[100] : undefined,
-  });
-
   return (
     <React.Fragment>
       {SHOW_OP_LINK_BAR && <WarehouseLinkBar />}
@@ -115,10 +88,17 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
           top: SHOW_OP_LINK_BAR ? OP_LINK_BAR_HEIGHT : 0,
           backgroundColor: 'white',
+          '&.MuiPaper-root': {
+            borderLeft: 'unset',
+            borderRight: 'unset',
+            borderTop: 'unset',
+          },
         }}
       >
-        {/* fixme: make responsive */}
-        <Toolbar sx={{ flexWrap: 'noWrap', overflow: 'hidden', gap: 1 }}>
+        <Toolbar
+          sx={{ px: isMobile ? 1 : 3, minHeight: APP_BAR_HEIGHT }}
+          disableGutters={isMobile}
+        >
           <RouterLink
             variant='h1'
             noWrap
@@ -133,49 +113,35 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             {appName || 'Open Path HMIS'}
           </RouterLink>
           <Box display='flex' sx={{ flexGrow: 1 }}></Box>
-          <RootPermissionsFilter permissions={'canViewMyDashboard'}>
-            <ButtonLink
-              variant='text'
-              to={Routes.MY_DASHBOARD}
-              data-testid='navToMyDashboard'
-              sx={navItemSx(activeItem === 'my-dashboard')}
+          {!isMobile && (
+            <Stack
+              direction='row'
+              alignItems='center'
+              spacing={{ md: 0.5, lg: 2 }}
             >
-              My Dashboard
-            </ButtonLink>
-          </RootPermissionsFilter>
-          <RootPermissionsFilter permissions={'canViewClients'}>
-            <ButtonLink
-              variant='text'
-              to='/'
-              data-testid='navToClients'
-              sx={navItemSx(activeItem === 'client')}
-            >
-              Clients
-            </ButtonLink>
-          </RootPermissionsFilter>
-          <ButtonLink
-            variant='text'
-            to={Routes.ALL_PROJECTS}
-            data-testid='navToProjects'
-            sx={navItemSx(activeItem === 'project')}
-          >
-            Projects
-          </ButtonLink>
-          <RootPermissionsFilter
-            permissions={PERMISSIONS_GRANTING_ADMIN_DASHBOARD_ACCESS}
-            mode='any'
-          >
-            <ButtonLink
-              variant='text'
-              to={Routes.ADMIN}
-              data-testid='navToAdmin'
-              sx={navItemSx(activeItem === 'admin')}
-            >
-              Admin
-            </ButtonLink>
-          </RootPermissionsFilter>
-          <OmniSearch />
-          <UserMenu />
+              <ToolbarMenu />
+              <OmniSearch />
+              <UserMenu />
+            </Stack>
+          )}
+          {isMobile && (
+            <>
+              <IconButton
+                aria-label='Navigation'
+                sx={{ color: 'text.primary' }}
+                onClick={() => handleOpenMobileMenu()}
+              >
+                <MenuIcon />
+              </IconButton>
+              {!isDashboard && (
+                // Dashboards render their own Mobile Menus with additional nav elements inside.
+                <MobileMenu
+                  mobileNavIsOpen={mobileNavIsOpen}
+                  onCloseMobileMenu={handleCloseMobileMenu}
+                />
+              )}
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <CssBaseline />

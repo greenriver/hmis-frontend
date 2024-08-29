@@ -90,6 +90,11 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
     [fieldsWatch]
   );
 
+  const eitherOptionsOrReferenceProvided = useMemo(
+    () => !!pickListReference || (fieldsWatch && fieldsWatch.length > 0),
+    [pickListReference, fieldsWatch]
+  );
+
   if (!formItemComponent) return;
 
   return (
@@ -123,6 +128,11 @@ const ManagePickListOptions: React.FC<ManagePickListOptionsProps> = ({
         label='Or, use a reference list for choices'
         placeholder='Select list'
         options={supportedPickListReferencesOptions}
+        rules={{
+          validate: () =>
+            eitherOptionsOrReferenceProvided ||
+            'Required: Either choose a reference list or Add Choice above',
+        }}
       />
     </>
   );

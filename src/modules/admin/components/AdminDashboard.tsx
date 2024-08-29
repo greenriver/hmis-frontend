@@ -15,6 +15,7 @@ import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import NotFound from '@/components/pages/NotFound';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { useDashboardState } from '@/hooks/useDashboardState';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { RootPermissionsFragment } from '@/types/gqlTypes';
@@ -113,6 +114,7 @@ const AdminDashboard: React.FC = () => {
   const dashboardState = useDashboardState();
   const breadCrumbConfig = useAdminBreadcrumbConfig();
   const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
+  const isMobile = useIsMobile();
 
   const formEditorContentSx = {
     px: 0,
@@ -140,6 +142,9 @@ const AdminDashboard: React.FC = () => {
           ? formEditorContentSx
           : {}
       }
+      // On desktop, 'Admin' appears in the ProjectNavHeader, so omit it from the nav label.
+      // On mobile, include it. We can remove this special case if we add the ProjectNavHeader info back on mobile.
+      navLabel={isMobile ? 'Admin' : ''}
       {...dashboardState}
     >
       <Container

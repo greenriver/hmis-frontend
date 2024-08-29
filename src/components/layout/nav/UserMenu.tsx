@@ -18,8 +18,8 @@ import {
   bindTrigger,
   usePopupState,
 } from 'material-ui-popup-state/hooks';
-import React from 'react';
-
+import React, { ReactNode, useMemo } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
@@ -28,6 +28,69 @@ const UserMenu: React.FC = () => {
   const { user, logoutUser } = useAuth();
   const { manageAccountUrl, warehouseUrl, warehouseName } =
     useHmisAppSettings();
+  const isMobile = useIsMobile();
+
+  const menuItems = useMemo(() => {
+    const items: ReactNode[] = [];
+    if (!user || user.impersonating) return items;
+
+    const sx = isMobile
+      ? {
+          py: 1,
+          px: 3,
+          border: '2px solid transparent',
+        }
+      : {};
+
+    if (manageAccountUrl) {
+      items.push(
+        <MenuItem
+          sx={sx}
+          component={Link}
+          href={manageAccountUrl}
+          target='_blank'
+          key='manage account'
+        >
+          <ListItemIcon>
+            <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
+          </ListItemIcon>
+          <ListItemText>Manage Account</ListItemText>
+        </MenuItem>
+      );
+    }
+    if (warehouseUrl && warehouseName) {
+      items.push(
+        <MenuItem
+          sx={sx}
+          component={Link}
+          href={warehouseUrl}
+          target='_blank'
+          key='warehouse'
+        >
+          <ListItemIcon>
+            <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
+          </ListItemIcon>
+          <ListItemText>{warehouseName}</ListItemText>
+        </MenuItem>
+      );
+    }
+    items.push(
+      <MenuItem sx={sx} onClick={logoutUser} key='logout'>
+        <ListItemIcon>
+          <LogoutIcon fontSize='small' />
+        </ListItemIcon>
+        <ListItemText>Sign Out</ListItemText>
+      </MenuItem>
+    );
+    return items;
+  }, [
+    isMobile,
+    logoutUser,
+    manageAccountUrl,
+    user,
+    warehouseName,
+    warehouseUrl,
+  ]);
 
   if (!user) return null;
 
@@ -51,6 +114,10 @@ const UserMenu: React.FC = () => {
         <AlertTitle sx={{ mb: 0 }}>{`Acting as ${user.name}`}</AlertTitle>
       </Alert>
     );
+  }
+
+  if (isMobile) {
+    return menuItems;
   }
 
   return (
@@ -78,29 +145,7 @@ const UserMenu: React.FC = () => {
         PaperProps={{ sx: { borderTopLeftRadius: 0, borderTopRightRadius: 0 } }}
         {...bindMenu(popupState)}
       >
-        {manageAccountUrl && (
-          <MenuItem component={Link} href={manageAccountUrl} target='_blank'>
-            <ListItemIcon>
-              <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
-            </ListItemIcon>
-            <ListItemText>Manage Account</ListItemText>
-          </MenuItem>
-        )}
-        {warehouseUrl && warehouseName && (
-          <MenuItem component={Link} href={warehouseUrl} target='_blank'>
-            <ListItemIcon>
-              <OpenInNewIcon fontSize='small' sx={{ color: 'links' }} />
-            </ListItemIcon>
-            <ListItemText>{warehouseName}</ListItemText>
-          </MenuItem>
-        )}
-
-        <MenuItem onClick={logoutUser}>
-          <ListItemIcon>
-            <LogoutIcon fontSize='small' />
-          </ListItemIcon>
-          <ListItemText>Sign Out</ListItemText>
-        </MenuItem>
+        {menuItems}
       </Menu>
     </>
   );

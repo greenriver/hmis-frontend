@@ -8,7 +8,6 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '../../layoutConstants';
-
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
@@ -34,6 +33,7 @@ export const ContextHeaderAppBar: React.FC<{ children: ReactNode }> = ({
     sx={{
       borderTop: 'unset',
       borderLeft: 'unset',
+      borderRight: 'unset',
       height: CONTEXT_HEADER_HEIGHT,
       alignItems: 'stretch',
       justifyContent: 'center',
@@ -117,7 +117,7 @@ const ContextHeader: React.FC<Props> = ({
         </Box>
       ) : (
         <Box display='flex' alignItems='stretch' width='100%' flex={1}>
-          {(!isOpen || isMobile) && (
+          {!isOpen && !isMobile && (
             <Box
               sx={{
                 display: 'flex',

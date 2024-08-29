@@ -1,4 +1,4 @@
-import { Chip, Stack, Typography } from '@mui/material';
+import { Chip, Stack, Tooltip, Typography } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/table/types';
@@ -42,13 +42,21 @@ export const ASSIGNED_STAFF_COL = {
     if (!hh.staffAssignments?.nodes.length) return;
 
     const first = hh.staffAssignments.nodes[0].user.name;
-    const rest = hh.staffAssignments.nodesCount - 1;
+    const rest = hh.staffAssignments.nodes
+      .slice(1)
+      .map((staffAssignment) => staffAssignment.user.name);
 
     return (
       <>
         {first}{' '}
-        {rest > 0 && (
-          <Chip sx={{ mb: 0.5 }} size='small' label={`+${rest} more`} />
+        {rest.length > 0 && (
+          <Tooltip arrow title={rest.join(', ')}>
+            <Chip
+              sx={{ mb: 0.5 }}
+              size='small'
+              label={`+${rest.length} more`}
+            />
+          </Tooltip>
         )}
       </>
     );
@@ -171,7 +179,7 @@ const ProjectHouseholdsTable = ({
   } = useProjectDashboardContext();
 
   const defaultColumns: ColumnDef<HouseholdFields>[] = useMemo(() => {
-    const c: ColumnDef<HouseholdFields>[] = [
+    const cols: ColumnDef<HouseholdFields>[] = [
       HOUSEHOLD_COLUMNS.hohIndicator,
       HOUSEHOLD_COLUMNS.clients,
       HOUSEHOLD_COLUMNS.relationshipToHoH,
@@ -180,9 +188,9 @@ const ProjectHouseholdsTable = ({
       HOUSEHOLD_COLUMNS.householdId,
     ];
 
-    if (staffAssignmentsEnabled) c.push(HOUSEHOLD_COLUMNS.assignedStaff);
+    if (staffAssignmentsEnabled) cols.push(HOUSEHOLD_COLUMNS.assignedStaff);
 
-    return c;
+    return cols;
   }, [staffAssignmentsEnabled]);
 
   const filters = useFilters({

@@ -8472,8 +8472,8 @@
           {
             "name": "RADIO_BUTTONS_VERTICAL",
             "description": "Render a choice input item as vertical radio buttons",
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "All radio buttons are now vertical"
           },
           {
             "name": "SIGNATURE",
@@ -9519,6 +9519,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "verifiedByProjectId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
               "ofType": null
             },
             "isDeprecated": false,
@@ -31646,6 +31658,12 @@
           {
             "name": "COC",
             "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CONTINUUM_PROJECTS",
+            "description": "Continuum Projects",
             "isDeprecated": false,
             "deprecationReason": null
           },
