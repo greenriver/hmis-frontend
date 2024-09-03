@@ -23,8 +23,8 @@ query GetProjectExternalFormSubmissions(
   }
 }
 
-query GetExternalFormDefinition($formDefinitionIdentifier: String!) {
-  externalFormDefinition(identifier: $formDefinitionIdentifier) {
+query GetExternalFormDefinition($formDefinitionIdentifier: String!, $id: ID) {
+  externalFormDefinition(identifier: $formDefinitionIdentifier, id: $id) {
     ...FormDefinitionFields
   }
 }

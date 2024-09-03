@@ -1,20 +1,19 @@
 import { Card, Chip } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import React, { useCallback, useMemo, useState } from 'react';
-import Loading from '@/components/elements/Loading';
 import theme from '@/config/theme';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { FormValues } from '@/modules/form/types';
-import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
-import { useFilters } from '@/modules/hmis/filterUtil';
 import {
-  customDataElementValueForKey,
-  getCustomDataElementColumns,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
+  createHudValuesForSubmit,
+  getItemMap,
+  getOptionValue,
+} from '@/modules/form/util/formUtil';
+import { useFilters } from '@/modules/hmis/filterUtil';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   DeleteExternalFormSubmissionDocument,
@@ -45,14 +44,7 @@ const ProjectExternalSubmissionsTable = ({
   projectId: string;
   formDefinitionIdentifier: string;
 }) => {
-  const { data, loading, error } = useGetExternalFormDefinitionQuery({
-    variables: { formDefinitionIdentifier: formDefinitionIdentifier },
-    skip: !formDefinitionIdentifier,
-  });
-  const definition = data?.externalFormDefinition;
-
-  const getColumnDefs = useCallback((rows: ExternalFormSubmissionFields[]) => {
-    const customColumns = getCustomDataElementColumns(rows);
+  const getColumnDefs = useCallback(() => {
     return [
       {
         header: 'Status',
@@ -87,12 +79,20 @@ const ProjectExternalSubmissionsTable = ({
         render: (s: ExternalFormSubmissionFieldsFragment) =>
           parseAndFormatDateTime(s.submittedAt),
       },
-      ...customColumns,
     ];
   }, []);
 
   const [selected, setSelected] =
     useState<ExternalFormSubmissionFieldsFragment | null>(null);
+
+  const { data: { externalFormDefinition: definition } = {}, error } =
+    useGetExternalFormDefinitionQuery({
+      variables: {
+        formDefinitionIdentifier: formDefinitionIdentifier,
+        id: selected?.definition?.id,
+      },
+      skip: !formDefinitionIdentifier || !selected,
+    });
 
   const submissionValues = useMemo(() => {
     if (!selected || !definition) return {};
@@ -101,12 +101,9 @@ const ProjectExternalSubmissionsTable = ({
     Object.keys(itemMap).forEach((key) => {
       const item = itemMap[key];
       const customFieldKey = item.mapping?.customFieldKey;
-      if (!customFieldKey) return;
-
-      const value = customDataElementValueForKey(
-        customFieldKey,
-        selected.customDataElements
-      );
+      const value = customFieldKey
+        ? selected.values[customFieldKey]
+        : selected.values[key];
 
       // if item has a picklist, convert value to PickListOption(s) so we can display the readable label
       if (item.pickListOptions) {
@@ -122,6 +119,31 @@ const ProjectExternalSubmissionsTable = ({
     return submissionValues;
   }, [selected, definition]);
 
+  const valuesViewComponent = useMemo(() => {
+    if (error) throw error;
+
+    return (
+      <>
+        {selected && definition && (
+          <Card sx={{ p: 2 }}>
+            <DynamicView
+              values={submissionValues}
+              definition={definition.definition}
+            />
+          </Card>
+        )}
+      </>
+    );
+  }, [selected, definition, submissionValues, error]);
+
+  const hudValues = useMemo(() => {
+    if (!selected) return {};
+    return createHudValuesForSubmit(
+      selected.values,
+      selected.definition.definition
+    );
+  }, [selected]);
+
   const { openFormDialog, renderFormDialog, closeDialog } = useStaticFormDialog<
     UpdateExternalFormSubmissionMutation,
     UpdateExternalFormSubmissionMutationVariables
@@ -132,12 +154,14 @@ const ProjectExternalSubmissionsTable = ({
     getVariables: (values) => {
       return {
         id: selected?.id || '', // selected should never be undefined when dialog is open
+        projectId: projectId,
         input: {
           notes: values.notes,
           status: values.reviewed
             ? ExternalFormSubmissionStatus.Reviewed
             : ExternalFormSubmissionStatus.New,
           spam: values.spam,
+          hudValues,
         } as ExternalFormSubmissionInput,
       };
     },
@@ -154,14 +178,7 @@ const ProjectExternalSubmissionsTable = ({
       }
     },
     onClose: () => setSelected(null),
-    beforeFormComponent: selected && definition && (
-      <Card sx={{ p: 2 }}>
-        <DynamicView
-          values={submissionValues}
-          definition={definition.definition}
-        />
-      </Card>
-    ),
+    beforeFormComponent: valuesViewComponent,
   });
 
   const deleteButton = useMemo(
@@ -191,9 +208,6 @@ const ProjectExternalSubmissionsTable = ({
   const filters = useFilters({
     type: 'ExternalFormSubmissionFilterOptions',
   });
-
-  if (loading) return <Loading />;
-  if (error) throw error;
 
   return (
     <>

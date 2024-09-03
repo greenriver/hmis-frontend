@@ -19767,30 +19767,6 @@
         "isOneOf": null,
         "fields": [
           {
-            "name": "customDataElements",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "CustomDataElement",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "definition",
             "description": null,
             "args": [],
@@ -19877,6 +19853,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "values",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -19939,6 +19927,18 @@
         "isOneOf": false,
         "fields": null,
         "inputFields": [
+          {
+            "name": "hudValues",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "JsonObject",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "notes",
             "description": null,
@@ -21826,7 +21826,7 @@
           },
           {
             "name": "customRule",
-            "description": null,
+            "description": "Custom rules that apply to this item",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -22090,7 +22090,7 @@
           },
           {
             "name": "rule",
-            "description": null,
+            "description": "Rules that apply to this item",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -30273,6 +30273,18 @@
                 "defaultValue": null,
                 "isDeprecated": false,
                 "deprecationReason": null
+              },
+              {
+                "name": "projectId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
               }
             ],
             "type": {
@@ -37416,6 +37428,18 @@
             "name": "externalFormDefinition",
             "description": null,
             "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
               {
                 "name": "identifier",
                 "description": null,
@@ -46677,13 +46701,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "ExternalFormSubmission",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "ExternalFormSubmission",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
