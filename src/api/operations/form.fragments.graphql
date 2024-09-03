@@ -98,6 +98,8 @@ fragment ItemFields on FormItem {
       ...EnableWhenFields
     }
   }
+  rule
+  customRule
 }
 
 # GQL doesnt allow recursive fragments, so we have a max nesting level here

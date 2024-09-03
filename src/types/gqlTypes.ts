@@ -3043,6 +3043,7 @@ export type FormItem = {
   briefText?: Maybe<Scalars['String']['output']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
+  customRule?: Maybe<Scalars['JSON']['output']>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
@@ -3076,6 +3077,7 @@ export type FormItem = {
   repeats?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the item must be included in data results */
   required?: Maybe<Scalars['Boolean']['output']>;
+  rule?: Maybe<Scalars['JSON']['output']>;
   /**
    * Whether to apply this field to all clients or a single client when bulk creating
    * @deprecated from old bulk services implementation, no longer supported
@@ -9463,6 +9465,8 @@ export type GetAssessmentQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -9485,6 +9489,8 @@ export type GetAssessmentQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -9507,6 +9513,8 @@ export type GetAssessmentQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -9529,6 +9537,8 @@ export type GetAssessmentQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -9551,6 +9561,8 @@ export type GetAssessmentQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -9957,6 +9969,8 @@ export type GetAssessmentQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -9979,6 +9993,8 @@ export type GetAssessmentQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -10001,6 +10017,8 @@ export type GetAssessmentQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -10023,6 +10041,8 @@ export type GetAssessmentQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -10045,6 +10065,8 @@ export type GetAssessmentQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -15081,6 +15103,8 @@ export type ClientDetailFormsQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -15103,6 +15127,8 @@ export type ClientDetailFormsQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -15125,6 +15151,8 @@ export type ClientDetailFormsQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -15147,6 +15175,8 @@ export type ClientDetailFormsQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -15169,6 +15199,8 @@ export type ClientDetailFormsQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -17848,6 +17880,8 @@ export type AllEnrollmentDetailsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -17870,6 +17904,8 @@ export type AllEnrollmentDetailsFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -17892,6 +17928,8 @@ export type AllEnrollmentDetailsFragment = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -17914,6 +17952,8 @@ export type AllEnrollmentDetailsFragment = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   item?: Array<{
                     __typename: 'FormItem';
                     linkId: string;
@@ -17936,6 +17976,8 @@ export type AllEnrollmentDetailsFragment = {
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
+                    rule?: any | null;
+                    customRule?: any | null;
                     mapping?: {
                       __typename?: 'FieldMapping';
                       recordType?: RelatedRecordType | null;
@@ -18967,6 +19009,8 @@ export type GetEnrollmentDetailsQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -18989,6 +19033,8 @@ export type GetEnrollmentDetailsQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -19011,6 +19057,8 @@ export type GetEnrollmentDetailsQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   item?: Array<{
                     __typename: 'FormItem';
                     linkId: string;
@@ -19033,6 +19081,8 @@ export type GetEnrollmentDetailsQuery = {
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
+                    rule?: any | null;
+                    customRule?: any | null;
                     item?: Array<{
                       __typename: 'FormItem';
                       linkId: string;
@@ -19055,6 +19105,8 @@ export type GetEnrollmentDetailsQuery = {
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
                       enableBehavior?: EnableBehavior | null;
+                      rule?: any | null;
+                      customRule?: any | null;
                       mapping?: {
                         __typename?: 'FieldMapping';
                         recordType?: RelatedRecordType | null;
@@ -20282,6 +20334,8 @@ export type GetExternalFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -20304,6 +20358,8 @@ export type GetExternalFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -20326,6 +20382,8 @@ export type GetExternalFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -20348,6 +20406,8 @@ export type GetExternalFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -20370,6 +20430,8 @@ export type GetExternalFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -20845,6 +20907,8 @@ export type ItemFieldsFragment = {
   dataCollectedAbout?: DataCollectedAbout | null;
   disabledDisplay?: DisabledDisplay | null;
   enableBehavior?: EnableBehavior | null;
+  rule?: any | null;
+  customRule?: any | null;
   mapping?: {
     __typename?: 'FieldMapping';
     recordType?: RelatedRecordType | null;
@@ -20944,6 +21008,8 @@ export type FormDefinitionJsonFieldsFragment = {
     dataCollectedAbout?: DataCollectedAbout | null;
     disabledDisplay?: DisabledDisplay | null;
     enableBehavior?: EnableBehavior | null;
+    rule?: any | null;
+    customRule?: any | null;
     item?: Array<{
       __typename: 'FormItem';
       linkId: string;
@@ -20966,6 +21032,8 @@ export type FormDefinitionJsonFieldsFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -20988,6 +21056,8 @@ export type FormDefinitionJsonFieldsFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -21010,6 +21080,8 @@ export type FormDefinitionJsonFieldsFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -21032,6 +21104,8 @@ export type FormDefinitionJsonFieldsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             mapping?: {
               __typename?: 'FieldMapping';
               recordType?: RelatedRecordType | null;
@@ -21449,6 +21523,8 @@ export type FormDefinitionFieldsFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -21471,6 +21547,8 @@ export type FormDefinitionFieldsFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -21493,6 +21571,8 @@ export type FormDefinitionFieldsFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -21515,6 +21595,8 @@ export type FormDefinitionFieldsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -21537,6 +21619,8 @@ export type FormDefinitionFieldsFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -21945,6 +22029,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -21967,6 +22053,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -21989,6 +22077,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -22011,6 +22101,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -22033,6 +22125,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -22441,6 +22535,8 @@ export type FormDefinitionFieldsForEditorFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -22463,6 +22559,8 @@ export type FormDefinitionFieldsForEditorFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -22485,6 +22583,8 @@ export type FormDefinitionFieldsForEditorFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -22507,6 +22607,8 @@ export type FormDefinitionFieldsForEditorFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -22529,6 +22631,8 @@ export type FormDefinitionFieldsForEditorFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -22974,6 +23078,8 @@ export type UpdateFormDefinitionMutation = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -22996,6 +23102,8 @@ export type UpdateFormDefinitionMutation = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -23018,6 +23126,8 @@ export type UpdateFormDefinitionMutation = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -23040,6 +23150,8 @@ export type UpdateFormDefinitionMutation = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -23062,6 +23174,8 @@ export type UpdateFormDefinitionMutation = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -23495,6 +23609,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -23517,6 +23633,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -23539,6 +23657,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -23561,6 +23681,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -23583,6 +23705,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -24181,6 +24305,8 @@ export type GetFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -24203,6 +24329,8 @@ export type GetFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -24225,6 +24353,8 @@ export type GetFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -24247,6 +24377,8 @@ export type GetFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -24269,6 +24401,8 @@ export type GetFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -24683,6 +24817,8 @@ export type GetStaticFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -24705,6 +24841,8 @@ export type GetStaticFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -24727,6 +24865,8 @@ export type GetStaticFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -24749,6 +24889,8 @@ export type GetStaticFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -24771,6 +24913,8 @@ export type GetStaticFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -25186,6 +25330,8 @@ export type GetServiceFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -25208,6 +25354,8 @@ export type GetServiceFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -25230,6 +25378,8 @@ export type GetServiceFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -25252,6 +25402,8 @@ export type GetServiceFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -25274,6 +25426,8 @@ export type GetServiceFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -25691,6 +25845,8 @@ export type GetAssessmentFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -25713,6 +25869,8 @@ export type GetAssessmentFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -25735,6 +25893,8 @@ export type GetAssessmentFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -25757,6 +25917,8 @@ export type GetAssessmentFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -25779,6 +25941,8 @@ export type GetAssessmentFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -27334,6 +27498,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -27356,6 +27522,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -27378,6 +27546,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -27400,6 +27570,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -27422,6 +27594,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -27837,6 +28011,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -27859,6 +28035,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -27881,6 +28059,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -27903,6 +28083,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -27925,6 +28107,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -28333,6 +28517,8 @@ export type GetParsedFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -28355,6 +28541,8 @@ export type GetParsedFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -28377,6 +28565,8 @@ export type GetParsedFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -28399,6 +28589,8 @@ export type GetParsedFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -28421,6 +28613,8 @@ export type GetParsedFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -29970,6 +30164,8 @@ export type OccurrencePointFormFieldsFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -29992,6 +30188,8 @@ export type OccurrencePointFormFieldsFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -30014,6 +30212,8 @@ export type OccurrencePointFormFieldsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -30036,6 +30236,8 @@ export type OccurrencePointFormFieldsFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -30058,6 +30260,8 @@ export type OccurrencePointFormFieldsFragment = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -35564,6 +35768,8 @@ export const ItemFieldsFragmentDoc = gql`
         ...EnableWhenFields
       }
     }
+    rule
+    customRule
   }
   ${PickListOptionFieldsFragmentDoc}
   ${EnableWhenFieldsFragmentDoc}
