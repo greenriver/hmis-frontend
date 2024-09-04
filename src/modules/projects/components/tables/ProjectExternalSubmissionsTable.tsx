@@ -11,6 +11,7 @@ import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteExternalFormSubmissionDocument,
   DeleteExternalFormSubmissionMutation,
@@ -91,9 +92,14 @@ const ProjectExternalSubmissionsTable = ({
     Object.keys(itemMap).forEach((key) => {
       const item = itemMap[key];
       const customFieldKey = item.mapping?.customFieldKey;
+
+      // TODO - this doesn't support reading the record type from the parent's record type. see transformSubmitValues
+      const recordType = item.mapping?.recordType;
+      const recordAttrKey = `${recordType ? HmisEnums.RelatedRecordType[recordType] : ''}.${item.mapping?.fieldName}`;
+
       const value = customFieldKey
         ? selected.values[customFieldKey]
-        : selected.values[key];
+        : selected.values[recordAttrKey];
 
       // if item has a picklist, convert value to PickListOption(s) so we can display the readable label
       if (item.pickListOptions) {
