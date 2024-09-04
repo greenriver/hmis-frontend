@@ -3,11 +3,11 @@ fragment ExternalFormSubmissionSummary on ExternalFormSubmission {
   submittedAt
   spam
   status
+  notes
 }
 
 fragment ExternalFormSubmissionFields on ExternalFormSubmission {
   ...ExternalFormSubmissionSummary
-  notes
   definition {
     ...FormDefinitionFields
   }

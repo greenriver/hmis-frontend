@@ -1,6 +1,7 @@
 import { Card, Chip } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import React, { useCallback, useMemo, useState } from 'react';
+import Loading from '@/components/elements/Loading';
 import theme from '@/config/theme';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -77,13 +78,16 @@ const ProjectExternalSubmissionsTable = ({
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const { data: { externalFormSubmission: selected } = {}, error } =
-    useGetExternalFormSubmissionQuery({
-      variables: {
-        id: selectedId || '',
-      },
-      skip: !selectedId,
-    });
+  const {
+    data: { externalFormSubmission: selected } = {},
+    error,
+    loading,
+  } = useGetExternalFormSubmissionQuery({
+    variables: {
+      id: selectedId || '',
+    },
+    skip: !selectedId,
+  });
 
   const submissionValues = useMemo(() => {
     if (!selected) return {};
@@ -117,18 +121,17 @@ const ProjectExternalSubmissionsTable = ({
 
   const valuesViewComponent = useMemo(() => {
     return (
-      <>
+      <Card sx={{ p: 2 }}>
+        {loading && <Loading />}
         {selected && (
-          <Card sx={{ p: 2 }}>
-            <DynamicView
-              values={submissionValues}
-              definition={selected.definition.definition}
-            />
-          </Card>
+          <DynamicView
+            values={submissionValues}
+            definition={selected.definition.definition}
+          />
         )}
-      </>
+      </Card>
     );
-  }, [selected, submissionValues]);
+  }, [loading, selected, submissionValues]);
 
   const { openFormDialog, renderFormDialog, closeDialog } = useStaticFormDialog<
     UpdateExternalFormSubmissionMutation,

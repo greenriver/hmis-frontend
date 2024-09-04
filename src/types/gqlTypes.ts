@@ -19981,16 +19981,17 @@ export type ExternalFormSubmissionSummaryFragment = {
   submittedAt: string;
   spam?: boolean | null;
   status: ExternalFormSubmissionStatus;
+  notes?: string | null;
 };
 
 export type ExternalFormSubmissionFieldsFragment = {
   __typename?: 'ExternalFormSubmission';
-  notes?: string | null;
   values?: any | null;
   id: string;
   submittedAt: string;
   spam?: boolean | null;
   status: ExternalFormSubmissionStatus;
+  notes?: string | null;
   definition: {
     __typename?: 'FormDefinition';
     id: string;
@@ -20513,6 +20514,7 @@ export type UpdateExternalFormSubmissionMutation = {
       submittedAt: string;
       spam?: boolean | null;
       status: ExternalFormSubmissionStatus;
+      notes?: string | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -20545,6 +20547,7 @@ export type DeleteExternalFormSubmissionMutation = {
       submittedAt: string;
       spam?: boolean | null;
       status: ExternalFormSubmissionStatus;
+      notes?: string | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -20587,6 +20590,7 @@ export type GetProjectExternalFormSubmissionsQuery = {
         submittedAt: string;
         spam?: boolean | null;
         status: ExternalFormSubmissionStatus;
+        notes?: string | null;
       }>;
     };
   } | null;
@@ -20600,12 +20604,12 @@ export type GetExternalFormSubmissionQuery = {
   __typename?: 'Query';
   externalFormSubmission?: {
     __typename?: 'ExternalFormSubmission';
-    notes?: string | null;
     values?: any | null;
     id: string;
     submittedAt: string;
     spam?: boolean | null;
     status: ExternalFormSubmissionStatus;
+    notes?: string | null;
     definition: {
       __typename?: 'FormDefinition';
       id: string;
@@ -36210,12 +36214,12 @@ export const ExternalFormSubmissionSummaryFragmentDoc = gql`
     submittedAt
     spam
     status
+    notes
   }
 `;
 export const ExternalFormSubmissionFieldsFragmentDoc = gql`
   fragment ExternalFormSubmissionFields on ExternalFormSubmission {
     ...ExternalFormSubmissionSummary
-    notes
     definition {
       ...FormDefinitionFields
     }
