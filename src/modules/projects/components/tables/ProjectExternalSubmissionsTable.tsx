@@ -93,13 +93,14 @@ const ProjectExternalSubmissionsTable = ({
     if (!selected) return {};
     const itemMap = getItemMap(selected.definition.definition, true);
     const submissionValues: FormValues = {};
-    Object.keys(itemMap).forEach((key) => {
-      const item = itemMap[key];
-      const customFieldKey = item.mapping?.customFieldKey;
+    Object.entries(itemMap).forEach(([key, item]) => {
+      const { customFieldKey, recordType, fieldName } = item.mapping || {};
+      const recordAttrKey =
+        recordType && fieldName
+          ? `${HmisEnums.RelatedRecordType[recordType]}.${fieldName}`
+          : '';
 
-      // TODO - this doesn't support reading the record type from the parent's record type. see transformSubmitValues
-      const recordType = item.mapping?.recordType;
-      const recordAttrKey = `${recordType ? HmisEnums.RelatedRecordType[recordType] : ''}.${item.mapping?.fieldName}`;
+      if (!customFieldKey && !recordAttrKey) return;
 
       const value = customFieldKey
         ? selected.values[customFieldKey]
