@@ -5,7 +5,7 @@ mutation UpdateExternalFormSubmission(
 ) {
   updateExternalFormSubmission(id: $id, projectId: $projectId, input: $input) {
     externalFormSubmission {
-      ...ExternalFormSubmissionFields
+      ...ExternalFormSubmissionSummary
     }
     errors {
       ...ValidationErrorFields
@@ -16,7 +16,7 @@ mutation UpdateExternalFormSubmission(
 mutation DeleteExternalFormSubmission($id: ID!) {
   deleteExternalFormSubmission(id: $id) {
     externalFormSubmission {
-      ...ExternalFormSubmissionFields
+      ...ExternalFormSubmissionSummary
     }
     errors {
       ...ValidationErrorFields

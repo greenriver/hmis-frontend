@@ -19767,6 +19767,30 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "customDataElements",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CustomDataElement",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "definition",
             "description": null,
             "args": [],
@@ -19927,18 +19951,6 @@
         "isOneOf": false,
         "fields": null,
         "inputFields": [
-          {
-            "name": "hudValues",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "JsonObject",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
           {
             "name": "notes",
             "description": null,
@@ -37429,18 +37441,6 @@
             "description": null,
             "args": [
               {
-                "name": "id",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "identifier",
                 "description": null,
                 "type": {
@@ -37460,6 +37460,35 @@
             "type": {
               "kind": "OBJECT",
               "name": "FormDefinition",
+              "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "use definition from the individual submission to display"
+          },
+          {
+            "name": "externalFormSubmission",
+            "description": null,
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ExternalFormSubmission",
               "ofType": null
             },
             "isDeprecated": false,

@@ -1186,15 +1186,6 @@ export const transformSubmitValues = ({
         const transformedValue = formValueToGqlValue(values[item.linkId], item);
         // Undefined indicates invalid value, so we ignore it
         if (!isUndefined(transformedValue)) result[key] = transformedValue;
-      } else if (
-        item.mapping?.customFieldKey &&
-        item.mapping.customFieldKey in values
-      ) {
-        const transformedValue = formValueToGqlValue(
-          values[item.mapping.customFieldKey],
-          item
-        );
-        if (!isUndefined(transformedValue)) result[key] = transformedValue;
       } else if (includeMissingKeys === 'AS_HIDDEN') {
         // Option: set missing fields to '_HIDDEN'
         result[key] = HIDDEN_VALUE;

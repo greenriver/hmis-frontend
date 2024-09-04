@@ -1,8 +1,12 @@
-fragment ExternalFormSubmissionFields on ExternalFormSubmission {
+fragment ExternalFormSubmissionSummary on ExternalFormSubmission {
   id
   submittedAt
   spam
   status
+}
+
+fragment ExternalFormSubmissionFields on ExternalFormSubmission {
+  ...ExternalFormSubmissionSummary
   notes
   definition {
     ...FormDefinitionFields

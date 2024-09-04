@@ -2805,6 +2805,7 @@ export enum ExpelledReason {
 
 export type ExternalFormSubmission = {
   __typename?: 'ExternalFormSubmission';
+  customDataElements: Array<CustomDataElement>;
   definition: FormDefinition;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
@@ -2822,7 +2823,6 @@ export type ExternalFormSubmissionFilterOptions = {
 
 /** External Form Submission Input */
 export type ExternalFormSubmissionInput = {
-  hudValues?: InputMaybe<Scalars['JsonObject']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
   spam?: InputMaybe<Scalars['Boolean']['input']>;
   status?: InputMaybe<ExternalFormSubmissionStatus>;
@@ -5759,7 +5759,9 @@ export type Query = {
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
   esgFundingReport: Array<EsgFundingService>;
+  /** @deprecated use definition from the individual submission to display */
   externalFormDefinition?: Maybe<FormDefinition>;
+  externalFormSubmission?: Maybe<ExternalFormSubmission>;
   file?: Maybe<File>;
   formDefinition?: Maybe<FormDefinition>;
   formIdentifier?: Maybe<FormIdentifier>;
@@ -5859,8 +5861,11 @@ export type QueryEsgFundingReportArgs = {
 };
 
 export type QueryExternalFormDefinitionArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
   identifier: Scalars['String']['input'];
+};
+
+export type QueryExternalFormSubmissionArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type QueryFileArgs = {
@@ -19970,14 +19975,22 @@ export type EventFieldsFragment = {
   } | null;
 };
 
-export type ExternalFormSubmissionFieldsFragment = {
+export type ExternalFormSubmissionSummaryFragment = {
   __typename?: 'ExternalFormSubmission';
   id: string;
   submittedAt: string;
   spam?: boolean | null;
   status: ExternalFormSubmissionStatus;
+};
+
+export type ExternalFormSubmissionFieldsFragment = {
+  __typename?: 'ExternalFormSubmission';
   notes?: string | null;
   values?: any | null;
+  id: string;
+  submittedAt: string;
+  spam?: boolean | null;
+  status: ExternalFormSubmissionStatus;
   definition: {
     __typename?: 'FormDefinition';
     id: string;
@@ -20500,512 +20513,6 @@ export type UpdateExternalFormSubmissionMutation = {
       submittedAt: string;
       spam?: boolean | null;
       status: ExternalFormSubmissionStatus;
-      notes?: string | null;
-      values?: any | null;
-      definition: {
-        __typename?: 'FormDefinition';
-        id: string;
-        role: FormRole;
-        title: string;
-        cacheKey: string;
-        identifier: string;
-        status: FormStatus;
-        dateUpdated: string;
-        definition: {
-          __typename?: 'FormDefinitionJson';
-          item: Array<{
-            __typename: 'FormItem';
-            linkId: string;
-            type: ItemType;
-            component?: Component | null;
-            prefix?: string | null;
-            text?: string | null;
-            briefText?: string | null;
-            readonlyText?: string | null;
-            helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
-            pickListReference?: string | null;
-            size?: InputSize | null;
-            assessmentDate?: boolean | null;
-            prefill?: boolean | null;
-            dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
-            rule?: any | null;
-            customRule?: any | null;
-            item?: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              component?: Component | null;
-              prefix?: string | null;
-              text?: string | null;
-              briefText?: string | null;
-              readonlyText?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              pickListReference?: string | null;
-              size?: InputSize | null;
-              assessmentDate?: boolean | null;
-              prefill?: boolean | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
-              rule?: any | null;
-              customRule?: any | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                component?: Component | null;
-                prefix?: string | null;
-                text?: string | null;
-                briefText?: string | null;
-                readonlyText?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                pickListReference?: string | null;
-                size?: InputSize | null;
-                assessmentDate?: boolean | null;
-                prefill?: boolean | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
-                rule?: any | null;
-                customRule?: any | null;
-                item?: Array<{
-                  __typename: 'FormItem';
-                  linkId: string;
-                  type: ItemType;
-                  component?: Component | null;
-                  prefix?: string | null;
-                  text?: string | null;
-                  briefText?: string | null;
-                  readonlyText?: string | null;
-                  helperText?: string | null;
-                  required?: boolean | null;
-                  warnIfEmpty?: boolean | null;
-                  hidden?: boolean | null;
-                  readOnly?: boolean | null;
-                  repeats?: boolean | null;
-                  pickListReference?: string | null;
-                  size?: InputSize | null;
-                  assessmentDate?: boolean | null;
-                  prefill?: boolean | null;
-                  dataCollectedAbout?: DataCollectedAbout | null;
-                  disabledDisplay?: DisabledDisplay | null;
-                  enableBehavior?: EnableBehavior | null;
-                  rule?: any | null;
-                  customRule?: any | null;
-                  item?: Array<{
-                    __typename: 'FormItem';
-                    linkId: string;
-                    type: ItemType;
-                    component?: Component | null;
-                    prefix?: string | null;
-                    text?: string | null;
-                    briefText?: string | null;
-                    readonlyText?: string | null;
-                    helperText?: string | null;
-                    required?: boolean | null;
-                    warnIfEmpty?: boolean | null;
-                    hidden?: boolean | null;
-                    readOnly?: boolean | null;
-                    repeats?: boolean | null;
-                    pickListReference?: string | null;
-                    size?: InputSize | null;
-                    assessmentDate?: boolean | null;
-                    prefill?: boolean | null;
-                    dataCollectedAbout?: DataCollectedAbout | null;
-                    disabledDisplay?: DisabledDisplay | null;
-                    enableBehavior?: EnableBehavior | null;
-                    rule?: any | null;
-                    customRule?: any | null;
-                    mapping?: {
-                      __typename?: 'FieldMapping';
-                      recordType?: RelatedRecordType | null;
-                      fieldName?: string | null;
-                      customFieldKey?: string | null;
-                    } | null;
-                    bounds?: Array<{
-                      __typename?: 'ValueBound';
-                      id: string;
-                      severity: ValidationSeverity;
-                      type: BoundType;
-                      question?: string | null;
-                      valueNumber?: number | null;
-                      valueDate?: string | null;
-                      valueLocalConstant?: string | null;
-                      offset?: number | null;
-                    }> | null;
-                    pickListOptions?: Array<{
-                      __typename?: 'PickListOption';
-                      code: string;
-                      label?: string | null;
-                      secondaryLabel?: string | null;
-                      groupLabel?: string | null;
-                      groupCode?: string | null;
-                      initialSelected?: boolean | null;
-                      helperText?: string | null;
-                      numericValue?: number | null;
-                    }> | null;
-                    initial?: Array<{
-                      __typename?: 'InitialValue';
-                      valueCode?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      valueLocalConstant?: string | null;
-                      initialBehavior: InitialBehavior;
-                    }> | null;
-                    enableWhen?: Array<{
-                      __typename?: 'EnableWhen';
-                      question?: string | null;
-                      localConstant?: string | null;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      answerDate?: string | null;
-                      compareQuestion?: string | null;
-                    }> | null;
-                    autofillValues?: Array<{
-                      __typename?: 'AutofillValue';
-                      valueCode?: string | null;
-                      valueQuestion?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      sumQuestions?: Array<string> | null;
-                      formula?: string | null;
-                      autofillBehavior: EnableBehavior;
-                      autofillReadonly?: boolean | null;
-                      autofillWhen: Array<{
-                        __typename?: 'EnableWhen';
-                        question?: string | null;
-                        localConstant?: string | null;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        answerDate?: string | null;
-                        compareQuestion?: string | null;
-                      }>;
-                    }> | null;
-                  }> | null;
-                  mapping?: {
-                    __typename?: 'FieldMapping';
-                    recordType?: RelatedRecordType | null;
-                    fieldName?: string | null;
-                    customFieldKey?: string | null;
-                  } | null;
-                  bounds?: Array<{
-                    __typename?: 'ValueBound';
-                    id: string;
-                    severity: ValidationSeverity;
-                    type: BoundType;
-                    question?: string | null;
-                    valueNumber?: number | null;
-                    valueDate?: string | null;
-                    valueLocalConstant?: string | null;
-                    offset?: number | null;
-                  }> | null;
-                  pickListOptions?: Array<{
-                    __typename?: 'PickListOption';
-                    code: string;
-                    label?: string | null;
-                    secondaryLabel?: string | null;
-                    groupLabel?: string | null;
-                    groupCode?: string | null;
-                    initialSelected?: boolean | null;
-                    helperText?: string | null;
-                    numericValue?: number | null;
-                  }> | null;
-                  initial?: Array<{
-                    __typename?: 'InitialValue';
-                    valueCode?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    valueLocalConstant?: string | null;
-                    initialBehavior: InitialBehavior;
-                  }> | null;
-                  enableWhen?: Array<{
-                    __typename?: 'EnableWhen';
-                    question?: string | null;
-                    localConstant?: string | null;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    answerDate?: string | null;
-                    compareQuestion?: string | null;
-                  }> | null;
-                  autofillValues?: Array<{
-                    __typename?: 'AutofillValue';
-                    valueCode?: string | null;
-                    valueQuestion?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    sumQuestions?: Array<string> | null;
-                    formula?: string | null;
-                    autofillBehavior: EnableBehavior;
-                    autofillReadonly?: boolean | null;
-                    autofillWhen: Array<{
-                      __typename?: 'EnableWhen';
-                      question?: string | null;
-                      localConstant?: string | null;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      answerDate?: string | null;
-                      compareQuestion?: string | null;
-                    }>;
-                  }> | null;
-                }> | null;
-                mapping?: {
-                  __typename?: 'FieldMapping';
-                  recordType?: RelatedRecordType | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                } | null;
-                bounds?: Array<{
-                  __typename?: 'ValueBound';
-                  id: string;
-                  severity: ValidationSeverity;
-                  type: BoundType;
-                  question?: string | null;
-                  valueNumber?: number | null;
-                  valueDate?: string | null;
-                  valueLocalConstant?: string | null;
-                  offset?: number | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                  helperText?: string | null;
-                  numericValue?: number | null;
-                }> | null;
-                initial?: Array<{
-                  __typename?: 'InitialValue';
-                  valueCode?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  valueLocalConstant?: string | null;
-                  initialBehavior: InitialBehavior;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  answerDate?: string | null;
-                  compareQuestion?: string | null;
-                }> | null;
-                autofillValues?: Array<{
-                  __typename?: 'AutofillValue';
-                  valueCode?: string | null;
-                  valueQuestion?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  sumQuestions?: Array<string> | null;
-                  formula?: string | null;
-                  autofillBehavior: EnableBehavior;
-                  autofillReadonly?: boolean | null;
-                  autofillWhen: Array<{
-                    __typename?: 'EnableWhen';
-                    question?: string | null;
-                    localConstant?: string | null;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    answerDate?: string | null;
-                    compareQuestion?: string | null;
-                  }>;
-                }> | null;
-              }> | null;
-              mapping?: {
-                __typename?: 'FieldMapping';
-                recordType?: RelatedRecordType | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-              } | null;
-              bounds?: Array<{
-                __typename?: 'ValueBound';
-                id: string;
-                severity: ValidationSeverity;
-                type: BoundType;
-                question?: string | null;
-                valueNumber?: number | null;
-                valueDate?: string | null;
-                valueLocalConstant?: string | null;
-                offset?: number | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-                helperText?: string | null;
-                numericValue?: number | null;
-              }> | null;
-              initial?: Array<{
-                __typename?: 'InitialValue';
-                valueCode?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                valueLocalConstant?: string | null;
-                initialBehavior: InitialBehavior;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                answerDate?: string | null;
-                compareQuestion?: string | null;
-              }> | null;
-              autofillValues?: Array<{
-                __typename?: 'AutofillValue';
-                valueCode?: string | null;
-                valueQuestion?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                sumQuestions?: Array<string> | null;
-                formula?: string | null;
-                autofillBehavior: EnableBehavior;
-                autofillReadonly?: boolean | null;
-                autofillWhen: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  answerDate?: string | null;
-                  compareQuestion?: string | null;
-                }>;
-              }> | null;
-            }> | null;
-            mapping?: {
-              __typename?: 'FieldMapping';
-              recordType?: RelatedRecordType | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-            } | null;
-            bounds?: Array<{
-              __typename?: 'ValueBound';
-              id: string;
-              severity: ValidationSeverity;
-              type: BoundType;
-              question?: string | null;
-              valueNumber?: number | null;
-              valueDate?: string | null;
-              valueLocalConstant?: string | null;
-              offset?: number | null;
-            }> | null;
-            pickListOptions?: Array<{
-              __typename?: 'PickListOption';
-              code: string;
-              label?: string | null;
-              secondaryLabel?: string | null;
-              groupLabel?: string | null;
-              groupCode?: string | null;
-              initialSelected?: boolean | null;
-              helperText?: string | null;
-              numericValue?: number | null;
-            }> | null;
-            initial?: Array<{
-              __typename?: 'InitialValue';
-              valueCode?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              valueLocalConstant?: string | null;
-              initialBehavior: InitialBehavior;
-            }> | null;
-            enableWhen?: Array<{
-              __typename?: 'EnableWhen';
-              question?: string | null;
-              localConstant?: string | null;
-              operator: EnableOperator;
-              answerCode?: string | null;
-              answerCodes?: Array<string> | null;
-              answerNumber?: number | null;
-              answerBoolean?: boolean | null;
-              answerGroupCode?: string | null;
-              answerDate?: string | null;
-              compareQuestion?: string | null;
-            }> | null;
-            autofillValues?: Array<{
-              __typename?: 'AutofillValue';
-              valueCode?: string | null;
-              valueQuestion?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              sumQuestions?: Array<string> | null;
-              formula?: string | null;
-              autofillBehavior: EnableBehavior;
-              autofillReadonly?: boolean | null;
-              autofillWhen: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                answerDate?: string | null;
-                compareQuestion?: string | null;
-              }>;
-            }> | null;
-          }>;
-        };
-        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
-      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -21038,512 +20545,6 @@ export type DeleteExternalFormSubmissionMutation = {
       submittedAt: string;
       spam?: boolean | null;
       status: ExternalFormSubmissionStatus;
-      notes?: string | null;
-      values?: any | null;
-      definition: {
-        __typename?: 'FormDefinition';
-        id: string;
-        role: FormRole;
-        title: string;
-        cacheKey: string;
-        identifier: string;
-        status: FormStatus;
-        dateUpdated: string;
-        definition: {
-          __typename?: 'FormDefinitionJson';
-          item: Array<{
-            __typename: 'FormItem';
-            linkId: string;
-            type: ItemType;
-            component?: Component | null;
-            prefix?: string | null;
-            text?: string | null;
-            briefText?: string | null;
-            readonlyText?: string | null;
-            helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
-            pickListReference?: string | null;
-            size?: InputSize | null;
-            assessmentDate?: boolean | null;
-            prefill?: boolean | null;
-            dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
-            rule?: any | null;
-            customRule?: any | null;
-            item?: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              component?: Component | null;
-              prefix?: string | null;
-              text?: string | null;
-              briefText?: string | null;
-              readonlyText?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              pickListReference?: string | null;
-              size?: InputSize | null;
-              assessmentDate?: boolean | null;
-              prefill?: boolean | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
-              rule?: any | null;
-              customRule?: any | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                component?: Component | null;
-                prefix?: string | null;
-                text?: string | null;
-                briefText?: string | null;
-                readonlyText?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                pickListReference?: string | null;
-                size?: InputSize | null;
-                assessmentDate?: boolean | null;
-                prefill?: boolean | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
-                rule?: any | null;
-                customRule?: any | null;
-                item?: Array<{
-                  __typename: 'FormItem';
-                  linkId: string;
-                  type: ItemType;
-                  component?: Component | null;
-                  prefix?: string | null;
-                  text?: string | null;
-                  briefText?: string | null;
-                  readonlyText?: string | null;
-                  helperText?: string | null;
-                  required?: boolean | null;
-                  warnIfEmpty?: boolean | null;
-                  hidden?: boolean | null;
-                  readOnly?: boolean | null;
-                  repeats?: boolean | null;
-                  pickListReference?: string | null;
-                  size?: InputSize | null;
-                  assessmentDate?: boolean | null;
-                  prefill?: boolean | null;
-                  dataCollectedAbout?: DataCollectedAbout | null;
-                  disabledDisplay?: DisabledDisplay | null;
-                  enableBehavior?: EnableBehavior | null;
-                  rule?: any | null;
-                  customRule?: any | null;
-                  item?: Array<{
-                    __typename: 'FormItem';
-                    linkId: string;
-                    type: ItemType;
-                    component?: Component | null;
-                    prefix?: string | null;
-                    text?: string | null;
-                    briefText?: string | null;
-                    readonlyText?: string | null;
-                    helperText?: string | null;
-                    required?: boolean | null;
-                    warnIfEmpty?: boolean | null;
-                    hidden?: boolean | null;
-                    readOnly?: boolean | null;
-                    repeats?: boolean | null;
-                    pickListReference?: string | null;
-                    size?: InputSize | null;
-                    assessmentDate?: boolean | null;
-                    prefill?: boolean | null;
-                    dataCollectedAbout?: DataCollectedAbout | null;
-                    disabledDisplay?: DisabledDisplay | null;
-                    enableBehavior?: EnableBehavior | null;
-                    rule?: any | null;
-                    customRule?: any | null;
-                    mapping?: {
-                      __typename?: 'FieldMapping';
-                      recordType?: RelatedRecordType | null;
-                      fieldName?: string | null;
-                      customFieldKey?: string | null;
-                    } | null;
-                    bounds?: Array<{
-                      __typename?: 'ValueBound';
-                      id: string;
-                      severity: ValidationSeverity;
-                      type: BoundType;
-                      question?: string | null;
-                      valueNumber?: number | null;
-                      valueDate?: string | null;
-                      valueLocalConstant?: string | null;
-                      offset?: number | null;
-                    }> | null;
-                    pickListOptions?: Array<{
-                      __typename?: 'PickListOption';
-                      code: string;
-                      label?: string | null;
-                      secondaryLabel?: string | null;
-                      groupLabel?: string | null;
-                      groupCode?: string | null;
-                      initialSelected?: boolean | null;
-                      helperText?: string | null;
-                      numericValue?: number | null;
-                    }> | null;
-                    initial?: Array<{
-                      __typename?: 'InitialValue';
-                      valueCode?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      valueLocalConstant?: string | null;
-                      initialBehavior: InitialBehavior;
-                    }> | null;
-                    enableWhen?: Array<{
-                      __typename?: 'EnableWhen';
-                      question?: string | null;
-                      localConstant?: string | null;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      answerDate?: string | null;
-                      compareQuestion?: string | null;
-                    }> | null;
-                    autofillValues?: Array<{
-                      __typename?: 'AutofillValue';
-                      valueCode?: string | null;
-                      valueQuestion?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      sumQuestions?: Array<string> | null;
-                      formula?: string | null;
-                      autofillBehavior: EnableBehavior;
-                      autofillReadonly?: boolean | null;
-                      autofillWhen: Array<{
-                        __typename?: 'EnableWhen';
-                        question?: string | null;
-                        localConstant?: string | null;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        answerDate?: string | null;
-                        compareQuestion?: string | null;
-                      }>;
-                    }> | null;
-                  }> | null;
-                  mapping?: {
-                    __typename?: 'FieldMapping';
-                    recordType?: RelatedRecordType | null;
-                    fieldName?: string | null;
-                    customFieldKey?: string | null;
-                  } | null;
-                  bounds?: Array<{
-                    __typename?: 'ValueBound';
-                    id: string;
-                    severity: ValidationSeverity;
-                    type: BoundType;
-                    question?: string | null;
-                    valueNumber?: number | null;
-                    valueDate?: string | null;
-                    valueLocalConstant?: string | null;
-                    offset?: number | null;
-                  }> | null;
-                  pickListOptions?: Array<{
-                    __typename?: 'PickListOption';
-                    code: string;
-                    label?: string | null;
-                    secondaryLabel?: string | null;
-                    groupLabel?: string | null;
-                    groupCode?: string | null;
-                    initialSelected?: boolean | null;
-                    helperText?: string | null;
-                    numericValue?: number | null;
-                  }> | null;
-                  initial?: Array<{
-                    __typename?: 'InitialValue';
-                    valueCode?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    valueLocalConstant?: string | null;
-                    initialBehavior: InitialBehavior;
-                  }> | null;
-                  enableWhen?: Array<{
-                    __typename?: 'EnableWhen';
-                    question?: string | null;
-                    localConstant?: string | null;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    answerDate?: string | null;
-                    compareQuestion?: string | null;
-                  }> | null;
-                  autofillValues?: Array<{
-                    __typename?: 'AutofillValue';
-                    valueCode?: string | null;
-                    valueQuestion?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    sumQuestions?: Array<string> | null;
-                    formula?: string | null;
-                    autofillBehavior: EnableBehavior;
-                    autofillReadonly?: boolean | null;
-                    autofillWhen: Array<{
-                      __typename?: 'EnableWhen';
-                      question?: string | null;
-                      localConstant?: string | null;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      answerDate?: string | null;
-                      compareQuestion?: string | null;
-                    }>;
-                  }> | null;
-                }> | null;
-                mapping?: {
-                  __typename?: 'FieldMapping';
-                  recordType?: RelatedRecordType | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                } | null;
-                bounds?: Array<{
-                  __typename?: 'ValueBound';
-                  id: string;
-                  severity: ValidationSeverity;
-                  type: BoundType;
-                  question?: string | null;
-                  valueNumber?: number | null;
-                  valueDate?: string | null;
-                  valueLocalConstant?: string | null;
-                  offset?: number | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                  helperText?: string | null;
-                  numericValue?: number | null;
-                }> | null;
-                initial?: Array<{
-                  __typename?: 'InitialValue';
-                  valueCode?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  valueLocalConstant?: string | null;
-                  initialBehavior: InitialBehavior;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  answerDate?: string | null;
-                  compareQuestion?: string | null;
-                }> | null;
-                autofillValues?: Array<{
-                  __typename?: 'AutofillValue';
-                  valueCode?: string | null;
-                  valueQuestion?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  sumQuestions?: Array<string> | null;
-                  formula?: string | null;
-                  autofillBehavior: EnableBehavior;
-                  autofillReadonly?: boolean | null;
-                  autofillWhen: Array<{
-                    __typename?: 'EnableWhen';
-                    question?: string | null;
-                    localConstant?: string | null;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    answerDate?: string | null;
-                    compareQuestion?: string | null;
-                  }>;
-                }> | null;
-              }> | null;
-              mapping?: {
-                __typename?: 'FieldMapping';
-                recordType?: RelatedRecordType | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-              } | null;
-              bounds?: Array<{
-                __typename?: 'ValueBound';
-                id: string;
-                severity: ValidationSeverity;
-                type: BoundType;
-                question?: string | null;
-                valueNumber?: number | null;
-                valueDate?: string | null;
-                valueLocalConstant?: string | null;
-                offset?: number | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-                helperText?: string | null;
-                numericValue?: number | null;
-              }> | null;
-              initial?: Array<{
-                __typename?: 'InitialValue';
-                valueCode?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                valueLocalConstant?: string | null;
-                initialBehavior: InitialBehavior;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                answerDate?: string | null;
-                compareQuestion?: string | null;
-              }> | null;
-              autofillValues?: Array<{
-                __typename?: 'AutofillValue';
-                valueCode?: string | null;
-                valueQuestion?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                sumQuestions?: Array<string> | null;
-                formula?: string | null;
-                autofillBehavior: EnableBehavior;
-                autofillReadonly?: boolean | null;
-                autofillWhen: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  answerDate?: string | null;
-                  compareQuestion?: string | null;
-                }>;
-              }> | null;
-            }> | null;
-            mapping?: {
-              __typename?: 'FieldMapping';
-              recordType?: RelatedRecordType | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-            } | null;
-            bounds?: Array<{
-              __typename?: 'ValueBound';
-              id: string;
-              severity: ValidationSeverity;
-              type: BoundType;
-              question?: string | null;
-              valueNumber?: number | null;
-              valueDate?: string | null;
-              valueLocalConstant?: string | null;
-              offset?: number | null;
-            }> | null;
-            pickListOptions?: Array<{
-              __typename?: 'PickListOption';
-              code: string;
-              label?: string | null;
-              secondaryLabel?: string | null;
-              groupLabel?: string | null;
-              groupCode?: string | null;
-              initialSelected?: boolean | null;
-              helperText?: string | null;
-              numericValue?: number | null;
-            }> | null;
-            initial?: Array<{
-              __typename?: 'InitialValue';
-              valueCode?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              valueLocalConstant?: string | null;
-              initialBehavior: InitialBehavior;
-            }> | null;
-            enableWhen?: Array<{
-              __typename?: 'EnableWhen';
-              question?: string | null;
-              localConstant?: string | null;
-              operator: EnableOperator;
-              answerCode?: string | null;
-              answerCodes?: Array<string> | null;
-              answerNumber?: number | null;
-              answerBoolean?: boolean | null;
-              answerGroupCode?: string | null;
-              answerDate?: string | null;
-              compareQuestion?: string | null;
-            }> | null;
-            autofillValues?: Array<{
-              __typename?: 'AutofillValue';
-              valueCode?: string | null;
-              valueQuestion?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              sumQuestions?: Array<string> | null;
-              formula?: string | null;
-              autofillBehavior: EnableBehavior;
-              autofillReadonly?: boolean | null;
-              autofillWhen: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                answerDate?: string | null;
-                compareQuestion?: string | null;
-              }>;
-            }> | null;
-          }>;
-        };
-        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
-      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -21586,560 +20587,37 @@ export type GetProjectExternalFormSubmissionsQuery = {
         submittedAt: string;
         spam?: boolean | null;
         status: ExternalFormSubmissionStatus;
-        notes?: string | null;
-        values?: any | null;
-        definition: {
-          __typename?: 'FormDefinition';
-          id: string;
-          role: FormRole;
-          title: string;
-          cacheKey: string;
-          identifier: string;
-          status: FormStatus;
-          dateUpdated: string;
-          definition: {
-            __typename?: 'FormDefinitionJson';
-            item: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              component?: Component | null;
-              prefix?: string | null;
-              text?: string | null;
-              briefText?: string | null;
-              readonlyText?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              pickListReference?: string | null;
-              size?: InputSize | null;
-              assessmentDate?: boolean | null;
-              prefill?: boolean | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
-              rule?: any | null;
-              customRule?: any | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                component?: Component | null;
-                prefix?: string | null;
-                text?: string | null;
-                briefText?: string | null;
-                readonlyText?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                pickListReference?: string | null;
-                size?: InputSize | null;
-                assessmentDate?: boolean | null;
-                prefill?: boolean | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
-                rule?: any | null;
-                customRule?: any | null;
-                item?: Array<{
-                  __typename: 'FormItem';
-                  linkId: string;
-                  type: ItemType;
-                  component?: Component | null;
-                  prefix?: string | null;
-                  text?: string | null;
-                  briefText?: string | null;
-                  readonlyText?: string | null;
-                  helperText?: string | null;
-                  required?: boolean | null;
-                  warnIfEmpty?: boolean | null;
-                  hidden?: boolean | null;
-                  readOnly?: boolean | null;
-                  repeats?: boolean | null;
-                  pickListReference?: string | null;
-                  size?: InputSize | null;
-                  assessmentDate?: boolean | null;
-                  prefill?: boolean | null;
-                  dataCollectedAbout?: DataCollectedAbout | null;
-                  disabledDisplay?: DisabledDisplay | null;
-                  enableBehavior?: EnableBehavior | null;
-                  rule?: any | null;
-                  customRule?: any | null;
-                  item?: Array<{
-                    __typename: 'FormItem';
-                    linkId: string;
-                    type: ItemType;
-                    component?: Component | null;
-                    prefix?: string | null;
-                    text?: string | null;
-                    briefText?: string | null;
-                    readonlyText?: string | null;
-                    helperText?: string | null;
-                    required?: boolean | null;
-                    warnIfEmpty?: boolean | null;
-                    hidden?: boolean | null;
-                    readOnly?: boolean | null;
-                    repeats?: boolean | null;
-                    pickListReference?: string | null;
-                    size?: InputSize | null;
-                    assessmentDate?: boolean | null;
-                    prefill?: boolean | null;
-                    dataCollectedAbout?: DataCollectedAbout | null;
-                    disabledDisplay?: DisabledDisplay | null;
-                    enableBehavior?: EnableBehavior | null;
-                    rule?: any | null;
-                    customRule?: any | null;
-                    item?: Array<{
-                      __typename: 'FormItem';
-                      linkId: string;
-                      type: ItemType;
-                      component?: Component | null;
-                      prefix?: string | null;
-                      text?: string | null;
-                      briefText?: string | null;
-                      readonlyText?: string | null;
-                      helperText?: string | null;
-                      required?: boolean | null;
-                      warnIfEmpty?: boolean | null;
-                      hidden?: boolean | null;
-                      readOnly?: boolean | null;
-                      repeats?: boolean | null;
-                      pickListReference?: string | null;
-                      size?: InputSize | null;
-                      assessmentDate?: boolean | null;
-                      prefill?: boolean | null;
-                      dataCollectedAbout?: DataCollectedAbout | null;
-                      disabledDisplay?: DisabledDisplay | null;
-                      enableBehavior?: EnableBehavior | null;
-                      rule?: any | null;
-                      customRule?: any | null;
-                      mapping?: {
-                        __typename?: 'FieldMapping';
-                        recordType?: RelatedRecordType | null;
-                        fieldName?: string | null;
-                        customFieldKey?: string | null;
-                      } | null;
-                      bounds?: Array<{
-                        __typename?: 'ValueBound';
-                        id: string;
-                        severity: ValidationSeverity;
-                        type: BoundType;
-                        question?: string | null;
-                        valueNumber?: number | null;
-                        valueDate?: string | null;
-                        valueLocalConstant?: string | null;
-                        offset?: number | null;
-                      }> | null;
-                      pickListOptions?: Array<{
-                        __typename?: 'PickListOption';
-                        code: string;
-                        label?: string | null;
-                        secondaryLabel?: string | null;
-                        groupLabel?: string | null;
-                        groupCode?: string | null;
-                        initialSelected?: boolean | null;
-                        helperText?: string | null;
-                        numericValue?: number | null;
-                      }> | null;
-                      initial?: Array<{
-                        __typename?: 'InitialValue';
-                        valueCode?: string | null;
-                        valueBoolean?: boolean | null;
-                        valueNumber?: number | null;
-                        valueLocalConstant?: string | null;
-                        initialBehavior: InitialBehavior;
-                      }> | null;
-                      enableWhen?: Array<{
-                        __typename?: 'EnableWhen';
-                        question?: string | null;
-                        localConstant?: string | null;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        answerDate?: string | null;
-                        compareQuestion?: string | null;
-                      }> | null;
-                      autofillValues?: Array<{
-                        __typename?: 'AutofillValue';
-                        valueCode?: string | null;
-                        valueQuestion?: string | null;
-                        valueBoolean?: boolean | null;
-                        valueNumber?: number | null;
-                        sumQuestions?: Array<string> | null;
-                        formula?: string | null;
-                        autofillBehavior: EnableBehavior;
-                        autofillReadonly?: boolean | null;
-                        autofillWhen: Array<{
-                          __typename?: 'EnableWhen';
-                          question?: string | null;
-                          localConstant?: string | null;
-                          operator: EnableOperator;
-                          answerCode?: string | null;
-                          answerCodes?: Array<string> | null;
-                          answerNumber?: number | null;
-                          answerBoolean?: boolean | null;
-                          answerGroupCode?: string | null;
-                          answerDate?: string | null;
-                          compareQuestion?: string | null;
-                        }>;
-                      }> | null;
-                    }> | null;
-                    mapping?: {
-                      __typename?: 'FieldMapping';
-                      recordType?: RelatedRecordType | null;
-                      fieldName?: string | null;
-                      customFieldKey?: string | null;
-                    } | null;
-                    bounds?: Array<{
-                      __typename?: 'ValueBound';
-                      id: string;
-                      severity: ValidationSeverity;
-                      type: BoundType;
-                      question?: string | null;
-                      valueNumber?: number | null;
-                      valueDate?: string | null;
-                      valueLocalConstant?: string | null;
-                      offset?: number | null;
-                    }> | null;
-                    pickListOptions?: Array<{
-                      __typename?: 'PickListOption';
-                      code: string;
-                      label?: string | null;
-                      secondaryLabel?: string | null;
-                      groupLabel?: string | null;
-                      groupCode?: string | null;
-                      initialSelected?: boolean | null;
-                      helperText?: string | null;
-                      numericValue?: number | null;
-                    }> | null;
-                    initial?: Array<{
-                      __typename?: 'InitialValue';
-                      valueCode?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      valueLocalConstant?: string | null;
-                      initialBehavior: InitialBehavior;
-                    }> | null;
-                    enableWhen?: Array<{
-                      __typename?: 'EnableWhen';
-                      question?: string | null;
-                      localConstant?: string | null;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      answerDate?: string | null;
-                      compareQuestion?: string | null;
-                    }> | null;
-                    autofillValues?: Array<{
-                      __typename?: 'AutofillValue';
-                      valueCode?: string | null;
-                      valueQuestion?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      sumQuestions?: Array<string> | null;
-                      formula?: string | null;
-                      autofillBehavior: EnableBehavior;
-                      autofillReadonly?: boolean | null;
-                      autofillWhen: Array<{
-                        __typename?: 'EnableWhen';
-                        question?: string | null;
-                        localConstant?: string | null;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        answerDate?: string | null;
-                        compareQuestion?: string | null;
-                      }>;
-                    }> | null;
-                  }> | null;
-                  mapping?: {
-                    __typename?: 'FieldMapping';
-                    recordType?: RelatedRecordType | null;
-                    fieldName?: string | null;
-                    customFieldKey?: string | null;
-                  } | null;
-                  bounds?: Array<{
-                    __typename?: 'ValueBound';
-                    id: string;
-                    severity: ValidationSeverity;
-                    type: BoundType;
-                    question?: string | null;
-                    valueNumber?: number | null;
-                    valueDate?: string | null;
-                    valueLocalConstant?: string | null;
-                    offset?: number | null;
-                  }> | null;
-                  pickListOptions?: Array<{
-                    __typename?: 'PickListOption';
-                    code: string;
-                    label?: string | null;
-                    secondaryLabel?: string | null;
-                    groupLabel?: string | null;
-                    groupCode?: string | null;
-                    initialSelected?: boolean | null;
-                    helperText?: string | null;
-                    numericValue?: number | null;
-                  }> | null;
-                  initial?: Array<{
-                    __typename?: 'InitialValue';
-                    valueCode?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    valueLocalConstant?: string | null;
-                    initialBehavior: InitialBehavior;
-                  }> | null;
-                  enableWhen?: Array<{
-                    __typename?: 'EnableWhen';
-                    question?: string | null;
-                    localConstant?: string | null;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    answerDate?: string | null;
-                    compareQuestion?: string | null;
-                  }> | null;
-                  autofillValues?: Array<{
-                    __typename?: 'AutofillValue';
-                    valueCode?: string | null;
-                    valueQuestion?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    sumQuestions?: Array<string> | null;
-                    formula?: string | null;
-                    autofillBehavior: EnableBehavior;
-                    autofillReadonly?: boolean | null;
-                    autofillWhen: Array<{
-                      __typename?: 'EnableWhen';
-                      question?: string | null;
-                      localConstant?: string | null;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      answerDate?: string | null;
-                      compareQuestion?: string | null;
-                    }>;
-                  }> | null;
-                }> | null;
-                mapping?: {
-                  __typename?: 'FieldMapping';
-                  recordType?: RelatedRecordType | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                } | null;
-                bounds?: Array<{
-                  __typename?: 'ValueBound';
-                  id: string;
-                  severity: ValidationSeverity;
-                  type: BoundType;
-                  question?: string | null;
-                  valueNumber?: number | null;
-                  valueDate?: string | null;
-                  valueLocalConstant?: string | null;
-                  offset?: number | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                  helperText?: string | null;
-                  numericValue?: number | null;
-                }> | null;
-                initial?: Array<{
-                  __typename?: 'InitialValue';
-                  valueCode?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  valueLocalConstant?: string | null;
-                  initialBehavior: InitialBehavior;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  answerDate?: string | null;
-                  compareQuestion?: string | null;
-                }> | null;
-                autofillValues?: Array<{
-                  __typename?: 'AutofillValue';
-                  valueCode?: string | null;
-                  valueQuestion?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  sumQuestions?: Array<string> | null;
-                  formula?: string | null;
-                  autofillBehavior: EnableBehavior;
-                  autofillReadonly?: boolean | null;
-                  autofillWhen: Array<{
-                    __typename?: 'EnableWhen';
-                    question?: string | null;
-                    localConstant?: string | null;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    answerDate?: string | null;
-                    compareQuestion?: string | null;
-                  }>;
-                }> | null;
-              }> | null;
-              mapping?: {
-                __typename?: 'FieldMapping';
-                recordType?: RelatedRecordType | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-              } | null;
-              bounds?: Array<{
-                __typename?: 'ValueBound';
-                id: string;
-                severity: ValidationSeverity;
-                type: BoundType;
-                question?: string | null;
-                valueNumber?: number | null;
-                valueDate?: string | null;
-                valueLocalConstant?: string | null;
-                offset?: number | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-                helperText?: string | null;
-                numericValue?: number | null;
-              }> | null;
-              initial?: Array<{
-                __typename?: 'InitialValue';
-                valueCode?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                valueLocalConstant?: string | null;
-                initialBehavior: InitialBehavior;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                answerDate?: string | null;
-                compareQuestion?: string | null;
-              }> | null;
-              autofillValues?: Array<{
-                __typename?: 'AutofillValue';
-                valueCode?: string | null;
-                valueQuestion?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                sumQuestions?: Array<string> | null;
-                formula?: string | null;
-                autofillBehavior: EnableBehavior;
-                autofillReadonly?: boolean | null;
-                autofillWhen: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  answerDate?: string | null;
-                  compareQuestion?: string | null;
-                }>;
-              }> | null;
-            }>;
-          };
-          updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
-        };
       }>;
     };
   } | null;
 };
 
-export type GetExternalFormDefinitionQueryVariables = Exact<{
-  formDefinitionIdentifier: Scalars['String']['input'];
-  id?: InputMaybe<Scalars['ID']['input']>;
+export type GetExternalFormSubmissionQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
 }>;
 
-export type GetExternalFormDefinitionQuery = {
+export type GetExternalFormSubmissionQuery = {
   __typename?: 'Query';
-  externalFormDefinition?: {
-    __typename?: 'FormDefinition';
+  externalFormSubmission?: {
+    __typename?: 'ExternalFormSubmission';
+    notes?: string | null;
+    values?: any | null;
     id: string;
-    role: FormRole;
-    title: string;
-    cacheKey: string;
-    identifier: string;
-    status: FormStatus;
-    dateUpdated: string;
+    submittedAt: string;
+    spam?: boolean | null;
+    status: ExternalFormSubmissionStatus;
     definition: {
-      __typename?: 'FormDefinitionJson';
-      item: Array<{
-        __typename: 'FormItem';
-        linkId: string;
-        type: ItemType;
-        component?: Component | null;
-        prefix?: string | null;
-        text?: string | null;
-        briefText?: string | null;
-        readonlyText?: string | null;
-        helperText?: string | null;
-        required?: boolean | null;
-        warnIfEmpty?: boolean | null;
-        hidden?: boolean | null;
-        readOnly?: boolean | null;
-        repeats?: boolean | null;
-        pickListReference?: string | null;
-        size?: InputSize | null;
-        assessmentDate?: boolean | null;
-        prefill?: boolean | null;
-        dataCollectedAbout?: DataCollectedAbout | null;
-        disabledDisplay?: DisabledDisplay | null;
-        enableBehavior?: EnableBehavior | null;
-        rule?: any | null;
-        customRule?: any | null;
-        item?: Array<{
+      __typename?: 'FormDefinition';
+      id: string;
+      role: FormRole;
+      title: string;
+      cacheKey: string;
+      identifier: string;
+      status: FormStatus;
+      dateUpdated: string;
+      definition: {
+        __typename?: 'FormDefinitionJson';
+        item: Array<{
           __typename: 'FormItem';
           linkId: string;
           type: ItemType;
@@ -22235,6 +20713,104 @@ export type GetExternalFormDefinitionQuery = {
                 enableBehavior?: EnableBehavior | null;
                 rule?: any | null;
                 customRule?: any | null;
+                item?: Array<{
+                  __typename: 'FormItem';
+                  linkId: string;
+                  type: ItemType;
+                  component?: Component | null;
+                  prefix?: string | null;
+                  text?: string | null;
+                  briefText?: string | null;
+                  readonlyText?: string | null;
+                  helperText?: string | null;
+                  required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
+                  hidden?: boolean | null;
+                  readOnly?: boolean | null;
+                  repeats?: boolean | null;
+                  pickListReference?: string | null;
+                  size?: InputSize | null;
+                  assessmentDate?: boolean | null;
+                  prefill?: boolean | null;
+                  dataCollectedAbout?: DataCollectedAbout | null;
+                  disabledDisplay?: DisabledDisplay | null;
+                  enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
+                  mapping?: {
+                    __typename?: 'FieldMapping';
+                    recordType?: RelatedRecordType | null;
+                    fieldName?: string | null;
+                    customFieldKey?: string | null;
+                  } | null;
+                  bounds?: Array<{
+                    __typename?: 'ValueBound';
+                    id: string;
+                    severity: ValidationSeverity;
+                    type: BoundType;
+                    question?: string | null;
+                    valueNumber?: number | null;
+                    valueDate?: string | null;
+                    valueLocalConstant?: string | null;
+                    offset?: number | null;
+                  }> | null;
+                  pickListOptions?: Array<{
+                    __typename?: 'PickListOption';
+                    code: string;
+                    label?: string | null;
+                    secondaryLabel?: string | null;
+                    groupLabel?: string | null;
+                    groupCode?: string | null;
+                    initialSelected?: boolean | null;
+                    helperText?: string | null;
+                    numericValue?: number | null;
+                  }> | null;
+                  initial?: Array<{
+                    __typename?: 'InitialValue';
+                    valueCode?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                    valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
+                  }> | null;
+                  enableWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question?: string | null;
+                    localConstant?: string | null;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                    answerDate?: string | null;
+                    compareQuestion?: string | null;
+                  }> | null;
+                  autofillValues?: Array<{
+                    __typename?: 'AutofillValue';
+                    valueCode?: string | null;
+                    valueQuestion?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
+                    formula?: string | null;
+                    autofillBehavior: EnableBehavior;
+                    autofillReadonly?: boolean | null;
+                    autofillWhen: Array<{
+                      __typename?: 'EnableWhen';
+                      question?: string | null;
+                      localConstant?: string | null;
+                      operator: EnableOperator;
+                      answerCode?: string | null;
+                      answerCodes?: Array<string> | null;
+                      answerNumber?: number | null;
+                      answerBoolean?: boolean | null;
+                      answerGroupCode?: string | null;
+                      answerDate?: string | null;
+                      compareQuestion?: string | null;
+                    }>;
+                  }> | null;
+                }> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -22530,83 +21106,10 @@ export type GetExternalFormDefinitionQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-        }> | null;
-        mapping?: {
-          __typename?: 'FieldMapping';
-          recordType?: RelatedRecordType | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-        } | null;
-        bounds?: Array<{
-          __typename?: 'ValueBound';
-          id: string;
-          severity: ValidationSeverity;
-          type: BoundType;
-          question?: string | null;
-          valueNumber?: number | null;
-          valueDate?: string | null;
-          valueLocalConstant?: string | null;
-          offset?: number | null;
-        }> | null;
-        pickListOptions?: Array<{
-          __typename?: 'PickListOption';
-          code: string;
-          label?: string | null;
-          secondaryLabel?: string | null;
-          groupLabel?: string | null;
-          groupCode?: string | null;
-          initialSelected?: boolean | null;
-          helperText?: string | null;
-          numericValue?: number | null;
-        }> | null;
-        initial?: Array<{
-          __typename?: 'InitialValue';
-          valueCode?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          valueLocalConstant?: string | null;
-          initialBehavior: InitialBehavior;
-        }> | null;
-        enableWhen?: Array<{
-          __typename?: 'EnableWhen';
-          question?: string | null;
-          localConstant?: string | null;
-          operator: EnableOperator;
-          answerCode?: string | null;
-          answerCodes?: Array<string> | null;
-          answerNumber?: number | null;
-          answerBoolean?: boolean | null;
-          answerGroupCode?: string | null;
-          answerDate?: string | null;
-          compareQuestion?: string | null;
-        }> | null;
-        autofillValues?: Array<{
-          __typename?: 'AutofillValue';
-          valueCode?: string | null;
-          valueQuestion?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          sumQuestions?: Array<string> | null;
-          formula?: string | null;
-          autofillBehavior: EnableBehavior;
-          autofillReadonly?: boolean | null;
-          autofillWhen: Array<{
-            __typename?: 'EnableWhen';
-            question?: string | null;
-            localConstant?: string | null;
-            operator: EnableOperator;
-            answerCode?: string | null;
-            answerCodes?: Array<string> | null;
-            answerNumber?: number | null;
-            answerBoolean?: boolean | null;
-            answerGroupCode?: string | null;
-            answerDate?: string | null;
-            compareQuestion?: string | null;
-          }>;
-        }> | null;
-      }>;
+        }>;
+      };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
-    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -37701,18 +36204,24 @@ export const SubmittedEnrollmentResultFieldsFragmentDoc = gql`
   ${EnrollmentOccurrencePointFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
 `;
-export const ExternalFormSubmissionFieldsFragmentDoc = gql`
-  fragment ExternalFormSubmissionFields on ExternalFormSubmission {
+export const ExternalFormSubmissionSummaryFragmentDoc = gql`
+  fragment ExternalFormSubmissionSummary on ExternalFormSubmission {
     id
     submittedAt
     spam
     status
+  }
+`;
+export const ExternalFormSubmissionFieldsFragmentDoc = gql`
+  fragment ExternalFormSubmissionFields on ExternalFormSubmission {
+    ...ExternalFormSubmissionSummary
     notes
     definition {
       ...FormDefinitionFields
     }
     values
   }
+  ${ExternalFormSubmissionSummaryFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
@@ -44168,14 +42677,14 @@ export const UpdateExternalFormSubmissionDocument = gql`
       input: $input
     ) {
       externalFormSubmission {
-        ...ExternalFormSubmissionFields
+        ...ExternalFormSubmissionSummary
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${ExternalFormSubmissionFieldsFragmentDoc}
+  ${ExternalFormSubmissionSummaryFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateExternalFormSubmissionMutationFn = Apollo.MutationFunction<
@@ -44228,14 +42737,14 @@ export const DeleteExternalFormSubmissionDocument = gql`
   mutation DeleteExternalFormSubmission($id: ID!) {
     deleteExternalFormSubmission(id: $id) {
       externalFormSubmission {
-        ...ExternalFormSubmissionFields
+        ...ExternalFormSubmissionSummary
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${ExternalFormSubmissionFieldsFragmentDoc}
+  ${ExternalFormSubmissionSummaryFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type DeleteExternalFormSubmissionMutationFn = Apollo.MutationFunction<
@@ -44302,12 +42811,12 @@ export const GetProjectExternalFormSubmissionsDocument = gql`
         limit
         nodesCount
         nodes {
-          ...ExternalFormSubmissionFields
+          ...ExternalFormSubmissionSummary
         }
       }
     }
   }
-  ${ExternalFormSubmissionFieldsFragmentDoc}
+  ${ExternalFormSubmissionSummaryFragmentDoc}
 `;
 
 /**
@@ -44385,84 +42894,83 @@ export type GetProjectExternalFormSubmissionsQueryResult = Apollo.QueryResult<
   GetProjectExternalFormSubmissionsQuery,
   GetProjectExternalFormSubmissionsQueryVariables
 >;
-export const GetExternalFormDefinitionDocument = gql`
-  query GetExternalFormDefinition($formDefinitionIdentifier: String!, $id: ID) {
-    externalFormDefinition(identifier: $formDefinitionIdentifier, id: $id) {
-      ...FormDefinitionFields
+export const GetExternalFormSubmissionDocument = gql`
+  query GetExternalFormSubmission($id: ID!) {
+    externalFormSubmission(id: $id) {
+      ...ExternalFormSubmissionFields
     }
   }
-  ${FormDefinitionFieldsFragmentDoc}
+  ${ExternalFormSubmissionFieldsFragmentDoc}
 `;
 
 /**
- * __useGetExternalFormDefinitionQuery__
+ * __useGetExternalFormSubmissionQuery__
  *
- * To run a query within a React component, call `useGetExternalFormDefinitionQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetExternalFormDefinitionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetExternalFormSubmissionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExternalFormSubmissionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetExternalFormDefinitionQuery({
+ * const { data, loading, error } = useGetExternalFormSubmissionQuery({
  *   variables: {
- *      formDefinitionIdentifier: // value for 'formDefinitionIdentifier'
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetExternalFormDefinitionQuery(
+export function useGetExternalFormSubmissionQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetExternalFormDefinitionQuery,
-    GetExternalFormDefinitionQueryVariables
+    GetExternalFormSubmissionQuery,
+    GetExternalFormSubmissionQueryVariables
   > &
     (
-      | { variables: GetExternalFormDefinitionQueryVariables; skip?: boolean }
+      | { variables: GetExternalFormSubmissionQueryVariables; skip?: boolean }
       | { skip: boolean }
     )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetExternalFormDefinitionQuery,
-    GetExternalFormDefinitionQueryVariables
-  >(GetExternalFormDefinitionDocument, options);
+    GetExternalFormSubmissionQuery,
+    GetExternalFormSubmissionQueryVariables
+  >(GetExternalFormSubmissionDocument, options);
 }
-export function useGetExternalFormDefinitionLazyQuery(
+export function useGetExternalFormSubmissionLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetExternalFormDefinitionQuery,
-    GetExternalFormDefinitionQueryVariables
+    GetExternalFormSubmissionQuery,
+    GetExternalFormSubmissionQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetExternalFormDefinitionQuery,
-    GetExternalFormDefinitionQueryVariables
-  >(GetExternalFormDefinitionDocument, options);
+    GetExternalFormSubmissionQuery,
+    GetExternalFormSubmissionQueryVariables
+  >(GetExternalFormSubmissionDocument, options);
 }
-export function useGetExternalFormDefinitionSuspenseQuery(
+export function useGetExternalFormSubmissionSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetExternalFormDefinitionQuery,
-    GetExternalFormDefinitionQueryVariables
+    GetExternalFormSubmissionQuery,
+    GetExternalFormSubmissionQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetExternalFormDefinitionQuery,
-    GetExternalFormDefinitionQueryVariables
-  >(GetExternalFormDefinitionDocument, options);
+    GetExternalFormSubmissionQuery,
+    GetExternalFormSubmissionQueryVariables
+  >(GetExternalFormSubmissionDocument, options);
 }
-export type GetExternalFormDefinitionQueryHookResult = ReturnType<
-  typeof useGetExternalFormDefinitionQuery
+export type GetExternalFormSubmissionQueryHookResult = ReturnType<
+  typeof useGetExternalFormSubmissionQuery
 >;
-export type GetExternalFormDefinitionLazyQueryHookResult = ReturnType<
-  typeof useGetExternalFormDefinitionLazyQuery
+export type GetExternalFormSubmissionLazyQueryHookResult = ReturnType<
+  typeof useGetExternalFormSubmissionLazyQuery
 >;
-export type GetExternalFormDefinitionSuspenseQueryHookResult = ReturnType<
-  typeof useGetExternalFormDefinitionSuspenseQuery
+export type GetExternalFormSubmissionSuspenseQueryHookResult = ReturnType<
+  typeof useGetExternalFormSubmissionSuspenseQuery
 >;
-export type GetExternalFormDefinitionQueryResult = Apollo.QueryResult<
-  GetExternalFormDefinitionQuery,
-  GetExternalFormDefinitionQueryVariables
+export type GetExternalFormSubmissionQueryResult = Apollo.QueryResult<
+  GetExternalFormSubmissionQuery,
+  GetExternalFormSubmissionQueryVariables
 >;
 export const UpdateFormDefinitionDocument = gql`
   mutation UpdateFormDefinition($id: ID!, $input: FormDefinitionInput!) {

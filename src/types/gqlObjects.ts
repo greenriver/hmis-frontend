@@ -7044,10 +7044,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
     name: 'ExternalFormSubmissionInput',
     args: [
-      {
-        name: 'hudValues',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
-      },
       { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       { name: 'spam', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
       {
