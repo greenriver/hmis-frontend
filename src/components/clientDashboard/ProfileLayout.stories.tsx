@@ -1,20 +1,31 @@
-import { Meta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import ProfileLayout from './ProfileLayout';
 
-import { RITA_ACKROYD } from '@/test/__mocks__/requests';
+import {
+  clientDetailFormsMock,
+  clientWithEnrollmentsMock,
+  getClientPermissionMocks,
+  RITA_ACKROYD,
+} from '@/test/__mocks__/requests';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export default {
-  title: 'ClientProfile',
+  title: 'ProfileLayout',
   component: ProfileLayout,
+  parameters: {
+    apolloClient: {
+      mocks: [
+        getClientPermissionMocks,
+        clientDetailFormsMock,
+        clientWithEnrollmentsMock,
+      ],
+    },
+  },
 } as Meta<typeof ProfileLayout>;
 
-const Template: ComponentStory<typeof ProfileLayout> = (args) => (
-  <ProfileLayout {...args} />
-);
+type Story = StoryObj<typeof ProfileLayout>;
 
-export const Default = Template.bind({});
-Default.args = {
-  client: RITA_ACKROYD as ClientFieldsFragment,
+export const Default: Story = {
+  args: { client: RITA_ACKROYD as ClientFieldsFragment },
 };

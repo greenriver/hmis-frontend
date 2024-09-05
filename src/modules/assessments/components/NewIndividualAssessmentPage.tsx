@@ -21,12 +21,10 @@ const NewIndividualAssessmentPage = () => {
   const { enrollment, client, overrideBreadcrumbTitles } =
     useEnrollmentDashboardContext();
 
-  // Fetch the FormDefinition. This also applies "data collected about" changes to form.
+  // Fetch the FormDefinition by ID
   const { formDefinition, loading } = useAssessmentFormDefinition({
     formDefinitionId,
     projectId: enrollment?.project.id || '',
-    client,
-    relationshipToHoH: enrollment?.relationshipToHoH,
   });
 
   // Set the breadcrumb so it says the correct name of this assessment

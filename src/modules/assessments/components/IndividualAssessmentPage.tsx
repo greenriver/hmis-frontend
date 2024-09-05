@@ -1,10 +1,9 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import Loading from '@/components/elements/Loading';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessmentFormController from '@/modules/assessments/components/IndividualAssessmentFormController';
-import { applyDefinitionRulesForClient } from '@/modules/form/util/formUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { useGetAssessmentQuery } from '@/types/gqlTypes';
 
@@ -26,36 +25,27 @@ const IndividualAssessmentPage = () => {
     error: assessmentError,
   } = useGetAssessmentQuery({ variables: { id: assessmentId } });
 
-  // Retrieve the Definition from the Assessment, and apply any "Data Collected About" rules to it
-  const definition = useMemo(() => {
-    if (!assessmentData?.assessment?.definition || !enrollment) return;
-
-    return applyDefinitionRulesForClient(
-      assessmentData?.assessment?.definition,
-      client,
-      enrollment.relationshipToHoH
-    );
-  }, [assessmentData, client, enrollment]);
+  const assessment = assessmentData?.assessment;
 
   // Set the breadcrumb so it says the correct name of this assessment
   useEffect(() => {
     overrideBreadcrumbTitles({
-      [EnrollmentDashboardRoutes.VIEW_ASSESSMENT]: definition?.title,
+      [EnrollmentDashboardRoutes.VIEW_ASSESSMENT]:
+        assessment?.definition?.title,
     });
-  }, [overrideBreadcrumbTitles, definition]);
+  }, [overrideBreadcrumbTitles, assessment]);
 
   if (assessmentError) throw assessmentError;
   if (!enrollment) return <NotFound />;
   if (!assessmentData && assessmentLoading) return <Loading />;
 
-  const assessment = assessmentData?.assessment;
-  if (!assessment || !definition) return <NotFound />;
+  if (!assessment) return <NotFound />;
 
   return (
     <IndividualAssessmentFormController
       enrollment={enrollment}
       client={client}
-      definition={definition}
+      definition={assessment.definition}
       assessment={assessment}
     />
   );

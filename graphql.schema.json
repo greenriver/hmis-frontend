@@ -1591,7 +1591,7 @@
           },
           {
             "name": "definition",
-            "description": null,
+            "description": "Definition to use for viewing the assessment. If upgradedDefinitionForEditing\nis nil, then it should also be used for editing.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -1753,6 +1753,18 @@
                 "name": "AssessmentRole",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "upgradedDefinitionForEditing",
+            "description": "Most recent published Definition to use for editing the assessment. Only\npresent if the original form definition was retired.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FormDefinition",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -20999,6 +21011,22 @@
               "kind": "OBJECT",
               "name": "ApplicationUser",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "version",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -41306,12 +41334,6 @@
           {
             "name": "ENROLLMENT",
             "description": "Enrollment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ENROLLMENT_COC",
-            "description": "EnrollmentCoc",
             "isDeprecated": false,
             "deprecationReason": null
           },
