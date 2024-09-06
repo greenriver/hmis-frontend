@@ -115,8 +115,12 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         <TextContent
           {...commonProps}
           value={
-            [TRUE_OPT, FALSE_OPT].find((o) => o.code === String(value))
-              ?.label || <NotCollectedText variant='body2' />
+            [TRUE_OPT, FALSE_OPT].find((o) => {
+              return (
+                o.code === String(value) ||
+                String(o.numericCode) === String(value)
+              );
+            })?.label || <NotCollectedText variant='body2' />
           }
           hasValue={(val) => !isNil(val)}
         />
