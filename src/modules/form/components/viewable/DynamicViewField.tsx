@@ -249,6 +249,13 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
             />
           );
       }
+    case ItemType.Geolocation:
+      return (
+        <CommonLabeledTextBlock title={label} key={JSON.stringify(value)}>
+          {/*TODO - this is just for convenience, but should be improved on in 6541*/}
+          {value}
+        </CommonLabeledTextBlock>
+      );
 
     default:
       return (

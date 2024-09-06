@@ -21826,7 +21826,7 @@
           },
           {
             "name": "customRule",
-            "description": null,
+            "description": "Custom rules that apply to this item",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -22090,7 +22090,7 @@
           },
           {
             "name": "rule",
-            "description": null,
+            "description": "Rules that apply to this item",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -27495,6 +27495,12 @@
           },
           {
             "name": "FILE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GEOLOCATION",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -41382,6 +41388,12 @@
           {
             "name": "EXIT",
             "description": "Exit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GEOLOCATION",
+            "description": "Geolocation",
             "isDeprecated": false,
             "deprecationReason": null
           },
