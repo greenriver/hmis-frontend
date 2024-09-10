@@ -19877,6 +19877,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "values",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -21826,7 +21838,7 @@
           },
           {
             "name": "customRule",
-            "description": null,
+            "description": "Custom rules that apply to this item",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -22090,7 +22102,7 @@
           },
           {
             "name": "rule",
-            "description": null,
+            "description": "Rules that apply to this item",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -30273,6 +30285,18 @@
                 "defaultValue": null,
                 "isDeprecated": false,
                 "deprecationReason": null
+              },
+              {
+                "name": "projectId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
               }
             ],
             "type": {
@@ -37436,6 +37460,35 @@
             "type": {
               "kind": "OBJECT",
               "name": "FormDefinition",
+              "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "use definition from the individual submission to display"
+          },
+          {
+            "name": "externalFormSubmission",
+            "description": null,
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ExternalFormSubmission",
               "ofType": null
             },
             "isDeprecated": false,
@@ -46677,13 +46730,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "ExternalFormSubmission",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "ExternalFormSubmission",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
