@@ -143,7 +143,7 @@ const ProjectExternalSubmissionsTable = ({
     getErrors: (data) => data.updateExternalFormSubmission?.errors || [],
     getVariables: (values) => {
       return {
-        id: selected?.id || '', // selected should never be undefined when dialog is open
+        id: selectedId || '', // selected should never be undefined when dialog is open
         projectId: projectId,
         input: {
           notes: values.notes,
