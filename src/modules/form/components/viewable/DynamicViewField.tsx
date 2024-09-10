@@ -16,10 +16,10 @@ import TextContent from './item/TextContent';
 import CommonHtmlContent from '@/components/elements/CommonHtmlContent';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import { minutesToHoursAndMinutes } from '@/components/elements/input/MinutesDurationInput';
-import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import LabelWithContent from '@/components/elements/LabelWithContent';
 import NotCollectedText from '@/components/elements/NotCollectedText';
 import RecoverableError from '@/components/elements/RecoverableError';
+import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import ClientAddress from '@/modules/client/components/ClientAddress';
 import ClientContactPoint from '@/modules/client/components/ClientContactPoint';
 import ClientName from '@/modules/client/components/ClientName';
@@ -111,16 +111,16 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         />
       );
     case ItemType.Boolean:
+      // value could be true/false (from HMIS form) or "0"/"1" (from external forms), so pass as both boolean and string
       return (
         <TextContent
           {...commonProps}
           value={
-            [TRUE_OPT, FALSE_OPT].find((o) => {
-              return (
-                o.code === String(value) ||
-                String(o.numericCode) === String(value)
-              );
-            })?.label || <NotCollectedText variant='body2' />
+            <YesNoDisplay
+              booleanValue={value}
+              stringValue={value}
+              fallback={<NotCollectedText variant='body2' />}
+            />
           }
           hasValue={(val) => !isNil(val)}
         />

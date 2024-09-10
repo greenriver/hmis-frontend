@@ -8,8 +8,8 @@ import RadioGroupInput, {
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import { PickListOption } from '@/types/gqlTypes';
 
-export const TRUE_OPT = { code: 'true', label: 'Yes', numericCode: 1 };
-export const FALSE_OPT = { code: 'false', label: 'No', numericCode: 0 };
+export const TRUE_OPT = { code: 'true', label: 'Yes' };
+export const FALSE_OPT = { code: 'false', label: 'No' };
 
 type Props = { onChange: (val: boolean | null) => void } & Omit<
   RadioGroupInputProps,

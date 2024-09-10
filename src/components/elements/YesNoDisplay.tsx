@@ -17,6 +17,7 @@ interface Props extends TypographyProps {
     | NoYesReasonsForMissingData
     | DisabilityResponse
     | null;
+  stringValue?: '0' | '1' | null;
   fallback?: ReactElement;
   showIcon?: boolean;
 }
@@ -36,13 +37,18 @@ const NO_VALUES: string[] = [
 const YesNoDisplay: React.FC<Props> = ({
   booleanValue,
   enumValue,
+  stringValue,
   fallback,
   showIcon = false,
   ...props
 }) => {
   let Icon;
   let text;
-  if (booleanValue === true || YES_VALUES.includes(enumValue as string)) {
+  if (
+    booleanValue === true ||
+    stringValue === '1' ||
+    YES_VALUES.includes(enumValue as string)
+  ) {
     Icon = CheckIcon;
     text = enumValue
       ? HmisEnums.DisabilityResponse[enumValue as DisabilityResponse] ||
@@ -52,6 +58,7 @@ const YesNoDisplay: React.FC<Props> = ({
       : 'Yes';
   } else if (
     booleanValue === false ||
+    stringValue === '0' ||
     NO_VALUES.includes(enumValue as string)
   ) {
     Icon = CloseIcon;
