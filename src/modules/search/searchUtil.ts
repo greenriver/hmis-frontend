@@ -1,4 +1,4 @@
-import { omitBy, isNil, mapKeys } from 'lodash-es';
+import { isNil, omitBy } from 'lodash-es';
 import { FormValues } from '../form/types';
 import { SearchFormDefinition } from '@/modules/form/data';
 import { ClientSearchInput, FormDefinitionJson } from '@/types/gqlTypes';
@@ -46,8 +46,15 @@ export const keySearchParamsByLinkId = (
   values?: ClientSearchInput
 ): FormValues => {
   if (!values) return {};
-  return mapKeys(values, (_, key) => {
-    return SearchFormDefinition.item.find((i) => i.mapping?.fieldName === key)
-      ?.linkId;
+
+  const mapped: FormValues = {};
+  Object.keys(values).forEach((key) => {
+    const item = SearchFormDefinition.item.find(
+      (i) => i.mapping?.fieldName === key
+    );
+    if (item) {
+      mapped[item.linkId] = values[key as keyof ClientSearchInput];
+    }
   });
+  return mapped;
 };
