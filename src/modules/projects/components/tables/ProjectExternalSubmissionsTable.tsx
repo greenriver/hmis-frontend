@@ -10,20 +10,17 @@ import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { FormValues } from '@/modules/form/types';
 import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import {
-  customDataElementValueForKey,
-  getCustomDataElementColumns,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteExternalFormSubmissionDocument,
   DeleteExternalFormSubmissionMutation,
   DeleteExternalFormSubmissionMutationVariables,
-  ExternalFormSubmissionFieldsFragment,
   ExternalFormSubmissionFilterOptions,
   ExternalFormSubmissionInput,
   ExternalFormSubmissionStatus,
+  ExternalFormSubmissionSummaryFragment,
   GetProjectExternalFormSubmissionsDocument,
   GetProjectExternalFormSubmissionsQuery,
   GetProjectExternalFormSubmissionsQueryVariables,
@@ -31,12 +28,8 @@ import {
   UpdateExternalFormSubmissionDocument,
   UpdateExternalFormSubmissionMutation,
   UpdateExternalFormSubmissionMutationVariables,
-  useGetExternalFormDefinitionQuery,
+  useGetExternalFormSubmissionQuery,
 } from '@/types/gqlTypes';
-
-export type ExternalFormSubmissionFields = NonNullable<
-  GetProjectExternalFormSubmissionsQuery['project']
->['externalFormSubmissions']['nodes'][number];
 
 const ProjectExternalSubmissionsTable = ({
   projectId,
@@ -45,19 +38,12 @@ const ProjectExternalSubmissionsTable = ({
   projectId: string;
   formDefinitionIdentifier: string;
 }) => {
-  const { data, loading, error } = useGetExternalFormDefinitionQuery({
-    variables: { formDefinitionIdentifier: formDefinitionIdentifier },
-    skip: !formDefinitionIdentifier,
-  });
-  const definition = data?.externalFormDefinition;
-
-  const getColumnDefs = useCallback((rows: ExternalFormSubmissionFields[]) => {
-    const customColumns = getCustomDataElementColumns(rows);
+  const getColumnDefs = useCallback(() => {
     return [
       {
         header: 'Status',
         linkTreatment: false,
-        render: (s: ExternalFormSubmissionFieldsFragment) => {
+        render: (s: ExternalFormSubmissionSummaryFragment) => {
           const isNew = s.status === ExternalFormSubmissionStatus.New;
           return (
             <>
@@ -84,29 +70,41 @@ const ProjectExternalSubmissionsTable = ({
       {
         header: 'Date Submitted',
         linkTreatment: false,
-        render: (s: ExternalFormSubmissionFieldsFragment) =>
+        render: (s: ExternalFormSubmissionSummaryFragment) =>
           parseAndFormatDateTime(s.submittedAt),
       },
-      ...customColumns,
     ];
   }, []);
 
-  const [selected, setSelected] =
-    useState<ExternalFormSubmissionFieldsFragment | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const {
+    data: { externalFormSubmission: selected } = {},
+    error,
+    loading,
+  } = useGetExternalFormSubmissionQuery({
+    variables: {
+      id: selectedId || '',
+    },
+    skip: !selectedId,
+  });
 
   const submissionValues = useMemo(() => {
-    if (!selected || !definition) return {};
-    const itemMap = getItemMap(definition.definition, true);
+    if (!selected) return {};
+    const itemMap = getItemMap(selected.definition.definition, true);
     const submissionValues: FormValues = {};
-    Object.keys(itemMap).forEach((key) => {
-      const item = itemMap[key];
-      const customFieldKey = item.mapping?.customFieldKey;
-      if (!customFieldKey) return;
+    Object.entries(itemMap).forEach(([key, item]) => {
+      const { customFieldKey, recordType, fieldName } = item.mapping || {};
+      const recordAttrKey =
+        recordType && fieldName
+          ? `${HmisEnums.RelatedRecordType[recordType]}.${fieldName}`
+          : '';
 
-      const value = customDataElementValueForKey(
-        customFieldKey,
-        selected.customDataElements
-      );
+      if (!customFieldKey && !recordAttrKey) return;
+
+      const value = customFieldKey
+        ? selected.values[customFieldKey]
+        : selected.values[recordAttrKey];
 
       // if item has a picklist, convert value to PickListOption(s) so we can display the readable label
       if (item.pickListOptions) {
@@ -120,7 +118,21 @@ const ProjectExternalSubmissionsTable = ({
       }
     });
     return submissionValues;
-  }, [selected, definition]);
+  }, [selected]);
+
+  const valuesViewComponent = useMemo(() => {
+    return (
+      <Card sx={{ p: 2 }}>
+        {loading && <Loading />}
+        {selected && (
+          <DynamicView
+            values={submissionValues}
+            definition={selected.definition.definition}
+          />
+        )}
+      </Card>
+    );
+  }, [loading, selected, submissionValues]);
 
   const { openFormDialog, renderFormDialog, closeDialog } = useStaticFormDialog<
     UpdateExternalFormSubmissionMutation,
@@ -131,7 +143,8 @@ const ProjectExternalSubmissionsTable = ({
     getErrors: (data) => data.updateExternalFormSubmission?.errors || [],
     getVariables: (values) => {
       return {
-        id: selected?.id || '', // selected should never be undefined when dialog is open
+        id: selectedId || '', // selected should never be undefined when dialog is open
+        projectId: projectId,
         input: {
           notes: values.notes,
           status: values.reviewed
@@ -150,18 +163,11 @@ const ProjectExternalSubmissionsTable = ({
       : {},
     onCompleted: (data) => {
       if (!data?.updateExternalFormSubmission?.errors?.length) {
-        setSelected(null);
+        setSelectedId(null);
       }
     },
-    onClose: () => setSelected(null),
-    beforeFormComponent: selected && definition && (
-      <Card sx={{ p: 2 }}>
-        <DynamicView
-          values={submissionValues}
-          definition={definition.definition}
-        />
-      </Card>
-    ),
+    onClose: () => setSelectedId(null),
+    beforeFormComponent: valuesViewComponent,
   });
 
   const deleteButton = useMemo(
@@ -179,7 +185,7 @@ const ProjectExternalSubmissionsTable = ({
             cache.evict({
               id: `ExternalFormSubmission:${selected.id}`,
             });
-            setSelected(null);
+            setSelectedId(null);
             closeDialog();
           }}
           onlyIcon
@@ -192,7 +198,6 @@ const ProjectExternalSubmissionsTable = ({
     type: 'ExternalFormSubmissionFilterOptions',
   });
 
-  if (loading) return <Loading />;
   if (error) throw error;
 
   return (
@@ -200,7 +205,7 @@ const ProjectExternalSubmissionsTable = ({
       <GenericTableWithData<
         GetProjectExternalFormSubmissionsQuery,
         GetProjectExternalFormSubmissionsQueryVariables,
-        ExternalFormSubmissionFields,
+        ExternalFormSubmissionSummaryFragment,
         ExternalFormSubmissionFilterOptions
       >
         queryVariables={{
@@ -215,7 +220,7 @@ const ProjectExternalSubmissionsTable = ({
         paginationItemName='submission'
         filters={filters}
         handleRowClick={(row) => {
-          setSelected(row);
+          setSelectedId(row.id);
           openFormDialog();
         }}
       />

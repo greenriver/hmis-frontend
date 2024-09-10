@@ -3072,6 +3072,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
+      { name: 'values', type: { kind: 'SCALAR', name: 'JSON', ofType: null } },
     ],
   },
   {
