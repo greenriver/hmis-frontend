@@ -1,13 +1,15 @@
-import { Button } from '@mui/material';
+import { Alert, Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import EditIconButton from '@/components/elements/EditIconButton';
 import PageTitle from '@/components/layout/PageTitle';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import {
@@ -50,15 +52,23 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
       }),
     });
 
+  const isFirstDraft = formDefinition.version === '0';
+
   const onSuccessfulDelete = useCallback(() => {
     // evict identifier so status updates
     cache.evict({ id: `FormIdentifier:${formDefinition.identifier}` });
-    navigate(
-      generatePath(AdminDashboardRoutes.VIEW_FORM, {
-        identifier: formDefinition.identifier,
-      })
-    );
-  }, [navigate, formDefinition.identifier]);
+    if (isFirstDraft) {
+      // If this is the first draft (aka only version of this identifier),
+      // it's been deleted entirely, so navigate back to the forms list
+      navigate(generatePath(AdminDashboardRoutes.FORMS));
+    } else {
+      navigate(
+        generatePath(AdminDashboardRoutes.VIEW_FORM, {
+          identifier: formDefinition.identifier,
+        })
+      );
+    }
+  }, [navigate, formDefinition.identifier, isFirstDraft]);
 
   return (
     <>
@@ -82,6 +92,17 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
         />
 
         <Stack direction='row' spacing={4} alignItems='center'>
+          <RootPermissionsFilter permissions='canAdministrateConfig'>
+            <ButtonLink
+              to={generatePath(AdminDashboardRoutes.JSON_EDIT_FORM, {
+                identifier: formDefinition.identifier,
+                formId: formDefinition.id,
+              })}
+              variant='text'
+            >
+              Edit JSON
+            </ButtonLink>
+          </RootPermissionsFilter>
           <Button
             variant='text'
             onClick={onClickPreview}
@@ -98,6 +119,20 @@ const FormBuilderHeader: React.FC<FormEditorHeaderProps> = ({
             idPath='deleteFormDefinition.formDefinition.id'
             recordName='draft'
             onSuccess={onSuccessfulDelete}
+            confirmationDialogContent={
+              <Stack gap={2}>
+                <Typography variant='body1'>
+                  Are you sure you want to delete this draft?
+                  <br />
+                  This action cannot be undone.
+                </Typography>
+                {isFirstDraft && (
+                  <Alert severity='error'>
+                    Deleting this draft will delete the entire form.
+                  </Alert>
+                )}
+              </Stack>
+            }
             onlyIcon
           ></DeleteMutationButton>
         </Stack>

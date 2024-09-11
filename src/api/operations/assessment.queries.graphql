@@ -1,6 +1,14 @@
 query GetAssessment($id: ID!) {
   assessment(id: $id) {
     ...FullAssessment
+    # Definition to use for viewing/editing the assessment
+    definition {
+      ...FormDefinitionFields
+    }
+    # Definition to use for editing. Only present if the previous definition is retired.
+    upgradedDefinitionForEditing {
+      ...FormDefinitionFields
+    }
   }
 }
 

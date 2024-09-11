@@ -1,8 +1,8 @@
 import { Stack, Typography } from '@mui/material';
 import Box from '@mui/system/Box/Box';
 import { useMemo, useState } from 'react';
-import { Controller, useWatch } from 'react-hook-form';
-import { FormItemControl } from '../types';
+import { Controller, UseFormSetValue, useWatch } from 'react-hook-form';
+import { FormItemControl, FormItemState } from '../types';
 import ManageEnableWhen from './ManageEnableWhen';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
@@ -19,6 +19,7 @@ interface AutofillValueCardProps {
   itemMap: ItemMap;
   title: string;
   itemType: ItemType; // will be used to determine value type
+  setValue: UseFormSetValue<FormItemState>;
 }
 
 // Card for managing a single AutofillValue
@@ -28,6 +29,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
   itemMap,
   title,
   itemType,
+  setValue,
 }) => {
   //TODO: also accept sum_questions for autofilling numeric fields using a sum of other questions
   const formulaValue = useWatch({
@@ -139,6 +141,7 @@ const AutofillValueCard: React.FC<AutofillValueCardProps> = ({
           enableBehaviorPath={`autofillValues.${index}.autofillBehavior`}
           control={control}
           itemMap={itemMap}
+          setValue={setValue}
         />
       </Stack>
     </>

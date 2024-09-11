@@ -45,11 +45,11 @@ const AdminReferralPostingForm: React.FC<Props> = ({
     onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
   });
   const handleSubmit: DynamicFormOnSubmit = useCallback(
-    ({ values }) => {
+    ({ rawValues }) => {
       setErrors(emptyErrorState);
       const input = transformSubmitValues({
         definition: formDefinition,
-        values,
+        values: rawValues,
         keyByFieldName: true,
       }) as ReferralPostingInput;
 

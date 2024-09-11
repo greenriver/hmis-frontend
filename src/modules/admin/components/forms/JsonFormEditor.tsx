@@ -317,7 +317,7 @@ const JsonFormEditor: React.FC<FormEditorProps> = ({
               effectiveLocalConstants,
             })}
             definition={currentDefinition}
-            onSubmit={({ values }) => setFormSubmitResult(values)}
+            onSubmit={({ rawValues }) => setFormSubmitResult(rawValues)}
             errors={{ errors: [], warnings: [] }}
             localConstants={effectiveLocalConstants}
             initialValues={effectiveInitialValues}

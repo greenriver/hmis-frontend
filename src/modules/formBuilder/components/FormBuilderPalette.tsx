@@ -1,4 +1,4 @@
-import { Drawer, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Paper, Tooltip } from '@mui/material';
 import { Stack } from '@mui/system';
 import {
   FormBooleanIcon,
@@ -67,7 +67,7 @@ export const FORM_ITEM_PALETTE = {
   [ItemType.Boolean]: {
     itemType: ItemType.Boolean,
     IconClass: FormBooleanIcon,
-    displayName: 'CheckBox',
+    displayName: 'Checkbox',
   },
   [ItemType.Choice]: {
     itemType: ItemType.Choice,
@@ -101,7 +101,11 @@ const PaletteButton: React.FC<
 > = ({ displayName, IconClass, onClick }) => {
   return (
     <Tooltip placement='left' title={displayName}>
-      <IconButton size='small' onClick={onClick}>
+      <IconButton
+        size='small'
+        onClick={onClick}
+        aria-label={`Add ${displayName} item`}
+      >
         <IconClass />
       </IconButton>
     </Tooltip>
@@ -115,28 +119,33 @@ interface FormBuilderPaletteType {
 const FormBuilderPalette: React.FC<FormBuilderPaletteType> = ({
   onItemClick,
 }) => {
+  const top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT;
+
   return (
-    <Drawer
-      variant='persistent'
-      open={true}
+    <Paper
+      square
       sx={{
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          height: `calc(100vh - ${
-            STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT
-          }px)`,
-          position: 'static',
-          borderTop: 'none',
-          boxSizing: 'border-box',
-          p: 1,
-          pt: 2,
-        },
+        height: `calc(100vh - ${top}px)`,
+        position: 'sticky',
+        left: 'auto',
+        top: top,
+        borderTop: 0,
+        borderRight: 0,
+        boxSizing: 'border-box',
+        p: 1,
+        pt: 2,
       }}
     >
       <Stack gap={1}>
         {Object.entries(FORM_ITEM_PALETTE)
-          // TODO - Object is a special case, remove it from the list for now until we support it
-          .filter(([key]) => key !== ItemType.Object)
+          // Remove Image, File, and Object from the list for now until we add support
+          // https://github.com/open-path/Green-River/issues/6401
+          .filter(
+            ([key]) =>
+              ![ItemType.Object, ItemType.Image, ItemType.File].includes(
+                key as ItemType
+              )
+          )
           .map(([key, paletteItem]) => (
             <PaletteButton
               key={key}
@@ -145,7 +154,7 @@ const FormBuilderPalette: React.FC<FormBuilderPaletteType> = ({
             />
           ))}
       </Stack>
-    </Drawer>
+    </Paper>
   );
 };
 

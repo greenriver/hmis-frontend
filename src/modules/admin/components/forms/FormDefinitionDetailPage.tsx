@@ -1,5 +1,6 @@
-import { Chip, Grid, Stack, Typography } from '@mui/material';
+import { Chip, Divider, Grid, Stack, Typography } from '@mui/material';
 
+import React from 'react';
 import { generatePath } from 'react-router-dom';
 import FormRulesCard from '../formRules/FormRulesCard';
 import FormVersionTable from './FormVersionTable';
@@ -12,25 +13,27 @@ import PageTitle from '@/components/layout/PageTitle';
 
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import EditFormButton, {
-  FormEditorType,
-} from '@/modules/admin/components/forms/EditFormButton';
+import EditFormButton from '@/modules/admin/components/forms/EditFormButton';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import {
+  formatRelativeDateTime,
+  parseHmisDateString,
+} from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { AdminDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  FormIdentifierDetailsFragment,
   FormStatus,
   useGetFormIdentifierDetailsQuery,
-  FormIdentifierDetailsFragment,
 } from '@/types/gqlTypes';
 
 const FormStatusText: React.FC<{
-  identifer: FormIdentifierDetailsFragment;
-}> = ({ identifer }) => {
-  const isPublished = identifer.displayVersion.status === FormStatus.Published;
-  const hasDraft = !!identifer.draftVersion;
-  const isRetired = identifer.displayVersion.status === FormStatus.Retired;
+  identifier: FormIdentifierDetailsFragment;
+}> = ({ identifier }) => {
+  const isPublished = identifier.displayVersion.status === FormStatus.Published;
+  const hasDraft = !!identifier.draftVersion;
+  const isRetired = identifier.displayVersion.status === FormStatus.Retired;
 
   if (isPublished && hasDraft) {
     // Form is currently published, but there is also a Draft
@@ -80,7 +83,20 @@ const FormDefinitionDetailPage = () => {
 
   const isPublished =
     formIdentifier.displayVersion.status === FormStatus.Published;
+  const publishedBy = isPublished
+    ? formIdentifier.displayVersion.updatedBy
+    : undefined;
+  const publishedOn = isPublished
+    ? parseHmisDateString(formIdentifier.displayVersion.dateUpdated)
+    : undefined;
+
   const hasDraft = !!formIdentifier.draftVersion;
+  const draftUpdatedBy = hasDraft
+    ? formIdentifier.draftVersion?.updatedBy
+    : undefined;
+  const draftUpdatedOn = hasDraft
+    ? parseHmisDateString(formIdentifier.draftVersion?.dateUpdated)
+    : undefined;
 
   return (
     <>
@@ -109,7 +125,7 @@ const FormDefinitionDetailPage = () => {
                   />
                 </CommonLabeledTextBlock>
                 <CommonLabeledTextBlock title='Status'>
-                  <FormStatusText identifer={formIdentifier} />
+                  <FormStatusText identifier={formIdentifier} />
                 </CommonLabeledTextBlock>
               </Stack>
             </CommonCard>
@@ -117,44 +133,56 @@ const FormDefinitionDetailPage = () => {
           <Grid item xs={12} md={4}>
             <CommonCard title='Actions' titleComponent='h5'>
               <Stack gap={1.5}>
-                <RootPermissionsFilter permissions='canManageForms'>
-                  <ButtonLink
-                    to={generatePath(AdminDashboardRoutes.PREVIEW_FORM_DRAFT, {
-                      identifier: formIdentifier.identifier,
-                      formId: formIdentifier.draftVersion?.id || '',
-                    })}
-                    variant='contained'
-                    fullWidth
-                    disabled={!hasDraft}
-                  >
-                    Preview / Publish Draft
-                  </ButtonLink>
-                  <EditFormButton
-                    formIdentifier={formIdentifier}
-                    text={hasDraft ? 'Edit Draft' : 'New Draft'}
-                    editorType={FormEditorType.FormBuilder}
-                    variant='outlined'
-                  />
-                  <RootPermissionsFilter permissions='canAdministrateConfig'>
-                    <EditFormButton
-                      formIdentifier={formIdentifier}
-                      text={hasDraft ? 'Edit Draft (JSON)' : 'New Draft (JSON)'}
-                      editorType={FormEditorType.JsonEditor}
-                      variant='outlined'
-                    />
-                  </RootPermissionsFilter>
-                </RootPermissionsFilter>
                 <ButtonLink
                   to={generatePath(AdminDashboardRoutes.PREVIEW_FORM, {
                     identifier: formIdentifier.identifier,
                     formId: formIdentifier.displayVersion.id,
                   })}
-                  variant='outlined'
+                  variant={hasDraft ? 'outlined' : 'contained'}
                   fullWidth
                   disabled={!isPublished}
                 >
-                  Preview Published
+                  View Published Form
                 </ButtonLink>
+                {isPublished && (
+                  <Typography variant='caption'>
+                    Published{' '}
+                    {publishedOn ? formatRelativeDateTime(publishedOn) : ''}{' '}
+                    {publishedBy && `by ${publishedBy.name}`}
+                  </Typography>
+                )}
+                <RootPermissionsFilter permissions='canManageForms'>
+                  <Divider />
+                  <EditFormButton
+                    formIdentifier={formIdentifier}
+                    text={'Edit Draft'}
+                    variant='outlined'
+                  />
+                  {hasDraft && (
+                    <>
+                      <ButtonLink
+                        to={generatePath(
+                          AdminDashboardRoutes.PREVIEW_FORM_DRAFT,
+                          {
+                            identifier: formIdentifier.identifier,
+                            formId: formIdentifier.draftVersion?.id || '',
+                          }
+                        )}
+                        variant='contained'
+                        fullWidth
+                      >
+                        Preview / Publish Draft
+                      </ButtonLink>
+                      <Typography variant='caption'>
+                        Last edited{' '}
+                        {draftUpdatedOn
+                          ? formatRelativeDateTime(draftUpdatedOn)
+                          : ''}{' '}
+                        {draftUpdatedBy && `by ${draftUpdatedBy.name}`}
+                      </Typography>
+                    </>
+                  )}
+                </RootPermissionsFilter>
               </Stack>
             </CommonCard>
           </Grid>

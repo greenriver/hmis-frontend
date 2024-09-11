@@ -125,6 +125,10 @@ fragment FormDefinitionMetadata on FormDefinition {
   cacheKey
   identifier
   status
+  updatedBy {
+    name
+  }
+  dateUpdated
 }
 
 # FormDefinition to use for rendering a dynamic form
@@ -146,6 +150,7 @@ fragment FormDefinitionFieldsForJsonEditor on FormDefinition {
 # fields like form rules that are not used for form rendering
 fragment FormDefinitionFieldsForEditor on FormDefinition {
   ...FormDefinitionFields
+  version
 }
 
 fragment FormIdentifierDetails on FormIdentifier {
