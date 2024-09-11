@@ -3869,6 +3869,7 @@ export enum ItemType {
   Date = 'DATE',
   Display = 'DISPLAY',
   File = 'FILE',
+  Geolocation = 'GEOLOCATION',
   Group = 'GROUP',
   Image = 'IMAGE',
   Integer = 'INTEGER',
@@ -6450,6 +6451,8 @@ export enum RelatedRecordType {
   Event = 'EVENT',
   /** Exit */
   Exit = 'EXIT',
+  /** Geolocation */
+  Geolocation = 'GEOLOCATION',
   /** HealthAndDv */
   HealthAndDv = 'HEALTH_AND_DV',
   /** IncomeBenefit */
