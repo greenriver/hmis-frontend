@@ -85,6 +85,9 @@ export default defineConfig(({ command, mode }) => {
       // Drop log statements when minifying
       pure: ['console.log', 'console.info', 'console.debug'],
     },
+    test: {
+      watch: false,
+    },
     build: {
       rollupOptions: {
         plugins: [
