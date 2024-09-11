@@ -1146,25 +1146,21 @@ export const transformSubmitValues = ({
 }: TransformSubmitValuesParams) => {
   const allLinkIds = new Set();
   // Recursive helper for traversing the FormDefinition
-  function rescursiveFillMap(
-    items: FormItem[],
-    result: Record<string, any>,
-    parentRecordType?: string
-  ) {
+  function rescursiveFillMap(items: FormItem[], result: Record<string, any>) {
     items.forEach((item: FormItem) => {
       allLinkIds.add(item.linkId);
 
       const mapping = item.mapping || {};
       const recordType = mapping.recordType
         ? HmisEnums.RelatedRecordType[mapping.recordType]
-        : parentRecordType;
+        : undefined;
 
       if (mapping.recordType && !recordType) {
         throw Error(`Unrecognized record type in form definition: ${mapping}`);
       }
 
       if (Array.isArray(item.item)) {
-        rescursiveFillMap(item.item, result, recordType);
+        rescursiveFillMap(item.item, result);
       }
       const fieldName = mapping.fieldName || mapping.customFieldKey;
       if (!fieldName) return; // If there is no field name, it can't be extracted so don't bother sending it
