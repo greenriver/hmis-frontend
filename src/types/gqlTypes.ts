@@ -3043,6 +3043,7 @@ export type FormItem = {
   briefText?: Maybe<Scalars['String']['output']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
+  /** Custom rules that apply to this item */
   customRule?: Maybe<Scalars['JSON']['output']>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
@@ -3077,6 +3078,7 @@ export type FormItem = {
   repeats?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the item must be included in data results */
   required?: Maybe<Scalars['Boolean']['output']>;
+  /** Rules that apply to this item */
   rule?: Maybe<Scalars['JSON']['output']>;
   /**
    * Whether to apply this field to all clients or a single client when bulk creating
