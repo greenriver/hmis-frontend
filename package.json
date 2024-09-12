@@ -43,10 +43,11 @@
     ]
   },
   "resolutions": {
+    "jose": "^4.15.5",
+    "ws": "^8.17.1",
     "dset": "^3.1.4",
     "express": "^4.20.0",
-    "jose": "^4.15.5",
-    "ws": "^8.17.1"
+    "micromatch": "^4.0.8"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
@@ -125,8 +126,8 @@
     "@storybook/test": "^8.2.9",
     "@types/lodash-es": "^4.17.12",
     "@types/rails__activestorage": "^7.0.1",
-    "@typescript-eslint/eslint-plugin": "^7.17.0",
-    "@typescript-eslint/parser": "^7.17.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.46.0",
     "eslint-config-airbnb": "^19.0.4",
