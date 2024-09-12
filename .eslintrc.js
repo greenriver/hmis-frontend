@@ -11,8 +11,9 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'prettier',
     'plugin:storybook/recommended',
+    'plugin:vitest/recommended',
   ],
-  plugins: ['react', '@typescript-eslint', 'jest'],
+  plugins: ['react', '@typescript-eslint'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -22,14 +23,6 @@ module.exports = {
     sourceType: 'module',
   },
   overrides: [
-    {
-      files: ['**/*.test.ts', '**/*.test.tx'],
-      env: {
-        'jest/globals': true,
-      },
-      plugins: ['jest'],
-      extends: ['plugin:jest/recommended'],
-    },
     {
       files: ['*.ts', '*.tsx'],
       extends: [
@@ -120,5 +113,5 @@ module.exports = {
     ],
     eqeqeq: 'error',
   },
-  ignorePatterns: ['jest.config.ts', 'gqltypes.ts'],
+  ignorePatterns: ['gqltypes.ts'],
 };
