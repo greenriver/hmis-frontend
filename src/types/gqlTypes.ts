@@ -2240,6 +2240,8 @@ export type EnableWhen = {
   answerCode?: Maybe<Scalars['String']['output']>;
   /** If question is choice type, and operator is IN, values for comparison */
   answerCodes?: Maybe<Array<Scalars['String']['output']>>;
+  /** If question is date type, value for comparison */
+  answerDate?: Maybe<Scalars['ISO8601Date']['output']>;
   /** If question is choice type and has grouped options, value for comparison */
   answerGroupCode?: Maybe<Scalars['String']['output']>;
   /** If question is numeric, value for comparison */
@@ -3041,6 +3043,7 @@ export type FormItem = {
   briefText?: Maybe<Scalars['String']['output']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
+  customRule?: Maybe<Scalars['JSON']['output']>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
@@ -3074,6 +3077,7 @@ export type FormItem = {
   repeats?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the item must be included in data results */
   required?: Maybe<Scalars['Boolean']['output']>;
+  rule?: Maybe<Scalars['JSON']['output']>;
   /**
    * Whether to apply this field to all clients or a single client when bulk creating
    * @deprecated from old bulk services implementation, no longer supported
@@ -8884,970 +8888,6 @@ export type FullAssessmentFragment = {
   dateUpdated?: string | null;
   dateDeleted?: string | null;
   role: AssessmentRole;
-  definition: {
-    __typename?: 'FormDefinition';
-    id: string;
-    cacheKey: string;
-    title: string;
-    role: FormRole;
-    identifier: string;
-    status: FormStatus;
-    definition: {
-      __typename?: 'FormDefinitionJson';
-      item: Array<{
-        __typename: 'FormItem';
-        linkId: string;
-        type: ItemType;
-        component?: Component | null;
-        prefix?: string | null;
-        text?: string | null;
-        briefText?: string | null;
-        readonlyText?: string | null;
-        helperText?: string | null;
-        required?: boolean | null;
-        warnIfEmpty?: boolean | null;
-        hidden?: boolean | null;
-        readOnly?: boolean | null;
-        repeats?: boolean | null;
-        pickListReference?: string | null;
-        size?: InputSize | null;
-        assessmentDate?: boolean | null;
-        prefill?: boolean | null;
-        dataCollectedAbout?: DataCollectedAbout | null;
-        disabledDisplay?: DisabledDisplay | null;
-        enableBehavior?: EnableBehavior | null;
-        item?: Array<{
-          __typename: 'FormItem';
-          linkId: string;
-          type: ItemType;
-          component?: Component | null;
-          prefix?: string | null;
-          text?: string | null;
-          briefText?: string | null;
-          readonlyText?: string | null;
-          helperText?: string | null;
-          required?: boolean | null;
-          warnIfEmpty?: boolean | null;
-          hidden?: boolean | null;
-          readOnly?: boolean | null;
-          repeats?: boolean | null;
-          pickListReference?: string | null;
-          size?: InputSize | null;
-          assessmentDate?: boolean | null;
-          prefill?: boolean | null;
-          dataCollectedAbout?: DataCollectedAbout | null;
-          disabledDisplay?: DisabledDisplay | null;
-          enableBehavior?: EnableBehavior | null;
-          item?: Array<{
-            __typename: 'FormItem';
-            linkId: string;
-            type: ItemType;
-            component?: Component | null;
-            prefix?: string | null;
-            text?: string | null;
-            briefText?: string | null;
-            readonlyText?: string | null;
-            helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
-            pickListReference?: string | null;
-            size?: InputSize | null;
-            assessmentDate?: boolean | null;
-            prefill?: boolean | null;
-            dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
-            item?: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              component?: Component | null;
-              prefix?: string | null;
-              text?: string | null;
-              briefText?: string | null;
-              readonlyText?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              pickListReference?: string | null;
-              size?: InputSize | null;
-              assessmentDate?: boolean | null;
-              prefill?: boolean | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                component?: Component | null;
-                prefix?: string | null;
-                text?: string | null;
-                briefText?: string | null;
-                readonlyText?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                pickListReference?: string | null;
-                size?: InputSize | null;
-                assessmentDate?: boolean | null;
-                prefill?: boolean | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
-                mapping?: {
-                  __typename?: 'FieldMapping';
-                  recordType?: RelatedRecordType | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                } | null;
-                bounds?: Array<{
-                  __typename?: 'ValueBound';
-                  id: string;
-                  severity: ValidationSeverity;
-                  type: BoundType;
-                  question?: string | null;
-                  valueNumber?: number | null;
-                  valueDate?: string | null;
-                  valueLocalConstant?: string | null;
-                  offset?: number | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                  helperText?: string | null;
-                  numericValue?: number | null;
-                }> | null;
-                initial?: Array<{
-                  __typename?: 'InitialValue';
-                  valueCode?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  valueLocalConstant?: string | null;
-                  initialBehavior: InitialBehavior;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }> | null;
-                autofillValues?: Array<{
-                  __typename?: 'AutofillValue';
-                  valueCode?: string | null;
-                  valueQuestion?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  sumQuestions?: Array<string> | null;
-                  formula?: string | null;
-                  autofillBehavior: EnableBehavior;
-                  autofillReadonly?: boolean | null;
-                  autofillWhen: Array<{
-                    __typename?: 'EnableWhen';
-                    question?: string | null;
-                    localConstant?: string | null;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    compareQuestion?: string | null;
-                  }>;
-                }> | null;
-              }> | null;
-              mapping?: {
-                __typename?: 'FieldMapping';
-                recordType?: RelatedRecordType | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-              } | null;
-              bounds?: Array<{
-                __typename?: 'ValueBound';
-                id: string;
-                severity: ValidationSeverity;
-                type: BoundType;
-                question?: string | null;
-                valueNumber?: number | null;
-                valueDate?: string | null;
-                valueLocalConstant?: string | null;
-                offset?: number | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-                helperText?: string | null;
-                numericValue?: number | null;
-              }> | null;
-              initial?: Array<{
-                __typename?: 'InitialValue';
-                valueCode?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                valueLocalConstant?: string | null;
-                initialBehavior: InitialBehavior;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                compareQuestion?: string | null;
-              }> | null;
-              autofillValues?: Array<{
-                __typename?: 'AutofillValue';
-                valueCode?: string | null;
-                valueQuestion?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                sumQuestions?: Array<string> | null;
-                formula?: string | null;
-                autofillBehavior: EnableBehavior;
-                autofillReadonly?: boolean | null;
-                autofillWhen: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }>;
-              }> | null;
-            }> | null;
-            mapping?: {
-              __typename?: 'FieldMapping';
-              recordType?: RelatedRecordType | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-            } | null;
-            bounds?: Array<{
-              __typename?: 'ValueBound';
-              id: string;
-              severity: ValidationSeverity;
-              type: BoundType;
-              question?: string | null;
-              valueNumber?: number | null;
-              valueDate?: string | null;
-              valueLocalConstant?: string | null;
-              offset?: number | null;
-            }> | null;
-            pickListOptions?: Array<{
-              __typename?: 'PickListOption';
-              code: string;
-              label?: string | null;
-              secondaryLabel?: string | null;
-              groupLabel?: string | null;
-              groupCode?: string | null;
-              initialSelected?: boolean | null;
-              helperText?: string | null;
-              numericValue?: number | null;
-            }> | null;
-            initial?: Array<{
-              __typename?: 'InitialValue';
-              valueCode?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              valueLocalConstant?: string | null;
-              initialBehavior: InitialBehavior;
-            }> | null;
-            enableWhen?: Array<{
-              __typename?: 'EnableWhen';
-              question?: string | null;
-              localConstant?: string | null;
-              operator: EnableOperator;
-              answerCode?: string | null;
-              answerCodes?: Array<string> | null;
-              answerNumber?: number | null;
-              answerBoolean?: boolean | null;
-              answerGroupCode?: string | null;
-              compareQuestion?: string | null;
-            }> | null;
-            autofillValues?: Array<{
-              __typename?: 'AutofillValue';
-              valueCode?: string | null;
-              valueQuestion?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              sumQuestions?: Array<string> | null;
-              formula?: string | null;
-              autofillBehavior: EnableBehavior;
-              autofillReadonly?: boolean | null;
-              autofillWhen: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                compareQuestion?: string | null;
-              }>;
-            }> | null;
-          }> | null;
-          mapping?: {
-            __typename?: 'FieldMapping';
-            recordType?: RelatedRecordType | null;
-            fieldName?: string | null;
-            customFieldKey?: string | null;
-          } | null;
-          bounds?: Array<{
-            __typename?: 'ValueBound';
-            id: string;
-            severity: ValidationSeverity;
-            type: BoundType;
-            question?: string | null;
-            valueNumber?: number | null;
-            valueDate?: string | null;
-            valueLocalConstant?: string | null;
-            offset?: number | null;
-          }> | null;
-          pickListOptions?: Array<{
-            __typename?: 'PickListOption';
-            code: string;
-            label?: string | null;
-            secondaryLabel?: string | null;
-            groupLabel?: string | null;
-            groupCode?: string | null;
-            initialSelected?: boolean | null;
-            helperText?: string | null;
-            numericValue?: number | null;
-          }> | null;
-          initial?: Array<{
-            __typename?: 'InitialValue';
-            valueCode?: string | null;
-            valueBoolean?: boolean | null;
-            valueNumber?: number | null;
-            valueLocalConstant?: string | null;
-            initialBehavior: InitialBehavior;
-          }> | null;
-          enableWhen?: Array<{
-            __typename?: 'EnableWhen';
-            question?: string | null;
-            localConstant?: string | null;
-            operator: EnableOperator;
-            answerCode?: string | null;
-            answerCodes?: Array<string> | null;
-            answerNumber?: number | null;
-            answerBoolean?: boolean | null;
-            answerGroupCode?: string | null;
-            compareQuestion?: string | null;
-          }> | null;
-          autofillValues?: Array<{
-            __typename?: 'AutofillValue';
-            valueCode?: string | null;
-            valueQuestion?: string | null;
-            valueBoolean?: boolean | null;
-            valueNumber?: number | null;
-            sumQuestions?: Array<string> | null;
-            formula?: string | null;
-            autofillBehavior: EnableBehavior;
-            autofillReadonly?: boolean | null;
-            autofillWhen: Array<{
-              __typename?: 'EnableWhen';
-              question?: string | null;
-              localConstant?: string | null;
-              operator: EnableOperator;
-              answerCode?: string | null;
-              answerCodes?: Array<string> | null;
-              answerNumber?: number | null;
-              answerBoolean?: boolean | null;
-              answerGroupCode?: string | null;
-              compareQuestion?: string | null;
-            }>;
-          }> | null;
-        }> | null;
-        mapping?: {
-          __typename?: 'FieldMapping';
-          recordType?: RelatedRecordType | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-        } | null;
-        bounds?: Array<{
-          __typename?: 'ValueBound';
-          id: string;
-          severity: ValidationSeverity;
-          type: BoundType;
-          question?: string | null;
-          valueNumber?: number | null;
-          valueDate?: string | null;
-          valueLocalConstant?: string | null;
-          offset?: number | null;
-        }> | null;
-        pickListOptions?: Array<{
-          __typename?: 'PickListOption';
-          code: string;
-          label?: string | null;
-          secondaryLabel?: string | null;
-          groupLabel?: string | null;
-          groupCode?: string | null;
-          initialSelected?: boolean | null;
-          helperText?: string | null;
-          numericValue?: number | null;
-        }> | null;
-        initial?: Array<{
-          __typename?: 'InitialValue';
-          valueCode?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          valueLocalConstant?: string | null;
-          initialBehavior: InitialBehavior;
-        }> | null;
-        enableWhen?: Array<{
-          __typename?: 'EnableWhen';
-          question?: string | null;
-          localConstant?: string | null;
-          operator: EnableOperator;
-          answerCode?: string | null;
-          answerCodes?: Array<string> | null;
-          answerNumber?: number | null;
-          answerBoolean?: boolean | null;
-          answerGroupCode?: string | null;
-          compareQuestion?: string | null;
-        }> | null;
-        autofillValues?: Array<{
-          __typename?: 'AutofillValue';
-          valueCode?: string | null;
-          valueQuestion?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          sumQuestions?: Array<string> | null;
-          formula?: string | null;
-          autofillBehavior: EnableBehavior;
-          autofillReadonly?: boolean | null;
-          autofillWhen: Array<{
-            __typename?: 'EnableWhen';
-            question?: string | null;
-            localConstant?: string | null;
-            operator: EnableOperator;
-            answerCode?: string | null;
-            answerCodes?: Array<string> | null;
-            answerNumber?: number | null;
-            answerBoolean?: boolean | null;
-            answerGroupCode?: string | null;
-            compareQuestion?: string | null;
-          }>;
-        }> | null;
-      }>;
-    };
-  };
-  upgradedDefinitionForEditing?: {
-    __typename?: 'FormDefinition';
-    id: string;
-    role: FormRole;
-    title: string;
-    cacheKey: string;
-    identifier: string;
-    status: FormStatus;
-    definition: {
-      __typename?: 'FormDefinitionJson';
-      item: Array<{
-        __typename: 'FormItem';
-        linkId: string;
-        type: ItemType;
-        component?: Component | null;
-        prefix?: string | null;
-        text?: string | null;
-        briefText?: string | null;
-        readonlyText?: string | null;
-        helperText?: string | null;
-        required?: boolean | null;
-        warnIfEmpty?: boolean | null;
-        hidden?: boolean | null;
-        readOnly?: boolean | null;
-        repeats?: boolean | null;
-        pickListReference?: string | null;
-        size?: InputSize | null;
-        assessmentDate?: boolean | null;
-        prefill?: boolean | null;
-        dataCollectedAbout?: DataCollectedAbout | null;
-        disabledDisplay?: DisabledDisplay | null;
-        enableBehavior?: EnableBehavior | null;
-        item?: Array<{
-          __typename: 'FormItem';
-          linkId: string;
-          type: ItemType;
-          component?: Component | null;
-          prefix?: string | null;
-          text?: string | null;
-          briefText?: string | null;
-          readonlyText?: string | null;
-          helperText?: string | null;
-          required?: boolean | null;
-          warnIfEmpty?: boolean | null;
-          hidden?: boolean | null;
-          readOnly?: boolean | null;
-          repeats?: boolean | null;
-          pickListReference?: string | null;
-          size?: InputSize | null;
-          assessmentDate?: boolean | null;
-          prefill?: boolean | null;
-          dataCollectedAbout?: DataCollectedAbout | null;
-          disabledDisplay?: DisabledDisplay | null;
-          enableBehavior?: EnableBehavior | null;
-          item?: Array<{
-            __typename: 'FormItem';
-            linkId: string;
-            type: ItemType;
-            component?: Component | null;
-            prefix?: string | null;
-            text?: string | null;
-            briefText?: string | null;
-            readonlyText?: string | null;
-            helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
-            pickListReference?: string | null;
-            size?: InputSize | null;
-            assessmentDate?: boolean | null;
-            prefill?: boolean | null;
-            dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
-            item?: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              component?: Component | null;
-              prefix?: string | null;
-              text?: string | null;
-              briefText?: string | null;
-              readonlyText?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              pickListReference?: string | null;
-              size?: InputSize | null;
-              assessmentDate?: boolean | null;
-              prefill?: boolean | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                component?: Component | null;
-                prefix?: string | null;
-                text?: string | null;
-                briefText?: string | null;
-                readonlyText?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                pickListReference?: string | null;
-                size?: InputSize | null;
-                assessmentDate?: boolean | null;
-                prefill?: boolean | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
-                mapping?: {
-                  __typename?: 'FieldMapping';
-                  recordType?: RelatedRecordType | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                } | null;
-                bounds?: Array<{
-                  __typename?: 'ValueBound';
-                  id: string;
-                  severity: ValidationSeverity;
-                  type: BoundType;
-                  question?: string | null;
-                  valueNumber?: number | null;
-                  valueDate?: string | null;
-                  valueLocalConstant?: string | null;
-                  offset?: number | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                  helperText?: string | null;
-                  numericValue?: number | null;
-                }> | null;
-                initial?: Array<{
-                  __typename?: 'InitialValue';
-                  valueCode?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  valueLocalConstant?: string | null;
-                  initialBehavior: InitialBehavior;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }> | null;
-                autofillValues?: Array<{
-                  __typename?: 'AutofillValue';
-                  valueCode?: string | null;
-                  valueQuestion?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  sumQuestions?: Array<string> | null;
-                  formula?: string | null;
-                  autofillBehavior: EnableBehavior;
-                  autofillReadonly?: boolean | null;
-                  autofillWhen: Array<{
-                    __typename?: 'EnableWhen';
-                    question?: string | null;
-                    localConstant?: string | null;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    compareQuestion?: string | null;
-                  }>;
-                }> | null;
-              }> | null;
-              mapping?: {
-                __typename?: 'FieldMapping';
-                recordType?: RelatedRecordType | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-              } | null;
-              bounds?: Array<{
-                __typename?: 'ValueBound';
-                id: string;
-                severity: ValidationSeverity;
-                type: BoundType;
-                question?: string | null;
-                valueNumber?: number | null;
-                valueDate?: string | null;
-                valueLocalConstant?: string | null;
-                offset?: number | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-                helperText?: string | null;
-                numericValue?: number | null;
-              }> | null;
-              initial?: Array<{
-                __typename?: 'InitialValue';
-                valueCode?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                valueLocalConstant?: string | null;
-                initialBehavior: InitialBehavior;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                compareQuestion?: string | null;
-              }> | null;
-              autofillValues?: Array<{
-                __typename?: 'AutofillValue';
-                valueCode?: string | null;
-                valueQuestion?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                sumQuestions?: Array<string> | null;
-                formula?: string | null;
-                autofillBehavior: EnableBehavior;
-                autofillReadonly?: boolean | null;
-                autofillWhen: Array<{
-                  __typename?: 'EnableWhen';
-                  question?: string | null;
-                  localConstant?: string | null;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }>;
-              }> | null;
-            }> | null;
-            mapping?: {
-              __typename?: 'FieldMapping';
-              recordType?: RelatedRecordType | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-            } | null;
-            bounds?: Array<{
-              __typename?: 'ValueBound';
-              id: string;
-              severity: ValidationSeverity;
-              type: BoundType;
-              question?: string | null;
-              valueNumber?: number | null;
-              valueDate?: string | null;
-              valueLocalConstant?: string | null;
-              offset?: number | null;
-            }> | null;
-            pickListOptions?: Array<{
-              __typename?: 'PickListOption';
-              code: string;
-              label?: string | null;
-              secondaryLabel?: string | null;
-              groupLabel?: string | null;
-              groupCode?: string | null;
-              initialSelected?: boolean | null;
-              helperText?: string | null;
-              numericValue?: number | null;
-            }> | null;
-            initial?: Array<{
-              __typename?: 'InitialValue';
-              valueCode?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              valueLocalConstant?: string | null;
-              initialBehavior: InitialBehavior;
-            }> | null;
-            enableWhen?: Array<{
-              __typename?: 'EnableWhen';
-              question?: string | null;
-              localConstant?: string | null;
-              operator: EnableOperator;
-              answerCode?: string | null;
-              answerCodes?: Array<string> | null;
-              answerNumber?: number | null;
-              answerBoolean?: boolean | null;
-              answerGroupCode?: string | null;
-              compareQuestion?: string | null;
-            }> | null;
-            autofillValues?: Array<{
-              __typename?: 'AutofillValue';
-              valueCode?: string | null;
-              valueQuestion?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              sumQuestions?: Array<string> | null;
-              formula?: string | null;
-              autofillBehavior: EnableBehavior;
-              autofillReadonly?: boolean | null;
-              autofillWhen: Array<{
-                __typename?: 'EnableWhen';
-                question?: string | null;
-                localConstant?: string | null;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                compareQuestion?: string | null;
-              }>;
-            }> | null;
-          }> | null;
-          mapping?: {
-            __typename?: 'FieldMapping';
-            recordType?: RelatedRecordType | null;
-            fieldName?: string | null;
-            customFieldKey?: string | null;
-          } | null;
-          bounds?: Array<{
-            __typename?: 'ValueBound';
-            id: string;
-            severity: ValidationSeverity;
-            type: BoundType;
-            question?: string | null;
-            valueNumber?: number | null;
-            valueDate?: string | null;
-            valueLocalConstant?: string | null;
-            offset?: number | null;
-          }> | null;
-          pickListOptions?: Array<{
-            __typename?: 'PickListOption';
-            code: string;
-            label?: string | null;
-            secondaryLabel?: string | null;
-            groupLabel?: string | null;
-            groupCode?: string | null;
-            initialSelected?: boolean | null;
-            helperText?: string | null;
-            numericValue?: number | null;
-          }> | null;
-          initial?: Array<{
-            __typename?: 'InitialValue';
-            valueCode?: string | null;
-            valueBoolean?: boolean | null;
-            valueNumber?: number | null;
-            valueLocalConstant?: string | null;
-            initialBehavior: InitialBehavior;
-          }> | null;
-          enableWhen?: Array<{
-            __typename?: 'EnableWhen';
-            question?: string | null;
-            localConstant?: string | null;
-            operator: EnableOperator;
-            answerCode?: string | null;
-            answerCodes?: Array<string> | null;
-            answerNumber?: number | null;
-            answerBoolean?: boolean | null;
-            answerGroupCode?: string | null;
-            compareQuestion?: string | null;
-          }> | null;
-          autofillValues?: Array<{
-            __typename?: 'AutofillValue';
-            valueCode?: string | null;
-            valueQuestion?: string | null;
-            valueBoolean?: boolean | null;
-            valueNumber?: number | null;
-            sumQuestions?: Array<string> | null;
-            formula?: string | null;
-            autofillBehavior: EnableBehavior;
-            autofillReadonly?: boolean | null;
-            autofillWhen: Array<{
-              __typename?: 'EnableWhen';
-              question?: string | null;
-              localConstant?: string | null;
-              operator: EnableOperator;
-              answerCode?: string | null;
-              answerCodes?: Array<string> | null;
-              answerNumber?: number | null;
-              answerBoolean?: boolean | null;
-              answerGroupCode?: string | null;
-              compareQuestion?: string | null;
-            }>;
-          }> | null;
-        }> | null;
-        mapping?: {
-          __typename?: 'FieldMapping';
-          recordType?: RelatedRecordType | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-        } | null;
-        bounds?: Array<{
-          __typename?: 'ValueBound';
-          id: string;
-          severity: ValidationSeverity;
-          type: BoundType;
-          question?: string | null;
-          valueNumber?: number | null;
-          valueDate?: string | null;
-          valueLocalConstant?: string | null;
-          offset?: number | null;
-        }> | null;
-        pickListOptions?: Array<{
-          __typename?: 'PickListOption';
-          code: string;
-          label?: string | null;
-          secondaryLabel?: string | null;
-          groupLabel?: string | null;
-          groupCode?: string | null;
-          initialSelected?: boolean | null;
-          helperText?: string | null;
-          numericValue?: number | null;
-        }> | null;
-        initial?: Array<{
-          __typename?: 'InitialValue';
-          valueCode?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          valueLocalConstant?: string | null;
-          initialBehavior: InitialBehavior;
-        }> | null;
-        enableWhen?: Array<{
-          __typename?: 'EnableWhen';
-          question?: string | null;
-          localConstant?: string | null;
-          operator: EnableOperator;
-          answerCode?: string | null;
-          answerCodes?: Array<string> | null;
-          answerNumber?: number | null;
-          answerBoolean?: boolean | null;
-          answerGroupCode?: string | null;
-          compareQuestion?: string | null;
-        }> | null;
-        autofillValues?: Array<{
-          __typename?: 'AutofillValue';
-          valueCode?: string | null;
-          valueQuestion?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          sumQuestions?: Array<string> | null;
-          formula?: string | null;
-          autofillBehavior: EnableBehavior;
-          autofillReadonly?: boolean | null;
-          autofillWhen: Array<{
-            __typename?: 'EnableWhen';
-            question?: string | null;
-            localConstant?: string | null;
-            operator: EnableOperator;
-            answerCode?: string | null;
-            answerCodes?: Array<string> | null;
-            answerNumber?: number | null;
-            answerBoolean?: boolean | null;
-            answerGroupCode?: string | null;
-            compareQuestion?: string | null;
-          }>;
-        }> | null;
-      }>;
-    };
-  } | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -10366,6 +9406,12 @@ export type FullAssessmentFragment = {
     lastName?: string | null;
     email: string;
   } | null;
+  definition: {
+    __typename?: 'FormDefinition';
+    id: string;
+    cacheKey: string;
+    title: string;
+  };
 };
 
 export type GetAssessmentQueryVariables = Exact<{
@@ -10394,6 +9440,7 @@ export type GetAssessmentQuery = {
       role: FormRole;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -10418,6 +9465,8 @@ export type GetAssessmentQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -10440,6 +9489,8 @@ export type GetAssessmentQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -10462,6 +9513,8 @@ export type GetAssessmentQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -10484,6 +9537,8 @@ export type GetAssessmentQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -10506,6 +9561,8 @@ export type GetAssessmentQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -10552,6 +9609,7 @@ export type GetAssessmentQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -10574,6 +9632,7 @@ export type GetAssessmentQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -10624,6 +9683,7 @@ export type GetAssessmentQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -10646,6 +9706,7 @@ export type GetAssessmentQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -10696,6 +9757,7 @@ export type GetAssessmentQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -10718,6 +9780,7 @@ export type GetAssessmentQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -10768,6 +9831,7 @@ export type GetAssessmentQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -10790,6 +9854,7 @@ export type GetAssessmentQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -10840,6 +9905,7 @@ export type GetAssessmentQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -10862,11 +9928,13 @@ export type GetAssessmentQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
     upgradedDefinitionForEditing?: {
       __typename?: 'FormDefinition';
@@ -10876,6 +9944,7 @@ export type GetAssessmentQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -10900,6 +9969,8 @@ export type GetAssessmentQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -10922,6 +9993,8 @@ export type GetAssessmentQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -10944,6 +10017,8 @@ export type GetAssessmentQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -10966,6 +10041,8 @@ export type GetAssessmentQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -10988,6 +10065,8 @@ export type GetAssessmentQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -11034,6 +10113,7 @@ export type GetAssessmentQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -11056,6 +10136,7 @@ export type GetAssessmentQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -11106,6 +10187,7 @@ export type GetAssessmentQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -11128,6 +10210,7 @@ export type GetAssessmentQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -11178,6 +10261,7 @@ export type GetAssessmentQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -11200,6 +10284,7 @@ export type GetAssessmentQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -11250,6 +10335,7 @@ export type GetAssessmentQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -11272,6 +10358,7 @@ export type GetAssessmentQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -11322,6 +10409,7 @@ export type GetAssessmentQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -11344,11 +10432,13 @@ export type GetAssessmentQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     enrollment: {
       __typename?: 'Enrollment';
@@ -15988,6 +15078,7 @@ export type ClientDetailFormsQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -16012,6 +15103,8 @@ export type ClientDetailFormsQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -16034,6 +15127,8 @@ export type ClientDetailFormsQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -16056,6 +15151,8 @@ export type ClientDetailFormsQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -16078,6 +15175,8 @@ export type ClientDetailFormsQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -16100,6 +15199,8 @@ export type ClientDetailFormsQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -16146,6 +15247,7 @@ export type ClientDetailFormsQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -16168,6 +15270,7 @@ export type ClientDetailFormsQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -16218,6 +15321,7 @@ export type ClientDetailFormsQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -16240,6 +15344,7 @@ export type ClientDetailFormsQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -16290,6 +15395,7 @@ export type ClientDetailFormsQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -16312,6 +15418,7 @@ export type ClientDetailFormsQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -16362,6 +15469,7 @@ export type ClientDetailFormsQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -16384,6 +15492,7 @@ export type ClientDetailFormsQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -16434,6 +15543,7 @@ export type ClientDetailFormsQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -16456,11 +15566,13 @@ export type ClientDetailFormsQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
   }>;
 };
@@ -18743,6 +17855,7 @@ export type AllEnrollmentDetailsFragment = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
         definition: {
           __typename?: 'FormDefinitionJson';
           item: Array<{
@@ -18767,6 +17880,8 @@ export type AllEnrollmentDetailsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -18789,6 +17904,8 @@ export type AllEnrollmentDetailsFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -18811,6 +17928,8 @@ export type AllEnrollmentDetailsFragment = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -18833,6 +17952,8 @@ export type AllEnrollmentDetailsFragment = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   item?: Array<{
                     __typename: 'FormItem';
                     linkId: string;
@@ -18855,6 +17976,8 @@ export type AllEnrollmentDetailsFragment = {
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
+                    rule?: any | null;
+                    customRule?: any | null;
                     mapping?: {
                       __typename?: 'FieldMapping';
                       recordType?: RelatedRecordType | null;
@@ -18901,6 +18024,7 @@ export type AllEnrollmentDetailsFragment = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }> | null;
                     autofillValues?: Array<{
@@ -18923,6 +18047,7 @@ export type AllEnrollmentDetailsFragment = {
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
                         answerGroupCode?: string | null;
+                        answerDate?: string | null;
                         compareQuestion?: string | null;
                       }>;
                     }> | null;
@@ -18973,6 +18098,7 @@ export type AllEnrollmentDetailsFragment = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -18995,6 +18121,7 @@ export type AllEnrollmentDetailsFragment = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -19045,6 +18172,7 @@ export type AllEnrollmentDetailsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -19067,6 +18195,7 @@ export type AllEnrollmentDetailsFragment = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -19117,6 +18246,7 @@ export type AllEnrollmentDetailsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -19139,6 +18269,7 @@ export type AllEnrollmentDetailsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -19189,6 +18320,7 @@ export type AllEnrollmentDetailsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -19211,11 +18343,13 @@ export type AllEnrollmentDetailsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
           }>;
         };
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
     }>;
     access: {
@@ -19850,6 +18984,7 @@ export type GetEnrollmentDetailsQuery = {
           cacheKey: string;
           identifier: string;
           status: FormStatus;
+          dateUpdated: string;
           definition: {
             __typename?: 'FormDefinitionJson';
             item: Array<{
@@ -19874,6 +19009,8 @@ export type GetEnrollmentDetailsQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -19896,6 +19033,8 @@ export type GetEnrollmentDetailsQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -19918,6 +19057,8 @@ export type GetEnrollmentDetailsQuery = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   item?: Array<{
                     __typename: 'FormItem';
                     linkId: string;
@@ -19940,6 +19081,8 @@ export type GetEnrollmentDetailsQuery = {
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
+                    rule?: any | null;
+                    customRule?: any | null;
                     item?: Array<{
                       __typename: 'FormItem';
                       linkId: string;
@@ -19962,6 +19105,8 @@ export type GetEnrollmentDetailsQuery = {
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
                       enableBehavior?: EnableBehavior | null;
+                      rule?: any | null;
+                      customRule?: any | null;
                       mapping?: {
                         __typename?: 'FieldMapping';
                         recordType?: RelatedRecordType | null;
@@ -20008,6 +19153,7 @@ export type GetEnrollmentDetailsQuery = {
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
                         answerGroupCode?: string | null;
+                        answerDate?: string | null;
                         compareQuestion?: string | null;
                       }> | null;
                       autofillValues?: Array<{
@@ -20030,6 +19176,7 @@ export type GetEnrollmentDetailsQuery = {
                           answerNumber?: number | null;
                           answerBoolean?: boolean | null;
                           answerGroupCode?: string | null;
+                          answerDate?: string | null;
                           compareQuestion?: string | null;
                         }>;
                       }> | null;
@@ -20080,6 +19227,7 @@ export type GetEnrollmentDetailsQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }> | null;
                     autofillValues?: Array<{
@@ -20102,6 +19250,7 @@ export type GetEnrollmentDetailsQuery = {
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
                         answerGroupCode?: string | null;
+                        answerDate?: string | null;
                         compareQuestion?: string | null;
                       }>;
                     }> | null;
@@ -20152,6 +19301,7 @@ export type GetEnrollmentDetailsQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -20174,6 +19324,7 @@ export type GetEnrollmentDetailsQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -20224,6 +19375,7 @@ export type GetEnrollmentDetailsQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -20246,6 +19398,7 @@ export type GetEnrollmentDetailsQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -20296,6 +19449,7 @@ export type GetEnrollmentDetailsQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -20318,11 +19472,13 @@ export type GetEnrollmentDetailsQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
             }>;
           };
+          updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
         };
       }>;
       access: {
@@ -21153,6 +20309,7 @@ export type GetExternalFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -21177,6 +20334,8 @@ export type GetExternalFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -21199,6 +20358,8 @@ export type GetExternalFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -21221,6 +20382,8 @@ export type GetExternalFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -21243,6 +20406,8 @@ export type GetExternalFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -21265,6 +20430,8 @@ export type GetExternalFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -21311,6 +20478,7 @@ export type GetExternalFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -21333,6 +20501,7 @@ export type GetExternalFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -21383,6 +20552,7 @@ export type GetExternalFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -21405,6 +20575,7 @@ export type GetExternalFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -21455,6 +20626,7 @@ export type GetExternalFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -21477,6 +20649,7 @@ export type GetExternalFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -21527,6 +20700,7 @@ export type GetExternalFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -21549,6 +20723,7 @@ export type GetExternalFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -21599,6 +20774,7 @@ export type GetExternalFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -21621,11 +20797,13 @@ export type GetExternalFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -21703,6 +20881,7 @@ export type EnableWhenFieldsFragment = {
   answerNumber?: number | null;
   answerBoolean?: boolean | null;
   answerGroupCode?: string | null;
+  answerDate?: string | null;
   compareQuestion?: string | null;
 };
 
@@ -21728,6 +20907,8 @@ export type ItemFieldsFragment = {
   dataCollectedAbout?: DataCollectedAbout | null;
   disabledDisplay?: DisabledDisplay | null;
   enableBehavior?: EnableBehavior | null;
+  rule?: any | null;
+  customRule?: any | null;
   mapping?: {
     __typename?: 'FieldMapping';
     recordType?: RelatedRecordType | null;
@@ -21774,6 +20955,7 @@ export type ItemFieldsFragment = {
     answerNumber?: number | null;
     answerBoolean?: boolean | null;
     answerGroupCode?: string | null;
+    answerDate?: string | null;
     compareQuestion?: string | null;
   }> | null;
   autofillValues?: Array<{
@@ -21796,6 +20978,7 @@ export type ItemFieldsFragment = {
       answerNumber?: number | null;
       answerBoolean?: boolean | null;
       answerGroupCode?: string | null;
+      answerDate?: string | null;
       compareQuestion?: string | null;
     }>;
   }> | null;
@@ -21825,6 +21008,8 @@ export type FormDefinitionJsonFieldsFragment = {
     dataCollectedAbout?: DataCollectedAbout | null;
     disabledDisplay?: DisabledDisplay | null;
     enableBehavior?: EnableBehavior | null;
+    rule?: any | null;
+    customRule?: any | null;
     item?: Array<{
       __typename: 'FormItem';
       linkId: string;
@@ -21847,6 +21032,8 @@ export type FormDefinitionJsonFieldsFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -21869,6 +21056,8 @@ export type FormDefinitionJsonFieldsFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -21891,6 +21080,8 @@ export type FormDefinitionJsonFieldsFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -21913,6 +21104,8 @@ export type FormDefinitionJsonFieldsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             mapping?: {
               __typename?: 'FieldMapping';
               recordType?: RelatedRecordType | null;
@@ -21959,6 +21152,7 @@ export type FormDefinitionJsonFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -21981,6 +21175,7 @@ export type FormDefinitionJsonFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -22031,6 +21226,7 @@ export type FormDefinitionJsonFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -22053,6 +21249,7 @@ export type FormDefinitionJsonFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -22103,6 +21300,7 @@ export type FormDefinitionJsonFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -22125,6 +21323,7 @@ export type FormDefinitionJsonFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -22175,6 +21374,7 @@ export type FormDefinitionJsonFieldsFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }> | null;
       autofillValues?: Array<{
@@ -22197,6 +21397,7 @@ export type FormDefinitionJsonFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }>;
       }> | null;
@@ -22247,6 +21448,7 @@ export type FormDefinitionJsonFieldsFragment = {
       answerNumber?: number | null;
       answerBoolean?: boolean | null;
       answerGroupCode?: string | null;
+      answerDate?: string | null;
       compareQuestion?: string | null;
     }> | null;
     autofillValues?: Array<{
@@ -22269,6 +21471,7 @@ export type FormDefinitionJsonFieldsFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }>;
     }> | null;
@@ -22283,6 +21486,8 @@ export type FormDefinitionMetadataFragment = {
   cacheKey: string;
   identifier: string;
   status: FormStatus;
+  dateUpdated: string;
+  updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
 export type FormDefinitionFieldsFragment = {
@@ -22293,6 +21498,7 @@ export type FormDefinitionFieldsFragment = {
   cacheKey: string;
   identifier: string;
   status: FormStatus;
+  dateUpdated: string;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -22317,6 +21523,8 @@ export type FormDefinitionFieldsFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -22339,6 +21547,8 @@ export type FormDefinitionFieldsFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -22361,6 +21571,8 @@ export type FormDefinitionFieldsFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -22383,6 +21595,8 @@ export type FormDefinitionFieldsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -22405,6 +21619,8 @@ export type FormDefinitionFieldsFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -22451,6 +21667,7 @@ export type FormDefinitionFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -22473,6 +21690,7 @@ export type FormDefinitionFieldsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -22523,6 +21741,7 @@ export type FormDefinitionFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -22545,6 +21764,7 @@ export type FormDefinitionFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -22595,6 +21815,7 @@ export type FormDefinitionFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -22617,6 +21838,7 @@ export type FormDefinitionFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -22667,6 +21889,7 @@ export type FormDefinitionFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -22689,6 +21912,7 @@ export type FormDefinitionFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -22739,6 +21963,7 @@ export type FormDefinitionFieldsFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }> | null;
       autofillValues?: Array<{
@@ -22761,11 +21986,13 @@ export type FormDefinitionFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }>;
       }> | null;
     }>;
   };
+  updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
 export type FormDefinitionFieldsForJsonEditorFragment = {
@@ -22777,6 +22004,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
   title: string;
   cacheKey: string;
   identifier: string;
+  dateUpdated: string;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -22801,6 +22029,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -22823,6 +22053,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -22845,6 +22077,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -22867,6 +22101,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -22889,6 +22125,8 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -22935,6 +22173,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -22957,6 +22196,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -23007,6 +22247,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -23029,6 +22270,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -23079,6 +22321,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -23101,6 +22344,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -23151,6 +22395,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -23173,6 +22418,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -23223,6 +22469,7 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }> | null;
       autofillValues?: Array<{
@@ -23245,21 +22492,25 @@ export type FormDefinitionFieldsForJsonEditorFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }>;
       }> | null;
     }>;
   };
+  updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
 export type FormDefinitionFieldsForEditorFragment = {
   __typename?: 'FormDefinition';
+  version: string;
   id: string;
   role: FormRole;
   title: string;
   cacheKey: string;
   identifier: string;
   status: FormStatus;
+  dateUpdated: string;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -23284,6 +22535,8 @@ export type FormDefinitionFieldsForEditorFragment = {
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
+      rule?: any | null;
+      customRule?: any | null;
       item?: Array<{
         __typename: 'FormItem';
         linkId: string;
@@ -23306,6 +22559,8 @@ export type FormDefinitionFieldsForEditorFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -23328,6 +22583,8 @@ export type FormDefinitionFieldsForEditorFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -23350,6 +22607,8 @@ export type FormDefinitionFieldsForEditorFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -23372,6 +22631,8 @@ export type FormDefinitionFieldsForEditorFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               mapping?: {
                 __typename?: 'FieldMapping';
                 recordType?: RelatedRecordType | null;
@@ -23418,6 +22679,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -23440,6 +22702,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -23490,6 +22753,7 @@ export type FormDefinitionFieldsForEditorFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -23512,6 +22776,7 @@ export type FormDefinitionFieldsForEditorFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -23562,6 +22827,7 @@ export type FormDefinitionFieldsForEditorFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -23584,6 +22850,7 @@ export type FormDefinitionFieldsForEditorFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -23634,6 +22901,7 @@ export type FormDefinitionFieldsForEditorFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -23656,6 +22924,7 @@ export type FormDefinitionFieldsForEditorFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -23706,6 +22975,7 @@ export type FormDefinitionFieldsForEditorFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+        answerDate?: string | null;
         compareQuestion?: string | null;
       }> | null;
       autofillValues?: Array<{
@@ -23728,11 +22998,13 @@ export type FormDefinitionFieldsForEditorFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }>;
       }> | null;
     }>;
   };
+  updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
 };
 
 export type FormIdentifierDetailsFragment = {
@@ -23747,6 +23019,8 @@ export type FormIdentifierDetailsFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
   draftVersion?: {
     __typename?: 'FormDefinition';
@@ -23756,6 +23030,8 @@ export type FormIdentifierDetailsFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -23770,12 +23046,14 @@ export type UpdateFormDefinitionMutation = {
     __typename?: 'UpdateFormDefinitionPayload';
     formDefinition?: {
       __typename?: 'FormDefinition';
+      version: string;
       id: string;
       role: FormRole;
       title: string;
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -23800,6 +23078,8 @@ export type UpdateFormDefinitionMutation = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -23822,6 +23102,8 @@ export type UpdateFormDefinitionMutation = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -23844,6 +23126,8 @@ export type UpdateFormDefinitionMutation = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -23866,6 +23150,8 @@ export type UpdateFormDefinitionMutation = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -23888,6 +23174,8 @@ export type UpdateFormDefinitionMutation = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -23934,6 +23222,7 @@ export type UpdateFormDefinitionMutation = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -23956,6 +23245,7 @@ export type UpdateFormDefinitionMutation = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -24006,6 +23296,7 @@ export type UpdateFormDefinitionMutation = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -24028,6 +23319,7 @@ export type UpdateFormDefinitionMutation = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -24078,6 +23370,7 @@ export type UpdateFormDefinitionMutation = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -24100,6 +23393,7 @@ export type UpdateFormDefinitionMutation = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -24150,6 +23444,7 @@ export type UpdateFormDefinitionMutation = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -24172,6 +23467,7 @@ export type UpdateFormDefinitionMutation = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -24222,6 +23518,7 @@ export type UpdateFormDefinitionMutation = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -24244,11 +23541,13 @@ export type UpdateFormDefinitionMutation = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -24285,6 +23584,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
       title: string;
       cacheKey: string;
       identifier: string;
+      dateUpdated: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -24309,6 +23609,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -24331,6 +23633,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -24353,6 +23657,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -24375,6 +23681,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 item?: Array<{
                   __typename: 'FormItem';
                   linkId: string;
@@ -24397,6 +23705,8 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  rule?: any | null;
+                  customRule?: any | null;
                   mapping?: {
                     __typename?: 'FieldMapping';
                     recordType?: RelatedRecordType | null;
@@ -24443,6 +23753,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }> | null;
                   autofillValues?: Array<{
@@ -24465,6 +23776,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                      answerDate?: string | null;
                       compareQuestion?: string | null;
                     }>;
                   }> | null;
@@ -24515,6 +23827,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -24537,6 +23850,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -24587,6 +23901,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -24609,6 +23924,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -24659,6 +23975,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -24681,6 +23998,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -24731,6 +24049,7 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -24753,11 +24072,13 @@ export type UpdateFormDefinitionFromJsonEditorMutation = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
         }>;
       };
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -24792,6 +24113,8 @@ export type CreateFormDefinitionMutation = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -24830,6 +24153,8 @@ export type CreateNextDraftFormDefinitionMutation = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       } | null;
     } | null;
   } | null;
@@ -24855,6 +24180,8 @@ export type PublishFormDefinitionMutation = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
       draftVersion?: {
         __typename?: 'FormDefinition';
@@ -24864,6 +24191,8 @@ export type PublishFormDefinitionMutation = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       } | null;
     } | null;
     errors: Array<{
@@ -24951,6 +24280,7 @@ export type GetFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -24975,6 +24305,8 @@ export type GetFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -24997,6 +24329,8 @@ export type GetFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -25019,6 +24353,8 @@ export type GetFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -25041,6 +24377,8 @@ export type GetFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -25063,6 +24401,8 @@ export type GetFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -25109,6 +24449,7 @@ export type GetFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -25131,6 +24472,7 @@ export type GetFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -25181,6 +24523,7 @@ export type GetFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -25203,6 +24546,7 @@ export type GetFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -25253,6 +24597,7 @@ export type GetFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -25275,6 +24620,7 @@ export type GetFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -25325,6 +24671,7 @@ export type GetFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -25347,6 +24694,7 @@ export type GetFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -25397,6 +24745,7 @@ export type GetFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -25419,11 +24768,13 @@ export type GetFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -25441,6 +24792,7 @@ export type GetStaticFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25465,6 +24817,8 @@ export type GetStaticFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -25487,6 +24841,8 @@ export type GetStaticFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -25509,6 +24865,8 @@ export type GetStaticFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -25531,6 +24889,8 @@ export type GetStaticFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -25553,6 +24913,8 @@ export type GetStaticFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -25599,6 +24961,7 @@ export type GetStaticFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -25621,6 +24984,7 @@ export type GetStaticFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -25671,6 +25035,7 @@ export type GetStaticFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -25693,6 +25058,7 @@ export type GetStaticFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -25743,6 +25109,7 @@ export type GetStaticFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -25765,6 +25132,7 @@ export type GetStaticFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -25815,6 +25183,7 @@ export type GetStaticFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -25837,6 +25206,7 @@ export type GetStaticFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -25887,6 +25257,7 @@ export type GetStaticFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -25909,11 +25280,13 @@ export type GetStaticFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
 };
 
@@ -25932,6 +25305,7 @@ export type GetServiceFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -25956,6 +25330,8 @@ export type GetServiceFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -25978,6 +25354,8 @@ export type GetServiceFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -26000,6 +25378,8 @@ export type GetServiceFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -26022,6 +25402,8 @@ export type GetServiceFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -26044,6 +25426,8 @@ export type GetServiceFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -26090,6 +25474,7 @@ export type GetServiceFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -26112,6 +25497,7 @@ export type GetServiceFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -26162,6 +25548,7 @@ export type GetServiceFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -26184,6 +25571,7 @@ export type GetServiceFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -26234,6 +25622,7 @@ export type GetServiceFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -26256,6 +25645,7 @@ export type GetServiceFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -26306,6 +25696,7 @@ export type GetServiceFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -26328,6 +25719,7 @@ export type GetServiceFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -26378,6 +25770,7 @@ export type GetServiceFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -26400,11 +25793,13 @@ export type GetServiceFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -26425,6 +25820,7 @@ export type GetAssessmentFormDefinitionQuery = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -26449,6 +25845,8 @@ export type GetAssessmentFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -26471,6 +25869,8 @@ export type GetAssessmentFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -26493,6 +25893,8 @@ export type GetAssessmentFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -26515,6 +25917,8 @@ export type GetAssessmentFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -26537,6 +25941,8 @@ export type GetAssessmentFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -26583,6 +25989,7 @@ export type GetAssessmentFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -26605,6 +26012,7 @@ export type GetAssessmentFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -26655,6 +26063,7 @@ export type GetAssessmentFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -26677,6 +26086,7 @@ export type GetAssessmentFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -26727,6 +26137,7 @@ export type GetAssessmentFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -26749,6 +26160,7 @@ export type GetAssessmentFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -26799,6 +26211,7 @@ export type GetAssessmentFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -26821,6 +26234,7 @@ export type GetAssessmentFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -26871,6 +26285,7 @@ export type GetAssessmentFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -26893,11 +26308,13 @@ export type GetAssessmentFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -26919,6 +26336,8 @@ export type GetFormIdentifierDetailsQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     };
     draftVersion?: {
       __typename?: 'FormDefinition';
@@ -26928,6 +26347,8 @@ export type GetFormIdentifierDetailsQuery = {
       cacheKey: string;
       identifier: string;
       status: FormStatus;
+      dateUpdated: string;
+      updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
     } | null;
   } | null;
 };
@@ -26951,6 +26372,7 @@ export type GetFormIdentifierVersionsQuery = {
       nodesCount: number;
       nodes: Array<{
         __typename?: 'FormDefinition';
+        version: string;
         dateUpdated: string;
         id: string;
         role: FormRole;
@@ -26997,7 +26419,9 @@ export type GetFormIdentifiersQuery = {
         cacheKey: string;
         identifier: string;
         status: FormStatus;
+        dateUpdated: string;
         formRules: { __typename?: 'FormRulesPaginated'; nodesCount: number };
+        updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
       };
     }>;
   };
@@ -28042,12 +27466,14 @@ export type GetFormDefinitionFieldsForEditorQuery = {
   __typename?: 'Query';
   formDefinition?: {
     __typename?: 'FormDefinition';
+    version: string;
     id: string;
     role: FormRole;
     title: string;
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -28072,6 +27498,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -28094,6 +27522,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -28116,6 +27546,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -28138,6 +27570,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -28160,6 +27594,8 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -28206,6 +27642,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -28228,6 +27665,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -28278,6 +27716,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -28300,6 +27739,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -28350,6 +27790,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -28372,6 +27813,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -28422,6 +27864,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -28444,6 +27887,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -28494,6 +27938,7 @@ export type GetFormDefinitionFieldsForEditorQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -28516,11 +27961,13 @@ export type GetFormDefinitionFieldsForEditorQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -28539,6 +27986,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
     title: string;
     cacheKey: string;
     identifier: string;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -28563,6 +28011,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -28585,6 +28035,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -28607,6 +28059,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -28629,6 +28083,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -28651,6 +28107,8 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -28697,6 +28155,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -28719,6 +28178,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -28769,6 +28229,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -28791,6 +28252,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -28841,6 +28303,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -28863,6 +28326,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -28913,6 +28377,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -28935,6 +28400,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -28985,6 +28451,7 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -29007,11 +28474,13 @@ export type GetFormDefinitionFieldsForJsonEditorQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   } | null;
 };
 
@@ -29048,6 +28517,8 @@ export type GetParsedFormDefinitionQuery = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -29070,6 +28541,8 @@ export type GetParsedFormDefinitionQuery = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -29092,6 +28565,8 @@ export type GetParsedFormDefinitionQuery = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -29114,6 +28589,8 @@ export type GetParsedFormDefinitionQuery = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -29136,6 +28613,8 @@ export type GetParsedFormDefinitionQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -29182,6 +28661,7 @@ export type GetParsedFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -29204,6 +28684,7 @@ export type GetParsedFormDefinitionQuery = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -29254,6 +28735,7 @@ export type GetParsedFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -29276,6 +28758,7 @@ export type GetParsedFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -29326,6 +28809,7 @@ export type GetParsedFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -29348,6 +28832,7 @@ export type GetParsedFormDefinitionQuery = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -29398,6 +28883,7 @@ export type GetParsedFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -29420,6 +28906,7 @@ export type GetParsedFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -29470,6 +28957,7 @@ export type GetParsedFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -29492,6 +28980,7 @@ export type GetParsedFormDefinitionQuery = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
@@ -30650,6 +30139,7 @@ export type OccurrencePointFormFieldsFragment = {
     cacheKey: string;
     identifier: string;
     status: FormStatus;
+    dateUpdated: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -30674,6 +30164,8 @@ export type OccurrencePointFormFieldsFragment = {
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
+        rule?: any | null;
+        customRule?: any | null;
         item?: Array<{
           __typename: 'FormItem';
           linkId: string;
@@ -30696,6 +30188,8 @@ export type OccurrencePointFormFieldsFragment = {
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
+          rule?: any | null;
+          customRule?: any | null;
           item?: Array<{
             __typename: 'FormItem';
             linkId: string;
@@ -30718,6 +30212,8 @@ export type OccurrencePointFormFieldsFragment = {
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            rule?: any | null;
+            customRule?: any | null;
             item?: Array<{
               __typename: 'FormItem';
               linkId: string;
@@ -30740,6 +30236,8 @@ export type OccurrencePointFormFieldsFragment = {
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              rule?: any | null;
+              customRule?: any | null;
               item?: Array<{
                 __typename: 'FormItem';
                 linkId: string;
@@ -30762,6 +30260,8 @@ export type OccurrencePointFormFieldsFragment = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                rule?: any | null;
+                customRule?: any | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -30808,6 +30308,7 @@ export type OccurrencePointFormFieldsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }> | null;
                 autofillValues?: Array<{
@@ -30830,6 +30331,7 @@ export type OccurrencePointFormFieldsFragment = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                    answerDate?: string | null;
                     compareQuestion?: string | null;
                   }>;
                 }> | null;
@@ -30880,6 +30382,7 @@ export type OccurrencePointFormFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }> | null;
               autofillValues?: Array<{
@@ -30902,6 +30405,7 @@ export type OccurrencePointFormFieldsFragment = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                  answerDate?: string | null;
                   compareQuestion?: string | null;
                 }>;
               }> | null;
@@ -30952,6 +30456,7 @@ export type OccurrencePointFormFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }> | null;
             autofillValues?: Array<{
@@ -30974,6 +30479,7 @@ export type OccurrencePointFormFieldsFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+                answerDate?: string | null;
                 compareQuestion?: string | null;
               }>;
             }> | null;
@@ -31024,6 +30530,7 @@ export type OccurrencePointFormFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }> | null;
           autofillValues?: Array<{
@@ -31046,6 +30553,7 @@ export type OccurrencePointFormFieldsFragment = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+              answerDate?: string | null;
               compareQuestion?: string | null;
             }>;
           }> | null;
@@ -31096,6 +30604,7 @@ export type OccurrencePointFormFieldsFragment = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+          answerDate?: string | null;
           compareQuestion?: string | null;
         }> | null;
         autofillValues?: Array<{
@@ -31118,11 +30627,13 @@ export type OccurrencePointFormFieldsFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+            answerDate?: string | null;
             compareQuestion?: string | null;
           }>;
         }> | null;
       }>;
     };
+    updatedBy?: { __typename?: 'ApplicationUser'; name: string } | null;
   };
 };
 
@@ -35492,153 +35003,13 @@ export const AssessmentWithValuesFragmentDoc = gql`
   }
   ${AssessmentFieldsFragmentDoc}
 `;
-export const FormDefinitionMetadataFragmentDoc = gql`
-  fragment FormDefinitionMetadata on FormDefinition {
-    id
-    role
-    title
-    cacheKey
-    identifier
-    status
-  }
-`;
-export const PickListOptionFieldsFragmentDoc = gql`
-  fragment PickListOptionFields on PickListOption {
-    code
-    label
-    secondaryLabel
-    groupLabel
-    groupCode
-    initialSelected
-    helperText
-    numericValue
-  }
-`;
-export const EnableWhenFieldsFragmentDoc = gql`
-  fragment EnableWhenFields on EnableWhen {
-    question
-    localConstant
-    operator
-    answerCode
-    answerCodes
-    answerNumber
-    answerBoolean
-    answerGroupCode
-    compareQuestion
-  }
-`;
-export const ItemFieldsFragmentDoc = gql`
-  fragment ItemFields on FormItem {
-    __typename
-    linkId
-    type
-    component
-    prefix
-    text
-    briefText
-    readonlyText
-    helperText
-    required
-    warnIfEmpty
-    hidden
-    readOnly
-    repeats
-    mapping {
-      recordType
-      fieldName
-      customFieldKey
-    }
-    pickListReference
-    size
-    assessmentDate
-    prefill
-    bounds {
-      id
-      severity
-      type
-      question
-      valueNumber
-      valueDate
-      valueLocalConstant
-      offset
-    }
-    pickListOptions {
-      ...PickListOptionFields
-    }
-    initial {
-      valueCode
-      valueBoolean
-      valueNumber
-      valueLocalConstant
-      initialBehavior
-    }
-    dataCollectedAbout
-    disabledDisplay
-    enableBehavior
-    enableWhen {
-      ...EnableWhenFields
-    }
-    autofillValues {
-      valueCode
-      valueQuestion
-      valueBoolean
-      valueNumber
-      sumQuestions
-      formula
-      autofillBehavior
-      autofillReadonly
-      autofillWhen {
-        ...EnableWhenFields
-      }
-    }
-  }
-  ${PickListOptionFieldsFragmentDoc}
-  ${EnableWhenFieldsFragmentDoc}
-`;
-export const FormDefinitionJsonFieldsFragmentDoc = gql`
-  fragment FormDefinitionJsonFields on FormDefinitionJson {
-    item {
-      ...ItemFields
-      item {
-        ...ItemFields
-        item {
-          ...ItemFields
-          item {
-            ...ItemFields
-            item {
-              ...ItemFields
-            }
-          }
-        }
-      }
-    }
-  }
-  ${ItemFieldsFragmentDoc}
-`;
-export const FormDefinitionFieldsFragmentDoc = gql`
-  fragment FormDefinitionFields on FormDefinition {
-    ...FormDefinitionMetadata
-    definition {
-      ...FormDefinitionJsonFields
-    }
-  }
-  ${FormDefinitionMetadataFragmentDoc}
-  ${FormDefinitionJsonFieldsFragmentDoc}
-`;
 export const FullAssessmentFragmentDoc = gql`
   fragment FullAssessment on Assessment {
     ...AssessmentWithRecords
     ...AssessmentWithValues
-    definition {
-      ...FormDefinitionFields
-    }
-    upgradedDefinitionForEditing {
-      ...FormDefinitionFields
-    }
   }
   ${AssessmentWithRecordsFragmentDoc}
   ${AssessmentWithValuesFragmentDoc}
-  ${FormDefinitionFieldsFragmentDoc}
 `;
 export const ProjectNameAndTypeFragmentDoc = gql`
   fragment ProjectNameAndType on Project {
@@ -36293,6 +35664,146 @@ export const DataCollectionFeatureFieldsFragmentDoc = gql`
     legacy
   }
 `;
+export const FormDefinitionMetadataFragmentDoc = gql`
+  fragment FormDefinitionMetadata on FormDefinition {
+    id
+    role
+    title
+    cacheKey
+    identifier
+    status
+    updatedBy {
+      name
+    }
+    dateUpdated
+  }
+`;
+export const PickListOptionFieldsFragmentDoc = gql`
+  fragment PickListOptionFields on PickListOption {
+    code
+    label
+    secondaryLabel
+    groupLabel
+    groupCode
+    initialSelected
+    helperText
+    numericValue
+  }
+`;
+export const EnableWhenFieldsFragmentDoc = gql`
+  fragment EnableWhenFields on EnableWhen {
+    question
+    localConstant
+    operator
+    answerCode
+    answerCodes
+    answerNumber
+    answerBoolean
+    answerGroupCode
+    answerDate
+    compareQuestion
+  }
+`;
+export const ItemFieldsFragmentDoc = gql`
+  fragment ItemFields on FormItem {
+    __typename
+    linkId
+    type
+    component
+    prefix
+    text
+    briefText
+    readonlyText
+    helperText
+    required
+    warnIfEmpty
+    hidden
+    readOnly
+    repeats
+    mapping {
+      recordType
+      fieldName
+      customFieldKey
+    }
+    pickListReference
+    size
+    assessmentDate
+    prefill
+    bounds {
+      id
+      severity
+      type
+      question
+      valueNumber
+      valueDate
+      valueLocalConstant
+      offset
+    }
+    pickListOptions {
+      ...PickListOptionFields
+    }
+    initial {
+      valueCode
+      valueBoolean
+      valueNumber
+      valueLocalConstant
+      initialBehavior
+    }
+    dataCollectedAbout
+    disabledDisplay
+    enableBehavior
+    enableWhen {
+      ...EnableWhenFields
+    }
+    autofillValues {
+      valueCode
+      valueQuestion
+      valueBoolean
+      valueNumber
+      sumQuestions
+      formula
+      autofillBehavior
+      autofillReadonly
+      autofillWhen {
+        ...EnableWhenFields
+      }
+    }
+    rule
+    customRule
+  }
+  ${PickListOptionFieldsFragmentDoc}
+  ${EnableWhenFieldsFragmentDoc}
+`;
+export const FormDefinitionJsonFieldsFragmentDoc = gql`
+  fragment FormDefinitionJsonFields on FormDefinitionJson {
+    item {
+      ...ItemFields
+      item {
+        ...ItemFields
+        item {
+          ...ItemFields
+          item {
+            ...ItemFields
+            item {
+              ...ItemFields
+            }
+          }
+        }
+      }
+    }
+  }
+  ${ItemFieldsFragmentDoc}
+`;
+export const FormDefinitionFieldsFragmentDoc = gql`
+  fragment FormDefinitionFields on FormDefinition {
+    ...FormDefinitionMetadata
+    definition {
+      ...FormDefinitionJsonFields
+    }
+  }
+  ${FormDefinitionMetadataFragmentDoc}
+  ${FormDefinitionJsonFieldsFragmentDoc}
+`;
 export const OccurrencePointFormFieldsFragmentDoc = gql`
   fragment OccurrencePointFormFields on OccurrencePointForm {
     id
@@ -36463,6 +35974,7 @@ export const FormDefinitionFieldsForJsonEditorFragmentDoc = gql`
 export const FormDefinitionFieldsForEditorFragmentDoc = gql`
   fragment FormDefinitionFieldsForEditor on FormDefinition {
     ...FormDefinitionFields
+    version
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
@@ -37464,9 +36976,16 @@ export const GetAssessmentDocument = gql`
   query GetAssessment($id: ID!) {
     assessment(id: $id) {
       ...FullAssessment
+      definition {
+        ...FormDefinitionFields
+      }
+      upgradedDefinitionForEditing {
+        ...FormDefinitionFields
+      }
     }
   }
   ${FullAssessmentFragmentDoc}
+  ${FormDefinitionFieldsFragmentDoc}
 `;
 
 /**
@@ -44004,6 +43523,7 @@ export const GetFormIdentifierVersionsDocument = gql`
         nodesCount
         nodes {
           ...FormDefinitionMetadata
+          version
           dateUpdated
           updatedBy {
             ...UserFields

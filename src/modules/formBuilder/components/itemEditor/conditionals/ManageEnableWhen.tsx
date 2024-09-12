@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
-import { Controller, useController, useFieldArray } from 'react-hook-form';
-import { FormItemControl } from '../types';
+import { useFieldArray, UseFormSetValue } from 'react-hook-form';
+import { FormItemControl, FormItemState } from '../types';
 import CardGroup, { RemovableCard } from './CardGroup';
 import EnableWhenCondition from './EnableWhenCondition';
 import { useItemPickList } from './useItemPickList';
-import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
+import ControlledRadioGroupInput from '@/modules/form/components/rhf/ControlledRadioGroupInput';
 import { ItemMap } from '@/modules/form/types';
+import { EnableBehavior } from '@/types/gqlTypes';
 
 export interface ManageEnableWhenProps {
   control: FormItemControl;
@@ -14,6 +15,7 @@ export interface ManageEnableWhenProps {
   enableBehaviorPath?:
     | 'enableBehavior'
     | `autofillValues.${number}.autofillBehavior`;
+  setValue: UseFormSetValue<FormItemState>;
 }
 
 // Component for managing a set of EnableWhen conditions, and the Enable Behavior (AND/OR).
@@ -23,16 +25,11 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
   itemMap,
   enableWhenPath = 'enableWhen',
   enableBehaviorPath = 'enableBehavior',
+  setValue,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: enableWhenPath,
-  });
-  const {
-    field: { onChange: onChangeEnableBehavior },
-  } = useController({
-    control,
-    name: enableBehaviorPath,
   });
 
   const itemPickList = useItemPickList({ control, itemMap });
@@ -58,42 +55,25 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
       onAddItem={() => {
         if (fields.length === 0) {
           // when adding first condition, set default enable behavior
-          onChangeEnableBehavior('ALL');
+          setValue(enableBehaviorPath, EnableBehavior.All);
         }
         append({}, { shouldFocus: false });
       }}
       addItemText='Add Condition'
     >
       {fields.length > 0 && (
-        <Controller
+        <ControlledRadioGroupInput
           name={enableBehaviorPath}
           control={control}
-          rules={{ required: 'This field is required' }}
-          shouldUnregister // clear value when unmounted
-          render={({
-            field: { ref, value, onChange, ...field },
-            fieldState: { error },
-          }) => (
-            <RadioGroupInput
-              options={enableBehaviorOptions}
-              label='Conditional Behavior (AND/OR)'
-              value={enableBehaviorOptions.find((o) => o.code === value)}
-              onChange={(option) => onChange(option?.code)}
-              {...field}
-              error={!!error}
-              helperText={error?.message}
-            />
-          )}
+          required={true}
+          options={enableBehaviorOptions}
+          label={'Conditional Behavior (AND/OR)'}
         />
       )}
       {fields.map((condition, index) => (
         <RemovableCard
-          key={JSON.stringify(condition)} // fixme could be non unique
-          onRemove={() => {
-            const isLastCondition = fields.length === 1;
-            remove(index);
-            if (isLastCondition) onChangeEnableBehavior(null);
-          }}
+          key={condition.id}
+          onRemove={() => remove(index)}
           removeTooltip={'Remove Condition'}
         >
           <EnableWhenCondition
@@ -102,6 +82,7 @@ const ManageEnableWhen: React.FC<ManageEnableWhenProps> = ({
             enableWhenPath={enableWhenPath}
             itemPickList={itemPickList}
             itemMap={itemMap}
+            setValue={setValue}
           />
         </RemovableCard>
       ))}

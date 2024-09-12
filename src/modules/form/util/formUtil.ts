@@ -2,6 +2,7 @@ import {
   add,
   getYear,
   isDate,
+  isEqual,
   isValid,
   max,
   min,
@@ -320,6 +321,7 @@ const evaluateEnableWhen = ({
       en.answerGroupCode,
       en.answerNumber,
       en.answerCodes,
+      en.answerDate ? parseHmisDateString(en.answerDate) : undefined,
       en.compareQuestion ? values[en.compareQuestion] : undefined,
     ].filter((e) => !isNil(e))[0];
   }
@@ -327,7 +329,11 @@ const evaluateEnableWhen = ({
   let result;
   switch (en.operator) {
     case EnableOperator.Equal:
-      result = currentValue === comparisonValue;
+      if (isDate(currentValue)) {
+        result = isEqual(currentValue, comparisonValue);
+      } else {
+        result = currentValue === comparisonValue;
+      }
       break;
     case EnableOperator.NotEqual:
       result = currentValue !== comparisonValue;
@@ -1138,24 +1144,23 @@ export const transformSubmitValues = ({
   autofillNotCollected = false,
   keyByFieldName = false,
 }: TransformSubmitValuesParams) => {
+  const allLinkIds = new Set();
   // Recursive helper for traversing the FormDefinition
-  function rescursiveFillMap(
-    items: FormItem[],
-    result: Record<string, any>,
-    parentRecordType?: string
-  ) {
+  function rescursiveFillMap(items: FormItem[], result: Record<string, any>) {
     items.forEach((item: FormItem) => {
+      allLinkIds.add(item.linkId);
+
       const mapping = item.mapping || {};
       const recordType = mapping.recordType
         ? HmisEnums.RelatedRecordType[mapping.recordType]
-        : parentRecordType;
+        : undefined;
 
       if (mapping.recordType && !recordType) {
         throw Error(`Unrecognized record type in form definition: ${mapping}`);
       }
 
       if (Array.isArray(item.item)) {
-        rescursiveFillMap(item.item, result, recordType);
+        rescursiveFillMap(item.item, result);
       }
       const fieldName = mapping.fieldName || mapping.customFieldKey;
       if (!fieldName) return; // If there is no field name, it can't be extracted so don't bother sending it
@@ -1205,6 +1210,18 @@ export const transformSubmitValues = ({
 
   const result: Record<string, any> = {};
   rescursiveFillMap(definition.item, result);
+
+  const unrecognizedKeys = Object.keys(values).filter(
+    (linkId) => !allLinkIds.has(linkId)
+  );
+
+  if (unrecognizedKeys.length > 0) {
+    throw new Error(
+      'Failed to transform form values. Unrecognized Keys: ' +
+        unrecognizedKeys.join(', ')
+    );
+  }
+
   return result;
 };
 
@@ -1316,53 +1333,6 @@ export const createHudValuesForSubmit = (
     keyByFieldName: true,
     includeMissingKeys: 'AS_HIDDEN',
   });
-
-export const debugFormValues = (
-  event: React.MouseEvent<HTMLButtonElement>,
-  values: FormValues,
-  definition: FormDefinitionJson,
-  transformValuesFn?: (
-    values: FormValues,
-    definition: FormDefinitionJson
-  ) => FormValues,
-  transformHudValuesFn?: (
-    values: FormValues,
-    definition: FormDefinitionJson
-  ) => FormValues
-) => {
-  if (import.meta.env.MODE === 'production') return false;
-  if (!event.ctrlKey && !event.metaKey) return false;
-
-  // eslint-disable-next-line no-console
-  console.debug('%c FORM STATE:', 'color: #BB7AFF');
-  if (transformValuesFn) {
-    // eslint-disable-next-line no-console
-    console.debug(transformValuesFn(values, definition));
-  } else {
-    // eslint-disable-next-line no-console
-    console.debug(values);
-  }
-
-  let hudValues = transformSubmitValues({
-    definition,
-    values,
-    autofillNotCollected: true,
-    includeMissingKeys: 'AS_NULL',
-    keyByFieldName: true,
-  });
-
-  if (transformHudValuesFn) {
-    hudValues = transformHudValuesFn(values, definition);
-  }
-
-  window.debug = { hudValues };
-  // eslint-disable-next-line no-console
-  console.debug('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
-  // eslint-disable-next-line no-console
-  console.debug(hudValues);
-
-  return true;
-};
 
 type GetDependentItemsDisabledStatus = {
   changedLinkIds: string[];

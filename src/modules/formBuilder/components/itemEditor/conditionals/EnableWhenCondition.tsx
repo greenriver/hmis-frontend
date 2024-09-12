@@ -1,19 +1,22 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { Controller, useWatch } from 'react-hook-form';
-import { FormItemControl } from '../types';
+import { Controller, UseFormSetValue, useWatch } from 'react-hook-form';
+import { FormItemControl, FormItemState } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
+import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
-import YesNoRadio from '@/components/elements/input/YesNoRadio';
+import { FALSE_OPT, TRUE_OPT } from '@/components/elements/input/YesNoRadio';
 import ControlledSelect from '@/modules/form/components/rhf/ControlledSelect';
 import ControlledTextInput from '@/modules/form/components/rhf/ControlledTextInput';
+import { usePickList } from '@/modules/form/hooks/usePickList';
 import { ItemMap } from '@/modules/form/types';
-import { localResolvePickList } from '@/modules/form/util/formUtil';
 import {
   COMPARABLE_ITEM_TYPES,
   getItemCategory,
 } from '@/modules/formBuilder/formBuilderUtil';
+import { formatDateForGql, parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   EnableOperator,
@@ -28,6 +31,7 @@ interface EnableWhenConditionProps {
   index: number;
   itemPickList: PickListOption[];
   itemMap: ItemMap;
+  setValue: UseFormSetValue<FormItemState>;
   enableWhenPath?: 'enableWhen' | `autofillValues.${number}.autofillWhen`; // path to enableWhen in form
 }
 
@@ -81,6 +85,8 @@ export const determineEnableWhenComparisonField = (
     case ItemType.Integer:
     case ItemType.Currency:
       return 'answerNumber';
+    case ItemType.Date:
+      return 'answerDate';
     default:
       // not handled: compareQuestion
       return 'answerCode';
@@ -93,6 +99,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
   index,
   itemPickList,
   itemMap,
+  setValue,
   enableWhenPath = 'enableWhen',
 }) => {
   // Watch state of this condition
@@ -105,14 +112,11 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
     () => (state?.question ? itemMap[state?.question] : undefined),
     [itemMap, state?.question]
   );
-  const dependentItemPickList = useMemo(() => {
-    if (!dependentItem) return;
-    if (dependentItem.pickListOptions) return dependentItem.pickListOptions;
-    if (dependentItem.pickListReference) {
-      // TODO: could use usePickList to fetch remote pick list. This will only resolve local enums.
-      return localResolvePickList(dependentItem.pickListReference);
-    }
-  }, [dependentItem]);
+
+  const { pickList: dependentItemPickList = [], loading: pickListLoading } =
+    usePickList({
+      item: dependentItem || { linkId: 'fake', type: ItemType.Choice },
+    });
 
   const enableOperatorPickList = useMemo(() => {
     // TODO handle local constant instead of dependentItem
@@ -181,6 +185,9 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 rules={{
                   required: 'Local Constant or Dependent Question is required',
                 }}
+                onChange={() =>
+                  setValue(`${enableWhenPath}.${index}.operator`, null as any)
+                }
               />
             )}
             {advanced.localConstant && (
@@ -193,7 +200,10 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   required: 'Local Constant or Dependent Question is required',
                 }}
                 options={localConstantsPickList}
-                helperText="Local constant who's value will determine whether the condition is met"
+                helperText='Local constant whose value will determine whether the condition is met'
+                onChange={() =>
+                  setValue(`${enableWhenPath}.${index}.operator`, null as any)
+                }
               />
             )}
           </Stack>
@@ -213,31 +223,38 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
         <Grid item xs={4}>
           <Stack gap={1}>
             {answerInputType === 'answerBoolean' && (
-              <Controller
+              <ControlledSelect
                 name={`${enableWhenPath}.${index}.answerBoolean`}
                 control={control}
-                shouldUnregister // clear value when un-mounted
-                render={({
-                  field: { ref, ...field },
-                  fieldState: { error },
-                }) => (
-                  <YesNoRadio
-                    label='Value'
-                    error={!!error}
-                    helperText={error?.message}
-                    {...field}
-                  />
-                )}
+                label='Value'
+                options={[TRUE_OPT, FALSE_OPT]}
+                setValueAs={(option) => {
+                  if (option?.code === 'true') return true;
+                  if (option?.code === 'false') return false;
+                  return null;
+                }}
+                rules={{
+                  validate: (value) => {
+                    if (value === null) {
+                      // Requires custom validation to accommodate the valid value `false`
+                      return 'This field is required';
+                    }
+                    return true;
+                  },
+                }}
               />
             )}
             {answerInputType === 'answerCode' &&
-              (dependentItemPickList ? (
+              ((dependentItemPickList && dependentItemPickList.length > 0) ||
+              pickListLoading ? (
                 <ControlledSelect
+                  loading={pickListLoading}
                   name={`${enableWhenPath}.${index}.answerCode`}
                   control={control}
                   label='Response Value'
-                  options={dependentItemPickList}
+                  options={dependentItemPickList || []}
                   helperText={answerHelperText}
+                  required
                 />
               ) : (
                 <ControlledTextInput
@@ -245,14 +262,36 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                   control={control}
                   label='Response Value (Code)'
                   helperText={answerHelperText}
+                  required
                 />
               ))}
+            {answerInputType === 'answerDate' && (
+              <Controller
+                name={`${enableWhenPath}.${index}.answerDate`}
+                control={control}
+                rules={{ required: 'This field is required' }}
+                render={({
+                  field: { ref, ...field },
+                  fieldState: { error },
+                }) => (
+                  <DatePicker
+                    value={parseHmisDateString(field.value)}
+                    onChange={(date) =>
+                      field.onChange(date ? formatDateForGql(date) : '')
+                    }
+                    label={`Response Value (Date)`}
+                    error={!!error}
+                  />
+                )}
+              />
+            )}
             {answerInputType === 'answerCodes' && (
               <ControlledTextInput
                 name={`${enableWhenPath}.${index}.answerCodes`}
                 control={control}
                 label='Response Value (Code List)'
                 helperText={answerHelperText}
+                required
               />
             )}
             {answerInputType === 'answerNumber' && (
@@ -262,6 +301,7 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 label='Response Value (Numeric)'
                 type='number'
                 helperText={answerHelperText}
+                required
               />
             )}
             {state?.answerGroupCode && (
@@ -270,26 +310,32 @@ const EnableWhenCondition: React.FC<EnableWhenConditionProps> = ({
                 control={control}
                 label='Response Group'
                 helperText='If dependent item uses a grouped picklist, enter the name of a group to compare using the operator.'
+                required
               />
             )}
           </Stack>
         </Grid>
       </Grid>
-      <Box sx={{ mt: 2 }}>
-        <Typography typography='body2' fontWeight={600}>
-          Advanced Options
-        </Typography>
-        <Stack>
-          <LabeledCheckbox
-            label='Compare with a Local Constant instead of a Dependent Question'
-            checked={advanced.localConstant}
-            sx={{ width: 'fit-content' }}
-            onChange={(evt, checked) =>
-              setAdvanced((old) => ({ ...old, localConstant: checked }))
-            }
-          />
-        </Stack>
-      </Box>
+      {/* TODO: Add typing for local constants (treat `today` as a date)
+      and add other useful local constants such as project ID.
+      Hiding this behind a super-admin-only curtain for now.*/}
+      <RootPermissionsFilter permissions='canAdministrateConfig'>
+        <Box sx={{ mt: 2 }}>
+          <Typography typography='body2' fontWeight={600}>
+            Advanced Options
+          </Typography>
+          <Stack>
+            <LabeledCheckbox
+              label='Compare with a Local Constant instead of a Dependent Question'
+              checked={advanced.localConstant}
+              sx={{ width: 'fit-content' }}
+              onChange={(evt, checked) =>
+                setAdvanced((old) => ({ ...old, localConstant: checked }))
+              }
+            />
+          </Stack>
+        </Box>
+      </RootPermissionsFilter>
     </Stack>
   );
 };

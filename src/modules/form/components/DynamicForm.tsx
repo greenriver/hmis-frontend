@@ -27,14 +27,25 @@ import { formAutoCompleteOff } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
-  values: FormValues;
+  rawValues: FormValues; // // Example: { 'favorite_color': { code: 'light_blue', label: 'Light Blue' }, 'assessment_date': <JS Date Object> }
+  valuesByLinkId: FormValues; // Example: { 'favorite_color': 'light_blue', 'assessment_date': '2020-09-01' }
+  valuesByFieldName: FormValues; // Example: { 'Client.favorite_color_field_key': 'light_blue', 'assessmentDate': '2020-09-01', 'someOtherHiddenField': '_HIDDEN' }
   confirmed?: boolean;
   event?: React.MouseEvent<HTMLButtonElement>;
   onSuccess?: VoidFunction;
   onError?: VoidFunction;
 }
 
+interface DynamicFormSaveDraftInput {
+  rawValues: FormValues;
+  valuesByLinkId: FormValues;
+  valuesByFieldName: FormValues;
+  onSuccess?: VoidFunction;
+  onError?: VoidFunction;
+}
+
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
+export type DynamicFormOnSaveDraft = (input: DynamicFormSaveDraftInput) => void;
 
 export interface DynamicFormProps
   extends Omit<
@@ -44,7 +55,7 @@ export interface DynamicFormProps
   clientId?: string;
   definition: FormDefinitionJson;
   onSubmit: DynamicFormOnSubmit;
-  onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
+  onSaveDraft?: DynamicFormOnSaveDraft;
   onDirty?: (value: boolean) => void;
   loading?: boolean;
   initialValues?: Record<string, any>;
@@ -115,7 +126,9 @@ const DynamicForm = forwardRef(
       }
     }, []);
 
-    const { renderFields, getCleanedValues } = useDynamicFields({
+    // getValues: returns form state (used by some nested components, like MciClearance)
+    // getValuesForSubmit: returns submittable form state (used for onSubmit/onSaveDraft)
+    const { renderFields, getValues, getValuesForSubmit } = useDynamicFields({
       definition,
       initialValues,
       localConstants,
@@ -127,19 +140,22 @@ const DynamicForm = forwardRef(
 
     const handleSaveDraft = useCallback(() => {
       if (!onSaveDraft) return;
-      onSaveDraft(getCleanedValues(), () => setDirty(false));
-    }, [onSaveDraft, getCleanedValues]);
+      onSaveDraft({
+        ...getValuesForSubmit(),
+        onSuccess: () => setDirty(false),
+      });
+    }, [onSaveDraft, getValuesForSubmit]);
 
     const handleSubmit = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         onSubmit({
-          values: getCleanedValues(),
+          ...getValuesForSubmit(),
           confirmed: false,
           event,
           onSuccess: () => setDirty(false),
         });
       },
-      [onSubmit, getCleanedValues]
+      [onSubmit, getValuesForSubmit]
     );
 
     // Expose handle for parent components to initiate a background save (used for household workflow tabs)
@@ -147,10 +163,7 @@ const DynamicForm = forwardRef(
       ref,
       () => ({
         SubmitForm: () => {
-          onSubmit({
-            values: getCleanedValues(),
-            confirmed: false,
-          });
+          onSubmit({ ...getValuesForSubmit(), confirmed: false });
         },
         SaveIfDirty: () => {
           if (!dirty || locked) return;
@@ -159,13 +172,13 @@ const DynamicForm = forwardRef(
         SubmitIfDirty: (ignoreWarnings: boolean) => {
           if (!onSubmit || !dirty || locked) return;
           onSubmit({
-            values: getCleanedValues(),
+            ...getValuesForSubmit(),
             confirmed: ignoreWarnings,
             onSuccess: () => setDirty(false),
           });
         },
       }),
-      [onSubmit, getCleanedValues, dirty, locked, handleSaveDraft]
+      [onSubmit, getValuesForSubmit, dirty, locked, handleSaveDraft]
     );
 
     useEffect(() => {
@@ -177,13 +190,13 @@ const DynamicForm = forwardRef(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         onSubmit({
-          values: getCleanedValues(),
+          ...getValuesForSubmit(),
           confirmed: true,
           event,
           onSuccess: () => setDirty(false),
         });
       },
-      [onSubmit, getCleanedValues]
+      [onSubmit, getValuesForSubmit]
     );
 
     const { renderValidationDialog, validationDialogVisible } =
@@ -233,7 +246,7 @@ const DynamicForm = forwardRef(
               </Stack>
             </Grid>
           )}
-          <DynamicFormContext.Provider value={{ getCleanedValues, definition }}>
+          <DynamicFormContext.Provider value={{ getValues, definition }}>
             {renderFields({
               itemChanged: handleChangeCallback,
               severalItemsChanged: handleChangeCallback,

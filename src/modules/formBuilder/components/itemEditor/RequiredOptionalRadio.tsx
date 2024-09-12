@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
-import { useController, useWatch } from 'react-hook-form';
-import { FormItemControl } from './types';
+import { UseFormSetValue, useWatch } from 'react-hook-form';
+import { FormItemControl, FormItemState } from './types';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import { PickListOption } from '@/types/gqlTypes';
 
@@ -25,25 +25,10 @@ const options = [
 
 interface Props {
   control: FormItemControl;
+  setValue: UseFormSetValue<FormItemState>;
 }
 
-const RequiredOptionalRadio: React.FC<Props> = ({ control }) => {
-  const { field: requiredField } = useController({
-    name: 'required',
-    control,
-    defaultValue: false,
-  });
-  const { field: warnIfEmptyField } = useController({
-    name: 'warnIfEmpty',
-    control,
-    defaultValue: false,
-  });
-  const { field: readOnlyField } = useController({
-    name: 'readOnly',
-    control,
-    defaultValue: false,
-  });
-
+const RequiredOptionalRadio: React.FC<Props> = ({ control, setValue }) => {
   const [required, warnIfEmpty, readOnly] = useWatch({
     control,
     name: ['required', 'warnIfEmpty', 'readOnly'],
@@ -64,26 +49,28 @@ const RequiredOptionalRadio: React.FC<Props> = ({ control }) => {
   const handleChange = useCallback(
     (option?: PickListOption | null) => {
       if (!option) return;
+      if (option.code === radioValue) return;
 
+      // setValue doesn't dirty the form by default because it's not usually called in response to user input
       if (option.code === 'required') {
-        requiredField.onChange(true);
-        warnIfEmptyField.onChange(false);
-        readOnlyField.onChange(false);
+        setValue('required', true, { shouldDirty: true });
+        setValue('warnIfEmpty', false, { shouldDirty: true });
+        setValue('readOnly', false, { shouldDirty: true });
       } else if (option.code === 'warnIfEmpty') {
-        requiredField.onChange(false);
-        warnIfEmptyField.onChange(true);
-        readOnlyField.onChange(false);
+        setValue('required', false, { shouldDirty: true });
+        setValue('warnIfEmpty', true, { shouldDirty: true });
+        setValue('readOnly', false, { shouldDirty: true });
       } else if (option.code === 'readOnly') {
-        requiredField.onChange(false);
-        warnIfEmptyField.onChange(false);
-        readOnlyField.onChange(true);
+        setValue('required', false, { shouldDirty: true });
+        setValue('warnIfEmpty', false, { shouldDirty: true });
+        setValue('readOnly', true, { shouldDirty: true });
       } else if (option.code === 'optional') {
-        requiredField.onChange(false);
-        warnIfEmptyField.onChange(false);
-        readOnlyField.onChange(false);
+        setValue('required', false, { shouldDirty: true });
+        setValue('warnIfEmpty', false, { shouldDirty: true });
+        setValue('readOnly', false, { shouldDirty: true });
       }
     },
-    [readOnlyField, requiredField, warnIfEmptyField]
+    [setValue, radioValue]
   );
 
   return (
