@@ -31805,7 +31805,7 @@
           },
           {
             "name": "OTHER_FUNDERS",
-            "description": "OtherFunder values for all active Funders across the installation",
+            "description": "OtherFunder values for all Funders across the installation",
             "isDeprecated": false,
             "deprecationReason": null
           },

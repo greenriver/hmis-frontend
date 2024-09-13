@@ -4655,7 +4655,7 @@ export enum PickListType {
   OpenProjects = 'OPEN_PROJECTS',
   /** All Organizations that the User can see */
   Organization = 'ORGANIZATION',
-  /** OtherFunder values for all active Funders across the installation */
+  /** OtherFunder values for all Funders across the installation */
   OtherFunders = 'OTHER_FUNDERS',
   /** Unit types that are eligible to be added to project */
   PossibleUnitTypesForProject = 'POSSIBLE_UNIT_TYPES_FOR_PROJECT',
