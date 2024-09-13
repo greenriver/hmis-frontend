@@ -1,9 +1,8 @@
 mutation UpdateExternalFormSubmission(
   $id: ID!
-  $projectId: ID!
   $input: ExternalFormSubmissionInput!
 ) {
-  updateExternalFormSubmission(id: $id, projectId: $projectId, input: $input) {
+  updateExternalFormSubmission(id: $id, input: $input) {
     externalFormSubmission {
       ...ExternalFormSubmissionSummary
     }
