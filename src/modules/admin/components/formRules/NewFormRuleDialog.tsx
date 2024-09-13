@@ -5,12 +5,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import React, { useCallback, useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
-import TextInput from '@/components/elements/input/TextInput';
 import theme from '@/config/theme';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { BaseFormRule } from '@/modules/admin/components/formRules/FormRule';
@@ -48,13 +46,12 @@ export interface RuleCondition {
   value: string;
 }
 
-// `otherFunder` is also a condition type, of a sort, but it's left off here because
-// it's dependent on `funder` and it's a TextInput instead of a Select
 export type ConditionType =
   | 'projectId'
   | 'projectType'
   | 'organizationId'
   | 'funder'
+  | 'otherFunder'
   | 'serviceTypeId'
   | 'serviceCategoryId';
 
@@ -79,7 +76,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
   const [dataCollectedAbout, setDataCollectedAbout] =
     useState<DataCollectedAbout>(DataCollectedAbout.AllClients);
   const [ruleConditions, setRuleConditions] = useState<RuleCondition[]>([]);
-  const [otherFundingSource, setOtherFundingSource] = useState<string>('');
   const [serviceConditionType, setServiceConditionType] = useState<
     'serviceCategoryId' | 'serviceTypeId'
   >('serviceCategoryId');
@@ -100,34 +96,26 @@ const NewFormRuleDialog: React.FC<Props> = ({
       projectType: conditions.projectType as ProjectType,
       organizationId: conditions.organizationId,
       funder: conditions.funder as FundingSource,
+      otherFunder: conditions.otherFunder as FundingSource,
       serviceTypeId: conditions.serviceTypeId,
       serviceCategoryId: conditions.serviceCategoryId,
       ...(formRole === FormRole.Service
         ? { [serviceConditionType]: serviceConditionValue }
         : {}),
-      ...(conditions.funder === FundingSource.LocalOrOtherFundingSource &&
-      otherFundingSource
-        ? { otherFunder: otherFundingSource }
-        : {}),
     };
   }, [
     dataCollectedAbout,
     ruleConditions,
-    otherFundingSource,
     serviceConditionType,
     serviceConditionValue,
     formRole,
   ]);
-
-  const [validationError, setValidationError] = useState<string>();
 
   const onCloseDialog = useCallback(() => {
     onClose();
     // Null out the form values
     setDataCollectedAbout(DataCollectedAbout.AllClients);
     setRuleConditions([]);
-    setOtherFundingSource('');
-    setValidationError(undefined);
   }, [onClose]);
 
   const [createFormRule, { loading, error }] = useCreateFormRuleMutation({
@@ -148,7 +136,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
                 nodesCount: existingRules.nodesCount + 1, // this isn't used, but update it anyway to avoid inconsistency
                 nodes: [
                   ...existingRules.nodes,
-                  { __ref: `FormRule:${data.createFormRule?.formRule?.id}` },
+                  { __ref: `FormRule:${data.createFormRule?.formRule.id}` },
                 ],
               };
             },
@@ -160,12 +148,12 @@ const NewFormRuleDialog: React.FC<Props> = ({
           id: `FormDefinition:{"cacheKey":"${formCacheKey}"}`,
           fieldName: 'projectMatches',
         });
-      } else if (data.createFormRule?.errors?.length) {
-        setValidationError(data.createFormRule.errors[0].fullMessage);
       }
     },
   });
 
+  // This would be better handled with real form validation
+  const [validationError, setValidationError] = useState<string>();
   const handleSubmit = () => {
     let error: string | undefined = undefined;
     if (formRole === FormRole.Service) {
@@ -191,6 +179,7 @@ const NewFormRuleDialog: React.FC<Props> = ({
       { code: 'projectType', label: 'Project Type' },
       { code: 'organizationId', label: 'Organization' },
       { code: 'funder', label: 'Funding Source' },
+      { code: 'otherFunder', label: 'Local or Other Funding Source' },
     ];
 
     const conditionsAlreadyInUse = ruleConditions.map(
@@ -240,9 +229,18 @@ const NewFormRuleDialog: React.FC<Props> = ({
     },
   });
 
+  const { pickList: otherFunderPickList } = usePickList({
+    item: {
+      linkId: 'fake',
+      type: ItemType.Choice,
+      pickListReference: PickListType.OtherFunders,
+    },
+  });
+
   const pickListMap: Record<ConditionType, PickListOption[]> = {
     projectType: projectTypePickList || [],
     funder: funderPickList || [],
+    otherFunder: otherFunderPickList || [],
     organizationId: orgList || [],
     projectId: projectList || [],
     serviceTypeId: serviceTypePickList || [],
@@ -440,29 +438,6 @@ const NewFormRuleDialog: React.FC<Props> = ({
               </RemovableCard>
             );
           })}
-
-          {rule.funder === FundingSource.LocalOrOtherFundingSource && (
-            <Card
-              sx={{
-                backgroundColor: theme.palette.grey[100],
-                border: 0,
-                px: 2,
-                py: 1,
-              }}
-            >
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <TextInput
-                    label='And funding source is'
-                    value={rule.otherFunder || ''}
-                    onChange={(e) => {
-                      setOtherFundingSource(e.target.value);
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </Card>
-          )}
         </CardGroup>
       </DialogContent>
       <DialogActions>
