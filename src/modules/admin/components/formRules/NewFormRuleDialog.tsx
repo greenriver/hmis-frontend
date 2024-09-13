@@ -118,14 +118,10 @@ const NewFormRuleDialog: React.FC<Props> = ({
     // Null out the form values
     setDataCollectedAbout(DataCollectedAbout.AllClients);
     setRuleConditions([]);
-    setOtherFundingSource('');
     setValidationError(undefined);
   }, [onClose]);
 
   const [createFormRule, { loading, error }] = useCreateFormRuleMutation({
-    variables: {
-      input: { input: rule, definitionId: formId },
-    },
     onCompleted: (data) => {
       if (data.createFormRule?.formRule) {
         onCloseDialog();
@@ -168,7 +164,13 @@ const NewFormRuleDialog: React.FC<Props> = ({
 
     setValidationError(error);
     if (!error) {
-      createFormRule();
+      // drop empty string values from rule object (eg { projectId: '' })
+      const cleaned = Object.fromEntries(
+        Object.entries(rule).map(([k, v]) => [k, v || undefined])
+      );
+      createFormRule({
+        variables: { input: { input: cleaned, definitionId: formId } },
+      });
     }
   };
 
