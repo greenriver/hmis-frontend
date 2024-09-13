@@ -31804,6 +31804,12 @@
             "deprecationReason": null
           },
           {
+            "name": "OTHER_FUNDERS",
+            "description": "OtherFunder values for all Funders across the installation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "POSSIBLE_UNIT_TYPES_FOR_PROJECT",
             "description": "Unit types that are eligible to be added to project",
             "isDeprecated": false,

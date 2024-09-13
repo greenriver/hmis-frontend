@@ -944,6 +944,7 @@ export const HmisEnums = {
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     OPEN_PROJECTS: 'Open Projects that the user can see',
     ORGANIZATION: 'All Organizations that the User can see',
+    OTHER_FUNDERS: 'OtherFunder values for all Funders across the installation',
     POSSIBLE_UNIT_TYPES_FOR_PROJECT:
       'Unit types that are eligible to be added to project',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
