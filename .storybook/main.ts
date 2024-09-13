@@ -15,7 +15,15 @@ const config = {
       },
     });
   },
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  stories: [
+    '../src/**/*.stories.mdx',
+    {
+      directory: '../src/components',
+      files: '**/*.stories.*',
+      titlePrefix: 'Components',
+    },
+    '../src/modules/**/*.stories.@(js|jsx|ts|tsx)',
+  ],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
