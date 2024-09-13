@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { FormItemControl } from '../types';
 import { useLocalConstantsPickList } from '../useLocalConstantsPickList';
@@ -25,6 +25,8 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
   const bound = useWatch({ control, name: `bounds.${index}` });
   const {
     type: boundTypeValue,
+    valueDate,
+    valueNumber,
     offset,
     question: dependentQuestion,
     valueLocalConstant,
@@ -48,6 +50,24 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
   const [canAdministrateConfig] = useHasRootPermissions([
     'canAdministrateConfig',
   ]);
+
+  const isTextField =
+    fieldType && [ItemType.Text, ItemType.String].includes(fieldType);
+
+  // At least one way to specify bound is required
+  const isValid = useMemo(
+    () =>
+      !!valueDate ||
+      !!valueNumber ||
+      !!valueLocalConstant ||
+      !!dependentQuestion,
+    [valueDate, valueNumber, valueLocalConstant, dependentQuestion]
+  );
+  // Non-super admin users see a simpler error message since, for now, only one of these fields is available to them
+  const requiredMessage =
+    canAdministrateConfig && !isTextField
+      ? 'Required: Either choose a value, a local constant, or a dependent question'
+      : 'This field is required';
 
   return (
     <Stack gap={2}>
@@ -96,7 +116,8 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
         <Controller
           name={`bounds.${index}.valueDate`}
           control={control}
-          render={({ field: { ref, ...field } }) => (
+          rules={{ validate: () => isValid || requiredMessage }}
+          render={({ field: { ref, ...field }, fieldState: { error } }) => (
             <DatePicker
               {...field}
               textInputProps={{ inputRef: ref }}
@@ -105,26 +126,21 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
                 field.onChange(date ? formatDateForGql(date) : '')
               }
               label={`${labelPrefix} Date`}
+              error={!!error}
             />
           )}
         />
       ) : (
         <ControlledTextInput
           control={control}
-          // Require this "simple" bound field only if the user is NOT a super-admin
-          // AND none of the "advanced" bound features have already been set.
-          rules={{
-            required:
-              !canAdministrateConfig &&
-              !(offset || dependentQuestion || valueLocalConstant),
-          }}
+          rules={{ validate: () => isValid || requiredMessage }}
           name={`bounds.${index}.valueNumber`}
           type='number'
           label={`${labelPrefix} Value`}
         />
       )}
 
-      {fieldType && ![ItemType.Text, ItemType.String].includes(fieldType) && (
+      {!isTextField && (
         <>
           {(canAdministrateConfig || !!valueLocalConstant) && (
             <ControlledSelect
@@ -134,6 +150,7 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
               placeholder='Select local constant'
               options={localConstantsPickList}
               disabled={!canAdministrateConfig}
+              rules={{ validate: () => isValid || requiredMessage }}
             />
           )}
 
@@ -147,6 +164,7 @@ const ValueBoundCard: React.FC<Props> = ({ control, itemMap, index }) => {
                 helperText='The response to this question will be the bound value'
                 options={itemPickList}
                 disabled={!canAdministrateConfig}
+                rules={{ validate: () => isValid || requiredMessage }}
               />
             )}
 
