@@ -49,3 +49,8 @@ jobs:
     - name: Storybook smoke test
       run: |
         yarn storybook --smoke-test
+
+    - name: Run Chromatic
+      uses: chromaui/action@latest
+      with:
+        projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
