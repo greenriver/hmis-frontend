@@ -16,36 +16,45 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
-
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # needed for chromatic
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
         node-version-file: '.nvmrc'
-
     - name: Install dependencies
       run: |
         corepack enable
         yarn install
-
     # - name: Audit dependencies
     #   run: |
     #     yarn audit --groups dependencies
 
+  test:
+    needs: build
+    steps:
     - name: Lint and Format
       run: |
         yarn tsc
         yarn format:check
         yarn lint:check
-
     - name: Test
       run: |
         yarn test
-
     - name: Check dependencies
       run: |
         yarn yarn-deduplicate --list --fail
-
     - name: Storybook smoke test
       run: |
         yarn storybook --smoke-test
+  chromatic:
+    needs: [build, test]
+    # Don't run chromatic on PR's against release (only on pushes to `release-N` or `stable`)
+    if: github.event_name != 'pull_request'
+    steps:
+    - name: Run Chromatic
+      uses: chromaui/action@latest
+      with:
+        projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
