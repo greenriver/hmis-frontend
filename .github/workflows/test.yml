@@ -50,9 +50,6 @@ jobs:
       uses: chromaui/action@latest
       with:
         projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-        debug: true #tmp
         zip: true
-        skip: true # skip chromatic tests, for now since we dont have them set up
-        # to add later, when we are ready to run chromatic tests:
-        # exitZeroOnChanges: true
-        # onlyChanged: true
+        exitZeroOnChanges: true
+        onlyChanged: true
