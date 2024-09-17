@@ -45,7 +45,7 @@ jobs:
       run: |
         yarn storybook --smoke-test
     - name: Run Chromatic
-      # Don't run chromatic on PR's against release (only on pushes to `release-N` or `stable`)
+      # Don't run chromatic on PRs. Only on pushes to release-N or stable
       if: github.event_name != 'pull_request'
       uses: chromaui/action@latest
       with:
