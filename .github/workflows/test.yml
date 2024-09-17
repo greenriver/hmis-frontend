@@ -48,12 +48,11 @@ jobs:
       # Don't run chromatic on PRs. Only on pushes to release-N or stable
       if: github.event_name != 'pull_request'
       uses: chromaui/action@latest
-      env:
-        # CHROMATIC_BRANCH: ${{ github.event.pull_request.head.ref }}
-        # CHROMATIC_SHA: ${{ github.event.pull_request.head.sha }
       with:
         projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-        # branchName:
         debug: true #tmp
         zip: true
-        skip: true # skip chromatic tests, for now since we dont have them set up?
+        skip: true # skip chromatic tests, for now since we dont have them set up
+        # to add later, when we are ready to run chromatic tests:
+        # exitZeroOnChanges: true
+        # onlyChanged: true
