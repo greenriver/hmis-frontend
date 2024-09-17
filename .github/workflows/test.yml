@@ -14,7 +14,6 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -34,6 +33,7 @@ jobs:
 
   test:
     needs: build
+    runs-on: ubuntu-latest
     steps:
     - name: Lint and Format
       run: |
@@ -51,6 +51,7 @@ jobs:
         yarn storybook --smoke-test
   chromatic:
     needs: [build, test]
+    runs-on: ubuntu-latest
     # Don't run chromatic on PR's against release (only on pushes to `release-N` or `stable`)
     if: github.event_name != 'pull_request'
     steps:
