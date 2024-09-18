@@ -1,7 +1,9 @@
-import { Card, Chip } from '@mui/material';
+import { Alert, Card, Chip, Stack, Typography } from '@mui/material';
 import { capitalize } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
+import RouterLink from '@/components/elements/RouterLink';
+import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -12,6 +14,7 @@ import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
 import { useFilters } from '@/modules/hmis/filterUtil';
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteExternalFormSubmissionDocument,
@@ -30,6 +33,7 @@ import {
   UpdateExternalFormSubmissionMutationVariables,
   useGetExternalFormSubmissionQuery,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ProjectExternalSubmissionsTable = ({
   projectId,
@@ -38,43 +42,90 @@ const ProjectExternalSubmissionsTable = ({
   projectId: string;
   formDefinitionIdentifier: string;
 }) => {
-  const getColumnDefs = useCallback(() => {
-    return [
-      {
-        header: 'Status',
-        linkTreatment: false,
-        render: (s: ExternalFormSubmissionSummaryFragment) => {
-          const isNew = s.status === ExternalFormSubmissionStatus.New;
-          return (
-            <>
-              <Chip
-                label={capitalize(s.status)}
-                size='small'
-                color={isNew ? 'primary' : 'default'}
-                variant={isNew ? 'filled' : 'outlined'}
-                sx={isNew ? {} : { color: theme.palette.text.secondary }}
-              />
-              {s.spam && (
+  const getColumnDefs = useCallback(
+    (
+      rows: ExternalFormSubmissionSummaryFragment[]
+    ): ColumnDef<ExternalFormSubmissionSummaryFragment>[] => {
+      // Get all unique "summary keys"
+      const summaryKeys = new Set<string>();
+      rows.forEach(({ summaryFields }) =>
+        summaryFields.forEach(({ key }) => summaryKeys.add(key))
+      );
+
+      // Add one column definition for each summary key
+      const defs: ColumnDef<ExternalFormSubmissionSummaryFragment>[] =
+        Array.from(summaryKeys)
+          .sort()
+          .map((key) => ({
+            key,
+            header: key,
+            render: (submission: ExternalFormSubmissionSummaryFragment) =>
+              submission.summaryFields.find((f) => f.key === key)?.value,
+          }));
+
+      // // if any submission is linked to an enrollment, add the enrollment column
+      // if (!!rows.find((r) => r.enrollmentId)) {
+      //   defs.push({
+      //     key: 'enrollmentId',
+      //     header: 'Enrollment',
+      //     render: (s: ExternalFormSubmissionSummaryFragment) => {
+      //       if (!s.enrollmentId || !s.clientId)
+      //         return <NotCollectedText>N/A</NotCollectedText>;
+
+      //       const to = generateSafePath(
+      //         EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+      //         {
+      //           clientId: s.clientId,
+      //           enrollmentId: s.enrollmentId,
+      //         }
+      //       );
+      //       return (
+      //         <RouterLink to={to} openInNew>
+      //           {s.enrollmentId}
+      //         </RouterLink>
+      //       );
+      //     },
+      //   });
+      // }
+      return [
+        {
+          header: 'Status',
+          linkTreatment: false,
+          render: (s: ExternalFormSubmissionSummaryFragment) => {
+            const isNew = s.status === ExternalFormSubmissionStatus.New;
+            return (
+              <>
                 <Chip
-                  label='Spam'
+                  label={capitalize(s.status)}
                   size='small'
-                  color='error'
-                  variant='outlined'
-                  sx={{ ml: 1, color: theme.palette.error.dark }}
+                  color={isNew ? 'primary' : 'default'}
+                  variant={isNew ? 'filled' : 'outlined'}
+                  sx={isNew ? {} : { color: theme.palette.text.secondary }}
                 />
-              )}
-            </>
-          );
+                {s.spam && (
+                  <Chip
+                    label='Spam'
+                    size='small'
+                    color='error'
+                    variant='outlined'
+                    sx={{ ml: 1, color: theme.palette.error.dark }}
+                  />
+                )}
+              </>
+            );
+          },
         },
-      },
-      {
-        header: 'Date Submitted',
-        linkTreatment: false,
-        render: (s: ExternalFormSubmissionSummaryFragment) =>
-          parseAndFormatDateTime(s.submittedAt),
-      },
-    ];
-  }, []);
+        {
+          header: 'Date Submitted',
+          linkTreatment: false,
+          render: (s: ExternalFormSubmissionSummaryFragment) =>
+            parseAndFormatDateTime(s.submittedAt),
+        },
+        ...defs,
+      ];
+    },
+    []
+  );
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -122,15 +173,38 @@ const ProjectExternalSubmissionsTable = ({
 
   const valuesViewComponent = useMemo(() => {
     return (
-      <Card sx={{ p: 2 }}>
-        {loading && <Loading />}
-        {selected && (
-          <DynamicView
-            values={submissionValues}
-            definition={selected.definition.definition}
-          />
+      <>
+        <Card sx={{ p: 2 }}>
+          {loading && <Loading />}
+          {selected && (
+            <DynamicView
+              values={submissionValues}
+              definition={selected.definition.definition}
+            />
+          )}
+        </Card>
+        {selected?.clientId && selected?.enrollmentId && (
+          <Stack sx={{ mt: 2 }}>
+            <Alert severity='success'>
+              <Typography variant='body2'>
+                This form submission is linked to{' '}
+                <RouterLink
+                  to={generateSafePath(
+                    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                    {
+                      clientId: selected.clientId,
+                      enrollmentId: selected.enrollmentId,
+                    }
+                  )}
+                  openInNew
+                >
+                  Enrollment {selected.enrollmentId}
+                </RouterLink>
+              </Typography>
+            </Alert>
+          </Stack>
         )}
-      </Card>
+      </>
     );
   }, [loading, selected, submissionValues]);
 

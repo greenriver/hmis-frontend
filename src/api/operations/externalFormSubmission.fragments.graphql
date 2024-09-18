@@ -4,6 +4,12 @@ fragment ExternalFormSubmissionSummary on ExternalFormSubmission {
   spam
   status
   notes
+  enrollmentId
+  clientId
+  summaryFields {
+    key
+    value
+  }
 }
 
 fragment ExternalFormSubmissionFields on ExternalFormSubmission {
