@@ -46,6 +46,7 @@ jobs:
         yarn storybook --smoke-test
     - name: Storybook test
       run: |
+        yarn playwright install
         yarn test-storybook -- --url https://66e877f06b978106d75d04bc-ozpedmkdpx.chromatic.com/
     - name: Run Chromatic
       # Don't run chromatic on PRs. Only on pushes to release-N or stable
