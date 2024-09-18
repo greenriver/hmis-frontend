@@ -34,6 +34,7 @@ const config = {
     '@storybook/addon-interactions',
     'storybook-addon-apollo-client',
     '@chromatic-com/storybook',
+    '@storybook/addon-a11y',
   ],
   framework: {
     name: '@storybook/react-vite',
