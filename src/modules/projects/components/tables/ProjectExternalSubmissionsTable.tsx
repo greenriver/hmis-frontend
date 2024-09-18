@@ -10,11 +10,8 @@ import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { useStaticFormDialog } from '@/modules/form/hooks/useStaticFormDialog';
 import { FormValues } from '@/modules/form/types';
 import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
+import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import {
-  formatRelativeDateTime,
-  parseHmisDateString,
-} from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -137,6 +134,12 @@ const ProjectExternalSubmissionsTable = ({
     beforeFormComponent: valuesViewComponent,
   });
 
+  const [bulkUpdate, { loading: bulkLoading, error: bulkError }] =
+    useBulkReviewExternalSubmissionsMutation({
+      refetchQueries: [GetProjectExternalFormSubmissionsDocument],
+      awaitRefetchQueries: true,
+    });
+
   const getColumnDefs = useCallback(() => {
     return [
       {
@@ -173,11 +176,12 @@ const ProjectExternalSubmissionsTable = ({
       {
         header: 'Date Submitted',
         linkTreatment: false,
-        render: (s: ExternalFormSubmissionSummaryFragment) => {
-          const parsedDate = parseHmisDateString(s.submittedAt);
-          if (parsedDate) return formatRelativeDateTime(parsedDate);
-          return '';
-        },
+        render: (s: ExternalFormSubmissionSummaryFragment) => (
+          <RelativeDateTableCellContents
+            dateTimeString={s.submittedAt}
+            horizontal
+          />
+        ),
       },
       {
         header: 'Action',
@@ -188,19 +192,14 @@ const ProjectExternalSubmissionsTable = ({
               setSelectedId(s.id);
               openFormDialog();
             }}
+            disabled={bulkLoading}
           >
             View
           </Button>
         ),
       },
     ];
-  }, [openFormDialog, setSelectedId]);
-
-  const [bulkUpdate, { loading: bulkLoading, error: bulkError }] =
-    useBulkReviewExternalSubmissionsMutation({
-      refetchQueries: [GetProjectExternalFormSubmissionsDocument],
-      awaitRefetchQueries: true,
-    });
+  }, [openFormDialog, setSelectedId, bulkLoading]);
 
   const deleteButton = useMemo(
     () =>
@@ -257,6 +256,7 @@ const ProjectExternalSubmissionsTable = ({
         paginationItemName='submission'
         filters={filters}
         EnhancedTableToolbarProps={{
+          title: 'Form Submissions',
           renderBulkAction: (selectedIds, selectedRows) => (
             <LoadingButton
               onClick={() => {
@@ -268,7 +268,7 @@ const ProjectExternalSubmissionsTable = ({
               }}
               loading={bulkLoading}
             >
-              Convert {selectedRows.length} to Client
+              Bulk Review ({selectedRows.length}) Submissions
             </LoadingButton>
           ),
         }}
