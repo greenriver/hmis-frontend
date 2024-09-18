@@ -63,30 +63,6 @@ const ProjectExternalSubmissionsTable = ({
               submission.summaryFields.find((f) => f.key === key)?.value,
           }));
 
-      // // if any submission is linked to an enrollment, add the enrollment column
-      // if (!!rows.find((r) => r.enrollmentId)) {
-      //   defs.push({
-      //     key: 'enrollmentId',
-      //     header: 'Enrollment',
-      //     render: (s: ExternalFormSubmissionSummaryFragment) => {
-      //       if (!s.enrollmentId || !s.clientId)
-      //         return <NotCollectedText>N/A</NotCollectedText>;
-
-      //       const to = generateSafePath(
-      //         EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
-      //         {
-      //           clientId: s.clientId,
-      //           enrollmentId: s.enrollmentId,
-      //         }
-      //       );
-      //       return (
-      //         <RouterLink to={to} openInNew>
-      //           {s.enrollmentId}
-      //         </RouterLink>
-      //       );
-      //     },
-      //   });
-      // }
       return [
         {
           header: 'Status',
