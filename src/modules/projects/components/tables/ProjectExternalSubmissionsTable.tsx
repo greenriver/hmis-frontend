@@ -141,6 +141,9 @@ const ProjectExternalSubmissionsTable = ({
         } as ExternalFormSubmissionInput,
       };
     },
+    localConstants: {
+      reviewed: selected?.status === ExternalFormSubmissionStatus.Reviewed,
+    },
     initialValues: selected
       ? {
           notes: selected.notes,
