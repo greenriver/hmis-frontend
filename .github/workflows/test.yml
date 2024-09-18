@@ -57,4 +57,4 @@ jobs:
       env:
         TARGET_URL: '${{ github.event.deployment_status.target_url }}'
       run: |
-        yarn test-storybook -- --url https://66e877f06b978106d75d04bc-ozpedmkdpx.chromatic.com/
+        yarn test-storybook
