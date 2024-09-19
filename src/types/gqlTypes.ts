@@ -4399,7 +4399,6 @@ export type MutationUpdateClientImageArgs = {
 export type MutationUpdateExternalFormSubmissionArgs = {
   id: Scalars['ID']['input'];
   input: ExternalFormSubmissionInput;
-  projectId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type MutationUpdateFormDefinitionArgs = {
@@ -20467,7 +20466,6 @@ export type ExternalFormSubmissionFieldsFragment = {
 
 export type UpdateExternalFormSubmissionMutationVariables = Exact<{
   id: Scalars['ID']['input'];
-  projectId: Scalars['ID']['input'];
   input: ExternalFormSubmissionInput;
 }>;
 
@@ -42593,14 +42591,9 @@ export type GetEnrollmentPermissionsQueryResult = Apollo.QueryResult<
 export const UpdateExternalFormSubmissionDocument = gql`
   mutation UpdateExternalFormSubmission(
     $id: ID!
-    $projectId: ID!
     $input: ExternalFormSubmissionInput!
   ) {
-    updateExternalFormSubmission(
-      id: $id
-      projectId: $projectId
-      input: $input
-    ) {
+    updateExternalFormSubmission(id: $id, input: $input) {
       externalFormSubmission {
         ...ExternalFormSubmissionSummary
       }
@@ -42631,7 +42624,6 @@ export type UpdateExternalFormSubmissionMutationFn = Apollo.MutationFunction<
  * const [updateExternalFormSubmissionMutation, { data, loading, error }] = useUpdateExternalFormSubmissionMutation({
  *   variables: {
  *      id: // value for 'id'
- *      projectId: // value for 'projectId'
  *      input: // value for 'input'
  *   },
  * });
