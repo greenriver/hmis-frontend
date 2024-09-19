@@ -158,22 +158,26 @@ const ExternalSubmissionsModalContent = ({
               minRows={2}
               onChange={(event) => setNotes(event.target.value)}
             />
-            <LabeledCheckbox
-              value={status === ExternalFormSubmissionStatus.Reviewed}
-              label='Mark as Reviewed'
-              onChange={(_e, checked) => {
-                setStatus(
-                  checked
-                    ? ExternalFormSubmissionStatus.Reviewed
-                    : ExternalFormSubmissionStatus.New
-                );
-              }}
-            />
-            <LabeledCheckbox
-              value={spam}
-              label='Mark as Spam'
-              onChange={(_e, checked) => setSpam(checked)}
-            />
+            {submission.status === ExternalFormSubmissionStatus.New && (
+              <>
+                <LabeledCheckbox
+                  value={status === ExternalFormSubmissionStatus.Reviewed}
+                  label='Mark as Reviewed'
+                  onChange={(_e, checked) => {
+                    setStatus(
+                      checked
+                        ? ExternalFormSubmissionStatus.Reviewed
+                        : ExternalFormSubmissionStatus.New
+                    );
+                  }}
+                />
+                <LabeledCheckbox
+                  value={spam}
+                  label='Mark as Spam'
+                  onChange={(_e, checked) => setSpam(checked)}
+                />
+              </>
+            )}
           </Stack>
         </Stack>
       </DialogContent>
@@ -210,7 +214,7 @@ const ExternalSubmissionsViewModal = ({
 
   return (
     <CommonDialog open={!!submissionId} fullWidth onClose={onClose}>
-      <DialogTitle>Review Submission</DialogTitle>
+      <DialogTitle>Submission {submissionId}</DialogTitle>
       {loading && (
         <DialogContent>
           <Loading />

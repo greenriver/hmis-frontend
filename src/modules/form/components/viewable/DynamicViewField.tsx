@@ -254,15 +254,16 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           );
       }
     case ItemType.Geolocation:
-      let valueJson;
+      let collected;
       try {
-        valueJson = JSON.parse(value);
+        const valueJson = JSON.parse(value);
+        collected = valueJson && valueJson.latitude && valueJson.longitude;
       } catch (SyntaxError) {
-        console.error('Invalid geolocation value', value);
+        collected = false;
       }
       return (
         <CommonLabeledTextBlock title={label} key={JSON.stringify(value)}>
-          {valueJson && valueJson.latitude && valueJson.longitude ? (
+          {collected ? (
             'Location collected'
           ) : (
             <NotCollectedText variant='body2' />

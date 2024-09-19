@@ -1,11 +1,12 @@
-import { Chip } from '@mui/material';
+import { Button, Chip } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import { useCallback, useState } from 'react';
+import LoadingButton from '@/components/elements/LoadingButton';
 import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import RelativeDateTableCellContents from '@/modules/hmis/components/RelativeDateTableCellContents';
 import { useFilters } from '@/modules/hmis/filterUtil';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import ExternalSubmissionsViewModal from '@/modules/projects/components/ExternalSubmissionsViewModal';
 import {
   ExternalFormSubmissionFilterOptions,
@@ -14,6 +15,7 @@ import {
   GetProjectExternalFormSubmissionsDocument,
   GetProjectExternalFormSubmissionsQuery,
   GetProjectExternalFormSubmissionsQueryVariables,
+  useBulkReviewExternalSubmissionsMutation,
 } from '@/types/gqlTypes';
 
 const ProjectExternalSubmissionsTable = ({
@@ -23,6 +25,14 @@ const ProjectExternalSubmissionsTable = ({
   projectId: string;
   formDefinitionIdentifier: string;
 }) => {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const [bulkUpdate, { loading: bulkLoading, error: bulkError }] =
+    useBulkReviewExternalSubmissionsMutation({
+      refetchQueries: [GetProjectExternalFormSubmissionsDocument],
+      awaitRefetchQueries: true,
+    });
+
   const getColumnDefs = useCallback(
     (
       rows: ExternalFormSubmissionSummaryFragment[]
@@ -47,6 +57,10 @@ const ProjectExternalSubmissionsTable = ({
           }));
 
       return [
+        {
+          header: 'ID',
+          render: (s: ExternalFormSubmissionSummaryFragment) => s.id,
+        },
         {
           header: 'Status',
           linkTreatment: false,
@@ -77,20 +91,36 @@ const ProjectExternalSubmissionsTable = ({
         {
           header: 'Date Submitted',
           linkTreatment: false,
-          render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) =>
-            parseAndFormatDateTime(submittedAt),
+          render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) => (
+            <RelativeDateTableCellContents
+              dateTimeString={submittedAt}
+              horizontal
+            />
+          ),
         },
         ...defs,
+        {
+          header: 'Action',
+          render: ({ id }: ExternalFormSubmissionSummaryFragment) => (
+            <Button
+              variant='outlined'
+              onClick={() => setSelectedId(id)}
+              disabled={bulkLoading}
+            >
+              View
+            </Button>
+          ),
+        },
       ];
     },
-    []
+    [setSelectedId, bulkLoading]
   );
-
-  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const filters = useFilters({
     type: 'ExternalFormSubmissionFilterOptions',
   });
+
+  if (bulkError) throw bulkError;
 
   return (
     <>
@@ -104,6 +134,10 @@ const ProjectExternalSubmissionsTable = ({
           id: projectId,
           formDefinitionIdentifier: formDefinitionIdentifier,
         }}
+        selectable='checkbox'
+        isRowSelectable={(s) =>
+          s.status === ExternalFormSubmissionStatus.New && !s.spam
+        }
         queryDocument={GetProjectExternalFormSubmissionsDocument}
         getColumnDefs={getColumnDefs}
         noData='No external form submissions'
@@ -111,7 +145,23 @@ const ProjectExternalSubmissionsTable = ({
         recordType='ExternalFormSubmission'
         paginationItemName='submission'
         filters={filters}
-        handleRowClick={(row) => setSelectedId(row.id)}
+        EnhancedTableToolbarProps={{
+          title: 'Form Submissions',
+          renderBulkAction: (selectedIds, selectedRows) => (
+            <LoadingButton
+              onClick={() => {
+                bulkUpdate({
+                  variables: {
+                    ids: selectedIds as string[],
+                  },
+                });
+              }}
+              loading={bulkLoading}
+            >
+              Bulk Review ({selectedRows.length}) Submissions
+            </LoadingButton>
+          ),
+        }}
       />
       {selectedId && (
         <ExternalSubmissionsViewModal

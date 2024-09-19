@@ -12,6 +12,12 @@ mutation UpdateExternalFormSubmission(
   }
 }
 
+mutation BulkReviewExternalSubmissions($ids: [ID!]!) {
+  bulkReviewExternalSubmissions(externalSubmissionIds: $ids) {
+    success
+  }
+}
+
 mutation DeleteExternalFormSubmission($id: ID!) {
   deleteExternalFormSubmission(id: $id) {
     externalFormSubmission {
