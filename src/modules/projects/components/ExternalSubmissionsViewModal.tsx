@@ -117,9 +117,6 @@ const ExternalSubmissionsModalContent = ({
     [onClose, submission]
   );
 
-  const isReviewed =
-    submission.status === ExternalFormSubmissionStatus.Reviewed;
-
   if (error) throw error;
 
   return (
@@ -161,7 +158,7 @@ const ExternalSubmissionsModalContent = ({
               minRows={2}
               onChange={(event) => setNotes(event.target.value)}
             />
-            {!isReviewed && (
+            {submission.status === ExternalFormSubmissionStatus.New && (
               <>
                 <LabeledCheckbox
                   value={status === ExternalFormSubmissionStatus.Reviewed}
