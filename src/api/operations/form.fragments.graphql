@@ -32,6 +32,7 @@ fragment EnableWhenFields on EnableWhen {
   answerNumber
   answerBoolean
   answerGroupCode
+  answerDate
   compareQuestion
 }
 fragment ItemFields on FormItem {
@@ -97,6 +98,8 @@ fragment ItemFields on FormItem {
       ...EnableWhenFields
     }
   }
+  rule
+  customRule
 }
 
 # GQL doesnt allow recursive fragments, so we have a max nesting level here

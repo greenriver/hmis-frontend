@@ -2,6 +2,7 @@ import {
   add,
   getYear,
   isDate,
+  isEqual,
   isValid,
   max,
   min,
@@ -320,6 +321,7 @@ const evaluateEnableWhen = ({
       en.answerGroupCode,
       en.answerNumber,
       en.answerCodes,
+      en.answerDate ? parseHmisDateString(en.answerDate) : undefined,
       en.compareQuestion ? values[en.compareQuestion] : undefined,
     ].filter((e) => !isNil(e))[0];
   }
@@ -327,7 +329,11 @@ const evaluateEnableWhen = ({
   let result;
   switch (en.operator) {
     case EnableOperator.Equal:
-      result = currentValue === comparisonValue;
+      if (isDate(currentValue)) {
+        result = isEqual(currentValue, comparisonValue);
+      } else {
+        result = currentValue === comparisonValue;
+      }
       break;
     case EnableOperator.NotEqual:
       result = currentValue !== comparisonValue;
