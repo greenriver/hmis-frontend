@@ -19811,6 +19811,18 @@
         "isOneOf": null,
         "fields": [
           {
+            "name": "clientId",
+            "description": "Client that was generated from this submission, if any",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "customDataElements",
             "description": null,
             "args": [],
@@ -19846,6 +19858,18 @@
                 "name": "FormDefinition",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollmentId",
+            "description": "Enrollment that was generated from this submission, if any",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -19917,6 +19941,30 @@
                 "kind": "SCALAR",
                 "name": "ISO8601DateTime",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "summaryFields",
+            "description": "Key/value responses for certain summary-level form questions",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "KeyValue",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
@@ -27631,6 +27679,46 @@
         "fields": null,
         "inputFields": null,
         "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "KeyValue",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "key",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "value",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
         "enumValues": null,
         "possibleTypes": null
       },
@@ -45192,8 +45280,8 @@
           {
             "name": "EXTERNAL_FORM_SUBMISSION_REVIEW",
             "description": "External form submission review",
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "External forms are moving to a directly configured react form, rather than a static form."
           },
           {
             "name": "FORM_DEFINITION",

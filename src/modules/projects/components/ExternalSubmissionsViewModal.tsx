@@ -1,21 +1,25 @@
 import {
+  Alert,
   Card,
   DialogActions,
   DialogContent,
   DialogTitle,
   Stack,
+  Typography,
 } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import CommonDialog from '@/components/elements/CommonDialog';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import TextInput from '@/components/elements/input/TextInput';
 import Loading from '@/components/elements/Loading';
+import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { FormValues } from '@/modules/form/types';
 import { getItemMap, getOptionValue } from '@/modules/form/util/formUtil';
 import { cache } from '@/providers/apolloClient';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DeleteExternalFormSubmissionDocument,
@@ -27,6 +31,7 @@ import {
   useGetExternalFormSubmissionQuery,
   useUpdateExternalFormSubmissionMutation,
 } from '@/types/gqlTypes';
+import { generateSafePath } from '@/utils/pathEncoding';
 
 const ExternalSubmissionsModalContent = ({
   submission,
@@ -118,6 +123,25 @@ const ExternalSubmissionsModalContent = ({
     <>
       <DialogContent>
         <Stack gap={2} sx={{ my: 2 }}>
+          {submission.enrollmentId && submission.clientId && (
+            <Alert severity='success'>
+              <Typography variant='body2'>
+                This form submission is linked to{' '}
+                <RouterLink
+                  to={generateSafePath(
+                    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                    {
+                      clientId: submission.clientId,
+                      enrollmentId: submission.enrollmentId,
+                    }
+                  )}
+                  openInNew
+                >
+                  Enrollment {submission.enrollmentId}
+                </RouterLink>
+              </Typography>
+            </Alert>
+          )}
           <Card sx={{ p: 2 }}>
             {submission && (
               <DynamicView

@@ -1,6 +1,7 @@
 import { Chip } from '@mui/material';
 import { capitalize } from 'lodash-es';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { useFilters } from '@/modules/hmis/filterUtil';
@@ -22,43 +23,68 @@ const ProjectExternalSubmissionsTable = ({
   projectId: string;
   formDefinitionIdentifier: string;
 }) => {
-  const getColumnDefs = useCallback(() => {
-    return [
-      {
-        header: 'Status',
-        linkTreatment: false,
-        render: (s: ExternalFormSubmissionSummaryFragment) => {
-          const isNew = s.status === ExternalFormSubmissionStatus.New;
-          return (
-            <>
-              <Chip
-                label={capitalize(s.status)}
-                size='small'
-                color={isNew ? 'primary' : 'default'}
-                variant={isNew ? 'filled' : 'outlined'}
-                sx={isNew ? {} : { color: theme.palette.text.secondary }}
-              />
-              {s.spam && (
+  const getColumnDefs = useCallback(
+    (
+      rows: ExternalFormSubmissionSummaryFragment[]
+    ): ColumnDef<ExternalFormSubmissionSummaryFragment>[] => {
+      // Get all unique "summary keys"
+      const summaryKeys = new Set<string>();
+      rows.forEach(({ summaryFields }) =>
+        summaryFields.forEach(({ key }) => summaryKeys.add(key))
+      );
+
+      // Add one column definition for each summary key
+      const defs: ColumnDef<ExternalFormSubmissionSummaryFragment>[] =
+        Array.from(summaryKeys)
+          .sort()
+          .map((fieldKey) => ({
+            key: fieldKey,
+            header: fieldKey,
+            render: ({
+              summaryFields,
+            }: ExternalFormSubmissionSummaryFragment) =>
+              summaryFields.find(({ key }) => key === fieldKey)?.value,
+          }));
+
+      return [
+        {
+          header: 'Status',
+          linkTreatment: false,
+          render: ({ status, spam }: ExternalFormSubmissionSummaryFragment) => {
+            const isNew = status === ExternalFormSubmissionStatus.New;
+            return (
+              <>
                 <Chip
-                  label='Spam'
+                  label={capitalize(status)}
                   size='small'
-                  color='error'
-                  variant='outlined'
-                  sx={{ ml: 1, color: theme.palette.error.dark }}
+                  color={isNew ? 'primary' : 'default'}
+                  variant={isNew ? 'filled' : 'outlined'}
+                  sx={isNew ? {} : { color: theme.palette.text.secondary }}
                 />
-              )}
-            </>
-          );
+                {spam && (
+                  <Chip
+                    label='Spam'
+                    size='small'
+                    color='error'
+                    variant='outlined'
+                    sx={{ ml: 1, color: theme.palette.error.dark }}
+                  />
+                )}
+              </>
+            );
+          },
         },
-      },
-      {
-        header: 'Date Submitted',
-        linkTreatment: false,
-        render: (s: ExternalFormSubmissionSummaryFragment) =>
-          parseAndFormatDateTime(s.submittedAt),
-      },
-    ];
-  }, []);
+        {
+          header: 'Date Submitted',
+          linkTreatment: false,
+          render: ({ submittedAt }: ExternalFormSubmissionSummaryFragment) =>
+            parseAndFormatDateTime(submittedAt),
+        },
+        ...defs,
+      ];
+    },
+    []
+  );
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
