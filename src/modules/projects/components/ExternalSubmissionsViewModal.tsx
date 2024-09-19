@@ -117,6 +117,9 @@ const ExternalSubmissionsModalContent = ({
     [onClose, submission]
   );
 
+  const isReviewed =
+    submission.status === ExternalFormSubmissionStatus.Reviewed;
+
   if (error) throw error;
 
   return (
@@ -158,24 +161,26 @@ const ExternalSubmissionsModalContent = ({
               minRows={2}
               onChange={(event) => setNotes(event.target.value)}
             />
-            {submission.status === ExternalFormSubmissionStatus.New && (
-              <LabeledCheckbox
-                value={status === ExternalFormSubmissionStatus.Reviewed}
-                label='Mark as Reviewed'
-                onChange={(_e, checked) => {
-                  setStatus(
-                    checked
-                      ? ExternalFormSubmissionStatus.Reviewed
-                      : ExternalFormSubmissionStatus.New
-                  );
-                }}
-              />
+            {!isReviewed && (
+              <>
+                <LabeledCheckbox
+                  value={status === ExternalFormSubmissionStatus.Reviewed}
+                  label='Mark as Reviewed'
+                  onChange={(_e, checked) => {
+                    setStatus(
+                      checked
+                        ? ExternalFormSubmissionStatus.Reviewed
+                        : ExternalFormSubmissionStatus.New
+                    );
+                  }}
+                />
+                <LabeledCheckbox
+                  value={spam}
+                  label='Mark as Spam'
+                  onChange={(_e, checked) => setSpam(checked)}
+                />
+              </>
             )}
-            <LabeledCheckbox
-              value={spam}
-              label='Mark as Spam'
-              onChange={(_e, checked) => setSpam(checked)}
-            />
           </Stack>
         </Stack>
       </DialogContent>

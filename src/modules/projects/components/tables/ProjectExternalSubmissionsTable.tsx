@@ -1,6 +1,7 @@
 import { Button, Chip } from '@mui/material';
 import { capitalize } from 'lodash-es';
 import { useCallback, useState } from 'react';
+import LoadingButton from '@/components/elements/LoadingButton';
 import { ColumnDef } from '@/components/elements/table/types';
 import theme from '@/config/theme';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
